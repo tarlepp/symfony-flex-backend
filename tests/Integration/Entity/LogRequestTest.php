@@ -50,7 +50,7 @@ class LogRequestTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -62,7 +62,7 @@ class LogRequestTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -94,7 +94,7 @@ class LogRequestTest extends EntityTestCase
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
-            static::assertInstanceOf($type, $value);
+            self::assertInstanceOf($type, $value);
         }
 
         $returnValue = $value;
@@ -116,12 +116,12 @@ class LogRequestTest extends EntityTestCase
         try {
             $method = 'assertIs' . ucfirst($type);
 
-            static::$method($value, $message);
+            self::$method($value, $message);
         } catch (Throwable $error) {
             /**
              * @var class-string $type
              */
-            static::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
+            self::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }
     }
 
@@ -149,7 +149,7 @@ class LogRequestTest extends EntityTestCase
 
         $logRequest = new LogRequest($properties->getArrayCopy(), $request, new Response());
 
-        static::assertSame($expected->getArrayCopy(), $logRequest->getHeaders());
+        self::assertSame($expected->getArrayCopy(), $logRequest->getHeaders());
     }
 
     /**
@@ -176,7 +176,7 @@ class LogRequestTest extends EntityTestCase
 
         $logRequest = new LogRequest($properties->getArrayCopy(), $request, new Response());
 
-        static::assertSame($expected->getArrayCopy(), $logRequest->getParameters());
+        self::assertSame($expected->getArrayCopy(), $logRequest->getParameters());
     }
 
     /**
@@ -195,7 +195,7 @@ class LogRequestTest extends EntityTestCase
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
-        static::assertSame(
+        self::assertSame(
             $expected->getArrayCopy(),
             PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request])
         );

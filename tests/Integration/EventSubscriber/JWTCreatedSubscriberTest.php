@@ -48,7 +48,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $keys = ['exp', 'checksum'];
 
         foreach ($keys as $key) {
-            static::assertArrayHasKey($key, $event->getData());
+            self::assertArrayHasKey($key, $event->getData());
         }
     }
 
@@ -71,10 +71,10 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $keys = ['exp'];
 
         foreach ($keys as $key) {
-            static::assertArrayHasKey($key, $event->getData());
+            self::assertArrayHasKey($key, $event->getData());
         }
 
-        static::assertArrayNotHasKey('checksum', $event->getData());
+        self::assertArrayNotHasKey('checksum', $event->getData());
     }
 
     public function testThatLoggerAlertIsCalledIfRequestDoesNotExist(): void
@@ -82,7 +82,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('alert')
             ->with('Request not available');
 

@@ -24,6 +24,6 @@ class EntityReferenceExistsTest extends KernelTestCase
      */
     public function testThatGetTargetsReturnsExpected(): void
     {
-        static::assertSame('property', (new EntityReferenceExists())->getTargets());
+        self::assertSame('property', (new EntityReferenceExists())->getTargets());
     }
 }

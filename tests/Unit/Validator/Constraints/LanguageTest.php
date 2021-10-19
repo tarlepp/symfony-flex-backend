@@ -24,6 +24,6 @@ class LanguageTest extends KernelTestCase
      */
     public function testThatGetTargetsReturnsExpected(): void
     {
-        static::assertSame('property', (new Language())->getTargets());
+        self::assertSame('property', (new Language())->getTargets());
     }
 }

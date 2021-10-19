@@ -34,29 +34,29 @@ class ResponseSubscriberTest extends KernelTestCase
      */
     public function testThatSubscriberAddsHeader(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         $cacheStub = $this->createMock(CacheInterface::class);
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
         $cacheStub
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('get')
             ->willReturn('1.2.3');
 
         $request = new Request();
         $response = new Response();
 
-        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
-        $version = new Version(static::$kernel->getProjectDir(), $cacheStub, $logger);
+        $event = new ResponseEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
+        $version = new Version(self::$kernel->getProjectDir(), $cacheStub, $logger);
 
         (new ResponseSubscriber($version))
             ->onKernelResponse($event);
 
         $version = $event->getResponse()->headers->get('X-API-VERSION');
 
-        static::assertNotNull($version);
-        static::assertSame('1.2.3', $version);
+        self::assertNotNull($version);
+        self::assertSame('1.2.3', $version);
     }
 }

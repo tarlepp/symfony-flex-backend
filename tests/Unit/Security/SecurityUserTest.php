@@ -28,7 +28,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $securityUser = new SecurityUser(new User(), ['Foo', 'Bar']);
 
-        static::assertSame(['Foo', 'Bar'], $securityUser->getRoles());
+        self::assertSame(['Foo', 'Bar'], $securityUser->getRoles());
     }
 
     /**
@@ -40,7 +40,7 @@ class SecurityUserTest extends KernelTestCase
 
         $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
 
-        static::assertSame('sbbone', $securityUser->getPassword());
+        self::assertSame('sbbone', $securityUser->getPassword());
     }
 
     /**
@@ -48,7 +48,7 @@ class SecurityUserTest extends KernelTestCase
      */
     public function testThatGetSaltReturnNothing(): void
     {
-        static::assertNull((new SecurityUser(new User()))->getSalt());
+        self::assertNull((new SecurityUser(new User()))->getSalt());
     }
 
     /**
@@ -58,7 +58,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $user = new User();
 
-        static::assertSame($user->getId(), (new SecurityUser($user))->getUserIdentifier());
+        self::assertSame($user->getId(), (new SecurityUser($user))->getUserIdentifier());
     }
 
     /**
@@ -68,7 +68,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $user = new User();
 
-        static::assertSame($user->getId(), (new SecurityUser($user))->getUuid());
+        self::assertSame($user->getId(), (new SecurityUser($user))->getUuid());
     }
 
     /**
@@ -82,6 +82,6 @@ class SecurityUserTest extends KernelTestCase
 
         $securityUser->eraseCredentials();
 
-        static::assertSame('sbbone', $securityUser->getPassword());
+        self::assertSame('sbbone', $securityUser->getPassword());
     }
 }

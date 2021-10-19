@@ -44,7 +44,7 @@ class UuidHelperTest extends KernelTestCase
      */
     public function testThatGetTypeReturnsExpected(?string $expected, string $value): void
     {
-        static::assertSame($expected, UuidHelper::getType($value));
+        self::assertSame($expected, UuidHelper::getType($value));
     }
 
     /**
@@ -67,7 +67,7 @@ class UuidHelperTest extends KernelTestCase
         $factory = UuidHelper::getFactory();
         $uuid = $factory->uuid1();
 
-        static::assertSame($uuid->getBytes(), UuidHelper::getBytes($uuid->toString()));
+        self::assertSame($uuid->getBytes(), UuidHelper::getBytes($uuid->toString()));
     }
 
     /**

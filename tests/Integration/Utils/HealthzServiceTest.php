@@ -40,15 +40,15 @@ class HealthzServiceTest extends KernelTestCase
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
         $this->getRepositoryMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('cleanup');
 
         $this->getRepositoryMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('create');
 
         $this->getRepositoryMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('read');
 
         (new HealthzService($this->getRepository()))

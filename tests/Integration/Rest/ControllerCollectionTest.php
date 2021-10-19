@@ -78,7 +78,7 @@ class ControllerCollectionTest extends KernelTestCase
     {
         $collection = $this->getCollection();
 
-        static::assertCount(13, $collection->getAll());
+        self::assertCount(13, $collection->getAll());
     }
 
     /**
@@ -92,7 +92,7 @@ class ControllerCollectionTest extends KernelTestCase
     {
         $collection = $this->getCollection();
 
-        static::assertInstanceOf($controllerName, $collection->get($controllerName));
+        self::assertInstanceOf($controllerName, $collection->get($controllerName));
     }
 
     /**
@@ -106,7 +106,7 @@ class ControllerCollectionTest extends KernelTestCase
     {
         $collection = $this->getCollection();
 
-        static::assertSame($expected, $collection->has($controller));
+        self::assertSame($expected, $collection->has($controller));
     }
 
     /**
@@ -143,6 +143,6 @@ class ControllerCollectionTest extends KernelTestCase
      */
     private function getCollection(): ControllerCollection
     {
-        return static::getContainer()->get(ControllerCollection::class);
+        return self::getContainer()->get(ControllerCollection::class);
     }
 }

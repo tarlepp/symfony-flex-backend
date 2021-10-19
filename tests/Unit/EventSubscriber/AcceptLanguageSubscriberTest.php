@@ -32,6 +32,6 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
             ],
         ];
 
-        static::assertSame($expected, AcceptLanguageSubscriber::getSubscribedEvents());
+        self::assertSame($expected, AcceptLanguageSubscriber::getSubscribedEvents());
     }
 }

@@ -30,6 +30,6 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             'lexik_jwt_authentication.on_jwt_created' => 'onJWTCreated',
         ];
 
-        static::assertSame($expected, JWTCreatedSubscriber::getSubscribedEvents());
+        self::assertSame($expected, JWTCreatedSubscriber::getSubscribedEvents());
     }
 }

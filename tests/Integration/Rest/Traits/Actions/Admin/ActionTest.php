@@ -58,7 +58,7 @@ class ActionTest extends KernelTestCase
         );
 
         $stub
-            ->expects(static::once())
+            ->expects(self::once())
             ->method($trait)
             ->with(...$parameters->getArrayCopy());
 
@@ -67,7 +67,7 @@ class ActionTest extends KernelTestCase
 
         $result = call_user_func_array($callback, $parameters->getArrayCopy());
 
-        static::assertInstanceOf(Response::class, $result);
+        self::assertInstanceOf(Response::class, $result);
     }
 
     /**
@@ -76,9 +76,9 @@ class ActionTest extends KernelTestCase
      */
     public function dataProviderTestThatTraitCallsExpectedMethod(): array
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Rest/Traits/Actions/Admin/';
+        $folder = self::$kernel->getProjectDir() . '/src/Rest/Traits/Actions/Admin/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Rest\\Traits\\Actions\\Admin\\';

@@ -63,7 +63,7 @@ abstract class DtoTestCase extends KernelTestCase
                 $reflectionProperty->getName()
             );
 
-            static::assertTrue($dtoReflection->hasMethod($method), $message);
+            self::assertTrue($dtoReflection->hasMethod($method), $message);
         }
     }
 
@@ -86,7 +86,7 @@ abstract class DtoTestCase extends KernelTestCase
                 $reflectionProperty->getName()
             );
 
-            static::assertTrue($dtoReflection->hasMethod($method), $message);
+            self::assertTrue($dtoReflection->hasMethod($method), $message);
         }
     }
 
@@ -106,7 +106,7 @@ abstract class DtoTestCase extends KernelTestCase
             ->onlyMethods(['setVisited'])
             ->getMock();
 
-        $mock->expects(static::atLeast(count($properties)))
+        $mock->expects(self::atLeast(count($properties)))
             ->method('setVisited');
 
         $expectedVisited = [];
@@ -122,7 +122,7 @@ abstract class DtoTestCase extends KernelTestCase
             $mock->{$setter}($value);
         }
 
-        static::assertSame($expectedVisited, $mock->getVisited());
+        self::assertSame($expectedVisited, $mock->getVisited());
     }
 
     /**
@@ -148,7 +148,7 @@ abstract class DtoTestCase extends KernelTestCase
             // Call setter method
             $dto->{$setter}($value);
 
-            static::assertSame($value, $dto->{$getter}());
+            self::assertSame($value, $dto->{$getter}());
         }
     }
 
@@ -177,7 +177,7 @@ abstract class DtoTestCase extends KernelTestCase
             is_object($value) ? gettype($value) : '(' . gettype($value) . ')' . $value
         );
 
-        static::fail($message);
+        self::fail($message);
     }
 
     /**
@@ -269,7 +269,7 @@ abstract class DtoTestCase extends KernelTestCase
 
         $types = self::$propertyInfo->getTypes($class, $property);
 
-        static::assertNotNull($types);
+        self::assertNotNull($types);
 
         $type = $types[0]->getBuiltinType();
 
@@ -277,7 +277,7 @@ abstract class DtoTestCase extends KernelTestCase
             $type = $types[0]->getClassName();
         }
 
-        static::assertNotNull($type);
+        self::assertNotNull($type);
 
         return $type;
     }

@@ -28,11 +28,11 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -42,11 +42,11 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::assertNull($this->getRepository()->read());
+        self::assertNull($this->getRepository()->read());
     }
 
     /**
@@ -57,7 +57,7 @@ class HealthzRepositoryTest extends KernelTestCase
     public function testThatCreateValueReturnsExpected(): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf(Healthz::class, $this->getRepository()->create());
+        self::assertInstanceOf(Healthz::class, $this->getRepository()->create());
     }
 
     /**
@@ -67,7 +67,7 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatReadValueReturnExpectedAfterCreate(): void
     {
-        static::assertNotNull($this->getRepository()->read());
+        self::assertNotNull($this->getRepository()->read());
     }
 
     /**
@@ -77,11 +77,11 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
     {
-        static::assertSame(0, $this->getRepository()->cleanup());
+        self::assertSame(0, $this->getRepository()->cleanup());
     }
 
     private function getRepository(): HealthzRepository
     {
-        return static::getContainer()->get(HealthzRepository::class);
+        return self::getContainer()->get(HealthzRepository::class);
     }
 }

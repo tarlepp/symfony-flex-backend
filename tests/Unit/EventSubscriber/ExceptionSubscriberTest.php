@@ -32,6 +32,6 @@ class ExceptionSubscriberTest extends KernelTestCase
             ],
         ];
 
-        static::assertSame($expected, ExceptionSubscriber::getSubscribedEvents());
+        self::assertSame($expected, ExceptionSubscriber::getSubscribedEvents());
     }
 }

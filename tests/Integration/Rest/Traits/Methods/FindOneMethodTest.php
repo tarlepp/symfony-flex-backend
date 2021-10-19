@@ -104,7 +104,7 @@ class FindOneMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($uuid)
             ->willThrowException($exception);
@@ -133,13 +133,13 @@ class FindOneMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid);
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($uuid, true)
             ->willReturn($entityMock);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 

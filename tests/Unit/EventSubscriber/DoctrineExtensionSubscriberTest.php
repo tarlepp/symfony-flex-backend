@@ -26,6 +26,6 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
             RequestEvent::class => 'onKernelRequest',
         ];
 
-        static::assertSame($expected, DoctrineExtensionSubscriber::getSubscribedEvents());
+        self::assertSame($expected, DoctrineExtensionSubscriber::getSubscribedEvents());
     }
 }

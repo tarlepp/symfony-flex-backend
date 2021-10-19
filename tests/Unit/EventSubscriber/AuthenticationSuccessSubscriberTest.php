@@ -29,6 +29,6 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
             'lexik_jwt_authentication.on_authentication_success' => 'onAuthenticationSuccess',
         ];
 
-        static::assertSame($expected, AuthenticationSuccessSubscriber::getSubscribedEvents());
+        self::assertSame($expected, AuthenticationSuccessSubscriber::getSubscribedEvents());
     }
 }

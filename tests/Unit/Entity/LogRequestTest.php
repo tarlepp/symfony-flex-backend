@@ -32,7 +32,7 @@ class LogRequestTest extends KernelTestCase
     {
         $entity = new LogRequest([]);
 
-        static::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+        self::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
     }
 
     /**
@@ -44,7 +44,7 @@ class LogRequestTest extends KernelTestCase
     {
         $entity = new LogRequest([]);
 
-        static::assertNull($entity->getUser());
+        self::assertNull($entity->getUser());
     }
 
     /**
@@ -57,6 +57,6 @@ class LogRequestTest extends KernelTestCase
         $user = new User();
         $entity = new LogRequest([], null, null, $user);
 
-        static::assertSame($user, $entity->getUser());
+        self::assertSame($user, $entity->getUser());
     }
 }

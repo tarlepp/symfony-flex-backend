@@ -34,10 +34,10 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), (string)$response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), (string)$response);
 
-        static::assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             '{"message":"JWT Token not found","code":401}',
             $content,
             "Response:\n" . $response,
@@ -59,9 +59,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
     /**
@@ -77,9 +77,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
     /**
@@ -97,9 +97,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -119,9 +119,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -143,9 +143,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(6, JSON::decode($content), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertCount(6, JSON::decode($content), "Response:\n" . $response);
     }
 
     /**
@@ -163,9 +163,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -187,9 +187,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(6, JSON::decode($content), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertCount(6, JSON::decode($content), "Response:\n" . $response);
     }
 
     /**
@@ -207,9 +207,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,

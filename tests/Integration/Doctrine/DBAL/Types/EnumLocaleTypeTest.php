@@ -51,7 +51,7 @@ class EnumLocaleTypeTest extends KernelTestCase
      */
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
-        static::assertSame("ENUM('en', 'fi')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
+        self::assertSame("ENUM('en', 'fi')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
     }
 
     /**
@@ -61,7 +61,7 @@ class EnumLocaleTypeTest extends KernelTestCase
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
-        static::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
+        self::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
     }
 
     /**
@@ -82,7 +82,7 @@ class EnumLocaleTypeTest extends KernelTestCase
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        static::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+        self::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     /**

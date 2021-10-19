@@ -26,11 +26,11 @@ class RoleRepositoryTest extends KernelTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -40,10 +40,10 @@ class RoleRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        $repository = static::getContainer()->get(RoleRepository::class);
+        $repository = self::getContainer()->get(RoleRepository::class);
 
-        static::assertSame(5, $repository->countAdvanced());
-        static::assertSame(5, $repository->reset());
-        static::assertSame(0, $repository->countAdvanced());
+        self::assertSame(5, $repository->countAdvanced());
+        self::assertSame(5, $repository->reset());
+        self::assertSame(0, $repository->countAdvanced());
     }
 }

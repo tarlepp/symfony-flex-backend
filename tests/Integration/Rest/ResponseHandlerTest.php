@@ -33,11 +33,11 @@ class ResponseHandlerTest extends KernelTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
-        $serializer = static::getContainer()->get(SerializerInterface::class);
+        $serializer = self::getContainer()->get(SerializerInterface::class);
 
         $responseClass = new ResponseHandler($serializer);
 
-        static::assertSame($serializer, $responseClass->getSerializer());
+        self::assertSame($serializer, $responseClass->getSerializer());
     }
 
     /**
@@ -54,13 +54,13 @@ class ResponseHandlerTest extends KernelTestCase
         array $data,
         string $expectedContent
     ): void {
-        $serializer = static::getContainer()->get(SerializerInterface::class);
+        $serializer = self::getContainer()->get(SerializerInterface::class);
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $httpResponse = (new ResponseHandler($serializer))->createResponse($request, $data, $stubResourceService, 200);
 
-        static::assertSame($expectedContent, $httpResponse->getContent());
+        self::assertSame($expectedContent, $httpResponse->getContent());
     }
 
     /**
@@ -77,7 +77,7 @@ class ResponseHandlerTest extends KernelTestCase
         $exception = new Exception('Some exception');
 
         $stubSerializer
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('serialize')
             ->withAnyParameters()
             ->willThrowException($exception);
@@ -110,7 +110,7 @@ class ResponseHandlerTest extends KernelTestCase
             ]
         );
 
-        $serializer = static::getContainer()->get(SerializerInterface::class);
+        $serializer = self::getContainer()->get(SerializerInterface::class);
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
@@ -137,12 +137,12 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([]);
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -152,7 +152,7 @@ class ResponseHandlerTest extends KernelTestCase
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
 
-        static::assertSame(['FakeEntity'], $context['groups']);
+        self::assertSame(['FakeEntity'], $context['groups']);
     }
 
     /**
@@ -166,14 +166,14 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateAll' => '',
             ]);
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -183,7 +183,7 @@ class ResponseHandlerTest extends KernelTestCase
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
 
-        static::assertSame(['FakeEntity'], $context['groups']);
+        self::assertSame(['FakeEntity'], $context['groups']);
     }
 
     /**
@@ -197,19 +197,19 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateAll' => '',
             ]);
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getAssociations')
             ->willReturn(['AnotherFakeEntity']);
 
@@ -219,7 +219,7 @@ class ResponseHandlerTest extends KernelTestCase
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
 
-        static::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
+        self::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
     }
 
     /**
@@ -233,14 +233,14 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
             ]);
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -250,7 +250,7 @@ class ResponseHandlerTest extends KernelTestCase
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
 
-        static::assertSame(['FakeEntity'], $context['groups']);
+        self::assertSame(['FakeEntity'], $context['groups']);
     }
 
     /**
@@ -264,19 +264,19 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
             ]);
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
         $request
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('get')
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
@@ -287,7 +287,7 @@ class ResponseHandlerTest extends KernelTestCase
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
 
-        static::assertSame(['AnotherFakeEntity'], $context['groups']);
+        self::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
 
     /**
@@ -307,24 +307,24 @@ class ResponseHandlerTest extends KernelTestCase
         ];
 
         $parameterBag
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
             ]);
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
         $restResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getSerializerContext')
             ->willReturn($expected);
 
         $request
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('get')
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
@@ -332,7 +332,7 @@ class ResponseHandlerTest extends KernelTestCase
         /** @var InputBag $parameterBag */
         $request->query = $parameterBag;
 
-        static::assertSame(
+        self::assertSame(
             $expected,
             (new ResponseHandler($serializer))->getSerializeContext($request, $restResource)
         );
@@ -353,23 +353,23 @@ class ResponseHandlerTest extends KernelTestCase
         $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
 
         $formInterface
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getErrors')
             ->withAnyParameters()
             ->willReturn($formErrorIterator);
 
         $formInterface
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getName')
             ->willReturn('foo');
 
         $formError
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getOrigin')
             ->willReturn($formInterface);
 
         $formError
-            ->expects(static::atLeast(1))
+            ->expects(self::atLeast(1))
             ->method('getMessage')
             ->willReturn('test error');
 
@@ -392,23 +392,23 @@ class ResponseHandlerTest extends KernelTestCase
         $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
 
         $formInterface
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getErrors')
             ->withAnyParameters()
             ->willReturn($formErrorIterator);
 
         $formInterface
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getName')
             ->willReturn('');
 
         $formError
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getOrigin')
             ->willReturn($formInterface);
 
         $formError
-            ->expects(static::atLeast(1))
+            ->expects(self::atLeast(1))
             ->method('getMessage')
             ->willReturn('test error');
 

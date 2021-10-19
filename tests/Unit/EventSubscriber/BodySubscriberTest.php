@@ -32,6 +32,6 @@ class BodySubscriberTest extends KernelTestCase
             ],
         ];
 
-        static::assertSame($expected, BodySubscriber::getSubscribedEvents());
+        self::assertSame($expected, BodySubscriber::getSubscribedEvents());
     }
 }

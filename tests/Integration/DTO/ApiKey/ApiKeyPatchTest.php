@@ -52,6 +52,6 @@ class ApiKeyPatchTest extends DtoTestCase
         /** @var ApiKey $updatedApiKey */
         $updatedApiKey = $dto->update($user);
 
-        static::assertCount(2, $updatedApiKey->getUserGroups());
+        self::assertCount(2, $updatedApiKey->getUserGroups());
     }
 }

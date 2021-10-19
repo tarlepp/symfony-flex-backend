@@ -20,6 +20,6 @@ class ProfileControllerTest extends KernelTestCase
 {
     public function testThatControllerWorks(): void
     {
-        static::markTestIncomplete('TODO implemented tests for this controller.');
+        self::markTestIncomplete('TODO implemented tests for this controller.');
     }
 }

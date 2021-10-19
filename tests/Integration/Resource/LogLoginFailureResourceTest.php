@@ -50,7 +50,7 @@ class LogLoginFailureResourceTest extends ResourceTestCase
         $user = (new User())->setUsername('username');
 
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('clear')
             ->with($user)
             ->willReturn(0);

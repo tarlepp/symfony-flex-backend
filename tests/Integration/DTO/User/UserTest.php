@@ -54,11 +54,11 @@ class UserTest extends DtoTestCase
         $dto = (new UserDto())
             ->load($userEntity);
 
-        static::assertSame('username', $dto->getUsername());
-        static::assertSame('first name', $dto->getFirstName());
-        static::assertSame('last name', $dto->getLastName());
-        static::assertSame('firstname.surname@test.com', $dto->getEmail());
-        static::assertSame([$userGroupEntity], $dto->getUserGroups());
+        self::assertSame('username', $dto->getUsername());
+        self::assertSame('first name', $dto->getFirstName());
+        self::assertSame('last name', $dto->getLastName());
+        self::assertSame('firstname.surname@test.com', $dto->getEmail());
+        self::assertSame([$userGroupEntity], $dto->getUserGroups());
     }
 
     /**
@@ -71,7 +71,7 @@ class UserTest extends DtoTestCase
         $entity = $this->getMockBuilder(UserEntity::class)->getMock();
 
         $entity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setPlainPassword')
             ->with('password');
 
@@ -95,11 +95,11 @@ class UserTest extends DtoTestCase
         $entity = $this->getMockBuilder(UserEntity::class)->getMock();
 
         $entity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('clearUserGroups');
 
         $entity
-            ->expects(static::exactly(count($userGroups)))
+            ->expects(self::exactly(count($userGroups)))
             ->method('addUserGroup')
             ->willReturn($entity);
 

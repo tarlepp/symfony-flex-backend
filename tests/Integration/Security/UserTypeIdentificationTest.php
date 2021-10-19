@@ -45,11 +45,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $userRepositoryMock = $this->createMock(UserRepository::class);
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull(
+        self::assertNull(
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getApiKey(),
         );
     }
@@ -67,11 +67,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertSame(
+        self::assertSame(
             $apiKey,
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getApiKey(),
         );
@@ -90,11 +90,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $userRepositoryMock = $this->createMock(UserRepository::class);
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull(
+        self::assertNull(
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getUser(),
         );
     }
@@ -114,17 +114,17 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
         $userRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
             ->with($user->getId(), true)
             ->willReturn($user);
 
-        static::assertSame(
+        self::assertSame(
             $user,
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getUser(),
         );
@@ -141,11 +141,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $userRepositoryMock = $this->createMock(UserRepository::class);
 
         $tokenStorageMock
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull(
+        self::assertNull(
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getIdentity(),
         );
     }
@@ -162,11 +162,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertSame(
+        self::assertSame(
             $securityUser,
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getIdentity()
         );
@@ -184,11 +184,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
         $tokenStorageMock
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertSame(
+        self::assertSame(
             $apiKeyUser,
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getIdentity()
         );
@@ -205,11 +205,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $userRepositoryMock = $this->createMock(UserRepository::class);
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull(
+        self::assertNull(
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getApiKeyUser(),
         );
     }
@@ -226,11 +226,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertSame(
+        self::assertSame(
             $apiKeyUser,
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getApiKeyUser(),
         );
@@ -247,11 +247,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $userRepositoryMock = $this->createMock(UserRepository::class);
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull(
+        self::assertNull(
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getSecurityUser(),
         );
     }
@@ -268,11 +268,11 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
 
         $tokenStorageMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertSame(
+        self::assertSame(
             $securityUser,
             (new UserTypeIdentification($tokenStorageMock, $userRepositoryMock))->getSecurityUser(),
         );

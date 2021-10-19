@@ -24,6 +24,6 @@ class UniqueUsernameTest extends KernelTestCase
      */
     public function testThatGetTargetsReturnsExpected(): void
     {
-        static::assertSame('class', (new UniqueUsername())->getTargets());
+        self::assertSame('class', (new UniqueUsername())->getTargets());
     }
 }
