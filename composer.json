@@ -35,7 +35,7 @@
 		"matthiasnoback/symfony-console-form": "5.0.0",
 		"nelmio/api-doc-bundle": "4.6.1",
 		"nelmio/cors-bundle": "2.1.1",
-		"phpdocumentor/reflection-docblock": "5.2.2",
+		"phpdocumentor/reflection-docblock": "5.3.0",
 		"ramsey/uuid-doctrine": "1.7.0",
 		"sensio/framework-extra-bundle": "6.2.0",
 		"symfony/asset": "5.3.4",
