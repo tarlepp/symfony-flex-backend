@@ -28,7 +28,7 @@ class LocaleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/locale` endpoint returns 405 with `$method` method
+     * @testdox Test that `/v1/localization/locale` endpoint returns HTTP status `405` if `$method` method is used
      */
     public function testThatLocaleRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -45,7 +45,7 @@ class LocaleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/locale` endpoint returns 200 with `GET` method
+     * @testdox Test that `/v1/localization/locale` endpoint returns HTTP status `200` with `GET` method
      */
     public function testThatLocaleRouteReturns200(): void
     {

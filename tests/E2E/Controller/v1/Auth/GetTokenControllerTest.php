@@ -29,7 +29,7 @@ class GetTokenControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/auth/get_token` returns 405 with $method method
+     * @testdox Test that `/v1/auth/get_token` route returns HTTP status 405 if `$method` method is used
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
@@ -48,7 +48,7 @@ class GetTokenControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/auth/get_token` returns proper JWT with $username + $password
+     * @testdox Test that `POST /v1/auth/get_token` returns proper JWT with `$username` + `$password` credentials
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
@@ -97,7 +97,7 @@ class GetTokenControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/auth/get_token` returns 401 with invalid credentials
+     * @testdox Test that `POST /v1/auth/get_token` returns HTTP status 401 with invalid credentials
      */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
@@ -158,11 +158,13 @@ class GetTokenControllerTest extends WebTestCase
     {
         yield ['john', 'password'];
         yield ['john-logged', 'password-logged'];
+        yield ['john-api', 'password-api'];
         yield ['john-user', 'password-user'];
         yield ['john-admin', 'password-admin'];
         yield ['john-root', 'password-root'];
         yield ['john.doe@test.com', 'password'];
         yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-api@test.com', 'password-api'];
         yield ['john.doe-user@test.com', 'password-user'];
         yield ['john.doe-admin@test.com', 'password-admin'];
         yield ['john.doe-root@test.com', 'password-root'];

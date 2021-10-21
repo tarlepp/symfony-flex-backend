@@ -28,7 +28,7 @@ class InheritedRolesControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` returns HTTP 401 for non-logged in user
+     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` returns HTTP status `401` for non-logged in user
      */
     public function testThatGetInheritedRoles401(): void
     {
@@ -48,7 +48,7 @@ class InheritedRolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that inherited roles are expected with $username + $password
+     * @testdox Test that inherited roles are expected when using `$username` + `$password` credentials
      */
     public function testThatGetInheritedRolesActionWorksAsExpected(string $username, string $password): void
     {
@@ -81,8 +81,15 @@ class InheritedRolesControllerTest extends WebTestCase
     {
         yield ['john', 'password'];
         yield ['john-logged', 'password-logged'];
+        yield ['john-api', 'password-api'];
         yield ['john-user', 'password-user'];
         yield ['john-admin', 'password-admin'];
         yield ['john-root', 'password-root'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-user@test.com', 'password-user'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
+        yield ['john.doe-root@test.com', 'password-root'];
     }
 }

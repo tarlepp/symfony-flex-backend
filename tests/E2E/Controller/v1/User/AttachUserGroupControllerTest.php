@@ -43,7 +43,7 @@ class AttachUserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns 401 for non-logged in user
+     * @testdox Test that `POST /v1/user/{id}/group/{id}` returns HTTP status `401` for non-logged in user
      */
     public function testThatAttachUserGroupReturns401(): void
     {
@@ -65,7 +65,7 @@ class AttachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `POST /v1/user/{id}/group/{id}` returns `403` when using `$u` + `$p`, who hasn't `ROLE_ROOT`
      */
     public function testThatAttachUserGroupReturns403(string $u, string $p): void
     {
@@ -87,7 +87,7 @@ class AttachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns status $expectedStatus with root user
+     * @testdox Test that `POST /v1/user/{id}/group/{id}` returns HTTP status `$expectedStatus` when using root user
      */
     public function testThatAttachUserGroupWorksAsExpected(int $expectedStatus): void
     {
@@ -111,10 +111,15 @@ class AttachUserGroupControllerTest extends WebTestCase
     public function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
         yield ['john-logged', 'password-logged'];
+        yield ['john-api', 'password-api'];
         yield ['john-user', 'password-user'];
         yield ['john-admin', 'password-admin'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-user@test.com', 'password-user'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
     }
 
     /**

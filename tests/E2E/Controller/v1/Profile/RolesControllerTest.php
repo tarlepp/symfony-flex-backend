@@ -29,7 +29,7 @@ class RolesControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile/roles` returns 401 without Json Web Token
+     * @testdox Test that `GET /v1/profile/roles` returns HTTP status `401` without Json Web Token
      */
     public function testThatRolesActionReturns401WithoutToken(): void
     {
@@ -59,7 +59,7 @@ class RolesControllerTest extends WebTestCase
     /**
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile/roles` returns 401 with invalid ApiKey token
+     * @testdox Test that `GET /v1/profile/roles` returns HTTP status `401` with invalid API Key token
      */
     public function testThatRolesActionReturns401WithInvalidApiKey(): void
     {
@@ -93,7 +93,7 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile/roles` returns expected roles with $username + $password
+     * @testdox Test that `GET /v1/profile/roles` returns expected roles with `$username` + `$password` credentials
      */
     public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
@@ -113,7 +113,7 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile/roles` returns expected with invalid $token token
+     * @testdox Test that `GET /v1/profile/roles` returns expected with valid API key `$token` token
      */
     public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {
@@ -147,11 +147,13 @@ class RolesControllerTest extends WebTestCase
     {
         yield ['john', 'password', []];
         yield ['john-logged', 'password-logged', ['ROLE_LOGGED']];
+        yield ['john-api', 'password-api', ['ROLE_API', 'ROLE_LOGGED']];
         yield ['john-user', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
         yield ['john-admin', 'password-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
         yield ['john-root', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
         yield ['john.doe@test.com', 'password', []];
         yield ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']];
+        yield ['john.doe-api@test.com', 'password-api', ['ROLE_API', 'ROLE_LOGGED']];
         yield ['john.doe-user@test.com', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
         yield ['john.doe-admin@test.com', 'password-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
         yield ['john.doe-root@test.com', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];

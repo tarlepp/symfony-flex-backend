@@ -25,7 +25,7 @@ class RoleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role` returns HTTP 401 for non-logged in user
+     * @testdox Test that `GET /v1/role` returns HTTP status `401` for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -44,7 +44,7 @@ class RoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role` returns HTTP 403 when using `$username` + `$password` as a user
+     * @testdox Test that `GET /v1/role` returns HTTP status `403` when using `$username` + `$password` credentials
      */
     public function testThatGetBaseRouteReturn403(string $username, string $password): void
     {
@@ -63,7 +63,7 @@ class RoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role` returns HTTP 200 when using `$username` + `$password` as a user
+     * @testdox Test that `GET /v1/role` returns HTTP status `200` when using `$username` + `$password` credentials
      */
     public function testThatGetBaseRouteReturn200(string $username, string $password): void
     {
@@ -86,6 +86,10 @@ class RoleControllerTest extends WebTestCase
         yield ['john-api', 'password-api'];
         yield ['john-logged', 'password-logged'];
         yield ['john-user', 'password-user'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-user@test.com', 'password-user'];
     }
 
     /**
@@ -95,5 +99,7 @@ class RoleControllerTest extends WebTestCase
     {
         yield ['john-admin', 'password-admin'];
         yield ['john-root', 'password-root'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
+        yield ['john.doe-root@test.com', 'password-root'];
     }
 }

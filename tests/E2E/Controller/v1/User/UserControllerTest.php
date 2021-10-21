@@ -25,6 +25,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *                  
+     * @testdox Test that `GET /v1/user` returns HTTP status `401` for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -49,11 +51,11 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/count` returns expected response with $username + $password
+     * @testdox Test that `GET /v1/user/count` returns expected response when using `$u` + `$p` credentials
      */
-    public function testThatCountActionReturnsExpected(string $username, string $password): void
+    public function testThatCountActionReturnsExpected(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
@@ -67,7 +69,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderValidApiKeyUsers
      *
-     * @testdox Test that `GET /v1/user/count` returns expected response with $role `ApiKey` token
+     * @testdox Test that `GET /v1/user/count` returns expected response when using API key token for `$role` role
      */
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
     {
@@ -87,11 +89,11 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/count` returns HTTP 403 with $username + $password
+     * @testdox Test that `GET /v1/user/count` returns HTTP status `403` when using `$u` + `$p` credentials
      */
-    public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
+    public function testThatCountActionReturns403ForInvalidUser(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
@@ -109,7 +111,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderInvalidApiKeyUsers
      *
-     * @testdox Test that `GET /v1/user/count` returns HTTP 403 with $role `ApiKey` token
+     * @testdox Test that `GET /v1/user/count` returns HTTP status `403` when using API key token for `$role` role
      */
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
@@ -133,7 +135,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user` action returns expected with $username + $password
+     * @testdox Test that `GET /v1/user` action returns expected when using `$username` + `$password` credentials
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
@@ -153,7 +155,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user` action returns HTTP 403 for invalid user $username + $password
+     * @testdox Test that `GET /v1/user` action returns HTTP status 403 when using `$username` + `$password` credentials
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -177,7 +179,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/ids` returns expected with $username + $password
+     * @testdox Test that `GET /v1/user/ids` returns expected when using `$username` + `$password` credentials
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
@@ -197,7 +199,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/ids` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `GET /v1/user/ids` returns HTTP status `403`  when using `$username` + `$password` credentials
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -223,6 +225,8 @@ class UserControllerTest extends WebTestCase
     {
         yield ['john-admin', 'password-admin'];
         yield ['john-root', 'password-root'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
+        yield ['john.doe-root@test.com', 'password-root'];
     }
 
     /**
@@ -243,6 +247,10 @@ class UserControllerTest extends WebTestCase
         yield ['john-api', 'password-api'];
         yield ['john-logged', 'password-logged'];
         yield ['john-user', 'password-user'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-user@test.com', 'password-user'];
     }
 
     /**
@@ -250,8 +258,8 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidApiKeyUsers(): Generator
     {
-        yield ['api'];
         yield ['logged'];
+        yield ['api'];
         yield ['user'];
     }
 }

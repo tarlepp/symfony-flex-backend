@@ -27,7 +27,7 @@ class UsersControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user_group/$userGroupId/users` returns expected count $userCount of users
+     * @testdox Test that `GET /v1/user_group/$userGroupId/users` returns expected count `$userCount` of users
      */
     public function testThatGetUserGroupUsersActionReturnsExpected(int $userCount, string $userGroupId): void
     {

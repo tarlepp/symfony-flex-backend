@@ -41,7 +41,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP status `401` for non-logged in user
      */
     public function testThatDeleteUserReturns401(): void
     {
@@ -60,11 +60,11 @@ class DeleteUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 403 for $username + $password, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `DELETE /v1/user/{id}` returns HTTP status `403` for `$u` + `$p`, who hasn't `ROLE_ROOT` role
      */
-    public function testThatDeleteUserReturns403(string $username, string $password): void
+    public function testThatDeleteUserReturns403(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('DELETE', $this->baseUrl . '/' . LoadUserData::$uuids['john']);
 
         $response = $client->getResponse();
@@ -77,7 +77,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 400 if user tries to remove himself
+     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP status `400` if user tries to remove him/herself
      */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
@@ -98,7 +98,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP status `200` for user who has `ROOT_ROLE` role
      */
     public function testThatDeleteActionReturns200(): void
     {
@@ -118,9 +118,14 @@ class DeleteUserControllerTest extends WebTestCase
     public function dataProviderTestThatDeleteUserReturns403(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
         yield ['john-logged', 'password-logged'];
+        yield ['john-api', 'password-api'];
         yield ['john-user', 'password-user'];
         yield ['john-admin', 'password-admin'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-user@test.com', 'password-user'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
     }
 }

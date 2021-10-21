@@ -43,7 +43,7 @@ class AttachUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user_group/{user}/user/{userGroup}` returns 401 for non-logged in user
+     * @testdox Test that `POST /v1/user_group/{id}/user/{id}` returns HTTP status `401` for non-logged in user
      */
     public function testThatAttachUserGroupReturns401(): void
     {
@@ -65,7 +65,7 @@ class AttachUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user_group/{user}/user/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT`
+     * @testdox Test that `POST /v1/user_group/{id}/user/{id}` returns `403` for `$u` + `$p`, who hasn't `ROLE_ROOT`
      */
     public function testThatAttachUserActionReturns403ForInvalidUser(string $u, string $p): void
     {
@@ -92,9 +92,9 @@ class AttachUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user_group/{user}/user/{userGroup}` returns status $expectedStatus with root user
+     * @testdox Test that `POST /v1/user_group/{id}/user/{id}` returns status `$e` for user who has `ROLE_ROOT` role
      */
-    public function testThatAttachUserActionWorksAsExpected(int $expectedStatus): void
+    public function testThatAttachUserActionWorksAsExpected(int $e): void
     {
         $groupUuid = LoadUserGroupData::$uuids['Role-root'];
         $userUuid = LoadUserData::$uuids['john'];
@@ -106,7 +106,7 @@ class AttachUserControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame($e, $response->getStatusCode(), "Response:\n" . $response);
         self::assertCount(2, JSON::decode($content));
     }
 
@@ -116,10 +116,15 @@ class AttachUserControllerTest extends WebTestCase
     public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
         yield ['john-logged', 'password-logged'];
+        yield ['john-api', 'password-api'];
         yield ['john-user', 'password-user'];
         yield ['john-admin', 'password-admin'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-user@test.com', 'password-user'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
     }
 
     /**

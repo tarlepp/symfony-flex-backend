@@ -28,7 +28,7 @@ class TimeZoneControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/timezone` endpoint returns 405 with `$method` method
+     * @testdox Test that `/v1/localization/timezone` endpoint returns HTTP status `405` if `$method` method is used
      */
     public function testThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {

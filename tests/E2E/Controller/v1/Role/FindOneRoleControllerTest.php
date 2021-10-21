@@ -25,7 +25,7 @@ class FindOneRoleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` returns HTTP 401 for non-logged in user
+     * @testdox Test that `GET /v1/role/ROLE_ADMIN` returns HTTP status `401` for non-logged in user
      */
     public function testThatFindOneRoleReturns401(): void
     {
@@ -45,11 +45,11 @@ class FindOneRoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` returns HTTP 403 when using `$username` + `$password` as a user
+     * @testdox Test that `GET /v1/role/ROLE_ADMIN` returns HTTP status `403` when using `$u` + `$p` credentials
      */
-    public function testThatFindOneRoleReturns403(string $username, string $password): void
+    public function testThatFindOneRoleReturns403(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -64,7 +64,7 @@ class FindOneRoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `findOne` action returns HTTP 200 with $username + $password
+     * @testdox Test that `findOne` action returns HTTP status `200` with `$username` + `$password` credentials
      */
     public function testThatFindOneActionWorksAsExpected(string $username, string $password): void
     {
@@ -80,6 +80,26 @@ class FindOneRoleControllerTest extends WebTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatFindOneActionReturns404
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `findOne` action returns HTTP status `404` with `$username` + `$password` credentials
+     */
+    public function testThatFindOneActionReturns404(string $username, string $password): void
+    {
+        $client = $this->getTestClient($username, $password);
+
+        $client->request('GET', $this->baseUrl . '/ROLE_FOOBAR');
+
+        $response = $client->getResponse();
+        $content = $response->getContent();
+
+        self::assertNotFalse($content);
+        self::assertSame(404, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+    }
+
+    /**
      * @return Generator<array{0: string, 1: string}>
      */
     public function dataProviderTestThatFindOneRoleReturns403(): Generator
@@ -88,6 +108,10 @@ class FindOneRoleControllerTest extends WebTestCase
         yield ['john-api', 'password-api'];
         yield ['john-logged', 'password-logged'];
         yield ['john-user', 'password-user'];
+        yield ['john.doe@test.com', 'password'];
+        yield ['john.doe-api@test.com', 'password-api'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-user@test.com', 'password-user'];
     }
 
     /**
@@ -96,6 +120,16 @@ class FindOneRoleControllerTest extends WebTestCase
     public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
     {
         yield ['john-admin', 'password-admin'];
-        yield ['john-root',   'password-root'];
+        yield ['john-root', 'password-root'];
+        yield ['john.doe-admin@test.com', 'password-admin'];
+        yield ['john.doe-root@test.com', 'password-root'];
+    }
+
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
+    public function dataProviderTestThatFindOneActionReturns404(): Generator
+    {
+        return $this->dataProviderTestThatFindOneActionWorksAsExpected();
     }
 }

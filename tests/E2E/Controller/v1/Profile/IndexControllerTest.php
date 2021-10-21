@@ -29,7 +29,7 @@ class IndexControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile` returns 401 without Json Web Token
+     * @testdox Test that `GET /v1/profile` returns HTTP status `401` without Json Web Token
      */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
@@ -61,7 +61,7 @@ class IndexControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile` returns HTTP 200 with $username + $password
+     * @testdox Test that `GET /v1/profile` returns HTTP status `200` with `$username` + `$password` credentials
      */
     public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
@@ -144,11 +144,13 @@ class IndexControllerTest extends WebTestCase
     {
         yield ['john', 'password'];
         yield ['john-logged', 'password-logged'];
+        yield ['john-api', 'password-api'];
         yield ['john-user', 'password-user'];
         yield ['john-admin', 'password-admin'];
         yield ['john-root', 'password-root'];
         yield ['john.doe@test.com', 'password'];
         yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john.doe-api@test.com', 'password-api'];
         yield ['john.doe-user@test.com', 'password-user'];
         yield ['john.doe-admin@test.com', 'password-admin'];
         yield ['john.doe-root@test.com', 'password-root'];

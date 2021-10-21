@@ -24,6 +24,8 @@ class ApiKeyControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that base route returns HTTP status 401 for non logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -42,7 +44,7 @@ class ApiKeyControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that find action returns $expectedStatus with $username + $password
+     * @testdox Test that find action returns HTTP status `$expectedStatus` with `$username` + `$password` user
      */
     public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
     {
@@ -67,5 +69,11 @@ class ApiKeyControllerTest extends WebTestCase
         yield ['john-user', 'password-user', 403];
         yield ['john-admin', 'password-admin', 403];
         yield ['john-root', 'password-root', 200];
+        yield ['john.doe@test.com', 'password', 403];
+        yield ['john.doe-api@test.com', 'password-api', 403];
+        yield ['john.doe-logged@test.com', 'password-logged', 403];
+        yield ['john.doe-user@test.com', 'password-user', 403];
+        yield ['john.doe-admin@test.com', 'password-admin', 403];
+        yield ['john.doe-root@test.com', 'password-root', 200];
     }
 }

@@ -25,7 +25,7 @@ class UserManagementFlowTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user` with proper payload creates new user
+     * @testdox Test that `POST /v1/user` with proper payload creates new user when using user who has `ROLE_ROOT` role
      */
     public function testThatCreateActionWorksLikeExpected(): string
     {
@@ -63,7 +63,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /v1/user/{userId}` returns expected
+     * @testdox Test that `PUT /v1/user/{userId}` returns expected when using user who has `ROLE_ROOT` role
      */
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
@@ -99,7 +99,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /v1/user/{userId}` returns HTTP status 400 with partial data
+     * @testdox Test that `PUT /v1/user/{userId}` returns HTTP status `400` with partial data
      */
     public function testThatUpdateActionDoesNotWorkWithPartialData(string $userId): string
     {
@@ -125,7 +125,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PATCH /v1/user/{userId}` returns expected data
+     * @testdox Test that `PATCH /v1/user/{userId}` returns expected data when changing partial data
      */
     public function testThatPatchActionWorksWithPartialData(string $userId): string
     {
@@ -164,7 +164,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP 200 with valid user
+     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP status `200` when using user who has `ROLE_ROOT` role
      */
     public function testThatDeleteActionWorksLikeExpected(string $userId): void
     {
