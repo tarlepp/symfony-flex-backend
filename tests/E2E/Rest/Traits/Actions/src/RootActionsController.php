@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions\src;
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
+use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Root as Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -45,4 +46,9 @@ class RootActionsController extends Controller
         Controller::METHOD_UPDATE => UserUpdate::class,
         Controller::METHOD_PATCH => UserPatch::class,
     ];
+
+    public function __construct(
+        protected UserResource $resource,
+    ) {
+    }
 }
