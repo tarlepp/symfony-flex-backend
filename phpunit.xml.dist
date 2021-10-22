@@ -65,11 +65,11 @@
         <testsuite name="Integration">
             <directory>./tests/Integration/</directory>
         </testsuite>
-        <testsuite name="E2E">
-            <directory>./tests/E2E/</directory>
-        </testsuite>
         <testsuite name="Functional">
             <directory>./tests/Functional/</directory>
+        </testsuite>
+        <testsuite name="E2E">
+            <directory>./tests/E2E/</directory>
         </testsuite>
     </testsuites>
     <logging>
