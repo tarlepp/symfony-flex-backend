@@ -31,7 +31,7 @@ class LoggedActionsTest extends RestTraitTestCase
             yield ['john-admin', 'password-admin'];
             yield ['john-root', 'password-root'];
         }
-        
+
         yield ['john.doe-logged@test.com', 'password-logged'];
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {

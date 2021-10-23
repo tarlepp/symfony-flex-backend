@@ -36,7 +36,7 @@ class RootActionsTest extends RestTraitTestCase
             yield ['john-api', 'password-api'];
             yield ['john-user', 'password-user'];
         }
-        
+
         yield ['john-admin', 'password-admin'];
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
@@ -45,7 +45,7 @@ class RootActionsTest extends RestTraitTestCase
             yield ['john.doe-api@test.com', 'password-api'];
             yield ['john.doe-user@test.com', 'password-user'];
         }
-        
+
         yield ['john.doe-admin@test.com', 'password-admin'];
     }
 }
