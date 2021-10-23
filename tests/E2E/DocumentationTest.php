@@ -22,7 +22,7 @@ class DocumentationTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /api/doc/` request returns HTTP status `200`
+     * @testdox Test that `GET /api/doc/` request returns `200`
      */
     public function testThatDocumentationUiWorks(): void
     {
@@ -35,7 +35,7 @@ class DocumentationTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /api/doc.json` request returns HTTP status `200`
+     * @testdox Test that `GET /api/doc.json` request returns `200`
      */
     public function testThatDocumentationJsonWorks(): void
     {
