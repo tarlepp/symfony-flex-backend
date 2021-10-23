@@ -47,7 +47,7 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/{$id}/groups` request returns `403` when using user `$u` + `$p`
+     * @testdox Test that `GET /v1/user/$id/groups` request returns `403` when using user `$u` + `$p`
      */
     public function testThatGetUserGroupsReturns403ForInvalidUser(string $id, string $u, string $p): void
     {
@@ -69,7 +69,7 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/{$id}/groups` request returns expected `$e` groups for user `$u` + `$p`
+     * @testdox Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for user `$u` + `$p`
      */
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $id,
@@ -99,7 +99,7 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/{$id}/groups` request returns expected `$e` groups for root user
+     * @testdox Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for root user
      */
     public function testThatGetUserGroupsReturns200ForRootRoleUser(string $id, StringableArrayObject $e): void
     {

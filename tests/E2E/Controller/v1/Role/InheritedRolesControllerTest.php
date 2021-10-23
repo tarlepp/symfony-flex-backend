@@ -67,7 +67,7 @@ class InheritedRolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `200` when using invalid user `$u` + `$p`
+     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `200` when using valid user `$u` + `$p`
      */
     public function testThatGetInheritedRoles200(string $u, string $p): void
     {
