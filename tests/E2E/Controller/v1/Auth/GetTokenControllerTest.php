@@ -48,7 +48,7 @@ class GetTokenControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/auth/get_token` request returns proper JWT with `$u` + `$p` credentials
+     * @testdox Test that `POST /v1/auth/get_token` request returns `200` with proper JWT with `$u` + `$p` credentials
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $u, string $p): void
     {
