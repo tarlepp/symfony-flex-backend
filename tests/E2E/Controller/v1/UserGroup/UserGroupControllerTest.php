@@ -25,7 +25,7 @@ class UserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user_group` returns HTTP 401 for non-logged in user
+     * @testdox Test that `GET /v1/user_group` request returns `401` for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -42,11 +42,11 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user_group` returns HTTP 403 when using $username + $password as a user
+     * @testdox Test that `GET /v1/user_group` request returns `403` when using invalid user `$u` + `$p`
      */
-    public function testThatGetBaseRouteReturns403ForInvalidUser(string $username, string $password): void
+    public function testThatGetBaseRouteReturns403ForInvalidUser(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -66,11 +66,11 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user_group` returns HTTP 200 when using $username + $password as a user
+     * @testdox Test that `GET /v1/user_group` request returns `200` when using valid user `$u` + `$p`
      */
-    public function testThatGetBaseRouteReturns200ForValidUser(string $username, string $password): void
+    public function testThatGetBaseRouteReturns200ForValidUser(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -84,9 +84,20 @@ class UserGroupControllerTest extends WebTestCase
     public function dataProviderTestThatGetBaseRouteReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+        }
+
+        yield ['john.doe@test.com', 'password'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+        }
     }
 
     /**
@@ -95,6 +106,15 @@ class UserGroupControllerTest extends WebTestCase
     public function dataProviderTestThatGetBaseRouteReturns200ForValidUser(): Generator
     {
         yield ['john-admin', 'password-admin'];
-        yield ['john-root', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-root', 'password-root'];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-root@test.com', 'password-root'];
+        }
     }
 }

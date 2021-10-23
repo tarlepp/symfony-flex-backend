@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions\src;
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
+use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Anon as Actions;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,6 +34,7 @@ class AnonActionsController extends Controller
     use Actions\FindOneAction;
     use Actions\IdsAction;
     use Actions\UpdateAction;
+    use Actions\PatchAction;
 
     /**
      * @var array<string, string>
@@ -42,4 +44,9 @@ class AnonActionsController extends Controller
         Controller::METHOD_UPDATE => UserUpdate::class,
         Controller::METHOD_PATCH => UserPatch::class,
     ];
+
+    public function __construct(
+        protected UserResource $resource,
+    ) {
+    }
 }

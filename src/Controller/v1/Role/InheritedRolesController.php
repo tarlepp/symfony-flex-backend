@@ -10,6 +10,7 @@ namespace App\Controller\v1\Role;
 
 use App\Entity\Role;
 use App\Resource\RoleResource;
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -17,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
  * Class InheritedRolesController
@@ -79,7 +79,7 @@ class InheritedRolesController
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
+    #[IsGranted(RolesServiceInterface::ROLE_ADMIN)]
     #[ParamConverter(
         data: 'role',
         class: RoleResource::class,

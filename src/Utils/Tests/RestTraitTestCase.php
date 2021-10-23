@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
-use App\Rest\UuidHelper;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +30,20 @@ abstract class RestTraitTestCase extends WebTestCase
     protected static string $route;
 
     /**
+     * @throws Throwable
+     */
+    public static function tearDownAfterClass(): void
+    {
+        self::bootKernel();
+
+        PhpUnitUtil::loadFixtures(self::$kernel);
+
+        self::$kernel->shutdown();
+
+        parent::tearDownAfterClass();
+    }
+
+    /**
      * @return Generator<array<int, string|null>>
      */
     abstract public function getValidUsers(): Generator;
@@ -45,14 +58,14 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/count` route doesn't allow `$method` method with `$username + $password`.
+     * @testdox Test that `$m /count` request returns `405` when using invalid user `$u` + `$p`
      */
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -62,16 +75,16 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/count` route works as expected when using `$method` method with `$username + $password`.
+     * @testdox Test that `$m /count` request returns `200` when using valid user `$u` + `$p`
      */
     public function testThatCountRouteWorksWithAllowedHttpMethods(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
-        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
+        static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -79,17 +92,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/count` route doesn't allow invalid user `$username + $password` when using `$method` method.
+     * @testdox Test that `$m /count` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatCountRouteDoesNotAllowInvalidUser(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
         static::assertSame(
-            $username === null ? 401 : 403,
+            $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
         );
@@ -100,14 +113,14 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/` route doesn't allow `$method` method with `$username + $password`.
+     * @testdox Test that `$m /` request returns `405` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -117,16 +130,18 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/` route works as expected when using `$method` method with `$username + $password`.
+     * @testdox Test that `$m /` request returns `200` or `400` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteWorksWithAllowedHttpMethods(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
-        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
+        $m === Request::METHOD_GET
+            ? static::assertSame(200, $response->getStatusCode(), (string)$response->getContent())
+            : static::assertSame(400, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -134,17 +149,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/` route doesn't allow invalid user `$username + $password` when using `$method` method.
+     * @testdox Test that `$m /` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatRootRouteDoesNotAllowInvalidUser(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
         static::assertSame(
-            $username === null ? 401 : 403,
+            $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
         );
@@ -155,15 +170,15 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/$uuid` route doesn't allow `$method` method with `$username + $password`.
+     * @testdox Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
         string $uuid,
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -173,17 +188,23 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/$uuid` route works as expected when using `$method` method with `$username + $password`.
+     * @testdox Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
         string $uuid,
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
-        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
+        $m === Request::METHOD_PUT
+            ? static::assertSame(400, $response->getStatusCode(), (string)$response->getContent())
+            : static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
+
+        if ($m === Request::METHOD_DELETE) {
+            self::tearDownAfterClass();
+        }
     }
 
     /**
@@ -191,18 +212,18 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/$uuid` route doesn't allow invalid user `$username + $password` when using `$method` method.
+     * @testdox Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
-    public function testThatRootRouteWithIdDoesNotAllowInvalidUser(
+    public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
         string $uuid,
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
         static::assertSame(
-            $username === null ? 401 : 403,
+            $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
         );
@@ -213,14 +234,14 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/ids` route doesn't allow `$method` method with `$username + $password`.
+     * @testdox Test that `$m /ids` request returns `405` when using valid user `$u` + `$p`
      */
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . '/ids', $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -230,16 +251,16 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/ids` route works as expected when using `$method` method with `$username + $password`.
+     * @testdox Test that `$m /ids` request returns `200` when using valid user `$u` + `$p`
      */
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . '/ids', $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
-        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
+        static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -247,17 +268,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/ids` route doesn't allow invalid user `$username + $password` when using `$method` method.
+     * @testdox Test that `$m /ids` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
-        ?string $username = null,
-        ?string $password = null,
-        ?string $method = null
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
     ): void {
-        $response = $this->getClientResponse(static::$route . '/ids', $username, $password, $method);
+        $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
         static::assertSame(
-            $username === null ? 401 : 403,
+            $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
         );
@@ -371,6 +392,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_DELETE],
             [Request::METHOD_GET],
             [Request::METHOD_PUT],
+            [Request::METHOD_PATCH],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods, true);
@@ -385,6 +407,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_DELETE],
             [Request::METHOD_GET],
             [Request::METHOD_PUT],
+            [Request::METHOD_PATCH],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods, true);
@@ -444,7 +467,7 @@ abstract class RestTraitTestCase extends WebTestCase
         foreach ($users as $userData) {
             foreach ($methods as $method) {
                 yield array_merge(
-                    $uuid ? [UuidHelper::getFactory()->uuid1()->toString()] : [],
+                    $uuid ? ['20000000-0000-1000-8000-000000000001'] : [],
                     $userData,
                     $method
                 );
