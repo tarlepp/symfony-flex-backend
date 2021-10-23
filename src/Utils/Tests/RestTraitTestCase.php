@@ -30,16 +30,6 @@ abstract class RestTraitTestCase extends WebTestCase
     protected static string $route;
 
     /**
-     * @return Generator<array<int, string|null>>
-     */
-    abstract public function getValidUsers(): Generator;
-
-    /**
-     * @return Generator<array<int, string|null>>
-     */
-    abstract public function getInvalidUsers(): Generator;
-
-    /**
      * @throws Throwable
      */
     public static function tearDownAfterClass(): void
@@ -54,11 +44,21 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
+     * @return Generator<array<int, string|null>>
+     */
+    abstract public function getValidUsers(): Generator;
+
+    /**
+     * @return Generator<array<int, string|null>>
+     */
+    abstract public function getInvalidUsers(): Generator;
+
+    /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /count` route returns HTTP status `405` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /count` request returns `405` when using invalid user `$u` + `$p`
      */
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $u = null,
@@ -75,7 +75,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /count` route return HTTP status `200` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /count` request returns `200` when using valid user `$u` + `$p`
      */
     public function testThatCountRouteWorksWithAllowedHttpMethods(
         ?string $u = null,
@@ -92,7 +92,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /count` route returns HTTP status `401` or `403` when using invalid user `$u` + `$p`
+     * @testdox Test that `$m /count` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $u = null,
@@ -113,7 +113,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /` route return HTTP status `405` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /` request returns `405` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $u = null,
@@ -130,7 +130,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /` route returns HTTP status `200` or `400` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /` request returns `200` or `400` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteWorksWithAllowedHttpMethods(
         ?string $u = null,
@@ -149,7 +149,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /` route returns HTTP status `401` or `403` when using invalid user `$u` + `$p`
+     * @testdox Test that `$m /` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $u = null,
@@ -170,10 +170,10 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /$uuid` route return HTTP status `405` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
-        string  $uuid,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null
@@ -188,10 +188,10 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /$uuid` route returns HTTP status `200` or `400` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
-        string  $uuid,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null
@@ -212,10 +212,10 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /$uuid` route returns HTTP status `401` or `403` when using invalid user `$u` + `$p`
+     * @testdox Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        string  $uuid,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null
@@ -234,7 +234,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /ids` route return HTTP status `405` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /ids` request returns `405` when using valid user `$u` + `$p`
      */
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $u = null,
@@ -251,7 +251,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /ids` route returns HTTP status `401` when using valid user `$u` + `$p`
+     * @testdox Test that `$m /ids` request returns `200` when using valid user `$u` + `$p`
      */
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
         ?string $u = null,
@@ -268,7 +268,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$m /ids` route returns HTTP status `401` or `403` when using invalid user `$u` + `$p`
+     * @testdox Test that `$m /ids` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $u = null,
@@ -392,6 +392,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_DELETE],
             [Request::METHOD_GET],
             [Request::METHOD_PUT],
+            [Request::METHOD_PATCH],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods, true);
@@ -406,6 +407,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_DELETE],
             [Request::METHOD_GET],
             [Request::METHOD_PUT],
+            [Request::METHOD_PATCH],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods, true);
