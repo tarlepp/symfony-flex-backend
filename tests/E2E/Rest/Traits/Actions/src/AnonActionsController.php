@@ -34,6 +34,7 @@ class AnonActionsController extends Controller
     use Actions\FindOneAction;
     use Actions\IdsAction;
     use Actions\UpdateAction;
+    use Actions\PatchAction;
 
     /**
      * @var array<string, string>
