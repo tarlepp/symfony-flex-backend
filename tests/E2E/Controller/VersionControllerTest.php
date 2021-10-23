@@ -25,7 +25,7 @@ class VersionControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /version` request returns HTTP status 200
+     * @testdox Test that `GET /version` request returns `200`
      */
     public function testThatVersionRouteReturns200(): void
     {
@@ -56,6 +56,8 @@ class VersionControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `X-API-VERSION` header is added to response with expected value
      */
     public function testThatApiVersionIsAddedToResponseHeaders(): void
     {

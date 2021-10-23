@@ -28,7 +28,7 @@ class LanguageControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/language` endpoint returns HTTP status 405 is `$method` method is used
+     * @testdox Test that `$method /v1/localization/language` request returns 405
      */
     public function testThatLanguageRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -45,7 +45,7 @@ class LanguageControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/language` endpoint returns HTTP status `200` with `GET` method
+     * @testdox Test that `GET /v1/localization/language` request returns `200`
      */
     public function testThatLanguageRouteReturns200(): void
     {
@@ -62,7 +62,7 @@ class LanguageControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/language` endpoint returns expected count of languages (2)
+     * @testdox Test that `/v1/localization/language` request returns expected count of languages (2)
      */
     public function testThatLanguageRouteReturnsExpectedNumberOfLanguages(): void
     {

@@ -8,8 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Profile;
 
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\JSON;
+use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
@@ -29,7 +31,7 @@ class RolesControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile/roles` returns HTTP status `401` without Json Web Token
+     * @testdox Test that `GET /v1/profile/roles` request returns `401` without Json Web Token
      */
     public function testThatRolesActionReturns401WithoutToken(): void
     {
@@ -59,7 +61,7 @@ class RolesControllerTest extends WebTestCase
     /**
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile/roles` returns HTTP status `401` with invalid API Key token
+     * @testdox Test that `GET /v1/profile/roles` request returns `401` with invalid API Key token
      */
     public function testThatRolesActionReturns401WithInvalidApiKey(): void
     {
@@ -89,15 +91,16 @@ class RolesControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRolesActionReturnsExpected
      *
-     * @param array<int, string> $expected
+     * @phpstan-param StringableArrayObject<array<int, string>> $e
+     * @psalm-param StringableArrayObject $e
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile/roles` returns expected roles with `$username` + `$password` credentials
+     * @testdox Test that `GET /v1/profile/roles` request returns expected `$e` roles with valid user `$u` + `$p`
      */
-    public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
+    public function testThatRolesActionReturnsExpected(string $u, string $p, StringableArrayObject $e): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -105,7 +108,7 @@ class RolesControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        self::assertSame($expected, JSON::decode($content, true), $content);
+        self::assertSame($e->getArrayCopy(), JSON::decode($content, true), $content);
     }
 
     /**
@@ -113,7 +116,7 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile/roles` returns expected with valid API key `$token` token
+     * @testdox Test that `GET /v1/profile/roles` request returns `401` with valid API key `$token` token
      */
     public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {
@@ -141,22 +144,74 @@ class RolesControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string, 2: array<int, string>}>
+     * @phpstan-return Generator<array{0: string, 1: string, 2: StringableArrayObject<array<int, string>>}>
+     * @psalm-return Generator<array{0: string, 1: string, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatRolesActionReturnsExpected(): Generator
     {
-        yield ['john', 'password', []];
-        yield ['john-logged', 'password-logged', ['ROLE_LOGGED']];
-        yield ['john-api', 'password-api', ['ROLE_API', 'ROLE_LOGGED']];
-        yield ['john-user', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john-admin', 'password-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john-root', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john.doe@test.com', 'password', []];
-        yield ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']];
-        yield ['john.doe-api@test.com', 'password-api', ['ROLE_API', 'ROLE_LOGGED']];
-        yield ['john.doe-user@test.com', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john.doe-admin@test.com', 'password-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john.doe-root@test.com', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield [
+            'john',
+            'password',
+            new StringableArrayObject([]),
+        ];
+        yield [
+            'john-logged',
+            'password-logged',
+            new StringableArrayObject(['ROLE_LOGGED']),
+        ];
+        yield [
+            'john-api',
+            'password-api',
+            new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED']),
+        ];
+        yield [
+            'john-user',
+            'password-user',
+            new StringableArrayObject(['ROLE_USER', 'ROLE_LOGGED']),
+        ];
+        yield [
+            'john-admin',
+            'password-admin',
+            new StringableArrayObject(['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']),
+        ];
+        yield [
+            'john-root',
+            'password-root',
+            new StringableArrayObject(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']),
+        ];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield [
+                'john.doe@test.com',
+                'password',
+                new StringableArrayObject([]),
+            ];
+            yield [
+                'john.doe-logged@test.com',
+                'password-logged',
+                new StringableArrayObject(['ROLE_LOGGED']),
+            ];
+            yield [
+                'john.doe-api@test.com',
+                'password-api',
+                new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED']),
+            ];
+            yield [
+                'john.doe-user@test.com',
+                'password-user',
+                new StringableArrayObject(['ROLE_USER', 'ROLE_LOGGED']),
+            ];
+            yield [
+                'john.doe-admin@test.com',
+                'password-admin',
+                new StringableArrayObject(['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']),
+            ];
+            yield [
+                'john.doe-root@test.com',
+                'password-root',
+                new StringableArrayObject(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']),
+            ];
+        }
     }
 
     /**
@@ -166,8 +221,12 @@ class RolesControllerTest extends WebTestCase
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
-        foreach ($rolesService->getRoles() as $role) {
-            yield [str_pad($rolesService->getShort($role), 40, '_')];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            foreach ($rolesService->getRoles() as $role) {
+                yield [str_pad($rolesService->getShort($role), 40, '_')];
+            }
+        } else {
+            yield [str_pad($rolesService->getShort(RolesServiceInterface::ROLE_LOGGED), 40, '_')];
         }
     }
 }

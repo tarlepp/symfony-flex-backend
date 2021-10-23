@@ -23,7 +23,7 @@ class HealthzControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /healthz` request returns HTTP status 200
+     * @testdox Test that `GET /healthz` request returns `200`
      */
     public function testThatHealthzRouteReturns200(): void
     {

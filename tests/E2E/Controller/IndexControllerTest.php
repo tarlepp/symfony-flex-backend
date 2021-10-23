@@ -22,7 +22,7 @@ class IndexControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /` request returns HTTP status 200
+     * @testdox Test that `GET /` request returns `200`
      */
     public function testThatDefaultRouteReturns200(): void
     {

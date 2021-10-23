@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Profile;
 
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -29,7 +30,7 @@ class IndexControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile` returns HTTP status `401` without Json Web Token
+     * @testdox Test that `GET /v1/profile` request returns `401` without Json Web Token
      */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
@@ -57,13 +58,13 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
+     * @dataProvider dataProviderTestThatProfileActionReturnExpectedWithValidUser
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile` returns HTTP status `200` with `$username` + `$password` credentials
+     * @testdox Test that `GET /v1/profile` request returns `200` with valid user `$username` + `$password`
      */
-    public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
+    public function testThatProfileActionReturnExpectedWithValidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
@@ -78,7 +79,7 @@ class IndexControllerTest extends WebTestCase
     /**
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile` returns 401 with invalid ApiKey token
+     * @testdox Test that `GET /v1/profile` request returns `401` with invalid API key token
      */
     public function testThatProfileActionReturns401WithInvalidApiKey(): void
     {
@@ -106,13 +107,13 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatProfileActionReturnsExpected
+     * @dataProvider dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken
      *
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile` returns expected with invalid $token token
+     * @testdox Test that `GET /v1/profile` request returns `401` with valid `$token` API key token
      */
-    public function testThatProfileActionReturnsExpected(string $token): void
+    public function testThatProfileActionReturnsExpectedWithValidApiKeyToken(string $token): void
     {
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl);
@@ -140,31 +141,42 @@ class IndexControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1:  string}>
      */
-    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
+    public function dataProviderTestThatProfileActionReturnExpectedWithValidUser(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-api', 'password-api'];
-        yield ['john-user', 'password-user'];
-        yield ['john-admin', 'password-admin'];
-        yield ['john-root', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+            yield ['john-admin', 'password-admin'];
+            yield ['john-root', 'password-root'];
+        }
+
         yield ['john.doe@test.com', 'password'];
-        yield ['john.doe-logged@test.com', 'password-logged'];
-        yield ['john.doe-api@test.com', 'password-api'];
-        yield ['john.doe-user@test.com', 'password-user'];
-        yield ['john.doe-admin@test.com', 'password-admin'];
-        yield ['john.doe-root@test.com', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+            yield ['john.doe-admin@test.com', 'password-admin'];
+            yield ['john.doe-root@test.com', 'password-root'];
+        }
     }
 
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatProfileActionReturnsExpected(): Generator
+    public function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
-        foreach ($rolesService->getRoles() as $role) {
-            yield [str_pad($rolesService->getShort($role), 40, '_')];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            foreach ($rolesService->getRoles() as $role) {
+                yield [str_pad($rolesService->getShort($role), 40, '_')];
+            }
+        } else {
+            yield [str_pad($rolesService->getShort(RolesServiceInterface::ROLE_LOGGED), 40, '_')];
         }
     }
 }

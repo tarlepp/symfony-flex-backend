@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Profile;
 
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
@@ -31,7 +32,7 @@ class GroupsControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile/groups` returns HTTP status `401` without Json Web Token
+     * @testdox Test that `GET /v1/profile/groups` request returns `401` without Json Web Token
      */
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
@@ -61,7 +62,7 @@ class GroupsControllerTest extends WebTestCase
     /**
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile/groups` returns HTTP status `401` with invalid API key token
+     * @testdox Test that `GET /v1/profile/groups` request returns `401` with invalid API key token
      */
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
     {
@@ -91,19 +92,19 @@ class GroupsControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGroupsActionReturnExpected
      *
-     * @psalm-param StringableArrayObject $expected
-     * @phpstan-param StringableArrayObject<array<int, string>> $expected
+     * @psalm-param StringableArrayObject $e
+     * @phpstan-param StringableArrayObject<array<int, string>> $e
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/profile/groups` returns expected groups `$expected` with `$username` + `$password`
+     * @testdox Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`
      */
     public function testThatGroupsActionReturnExpected(
-        string $username,
-        string $password,
-        StringableArrayObject $expected
+        string $u,
+        string $p,
+        StringableArrayObject $e
     ): void {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -115,7 +116,7 @@ class GroupsControllerTest extends WebTestCase
         $responseContent = JSON::decode($content);
 
         self::assertSame(
-            $expected->getArrayCopy(),
+            $e->getArrayCopy(),
             array_map(static fn (stdClass $userGroup): string => $userGroup->role->id, $responseContent),
         );
     }
@@ -125,7 +126,7 @@ class GroupsControllerTest extends WebTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `GET /v1/profile/groups` returns expected with valid `$token` API key token
+     * @testdox Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token
      */
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {
@@ -166,12 +167,15 @@ class GroupsControllerTest extends WebTestCase
         yield ['john-user', 'password-user', new StringableArrayObject(['ROLE_USER'])];
         yield ['john-admin', 'password-admin', new StringableArrayObject(['ROLE_ADMIN'])];
         yield ['john-root', 'password-root', new StringableArrayObject(['ROLE_ROOT'])];
-        yield ['john.doe@test.com', 'password', new StringableArrayObject([])];
-        yield ['john.doe-logged@test.com', 'password-logged', new StringableArrayObject(['ROLE_LOGGED'])];
-        yield ['john.doe-api@test.com', 'password-api', new StringableArrayObject(['ROLE_API'])];
-        yield ['john.doe-user@test.com', 'password-user', new StringableArrayObject(['ROLE_USER'])];
-        yield ['john.doe-admin@test.com', 'password-admin', new StringableArrayObject(['ROLE_ADMIN'])];
-        yield ['john.doe-root@test.com', 'password-root', new StringableArrayObject(['ROLE_ROOT'])];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password', new StringableArrayObject([])];
+            yield ['john.doe-logged@test.com', 'password-logged', new StringableArrayObject(['ROLE_LOGGED'])];
+            yield ['john.doe-api@test.com', 'password-api', new StringableArrayObject(['ROLE_API'])];
+            yield ['john.doe-user@test.com', 'password-user', new StringableArrayObject(['ROLE_USER'])];
+            yield ['john.doe-admin@test.com', 'password-admin', new StringableArrayObject(['ROLE_ADMIN'])];
+            yield ['john.doe-root@test.com', 'password-root', new StringableArrayObject(['ROLE_ROOT'])];
+        }
     }
 
     /**
@@ -181,8 +185,12 @@ class GroupsControllerTest extends WebTestCase
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
-        foreach ($rolesService->getRoles() as $role) {
-            yield [str_pad($rolesService->getShort($role), 40, '_')];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            foreach ($rolesService->getRoles() as $role) {
+                yield [str_pad($rolesService->getShort($role), 40, '_')];
+            }
+        } else {
+            yield [str_pad($rolesService->getShort(RolesServiceInterface::ROLE_LOGGED), 40, '_')];
         }
     }
 }
