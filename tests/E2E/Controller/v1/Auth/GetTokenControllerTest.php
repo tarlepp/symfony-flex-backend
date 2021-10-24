@@ -29,7 +29,7 @@ class GetTokenControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/auth/get_token` returns 405 with $method method
+     * @testdox Test that `$method /v1/auth/get_token` request returns `405`
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
@@ -48,11 +48,17 @@ class GetTokenControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/auth/get_token` returns proper JWT with $username + $password
+     * @testdox Test that `POST /v1/auth/get_token` request returns `200` with proper JWT with `$u` + `$p` credentials
      */
-    public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
+    public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $u, string $p): void
     {
-        $payload = json_encode(compact('username', 'password'), JSON_THROW_ON_ERROR);
+        $payload = json_encode(
+            [
+                'username' => $u,
+                'password' => $p,
+            ],
+            JSON_THROW_ON_ERROR,
+        );
 
         $client = $this->getTestClient();
         $client->request(
@@ -97,7 +103,7 @@ class GetTokenControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/auth/get_token` returns 401 with invalid credentials
+     * @testdox Test that `POST /v1/auth/get_token` request returns `401` with invalid credentials
      */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
@@ -157,14 +163,23 @@ class GetTokenControllerTest extends WebTestCase
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
-        yield ['john-admin', 'password-admin'];
-        yield ['john-root', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+            yield ['john-admin', 'password-admin'];
+            yield ['john-root', 'password-root'];
+        }
+
         yield ['john.doe@test.com', 'password'];
-        yield ['john.doe-logged@test.com', 'password-logged'];
-        yield ['john.doe-user@test.com', 'password-user'];
-        yield ['john.doe-admin@test.com', 'password-admin'];
-        yield ['john.doe-root@test.com', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+            yield ['john.doe-admin@test.com', 'password-admin'];
+            yield ['john.doe-root@test.com', 'password-root'];
+        }
     }
 }

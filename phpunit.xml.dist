@@ -38,6 +38,7 @@
 
         <env name="KERNEL_CLASS" value="App\Kernel" />
         <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="USE_ALL_USER_COMBINATIONS" value="no" />
         <env name="APP_ENV" value="test" force="true" />
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb" />
@@ -64,11 +65,11 @@
         <testsuite name="Integration">
             <directory>./tests/Integration/</directory>
         </testsuite>
-        <testsuite name="E2E">
-            <directory>./tests/E2E/</directory>
-        </testsuite>
         <testsuite name="Functional">
             <directory>./tests/Functional/</directory>
+        </testsuite>
+        <testsuite name="E2E">
+            <directory>./tests/E2E/</directory>
         </testsuite>
     </testsuites>
     <logging>

@@ -42,7 +42,7 @@ class DetachUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user_group/{userGroup}/user/{user}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user_group/{id}/user/{id}` request returns `401` for non-logged in user
      */
     public function testThatDetachUserReturns401(): void
     {
@@ -64,7 +64,7 @@ class DetachUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user_group/{group}/user/{user}` returns 403 for $u + $p, who hasn't `ROLE_ROOT`
+     * @testdox Test that `DELETE /v1/user_group/{id}/user/{id}` request returns `403` for not root user `$u` + `$p`
      */
     public function testThatDetachUserReturns403(string $u, string $p): void
     {
@@ -84,7 +84,7 @@ class DetachUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user_group/{userGroup}/user/{user}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user_group/{id}/user/{id}` request returns `200` for root user
      */
     public function testThatDetachUserReturns200(): void
     {
@@ -107,9 +107,21 @@ class DetachUserControllerTest extends WebTestCase
     public function dataProviderTestThatDetachUserReturns403(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
-        yield ['john-admin', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+            yield ['john-admin', 'password-admin'];
+        }
+
+        yield ['john.doe@test.com', 'password'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+            yield ['john.doe-admin@test.com', 'password-admin'];
+        }
     }
 }
