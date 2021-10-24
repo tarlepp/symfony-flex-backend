@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/DocumentationTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E;
@@ -15,12 +15,14 @@ use Throwable;
  * Class DocumentationTest
  *
  * @package App\Tests\Functional
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DocumentationTest extends WebTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /api/doc/` request returns `200`
      */
     public function testThatDocumentationUiWorks(): void
     {
@@ -32,6 +34,8 @@ class DocumentationTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /api/doc.json` request returns `200`
      */
     public function testThatDocumentationJsonWorks(): void
     {

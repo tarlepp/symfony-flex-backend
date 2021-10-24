@@ -23,12 +23,22 @@ class AnonActionsTest extends RestTraitTestCase
 
     public function getValidUsers(): Generator
     {
-        //yield ['john-root', 'password-root'];
-        //yield ['john-admin', 'password-admin'];
-        //yield ['john-user', 'password-user'];
-        //yield ['john-logged', 'password-logged'];
-        yield ['john', 'password'];
         yield [null, null];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password'];
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+            yield ['john-admin', 'password-admin'];
+            yield ['john-root', 'password-root'];
+            yield ['john.doe@test.com', 'password'];
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+            yield ['john.doe-admin@test.com', 'password-admin'];
+            yield ['john.doe-root@test.com', 'password-root'];
+        }
     }
 
     public function getInvalidUsers(): Generator

@@ -104,15 +104,30 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     public function dataProviderValidUsers(): Generator
     {
         yield ['john'];
-        yield ['john-api'];
-        yield ['john-logged'];
-        yield ['john-user'];
-        yield ['john-admin'];
-        yield ['john-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged'];
+            yield ['john-api'];
+            yield ['john-user'];
+            yield ['john-admin'];
+            yield ['john-root'];
+        }
+
+        yield ['john.doe@test.com'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com'];
+            yield ['john.doe-api@test.com'];
+            yield ['john.doe-user@test.com'];
+            yield ['john.doe-admin@test.com'];
+            yield ['john.doe-root@test.com'];
+        }
     }
 
     private function getRepository(): UserRepository
     {
+        self::bootKernel();
+
         return self::getContainer()->get(UserRepository::class);
     }
 }
