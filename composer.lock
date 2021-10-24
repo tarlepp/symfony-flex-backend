@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3062390dfbeee0303884723fa21c792c",
+    "content-hash": "ed8a51f0584ff59c5fec99d6c800d985",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -430,16 +430,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "3.1.2",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "a036d90c303f3163b5be8b8fde9b6755b2be4a3a"
+                "reference": "6d970a11479275300b5144e9373ce5feacfa9b91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/a036d90c303f3163b5be8b8fde9b6755b2be4a3a",
-                "reference": "a036d90c303f3163b5be8b8fde9b6755b2be4a3a",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/6d970a11479275300b5144e9373ce5feacfa9b91",
+                "reference": "6d970a11479275300b5144e9373ce5feacfa9b91",
                 "shasum": ""
             },
             "require": {
@@ -500,7 +500,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/common/issues",
-                "source": "https://github.com/doctrine/common/tree/3.1.2"
+                "source": "https://github.com/doctrine/common/tree/3.2.0"
             },
             "funding": [
                 {
@@ -516,7 +516,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-10T20:18:51+00:00"
+            "time": "2021-10-19T06:47:22+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -785,21 +785,21 @@
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "91f0a5e2356029575f3038432cc188b12f9d5da5"
+                "reference": "7ad66566ecce0925786707654df15203782f583a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/91f0a5e2356029575f3038432cc188b12f9d5da5",
-                "reference": "91f0a5e2356029575f3038432cc188b12f9d5da5",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/7ad66566ecce0925786707654df15203782f583a",
+                "reference": "7ad66566ecce0925786707654df15203782f583a",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.0|~2.0",
-                "doctrine/migrations": "^3.1",
+                "doctrine/migrations": "^3.2",
                 "php": "^7.2|^8.0",
                 "symfony/framework-bundle": "~3.4|~4.0|~5.0"
             },
@@ -849,7 +849,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineMigrationsBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineMigrationsBundle/tree/3.1.1"
+                "source": "https://github.com/doctrine/DoctrineMigrationsBundle/tree/3.2.0"
             },
             "funding": [
                 {
@@ -865,7 +865,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-10T16:48:53+00:00"
+            "time": "2021-10-19T16:25:22+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -963,34 +963,30 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "9cf661f4eb38f7c881cac67c75ea9b00bf97b210"
+                "reference": "8b7ff3e4b7de6b2c84da85637b59fd2880ecaa89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
-                "reference": "9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/8b7ff3e4b7de6b2c84da85637b59fd2880ecaa89",
+                "reference": "8b7ff3e4b7de6b2c84da85637b59fd2880ecaa89",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^7.0",
-                "phpstan/phpstan": "^0.11",
-                "phpstan/phpstan-phpunit": "^0.11",
-                "phpstan/phpstan-strict-rules": "^0.11",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+                "doctrine/coding-standard": "^8.2",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
+                "vimeo/psalm": "^4.10"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
@@ -1038,7 +1034,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/inflector/issues",
-                "source": "https://github.com/doctrine/inflector/tree/2.0.x"
+                "source": "https://github.com/doctrine/inflector/tree/2.0.4"
             },
             "funding": [
                 {
@@ -1054,7 +1050,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-29T15:13:26+00:00"
+            "time": "2021-10-22T20:16:43+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -1207,21 +1203,21 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.2.1",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "818e31703b4fb353c0c23caa714273fc64efa675"
+                "reference": "1967775546df997eb97057911d80184c91c92b9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/818e31703b4fb353c0c23caa714273fc64efa675",
-                "reference": "818e31703b4fb353c0c23caa714273fc64efa675",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/1967775546df997eb97057911d80184c91c92b9a",
+                "reference": "1967775546df997eb97057911d80184c91c92b9a",
                 "shasum": ""
             },
             "require": {
                 "composer/package-versions-deprecated": "^1.8",
-                "doctrine/dbal": "^2.11",
+                "doctrine/dbal": "^2.11 || ^3.0",
                 "doctrine/deprecations": "^0.5.3",
                 "doctrine/event-manager": "^1.0",
                 "friendsofphp/proxy-manager-lts": "^1.0",
@@ -1293,7 +1289,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.2.1"
+                "source": "https://github.com/doctrine/migrations/tree/3.3.0"
             },
             "funding": [
                 {
@@ -1309,7 +1305,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-03T11:49:27+00:00"
+            "time": "2021-10-15T16:53:47+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -2502,16 +2498,16 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v4.6.1",
+            "version": "v4.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "9c729ab7b70bb608af6ea9b313adbc311c21596d"
+                "reference": "efa83ca54eefb43e7af16a3c08e8b613d075fc79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/9c729ab7b70bb608af6ea9b313adbc311c21596d",
-                "reference": "9c729ab7b70bb608af6ea9b313adbc311c21596d",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/efa83ca54eefb43e7af16a3c08e8b613d075fc79",
+                "reference": "efa83ca54eefb43e7af16a3c08e8b613d075fc79",
                 "shasum": ""
             },
             "require": {
@@ -2607,9 +2603,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioApiDocBundle/issues",
-                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.6.1"
+                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.6.2"
             },
-            "time": "2021-09-22T21:43:32+00:00"
+            "time": "2021-10-19T12:29:11+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -2727,16 +2723,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.2.2",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "069a785b2141f5bcf49f3e353548dc1cce6df556"
+                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/069a785b2141f5bcf49f3e353548dc1cce6df556",
-                "reference": "069a785b2141f5bcf49f3e353548dc1cce6df556",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/622548b623e81ca6d78b721c5e029f4ce664f170",
+                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170",
                 "shasum": ""
             },
             "require": {
@@ -2747,7 +2743,8 @@
                 "webmozart/assert": "^1.9.1"
             },
             "require-dev": {
-                "mockery/mockery": "~1.3.2"
+                "mockery/mockery": "~1.3.2",
+                "psalm/phar": "^4.8"
             },
             "type": "library",
             "extra": {
@@ -2777,9 +2774,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/master"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.3.0"
             },
-            "time": "2020-09-03T19:13:55+00:00"
+            "time": "2021-10-19T17:43:47+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -3274,16 +3271,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v6.2.0",
+            "version": "v6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "3f5b6490878f8a70ba702e9692007cf979b42f0e"
+                "reference": "7fd1d54c1b27f094a68ae15a99b7fc815857255f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/3f5b6490878f8a70ba702e9692007cf979b42f0e",
-                "reference": "3f5b6490878f8a70ba702e9692007cf979b42f0e",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/7fd1d54c1b27f094a68ae15a99b7fc815857255f",
+                "reference": "7fd1d54c1b27f094a68ae15a99b7fc815857255f",
                 "shasum": ""
             },
             "require": {
@@ -3346,9 +3343,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues",
-                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.2.0"
+                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.2.1"
             },
-            "time": "2021-09-06T13:24:35+00:00"
+            "time": "2021-10-20T09:43:03+00:00"
         },
         {
             "name": "symfony/asset",
@@ -4539,16 +4536,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.17.1",
+            "version": "v1.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "782ef2269622b8349c4bc3dc795fc79d39e8a5b2"
+                "reference": "0170279814f86648c62aede39b100a343ea29962"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/782ef2269622b8349c4bc3dc795fc79d39e8a5b2",
-                "reference": "782ef2269622b8349c4bc3dc795fc79d39e8a5b2",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/0170279814f86648c62aede39b100a343ea29962",
+                "reference": "0170279814f86648c62aede39b100a343ea29962",
                 "shasum": ""
             },
             "require": {
@@ -4587,7 +4584,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.17.1"
+                "source": "https://github.com/symfony/flex/tree/v1.17.2"
             },
             "funding": [
                 {
@@ -4603,7 +4600,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-14T06:14:48+00:00"
+            "time": "2021-10-21T08:39:19+00:00"
         },
         {
             "name": "symfony/form",
@@ -9126,16 +9123,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.34.0",
+            "version": "v1.34.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "c1ead8581cddeb4b2b9dcc8a3f00910093c4e5e8"
+                "reference": "c9ae401f3fa2b42881120d33ad79416630d1f2be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/c1ead8581cddeb4b2b9dcc8a3f00910093c4e5e8",
-                "reference": "c1ead8581cddeb4b2b9dcc8a3f00910093c4e5e8",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/c9ae401f3fa2b42881120d33ad79416630d1f2be",
+                "reference": "c9ae401f3fa2b42881120d33ad79416630d1f2be",
                 "shasum": ""
             },
             "require": {
@@ -9194,7 +9191,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.34.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.34.1"
             },
             "funding": [
                 {
@@ -9210,7 +9207,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-27T14:29:38+00:00"
+            "time": "2021-10-13T15:58:56+00:00"
         },
         {
             "name": "symfony/requirements-checker",
