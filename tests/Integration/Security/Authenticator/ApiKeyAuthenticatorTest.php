@@ -76,7 +76,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         $passport = (new ApiKeyAuthenticator($apiKeyUserProvider))->authenticate($request);
 
         self::assertTrue($passport->hasBadge(UserBadge::class));
-        
+
         $badge = $passport->getBadge(UserBadge::class);
 
         self::assertNotNull($badge);
@@ -117,7 +117,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
             'foobar',
         ));
     }
-    
+
     public function testThatOnAuthenticationFailureMethodReturnsExpectedResponse(): void
     {
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
@@ -125,18 +125,18 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
             ->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
-        
+
         $response = $authenticator->onAuthenticationFailure(new Request(), new AuthenticationException());
-        
+
         self::assertInstanceOf(JsonResponse::class, $response);
         self::assertSame(401, $response->getStatusCode());
-        
+
         $content = $response->getContent();
-        
+
         self::assertIsString($content);
-        
+
         $decoded = JSON::decode($content);
-        
+
         self::assertSame('Invalid API key', $decoded->message);
     }
 
