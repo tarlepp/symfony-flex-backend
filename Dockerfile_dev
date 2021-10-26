@@ -15,6 +15,7 @@ ENV NODE_VERSION 16
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo wget \
+    python3-dev python3-pip python3-setuptools \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable all necessary PHP packages
@@ -68,6 +69,13 @@ RUN groupadd --gid ${HOST_GID} dev \
     && chgrp -hR dev /app
 
 USER dev
+
+RUN pip3 install thefuck --user
+
+# Add necessary stuff to bash autocomplete
+ENV PATH "$PATH:/home/dev/.local/bin"
+
+RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc
 
 # Install following common tools;
 #   - bamarni/symfony-console-autocomplete, to get application commands and composer autocomplete working
