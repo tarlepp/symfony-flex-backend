@@ -1,4 +1,4 @@
-FROM php:8.0.11-fpm
+FROM php:8.0.12-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -25,10 +25,10 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install intl \
     && docker-php-ext-install opcache \
     && docker-php-ext-install zip \
-    && pecl install xdebug-3.0.4 \
+    && pecl install xdebug-3.1.1 \
     && docker-php-ext-enable xdebug
 
-RUN curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar \
+RUN curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.7/pickle.phar \
     && chmod +x /usr/local/bin/pickle
 
 # Install APCu and APC backward compatibility
@@ -36,7 +36,7 @@ RUN pickle install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.8 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.9 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
