@@ -9,7 +9,7 @@
 		"phpunit/phpunit": "9.5.10",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "5.3.4",
-		"symfony/phpunit-bridge": "5.3.8"
+		"symfony/phpunit-bridge": "5.3.10"
 	},
 	"config": {
 		"platform": {
