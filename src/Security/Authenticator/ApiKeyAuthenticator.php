@@ -45,7 +45,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         if ($apiKey === null) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException('API key not found');
         }
 
         return new SelfValidatingPassport(new UserBadge($token));
@@ -56,11 +56,11 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $data = [
             'code' => 401,
-            'message' => 'Invalid ApiKey',
+            'message' => 'Invalid API key',
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
