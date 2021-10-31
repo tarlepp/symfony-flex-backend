@@ -14,6 +14,7 @@ use Generator;
 use Throwable;
 use function array_search;
 use function array_slice;
+use function getenv;
 
 /**
  * Class InheritedRolesControllerTest

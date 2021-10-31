@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Utils\Tests\RestTraitTestCase;
 use Generator;
+use function getenv;
 
 /**
  * Class AuthenticatedActionsTest
