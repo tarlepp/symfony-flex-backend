@@ -1,4 +1,4 @@
-FROM php:8.0.11-fpm
+FROM php:8.0.12-fpm
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
@@ -12,7 +12,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install opcache \
     && docker-php-ext-install zip
 
-RUN curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar \
+RUN curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.7/pickle.phar \
     && chmod +x /usr/local/bin/pickle
 
 # Install APCu and APC backward compatibility
@@ -20,7 +20,7 @@ RUN pickle install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.8 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.9 /usr/bin/composer /usr/bin/composer
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
