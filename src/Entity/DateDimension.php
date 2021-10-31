@@ -40,6 +40,7 @@ use function floor;
     ],
     name: 'date',
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class DateDimension implements EntityInterface
 {
     use Uuid;
