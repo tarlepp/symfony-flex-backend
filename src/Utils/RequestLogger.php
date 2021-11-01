@@ -8,10 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Utils;
 
-use App\Entity\ApiKey;
 use App\Entity\LogRequest;
-use App\Entity\User;
+use App\Resource\ApiKeyResource;
 use App\Resource\LogRequestResource;
+use App\Resource\UserResource;
 use App\Utils\Interfaces\RequestLoggerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,12 +30,14 @@ class RequestLogger implements RequestLoggerInterface
 {
     private ?Response $response = null;
     private ?Request $request = null;
-    private ?User $user = null;
-    private ?ApiKey $apiKey = null;
+    private ?string $userId = null;
+    private ?string $apiKeyId = null;
     private bool $mainRequest = false;
 
     public function __construct(
-        private LogRequestResource $resource,
+        private LogRequestResource $logRequestResource,
+        private UserResource $userResource,
+        private ApiKeyResource $apiKeyResource,
         private LoggerInterface $logger,
         private array $sensitiveProperties,
     ) {
@@ -55,16 +57,16 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
-    public function setUser(?User $user = null): self
+    public function setUserId(string $userId): self
     {
-        $this->user = $user;
+        $this->userId = $userId;
 
         return $this;
     }
 
-    public function setApiKey(?ApiKey $apiKey = null): self
+    public function setApiKeyId(string $apiKeyId): self
     {
-        $this->apiKey = $apiKey;
+        $this->apiKeyId = $apiKeyId;
 
         return $this;
     }
@@ -102,18 +104,29 @@ class RequestLogger implements RequestLoggerInterface
          * flush this new `LogRequest` entity to database. This is to prevent
          * not wanted entity state changes to be flushed.
          */
-        $this->resource->getRepository()->getEntityManager()->clear();
+        $this->logRequestResource->getRepository()->getEntityManager()->clear();
+
+        $user = null;
+        $apiKey = null;
+
+        if ($this->userId !== null) {
+            $user = $this->userResource->getReference($this->userId);
+        }
+
+        if ($this->apiKeyId !== null) {
+            $apiKey = $this->apiKeyResource->getReference($this->apiKeyId);
+        }
 
         // Create new request log entity
         $entity = new LogRequest(
             $this->sensitiveProperties,
             $this->request,
             $this->response,
-            $this->user,
-            $this->apiKey,
+            $user,
+            $apiKey,
             $this->mainRequest
         );
 
-        $this->resource->save($entity, true, true);
+        $this->logRequestResource->save($entity, true, true);
     }
 }
