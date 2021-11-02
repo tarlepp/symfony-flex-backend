@@ -33,6 +33,8 @@ class JSON
      *                          The behaviour of these constants is described on the JSON constants page.
      * @param int|null $depth Set the maximum depth. Must be greater than zero.
      *
+     * @phpstan-param int<1, max>|null $depth
+     *
      * @throws JsonException
      */
     public static function encode(mixed $input, ?int $options = null, ?int $depth = null): string
@@ -54,6 +56,8 @@ class JSON
      * @param int|null $depth user specified recursion depth
      * @param int|null $options Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                          (default is to cast large integers as floats)
+     *
+     * @phpstan-param int<1, max>|null $depth
      *
      * @throws JsonException
      */
