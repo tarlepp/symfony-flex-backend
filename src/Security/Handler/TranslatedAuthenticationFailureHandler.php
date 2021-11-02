@@ -39,6 +39,9 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
+        /**
+         * @psalm-suppress MissingDependency, InvalidArgument
+         */
         $event = new AuthenticationFailureEvent(
             $exception,
             new JWTAuthenticationFailureResponse(
