@@ -39,9 +39,9 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
     if (!array_key_exists($readableChannel, $cache)) {
         // Parse current environment file
         $variables = (new Dotenv())->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
-        
+
         $configuration = JSON::decode((string)file_get_contents($variables['APPLICATION_CONFIG']), true);
-        
+
         if (!is_array($configuration) || !array_key_exists('DATABASE_URL', $configuration)) {
             throw new RuntimeException('Cannot get `DATABASE_URL from specified env file.');
         }
