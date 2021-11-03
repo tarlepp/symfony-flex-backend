@@ -8,9 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Utils\Interfaces;
 
-use App\Entity\ApiKey;
-use App\Entity\User;
+use App\Resource\ApiKeyResource;
 use App\Resource\LogRequestResource;
+use App\Resource\UserResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +28,13 @@ interface RequestLoggerInterface
      *
      * @param array<int, string> $sensitiveProperties
      */
-    public function __construct(LogRequestResource $resource, LoggerInterface $logger, array $sensitiveProperties);
+    public function __construct(
+        LogRequestResource $logRequestResource,
+        UserResource $userResource,
+        ApiKeyResource $apiKeyResource,
+        LoggerInterface $logger,
+        array $sensitiveProperties,
+    );
 
     /**
      * Setter for response object.
@@ -43,12 +49,12 @@ interface RequestLoggerInterface
     /**
      * Setter method for current user.
      */
-    public function setUser(?User $user = null): self;
+    public function setUserId(string $userId): self;
 
     /**
      * Setter method for current api key
      */
-    public function setApiKey(?ApiKey $apiKey = null): self;
+    public function setApiKeyId(string $apiKeyId): self;
 
     /**
      * Setter method for 'main request' info.
