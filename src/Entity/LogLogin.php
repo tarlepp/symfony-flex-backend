@@ -49,6 +49,7 @@ use function is_array;
     name: 'date',
 )]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class LogLogin implements EntityInterface
 {
     use LogEntityTrait;
