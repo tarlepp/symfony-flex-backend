@@ -50,6 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'email',
     ],
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 #[AssertCollection\UniqueEntity('email')]
 #[AssertCollection\UniqueEntity('username')]
 class User implements EntityInterface, UserInterface, UserGroupAwareInterface

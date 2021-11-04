@@ -33,6 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'role',
     ],
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class Role implements EntityInterface
 {
     use Blameable;

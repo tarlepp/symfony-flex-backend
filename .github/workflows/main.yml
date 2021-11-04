@@ -45,6 +45,9 @@ jobs:
       - name: Validate main `composer.json` and `composer.lock` files
         run: composer validate --no-check-version
 
+      - name: Local PHP Security Checker
+        uses: docker://pplotka/local-php-security-checker-github-actions
+
       - name: Install Composer dependencies
         run: composer install --no-progress --optimize-autoloader
 
@@ -55,11 +58,6 @@ jobs:
           php ./bin/console --version
           php ./vendor/bin/phpunit --version
           composer --version
-
-      - name: PHP Security Checker
-        uses: StephaneBour/actions-php-security-checker@1.1
-        with:
-          composer-lock: './composer.lock'
 
       - name: Check that environment is configured correctly
         run: php ./vendor/bin/requirements-checker
