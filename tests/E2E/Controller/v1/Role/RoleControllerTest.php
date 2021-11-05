@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Role;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class RoleControllerTest

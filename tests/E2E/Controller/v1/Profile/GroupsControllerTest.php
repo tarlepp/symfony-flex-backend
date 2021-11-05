@@ -18,6 +18,7 @@ use JsonException;
 use stdClass;
 use Throwable;
 use function array_map;
+use function getenv;
 
 /**
  * Class GroupsControllerTest

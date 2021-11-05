@@ -38,6 +38,7 @@ use Throwable;
     ],
     name: 'user_id',
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class LogLoginFailure implements EntityInterface
 {
     use Uuid;
