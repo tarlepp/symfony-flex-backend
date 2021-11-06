@@ -33,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(
     name: 'user_group',
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class UserGroup implements EntityInterface, Stringable
 {
     use Blameable;

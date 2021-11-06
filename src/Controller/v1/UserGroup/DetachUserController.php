@@ -32,6 +32,7 @@ use Throwable;
 class DetachUserController
 {
     public function __construct(
+        private UserResource $userResource,
         private UserGroupResource $userGroupResource,
         private SerializerInterface $serializer,
     ) {
@@ -120,7 +121,8 @@ class DetachUserController
     )]
     public function __invoke(UserGroup $userGroup, User $user): JsonResponse
     {
-        $this->userGroupResource->save($userGroup->removeUser($user));
+        $this->userGroupResource->save($userGroup->removeUser($user), false);
+        $this->userResource->save($user, true, true);
 
         $groups = [
             'groups' => [

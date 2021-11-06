@@ -16,6 +16,7 @@ use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
 use Throwable;
+use function getenv;
 use function str_pad;
 
 /**

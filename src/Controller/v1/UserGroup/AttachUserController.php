@@ -32,6 +32,7 @@ use Throwable;
 class AttachUserController
 {
     public function __construct(
+        private UserResource $userResource,
         private UserGroupResource $userGroupResource,
         private SerializerInterface $serializer,
     ) {
@@ -135,7 +136,8 @@ class AttachUserController
     {
         $status = $userGroup->getUsers()->contains($user) ? 200 : 201;
 
-        $this->userGroupResource->save($userGroup->addUser($user));
+        $this->userGroupResource->save($userGroup->addUser($user), false);
+        $this->userResource->save($user, true, true);
 
         $groups = [
             'groups' => [
