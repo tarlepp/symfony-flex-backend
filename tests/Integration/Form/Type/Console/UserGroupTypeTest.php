@@ -117,7 +117,7 @@ class UserGroupTypeTest extends TypeTestCase
         if ($cache === null) {
             $cache = $this->createMock(RolesService::class);
         }
-        
+
         return $cache;
     }
 
@@ -131,7 +131,7 @@ class UserGroupTypeTest extends TypeTestCase
         if ($cache === null) {
             $cache = $this->createMock(RoleResource::class);
         }
-        
+
         return $cache;
     }
 }

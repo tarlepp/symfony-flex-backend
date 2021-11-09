@@ -724,7 +724,7 @@ class GenericResourceTest extends KernelTestCase
         $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $validator = self::getContainer()->get(ValidatorInterface::class);
 
         assert($validator instanceof ValidatorInterface);
