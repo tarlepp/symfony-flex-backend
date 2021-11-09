@@ -28,17 +28,9 @@ use function array_keys;
  */
 class UserTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-    private MockObject | Localization | string $localization = '';
-
-    protected function setUp(): void
-    {
-        $this->userGroupResource = $this->createMock(UserGroupResource::class);
-        $this->localization = $this->createMock(Localization::class);
-
-        parent::setUp();
-    }
-
+    /**
+     * @testdox Test that form submit with valid input data works as expected
+     */
     public function testSubmitValidData(): void
     {
         $resource = $this->getUserGroupResource();

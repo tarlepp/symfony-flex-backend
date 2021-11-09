@@ -27,10 +27,8 @@ use function array_keys;
  */
 class ApiKeyTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-
     /**
-     * @throws Throwable
+     * @testdox Test that form submit with valid input data works as expected
      */
     public function testSubmitValidData(): void
     {

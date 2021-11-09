@@ -27,17 +27,9 @@ use function array_keys;
  */
 class UserGroupTypeTest extends TypeTestCase
 {
-    private MockObject | RolesService | string $rolesService = '';
-    private MockObject | RoleResource | string $roleResource = '';
-
-    protected function setUp(): void
-    {
-        $this->rolesService = $this->createMock(RolesService::class);
-        $this->roleResource = $this->createMock(RoleResource::class);
-
-        parent::setUp();
-    }
-
+    /**
+     * @testdox Test that form submit with valid input data works as expected
+     */
     public function testSubmitValidData(): void
     {
         $resource = $this->getRoleResource();
