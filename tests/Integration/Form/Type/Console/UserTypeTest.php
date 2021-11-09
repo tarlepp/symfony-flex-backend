@@ -18,7 +18,6 @@ use App\Service\Localization;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -42,6 +41,9 @@ class UserTypeTest extends TypeTestCase
 
     public function testSubmitValidData(): void
     {
+        $resource = $this->getUserGroupResource();
+        $localization = $this->getLocalization();
+
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
@@ -49,28 +51,28 @@ class UserTypeTest extends TypeTestCase
         $userGroupEntity = (new UserGroup())
             ->setRole($roleEntity);
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
-        $this->getLocalizationMock()
+        $localization
             ->expects(self::once())
             ->method('getLanguages')
             ->willReturn(['en', 'fi']);
 
-        $this->getLocalizationMock()
+        $localization
             ->expects(self::once())
             ->method('getLocales')
             ->willReturn(['en', 'fi']);
 
-        $this->getLocalizationMock()
+        $localization
             ->expects(self::once())
             ->method('getFormattedTimezones')
             ->willReturn([
@@ -152,12 +154,11 @@ class UserTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        $resource = $this->getUserGroupResource();
+        $localization = $this->getLocalization();
+
         // create a type instance with the mocked dependencies
-        $type = new UserType(
-            $this->getUserGroupResource(),
-            new UserGroupTransformer($this->getUserGroupResource()),
-            $this->getLocalization()
-        );
+        $type = new UserType($resource, new UserGroupTransformer($resource), $localization);
 
         return [
             // register the type instances with the PreloadedExtension
@@ -165,31 +166,31 @@ class UserTypeTest extends TypeTestCase
         ];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @phpstan-return  MockObject&UserGroupResource
+     */
+    private function getUserGroupResource(): MockObject
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
+        static $cache;
+
+        if ($cache === null) {
+            $cache = $this->createMock(UserGroupResource::class);
+        }
+
+        return $cache;
     }
 
-    private function getUserGroupResourceMock(): MockObject
+    /**
+     * @phpstan-return  MockObject&Localization
+     */
+    private function getLocalization(): MockObject
     {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        static $cache;
 
-    private function getLocalization(): Localization
-    {
-        return $this->localization instanceof Localization
-            ? $this->localization
-            : throw new UnexpectedValueException('Localization not set');
-    }
+        if ($cache === null) {
+            $cache = $this->createMock(Localization::class);
+        }
 
-    private function getLocalizationMock(): MockObject
-    {
-        return $this->localization instanceof MockObject
-            ? $this->localization
-            : throw new UnexpectedValueException('Localization not set');
+        return $cache;
     }
 }
