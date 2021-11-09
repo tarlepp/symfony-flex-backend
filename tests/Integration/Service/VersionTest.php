@@ -24,17 +24,6 @@ use UnexpectedValueException;
  */
 class VersionTest extends KernelTestCase
 {
-    private MockObject | CacheInterface | string $cache = '';
-    private MockObject | LoggerInterface | string $logger = '';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-    }
-
     /**
      * @testdox Test that `LoggerInterface::error` method is called when `CacheInterface::get` throws an exception
      */
@@ -42,45 +31,36 @@ class VersionTest extends KernelTestCase
     {
         $exception = new Exception('test exception');
 
-        $this->getCacheMock()
+        $cache = $this->getCache();
+        $logger = $this->getLogger();
+
+        $cache
             ->expects(self::once())
             ->method('get')
             ->willThrowException($exception);
 
-        $this->getLoggerMock()
+        $logger
             ->expects(self::once())
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 
-        (new Version('', $this->getCache(), $this->getLogger()))
+        (new Version('', $cache, $logger))
             ->get();
     }
 
-    private function getCache(): CacheInterface
+    /**
+     * @phpstan-return MockObject&CacheInterface
+     */
+    private function getCache(): MockObject
     {
-        return $this->cache instanceof CacheInterface
-            ? $this->cache
-            : throw new UnexpectedValueException('Cache not set');
+        return $this->getMockBuilder(CacheInterface::class)->getMock();
     }
 
-    private function getCacheMock(): MockObject
+    /**
+     * @phpstan-return MockObject&LoggerInterface
+     */
+    private function getLogger(): MockObject
     {
-        return $this->cache instanceof MockObject
-            ? $this->cache
-            : throw new UnexpectedValueException('Cache not set');
-    }
-
-    private function getLogger(): LoggerInterface
-    {
-        return $this->logger instanceof LoggerInterface
-            ? $this->logger
-            : throw new UnexpectedValueException('Logger not set');
-    }
-
-    private function getLoggerMock(): MockObject
-    {
-        return $this->logger instanceof MockObject
-            ? $this->logger
-            : throw new UnexpectedValueException('Logger not set');
+        return $this->getMockBuilder(LoggerInterface::class)->getMock();
     }
 }
