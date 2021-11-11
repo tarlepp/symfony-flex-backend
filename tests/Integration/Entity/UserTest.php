@@ -33,7 +33,7 @@ class UserTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatPasswordHashingIsWorkingAsExpected
      *
-     * @testdox Test that password hashing is working with `$callable` callable.
+     * @testdox Test that password `$password` is hashed to `$expected` when using `$callable` callable
      */
     public function testThatPasswordHashingIsWorkingAsExpected(
         callable $callable,
@@ -47,6 +47,9 @@ class UserTest extends EntityTestCase
         self::assertSame($expected, $entity->getPassword());
     }
 
+    /**
+     * @testdox Test that `setPlainPassword` method works as expected
+     */
     public function testThatSetPlainPasswordIsWorkingAsExpected(): void
     {
         $entity = $this->getEntity();
@@ -57,10 +60,13 @@ class UserTest extends EntityTestCase
         // Set plain password
         $entity->setPlainPassword('plainPassword');
 
-        self::assertEmpty($this->getEntity()->getPassword());
-        self::assertSame('plainPassword', $this->getEntity()->getPlainPassword());
+        self::assertEmpty($entity->getPassword());
+        self::assertSame('plainPassword', $entity->getPlainPassword());
     }
 
+    /**
+     * @testdox Test that `setPlainPassword` method with empty input does not reset password
+     */
     public function testThatSetEmptyPlainPasswordDoesNotResetPassword(): void
     {
         $entity = $this->getEntity();
@@ -75,6 +81,9 @@ class UserTest extends EntityTestCase
         self::assertEmpty($entity->getPlainPassword());
     }
 
+    /**
+     * @testdox Test that user entity can be serialized and un-serialized as expected
+     */
     public function testThatUserEntityCanBeSerializedAndUnSerializedAsExpected(): void
     {
         $entity = $this->getEntity();
@@ -96,6 +105,9 @@ class UserTest extends EntityTestCase
         self::assertSame('cnffjbeq', $entityUnSerialized->getPassword());
     }
 
+    /**
+     * @testdox Test that `eraseCredentials` method works as expected
+     */
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
     {
         $entity = $this->getEntity();
@@ -106,7 +118,10 @@ class UserTest extends EntityTestCase
         self::assertEmpty($entity->getPlainPassword());
     }
 
-    public function testThatGetRolesReturnsExpectedWithoutRoleService(): void
+    /**
+     * @testdox Test that `getRoles` method returns expected roles
+     */
+    public function testThatGetRolesReturnsExpectedRoles(): void
     {
         $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
         $user = (new User())->addUserGroup($group);

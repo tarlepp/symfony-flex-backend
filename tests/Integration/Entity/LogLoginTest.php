@@ -36,24 +36,24 @@ class LogLoginTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
-        ?string $field = null,
+        ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array  $meta = null
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterReturnsInstanceOfEntity(
-        ?string $field = null,
+        ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array  $meta = null
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -64,14 +64,14 @@ class LogLoginTest extends EntityTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that getter method for `$field` with `$type` returns expected.
+     * @testdox Test that getter method for `$type $property` property returns expected
      */
-    public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
+    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
-        $getter = 'get' . ucfirst($field);
+        $getter = 'get' . ucfirst($property);
 
         if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
-            $getter = 'is' . ucfirst($field);
+            $getter = 'is' . ucfirst($property);
         }
 
         $request = Request::create('');
