@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLocaleType;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -17,7 +16,6 @@ use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use UnexpectedValueException;
 
 /**
  * Class EnumLocaleTypeTest
@@ -27,31 +25,15 @@ use UnexpectedValueException;
  */
 class EnumLocaleTypeTest extends KernelTestCase
 {
-    private ?AbstractPlatform $platform = null;
-    private ?Type $type = null;
-
-    /**
-     * @throws DBALException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        Type::hasType('EnumLocale')
-            ? Type::overrideType('EnumLocale', EnumLocaleType::class)
-            : Type::addType('EnumLocale', EnumLocaleType::class);
-
-        $this->type = Type::getType('EnumLocale');
-    }
-
     /**
      * @testdox Test that `getSQLDeclaration` method returns expected
      */
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
-        self::assertSame("ENUM('en', 'fi')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+        
+        self::assertSame("ENUM('en', 'fi')", $type->getSQLDeclaration([], $platform));
     }
 
     /**
@@ -61,7 +43,10 @@ class EnumLocaleTypeTest extends KernelTestCase
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
-        self::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+        
+        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
     }
 
     /**
@@ -74,7 +59,10 @@ class EnumLocaleTypeTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid \'EnumLocale\' value');
 
-        $this->getType()->convertToDatabaseValue($value, $this->getPlatform());
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        $type->convertToDatabaseValue($value, $platform);
     }
 
     /**
@@ -82,7 +70,10 @@ class EnumLocaleTypeTest extends KernelTestCase
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        self::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+        
+        self::assertTrue($type->requiresSQLCommentHint($platform));
     }
 
     /**
@@ -111,11 +102,15 @@ class EnumLocaleTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
+        return new MySqlPlatform();
     }
 
     private function getType(): Type
     {
-        return $this->type ?? throw new UnexpectedValueException('Type not set');
+        Type::hasType('EnumLocale')
+            ? Type::overrideType('EnumLocale', EnumLocaleType::class)
+            : Type::addType('EnumLocale', EnumLocaleType::class);
+
+        return Type::getType('EnumLocale');
     }
 }
