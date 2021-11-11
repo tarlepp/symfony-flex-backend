@@ -29,10 +29,11 @@ class DateDimensionTest extends KernelTestCase
      */
     public function testThatConstructorCallsExpectedMethods(): void
     {
-        $dateTime = new DateTime('now', new DateTimeZone('UTC'));
-        $dateTime->setTime(10, 10, 10);
+        $dateTime = DateTimeImmutable::createFromMutable(
+            (new DateTime('now', new DateTimeZone('UTC')))->setTime(10, 10, 10)
+        );
 
-        $entity = new DateDimension(DateTimeImmutable::createFromMutable($dateTime));
+        $entity = new DateDimension($dateTime);
 
         self::assertSame($dateTime, $entity->getDate());
         self::assertSame($dateTime->format('U'), $entity->getCreatedAt()->format('U'));
