@@ -22,7 +22,7 @@ use Throwable;
 /**
  * Class RequestMapperTest
  *
- * @package App\Tests\Integration\AutoMapper\User
+ * @package App\Tests\Integration\AutoMapper\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestMapperTest extends RestRequestMapperTestCase
