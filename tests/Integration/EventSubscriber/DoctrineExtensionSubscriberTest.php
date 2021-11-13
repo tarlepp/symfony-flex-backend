@@ -56,7 +56,7 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
     {
         $userTypeIdentification = $this->getUserTypeIdentification();
         $blameableListener = $this->getBlameableListener();
-        
+
         $user = new User();
 
         $userTypeIdentification

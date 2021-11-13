@@ -15,7 +15,6 @@ use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use function array_unique;
-use function strlen;
 
 /**
  * Class ApiKeyTest

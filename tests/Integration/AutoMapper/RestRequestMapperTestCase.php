@@ -31,13 +31,6 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
      */
     protected array $restDtoClasses = [];
 
-    abstract protected function getRequestMapper(): RestRequestMapper;
-
-    /**
-     * @phpstan-return  MockObject&RestResourceInterface
-     */
-    abstract protected function getResource(): MockObject;
-
     /**
      * @dataProvider dataProviderTestThatMapToObjectReturnsExpectedDtoObject
      *
@@ -64,4 +57,11 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
             yield [$dtoClass];
         }
     }
+
+    abstract protected function getRequestMapper(): RestRequestMapper;
+
+    /**
+     * @phpstan-return  MockObject&RestResourceInterface
+     */
+    abstract protected function getResource(): MockObject;
 }

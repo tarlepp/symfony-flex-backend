@@ -32,7 +32,7 @@ class EnumLocaleTypeTest extends KernelTestCase
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
-        
+
         self::assertSame("ENUM('en', 'fi')", $type->getSQLDeclaration([], $platform));
     }
 
@@ -45,7 +45,7 @@ class EnumLocaleTypeTest extends KernelTestCase
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
-        
+
         self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
     }
 
@@ -72,7 +72,7 @@ class EnumLocaleTypeTest extends KernelTestCase
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
-        
+
         self::assertTrue($type->requiresSQLCommentHint($platform));
     }
 
