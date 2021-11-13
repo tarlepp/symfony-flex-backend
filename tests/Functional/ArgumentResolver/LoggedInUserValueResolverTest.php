@@ -21,6 +21,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Throwable;
+use function getenv;
 use function iterator_to_array;
 
 /**
@@ -44,7 +45,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $user = $repository->loadUserByIdentifier($username, false);
 
-        static::assertNotNull($user);
+        self::assertNotNull($user);
 
         $securityUser = new SecurityUser($user);
         $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
@@ -60,7 +61,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $resolver->supports($request, $metadata);
 
-        static::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
+        self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
 
     /**
@@ -76,7 +77,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $user = $repository->loadUserByIdentifier($username, false);
 
-        static::assertNotNull($user);
+        self::assertNotNull($user);
 
         $securityUser = new SecurityUser($user);
         $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
@@ -95,7 +96,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             // Do nothing
         };
 
-        static::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
+        self::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
     /**
@@ -104,15 +105,30 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     public function dataProviderValidUsers(): Generator
     {
         yield ['john'];
-        yield ['john-api'];
-        yield ['john-logged'];
-        yield ['john-user'];
-        yield ['john-admin'];
-        yield ['john-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged'];
+            yield ['john-api'];
+            yield ['john-user'];
+            yield ['john-admin'];
+            yield ['john-root'];
+        }
+
+        yield ['john.doe@test.com'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com'];
+            yield ['john.doe-api@test.com'];
+            yield ['john.doe-user@test.com'];
+            yield ['john.doe-admin@test.com'];
+            yield ['john.doe-root@test.com'];
+        }
     }
 
     private function getRepository(): UserRepository
     {
-        return static::getContainer()->get(UserRepository::class);
+        self::bootKernel();
+
+        return self::getContainer()->get(UserRepository::class);
     }
 }

@@ -24,7 +24,7 @@ class StopwatchAwareTraitTest extends KernelTestCase
 {
     public function testThatStopwatchAttributeExists(): void
     {
-        static::assertClassHasAttribute('stopwatch', StopwatchAwareService::class);
+        self::assertClassHasAttribute('stopwatch', StopwatchAwareService::class);
     }
 
     /**
@@ -32,15 +32,13 @@ class StopwatchAwareTraitTest extends KernelTestCase
      */
     public function testThatStopwatchIsInstanceOfLoggerInterface(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        /**
-         * @var StopwatchAwareService $service
-         */
-        $service = static::$kernel->getContainer()->get(StopwatchAwareService::class);
+        /** @var StopwatchAwareService $service */
+        $service = self::$kernel->getContainer()->get(StopwatchAwareService::class);
 
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);
 
-        static::assertInstanceOf(Stopwatch::class, $stopwatch);
+        self::assertInstanceOf(Stopwatch::class, $stopwatch);
     }
 }

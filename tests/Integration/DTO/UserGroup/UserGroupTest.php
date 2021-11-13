@@ -43,8 +43,8 @@ class UserGroupTest extends DtoTestCase
         $dto = (new UserGroup())
             ->load($userGroupEntity);
 
-        static::assertSame('test user group', $dto->getName());
-        static::assertSame($roleEntity, $dto->getRole());
+        self::assertSame('test user group', $dto->getName());
+        self::assertSame($roleEntity, $dto->getRole());
     }
 
     /**
@@ -58,13 +58,13 @@ class UserGroupTest extends DtoTestCase
             ->getMock();
 
         $userGroupEntity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setName')
             ->with('test name')
             ->willReturn($userGroupEntity);
 
         $userGroupEntity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setRole')
             ->with($roleEntity)
             ->willReturn($userGroupEntity);

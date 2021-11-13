@@ -58,7 +58,7 @@ class UserGroupTransformerTest extends KernelTestCase
     ): void {
         $transformer = new UserGroupTransformer($this->getUserGroupResource());
 
-        static::assertSame(
+        self::assertSame(
             $expected->getArrayCopy(),
             $transformer->transform($input === null ? null : $input->getArrayCopy())
         );
@@ -73,7 +73,7 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity2 = new UserGroup();
 
         $this->getUserGroupResourceMock()
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
@@ -93,7 +93,7 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity = new UserGroup();
 
         $this->getUserGroupResourceMock()
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity, null);
@@ -111,14 +111,14 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity2 = new UserGroup();
 
         $this->getUserGroupResourceMock()
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
         $transformer = new UserGroupTransformer($this->getUserGroupResource());
 
-        static::assertSame([$entity1, $entity2], $transformer->reverseTransform(['1', '2']));
+        self::assertSame([$entity1, $entity2], $transformer->reverseTransform(['1', '2']));
     }
 
     /**

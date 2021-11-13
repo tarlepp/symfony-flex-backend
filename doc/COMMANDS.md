@@ -96,10 +96,10 @@ stop                        # Stop application containers
 update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
 validate-composer           # Validate `composer.json` file content
+watch                       # Start application in development mode + watch
+                            # output
 watch-build                 # Build containers and start application in 
                             # development mode + watch output
-watch-start                 # Start application in development mode + watch
-                            # output
 ```
 
 ### Symfony console [ᐞ](#table-of-contents)

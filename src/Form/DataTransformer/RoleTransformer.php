@@ -46,6 +46,8 @@ class RoleTransformer implements DataTransformerInterface
      *
      * Transforms a string (Role id) to an object (Role).
      *
+     * @phpstan-param mixed $value
+     *
      * @throws Throwable
      */
     public function reverseTransform($value): ?Role

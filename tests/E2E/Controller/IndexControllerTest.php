@@ -21,6 +21,8 @@ class IndexControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /` request returns `200`
      */
     public function testThatDefaultRouteReturns200(): void
     {
@@ -29,6 +31,6 @@ class IndexControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 }

@@ -28,7 +28,7 @@ class LanguageControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/language` endpoint returns 405 with `$method` method
+     * @testdox Test that `$method /v1/localization/language` request returns 405
      */
     public function testThatLanguageRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -38,14 +38,14 @@ class LanguageControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(405, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/language` endpoint returns 200 with `GET` method
+     * @testdox Test that `GET /v1/localization/language` request returns `200`
      */
     public function testThatLanguageRouteReturns200(): void
     {
@@ -55,14 +55,14 @@ class LanguageControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/language` endpoint returns expected count of languages (2)
+     * @testdox Test that `/v1/localization/language` request returns expected count of languages (2)
      */
     public function testThatLanguageRouteReturnsExpectedNumberOfLanguages(): void
     {
@@ -72,9 +72,9 @@ class LanguageControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
+        self::assertNotFalse($content);
 
-        static::assertCount(2, JSON::decode($content));
+        self::assertCount(2, JSON::decode($content));
     }
 
     /**

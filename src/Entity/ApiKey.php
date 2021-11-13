@@ -48,6 +48,7 @@ use function random_int;
         'token',
     ],
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 #[AssertCollection\UniqueEntity('token')]
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {

@@ -30,6 +30,7 @@ use Throwable;
 #[ORM\Table(
     name: 'healthz',
 )]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class Healthz implements EntityInterface
 {
     use Uuid;

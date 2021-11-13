@@ -20,6 +20,6 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
 {
     public function testThatClearReturnsExpected(): void
     {
-        static::markTestIncomplete('TODO implemented this test');
+        self::markTestIncomplete('TODO implemented this test');
     }
 }

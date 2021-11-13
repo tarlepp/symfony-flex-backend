@@ -24,6 +24,8 @@ class VersionControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /version` request returns `200`
      */
     public function testThatVersionRouteReturns200(): void
     {
@@ -32,26 +34,30 @@ class VersionControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /version` request doesn't add request log row to database
      */
     public function testThatVersionRouteDoesNotMakeRequestLog(): void
     {
-        $resource = static::getContainer()->get(LogRequestResource::class);
+        $resource = self::getContainer()->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();
         $client->request('GET', '/version');
 
-        static::assertSame($expectedLogCount, $resource->count());
+        self::assertSame($expectedLogCount, $resource->count());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `X-API-VERSION` header is added to response with expected value
      */
     public function testThatApiVersionIsAddedToResponseHeaders(): void
     {
@@ -62,8 +68,8 @@ class VersionControllerTest extends WebTestCase
 
         $version = $response->headers->get('X-API-VERSION');
 
-        static::assertNotNull($version);
-        static::assertSame(
+        self::assertNotNull($version);
+        self::assertSame(
             JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'))->version,
             $version,
         );

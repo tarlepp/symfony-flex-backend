@@ -8,15 +8,21 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Security\Authenticator;
 
+use App\Entity\ApiKey;
 use App\Security\Authenticator\ApiKeyAuthenticator;
 use App\Security\Provider\ApiKeyUserProvider;
+use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Throwable;
 
 /**
@@ -42,27 +48,96 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
-        static::assertSame($expected, $authenticator->supports($request));
+        self::assertSame($expected, $authenticator->supports($request));
+    }
+
+    /**
+     * @testdox Test that `authenticate` method returns expected `passport` which have `UserBadge` set
+     */
+    public function testThatAuthenticateMethodCallsExpectedServiceMethodAndReturnsExpectedBadge(): void
+    {
+        $apiKey = new ApiKey();
+
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiKeyUserProvider
+            ->expects(self::once())
+            ->method('getApiKeyForToken')
+            ->with('SomeToken')
+            ->willReturn($apiKey);
+
+        $request = new Request();
+        $request->headers = new HeaderBag([
+            'Authorization' => 'ApiKey SomeToken',
+        ]);
+
+        $passport = (new ApiKeyAuthenticator($apiKeyUserProvider))->authenticate($request);
+
+        self::assertTrue($passport->hasBadge(UserBadge::class));
+
+        $badge = $passport->getBadge(UserBadge::class);
+
+        self::assertNotNull($badge);
+        self::assertTrue($badge->isResolved());
+    }
+
+    /**
+     * @testdox Test that `authenticate` method throws an exception if API key is not found
+     */
+    public function testThatAuthenticateMethodThrowsAnExceptionWhenTokenNotFound(): void
+    {
+        $this->expectException(UserNotFoundException::class);
+        $this->expectExceptionMessage('API key not found');
+
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        (new ApiKeyAuthenticator($apiKeyUserProvider))->authenticate(new Request());
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `onAuthenticationSuccess` return null when using anonymous token
+     * @testdox Test that `onAuthenticationSuccess` method return `null` when using anonymous token
      */
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
-        static::assertNull($authenticator->onAuthenticationSuccess(
+        self::assertNull($authenticator->onAuthenticationSuccess(
             new Request(),
             new AnonymousToken('secret', 'user'),
             'foobar',
         ));
+    }
+
+    public function testThatOnAuthenticationFailureMethodReturnsExpectedResponse(): void
+    {
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
+
+        $response = $authenticator->onAuthenticationFailure(new Request(), new AuthenticationException());
+
+        self::assertInstanceOf(JsonResponse::class, $response);
+        self::assertSame(401, $response->getStatusCode());
+
+        $content = $response->getContent();
+
+        self::assertIsString($content);
+
+        $decoded = JSON::decode($content);
+
+        self::assertSame('Invalid API key', $decoded->message);
     }
 
     /**

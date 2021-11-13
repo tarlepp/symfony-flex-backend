@@ -104,7 +104,7 @@ class IdsMethodTest extends KernelTestCase
         $request = Request::create('/');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getIds')
             ->with([], [])
             ->willThrowException($exception);
@@ -146,13 +146,13 @@ class IdsMethodTest extends KernelTestCase
         $request = Request::create('/' . $queryString);
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getIds')
             ->with($criteria->getArrayCopy(), $search->getArrayCopy())
             ->willReturn([]);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with($request, [], $resourceMock);
 

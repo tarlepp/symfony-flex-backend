@@ -28,7 +28,7 @@ class TimeZoneControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/timezone` endpoint returns 405 with `$method` method
+     * @testdox Test that `$method /v1/localization/timezone` request returns `405`
      */
     public function testThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -38,14 +38,14 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(405, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/timezone` endpoint returns 200 with `GET` method
+     * @testdox Test that `GET /v1/localization/timezone` request returns `200`
      */
     public function testThatTimeZoneRouteReturns200(): void
     {
@@ -55,14 +55,14 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/timezone` endpoint returns and array of timezones
+     * @testdox Test that `GET /v1/localization/timezone` request returns and array of timezones
      */
     public function testThatTimeZoneRouteReturnsAnArrayOfTimeZones(): void
     {
@@ -72,16 +72,17 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
+        self::assertNotFalse($content);
         $data = JSON::decode((string)$response->getContent());
 
-        static::assertIsArray($data, $content);
+        self::assertIsArray($data, $content);
+        self::assertNotEmpty($data);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/v1/localization/timezone` endpoint returns data as in expected structure
+     * @testdox Test that `GET /v1/localization/timezone` request returns data as in expected structure
      */
     public function testThatTimeZoneRouteReturnsDataAsInExpectedStructure(): void
     {
@@ -91,13 +92,14 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        $data = JSON::decode($content, true)[0];
+        self::assertNotFalse($content);
 
-        static::assertArrayHasKey('timezone', $data);
-        static::assertArrayHasKey('identifier', $data);
-        static::assertArrayHasKey('offset', $data);
-        static::assertArrayHasKey('value', $data);
+        $timezone = JSON::decode($content, true)[0];
+
+        self::assertArrayHasKey('timezone', $timezone);
+        self::assertArrayHasKey('identifier', $timezone);
+        self::assertArrayHasKey('offset', $timezone);
+        self::assertArrayHasKey('value', $timezone);
     }
 
     /**

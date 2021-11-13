@@ -42,7 +42,7 @@ class SchemaTest extends KernelTestCase
 
         array_walk($errors, $formatter);
 
-        static::assertEmpty($errors, implode("\n", $messages));
+        self::assertEmpty($errors, implode("\n", $messages));
     }
 
     /**
@@ -50,7 +50,7 @@ class SchemaTest extends KernelTestCase
      */
     public function testThatSchemaInSyncWithMetadata(): void
     {
-        static::assertTrue(
+        self::assertTrue(
             $this->getValidator()->schemaInSyncWithMetadata(),
             'The database schema is not in sync with the current mapping file.'
         );
@@ -58,7 +58,7 @@ class SchemaTest extends KernelTestCase
 
     private function getValidator(): SchemaValidator
     {
-        static::bootKernel();
+        self::bootKernel();
 
         if (!Type::hasType('EnumLanguage')) {
             Type::addType('EnumLanguage', EnumLanguageType::class);
@@ -72,10 +72,8 @@ class SchemaTest extends KernelTestCase
             Type::addType('EnumLogLogin', EnumLogLoginType::class);
         }
 
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::$kernel->getContainer()->get('doctrine');
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = self::$kernel->getContainer()->get('doctrine');
 
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $managerRegistry->getManager();

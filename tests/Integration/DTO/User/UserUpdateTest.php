@@ -52,7 +52,7 @@ class UserUpdateTest extends DtoTestCase
         /** @var User $updatedUser */
         $updatedUser = $dto->update($user);
 
-        static::assertCount(1, $updatedUser->getUserGroups());
-        static::assertSame($userGroup2, $updatedUser->getUserGroups()[0]);
+        self::assertCount(1, $updatedUser->getUserGroups());
+        self::assertSame($userGroup2, $updatedUser->getUserGroups()[0]);
     }
 }

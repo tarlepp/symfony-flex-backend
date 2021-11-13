@@ -503,7 +503,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose down
 endif
 
-watch-start: ## Start application in development mode + watch output
+watch: ## Start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)

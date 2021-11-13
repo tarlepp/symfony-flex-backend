@@ -41,7 +41,7 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
      */
     public function testThatMapToObjectReturnsExpectedDtoObject(string $expectedDto): void
     {
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             $expectedDto,
             $this->getMapperObject()->mapToObject(new Request(), new $expectedDto()),
         );

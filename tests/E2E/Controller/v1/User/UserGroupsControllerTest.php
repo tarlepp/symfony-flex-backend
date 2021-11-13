@@ -9,11 +9,12 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
-use App\Security\RolesService;
 use App\Utils\JSON;
+use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class UserGroupsControllerTest
@@ -28,7 +29,7 @@ class UserGroupsControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/{user}/groups` returns 401 for non-logged in user
+     * @testdox Test that `GET /v1/user/{id}/groups` request returns `401` for non-logged in user
      */
     public function testThatGetUserGroupsReturnsReturns401(): void
     {
@@ -38,8 +39,8 @@ class UserGroupsControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -47,77 +48,74 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/$userId/groups` returns 403 with invalid user $username + $password
+     * @testdox Test that `GET /v1/user/$id/groups` request returns `403` when using user `$u` + `$p`
      */
-    public function testThatGetUserGroupsReturns403ForInvalidUser(
-        string $userId,
-        string $username,
-        string $password
-    ): void {
-        $client = $this->getTestClient($username, $password);
-        $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
+    public function testThatGetUserGroupsReturns403ForInvalidUser(string $id, string $u, string $p): void
+    {
+        $client = $this->getTestClient($u, $p);
+        $client->request('GET', $this->baseUrl . '/' . $id . '/groups');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
      * @dataProvider dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself
      *
+     * @psalm-param StringableArrayObject $e
+     * @phpstan-param StringableArrayObject<int, string> $e
+     *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/$userId/groups` returns expected with user him/herself $username + $password
+     * @testdox Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for user `$u` + `$p`
      */
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
-        string $userId,
-        string $username,
-        string $password,
-        string $expectedResponse
+        string $id,
+        string $u,
+        string $p,
+        StringableArrayObject $e
     ): void {
-        $client = $this->getTestClient($username, $password);
-        $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
+        $client = $this->getTestClient($u, $p);
+        $client->request('GET', $this->baseUrl . '/' . $id . '/groups');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data = JSON::decode($content);
+        $data = JSON::decode($content, true);
 
-        $expectedResponse === ''
-            ? static::assertEmpty($data)
-            : static::assertSame($expectedResponse, $data[0]->role->id);
+        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => $group['id'], $data));
     }
 
     /**
      * @dataProvider dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser
      *
+     * @psalm-param StringableArrayObject $e
+     * @phpstan-param StringableArrayObject<int, string> $e
+     *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/$userId/groups` request returns expected response `$expectedResponse`
+     * @testdox Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for root user
      */
-    public function testThatGetUserGroupsReturns200ForRootRoleUser(
-        string $userId,
-        ?string $expectedResponse = null
-    ): void {
+    public function testThatGetUserGroupsReturns200ForRootRoleUser(string $id, StringableArrayObject $e): void
+    {
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
+        $client->request('GET', $this->baseUrl . '/' . $id . '/groups');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data = JSON::decode($content);
+        $data = JSON::decode($content, true);
 
-        $expectedResponse === null
-            ? static::assertEmpty($data)
-            : static::assertSame($expectedResponse, $data[0]->role->id, $content);
+        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => $group['id'], $data));
     }
 
     /**
@@ -126,35 +124,149 @@ class UserGroupsControllerTest extends WebTestCase
     public function dataProviderTestThatGetUserGroupsReturns403ForInvalidUser(): Generator
     {
         yield [LoadUserData::$uuids['john-api'], 'john', 'password'];
-        yield [LoadUserData::$uuids['john-logged'], 'john-api', 'password-api'];
-        yield [LoadUserData::$uuids['john-user'], 'john-logged', 'password-logged'];
-        yield [LoadUserData::$uuids['john-admin'], 'john-user', 'password-user'];
-        yield [LoadUserData::$uuids['john'], 'john-admin', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield [LoadUserData::$uuids['john-user'], 'john-logged', 'password-logged'];
+            yield [LoadUserData::$uuids['john-logged'], 'john-api', 'password-api'];
+            yield [LoadUserData::$uuids['john-admin'], 'john-user', 'password-user'];
+            yield [LoadUserData::$uuids['john'], 'john-admin', 'password-admin'];
+            yield [LoadUserData::$uuids['john-api'], 'john.doe@test.com', 'password'];
+            yield [LoadUserData::$uuids['john-user'], 'john.doe-logged@test.com', 'password-logged'];
+            yield [LoadUserData::$uuids['john-logged'], 'john.doe-api@test.com', 'password-api'];
+            yield [LoadUserData::$uuids['john-admin'], 'john.doe-user@test.com', 'password-user'];
+            yield [LoadUserData::$uuids['john'], 'john.doe-admin@test.com', 'password-admin'];
+        }
     }
 
     /**
-     * @return Generator<array{0: string, 1: string, 2: string, 3: string}>
+     * @psalm-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject<int, string>}>
      */
     public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): Generator
     {
-        yield [LoadUserData::$uuids['john'], 'john', 'password', ''];
-        yield [LoadUserData::$uuids['john-api'], 'john-api', 'password-api', RolesService::ROLE_API];
-        yield [LoadUserData::$uuids['john-logged'], 'john-logged', 'password-logged', RolesService::ROLE_LOGGED];
-        yield [LoadUserData::$uuids['john-user'], 'john-user', 'password-user', RolesService::ROLE_USER];
-        yield [LoadUserData::$uuids['john-admin'], 'john-admin', 'password-admin', RolesService::ROLE_ADMIN];
-        yield [LoadUserData::$uuids['john-root'], 'john-root', 'password-root', RolesService::ROLE_ROOT];
+        yield [LoadUserData::$uuids['john'], 'john', 'password', new StringableArrayObject([])];
+        yield [
+            LoadUserData::$uuids['john-logged'],
+            'john-logged',
+            'password-logged',
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000001',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-api'],
+            'john-api',
+            'password-api',
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000002',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-user'],
+            'john-user',
+            'password-user',
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000003',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-admin'],
+            'john-admin',
+            'password-admin',
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000004',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-root'],
+            'john-root',
+            'password-root',
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000005',
+            ]),
+        ];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield [LoadUserData::$uuids['john'], 'john.doe@test.com', 'password', new StringableArrayObject([])];
+            yield [
+                LoadUserData::$uuids['john-logged'],
+                'john.doe-logged@test.com',
+                'password-logged',
+                new StringableArrayObject([
+                    '10000000-0000-1000-8000-000000000001',
+                ]),
+            ];
+            yield [
+                LoadUserData::$uuids['john-api'],
+                'john.doe-api@test.com',
+                'password-api',
+                new StringableArrayObject([
+                    '10000000-0000-1000-8000-000000000002',
+                ]),
+            ];
+            yield [
+                LoadUserData::$uuids['john-user'],
+                'john.doe-user@test.com',
+                'password-user',
+                new StringableArrayObject([
+                    '10000000-0000-1000-8000-000000000003',
+                ]),
+            ];
+            yield [
+                LoadUserData::$uuids['john-admin'],
+                'john.doe-admin@test.com',
+                'password-admin',
+                new StringableArrayObject([
+                    '10000000-0000-1000-8000-000000000004',
+                ]),
+            ];
+            yield [
+                LoadUserData::$uuids['john-root'],
+                'john.doe-root@test.com',
+                'password-root',
+                new StringableArrayObject([
+                    '10000000-0000-1000-8000-000000000005',
+                ]),
+            ];
+        }
     }
 
     /**
-     * @return Generator<array{0: string, 1: string|null}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<int, string>}>
      */
     public function dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser(): Generator
     {
-        yield [LoadUserData::$uuids['john'], null];
-        yield [LoadUserData::$uuids['john-api'], RolesService::ROLE_API];
-        yield [LoadUserData::$uuids['john-logged'], RolesService::ROLE_LOGGED];
-        yield [LoadUserData::$uuids['john-user'], RolesService::ROLE_USER];
-        yield [LoadUserData::$uuids['john-admin'], RolesService::ROLE_ADMIN];
-        yield [LoadUserData::$uuids['john-root'], RolesService::ROLE_ROOT];
+        yield [LoadUserData::$uuids['john'], new StringableArrayObject([])];
+        yield [
+            LoadUserData::$uuids['john-logged'],
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000001',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-api'],
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000002',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-user'],
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000003',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-admin'],
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000004',
+            ]),
+        ];
+        yield [
+            LoadUserData::$uuids['john-root'],
+            new StringableArrayObject([
+                '10000000-0000-1000-8000-000000000005',
+            ]),
+        ];
     }
 }

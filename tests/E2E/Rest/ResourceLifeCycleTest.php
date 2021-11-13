@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Rest;
 
 use App\Repository\RoleRepository;
-use App\Security\RolesService;
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 use Generator;
@@ -29,7 +29,7 @@ class ResourceLifeCycleTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that modified entity ($role) is not flushed if life cycle method throws exception
+     * @testdox Test that modified entity `$role` is not flushed if life cycle method throws exception
      */
     public function testThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(string $role): void
     {
@@ -41,9 +41,9 @@ class ResourceLifeCycleTest extends WebTestCase
             'id' => $role,
         ]);
 
-        static::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
-        static::assertSame(418, $response->getStatusCode(), (string)$response->getContent());
-        static::assertSame('Description - ' . $role, $entity->getDescription());
+        self::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
+        self::assertSame(418, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame('Description - ' . $role, $entity->getDescription());
     }
 
     /**
@@ -51,15 +51,15 @@ class ResourceLifeCycleTest extends WebTestCase
      */
     public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
-        yield [RolesService::ROLE_ADMIN];
-        yield [RolesService::ROLE_API];
-        yield [RolesService::ROLE_LOGGED];
-        yield [RolesService::ROLE_ROOT];
-        yield [RolesService::ROLE_USER];
+        yield [RolesServiceInterface::ROLE_ADMIN];
+        yield [RolesServiceInterface::ROLE_API];
+        yield [RolesServiceInterface::ROLE_LOGGED];
+        yield [RolesServiceInterface::ROLE_ROOT];
+        yield [RolesServiceInterface::ROLE_USER];
     }
 
     private function getRepository(): RoleRepository
     {
-        return static::getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
+        return self::getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
     }
 }

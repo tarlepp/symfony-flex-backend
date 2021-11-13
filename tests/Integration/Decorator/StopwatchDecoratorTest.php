@@ -44,7 +44,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), new Stopwatch());
 
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf($expected, $decorator->decorate($service));
+        self::assertInstanceOf($expected, $decorator->decorate($service));
     }
 
     /**
@@ -56,12 +56,12 @@ class StopwatchDecoratorTest extends KernelTestCase
 
         /** @noinspection ClassConstantCanBeUsedInspection */
         $stopWatch
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('start')
             ->with('EntityReferenceExists->getTargets', 'App\Validator\Constraints\EntityReferenceExists');
 
         $stopWatch
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('stop')
             ->with('EntityReferenceExists->getTargets');
 
@@ -70,7 +70,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         /** @var EntityReferenceExists $decoratedService */
         $decoratedService = $decorator->decorate(new EntityReferenceExists());
 
-        static::assertSame('property', $decoratedService->getTargets());
+        self::assertSame('property', $decoratedService->getTargets());
     }
 
     /**
@@ -87,13 +87,13 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $factory
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createProxy')
             ->willThrowException(new Exception('foo'));
 
         $decorator = new StopwatchDecorator($factory, $stopWatch);
 
-        static::assertSame($service, $decorator->decorate($service));
+        self::assertSame($service, $decorator->decorate($service));
     }
 
     /**
@@ -108,16 +108,16 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $managerRegistry
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
         $stopWatch
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('start');
 
         $stopWatch
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('stop');
 
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
@@ -143,21 +143,21 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $managerRegistry
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
         $entityManager
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->willReturn($apiKey);
 
         $stopWatch
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('start');
 
         $stopWatch
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('stop');
 
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
@@ -166,7 +166,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         /** @var ApiKeyRepository $decoratedService */
         $decoratedService = $decorator->decorate($repository);
 
-        static::assertSame($apiKey, $decoratedService->find($apiKey->getId()));
+        self::assertSame($apiKey, $decoratedService->find($apiKey->getId()));
     }
 
     /**

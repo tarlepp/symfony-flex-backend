@@ -24,6 +24,6 @@ class UniqueEmailTest extends KernelTestCase
      */
     public function testThatGetTargetsReturnsExpected(): void
     {
-        static::assertSame('class', (new UniqueEmail())->getTargets());
+        self::assertSame('class', (new UniqueEmail())->getTargets());
     }
 }

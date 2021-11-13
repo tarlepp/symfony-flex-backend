@@ -22,6 +22,8 @@ class HealthzControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /healthz` request returns `200`
      */
     public function testThatHealthzRouteReturns200(): void
     {
@@ -30,21 +32,23 @@ class HealthzControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /healthz` request doesn't add request log row to database
      */
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
-        $resource = static::getContainer()->get(LogRequestResource::class);
+        $resource = self::getContainer()->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();
         $client->request('GET', '/healthz');
 
-        static::assertSame($expectedLogCount, $resource->count());
+        self::assertSame($expectedLogCount, $resource->count());
     }
 }

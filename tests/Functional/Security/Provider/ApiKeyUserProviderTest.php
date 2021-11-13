@@ -43,7 +43,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $apiKey = $this->getApiKeyUserProvider()->getApiKeyForToken($token);
 
-        static::assertInstanceOf(ApiKey::class, $apiKey);
+        self::assertInstanceOf(ApiKey::class, $apiKey);
     }
 
     /**
@@ -57,7 +57,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $apiKey = $this->getApiKeyUserProvider()->getApiKeyForToken($token);
 
-        static::assertNull($apiKey);
+        self::assertNull($apiKey);
     }
 
     /**
@@ -85,8 +85,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
 
-        static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
-        static::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
+        self::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
+        self::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
     }
 
     /**
@@ -109,7 +109,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatSupportsClassReturnsExpected(bool $expected, string $class): void
     {
-        static::assertSame($expected, $this->getApiKeyUserProvider()->supportsClass($class));
+        self::assertSame($expected, $this->getApiKeyUserProvider()->supportsClass($class));
     }
 
     /**
@@ -117,7 +117,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        $rolesService = static::getContainer()->get(RolesService::class);
+        $rolesService = self::getContainer()->get(RolesService::class);
 
         $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
 
@@ -131,7 +131,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     public function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
         /** @var ManagerRegistry $managerRegistry */
-        $managerRegistry = static::getContainer()->get('doctrine');
+        $managerRegistry = self::getContainer()->get('doctrine');
         $repositoryClass = ApiKeyRepository::class;
         $repository = new $repositoryClass($managerRegistry);
 
@@ -156,13 +156,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     private function getApiKeyUserProvider(): ApiKeyUserProvider
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::getContainer()->get('doctrine');
-        $rolesService = static::getContainer()->get(RolesService::class);
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = self::getContainer()->get('doctrine');
+        $rolesService = self::getContainer()->get(RolesService::class);
 
         $repository = ApiKeyRepository::class;
 

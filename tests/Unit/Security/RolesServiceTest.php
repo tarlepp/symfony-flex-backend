@@ -26,7 +26,7 @@ class RolesServiceTest extends KernelTestCase
      */
     public function testThatGetRolesReturnsExpected(): void
     {
-        static::assertSame(
+        self::assertSame(
             [
                 'ROLE_LOGGED',
                 'ROLE_USER',
@@ -46,7 +46,7 @@ class RolesServiceTest extends KernelTestCase
      */
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
     {
-        static::assertSame($expected, $this->getService()->getRoleLabel($role), 'Role label was not expected one.');
+        self::assertSame($expected, $this->getService()->getRoleLabel($role), 'Role label was not expected one.');
     }
 
     /**
@@ -56,7 +56,7 @@ class RolesServiceTest extends KernelTestCase
      */
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
     {
-        static::assertSame($expected, $this->getService()->getShort($input), 'Short role name was not expected');
+        self::assertSame($expected, $this->getService()->getShort($input), 'Short role name was not expected');
     }
 
     /**
@@ -73,7 +73,7 @@ class RolesServiceTest extends KernelTestCase
         StringableArrayObject $expected,
         StringableArrayObject $roles
     ): void {
-        static::assertSame(
+        self::assertSame(
             $expected->getArrayCopy(),
             $this->getService()->getInheritedRoles($roles->getArrayCopy()),
             'Inherited roles was not expected'
@@ -145,6 +145,6 @@ class RolesServiceTest extends KernelTestCase
 
     private function getService(): RolesService
     {
-        return static::getContainer()->get(RolesService::class);
+        return self::getContainer()->get(RolesService::class);
     }
 }

@@ -101,15 +101,15 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $value = $this->getMockForAbstractClass(EntityReference::class, [], 'TestClass');
 
         $contextMock
-            ->expects(static::never())
-            ->method(static::anything());
+            ->expects(self::never())
+            ->method(self::anything());
 
         $contextMock
-            ->expects(static::never())
-            ->method(static::anything());
+            ->expects(self::never())
+            ->method(self::anything());
 
         $value
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getCreatedAt')
             ->willReturn(null);
 
@@ -137,33 +137,33 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $exception = new EntityNotFoundException('Entity not found');
 
         $violation
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('setParameter')
             ->willReturn($violation);
 
         $violation
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setCode')
             ->with('64888b5e-bded-449b-82ed-0cc1f73df14d')
             ->willReturn($violation);
 
         $violation
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('addViolation');
 
         $contextMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('buildViolation')
             ->with('Invalid id value "{{ id }}" given for entity "{{ entity }}".')
             ->willReturn($violation);
 
         $loggerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error')
             ->with('Entity not found');
 
         $value
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getCreatedAt')
             ->willThrowException($exception);
 

@@ -13,6 +13,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class DeleteUserControllerTest
@@ -29,11 +30,11 @@ class DeleteUserControllerTest extends WebTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -41,7 +42,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user/{id}` request returns `401` for non-logged in user
      */
     public function testThatDeleteUserReturns401(): void
     {
@@ -51,8 +52,8 @@ class DeleteUserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -60,24 +61,24 @@ class DeleteUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 403 for $username + $password, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `DELETE /v1/user/{id}` request returns `403` when using user `$u` + `$p`
      */
-    public function testThatDeleteUserReturns403(string $username, string $password): void
+    public function testThatDeleteUserReturns403(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('DELETE', $this->baseUrl . '/' . LoadUserData::$uuids['john']);
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 400 if user tries to remove himself
+     * @testdox Test that `DELETE /v1/user/{id}` request returns `400` if user tries to remove him/herself
      */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
@@ -87,9 +88,9 @@ class DeleteUserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"You cannot remove yourself...","code":0,"status":400}',
             $content,
         );
@@ -98,7 +99,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user/{id}` request returns `200` for root user
      */
     public function testThatDeleteActionReturns200(): void
     {
@@ -108,8 +109,8 @@ class DeleteUserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -117,10 +118,22 @@ class DeleteUserControllerTest extends WebTestCase
      */
     public function dataProviderTestThatDeleteUserReturns403(): Generator
     {
-        yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password'];
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+        }
+
         yield ['john-admin', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password'];
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin'];
     }
 }

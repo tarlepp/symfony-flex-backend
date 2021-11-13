@@ -52,12 +52,12 @@ class ApiKeyTypeTest extends TypeTestCase
             ->setName('Some name');
 
         $this->getUserGroupResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
         $this->getUserGroupResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
@@ -80,19 +80,19 @@ class ApiKeyTypeTest extends TypeTestCase
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        static::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertSame($dto->getId(), $form->getData()->getId());
-        static::assertSame($dto->getDescription(), $form->getData()->getDescription());
-        static::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
+        self::assertSame($dto->getId(), $form->getData()->getId());
+        self::assertSame($dto->getDescription(), $form->getData()->getDescription());
+        self::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            static::assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 

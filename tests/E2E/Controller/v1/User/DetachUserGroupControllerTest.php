@@ -14,6 +14,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class DetachUserGroupControllerTest
@@ -30,11 +31,11 @@ class DetachUserGroupControllerTest extends WebTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -42,7 +43,7 @@ class DetachUserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user/{id}/group/{id}` request returns `401` for non-logged in user
      */
     public function testThatDetachUserGroupReturns401(): void
     {
@@ -55,8 +56,8 @@ class DetachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -64,7 +65,7 @@ class DetachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `DELETE /v1/user/{id}/group/{id}` request returns `403` when using user `$u` + `$p`
      */
     public function testThatDetachUserGroupReturns403(string $u, string $p): void
     {
@@ -77,14 +78,14 @@ class DetachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user/{id}/group/{id}` request returns `200` for root user
      */
     public function testThatDetachUserGroupReturns200(): void
     {
@@ -97,8 +98,8 @@ class DetachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -106,10 +107,22 @@ class DetachUserGroupControllerTest extends WebTestCase
      */
     public function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
-        yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password'];
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+        }
+
         yield ['john-admin', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password'];
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin'];
     }
 }

@@ -25,7 +25,7 @@ class UserManagementFlowTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user` with proper payload creates new user
+     * @testdox Test that `POST /v1/user` request returns `201` with expected data on response
      */
     public function testThatCreateActionWorksLikeExpected(): string
     {
@@ -46,14 +46,14 @@ class UserManagementFlowTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         $data['id'] = JSON::decode($content)->id;
 
         unset($data['password']);
 
-        static::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
+        self::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
         return $data['id'];
     }
@@ -63,12 +63,12 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /v1/user/{userId}` returns expected
+     * @testdox Test that `PUT /v1/user/{id}` request returns `200` with expected data on response
      */
-    public function testThatUpdateActionWorksLikeExpected(string $userId): string
+    public function testThatUpdateActionWorksLikeExpected(string $id): string
     {
         $data = [
-            'id' => $userId,
+            'id' => $id,
             'username' => 'test-user',
             'firstName' => 'test-1',
             'lastName' => 'user-2',
@@ -79,19 +79,19 @@ class UserManagementFlowTest extends WebTestCase
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
+        $client->request('PUT', $this->baseUrl . '/' . $id, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data['id'] = $userId;
+        $data['id'] = $id;
 
-        static::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
+        self::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
-        return $userId;
+        return $id;
     }
 
     /**
@@ -99,25 +99,25 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /v1/user/{userId}` returns HTTP status 400 with partial data
+     * @testdox Test that `PUT /v1/user/{id}` request returns `400` with partial payload
      */
-    public function testThatUpdateActionDoesNotWorkWithPartialData(string $userId): string
+    public function testThatUpdateActionDoesNotWorkWithPartialData(string $id): string
     {
         $data = [
-            'id' => $userId,
+            'id' => $id,
             'email' => 'test-user@test.com',
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
+        $client->request('PUT', $this->baseUrl . '/' . $id, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        return $userId;
+        return $id;
     }
 
     /**
@@ -125,18 +125,18 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PATCH /v1/user/{userId}` returns expected data
+     * @testdox Test that `PATCH /v1/user/{id}` request returns `200` and expected data when using partial payload
      */
-    public function testThatPatchActionWorksWithPartialData(string $userId): string
+    public function testThatPatchActionWorksWithPartialData(string $id): string
     {
         $data = [
-            'id' => $userId,
+            'id' => $id,
             'email' => 'test-user2@test.com',
             'locale' => 'en',
         ];
 
         $expectedData = [
-            'id' => $userId,
+            'id' => $id,
             'username' => 'test-user',
             'firstName' => 'test-1',
             'lastName' => 'user-2',
@@ -147,16 +147,16 @@ class UserManagementFlowTest extends WebTestCase
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('PATCH', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
+        $client->request('PATCH', $this->baseUrl . '/' . $id, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $content);
 
-        return $userId;
+        return $id;
     }
 
     /**
@@ -164,17 +164,17 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP 200 with valid user
+     * @testdox Test that `DELETE /v1/user/{id}` request returns `200`
      */
-    public function testThatDeleteActionWorksLikeExpected(string $userId): void
+    public function testThatDeleteActionWorksLikeExpected(string $id): void
     {
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('DELETE', $this->baseUrl . '/' . $userId);
+        $client->request('DELETE', $this->baseUrl . '/' . $id);
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "Response:\n" . $response);
     }
 }

@@ -50,28 +50,28 @@ class UserTypeTest extends TypeTestCase
             ->setRole($roleEntity);
 
         $this->getUserGroupResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
         $this->getUserGroupResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
         $this->getLocalizationMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getLanguages')
             ->willReturn(['en', 'fi']);
 
         $this->getLocalizationMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getLocales')
             ->willReturn(['en', 'fi']);
 
         $this->getLocalizationMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getFormattedTimezones')
             ->willReturn([
                 [
@@ -123,25 +123,25 @@ class UserTypeTest extends TypeTestCase
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        static::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertSame($dto->getId(), $form->getData()->getId());
-        static::assertSame($dto->getUsername(), $form->getData()->getUsername());
-        static::assertSame($dto->getFirstName(), $form->getData()->getFirstName());
-        static::assertSame($dto->getLastName(), $form->getData()->getLastName());
-        static::assertSame($dto->getEmail(), $form->getData()->getEmail());
-        static::assertSame($dto->getLanguage(), $form->getData()->getLanguage());
-        static::assertSame($dto->getLocale(), $form->getData()->getLocale());
-        static::assertSame($dto->getTimezone(), $form->getData()->getTimezone());
-        static::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
+        self::assertSame($dto->getId(), $form->getData()->getId());
+        self::assertSame($dto->getUsername(), $form->getData()->getUsername());
+        self::assertSame($dto->getFirstName(), $form->getData()->getFirstName());
+        self::assertSame($dto->getLastName(), $form->getData()->getLastName());
+        self::assertSame($dto->getEmail(), $form->getData()->getEmail());
+        self::assertSame($dto->getLanguage(), $form->getData()->getLanguage());
+        self::assertSame($dto->getLocale(), $form->getData()->getLocale());
+        self::assertSame($dto->getTimezone(), $form->getData()->getTimezone());
+        self::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            static::assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 

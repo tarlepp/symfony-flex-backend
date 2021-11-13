@@ -57,7 +57,7 @@ class ControllerTest extends KernelTestCase
         $controller = new ApiKeyController($resourceMock);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
-        static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
+        self::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
     /**
@@ -86,7 +86,7 @@ class ControllerTest extends KernelTestCase
         $controller = new ApiKeyController($resourceMock);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
-        static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
+        self::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
     }
 
     /**
@@ -103,7 +103,7 @@ class ControllerTest extends KernelTestCase
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getDtoClass')
             ->willReturn(get_class($dtoClassMock));
 
@@ -128,7 +128,7 @@ class ControllerTest extends KernelTestCase
         );
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getDtoClass')
             ->willReturn(stdClass::class);
 
@@ -153,6 +153,6 @@ class ControllerTest extends KernelTestCase
 
         PhpUnitUtil::setProperty('dtoClasses', $dtoClasses, $controller);
 
-        static::assertSame(ApiKey::class, $controller->getDtoClass('foo'));
+        self::assertSame(ApiKey::class, $controller->getDtoClass('foo'));
     }
 }

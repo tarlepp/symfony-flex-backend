@@ -59,7 +59,7 @@ class LoginLoggerTest extends KernelTestCase
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
         $this->getResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('save');
 
         $requestStack = new RequestStack();

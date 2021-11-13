@@ -51,8 +51,8 @@ class ApiKeyTest extends DtoTestCase
         $dto = (new ApiKeyDto())
             ->load($apiKeyEntity);
 
-        static::assertSame('Some description', $dto->getDescription());
-        static::assertSame([$userGroupEntity], $dto->getUserGroups());
+        self::assertSame('Some description', $dto->getDescription());
+        self::assertSame([$userGroupEntity], $dto->getUserGroups());
     }
 
     /**
@@ -71,16 +71,16 @@ class ApiKeyTest extends DtoTestCase
             ->getMock();
 
         $entity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setDescription')
             ->willReturn($entity);
 
         $entity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('clearUserGroups');
 
         $entity
-            ->expects(static::exactly(count($userGroups)))
+            ->expects(self::exactly(count($userGroups)))
             ->method('addUserGroup')
             ->willReturn($entity);
 

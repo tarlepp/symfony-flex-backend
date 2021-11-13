@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class UserControllerTest
@@ -25,6 +26,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /v1/user` request returns `401` for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -34,10 +37,10 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), (string)$response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), (string)$response);
 
-        static::assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             '{"message":"JWT Token not found","code":401}',
             $content,
             "Response:\n" . $response,
@@ -49,37 +52,37 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/count` returns expected response with $username + $password
+     * @testdox Test that `GET /v1/user/count` request returns expected response when using valid user `$u` + `$p`
      */
-    public function testThatCountActionReturnsExpected(string $username, string $password): void
+    public function testThatCountActionReturnsExpected(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
     /**
      * @dataProvider dataProviderValidApiKeyUsers
      *
-     * @testdox Test that `GET /v1/user/count` returns expected response with $role `ApiKey` token
+     * @testdox Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role
      */
-    public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
+    public function testThatCountActionReturnsExpectedForApiKeyUser(string $r): void
     {
-        $client = $this->getApiKeyClient($role);
+        $client = $this->getApiKeyClient($r);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
     /**
@@ -87,19 +90,19 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/count` returns HTTP 403 with $username + $password
+     * @testdox Test that `GET /v1/user/count` request returns `403` when using invalid user `$u` + `$p`
      */
-    public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
+    public function testThatCountActionReturns403ForInvalidUser(string $u, string $p): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -109,7 +112,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderInvalidApiKeyUsers
      *
-     * @testdox Test that `GET /v1/user/count` returns HTTP 403 with $role `ApiKey` token
+     * @testdox Test that `GET /v1/user/count` request returns `403` when using API key token for `$role` role
      */
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
@@ -119,9 +122,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -133,7 +136,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user` action returns expected with $username + $password
+     * @testdox Test that `GET /v1/user` request returns expected when using valid user `$username` + `$password`
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
@@ -143,9 +146,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(6, JSON::decode($content), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertCount(6, JSON::decode($content), "Response:\n" . $response);
     }
 
     /**
@@ -153,7 +156,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user` action returns HTTP 403 for invalid user $username + $password
+     * @testdox Test that `GET /v1/user` request returns 403 when using invalid user `$username` + `$password`
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -163,9 +166,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -177,7 +180,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/ids` returns expected with $username + $password
+     * @testdox Test that `GET /v1/user/ids` request returns expected when using valid user `$username` + `$password`
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
@@ -187,9 +190,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(6, JSON::decode($content), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertCount(6, JSON::decode($content), "Response:\n" . $response);
     }
 
     /**
@@ -197,7 +200,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user/ids` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `GET /v1/user/ids` request returns `403` when using invalid user `$username` + `$password`
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -207,9 +210,9 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -222,7 +225,16 @@ class UserControllerTest extends WebTestCase
     public function dataProviderValidUsers(): Generator
     {
         yield ['john-admin', 'password-admin'];
-        yield ['john-root', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-root', 'password-root'];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-root@test.com', 'password-root'];
+        }
     }
 
     /**
@@ -231,7 +243,10 @@ class UserControllerTest extends WebTestCase
     public function dataProviderValidApiKeyUsers(): Generator
     {
         yield ['admin'];
-        yield ['root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['root'];
+        }
     }
 
     /**
@@ -239,10 +254,21 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidUsers(): Generator
     {
-        yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password'];
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+        }
+
         yield ['john-user', 'password-user'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password'];
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+        }
+
+        yield ['john.doe-user@test.com', 'password-user'];
     }
 
     /**
@@ -250,8 +276,11 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidApiKeyUsers(): Generator
     {
-        yield ['api'];
         yield ['logged'];
-        yield ['user'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['api'];
+            yield ['user'];
+        }
     }
 }

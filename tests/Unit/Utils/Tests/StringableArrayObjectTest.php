@@ -30,7 +30,7 @@ class StringableArrayObjectTest extends KernelTestCase
      */
     public function testThatCastingToStringReturnsExpected(StringableArrayObject $input, string $expected): void
     {
-        static::assertSame($expected, (string)(new StringableArrayObject($input)));
+        self::assertSame($expected, (string)(new StringableArrayObject($input)));
     }
 
     /**

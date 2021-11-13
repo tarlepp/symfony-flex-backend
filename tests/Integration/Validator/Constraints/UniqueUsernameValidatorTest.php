@@ -41,25 +41,25 @@ class UniqueUsernameValidatorTest extends KernelTestCase
             ->setUsername('john');
 
         $repositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('isUsernameAvailable')
             ->with($user->getUsername(), $user->getId())
             ->willReturn(false);
 
         $contextMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('buildViolation')
             ->with(UniqueUsername::MESSAGE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setCode')
             ->with(UniqueUsername::IS_UNIQUE_USERNAME_ERROR)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('addViolation');
 
         // Run validator

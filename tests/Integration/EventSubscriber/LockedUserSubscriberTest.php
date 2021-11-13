@@ -74,17 +74,17 @@ class LockedUserSubscriberTest extends KernelTestCase
         $uuid = UuidHelper::getFactory()->uuid1();
 
         $user
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('getId')
             ->willReturn($uuid->toString());
 
         $user
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getLogsLoginFailure')
             ->willReturn(new ArrayCollection(range(0, 11)));
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
@@ -108,13 +108,13 @@ class LockedUserSubscriberTest extends KernelTestCase
         $user = new UserEntity();
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
         $logLoginFailureResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('reset')
             ->with($user);
 
@@ -139,12 +139,12 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->getMock();
 
         $userRepository
-            ->expects(static::never())
-            ->method(static::anything());
+            ->expects(self::never())
+            ->method(self::anything());
 
         $logLoginFailureResource
-            ->expects(static::never())
-            ->method(static::anything());
+            ->expects(self::never())
+            ->method(self::anything());
 
         $event = new AuthenticationFailureEvent(new AuthenticationException(), new Response());
 
@@ -168,14 +168,14 @@ class LockedUserSubscriberTest extends KernelTestCase
         $exception->setToken($token);
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(null);
 
         $logLoginFailureResource
-            ->expects(static::never())
-            ->method(static::anything());
+            ->expects(self::never())
+            ->method(self::anything());
 
         $event = new AuthenticationFailureEvent($exception, new Response());
 
@@ -202,13 +202,13 @@ class LockedUserSubscriberTest extends KernelTestCase
         $exception->setToken($token);
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(new UserEntity());
 
         $logLoginFailureResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('save');
 
         $event = new AuthenticationFailureEvent($exception, new Response());

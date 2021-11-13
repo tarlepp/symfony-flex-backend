@@ -31,7 +31,7 @@ class RoleTest extends EntityTestCase
      */
     public function testThatGetIdReturnsCorrectUuid(): void
     {
-        static::markTestSkipped();
+        self::markTestSkipped();
     }
 
     /**
