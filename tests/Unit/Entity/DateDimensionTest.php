@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use function floor;
 
 /**
  * Class DateDimensionTest
@@ -25,16 +26,26 @@ class DateDimensionTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `DateDimension::getCreatedAt` method returns expected
      */
-    public function testThatGetCreatedAtReturnsExpected(): void
+    public function testThatConstructorCallsExpectedMethods(): void
     {
-        $dateTime = new DateTime('now', new DateTimeZone('UTC'));
-        $dateTime->setTime(10, 10, 10);
+        $dateTime = DateTimeImmutable::createFromMutable(
+            (new DateTime('now', new DateTimeZone('UTC')))->setTime(10, 10, 10)
+        );
 
-        $entity = new DateDimension(DateTimeImmutable::createFromMutable($dateTime));
+        $entity = new DateDimension($dateTime);
 
-        self::assertSame($dateTime->format('u'), $entity->getCreatedAt()->format('u'));
+        self::assertSame($dateTime, $entity->getDate());
+        self::assertSame($dateTime->format('U'), $entity->getCreatedAt()->format('U'));
+        self::assertSame((int)$dateTime->format('Y'), $entity->getYear());
+        self::assertSame((int)$dateTime->format('n'), $entity->getMonth());
+        self::assertSame((int)$dateTime->format('j'), $entity->getDay());
+        self::assertSame((int)floor(((int)$dateTime->format('n') - 1) / 3) + 1, $entity->getQuarter());
+        self::assertSame((int)$dateTime->format('W'), $entity->getWeekNumber());
+        self::assertSame((int)$dateTime->format('N'), $entity->getDayNumberOfWeek());
+        self::assertSame((int)$dateTime->format('z'), $entity->getDayNumberOfYear());
+        self::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
+        self::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
+        self::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
     }
 }

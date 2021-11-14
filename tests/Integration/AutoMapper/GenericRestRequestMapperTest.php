@@ -92,6 +92,8 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `mapToObject` method works as expected
      */
     public function testThatMapToObjectWorksAsExpected(): void
     {

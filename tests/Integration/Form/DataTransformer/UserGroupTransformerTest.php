@@ -17,7 +17,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class UserGroupTransformerTest
@@ -27,21 +26,6 @@ use UnexpectedValueException;
  */
 class UserGroupTransformerTest extends KernelTestCase
 {
-    private MockObject | UserGroupResource | null $userGroupResource = null;
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->userGroupResource = $this
-            ->getMockBuilder(UserGroupResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
@@ -50,73 +34,87 @@ class UserGroupTransformerTest extends KernelTestCase
      * @psalm-param StringableArrayObject $expected
      * @psalm-param StringableArrayObject|null $input
      *
-     * @testdox Test that `transform` method returns `$expected` when using `$input` input.
+     * @testdox Test that `transform` method returns `$expected` when using `$input` as input
      */
     public function testThatTransformReturnsExpected(
         StringableArrayObject $expected,
         ?StringableArrayObject $input
     ): void {
-        $transformer = new UserGroupTransformer($this->getUserGroupResource());
+        $resource = $this->getUserGroupResource();
+
+        $transformer = new UserGroupTransformer($resource);
 
         self::assertSame(
             $expected->getArrayCopy(),
-            $transformer->transform($input === null ? null : $input->getArrayCopy())
+            $transformer->transform($input?->getArrayCopy())
         );
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `reverseTransform` method calls expected resource methods
      */
-    public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
+    public function testThatReverseTransformCallsExpectedResourceMethods(): void
     {
+        $resource = $this->getUserGroupResource();
+
         $entity1 = new UserGroup();
         $entity2 = new UserGroup();
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
-        (new UserGroupTransformer($this->getUserGroupResource()))
+        (new UserGroupTransformer($resource))
             ->reverseTransform(['1', '2']);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `reverseTransform` throws an exception for non-existing user group id
      */
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessage('User group with id "2" does not exist!');
 
+        $resource = $this->getUserGroupResource();
+
         $entity = new UserGroup();
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity, null);
 
-        (new UserGroupTransformer($this->getUserGroupResource()))
+        (new UserGroupTransformer($resource))
             ->reverseTransform(['1', '2']);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `reverseTransform` method returns expected `UserGroup` entities
      */
     public function testThatReverseTransformReturnsExpected(): void
     {
+        $resource = $this->getUserGroupResource();
+
         $entity1 = new UserGroup();
         $entity2 = new UserGroup();
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
-        $transformer = new UserGroupTransformer($this->getUserGroupResource());
+        $transformer = new UserGroupTransformer($resource);
 
         self::assertSame([$entity1, $entity2], $transformer->reverseTransform(['1', '2']));
     }
@@ -134,17 +132,14 @@ class UserGroupTransformerTest extends KernelTestCase
         yield [new StringableArrayObject([$entity->getId()]), new StringableArrayObject([$entity])];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @phpstan-return  MockObject&UserGroupResource
+     */
+    private function getUserGroupResource(): MockObject
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
-
-    private function getUserGroupResourceMock(): MockObject
-    {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
+        return  $this
+            ->getMockBuilder(UserGroupResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

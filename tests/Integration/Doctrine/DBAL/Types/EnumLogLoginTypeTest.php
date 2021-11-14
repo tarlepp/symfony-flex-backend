@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -17,7 +16,6 @@ use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use UnexpectedValueException;
 
 /**
  * Class EnumLogLoginTypeTest
@@ -27,31 +25,15 @@ use UnexpectedValueException;
  */
 class EnumLogLoginTypeTest extends KernelTestCase
 {
-    private ?AbstractPlatform $platform = null;
-    private ?Type $type = null;
-
-    /**
-     * @throws DBALException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        Type::hasType('EnumLogLogin')
-            ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
-            : Type::addType('EnumLogLogin', EnumLogLoginType::class);
-
-        $this->type = Type::getType('EnumLogLogin');
-    }
-
     /**
      * @testdox Test that `getSQLDeclaration` method returns expected
      */
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
-        self::assertSame("ENUM('failure', 'success')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame("ENUM('failure', 'success')", $type->getSQLDeclaration([], $platform));
     }
 
     /**
@@ -61,7 +43,10 @@ class EnumLogLoginTypeTest extends KernelTestCase
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
-        self::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
     }
 
     /**
@@ -74,7 +59,10 @@ class EnumLogLoginTypeTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid \'EnumLogLogin\' value');
 
-        $this->getType()->convertToDatabaseValue($value, $this->getPlatform());
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        $type->convertToDatabaseValue($value, $platform);
     }
 
     /**
@@ -82,7 +70,10 @@ class EnumLogLoginTypeTest extends KernelTestCase
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        self::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertTrue($type->requiresSQLCommentHint($platform));
     }
 
     /**
@@ -111,11 +102,15 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
+        return new MySqlPlatform();
     }
 
     private function getType(): Type
     {
-        return $this->type ?? throw new UnexpectedValueException('Type not set');
+        Type::hasType('EnumLogLogin')
+            ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
+            : Type::addType('EnumLogLogin', EnumLogLoginType::class);
+
+        return Type::getType('EnumLogLogin');
     }
 }

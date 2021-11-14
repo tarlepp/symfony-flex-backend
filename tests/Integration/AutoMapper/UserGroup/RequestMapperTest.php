@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\AutoMapper\UserGroup;
 
+use App\AutoMapper\RestRequestMapper;
 use App\AutoMapper\UserGroup\RequestMapper;
 use App\DTO\UserGroup as DTO;
 use App\Entity\Role;
@@ -17,7 +18,6 @@ use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class RequestMapperTest
@@ -37,19 +37,6 @@ class RequestMapperTest extends RestRequestMapperTestCase
         DTO\UserGroupPatch::class,
     ];
 
-    private ?MockObject $mockRoleResource = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->mockRoleResource = $this->getMockBuilder(RoleResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mapperObject = new RequestMapper($this->mockRoleResource);
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
      *
@@ -57,13 +44,15 @@ class RequestMapperTest extends RestRequestMapperTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass`
+     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object
      */
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
+        $resource = $this->getResource();
+        $requestMapper = new RequestMapper($resource);
         $role = new Role('Some Role');
 
-        $this->getMockRoleResource()
+        $resource
             ->expects(self::once())
             ->method('getReference')
             ->with($role->getId())
@@ -77,7 +66,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         );
 
         /** @var DTO\UserGroup $dto */
-        $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
+        $dto = $requestMapper->mapToObject($request, new $dtoClass());
 
         self::assertSame($role, $dto->getRole());
     }
@@ -92,8 +81,18 @@ class RequestMapperTest extends RestRequestMapperTestCase
         }
     }
 
-    private function getMockRoleResource(): MockObject
+    /**
+     * @phpstan-return MockObject&RoleResource
+     */
+    protected function getResource(): MockObject
     {
-        return $this->mockRoleResource ?? throw new UnexpectedValueException('MockRoleResource not set');
+        return $this->getMockBuilder(RoleResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    protected function getRequestMapper(): RestRequestMapper
+    {
+        return new RequestMapper($this->getResource());
     }
 }
