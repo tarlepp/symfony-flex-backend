@@ -17,7 +17,6 @@ use App\Security\RolesService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -28,34 +27,29 @@ use function array_keys;
  */
 class UserGroupTypeTest extends TypeTestCase
 {
-    private MockObject | RolesService | string $rolesService = '';
-    private MockObject | RoleResource | string $roleResource = '';
-
-    protected function setUp(): void
-    {
-        $this->rolesService = $this->createMock(RolesService::class);
-        $this->roleResource = $this->createMock(RoleResource::class);
-
-        parent::setUp();
-    }
-
+    /**
+     * @testdox Test that form submit with valid input data works as expected
+     */
     public function testSubmitValidData(): void
     {
+        $resource = $this->getRoleResource();
+        $service = $this->getRolesService();
+
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
-        $this->getRoleResourceMock()
+        $resource
             ->expects(self::once())
             ->method('find')
             ->willReturn([$roleEntity]);
 
-        $this->getRoleResourceMock()
+        $resource
             ->expects(self::once())
             ->method('findOne')
             ->with($roleEntity->getId())
             ->willReturn($roleEntity);
 
-        $this->getRolesServiceMock()
+        $service
             ->expects(self::once())
             ->method('getRoleLabel')
             ->willReturn('role name');
@@ -101,12 +95,11 @@ class UserGroupTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        $resource = $this->getRoleResource();
+        $service = $this->getRolesService();
+
         // create a type instance with the mocked dependencies
-        $type = new UserGroupType(
-            $this->getRolesService(),
-            $this->getRoleResource(),
-            new RoleTransformer($this->getRoleResource())
-        );
+        $type = new UserGroupType($service, $resource, new RoleTransformer($resource));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -114,31 +107,31 @@ class UserGroupTypeTest extends TypeTestCase
         ];
     }
 
-    private function getRolesService(): RolesService
+    /**
+     * @phpstan-return MockObject&RolesService
+     */
+    private function getRolesService(): MockObject
     {
-        return $this->rolesService instanceof RolesService
-            ? $this->rolesService
-            : throw new UnexpectedValueException('RolesService not set');
+        static $cache;
+
+        if ($cache === null) {
+            $cache = $this->createMock(RolesService::class);
+        }
+
+        return $cache;
     }
 
-    private function getRolesServiceMock(): MockObject
+    /**
+     * @phpstan-return MockObject&RoleResource
+     */
+    private function getRoleResource(): MockObject
     {
-        return $this->rolesService instanceof MockObject
-            ? $this->rolesService
-            : throw new UnexpectedValueException('RolesService not set');
-    }
+        static $cache;
 
-    private function getRoleResource(): RoleResource
-    {
-        return $this->roleResource instanceof RoleResource
-            ? $this->roleResource
-            : throw new UnexpectedValueException('RoleResource not set');
-    }
+        if ($cache === null) {
+            $cache = $this->createMock(RoleResource::class);
+        }
 
-    private function getRoleResourceMock(): MockObject
-    {
-        return $this->roleResource instanceof MockObject
-            ? $this->roleResource
-            : throw new UnexpectedValueException('RoleResource not set');
+        return $cache;
     }
 }

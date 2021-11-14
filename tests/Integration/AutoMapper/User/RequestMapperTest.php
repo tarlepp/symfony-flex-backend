@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\AutoMapper\User;
 
+use App\AutoMapper\RestRequestMapper;
 use App\AutoMapper\User\RequestMapper;
 use App\DTO\User as DTO;
 use App\Entity\UserGroup;
@@ -17,7 +18,6 @@ use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class RequestMapperTest
@@ -37,19 +37,6 @@ class RequestMapperTest extends RestRequestMapperTestCase
         DTO\UserPatch::class,
     ];
 
-    private ?MockObject $mockUserGroupResource = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->mockUserGroupResource = $this->getMockBuilder(UserGroupResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mapperObject = new RequestMapper($this->mockUserGroupResource);
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
      *
@@ -57,13 +44,15 @@ class RequestMapperTest extends RestRequestMapperTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass`.
+     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object
      */
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
+        $resource = $this->getResource();
+        $requestMapper = new RequestMapper($resource);
         $userGroup = new UserGroup();
 
-        $this->getMockUserGroupResource()
+        $resource
             ->expects(self::once())
             ->method('getReference')
             ->with($userGroup->getId())
@@ -74,7 +63,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         ]);
 
         /** @var DTO\User $dto */
-        $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
+        $dto = $requestMapper->mapToObject($request, new $dtoClass());
 
         self::assertSame([$userGroup], $dto->getUserGroups());
     }
@@ -89,8 +78,18 @@ class RequestMapperTest extends RestRequestMapperTestCase
         }
     }
 
-    private function getMockUserGroupResource(): MockObject
+    /**
+     * @phpstan-return MockObject&UserGroupResource
+     */
+    protected function getResource(): MockObject
     {
-        return $this->mockUserGroupResource ?? throw new UnexpectedValueException('MockUserGroupResource not set');
+        return $this->getMockBuilder(UserGroupResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    protected function getRequestMapper(): RestRequestMapper
+    {
+        return new RequestMapper($this->getResource());
     }
 }
