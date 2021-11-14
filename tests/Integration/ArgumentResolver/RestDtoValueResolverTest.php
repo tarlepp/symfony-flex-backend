@@ -12,7 +12,6 @@ use App\ArgumentResolver\RestDtoValueResolver;
 use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
-use App\Utils\Tests\WebTestCase;
 use AutoMapperPlus\AutoMapperInterface;
 use BadMethodCallException;
 use Generator;
@@ -27,7 +26,7 @@ use Throwable;
  * @package App\Tests\Integration\ArgumentResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RestDtoValueResolverTest extends WebTestCase
+class RestDtoValueResolverTest extends KernelTestCase
 {
     /**
      * @dataProvider dataProviderTestThatSupportMethodWorksAsExpected
@@ -124,6 +123,9 @@ class RestDtoValueResolverTest extends WebTestCase
         static::assertSame($restDto, $resolver->resolve($request, $metadata)->current());
     }
 
+    /**
+     * @phpstan-return Generator<array{0: bool, 1: ControllerCollection, 2: Request, 3: ArgumentMetadata}>
+     */
     public function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
     {
         $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
