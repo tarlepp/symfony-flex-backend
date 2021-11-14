@@ -34,7 +34,7 @@ use function strncmp;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-final class ResponseHandler implements ResponseHandlerInterface
+class ResponseHandler implements ResponseHandlerInterface
 {
     /**
      * Content types for supported response output formats.
