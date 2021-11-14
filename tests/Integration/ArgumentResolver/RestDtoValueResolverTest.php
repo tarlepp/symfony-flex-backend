@@ -90,7 +90,9 @@ class RestDtoValueResolverTest extends KernelTestCase
 
         $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);
         $metadata = new ArgumentMetadata('foo', RestDtoInterface::class, false, false, null);
-        $request = new Request(attributes: ['_controller' => 'foo::createAction']);
+        $request = new Request(attributes: [
+            '_controller' => 'foo::createAction',
+        ]);
 
         $resolver->supports($request, $metadata);
 
@@ -141,7 +143,9 @@ class RestDtoValueResolverTest extends KernelTestCase
             $argumentMetaData,
         ];
 
-        $request = new Request(attributes: ['_controller' => 'foo::bar']);
+        $request = new Request(attributes: [
+            '_controller' => 'foo::bar',
+        ]);
 
         yield [
             false,
@@ -160,7 +164,9 @@ class RestDtoValueResolverTest extends KernelTestCase
             ->with('foo')
             ->willReturn(false);
 
-        $request = new Request(attributes: ['_controller' => 'foo::createAction']);
+        $request = new Request(attributes: [
+            '_controller' => 'foo::createAction',
+        ]);
 
         $argumentMetaData = new ArgumentMetadata('foo', RestDtoInterface::class, false, false, null);
 
@@ -180,7 +186,9 @@ class RestDtoValueResolverTest extends KernelTestCase
             ->method('has')
             ->with('foo');
 
-        $request = new Request(attributes: ['_controller' => 'foo::createAction']);
+        $request = new Request(attributes: [
+            '_controller' => 'foo::createAction',
+        ]);
 
         $argumentMetaData = new ArgumentMetadata('foo', null, false, false, null);
 
@@ -201,7 +209,9 @@ class RestDtoValueResolverTest extends KernelTestCase
             ->with('foo')
             ->willReturn(true);
 
-        $request = new Request(attributes: ['_controller' => 'foo::createAction']);
+        $request = new Request(attributes: [
+            '_controller' => 'foo::createAction',
+        ]);
 
         $argumentMetaData = new ArgumentMetadata('foo', RestDtoInterface::class, false, false, null);
 
