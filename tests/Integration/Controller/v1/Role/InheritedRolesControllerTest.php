@@ -21,7 +21,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class InheritedRolesControllerTest extends KernelTestCase
 {
-    public function testThatInvokeMethodCallsExpectedMethodsAndReturnExpected(): void
+    /**
+     * @testdox Test that `__invoke($role)` method calls expected service methods
+     */
+    public function testThatInvokeMethodCallsExpectedMethods(): void
     {
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
         $role = new Role('Test');
@@ -32,6 +35,6 @@ class InheritedRolesControllerTest extends KernelTestCase
             ->with([$role->getId()])
             ->willReturn([$role]);
 
-        (new InheritedRolesController($rolesService))->__invoke($role);
+        (new InheritedRolesController($rolesService))($role);
     }
 }
