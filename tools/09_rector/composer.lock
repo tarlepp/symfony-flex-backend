@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46801d1fe9dee8270131c250d21d4064",
+    "content-hash": "b5cd747e4ec202c38ddbb8af31642002",
     "packages": [],
     "packages-dev": [
         {
@@ -73,16 +73,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.3",
+            "version": "0.12.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "1a53f093b701d9c4abe1e0d19921379f4c887fe2"
+                "reference": "d7d4659acae85a9ba5b8b75d4dadb998ffed2a48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/1a53f093b701d9c4abe1e0d19921379f4c887fe2",
-                "reference": "1a53f093b701d9c4abe1e0d19921379f4c887fe2",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d7d4659acae85a9ba5b8b75d4dadb998ffed2a48",
+                "reference": "d7d4659acae85a9ba5b8b75d4dadb998ffed2a48",
                 "shasum": ""
             },
             "require": {
@@ -121,7 +121,7 @@
             "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.3"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.4"
             },
             "funding": [
                 {
@@ -129,7 +129,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-10T19:11:36+00:00"
+            "time": "2021-11-15T14:06:50+00:00"
         },
         {
             "name": "roave/security-advisories",
