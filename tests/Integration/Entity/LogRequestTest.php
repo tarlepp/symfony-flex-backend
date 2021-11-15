@@ -43,10 +43,10 @@ class LogRequestTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
-        ?string $field = null,
+        ?string $property = null,
         ?string $type = null,
         ?array $meta = null
     ): void {
@@ -55,10 +55,10 @@ class LogRequestTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterReturnsInstanceOfEntity(
-        ?string $field = null,
+        ?string $property = null,
         ?string $type = null,
         ?array $meta = null
     ): void {
@@ -71,14 +71,14 @@ class LogRequestTest extends EntityTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that getter method for `$field` with `$type` returns expected.
+     * @testdox Test that getter method for `$type $property` returns expected
      */
-    public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
+    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
-        $getter = 'get' . ucfirst($field);
+        $getter = 'get' . ucfirst($property);
 
         if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
-            $getter = 'is' . ucfirst($field);
+            $getter = 'is' . ucfirst($property);
         }
 
         $logRequest = new LogRequest(
@@ -108,7 +108,7 @@ class LogRequestTest extends EntityTestCase
         $message = sprintf(
             'Getter \'%s\' for field \'%s\' did not return expected type \'%s\' return value was \'%s\'',
             $getter,
-            $field,
+            $property,
             $type,
             $returnValue
         );
@@ -137,7 +137,7 @@ class LogRequestTest extends EntityTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`.
+     * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`
      */
     public function testThatSensitiveDataIsCleanedFromHeaders(
         StringableArrayObject $properties,
@@ -164,7 +164,7 @@ class LogRequestTest extends EntityTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`.
+     * @testdox Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`
      */
     public function testThatSensitiveDataIsCleanedFromParameters(
         StringableArrayObject $properties,
@@ -187,7 +187,7 @@ class LogRequestTest extends EntityTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input.
+     * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input
      */
     public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
     {

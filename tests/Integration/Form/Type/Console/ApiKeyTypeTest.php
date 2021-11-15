@@ -17,8 +17,6 @@ use App\Resource\UserGroupResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use Throwable;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -29,20 +27,13 @@ use function array_keys;
  */
 class ApiKeyTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-
     /**
-     * @throws Throwable
+     * @testdox Test that form submit with valid input data works as expected
      */
-    protected function setUp(): void
-    {
-        $this->userGroupResource = $this->createMock(UserGroupResource::class);
-
-        parent::setUp();
-    }
-
     public function testSubmitValidData(): void
     {
+        $resource = $this->getUserGroupResource();
+
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
@@ -51,12 +42,12 @@ class ApiKeyTypeTest extends TypeTestCase
             ->setRole($roleEntity)
             ->setName('Some name');
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->getUserGroupResourceMock()
+        $resource
             ->expects(self::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
@@ -103,8 +94,10 @@ class ApiKeyTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        $resource = $this->getUserGroupResource();
+
         // create a type instance with the mocked dependencies
-        $type = new ApiKeyType($this->getUserGroupResource(), new UserGroupTransformer($this->getUserGroupResource()));
+        $type = new ApiKeyType($resource, new UserGroupTransformer($resource));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -112,17 +105,17 @@ class ApiKeyTypeTest extends TypeTestCase
         ];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @phpstan-return MockObject&UserGroupResource
+     */
+    private function getUserGroupResource(): MockObject
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        static $cache;
 
-    private function getUserGroupResourceMock(): MockObject
-    {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
+        if ($cache === null) {
+            $cache = $this->createMock(UserGroupResource::class);
+        }
+
+        return $cache;
     }
 }

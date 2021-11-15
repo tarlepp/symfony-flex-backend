@@ -12,7 +12,6 @@ use App\Doctrine\DBAL\Types\UTCDateTimeType;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
 use DateTimeZone;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\ConversionException;
@@ -21,7 +20,6 @@ use Generator;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class UTCDateTimeTypeTest
@@ -31,25 +29,6 @@ use UnexpectedValueException;
  */
 class UTCDateTimeTypeTest extends KernelTestCase
 {
-    private ?AbstractPlatform $platform = null;
-    private ?Type $type = null;
-
-    /**
-     * @throws DBALException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        Type::hasType('datetime')
-            ? Type::overrideType('datetime', UTCDateTimeType::class)
-            : Type::addType('datetime', UTCDateTimeType::class);
-
-        $this->type = Type::getType('datetime');
-    }
-
     /**
      * @throws Throwable
      *
@@ -57,14 +36,17 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     public function testThatDateTimeConvertsToDatabaseValue(): void
     {
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
         $dateInput = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
         $dateExpected = clone $dateInput;
 
         $expected = $dateExpected
             ->setTimezone(new DateTimeZone('UTC'))
-            ->format($this->getPlatform()->getDateTimeTzFormatString());
+            ->format($platform->getDateTimeTzFormatString());
 
-        self::assertSame($expected, $this->getType()->convertToDatabaseValue($dateInput, $this->getPlatform()));
+        self::assertSame($expected, $type->convertToDatabaseValue($dateInput, $platform));
     }
 
     /**
@@ -75,6 +57,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         $type = $this->getType();
+        $platform = $this->getPlatform();
 
         PhpUnitUtil::setProperty('utc', null, $type);
 
@@ -82,7 +65,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $dateInput = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
 
-        $type->convertToDatabaseValue($dateInput, $this->getPlatform());
+        $type->convertToDatabaseValue($dateInput, $platform);
 
         /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type);
@@ -98,7 +81,10 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
     {
-        $date = $this->getType()->convertToPHPValue($value, $this->getPlatform());
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        $date = $type->convertToPHPValue($value, $platform);
 
         self::assertInstanceOf(DateTime::class, $date);
         self::assertSame($expected, $date->format('Y-m-d H:i:s'));
@@ -112,12 +98,13 @@ class UTCDateTimeTypeTest extends KernelTestCase
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         $type = $this->getType();
+        $platform = $this->getPlatform();
 
         PhpUnitUtil::setProperty('utc', null, $type);
 
         self::assertNull(PhpUnitUtil::getProperty('utc', $type));
 
-        $type->convertToPHPValue('1981-04-07 10:00:00', $this->getPlatform());
+        $type->convertToPHPValue('1981-04-07 10:00:00', $platform);
 
         /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type);
@@ -133,7 +120,10 @@ class UTCDateTimeTypeTest extends KernelTestCase
     {
         $this->expectException(ConversionException::class);
 
-        $this->getType()->convertToPHPValue('foobar', $this->getPlatform());
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        $type->convertToPHPValue('foobar', $platform);
     }
 
     /**
@@ -141,7 +131,10 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        self::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertTrue($type->requiresSQLCommentHint($platform));
     }
 
     /**
@@ -169,11 +162,15 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
+        return new MySqlPlatform();
     }
 
     private function getType(): Type
     {
-        return $this->type ?? throw new UnexpectedValueException('Type not set');
+        Type::hasType('datetime')
+            ? Type::overrideType('datetime', UTCDateTimeType::class)
+            : Type::addType('datetime', UTCDateTimeType::class);
+
+        return Type::getType('datetime');
     }
 }

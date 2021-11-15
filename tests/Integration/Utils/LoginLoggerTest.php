@@ -16,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class LoginLoggerTest
@@ -26,17 +25,6 @@ use UnexpectedValueException;
  */
 class LoginLoggerTest extends KernelTestCase
 {
-    private MockObject | LogLoginResource | null $resource = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(LogLoginResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @throws Throwable
      *
@@ -58,28 +46,26 @@ class LoginLoggerTest extends KernelTestCase
      */
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
-        $this->getResourceMock()
+        $resource = $this->getResource();
+
+        $resource
             ->expects(self::once())
             ->method('save');
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
-        (new LoginLogger($this->getResource(), $requestStack))
+        (new LoginLogger($resource, $requestStack))
             ->process('');
     }
 
-    private function getResource(): LogLoginResource
+    /**
+     * @phpstan-return MockObject&LogLoginResource
+     */
+    private function getResource(): MockObject
     {
-        return $this->resource instanceof LogLoginResource
-            ? $this->resource
-            : throw new UnexpectedValueException('Resource not set');
-    }
-
-    private function getResourceMock(): MockObject
-    {
-        return $this->resource instanceof MockObject
-            ? $this->resource
-            : throw new UnexpectedValueException('Resource not set');
+        return $this->getMockBuilder(LogLoginResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

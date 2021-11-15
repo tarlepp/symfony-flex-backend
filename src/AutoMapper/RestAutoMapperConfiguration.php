@@ -25,7 +25,7 @@ abstract class RestAutoMapperConfiguration implements AutoMapperConfiguratorInte
     /**
      * Classes to use specified request mapper.
      *
-     * @var array<int, string>
+     * @var array<int, class-string>
      */
     protected static array $requestMapperClasses = [];
 
