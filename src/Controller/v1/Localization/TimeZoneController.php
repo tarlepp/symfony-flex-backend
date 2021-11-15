@@ -13,7 +13,6 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 /**
  * Class TimezoneController
@@ -69,8 +68,6 @@ class TimeZoneController
      *          ),
      *      ),
      *  )
-     *
-     * @throws Throwable
      */
     #[Route(
         path: '/v1/localization/timezone',

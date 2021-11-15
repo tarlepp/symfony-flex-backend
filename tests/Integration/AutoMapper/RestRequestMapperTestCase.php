@@ -32,6 +32,23 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     protected array $restDtoClasses = [];
 
     /**
+     * @dataProvider dataProviderTestThatMapMethodWorksAsExpected
+     *
+     * @param class-string $expectedDto
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `map` method returns `$expectedDto` DTO object
+     */
+    public function testThatMapMethodWorksAsExpected(string $expectedDto): void
+    {
+        self::assertInstanceOf(
+            $expectedDto,
+            $this->getRequestMapper()->map(new Request(), $expectedDto),
+        );
+    }
+
+    /**
      * @dataProvider dataProviderTestThatMapToObjectReturnsExpectedDtoObject
      *
      * @param class-string $expectedDto
@@ -51,11 +68,19 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     /**
      * @return Generator<array{0: class-string}>
      */
-    public function dataProviderTestThatMapToObjectReturnsExpectedDtoObject(): Generator
+    public function dataProviderTestThatMapMethodWorksAsExpected(): Generator
     {
         foreach ($this->restDtoClasses as $dtoClass) {
             yield [$dtoClass];
         }
+    }
+
+    /**
+     * @return Generator<array{0: class-string}>
+     */
+    public function dataProviderTestThatMapToObjectReturnsExpectedDtoObject(): Generator
+    {
+        return $this->dataProviderTestThatMapMethodWorksAsExpected();
     }
 
     abstract protected function getRequestMapper(): RestRequestMapper;
