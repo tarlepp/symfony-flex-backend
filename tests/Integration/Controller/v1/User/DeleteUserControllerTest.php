@@ -9,8 +9,13 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Controller\v1\User;
 
 use App\Controller\v1\User\DeleteUserController;
+use App\Entity\User;
 use App\Resource\UserResource;
+use App\Rest\ResponseHandler;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 /**
  * Class DeleteUserControllerTest
@@ -31,4 +36,52 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
      * @var class-string
      */
     protected string $resourceClass = UserResource::class;
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself
+     */
+    public function testThatInvokeMethodThrowsAnExceptionIfUserTriesToDeleteHimself(): void
+    {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('You cannot remove yourself...');
+
+        $resource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+
+        $request = Request::create('/');
+        $user = new User();
+
+        (new DeleteUserController($resource))($request, $user, $user);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `__invoke($request, $requestUser, $loggedInUser)` method calls expected service methods
+     */
+    public function testThatInvokeMethodCallsExpectedMethods(): void
+    {
+        $resource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        $responseHandler = $this->getMockBuilder(ResponseHandler::class)->disableOriginalConstructor()->getMock();
+
+        $request = Request::create('/', 'DELETE');
+        $requestUser = new User();
+        $loggedInUser = new User();
+
+        $resource
+            ->expects(self::once())
+            ->method('delete')
+            ->with($requestUser->getId())
+            ->willReturn($requestUser);
+
+        $responseHandler
+            ->expects(self::once())
+            ->method('createResponse')
+            ->with($request, $requestUser, $resource);
+
+        (new DeleteUserController($resource))
+            ->setResponseHandler($responseHandler)
+            ->__invoke($request, $requestUser, $loggedInUser);
+    }
 }
