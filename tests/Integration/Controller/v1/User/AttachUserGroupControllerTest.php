@@ -58,5 +58,10 @@ class AttachUserGroupControllerTest extends KernelTestCase
             ->willReturn('[]');
 
         (new AttachUserGroupController($userResource, $userGroupResource, $serializer))($user, $userGroup);
+        
+        self::assertTrue(
+            $user->getUserGroups()->contains($userGroup),
+            'User entity does not have expected user group',
+        );
     }
 }
