@@ -63,5 +63,10 @@ class DetachUserGroupControllerTest extends KernelTestCase
             $user->getUserGroups()->contains($userGroup),
             'Expected user group was not removed from user entity',
         );
+
+        self::assertFalse(
+            $userGroup->getUsers()->contains($user),
+            'Expected user was not removed from user group entity',
+        );
     }
 }
