@@ -49,6 +49,10 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
 
         $resource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 
+        $resource
+            ->expects(self::never())
+            ->method('delete');
+
         $request = Request::create('/');
         $user = new User();
 
