@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd14871524f3f978de93e196394808a0",
+    "content-hash": "a88483d14d0cee243f4865cecb246e11",
     "packages": [],
     "packages-dev": [
         {
@@ -332,16 +332,16 @@
         },
         {
             "name": "php-coveralls/php-coveralls",
-            "version": "v2.4.3",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-coveralls/php-coveralls.git",
-                "reference": "909381bd40a17ae6e9076051f0d73293c1c091af"
+                "reference": "a54881adfb9bb3a01ca72e2832131b33f02da4e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-coveralls/php-coveralls/zipball/909381bd40a17ae6e9076051f0d73293c1c091af",
-                "reference": "909381bd40a17ae6e9076051f0d73293c1c091af",
+                "url": "https://api.github.com/repos/php-coveralls/php-coveralls/zipball/a54881adfb9bb3a01ca72e2832131b33f02da4e4",
+                "reference": "a54881adfb9bb3a01ca72e2832131b33f02da4e4",
                 "shasum": ""
             },
             "require": {
@@ -349,11 +349,11 @@
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^6.0 || ^7.0",
                 "php": "^5.5 || ^7.0 || ^8.0",
-                "psr/log": "^1.0",
-                "symfony/config": "^2.1 || ^3.0 || ^4.0 || ^5.0",
-                "symfony/console": "^2.1 || ^3.0 || ^4.0 || ^5.0",
-                "symfony/stopwatch": "^2.0 || ^3.0 || ^4.0 || ^5.0",
-                "symfony/yaml": "^2.0.5 || ^3.0 || ^4.0 || ^5.0"
+                "psr/log": "^1.0 || ^2.0",
+                "symfony/config": "^2.1 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
+                "symfony/console": "^2.1 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
+                "symfony/stopwatch": "^2.0 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
+                "symfony/yaml": "^2.0.5 || ^3.0 || ^4.0 || ^5.0 || ^6.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.35 || ^5.4.3 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
@@ -409,9 +409,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-coveralls/php-coveralls/issues",
-                "source": "https://github.com/php-coveralls/php-coveralls/tree/v2.4.3"
+                "source": "https://github.com/php-coveralls/php-coveralls/tree/v2.5.1"
             },
-            "time": "2020-12-24T09:17:03+00:00"
+            "time": "2021-11-10T16:53:56+00:00"
         },
         {
             "name": "psr/container",
@@ -623,30 +623,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.4",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
+                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/ef29f6d262798707a9edd554e2b82517ef3a9376",
+                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=8.0.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
+                    "Psr\\Log\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -667,9 +667,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.4"
+                "source": "https://github.com/php-fig/log/tree/2.0.0"
             },
-            "time": "2021-05-03T11:20:27+00:00"
+            "time": "2021-07-14T16:41:46+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -721,12 +721,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "a2102bff4c797a8f86e3c39ebc4d0b047e14b06d"
+                "reference": "bac54e18ee767f065d88b81c8517fb21cd6414ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a2102bff4c797a8f86e3c39ebc4d0b047e14b06d",
-                "reference": "a2102bff4c797a8f86e3c39ebc4d0b047e14b06d",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bac54e18ee767f065d88b81c8517fb21cd6414ab",
+                "reference": "bac54e18ee767f065d88b81c8517fb21cd6414ab",
                 "shasum": ""
             },
             "conflict": {
@@ -827,7 +827,7 @@
                 "friendsoftypo3/mediace": ">=7.6.2,<7.6.5",
                 "froala/wysiwyg-editor": "<3.2.7",
                 "fuel/core": "<1.8.1",
-                "getgrav/grav": "<1.7.24",
+                "getgrav/grav": "<=1.7.24",
                 "getkirby/cms": "<=3.5.6",
                 "getkirby/panel": "<2.5.14",
                 "gilacms/gila": "<=1.11.4",
@@ -886,6 +886,7 @@
                 "monolog/monolog": ">=1.8,<1.12",
                 "moodle/moodle": "<3.5.17|>=3.7,<3.7.9|>=3.8,<3.8.8|>=3.9,<3.9.5|>=3.10-beta,<3.10.2",
                 "namshi/jose": "<2.2",
+                "neoan3-apps/template": "<1.1.1",
                 "neos/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.12|>=3.1,<3.1.10|>=3.2,<3.2.13|>=3.3,<3.3.13|>=4,<4.0.6",
                 "neos/form": ">=1.2,<4.3.3|>=5,<5.0.9|>=5.1,<5.1.3",
                 "neos/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4|>=2.3,<2.9.99|>=3,<3.0.20|>=3.1,<3.1.18|>=3.2,<3.2.14|>=3.3,<3.3.23|>=4,<4.0.17|>=4.1,<4.1.16|>=4.2,<4.2.12|>=4.3,<4.3.3",
@@ -898,9 +899,9 @@
                 "nzo/url-encryptor-bundle": ">=4,<4.3.2|>=5,<5.0.1",
                 "october/backend": "<1.1.2",
                 "october/cms": "= 1.1.1|= 1.0.471|= 1.0.469|>=1.0.319,<1.0.469",
-                "october/october": "<2.1.12",
+                "october/october": ">=1.0.319,<1.0.466|>=2.1,<2.1.12",
                 "october/rain": "<1.0.472|>=1.1,<1.1.2",
-                "october/system": "<2.1.12",
+                "october/system": "<1.0.472|>=1.1.1,<1.1.5|>=2.1,<2.1.12",
                 "onelogin/php-saml": "<2.10.4",
                 "oneup/uploader-bundle": "<1.9.3|>=2,<2.1.5",
                 "opencart/opencart": "<=3.0.3.2",
@@ -1132,7 +1133,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-08T18:16:59+00:00"
+            "time": "2021-11-10T17:18:39+00:00"
         },
         {
             "name": "symfony/config",
