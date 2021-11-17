@@ -12,6 +12,7 @@ use App\Entity\ApiKey;
 use App\Entity\User;
 use App\EventSubscriber\RequestLogSubscriber;
 use App\Security\ApiKeyUser;
+use App\Security\RolesService;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
@@ -150,6 +151,10 @@ class RequestLogSubscriberTest extends KernelTestCase
     public function testThatSetApiKeyIsCalled(): void
     {
         self::bootKernel();
+        
+        $rolesService = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $request = new Request(
             [],
@@ -164,7 +169,7 @@ class RequestLogSubscriberTest extends KernelTestCase
         $response = new Response();
         $event = new TerminateEvent(self::$kernel, $request, $response);
         $apiKey = new ApiKey();
-        $apiKeyUser = new ApiKeyUser($apiKey, []);
+        $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
         $requestLogger = $this->getRequestLogger();
         $userTypeIdentification = $this->getUserTypeIdentification();
 

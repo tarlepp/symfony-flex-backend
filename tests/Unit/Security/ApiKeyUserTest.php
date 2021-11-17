@@ -9,6 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Security;
 
 use App\Entity\ApiKey;
+use App\Entity\Role;
+use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
@@ -38,7 +40,7 @@ class ApiKeyUserTest extends KernelTestCase
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
-        $apiKeyUser = new ApiKeyUser($apiKey, $rolesService->getInheritedRoles($apiKey->getRoles()));
+        $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
 
         self::assertEqualsCanonicalizing($expectedRoles->getArrayCopy(), $apiKeyUser->getRoles());
     }
@@ -53,28 +55,37 @@ class ApiKeyUserTest extends KernelTestCase
     {
         $userGroupResource = self::getContainer()->get(UserGroupResource::class);
 
-        yield [new ApiKey(), new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
+        yield [
+            (new ApiKey())->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED'))),
+            new StringableArrayObject(['ROLE_LOGGED', 'ROLE_API']),
+        ];
 
         $exception = new Exception('Cannot find user group');
 
         yield [
-            (new ApiKey())->addUserGroup($userGroupResource->findOneBy([
-                'name' => 'Normal users',
-            ]) ?? throw $exception),
-            new StringableArrayObject(['ROLE_API', 'ROLE_USER', 'ROLE_LOGGED']),
+            (new ApiKey())
+                ->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED')))
+                ->addUserGroup($userGroupResource->findOneBy([
+                    'name' => 'Normal users',
+                ]) ?? throw $exception),
+            new StringableArrayObject(['ROLE_LOGGED', 'ROLE_API', 'ROLE_USER']),
         ];
 
         yield [
-            (new ApiKey())->addUserGroup($userGroupResource->findOneBy([
-                'name' => 'Admin users',
-            ]) ?? throw $exception),
+            (new ApiKey())
+                ->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED')))
+                ->addUserGroup($userGroupResource->findOneBy([
+                    'name' => 'Admin users',
+                ]) ?? throw $exception),
             new StringableArrayObject(['ROLE_API', 'ROLE_ADMIN', 'ROLE_LOGGED', 'ROLE_USER']),
         ];
 
         yield [
-            (new ApiKey())->addUserGroup($userGroupResource->findOneBy([
-                'name' => 'Root users',
-            ]) ?? throw $exception),
+            (new ApiKey())
+                ->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED')))
+                ->addUserGroup($userGroupResource->findOneBy([
+                    'name' => 'Root users',
+                ]) ?? throw $exception),
             new StringableArrayObject(['ROLE_API', 'ROLE_ROOT', 'ROLE_LOGGED', 'ROLE_ADMIN', 'ROLE_USER']),
         ];
     }
