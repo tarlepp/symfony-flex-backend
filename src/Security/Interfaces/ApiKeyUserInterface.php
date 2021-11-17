@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Security\Interfaces;
 
 use App\Entity\ApiKey;
+use App\Security\RolesService;
 
 /**
  * Interface ApiKeyUserInterface
@@ -19,11 +20,9 @@ use App\Entity\ApiKey;
 interface ApiKeyUserInterface
 {
     /**
-     * ApiKeyUser constructor.
-     *
-     * @param array<int, string> $roles
+     * ApiKeyUser constructor
      */
-    public function __construct(ApiKey $apiKey, array $roles);
+    public function __construct(ApiKey $apiKey, RolesService $rolesService);
 
     /**
      * Getter method for ApiKey entity

@@ -10,6 +10,7 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Security\Interfaces\ApiKeyUserInterface;
+use App\Security\Interfaces\RolesServiceInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function array_merge;
 use function array_unique;
@@ -33,11 +34,16 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(ApiKey $apiKey, array $roles)
+    public function __construct(ApiKey $apiKey, RolesService $rolesService)
     {
         $this->apiKey = $apiKey;
         $this->identifier = $this->apiKey->getToken();
-        $this->roles = array_unique(array_merge($roles, [RolesService::ROLE_API]));
+        $this->roles = array_unique(
+            array_merge(
+                $rolesService->getInheritedRoles($apiKey->getRoles()),
+                [RolesServiceInterface::ROLE_API]
+            ),
+        );
     }
 
     public function getApiKey(): ApiKey
