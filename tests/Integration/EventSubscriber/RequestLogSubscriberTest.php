@@ -151,7 +151,7 @@ class RequestLogSubscriberTest extends KernelTestCase
     public function testThatSetApiKeyIsCalled(): void
     {
         self::bootKernel();
-        
+
         $rolesService = $this->getMockBuilder(RolesService::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -19,9 +19,7 @@ use App\Security\RolesService;
  */
 interface ApiKeyUserInterface
 {
-    /**
-     * ApiKeyUser constructor
-     */
+    
     public function __construct(ApiKey $apiKey, RolesService $rolesService);
 
     /**

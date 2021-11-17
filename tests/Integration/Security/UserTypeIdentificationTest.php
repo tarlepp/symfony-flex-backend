@@ -70,8 +70,8 @@ class UserTypeIdentificationTest extends KernelTestCase
             ->expects(self::once())
             ->method('getInheritedRoles')
             ->willReturn([
-               'ROLE_API',
-               'Some Role',
+                'ROLE_API',
+                'Some Role',
             ]);
 
         $apiKeyEntity = (new ApiKey())->addUserGroup((new UserGroup())->setRole(new Role('Some Role')));
