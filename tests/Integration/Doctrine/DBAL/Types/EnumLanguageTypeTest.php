@@ -16,6 +16,7 @@ use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class EnumLanguageTypeTest
@@ -26,6 +27,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class EnumLanguageTypeTest extends KernelTestCase
 {
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `getSQLDeclaration` method returns expected
      */
     public function testThatGetSQLDeclarationReturnsExpected(): void
@@ -39,6 +42,8 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
+     * @throws Throwable
+     *
      * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
@@ -51,6 +56,8 @@ class EnumLanguageTypeTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
+     *
+     * @throws Throwable
      *
      * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
@@ -67,6 +74,8 @@ class EnumLanguageTypeTest extends KernelTestCase
 
     /**
      * @testdox Test that `requiresSQLCommentHint` method returns expected
+     *
+     * @throws Throwable
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
@@ -105,6 +114,9 @@ class EnumLanguageTypeTest extends KernelTestCase
         return new MySqlPlatform();
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getType(): Type
     {
         Type::hasType('EnumLanguage')
