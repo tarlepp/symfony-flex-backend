@@ -1,7 +1,7 @@
 # What is this?
 
 This folder contains _default_ configuration for this application for
-development environments.
+local development and testing environments.
 
 ## application.json
 
