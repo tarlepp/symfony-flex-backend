@@ -5,6 +5,10 @@ framework:
     http_method_override: false
     default_locale: '%locale%'
 
+    # see https://symfony.com/doc/current/deployment/proxies.html
+    trusted_proxies: '%env(TRUSTED_PROXIES)%'
+    trusted_headers: [ 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix' ]
+
     translator:
         default_path: '%kernel.project_dir%/translations'
 
@@ -20,6 +24,7 @@ framework:
 
     #esi: true
     #fragments: true
+
     php_errors:
         log: true
 
