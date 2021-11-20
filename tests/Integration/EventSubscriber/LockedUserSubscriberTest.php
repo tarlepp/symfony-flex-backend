@@ -163,7 +163,9 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->method(self::anything());
 
         $requestStack = new RequestStack();
-        $requestStack->push(new Request(['username' => 'test-user']));
+        $requestStack->push(new Request([
+            'username' => 'test-user',
+        ]));
 
         (new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack))
             ->onAuthenticationFailure();
