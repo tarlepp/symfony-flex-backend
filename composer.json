@@ -25,7 +25,7 @@
 		"ext-mbstring": "*",
 		"ext-pdo": "*",
 		"doctrine/annotations": "1.13.2",
-		"doctrine/doctrine-bundle": "2.4.3",
+		"doctrine/doctrine-bundle": "2.5.0",
 		"doctrine/doctrine-migrations-bundle": "3.2.1",
 		"doctrine/orm": "2.9.6",
 		"gedmo/doctrine-extensions": "3.2.0",
