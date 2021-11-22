@@ -24,7 +24,7 @@ use function array_unique;
 class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
     private string $identifier;
-    private ApiKey $apiKey;
+    private string $apiKeyIdentifier;
 
     /**
      * @var array<int, string>
@@ -34,21 +34,21 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(ApiKey $apiKey, RolesService $rolesService)
+    public function __construct(ApiKey $apiKey, array $roles)
     {
-        $this->apiKey = $apiKey;
-        $this->identifier = $this->apiKey->getToken();
-        $this->roles = array_unique(
-            array_merge(
-                $rolesService->getInheritedRoles($apiKey->getRoles()),
-                [RolesServiceInterface::ROLE_API]
-            ),
-        );
+        $this->identifier = $apiKey->getToken();
+        $this->apiKeyIdentifier = $apiKey->getId();
+        $this->roles = array_unique(array_merge($roles, [RolesServiceInterface::ROLE_API]));
     }
 
-    public function getApiKey(): ApiKey
+    public function getUserIdentifier(): string
     {
-        return $this->apiKey;
+        return $this->identifier;
+    }
+
+    public function getApiKeyIdentifier(): string
+    {
+        return $this->apiKeyIdentifier;
     }
 
     public function getRoles(): array
@@ -77,11 +77,6 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
      */
     public function eraseCredentials(): void
     {
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return $this->identifier;
     }
 
     /**

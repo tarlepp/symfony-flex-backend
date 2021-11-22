@@ -45,7 +45,7 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
             throw new UserNotFoundException('API key is not valid');
         }
 
-        return new ApiKeyUser($apiKey, $this->rolesService);
+        return new ApiKeyUser($apiKey, $this->rolesService->getInheritedRoles($apiKey->getRoles()));
     }
 
     public function refreshUser(UserInterface $user): UserInterface

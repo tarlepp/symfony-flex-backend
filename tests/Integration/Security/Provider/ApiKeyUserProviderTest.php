@@ -34,13 +34,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
-     * @param mixed $input
-     *
      * @throws Throwable
      *
      * @testdox Test that `supportsClass` method returns `$expected` when using `$input` as input
      */
-    public function testThatSupportClassReturnsExpected(bool $expected, $input): void
+    public function testThatSupportClassReturnsExpected(bool $expected, mixed $input): void
     {
         $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()
@@ -137,7 +135,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('guid');
 
-        self::assertSame($apiKey, $user->getApiKey());
+        self::assertSame($apiKey->getId(), $user->getApiKeyIdentifier());
     }
 
     /**
