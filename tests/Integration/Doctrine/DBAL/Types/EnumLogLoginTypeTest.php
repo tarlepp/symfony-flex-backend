@@ -10,12 +10,13 @@ namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class EnumLogLoginTypeTest
@@ -26,6 +27,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class EnumLogLoginTypeTest extends KernelTestCase
 {
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `getSQLDeclaration` method returns expected
      */
     public function testThatGetSQLDeclarationReturnsExpected(): void
@@ -39,6 +42,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
+     * @throws Throwable
+     *
      * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
@@ -51,6 +56,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
+     *
+     * @throws Throwable
      *
      * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
@@ -66,6 +73,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `requiresSQLCommentHint` method returns expected
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
@@ -105,6 +114,9 @@ class EnumLogLoginTypeTest extends KernelTestCase
         return new MySqlPlatform();
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getType(): Type
     {
         Type::hasType('EnumLogLogin')

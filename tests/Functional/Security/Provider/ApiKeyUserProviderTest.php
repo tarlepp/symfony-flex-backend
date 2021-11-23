@@ -86,7 +86,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
 
         self::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
-        self::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
+        self::assertSame($roles->getArrayCopy(), $apiKeyUser->getRoles());
     }
 
     /**
@@ -132,15 +132,17 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = self::getContainer()->get('doctrine');
+
+        /** @var RolesService $rolesService */
+        $rolesService = self::getContainer()->get(RolesService::class);
+
         $repositoryClass = ApiKeyRepository::class;
         $repository = new $repositoryClass($managerRegistry);
 
-        $iterator = static function (ApiKey $apiKey): array {
-            return [
-                $apiKey->getToken(),
-                new StringableArrayObject($apiKey->getRoles()),
-            ];
-        };
+        $iterator = static fn (ApiKey $apiKey): array => [
+            $apiKey->getToken(),
+            new StringableArrayObject(array_merge($rolesService->getInheritedRoles($apiKey->getRoles()))),
+        ];
 
         return array_map($iterator, $repository->findAll());
     }

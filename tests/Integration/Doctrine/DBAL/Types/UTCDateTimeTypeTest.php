@@ -13,11 +13,10 @@ use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
-use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -77,6 +76,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestDateTimeConvertsToPHPValue
      *
+     * @throws Throwable
+     *
      * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`
      */
     public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
@@ -91,7 +92,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
     }
 
     /**
-     * @throws ReflectionException
+     * @throws Throwable
      *
      * @testdox Test that `convertToPHPValue` method creates DateTimeZone instance as expected
      */
@@ -114,6 +115,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `convertToPHPValue` method throws an exception when invalid value is used
      */
     public function testThatConvertToPHPValueThrowsAnExceptionWithInvalidValue(): void
@@ -127,6 +130,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `requiresSQLCommentHint` method returns expected
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
@@ -138,9 +143,9 @@ class UTCDateTimeTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string|DateTime}>
-     *
      * @throws Throwable
+     *
+     * @return Generator<array{0: string, 1: string|DateTime}>
      */
     public function dataProviderTestDateTimeConvertsToPHPValue(): Generator
     {
@@ -165,6 +170,9 @@ class UTCDateTimeTypeTest extends KernelTestCase
         return new MySqlPlatform();
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getType(): Type
     {
         Type::hasType('datetime')
