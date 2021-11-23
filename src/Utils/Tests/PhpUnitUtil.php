@@ -157,7 +157,10 @@ class PhpUnitUtil
     public static function getType(Type | string | null $type): string
     {
         $exception = new LogicException(
-            sprintf("Currently type '%s' is not supported within type normalizer", (string)$type),
+            sprintf(
+                "Currently type '%s' is not supported within type normalizer",
+                $type instanceof Type ? $type->getName() : (string)$type,
+            ),
         );
 
         return match ($type) {

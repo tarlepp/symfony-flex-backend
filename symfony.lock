@@ -404,6 +404,9 @@
     "symfony/polyfill-php56": {
         "version": "v1.13.1"
     },
+    "symfony/polyfill-php72": {
+        "version": "v1.23.0"
+    },
     "symfony/polyfill-php73": {
         "version": "v1.13.1"
     },
