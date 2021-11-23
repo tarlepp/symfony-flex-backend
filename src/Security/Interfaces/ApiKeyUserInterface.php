@@ -24,9 +24,4 @@ interface ApiKeyUserInterface
      * @param array<int, string> $roles
      */
     public function __construct(ApiKey $apiKey, array $roles);
-
-    /**
-     * Getter method for ApiKey entity
-     */
-    public function getApiKey(): ApiKey;
 }

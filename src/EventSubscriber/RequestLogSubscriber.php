@@ -102,7 +102,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
         if ($identify instanceof SecurityUser) {
             $this->requestLogger->setUserId($identify->getUserIdentifier());
         } elseif ($identify instanceof ApiKeyUser) {
-            $this->requestLogger->setApiKeyId($identify->getApiKey()->getId());
+            $this->requestLogger->setApiKeyId($identify->getApiKeyIdentifier());
         }
 
         $this->requestLogger->setMainRequest($event->isMainRequest());
