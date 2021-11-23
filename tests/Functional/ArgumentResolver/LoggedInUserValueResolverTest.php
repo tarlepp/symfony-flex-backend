@@ -11,6 +11,7 @@ namespace App\Tests\Functional\ArgumentResolver;
 use App\ArgumentResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use Generator;
@@ -53,7 +54,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository);
+        $apiKeyUserProvider = $this->createMock(ApiKeyUserProvider::class);
+
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository, $apiKeyUserProvider);
 
         $resolver = new LoggedInUserValueResolver($userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
@@ -85,7 +88,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository);
+        $apiKeyUserProvider = $this->createMock(ApiKeyUserProvider::class);
+
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository, $apiKeyUserProvider);
 
         $argumentResolver = new ArgumentResolver(
             null,
