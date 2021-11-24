@@ -1,25 +1,26 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/v1/Profile/RolesControllerTest.php
+ * /tests/Integration/Controller/v1/Profile/IndexControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 namespace App\Tests\Integration\Controller\v1\Profile;
 
-use App\Controller\v1\Profile\RolesController;
+use App\Controller\v1\Profile\IndexController;
 use App\Entity\User;
 use App\Security\RolesService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
 /**
- * Class RolesControllerTest
+ * Class IndexControllerTest
  *
  * @package App\Tests\Integration\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RolesControllerTest extends KernelTestCase
+class IndexControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
@@ -30,16 +31,30 @@ class RolesControllerTest extends KernelTestCase
     {
         $user = new User();
 
+        $serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
+
         $rolesService = $this->getMockBuilder(RolesService::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $serializer
+            ->expects(self::once())
+            ->method('serialize')
+            ->with(
+                $user,
+                'json',
+                [
+                    'groups' => 'set.UserProfile',
+                ],
+            )
+            ->willReturn('{"roles": ["foo", "bar"]}');
+
         $rolesService
             ->expects(self::once())
             ->method('getInheritedRoles')
-            ->with($user->getRoles())
-            ->willReturn([]);
+            ->with(['foo', 'bar'])
+            ->willReturn(['foo', 'bar']);
 
-        (new RolesController($rolesService))->__invoke($user);
+        (new IndexController($serializer, $rolesService))($user);
     }
 }
