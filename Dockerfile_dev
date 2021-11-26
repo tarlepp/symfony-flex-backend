@@ -1,4 +1,4 @@
-FROM php:8.0.12-fpm
+FROM php:8.0.13-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -9,8 +9,8 @@ ARG HOST_GID
 
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin:/app/bin"
-ENV NVM_VERSION v0.38.0
-ENV NODE_VERSION 16
+ENV NVM_VERSION v0.39.0
+ENV NODE_VERSION 17.1.0
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
@@ -18,26 +18,21 @@ RUN apt-get update && apt-get install -y \
     python3-dev python3-pip python3-setuptools \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
+COPY --from=mlocati/php-extension-installer:1.4.2 /usr/bin/install-php-extensions /usr/local/bin/
+
 # Enable all necessary PHP packages
-RUN docker-php-ext-install -j$(nproc) bcmath \
-    && docker-php-ext-install pdo \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-install zip \
-    && pecl install xdebug-3.1.1 \
-    && docker-php-ext-enable xdebug
-
-RUN curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.7/pickle.phar \
-    && chmod +x /usr/local/bin/pickle
-
-# Install APCu and APC backward compatibility
-RUN pickle install apcu \
-    && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
+RUN install-php-extensions \
+    apcu \
+    bcmath \
+    intl \
+    opcache \
+    pdo_mysql \
+    xdebug \
+    zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.9 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.12 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
