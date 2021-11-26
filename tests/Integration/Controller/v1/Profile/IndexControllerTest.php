@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+
 namespace App\Tests\Integration\Controller\v1\Profile;
 
 use App\Controller\v1\Profile\IndexController;
