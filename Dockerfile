@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
 COPY --from=mlocati/php-extension-installer:1.4.2 /usr/bin/install-php-extensions /usr/local/bin/
 
-# Enable all necessary PHP packages
+# Install and enable all necessary PHP extensions
 RUN install-php-extensions \
     apcu \
     bcmath \
