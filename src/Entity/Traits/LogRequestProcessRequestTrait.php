@@ -38,7 +38,7 @@ trait LogRequestProcessRequestTrait
     private string $replaceValue = '*** REPLACED ***';
 
     /**
-     * @var array<string, string>
+     * @var array<string, array<int, string|null>>|array<int, string|null>
      */
     #[ORM\Column(
         name: 'headers',
@@ -241,7 +241,7 @@ trait LogRequestProcessRequestTrait
     }
 
     /**
-     * @return array<string, string>
+     * @return array<int|string, array<int, string|null>|string|null>
      */
     public function getHeaders(): array
     {
@@ -312,7 +312,9 @@ trait LogRequestProcessRequestTrait
         // Clean possible sensitive data from parameters
         array_walk(
             $rawHeaders,
-            fn (mixed &$value, string $key) => $this->cleanParameters($value, $key),
+            function (mixed &$value, string|int $key): void {
+                $this->cleanParameters($value, (string)$key);
+            },
         );
 
         $this->headers = $rawHeaders;

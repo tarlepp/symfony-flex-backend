@@ -90,10 +90,10 @@ class UserTypeIdentification
      * object implementing a __toString method, or the username as a regular
      * string.
      */
-    private function getUserToken(): UserInterface | Stringable | string | null
+    private function getUserToken(): UserInterface | null
     {
         $token = $this->tokenStorage->getToken();
 
-        return $token === null || $token instanceof AnonymousToken ? null : $token->getUser();
+        return $token?->getUser();
     }
 }
