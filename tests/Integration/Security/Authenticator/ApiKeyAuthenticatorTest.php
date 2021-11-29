@@ -9,8 +9,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Security\Authenticator;
 
 use App\Entity\ApiKey;
+use App\Entity\User;
 use App\Security\Authenticator\ApiKeyAuthenticator;
 use App\Security\Provider\ApiKeyUserProvider;
+use App\Security\SecurityUser;
 use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
@@ -19,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -113,7 +115,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         self::assertNull($authenticator->onAuthenticationSuccess(
             new Request(),
-            new AnonymousToken('secret', 'user'),
+            new UsernamePasswordToken(new SecurityUser(new User()), 'foobar'),
             'foobar',
         ));
     }

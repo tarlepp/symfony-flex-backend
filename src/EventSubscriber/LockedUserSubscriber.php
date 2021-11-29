@@ -85,7 +85,9 @@ class LockedUserSubscriber implements EventSubscriberInterface
 
         assert($request instanceof Request);
 
-        $user = $this->getUser($request->get('username', ''));
+        $user = $this->getUser(
+            (string)($request->query->get('username') ?? $request->request->get('username', ''))
+        );
 
         if ($user !== null) {
             $this->logLoginFailureResource->save(new LogLoginFailure($user), true);

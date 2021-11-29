@@ -103,8 +103,7 @@ abstract class RestRequestMapper implements MapperInterface
             $setter = 'set' . ucfirst($property);
             $transformer = 'transform' . ucfirst($property);
 
-            /** @var int|string|array<mixed>|null $value */
-            $value = $request->get($property);
+            $value = $request->query->get($property) ?? $request->request->get($property);
 
             if (method_exists($this, $transformer)) {
                 /** @var int|string|object|array<mixed>|null $value */

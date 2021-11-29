@@ -68,7 +68,7 @@ class ResponseHandler implements ResponseHandlerInterface
          *
          * @var array<int, string> $populate
          */
-        $populate = (array)$request->get('populate', []);
+        $populate = (array)($request->query->get('populate') ?? $request->request->get('populate'));
 
         $groups = ['default', ...$populate];
 

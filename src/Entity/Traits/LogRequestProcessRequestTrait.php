@@ -337,7 +337,7 @@ trait LogRequestProcessRequestTrait
         $this->path = $request->getPathInfo();
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
-        $this->controller = (string)$request->get('_controller', '');
+        $this->controller = (string)$request->attributes->get('_controller', '');
         $this->contentType = (string)$request->getMimeType($request->getContentType() ?? '');
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
@@ -345,7 +345,7 @@ trait LogRequestProcessRequestTrait
 
     private function determineAction(Request $request): string
     {
-        $rawAction = $request->get('_controller', '');
+        $rawAction = (string)($request->query->get('_controller') ?? $request->request->get('_controller', ''));
         $rawAction = explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
         return $rawAction[1] ?? '';
