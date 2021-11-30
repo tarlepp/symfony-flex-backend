@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbd4f64ef2bd8eb5347f5c144cbada39",
+    "content-hash": "7119c7bfe382348687448455f7fe6dbd",
     "packages": [],
     "packages-dev": [
         {
@@ -2582,28 +2582,28 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v5.3.4",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "c1e3f64fcc631c96e2c5843b666db66679ced11c"
+                "reference": "d250db364a35ba5d60626b2a6f10f2eaf2073bde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/c1e3f64fcc631c96e2c5843b666db66679ced11c",
-                "reference": "c1e3f64fcc631c96e2c5843b666db66679ced11c",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/d250db364a35ba5d60626b2a6f10f2eaf2073bde",
+                "reference": "d250db364a35ba5d60626b2a6f10f2eaf2073bde",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
-                "symfony/dom-crawler": "^4.4|^5.0",
+                "symfony/dom-crawler": "^4.4|^5.0|^6.0",
                 "symfony/polyfill-php80": "^1.16"
             },
             "require-dev": {
-                "symfony/css-selector": "^4.4|^5.0",
-                "symfony/http-client": "^4.4|^5.0",
-                "symfony/mime": "^4.4|^5.0",
-                "symfony/process": "^4.4|^5.0"
+                "symfony/css-selector": "^4.4|^5.0|^6.0",
+                "symfony/http-client": "^4.4|^5.0|^6.0",
+                "symfony/mime": "^4.4|^5.0|^6.0",
+                "symfony/process": "^4.4|^5.0|^6.0"
             },
             "suggest": {
                 "symfony/process": ""
@@ -2634,7 +2634,7 @@
             "description": "Simulates the behavior of a web browser, allowing you to make requests, click on links and submit forms programmatically",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/browser-kit/tree/v5.3.4"
+                "source": "https://github.com/symfony/browser-kit/tree/v5.4.0"
             },
             "funding": [
                 {
@@ -2650,7 +2650,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-21T12:40:44+00:00"
+            "time": "2021-10-26T22:29:18+00:00"
         },
         {
             "name": "symfony/console",
@@ -2819,21 +2819,21 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v5.3.7",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "c7eef3a60ccfdd8eafe07f81652e769ac9c7146c"
+                "reference": "5b06626e940a3ad54e573511d64d4e00dc8d0fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/c7eef3a60ccfdd8eafe07f81652e769ac9c7146c",
-                "reference": "c7eef3a60ccfdd8eafe07f81652e769ac9c7146c",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/5b06626e940a3ad54e573511d64d4e00dc8d0fd8",
+                "reference": "5b06626e940a3ad54e573511d64d4e00dc8d0fd8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1",
+                "symfony/deprecation-contracts": "^2.1|^3",
                 "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/polyfill-php80": "^1.16"
@@ -2843,7 +2843,7 @@
             },
             "require-dev": {
                 "masterminds/html5": "^2.6",
-                "symfony/css-selector": "^4.4|^5.0"
+                "symfony/css-selector": "^4.4|^5.0|^6.0"
             },
             "suggest": {
                 "symfony/css-selector": ""
@@ -2874,7 +2874,7 @@
             "description": "Eases DOM navigation for HTML and XML documents",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dom-crawler/tree/v5.3.7"
+                "source": "https://github.com/symfony/dom-crawler/tree/v5.4.0"
             },
             "funding": [
                 {
@@ -2890,7 +2890,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-29T19:32:13+00:00"
+            "time": "2021-11-23T10:19:22+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
