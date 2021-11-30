@@ -29,7 +29,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedIfSubjectIsNotSupported(): void
     {
-        $token = new UsernamePasswordToken(new SecurityUser(new User()), '');
+        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
 
         self::assertSame(
             VoterInterface::ACCESS_ABSTAIN,
@@ -42,7 +42,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedWhenUserMismatch(): void
     {
-        $token = new UsernamePasswordToken(new SecurityUser(new User()), '');
+        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
 
         self::assertSame(
             VoterInterface::ACCESS_DENIED,
@@ -56,7 +56,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
     public function testThatVoteReturnsExpectedWhenUserMatch(): void
     {
         $user = new User();
-        $token = new UsernamePasswordToken(new SecurityUser($user), '');
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         self::assertSame(VoterInterface::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
     }

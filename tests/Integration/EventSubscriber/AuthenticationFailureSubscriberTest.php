@@ -36,7 +36,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $user = (new User())
             ->setUsername('test-user');
 
-        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -51,7 +51,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(self::once())
             ->method('loadUserByIdentifier')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn($user);
 
         $loginLogger
@@ -70,7 +70,8 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
     {
-        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
+        $user = new User();
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -85,7 +86,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(self::once())
             ->method('loadUserByIdentifier')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn(null);
 
         $loginLogger
