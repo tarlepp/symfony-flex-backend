@@ -13,8 +13,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Provider\ApiKeyUserProvider;
 use Doctrine\ORM\NonUniqueResultException;
-use Stringable;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
