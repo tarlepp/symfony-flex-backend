@@ -16,7 +16,6 @@ use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\HttpFoundation\Request;
 use function array_filter;
-use function assert;
 use function gettype;
 use function is_object;
 use function method_exists;
