@@ -43,10 +43,11 @@ class StopwatchDecoratorTest extends KernelTestCase
     {
         self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
 
+        /*
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), new Stopwatch());
 
-        /** @noinspection UnnecessaryAssertionInspection */
         self::assertInstanceOf($expected, $decorator->decorate($service));
+        */
     }
 
     /**
@@ -56,9 +57,9 @@ class StopwatchDecoratorTest extends KernelTestCase
     {
         self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
 
+        /*
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        /** @noinspection ClassConstantCanBeUsedInspection */
         $stopWatch
             ->expects(self::once())
             ->method('start')
@@ -71,10 +72,10 @@ class StopwatchDecoratorTest extends KernelTestCase
 
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
 
-        /** @var EntityReferenceExists $decoratedService */
         $decoratedService = $decorator->decorate(new EntityReferenceExists());
 
         self::assertSame('property', $decoratedService->getTargets());
+        */
     }
 
     /**
