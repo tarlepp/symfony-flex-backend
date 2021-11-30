@@ -21,6 +21,7 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_pop;
+use function array_unique;
 use function array_values;
 use function end;
 use function explode;
@@ -96,7 +97,7 @@ class ResponseHandler implements ResponseHandlerInterface
 
         return array_merge(
             [
-                'groups' => $groups,
+                'groups' => array_unique($groups),
             ],
             $restResource !== null ? $restResource->getSerializerContext() : [],
         );
