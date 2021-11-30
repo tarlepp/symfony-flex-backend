@@ -106,8 +106,20 @@ final class RequestHandler
      */
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
-        // Normalize parameter value
-        $input = array_filter((array)($request->query->get('order') ?? $request->request->get('order')));
+        $key = 'order';
+        $input = [];
+
+        if ($request->query->has($key)) {
+            $input = $request->query->all()[$key];
+        } elseif ($request->request->has($key)) {
+            $input = $request->request->all()[$key];
+        }
+
+        if (!is_array($input)) {
+            $input = (array)$input;
+        }
+
+        $input = array_filter($input);
 
         // Initialize output
         $output = [];
