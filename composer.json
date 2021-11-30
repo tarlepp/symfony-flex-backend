@@ -49,7 +49,7 @@
 		"symfony/monolog-bundle": "3.7.1",
 		"symfony/process": "5.3.12",
 		"symfony/property-access": "5.3.8",
-		"symfony/property-info": "5.3.8",
+		"symfony/property-info": "5.4.0",
 		"symfony/routing": "5.3.11",
 		"symfony/runtime": "5.3.11",
 		"symfony/security-bundle": "5.3.12",
