@@ -13,8 +13,10 @@ use AutoMapperPlus\MapperInterface;
 use InvalidArgumentException;
 use LengthException;
 use ReflectionClass;
+use ReflectionNamedType;
 use Symfony\Component\HttpFoundation\Request;
 use function array_filter;
+use function assert;
 use function gettype;
 use function is_object;
 use function method_exists;
@@ -105,13 +107,11 @@ abstract class RestRequestMapper implements MapperInterface
         foreach ($this->getValidProperties($request) as $property) {
             $setter = 'set' . ucfirst($property);
             $transformer = 'transform' . ucfirst($property);
-            $reflectionProperty = $reflectionClass->getProperty($property);
+            $type = $reflectionClass->getProperty($property)->getType();
 
-            $value = $reflectionProperty->getType()?->getName() === 'array'
+            $value = $type instanceof ReflectionNamedType && $type->getName() === 'array'
                 ? $request->request->all($property)
                 : $request->request->get($property);
-
-            //$value = $request->request->get($property);
 
             if (method_exists($this, $transformer)) {
                 /** @var int|string|object|array<mixed>|null $value */
