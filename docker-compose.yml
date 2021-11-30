@@ -2,6 +2,7 @@ version: '3'
 services:
     php:
         container_name: symfony-backend-php-fpm
+        hostname: php-fpm
         build:
             context: .
             dockerfile: ./Dockerfile_dev
@@ -21,6 +22,7 @@ services:
 
     nginx:
         container_name: symfony-backend-nginx
+        hostname: nginx
         build:
             context: ./docker/nginx/
         depends_on:
@@ -34,6 +36,7 @@ services:
 
     mysql:
         container_name: symfony-backend-mysql
+        hostname: mysql
         build:
             context: ./docker/mysql/
         command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -46,6 +49,7 @@ services:
 
     dozzle:
         container_name: symfony-backend-dozzle
+        hostname: dozzle
         image: amir20/dozzle
         ports:
             - "8080:8080"
