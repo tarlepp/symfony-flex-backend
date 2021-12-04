@@ -13,8 +13,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Provider\ApiKeyUserProvider;
 use Doctrine\ORM\NonUniqueResultException;
-use Stringable;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -90,10 +88,10 @@ class UserTypeIdentification
      * object implementing a __toString method, or the username as a regular
      * string.
      */
-    private function getUserToken(): UserInterface | Stringable | string | null
+    private function getUserToken(): UserInterface | null
     {
         $token = $this->tokenStorage->getToken();
 
-        return $token === null || $token instanceof AnonymousToken ? null : $token->getUser();
+        return $token?->getUser();
     }
 }

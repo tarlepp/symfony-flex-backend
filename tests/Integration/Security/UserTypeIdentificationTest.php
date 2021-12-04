@@ -18,7 +18,6 @@ use App\Security\UserTypeIdentification;
 use Doctrine\ORM\NonUniqueResultException;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -67,7 +66,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $apiKey = new ApiKey();
         $apiKeyUser = new ApiKeyUser($apiKey, []);
-        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
+        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
             ->expects(self::once())
@@ -122,7 +121,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $user = (new User())->setUsername('some-username');
         $securityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
+        $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
             ->expects(self::once())
@@ -176,7 +175,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $securityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
+        $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
             ->expects(self::once())
@@ -199,7 +198,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $apiKeyUser = new ApiKeyUser(new ApiKey(), []);
-        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
+        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
             ->expects(self::exactly(2))
@@ -247,7 +246,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $apiKeyUser = new ApiKeyUser(new ApiKey(), []);
-        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
+        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
             ->expects(self::once())
@@ -299,7 +298,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $securityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
+        $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
             ->expects(self::once())
@@ -363,27 +362,16 @@ class UserTypeIdentificationTest extends KernelTestCase
     {
         yield [null];
 
-        yield [new AnonymousToken('secret', 'user')];
-
-        yield [new AnonymousToken(
-            'secret',
-            new InMemoryUser('username', 'password'),
-        )];
-
-        yield [new UsernamePasswordToken('user', 'credentials', 'providerKey')];
-
         yield [new UsernamePasswordToken(
             new InMemoryUser('username', 'password'),
             'credentials',
-            'providerKey',
+            ['providerKey']
         )];
-
-        yield [new PreAuthenticatedToken('user', 'credentials', 'providerKey')];
 
         yield [new PreAuthenticatedToken(
             new InMemoryUser('username', 'password'),
             'credentials',
-            'providerKey',
+            ['providerKey'],
         )];
 
         yield [new RememberMeToken(
