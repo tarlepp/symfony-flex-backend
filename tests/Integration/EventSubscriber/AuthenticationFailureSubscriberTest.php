@@ -11,6 +11,7 @@ namespace App\Tests\Integration\EventSubscriber;
 use App\Entity\User;
 use App\EventSubscriber\AuthenticationFailureSubscriber;
 use App\Repository\UserRepository;
+use App\Security\SecurityUser;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -35,7 +36,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $user = (new User())
             ->setUsername('test-user');
 
-        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -50,7 +51,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(self::once())
             ->method('loadUserByIdentifier')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn($user);
 
         $loginLogger
@@ -69,7 +70,8 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
     {
-        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+        $user = new User();
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -84,7 +86,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(self::once())
             ->method('loadUserByIdentifier')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn(null);
 
         $loginLogger
