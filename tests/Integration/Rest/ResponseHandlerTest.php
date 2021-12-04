@@ -137,6 +137,11 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
+            ->expects(self::once())
+            ->method('get')
+            ->willReturn([]);
+
+        $parameterBag
             ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([]);
@@ -167,6 +172,12 @@ class ResponseHandlerTest extends KernelTestCase
 
         $parameterBag
             ->expects(self::exactly(2))
+            ->method('get')
+            ->with('populate')
+            ->willReturn(null);
+
+        $parameterBag
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateAll' => '',
@@ -179,6 +190,7 @@ class ResponseHandlerTest extends KernelTestCase
 
         /** @var InputBag $parameterBag */
         $request->query = $parameterBag;
+        $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
@@ -195,6 +207,12 @@ class ResponseHandlerTest extends KernelTestCase
         $request = $this->createMock(Request::class);
         $parameterBag = $this->createMock(ParameterBag::class);
         $restResource = $this->createMock(RestResourceInterface::class);
+
+        $parameterBag
+            ->expects(self::exactly(2))
+            ->method('get')
+            ->with('populate')
+            ->willReturn(null);
 
         $parameterBag
             ->expects(self::exactly(2))
@@ -215,6 +233,7 @@ class ResponseHandlerTest extends KernelTestCase
 
         /** @var InputBag $parameterBag */
         $request->query = $parameterBag;
+        $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
@@ -234,6 +253,12 @@ class ResponseHandlerTest extends KernelTestCase
 
         $parameterBag
             ->expects(self::exactly(2))
+            ->method('get')
+            ->with('populate')
+            ->willReturn(null);
+
+        $parameterBag
+            ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
@@ -246,6 +271,7 @@ class ResponseHandlerTest extends KernelTestCase
 
         /** @var InputBag $parameterBag */
         $request->query = $parameterBag;
+        $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
@@ -264,6 +290,12 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
+            ->expects(self::once())
+            ->method('get')
+            ->with('populate')
+            ->willReturn(['AnotherFakeEntity']);
+
+        $parameterBag
             ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
@@ -275,14 +307,9 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $request
-            ->expects(self::once())
-            ->method('get')
-            ->with('populate')
-            ->willReturn(['AnotherFakeEntity']);
-
         /** @var InputBag $parameterBag */
         $request->query = $parameterBag;
+        $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
             ->getSerializeContext($request, $restResource);
@@ -307,6 +334,12 @@ class ResponseHandlerTest extends KernelTestCase
         ];
 
         $parameterBag
+            ->expects(self::once())
+            ->method('get')
+            ->with('populate')
+            ->willReturn(['AnotherFakeEntity']);
+
+        $parameterBag
             ->expects(self::exactly(2))
             ->method('all')
             ->willReturn([
@@ -322,12 +355,6 @@ class ResponseHandlerTest extends KernelTestCase
             ->expects(self::once())
             ->method('getSerializerContext')
             ->willReturn($expected);
-
-        $request
-            ->expects(self::once())
-            ->method('get')
-            ->with('populate')
-            ->willReturn(['AnotherFakeEntity']);
 
         /** @var InputBag $parameterBag */
         $request->query = $parameterBag;

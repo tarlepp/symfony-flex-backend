@@ -12,7 +12,7 @@ use App\Entity\User;
 use App\Security\SecurityUser;
 use App\Security\Voter\IsUserHimselfVoter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -29,7 +29,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedIfSubjectIsNotSupported(): void
     {
-        $token = new AnonymousToken('secret', 'anon');
+        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
 
         self::assertSame(
             VoterInterface::ACCESS_ABSTAIN,
@@ -42,7 +42,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedWhenUserMismatch(): void
     {
-        $token = new AnonymousToken('secret', new SecurityUser(new User()));
+        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
 
         self::assertSame(
             VoterInterface::ACCESS_DENIED,
@@ -56,7 +56,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
     public function testThatVoteReturnsExpectedWhenUserMatch(): void
     {
         $user = new User();
-        $token = new AnonymousToken('secret', new SecurityUser($user));
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         self::assertSame(VoterInterface::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
     }

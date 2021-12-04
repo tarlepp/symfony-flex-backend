@@ -39,7 +39,7 @@ class EntityValueResolverTest extends KernelTestCase
                 '/',
                 'GET',
                 [
-                    'foo' => new stdClass(),
+                    'foo' => '',
                 ]
             ),
             $metadata

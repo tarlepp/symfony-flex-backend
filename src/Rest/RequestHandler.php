@@ -65,7 +65,10 @@ final class RequestHandler
     {
         try {
             $where = array_filter(
-                (array)JSON::decode((string)$request->get('where', '{}'), true),
+                (array)JSON::decode(
+                    (string)($request->query->get('where') ?? $request->request->get('where', '{}')),
+                    true
+                ),
                 static fn ($value): bool => $value !== null,
             );
         } catch (JsonException $error) {
@@ -103,8 +106,20 @@ final class RequestHandler
      */
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
-        // Normalize parameter value
-        $input = array_filter((array)$request->get('order', []));
+        $key = 'order';
+        $input = [];
+
+        if ($request->query->has($key)) {
+            $input = $request->query->all()[$key];
+        } elseif ($request->request->has($key)) {
+            $input = $request->request->all()[$key];
+        }
+
+        if (!is_array($input)) {
+            $input = (array)$input;
+        }
+
+        $input = array_filter($input);
 
         // Initialize output
         $output = [];
@@ -123,7 +138,7 @@ final class RequestHandler
      */
     public static function getLimit(HttpFoundationRequest $request): ?int
     {
-        $limit = $request->get('limit');
+        $limit = $request->query->get('limit') ?? $request->request->get('limit');
 
         return $limit !== null ? (int)abs((float)$limit) : null;
     }
@@ -136,7 +151,7 @@ final class RequestHandler
      */
     public static function getOffset(HttpFoundationRequest $request): ?int
     {
-        $offset = $request->get('offset');
+        $offset = $request->query->get('offset') ?? $request->request->get('offset');
 
         return $offset !== null ? (int)abs((float)$offset) : null;
     }
@@ -159,9 +174,9 @@ final class RequestHandler
      */
     public static function getSearchTerms(HttpFoundationRequest $request): array
     {
-        $search = $request->get('search');
+        $search = $request->query->get('search') ?? $request->request->get('search');
 
-        return $search !== null ? self::getSearchTermCriteria($search) : [];
+        return $search !== null ? self::getSearchTermCriteria((string)$search) : [];
     }
 
     /**
