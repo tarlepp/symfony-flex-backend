@@ -49,7 +49,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         self::assertNotNull($user);
 
         $securityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
+        $token = new UsernamePasswordToken($securityUser, 'firewall');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
@@ -83,7 +83,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         self::assertNotNull($user);
 
         $securityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
+        $token = new UsernamePasswordToken($securityUser, 'firewall');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
