@@ -47,9 +47,7 @@ if (!is_readable($autoloader)) {
 /** @noinspection PhpIncludeInspection */
 require_once $autoloader;
 
-$symfonyVersion = class_exists(Kernel::class) ? Kernel::VERSION : null;
-
-$symfonyRequirements = new SymfonyRequirements(dirname(realpath($autoloader), 2), $symfonyVersion);
+$symfonyRequirements = new SymfonyRequirements();
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();
@@ -417,16 +415,6 @@ $hasMinorProblems = (bool)count($minorProblems);
                             </li>
                         <?php endforeach; ?>
                     </ol>
-                <?php endif; ?>
-
-                <?php if ($symfonyRequirements->hasPhpConfigIssue()): ?>
-                    <p id="phpini">*
-                        <?php if ($symfonyRequirements->getPhpIniPath()): ?>
-                            Changes to the <strong>php.ini</strong> file must be done in "<strong><?php echo $symfonyRequirements->getPhpIniPath() ?></strong>".
-                        <?php else: ?>
-                            To change settings, create a "<strong>php.ini</strong>".
-                        <?php endif; ?>
-                    </p>
                 <?php endif; ?>
 
                 <?php if (!$hasMajorProblems && !$hasMinorProblems): ?>
