@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Role;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class RoleControllerTest
@@ -25,7 +26,7 @@ class RoleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role` returns HTTP 401 for non-logged in user
+     * @testdox Test that `GET /v1/role` request returns `401` for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -35,8 +36,8 @@ class RoleControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -44,7 +45,7 @@ class RoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role` returns HTTP 403 when using `$username` + `$password` as a user
+     * @testdox Test that `GET /v1/role` request returns `403` when using invalid user `$username` + `$password`
      */
     public function testThatGetBaseRouteReturn403(string $username, string $password): void
     {
@@ -54,8 +55,8 @@ class RoleControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -63,7 +64,7 @@ class RoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/role` returns HTTP 200 when using `$username` + `$password` as a user
+     * @testdox Test that `GET /v1/role` request returns `200` when using valid user `$username` + `$password`
      */
     public function testThatGetBaseRouteReturn200(string $username, string $password): void
     {
@@ -73,8 +74,8 @@ class RoleControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -82,10 +83,21 @@ class RoleControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetBaseRouteReturn403(): Generator
     {
-        yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password'];
+            yield ['john-api', 'password-api'];
+            yield ['john-logged', 'password-logged'];
+        }
+
         yield ['john-user', 'password-user'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-logged@test.com', 'password-logged'];
+        }
+
+        yield ['john.doe-user@test.com', 'password-user'];
     }
 
     /**
@@ -94,6 +106,15 @@ class RoleControllerTest extends WebTestCase
     public function dataProviderTestThatGetBaseRouteReturn200(): Generator
     {
         yield ['john-admin', 'password-admin'];
-        yield ['john-root', 'password-root'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-root', 'password-root'];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-root@test.com', 'password-root'];
+        }
     }
 }

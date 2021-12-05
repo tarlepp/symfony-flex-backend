@@ -30,6 +30,6 @@ class JWTDecodedSubscriberTest extends KernelTestCase
             'lexik_jwt_authentication.on_jwt_decoded' => 'onJWTDecoded',
         ];
 
-        static::assertSame($expected, JWTDecodedSubscriber::getSubscribedEvents());
+        self::assertSame($expected, JWTDecodedSubscriber::getSubscribedEvents());
     }
 }

@@ -9,11 +9,12 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\AutoMapper;
 
 use App\AutoMapper\RestRequestMapper;
+use App\Rest\Interfaces\RestResourceInterface;
 use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class RestRequestMapperTestCase
@@ -31,20 +32,47 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     protected array $restDtoClasses = [];
 
     /**
+     * @dataProvider dataProviderTestThatMapMethodWorksAsExpected
+     *
+     * @param class-string $expectedDto
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `map` method returns `$expectedDto` DTO object
+     */
+    public function testThatMapMethodWorksAsExpected(string $expectedDto): void
+    {
+        self::assertInstanceOf(
+            $expectedDto,
+            $this->getRequestMapper()->map(new Request(), $expectedDto),
+        );
+    }
+
+    /**
      * @dataProvider dataProviderTestThatMapToObjectReturnsExpectedDtoObject
      *
      * @param class-string $expectedDto
      *
      * @throws Throwable
      *
-     * @testdox Test that `mapToObject` method returns `$expectedDto`
+     * @testdox Test that `mapToObject` method returns `$expectedDto` DTO object
      */
     public function testThatMapToObjectReturnsExpectedDtoObject(string $expectedDto): void
     {
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             $expectedDto,
-            $this->getMapperObject()->mapToObject(new Request(), new $expectedDto()),
+            $this->getRequestMapper()->mapToObject(new Request(), new $expectedDto()),
         );
+    }
+
+    /**
+     * @return Generator<array{0: class-string}>
+     */
+    public function dataProviderTestThatMapMethodWorksAsExpected(): Generator
+    {
+        foreach ($this->restDtoClasses as $dtoClass) {
+            yield [$dtoClass];
+        }
     }
 
     /**
@@ -52,13 +80,13 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
      */
     public function dataProviderTestThatMapToObjectReturnsExpectedDtoObject(): Generator
     {
-        foreach ($this->restDtoClasses as $dtoClass) {
-            yield [$dtoClass];
-        }
+        return $this->dataProviderTestThatMapMethodWorksAsExpected();
     }
 
-    protected function getMapperObject(): RestRequestMapper
-    {
-        return $this->mapperObject ?? throw new UnexpectedValueException('MapperObject not set');
-    }
+    abstract protected function getRequestMapper(): RestRequestMapper;
+
+    /**
+     * @phpstan-return  MockObject&RestResourceInterface
+     */
+    abstract protected function getResource(): MockObject;
 }

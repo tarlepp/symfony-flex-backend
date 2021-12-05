@@ -21,6 +21,7 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_pop;
+use function array_unique;
 use function array_values;
 use function end;
 use function explode;
@@ -34,7 +35,7 @@ use function strncmp;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-final class ResponseHandler implements ResponseHandlerInterface
+class ResponseHandler implements ResponseHandlerInterface
 {
     /**
      * Content types for supported response output formats.
@@ -68,7 +69,7 @@ final class ResponseHandler implements ResponseHandlerInterface
          *
          * @var array<int, string> $populate
          */
-        $populate = (array)$request->get('populate', []);
+        $populate = (array)($request->query->get('populate') ?? $request->request->get('populate'));
 
         $groups = ['default', ...$populate];
 
@@ -96,7 +97,7 @@ final class ResponseHandler implements ResponseHandlerInterface
 
         return array_merge(
             [
-                'groups' => $groups,
+                'groups' => array_unique($groups),
             ],
             $restResource !== null ? $restResource->getSerializerContext() : [],
         );

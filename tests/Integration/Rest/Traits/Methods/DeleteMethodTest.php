@@ -106,7 +106,7 @@ class DeleteMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid, 'DELETE');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('delete')
             ->with($uuid)
             ->willThrowException($exception);
@@ -138,13 +138,13 @@ class DeleteMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid, 'DELETE');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('delete')
             ->with($uuid)
             ->willReturn($entityMock);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 

@@ -32,26 +32,26 @@ class LogLoginFailureTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
-        ?string $field = null,
+        ?string $property = null,
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterReturnsInstanceOfEntity(
-        ?string $field = null,
+        ?string $property = null,
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -60,14 +60,14 @@ class LogLoginFailureTest extends EntityTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that getter method for `$field` with `$type` returns expected.
+     * @testdox Test that getter method for `$type $property` property returns expected
      */
-    public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
+    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
-        $getter = 'get' . ucfirst($field);
+        $getter = 'get' . ucfirst($property);
 
         if ($type === 'boolean') {
-            $getter = 'is' . ucfirst($field);
+            $getter = 'is' . ucfirst($property);
         }
 
         $logRequest = new LogLoginFailure(
@@ -77,18 +77,18 @@ class LogLoginFailureTest extends EntityTestCase
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
-            static::assertInstanceOf($type, $logRequest->{$getter}());
+            self::assertInstanceOf($type, $logRequest->{$getter}());
         }
 
         try {
             $method = 'assertIs' . ucfirst($type);
 
-            static::$method($logRequest->{$getter}());
+            self::$method($logRequest->{$getter}());
         } catch (Throwable $error) {
             /**
              * @var class-string $type
              */
-            static::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
+            self::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
         }
     }
 

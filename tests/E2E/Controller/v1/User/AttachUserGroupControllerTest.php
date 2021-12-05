@@ -15,6 +15,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class AttachUserGroupControllerTest
@@ -31,11 +32,11 @@ class AttachUserGroupControllerTest extends WebTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -43,7 +44,7 @@ class AttachUserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns 401 for non-logged in user
+     * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `401` for non-logged in user
      */
     public function testThatAttachUserGroupReturns401(): void
     {
@@ -56,8 +57,8 @@ class AttachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -65,7 +66,7 @@ class AttachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
     public function testThatAttachUserGroupReturns403(string $u, string $p): void
     {
@@ -78,8 +79,8 @@ class AttachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -87,7 +88,7 @@ class AttachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns status $expectedStatus with root user
+     * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `$expectedStatus` when using root user
      */
     public function testThatAttachUserGroupWorksAsExpected(int $expectedStatus): void
     {
@@ -100,9 +101,9 @@ class AttachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(1, JSON::decode($content));
+        self::assertNotFalse($content);
+        self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertCount(1, JSON::decode($content));
     }
 
     /**
@@ -110,11 +111,23 @@ class AttachUserGroupControllerTest extends WebTestCase
      */
     public function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
-        yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password'];
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+        }
+
         yield ['john-admin', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password'];
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin'];
     }
 
     /**

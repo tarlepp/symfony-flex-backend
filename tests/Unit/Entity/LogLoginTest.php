@@ -41,7 +41,7 @@ class LogLoginTest extends KernelTestCase
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
 
-        static::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+        self::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
     }
 
     /**
@@ -58,7 +58,7 @@ class LogLoginTest extends KernelTestCase
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
 
-        static::assertNull($entity->getUser());
+        self::assertNull($entity->getUser());
     }
 
     /**
@@ -76,7 +76,7 @@ class LogLoginTest extends KernelTestCase
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector, $user);
 
-        static::assertSame($user, $entity->getUser());
+        self::assertSame($user, $entity->getUser());
     }
 
     /**

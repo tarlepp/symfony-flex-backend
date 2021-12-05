@@ -13,6 +13,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class UserUpdateInvalidUserTest
@@ -27,9 +28,9 @@ class UserUpdateInvalidUserTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /v1/user/{userId}` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `PUT /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
-    public function testThatPutActionReturns403ForInvalidUser(string $username, string $password): void
+    public function testThatPutActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [
             'username' => 'test-user',
@@ -38,15 +39,15 @@ class UserUpdateInvalidUserTest extends WebTestCase
             'email' => 'test-user@test.com',
         ];
 
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('PUT', '/v1/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -58,9 +59,9 @@ class UserUpdateInvalidUserTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PATCH /v1/user/{userId}` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `PATCH /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
-    public function testThatPatchActionReturns403ForInvalidUser(string $username, string $password): void
+    public function testThatPatchActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [
             'username' => 'test-user',
@@ -69,15 +70,15 @@ class UserUpdateInvalidUserTest extends WebTestCase
             'email' => 'test-user@test.com',
         ];
 
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('PUT', '/v1/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString(
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
             "Response:\n" . $response,
@@ -90,10 +91,22 @@ class UserUpdateInvalidUserTest extends WebTestCase
     public function dataProviderTestThatPutActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
-        yield ['john-api', 'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user', 'password-user'];
-        yield ['john-admin', 'password-admin'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john-logged', 'password-logged'];
+            yield ['john-api', 'password-api'];
+            yield ['john-user', 'password-user'];
+            yield ['john-admin', 'password-admin'];
+        }
+
+        yield ['john.doe@test.com', 'password'];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe-logged@test.com', 'password-logged'];
+            yield ['john.doe-api@test.com', 'password-api'];
+            yield ['john.doe-user@test.com', 'password-user'];
+            yield ['john.doe-admin@test.com', 'password-admin'];
+        }
     }
 
     /**

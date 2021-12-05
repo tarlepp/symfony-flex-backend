@@ -13,7 +13,6 @@ use App\Utils\HealthzService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class HealthzServiceTest
@@ -23,15 +22,6 @@ use UnexpectedValueException;
  */
 class HealthzServiceTest extends KernelTestCase
 {
-    private MockObject | HealthzRepository | null $repository = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->repository = $this->getMockBuilder(HealthzRepository::class)->disableOriginalConstructor()->getMock();
-    }
-
     /**
      * @throws Throwable
      *
@@ -39,33 +29,29 @@ class HealthzServiceTest extends KernelTestCase
      */
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
-        $this->getRepositoryMock()
-            ->expects(static::once())
+        $repository = $this->getRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('cleanup');
 
-        $this->getRepositoryMock()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('create');
 
-        $this->getRepositoryMock()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('read');
 
-        (new HealthzService($this->getRepository()))
+        (new HealthzService($repository))
             ->check();
     }
 
-    private function getRepository(): HealthzRepository
+    /**
+     * @phpstan-return MockObject&HealthzRepository
+     */
+    private function getRepository(): MockObject
     {
-        return $this->repository instanceof HealthzRepository
-            ? $this->repository
-            : throw new UnexpectedValueException('Repository not set');
-    }
-
-    private function getRepositoryMock(): MockObject
-    {
-        return $this->repository instanceof MockObject
-            ? $this->repository
-            : throw new UnexpectedValueException('Repository not set');
+        return $this->getMockBuilder(HealthzRepository::class)->disableOriginalConstructor()->getMock();
     }
 }

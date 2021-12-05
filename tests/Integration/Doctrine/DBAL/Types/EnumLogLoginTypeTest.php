@@ -9,15 +9,14 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use UnexpectedValueException;
+use Throwable;
 
 /**
  * Class EnumLogLoginTypeTest
@@ -27,45 +26,38 @@ use UnexpectedValueException;
  */
 class EnumLogLoginTypeTest extends KernelTestCase
 {
-    private ?AbstractPlatform $platform = null;
-    private ?Type $type = null;
-
     /**
-     * @throws DBALException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        Type::hasType('EnumLogLogin')
-            ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
-            : Type::addType('EnumLogLogin', EnumLogLoginType::class);
-
-        $this->type = Type::getType('EnumLogLogin');
-    }
-
-    /**
+     * @throws Throwable
+     *
      * @testdox Test that `getSQLDeclaration` method returns expected
      */
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
-        static::assertSame("ENUM('failure', 'success')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame("ENUM('failure', 'success')", $type->getSQLDeclaration([], $platform));
     }
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
+     * @throws Throwable
+     *
      * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
-        static::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
     }
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
+     *
+     * @throws Throwable
      *
      * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
@@ -74,15 +66,23 @@ class EnumLogLoginTypeTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid \'EnumLogLogin\' value');
 
-        $this->getType()->convertToDatabaseValue($value, $this->getPlatform());
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        $type->convertToDatabaseValue($value, $platform);
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `requiresSQLCommentHint` method returns expected
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        static::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertTrue($type->requiresSQLCommentHint($platform));
     }
 
     /**
@@ -111,11 +111,18 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
+        return new MySqlPlatform();
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getType(): Type
     {
-        return $this->type ?? throw new UnexpectedValueException('Type not set');
+        Type::hasType('EnumLogLogin')
+            ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
+            : Type::addType('EnumLogLogin', EnumLogLoginType::class);
+
+        return Type::getType('EnumLogLogin');
     }
 }

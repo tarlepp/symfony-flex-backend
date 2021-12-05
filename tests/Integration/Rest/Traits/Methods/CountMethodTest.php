@@ -98,7 +98,7 @@ class CountMethodTest extends KernelTestCase
         $request = Request::create('/');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('count')
             ->with([], [])
             ->willThrowException($exception);
@@ -138,13 +138,13 @@ class CountMethodTest extends KernelTestCase
         $request = Request::create('/' . $queryString);
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('count')
             ->with($criteria->getArrayCopy(), $search->getArrayCopy())
             ->willReturn(0);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with(
                 $request,

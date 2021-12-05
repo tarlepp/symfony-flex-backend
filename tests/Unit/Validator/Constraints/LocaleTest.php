@@ -24,6 +24,6 @@ class LocaleTest extends KernelTestCase
      */
     public function testThatGetTargetsReturnsExpected(): void
     {
-        static::assertSame('property', (new Locale())->getTargets());
+        self::assertSame('property', (new Locale())->getTargets());
     }
 }

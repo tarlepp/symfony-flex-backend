@@ -68,7 +68,7 @@ class RequestHandlerTest extends KernelTestCase
             ]
         );
 
-        static::assertSame($expected->getArrayCopy(), RequestHandler::getCriteria($fakeRequest));
+        self::assertSame($expected->getArrayCopy(), RequestHandler::getCriteria($fakeRequest));
     }
 
     /**
@@ -87,7 +87,7 @@ class RequestHandlerTest extends KernelTestCase
     ): void {
         $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
 
-        static::assertSame(
+        self::assertSame(
             $expected->getArrayCopy(),
             RequestHandler::getOrderBy($fakeRequest),
             'getOrderBy method did not return expected value'
@@ -101,7 +101,7 @@ class RequestHandlerTest extends KernelTestCase
     {
         $fakeRequest = Request::create('/');
 
-        static::assertNull(
+        self::assertNull(
             RequestHandler::getLimit($fakeRequest),
             'getLimit method did not return NULL as it should without any parameters'
         );
@@ -121,12 +121,12 @@ class RequestHandlerTest extends KernelTestCase
 
         $actual = RequestHandler::getLimit($fakeRequest);
 
-        static::assertNotNull(
+        self::assertNotNull(
             $actual,
             'getLimit returned NULL and it should return an integer'
         );
 
-        static::assertSame(
+        self::assertSame(
             $expected,
             $actual,
             'getLimit method did not return expected value'
@@ -140,7 +140,7 @@ class RequestHandlerTest extends KernelTestCase
     {
         $fakeRequest = Request::create('/');
 
-        static::assertNull(
+        self::assertNull(
             RequestHandler::getOffset($fakeRequest),
             'getOffset method did not return NULL as it should without any parameters'
         );
@@ -160,12 +160,12 @@ class RequestHandlerTest extends KernelTestCase
 
         $actual = RequestHandler::getOffset($fakeRequest);
 
-        static::assertNotNull(
+        self::assertNotNull(
             $actual,
             'getOffset returned NULL and it should return an integer'
         );
 
-        static::assertSame(
+        self::assertSame(
             $expected,
             $actual,
             'getOffset method did not return expected value'
@@ -179,7 +179,7 @@ class RequestHandlerTest extends KernelTestCase
     {
         $fakeRequest = Request::create('/');
 
-        static::assertSame(
+        self::assertSame(
             [],
             RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return empty array ([]) as it should without any parameters'
@@ -225,7 +225,7 @@ class RequestHandlerTest extends KernelTestCase
 
         $fakeRequest = Request::create('/', 'GET', $parameters);
 
-        static::assertSame(
+        self::assertSame(
             $expected->getArrayCopy(),
             RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return expected value'

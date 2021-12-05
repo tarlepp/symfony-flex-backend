@@ -54,6 +54,7 @@ use function mb_strlen;
     name: 'request_date',
 )]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class LogRequest implements EntityInterface
 {
     use LogEntityTrait;

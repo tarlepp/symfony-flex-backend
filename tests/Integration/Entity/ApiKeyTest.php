@@ -10,11 +10,11 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use function array_unique;
-use function strlen;
 
 /**
  * Class ApiKeyTest
@@ -31,16 +31,6 @@ class ApiKeyTest extends EntityTestCase
      */
     protected string $entityName = ApiKey::class;
 
-    public function testThatTokenIsGenerated(): void
-    {
-        static::assertSame(40, strlen($this->getEntity()->getToken()));
-    }
-
-    public function testThatGetRolesContainsExpectedRole(): void
-    {
-        static::assertContainsEquals(RolesService::ROLE_API, $this->getEntity()->getRoles());
-    }
-
     /**
      * @dataProvider dataProviderTestThatApiKeyHasExpectedRoles
      *
@@ -49,16 +39,16 @@ class ApiKeyTest extends EntityTestCase
      * @psalm-param StringableArrayObject $expectedRoles
      * @psalm-param StringableArrayObject $criteria
      *
-     * @testdox Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`.
+     * @testdox Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`
      */
     public function testThatApiKeyHasExpectedRoles(
         StringableArrayObject $expectedRoles,
         StringableArrayObject $criteria
     ): void {
-        $apiKey = static::getContainer()->get(ApiKeyRepository::class)->findOneBy($criteria->getArrayCopy());
+        $apiKey = self::getContainer()->get(ApiKeyRepository::class)->findOneBy($criteria->getArrayCopy());
 
-        static::assertInstanceOf(ApiKey::class, $apiKey);
-        static::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
+        self::assertInstanceOf(ApiKey::class, $apiKey);
+        self::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
     }
 
     /**
@@ -67,11 +57,11 @@ class ApiKeyTest extends EntityTestCase
      */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
-        $rolesService = static::getContainer()->get(RolesService::class);
+        $rolesService = self::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
             yield [
-                new StringableArrayObject(array_unique([RolesService::ROLE_API, $role])),
+                new StringableArrayObject(array_unique([RolesServiceInterface::ROLE_API, $role])),
                 new StringableArrayObject([
                     'description' => 'ApiKey Description: ' . $rolesService->getShort($role),
                 ]),

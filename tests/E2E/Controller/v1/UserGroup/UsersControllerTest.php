@@ -27,19 +27,19 @@ class UsersControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /v1/user_group/$userGroupId/users` returns expected count $userCount of users
+     * @testdox Test that `GET /v1/user_group/$id/users` request returns `200` and expected count `$c` of users
      */
-    public function testThatGetUserGroupUsersActionReturnsExpected(int $userCount, string $userGroupId): void
+    public function testThatGetUserGroupUsersActionReturnsExpected(int $c, string $id): void
     {
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('GET', '/v1/user_group/' . $userGroupId . '/users');
+        $client->request('GET', '/v1/user_group/' . $id . '/users');
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertCount($userCount, JSON::decode($content));
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertCount($c, JSON::decode($content));
     }
 
     /**

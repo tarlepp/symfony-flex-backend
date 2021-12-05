@@ -41,25 +41,25 @@ class UniqueEmailValidatorTest extends KernelTestCase
             ->setEmail('john.doe@test.com');
 
         $repositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('isEmailAvailable')
             ->with($user->getEmail(), $user->getId())
             ->willReturn(false);
 
         $contextMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('buildViolation')
             ->with(UniqueEmail::MESSAGE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setCode')
             ->with(UniqueEmail::IS_UNIQUE_EMAIL_ERROR)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('addViolation');
 
         // Run validator

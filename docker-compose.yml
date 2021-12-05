@@ -2,6 +2,7 @@ version: '3'
 services:
     php:
         container_name: symfony-backend-php-fpm
+        hostname: php-fpm
         build:
             context: .
             dockerfile: ./Dockerfile_dev
@@ -18,14 +19,10 @@ services:
             #- /app/var/
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
-            # Eg. in GCP environment just set this environment variable
-            # to your k8s configuration.
-            #
-            # https://symfony.com/doc/current/deployment/proxies.html
-            TRUSTED_PROXIES: "127.0.0.1,REMOTE_ADDR"
 
     nginx:
         container_name: symfony-backend-nginx
+        hostname: nginx
         build:
             context: ./docker/nginx/
         depends_on:
@@ -39,6 +36,7 @@ services:
 
     mysql:
         container_name: symfony-backend-mysql
+        hostname: mysql
         build:
             context: ./docker/mysql/
         command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -51,6 +49,7 @@ services:
 
     dozzle:
         container_name: symfony-backend-dozzle
+        hostname: dozzle
         image: amir20/dozzle
         ports:
             - "8080:8080"

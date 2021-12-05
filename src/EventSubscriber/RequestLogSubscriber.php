@@ -8,13 +8,10 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
-use App\Entity\User as UserEntity;
-use App\Repository\UserRepository;
 use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
@@ -42,8 +39,6 @@ class RequestLogSubscriber implements EventSubscriberInterface
      */
     public function __construct(
         private RequestLogger $requestLogger,
-        private UserRepository $userRepository,
-        private LoggerInterface $logger,
         private UserTypeIdentification $userService,
         private array $ignoredRoutes,
     ) {
@@ -105,18 +100,9 @@ class RequestLogSubscriber implements EventSubscriberInterface
         $identify = $this->userService->getIdentity();
 
         if ($identify instanceof SecurityUser) {
-            $userEntity = $this->userRepository->getReference($identify->getUserIdentifier());
-
-            if ($userEntity instanceof UserEntity) {
-                $this->requestLogger->setUser($userEntity);
-            } else {
-                $this->logger->error(
-                    sprintf('User not found for UUID: "%s".', $identify->getUserIdentifier()),
-                    self::getSubscribedEvents()
-                );
-            }
+            $this->requestLogger->setUserId($identify->getUserIdentifier());
         } elseif ($identify instanceof ApiKeyUser) {
-            $this->requestLogger->setApiKey($identify->getApiKey());
+            $this->requestLogger->setApiKeyId($identify->getApiKeyIdentifier());
         }
 
         $this->requestLogger->setMainRequest($event->isMainRequest());

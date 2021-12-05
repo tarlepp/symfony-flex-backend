@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use function preg_match;
 
@@ -39,13 +39,13 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         return $this->getToken($request) !== '';
     }
 
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $token = $this->getToken($request);
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         if ($apiKey === null) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException('API key not found');
         }
 
         return new SelfValidatingPassport(new UserBadge($token));
@@ -56,11 +56,11 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $data = [
             'code' => 401,
-            'message' => 'Invalid ApiKey',
+            'message' => 'Invalid API key',
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);

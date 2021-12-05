@@ -9,11 +9,15 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Resource;
 
 use App\Entity\Interfaces\EntityInterface;
+use App\Entity\Role;
 use App\Entity\User;
+use App\Entity\UserGroup;
 use App\Repository\BaseRepository;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RestResource;
+use App\Security\RolesService;
+use Throwable;
 
 /**
  * Class UserResourceTest
@@ -37,4 +41,32 @@ class UserResourceTest extends ResourceTestCase
      * @var class-string<RestResource>
      */
     protected string $resourceClass = UserResource::class;
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `getUsersForGroup(UserGroup $userGroup)` method calls expected service methods
+     */
+    public function testThatGetUsersForGroupMethodCallsExpectedServiceMethods(): void
+    {
+        $repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
+
+        $userGroup = (new UserGroup())->setRole(new Role('Some Role'));
+        $user = (new User())->addUserGroup($userGroup);
+
+        $repository
+            ->expects(self::once())
+            ->method('findByAdvanced')
+            ->with()
+            ->willReturn([$user]);
+
+        $rolesService
+            ->expects(self::once())
+            ->method('getInheritedRoles')
+            ->with(['Some Role'])
+            ->willReturn(['Some Role']);
+
+        self::assertIsArray((new UserResource($repository, $rolesService))->getUsersForGroup($userGroup));
+    }
 }

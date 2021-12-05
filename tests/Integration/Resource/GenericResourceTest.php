@@ -15,10 +15,8 @@ use App\Resource\UserResource;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
-use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,6 +26,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
+use function assert;
 
 /**
  * Class GenericResourceTest
@@ -37,33 +36,17 @@ use UnexpectedValueException;
  */
 class GenericResourceTest extends KernelTestCase
 {
-    private ?UserResource $resource = null;
-    private ?MockObject $repository = null;
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-        $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)->disableOriginalConstructor()->getMock();
-
-        $this->resource = new UserResource($repository, new RolesService($roleHierarchy));
-        $this->resource->setValidator(static::getContainer()->get(ValidatorInterface::class));
-        $this->repository = $repository;
-    }
-
     /**
      * @testdox Test without DTO class `getDtoClass` method call throws an exception
      */
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void
     {
+        [$resource] = $this->getResourceAndRepository();
+
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageMatches('/DTO class not specified for \'.*\' resource/');
 
-        $this->getResource()->setDtoClass('')->getDtoClass();
+        $resource->setDtoClass('')->getDtoClass();
     }
 
     /**
@@ -71,9 +54,11 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatGetDtoClassReturnsExpectedDto(): void
     {
-        $resource = $this->getResource()->setDtoClass('foobar');
+        [$resource] = $this->getResourceAndRepository();
 
-        static::assertSame('foobar', $resource->getDtoClass());
+        $resource->setDtoClass('foobar');
+
+        self::assertSame('foobar', $resource->getDtoClass());
     }
 
     /**
@@ -83,12 +68,14 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatGetEntityNameCallsExpectedRepositoryMethod(): void
     {
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn('someEntity');
 
-        static::assertSame('someEntity', $this->getResource()->getEntityName());
+        self::assertSame('someEntity', $resource->getEntityName());
     }
 
     /**
@@ -98,15 +85,17 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatGetReferenceCallsExpectedRepositoryMethod(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('getReference')
             ->with($entity->getId())
             ->willReturn($entity);
 
-        static::assertSame($entity, $this->getResource()->getReference($entity->getId()));
+        self::assertSame($entity, $resource->getReference($entity->getId()));
     }
 
     /**
@@ -116,15 +105,17 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('getAssociations')
             ->willReturn([
                 'entity1' => 'foo',
                 'entity2' => 'bar',
             ]);
 
-        static::assertSame(['entity1', 'entity2'], $this->getResource()->getAssociations());
+        self::assertSame(['entity1', 'entity2'], $resource->getAssociations());
     }
 
     /**
@@ -134,18 +125,20 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('find')
             ->with($entity->getId())
             ->willReturn($entity);
 
-        $newDto = $this->getResource()->getDtoForEntity($entity->getId(), UserDto::class, new UserDto());
+        $newDto = $resource->getDtoForEntity($entity->getId(), UserDto::class, new UserDto());
 
-        static::assertInstanceOf(UserDto::class, $newDto);
-        static::assertSame($entity->getId(), $newDto->getId());
+        self::assertInstanceOf(UserDto::class, $newDto);
+        self::assertSame($entity->getId(), $newDto->getId());
     }
 
     /**
@@ -158,13 +151,15 @@ class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
 
-        $this->getResource()->getDtoForEntity('some id', UserDto::class, new UserDto());
+        $resource->getDtoForEntity('some id', UserDto::class, new UserDto());
     }
 
     /**
@@ -183,19 +178,21 @@ class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $results = [
             new UserEntity(),
             new UserEntity(),
             new UserEntity(),
         ];
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('findByAdvanced')
             ->with(...$expectedArguments->getArrayCopy())
             ->willReturn($results);
 
-        static::assertSame($results, $this->getResource()->find(...$arguments->getArrayCopy()));
+        self::assertSame($results, $resource->find(...$arguments->getArrayCopy()));
     }
 
     /**
@@ -205,15 +202,17 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatFindOneCallsExpectedRepositoryMethod(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('findAdvanced')
             ->with($entity->getId())
             ->willReturn($entity);
 
-        static::assertSame($entity, $this->getResource()->findOne($entity->getId()));
+        self::assertSame($entity, $resource->findOne($entity->getId()));
     }
 
     /**
@@ -223,13 +222,15 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatFindOneReturnsNullIfEntityIsNotFound(): void
     {
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('findAdvanced')
             ->with('some id')
             ->willReturn(null);
 
-        static::assertNull($this->getResource()->findOne('some id'));
+        self::assertNull($resource->findOne('some id'));
     }
 
     /**
@@ -242,13 +243,15 @@ class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('findAdvanced')
             ->with('some id')
             ->willReturn(null);
 
-        $this->getResource()->findOne('some id', true);
+        $resource->findOne('some id', true);
     }
 
     /**
@@ -267,15 +270,17 @@ class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('findOneBy')
             ->with(...$expectedArguments->getArrayCopy())
             ->willReturn($entity);
 
-        static::assertSame($entity, $this->getResource()->findOneBy(...$arguments->getArrayCopy()));
+        self::assertSame($entity, $resource->findOneBy(...$arguments->getArrayCopy()));
     }
 
     /**
@@ -288,13 +293,15 @@ class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn(null);
 
-        $this->getResource()->findOneBy([], throwExceptionIfNotFound: true);
+        $resource->findOneBy([], throwExceptionIfNotFound: true);
     }
 
     /**
@@ -304,13 +311,15 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatFindOneByDoesNotThrowAnExceptionIfEntityWasNotFound(): void
     {
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn(null);
 
-        static::assertNull($this->getResource()->findOneBy([]));
+        self::assertNull($resource->findOneBy([]));
     }
 
     /**
@@ -320,15 +329,17 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatFindOneByWontThrowAnExceptionIfEntityWasFound(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn($entity);
 
-        static::assertSame($entity, $this->getResource()->findOneBy([], throwExceptionIfNotFound: true));
+        self::assertSame($entity, $resource->findOneBy([], throwExceptionIfNotFound: true));
     }
 
     /**
@@ -347,13 +358,15 @@ class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('countAdvanced')
             ->with(...$expectedArguments->getArrayCopy())
             ->willReturn(10);
 
-        static::assertSame(10, $this->getResource()->count(...$arguments->getArrayCopy()));
+        self::assertSame(10, $resource->count(...$arguments->getArrayCopy()));
     }
 
     /**
@@ -363,14 +376,16 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatSaveMethodCallsExpectedRepositoryMethod(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::once())
+        $repository
+            ->expects(self::once())
             ->method('save')
             ->with($entity);
 
-        static::assertSame($entity, $this->getResource()->save($entity, skipValidation: true));
+        self::assertSame($entity, $resource->save($entity, skipValidation: true));
     }
 
     /**
@@ -382,13 +397,15 @@ class GenericResourceTest extends KernelTestCase
     {
         $this->expectException(ValidatorException::class);
 
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $this->getRepository()
-            ->expects(static::never())
+        $repository
+            ->expects(self::never())
             ->method('save');
 
-        $this->getResource()->save($entity);
+        $resource->save($entity);
     }
 
     /**
@@ -400,12 +417,14 @@ class GenericResourceTest extends KernelTestCase
     {
         $this->expectException(ValidatorException::class);
 
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn(UserEntity::class);
 
-        $this->getResource()->create(new UserDto());
+        $resource->create(new UserDto());
     }
 
     /**
@@ -415,36 +434,36 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatCreateMethodCallsExpectedMethods(): void
     {
-        $repository = $this->getRepository();
+        [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityName')
             ->willReturn(UserEntity::class);
 
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('save');
 
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
         $constraintViolationList = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
 
         $constraintViolationList
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('count')
             ->willReturn(0);
 
         $validator
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('validate')
             ->willReturn($constraintViolationList);
 
         $dto = $this->getMockBuilder(UserDto::class)->getMock();
 
-        $dto->expects(static::once())
+        $dto->expects(self::once())
             ->method('update');
 
-        $this->getResource()
+        $resource
             ->setValidator($validator)
             ->create($dto);
     }
@@ -459,13 +478,15 @@ class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
 
-        $this->getResource()->update('some id', new UserDto());
+        $resource->update('some id', new UserDto());
     }
 
     /**
@@ -475,6 +496,8 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatUpdateCallsExpectedRepositoryMethod(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $dto = new UserDto();
         $entity = new UserEntity();
 
@@ -490,20 +513,18 @@ class GenericResourceTest extends KernelTestCase
             $entity->{$method}($value);
         }
 
-        $repository = $this->getRepository();
-
         $repository
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('find')
             ->with('some id')
             ->willReturn($entity);
 
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('save')
             ->with($dto->update($entity));
 
-        $this->getResource()->update('some id', $dto);
+        $resource->update('some id', $dto);
     }
 
     /**
@@ -513,22 +534,22 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
     {
+        [$resource, $repository] = $this->getResourceAndRepository();
+
         $entity = new UserEntity();
 
-        $repository = $this->getRepository();
-
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->with('some id')
             ->willReturn($entity);
 
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('remove')
             ->with($entity);
 
-        static::assertSame($entity, $this->getResource()->delete('some id'));
+        self::assertSame($entity, $resource->delete('some id'));
     }
 
     /**
@@ -541,19 +562,19 @@ class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        $repository = $this->getRepository();
+        [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
 
         $repository
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('remove');
 
-        $this->getResource()->delete('some id');
+        $resource->delete('some id');
     }
 
     /**
@@ -572,12 +593,14 @@ class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
-        $this->getRepository()
-            ->expects(static::once())
+        [$resource, $repository] = $this->getResourceAndRepository();
+
+        $repository
+            ->expects(self::once())
             ->method('findIds')
             ->with(...$expectedArguments->getArrayCopy());
 
-        $this->getResource()->getIds(...$arguments->getArrayCopy());
+        $resource->getIds(...$arguments->getArrayCopy());
     }
 
     /**
@@ -683,34 +706,35 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
-    protected function getResource(): UserResource
-    {
-        return $this->resource ?? throw new UnexpectedValueException('Resource not found...');
-    }
-
-    protected function getRepository(): MockObject
-    {
-        return !$this->repository instanceof MockObject
-            ? throw new UnexpectedValueException('Repository not found...')
-            : $this->repository;
-    }
-
     /**
-     * @return MockBuilder<UserRepository>
+     * @phpstan-return array{0: UserResource, 1: MockObject&UserRepository}
      */
-    private function getRepositoryMockBuilder(): MockBuilder
+    private function getResourceAndRepository(): array
     {
-        /** @var Registry $doctrine */
-        $doctrine = static::getContainer()->get('doctrine');
+        $doctrine = self::getContainer()->get('doctrine');
 
-        if (method_exists($doctrine, 'getManager')
-            && ($doctrine->getManager() instanceof EntityManagerInterface)
-        ) {
-            return $this
-                ->getMockBuilder(UserRepository::class)
-                ->setConstructorArgs([$doctrine->getManager(), new ClassMetadata(UserEntity::class)]);
-        }
+        assert($doctrine instanceof Registry);
 
-        throw new UnexpectedValueException('....');
+        $repository = $this
+            ->getMockBuilder(UserRepository::class)
+            ->setConstructorArgs([$doctrine->getManager(), new ClassMetadata(UserEntity::class)])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $validator = self::getContainer()->get(ValidatorInterface::class);
+
+        assert($validator instanceof ValidatorInterface);
+
+        $resource = new UserResource($repository, new RolesService($roleHierarchy));
+        $resource->setValidator($validator);
+
+        return [
+            $resource,
+            $repository,
+        ];
     }
 }

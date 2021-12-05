@@ -16,7 +16,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class RoleTransformerTest
@@ -26,84 +25,83 @@ use UnexpectedValueException;
  */
 class RoleTransformerTest extends KernelTestCase
 {
-    private MockObject | RoleResource | null $roleResource = null;
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->roleResource = $this
-            ->getMockBuilder(RoleResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
-     * @testdox Test that `transform` method returns `$expected` when using `$input` input.
+     * @testdox Test that `transform` method returns `$expected` when using `$input` as input
      */
     public function testThatTransformReturnsExpected(string $expected, ?Role $input): void
     {
-        $transformer = new RoleTransformer($this->getRoleResource());
+        $resource = $this->getRoleResource();
 
-        static::assertSame($expected, $transformer->transform($input));
+        $transformer = new RoleTransformer($resource);
+
+        self::assertSame($expected, $transformer->transform($input));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `reverseTransform` method calls expected resource methods
      */
-    public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
+    public function testThatReverseTransformCallsExpectedResourceMethods(): void
     {
+        $resource = $this->getRoleResource();
+
         $entity = new Role('Some Role');
 
-        $this->getRoleResourceMock()
-            ->expects(static::once())
+        $resource
+            ->expects(self::once())
             ->method('findOne')
             ->with($entity->getId())
             ->willReturn($entity);
 
-        (new RoleTransformer($this->getRoleResource()))
+        (new RoleTransformer($resource))
             ->reverseTransform($entity->getId());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `reverseTransform` throws an exception for non-existing role
      */
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessage('Role with name "role_name" does not exist!');
 
-        $this->getRoleResourceMock()
-            ->expects(static::once())
+        $resource = $this->getRoleResource();
+
+        $resource
+            ->expects(self::once())
             ->method('findOne')
             ->with('role_name')
             ->willReturn(null);
 
-        (new RoleTransformer($this->getRoleResource()))
+        (new RoleTransformer($resource))
             ->reverseTransform('role_name');
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `reverseTransform` method returns expected `role` entity
      */
     public function testThatReverseTransformReturnsExpected(): void
     {
+        $resource = $this->getRoleResource();
+
         $entity = new Role('Some Role');
 
-        $this->getRoleResourceMock()
-            ->expects(static::once())
+        $resource
+            ->expects(self::once())
             ->method('findOne')
             ->with('Some Role')
             ->willReturn($entity);
 
-        $transformer = new RoleTransformer($this->getRoleResource());
+        $transformer = new RoleTransformer($resource);
 
-        static::assertSame($entity, $transformer->reverseTransform('Some Role'));
+        self::assertSame($entity, $transformer->reverseTransform('Some Role'));
     }
 
     /**
@@ -118,17 +116,14 @@ class RoleTransformerTest extends KernelTestCase
         yield [$entity->getId(), $entity];
     }
 
-    private function getRoleResource(): RoleResource
+    /**
+     * @phpstan-return MockObject&RoleResource
+     */
+    private function getRoleResource(): MockObject
     {
-        return $this->roleResource instanceof RoleResource
-            ? $this->roleResource
-            : throw new UnexpectedValueException('RoleResource not set');
-    }
-
-    private function getRoleResourceMock(): MockObject
-    {
-        return $this->roleResource instanceof MockObject
-            ? $this->roleResource
-            : throw new UnexpectedValueException('RoleResource not set');
+        return $this
+            ->getMockBuilder(RoleResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

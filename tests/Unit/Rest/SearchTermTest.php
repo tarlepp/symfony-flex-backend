@@ -29,7 +29,7 @@ class SearchTermTest extends KernelTestCase
      */
     public function testThatWithoutColumnOrSearchTermCriteriaIsNull(mixed $column, mixed $search): void
     {
-        static::assertNull(SearchTerm::getCriteria(
+        self::assertNull(SearchTerm::getCriteria(
             $column instanceof StringableArrayObject ? $column->getArrayCopy() : $column,
             $search instanceof StringableArrayObject ? $search->getArrayCopy() : $search
         ), 'Criteria was not NULL with given parameters');
@@ -49,7 +49,7 @@ class SearchTermTest extends KernelTestCase
         StringableArrayObject $inputArguments,
         StringableArrayObject $expected
     ): void {
-        static::assertSame(
+        self::assertSame(
             $expected->getArrayCopy(),
             call_user_func_array([SearchTerm::class, 'getCriteria'], $inputArguments->getArrayCopy())
         );

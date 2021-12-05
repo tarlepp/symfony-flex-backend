@@ -33,29 +33,29 @@ class LanguageValidatorTest extends KernelTestCase
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         $localizationMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getLanguages')
             ->willReturn(['bar']);
 
         $contextMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('buildViolation')
             ->with(Language::MESSAGE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setParameter')
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setCode')
             ->with(Language::INVALID_LANGUAGE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('addViolation');
 
         // Run validator

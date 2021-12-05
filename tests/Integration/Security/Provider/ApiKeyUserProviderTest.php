@@ -34,13 +34,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
-     * @param mixed $input
-     *
      * @throws Throwable
      *
      * @testdox Test that `supportsClass` method returns `$expected` when using `$input` as input
      */
-    public function testThatSupportClassReturnsExpected(bool $expected, $input): void
+    public function testThatSupportClassReturnsExpected(bool $expected, mixed $input): void
     {
         $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()
@@ -52,7 +50,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $provider = new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock);
 
-        static::assertSame($expected, $provider->supportsClass((string)$input));
+        self::assertSame($expected, $provider->supportsClass((string)$input));
     }
 
     /**
@@ -95,7 +93,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $apiKeyRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([
                 'token' => 'guid',
@@ -127,7 +125,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = new ApiKey();
 
         $apiKeyRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([
                 'token' => 'guid',
@@ -137,7 +135,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('guid');
 
-        static::assertSame($apiKey, $user->getApiKey());
+        self::assertSame($apiKey->getId(), $user->getApiKeyIdentifier());
     }
 
     /**
@@ -156,7 +154,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $apiKeyRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([
                 'token' => 'some_token',

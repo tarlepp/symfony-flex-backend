@@ -54,7 +54,7 @@ abstract class RepositoryTestCase extends KernelTestCase
      */
     public function testThatGetEntityNameReturnsExpected(): void
     {
-        static::assertSame($this->entityName, $this->getRepository()->getEntityName());
+        self::assertSame($this->entityName, $this->getRepository()->getEntityName());
     }
 
     /**
@@ -69,7 +69,7 @@ abstract class RepositoryTestCase extends KernelTestCase
         sort($expected);
         sort($actual);
 
-        static::assertSame($expected, $actual, $message);
+        self::assertSame($expected, $actual, $message);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class RepositoryTestCase extends KernelTestCase
         sort($expected);
         sort($actual);
 
-        static::assertSame($expected, $actual, $message);
+        self::assertSame($expected, $actual, $message);
     }
 
     /**
@@ -92,10 +92,10 @@ abstract class RepositoryTestCase extends KernelTestCase
      */
     protected function getRepository(): BaseRepositoryInterface
     {
-        static::bootKernel();
+        self::bootKernel();
 
         /** @var RestResourceInterface $resource */
-        $resource = static::getContainer()->get($this->resourceName);
+        $resource = self::getContainer()->get($this->resourceName);
 
         return $resource->getRepository();
     }

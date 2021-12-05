@@ -18,7 +18,6 @@ use App\Service\Localization;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -29,19 +28,14 @@ use function array_keys;
  */
 class UserTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-    private MockObject | Localization | string $localization = '';
-
-    protected function setUp(): void
-    {
-        $this->userGroupResource = $this->createMock(UserGroupResource::class);
-        $this->localization = $this->createMock(Localization::class);
-
-        parent::setUp();
-    }
-
+    /**
+     * @testdox Test that form submit with valid input data works as expected
+     */
     public function testSubmitValidData(): void
     {
+        $resource = $this->getUserGroupResource();
+        $localization = $this->getLocalization();
+
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
@@ -49,29 +43,29 @@ class UserTypeTest extends TypeTestCase
         $userGroupEntity = (new UserGroup())
             ->setRole($roleEntity);
 
-        $this->getUserGroupResourceMock()
-            ->expects(static::once())
+        $resource
+            ->expects(self::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->getUserGroupResourceMock()
-            ->expects(static::once())
+        $resource
+            ->expects(self::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
-        $this->getLocalizationMock()
-            ->expects(static::once())
+        $localization
+            ->expects(self::once())
             ->method('getLanguages')
             ->willReturn(['en', 'fi']);
 
-        $this->getLocalizationMock()
-            ->expects(static::once())
+        $localization
+            ->expects(self::once())
             ->method('getLocales')
             ->willReturn(['en', 'fi']);
 
-        $this->getLocalizationMock()
-            ->expects(static::once())
+        $localization
+            ->expects(self::once())
             ->method('getFormattedTimezones')
             ->willReturn([
                 [
@@ -123,25 +117,25 @@ class UserTypeTest extends TypeTestCase
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        static::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertSame($dto->getId(), $form->getData()->getId());
-        static::assertSame($dto->getUsername(), $form->getData()->getUsername());
-        static::assertSame($dto->getFirstName(), $form->getData()->getFirstName());
-        static::assertSame($dto->getLastName(), $form->getData()->getLastName());
-        static::assertSame($dto->getEmail(), $form->getData()->getEmail());
-        static::assertSame($dto->getLanguage(), $form->getData()->getLanguage());
-        static::assertSame($dto->getLocale(), $form->getData()->getLocale());
-        static::assertSame($dto->getTimezone(), $form->getData()->getTimezone());
-        static::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
+        self::assertSame($dto->getId(), $form->getData()->getId());
+        self::assertSame($dto->getUsername(), $form->getData()->getUsername());
+        self::assertSame($dto->getFirstName(), $form->getData()->getFirstName());
+        self::assertSame($dto->getLastName(), $form->getData()->getLastName());
+        self::assertSame($dto->getEmail(), $form->getData()->getEmail());
+        self::assertSame($dto->getLanguage(), $form->getData()->getLanguage());
+        self::assertSame($dto->getLocale(), $form->getData()->getLocale());
+        self::assertSame($dto->getTimezone(), $form->getData()->getTimezone());
+        self::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            static::assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 
@@ -152,12 +146,11 @@ class UserTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        $resource = $this->getUserGroupResource();
+        $localization = $this->getLocalization();
+
         // create a type instance with the mocked dependencies
-        $type = new UserType(
-            $this->getUserGroupResource(),
-            new UserGroupTransformer($this->getUserGroupResource()),
-            $this->getLocalization()
-        );
+        $type = new UserType($resource, new UserGroupTransformer($resource), $localization);
 
         return [
             // register the type instances with the PreloadedExtension
@@ -165,31 +158,31 @@ class UserTypeTest extends TypeTestCase
         ];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @phpstan-return  MockObject&UserGroupResource
+     */
+    private function getUserGroupResource(): MockObject
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
+        static $cache;
+
+        if ($cache === null) {
+            $cache = $this->createMock(UserGroupResource::class);
+        }
+
+        return $cache;
     }
 
-    private function getUserGroupResourceMock(): MockObject
+    /**
+     * @phpstan-return  MockObject&Localization
+     */
+    private function getLocalization(): MockObject
     {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        static $cache;
 
-    private function getLocalization(): Localization
-    {
-        return $this->localization instanceof Localization
-            ? $this->localization
-            : throw new UnexpectedValueException('Localization not set');
-    }
+        if ($cache === null) {
+            $cache = $this->createMock(Localization::class);
+        }
 
-    private function getLocalizationMock(): MockObject
-    {
-        return $this->localization instanceof MockObject
-            ? $this->localization
-            : throw new UnexpectedValueException('Localization not set');
+        return $cache;
     }
 }

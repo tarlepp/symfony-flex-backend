@@ -41,9 +41,9 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $entity = new ApiKeyEntity();
 
-        $resource = static::getContainer()->get(ApiKeyResource::class);
+        $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        static::assertInstanceOf(ApiKeyEntity::class, $resource->getRepository()->getReference($entity->getId()));
+        self::assertInstanceOf(ApiKeyEntity::class, $resource->getRepository()->getReference($entity->getId()));
     }
 
     /**
@@ -51,9 +51,9 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatGetReferenceReturnsExpectedWithNonUuidInput(): void
     {
-        $repository = static::getContainer()->get(RoleRepository::class);
+        $repository = self::getContainer()->get(RoleRepository::class);
 
-        static::assertInstanceOf(Role::class, $repository->getReference('some-role'));
+        self::assertInstanceOf(Role::class, $repository->getReference('some-role'));
     }
 
     /**
@@ -61,9 +61,9 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatGetAssociationsReturnsExpected(): void
     {
-        $resource = static::getContainer()->get(ApiKeyResource::class);
+        $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        static::assertSame(
+        self::assertSame(
             ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
             array_keys($resource->getRepository()->getAssociations())
         );
@@ -74,9 +74,9 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatGetClassMetaDataReturnsExpected(): void
     {
-        $resource = static::getContainer()->get(ApiKeyResource::class);
+        $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        static::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
+        self::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
     }
 
     /**
@@ -98,7 +98,7 @@ class GenericRepositoryTest extends KernelTestCase
         );
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn(null);
 
@@ -126,18 +126,18 @@ class GenericRepositoryTest extends KernelTestCase
             ->getMock();
 
         $entityManager
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('isOpen')
             ->willReturn(true);
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
         $repository = new ApiKeyRepository($managerObject);
 
-        static::assertSame($entityManager, $repository->getEntityManager());
+        self::assertSame($entityManager, $repository->getEntityManager());
     }
 
     /**
@@ -160,27 +160,27 @@ class GenericRepositoryTest extends KernelTestCase
             ->getMock();
 
         $entityManager
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('isOpen')
             ->willReturn(false, true);
 
         $secondEntityManager = clone $entityManager;
 
         $managerObject
-            ->expects(static::exactly(2))
+            ->expects(self::exactly(2))
             ->method('getManagerForClass')
             ->willReturn($entityManager, $secondEntityManager);
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('resetManager');
 
         $repository = new ApiKeyRepository($managerObject);
 
         $actualEntityManager = $repository->getEntityManager();
 
-        static::assertNotSame($entityManager, $actualEntityManager);
-        static::assertSame($secondEntityManager, $actualEntityManager);
+        self::assertNotSame($entityManager, $actualEntityManager);
+        self::assertSame($secondEntityManager, $actualEntityManager);
     }
 
     /**
@@ -195,7 +195,7 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
-        $repository = static::getContainer()->get(ApiKeyResource::class)->getRepository();
+        $repository = self::getContainer()->get(ApiKeyResource::class)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -205,7 +205,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $message = 'addLeftJoin method did not return expected';
 
-        static::assertSame($expected, $queryBuilder->getDQL(), $message);
+        self::assertSame($expected, $queryBuilder->getDQL(), $message);
     }
 
     /**
@@ -220,7 +220,7 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
-        $repository = static::getContainer()->get(ApiKeyResource::class)->getRepository();
+        $repository = self::getContainer()->get(ApiKeyResource::class)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -230,7 +230,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $message = 'addLeftJoin method did not return expected';
 
-        static::assertSame($expected, $queryBuilder->getDQL(), $message);
+        self::assertSame($expected, $queryBuilder->getDQL(), $message);
     }
 
     /**
@@ -245,7 +245,7 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
-        $repository = static::getContainer()->get(ApiKeyResource::class)->getRepository();
+        $repository = self::getContainer()->get(ApiKeyResource::class)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -257,7 +257,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $message = 'addLeftJoin method did not return expected';
 
-        static::assertSame($expected, $queryBuilder->getDQL(), $message);
+        self::assertSame($expected, $queryBuilder->getDQL(), $message);
     }
 
     /**
@@ -272,7 +272,7 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
-        $repository = static::getContainer()->get(ApiKeyResource::class)->getRepository();
+        $repository = self::getContainer()->get(ApiKeyResource::class)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -284,7 +284,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $message = 'addLeftJoin method did not return expected';
 
-        static::assertSame($expected, $queryBuilder->getDQL(), $message);
+        self::assertSame($expected, $queryBuilder->getDQL(), $message);
     }
 
     /**
@@ -292,14 +292,14 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatAddCallbackWorks(): void
     {
-        $repository = static::getContainer()->get(ApiKeyResource::class)->getRepository();
+        $repository = self::getContainer()->get(ApiKeyResource::class)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder): void {
-            static::assertSame($queryBuilder, $qb);
-            static::assertSame(1, $foo);
-            static::assertSame('string', $bar);
+            self::assertSame($queryBuilder, $qb);
+            self::assertSame(1, $foo);
+            self::assertSame('string', $bar);
         };
 
         $repository
@@ -312,16 +312,16 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatAddCallbackCallsCallbackJustOnce(): void
     {
-        $repository = static::getContainer()->get(ApiKeyResource::class)->getRepository();
+        $repository = self::getContainer()->get(ApiKeyResource::class)->getRepository();
 
         $count = 0;
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder, &$count): void {
-            static::assertSame($queryBuilder, $qb);
-            static::assertSame(1, $foo);
-            static::assertSame('string', $bar);
+            self::assertSame($queryBuilder, $qb);
+            self::assertSame(1, $foo);
+            self::assertSame('string', $bar);
 
             $count++;
         };
@@ -334,7 +334,7 @@ class GenericRepositoryTest extends KernelTestCase
         // Process query builder
         $repository->processQueryBuilder($queryBuilder);
 
-        static::assertSame(1, $count);
+        self::assertSame(1, $count);
     }
 
     /**
@@ -358,7 +358,7 @@ class GenericRepositoryTest extends KernelTestCase
         ];
 
         $entityManager
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->with(
                 ApiKeyEntity::class,
@@ -368,7 +368,7 @@ class GenericRepositoryTest extends KernelTestCase
             );
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -400,18 +400,18 @@ class GenericRepositoryTest extends KernelTestCase
         ];
 
         $repositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with(...$arguments);
 
         $entityManager
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -449,19 +449,19 @@ class GenericRepositoryTest extends KernelTestCase
         ];
 
         $repositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findBy')
             ->with(...$arguments)
             ->willReturn([]);
 
         $entityManager
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -489,18 +489,18 @@ class GenericRepositoryTest extends KernelTestCase
             ->getMock();
 
         $repositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findAll')
             ->willReturn([]);
 
         $entityManager
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
 
         $managerObject
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 

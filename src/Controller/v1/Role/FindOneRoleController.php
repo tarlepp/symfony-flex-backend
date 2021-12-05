@@ -11,12 +11,12 @@ namespace App\Controller\v1\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
+use App\Security\Interfaces\RolesServiceInterface;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Throwable;
 
 /**
@@ -46,7 +46,7 @@ class FindOneRoleController extends Controller
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
+    #[IsGranted(RolesServiceInterface::ROLE_ADMIN)]
     public function __invoke(Request $request, string $role): Response
     {
         return $this->findOneMethod($request, $role);

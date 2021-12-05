@@ -18,7 +18,7 @@ use Throwable;
  * @package App\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-final class HealthzService
+class HealthzService
 {
     public function __construct(
         private HealthzRepository $repository,

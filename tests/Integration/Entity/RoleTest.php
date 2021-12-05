@@ -25,13 +25,12 @@ class RoleTest extends EntityTestCase
      */
     protected string $entityName = Role::class;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Generic method to test that getId method returns a string and it is UUID V4 format
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function testThatGetIdReturnsCorrectUuid(): void
     {
-        static::markTestSkipped();
+        self::markTestSkipped();
     }
 
     /**

@@ -17,8 +17,6 @@ use App\Resource\UserGroupResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use Throwable;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -29,20 +27,13 @@ use function array_keys;
  */
 class ApiKeyTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-
     /**
-     * @throws Throwable
+     * @testdox Test that form submit with valid input data works as expected
      */
-    protected function setUp(): void
-    {
-        $this->userGroupResource = $this->createMock(UserGroupResource::class);
-
-        parent::setUp();
-    }
-
     public function testSubmitValidData(): void
     {
+        $resource = $this->getUserGroupResource();
+
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
@@ -51,13 +42,13 @@ class ApiKeyTypeTest extends TypeTestCase
             ->setRole($roleEntity)
             ->setName('Some name');
 
-        $this->getUserGroupResourceMock()
-            ->expects(static::once())
+        $resource
+            ->expects(self::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->getUserGroupResourceMock()
-            ->expects(static::once())
+        $resource
+            ->expects(self::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
@@ -80,19 +71,19 @@ class ApiKeyTypeTest extends TypeTestCase
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        static::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertSame($dto->getId(), $form->getData()->getId());
-        static::assertSame($dto->getDescription(), $form->getData()->getDescription());
-        static::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
+        self::assertSame($dto->getId(), $form->getData()->getId());
+        self::assertSame($dto->getDescription(), $form->getData()->getDescription());
+        self::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            static::assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 
@@ -103,8 +94,10 @@ class ApiKeyTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        $resource = $this->getUserGroupResource();
+
         // create a type instance with the mocked dependencies
-        $type = new ApiKeyType($this->getUserGroupResource(), new UserGroupTransformer($this->getUserGroupResource()));
+        $type = new ApiKeyType($resource, new UserGroupTransformer($resource));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -112,17 +105,17 @@ class ApiKeyTypeTest extends TypeTestCase
         ];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @phpstan-return MockObject&UserGroupResource
+     */
+    private function getUserGroupResource(): MockObject
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        static $cache;
 
-    private function getUserGroupResourceMock(): MockObject
-    {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
+        if ($cache === null) {
+            $cache = $this->createMock(UserGroupResource::class);
+        }
+
+        return $cache;
     }
 }

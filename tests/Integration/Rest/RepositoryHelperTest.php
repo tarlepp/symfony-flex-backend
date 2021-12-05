@@ -38,7 +38,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         $message = 'processCriteria did not return expected DQL.';
 
-        static::assertSame($expected, $qb->getDQL(), $message);
+        self::assertSame($expected, $qb->getDQL(), $message);
     }
 
     /**
@@ -55,7 +55,7 @@ SELECT entity FROM App\Entity\User entity
 DQL;
         $message = 'processCriteria method changed DQL when it should not - weird';
 
-        static::assertSame($expected, $qb->getDQL(), $message);
+        self::assertSame($expected, $qb->getDQL(), $message);
     }
 
     /**
@@ -80,7 +80,7 @@ SELECT entity FROM App\Entity\User entity
 DQL;
         $actual = $qb->getDQL();
 
-        static::assertSame($expected, $actual, $message);
+        self::assertSame($expected, $actual, $message);
     }
 
     /**
@@ -101,7 +101,7 @@ DQL;
 
         $message = 'processSearchTerms did not return expected DQL.';
 
-        static::assertSame($expected, $qb->getDQL(), $message);
+        self::assertSame($expected, $qb->getDQL(), $message);
     }
 
     /**
@@ -120,7 +120,7 @@ DQL;
 
         $message = 'processOrderBy did not return expected DQL.';
 
-        static::assertSame($expected, $qb->getDQL(), $message);
+        self::assertSame($expected, $qb->getDQL(), $message);
     }
 
     /**
@@ -135,7 +135,7 @@ DQL;
 
         $message = 'getExpression method did modify expression with no criteria - this should not happen';
 
-        static::assertSame($expression, $output, $message);
+        self::assertSame($expression, $output, $message);
     }
 
     /**
@@ -160,12 +160,12 @@ DQL;
             RepositoryHelper::getExpression($queryBuilder, $expression, [$criteria->getArrayCopy()])
         );
 
-        static::assertSame($dql, $queryBuilder->getQuery()->getDQL());
-        static::assertCount($params->count(), $queryBuilder->getParameters());
+        self::assertSame($dql, $queryBuilder->getQuery()->getDQL());
+        self::assertCount($params->count(), $queryBuilder->getParameters());
 
         foreach ($queryBuilder->getParameters()->toArray() as $key => $parameter) {
-            static::assertSame($params[$key]['name'], $parameter->getName());
-            static::assertSame($params[$key]['value'], $parameter->getValue());
+            self::assertSame($params[$key]['name'], $parameter->getName());
+            self::assertSame($params[$key]['value'], $parameter->getValue());
         }
     }
 
@@ -578,7 +578,7 @@ DQL
     private function getRepository(): UserRepository
     {
         /** @var UserRepository $userRepository */
-        $userRepository = static::getContainer()->get(UserRepository::class);
+        $userRepository = self::getContainer()->get(UserRepository::class);
 
         RepositoryHelper::resetParameterCount();
 

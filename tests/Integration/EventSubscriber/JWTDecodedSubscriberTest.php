@@ -46,7 +46,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         (new JWTDecodedSubscriber($requestStack, $logger))
             ->onJWTDecoded($event);
 
-        static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
+        self::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
     }
 
     public function testThatJwtIsNotMarkedInvalidIfChecksumMatches(): void
@@ -75,7 +75,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         (new JWTDecodedSubscriber($requestStack, $logger))
             ->onJWTDecoded($event);
 
-        static::assertTrue($event->isValid(), 'JWTDecodedEvent did mark event as invalid.');
+        self::assertTrue($event->isValid(), 'JWTDecodedEvent did mark event as invalid.');
     }
 
     public function testThatEventIsMarkedInvalidIfRequestDoesNotExist(): void
@@ -89,7 +89,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         (new JWTDecodedSubscriber(new RequestStack(), $logger))
             ->onJWTDecoded($event);
 
-        static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
+        self::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
     }
 
     public function testThatEventIsNotTouchedIfItHasAlreadyBeenMarkedInvalid(): void
@@ -106,8 +106,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         (new JWTDecodedSubscriber(new RequestStack(), $logger))
             ->onJWTDecoded($event);
 
-        static::assertSame($expectedEvent->getPayload(), $event->getPayload());
-        static::assertFalse($event->isValid());
+        self::assertSame($expectedEvent->getPayload(), $event->getPayload());
+        self::assertFalse($event->isValid());
     }
 
     public function testThatLoggerIsCalledAndEventIsMarkedInvalidIfThereIsNoRequest(): void
@@ -115,7 +115,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error')
             ->with('Request not available');
 
@@ -124,6 +124,6 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         (new JWTDecodedSubscriber(new RequestStack(), $logger))
             ->onJWTDecoded($event);
 
-        static::assertFalse($event->isValid());
+        self::assertFalse($event->isValid());
     }
 }

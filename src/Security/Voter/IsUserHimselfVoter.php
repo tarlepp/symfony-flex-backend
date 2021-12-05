@@ -38,8 +38,6 @@ class IsUserHimselfVoter extends Voter
     {
         $user = $token->getUser();
 
-        return $token->isAuthenticated()
-            && $user instanceof SecurityUser
-            && $user->getUuid() === $subject->getId();
+        return $user instanceof SecurityUser && $user->getUuid() === $subject->getId();
     }
 }

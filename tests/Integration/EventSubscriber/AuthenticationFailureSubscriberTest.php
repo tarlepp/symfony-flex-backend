@@ -11,6 +11,7 @@ namespace App\Tests\Integration\EventSubscriber;
 use App\Entity\User;
 use App\EventSubscriber\AuthenticationFailureSubscriber;
 use App\Repository\UserRepository;
+use App\Security\SecurityUser;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -35,7 +36,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $user = (new User())
             ->setUsername('test-user');
 
-        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -48,19 +49,19 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn($user);
 
         $loginLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setUser')
             ->with($user)
             ->willReturn($loginLogger);
 
         $loginLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('process');
 
         (new AuthenticationFailureSubscriber($loginLogger, $userRepository))
@@ -69,7 +70,8 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
     {
-        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+        $user = new User();
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -82,19 +84,19 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn(null);
 
         $loginLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setUser')
             ->with(null)
             ->willReturn($loginLogger);
 
         $loginLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('process');
 
         $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);

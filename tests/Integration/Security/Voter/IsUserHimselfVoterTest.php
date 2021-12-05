@@ -11,10 +11,10 @@ namespace App\Tests\Integration\Security\Voter;
 use App\Entity\User;
 use App\Security\SecurityUser;
 use App\Security\Voter\IsUserHimselfVoter;
-use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserToken;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * Class IsUserHimselfVoterTest
@@ -29,9 +29,12 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedIfSubjectIsNotSupported(): void
     {
-        $token = new AnonymousToken('secret', 'anon');
+        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
 
-        static::assertSame(Voter::ACCESS_ABSTAIN, $this->getVoter()->vote($token, 'subject', ['IS_USER_HIMSELF']));
+        self::assertSame(
+            VoterInterface::ACCESS_ABSTAIN,
+            $this->getVoter()->vote($token, 'subject', ['IS_USER_HIMSELF']),
+        );
     }
 
     /**
@@ -39,9 +42,12 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedWhenUserMismatch(): void
     {
-        $token = new JWTUserToken([], new SecurityUser(new User()));
+        $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
 
-        static::assertSame(Voter::ACCESS_DENIED, $this->getVoter()->vote($token, new User(), ['IS_USER_HIMSELF']));
+        self::assertSame(
+            VoterInterface::ACCESS_DENIED,
+            $this->getVoter()->vote($token, new User(), ['IS_USER_HIMSELF']),
+        );
     }
 
     /**
@@ -50,9 +56,9 @@ class IsUserHimselfVoterTest extends KernelTestCase
     public function testThatVoteReturnsExpectedWhenUserMatch(): void
     {
         $user = new User();
-        $token = new JWTUserToken([], new SecurityUser($user));
+        $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
 
-        static::assertSame(Voter::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
+        self::assertSame(VoterInterface::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
     }
 
     private function getVoter(): IsUserHimselfVoter

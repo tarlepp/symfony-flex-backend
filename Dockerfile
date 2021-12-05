@@ -1,30 +1,28 @@
-FROM php:8.0.11-fpm
+FROM php:8.0.13-fpm
+
+ENV APP_ENV prod
+ENV APP_DEBUG 0
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install -j$(nproc) bcmath \
-    && docker-php-ext-install pdo \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-install zip
+# Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
+COPY --from=mlocati/php-extension-installer:1.4.2 /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar \
-    && chmod +x /usr/local/bin/pickle
-
-# Install APCu and APC backward compatibility
-RUN pickle install apcu \
-    && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
+# Install and enable all necessary PHP extensions
+RUN install-php-extensions \
+    apcu \
+    bcmath \
+    intl \
+    opcache \
+    pdo_mysql \
+    xdebug \
+    zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.8 /usr/bin/composer /usr/bin/composer
-
-ENV APP_ENV prod
-ENV APP_DEBUG 0
-ENV COMPOSER_ALLOW_SUPERUSER 1
+COPY --from=composer:2.1.12 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 

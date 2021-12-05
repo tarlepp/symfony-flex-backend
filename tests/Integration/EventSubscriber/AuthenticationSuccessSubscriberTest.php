@@ -39,17 +39,17 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $loginLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setUser')
             ->with($userEntity)
             ->willReturn($loginLogger);
 
         $loginLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('process');
 
         $userRepository
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('loadUserByIdentifier')
             ->with($userEntity->getId())
             ->willReturn($userEntity);

@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\ApiKey;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use function getenv;
 
 /**
  * Class ApiKeyControllerTest
@@ -24,6 +25,8 @@ class ApiKeyControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /v1/api_key` request returns `401` for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -33,8 +36,8 @@ class ApiKeyControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -42,18 +45,18 @@ class ApiKeyControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that find action returns $expectedStatus with $username + $password
+     * @testdox Test that `GET /v1/api_key` request returns `$e` with user `$u` + `$p`
      */
-    public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
+    public function testThatFindActionWorksAsExpected(string $u, string $p, int $e): void
     {
-        $client = $this->getTestClient($username, $password);
+        $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame($e, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -61,11 +64,24 @@ class ApiKeyControllerTest extends WebTestCase
      */
     public function dataProviderTestThatFindActionWorksAsExpected(): Generator
     {
-        yield ['john', 'password', 403];
-        yield ['john-api', 'password-api', 403];
-        yield ['john-logged', 'password-logged', 403];
-        yield ['john-user', 'password-user', 403];
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john', 'password', 403];
+            yield ['john-api', 'password-api', 403];
+            yield ['john-logged', 'password-logged', 403];
+            yield ['john-user', 'password-user', 403];
+        }
+
         yield ['john-admin', 'password-admin', 403];
         yield ['john-root', 'password-root', 200];
+
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+            yield ['john.doe@test.com', 'password', 403];
+            yield ['john.doe-api@test.com', 'password-api', 403];
+            yield ['john.doe-logged@test.com', 'password-logged', 403];
+            yield ['john.doe-user@test.com', 'password-user', 403];
+        }
+
+        yield ['john.doe-admin@test.com', 'password-admin', 403];
+        yield ['john.doe-root@test.com', 'password-root', 200];
     }
 }
