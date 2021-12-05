@@ -10,7 +10,6 @@ declare(strict_types = 1);
  * file that was distributed with this source code.
  */
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Requirements\SymfonyRequirements;
 
 if (!isset($_SERVER['HTTP_HOST'])) {
@@ -23,7 +22,7 @@ if (!in_array(
         '127.0.0.1',
         '::1',
         '10.0.2.2', // VirtualBox default gateway on NAT network - https://www.virtualbox.org/manual/ch09.html#changenat
-        $_ENV['DOCKER_IP'],
+        $_ENV['DOCKER_IP'] ?? '',
     ],
     true
 )) {
@@ -44,7 +43,6 @@ if (!is_readable($autoloader)) {
     throw new RuntimeException('Unable to find the Composer autoloader.');
 }
 
-/** @noinspection PhpIncludeInspection */
 require_once $autoloader;
 
 $symfonyRequirements = new SymfonyRequirements();
