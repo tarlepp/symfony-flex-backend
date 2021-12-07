@@ -60,7 +60,7 @@ abstract class Controller implements ControllerInterface
     }
 
     #[Required]
-    public function setResponseHandler(ResponseHandler $responseHandler): self
+    public function setResponseHandler(ResponseHandler $responseHandler): static
     {
         $this->responseHandler = $responseHandler;
 
