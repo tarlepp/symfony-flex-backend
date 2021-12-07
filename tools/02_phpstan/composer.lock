@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6d88033ce411c96788ebca0867aab2c",
+    "content-hash": "f3964871b92cbad621240d2f45ea5808",
     "packages": [],
     "packages-dev": [
         {
@@ -128,16 +128,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "be2425774b6e23a9b9dae5304941f33c113bef18"
+                "reference": "a5aed927c36088284267c6170b41fcb556e32a44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/be2425774b6e23a9b9dae5304941f33c113bef18",
-                "reference": "be2425774b6e23a9b9dae5304941f33c113bef18",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/a5aed927c36088284267c6170b41fcb556e32a44",
+                "reference": "a5aed927c36088284267c6170b41fcb556e32a44",
                 "shasum": ""
             },
             "require": {
@@ -192,9 +192,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.0.2"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.0.3"
             },
-            "time": "2021-11-29T12:41:15+00:00"
+            "time": "2021-12-05T18:14:35+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -202,12 +202,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "0529e9ce362a73b9355ed8d3d40f578f46db8d88"
+                "reference": "e26f8fefe293849248fb3414805684d0ba1f94f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0529e9ce362a73b9355ed8d3d40f578f46db8d88",
-                "reference": "0529e9ce362a73b9355ed8d3d40f578f46db8d88",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/e26f8fefe293849248fb3414805684d0ba1f94f3",
+                "reference": "e26f8fefe293849248fb3414805684d0ba1f94f3",
                 "shasum": ""
             },
             "conflict": {
@@ -320,7 +320,7 @@
                 "gos/web-socket-bundle": "<1.10.4|>=2,<2.6.1|>=3,<3.3",
                 "gree/jose": "<=2.2",
                 "gregwar/rst": "<1.0.3",
-                "grumpydictator/firefly-iii": "<5.6.3",
+                "grumpydictator/firefly-iii": "<5.6.5",
                 "guzzlehttp/guzzle": ">=4-rc.2,<4.2.4|>=5,<5.3.1|>=6,<6.2.1",
                 "helloxz/imgurl": "<=2.31",
                 "hjue/justwriting": "<=1",
@@ -621,7 +621,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-03T21:12:43+00:00"
+            "time": "2021-12-06T18:19:48+00:00"
         }
     ],
     "aliases": [],
