@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13e3fc5db78bde648a159736f03a8199",
+    "content-hash": "502c0a8061b385468e94602a9530b15b",
     "packages": [],
     "packages-dev": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "e26f8fefe293849248fb3414805684d0ba1f94f3"
+                "reference": "48f62899325ede08503d5532d9e1c98d7983df55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/e26f8fefe293849248fb3414805684d0ba1f94f3",
-                "reference": "e26f8fefe293849248fb3414805684d0ba1f94f3",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/48f62899325ede08503d5532d9e1c98d7983df55",
+                "reference": "48f62899325ede08503d5532d9e1c98d7983df55",
                 "shasum": ""
             },
             "conflict": {
@@ -234,6 +234,7 @@
                 "prestashop/autoupgrade": ">=4,<4.10.1",
                 "prestashop/contactform": ">1.0.1,<4.3",
                 "prestashop/gamification": "<2.3.2",
+                "prestashop/prestashop": ">=1.7.5,<=1.7.8.1",
                 "prestashop/productcomments": ">=4,<4.2.1",
                 "prestashop/ps_emailsubscription": "<2.6.1",
                 "prestashop/ps_facetedsearch": "<3.4.1",
@@ -432,20 +433,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-06T18:19:48+00:00"
+            "time": "2021-12-07T22:15:12+00:00"
         },
         {
             "name": "symplify/config-transformer",
-            "version": "9.4.70",
+            "version": "10.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "59cab81d42a2c703f9856eb8cdf1e923f3095fb3"
+                "reference": "a1aab1c486caf0050b82acb8eeeca40c9806d039"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/59cab81d42a2c703f9856eb8cdf1e923f3095fb3",
-                "reference": "59cab81d42a2c703f9856eb8cdf1e923f3095fb3",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/a1aab1c486caf0050b82acb8eeeca40c9806d039",
+                "reference": "a1aab1c486caf0050b82acb8eeeca40c9806d039",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +462,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/9.4.70"
+                "source": "https://github.com/symplify/config-transformer/tree/10.0.0"
             },
             "funding": [
                 {
@@ -473,20 +474,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-02T16:07:51+00:00"
+            "time": "2021-12-07T22:52:05+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.4.70",
+            "version": "10.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "9276b0c7a1a5671fc4a067656ab40d0aea42aaca"
+                "reference": "e695c6c7d811fca79aa8ba694173730856f965bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/9276b0c7a1a5671fc4a067656ab40d0aea42aaca",
-                "reference": "9276b0c7a1a5671fc4a067656ab40d0aea42aaca",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/e695c6c7d811fca79aa8ba694173730856f965bd",
+                "reference": "e695c6c7d811fca79aa8ba694173730856f965bd",
                 "shasum": ""
             },
             "require": {
@@ -516,7 +517,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.70"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/10.0.0"
             },
             "funding": [
                 {
@@ -528,7 +529,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-02T16:09:04+00:00"
+            "time": "2021-12-07T22:55:36+00:00"
         }
     ],
     "aliases": [],
