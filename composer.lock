@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95e89993047e14a17e887bf417c29bb3",
+    "content-hash": "0c954f8d7f57df096b8cabecd07ceffe",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2234,34 +2234,35 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "v5.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/symfony-console-form.git",
-                "reference": "8e4d48c006d52d48fd8c85c772b36c47ec707c5c"
+                "reference": "e4cc0620ec29db6d8f77889806dcd73904e18f1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/8e4d48c006d52d48fd8c85c772b36c47ec707c5c",
-                "reference": "8e4d48c006d52d48fd8c85c772b36c47ec707c5c",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/e4cc0620ec29db6d8f77889806dcd73904e18f1e",
+                "reference": "e4cc0620ec29db6d8f77889806dcd73904e18f1e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4",
-                "symfony/console": "~5.0",
-                "symfony/form": "~5.0",
-                "symfony/translation": "~5.0"
+                "php": ">=8.0",
+                "symfony/console": "~5.0 || ~6.0",
+                "symfony/form": "~5.0 || ~6.0",
+                "symfony/translation": "~5.0 || ~6.0"
             },
             "require-dev": {
                 "beberlei/assert": "~2.1",
                 "behat/behat": "^3.6",
-                "friendsofphp/php-cs-fixer": "^2.2",
                 "phpunit/phpunit": "^9.5",
-                "symfony/finder": "~5.0",
-                "symfony/framework-bundle": "~5.0",
-                "symfony/security-csrf": "~5.0",
-                "symfony/validator": "~5.0",
-                "symfony/yaml": "~5.0"
+                "symfony/finder": "~5 || ~6.0.0",
+                "symfony/framework-bundle": "~5.0 || ~6.0",
+                "symfony/security-csrf": "~5.0 || ~6.0",
+                "symfony/validator": "~5.0 || ~6.0",
+                "symfony/yaml": "~5.0 || ~6.0",
+                "symplify/coding-standard": "^9.4",
+                "symplify/easy-coding-standard": "^9.4"
             },
             "type": "library",
             "autoload": {
@@ -2289,9 +2290,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthiasnoback/symfony-console-form/issues",
-                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.0.0"
+                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.1.0"
             },
-            "time": "2021-02-14T12:05:06+00:00"
+            "time": "2021-12-07T12:51:35+00:00"
         },
         {
             "name": "monolog/monolog",
