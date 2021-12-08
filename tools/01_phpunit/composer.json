@@ -8,12 +8,12 @@
 		"phpunit/phpcov": "8.2.0",
 		"phpunit/phpunit": "9.5.10",
 		"roave/security-advisories": "dev-latest",
-		"symfony/browser-kit": "5.4.0",
-		"symfony/phpunit-bridge": "5.4.0"
+		"symfony/browser-kit": "6.0.0",
+		"symfony/phpunit-bridge": "6.0.0"
 	},
 	"config": {
 		"platform": {
-			"php": "7.4.0"
+			"php": "8.0.2"
 		},
 		"preferred-install": {
 			"*": "dist"
