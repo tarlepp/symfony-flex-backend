@@ -536,7 +536,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make local-configuration
 endif
 
-normalize-composer: ## Normalizes `composer.json` file content
+composer-normalize: ## Normalizes `composer.json` file content
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@composer normalize
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -545,10 +545,10 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make normalize-composer
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-normalize
 endif
 
-validate-composer: ## Validate `composer.json` file content
+composer-validate: ## Validate `composer.json` file content
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@composer validate --no-check-version && ([ $$? -eq 0 ] && echo "\033[32mGood news, your \`composer.json\` file is valid\033[39m")
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -557,7 +557,31 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make validate-composer
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-validate
+endif
+
+composer-require-checker: ## Check the defined dependencies against your code
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-require-checker
+endif
+
+composer-unused: ## Show unused packages by scanning and comparing package namespaces against your source
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@XDEBUG_MODE=off php /app/vendor/bin/composer-unused
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-unused
 endif
 
 phploc: ## Runs `phploc` and create json output
