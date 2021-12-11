@@ -39,18 +39,18 @@ class SearchTermTest extends KernelTestCase
      * @dataProvider dataProviderTestThatReturnedCriteriaIsExpected
      *
      * @phpstan-param StringableArrayObject<array> $inputArguments
-     * @phpstan-param StringableArrayObject<array> $expected
+     * @phpstan-param StringableArrayObject<array> | null $expected
      * @psalm-param StringableArrayObject $inputArguments
-     * @psalm-param StringableArrayObject $expected
+     * @psalm-param StringableArrayObject | null $expected
      *
      * @testdox Test that `getCriteria` method returns `$expected` with given `$inputArguments` arguments
      */
     public function testThatReturnedCriteriaIsExpected(
         StringableArrayObject $inputArguments,
-        StringableArrayObject $expected
+        StringableArrayObject | null $expected
     ): void {
         self::assertSame(
-            $expected->getArrayCopy(),
+            $expected?->getArrayCopy(),
             call_user_func_array([SearchTerm::class, 'getCriteria'], $inputArguments->getArrayCopy())
         );
     }
@@ -94,11 +94,53 @@ class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject|null}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
      */
     public function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {
+        // To cover array_filter on search term
+        yield [
+            new StringableArrayObject(['c1', '0']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%0%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([null, null]),
+            null,
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', null]),
+            null,
+        ];
+
+        yield [
+            new StringableArrayObject([null, 'word']),
+            null,
+        ];
+
+        yield [
+            new StringableArrayObject(['', '']),
+            null,
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '']),
+            null,
+        ];
+
+        yield [
+            new StringableArrayObject(['', 'word']),
+            null,
+        ];
+
         yield [
             new StringableArrayObject(['c1', 'word']),
             new StringableArrayObject([
