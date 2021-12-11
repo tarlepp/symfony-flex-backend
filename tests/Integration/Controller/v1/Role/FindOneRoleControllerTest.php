@@ -9,8 +9,12 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Controller\v1\Role;
 
 use App\Controller\v1\Role\FindOneRoleController;
+use App\Entity\Role;
 use App\Resource\RoleResource;
+use App\Rest\ResponseHandler;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 /**
  * Class FindOneRoleControllerTest
@@ -31,4 +35,33 @@ class FindOneRoleControllerTest extends RestIntegrationControllerTestCase
      * @var class-string
      */
     protected string $resourceClass = RoleResource::class;
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `__invoke($role)` method calls expected service methods
+     */
+    public function testThatInvokeMethodCallsExpectedMethods(): void
+    {
+        $resource = $this->getMockBuilder(RoleResource::class)->disableOriginalConstructor()->getMock();
+        $responseHandler = $this->getMockBuilder(ResponseHandler::class)->disableOriginalConstructor()->getMock();
+
+        $role = new Role('role');
+        $request = Request::create('/');
+
+        $resource
+            ->expects(self::once())
+            ->method('findOne')
+            ->with('role', true)
+            ->willReturn($role);
+
+        $responseHandler
+            ->expects(self::once())
+            ->method('createResponse')
+            ->with($request, $role, $resource);
+
+        (new FindOneRoleController($resource))
+            ->setResponseHandler($responseHandler)
+            ->__invoke($request, 'role');
+    }
 }

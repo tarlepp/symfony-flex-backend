@@ -41,7 +41,7 @@ interface ControllerInterface
      * Setter method for `ResponseHandler` service, this is called by Symfony
      * DI.
      */
-    public function setResponseHandler(ResponseHandler $responseHandler): self;
+    public function setResponseHandler(ResponseHandler $responseHandler): static;
 
     /**
      * Getter method for used DTO class for current controller.
