@@ -15,8 +15,8 @@ ENV NODE_VERSION 17.2.0
 # Update package list and install necessary libraries
 RUN apt-get update \
     && apt-get install -y \
-      zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo wget \
-      python3-dev python3-pip python3-setuptools \
+        zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo wget \
+        python3-dev python3-pip python3-setuptools \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
@@ -52,10 +52,10 @@ RUN chmod +x /app/bin/console \
 RUN chmod -R o+s+w /usr/local/etc/php
 
 RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest | \
-    grep -E "browser_download_url(.+)linux_amd64" | \
-    cut -d : -f 2,3 | \
-    tr -d \" | \
-    xargs -I{} wget -O local-php-security-checker {} \
+        grep -E "browser_download_url(.+)linux_amd64" | \
+        cut -d : -f 2,3 | \
+        tr -d \" | \
+        xargs -I{} wget -O local-php-security-checker {} \
     && mv local-php-security-checker /usr/bin/local-php-security-checker \
     && chmod +x /usr/bin/local-php-security-checker
 
