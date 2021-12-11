@@ -211,8 +211,6 @@ class RequestHandlerTest extends KernelTestCase
      * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: boolean|string}> $expected
      * @psalm-param StringableArrayObject $expected
      *
-     * @param string|bool $search
-     *
      * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `?search` parameter
      */
     public function testThatGetSearchTermsReturnsExpectedValue(

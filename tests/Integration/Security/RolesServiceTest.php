@@ -1,28 +1,46 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Unit/Security/RolesServiceTest.php
+ * /tests/Integration/Security/RolesServiceTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Unit\Security;
+namespace App\Tests\Integration\Security;
 
+use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * Class RolesServiceTest
  *
- * @package App\Tests\Unit\Security
+ * @package App\Tests\Integration\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RolesServiceTest extends KernelTestCase
 {
     /**
-     * @testdox Test that `RolesService::getRoles` method returns expected
+     * @testdox Test that `getInheritedRoles(array $roles)` method calls expected service method
+     */
+    public function testThatGetInheritedRolesMethodCallsExpectedServiceMethod(): void
+    {
+        $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)->getMock();
+
+        $roleHierarchy
+            ->expects(self::once())
+            ->method('getReachableRoleNames')
+            ->with(['RoleA', 'RoleB'])
+            ->willReturn(['RoleA', 'RoleB', 'RoleC']);
+
+        (new RolesService($roleHierarchy))->getInheritedRoles(['RoleA', 'RoleB']);
+    }
+
+    /**
+     * @testdox Test that `RolesServiceInterface::getRoles` method returns expected
      */
     public function testThatGetRolesReturnsExpected(): void
     {
@@ -42,7 +60,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetRoleLabelReturnsExpected
      *
-     * @testdox Test that `RolesService::getRoleLabel` method returns `$expected` when using `$role` as input
+     * @testdox Test that `RolesServiceInterface::getRoleLabel` method returns `$expected` when using `$role` as input
      */
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
     {
@@ -52,7 +70,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetShortReturnsExpected
      *
-     * @testdox Test that `RolesService::getShort` method returns `$expected` when using `$input` as input
+     * @testdox Test that `RolesServiceInterface::getShort` method returns `$expected` when using `$input` as input
      */
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
     {
@@ -85,11 +103,11 @@ class RolesServiceTest extends KernelTestCase
      */
     public function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
     {
-        yield [RolesService::ROLE_LOGGED, 'Logged in users'];
-        yield [RolesService::ROLE_USER, 'Normal users'];
-        yield [RolesService::ROLE_ADMIN, 'Admin users'];
-        yield [RolesService::ROLE_ROOT, 'Root users'];
-        yield [RolesService::ROLE_API, 'API users'];
+        yield [RolesServiceInterface::ROLE_LOGGED, 'Logged in users'];
+        yield [RolesServiceInterface::ROLE_USER, 'Normal users'];
+        yield [RolesServiceInterface::ROLE_ADMIN, 'Admin users'];
+        yield [RolesServiceInterface::ROLE_ROOT, 'Root users'];
+        yield [RolesServiceInterface::ROLE_API, 'API users'];
         yield ['Not supported role', 'Unknown - Not supported role'];
     }
 
@@ -98,11 +116,11 @@ class RolesServiceTest extends KernelTestCase
      */
     public function dataProviderTestThatGetShortReturnsExpected(): Generator
     {
-        yield [RolesService::ROLE_LOGGED, 'logged'];
-        yield [RolesService::ROLE_USER, 'user'];
-        yield [RolesService::ROLE_ADMIN, 'admin'];
-        yield [RolesService::ROLE_ROOT, 'root'];
-        yield [RolesService::ROLE_API, 'api'];
+        yield [RolesServiceInterface::ROLE_LOGGED, 'logged'];
+        yield [RolesServiceInterface::ROLE_USER, 'user'];
+        yield [RolesServiceInterface::ROLE_ADMIN, 'admin'];
+        yield [RolesServiceInterface::ROLE_ROOT, 'root'];
+        yield [RolesServiceInterface::ROLE_API, 'api'];
         yield ['SOME_CUSTOM_ROLE', 'custom_role'];
     }
 
@@ -113,33 +131,37 @@ class RolesServiceTest extends KernelTestCase
     public function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {
         yield [
-            new StringableArrayObject([RolesService::ROLE_LOGGED]),
-            new StringableArrayObject([RolesService::ROLE_LOGGED]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_LOGGED]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_LOGGED]),
         ];
 
         yield [
-            new StringableArrayObject([RolesService::ROLE_USER, RolesService::ROLE_LOGGED]),
-            new StringableArrayObject([RolesService::ROLE_USER]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_USER, RolesServiceInterface::ROLE_LOGGED]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_USER]),
         ];
 
         yield [
-            new StringableArrayObject([RolesService::ROLE_API, RolesService::ROLE_LOGGED]),
-            new StringableArrayObject([RolesService::ROLE_API]),
-        ];
-
-        yield [
-            new StringableArrayObject([RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED]),
-            new StringableArrayObject([RolesService::ROLE_ADMIN]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_API, RolesServiceInterface::ROLE_LOGGED]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_API]),
         ];
 
         yield [
             new StringableArrayObject([
-                RolesService::ROLE_ROOT,
-                RolesService::ROLE_ADMIN,
-                RolesService::ROLE_USER,
-                RolesService::ROLE_LOGGED,
+                RolesServiceInterface::ROLE_ADMIN,
+                RolesServiceInterface::ROLE_USER,
+                RolesServiceInterface::ROLE_LOGGED,
             ]),
-            new StringableArrayObject([RolesService::ROLE_ROOT]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_ADMIN]),
+        ];
+
+        yield [
+            new StringableArrayObject([
+                RolesServiceInterface::ROLE_ROOT,
+                RolesServiceInterface::ROLE_ADMIN,
+                RolesServiceInterface::ROLE_USER,
+                RolesServiceInterface::ROLE_LOGGED,
+            ]),
+            new StringableArrayObject([RolesServiceInterface::ROLE_ROOT]),
         ];
     }
 

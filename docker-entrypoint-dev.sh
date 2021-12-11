@@ -11,6 +11,7 @@ set -e
 #   3) Generate JWT encryption keys
 #   4) Create database if it not exists yet
 #   5) Run possible migrations, so that database is always up to date
+#   6) Add needed symfony console autocomplete for bash
 #
 
 # Step 0
@@ -43,5 +44,8 @@ make generate-jwt-keys
 
 # Step 5
 ./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
+
+# Step 6
+./bin/console completion bash >> /home/dev/.bashrc
 
 exec "$@"
