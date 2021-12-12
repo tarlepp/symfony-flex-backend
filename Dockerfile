@@ -1,15 +1,16 @@
-FROM php:8.0.13-fpm
+FROM php:8.1.0-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-RUN apt-get update && apt-get install -y \
-    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
+RUN apt-get update \
+    && apt-get install -y \
+        zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:1.4.2 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:1.4.6 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
@@ -18,11 +19,10 @@ RUN install-php-extensions \
     intl \
     opcache \
     pdo_mysql \
-    xdebug \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.12 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.14 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
@@ -34,10 +34,10 @@ RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /usr/bin/composer
 
 RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest | \
-    grep -E "browser_download_url(.+)linux_amd64" | \
-    cut -d : -f 2,3 | \
-    tr -d \" | \
-    xargs -I{} wget -O local-php-security-checker {} \
+        grep -E "browser_download_url(.+)linux_amd64" | \
+        cut -d : -f 2,3 | \
+        tr -d \" | \
+        xargs -I{} wget -O local-php-security-checker {} \
     && mv local-php-security-checker /usr/bin/local-php-security-checker \
     && chmod +x /usr/bin/local-php-security-checker
 

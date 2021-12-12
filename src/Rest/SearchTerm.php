@@ -129,24 +129,30 @@ final class SearchTerm implements SearchTermInterface
     }
 
     /**
-     * @param string|array<int, string>|null $column search column(s), could be a
-     *                                               string or an array of strings
+     * @param string|array<int, string|null>|null $column search column(s), could be a string or an array of strings
      *
      * @return array<int, string>
      */
     private static function getColumns(array | string | null $column): array
     {
-        // Normalize column and search parameters
-        return array_filter(
-            array_map('trim', (is_array($column) ? $column : (array)(string)$column)),
-            static fn (string $value): bool => trim($value) !== ''
-        );
+        // Normalize columns
+        return $column === null
+            ? []
+            : array_filter(
+                array_map(
+                    'trim',
+                    (is_array($column)
+                        ? array_filter($column, static fn (string | null $column): bool => is_string($column))
+                        : (array)$column),
+                ),
+                static fn (string $value): bool => trim($value) !== '',
+            );
     }
 
     /**
      * Method to get search terms.
      *
-     * @param string|array<int, string>|null $search search term(s), could be a string or an array of strings
+     * @param string|array<int, string|null>|null $search search term(s), could be a string or an array of strings
      *
      * @return array<int, string>
      */
@@ -163,14 +169,21 @@ final class SearchTerm implements SearchTermInterface
             }
         }
 
-        return array_unique(
-            array_filter(
-                array_map(
-                    static fn (string $term): string => (string)preg_replace('#\s+#', ' ', $term),
-                    array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
-                ),
-                static fn (string $value): bool => trim($value) !== ''
-            )
-        );
+        return $search === null
+            ? []
+            : array_unique(
+                array_filter(
+                    array_map(
+                        static fn (string $term): string => (string)preg_replace('#\s+#', ' ', $term),
+                        array_map(
+                            'trim',
+                            (is_array($search)
+                                ? array_filter($search, static fn (string | null $term): bool => is_string($term))
+                                : explode(' ', $search)),
+                        ),
+                    ),
+                    static fn (string $value): bool => trim($value) !== ''
+                )
+            );
     }
 }
