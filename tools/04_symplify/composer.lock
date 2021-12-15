@@ -726,12 +726,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "24af7780733bcdb3a22c3377e4318aa9c1945cc5"
+                "reference": "92e217f7d613827eb7545586b3aafc616e878022"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/24af7780733bcdb3a22c3377e4318aa9c1945cc5",
-                "reference": "24af7780733bcdb3a22c3377e4318aa9c1945cc5",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/92e217f7d613827eb7545586b3aafc616e878022",
+                "reference": "92e217f7d613827eb7545586b3aafc616e878022",
                 "shasum": ""
             },
             "conflict": {
@@ -860,6 +860,7 @@
                 "in2code/femanager": "<5.5.1|>=6,<6.3.1",
                 "intelliants/subrion": "<=4.2.1",
                 "ivankristianto/phpwhois": "<=4.3",
+                "jackalope/jackalope-doctrine-dbal": "<1.7.4",
                 "james-heinrich/getid3": "<1.9.21",
                 "joomla/archive": "<1.1.10",
                 "joomla/session": "<1.3.1",
@@ -1148,7 +1149,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-14T15:17:22+00:00"
+            "time": "2021-12-14T21:11:48+00:00"
         },
         {
             "name": "symfony/console",
