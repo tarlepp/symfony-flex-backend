@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Language;
+
 /**
  * Class EnumLanguageType
  *
@@ -16,16 +18,10 @@ namespace App\Doctrine\DBAL\Types;
  */
 class EnumLanguageType extends EnumType
 {
-    public const LANGUAGE_EN = 'en';
-    public const LANGUAGE_FI = 'fi';
-
     protected static string $name = Types::ENUM_LANGUAGE;
 
     /**
-     * @var array<int, string>
+     * @var class-string
      */
-    protected static array $values = [
-        self::LANGUAGE_EN,
-        self::LANGUAGE_FI,
-    ];
+    protected static string $enum = Language::class;
 }

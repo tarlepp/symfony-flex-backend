@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Locale;
+
 /**
  * Class EnumLocaleType
  *
@@ -16,16 +18,10 @@ namespace App\Doctrine\DBAL\Types;
  */
 class EnumLocaleType extends EnumType
 {
-    public const LOCALE_EN = 'en';
-    public const LOCALE_FI = 'fi';
-
     protected static string $name = Types::ENUM_LOCALE;
 
     /**
-     * @var array<int, string>
+     * @var class-string
      */
-    protected static array $values = [
-        self::LOCALE_EN,
-        self::LOCALE_FI,
-    ];
+    protected static string $enum = Locale::class;
 }

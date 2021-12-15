@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Login;
+
 /**
  * Class EnumLogLoginType
  *
@@ -16,16 +18,10 @@ namespace App\Doctrine\DBAL\Types;
  */
 class EnumLogLoginType extends EnumType
 {
-    public const TYPE_FAILURE = 'failure';
-    public const TYPE_SUCCESS = 'success';
-
     protected static string $name = Types::ENUM_LOG_LOGIN;
 
     /**
-     * @var array<int, string>
+     * @var class-string
      */
-    protected static array $values = [
-        self::TYPE_FAILURE,
-        self::TYPE_SUCCESS,
-    ];
+    protected static string $enum = Login::class;
 }

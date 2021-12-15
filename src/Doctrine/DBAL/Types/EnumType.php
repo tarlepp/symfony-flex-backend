@@ -8,6 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Language;
+use App\Enum\Locale;
+use App\Enum\Login;
+use BackedEnum;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
@@ -28,6 +32,11 @@ abstract class EnumType extends Type
     protected static string $name;
 
     /**
+     * @var class-string
+     */
+    protected static string $enum;
+
+    /**
      * @var array<int, string>
      */
     protected static array $values = [];
@@ -37,14 +46,22 @@ abstract class EnumType extends Type
      */
     public static function getValues(): array
     {
-        return static::$values;
+        /**
+         * @var class-string<Language>|class-string<Locale>|class-string<Login> $foo
+         */
+        $foo = static::$enum;
+
+        return array_map(static fn (BackedEnum $enum): string => $enum->value, $foo::cases());
     }
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        $iterator = static fn (string $value): string => "'" . $value . "'";
+        $enumDefinition = implode(
+            ', ',
+            array_map(static fn (string $value): string => "'" . $value . "'", self::getValues()),
+        );
 
-        return 'ENUM(' . implode(', ', array_map($iterator, self::getValues())) . ')';
+        return 'ENUM(' . $enumDefinition . ')';
     }
 
     /**
@@ -54,7 +71,7 @@ abstract class EnumType extends Type
     {
         $value = (string)parent::convertToDatabaseValue(is_string($value) ? $value : '', $platform);
 
-        if (!in_array($value, static::$values, true)) {
+        if (!in_array($value, static::getValues(), true)) {
             $message = sprintf(
                 "Invalid '%s' value",
                 $this->getName()
