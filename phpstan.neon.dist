@@ -9,6 +9,6 @@ parameters:
         container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
     checkExplicitMixed: false
 includes:
-    - tools/02_phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - tools/02_phpstan/vendor/phpstan/phpstan-phpunit/extension.neon
-    - tools/02_phpstan/vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
