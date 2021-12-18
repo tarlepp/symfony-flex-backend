@@ -4,12 +4,12 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"symplify/config-transformer": "9.4.70",
-		"symplify/easy-coding-standard": "9.4.70"
+		"symplify/config-transformer": "10.0.2",
+		"symplify/easy-coding-standard": "10.0.2"
 	},
 	"config": {
 		"platform": {
-			"php": "8.0.0"
+			"php": "8.1.0"
 		},
 		"preferred-install": {
 			"*": "dist"

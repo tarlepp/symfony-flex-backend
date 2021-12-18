@@ -3,12 +3,12 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"infection/infection": "0.25.3",
+		"infection/infection": "0.25.4",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"platform": {
-			"php": "8.0.0"
+			"php": "8.1.0"
 		},
 		"preferred-install": {
 			"*": "dist"
