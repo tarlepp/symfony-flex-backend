@@ -1,0 +1,19 @@
+{
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
+	"require": {},
+	"require-dev": {
+		"icanhazstring/composer-unused": "0.7.8",
+		"maglnet/composer-require-checker": "3.8.0",
+		"roave/security-advisories": "dev-latest"
+	},
+	"config": {
+		"platform": {
+			"php": "8.0.0"
+		},
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}
