@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7ee727fdc68614b439cfb99bb7160e4",
+    "content-hash": "64c8571b09e4743d3ca84b55f55e6e2b",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6220,26 +6220,24 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v5.4.0",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "07db4e9d1f0bf4b8a0c60a25b2672f20ab8f3562"
+                "reference": "e0b66975319b4648e0cbf267878b07d8e2d11e2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/07db4e9d1f0bf4b8a0c60a25b2672f20ab8f3562",
-                "reference": "07db4e9d1f0bf4b8a0c60a25b2672f20ab8f3562",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/e0b66975319b4648e0cbf267878b07d8e2d11e2e",
+                "reference": "e0b66975319b4648e0cbf267878b07d8e2d11e2e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-php80": "^1.16",
-                "symfony/property-info": "^5.2|^6.0"
+                "php": ">=8.0.2",
+                "symfony/property-info": "^5.4|^6.0"
             },
             "require-dev": {
-                "symfony/cache": "^4.4|^5.0|^6.0"
+                "symfony/cache": "^5.4|^6.0"
             },
             "suggest": {
                 "psr/cache-implementation": "To cache access methods."
@@ -6281,7 +6279,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/v5.4.0"
+                "source": "https://github.com/symfony/property-access/tree/v6.0.0"
             },
             "funding": [
                 {
@@ -6297,7 +6295,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-28T15:25:38+00:00"
+            "time": "2021-11-28T15:34:37+00:00"
         },
         {
             "name": "symfony/property-info",
