@@ -48,9 +48,11 @@ class EntityValueResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        $uuid = $request->query->get($argument->getName())
-            ?? $request->request->get($argument->getName())
-            ?? $request->attributes->get($argument->getName());
+        $argumentName = $argument->getName();
+
+        $uuid = $request->attributes->get($argumentName)
+            ?? $request->request->get($argumentName)
+            ?? $request->query->get($argumentName);
 
         return is_string($uuid)
             && is_subclass_of((string)$argument->getType(), EntityInterface::class, true)
@@ -64,9 +66,11 @@ class EntityValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        $uuid = $request->query->get($argument->getName())
-            ?? $request->request->get($argument->getName())
-            ?? $request->attributes->get($argument->getName());
+        $argumentName = $argument->getName();
+
+        $uuid = $request->attributes->get($argumentName)
+            ?? $request->request->get($argumentName)
+            ?? $request->query->get($argumentName);
 
         yield $this->resourceCollection
             ->getEntityResource((string)$argument->getType())
