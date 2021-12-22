@@ -3,13 +3,13 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"icanhazstring/composer-unused": "0.7.8",
-		"maglnet/composer-require-checker": "3.8.0",
+		"icanhazstring/composer-unused": "0.7.10",
+		"maglnet/composer-require-checker": "4.0.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"platform": {
-			"php": "8.0.0"
+			"php": "8.1.0"
 		},
 		"preferred-install": {
 			"*": "dist"
