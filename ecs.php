@@ -12,7 +12,6 @@ use PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer;
 use PhpCsFixer\Fixer\CastNotation\CastSpacesFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
-use PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer;
 use PhpCsFixer\Fixer\FunctionNotation\NativeFunctionInvocationFixer;
 use PhpCsFixer\Fixer\FunctionNotation\SingleLineThrowFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
@@ -171,8 +170,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PhpdocAlignFixer::class => null,
             PhpdocToCommentFixer::class => null,
             NativeFunctionInvocationFixer::class => null,
-            // https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/6164
-            FunctionTypehintSpaceFixer::class => null,
         ]
     );
 
