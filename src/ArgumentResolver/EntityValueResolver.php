@@ -67,7 +67,7 @@ class EntityValueResolver implements ArgumentValueResolverInterface
         $uuid = $request->query->get($argument->getName())
             ?? $request->request->get($argument->getName())
             ?? $request->attributes->get($argument->getName());
-        
+
         yield $this->resourceCollection
             ->getEntityResource((string)$argument->getType())
             ->findOne((string)($uuid), !$argument->isNullable());
