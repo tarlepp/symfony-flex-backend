@@ -3,7 +3,8 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"infection/infection": "0.25.5",
+		"icanhazstring/composer-unused": "0.7.10",
+		"maglnet/composer-require-checker": "4.0.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
