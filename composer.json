@@ -33,11 +33,11 @@
 		"mark-gerarts/automapper-plus-bundle": "1.4.0",
 		"matomo/device-detector": "5.0.1",
 		"matthiasnoback/symfony-console-form": "5.1.1",
-		"nelmio/api-doc-bundle": "4.7.0",
+		"nelmio/api-doc-bundle": "4.8.1",
 		"nelmio/cors-bundle": "2.2.0",
 		"phpdocumentor/reflection-docblock": "5.3.0",
 		"ramsey/uuid-doctrine": "1.8.0",
-		"sensio/framework-extra-bundle": "6.2.3",
+		"sensio/framework-extra-bundle": "6.2.4",
 		"symfony/asset": "5.4.0",
 		"symfony/config": "5.4.0",
 		"symfony/console": "5.4.1",
@@ -83,7 +83,13 @@
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true,
+			"bamarni/composer-bin-plugin": true,
+			"symfony/flex": true,
+			"symfony/runtime": true
+		}
 	},
 	"extra": {
 		"allow-contrib": "true",
