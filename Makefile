@@ -419,6 +419,19 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-minor
 endif
 
+check-licenses: ## Check vendor licenses
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@echo "\033[32mChecking vendor licenses\033[39m"
+	@composer license | awk '{ print $$3 }' | sort | uniq -c | sort -rn
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-licenses
+endif
+
 update: ## Update composer dependencies
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader

@@ -59,6 +59,7 @@ check-dependencies-latest   # Checks if any vendor dependency can be updated
                             # (latest versions)
 check-dependencies-minor    # Checks if any vendor dependency can be updated
                             # (only minor versions)
+check-licenses              # Check vendor licenses
 clear-tools                 # Clears all tools dependencies
 composer-normalize          # Normalizes `composer.json` file content
 composer-require-checker    # Check the defined dependencies against your code
