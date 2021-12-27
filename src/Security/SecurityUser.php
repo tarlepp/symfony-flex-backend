@@ -9,6 +9,8 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\User;
+use App\Enum\Language;
+use App\Enum\Locale;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,8 +24,8 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private string $identifier;
     private string | null $password;
-    private string $language;
-    private string $locale;
+    private Language $language;
+    private Locale $locale;
     private string $timezone;
 
     /**
@@ -84,12 +86,12 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->identifier;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function getLocale(): string
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
