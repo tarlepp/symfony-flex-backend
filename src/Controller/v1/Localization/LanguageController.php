@@ -49,6 +49,6 @@ class LanguageController
     )]
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse($this->localization->getLanguages());
+        return new JsonResponse($this->localization->getLanguageValues());
     }
 }

@@ -50,6 +50,6 @@ class LocaleController
     )]
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse($this->localization->getLocales());
+        return new JsonResponse($this->localization->getLocaleValues());
     }
 }
