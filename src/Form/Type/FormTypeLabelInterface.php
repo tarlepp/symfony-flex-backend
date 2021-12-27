@@ -16,6 +16,7 @@ namespace App\Form\Type;
  */
 interface FormTypeLabelInterface
 {
+    public const CLASS_NAME = 'class';
     public const LABEL = 'label';
     public const REQUIRED = 'required';
     public const EMPTY_DATA = 'empty_data';
