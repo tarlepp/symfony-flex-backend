@@ -9,6 +9,8 @@ declare(strict_types = 1);
 namespace App\Form\Type\Console;
 
 use App\DTO\User\User as UserDto;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
@@ -21,7 +23,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
-use function array_combine;
 use function array_map;
 
 /**
@@ -147,30 +148,27 @@ class UserType extends AbstractType
 
     private function addLocalizationFieldsToForm(FormBuilderInterface $builder): void
     {
-        $languages = $this->localization->getLanguages();
-        $locales = $this->localization->getLocales();
-
         $builder
             ->add(
                 'language',
-                Type\ChoiceType::class,
+                Type\EnumType::class,
                 [
+                    FormTypeLabelInterface::CLASS_NAME => Language::class,
                     FormTypeLabelInterface::LABEL => 'Language',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LANGUAGE,
-                    FormTypeLabelInterface::CHOICES => array_combine($languages, $languages),
+                    FormTypeLabelInterface::EMPTY_DATA => Language::getDefault(),
                 ],
             );
 
         $builder
             ->add(
                 'locale',
-                Type\ChoiceType::class,
+                Type\EnumType::class,
                 [
+                    FormTypeLabelInterface::CLASS_NAME => Locale::class,
                     FormTypeLabelInterface::LABEL => 'Locale',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LOCALE,
-                    FormTypeLabelInterface::CHOICES => array_combine($locales, $locales),
+                    FormTypeLabelInterface::EMPTY_DATA => Locale::getDefault(),
                 ],
             );
 
