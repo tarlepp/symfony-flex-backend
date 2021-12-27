@@ -10,6 +10,8 @@ namespace App\AutoMapper\User;
 
 use App\AutoMapper\RestRequestMapper;
 use App\Entity\UserGroup;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Resource\UserGroupResource;
 use Throwable;
 use function array_map;
@@ -55,5 +57,17 @@ class RequestMapper extends RestRequestMapper
             fn (string $userGroupUuid): UserGroup => $this->userGroupResource->getReference($userGroupUuid),
             $userGroups,
         );
+    }
+
+    protected function transformLanguage(string $language): ?Language
+    {
+        // TODO validate language
+        return Language::tryFrom($language);
+    }
+
+    protected function transformLocale(string $locale): ?Locale
+    {
+        // TODO validate locale
+        return Locale::tryFrom($locale);
     }
 }
