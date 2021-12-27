@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
-use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use App\Enum\Login;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -55,6 +55,6 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
     {
         $this->loginLogger
             ->setUser($this->userRepository->loadUserByIdentifier($event->getUser()->getUserIdentifier(), true))
-            ->process(EnumLogLoginType::TYPE_SUCCESS);
+            ->process(Login::SUCCESS);
     }
 }

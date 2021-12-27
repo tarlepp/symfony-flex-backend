@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Security\SecurityUser;
 use App\Service\Localization;
 use DateTime;
@@ -77,9 +79,19 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      */
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
-        $payload['language'] = $user instanceof SecurityUser ? $user->getLanguage() : Localization::DEFAULT_LANGUAGE;
-        $payload['locale'] = $user instanceof SecurityUser ? $user->getLocale() : Localization::DEFAULT_LOCALE;
-        $payload['timezone'] = $user instanceof SecurityUser ? $user->getTimezone() : Localization::DEFAULT_TIMEZONE;
+        $language = Language::getDefault();
+        $locale = Locale::getDefault();
+        $timezone = Localization::DEFAULT_TIMEZONE;
+
+        if ($user instanceof SecurityUser) {
+            $language = $user->getLanguage();
+            $locale = $user->getLocale();
+            $timezone = $user->getTimezone();
+        }
+
+        $payload['language'] = $language->value;
+        $payload['locale'] = $locale->value;
+        $payload['timezone'] = $timezone;
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
