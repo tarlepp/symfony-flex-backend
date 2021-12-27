@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Utils\Interfaces;
 
 use App\Entity\User;
+use App\Enum\Login;
 use App\Resource\LogLoginResource;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
@@ -33,5 +34,5 @@ interface LoginLoggerInterface
      *
      * @throws Throwable
      */
-    public function process(string $type): void;
+    public function process(Login $type): void;
 }
