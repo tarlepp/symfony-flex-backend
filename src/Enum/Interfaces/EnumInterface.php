@@ -8,12 +8,14 @@ declare(strict_types = 1);
 
 namespace App\Enum\Interfaces;
 
+use BackedEnum;
+
 /**
  * Enum EnumInterface
  *
  * @package App\Enum\Interfaces
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-interface EnumInterface
+interface EnumInterface extends BackedEnum
 {
 }
