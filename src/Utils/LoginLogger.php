@@ -10,6 +10,7 @@ namespace App\Utils;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
+use App\Enum\Login;
 use App\Resource\LogLoginResource;
 use App\Utils\Interfaces\LoginLoggerInterface;
 use BadMethodCallException;
@@ -43,7 +44,7 @@ class LoginLogger implements LoginLoggerInterface
         return $this;
     }
 
-    public function process(string $type): void
+    public function process(Login $type): void
     {
         // Get current request
         $request = $this->requestStack->getCurrentRequest();
@@ -65,7 +66,7 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @throws Throwable
      */
-    private function createEntry(string $type, Request $request): void
+    private function createEntry(Login $type, Request $request): void
     {
         $entry = new LogLogin($type, $request, $this->deviceDetector, $this->user);
 
