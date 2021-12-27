@@ -13,6 +13,8 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -61,12 +63,12 @@ class User extends RestDto
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[AppAssert\Language]
-    protected string $language = Localization::DEFAULT_LANGUAGE;
+    protected Language $language;
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[AppAssert\Locale]
-    protected string $locale = Localization::DEFAULT_LOCALE;
+    protected Locale $locale;
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -80,6 +82,12 @@ class User extends RestDto
     protected array $userGroups = [];
 
     protected string $password = '';
+
+    public function __construct()
+    {
+        $this->language = Language::getDefault();
+        $this->locale = Locale::getDefault();
+    }
 
     public function getUsername(): string
     {
@@ -137,12 +145,12 @@ class User extends RestDto
         return $this;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->setVisited('language');
 
@@ -151,12 +159,12 @@ class User extends RestDto
         return $this;
     }
 
-    public function getLocale(): string
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
 
-    public function setLocale(string $locale): self
+    public function setLocale(Locale $locale): self
     {
         $this->setVisited('locale');
 

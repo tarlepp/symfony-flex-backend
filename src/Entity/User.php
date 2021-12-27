@@ -16,6 +16,8 @@ use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
 use App\Entity\Traits\Uuid;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -187,7 +189,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[AppAssert\Language]
-    private string $language = Localization::DEFAULT_LANGUAGE;
+    private Language $language;
 
     #[ORM\Column(
         name: 'locale',
@@ -207,7 +209,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[AppAssert\Locale]
-    private string $locale = Localization::DEFAULT_LOCALE;
+    private Locale $locale;
 
     #[ORM\Column(
         name: 'timezone',
@@ -252,6 +254,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     public function __construct()
     {
         $this->id = $this->createUuid();
+        $this->language = Language::getDefault();
+        $this->locale = Locale::getDefault();
 
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
@@ -312,24 +316,24 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->language = $language;
 
         return $this;
     }
 
-    public function getLocale(): string
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
 
-    public function setLocale(string $locale): self
+    public function setLocale(Locale $locale): self
     {
         $this->locale = $locale;
 
