@@ -35,6 +35,7 @@
         <ini name="display_errors" value="On" />
         <ini name="display_startup_errors" value="On" />
         <ini name="date.timezone" value="UTC" />
+        <ini name="xdebug.show_exception_trace" value="0" />
 
         <env name="KERNEL_CLASS" value="App\Kernel" />
         <env name="SHELL_VERBOSITY" value="-1" />
