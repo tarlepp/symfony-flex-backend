@@ -4,13 +4,13 @@
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-     backupGlobals="false"
-     colors="true"
-     testdox="true"
-     beStrictAboutTodoAnnotatedTests="true"
-     beStrictAboutTestsThatDoNotTestAnything="true"
-     beStrictAboutOutputDuringTests="true"
-     bootstrap="tests/bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    testdox="true"
+    beStrictAboutTodoAnnotatedTests="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    beStrictAboutOutputDuringTests="true"
+    bootstrap="tests/bootstrap.php"
 >
     <php>
         <ini name="error_reporting" value="-1" />
