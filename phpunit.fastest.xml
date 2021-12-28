@@ -13,7 +13,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <ini name="display_errors" value="On" />
+        <ini name="display_errors" value="Off" />
         <ini name="display_startup_errors" value="On" />
         <ini name="date.timezone" value="UTC" />
         <ini name="xdebug.show_exception_trace" value="0" />
