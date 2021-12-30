@@ -6,7 +6,7 @@
 		"roave/security-advisories": "dev-latest",
 		"psalm/plugin-phpunit": "0.16.1",
 		"psalm/plugin-symfony": "3.1.0",
-		"vimeo/psalm": "dev-master"
+		"vimeo/psalm": "4.16.1"
 	},
 	"config": {
 		"platform": {
@@ -15,6 +15,9 @@
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true
+		}
 	}
 }
