@@ -29,7 +29,7 @@ class LanguageControllerTest extends KernelTestCase
 
         $Localization
             ->expects(static::once())
-            ->method('getLanguages')
+            ->method('getLanguageValues')
             ->willReturn(['fi', 'en']);
 
         $response = (new LanguageController($Localization))();
