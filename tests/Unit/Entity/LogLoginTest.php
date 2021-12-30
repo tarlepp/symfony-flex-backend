@@ -8,9 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Tests\Unit\Entity;
 
-use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Entity\LogLogin;
 use App\Entity\User;
+use App\Enum\Login;
 use DateTime;
 use DateTimeZone;
 use DeviceDetector\DeviceDetector;
@@ -35,7 +35,7 @@ class LogLoginTest extends KernelTestCase
      * @testdox Test that `LogLogin::getCreatedAt` method returns expected with `$type` type
      */
     public function testThatGetCreatedAtReturnsExpected(
-        string $type,
+        Login $type,
         Request $request,
         DeviceDetector $deviceDetector
     ): void {
@@ -52,7 +52,7 @@ class LogLoginTest extends KernelTestCase
      * @testdox Test that `LogLogin::getUser` method returns `null` if user is not provided with `$type` type
      */
     public function testThatGetUserReturnsNullIfUserNotGiven(
-        string $type,
+        Login $type,
         Request $request,
         DeviceDetector $deviceDetector
     ): void {
@@ -69,7 +69,7 @@ class LogLoginTest extends KernelTestCase
      * @testdox Test that `LogLogin::getUser` method returns provided user with `$type` type
      */
     public function testThatGetUserReturnsExpectedUser(
-        string $type,
+        Login $type,
         Request $request,
         DeviceDetector $deviceDetector,
         User $user
@@ -80,32 +80,32 @@ class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     * @return Generator<array{0: Login, 1: Request, 2: DeviceDetector}>
      */
     public function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
     {
-        yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
+        yield [Login::SUCCESS, new Request(), new DeviceDetector('')];
 
-        yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector('')];
+        yield [Login::FAILURE, new Request(), new DeviceDetector('')];
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     * @return Generator<array{0: Login, 1: Request, 2: DeviceDetector}>
      */
     public function dataProviderTestThatGetUserReturnsNullIfUserNotGiven(): Generator
     {
-        yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
+        yield [Login::SUCCESS, new Request(), new DeviceDetector('')];
 
-        yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector('')];
+        yield [Login::FAILURE, new Request(), new DeviceDetector('')];
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     * @return Generator<array{0: Login, 1: Request, 2: DeviceDetector}>
      */
     public function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
     {
-        yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector(''), new User()];
+        yield [Login::SUCCESS, new Request(), new DeviceDetector(''), new User()];
 
-        yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector(''), new User()];
+        yield [Login::FAILURE, new Request(), new DeviceDetector(''), new User()];
     }
 }
