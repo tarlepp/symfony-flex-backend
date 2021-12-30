@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use App\Enum\Login;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -46,12 +47,12 @@ class EnumLogLoginTypeTest extends KernelTestCase
      *
      * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
-    public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
+    public function testThatConvertToDatabaseValueWorksWithProperValues(string $value, Login $login): void
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
 
-        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
+        self::assertSame($value, $type->convertToDatabaseValue($login, $platform));
     }
 
     /**
@@ -90,8 +91,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
      */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
-        yield ['failure'];
-        yield ['success'];
+        yield ['failure', Login::FAILURE];
+        yield ['success', Login::SUCCESS];
     }
 
     /**
@@ -111,7 +112,7 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return new MySqlPlatform();
+        return new MySQLPlatform();
     }
 
     /**

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLanguageType;
+use App\Enum\Language;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -44,14 +45,14 @@ class EnumLanguageTypeTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `convertToDatabaseValue` method returns `$value`
+     * @testdox Test that `convertToDatabaseValue` method returns `$value` when using `$language`
      */
-    public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
+    public function testThatConvertToDatabaseValueWorksWithProperValues(string $value, Language $language): void
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
 
-        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
+        self::assertSame($value, $type->convertToDatabaseValue($language, $platform));
     }
 
     /**
@@ -90,8 +91,8 @@ class EnumLanguageTypeTest extends KernelTestCase
      */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
-        yield ['en'];
-        yield ['fi'];
+        yield ['en', Language::EN];
+        yield ['fi', Language::FI];
     }
 
     /**
@@ -111,7 +112,7 @@ class EnumLanguageTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return new MySqlPlatform();
+        return new MySQLPlatform();
     }
 
     /**
