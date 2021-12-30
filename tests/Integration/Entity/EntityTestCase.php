@@ -467,9 +467,10 @@ abstract class EntityTestCase extends KernelTestCase
         /**
          * Lambda function to generate actual test case arrays for tests. Output value is an array which contains
          * following data:
-         *  1) Name
+         *  1) Field name
          *  2) Type
-         *  4) meta
+         *  3) Field mapping
+         *  4) Is field read-only
          *
          * @return array
          */
