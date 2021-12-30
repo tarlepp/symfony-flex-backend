@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
+use App\Enum\Login;
 use App\Utils\Tests\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -81,7 +82,7 @@ class LogLoginTest extends EntityTestCase
         $deviceDetector->parse();
 
         $logRequest = new LogLogin(
-            '',
+            Login::SUCCESS,
             $request,
             $deviceDetector,
             new User()
@@ -118,6 +119,6 @@ class LogLoginTest extends EntityTestCase
         $deviceDetector = new DeviceDetector((string)$request->headers->get('User-Agent'));
         $deviceDetector->parse();
 
-        return new LogLogin('', $request, $deviceDetector, new User());
+        return new LogLogin(Login::SUCCESS, $request, $deviceDetector, new User());
     }
 }
