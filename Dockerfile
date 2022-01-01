@@ -22,7 +22,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.14 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.2.1 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
