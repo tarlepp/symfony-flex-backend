@@ -12,7 +12,7 @@ services:
         command: php-fpm
         user: $HOST_UID:$HOST_GID
         depends_on:
-            - mysql
+            - mariadb
         volumes:
             - ./:/app:cached
             # Cannot use this because of the directory rights are forced for root user
@@ -34,18 +34,18 @@ services:
             # Cannot use this because of the directory rights are forced for root user
             #- /app/var/
 
-    mysql:
-        container_name: symfony-backend-mysql
-        hostname: mysql
+    mariadb:
+        container_name: symfony-backend-mariadb
+        hostname: mariadb
         build:
-            context: ./docker/mysql/
-        command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+            context: ./docker/mariadb/
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
         environment:
             MYSQL_ROOT_PASSWORD: password
         ports:
             - "33060:3306"
         volumes:
-            - mysql:/var/lib/mysql
+            - mariadb:/var/lib/mysql
 
     dozzle:
         container_name: symfony-backend-dozzle
@@ -56,4 +56,4 @@ services:
         volumes:
             -  /var/run/docker.sock:/var/run/docker.sock
 volumes:
-    mysql:
+    mariadb:
