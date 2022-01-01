@@ -81,7 +81,8 @@ Those containers are following:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
-* [mariadb](https://mariadb.org/) (MariaDB 10.7 which will store all the data of application)
+* [mariadb](https://mariadb.org/) (MariaDB 10.7 which will store all the data
+  of application)
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
 
 ### 3. Using application [ᐞ](#table-of-contents)
