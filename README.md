@@ -81,7 +81,8 @@ Those containers are following:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
-* [mysql](https://www.mysql.com/) (MySQL 8.0 which will store all the data of application)
+* [mariadb](https://mariadb.org/) (MariaDB 10.7 which will store all the data
+  of application)
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
 
 ### 3. Using application [ᐞ](#table-of-contents)
@@ -91,13 +92,13 @@ containers and exposes following ports on `localhost`:
 
 * symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
-* symfony-backend-mysql - [http://localhost:33060](http://localhost:3010) (mysql)
+* symfony-backend-mariadb - [http://localhost:33060](http://localhost:3010) (mariadb)
 * symfony-backend-dozzle - [http://localhost:8080](http://localhost:8100) (dozzle)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.
 
-MySQL credentials:
+MariaDB credentials:
 
 ```bash
 user: root
