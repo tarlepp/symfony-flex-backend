@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50211b95b0cdd7ff656a4b1e7dd1f029",
+    "content-hash": "071ba59e2ba7c644ec4d8d765a155ff9",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6474,32 +6474,31 @@
         },
         {
             "name": "symfony/runtime",
-            "version": "v5.4.1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/runtime.git",
-                "reference": "f7a8403ae0e6847e56881c3c106e4ea2ec4ef8c9"
+                "reference": "7ae279ba1eae28ac3f5d7098bd94f2ead498e458"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/runtime/zipball/f7a8403ae0e6847e56881c3c106e4ea2ec4ef8c9",
-                "reference": "f7a8403ae0e6847e56881c3c106e4ea2ec4ef8c9",
+                "url": "https://api.github.com/repos/symfony/runtime/zipball/7ae279ba1eae28ac3f5d7098bd94f2ead498e458",
+                "reference": "7ae279ba1eae28ac3f5d7098bd94f2ead498e458",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0|^2.0",
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.15"
+                "php": ">=8.0.2"
             },
             "conflict": {
-                "symfony/dotenv": "<5.1"
+                "symfony/dotenv": "<5.4"
             },
             "require-dev": {
                 "composer/composer": "^1.0.2|^2.0",
-                "symfony/console": "^4.4.30|^5.3.7|^6.0",
-                "symfony/dotenv": "^5.1|^6.0",
-                "symfony/http-foundation": "^4.4.30|^5.3.7|^6.0",
-                "symfony/http-kernel": "^4.4.30|^5.3.7|^6.0"
+                "symfony/console": "^5.4|^6.0",
+                "symfony/dotenv": "^5.4|^6.0",
+                "symfony/http-foundation": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0"
             },
             "type": "composer-plugin",
             "extra": {
@@ -6531,7 +6530,7 @@
             "description": "Enables decoupling PHP applications from global state",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/runtime/tree/v5.4.1"
+                "source": "https://github.com/symfony/runtime/tree/v6.0.0"
             },
             "funding": [
                 {
@@ -6547,7 +6546,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-01T15:47:38+00:00"
+            "time": "2021-11-07T13:29:17+00:00"
         },
         {
             "name": "symfony/security-bundle",
