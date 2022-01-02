@@ -54,7 +54,7 @@
 		"symfony/runtime": "5.4.1",
 		"symfony/security-bundle": "5.4.2",
 		"symfony/serializer": "5.4.2",
-		"symfony/translation": "5.4.2",
+		"symfony/translation": "6.0.2",
 		"symfony/twig-bundle": "5.4.0",
 		"symfony/validator": "5.4.2",
 		"symfony/yaml": "5.4.2"
