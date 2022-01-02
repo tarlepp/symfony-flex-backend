@@ -3,7 +3,8 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"nunomaduro/phpinsights": "2.0.1",
+		"icanhazstring/composer-unused": "0.7.12",
+		"maglnet/composer-require-checker": "4.0.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
@@ -15,7 +16,7 @@
 		},
 		"sort-packages": true,
 		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"icanhazstring/composer-unused": true
 		}
 	}
 }

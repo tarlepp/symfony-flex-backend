@@ -3,16 +3,19 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"infection/infection": "0.25.4",
+		"infection/infection": "0.25.5",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"platform": {
-			"php": "8.0.0"
+			"php": "8.1.0"
 		},
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"infection/extension-installer": true
+		}
 	}
 }
