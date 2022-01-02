@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ffd59a2c94b903d18323c0c0ec88463",
+    "content-hash": "50211b95b0cdd7ff656a4b1e7dd1f029",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -674,16 +674,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.5.3",
+            "version": "2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "f6cbf1816691bd2632407f6f34cf5db24fc2e411"
+                "reference": "f6191c50600bad1c0195638413f53aee6158b909"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/f6cbf1816691bd2632407f6f34cf5db24fc2e411",
-                "reference": "f6cbf1816691bd2632407f6f34cf5db24fc2e411",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/f6191c50600bad1c0195638413f53aee6158b909",
+                "reference": "f6191c50600bad1c0195638413f53aee6158b909",
                 "shasum": ""
             },
             "require": {
@@ -767,7 +767,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.5.3"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.5.4"
             },
             "funding": [
                 {
@@ -783,7 +783,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-29T08:13:45+00:00"
+            "time": "2021-12-30T18:43:28+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -8167,16 +8167,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.1.0",
+            "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "faafa3535c11c05e17f05f21a541b96a837a55a2"
+                "reference": "47bc50f88a8a2be7a3048112344dacd6cfba1926"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/faafa3535c11c05e17f05f21a541b96a837a55a2",
-                "reference": "faafa3535c11c05e17f05f21a541b96a837a55a2",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/47bc50f88a8a2be7a3048112344dacd6cfba1926",
+                "reference": "47bc50f88a8a2be7a3048112344dacd6cfba1926",
                 "shasum": ""
             },
             "require": {
@@ -8236,9 +8236,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.1.0"
+                "source": "https://github.com/zircote/swagger-php/tree/4.1.1"
             },
-            "time": "2021-12-23T01:28:48+00:00"
+            "time": "2022-01-01T02:07:33+00:00"
         }
     ],
     "packages-dev": [
