@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bb1cae54466a5dd7d85042800391747",
+    "content-hash": "dbd42d6744fc73daef9ea425be0d78fe",
     "packages": [],
     "packages-dev": [
         {
@@ -73,21 +73,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.9",
+            "version": "0.12.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "8f7cfa85731bf23cff9571460d88c327c8c1ac4c"
+                "reference": "8c823197becb3905e42b9d7f7849f1174e8b47cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/8f7cfa85731bf23cff9571460d88c327c8c1ac4c",
-                "reference": "8f7cfa85731bf23cff9571460d88c327c8c1ac4c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/8c823197becb3905e42b9d7f7849f1174e8b47cf",
+                "reference": "8c823197becb3905e42b9d7f7849f1174e8b47cf",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1|^8.0",
-                "phpstan/phpstan": "^1.2"
+                "phpstan/phpstan": "^1.3"
             },
             "conflict": {
                 "phpstan/phpdoc-parser": "<1.2",
@@ -121,7 +121,7 @@
             "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.9"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.10"
             },
             "funding": [
                 {
@@ -129,7 +129,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-21T23:30:38+00:00"
+            "time": "2021-12-31T12:57:22+00:00"
         },
         {
             "name": "roave/security-advisories",
