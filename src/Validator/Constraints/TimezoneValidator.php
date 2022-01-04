@@ -31,7 +31,7 @@ class TimezoneValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (in_array($value, array_column($this->localization->getTimezones(), 'identifier'), true) !== true) {
             $this->context

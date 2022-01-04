@@ -29,7 +29,7 @@ class LanguageValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (in_array($value, $this->localization->getLanguages(), true) !== true) {
             $this->context
