@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ecb489a5f82acaf6c12da0de67947b4",
+    "content-hash": "c047b507a99a2b6f94643c1ee6ddd55c",
     "packages": [],
     "packages-dev": [
         {
@@ -319,16 +319,16 @@
         },
         {
             "name": "composer/semver",
-            "version": "3.2.6",
+            "version": "3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "83e511e247de329283478496f7a1e114c9517506"
+                "reference": "deac27056b57e46faf136fae7b449eeaa71661ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/83e511e247de329283478496f7a1e114c9517506",
-                "reference": "83e511e247de329283478496f7a1e114c9517506",
+                "url": "https://api.github.com/repos/composer/semver/zipball/deac27056b57e46faf136fae7b449eeaa71661ee",
+                "reference": "deac27056b57e46faf136fae7b449eeaa71661ee",
                 "shasum": ""
             },
             "require": {
@@ -380,7 +380,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/semver/issues",
-                "source": "https://github.com/composer/semver/tree/3.2.6"
+                "source": "https://github.com/composer/semver/tree/3.2.7"
             },
             "funding": [
                 {
@@ -396,7 +396,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-25T11:34:17+00:00"
+            "time": "2022-01-04T09:57:54+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -984,16 +984,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v3.1.0",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "d6be2fbfa36c466997fed26b474f0c68b2b1d161"
+                "reference": "cd25832215c35770bb3a6a42a00f34cd7672697c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/d6be2fbfa36c466997fed26b474f0c68b2b1d161",
-                "reference": "d6be2fbfa36c466997fed26b474f0c68b2b1d161",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/cd25832215c35770bb3a6a42a00f34cd7672697c",
+                "reference": "cd25832215c35770bb3a6a42a00f34cd7672697c",
                 "shasum": ""
             },
             "require": {
@@ -1042,9 +1042,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v3.1.0"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v3.1.2"
             },
-            "time": "2021-12-02T07:14:19+00:00"
+            "time": "2022-01-02T20:22:02+00:00"
         },
         {
             "name": "psr/cache",
