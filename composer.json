@@ -29,7 +29,7 @@
 		"doctrine/doctrine-migrations-bundle": "3.2.1",
 		"doctrine/orm": "2.10.4",
 		"gedmo/doctrine-extensions": "3.4.0",
-		"lexik/jwt-authentication-bundle": "2.14.3",
+		"lexik/jwt-authentication-bundle": "2.14.4",
 		"mark-gerarts/automapper-plus-bundle": "1.4.0",
 		"matomo/device-detector": "5.0.1",
 		"matthiasnoback/symfony-console-form": "5.1.1",
