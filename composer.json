@@ -30,7 +30,7 @@
 		"doctrine/orm": "2.10.4",
 		"gedmo/doctrine-extensions": "3.4.0",
 		"lexik/jwt-authentication-bundle": "2.14.3",
-		"mark-gerarts/automapper-plus-bundle": "1.4.0",
+		"mark-gerarts/automapper-plus-bundle": "1.4.1",
 		"matomo/device-detector": "5.0.1",
 		"matthiasnoback/symfony-console-form": "5.1.1",
 		"nelmio/api-doc-bundle": "4.8.1",

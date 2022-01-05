@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f28a00ad20e10a1b9e0a7a403b1e3fe8",
+    "content-hash": "bb1fdc11167c16448d382e2994ecd9ad",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2106,16 +2106,16 @@
         },
         {
             "name": "mark-gerarts/automapper-plus-bundle",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mark-gerarts/automapper-plus-bundle.git",
-                "reference": "dd7f665b18a025a1999ded639dfed886ad4897d5"
+                "reference": "441bd65ca7eeec022cfe0b3d0ec015f07edbcf28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/dd7f665b18a025a1999ded639dfed886ad4897d5",
-                "reference": "dd7f665b18a025a1999ded639dfed886ad4897d5",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/441bd65ca7eeec022cfe0b3d0ec015f07edbcf28",
+                "reference": "441bd65ca7eeec022cfe0b3d0ec015f07edbcf28",
                 "shasum": ""
             },
             "require": {
@@ -2157,9 +2157,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mark-gerarts/automapper-plus-bundle/issues",
-                "source": "https://github.com/mark-gerarts/automapper-plus-bundle/tree/1.4.0"
+                "source": "https://github.com/mark-gerarts/automapper-plus-bundle/tree/1.4.1"
             },
-            "time": "2021-12-01T16:30:04+00:00"
+            "time": "2022-01-03T17:34:33+00:00"
         },
         {
             "name": "matomo/device-detector",
