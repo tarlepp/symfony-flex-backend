@@ -80,16 +80,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "6555461e76962fd0379c444c46fd558a0fcfb65e"
+                "reference": "0c1a3925ec58a4ec98e992b9c7d171e9e184be0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/6555461e76962fd0379c444c46fd558a0fcfb65e",
-                "reference": "6555461e76962fd0379c444c46fd558a0fcfb65e",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/0c1a3925ec58a4ec98e992b9c7d171e9e184be0a",
+                "reference": "0c1a3925ec58a4ec98e992b9c7d171e9e184be0a",
                 "shasum": ""
             },
             "require": {
@@ -126,7 +126,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/xdebug-handler/issues",
-                "source": "https://github.com/composer/xdebug-handler/tree/2.0.3"
+                "source": "https://github.com/composer/xdebug-handler/tree/2.0.4"
             },
             "funding": [
                 {
@@ -142,7 +142,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-08T13:07:32+00:00"
+            "time": "2022-01-04T17:06:45+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
@@ -744,12 +744,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "31d9d9e2977ae7d796d82271be09e46f4bdf41b3"
+                "reference": "926f263c0e50a30797761bbec10ea2dc665d63ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/31d9d9e2977ae7d796d82271be09e46f4bdf41b3",
-                "reference": "31d9d9e2977ae7d796d82271be09e46f4bdf41b3",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/926f263c0e50a30797761bbec10ea2dc665d63ba",
+                "reference": "926f263c0e50a30797761bbec10ea2dc665d63ba",
                 "shasum": ""
             },
             "conflict": {
@@ -761,6 +761,7 @@
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
                 "amphp/http-client": ">=4,<4.4",
+                "anchorcms/anchor-cms": "<=0.12.7",
                 "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
                 "area17/twill": "<1.2.5|>=2,<2.5.3",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
@@ -786,6 +787,7 @@
                 "cesnet/simplesamlphp-module-proxystatistics": "<3.1",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<=3.0.6",
+                "codeigniter4/framework": "<4.1.6",
                 "codiad/codiad": "<=2.8.4",
                 "composer/composer": "<1.10.23|>=2-alpha.1,<2.1.9",
                 "concrete5/concrete5": "<8.5.5",
@@ -1169,7 +1171,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-22T21:13:38+00:00"
+            "time": "2022-01-05T15:16:14+00:00"
         },
         {
             "name": "sanmai/later",
@@ -1644,20 +1646,23 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.23.0",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "46cd95797e9df938fdd2b03693b5fca5e64b01ce"
+                "reference": "30885182c981ab175d4d034db0f6f469898070ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/46cd95797e9df938fdd2b03693b5fca5e64b01ce",
-                "reference": "46cd95797e9df938fdd2b03693b5fca5e64b01ce",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/30885182c981ab175d4d034db0f6f469898070ab",
+                "reference": "30885182c981ab175d4d034db0f6f469898070ab",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
+            },
+            "provide": {
+                "ext-ctype": "*"
             },
             "suggest": {
                 "ext-ctype": "For best performance"
@@ -1703,7 +1708,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.23.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -1719,20 +1724,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-19T12:13:01+00:00"
+            "time": "2021-10-20T20:35:02+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
-            "version": "v1.23.1",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
-                "reference": "16880ba9c5ebe3642d1995ab866db29270b36535"
+                "reference": "81b86b50cf841a64252b439e738e97f4a34e2783"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/16880ba9c5ebe3642d1995ab866db29270b36535",
-                "reference": "16880ba9c5ebe3642d1995ab866db29270b36535",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/81b86b50cf841a64252b439e738e97f4a34e2783",
+                "reference": "81b86b50cf841a64252b439e738e97f4a34e2783",
                 "shasum": ""
             },
             "require": {
@@ -1784,7 +1789,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.23.1"
+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -1800,11 +1805,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-27T12:26:48+00:00"
+            "time": "2021-11-23T21:10:46+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.23.0",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
@@ -1868,7 +1873,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.23.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -1888,20 +1893,23 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.23.1",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "9174a3d80210dca8daa7f31fec659150bbeabfc6"
+                "reference": "0abb51d2f102e00a4eefcf46ba7fec406d245825"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9174a3d80210dca8daa7f31fec659150bbeabfc6",
-                "reference": "9174a3d80210dca8daa7f31fec659150bbeabfc6",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/0abb51d2f102e00a4eefcf46ba7fec406d245825",
+                "reference": "0abb51d2f102e00a4eefcf46ba7fec406d245825",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
+            },
+            "provide": {
+                "ext-mbstring": "*"
             },
             "suggest": {
                 "ext-mbstring": "For best performance"
@@ -1948,7 +1956,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.23.1"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -1964,7 +1972,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-27T12:26:48+00:00"
+            "time": "2021-11-30T18:21:41+00:00"
         },
         {
             "name": "symfony/process",
