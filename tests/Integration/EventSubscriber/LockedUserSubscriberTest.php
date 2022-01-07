@@ -10,6 +10,8 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
 use App\Entity\User as UserEntity;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\EventSubscriber\LockedUserSubscriber;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
@@ -87,6 +89,16 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->expects(self::exactly(2))
             ->method('getId')
             ->willReturn($uuid->toString());
+
+        $user
+            ->expects(self::once())
+            ->method('getLanguage')
+            ->willReturn(Language::EN);
+
+        $user
+            ->expects(self::once())
+            ->method('getLocale')
+            ->willReturn(Locale::EN);
 
         $user
             ->expects(self::once())

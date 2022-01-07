@@ -11,6 +11,8 @@ namespace App\Tests\Integration\Form\Type\Console;
 use App\DTO\User\User as UserDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
@@ -56,16 +58,6 @@ class UserTypeTest extends TypeTestCase
 
         $localization
             ->expects(self::once())
-            ->method('getLanguages')
-            ->willReturn(['en', 'fi']);
-
-        $localization
-            ->expects(self::once())
-            ->method('getLocales')
-            ->willReturn(['en', 'fi']);
-
-        $localization
-            ->expects(self::once())
             ->method('getFormattedTimezones')
             ->willReturn([
                 [
@@ -92,8 +84,8 @@ class UserTypeTest extends TypeTestCase
             ->setLastName('Doe')
             ->setEmail('john.doe@test.com')
             ->setPassword('password')
-            ->setLanguage('fi')
-            ->setLocale('fi')
+            ->setLanguage(Language::EN)
+            ->setLocale(Locale::EN)
             ->setTimezone('Europe/Stockholm')
             ->setUserGroups([$userGroupEntity]);
 
@@ -107,8 +99,8 @@ class UserTypeTest extends TypeTestCase
                 'password1' => 'password',
                 'password2' => 'password',
             ],
-            'language' => 'fi',
-            'locale' => 'fi',
+            'language' => Language::EN,
+            'locale' => Locale::EN,
             'timezone' => 'Europe/Stockholm',
             'userGroups' => [$userGroupEntity->getId()],
         ];
