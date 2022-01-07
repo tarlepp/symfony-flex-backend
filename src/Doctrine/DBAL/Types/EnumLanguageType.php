@@ -12,7 +12,7 @@ use App\Enum\Language;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use function gettype;
-use function is_null;
+use function implode;
 use function is_string;
 
 /**
@@ -36,21 +36,19 @@ class EnumLanguageType extends EnumType
      * @throws ConversionException
      *
      * @noinspection PhpMissingParentCallCommonInspection
-     *
-     * TODO: add test cases for this
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): Language
     {
         $enum = Language::tryFrom($value);
 
-        if (is_string($value) && !is_null($enum)) {
+        if (is_string($value) && $enum !== null) {
             return $enum;
         }
 
         throw ConversionException::conversionFailedFormat(
             gettype($value),
             $this->getName(),
-            'One of: "' . implode('",', Language::getValues()) . '"',
+            'One of: "' . implode('", "', Language::getValues()) . '"',
         );
     }
 }
