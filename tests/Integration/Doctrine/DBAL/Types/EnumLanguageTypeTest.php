@@ -167,23 +167,6 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield [new stdClass()];
     }
 
-    private function getPlatform(): AbstractPlatform
-    {
-        return new MySQLPlatform();
-    }
-
-    /**
-     * @throws Throwable
-     */
-    private function getType(): Type
-    {
-        Type::hasType('EnumLanguage')
-            ? Type::overrideType('EnumLanguage', EnumLanguageType::class)
-            : Type::addType('EnumLanguage', EnumLanguageType::class);
-
-        return Type::getType('EnumLanguage');
-    }
-
     /**
      * @return Generator<array{0: Language, 1: string}>
      */
@@ -213,5 +196,22 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield [true];
         yield [[]];
         yield [new stdClass()];
+    }
+
+    private function getPlatform(): AbstractPlatform
+    {
+        return new MySQLPlatform();
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function getType(): Type
+    {
+        Type::hasType('EnumLanguage')
+            ? Type::overrideType('EnumLanguage', EnumLanguageType::class)
+            : Type::addType('EnumLanguage', EnumLanguageType::class);
+
+        return Type::getType('EnumLanguage');
     }
 }
