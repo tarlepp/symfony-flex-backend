@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Enum;
 
 use App\Enum\Interfaces\EnumInterface;
+use function array_map;
 
 /**
  * Enum Login
@@ -26,6 +27,6 @@ enum Login: string implements EnumInterface
      */
     public static function getValues(): array
     {
-        return array_map(static fn (Login $enum): string => $enum->value, self::cases());
+        return array_map(static fn (self $enum): string => $enum->value, self::cases());
     }
 }
