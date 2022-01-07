@@ -32,7 +32,7 @@ class UniqueUsernameValidator extends ConstraintValidator
      *
      * @throws NonUniqueResultException
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if ($value instanceof UserInterface
             && !$this->repository->isUsernameAvailable($value->getUsername(), $value->getId())
