@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbd42d6744fc73daef9ea425be0d78fe",
+    "content-hash": "dadacb721c98f003419fea5565c22379",
     "packages": [],
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ffc5aee6019eeae4ea618d97dd290ab95e77be59"
+                "reference": "c3e7a5837829b3cd5907b895da73a4da084a9f8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ffc5aee6019eeae4ea618d97dd290ab95e77be59",
-                "reference": "ffc5aee6019eeae4ea618d97dd290ab95e77be59",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c3e7a5837829b3cd5907b895da73a4da084a9f8f",
+                "reference": "c3e7a5837829b3cd5907b895da73a4da084a9f8f",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.3.0"
+                "source": "https://github.com/phpstan/phpstan/tree/1.3.1"
             },
             "funding": [
                 {
@@ -69,20 +69,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-29T17:03:31+00:00"
+            "time": "2022-01-04T17:12:37+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "0.12.10",
+            "version": "0.12.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "8c823197becb3905e42b9d7f7849f1174e8b47cf"
+                "reference": "348f392aa15fa19e9bd7489aa7bc69bc31c148a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/8c823197becb3905e42b9d7f7849f1174e8b47cf",
-                "reference": "8c823197becb3905e42b9d7f7849f1174e8b47cf",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/348f392aa15fa19e9bd7489aa7bc69bc31c148a4",
+                "reference": "348f392aa15fa19e9bd7489aa7bc69bc31c148a4",
                 "shasum": ""
             },
             "require": {
@@ -121,7 +121,7 @@
             "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.10"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.11"
             },
             "funding": [
                 {
@@ -129,7 +129,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-31T12:57:22+00:00"
+            "time": "2022-01-05T18:37:59+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -137,12 +137,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "31d9d9e2977ae7d796d82271be09e46f4bdf41b3"
+                "reference": "cf076bc797a0051c51e958f3be7065d5c4c1b802"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/31d9d9e2977ae7d796d82271be09e46f4bdf41b3",
-                "reference": "31d9d9e2977ae7d796d82271be09e46f4bdf41b3",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/cf076bc797a0051c51e958f3be7065d5c4c1b802",
+                "reference": "cf076bc797a0051c51e958f3be7065d5c4c1b802",
                 "shasum": ""
             },
             "conflict": {
@@ -154,6 +154,7 @@
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
                 "amphp/http-client": ">=4,<4.4",
+                "anchorcms/anchor-cms": "<=0.12.7",
                 "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
                 "area17/twill": "<1.2.5|>=2,<2.5.3",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
@@ -179,6 +180,7 @@
                 "cesnet/simplesamlphp-module-proxystatistics": "<3.1",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<=3.0.6",
+                "codeigniter4/framework": "<4.1.6",
                 "codiad/codiad": "<=2.8.4",
                 "composer/composer": "<1.10.23|>=2-alpha.1,<2.1.9",
                 "concrete5/concrete5": "<8.5.5",
@@ -354,7 +356,7 @@
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
-                "pimcore/pimcore": "<10.2.6",
+                "pimcore/pimcore": "<10.2.7",
                 "pocketmine/pocketmine-mp": "<4.0.3",
                 "pressbooks/pressbooks": "<5.18",
                 "prestashop/autoupgrade": ">=4,<4.10.1",
@@ -372,7 +374,7 @@
                 "pusher/pusher-php-server": "<2.2.1",
                 "pwweb/laravel-core": "<=0.3.6-beta",
                 "rainlab/debugbar-plugin": "<3.1",
-                "remdex/livehelperchat": "<=3.90",
+                "remdex/livehelperchat": "<3.91",
                 "rmccue/requests": ">=1.6,<1.8",
                 "robrichards/xmlseclibs": "<3.0.4",
                 "sabberworm/php-css-parser": ">=1,<1.0.1|>=2,<2.0.1|>=3,<3.0.1|>=4,<4.0.1|>=5,<5.0.9|>=5.1,<5.1.3|>=5.2,<5.2.1|>=6,<6.0.2|>=7,<7.0.4|>=8,<8.0.1|>=8.1,<8.1.1|>=8.2,<8.2.1|>=8.3,<8.3.1",
@@ -562,7 +564,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-22T21:13:38+00:00"
+            "time": "2022-01-05T21:13:39+00:00"
         }
     ],
     "aliases": [],
