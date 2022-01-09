@@ -15,7 +15,9 @@ use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
@@ -69,12 +71,53 @@ class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatExceptionIsThrownWhenUsingInvalidLanguage
+     *
+     * @param class-string $dtoClass
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `transformLanguage` throws exception when using `$input` language with `$dtoClass` DTO object
+     */
+    public function testThatExceptionIsThrownWhenUsingInvalidLanguage(string $dtoClass, mixed $input): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid language');
+
+        $resource = $this->getResource();
+        $requestMapper = new RequestMapper($resource);
+
+        $request = new Request([], [
+            'language' => $input,
+        ]);
+
+        $requestMapper->mapToObject($request, new $dtoClass());
+    }
+
+    /**
      * @return Generator<array{0: class-string}>
      */
     public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
         foreach ($this->restDtoClasses as $dtoClass) {
             yield [$dtoClass];
+        }
+    }
+
+    /**
+     * @return Generator<array{0: class-string, 1: mixed}>
+     */
+    public function dataProviderTestThatExceptionIsThrownWhenUsingInvalidLanguage(): Generator
+    {
+        $invalidValues = [
+            '',
+            'foo',
+        ];
+
+        foreach ($this->restDtoClasses as $dtoClass) {
+            foreach ($invalidValues as $input) {
+                yield [$dtoClass, $input];
+            }
         }
     }
 
