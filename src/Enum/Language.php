@@ -27,9 +27,6 @@ enum Language: string implements EnumInterface
         return self::EN;
     }
 
-    /**
-     * @return array<int, string>
-     */
     public static function getValues(): array
     {
         return array_map(static fn (self $enum): string => $enum->value, self::cases());

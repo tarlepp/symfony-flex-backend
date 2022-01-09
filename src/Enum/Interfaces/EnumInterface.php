@@ -18,4 +18,8 @@ use BackedEnum;
  */
 interface EnumInterface extends BackedEnum
 {
+    /**
+     * @return array<int, string>
+     */
+    public static function getValues(): array;
 }

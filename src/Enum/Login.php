@@ -22,9 +22,6 @@ enum Login: string implements EnumInterface
     case FAILURE = 'failure';
     case SUCCESS = 'success';
 
-    /**
-     * @return array<int, string>
-     */
     public static function getValues(): array
     {
         return array_map(static fn (self $enum): string => $enum->value, self::cases());
