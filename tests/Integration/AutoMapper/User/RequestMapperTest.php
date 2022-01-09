@@ -17,7 +17,6 @@ use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
 use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
-use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
@@ -135,7 +134,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     {
         $invalidValues = [
             '',
-            'foo',
+            'invalid language',
         ];
 
         foreach ($this->restDtoClasses as $dtoClass) {
@@ -152,7 +151,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     {
         $invalidValues = [
             '',
-            'foo',
+            'invalid locale',
         ];
 
         foreach ($this->restDtoClasses as $dtoClass) {
