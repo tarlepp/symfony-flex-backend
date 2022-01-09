@@ -13,6 +13,7 @@ use App\Entity\UserGroup;
 use App\Enum\Language;
 use App\Enum\Locale;
 use App\Resource\UserGroupResource;
+use InvalidArgumentException;
 use Throwable;
 use function array_map;
 
@@ -59,15 +60,13 @@ class RequestMapper extends RestRequestMapper
         );
     }
 
-    protected function transformLanguage(string $language): ?Language
+    protected function transformLanguage(string $language): Language
     {
-        // TODO validate language
-        return Language::tryFrom($language);
+        return Language::tryFrom($language) ?? throw new InvalidArgumentException('Invalid language');
     }
 
-    protected function transformLocale(string $locale): ?Locale
+    protected function transformLocale(string $locale): Locale
     {
-        // TODO validate locale
-        return Locale::tryFrom($locale);
+        return Locale::tryFrom($locale) ?? throw new InvalidArgumentException('Invalid locale');
     }
 }
