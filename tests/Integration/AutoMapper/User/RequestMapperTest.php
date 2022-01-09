@@ -95,6 +95,30 @@ class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatExceptionIsThrownWhenUsingInvalidLocale
+     *
+     * @param class-string $dtoClass
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `transformLocale` throws exception when using `$input` language with `$dtoClass` DTO object
+     */
+    public function testThatExceptionIsThrownWhenUsingInvalidLocale(string $dtoClass, mixed $input): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid locale');
+
+        $resource = $this->getResource();
+        $requestMapper = new RequestMapper($resource);
+
+        $request = new Request([], [
+            'locale' => $input,
+        ]);
+
+        $requestMapper->mapToObject($request, new $dtoClass());
+    }
+
+    /**
      * @return Generator<array{0: class-string}>
      */
     public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
@@ -108,6 +132,23 @@ class RequestMapperTest extends RestRequestMapperTestCase
      * @return Generator<array{0: class-string, 1: mixed}>
      */
     public function dataProviderTestThatExceptionIsThrownWhenUsingInvalidLanguage(): Generator
+    {
+        $invalidValues = [
+            '',
+            'foo',
+        ];
+
+        foreach ($this->restDtoClasses as $dtoClass) {
+            foreach ($invalidValues as $input) {
+                yield [$dtoClass, $input];
+            }
+        }
+    }
+
+    /**
+     * @return Generator<array{0: class-string, 1: mixed}>
+     */
+    public function dataProviderTestThatExceptionIsThrownWhenUsingInvalidLocale(): Generator
     {
         $invalidValues = [
             '',
