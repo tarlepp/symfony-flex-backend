@@ -33,6 +33,7 @@ use function array_map;
 use function class_exists;
 use function count;
 use function implode;
+use function in_array;
 use function sprintf;
 use function str_replace;
 use const DIRECTORY_SEPARATOR;
@@ -415,6 +416,33 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatEnumHasIntegrationTests
+     *
+     * @phpstan-param StringableArrayObject<array<int, string>> $methods
+     * @psalm-param StringableArrayObject $methods
+     *
+     * @testdox Test that enum `$class` has integration test class `$testClass` for `$methods` methods
+     */
+    public function testThatEnumHasIntegrationTests(
+        string $testClass,
+        string $class,
+        StringableArrayObject $methods
+    ): void {
+        $format = <<<FORMAT
+Enum '%s' doesn't have required test class '%s', enum has following methods that needs to be tested: '%s'.
+FORMAT;
+
+        $message = sprintf(
+            $format,
+            $class,
+            $testClass,
+            implode('\', \'', $methods->getArrayCopy())
+        );
+
+        self::assertTrue(class_exists($testClass), $message);
+    }
+
+    /**
      * @return array<int, array{0: string, 1: string}>
      */
     public function dataProviderTestThatControllerHasE2ETests(): array
@@ -781,6 +809,61 @@ FORMAT;
         $filter = $this->getInterfaceFilter(ArgumentValueResolverInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @psalm-return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
+     * @phpstan-return array<int, array{0: string, 1: string, 2: StringableArrayObject<mixed>}>
+     */
+    public function dataProviderTestThatEnumHasIntegrationTests(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = self::$kernel->getProjectDir() . '/src/Enum/';
+        $namespace = '\\App\\Enum\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Enum\\';
+
+        $enumMethods = [];
+
+        $filter = static function (ReflectionClass $reflectionClass) use (&$enumMethods): bool {
+            $filter = static fn (ReflectionMethod $method): bool =>
+                $method->class === $reflectionClass->getName()
+                && !$method->isConstructor()
+                && !in_array($method->getName(), ['cases', 'from', 'tryFrom']);
+            $formatter = static fn (ReflectionMethod $method): string => $method->getName();
+
+            $methods = array_values(array_filter($reflectionClass->getMethods(), $filter));
+
+            $enumMethods[$reflectionClass->getName()] = array_map($formatter, $methods);
+
+            return !(
+                $reflectionClass->isAbstract() ||
+                $reflectionClass->isInterface() ||
+                $reflectionClass->isTrait() ||
+                count($methods) === 0
+            );
+        };
+
+        $formatter = static function (ReflectionClass $reflectionClass) use (
+            &$enumMethods,
+            $folder,
+            $namespace,
+            $namespaceTest
+        ): array {
+            $file = (string)$reflectionClass->getFileName();
+
+            $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . str_replace('.php', '', $base);
+            $classTest = $namespaceTest . str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+                new StringableArrayObject($enumMethods[$reflectionClass->getName()]),
+            ];
+        };
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter, $formatter);
     }
 
     /**
