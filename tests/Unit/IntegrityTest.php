@@ -829,7 +829,7 @@ FORMAT;
             $filter = static fn (ReflectionMethod $method): bool =>
                 $method->class === $reflectionClass->getName()
                 && !$method->isConstructor()
-                && !in_array($method->getName(), ['cases', 'from', 'tryFrom']);
+                && !in_array($method->getName(), ['cases', 'from', 'tryFrom'], true);
             $formatter = static fn (ReflectionMethod $method): string => $method->getName();
 
             $methods = array_values(array_filter($reflectionClass->getMethods(), $filter));
