@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c16327a2d125c07ef95684f51a5911fb",
+    "content-hash": "3a9ef3091d0a2163ae2990b437c6ee4a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1411,38 +1411,39 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "2.2.3",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "5e7bdbbfe9811c06e1f745d1c166647d5c47d6ee"
+                "reference": "f8af155c1e7963f3d2b4415097d55757bbaa53d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/5e7bdbbfe9811c06e1f745d1c166647d5c47d6ee",
-                "reference": "5e7bdbbfe9811c06e1f745d1c166647d5c47d6ee",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/f8af155c1e7963f3d2b4415097d55757bbaa53d8",
+                "reference": "f8af155c1e7963f3d2b4415097d55757bbaa53d8",
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "^1.0",
                 "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/collections": "^1.0",
                 "doctrine/deprecations": "^0.5.3",
                 "doctrine/event-manager": "^1.0",
                 "php": "^7.1 || ^8.0",
-                "psr/cache": "^1.0|^2.0|^3.0"
+                "psr/cache": "^1.0 || ^2.0 || ^3.0"
             },
             "conflict": {
+                "doctrine/annotations": "<1.0 || >=2.0",
                 "doctrine/common": "<2.10@dev"
             },
             "require-dev": {
                 "composer/package-versions-deprecated": "^1.11",
+                "doctrine/annotations": "^1.0",
                 "doctrine/coding-standard": "^6.0 || ^9.0",
                 "doctrine/common": "^3.0",
-                "phpstan/phpstan": "0.12.84",
+                "phpstan/phpstan": "1.2.0",
                 "phpunit/phpunit": "^7.5.20 || ^8.0 || ^9.0",
-                "symfony/cache": "^4.4|^5.0",
-                "vimeo/psalm": "4.7.0"
+                "symfony/cache": "^4.4 || ^5.0 || ^6.0",
+                "vimeo/psalm": "4.13.1"
             },
             "type": "library",
             "autoload": {
@@ -1492,9 +1493,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/persistence/issues",
-                "source": "https://github.com/doctrine/persistence/tree/2.2.3"
+                "source": "https://github.com/doctrine/persistence/tree/2.3.0"
             },
-            "time": "2021-10-25T19:59:10+00:00"
+            "time": "2022-01-09T19:58:46+00:00"
         },
         {
             "name": "doctrine/sql-formatter",
@@ -1632,47 +1633,51 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v3.4.0",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine-extensions/DoctrineExtensions.git",
-                "reference": "85d58c24584a50db3872357ab6a68e3479ae7590"
+                "reference": "dd1a1438a10e92910e5c510f631a568c19e6c00e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/85d58c24584a50db3872357ab6a68e3479ae7590",
-                "reference": "85d58c24584a50db3872357ab6a68e3479ae7590",
+                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/dd1a1438a10e92910e5c510f631a568c19e6c00e",
+                "reference": "dd1a1438a10e92910e5c510f631a568c19e6c00e",
                 "shasum": ""
             },
             "require": {
                 "behat/transliterator": "~1.2",
                 "doctrine/annotations": "^1.13",
+                "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/collections": "^1.0",
                 "doctrine/common": "^2.13 || ^3.0",
                 "doctrine/event-manager": "^1.0",
                 "doctrine/persistence": "^1.3.3 || ^2.0",
-                "php": "^7.2 || ^8.0"
+                "php": "^7.2 || ^8.0",
+                "psr/cache": "^1 || ^2 || ^3",
+                "symfony/cache": "^4.4 || ^5.3 || ^6.0"
             },
             "conflict": {
                 "doctrine/cache": "<1.11",
                 "doctrine/dbal": "<2.13.1 || ^3.0 <3.2",
-                "doctrine/mongodb-odm": "<2.0",
+                "doctrine/mongodb-odm": "<2.2",
                 "doctrine/orm": "<2.10.2",
                 "sebastian/comparator": "<2.0"
             },
             "require-dev": {
-                "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/dbal": "^2.13.1 || ^3.2",
+                "doctrine/deprecations": "^0.5.3",
                 "doctrine/doctrine-bundle": "^2.3",
-                "doctrine/mongodb-odm": "^2.0",
+                "doctrine/mongodb-odm": "^2.2",
                 "doctrine/orm": "^2.10.2",
                 "friendsofphp/php-cs-fixer": "^3.0",
+                "nesbot/carbon": "^2.55",
                 "phpstan/phpstan": "^1.1",
                 "phpstan/phpstan-doctrine": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^8.5 || ^9.5",
-                "symfony/cache": "^4.4 || ^5.3 || ^6.0",
                 "symfony/console": "^4.4 || ^5.3 || ^6.0",
+                "symfony/phpunit-bridge": "^6.0",
                 "symfony/yaml": "^4.4 || ^5.3 || ^6.0"
             },
             "suggest": {
@@ -1683,7 +1688,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -1729,10 +1734,10 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
-                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.4.0",
+                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.5.0",
                 "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/main/doc"
             },
-            "time": "2021-12-05T19:39:32+00:00"
+            "time": "2022-01-10T21:29:33+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -2163,16 +2168,16 @@
         },
         {
             "name": "matomo/device-detector",
-            "version": "5.0.1",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "ebd8a07e4b69088c0e34f29ec72dc162c34c9264"
+                "reference": "15cc0ac69bced9d273f85dd7debf9d6aaea72517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/ebd8a07e4b69088c0e34f29ec72dc162c34c9264",
-                "reference": "ebd8a07e4b69088c0e34f29ec72dc162c34c9264",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/15cc0ac69bced9d273f85dd7debf9d6aaea72517",
+                "reference": "15cc0ac69bced9d273f85dd7debf9d6aaea72517",
                 "shasum": ""
             },
             "require": {
@@ -2228,7 +2233,7 @@
                 "source": "https://github.com/matomo-org/matomo",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2021-12-07T11:40:16+00:00"
+            "time": "2022-01-11T14:01:02+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -2510,23 +2515,23 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v4.8.1",
+            "version": "v4.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "cc6731ae772b48304d7ac43c80f646da3a1feee8"
+                "reference": "1885d25cd95810b376b670e7f5f23a33c0dda068"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/cc6731ae772b48304d7ac43c80f646da3a1feee8",
-                "reference": "cc6731ae772b48304d7ac43c80f646da3a1feee8",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/1885d25cd95810b376b670e7f5f23a33c0dda068",
+                "reference": "1885d25cd95810b376b670e7f5f23a33c0dda068",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "^1.11",
                 "ext-json": "*",
                 "php": ">=7.2",
-                "phpdocumentor/reflection-docblock": "^3.1|^4.4|^5.0",
+                "phpdocumentor/reflection-docblock": "^3.1|^4.0|^5.0",
                 "psr/cache": "^1.0|^2.0|^3.0",
                 "psr/container": "^1.0|^2.0",
                 "psr/log": "^1.0|^2.0|^3.0",
@@ -2615,9 +2620,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioApiDocBundle/issues",
-                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.8.1"
+                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.8.2"
             },
-            "time": "2021-12-23T14:15:40+00:00"
+            "time": "2022-01-10T16:10:58+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -7990,16 +7995,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.1.1",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "47bc50f88a8a2be7a3048112344dacd6cfba1926"
+                "reference": "8f53ded4c90ec7cccb18333c1d7d8a4c16f0c3c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/47bc50f88a8a2be7a3048112344dacd6cfba1926",
-                "reference": "47bc50f88a8a2be7a3048112344dacd6cfba1926",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/8f53ded4c90ec7cccb18333c1d7d8a4c16f0c3c8",
+                "reference": "8f53ded4c90ec7cccb18333c1d7d8a4c16f0c3c8",
                 "shasum": ""
             },
             "require": {
@@ -8059,9 +8064,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.1.1"
+                "source": "https://github.com/zircote/swagger-php/tree/4.2.1"
             },
-            "time": "2022-01-01T02:07:33+00:00"
+            "time": "2022-01-10T22:04:03+00:00"
         }
     ],
     "packages-dev": [
