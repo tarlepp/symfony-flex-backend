@@ -6,10 +6,12 @@ declare(strict_types = 1);
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
+// phpcs:ignoreFile
+
 namespace App\Enum;
 
 use App\Enum\Interfaces\EnumInterface;
-use function array_map;
+use App\Enum\Traits\GetValues;
 
 /**
  * Enum Login
@@ -19,11 +21,8 @@ use function array_map;
  */
 enum Login: string implements EnumInterface
 {
+    use GetValues;
+
     case FAILURE = 'failure';
     case SUCCESS = 'success';
-
-    public static function getValues(): array
-    {
-        return array_map(static fn (self $enum): string => $enum->value, self::cases());
-    }
 }
