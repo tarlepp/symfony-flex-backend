@@ -11,6 +11,8 @@ namespace App\Repository\Traits;
 use App\Entity\Interfaces\EntityInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
@@ -24,6 +26,9 @@ use function array_column;
  */
 trait RepositoryMethodsTrait
 {
+    /**
+     * @psalm-param LockMode::*|null $lockMode
+     */
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
@@ -31,6 +36,9 @@ trait RepositoryMethodsTrait
         return $output instanceof EntityInterface ? $output : null;
     }
 
+    /**
+     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
         // Get query builder
