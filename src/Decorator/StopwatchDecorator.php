@@ -41,7 +41,7 @@ class StopwatchDecorator
         // Do not process core or extensions or already wrapped services
         if ($class->getFileName() === false
             || $class->isFinal()
-            || !str_starts_with($class->getName(), 'ProxyManagerGeneratedProxy')
+            || str_starts_with($class->getName(), 'ProxyManagerGeneratedProxy')
             || str_contains($class->getName(), 'RequestStack')
         ) {
             return $service;
