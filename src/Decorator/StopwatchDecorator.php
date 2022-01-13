@@ -16,6 +16,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use function array_filter;
 use function is_object;
+use function str_contains;
 use function str_starts_with;
 
 /**
@@ -38,7 +39,11 @@ class StopwatchDecorator
         $className = $class->getName();
 
         // Do not process core or extensions or already wrapped services
-        if ($class->getFileName() === false || str_starts_with($class->getName(), 'ProxyManagerGeneratedProxy')) {
+        if ($class->getFileName() === false
+            || $class->isFinal()
+            || !str_starts_with($class->getName(), 'ProxyManagerGeneratedProxy')
+            || str_contains($class->getName(), 'RequestStack')
+        ) {
             return $service;
         }
 
