@@ -3,7 +3,7 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "3.4.0",
+		"friendsofphp/php-cs-fixer": "3.5.0",
 		"roave/security-advisories": "dev-latest",
 		"symplify/config-transformer": "10.0.9",
 		"symplify/easy-coding-standard": "10.0.9"
