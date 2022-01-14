@@ -101,7 +101,7 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($this->dtoClass);
         $properties = $this->getDtoProperties();
 
-        /** @var RestDtoInterface&MockObject $mock */
+        /** @psalm-var RestDtoInterface&MockObject $mock */
         $mock = $this->getMockBuilder($this->dtoClass)
             ->onlyMethods(['setVisited'])
             ->getMock();
