@@ -9,6 +9,8 @@ declare(strict_types = 1);
 namespace App\Repository\Interfaces;
 
 use App\Entity\Interfaces\EntityInterface;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NonUniqueResultException;
@@ -73,6 +75,8 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository find method.
      *
+     * @psalm-param LockMode::*|null $lockMode
+     *
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
@@ -82,6 +86,8 @@ interface BaseRepositoryInterface
     /**
      * Advanced version of find method, with this you can process query as you
      * like, eg. add joins and callbacks to modify / optimize current query.
+     *
+     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      *
      * @psalm-return array<int|string, mixed>|EntityInterface|null
      *

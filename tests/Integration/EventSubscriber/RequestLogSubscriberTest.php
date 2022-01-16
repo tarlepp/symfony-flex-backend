@@ -300,7 +300,7 @@ class RequestLogSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return MockObject&RequestLogger
+     * @psalm-return MockObject&RequestLogger
      */
     private function getRequestLogger(): MockObject
     {
@@ -310,7 +310,7 @@ class RequestLogSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return MockObject&UserTypeIdentification
+     * @psalm-return MockObject&UserTypeIdentification
      */
     private function getUserTypeIdentification(): MockObject
     {
