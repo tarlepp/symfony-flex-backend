@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c80ed3b72b535f9b37f641b83de6823",
+    "content-hash": "8bfa1e21b4624b9e520473b479af19d4",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4471,16 +4471,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.0.1",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "3dbfa5c4e3308fd9def9a2006a20fa0c272a30a2"
+                "reference": "ee7d282ff48c55d8e86d2aaa47802e80a3622b6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/3dbfa5c4e3308fd9def9a2006a20fa0c272a30a2",
-                "reference": "3dbfa5c4e3308fd9def9a2006a20fa0c272a30a2",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ee7d282ff48c55d8e86d2aaa47802e80a3622b6e",
+                "reference": "ee7d282ff48c55d8e86d2aaa47802e80a3622b6e",
                 "shasum": ""
             },
             "require": {
@@ -4516,7 +4516,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.0.1"
+                "source": "https://github.com/symfony/flex/tree/v2.1.1"
             },
             "funding": [
                 {
@@ -4532,7 +4532,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-29T15:40:20+00:00"
+            "time": "2022-01-19T08:54:03+00:00"
         },
         {
             "name": "symfony/form",
@@ -7918,16 +7918,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.2.2",
+            "version": "4.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "910eda5bc1114d7d203af7788df462b781f98286"
+                "reference": "27422d180a2a1fef6b0b590d87858f5aa30b45f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/910eda5bc1114d7d203af7788df462b781f98286",
-                "reference": "910eda5bc1114d7d203af7788df462b781f98286",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/27422d180a2a1fef6b0b590d87858f5aa30b45f2",
+                "reference": "27422d180a2a1fef6b0b590d87858f5aa30b45f2",
                 "shasum": ""
             },
             "require": {
@@ -7987,9 +7987,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.2.2"
+                "source": "https://github.com/zircote/swagger-php/tree/4.2.3"
             },
-            "time": "2022-01-16T05:39:33+00:00"
+            "time": "2022-01-19T01:07:44+00:00"
         }
     ],
     "packages-dev": [
