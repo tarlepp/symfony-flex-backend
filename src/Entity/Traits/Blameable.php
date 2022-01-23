@@ -21,9 +21,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 trait Blameable
 {
-    /**
-     * @Gedmo\Blameable(on="create")
-     */
     #[ORM\ManyToOne(
         targetEntity: User::class,
     )]
@@ -33,6 +30,9 @@ trait Blameable
         nullable: true,
         onDelete: 'SET NULL',
     )]
+    #[Gedmo\Blameable(
+        on: 'create',
+    )]
     #[Groups([
         'ApiKey.createdBy',
         'Role.createdBy',
@@ -41,9 +41,6 @@ trait Blameable
     ])]
     protected ?User $createdBy = null;
 
-    /**
-     * @Gedmo\Blameable(on="update")
-     */
     #[ORM\ManyToOne(
         targetEntity: User::class,
     )]
@@ -52,6 +49,9 @@ trait Blameable
         referencedColumnName: 'id',
         nullable: true,
         onDelete: 'SET NULL',
+    )]
+    #[Gedmo\Blameable(
+        on: 'update',
     )]
     #[Groups([
         'ApiKey.updatedBy',
