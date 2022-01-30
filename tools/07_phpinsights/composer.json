@@ -3,7 +3,7 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"nunomaduro/phpinsights": "2.0.1",
+		"nunomaduro/phpinsights": "2.1.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
@@ -13,6 +13,9 @@
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

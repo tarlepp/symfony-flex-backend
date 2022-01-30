@@ -199,7 +199,7 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @return MockObject&LoggerInterface
+     * @psalm-return MockObject&LoggerInterface
      */
     private function getLogger(): LoggerInterface
     {
@@ -207,7 +207,7 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @return MockObject&LogRequestResource
+     * @psalm-return MockObject&LogRequestResource
      */
     private function getLogRequestResource(): MockObject
     {
@@ -215,7 +215,7 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @return MockObject&UserResource
+     * @psalm-return MockObject&UserResource
      */
     private function getUserResource(): MockObject
     {
@@ -223,7 +223,7 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @return MockObject&ApiKeyResource
+     * @psalm-return MockObject&ApiKeyResource
      */
     private function getApiKeyResource(): MockObject
     {

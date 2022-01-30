@@ -25,7 +25,6 @@ use function array_map;
  * @package App\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @psalm-suppress MissingConstructor
  * @psalm-suppress PropertyNotSetInConstructor
  */
 final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface

@@ -1,0 +1,19 @@
+[mysqld]
+log_output = TABLE
+log_slow_verbosity = query_plan,innodb,explain
+slow_query_log = 1
+long_query_time = 1
+
+; pm.max_children = 5 * of app servers
+;max_connections = 100
+
+; 90% of server memory
+;innodb_buffer_pool_size = 2GB
+
+; Enterprise SSD = 50000
+; Single consumer SSD = 10000
+; Single 7200RPM drive = 200
+;innodb_io_capacity = 200
+
+;max_allowed_packet=60M
+;group_concat_max_len=1048576

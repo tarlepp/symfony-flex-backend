@@ -1,3 +1,0 @@
-[mysqld]
-;max_allowed_packet=60M
-;group_concat_max_len=1048576

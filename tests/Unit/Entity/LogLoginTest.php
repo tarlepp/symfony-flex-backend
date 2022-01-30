@@ -40,8 +40,14 @@ class LogLoginTest extends KernelTestCase
         DeviceDetector $deviceDetector
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
+        $createdAt = $entity->getCreatedAt();
 
-        self::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+        self::assertNotNull($createdAt);
+        self::assertEqualsWithDelta(
+            (new DateTime('now', new DateTimeZone('utc')))->getTimestamp(),
+            $createdAt->getTimestamp(),
+            1
+        );
     }
 
     /**
