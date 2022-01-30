@@ -59,14 +59,4 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
             'token' => $token,
         ]);
     }
-
-    /**
-     * @reminder Remove this method when Symfony 6.0.0 is released
-     *
-     * @codeCoverageIgnore
-     */
-    public function loadUserByUsername(string $username): ApiKeyUser
-    {
-        return $this->loadUserByIdentifier($username);
-    }
 }
