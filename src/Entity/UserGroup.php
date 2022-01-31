@@ -112,7 +112,7 @@ class UserGroup implements EntityInterface, Stringable
      * @var Collection<int, User>|ArrayCollection<int, User>
      */
     #[ORM\ManyToMany(
-        targetEntity: 'User',
+        targetEntity: User::class,
         mappedBy: 'userGroups',
     )]
     #[ORM\JoinTable(
@@ -127,7 +127,7 @@ class UserGroup implements EntityInterface, Stringable
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      */
     #[ORM\ManyToMany(
-        targetEntity: 'ApiKey',
+        targetEntity: ApiKey::class,
         mappedBy: 'userGroups',
     )]
     #[ORM\JoinTable(
