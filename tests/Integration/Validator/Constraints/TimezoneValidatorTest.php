@@ -33,10 +33,6 @@ class TimezoneValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
-        // Create new user
-        $user = (new User())
-            ->setTimezone('foo/bar');
-
         $localizationMock
             ->expects(self::once())
             ->method('getTimezones')
@@ -66,6 +62,6 @@ class TimezoneValidatorTest extends KernelTestCase
         // Run validator
         $validator = new TimezoneValidator($localizationMock);
         $validator->initialize($contextMock);
-        $validator->validate($user, new Timezone());
+        $validator->validate('foo/bar', new Timezone());
     }
 }
