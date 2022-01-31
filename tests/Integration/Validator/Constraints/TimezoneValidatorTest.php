@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Validator\Constraints;
 
-use App\Entity\User;
 use App\Service\Localization;
 use App\Validator\Constraints\Timezone;
 use App\Validator\Constraints\TimezoneValidator;
