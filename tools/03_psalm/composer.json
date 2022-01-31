@@ -7,7 +7,7 @@
 		"psalm/plugin-phpunit": "0.16.1",
 		"psalm/plugin-symfony": "3.1.2",
 		"vimeo/psalm": "4.19.0",
-		"weirdan/doctrine-psalm-plugin": "2.1.0"
+		"weirdan/doctrine-psalm-plugin": "2.2.0"
 	},
 	"config": {
 		"platform": {

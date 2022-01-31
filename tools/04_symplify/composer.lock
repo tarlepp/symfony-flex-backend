@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "755d649e70c3017a1eb836d8bb521f51",
+    "content-hash": "531dd3aca01a6c5bd9ad357f8e0dc122",
     "packages": [],
     "packages-dev": [
         {
@@ -722,12 +722,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "225b2aa716ea6a2945b1ef3cd76daf6d4360b37c"
+                "reference": "f2fdb4f34a593f9435ff6f994a4ca47600f285d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/225b2aa716ea6a2945b1ef3cd76daf6d4360b37c",
-                "reference": "225b2aa716ea6a2945b1ef3cd76daf6d4360b37c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f2fdb4f34a593f9435ff6f994a4ca47600f285d9",
+                "reference": "f2fdb4f34a593f9435ff6f994a4ca47600f285d9",
                 "shasum": ""
             },
             "conflict": {
@@ -1026,7 +1026,7 @@
                 "symfony/dependency-injection": ">=2,<2.0.17|>=2.7,<2.7.51|>=2.8,<2.8.50|>=3,<3.4.26|>=4,<4.1.12|>=4.2,<4.2.7",
                 "symfony/error-handler": ">=4.4,<4.4.4|>=5,<5.0.4",
                 "symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
-                "symfony/framework-bundle": ">=2,<2.3.18|>=2.4,<2.4.8|>=2.5,<2.5.2|>=2.7,<2.7.51|>=2.8,<2.8.50|>=3,<3.4.26|>=4,<4.1.12|>=4.2,<4.2.7",
+                "symfony/framework-bundle": ">=2,<2.3.18|>=2.4,<2.4.8|>=2.5,<2.5.2|>=2.7,<2.7.51|>=2.8,<2.8.50|>=3,<3.4.26|>=4,<4.1.12|>=4.2,<4.2.7|>=5.3.14,<=5.3.14|>=5.4.3,<=5.4.3|>=6.0.3,<=6.0.3",
                 "symfony/http-foundation": ">=2,<2.8.52|>=3,<3.4.35|>=4,<4.2.12|>=4.3,<4.3.8|>=4.4,<4.4.7|>=5,<5.0.7",
                 "symfony/http-kernel": ">=2,<2.8.52|>=3,<3.4.35|>=4,<4.2.12|>=4.3,<4.4.13|>=5,<5.1.5|>=5.2,<5.3.12",
                 "symfony/intl": ">=2.7,<2.7.38|>=2.8,<2.8.31|>=3,<3.2.14|>=3.3,<3.3.13",
@@ -1044,7 +1044,7 @@
                 "symfony/security-guard": ">=2.8,<3.4.48|>=4,<4.4.23|>=5,<5.2.8",
                 "symfony/security-http": ">=2.3,<2.3.41|>=2.4,<2.7.51|>=2.8,<3.4.48|>=4,<4.4.23|>=5,<5.2.8|>=5.3,<5.3.2",
                 "symfony/serializer": ">=2,<2.0.11|>=4.1,<4.4.35|>=5,<5.3.12",
-                "symfony/symfony": ">=2,<3.4.49|>=4,<4.4.35|>=5,<5.3.12",
+                "symfony/symfony": ">=2,<3.4.49|>=4,<4.4.35|>=5,<5.3.12|>=5.3.14,<=5.3.14|>=5.4.3,<=5.4.3|>=6.0.3,<=6.0.3",
                 "symfony/translation": ">=2,<2.0.17",
                 "symfony/validator": ">=2,<2.0.24|>=2.1,<2.1.12|>=2.2,<2.2.5|>=2.3,<2.3.3",
                 "symfony/var-exporter": ">=4.2,<4.2.12|>=4.3,<4.3.8",
@@ -1161,7 +1161,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-28T23:14:37+00:00"
+            "time": "2022-01-29T19:13:00+00:00"
         },
         {
             "name": "symfony/console",
@@ -2462,16 +2462,16 @@
         },
         {
             "name": "symplify/config-transformer",
-            "version": "10.0.18",
+            "version": "10.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "5c2a167af3345a7500044a1369ade8cd97cb2b73"
+                "reference": "fd83b4ab836de757782d49af7741bff6627d8c9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/5c2a167af3345a7500044a1369ade8cd97cb2b73",
-                "reference": "5c2a167af3345a7500044a1369ade8cd97cb2b73",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/fd83b4ab836de757782d49af7741bff6627d8c9c",
+                "reference": "fd83b4ab836de757782d49af7741bff6627d8c9c",
                 "shasum": ""
             },
             "require": {
@@ -2487,7 +2487,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/10.0.18"
+                "source": "https://github.com/symplify/config-transformer/tree/10.0.20"
             },
             "funding": [
                 {
@@ -2499,20 +2499,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-26T01:03:14+00:00"
+            "time": "2022-01-30T20:47:26+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "10.0.19",
+            "version": "10.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "f38070ac6ec8c83ccabc51147c2089890a38ed7c"
+                "reference": "5d161b10eac4e7fc1b225f130f6481bb82844f88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/f38070ac6ec8c83ccabc51147c2089890a38ed7c",
-                "reference": "f38070ac6ec8c83ccabc51147c2089890a38ed7c",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/5d161b10eac4e7fc1b225f130f6481bb82844f88",
+                "reference": "5d161b10eac4e7fc1b225f130f6481bb82844f88",
                 "shasum": ""
             },
             "require": {
@@ -2542,7 +2542,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/10.0.19"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/10.0.20"
             },
             "funding": [
                 {
@@ -2554,7 +2554,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-26T01:15:43+00:00"
+            "time": "2022-01-30T20:50:35+00:00"
         }
     ],
     "aliases": [],
