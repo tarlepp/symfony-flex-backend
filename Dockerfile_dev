@@ -51,6 +51,9 @@ RUN chmod +x /app/bin/console \
 
 RUN chmod -R o+s+w /usr/local/etc/php
 
+# Enable PHP-FPM status page
+RUN echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/www.conf
+
 RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest | \
         grep -E "browser_download_url(.+)linux_amd64" | \
         cut -d : -f 2,3 | \

@@ -25,6 +25,7 @@ services:
         hostname: nginx
         build:
             context: ./docker/nginx/
+            dockerfile: ./Dockerfile_dev
         depends_on:
             - php
         ports:
