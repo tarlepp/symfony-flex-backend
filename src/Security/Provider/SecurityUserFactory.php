@@ -74,18 +74,4 @@ class SecurityUserFactory implements UserProviderInterface
 
         return new SecurityUser($userEntity, $this->rolesService->getInheritedRoles($userEntity->getRoles()));
     }
-
-    /**
-     * @reminder Remove this method when Symfony 6.0.0 is released
-     *
-     * {@inheritDoc}
-     *
-     * @throws Throwable
-     *
-     * @codeCoverageIgnore
-     */
-    public function loadUserByUsername(string $username): SecurityUser
-    {
-        return $this->loadUserByIdentifier($username);
-    }
 }
