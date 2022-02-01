@@ -52,7 +52,7 @@
 		"symfony/property-info": "6.0.2",
 		"symfony/routing": "6.0.1",
 		"symfony/runtime": "6.0.0",
-		"symfony/security-bundle": "6.0.2",
+		"symfony/security-bundle": "6.0.3",
 		"symfony/serializer": "6.0.2",
 		"symfony/translation": "6.0.2",
 		"symfony/twig-bundle": "6.0.1",
