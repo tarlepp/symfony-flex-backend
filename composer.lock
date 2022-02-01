@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2f57382ce472113d8dd3520fabb4ea1",
+    "content-hash": "cca3efd188ff6a4f4ed361c4eb77250c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6056,16 +6056,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v6.0.2",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "3f237ffd38a54592181ac62f63c6cabbca00051f"
+                "reference": "428ffd96c60bf2c13b35182f704b24db6712c897"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/3f237ffd38a54592181ac62f63c6cabbca00051f",
-                "reference": "3f237ffd38a54592181ac62f63c6cabbca00051f",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/428ffd96c60bf2c13b35182f704b24db6712c897",
+                "reference": "428ffd96c60bf2c13b35182f704b24db6712c897",
                 "shasum": ""
             },
             "require": {
@@ -6115,7 +6115,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/v6.0.2"
+                "source": "https://github.com/symfony/property-access/tree/v6.0.3"
             },
             "funding": [
                 {
@@ -6131,7 +6131,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-11T16:36:28+00:00"
+            "time": "2022-01-12T18:59:56+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -6978,16 +6978,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.0.2",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "bae261d0c3ac38a1f802b4dfed42094296100631"
+                "reference": "522144f0c4c004c80d56fa47e40e17028e2eefc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/bae261d0c3ac38a1f802b4dfed42094296100631",
-                "reference": "bae261d0c3ac38a1f802b4dfed42094296100631",
+                "url": "https://api.github.com/repos/symfony/string/zipball/522144f0c4c004c80d56fa47e40e17028e2eefc2",
+                "reference": "522144f0c4c004c80d56fa47e40e17028e2eefc2",
                 "shasum": ""
             },
             "require": {
@@ -7043,7 +7043,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.0.2"
+                "source": "https://github.com/symfony/string/tree/v6.0.3"
             },
             "funding": [
                 {
@@ -7059,7 +7059,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-16T22:13:01+00:00"
+            "time": "2022-01-02T09:55:41+00:00"
         },
         {
             "name": "symfony/translation",
