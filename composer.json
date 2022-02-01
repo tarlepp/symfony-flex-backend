@@ -47,7 +47,7 @@
 		"symfony/form": "6.0.2",
 		"symfony/framework-bundle": "6.0.2",
 		"symfony/monolog-bundle": "3.7.1",
-		"symfony/process": "6.0.2",
+		"symfony/process": "6.0.3",
 		"symfony/property-access": "6.0.2",
 		"symfony/property-info": "6.0.2",
 		"symfony/routing": "6.0.1",
