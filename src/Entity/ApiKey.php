@@ -169,7 +169,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         for ($i = 0; $i < 40; $i++) {
-            $random .= $chars[random_int(0, 62)];
+            $random .= $chars[random_int(0, 61)];
         }
 
         return $this->setToken($random);
