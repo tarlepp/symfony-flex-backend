@@ -80,9 +80,6 @@
 		"platform": {
 			"php": "8.1.0"
 		},
-		"preferred-install": {
-			"*": "dist"
-		},
 		"sort-packages": true,
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true,
@@ -132,7 +129,6 @@
 			"Rector\\Set\\": "tools/09_rector/vendor/rector/rector/packages/Set"
 		}
 	},
-	"prefer-stable": true,
 	"scripts": {
 		"post-install-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
