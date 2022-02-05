@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Validator\Constraints;
 
-use App\Entity\User;
 use App\Service\Localization;
 use App\Validator\Constraints\Timezone;
 use App\Validator\Constraints\TimezoneValidator;
@@ -32,10 +31,6 @@ class TimezoneValidatorTest extends KernelTestCase
         $localizationMock = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
         $contextMock = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-
-        // Create new user
-        $user = (new User())
-            ->setTimezone('foo/bar');
 
         $localizationMock
             ->expects(self::once())
@@ -66,6 +61,6 @@ class TimezoneValidatorTest extends KernelTestCase
         // Run validator
         $validator = new TimezoneValidator($localizationMock);
         $validator->initialize($contextMock);
-        $validator->validate($user, new Timezone());
+        $validator->validate('foo/bar', new Timezone());
     }
 }
