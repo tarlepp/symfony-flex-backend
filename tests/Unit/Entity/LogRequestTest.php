@@ -31,8 +31,14 @@ class LogRequestTest extends KernelTestCase
     public function testThatGetCreatedAtReturnsExpected(): void
     {
         $entity = new LogRequest([]);
+        $createdAt = $entity->getCreatedAt();
 
-        self::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+        self::assertNotNull($createdAt);
+        self::assertEqualsWithDelta(
+            (new DateTime('now', new DateTimeZone('utc')))->getTimestamp(),
+            $createdAt->getTimestamp(),
+            1,
+        );
     }
 
     /**
