@@ -486,7 +486,7 @@ else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose logs --follow php nginx mysql
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose logs --follow php nginx mariadb
 endif
 
 start: ## Start application in development mode
