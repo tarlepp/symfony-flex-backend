@@ -98,14 +98,4 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->timezone;
     }
-
-    /**
-     * @reminder Remove this method when Symfony 6.0.0 is released
-     *
-     * @codeCoverageIgnore
-     */
-    public function getUsername(): string
-    {
-        return $this->getUserIdentifier();
-    }
 }

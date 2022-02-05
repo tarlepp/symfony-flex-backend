@@ -78,14 +78,4 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     public function eraseCredentials(): void
     {
     }
-
-    /**
-     * @remimder Remove this method when Symfony 6.0.0 is released
-     *
-     * @codeCoverageIgnore
-     */
-    public function getUsername(): string
-    {
-        return $this->getUserIdentifier();
-    }
 }
