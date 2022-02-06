@@ -23,13 +23,13 @@ use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\String\ByteString;
 use Symfony\Component\Validator\Constraints as Assert;
 use Throwable;
 use function array_map;
 use function array_merge;
 use function array_unique;
 use function array_values;
-use function random_int;
 
 /**
  * Class ApiKey
@@ -165,14 +165,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      */
     public function generateToken(): self
     {
-        $random = '';
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        for ($i = 0; $i < 40; $i++) {
-            $random .= $chars[random_int(0, 61)];
-        }
-
-        return $this->setToken($random);
+        return $this->setToken(ByteString::fromRandom(40)->toString());
     }
 
     public function getDescription(): string
