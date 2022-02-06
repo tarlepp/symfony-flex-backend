@@ -1,4 +1,4 @@
-FROM php:8.1.1-fpm
+FROM php:8.1.2-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -9,8 +9,8 @@ ARG HOST_GID
 
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
-ENV NVM_VERSION v0.39.0
-ENV NODE_VERSION 17.2.0
+ENV NVM_VERSION v0.39.1
+ENV NODE_VERSION 17.4.0
 
 # Update package list and install necessary libraries
 RUN apt-get update \
@@ -34,7 +34,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.2.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.2.4 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
