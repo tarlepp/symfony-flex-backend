@@ -55,22 +55,22 @@
         },
         {
             "name": "composer-unused/symbol-parser",
-            "version": "0.1.5",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer-unused/symbol-parser.git",
-                "reference": "2d6ee47c70ee454d056155bf9b8a23e6aed1e003"
+                "reference": "23913cddc04f43749e45dda39ff0964ea631b0f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/symbol-parser/zipball/2d6ee47c70ee454d056155bf9b8a23e6aed1e003",
-                "reference": "2d6ee47c70ee454d056155bf9b8a23e6aed1e003",
+                "url": "https://api.github.com/repos/composer-unused/symbol-parser/zipball/23913cddc04f43749e45dda39ff0964ea631b0f7",
+                "reference": "23913cddc04f43749e45dda39ff0964ea631b0f7",
                 "shasum": ""
             },
             "require": {
                 "composer-unused/contracts": "^0.1 || ^0.2",
                 "nikic/php-parser": "^4.13",
-                "php": ">=7.4 || ^8.0",
+                "php": "^7.4 || ^8.0",
                 "psr/container": "^1.0 || ^2.0",
                 "psr/log": "^1.1 || ^2 || ^3",
                 "symfony/finder": "4.4 || ^5.3 || ^6.0"
@@ -120,7 +120,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2022-02-03T11:16:08+00:00"
+            "time": "2022-02-08T12:00:04+00:00"
         },
         {
             "name": "icanhazstring/composer-unused",
