@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a440a9dccb9f2ac00d74194ab608ed44",
+    "content-hash": "b5b990814972f99ae393c5e2f4f5a892",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2160,16 +2160,16 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "v5.1.2",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/symfony-console-form.git",
-                "reference": "a7db37afb1a3a4fe5c1083f47614bd702f9c53be"
+                "reference": "fab9b9320c96ddde139b41a3dc0f927d3a0a7549"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/a7db37afb1a3a4fe5c1083f47614bd702f9c53be",
-                "reference": "a7db37afb1a3a4fe5c1083f47614bd702f9c53be",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/fab9b9320c96ddde139b41a3dc0f927d3a0a7549",
+                "reference": "fab9b9320c96ddde139b41a3dc0f927d3a0a7549",
                 "shasum": ""
             },
             "require": {
@@ -2216,9 +2216,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthiasnoback/symfony-console-form/issues",
-                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.1.2"
+                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.2.0"
             },
-            "time": "2022-02-07T13:47:45+00:00"
+            "time": "2022-02-09T14:47:00+00:00"
         },
         {
             "name": "monolog/monolog",
