@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02ff5debffa22915c5ed2cd7e5067ce6",
+    "content-hash": "44b03f6a39d5553cd3bb6947081339c8",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2160,16 +2160,16 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "v5.1.1",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/symfony-console-form.git",
-                "reference": "a9ad35e3d6841496680334da3ae81988c0936b30"
+                "reference": "fab9b9320c96ddde139b41a3dc0f927d3a0a7549"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/a9ad35e3d6841496680334da3ae81988c0936b30",
-                "reference": "a9ad35e3d6841496680334da3ae81988c0936b30",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/fab9b9320c96ddde139b41a3dc0f927d3a0a7549",
+                "reference": "fab9b9320c96ddde139b41a3dc0f927d3a0a7549",
                 "shasum": ""
             },
             "require": {
@@ -2216,9 +2216,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthiasnoback/symfony-console-form/issues",
-                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.1.1"
+                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.2.0"
             },
-            "time": "2021-12-17T15:05:42+00:00"
+            "time": "2022-02-09T14:47:00+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -5383,12 +5383,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Grapheme\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5551,12 +5551,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -5859,12 +5859,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php80\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php80\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -5942,12 +5942,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php81\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php81\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
