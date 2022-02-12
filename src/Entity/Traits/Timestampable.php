@@ -22,13 +22,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 trait Timestampable
 {
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(
         name: 'created_at',
         type: Types::DATETIME_IMMUTABLE,
         nullable: true,
+    )]
+    #[Gedmo\Timestampable(
+        on: 'create',
     )]
     #[Groups([
         'ApiKey.createdAt',
@@ -38,13 +38,13 @@ trait Timestampable
     ])]
     protected ?DateTimeImmutable $createdAt = null;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(
         name: 'updated_at',
         type: Types::DATETIME_IMMUTABLE,
         nullable: true,
+    )]
+    #[Gedmo\Timestampable(
+        on: 'update',
     )]
     #[Groups([
         'ApiKey.updatedAt',
