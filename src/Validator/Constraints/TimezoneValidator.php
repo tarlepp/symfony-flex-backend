@@ -33,10 +33,12 @@ class TimezoneValidator extends ConstraintValidator
      */
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (in_array($value, array_column($this->localization->getTimezones(), 'identifier'), true) !== true) {
+        if (is_string($value)
+            && !in_array($value, array_column($this->localization->getTimezones(), 'identifier'), true)
+        ) {
             $this->context
                 ->buildViolation(Timezone::MESSAGE)
-                ->setParameter('{{ timezone }}', !is_string($value) ? $value->getTimezone() : $value)
+                ->setParameter('{{ timezone }}', $value)
                 ->setCode(Timezone::INVALID_TIMEZONE)
                 ->addViolation();
         }
