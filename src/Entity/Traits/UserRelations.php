@@ -148,7 +148,6 @@ trait UserRelations
         if ($this->userGroups->contains($userGroup) === false) {
             $this->userGroups->add($userGroup);
 
-            /* @noinspection PhpParamsInspection */
             $userGroup->addUser($this);
         }
 

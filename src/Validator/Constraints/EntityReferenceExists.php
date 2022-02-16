@@ -58,12 +58,4 @@ class EntityReferenceExists extends Constraint
 
         parent::__construct($options, $groups, $payload);
     }
-
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function getTargets(): string
-    {
-        return self::PROPERTY_CONSTRAINT;
-    }
 }

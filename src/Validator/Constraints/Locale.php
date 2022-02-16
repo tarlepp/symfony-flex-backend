@@ -39,12 +39,4 @@ class Locale extends Constraint
     protected static $errorNames = [
         self::INVALID_LOCALE => 'INVALID_LOCALE',
     ];
-
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function getTargets(): string
-    {
-        return self::PROPERTY_CONSTRAINT;
-    }
 }
