@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5b990814972f99ae393c5e2f4f5a892",
+    "content-hash": "15fcd5a1160b786a6b87fa0d5ca16033",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -601,22 +601,22 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.5.5",
+            "version": "2.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "5c086cbbe5327937dd6f90da075f7d421b0f28bc"
+                "reference": "f1423b2a640b6ac545b6e0c02575427a4dc1e9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/5c086cbbe5327937dd6f90da075f7d421b0f28bc",
-                "reference": "5c086cbbe5327937dd6f90da075f7d421b0f28bc",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/f1423b2a640b6ac545b6e0c02575427a4dc1e9dc",
+                "reference": "f1423b2a640b6ac545b6e0c02575427a4dc1e9dc",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "^1",
                 "doctrine/cache": "^1.11 || ^2.0",
-                "doctrine/dbal": "^2.13.1|^3.1",
+                "doctrine/dbal": "^2.13.1|^3.3.2",
                 "doctrine/persistence": "^2.2",
                 "doctrine/sql-formatter": "^1.0.1",
                 "php": "^7.1 || ^8.0",
@@ -630,7 +630,7 @@
                 "symfony/service-contracts": "^1.1.1|^2.0|^3"
             },
             "conflict": {
-                "doctrine/orm": "<2.9",
+                "doctrine/orm": "<2.9|>=3.0",
                 "twig/twig": "<1.34|>=2.0,<2.4"
             },
             "require-dev": {
@@ -694,7 +694,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.5.5"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.5.6"
             },
             "funding": [
                 {
@@ -710,7 +710,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-06T08:56:31+00:00"
+            "time": "2022-02-13T20:17:53+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -2160,16 +2160,16 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/symfony-console-form.git",
-                "reference": "fab9b9320c96ddde139b41a3dc0f927d3a0a7549"
+                "reference": "cd6f1858e5f7351d307e1418280a3fbf096379d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/fab9b9320c96ddde139b41a3dc0f927d3a0a7549",
-                "reference": "fab9b9320c96ddde139b41a3dc0f927d3a0a7549",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/cd6f1858e5f7351d307e1418280a3fbf096379d8",
+                "reference": "cd6f1858e5f7351d307e1418280a3fbf096379d8",
                 "shasum": ""
             },
             "require": {
@@ -2216,9 +2216,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthiasnoback/symfony-console-form/issues",
-                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.2.0"
+                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.2.1"
             },
-            "time": "2022-02-09T14:47:00+00:00"
+            "time": "2022-02-15T12:40:52+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4471,28 +4471,28 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.1.4",
+            "version": "v2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "110e8928b6e719e9b9f146c8fd92c41a4b74a3ac"
+                "reference": "10e438f53a972439675dc720706f0cd5c0ed94f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/110e8928b6e719e9b9f146c8fd92c41a4b74a3ac",
-                "reference": "110e8928b6e719e9b9f146c8fd92c41a4b74a3ac",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/10e438f53a972439675dc720706f0cd5c0ed94f1",
+                "reference": "10e438f53a972439675dc720706f0cd5c0ed94f1",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^2.1",
-                "php": ">=8.0"
+                "composer-plugin-api": "^1.0|^2.0",
+                "php": ">=7.1"
             },
             "require-dev": {
-                "composer/composer": "^2.1",
-                "symfony/dotenv": "^5.4|^6.0",
-                "symfony/filesystem": "^5.4|^6.0",
-                "symfony/phpunit-bridge": "^5.4|^6.0",
-                "symfony/process": "^5.4|^6.0"
+                "composer/composer": "^1.0.2|^2.0",
+                "symfony/dotenv": "^4.4|^5.0|^6.0",
+                "symfony/filesystem": "^4.4|^5.0|^6.0",
+                "symfony/phpunit-bridge": "^4.4.12|^5.0|^6.0",
+                "symfony/process": "^4.4|^5.0|^6.0"
             },
             "type": "composer-plugin",
             "extra": {
@@ -4516,7 +4516,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.1.4"
+                "source": "https://github.com/symfony/flex/tree/v2.1.6"
             },
             "funding": [
                 {
@@ -4532,7 +4532,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-27T10:25:12+00:00"
+            "time": "2022-02-16T17:26:46+00:00"
         },
         {
             "name": "symfony/form",
@@ -7516,16 +7516,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.2.7",
+            "version": "4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "ef7ac9107fb2998440948b46610182f398487b6d"
+                "reference": "aa691c9ee5d08a8f796da8f1872c215900f8580f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/ef7ac9107fb2998440948b46610182f398487b6d",
-                "reference": "ef7ac9107fb2998440948b46610182f398487b6d",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/aa691c9ee5d08a8f796da8f1872c215900f8580f",
+                "reference": "aa691c9ee5d08a8f796da8f1872c215900f8580f",
                 "shasum": ""
             },
             "require": {
@@ -7585,24 +7585,24 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.2.7"
+                "source": "https://github.com/zircote/swagger-php/tree/4.2.8"
             },
-            "time": "2022-02-10T19:48:55+00:00"
+            "time": "2022-02-12T01:37:11+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "bamarni/composer-bin-plugin",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bamarni/composer-bin-plugin.git",
-                "reference": "9329fb0fbe29e0e1b2db8f4639a193e4f5406225"
+                "reference": "f7fb03e96a154f9c7a10fe736b6c1fa4a617d54e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bamarni/composer-bin-plugin/zipball/9329fb0fbe29e0e1b2db8f4639a193e4f5406225",
-                "reference": "9329fb0fbe29e0e1b2db8f4639a193e4f5406225",
+                "url": "https://api.github.com/repos/bamarni/composer-bin-plugin/zipball/f7fb03e96a154f9c7a10fe736b6c1fa4a617d54e",
+                "reference": "f7fb03e96a154f9c7a10fe736b6c1fa4a617d54e",
                 "shasum": ""
             },
             "require": {
@@ -7637,9 +7637,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bamarni/composer-bin-plugin/issues",
-                "source": "https://github.com/bamarni/composer-bin-plugin/tree/master"
+                "source": "https://github.com/bamarni/composer-bin-plugin/tree/1.4.2"
             },
-            "time": "2020-05-03T08:27:20+00:00"
+            "time": "2022-02-16T16:23:46+00:00"
         },
         {
             "name": "doctrine/data-fixtures",
@@ -7868,12 +7868,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "a74c203357d9b250a4019bc18e9a23a050e16bef"
+                "reference": "1032f0ce78ed92e983c17697eafd202ac5cbbca4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a74c203357d9b250a4019bc18e9a23a050e16bef",
-                "reference": "a74c203357d9b250a4019bc18e9a23a050e16bef",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1032f0ce78ed92e983c17697eafd202ac5cbbca4",
+                "reference": "1032f0ce78ed92e983c17697eafd202ac5cbbca4",
                 "shasum": ""
             },
             "conflict": {
@@ -7945,7 +7945,7 @@
                 "ecodev/newsletter": "<=4",
                 "elgg/elgg": "<3.3.24|>=4,<4.0.5",
                 "endroid/qr-code-bundle": "<3.4.2",
-                "enshrined/svg-sanitize": "<0.13.1",
+                "enshrined/svg-sanitize": "<0.15",
                 "erusev/parsedown": "<1.7.2",
                 "ether/logs": "<3.0.4",
                 "ezsystems/demobundle": ">=5.4,<5.4.6.1",
@@ -8311,7 +8311,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-11T21:12:37+00:00"
+            "time": "2022-02-15T01:00:26+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -8537,16 +8537,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.36.4",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "716eee9c8b10b33e682df1b7d80b9061887e9691"
+                "reference": "411863a63c495c68852215518bb5665965c61a2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/716eee9c8b10b33e682df1b7d80b9061887e9691",
-                "reference": "716eee9c8b10b33e682df1b7d80b9061887e9691",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/411863a63c495c68852215518bb5665965c61a2d",
+                "reference": "411863a63c495c68852215518bb5665965c61a2d",
                 "shasum": ""
             },
             "require": {
@@ -8605,7 +8605,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.36.4"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -8621,7 +8621,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-01T00:27:38+00:00"
+            "time": "2022-02-16T15:29:59+00:00"
         },
         {
             "name": "symfony/requirements-checker",
