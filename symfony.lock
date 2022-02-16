@@ -386,9 +386,6 @@
     "symfony/password-hasher": {
         "version": "v5.3.0"
     },
-    "symfony/polyfill-ctype": {
-        "version": "v1.13.1"
-    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.17.0"
     },
@@ -398,20 +395,8 @@
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.17.0"
     },
-    "symfony/polyfill-mbstring": {
-        "version": "v1.13.1"
-    },
     "symfony/polyfill-php56": {
         "version": "v1.13.1"
-    },
-    "symfony/polyfill-php72": {
-        "version": "v1.23.0"
-    },
-    "symfony/polyfill-php80": {
-        "version": "v1.15.0"
-    },
-    "symfony/polyfill-php81": {
-        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v4.4.3"
