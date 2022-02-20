@@ -5,8 +5,8 @@
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "3.6.0",
 		"roave/security-advisories": "dev-latest",
-		"symplify/config-transformer": "10.0.21",
-		"symplify/easy-coding-standard": "10.0.21"
+		"symplify/config-transformer": "10.0.24",
+		"symplify/easy-coding-standard": "10.0.24"
 	},
 	"config": {
 		"platform": {
