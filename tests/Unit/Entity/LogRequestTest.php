@@ -10,7 +10,7 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\LogRequest;
 use App\Entity\User;
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -31,8 +31,14 @@ class LogRequestTest extends KernelTestCase
     public function testThatGetCreatedAtReturnsExpected(): void
     {
         $entity = new LogRequest([]);
+        $createdAt = $entity->getCreatedAt();
 
-        self::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+        self::assertNotNull($createdAt);
+        self::assertEqualsWithDelta(
+            (new DateTimeImmutable('now', new DateTimeZone('utc')))->getTimestamp(),
+            $createdAt->getTimestamp(),
+            1,
+        );
     }
 
     /**

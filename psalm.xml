@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="false"
     rememberPropertyAssignmentsAfterCall="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config file://./tools/03_psalm/vendor/vimeo/psalm/config.xsd"
-    phpVersion="8.0"
+    phpVersion="8.1"
 >
     <projectFiles>
         <directory name="src/" />
@@ -19,6 +18,7 @@
     <plugins>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin" />
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin" />
+        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin" />
     </plugins>
 
     <issueHandlers>
