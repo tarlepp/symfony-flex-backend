@@ -1,4 +1,4 @@
-FROM php:8.1.2-fpm
+FROM php:8.1.3-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -22,7 +22,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.2.4 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.2.6 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
