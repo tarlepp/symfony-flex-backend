@@ -10,7 +10,6 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\LogRequest;
 use App\Entity\User;
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -34,12 +33,11 @@ class LogRequestTest extends KernelTestCase
         $entity = new LogRequest([]);
         $createdAt = $entity->getCreatedAt();
 
-        self::assertInstanceOf(DateTimeImmutable::class, $createdAt);
-
+        self::assertNotNull($createdAt);
         self::assertEqualsWithDelta(
-            (new DateTime('now', new DateTimeZone('utc')))->getTimestamp(),
+            (new DateTimeImmutable('now', new DateTimeZone('utc')))->getTimestamp(),
             $createdAt->getTimestamp(),
-            1
+            1,
         );
     }
 
