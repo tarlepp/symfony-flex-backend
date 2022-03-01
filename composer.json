@@ -51,7 +51,7 @@
 		"symfony/property-access": "6.0.3",
 		"symfony/property-info": "6.0.3",
 		"symfony/routing": "6.0.3",
-		"symfony/runtime": "6.0.3",
+		"symfony/runtime": "6.0.5",
 		"symfony/security-bundle": "6.0.3",
 		"symfony/serializer": "6.0.3",
 		"symfony/string": "6.0.3",
