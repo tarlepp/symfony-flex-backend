@@ -39,7 +39,7 @@ class DocumentationTest extends WebTestCase
      */
     public function testThatDocumentationJsonWorks(): void
     {
-        $this->markTestSkipped(
+        self::markTestSkipped(
             'This is currently skipped, see - https://github.com/nelmio/NelmioApiDocBundle/issues/1967'
         );
 
