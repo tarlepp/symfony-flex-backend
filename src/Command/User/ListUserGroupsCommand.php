@@ -35,7 +35,7 @@ use function sprintf;
 class ListUserGroupsCommand extends Command
 {
     use SymfonyStyleTrait;
-    
+
     public const NAME = 'user:list-groups';
 
     public function __construct(

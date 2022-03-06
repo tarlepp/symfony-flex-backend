@@ -30,7 +30,7 @@ use Throwable;
 class RemoveUserCommand extends Command
 {
     use SymfonyStyleTrait;
-    
+
     public const NAME = 'user:remove';
 
     public function __construct(

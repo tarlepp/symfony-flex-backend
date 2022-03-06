@@ -35,7 +35,7 @@ use function sprintf;
 class CreateRolesCommand extends Command
 {
     use SymfonyStyleTrait;
-    
+
     public const NAME = 'user:create-roles';
 
     public function __construct(

@@ -30,7 +30,7 @@ use Throwable;
 class ChangeTokenCommand extends Command
 {
     use SymfonyStyleTrait;
-    
+
     public const NAME = 'api-key:change-token';
 
     public function __construct(

@@ -36,7 +36,7 @@ use function sprintf;
 class ListUsersCommand extends Command
 {
     use SymfonyStyleTrait;
-    
+
     public const NAME = 'user:list';
 
     public function __construct(
