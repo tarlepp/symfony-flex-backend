@@ -14,6 +14,7 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
 use App\Resource\ApiKeyResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,17 +26,21 @@ use Throwable;
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Command to edit existing API key',
+)]
 class EditApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'api-key:edit';
 
     public function __construct(
         private ApiKeyResource $apiKeyResource,
         private ApiKeyHelper $apiKeyHelper,
     ) {
-        parent::__construct('api-key:edit');
-
-        $this->setDescription('Command to edit existing API key');
+        parent::__construct();
     }
 
     /**
