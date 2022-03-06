@@ -14,6 +14,7 @@ use App\Entity\UserGroup;
 use App\Resource\UserResource;
 use App\Security\RolesService;
 use Closure;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -28,17 +29,21 @@ use function sprintf;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to list users',
+)]
 class ListUsersCommand extends Command
 {
     use SymfonyStyleTrait;
+    
+    public const NAME = 'user:list';
 
     public function __construct(
         private UserResource $userResource,
         private RolesService $roles,
     ) {
-        parent::__construct('user:list');
-
-        $this->setDescription('Console command to list users');
+        parent::__construct();
     }
 
     /**

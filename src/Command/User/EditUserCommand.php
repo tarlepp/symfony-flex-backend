@@ -14,6 +14,7 @@ use App\Entity\User as UserEntity;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,17 +26,21 @@ use Throwable;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Command to edit existing user',
+)]
 class EditUserCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:edit';
 
     public function __construct(
         private UserResource $userResource,
         private UserHelper $userHelper,
     ) {
-        parent::__construct('user:edit');
-
-        $this->setDescription('Command to edit existing user');
+        parent::__construct();
     }
 
     /**

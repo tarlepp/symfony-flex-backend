@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Closure;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,16 +28,20 @@ use function sprintf;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to list user groups',
+)]
 class ListUserGroupsCommand extends Command
 {
     use SymfonyStyleTrait;
+    
+    public const NAME = 'user:list-groups';
 
     public function __construct(
         private UserGroupResource $userGroupResource,
     ) {
-        parent::__construct('user:list-groups');
-
-        $this->setDescription('Console command to list user groups');
+        parent::__construct();
     }
 
     /**
