@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
+use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
 use OpenApi\Annotations as OA;
@@ -36,14 +37,19 @@ class HealthzController
      *
      * @see https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
      *
-     * @OA\Response(
-     *      response=200,
-     *      description="success",
-     *      @OA\Schema(
-     *          type="object",
-     *          example={"timestamp": "2018-01-01T13:08:05+00:00"},
-     *          @OA\Property(property="timestamp", type="string"),
-     *      ),
+     * @OA\Get(
+     *     operationId="healthz",
+     *     responses={
+     *          @OA\Response(
+     *              response=200,
+     *              description="success",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  example={"timestamp": "2018-01-01T13:08:05+00:00"},
+     *                  @OA\Property(property="timestamp", type="string"),
+     *              ),
+     *          ),
+     *     },
      *  )
      *
      * @throws Throwable
@@ -57,7 +63,7 @@ class HealthzController
         return $this->responseHandler->createResponse(
             $request,
             $this->healthzService->check(),
-            format: ResponseHandler::FORMAT_JSON,
+            format: ResponseHandlerInterface::FORMAT_JSON,
             context: [
                 'groups' => [
                     'Healthz.timestamp',

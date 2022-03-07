@@ -30,14 +30,19 @@ class VersionController
     /**
      * Route for get API version.
      *
-     * @OA\Response(
-     *      response=200,
-     *      description="success",
-     *      @OA\Schema(
-     *          type="object",
-     *          example={"version": "1.2.3"},
-     *          @OA\Property(property="version", type="string", description="Version number"),
-     *      ),
+     * @OA\Get(
+     *      operationId="version",
+     *      responses={
+     *          @OA\Response(
+     *               response=200,
+     *               description="success",
+     *               @OA\Schema(
+     *                   type="object",
+     *                   example={"version": "1.2.3"},
+     *                   @OA\Property(property="version", type="string", description="Version number"),
+     *               ),
+     *           ),
+     *      },
      *  )
      */
     #[Route(
