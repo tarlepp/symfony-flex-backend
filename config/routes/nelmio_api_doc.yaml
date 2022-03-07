@@ -1,8 +1,12 @@
-NelmioApiDocBundleUi:
-    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
-    prefix:   /api/doc
+# Expose your documentation as JSON swagger compliant
+#app.swagger:
+#    path: /api/doc.json
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger }
 
-NelmioApiDocBundle:
-    path: /api/doc.json
+## Requires the Asset component and the Twig bundle
+## $ composer require twig asset
+app.swagger_ui:
+    path: /api/doc
     methods: GET
-    defaults: { _controller: nelmio_api_doc.controller.swagger }
+    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
