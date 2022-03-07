@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4158aa6c88cdfab4ca962f7128ef8b05",
+    "content-hash": "5dd1a85206ebe9db8720004a53cb8ccf",
     "packages": [],
     "packages-dev": [
         {
@@ -375,21 +375,21 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.6.0",
+            "version": "v3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "1975e4453eb2726d1f50da0ce7fa91295029a4fa"
+                "reference": "7705d5a985132a40282d18a176eb9a4a0497747c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/1975e4453eb2726d1f50da0ce7fa91295029a4fa",
-                "reference": "1975e4453eb2726d1f50da0ce7fa91295029a4fa",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/7705d5a985132a40282d18a176eb9a4a0497747c",
+                "reference": "7705d5a985132a40282d18a176eb9a4a0497747c",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^3.2",
-                "composer/xdebug-handler": "^3.0",
+                "composer/xdebug-handler": "^3.0.3",
                 "doctrine/annotations": "^1.13",
                 "ext-json": "*",
                 "ext-tokenizer": "*",
@@ -401,8 +401,8 @@
                 "symfony/finder": "^5.4 || ^6.0",
                 "symfony/options-resolver": "^5.4 || ^6.0",
                 "symfony/polyfill-mbstring": "^1.23",
-                "symfony/polyfill-php80": "^1.23",
-                "symfony/polyfill-php81": "^1.23",
+                "symfony/polyfill-php80": "^1.25",
+                "symfony/polyfill-php81": "^1.25",
                 "symfony/process": "^5.4 || ^6.0",
                 "symfony/stopwatch": "^5.4 || ^6.0"
             },
@@ -452,7 +452,7 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
-                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v3.6.0"
+                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v3.7.0"
             },
             "funding": [
                 {
@@ -460,7 +460,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-07T18:02:40+00:00"
+            "time": "2022-03-07T16:59:59+00:00"
         },
         {
             "name": "php-cs-fixer/diff",
@@ -2472,16 +2472,16 @@
         },
         {
             "name": "symplify/config-transformer",
-            "version": "10.1.1",
+            "version": "10.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "331ebeb1f8c5f1bb43836e18921b35b8c8e58da0"
+                "reference": "fb994299ad4d9bd53745a56303d9db5d4ca86ab0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/331ebeb1f8c5f1bb43836e18921b35b8c8e58da0",
-                "reference": "331ebeb1f8c5f1bb43836e18921b35b8c8e58da0",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/fb994299ad4d9bd53745a56303d9db5d4ca86ab0",
+                "reference": "fb994299ad4d9bd53745a56303d9db5d4ca86ab0",
                 "shasum": ""
             },
             "require": {
@@ -2497,7 +2497,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/10.1.1"
+                "source": "https://github.com/symplify/config-transformer/tree/10.1.2"
             },
             "funding": [
                 {
@@ -2509,20 +2509,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-03T17:22:35+00:00"
+            "time": "2022-03-06T19:10:57+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "10.1.1",
+            "version": "10.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "b1411f67beb52560c8300d8e007ccd8ca40007aa"
+                "reference": "94cea426d4da6d40347bfdcb15bcb9cf8ef446c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/b1411f67beb52560c8300d8e007ccd8ca40007aa",
-                "reference": "b1411f67beb52560c8300d8e007ccd8ca40007aa",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/94cea426d4da6d40347bfdcb15bcb9cf8ef446c6",
+                "reference": "94cea426d4da6d40347bfdcb15bcb9cf8ef446c6",
                 "shasum": ""
             },
             "require": {
@@ -2552,7 +2552,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/10.1.1"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/10.1.2"
             },
             "funding": [
                 {
@@ -2564,7 +2564,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-03T17:24:37+00:00"
+            "time": "2022-03-06T19:13:51+00:00"
         }
     ],
     "aliases": [],
