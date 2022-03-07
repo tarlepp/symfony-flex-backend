@@ -55,7 +55,7 @@
 		"symfony/security-bundle": "6.0.3",
 		"symfony/serializer": "6.0.3",
 		"symfony/string": "6.0.3",
-		"symfony/translation": "6.0.3",
+		"symfony/translation": "6.0.6",
 		"symfony/twig-bundle": "6.0.3",
 		"symfony/validator": "6.0.3",
 		"symfony/yaml": "6.0.3"
