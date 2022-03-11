@@ -93,9 +93,9 @@ containers and exposes following ports on `localhost`:
 
 * symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
-* symfony-backend-mariadb - [http://localhost:33060](http://localhost:3010) (mariadb)
+* symfony-backend-mariadb - [http://localhost:33060](http://localhost:33060) (mariadb)
 * symfony-backend-dozzle - [http://localhost:8080](http://localhost:8100) (dozzle)
-* symfony-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
+* symfony-backend-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.
