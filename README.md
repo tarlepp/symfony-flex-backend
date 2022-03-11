@@ -88,8 +88,8 @@ application:
 
 ### 3. Using application [ᐞ](#table-of-contents)
 
-By default `make start` / `docker-compose up` command starts those four
-containers and exposes following ports on `localhost`:
+By default `make start` / `docker-compose up` command starts all the containers
+and exposes following ports on `localhost` on your host machine:
 
 * symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
