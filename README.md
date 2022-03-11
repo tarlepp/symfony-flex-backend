@@ -76,14 +76,15 @@ If you like to see containers logs directly use following command:
 make watch
 ```
 
-These commands will create four (4) containers to run this backend application.
-Those containers are following:
+These commands will create following containers to run this backend
+application:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
 * [mariadb](https://mariadb.org/) (MariaDB 10.7 which will store all the data
   of application)
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
+* [adminer](https://www.adminer.org/) (to manage your database via browser)
 
 ### 3. Using application [ᐞ](#table-of-contents)
 
@@ -94,6 +95,7 @@ containers and exposes following ports on `localhost`:
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
 * symfony-backend-mariadb - [http://localhost:33060](http://localhost:3010) (mariadb)
 * symfony-backend-dozzle - [http://localhost:8080](http://localhost:8100) (dozzle)
+* symfony-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.
