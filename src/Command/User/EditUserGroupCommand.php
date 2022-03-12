@@ -14,6 +14,7 @@ use App\Entity\UserGroup as UserGroupEntity;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,17 +26,21 @@ use Throwable;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Command to edit existing user group',
+)]
 class EditUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:edit-group';
 
     public function __construct(
         private UserGroupResource $userGroupResource,
         private UserHelper $userHelper,
     ) {
-        parent::__construct('user:edit-group');
-
-        $this->setDescription('Command to edit existing user group');
+        parent::__construct();
     }
 
     /**
