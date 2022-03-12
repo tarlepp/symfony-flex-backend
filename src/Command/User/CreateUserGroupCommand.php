@@ -16,6 +16,7 @@ use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,10 +30,16 @@ use Throwable;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to create user groups',
+)]
 class CreateUserGroupCommand extends Command
 {
     use GetApplicationTrait;
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:create-group';
 
     /**
      * @var array<int, array<string, string>>
@@ -52,9 +59,7 @@ class CreateUserGroupCommand extends Command
         private UserGroupResource $userGroupResource,
         private RoleRepository $roleRepository,
     ) {
-        parent::__construct('user:create-group');
-
-        $this->setDescription('Console command to create user groups');
+        parent::__construct();
     }
 
     protected function configure(): void
