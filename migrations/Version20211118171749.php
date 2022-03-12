@@ -19,7 +19,7 @@ final class Version20211118171749 extends AbstractMigration
      */
     public function getDescription(): string
     {
-        return 'TODO: Describe reason for this migration';
+        return 'Initial database structure';
     }
 
     /**
