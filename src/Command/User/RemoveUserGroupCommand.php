@@ -11,6 +11,7 @@ namespace App\Command\User;
 use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,17 +23,21 @@ use Throwable;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to remove existing user group',
+)]
 class RemoveUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:remove-group';
 
     public function __construct(
         private UserGroupResource $userGroupResource,
         private UserHelper $userHelper,
     ) {
-        parent::__construct('user:remove-group');
-
-        $this->setDescription('Console command to remove existing user group');
+        parent::__construct();
     }
 
     /**
