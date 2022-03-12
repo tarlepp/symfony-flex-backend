@@ -11,6 +11,7 @@ namespace App\Command\User;
 use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\User;
 use App\Resource\UserResource;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,17 +23,21 @@ use Throwable;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to remove existing user',
+)]
 class RemoveUserCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:remove';
 
     public function __construct(
         private UserResource $userResource,
         private UserHelper $userHelper,
     ) {
-        parent::__construct('user:remove');
-
-        $this->setDescription('Console command to remove existing user');
+        parent::__construct();
     }
 
     /**

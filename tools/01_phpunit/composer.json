@@ -4,9 +4,9 @@
 	"require": {},
 	"require-dev": {
 		"liuggio/fastest": "1.9.0",
-		"phpunit/php-code-coverage": "9.2.10",
+		"phpunit/php-code-coverage": "9.2.15",
 		"phpunit/phpcov": "8.2.0",
-		"phpunit/phpunit": "9.5.13",
+		"phpunit/phpunit": "9.5.18",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.0.3",
 		"symfony/phpunit-bridge": "6.0.3"

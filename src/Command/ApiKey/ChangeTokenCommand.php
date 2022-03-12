@@ -11,6 +11,7 @@ namespace App\Command\ApiKey;
 use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\ApiKey;
 use App\Resource\ApiKeyResource;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,17 +23,21 @@ use Throwable;
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Command to change token for existing API key',
+)]
 class ChangeTokenCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'api-key:change-token';
 
     public function __construct(
         private ApiKeyResource $apiKeyResource,
         private ApiKeyHelper $apiKeyHelper,
     ) {
-        parent::__construct('api-key:change-token');
-
-        $this->setDescription('Command to change token for existing API key');
+        parent::__construct();
     }
 
     /**
