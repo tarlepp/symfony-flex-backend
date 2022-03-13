@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\Traits\ExecuteMultipleCommandTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 
@@ -18,6 +19,10 @@ use Symfony\Component\Console\Exception\LogicException;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: 'user:management',
+    description: 'Console command to manage users and user groups',
+)]
 class ManagementCommand extends Command
 {
     use ExecuteMultipleCommandTrait;
@@ -29,19 +34,17 @@ class ManagementCommand extends Command
      */
     public function __construct()
     {
-        parent::__construct('user:management');
-
-        $this->setDescription('Console command to manage users and user groups');
+        parent::__construct();
 
         $this->setChoices([
-            'user:list' => 'List users',
-            'user:list-groups' => 'List user groups',
-            'user:create' => 'Create user',
-            'user:create-group' => 'Create user group',
-            'user:edit' => 'Edit user',
-            'user:edit-group' => 'Edit user group',
-            'user:remove' => 'Remove user',
-            'user:remove-group' => 'Remove user group',
+            ListUsersCommand::NAME => 'List users',
+            ListUserGroupsCommand::NAME => 'List user groups',
+            CreateUserCommand::NAME => 'Create user',
+            CreateUserGroupCommand::NAME => 'Create user group',
+            EditUserCommand::NAME => 'Edit user',
+            EditUserGroupCommand::NAME => 'Edit user group',
+            RemoveUserCommand::NAME => 'Remove user',
+            RemoveUserGroupCommand::NAME => 'Remove user group',
             '0' => 'Exit',
         ]);
     }

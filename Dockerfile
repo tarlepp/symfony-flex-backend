@@ -16,6 +16,7 @@ COPY --from=mlocati/php-extension-installer:1.4.6 /usr/bin/install-php-extension
 RUN install-php-extensions \
     apcu \
     bcmath \
+    igbinary \
     intl \
     opcache \
     pdo_mysql \
