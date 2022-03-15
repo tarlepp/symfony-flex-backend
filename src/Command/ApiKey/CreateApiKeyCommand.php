@@ -18,6 +18,7 @@ use App\Resource\ApiKeyResource;
 use App\Resource\UserGroupResource;
 use App\Security\RolesService;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,10 +31,16 @@ use Throwable;
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Command to create new API key',
+)]
 class CreateApiKeyCommand extends Command
 {
     use ApiKeyUserManagementHelperTrait;
     use SymfonyStyleTrait;
+
+    public const NAME = 'api-key:create';
 
     /**
      * @var array<int, array<string, string>>
@@ -52,9 +59,7 @@ class CreateApiKeyCommand extends Command
         private RolesService $rolesService,
         private RoleRepository $roleRepository,
     ) {
-        parent::__construct('api-key:create');
-
-        $this->setDescription('Command to create new API key');
+        parent::__construct();
     }
 
     public function getRolesService(): RolesService

@@ -16,6 +16,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,6 +31,10 @@ use function sprintf;
  * @package App\Command\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: 'utils:create-date-dimension-entities',
+    description: 'Console command to create `DateDimension` entities.',
+)]
 class CreateDateDimensionEntitiesCommand extends Command
 {
     private const YEAR_MIN = 1970;
@@ -38,9 +43,7 @@ class CreateDateDimensionEntitiesCommand extends Command
     public function __construct(
         private DateDimensionRepository $dateDimensionRepository,
     ) {
-        parent::__construct('utils:create-date-dimension-entities');
-
-        $this->setDescription('Console command to create `DateDimension` entities.');
+        parent::__construct();
     }
 
     /**

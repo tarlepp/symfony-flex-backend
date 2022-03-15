@@ -40,11 +40,14 @@ class UniqueEmail extends Constraint
         self::IS_UNIQUE_EMAIL_ERROR => 'IS_UNIQUE_EMAIL_ERROR',
     ];
 
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
     public function getTargets(): string
     {
-        return self::CLASS_CONSTRAINT;
+        $output = null;
+
+        if (parent::getTargets() !== self::CLASS_CONSTRAINT) {
+            $output = self::CLASS_CONSTRAINT;
+        }
+
+        return $output ?? self::CLASS_CONSTRAINT;
     }
 }
