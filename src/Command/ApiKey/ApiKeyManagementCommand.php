@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Command\Traits\ExecuteMultipleCommandTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -17,22 +18,24 @@ use Symfony\Component\Console\Command\Command;
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: 'api-key:management',
+    description: 'Console command to manage API keys',
+)]
 class ApiKeyManagementCommand extends Command
 {
     use ExecuteMultipleCommandTrait;
 
     public function __construct()
     {
-        parent::__construct('api-key:management');
-
-        $this->setDescription('Console command to manage API keys');
+        parent::__construct();
 
         $this->setChoices([
-            'api-key:list' => 'List API keys',
-            'api-key:create' => 'Create API key',
-            'api-key:edit' => 'Edit API key',
-            'api-key:change-token' => 'Change API key token',
-            'api-key:remove' => 'Remove API key',
+            ListApiKeysCommand::NAME => 'List API keys',
+            CreateApiKeyCommand::NAME => 'Create API key',
+            EditApiKeyCommand::NAME => 'Edit API key',
+            ChangeTokenCommand::NAME => 'Change API key token',
+            RemoveApiKeyCommand::NAME => 'Remove API key',
             '0' => 'Exit',
         ]);
     }
