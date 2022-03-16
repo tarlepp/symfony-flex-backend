@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Command\Traits;
 
 use App\Enum\Role;
-use App\Security\RolesService;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;

@@ -10,7 +10,6 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Enum\Role as RoleEnum;
-use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

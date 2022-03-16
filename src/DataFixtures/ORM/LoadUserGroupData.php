@@ -12,7 +12,6 @@ use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Enum\Role as RoleEnum;
 use App\Rest\UuidHelper;
-use App\Security\Interfaces\RolesServiceInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
