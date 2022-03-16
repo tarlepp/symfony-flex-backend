@@ -10,6 +10,7 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Entity\UserGroup;
+use App\Enum\Role as RoleEnum;
 use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
 use App\Utils\Tests\PhpUnitUtil;
@@ -40,18 +41,13 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         'Role-root' => '10000000-0000-1000-8000-000000000005',
     ];
 
-    public function __construct(
-        private RolesServiceInterface $rolesService,
-    ) {
-    }
-
     /**
      * @throws Throwable
      */
     public function load(ObjectManager $manager): void
     {
         // Create entities
-        array_map(fn (string $role): bool => $this->createUserGroup($manager, $role), $this->rolesService->getRoles());
+        array_map(fn (RoleEnum $role): bool => $this->createUserGroup($manager, $role), RoleEnum::cases());
 
         // Flush database changes
         $manager->flush();
@@ -67,19 +63,19 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
      *
      * @throws Throwable
      */
-    private function createUserGroup(ObjectManager $manager, string $role): bool
+    private function createUserGroup(ObjectManager $manager, RoleEnum $role): bool
     {
         /** @var Role $roleReference */
-        $roleReference = $this->getReference('Role-' . $this->rolesService->getShort($role));
+        $roleReference = $this->getReference('Role-' . $role->getShort());
 
         // Create new entity
         $entity = new UserGroup();
         $entity->setRole($roleReference);
-        $entity->setName($this->rolesService->getRoleLabel($role));
+        $entity->setName($role->getLabel());
 
         PhpUnitUtil::setProperty(
             'id',
-            UuidHelper::fromString(self::$uuids['Role-' . $this->rolesService->getShort($role)]),
+            UuidHelper::fromString(self::$uuids['Role-' . $role->getShort()]),
             $entity
         );
 
@@ -87,7 +83,7 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         $manager->persist($entity);
 
         // Create reference for later usage
-        $this->addReference('UserGroup-' . $this->rolesService->getShort($role), $entity);
+        $this->addReference('UserGroup-' . $role->getShort(), $entity);
 
         return true;
     }

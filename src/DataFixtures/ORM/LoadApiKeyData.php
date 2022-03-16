@@ -10,8 +10,8 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
+use App\Enum\Role;
 use App\Rest\UuidHelper;
-use App\Security\Interfaces\RolesServiceInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -42,11 +42,6 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
         '-root' => '30000000-0000-1000-8000-000000000006',
     ];
 
-    public function __construct(
-        private RolesServiceInterface $rolesService,
-    ) {
-    }
-
     /**
      * @throws Throwable
      */
@@ -54,10 +49,10 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
     {
         // Create entities
         array_map(
-            fn (?string $role): bool => $this->createApiKey($manager, $role),
+            fn (?Role $role): bool => $this->createApiKey($manager, $role),
             [
                 null,
-                ...$this->rolesService->getRoles(),
+                ...Role::cases(),
             ],
         );
 
@@ -73,22 +68,22 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
     /**
      * @throws Throwable
      */
-    private function createApiKey(ObjectManager $manager, ?string $role = null): bool
+    private function createApiKey(ObjectManager $manager, ?Role $role = null): bool
     {
         // Create new entity
         $entity = (new ApiKey())
-            ->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->rolesService->getShort($role)))
-            ->setToken(str_pad($role === null ? '' : $this->rolesService->getShort($role), 40, '_'));
+            ->setDescription('ApiKey Description: ' . ($role === null ? '' : $role->getShort()))
+            ->setToken(str_pad($role === null ? '' : $role->getShort(), 40, '_'));
 
         $suffix = '';
 
         if ($role !== null) {
             /** @var UserGroup $userGroup */
-            $userGroup = $this->getReference('UserGroup-' . $this->rolesService->getShort($role));
+            $userGroup = $this->getReference('UserGroup-' . $role->getShort());
 
             $entity->addUserGroup($userGroup);
 
-            $suffix = '-' . $this->rolesService->getShort($role);
+            $suffix = '-' . $role->getShort();
         }
 
         PhpUnitUtil::setProperty(

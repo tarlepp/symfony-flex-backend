@@ -10,6 +10,7 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Role;
 use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
 use App\Utils\Tests\PhpUnitUtil;
@@ -41,11 +42,6 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
         'john-root' => '20000000-0000-1000-8000-000000000006',
     ];
 
-    public function __construct(
-        private RolesServiceInterface $rolesService,
-    ) {
-    }
-
     /**
      * @throws Throwable
      */
@@ -53,10 +49,10 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
     {
         // Create entities
         array_map(
-            fn (?string $role): bool => $this->createUser($manager, $role),
+            fn (?Role $role): bool => $this->createUser($manager, $role),
             [
                 null,
-                ...$this->rolesService->getRoles(),
+                ...Role::cases(),
             ],
         );
 
@@ -74,9 +70,9 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
      *
      * @throws Throwable
      */
-    private function createUser(ObjectManager $manager, ?string $role = null): bool
+    private function createUser(ObjectManager $manager, ?Role $role = null): bool
     {
-        $suffix = $role === null ? '' : '-' . $this->rolesService->getShort($role);
+        $suffix = $role === null ? '' : '-' . $role->getShort();
 
         // Create new entity
         $entity = (new User())
@@ -88,7 +84,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
 
         if ($role !== null) {
             /** @var UserGroup $userGroup */
-            $userGroup = $this->getReference('UserGroup-' . $this->rolesService->getShort($role));
+            $userGroup = $this->getReference('UserGroup-' . $role->getShort());
 
             $entity->addUserGroup($userGroup);
         }

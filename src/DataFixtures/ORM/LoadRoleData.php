@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
+use App\Enum\Role as RoleEnum;
 use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -26,18 +27,13 @@ use function array_map;
  */
 final class LoadRoleData extends Fixture implements OrderedFixtureInterface
 {
-    public function __construct(
-        private RolesServiceInterface $rolesService,
-    ) {
-    }
-
     /**
      * @throws Throwable
      */
     public function load(ObjectManager $manager): void
     {
         // Create entities
-        array_map(fn (string $role): bool => $this->createRole($manager, $role), $this->rolesService->getRoles());
+        array_map(fn (RoleEnum $role): bool => $this->createRole($manager, $role), RoleEnum::cases());
 
         // Flush database changes
         $manager->flush();
@@ -53,17 +49,17 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface
      *
      * @throws Throwable
      */
-    private function createRole(ObjectManager $manager, string $role): bool
+    private function createRole(ObjectManager $manager, RoleEnum $role): bool
     {
         // Create new Role entity
-        $entity = (new Role($role))
-            ->setDescription('Description - ' . $role);
+        $entity = (new Role($role->value))
+            ->setDescription('Description - ' . $role->getLabel());
 
         // Persist entity
         $manager->persist($entity);
 
         // Create reference for later usage
-        $this->addReference('Role-' . $this->rolesService->getShort($role), $entity);
+        $this->addReference('Role-' . $role->getShort(), $entity);
 
         return true;
     }
