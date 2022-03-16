@@ -10,11 +10,11 @@ namespace App\Form\Type\Console;
 
 use App\DTO\UserGroup\UserGroup;
 use App\Entity\Role;
+use App\Enum\Role as RoleEnum;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Resource\RoleResource;
-use App\Security\RolesService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -49,7 +49,6 @@ class UserGroupType extends AbstractType
     ];
 
     public function __construct(
-        private RolesService $rolesService,
         private RoleResource $roleResource,
         private RoleTransformer $roleTransformer,
     ) {
@@ -102,7 +101,7 @@ class UserGroupType extends AbstractType
         $choices = [];
 
         $iterator = function (Role $role) use (&$choices): void {
-            $choices[$this->rolesService->getRoleLabel($role->getId())] = $role->getId();
+            $choices[RoleEnum::from($role->getId())->getLabel()] = $role->getId();
         };
 
         array_map($iterator, $this->roleResource->find());
