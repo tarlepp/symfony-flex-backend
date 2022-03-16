@@ -16,7 +16,6 @@ use App\Form\Type\Console\ApiKeyType;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Resource\UserGroupResource;
-use App\Security\RolesService;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,17 +48,11 @@ class CreateApiKeyCommand extends Command
         private ApiKeyHelper $apiKeyHelper,
         private ApiKeyResource $apiKeyResource,
         private UserGroupResource $userGroupResource,
-        private RolesService $rolesService,
         private RoleRepository $roleRepository,
     ) {
         parent::__construct('api-key:create');
 
         $this->setDescription('Command to create new API key');
-    }
-
-    public function getRolesService(): RolesService
-    {
-        return $this->rolesService;
     }
 
     protected function configure(): void

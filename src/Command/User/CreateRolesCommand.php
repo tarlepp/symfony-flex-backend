@@ -10,8 +10,8 @@ namespace App\Command\User;
 
 use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\Role;
+use App\Enum\Role as RoleEnum;
 use App\Repository\RoleRepository;
-use App\Security\RolesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +34,6 @@ class CreateRolesCommand extends Command
     public function __construct(
         private EntityManagerInterface $entityManager,
         private RoleRepository $roleRepository,
-        private RolesService $rolesService,
     ) {
         parent::__construct('user:create-roles');
 
@@ -52,14 +51,14 @@ class CreateRolesCommand extends Command
 
         $created = array_sum(
             array_map(
-                fn (string $role): int => $this->createRole($role),
-                $this->rolesService->getRoles(),
+                fn (RoleEnum $role): int => $this->createRole($role),
+                RoleEnum::cases(),
             ),
         );
 
         $this->entityManager->flush();
 
-        $removed = $this->clearRoles($this->rolesService->getRoles());
+        $removed = $this->clearRoles();
 
         if ($input->isInteractive()) {
             $message = sprintf(
@@ -80,12 +79,12 @@ class CreateRolesCommand extends Command
      *
      * @throws Throwable
      */
-    private function createRole(string $role): int
+    private function createRole(RoleEnum $role): int
     {
         $output = 0;
 
-        if ($this->roleRepository->find($role) === null) {
-            $entity = new Role($role);
+        if ($this->roleRepository->find($role->value) === null) {
+            $entity = new Role($role->value);
 
             $this->entityManager->persist($entity);
 
@@ -97,16 +96,14 @@ class CreateRolesCommand extends Command
 
     /**
      * Method to clean existing roles from database that does not really
-     * exists.
-     *
-     * @param array<int, string> $roles
+     * exist.
      */
-    private function clearRoles(array $roles): int
+    private function clearRoles(): int
     {
         return (int)$this->roleRepository->createQueryBuilder('role')
             ->delete()
             ->where('role.id NOT IN(:roles)')
-            ->setParameter(':roles', $roles)
+            ->setParameter(':roles', RoleEnum::getValues())
             ->getQuery()
             ->execute();
     }

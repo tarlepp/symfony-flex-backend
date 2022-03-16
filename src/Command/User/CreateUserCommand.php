@@ -16,7 +16,6 @@ use App\Form\Type\Console\UserType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
-use App\Security\RolesService;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,17 +70,11 @@ class CreateUserCommand extends Command
     public function __construct(
         private UserResource $userResource,
         private UserGroupResource $userGroupResource,
-        private RolesService $rolesService,
         private RoleRepository $roleRepository,
     ) {
         parent::__construct('user:create');
 
         $this->setDescription('Console command to create user to database');
-    }
-
-    public function getRolesService(): RolesService
-    {
-        return $this->rolesService;
     }
 
     protected function configure(): void

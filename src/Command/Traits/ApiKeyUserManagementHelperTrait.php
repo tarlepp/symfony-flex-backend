@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Command\Traits;
 
+use App\Enum\Role;
 use App\Security\RolesService;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,8 +24,6 @@ trait ApiKeyUserManagementHelperTrait
 {
     use GetApplicationTrait;
 
-    abstract public function getRolesService(): RolesService;
-
     /**
      * Method to create user groups via existing 'user:create-group' command.
      *
@@ -35,11 +34,11 @@ trait ApiKeyUserManagementHelperTrait
         $command = $this->getApplication()->find('user:create-group');
 
         // Iterate roles and create user group for each one
-        foreach ($this->getRolesService()->getRoles() as $role) {
+        foreach (Role::cases() as $role) {
             $arguments = [
                 'command' => 'user:create-group',
-                '--name' => $this->getRolesService()->getRoleLabel($role),
-                '--role' => $role,
+                '--name' => $role->getLabel(),
+                '--role' => $role->value,
                 '-n' => true,
             ];
 
