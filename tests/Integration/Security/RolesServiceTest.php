@@ -40,44 +40,6 @@ class RolesServiceTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `RolesServiceInterface::getRoles` method returns expected
-     */
-    public function testThatGetRolesReturnsExpected(): void
-    {
-        self::assertSame(
-            [
-                'ROLE_LOGGED',
-                'ROLE_USER',
-                'ROLE_ADMIN',
-                'ROLE_ROOT',
-                'ROLE_API',
-            ],
-            $this->getService()->getRoles(),
-            'Returned roles are not expected.'
-        );
-    }
-
-    /**
-     * @dataProvider dataProviderTestThatGetRoleLabelReturnsExpected
-     *
-     * @testdox Test that `RolesServiceInterface::getRoleLabel` method returns `$expected` when using `$role` as input
-     */
-    public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
-    {
-        self::assertSame($expected, $this->getService()->getRoleLabel($role), 'Role label was not expected one.');
-    }
-
-    /**
-     * @dataProvider dataProviderTestThatGetShortReturnsExpected
-     *
-     * @testdox Test that `RolesServiceInterface::getShort` method returns `$expected` when using `$input` as input
-     */
-    public function testThatGetShortReturnsExpected(string $input, string $expected): void
-    {
-        self::assertSame($expected, $this->getService()->getShort($input), 'Short role name was not expected');
-    }
-
-    /**
      * @dataProvider dataProviderTestThatGetInheritedRolesReturnsExpected
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $expected
@@ -96,32 +58,6 @@ class RolesServiceTest extends KernelTestCase
             $this->getService()->getInheritedRoles($roles->getArrayCopy()),
             'Inherited roles was not expected'
         );
-    }
-
-    /**
-     * @return Generator<array{0: string, 1: string}>
-     */
-    public function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
-    {
-        yield [RolesServiceInterface::ROLE_LOGGED, 'Logged in users'];
-        yield [RolesServiceInterface::ROLE_USER, 'Normal users'];
-        yield [RolesServiceInterface::ROLE_ADMIN, 'Admin users'];
-        yield [RolesServiceInterface::ROLE_ROOT, 'Root users'];
-        yield [RolesServiceInterface::ROLE_API, 'API users'];
-        yield ['Not supported role', 'Unknown - Not supported role'];
-    }
-
-    /**
-     * @return Generator<array{0: string, 1: string}>
-     */
-    public function dataProviderTestThatGetShortReturnsExpected(): Generator
-    {
-        yield [RolesServiceInterface::ROLE_LOGGED, 'logged'];
-        yield [RolesServiceInterface::ROLE_USER, 'user'];
-        yield [RolesServiceInterface::ROLE_ADMIN, 'admin'];
-        yield [RolesServiceInterface::ROLE_ROOT, 'root'];
-        yield [RolesServiceInterface::ROLE_API, 'api'];
-        yield ['SOME_CUSTOM_ROLE', 'custom_role'];
     }
 
     /**

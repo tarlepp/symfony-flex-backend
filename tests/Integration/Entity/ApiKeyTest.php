@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\ApiKey;
+use App\Enum\Role;
 use App\Repository\ApiKeyRepository;
 use App\Security\Interfaces\RolesServiceInterface;
-use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use function array_unique;
@@ -57,13 +57,11 @@ class ApiKeyTest extends EntityTestCase
      */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
-        $rolesService = self::getContainer()->get(RolesService::class);
-
-        foreach ($rolesService->getRoles() as $role) {
+        foreach (Role::cases() as $role) {
             yield [
-                new StringableArrayObject(array_unique([RolesServiceInterface::ROLE_API, $role])),
+                new StringableArrayObject(array_unique([RolesServiceInterface::ROLE_API, $role->value])),
                 new StringableArrayObject([
-                    'description' => 'ApiKey Description: ' . $rolesService->getShort($role),
+                    'description' => 'ApiKey Description: ' . $role->getShort(),
                 ]),
             ];
         }

@@ -9,10 +9,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Request\ParamConverter;
 
 use App\Entity\Role;
+use App\Enum\Role as RoleEnum;
 use App\Request\ParamConverter\RestResourceConverter;
 use App\Resource\ResourceCollection;
 use App\Resource\RoleResource;
-use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -71,10 +71,10 @@ class RestResourceConverterTest extends KernelTestCase
      *
      * @testdox Test that `apply` method works as expected when using `$role` as a request attribute.
      */
-    public function testThatApplyMethodReturnsExpected(string $role): void
+    public function testThatApplyMethodReturnsExpected(RoleEnum $role): void
     {
         $request = new Request();
-        $request->attributes->set('role', $role);
+        $request->attributes->set('role', $role->value);
 
         $paramConverter = new ParamConverter([
             'name' => 'role',
@@ -83,7 +83,7 @@ class RestResourceConverterTest extends KernelTestCase
 
         self::assertTrue($this->getConverter()->apply($request, $paramConverter));
         self::assertInstanceOf(Role::class, $request->attributes->get('role'));
-        self::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
+        self::assertSame('Description - ' . $role->getLabel(), $request->attributes->get('role')->getDescription());
     }
 
     /**
@@ -122,15 +122,15 @@ class RestResourceConverterTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<array{0: RoleEnum}>
      */
     public function dataProviderTestThatApplyMethodReturnsExpected(): Generator
     {
-        yield [RolesService::ROLE_LOGGED];
-        yield [RolesService::ROLE_USER];
-        yield [RolesService::ROLE_ADMIN];
-        yield [RolesService::ROLE_ROOT];
-        yield [RolesService::ROLE_API];
+        yield [RoleEnum::ROLE_LOGGED];
+        yield [RoleEnum::ROLE_USER];
+        yield [RoleEnum::ROLE_ADMIN];
+        yield [RoleEnum::ROLE_ROOT];
+        yield [RoleEnum::ROLE_API];
     }
 
     private function getConverter(): RestResourceConverter

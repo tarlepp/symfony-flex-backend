@@ -13,7 +13,6 @@ use App\Entity\Role;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\RoleResource;
-use App\Security\RolesService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -33,7 +32,6 @@ class UserGroupTypeTest extends TypeTestCase
     public function testSubmitValidData(): void
     {
         $resource = $this->getRoleResource();
-        $service = $this->getRolesService();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
@@ -48,11 +46,6 @@ class UserGroupTypeTest extends TypeTestCase
             ->method('findOne')
             ->with($roleEntity->getId())
             ->willReturn($roleEntity);
-
-        $service
-            ->expects(self::once())
-            ->method('getRoleLabel')
-            ->willReturn('role name');
 
         // Create form
         $form = $this->factory->create(UserGroupType::class);
@@ -96,10 +89,9 @@ class UserGroupTypeTest extends TypeTestCase
         parent::getExtensions();
 
         $resource = $this->getRoleResource();
-        $service = $this->getRolesService();
 
         // create a type instance with the mocked dependencies
-        $type = new UserGroupType($service, $resource, new RoleTransformer($resource));
+        $type = new UserGroupType($resource, new RoleTransformer($resource));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -108,23 +100,9 @@ class UserGroupTypeTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return MockObject&RolesService
-     */
-    private function getRolesService(): MockObject
-    {
-        static $cache;
-
-        if ($cache === null) {
-            $cache = $this->createMock(RolesService::class);
-        }
-
-        return $cache;
-    }
-
-    /**
      * @phpstan-return MockObject&RoleResource
      */
-    private function getRoleResource(): MockObject
+    private function getRoleResource(): mixed
     {
         static $cache;
 
