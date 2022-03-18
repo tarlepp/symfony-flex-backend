@@ -318,6 +318,22 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatEnumHasUnitTest
+     *
+     * @testdox Test that enum `$class` has unit test class `$testClass`
+     */
+    public function testThatEnumHasUnitTest(string $testClass, string $class): void
+    {
+        $message = sprintf(
+            'Enum "%s" does not have required test class "%s".',
+            $class,
+            $testClass
+        );
+
+        self::assertTrue(class_exists($testClass), $message);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatEventSubscriberHasUnitTest
      *
      * @testdox Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`
@@ -720,6 +736,21 @@ FORMAT;
     /**
      * @return array<int, array{0: string, 1: string}>
      */
+    public function dataProviderTestThatEnumHasUnitTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = self::$kernel->getProjectDir() . '/src/Enum/';
+        $namespace = '\\App\\Enum\\';
+        $namespaceTest = '\\App\\Tests\\Unit\\Enum\\';
+        $filter = $this->getIsEnumFilter();
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
         $this->bootKernelCached();
@@ -953,5 +984,10 @@ FORMAT;
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
             && $reflectionClass->isSubclassOf($class);
+    }
+
+    private function getIsEnumFilter(): Closure
+    {
+        return static fn (ReflectionClass $reflectionClass): bool => $reflectionClass->isEnum();
     }
 }
