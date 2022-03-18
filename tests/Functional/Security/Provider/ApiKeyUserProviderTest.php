@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Functional\Security\Provider;
 
 use App\Entity\ApiKey;
+use App\Enum\Role;
 use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
@@ -117,11 +118,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        $rolesService = self::getContainer()->get(RolesService::class);
-
-        $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
-
-        return array_map($iterator, $rolesService->getRoles());
+        return array_map(static fn (Role $role): array => [$role->getShort()], Role::cases());
     }
 
     /**
