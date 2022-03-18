@@ -71,15 +71,12 @@ class Localization
 
     /**
      * @return array<int, array{timezone: string, identifier: string,  offset: string, value: string}>
-     *
-     * @noinspection PhpDocMissingThrowsInspection
      */
     public function getTimezones(): array
     {
         $output = [];
 
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->appCacheApcu->get('application_timezone', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
@@ -89,7 +86,7 @@ class Localization
     }
 
     /**
-     * @noinspection PhpDocMissingThrowsInspection
+     * @throws Throwable
      *
      * @return array<int, array{timezone: string, identifier: string,  offset: string, value: string}>
      */
@@ -102,7 +99,6 @@ class Localization
         foreach ($identifiers as $identifier) {
             $dateTimeZone = new DateTimeZone($identifier);
 
-            /** @noinspection PhpUnhandledExceptionInspection */
             $dateTime = new DateTimeImmutable(timezone: $dateTimeZone);
 
             $hours = floor($dateTimeZone->getOffset($dateTime) / 3600);

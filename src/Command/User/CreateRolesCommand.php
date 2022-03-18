@@ -13,6 +13,7 @@ use App\Entity\Role;
 use App\Enum\Role as RoleEnum;
 use App\Repository\RoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,17 +28,21 @@ use function sprintf;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to create roles to database',
+)]
 class CreateRolesCommand extends Command
 {
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:create-roles';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private RoleRepository $roleRepository,
     ) {
-        parent::__construct('user:create-roles');
-
-        $this->setDescription('Console command to create roles to database');
+        parent::__construct();
     }
 
     /**

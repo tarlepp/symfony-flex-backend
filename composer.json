@@ -27,11 +27,11 @@
 		"doctrine/annotations": "1.13.2",
 		"doctrine/doctrine-bundle": "2.5.7",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
-		"doctrine/orm": "2.11.1",
+		"doctrine/orm": "2.11.2",
 		"gedmo/doctrine-extensions": "3.5.0",
 		"lexik/jwt-authentication-bundle": "2.14.4",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
-		"matomo/device-detector": "5.0.4",
+		"matomo/device-detector": "5.0.5",
 		"matthiasnoback/symfony-console-form": "5.2.1",
 		"nelmio/api-doc-bundle": "4.8.2",
 		"nelmio/cors-bundle": "2.2.0",
@@ -91,6 +91,7 @@
 		"sort-packages": true,
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true,
+			"ergebnis/composer-normalize": true,
 			"bamarni/composer-bin-plugin": true,
 			"symfony/flex": true,
 			"symfony/runtime": true

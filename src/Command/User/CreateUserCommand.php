@@ -17,6 +17,7 @@ use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,10 +30,16 @@ use Throwable;
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: self::NAME,
+    description: 'Console command to create user to database',
+)]
 class CreateUserCommand extends Command
 {
     use ApiKeyUserManagementHelperTrait;
     use SymfonyStyleTrait;
+
+    public const NAME = 'user:create';
 
     private const PARAMETER_NAME = 'name';
     private const PARAMETER_DESCRIPTION = 'description';
@@ -72,9 +79,7 @@ class CreateUserCommand extends Command
         private UserGroupResource $userGroupResource,
         private RoleRepository $roleRepository,
     ) {
-        parent::__construct('user:create');
-
-        $this->setDescription('Console command to create user to database');
+        parent::__construct();
     }
 
     protected function configure(): void

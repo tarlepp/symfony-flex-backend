@@ -39,12 +39,4 @@ class Language extends Constraint
     protected static $errorNames = [
         self::INVALID_LANGUAGE => 'INVALID_LANGUAGE',
     ];
-
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function getTargets(): string
-    {
-        return self::PROPERTY_CONSTRAINT;
-    }
 }
