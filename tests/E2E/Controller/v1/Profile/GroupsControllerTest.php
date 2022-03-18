@@ -8,8 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Profile;
 
-use App\Security\Interfaces\RolesServiceInterface;
-use App\Security\RolesService;
+use App\Enum\Role;
 use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
@@ -184,14 +183,12 @@ class GroupsControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
-        $rolesService = self::getContainer()->get(RolesService::class);
-
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
-            foreach ($rolesService->getRoles() as $role) {
-                yield [str_pad($rolesService->getShort($role), 40, '_')];
+            foreach (Role::cases() as $role) {
+                yield [str_pad($role->getShort(), 40, '_')];
             }
         } else {
-            yield [str_pad($rolesService->getShort(RolesServiceInterface::ROLE_LOGGED), 40, '_')];
+            yield [str_pad(Role::ROLE_LOGGED->getShort(), 40, '_')];
         }
     }
 }
