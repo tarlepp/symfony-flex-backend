@@ -34,6 +34,14 @@ class LanguageTest extends KernelTestCase
     }
 
     /**
+     * @testdox Test that `Language::getValues()` method returns expected value
+     */
+    public function testThatGetValuesMethodReturnsExpected(): void
+    {
+        self::assertSame(['en', 'fi'], Language::getValues());
+    }
+
+    /**
      * @testdox Test that `Language::getDefault()` method returns expected value
      */
     public function testThatGetDefaultMethodReturnsExpected(): void

@@ -32,4 +32,12 @@ class LoginTest extends KernelTestCase
             Login::cases()
         );
     }
+
+    /**
+     * @testdox Test that `Login::getValues()` method returns expected value
+     */
+    public function testThatGetValuesMethodReturnsExpected(): void
+    {
+        self::assertSame(['failure', 'success'], Login::getValues());
+    }
 }

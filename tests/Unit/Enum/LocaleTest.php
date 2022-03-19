@@ -34,6 +34,14 @@ class LocaleTest extends KernelTestCase
     }
 
     /**
+     * @testdox Test that `Locale::getValues()` method returns expected value
+     */
+    public function testThatGetValuesMethodReturnsExpected(): void
+    {
+        self::assertSame(['en', 'fi'], Locale::getValues());
+    }
+
+    /**
      * @testdox Test that `Locale::getDefault()` method returns expected value
      */
     public function testThatGetDefaultMethodReturnsExpected(): void

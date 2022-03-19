@@ -39,6 +39,14 @@ class RoleTest extends KernelTestCase
     }
 
     /**
+     * @testdox Test that `Role::getValues()` method returns expected value
+     */
+    public function testThatGetValuesMethodReturnsExpected(): void
+    {
+        self::assertSame(['ROLE_LOGGED', 'ROLE_USER', 'ROLE_ADMIN', 'ROLE_ROOT', 'ROLE_API'], Role::getValues());
+    }
+
+    /**
      * @testdox Test that `getLabelForRole` method throws exception when invalid role is given
      */
     public function testThatGetLabelForRoleMethodThrowsAnExceptionWithUnknownRole(): void
