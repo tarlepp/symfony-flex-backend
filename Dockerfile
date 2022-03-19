@@ -1,4 +1,4 @@
-FROM php:8.1.2-fpm
+FROM php:8.1.3-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -10,19 +10,20 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:1.4.6 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:1.4.17 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
     apcu \
     bcmath \
+    igbinary \
     intl \
     opcache \
     pdo_mysql \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.2.4 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.2.7 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 

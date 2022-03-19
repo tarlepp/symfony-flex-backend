@@ -14,6 +14,7 @@ use JsonException;
 use LogicException;
 use SplFileInfo;
 use stdClass;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -47,6 +48,10 @@ use const DIRECTORY_SEPARATOR;
  * @package App\Command\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsCommand(
+    name: 'check-dependencies',
+    description: 'Console command to check which vendor dependencies has updates',
+)]
 class CheckDependencies extends Command
 {
     use SymfonyStyleTrait;
@@ -54,9 +59,7 @@ class CheckDependencies extends Command
     public function __construct(
         private string $projectDir,
     ) {
-        parent::__construct('check-dependencies');
-
-        $this->setDescription('Console command to check which vendor dependencies has updates');
+        parent::__construct();
 
         $this->addOption(
             'minor',

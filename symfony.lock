@@ -175,12 +175,6 @@
     "nikic/php-parser": {
         "version": "v4.3.0"
     },
-    "ocramius/package-versions": {
-        "version": "1.5.1"
-    },
-    "php": {
-        "version": "7.4.0"
-    },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"
     },
@@ -271,9 +265,6 @@
             "config/packages/dev/debug.yaml"
         ]
     },
-    "symfony/debug-pack": {
-        "version": "v1.0.7"
-    },
     "symfony/dependency-injection": {
         "version": "v4.4.3"
     },
@@ -341,9 +332,6 @@
             "src/Kernel.php"
         ]
     },
-    "symfony/http-client-contracts": {
-        "version": "v2.0.1"
-    },
     "symfony/http-foundation": {
         "version": "v4.4.3"
     },
@@ -380,9 +368,6 @@
     "symfony/options-resolver": {
         "version": "v4.4.3"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.7"
-    },
     "symfony/password-hasher": {
         "version": "v5.3.0"
     },
@@ -400,9 +385,6 @@
     },
     "symfony/process": {
         "version": "v4.4.3"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.4"
     },
     "symfony/property-access": {
         "version": "v4.4.3"
@@ -458,9 +440,6 @@
     },
     "symfony/serializer": {
         "version": "v4.4.3"
-    },
-    "symfony/serializer-pack": {
-        "version": "v1.0.2"
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"
@@ -539,12 +518,6 @@
     },
     "webmozart/assert": {
         "version": "1.6.0"
-    },
-    "zendframework/zend-code": {
-        "version": "3.4.0"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     },
     "zircote/swagger-php": {
         "version": "2.0.14"

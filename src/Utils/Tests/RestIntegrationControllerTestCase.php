@@ -12,6 +12,7 @@ use App\Rest\Controller;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use UnexpectedValueException;
+use function assert;
 use function gc_collect_cycles;
 use function gc_enable;
 use function mb_substr;
@@ -43,8 +44,9 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
 
         parent::setUp();
 
-        /** @var Controller $controller */
         $controller = self::getContainer()->get($this->controllerClass);
+
+        assert($controller instanceof Controller);
 
         $this->controller = $controller;
     }

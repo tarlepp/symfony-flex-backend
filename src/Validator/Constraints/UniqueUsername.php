@@ -40,11 +40,14 @@ class UniqueUsername extends Constraint
         self::IS_UNIQUE_USERNAME_ERROR => 'IS_UNIQUE_USERNAME_ERROR',
     ];
 
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
     public function getTargets(): string
     {
-        return self::CLASS_CONSTRAINT;
+        $output = null;
+
+        if (parent::getTargets() !== self::CLASS_CONSTRAINT) {
+            $output = self::CLASS_CONSTRAINT;
+        }
+
+        return $output ?? self::CLASS_CONSTRAINT;
     }
 }
