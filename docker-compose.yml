@@ -25,6 +25,7 @@ services:
         hostname: nginx
         build:
             context: ./docker/nginx/
+            dockerfile: ./Dockerfile_dev
         depends_on:
             - php
         ports:
@@ -52,7 +53,7 @@ services:
         hostname: dozzle
         image: amir20/dozzle
         ports:
-            - "8080:8080"
+            - "8100:8080"
         volumes:
             -  /var/run/docker.sock:/var/run/docker.sock
 

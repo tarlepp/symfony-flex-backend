@@ -81,6 +81,7 @@ class LogLoginFailure implements EntityInterface
         #[ORM\JoinColumn(
             name: 'user_id',
             nullable: false,
+            onDelete: 'CASCADE',
         )]
         #[Groups([
             'LogLoginFailure',

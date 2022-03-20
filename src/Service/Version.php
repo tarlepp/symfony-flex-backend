@@ -11,7 +11,6 @@ namespace App\Service;
 use App\Utils\JSON;
 use Closure;
 use Psr\Log\LoggerInterface;
-use stdClass;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Throwable;
@@ -34,15 +33,12 @@ class Version
     /**
      * Method to get application version from cache or create new entry to
      * cache with version value from composer.json file.
-     *
-     * @noinspection PhpDocMissingThrowsInspection
      */
     public function get(): string
     {
         $output = '0.0.0';
 
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->appCacheApcu->get('application_version', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
@@ -57,7 +53,6 @@ class Version
             // One year
             $item->expiresAfter(31536000);
 
-            /** @var stdClass $composerData */
             $composerData = JSON::decode((string)file_get_contents($this->projectDir . '/composer.json'));
 
             return (string)($composerData->version ?? '0.0.0');
