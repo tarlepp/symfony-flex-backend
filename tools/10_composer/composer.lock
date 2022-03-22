@@ -128,12 +128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer-unused/composer-unused.git",
-                "reference": "a86c29b51d41ed0087085c36cd9948d9952cd9cf"
+                "reference": "82d6a14ab3199b42f9b3bcbd5f832b2c5c04357d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/composer-unused/zipball/a86c29b51d41ed0087085c36cd9948d9952cd9cf",
-                "reference": "a86c29b51d41ed0087085c36cd9948d9952cd9cf",
+                "url": "https://api.github.com/repos/composer-unused/composer-unused/zipball/82d6a14ab3199b42f9b3bcbd5f832b2c5c04357d",
+                "reference": "82d6a14ab3199b42f9b3bcbd5f832b2c5c04357d",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +202,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2022-03-16T06:01:46+00:00"
+            "time": "2022-03-22T12:44:31+00:00"
         },
         {
             "name": "maglnet/composer-require-checker",
@@ -528,12 +528,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c3af547251735047a229a3020a16bc42bae5d495"
+                "reference": "a1696aadf99f7ff55d44c56e7ebf54eace85310c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c3af547251735047a229a3020a16bc42bae5d495",
-                "reference": "c3af547251735047a229a3020a16bc42bae5d495",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a1696aadf99f7ff55d44c56e7ebf54eace85310c",
+                "reference": "a1696aadf99f7ff55d44c56e7ebf54eace85310c",
                 "shasum": ""
             },
             "conflict": {
@@ -556,6 +556,7 @@
                 "bagisto/bagisto": "<0.1.5",
                 "barrelstrength/sprout-base-email": "<1.2.7",
                 "barrelstrength/sprout-forms": "<3.9",
+                "barryvdh/laravel-translation-manager": "<0.6.2",
                 "baserproject/basercms": "<4.5.4",
                 "billz/raspap-webgui": "<=2.6.6",
                 "bk2k/bootstrap-package": ">=7.1,<7.1.2|>=8,<8.0.8|>=9,<9.0.4|>=9.1,<9.1.3|>=10,<10.0.10|>=11,<11.0.3",
@@ -664,6 +665,7 @@
                 "hillelcoren/invoice-ninja": "<5.3.35",
                 "hjue/justwriting": "<=1",
                 "hov/jobfair": "<1.0.13|>=2,<2.0.2",
+                "hyn/multi-tenant": ">=5.6,<5.7.2",
                 "ibexa/post-install": "<=1.0.4",
                 "icecoder/icecoder": "<=8.1",
                 "illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
@@ -768,7 +770,7 @@
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
                 "pimcore/pimcore": "<=10.3.2",
-                "pocketmine/pocketmine-mp": "<4.0.7",
+                "pocketmine/pocketmine-mp": "<4.2.4",
                 "pressbooks/pressbooks": "<5.18",
                 "prestashop/autoupgrade": ">=4,<4.10.1",
                 "prestashop/contactform": ">1.0.1,<4.3",
@@ -901,7 +903,7 @@
                 "usmanhalalit/pixie": "<1.0.3|>=2,<2.0.2",
                 "vanilla/safecurl": "<0.9.2",
                 "verot/class.upload.php": "<=1.0.3|>=2,<=2.0.4",
-                "vrana/adminer": "<4.7.9",
+                "vrana/adminer": "<4.8.1",
                 "wallabag/tcpdf": "<6.2.22",
                 "wanglelecc/laracms": "<=1.0.3",
                 "web-auth/webauthn-framework": ">=3.3,<3.3.4",
@@ -983,7 +985,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-21T18:09:42+00:00"
+            "time": "2022-03-22T13:13:56+00:00"
         },
         {
             "name": "symfony/config",
