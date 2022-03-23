@@ -39,12 +39,4 @@ class Timezone extends Constraint
     protected static $errorNames = [
         self::INVALID_TIMEZONE => 'INVALID_TIMEZONE',
     ];
-
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function getTargets(): string
-    {
-        return self::PROPERTY_CONSTRAINT;
-    }
 }

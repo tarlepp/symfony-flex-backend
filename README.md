@@ -88,12 +88,13 @@ Those containers are following:
 ### 3. Using application [ᐞ](#table-of-contents)
 
 By default `make start` / `docker-compose up` command starts those four
-containers and exposes following ports on `localhost`:
+containers and exposes following ports on your host machine `localhost`:
 
 * symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
+  * PHP-FPM status page -  [http://localhost:8000/status](http://localhost:8000/status)
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
-* symfony-backend-mariadb - [http://localhost:33060](http://localhost:3010) (mariadb)
-* symfony-backend-dozzle - [http://localhost:8080](http://localhost:8100) (dozzle)
+* symfony-backend-mariadb - [http://localhost:33060](http://localhost:33060) (mariadb)
+* symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.

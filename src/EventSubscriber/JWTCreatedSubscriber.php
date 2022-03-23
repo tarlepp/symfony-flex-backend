@@ -82,7 +82,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         $payload['timezone'] = $user instanceof SecurityUser ? $user->getTimezone() : Localization::DEFAULT_TIMEZONE;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Method to set/modify JWT expiration date dynamically.
      *
@@ -91,7 +90,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private function setExpiration(array &$payload): void
     {
         // Set new exp value for JWT
-        /* @noinspection PhpUnhandledExceptionInspection */
         $payload['exp'] = (new DateTime('+1 day', new DateTimeZone('UTC')))->getTimestamp();
     }
 
