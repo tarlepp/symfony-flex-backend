@@ -3,7 +3,7 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"liuggio/fastest": "1.9.0",
+		"liuggio/fastest": "1.10.0",
 		"phpunit/php-code-coverage": "9.2.15",
 		"phpunit/phpcov": "8.2.1",
 		"phpunit/phpunit": "9.5.19",
