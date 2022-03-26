@@ -63,17 +63,17 @@ git clone https://github.com/tarlepp/symfony-flex-backend.git
 
 ### 2. Start containers [ᐞ](#table-of-contents)
 
-For this just run following command, which will start all the containers
-background:
+For this just run following command, which will start all the containers:
 
 ```bash
 make start
 ```
 
-If you like to see containers logs directly use following command:
+If you like to start containers in background, then you can use following
+command:
 
 ```bash
-make watch
+make daemon
 ```
 
 These commands will create following containers to run this backend
