@@ -29,7 +29,7 @@ PHPDBG := $(shell which phpdbg)
 COMPOSER_BIN := $(shell which composer)
 DOCKER := $(shell which docker)
 CONTAINER_PREFIX := 'symfony-backend' # Check your `docker-compose.yml` file `container_name` property for this one
-CONTAINER_COUNT := 4 # Check your `docker-compose.yml` file service count for this one
+CONTAINER_COUNT := 5 # Check your `docker-compose.yml` file service count for this one
 
 ifdef DOCKER
 	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
