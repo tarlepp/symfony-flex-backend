@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d3c7880e0dd49d9d57fe6645ae061a1",
+    "content-hash": "eef84104254f66fc6d16304503455632",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -601,16 +601,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "eca20633225fde77d042ecdac222bc9a5cb20f6a"
+                "reference": "b7002752b555cb61cc9ca8d4c89a5b6e8200f765"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/eca20633225fde77d042ecdac222bc9a5cb20f6a",
-                "reference": "eca20633225fde77d042ecdac222bc9a5cb20f6a",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/b7002752b555cb61cc9ca8d4c89a5b6e8200f765",
+                "reference": "b7002752b555cb61cc9ca8d4c89a5b6e8200f765",
                 "shasum": ""
             },
             "require": {
@@ -640,6 +640,7 @@
                 "phpunit/phpunit": "^7.5 || ^8.0 || ^9.3 || ^10.0",
                 "psalm/plugin-phpunit": "^0.16.1",
                 "psalm/plugin-symfony": "^3",
+                "psr/log": "^1.1.4|^2.0|^3.0",
                 "symfony/phpunit-bridge": "^5.2|^6.0",
                 "symfony/property-info": "^4.3.3|^5.0|^6.0",
                 "symfony/proxy-manager-bridge": "^3.4|^4.3.3|^5.0|^6.0",
@@ -694,7 +695,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.6.0"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.6.1"
             },
             "funding": [
                 {
@@ -710,7 +711,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-05T10:43:39+00:00"
+            "time": "2022-04-02T16:17:41+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
