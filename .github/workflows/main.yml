@@ -15,9 +15,17 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 jobs:
+  security-check:
+    name: PHP Security Checker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: symfonycorp/security-checker-action@v3
   static:
     name: Static analyzers / checks (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
+    needs:
+      - security-check
     strategy:
       fail-fast: false
       matrix:
