@@ -51,13 +51,11 @@ with just running `make` command:
 
 ```bash
 bash                        # Get bash inside PHP container
-build                       # Build containers and start application in
-                            # development mode
 cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
 check-dependencies-latest   # Checks if any vendor dependency can be updated
                             # (latest versions)
-check-dependencies-minor    # Checks if any vendor dependency can be updated
+check-dependencies-minor    # Checks if any vendor dependency can be updated 
                             # (only minor versions)
 check-licenses              # Check vendor licenses
 clear-tools                 # Clears all tools dependencies
@@ -67,6 +65,10 @@ composer-unused             # Show unused packages by scanning and comparing
                             # package namespaces against your source
 composer-validate           # Validate `composer.json` file content
 configuration               # Prints out application current configuration
+daemon-build                # Build containers and start application in
+                            # development mode in background
+daemon                      # Start application in development mode in
+                            # background
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
@@ -84,27 +86,25 @@ phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
 phpstan                     # Runs PHPStan static analysis tool
 psalm-github                # Runs Psalm static analysis tool
+psalm                       # Runs Psalm static analysis tool
 psalm-shepherd              # Runs Psalm static analysis tool + report results
                             # to shepherd
-psalm                       # Runs Psalm static analysis tool
 report-fastest              # Creates clover and JUnit xml from fastest run
-run-tests-fastest-php       # Runs all test via fastest (pure PHP)
 run-tests-fastest-phpdbg    # Runs all test via fastest (phpdbg)
+run-tests-fastest-php       # Runs all test via fastest (pure PHP)
 run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is
                             # installed)
-run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
+run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
                             # is installed)
-start                       # Start application in development mode
+start-build                 # Build containers and start application in
+                            # development mode + watch output
+start                       # Start application in development mode + watch
+                            # output
 stop                        # Stop application containers
 update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
-watch-build                 # Build containers and start application in
-                            # development mode + watch output
-watch                       # Start application in development mode + watch
-                            # output
-
 ```
 
 ### Symfony console [ᐞ](#table-of-contents)

@@ -57,5 +57,15 @@ services:
         volumes:
             -  /var/run/docker.sock:/var/run/docker.sock
 
+    adminer:
+        container_name: symfony-backend-adminer
+        hostname: adminer
+        image: adminer
+        environment:
+            ADMINER_DEFAULT_SERVER: mariadb
+            ADMINER_DESIGN: pepa-linha-dark
+        ports:
+            - "8200:8080"
+
 volumes:
     mariadb:

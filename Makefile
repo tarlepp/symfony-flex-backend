@@ -29,7 +29,7 @@ PHPDBG := $(shell which phpdbg)
 COMPOSER_BIN := $(shell which composer)
 DOCKER := $(shell which docker)
 CONTAINER_PREFIX := 'symfony-backend' # Check your `docker-compose.yml` file `container_name` property for this one
-CONTAINER_COUNT := 4 # Check your `docker-compose.yml` file service count for this one
+CONTAINER_COUNT := 5 # Check your `docker-compose.yml` file service count for this one
 
 ifdef DOCKER
 	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
@@ -48,7 +48,7 @@ endif
 ERROR_DOCKER = @printf "\033[31mSeems like that all necessary Docker containers are not running atm.\nCheck logs for detailed information about the reason of this\033[39m\n"
 NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker-compose exec' command\033[39m\n"
 WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
-WARNING_DOCKER = @printf "\033[31mThis command must be run inside specified docker container and it's not\nrunning atm. Use \`make start\` and/or \`make watch-start\` command to get\nnecessary container(s) running and after that run this command again.\033[39m\n"
+WARNING_DOCKER = @printf "\033[31mThis command must be run inside specified docker container and it's not\nrunning atm. Use \`make start\` and/or \`make daemon\` command to get\nnecessary container(s) running and after that run this command again.\033[39m\n"
 WARNING_DOCKER_RUNNING = @printf "\033[31mDocker is already running - you cannot execute this command multiple times\033[39m\n"
 
 .DEFAULT_GOAL := help
@@ -489,7 +489,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose logs --follow php nginx mariadb
 endif
 
-start: ## Start application in development mode
+daemon: ## Start application in development mode in background
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -499,7 +499,7 @@ else
 	@printf "\033[32mContainers are running background, check logs for detailed information!\033[39m\n"
 endif
 
-build: ## Build containers and start application in development mode
+daemon-build: ## Build containers and start application in development mode in background
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -516,7 +516,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose down
 endif
 
-watch: ## Start application in development mode + watch output
+start: ## Start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -525,7 +525,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
 endif
 
-watch-build: ## Build containers and start application in development mode + watch output
+start-build: ## Build containers and start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
