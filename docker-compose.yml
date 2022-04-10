@@ -15,8 +15,8 @@ services:
             - mariadb
         volumes:
             - ./:/app:cached
-            # Cannot use this because of the directory rights are forced for root user
-            #- /app/var/
+        tmpfs:
+            - /app/var/:uid=$HOST_UID,gid=$HOST_GID
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
 
@@ -32,8 +32,8 @@ services:
             - "8000:80"
         volumes:
             - ./:/app:cached
-            # Cannot use this because of the directory rights are forced for root user
-            #- /app/var/
+        tmpfs:
+            - /app/var/:uid=$HOST_UID,gid=$HOST_GID
 
     mariadb:
         container_name: symfony-backend-mariadb
