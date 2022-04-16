@@ -62,6 +62,9 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --optimize-autoloader
 
+      - name: Check that application doesn't have installed dependencies with known security vulnerabilities
+        run: make security-check
+
       - name: Check which versions we're using
         run: |
           mysql --version
