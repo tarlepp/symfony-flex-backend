@@ -48,13 +48,21 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --optimize-autoloader
 
+      - name: Check which versions we're using
+        run: |
+          mysql --version
+          php --version
+          php ./bin/console --version
+          php ./vendor/bin/phpunit --version
+          composer --version
+
       - name: Local PHP Security Checker
         uses: docker://pplotka/local-php-security-checker-github-actions
 
+      - uses: symfonycorp/security-checker-action@v3
+
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: make security-check
-
-      - uses: symfonycorp/security-checker-action@v3
 
   lint-configuration:
     name: Lint configuration
@@ -86,6 +94,9 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Install Composer dependencies
+        run: composer install --no-progress --optimize-autoloader
+
       - name: Check which versions we're using
         run: |
           mysql --version
@@ -93,9 +104,6 @@ jobs:
           php ./bin/console --version
           php ./vendor/bin/phpunit --version
           composer --version
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
 
       - name: Validate main `composer.json` and `composer.lock` files
         run: composer validate --no-check-version
@@ -139,6 +147,9 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Install Composer dependencies
+        run: composer install --no-progress --optimize-autoloader
+
       - name: Check which versions we're using
         run: |
           mysql --version
@@ -146,9 +157,6 @@ jobs:
           php ./bin/console --version
           php ./vendor/bin/phpunit --version
           composer --version
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
 
       - name: Run PHP CodeSniffer
         run: make phpcs
@@ -228,14 +236,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
       - name: Configure application for CI run
         run: |
           cp .env.gh-actions .env
@@ -245,6 +245,14 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-progress --optimize-autoloader
+
+      - name: Check which versions we're using
+        run: |
+          mysql --version
+          php --version
+          php ./bin/console --version
+          php ./vendor/bin/phpunit --version
+          composer --version
 
       - name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
         run: |
