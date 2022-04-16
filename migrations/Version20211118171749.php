@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -18,7 +19,7 @@ final class Version20211118171749 extends AbstractMigration
      */
     public function getDescription(): string
     {
-        return 'TODO: Describe reason for this migration';
+        return 'Initial database structure';
     }
 
     /**
@@ -28,7 +29,7 @@ final class Version20211118171749 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf(
-            $this->connection->getDatabasePlatform()->getName() !== 'mysql',
+            !$this->connection->getDatabasePlatform() instanceof AbstractMySQLPlatform,
             'Migration can only be executed safely on \'mysql\'.'
         );
 
@@ -71,7 +72,7 @@ final class Version20211118171749 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf(
-            $this->connection->getDatabasePlatform()->getName() !== 'mysql',
+            !$this->connection->getDatabasePlatform() instanceof AbstractMySQLPlatform,
             'Migration can only be executed safely on \'mysql\'.'
         );
 
