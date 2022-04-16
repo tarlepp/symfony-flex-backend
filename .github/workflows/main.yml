@@ -56,10 +56,8 @@ jobs:
           php ./vendor/bin/phpunit --version
           composer --version
 
-      - name: Local PHP Security Checker
-        uses: docker://pplotka/local-php-security-checker-github-actions
-
-      - uses: symfonycorp/security-checker-action@v3
+      - name: PHP Security Checker
+        uses: symfonycorp/security-checker-action@v3
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: make security-check
