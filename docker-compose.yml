@@ -15,8 +15,8 @@ services:
             - mariadb
         volumes:
             - ./:/app:cached
-            # Cannot use this because of the directory rights are forced for root user
-            #- /app/var/
+        tmpfs:
+            - /app/var/:uid=$HOST_UID,gid=$HOST_GID
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
 
@@ -25,14 +25,15 @@ services:
         hostname: nginx
         build:
             context: ./docker/nginx/
+            dockerfile: ./Dockerfile_dev
         depends_on:
             - php
         ports:
             - "8000:80"
         volumes:
             - ./:/app:cached
-            # Cannot use this because of the directory rights are forced for root user
-            #- /app/var/
+        tmpfs:
+            - /app/var/:uid=$HOST_UID,gid=$HOST_GID
 
     mariadb:
         container_name: symfony-backend-mariadb
@@ -52,8 +53,19 @@ services:
         hostname: dozzle
         image: amir20/dozzle
         ports:
-            - "8080:8080"
+            - "8100:8080"
         volumes:
             -  /var/run/docker.sock:/var/run/docker.sock
+
+    adminer:
+        container_name: symfony-backend-adminer
+        hostname: adminer
+        image: adminer
+        environment:
+            ADMINER_DEFAULT_SERVER: mariadb
+            ADMINER_DESIGN: pepa-linha-dark
+        ports:
+            - "8200:8080"
+
 volumes:
     mariadb:

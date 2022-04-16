@@ -1,4 +1,4 @@
-FROM php:8.1.2-fpm
+FROM php:8.1.4-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -10,7 +10,7 @@ ARG HOST_GID
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION v0.39.1
-ENV NODE_VERSION 17.4.0
+ENV NODE_VERSION 17.8.0
 
 # Update package list and install necessary libraries
 RUN apt-get update \
@@ -20,7 +20,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:1.4.6 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:1.5.7 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Enable all necessary PHP packages
 RUN install-php-extensions \
@@ -34,7 +34,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.2.4 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.3.2 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
@@ -51,6 +51,9 @@ RUN chmod +x /app/bin/console \
     && chmod +x /usr/bin/composer
 
 RUN chmod -R o+s+w /usr/local/etc/php
+
+# Enable PHP-FPM status page
+RUN echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/www.conf
 
 RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest | \
         grep -E "browser_download_url(.+)linux_amd64" | \

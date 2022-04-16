@@ -43,6 +43,7 @@ class StopwatchDecorator
             || $class->isFinal()
             || str_starts_with($class->getName(), 'ProxyManagerGeneratedProxy')
             || str_contains($class->getName(), 'RequestStack')
+            || str_contains($class->getName(), 'Mock_')
         ) {
             return $service;
         }
