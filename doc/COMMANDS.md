@@ -98,6 +98,8 @@ run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
                             # is installed)
+security-check              # Checks that application doesn't have installed
+                            # dependencies with known security vulnerabilities
 start-build                 # Build containers and start application in
                             # development mode + watch output
 start                       # Start application in development mode + watch

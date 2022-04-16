@@ -608,3 +608,15 @@ else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phploc
 endif
+
+security-check: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@composer update --dry-run --no-plugins roave/security-advisories
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make security-check
+endif
