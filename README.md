@@ -63,37 +63,40 @@ git clone https://github.com/tarlepp/symfony-flex-backend.git
 
 ### 2. Start containers [ᐞ](#table-of-contents)
 
-For this just run following command, which will start all the containers
-background:
+For this just run following command, which will start all the containers:
 
 ```bash
 make start
 ```
 
-If you like to see containers logs directly use following command:
+If you like to start containers in background, then you can use following
+command:
 
 ```bash
-make watch
+make daemon
 ```
 
-These commands will create four (4) containers to run this backend application.
-Those containers are following:
+These commands will create following containers to run this backend
+application:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
 * [mariadb](https://mariadb.org/) (MariaDB 10.7 which will store all the data
   of application)
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
+* [adminer](https://www.adminer.org/) (to manage your database via browser)
 
 ### 3. Using application [ᐞ](#table-of-contents)
 
-By default `make start` / `docker-compose up` command starts those four
-containers and exposes following ports on `localhost`:
+By default `make start` / `docker-compose up` command starts all the containers
+and exposes following ports on `localhost` on your host machine:
 
 * symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
+  * PHP-FPM status page -  [http://localhost:8000/status](http://localhost:8000/status)
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
 * symfony-backend-mariadb - [http://localhost:33060](http://localhost:33060) (mariadb)
 * symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
+* symfony-backend-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.

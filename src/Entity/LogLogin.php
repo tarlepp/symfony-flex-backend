@@ -72,6 +72,18 @@ class LogLogin implements EntityInterface
     private UuidInterface $id;
 
     #[ORM\Column(
+        name: 'username',
+        type: Types::STRING,
+        length: 255,
+        nullable: false,
+    )]
+    #[Groups([
+        'LogLogin',
+        'LogLogin.username',
+    ])]
+    private string $username = '';
+
+    #[ORM\Column(
         name: 'client_type',
         type: Types::STRING,
         length: 255,
@@ -255,6 +267,10 @@ class LogLogin implements EntityInterface
         $this->processTimeAndDate();
         $this->processRequestData($request);
         $this->processClientData();
+
+        if ($this->user !== null) {
+            $this->username = $this->user->getUsername();
+        }
     }
 
     public function getId(): string
@@ -270,6 +286,11 @@ class LogLogin implements EntityInterface
     public function getType(): Login
     {
         return $this->type;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
     }
 
     public function getClientType(): ?string
