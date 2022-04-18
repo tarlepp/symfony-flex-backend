@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f3ac474a65f0d812ea3a5fafc05e179",
+    "content-hash": "5f8dcb895e99d7061d1a1a3fa27ada23",
     "packages": [],
     "packages-dev": [
         {
@@ -68,21 +68,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.20",
+            "version": "0.12.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "cfa8d3e236a6e1a41d69712a84d434dfdf70e560"
+                "reference": "2fb3b1c1d85e784a55e5806cf50734e5aa872eb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/cfa8d3e236a6e1a41d69712a84d434dfdf70e560",
-                "reference": "cfa8d3e236a6e1a41d69712a84d434dfdf70e560",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/2fb3b1c1d85e784a55e5806cf50734e5aa872eb4",
+                "reference": "2fb3b1c1d85e784a55e5806cf50734e5aa872eb4",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.5"
+                "phpstan/phpstan": "^1.5.6"
             },
             "conflict": {
                 "phpstan/phpdoc-parser": "<1.2",
@@ -116,7 +116,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.20"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.21"
             },
             "funding": [
                 {
@@ -124,7 +124,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-06T12:55:14+00:00"
+            "time": "2022-04-18T12:12:41+00:00"
         },
         {
             "name": "roave/security-advisories",
