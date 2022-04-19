@@ -94,7 +94,7 @@ RUN source ~/.nvm/nvm.sh \
 
 # Add necessary stuff to bash autocomplete
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
-    && echo 'alias console="/app/bin/console $@"' >> /home/dev/.bashrc
+    && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc
 
 EXPOSE 9000
 
