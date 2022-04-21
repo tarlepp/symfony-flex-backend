@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Security;
 
-use App\Security\Interfaces\RolesServiceInterface;
+use App\Enum\Role;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
@@ -67,37 +67,37 @@ class RolesServiceTest extends KernelTestCase
     public function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {
         yield [
-            new StringableArrayObject([RolesServiceInterface::ROLE_LOGGED]),
-            new StringableArrayObject([RolesServiceInterface::ROLE_LOGGED]),
+            new StringableArrayObject([Role::LOGGED]),
+            new StringableArrayObject([Role::LOGGED]),
         ];
 
         yield [
-            new StringableArrayObject([RolesServiceInterface::ROLE_USER, RolesServiceInterface::ROLE_LOGGED]),
-            new StringableArrayObject([RolesServiceInterface::ROLE_USER]),
+            new StringableArrayObject([Role::USER, Role::LOGGED]),
+            new StringableArrayObject([Role::USER]),
         ];
 
         yield [
-            new StringableArrayObject([RolesServiceInterface::ROLE_API, RolesServiceInterface::ROLE_LOGGED]),
-            new StringableArrayObject([RolesServiceInterface::ROLE_API]),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                RolesServiceInterface::ROLE_ADMIN,
-                RolesServiceInterface::ROLE_USER,
-                RolesServiceInterface::ROLE_LOGGED,
-            ]),
-            new StringableArrayObject([RolesServiceInterface::ROLE_ADMIN]),
+            new StringableArrayObject([Role::API, Role::LOGGED]),
+            new StringableArrayObject([Role::API]),
         ];
 
         yield [
             new StringableArrayObject([
-                RolesServiceInterface::ROLE_ROOT,
-                RolesServiceInterface::ROLE_ADMIN,
-                RolesServiceInterface::ROLE_USER,
-                RolesServiceInterface::ROLE_LOGGED,
+                Role::ADMIN,
+                Role::USER,
+                Role::LOGGED,
             ]),
-            new StringableArrayObject([RolesServiceInterface::ROLE_ROOT]),
+            new StringableArrayObject([Role::ADMIN]),
+        ];
+
+        yield [
+            new StringableArrayObject([
+                Role::ROOT,
+                Role::ADMIN,
+                Role::USER,
+                Role::LOGGED,
+            ]),
+            new StringableArrayObject([Role::ROOT]),
         ];
     }
 

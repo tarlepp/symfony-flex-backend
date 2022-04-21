@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Entity;
 
 use App\Entity\ApiKey;
-use App\Security\Interfaces\RolesServiceInterface;
+use App\Enum\Role;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function strlen;
 
@@ -34,6 +34,6 @@ class ApiKeyTest extends KernelTestCase
      */
     public function testThatGetRolesContainsExpectedRole(): void
     {
-        self::assertContainsEquals(RolesServiceInterface::ROLE_API, (new ApiKey())->getRoles());
+        self::assertContainsEquals(Role::API, (new ApiKey())->getRoles());
     }
 }
