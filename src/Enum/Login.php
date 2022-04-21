@@ -23,9 +23,9 @@ enum Login: string implements StringEnumInterface
 {
     use GetValues;
 
-    case FAILURE = self::FAIL;
-    case SUCCESS = self::OK;
-
     public const FAIL = 'failure';
     public const OK = 'success';
+
+    case FAILURE = self::FAIL;
+    case SUCCESS = self::OK;
 }

@@ -23,11 +23,11 @@ enum Locale: string implements StringEnumInterface
 {
     use GetValues;
 
-    case EN = self::ENGLISH;
-    case FI = self::FINNISH;
-
     public const ENGLISH = 'en';
     public const FINNISH = 'fi';
+
+    case EN = self::ENGLISH;
+    case FI = self::FINNISH;
 
     public static function getDefault(): self
     {

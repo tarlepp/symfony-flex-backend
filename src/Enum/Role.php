@@ -28,17 +28,17 @@ enum Role: string implements StringEnumInterface
 {
     use GetValues;
 
-    case ROLE_LOGGED = self::LOGGED;
-    case ROLE_USER = self::USER;
-    case ROLE_ADMIN = self::ADMIN;
-    case ROLE_ROOT = self::ROOT;
-    case ROLE_API = self::API;
-
     public const LOGGED = 'ROLE_LOGGED';
     public const USER = 'ROLE_USER';
     public const ADMIN = 'ROLE_ADMIN';
     public const ROOT = 'ROLE_ROOT';
     public const API = 'ROLE_API';
+
+    case ROLE_LOGGED = self::LOGGED;
+    case ROLE_USER = self::USER;
+    case ROLE_ADMIN = self::ADMIN;
+    case ROLE_ROOT = self::ROOT;
+    case ROLE_API = self::API;
 
     public static function getLabelForRole(self|string $role): string
     {
