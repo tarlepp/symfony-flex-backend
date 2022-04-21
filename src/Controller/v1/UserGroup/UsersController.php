@@ -10,10 +10,10 @@ namespace App\Controller\v1\UserGroup;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Role;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
-use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -85,7 +85,7 @@ class UsersController
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ADMIN)]
+    #[IsGranted(Role::ROOT)]
     #[ParamConverter(
         data: 'userGroup',
         class: UserGroupResource::class,
