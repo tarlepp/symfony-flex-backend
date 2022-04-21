@@ -10,7 +10,7 @@ declare(strict_types = 1);
 
 namespace App\Enum;
 
-use App\Enum\Interfaces\EnumInterface;
+use App\Enum\Interfaces\StringEnumInterface;
 use App\Enum\Traits\GetValues;
 
 /**
@@ -19,10 +19,13 @@ use App\Enum\Traits\GetValues;
  * @package App\Enum
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-enum Login: string implements EnumInterface
+enum Login: string implements StringEnumInterface
 {
     use GetValues;
 
-    case FAILURE = 'failure';
-    case SUCCESS = 'success';
+    public const FAIL = 'failure';
+    public const OK = 'success';
+
+    case FAILURE = self::FAIL;
+    case SUCCESS = self::OK;
 }

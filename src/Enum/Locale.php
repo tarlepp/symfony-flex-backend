@@ -10,7 +10,7 @@ declare(strict_types = 1);
 
 namespace App\Enum;
 
-use App\Enum\Interfaces\EnumInterface;
+use App\Enum\Interfaces\StringEnumInterface;
 use App\Enum\Traits\GetValues;
 
 /**
@@ -19,12 +19,15 @@ use App\Enum\Traits\GetValues;
  * @package App\Enum
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-enum Locale: string implements EnumInterface
+enum Locale: string implements StringEnumInterface
 {
     use GetValues;
 
-    case EN = 'en';
-    case FI = 'fi';
+    public const ENGLISH = 'en';
+    public const FINNISH = 'fi';
+
+    case EN = self::ENGLISH;
+    case FI = self::FINNISH;
 
     public static function getDefault(): self
     {

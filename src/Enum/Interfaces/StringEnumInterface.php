@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Enum/Interfaces/EnumInterface.php
+ * /src/Enum/Interfaces/StringEnumInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -11,12 +11,12 @@ namespace App\Enum\Interfaces;
 use BackedEnum;
 
 /**
- * Enum EnumInterface
+ * Enum StringEnumInterface
  *
  * @package App\Enum\Interfaces
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-interface EnumInterface extends BackedEnum
+interface StringEnumInterface extends BackedEnum
 {
     /**
      * @return array<int, string>
