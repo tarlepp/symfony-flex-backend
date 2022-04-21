@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Logged;
 
+use App\Enum\Role;
 use App\Rest\Traits\Methods\DeleteMethod;
-use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +40,7 @@ trait DeleteAction
         ],
         methods: [Request::METHOD_DELETE],
     )]
-    #[IsGranted(RolesService::ROLE_LOGGED)]
+    #[IsGranted(Role::LOGGED)]
     public function deleteAction(Request $request, string $id): Response
     {
         return $this->deleteMethod($request, $id);

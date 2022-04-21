@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\Root;
 
 use App\DTO\RestDtoInterface;
+use App\Enum\Role;
 use App\Rest\Traits\Methods\PatchMethod;
-use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +41,7 @@ trait PatchAction
         ],
         methods: [Request::METHOD_PATCH],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT)]
     public function patchAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->patchMethod($request, $restDto, $id);

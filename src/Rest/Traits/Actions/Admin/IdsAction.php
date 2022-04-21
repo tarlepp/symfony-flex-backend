@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Admin;
 
+use App\Enum\Role;
 use App\Rest\Traits\Methods\IdsMethod;
-use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ trait IdsAction
         path: '/ids',
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ADMIN)]
+    #[IsGranted(Role::ADMIN)]
     public function idsAction(Request $request): Response
     {
         return $this->idsMethod($request);

@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Root;
 
+use App\Enum\Role;
 use App\Rest\Traits\Methods\CountMethod;
-use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ trait CountAction
         path: '/count',
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT)]
     public function countAction(Request $request): Response
     {
         return $this->countMethod($request);

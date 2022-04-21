@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\User;
 
 use App\DTO\RestDtoInterface;
+use App\Enum\Role;
 use App\Rest\Traits\Methods\CreateMethod;
-use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +38,7 @@ trait CreateAction
         path: '',
         methods: [Request::METHOD_POST],
     )]
-    #[IsGranted(RolesService::ROLE_USER)]
+    #[IsGranted(Role::USER)]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
         return $this->createMethod($request, $restDto);

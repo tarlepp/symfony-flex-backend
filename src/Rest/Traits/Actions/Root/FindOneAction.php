@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Root;
 
+use App\Enum\Role;
 use App\Rest\Traits\Methods\FindOneMethod;
-use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +40,7 @@ trait FindOneAction
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT)]
     public function findOneAction(Request $request, string $id): Response
     {
         return $this->findOneMethod($request, $id);
