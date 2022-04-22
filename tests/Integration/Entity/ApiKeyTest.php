@@ -11,7 +11,6 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\ApiKey;
 use App\Enum\Role;
 use App\Repository\ApiKeyRepository;
-use App\Security\Interfaces\RolesServiceInterface;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use function array_unique;

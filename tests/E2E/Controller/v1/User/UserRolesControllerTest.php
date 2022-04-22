@@ -10,7 +10,6 @@ namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\Enum\Role;
-use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -193,7 +192,7 @@ class UserRolesControllerTest extends WebTestCase
                 LoadUserData::$uuids['john-api'],
                 'john.doe-api@test.com',
                 'password-api',
-                JSON::encode($rolesService->getInheritedRoles(Role::ROLE_API->value)),
+                JSON::encode($rolesService->getInheritedRoles([Role::ROLE_API->value])),
             ];
 
             yield [
