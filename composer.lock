@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1feb57cf30682b2ad8cab5a66cfa61de",
+    "content-hash": "d5e212d3f751977979100561574990bd",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -8614,16 +8614,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.40.0",
+            "version": "v1.40.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "bb92c67267a848567c55858aa360d3456ca57d25"
+                "reference": "adc846e4f852e3aa2cd84a433cd05ba23dd19c3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/bb92c67267a848567c55858aa360d3456ca57d25",
-                "reference": "bb92c67267a848567c55858aa360d3456ca57d25",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/adc846e4f852e3aa2cd84a433cd05ba23dd19c3f",
+                "reference": "adc846e4f852e3aa2cd84a433cd05ba23dd19c3f",
                 "shasum": ""
             },
             "require": {
@@ -8635,7 +8635,7 @@
                 "symfony/dependency-injection": "^5.4.7|^6.0",
                 "symfony/deprecation-contracts": "^2.2|^3",
                 "symfony/filesystem": "^5.4.7|^6.0",
-                "symfony/finder": "^5.4.7|^6.0",
+                "symfony/finder": "^5.4.3|^6.0",
                 "symfony/framework-bundle": "^5.4.7|^6.0",
                 "symfony/http-kernel": "^5.4.7|^6.0"
             },
@@ -8648,7 +8648,7 @@
                 "symfony/polyfill-php80": "^1.16.0",
                 "symfony/process": "^5.4.7|^6.0",
                 "symfony/security-core": "^5.4.7|^6.0",
-                "symfony/yaml": "^5.4.7|^6.0",
+                "symfony/yaml": "^5.4.3|^6.0",
                 "twig/twig": "^2.0|^3.0"
             },
             "type": "symfony-bundle",
@@ -8682,7 +8682,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.40.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.40.1"
             },
             "funding": [
                 {
@@ -8698,7 +8698,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-22T18:43:50+00:00"
+            "time": "2022-04-23T19:42:13+00:00"
         },
         {
             "name": "symfony/requirements-checker",
