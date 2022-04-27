@@ -35,6 +35,8 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
     /**
      * {@inheritdoc}
      *
+     * @see https://github.com/lexik/LexikJWTAuthenticationBundle/issues/944
+     *
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
@@ -44,7 +46,7 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
          */
         $event = new AuthenticationFailureEvent(
             $exception,
-            new JWTAuthenticationFailureResponse(
+            new JWTAuthenticationFailureResponse( // @phpstan-ignore-line
                 $this->translator->trans('Invalid credentials.', [], 'security')
             )
         );
