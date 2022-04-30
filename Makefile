@@ -323,7 +323,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm-shepherd
 endif
 
-psalm-github: ## Runs Psalm static analysis tool
+psalm-github: ## Runs Psalm static analysis tool (GitHub)
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
