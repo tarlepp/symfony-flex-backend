@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5e212d3f751977979100561574990bd",
+    "content-hash": "4dd38829e34aa73b9166368026c4ac47",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5698,16 +5698,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v6.0.7",
+            "version": "v6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "384dbce5632f5a4f1117bbc59b050f8ff5f89cc4"
+                "reference": "e5ac708a97933e9680b81b92eb90a5e301490d72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/384dbce5632f5a4f1117bbc59b050f8ff5f89cc4",
-                "reference": "384dbce5632f5a4f1117bbc59b050f8ff5f89cc4",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/e5ac708a97933e9680b81b92eb90a5e301490d72",
+                "reference": "e5ac708a97933e9680b81b92eb90a5e301490d72",
                 "shasum": ""
             },
             "require": {
@@ -5757,7 +5757,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/v6.0.7"
+                "source": "https://github.com/symfony/property-access/tree/v6.0.8"
             },
             "funding": [
                 {
@@ -5773,7 +5773,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-31T17:18:25+00:00"
+            "time": "2022-04-20T15:01:42+00:00"
         },
         {
             "name": "symfony/property-info",
