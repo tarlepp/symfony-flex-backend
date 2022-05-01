@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5e212d3f751977979100561574990bd",
+    "content-hash": "f63d0a93e0aa9b4625b24d53ff84ee6c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6375,16 +6375,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v6.0.7",
+            "version": "v6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "384208d97ba09fdeeb49096bf3b3db4c2c48dcef"
+                "reference": "76b9a43c4295ced6d5f43208ba858325d8f61f30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/384208d97ba09fdeeb49096bf3b3db4c2c48dcef",
-                "reference": "384208d97ba09fdeeb49096bf3b3db4c2c48dcef",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/76b9a43c4295ced6d5f43208ba858325d8f61f30",
+                "reference": "76b9a43c4295ced6d5f43208ba858325d8f61f30",
                 "shasum": ""
             },
             "require": {
@@ -6456,7 +6456,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v6.0.7"
+                "source": "https://github.com/symfony/serializer/tree/v6.0.8"
             },
             "funding": [
                 {
@@ -6472,7 +6472,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-24T18:04:39+00:00"
+            "time": "2022-04-12T16:11:42+00:00"
         },
         {
             "name": "symfony/service-contracts",
