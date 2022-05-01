@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3495745aab69ee861931fc7bafb548bb",
+    "content-hash": "0aaf5e1559f8bca11bb1759f5d165b9d",
     "packages": [],
     "packages-dev": [
         {
@@ -2886,16 +2886,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v6.0.7",
+            "version": "v6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "924f44f1c682473453a502f8f01d4904a7761dcc"
+                "reference": "4959a1eedd473bdb3f19db5b1525d5415dfab471"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/924f44f1c682473453a502f8f01d4904a7761dcc",
-                "reference": "924f44f1c682473453a502f8f01d4904a7761dcc",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/4959a1eedd473bdb3f19db5b1525d5415dfab471",
+                "reference": "4959a1eedd473bdb3f19db5b1525d5415dfab471",
                 "shasum": ""
             },
             "require": {
@@ -2949,7 +2949,7 @@
             "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/phpunit-bridge/tree/v6.0.7"
+                "source": "https://github.com/symfony/phpunit-bridge/tree/v6.0.8"
             },
             "funding": [
                 {
@@ -2965,7 +2965,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-06T11:27:28+00:00"
+            "time": "2022-04-12T16:11:42+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
