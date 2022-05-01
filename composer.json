@@ -54,7 +54,7 @@
 		"symfony/runtime": "6.0.7",
 		"symfony/security-bundle": "6.0.5",
 		"symfony/serializer": "6.0.7",
-		"symfony/string": "6.0.3",
+		"symfony/string": "6.0.8",
 		"symfony/translation": "6.0.7",
 		"symfony/twig-bundle": "6.0.3",
 		"symfony/validator": "6.0.7",
