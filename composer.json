@@ -43,7 +43,7 @@
 		"symfony/console": "6.0.8",
 		"symfony/dotenv": "6.0.5",
 		"symfony/expression-language": "6.0.8",
-		"symfony/flex": "2.1.7",
+		"symfony/flex": "2.1.8",
 		"symfony/form": "6.0.8",
 		"symfony/framework-bundle": "6.0.8",
 		"symfony/monolog-bundle": "3.7.1",
