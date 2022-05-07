@@ -27,13 +27,15 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
 {
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        private TranslatorInterface $translator,
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct($dispatcher);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @see https://github.com/lexik/LexikJWTAuthenticationBundle/issues/944
      *
      * @noinspection PhpMissingParentCallCommonInspection
      */
@@ -44,9 +46,7 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
          */
         $event = new AuthenticationFailureEvent(
             $exception,
-            new JWTAuthenticationFailureResponse(
-                $this->translator->trans('Invalid credentials.', [], 'security')
-            )
+            new JWTAuthenticationFailureResponse($this->translator->trans('Invalid credentials.', [], 'security'))
         );
 
         $this->dispatcher->dispatch($event);

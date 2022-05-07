@@ -323,7 +323,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm-shepherd
 endif
 
-psalm-github: ## Runs Psalm static analysis tool
+psalm-github: ## Runs Psalm static analysis tool (GitHub)
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
@@ -344,7 +344,22 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
 	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan
+	@./vendor/bin/phpstan -v
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpstan
+endif
+
+phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
+	@@bin/console cache:clear
+	@./vendor/bin/phpstan --version
+	@./vendor/bin/phpstan -v --error-format=github
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
