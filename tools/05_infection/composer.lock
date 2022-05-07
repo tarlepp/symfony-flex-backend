@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5e747211b84a80e9b9ef4caca21939a",
+    "content-hash": "ee2b4b3bed84e934099c66b3634618d2",
     "packages": [],
     "packages-dev": [
         {
@@ -323,16 +323,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.26.8",
+            "version": "0.26.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "27727f929420a405e74530115aa98f17a6083717"
+                "reference": "e5aa8de5c1b4fa8ecf8b8904d534e69b0a2558ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/27727f929420a405e74530115aa98f17a6083717",
-                "reference": "27727f929420a405e74530115aa98f17a6083717",
+                "url": "https://api.github.com/repos/infection/infection/zipball/e5aa8de5c1b4fa8ecf8b8904d534e69b0a2558ab",
+                "reference": "e5aa8de5c1b4fa8ecf8b8904d534e69b0a2558ab",
                 "shasum": ""
             },
             "require": {
@@ -433,7 +433,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.26.8"
+                "source": "https://github.com/infection/infection/tree/0.26.9"
             },
             "funding": [
                 {
@@ -445,7 +445,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2022-04-21T10:28:00+00:00"
+            "time": "2022-05-06T08:37:38+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -760,12 +760,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "2658dd564ed1a63989404083d7ccb9cb10e07701"
+                "reference": "c99945852fb9e9de3bc89c90f24b4c8ef47668fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2658dd564ed1a63989404083d7ccb9cb10e07701",
-                "reference": "2658dd564ed1a63989404083d7ccb9cb10e07701",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c99945852fb9e9de3bc89c90f24b4c8ef47668fd",
+                "reference": "c99945852fb9e9de3bc89c90f24b4c8ef47668fd",
                 "shasum": ""
             },
             "conflict": {
@@ -817,8 +817,9 @@
                 "concrete5/concrete5": "<9",
                 "concrete5/core": "<8.5.7",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
+                "contao/contao": ">=4,<4.4.56|>=4.5,<4.9.18|>=4.10,<4.11.7|>=4.13,<4.13.3",
                 "contao/core": ">=2,<3.5.39",
-                "contao/core-bundle": "<4.9.18|>=4.10,<4.11.7|= 4.10.0",
+                "contao/core-bundle": "<4.9.18|>=4.10,<4.11.7|>=4.13,<4.13.3|= 4.10.0",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/managed-edition": "<=1.5",
                 "craftcms/cms": "<3.7.29",
@@ -1241,7 +1242,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-05T14:08:42+00:00"
+            "time": "2022-05-06T13:19:01+00:00"
         },
         {
             "name": "sanmai/later",
