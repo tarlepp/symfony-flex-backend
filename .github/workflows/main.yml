@@ -169,7 +169,7 @@ jobs:
       #  run: make psalm
 
       - name: Run PHPStan static analysis tool
-        run: make phpstan
+        run: make phpstan-github
 
       - name: Run `phploc` to collect LOC stats
         run: make phploc
