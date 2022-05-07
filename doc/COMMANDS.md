@@ -84,11 +84,12 @@ phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
 phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
+phpstan-github              # Runs PHPStan static analysis tool (GitHub)
 phpstan                     # Runs PHPStan static analysis tool
-psalm-github                # Runs Psalm static analysis tool
-psalm                       # Runs Psalm static analysis tool
+psalm-github                # Runs Psalm static analysis tool (GitHub)
 psalm-shepherd              # Runs Psalm static analysis tool + report results
                             # to shepherd
+psalm                       # Runs Psalm static analysis tool
 report-fastest              # Creates clover and JUnit xml from fastest run
 run-tests-fastest-phpdbg    # Runs all test via fastest (phpdbg)
 run-tests-fastest-php       # Runs all test via fastest (pure PHP)
