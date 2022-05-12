@@ -61,7 +61,7 @@ class Version
 
             assert(is_array($composerData));
 
-            return (array_key_exists('version', $composerData) && is_string($composerData['version']))
+            return array_key_exists('version', $composerData) && is_string($composerData['version'])
                 ? $composerData['version']
                 : '0.0.0';
         };
