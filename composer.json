@@ -46,7 +46,7 @@
 		"symfony/flex": "2.1.8",
 		"symfony/form": "6.0.8",
 		"symfony/framework-bundle": "6.0.8",
-		"symfony/monolog-bundle": "3.7.1",
+		"symfony/monolog-bundle": "3.8.0",
 		"symfony/process": "6.0.8",
 		"symfony/property-access": "6.0.8",
 		"symfony/property-info": "6.0.7",

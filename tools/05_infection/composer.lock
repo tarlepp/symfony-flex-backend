@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee2b4b3bed84e934099c66b3634618d2",
+    "content-hash": "38811fe77903e644a32520a9a75e4901",
     "packages": [],
     "packages-dev": [
         {
@@ -323,16 +323,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.26.9",
+            "version": "0.26.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "e5aa8de5c1b4fa8ecf8b8904d534e69b0a2558ab"
+                "reference": "134853ce500c4669db7d6f9fe03ea5c8771a4540"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/e5aa8de5c1b4fa8ecf8b8904d534e69b0a2558ab",
-                "reference": "e5aa8de5c1b4fa8ecf8b8904d534e69b0a2558ab",
+                "url": "https://api.github.com/repos/infection/infection/zipball/134853ce500c4669db7d6f9fe03ea5c8771a4540",
+                "reference": "134853ce500c4669db7d6f9fe03ea5c8771a4540",
                 "shasum": ""
             },
             "require": {
@@ -374,7 +374,7 @@
                 "phpstan/phpstan-phpunit": "^1.0.0",
                 "phpstan/phpstan-strict-rules": "^1.1.0",
                 "phpstan/phpstan-webmozart-assert": "^1.0.2",
-                "phpunit/phpunit": "^9.3.11",
+                "phpunit/phpunit": "^9.5.5",
                 "symfony/phpunit-bridge": "^4.4.18 || ^5.1.10",
                 "symfony/yaml": "^5.0",
                 "thecodingmachine/phpstan-safe-rule": "^1.2.0"
@@ -433,7 +433,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.26.9"
+                "source": "https://github.com/infection/infection/tree/0.26.10"
             },
             "funding": [
                 {
@@ -445,7 +445,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2022-05-06T08:37:38+00:00"
+            "time": "2022-05-11T20:58:00+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -760,12 +760,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c99945852fb9e9de3bc89c90f24b4c8ef47668fd"
+                "reference": "2ed308386e65cafaadd54723f5b57775374c2ae8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c99945852fb9e9de3bc89c90f24b4c8ef47668fd",
-                "reference": "c99945852fb9e9de3bc89c90f24b4c8ef47668fd",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2ed308386e65cafaadd54723f5b57775374c2ae8",
+                "reference": "2ed308386e65cafaadd54723f5b57775374c2ae8",
                 "shasum": ""
             },
             "conflict": {
@@ -802,7 +802,7 @@
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "bytefury/crater": "<6.0.2",
                 "cachethq/cachet": "<2.5.1",
-                "cakephp/cakephp": "<4.0.6",
+                "cakephp/cakephp": "<3.10.3|>=4,<4.0.6",
                 "cardgate/magento2": "<2.0.33",
                 "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
                 "cartalyst/sentry": "<=2.1.6",
@@ -1242,7 +1242,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-06T13:19:01+00:00"
+            "time": "2022-05-11T11:06:18+00:00"
         },
         {
             "name": "sanmai/later",
