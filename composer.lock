@@ -7583,16 +7583,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.4.1",
+            "version": "4.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "86ab9cb3468a9a6989b14f57d95bb4202aa593ce"
+                "reference": "1653b53eb3973a9a6dac87ef8f2676801b14469f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/86ab9cb3468a9a6989b14f57d95bb4202aa593ce",
-                "reference": "86ab9cb3468a9a6989b14f57d95bb4202aa593ce",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/1653b53eb3973a9a6dac87ef8f2676801b14469f",
+                "reference": "1653b53eb3973a9a6dac87ef8f2676801b14469f",
                 "shasum": ""
             },
             "require": {
@@ -7654,9 +7654,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.4.1"
+                "source": "https://github.com/zircote/swagger-php/tree/4.4.2"
             },
-            "time": "2022-05-06T09:12:54+00:00"
+            "time": "2022-05-13T23:51:07+00:00"
         }
     ],
     "packages-dev": [
