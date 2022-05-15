@@ -39,15 +39,9 @@ class DocumentationTest extends WebTestCase
      */
     public function testThatDocumentationJsonWorks(): void
     {
-        self::markTestSkipped(
-            'This is currently skipped, see - https://github.com/nelmio/NelmioApiDocBundle/issues/1967'
-        );
-
-        /*
         $client = $this->getTestClient();
         $client->request('GET', '/api/doc.json');
 
         self::assertSame(200, $client->getResponse()->getStatusCode());
-        */
     }
 }
