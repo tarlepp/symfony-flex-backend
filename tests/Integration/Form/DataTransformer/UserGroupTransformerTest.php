@@ -137,7 +137,7 @@ class UserGroupTransformerTest extends KernelTestCase
      */
     private function getUserGroupResource(): MockObject
     {
-        return  $this
+        return $this
             ->getMockBuilder(UserGroupResource::class)
             ->disableOriginalConstructor()
             ->getMock();
