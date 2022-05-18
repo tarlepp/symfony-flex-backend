@@ -28,7 +28,7 @@
 		"doctrine/doctrine-bundle": "2.6.3",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
 		"doctrine/orm": "2.12.2",
-		"gedmo/doctrine-extensions": "3.6.0",
+		"gedmo/doctrine-extensions": "3.7.0",
 		"lexik/jwt-authentication-bundle": "2.15.1",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
 		"matomo/device-detector": "6.0.0",
