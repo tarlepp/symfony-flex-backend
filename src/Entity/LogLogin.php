@@ -68,7 +68,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.id',
     ])]
-    private UuidInterface $id;
+    private readonly UuidInterface $id;
 
     #[ORM\Column(
         name: 'username',
@@ -80,7 +80,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.username',
     ])]
-    private string $username = '';
+    private readonly string $username;
 
     #[ORM\Column(
         name: 'client_type',
@@ -92,7 +92,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientType',
     ])]
-    private ?string $clientType = null;
+    private readonly string $clientType;
 
     #[ORM\Column(
         name: 'client_name',
@@ -104,7 +104,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientName',
     ])]
-    private ?string $clientName = null;
+    private readonly string $clientName;
 
     #[ORM\Column(
         name: 'client_short_name',
@@ -116,7 +116,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientShortName',
     ])]
-    private ?string $clientShortName = null;
+    private readonly string $clientShortName;
 
     #[ORM\Column(
         name: 'client_version',
@@ -128,7 +128,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientVersion',
     ])]
-    private ?string $clientVersion = null;
+    private readonly string $clientVersion;
 
     #[ORM\Column(
         name: 'client_engine',
@@ -140,7 +140,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientEngine',
     ])]
-    private ?string $clientEngine = null;
+    private readonly string $clientEngine;
 
     #[ORM\Column(
         name: 'os_name',
@@ -152,7 +152,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osName',
     ])]
-    private ?string $osName = null;
+    private readonly string $osName;
 
     #[ORM\Column(
         name: 'os_short_name',
@@ -164,7 +164,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osShortName',
     ])]
-    private ?string $osShortName = null;
+    private readonly string $osShortName;
 
     #[ORM\Column(
         name: 'os_version',
@@ -176,7 +176,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osVersion',
     ])]
-    private ?string $osVersion = null;
+    private readonly string $osVersion;
 
     #[ORM\Column(
         name: 'os_platform',
@@ -188,7 +188,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osPlatform',
     ])]
-    private ?string $osPlatform = null;
+    private readonly string $osPlatform;
 
     #[ORM\Column(
         name: 'device_name',
@@ -200,7 +200,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.deviceName',
     ])]
-    private ?string $deviceName = null;
+    private readonly string $deviceName;
 
     #[ORM\Column(
         name: 'brand_name',
@@ -212,7 +212,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.brandName',
     ])]
-    private ?string $brandName = null;
+    private readonly string $brandName;
 
     #[ORM\Column(
         name: 'model',
@@ -224,9 +224,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.model',
     ])]
-    private ?string $model = null;
-
-    private DeviceDetector $deviceDetector;
+    private readonly string $model;
 
     /**
      * LogLogin constructor.
@@ -242,9 +240,9 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.type',
         ])]
-        private string $type,
-        Request $request,
-        DeviceDetector $deviceDetector,
+        private readonly string $type,
+        private Request $request,
+        private readonly DeviceDetector $deviceDetector,
         #[ORM\ManyToOne(
             targetEntity: User::class,
             inversedBy: 'logsLogin',
@@ -257,19 +255,15 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.user',
         ])]
-        private ?User $user = null
+        private readonly ?User $user = null
     ) {
         $this->id = $this->createUuid();
-
-        $this->deviceDetector = $deviceDetector;
 
         $this->processTimeAndDate();
         $this->processRequestData($request);
         $this->processClientData();
 
-        if ($this->user !== null) {
-            $this->username = $this->user->getUsername();
-        }
+        $this->username = $this->user?->getUsername() ?? '';
     }
 
     public function getId(): string

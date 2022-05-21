@@ -38,7 +38,7 @@ trait LogEntityTrait
         'LogRequest',
         'LogRequest.time',
     ])]
-    protected DateTimeImmutable $time;
+    protected readonly DateTimeImmutable $time;
 
     #[ORM\Column(
         name: '`date`',
@@ -51,7 +51,7 @@ trait LogEntityTrait
         'LogRequest',
         'LogRequest.date',
     ])]
-    protected DateTimeImmutable $date;
+    protected readonly DateTimeImmutable $date;
 
     #[ORM\Column(
         name: 'agent',
@@ -64,7 +64,7 @@ trait LogEntityTrait
         'LogRequest',
         'LogRequest.agent',
     ])]
-    protected string $agent = '';
+    protected readonly string $agent;
 
     #[ORM\Column(
         name: 'http_host',
@@ -78,7 +78,7 @@ trait LogEntityTrait
         'LogRequest',
         'LogRequest.httpHost',
     ])]
-    protected string $httpHost = '';
+    protected readonly string $httpHost;
 
     #[ORM\Column(
         name: 'client_ip',
@@ -92,7 +92,7 @@ trait LogEntityTrait
         'LogRequest',
         'LogRequest.clientIp',
     ])]
-    private string $clientIp = '';
+    private readonly string $clientIp;
 
     public function getTime(): DateTimeImmutable
     {
