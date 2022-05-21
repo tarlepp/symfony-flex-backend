@@ -9,11 +9,9 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\DateDimension;
-use App\Utils\Tests\PhpUnitUtil;
+use DateTime;
 use DateTimeImmutable;
-use Throwable;
-use function in_array;
-use function ucfirst;
+use DateTimeZone;
 
 /**
  * Class DateDimensionTest
@@ -29,59 +27,17 @@ class DateDimensionTest extends EntityTestCase
      * @var class-string
      */
     protected string $entityName = DateDimension::class;
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
-     */
-    public function testThatSetterOnlyAcceptSpecifiedType(
-        ?string $property = null,
-        ?string $type = null,
-        ?array $meta = null,
-    ): void {
-        self::markTestSkipped('There is not setter in read only entity...');
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
-     */
-    public function testThatSetterReturnsInstanceOfEntity(
-        ?string $property = null,
-        ?string $type = null,
-        ?array $meta = null
-    ): void {
-        self::markTestSkipped('There is not setter in read only entity...');
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @throws Throwable
-     *
-     * @testdox Test that getter method for `$type $property` property returns expected
-     */
-    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
+    
+    public function testThatGetCreatedAtMethodReturnsExpected(): void
     {
-        $getter = 'get' . ucfirst($property);
+        $entity = $this->createEntity();
+        $createdAt = $entity->getCreatedAt();
 
-        if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
-            $getter = 'is' . ucfirst($property);
-        }
-
-        $dateDimension = $this->createEntity();
-
-        try {
-            $method = 'assertIs' . ucfirst($type);
-
-            self::$method($dateDimension->{$getter}());
-        } catch (Throwable $error) {
-            /**
-             * @var class-string $type
-             */
-            self::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
-        }
+        self::assertEqualsWithDelta(
+            (new DateTime('now', new DateTimeZone('utc')))->getTimestamp(),
+            $createdAt->getTimestamp(),
+            1
+        );
     }
 
     /**
