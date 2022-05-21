@@ -63,7 +63,7 @@ return static function (ECSConfig $ecsConfig): void {
         ],
         [
             CastSpacesFixer::class,
-            ['space' => 'none',],
+            ['space' => 'none'],
         ],
         [
             OrderedImportsFixer::class,
