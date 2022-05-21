@@ -15,6 +15,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use TypeError;
@@ -81,8 +82,12 @@ abstract class EntityTestCase extends KernelTestCase
      *
      * @testdox Test that `getter` and `setter` methods exists for `$type $property` property
      */
-    public function testThatGetterAndSetterExists(string $property, string $type, array $meta, bool $readOnly): void
-    {
+    public function testThatGetterAndSetterExists(
+        string $property,
+        string $type,
+        array $meta,
+        bool $readOnlyClass,
+    ): void {
         $entity = $this->getEntity();
         $getter = 'get' . ucfirst($property);
         $setter = 'set' . ucfirst($property);
@@ -102,12 +107,29 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         if (array_key_exists('columnName', $meta)) {
-            $message = $readOnly
+            $entity = $this->getEntity();
+
+            $readOnlyProperty = $this->isReadOnlyProperty($property);
+
+            $message = $readOnlyClass || $readOnlyProperty
                 ? "Entity '%s' has not expected setter '%s()' method for '%s' property."
                 : "Entity '%s' does not have expected setter '%s()' method for '%s' property.";
 
+            if ($readOnlyProperty) {
+                static::assertFalse(
+                    method_exists($entity, $setter),
+                    sprintf($message, $this->entityName, $setter, $property)
+                );
+            } else {
+                static::assertSame(
+                    !$readOnlyClass,
+                    method_exists($entity, $setter),
+                    sprintf($message, $this->entityName, $setter, $property),
+                );
+            }
+            
             self::assertSame(
-                !$readOnly,
+                !$readOnlyClass,
                 method_exists($entity, $setter),
                 sprintf($message, $this->entityName, $setter, $property),
             );
@@ -128,7 +150,9 @@ abstract class EntityTestCase extends KernelTestCase
         string $type,
         array $meta,
     ): void {
-        if (!array_key_exists('columnName', $meta) && !array_key_exists('joinColumns', $meta)) {
+        if ((!array_key_exists('columnName', $meta) && !array_key_exists('joinColumns', $meta))
+            || $this->isReadOnlyProperty($property)
+        ) {
             self::markTestSkipped('No need to test this setter...');
         }
 
@@ -163,7 +187,7 @@ abstract class EntityTestCase extends KernelTestCase
         string $type,
         array $meta,
     ): void {
-        if (!array_key_exists('columnName', $meta)) {
+        if (!array_key_exists('columnName', $meta) || $this->isReadOnlyProperty($property)) {
             self::markTestSkipped('No need to test this setter...');
         }
 
@@ -207,26 +231,28 @@ abstract class EntityTestCase extends KernelTestCase
         /** @var callable $callable */
         $callable = [$entity, $getter];
 
-        if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
-            $value = PhpUnitUtil::getValidValueForType($type, $meta);
+        if (!$this->isReadOnlyProperty($property)) {
+            if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
+                $value = PhpUnitUtil::getValidValueForType($type, $meta);
 
-            $entity->{$setter}($value);
+                $entity->{$setter}($value);
 
-            self::assertSame(
-                $value,
-                $callable(),
-                sprintf(
-                    'Getter method of %s:%s did not return expected value type (%s) and it returned (%s)',
-                    $this->entityName,
-                    $getter,
-                    gettype($value),
-                    gettype($callable()),
-                ),
-            );
-        } else {
-            $type = ArrayCollection::class;
+                self::assertSame(
+                    $value,
+                    $callable(),
+                    sprintf(
+                        'Getter method of %s:%s did not return expected value type (%s) and it returned (%s)',
+                        $this->entityName,
+                        $getter,
+                        gettype($value),
+                        gettype($callable()),
+                    ),
+                );
+            } else {
+                $type = ArrayCollection::class;
 
-            self::assertInstanceOf($type, $callable());
+                self::assertInstanceOf($type, $callable());
+            }
         }
 
         try {
@@ -769,5 +795,10 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertInstanceOf(EntityInterface::class, $entity);
 
         return $entity;
+    }
+
+    private function isReadOnlyProperty(string $property): bool
+    {
+        return (new ReflectionProperty($this->getEntity(), $property))->isReadOnly();
     }
 }
