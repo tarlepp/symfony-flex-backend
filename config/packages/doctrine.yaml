@@ -24,8 +24,15 @@ doctrine:
                 prefix: 'App\Entity'
                 alias: App
 
+when@test:
+    doctrine:
+        dbal:
+            logging: false
+
 when@prod:
     doctrine:
+        dbal:
+            logging: false
         orm:
             auto_generate_proxy_classes: false
             query_cache_driver:
