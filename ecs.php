@@ -39,7 +39,7 @@ return static function (ECSConfig $ecsConfig): void {
     ]);
 
     $ecsConfig->sets([SetList::PSR_12, SetList::CLEAN_CODE, SetList::COMMON]);
-    
+
     $ruleConfigurations = [
         [
             IncrementStyleFixer::class,
@@ -88,11 +88,11 @@ return static function (ECSConfig $ecsConfig): void {
         [
             BinaryOperatorSpacesFixer::class,
             ['operators' => ['&' => 'align']],
-        ]
+        ],
     ];
-    
+
     array_map(static fn ($parameters) => $ecsConfig->ruleWithConfiguration(...$parameters), $ruleConfigurations);
-    
+
     $ecsConfig->skip([
         NoMultilineWhitespaceAroundDoubleArrowFixer::class => null,
         PhpdocNoPackageFixer::class => null,
