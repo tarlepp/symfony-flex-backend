@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1c71f6f4ac44fb477f078ec3a6cf081",
+    "content-hash": "e33958f9afb671f4ad2d834a1caecc60",
     "packages": [],
     "packages-dev": [
         {
@@ -722,12 +722,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c99945852fb9e9de3bc89c90f24b4c8ef47668fd"
+                "reference": "c491d086242983f784b8af91cbb9de43d3374971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c99945852fb9e9de3bc89c90f24b4c8ef47668fd",
-                "reference": "c99945852fb9e9de3bc89c90f24b4c8ef47668fd",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c491d086242983f784b8af91cbb9de43d3374971",
+                "reference": "c491d086242983f784b8af91cbb9de43d3374971",
                 "shasum": ""
             },
             "conflict": {
@@ -760,11 +760,12 @@
                 "bolt/core": "<=4.2",
                 "bottelet/flarepoint": "<2.2.1",
                 "brightlocal/phpwhois": "<=4.2.5",
+                "brotkrueml/codehighlight": "<2.7",
                 "buddypress/buddypress": "<7.2.1",
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "bytefury/crater": "<6.0.2",
                 "cachethq/cachet": "<2.5.1",
-                "cakephp/cakephp": "<4.0.6",
+                "cakephp/cakephp": "<3.10.3|>=4,<4.0.6",
                 "cardgate/magento2": "<2.0.33",
                 "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
                 "cartalyst/sentry": "<=2.1.6",
@@ -1204,7 +1205,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-06T13:19:01+00:00"
+            "time": "2022-05-16T08:10:11+00:00"
         },
         {
             "name": "symfony/console",
@@ -2505,20 +2506,20 @@
         },
         {
             "name": "symplify/config-transformer",
-            "version": "10.2.3",
+            "version": "10.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "04c5a295acb34adce69f9f20bf67989ebee080b9"
+                "reference": "0b78ff71ca428e8cc187b3891aa3503bebb2a5bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/04c5a295acb34adce69f9f20bf67989ebee080b9",
-                "reference": "04c5a295acb34adce69f9f20bf67989ebee080b9",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/0b78ff71ca428e8cc187b3891aa3503bebb2a5bc",
+                "reference": "0b78ff71ca428e8cc187b3891aa3503bebb2a5bc",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "bin": [
                 "bin/config-transformer"
@@ -2530,7 +2531,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/10.2.3"
+                "source": "https://github.com/symplify/config-transformer/tree/10.2.7"
             },
             "funding": [
                 {
@@ -2542,24 +2543,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-03T14:06:31+00:00"
+            "time": "2022-05-21T11:11:41+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "10.2.3",
+            "version": "10.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "7303e9b0a6ac61b2a0cf5185a2078b7af25fba9d"
+                "reference": "e34a105876b0640e70c584d75adaf9c0b03cf0f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/7303e9b0a6ac61b2a0cf5185a2078b7af25fba9d",
-                "reference": "7303e9b0a6ac61b2a0cf5185a2078b7af25fba9d",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/e34a105876b0640e70c584d75adaf9c0b03cf0f3",
+                "reference": "e34a105876b0640e70c584d75adaf9c0b03cf0f3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "conflict": {
                 "friendsofphp/php-cs-fixer": "<3.0",
@@ -2585,7 +2586,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/10.2.3"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/10.2.7"
             },
             "funding": [
                 {
@@ -2597,7 +2598,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-03T14:07:44+00:00"
+            "time": "2022-05-21T11:14:40+00:00"
         }
     ],
     "aliases": [],
