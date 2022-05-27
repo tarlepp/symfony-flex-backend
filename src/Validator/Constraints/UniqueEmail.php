@@ -36,7 +36,7 @@ class UniqueEmail extends Constraint
      *
      * @var array<string, string>
      */
-    protected static $errorNames = [
+    protected const ERROR_NAMES = [
         self::IS_UNIQUE_EMAIL_ERROR => 'IS_UNIQUE_EMAIL_ERROR',
     ];
 

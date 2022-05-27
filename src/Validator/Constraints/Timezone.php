@@ -36,7 +36,7 @@ class Timezone extends Constraint
      *
      * @var array<string, string>
      */
-    protected static $errorNames = [
+    protected const ERROR_NAMES = [
         self::INVALID_TIMEZONE => 'INVALID_TIMEZONE',
     ];
 }

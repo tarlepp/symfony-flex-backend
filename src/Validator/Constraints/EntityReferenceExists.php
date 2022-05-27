@@ -39,9 +39,9 @@ class EntityReferenceExists extends Constraint
      *
      * @var array<string, string>
      */
-    protected static $errorNames = [
+    protected const ERROR_NAMES = [
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
-    ];
+    ]; 
 
     /**
      * EntityReferenceExists constructor.
