@@ -5,9 +5,10 @@ monolog:
             path: php://stderr
             level: debug
             channels: ['!event']
-        firephp:
-            type: firephp
-            level: info
+        # Disabled for now see - https://github.com/symfony/symfony/pull/46475
+        #firephp:
+        #    type: firephp
+        #    level: info
         chromephp:
             type: chromephp
             level: info
