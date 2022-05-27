@@ -136,6 +136,9 @@
     "mark-gerarts/automapper-plus-bundle": {
         "version": "1.2.1"
     },
+    "masterminds/html5": {
+        "version": "2.7.5"
+    },
     "matomo/device-detector": {
         "version": "4.0.2"
     },
