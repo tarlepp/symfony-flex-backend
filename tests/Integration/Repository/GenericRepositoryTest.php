@@ -344,7 +344,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
+            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -383,7 +384,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
+            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -426,7 +428,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
+            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -477,7 +480,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
+            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
