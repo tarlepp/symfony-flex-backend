@@ -56,8 +56,8 @@ class CreateUserGroupCommand extends Command
     ];
 
     public function __construct(
-        private UserGroupResource $userGroupResource,
-        private RoleRepository $roleRepository,
+        private readonly UserGroupResource $userGroupResource,
+        private readonly RoleRepository $roleRepository,
     ) {
         parent::__construct();
     }

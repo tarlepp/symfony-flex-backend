@@ -57,7 +57,7 @@ class CheckDependencies extends Command
     use SymfonyStyleTrait;
 
     public function __construct(
-        private string $projectDir,
+        private readonly string $projectDir,
     ) {
         parent::__construct();
 

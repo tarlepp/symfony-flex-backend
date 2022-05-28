@@ -53,11 +53,11 @@ class CreateApiKeyCommand extends Command
     ];
 
     public function __construct(
-        private ApiKeyHelper $apiKeyHelper,
-        private ApiKeyResource $apiKeyResource,
-        private UserGroupResource $userGroupResource,
-        private RolesService $rolesService,
-        private RoleRepository $roleRepository,
+        private readonly ApiKeyHelper $apiKeyHelper,
+        private readonly ApiKeyResource $apiKeyResource,
+        private readonly UserGroupResource $userGroupResource,
+        private readonly RolesService $rolesService,
+        private readonly RoleRepository $roleRepository,
     ) {
         parent::__construct();
     }
