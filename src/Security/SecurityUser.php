@@ -31,8 +31,10 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @param array<int, string> $roles
      */
-    public function __construct(User $user, private readonly array $roles = [])
-    {
+    public function __construct(
+        User $user,
+        private readonly array $roles = [],
+    ) {
         $this->identifier = $user->getId();
         $this->password = $user->getPassword();
         $this->language = $user->getLanguage();
