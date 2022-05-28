@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserRolesController
 {
     public function __construct(
-        private RolesService $rolesService,
+        private readonly RolesService $rolesService,
     ) {
     }
 

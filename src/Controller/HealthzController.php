@@ -26,8 +26,8 @@ use Throwable;
 class HealthzController
 {
     public function __construct(
-        private ResponseHandler $responseHandler,
-        private HealthzService $healthzService,
+        private readonly ResponseHandler $responseHandler,
+        private readonly HealthzService $healthzService,
     ) {
     }
 

@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class VersionController
 {
     public function __construct(
-        private Version $version,
+        private readonly Version $version,
     ) {
     }
 
