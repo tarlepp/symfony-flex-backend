@@ -23,8 +23,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class DoctrineExtensionSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private BlameableListener $blameableListener,
-        private UserTypeIdentification $userTypeIdentification,
+        private readonly BlameableListener $blameableListener,
+        private readonly UserTypeIdentification $userTypeIdentification,
     ) {
     }
 
