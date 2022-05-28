@@ -23,7 +23,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class UniqueEmailValidator extends ConstraintValidator
 {
     public function __construct(
-        private UserRepository $repository,
+        private readonly UserRepository $repository,
     ) {
     }
 

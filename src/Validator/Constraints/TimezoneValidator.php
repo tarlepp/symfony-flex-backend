@@ -24,7 +24,7 @@ use function is_string;
 class TimezoneValidator extends ConstraintValidator
 {
     public function __construct(
-        private Localization $localization,
+        private readonly Localization $localization,
     ) {
     }
 
