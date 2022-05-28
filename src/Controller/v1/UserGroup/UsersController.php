@@ -32,8 +32,8 @@ use Throwable;
 class UsersController
 {
     public function __construct(
-        private UserResource $userResource,
-        private ResponseHandler $responseHandler,
+        private readonly UserResource $userResource,
+        private readonly ResponseHandler $responseHandler,
     ) {
     }
 

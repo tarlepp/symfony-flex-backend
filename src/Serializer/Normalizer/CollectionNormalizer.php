@@ -22,7 +22,7 @@ use function is_object;
 class CollectionNormalizer implements NormalizerInterface
 {
     public function __construct(
-        private ObjectNormalizer $normalizer,
+        private readonly ObjectNormalizer $normalizer,
     ) {
     }
 

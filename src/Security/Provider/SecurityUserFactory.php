@@ -27,9 +27,9 @@ use Throwable;
 class SecurityUserFactory implements UserProviderInterface
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private RolesService $rolesService,
-        private string $uuidV1Regex,
+        private readonly UserRepository $userRepository,
+        private readonly RolesService $rolesService,
+        private readonly string $uuidV1Regex,
     ) {
     }
 

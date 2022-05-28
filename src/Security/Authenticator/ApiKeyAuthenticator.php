@@ -30,7 +30,7 @@ use function preg_match;
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private ApiKeyUserProvider $apiKeyUserProvider,
+        private readonly ApiKeyUserProvider $apiKeyUserProvider,
     ) {
     }
 

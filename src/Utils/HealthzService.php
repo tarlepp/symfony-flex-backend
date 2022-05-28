@@ -21,7 +21,7 @@ use Throwable;
 class HealthzService
 {
     public function __construct(
-        private HealthzRepository $repository,
+        private readonly HealthzRepository $repository,
     ) {
     }
 

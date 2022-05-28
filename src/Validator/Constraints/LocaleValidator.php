@@ -22,7 +22,7 @@ use function in_array;
 class LocaleValidator extends ConstraintValidator
 {
     public function __construct(
-        private Localization $localization,
+        private readonly Localization $localization,
     ) {
     }
 
