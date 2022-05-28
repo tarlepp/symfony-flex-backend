@@ -27,8 +27,8 @@ use function sprintf;
 class UserHelper
 {
     public function __construct(
-        private UserResource $userResource,
-        private UserGroupResource $userGroupResource,
+        private readonly UserResource $userResource,
+        private readonly UserGroupResource $userGroupResource,
     ) {
     }
 

@@ -25,9 +25,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class UserTypeIdentification
 {
     public function __construct(
-        private TokenStorageInterface $tokenStorage,
-        private UserRepository $userRepository,
-        private ApiKeyUserProvider $apiKeyUserProvider,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly UserRepository $userRepository,
+        private readonly ApiKeyUserProvider $apiKeyUserProvider,
     ) {
     }
 

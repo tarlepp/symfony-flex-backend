@@ -40,8 +40,8 @@ class ListUsersCommand extends Command
     public const NAME = 'user:list';
 
     public function __construct(
-        private UserResource $userResource,
-        private RolesService $roles,
+        private readonly UserResource $userResource,
+        private readonly RolesService $roles,
     ) {
         parent::__construct();
     }

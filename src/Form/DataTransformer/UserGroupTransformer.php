@@ -26,11 +26,9 @@ use function sprintf;
  */
 class UserGroupTransformer implements DataTransformerInterface
 {
-    private UserGroupResource $resource;
-
-    public function __construct(UserGroupResource $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        private readonly UserGroupResource $resource
+    ) {
     }
 
     /**

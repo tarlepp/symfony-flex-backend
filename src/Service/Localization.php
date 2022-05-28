@@ -34,8 +34,8 @@ class Localization
     public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
-        private CacheInterface $appCacheApcu,
-        private LoggerInterface $logger,
+        private readonly CacheInterface $appCacheApcu,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -63,6 +63,7 @@ class Localization
         $output = [];
 
         try {
+            /** @var array<int, array{timezone: string, identifier: string, offset: string, value: string}> $output */
             $output = $this->appCacheApcu->get('application_timezone', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
