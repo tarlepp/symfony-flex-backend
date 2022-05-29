@@ -27,8 +27,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInterface
 {
     public function __construct(
-        private ApiKeyRepository $apiKeyRepository,
-        private RolesService $rolesService,
+        private readonly ApiKeyRepository $apiKeyRepository,
+        private readonly RolesService $rolesService,
     ) {
     }
 

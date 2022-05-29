@@ -34,8 +34,8 @@ class RemoveApiKeyCommand extends Command
     public const NAME = 'api-key:remove';
 
     public function __construct(
-        private ApiKeyResource $apiKeyResource,
-        private ApiKeyHelper $apiKeyHelper,
+        private readonly ApiKeyResource $apiKeyResource,
+        private readonly ApiKeyHelper $apiKeyHelper,
     ) {
         parent::__construct();
     }

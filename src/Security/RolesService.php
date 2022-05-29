@@ -37,7 +37,7 @@ class RolesService implements RolesServiceInterface
     ];
 
     public function __construct(
-        private RoleHierarchyInterface $roleHierarchy,
+        private readonly RoleHierarchyInterface $roleHierarchy,
     ) {
     }
 

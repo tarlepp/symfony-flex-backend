@@ -30,8 +30,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class IndexController
 {
     public function __construct(
-        private SerializerInterface $serializer,
-        private RolesService $rolesService,
+        private readonly SerializerInterface $serializer,
+        private readonly RolesService $rolesService,
     ) {
     }
 

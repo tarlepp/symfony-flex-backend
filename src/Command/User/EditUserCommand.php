@@ -37,8 +37,8 @@ class EditUserCommand extends Command
     public const NAME = 'user:edit';
 
     public function __construct(
-        private UserResource $userResource,
-        private UserHelper $userHelper,
+        private readonly UserResource $userResource,
+        private readonly UserHelper $userHelper,
     ) {
         parent::__construct();
     }

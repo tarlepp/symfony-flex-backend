@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class InheritedRolesController
 {
     public function __construct(
-        private RolesService $rolesService,
+        private readonly RolesService $rolesService,
     ) {
     }
 

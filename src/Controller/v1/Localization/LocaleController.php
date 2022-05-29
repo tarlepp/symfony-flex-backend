@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LocaleController
 {
     public function __construct(
-        private Localization $localization,
+        private readonly Localization $localization,
     ) {
     }
 

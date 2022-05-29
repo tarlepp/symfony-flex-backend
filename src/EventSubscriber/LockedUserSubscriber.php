@@ -35,9 +35,9 @@ use function is_string;
 class LockedUserSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private LogLoginFailureResource $logLoginFailureResource,
-        private RequestStack $requestStack,
+        private readonly UserRepository $userRepository,
+        private readonly LogLoginFailureResource $logLoginFailureResource,
+        private readonly RequestStack $requestStack,
     ) {
     }
 

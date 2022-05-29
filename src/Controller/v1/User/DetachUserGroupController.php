@@ -32,9 +32,9 @@ use Throwable;
 class DetachUserGroupController
 {
     public function __construct(
-        private UserResource $userResource,
-        private UserGroupResource $userGroupResource,
-        private SerializerInterface $serializer,
+        private readonly UserResource $userResource,
+        private readonly UserGroupResource $userGroupResource,
+        private readonly SerializerInterface $serializer,
     ) {
     }
 
