@@ -38,7 +38,7 @@ class RequestMapper extends RestRequestMapper
     ];
 
     public function __construct(
-        private UserGroupResource $userGroupResource,
+        private readonly UserGroupResource $userGroupResource,
     ) {
     }
 

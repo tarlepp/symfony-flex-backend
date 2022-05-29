@@ -26,7 +26,7 @@ use Throwable;
 class RestResourceConverter implements ParamConverterInterface
 {
     public function __construct(
-        private ResourceCollection $collection,
+        private readonly ResourceCollection $collection,
     ) {
     }
 

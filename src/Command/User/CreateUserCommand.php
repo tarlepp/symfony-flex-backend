@@ -76,10 +76,10 @@ class CreateUserCommand extends Command
     ];
 
     public function __construct(
-        private UserResource $userResource,
-        private UserGroupResource $userGroupResource,
-        private RolesService $rolesService,
-        private RoleRepository $roleRepository,
+        private readonly UserResource $userResource,
+        private readonly UserGroupResource $userGroupResource,
+        private readonly RolesService $rolesService,
+        private readonly RoleRepository $roleRepository,
     ) {
         parent::__construct();
     }

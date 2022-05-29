@@ -39,9 +39,9 @@ class CreateRolesCommand extends Command
     public const NAME = 'user:create-roles';
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private RoleRepository $roleRepository,
-        private RolesService $rolesService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly RoleRepository $roleRepository,
+        private readonly RolesService $rolesService,
     ) {
         parent::__construct();
     }

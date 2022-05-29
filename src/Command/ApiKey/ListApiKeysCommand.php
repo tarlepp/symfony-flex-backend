@@ -38,8 +38,8 @@ class ListApiKeysCommand extends Command
     public const NAME = 'api-key:list';
 
     public function __construct(
-        private ApiKeyResource $apiKeyResource,
-        private RolesService $rolesService,
+        private readonly ApiKeyResource $apiKeyResource,
+        private readonly RolesService $rolesService,
     ) {
         parent::__construct();
     }

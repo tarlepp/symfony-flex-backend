@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TimeZoneController
 {
     public function __construct(
-        private Localization $localization,
+        private readonly Localization $localization,
     ) {
     }
 

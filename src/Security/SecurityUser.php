@@ -27,23 +27,19 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     private string $timezone;
 
     /**
-     * @var array<int, string>
-     */
-    private array $roles;
-
-    /**
      * SecurityUser constructor.
      *
      * @param array<int, string> $roles
      */
-    public function __construct(User $user, array $roles = [])
-    {
+    public function __construct(
+        User $user,
+        private readonly array $roles = [],
+    ) {
         $this->identifier = $user->getId();
         $this->password = $user->getPassword();
         $this->language = $user->getLanguage();
         $this->locale = $user->getLocale();
         $this->timezone = $user->getTimezone();
-        $this->roles = $roles;
     }
 
     public function getUuid(): string

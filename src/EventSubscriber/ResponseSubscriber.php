@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 class ResponseSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private Version $version,
+        private readonly Version $version,
     ) {
     }
 

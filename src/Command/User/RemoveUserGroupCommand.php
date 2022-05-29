@@ -34,8 +34,8 @@ class RemoveUserGroupCommand extends Command
     public const NAME = 'user:remove-group';
 
     public function __construct(
-        private UserGroupResource $userGroupResource,
-        private UserHelper $userHelper,
+        private readonly UserGroupResource $userGroupResource,
+        private readonly UserHelper $userHelper,
     ) {
         parent::__construct();
     }

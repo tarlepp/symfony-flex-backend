@@ -49,9 +49,9 @@ class UserGroupType extends AbstractType
     ];
 
     public function __construct(
-        private RolesService $rolesService,
-        private RoleResource $roleResource,
-        private RoleTransformer $roleTransformer,
+        private readonly RolesService $rolesService,
+        private readonly RoleResource $roleResource,
+        private readonly RoleTransformer $roleTransformer,
     ) {
     }
 

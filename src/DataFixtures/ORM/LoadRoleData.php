@@ -27,7 +27,7 @@ use function array_map;
 final class LoadRoleData extends Fixture implements OrderedFixtureInterface
 {
     public function __construct(
-        private RolesServiceInterface $rolesService,
+        private readonly RolesServiceInterface $rolesService,
     ) {
     }
 

@@ -27,8 +27,8 @@ use function assert;
 class AuthenticationFailureSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private LoginLogger $loginLogger,
-        private UserRepository $userRepository,
+        private readonly LoginLogger $loginLogger,
+        private readonly UserRepository $userRepository,
     ) {
     }
 

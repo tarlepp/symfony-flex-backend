@@ -41,7 +41,7 @@ class CreateDateDimensionEntitiesCommand extends Command
     private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
     public function __construct(
-        private DateDimensionRepository $dateDimensionRepository,
+        private readonly DateDimensionRepository $dateDimensionRepository,
     ) {
         parent::__construct();
     }
