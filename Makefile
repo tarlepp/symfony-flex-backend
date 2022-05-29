@@ -624,14 +624,16 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phploc
 endif
 
-security-check: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
+check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@printf "\033[33mChecking installed packages with 'roave/security-advisories' library\033[39m\n"
 	@composer update --dry-run --no-plugins roave/security-advisories
+	@if which local-php-security-checker; then local-php-security-checker --update-cache && local-php-security-checker; fi
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make security-check
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-security
 endif

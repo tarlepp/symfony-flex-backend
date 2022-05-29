@@ -58,6 +58,8 @@ check-dependencies-latest   # Checks if any vendor dependency can be updated
 check-dependencies-minor    # Checks if any vendor dependency can be updated 
                             # (only minor versions)
 check-licenses              # Check vendor licenses
+check-security              # Checks that application doesn't have installed
+                            # dependencies with known security vulnerabilities
 clear-tools                 # Clears all tools dependencies
 composer-normalize          # Normalizes `composer.json` file content
 composer-require-checker    # Check the defined dependencies against your code
@@ -99,8 +101,6 @@ run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
                             # is installed)
-security-check              # Checks that application doesn't have installed
-                            # dependencies with known security vulnerabilities
 start-build                 # Build containers and start application in
                             # development mode + watch output
 start                       # Start application in development mode + watch
