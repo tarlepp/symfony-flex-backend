@@ -99,16 +99,6 @@ class LogRequest implements EntityInterface
     ])]
     private int $responseContentLength = 0;
 
-    #[ORM\Column(
-        name: 'is_main_request',
-        type: Types::BOOLEAN,
-    )]
-    #[Groups([
-        'LogRequest',
-        'LogRequest.isMainRequest',
-    ])]
-    private bool $mainRequest;
-
     /**
      * LogRequest constructor.
      *
@@ -117,7 +107,7 @@ class LogRequest implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        private array $sensitiveProperties,
+        private readonly array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
         #[ORM\ManyToOne(
@@ -131,7 +121,7 @@ class LogRequest implements EntityInterface
         #[Groups([
             'LogRequest.user',
         ])]
-        private ?User $user = null,
+        private readonly ?User $user = null,
         #[ORM\ManyToOne(
             targetEntity: ApiKey::class,
             inversedBy: 'logsRequest',
@@ -143,11 +133,18 @@ class LogRequest implements EntityInterface
         #[Groups([
             'LogRequest.apiKey',
         ])]
-        private ?ApiKey $apiKey = null,
-        ?bool $mainRequest = null
+        private readonly ?ApiKey $apiKey = null,
+        #[ORM\Column(
+            name: 'is_main_request',
+            type: Types::BOOLEAN,
+        )]
+        #[Groups([
+            'LogRequest',
+            'LogRequest.isMainRequest',
+        ])]
+        private readonly bool $mainRequest = true,
     ) {
         $this->id = $this->createUuid();
-        $this->mainRequest = $mainRequest ?? true;
 
         $this->processTimeAndDate();
 

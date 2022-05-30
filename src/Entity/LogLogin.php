@@ -241,7 +241,7 @@ class LogLogin implements EntityInterface
             'LogLogin.type',
         ])]
         private readonly string $type,
-        private Request $request,
+        readonly Request $request,
         private readonly DeviceDetector $deviceDetector,
         #[ORM\ManyToOne(
             targetEntity: User::class,

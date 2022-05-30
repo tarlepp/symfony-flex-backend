@@ -50,25 +50,23 @@ class Healthz implements EntityInterface
     ])]
     private UuidInterface $id;
 
-    #[ORM\Column(
-        name: 'timestamp',
-        type: Types::DATETIME_IMMUTABLE,
-    )]
-    #[Groups([
-        'Healthz',
-        'Healthz.timestamp',
-    ])]
-    private DateTimeImmutable $timestamp;
-
     /**
      * Healthz constructor.
      *
      * @throws Throwable
      */
-    public function __construct()
-    {
+    public function __construct(
+        #[ORM\Column(
+            name: 'timestamp',
+            type: Types::DATETIME_IMMUTABLE,
+        )]
+        #[Groups([
+            'Healthz',
+            'Healthz.timestamp',
+        ])]
+        private readonly DateTimeImmutable $timestamp = new DateTimeImmutable(timezone: new DateTimeZone('UTC')),
+    ) {
         $this->id = $this->createUuid();
-        $this->timestamp = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
     }
 
     public function getId(): string
@@ -79,13 +77,6 @@ class Healthz implements EntityInterface
     public function getTimestamp(): DateTimeImmutable
     {
         return $this->getCreatedAt();
-    }
-
-    public function setTimestamp(DateTimeImmutable $timestamp): self
-    {
-        $this->timestamp = $timestamp;
-
-        return $this;
     }
 
     public function getCreatedAt(): DateTimeImmutable

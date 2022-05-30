@@ -58,16 +58,6 @@ class LogLoginFailure implements EntityInterface
     ])]
     private UuidInterface $id;
 
-    #[ORM\Column(
-        name: 'timestamp',
-        type: Types::DATETIME_IMMUTABLE,
-    )]
-    #[Groups([
-        'LogLoginFailure',
-        'LogLoginFailure.timestamp',
-    ])]
-    private DateTimeImmutable $timestamp;
-
     /**
      * LogLoginFailure constructor.
      *
@@ -87,10 +77,18 @@ class LogLoginFailure implements EntityInterface
             'LogLoginFailure',
             'LogLoginFailure.user',
         ])]
-        private User $user
+        private readonly User $user,
+        #[ORM\Column(
+            name: 'timestamp',
+            type: Types::DATETIME_IMMUTABLE,
+        )]
+        #[Groups([
+            'LogLoginFailure',
+            'LogLoginFailure.timestamp',
+        ])]
+        private readonly DateTimeImmutable $timestamp = new DateTimeImmutable(timezone: new DateTimeZone('UTC')),
     ) {
         $this->id = $this->createUuid();
-        $this->timestamp = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
     }
 
     public function getId(): string
