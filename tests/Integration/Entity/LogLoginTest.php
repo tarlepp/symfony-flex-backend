@@ -10,14 +10,9 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
-use App\Utils\Tests\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
-use function array_key_exists;
-use function in_array;
-use function ucfirst;
 
 /**
  * Class LogLoginTest

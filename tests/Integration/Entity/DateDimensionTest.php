@@ -27,7 +27,7 @@ class DateDimensionTest extends EntityTestCase
      * @var class-string
      */
     protected string $entityName = DateDimension::class;
-    
+
     public function testThatGetCreatedAtMethodReturnsExpected(): void
     {
         $entity = $this->createEntity();

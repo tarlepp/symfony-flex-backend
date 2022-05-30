@@ -127,12 +127,6 @@ abstract class EntityTestCase extends KernelTestCase
                     sprintf($message, $this->entityName, $setter, $property),
                 );
             }
-            
-            self::assertSame(
-                !$readOnlyClass,
-                method_exists($entity, $setter),
-                sprintf($message, $this->entityName, $setter, $property),
-            );
         }
     }
 
@@ -153,7 +147,7 @@ abstract class EntityTestCase extends KernelTestCase
         if ((!array_key_exists('columnName', $meta) && !array_key_exists('joinColumns', $meta))
             || $this->isReadOnlyProperty($property)
         ) {
-            self::markTestSkipped('No need to test this setter...');
+            static::markTestSkipped('No need to test this setter...');
         }
 
         $this->expectException(TypeError::class);
