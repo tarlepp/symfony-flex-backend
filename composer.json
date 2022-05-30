@@ -44,7 +44,7 @@
 		"symfony/dotenv": "6.0.5",
 		"symfony/expression-language": "6.0.8",
 		"symfony/flex": "2.1.8",
-		"symfony/form": "6.0.8",
+		"symfony/form": "6.1.0",
 		"symfony/framework-bundle": "6.0.8",
 		"symfony/monolog-bundle": "3.8.0",
 		"symfony/process": "6.0.8",
