@@ -3,7 +3,7 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"phpstan/phpstan": "1.7.1",
+		"phpstan/phpstan": "1.7.6",
 		"phpstan/phpstan-phpunit": "1.1.1",
 		"phpstan/phpstan-symfony": "1.1.8",
 		"roave/security-advisories": "dev-latest"
