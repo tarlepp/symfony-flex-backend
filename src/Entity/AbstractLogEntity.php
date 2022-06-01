@@ -1,14 +1,13 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Entity/Traits/LogEntityTrait.php
+ * /src/Entity/AbstractLogEntity.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Entity\Traits;
+namespace App\Entity;
 
-use App\Entity\User;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
@@ -18,14 +17,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
 /**
- * Trait LogEntityTrait
+ * Class AbstractLogEntity
  *
- * @package App\Entity\Traits
+ * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
- * @property User|null $user
  */
-trait LogEntityTrait
+#[ORM\MappedSuperclass]
+abstract class AbstractLogEntity
 {
     #[ORM\Column(
         name: 'time',
@@ -92,7 +90,21 @@ trait LogEntityTrait
         'LogRequest',
         'LogRequest.clientIp',
     ])]
-    private readonly string $clientIp;
+    protected readonly string $clientIp;
+
+    /**
+     * @throws Throwable
+     */
+    public function __construct(?Request $request)
+    {
+        $now = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
+
+        $this->time = $now;
+        $this->date = $now;
+        $this->clientIp = $request?->getClientIp() ?? '';
+        $this->httpHost = $request?->getHttpHost() ?? '';
+        $this->agent = $request?->headers->get('User-Agent') ?? '';
+    }
 
     public function getTime(): DateTimeImmutable
     {
@@ -122,24 +134,5 @@ trait LogEntityTrait
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->getDate();
-    }
-
-    private function processRequestData(Request $request): void
-    {
-        $this->clientIp = $request->getClientIp() ?? '';
-        $this->httpHost = $request->getHttpHost();
-        $this->agent = $request->headers->get('User-Agent') ?? '';
-    }
-
-    /**
-     * @throws Throwable
-     */
-    #[ORM\PrePersist]
-    private function processTimeAndDate(): void
-    {
-        $now = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
-
-        $this->time = $now;
-        $this->date = $now;
     }
 }

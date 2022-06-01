@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use function array_key_exists;
 use function array_map;
 use function array_walk;
-use function basename;
 use function explode;
 use function is_array;
 use function mb_strtolower;
@@ -296,29 +295,27 @@ trait LogRequestProcessRequestTrait
         return $this->contentTypeShort;
     }
 
-    protected function processRequest(Request $request): void
-    {
-        $this->processRequestBaseInfo($request);
-        $this->processHeadersAndParameters($request);
-
-        $this->action = $this->determineAction($request);
-        $this->content = $this->cleanContent($request->getContent());
-    }
-
-    private function processHeadersAndParameters(Request $request): void
+    /**
+     * @return array<string, array<int, string|null>>|array<int, string|null>
+     */
+    private function processHeaders(Request $request): array
     {
         $rawHeaders = $request->headers->all();
 
-        // Clean possible sensitive data from parameters
+        // Clean possible sensitive data from headers
         array_walk(
             $rawHeaders,
-            function (mixed &$value, string|int $key): void {
-                $this->cleanParameters($value, (string)$key);
-            },
+            fn (mixed &$value, string|int $key) => $this->cleanParameters($value, (string)$key)
         );
 
-        $this->headers = $rawHeaders;
+        return $rawHeaders;
+    }
 
+    /**
+     * @return array<string, string>
+     */
+    private function processParameters(Request $request): array
+    {
         $rawParameters = $this->determineParameters($request);
 
         // Clean possible sensitive data from parameters
@@ -327,22 +324,7 @@ trait LogRequestProcessRequestTrait
             fn (mixed &$value, string $key) => $this->cleanParameters($value, $key),
         );
 
-        $this->parameters = $rawParameters;
-    }
-
-    private function processRequestBaseInfo(Request $request): void
-    {
-        $this->method = $request->getRealMethod();
-        $this->scheme = $request->getScheme();
-        $this->basePath = $request->getBasePath();
-        $this->script = '/' . basename($request->getScriptName());
-        $this->path = $request->getPathInfo();
-        $this->queryString = $request->getRequestUri();
-        $this->uri = $request->getUri();
-        $this->controller = (string)$request->attributes->get('_controller', '');
-        $this->contentType = (string)$request->getMimeType($request->getContentType() ?? '');
-        $this->contentTypeShort = (string)$request->getContentType();
-        $this->xmlHttpRequest = $request->isXmlHttpRequest();
+        return $rawParameters;
     }
 
     private function determineAction(Request $request): string
@@ -388,7 +370,7 @@ trait LogRequestProcessRequestTrait
     private function cleanParameters(mixed &$value, string $key): void
     {
         // What keys we should replace so that any sensitive data is not logged
-        $replacements = array_fill_keys($this->sensitiveProperties, $this->replaceValue);
+        $replacements = array_fill_keys($this->getSensitiveProperties(), $this->replaceValue);
 
         // Normalize current key
         $key = mb_strtolower($key);

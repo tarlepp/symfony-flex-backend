@@ -10,7 +10,6 @@ namespace App\Entity;
 
 use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
-use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\Uuid;
 use DeviceDetector\DeviceDetector;
 use Doctrine\DBAL\Types\Types;
@@ -50,9 +49,8 @@ use function is_array;
 )]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
-class LogLogin implements EntityInterface
+class LogLogin extends AbstractLogEntity implements EntityInterface
 {
-    use LogEntityTrait;
     use Uuid;
 
     /**
@@ -257,12 +255,21 @@ class LogLogin implements EntityInterface
         ])]
         private readonly ?User $user = null
     ) {
+        parent::__construct($request);
+
         $this->id = $this->createUuid();
-
-        $this->processTimeAndDate();
-        $this->processRequestData($request);
-        $this->processClientData();
-
+        $this->clientType = $this->getClientData('getClient', 'type');
+        $this->clientName = $this->getClientData('getClient', 'name');
+        $this->clientShortName = $this->getClientData('getClient', 'short_name');
+        $this->clientVersion = $this->getClientData('getClient', 'version');
+        $this->clientEngine = $this->getClientData('getClient', 'engine');
+        $this->osName = $this->getClientData('getOs', 'name');
+        $this->osShortName = $this->getClientData('getOs', 'short_name');
+        $this->osVersion = $this->getClientData('getOs', 'version');
+        $this->osPlatform = $this->getClientData('getOs', 'platform');
+        $this->deviceName = $this->deviceDetector->getDeviceName();
+        $this->brandName = $this->deviceDetector->getBrandName();
+        $this->model = $this->deviceDetector->getModel();
         $this->username = $this->user?->getUsername() ?? '';
     }
 
@@ -344,22 +351,6 @@ class LogLogin implements EntityInterface
     public function getModel(): ?string
     {
         return $this->model;
-    }
-
-    private function processClientData(): void
-    {
-        $this->clientType = $this->getClientData('getClient', 'type');
-        $this->clientName = $this->getClientData('getClient', 'name');
-        $this->clientShortName = $this->getClientData('getClient', 'short_name');
-        $this->clientVersion = $this->getClientData('getClient', 'version');
-        $this->clientEngine = $this->getClientData('getClient', 'engine');
-        $this->osName = $this->getClientData('getOs', 'name');
-        $this->osShortName = $this->getClientData('getOs', 'short_name');
-        $this->osVersion = $this->getClientData('getOs', 'version');
-        $this->osPlatform = $this->getClientData('getOs', 'platform');
-        $this->deviceName = $this->deviceDetector->getDeviceName();
-        $this->brandName = $this->deviceDetector->getBrandName();
-        $this->model = $this->deviceDetector->getModel();
     }
 
     private function getClientData(string $method, string $attribute): string
