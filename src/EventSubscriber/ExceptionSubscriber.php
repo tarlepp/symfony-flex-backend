@@ -52,9 +52,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
     ];
 
     public function __construct(
-        private LoggerInterface $logger,
-        private UserTypeIdentification $userService,
-        private string $environment,
+        private readonly LoggerInterface $logger,
+        private readonly UserTypeIdentification $userService,
+        private readonly string $environment,
     ) {
     }
 

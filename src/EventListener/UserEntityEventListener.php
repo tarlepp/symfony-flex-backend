@@ -24,7 +24,7 @@ use function strlen;
 class UserEntityEventListener
 {
     public function __construct(
-        private UserPasswordHasherInterface $userPasswordHasher,
+        private readonly UserPasswordHasherInterface $userPasswordHasher,
     ) {
     }
 

@@ -30,8 +30,8 @@ use function implode;
 class JWTCreatedSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
-        private LoggerInterface $logger,
+        private readonly RequestStack $requestStack,
+        private readonly LoggerInterface $logger,
     ) {
     }
 

@@ -43,6 +43,8 @@ class LogRequestTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
+     * @dataProvider dataProviderTestThatSetterAndGettersWorks
+     *
      * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
@@ -55,6 +57,8 @@ class LogRequestTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
+     * @dataProvider dataProviderTestThatSetterAndGettersWorks
+     *
      * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
     public function testThatSetterReturnsInstanceOfEntity(

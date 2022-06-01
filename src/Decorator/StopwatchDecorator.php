@@ -28,8 +28,8 @@ use function str_starts_with;
 class StopwatchDecorator
 {
     public function __construct(
-        private AccessInterceptorValueHolderFactory $factory,
-        private Stopwatch $stopwatch,
+        private readonly AccessInterceptorValueHolderFactory $factory,
+        private readonly Stopwatch $stopwatch,
     ) {
     }
 

@@ -60,7 +60,7 @@ jobs:
         uses: symfonycorp/security-checker-action@v3
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
-        run: make security-check
+        run: make check-security
 
   lint-configuration:
     name: Lint configuration

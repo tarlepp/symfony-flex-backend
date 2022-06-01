@@ -38,9 +38,9 @@ class RequestLogSubscriber implements EventSubscriberInterface
      * @param array<int, string> $ignoredRoutes
      */
     public function __construct(
-        private RequestLogger $requestLogger,
-        private UserTypeIdentification $userService,
-        private array $ignoredRoutes,
+        private readonly RequestLogger $requestLogger,
+        private readonly UserTypeIdentification $userService,
+        private readonly array $ignoredRoutes,
     ) {
     }
 

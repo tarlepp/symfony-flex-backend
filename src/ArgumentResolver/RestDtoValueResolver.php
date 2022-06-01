@@ -59,8 +59,8 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      * @param ControllerCollection<Controller> $controllerCollection
      */
     public function __construct(
-        private ControllerCollection $controllerCollection,
-        private AutoMapperInterface $autoMapper,
+        private readonly ControllerCollection $controllerCollection,
+        private readonly AutoMapperInterface $autoMapper,
     ) {
     }
 

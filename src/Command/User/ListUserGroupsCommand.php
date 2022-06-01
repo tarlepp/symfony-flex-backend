@@ -39,7 +39,7 @@ class ListUserGroupsCommand extends Command
     public const NAME = 'user:list-groups';
 
     public function __construct(
-        private UserGroupResource $userGroupResource,
+        private readonly UserGroupResource $userGroupResource,
     ) {
         parent::__construct();
     }

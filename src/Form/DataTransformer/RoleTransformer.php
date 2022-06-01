@@ -25,7 +25,7 @@ use function sprintf;
 class RoleTransformer implements DataTransformerInterface
 {
     public function __construct(
-        private RoleResource $resource,
+        private readonly RoleResource $resource,
     ) {
     }
 
