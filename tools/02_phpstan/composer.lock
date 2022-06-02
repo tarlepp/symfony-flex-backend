@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2833da112c21badd030efde04b708bbb",
+    "content-hash": "a8106fc3cadfaa7cf7ab3abaa6e8cc15",
     "packages": [],
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.7.8",
+            "version": "1.7.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2bf3d43015d56abac4d002a4d2d6c3a7d6fa627a"
+                "reference": "22e7559489776846e7c9d92ca43e8d1e53d18b94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2bf3d43015d56abac4d002a4d2d6c3a7d6fa627a",
-                "reference": "2bf3d43015d56abac4d002a4d2d6c3a7d6fa627a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/22e7559489776846e7c9d92ca43e8d1e53d18b94",
+                "reference": "22e7559489776846e7c9d92ca43e8d1e53d18b94",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.7.8"
+                "source": "https://github.com/phpstan/phpstan/tree/1.7.9"
             },
             "funding": [
                 {
@@ -64,7 +64,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-01T13:43:17+00:00"
+            "time": "2022-06-02T13:27:46+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -195,12 +195,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "268c2095dd32f68b65b8cfc0af26f58d61ff320c"
+                "reference": "12dbef76aa58b8545ef34d52c040ea26b42e6817"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/268c2095dd32f68b65b8cfc0af26f58d61ff320c",
-                "reference": "268c2095dd32f68b65b8cfc0af26f58d61ff320c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/12dbef76aa58b8545ef34d52c040ea26b42e6817",
+                "reference": "12dbef76aa58b8545ef34d52c040ea26b42e6817",
                 "shasum": ""
             },
             "conflict": {
@@ -404,8 +404,9 @@
                 "miniorange/miniorange-saml": "<1.4.3",
                 "mittwald/typo3_forum": "<1.2.1",
                 "modx/revolution": "<= 2.8.3-pl|<2.8",
+                "mojo42/jirafeau": "<4.4",
                 "monolog/monolog": ">=1.8,<1.12",
-                "moodle/moodle": "<3.9.13|>=3.10-beta,<3.10.10|>=3.11,<3.11.6",
+                "moodle/moodle": "<4.0.1",
                 "mustache/mustache": ">=2,<2.14.1",
                 "namshi/jose": "<2.2",
                 "neoan3-apps/template": "<1.1.1",
@@ -683,7 +684,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-25T23:04:15+00:00"
+            "time": "2022-06-02T16:04:34+00:00"
         }
     ],
     "aliases": [],

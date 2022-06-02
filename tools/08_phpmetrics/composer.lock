@@ -137,12 +137,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "268c2095dd32f68b65b8cfc0af26f58d61ff320c"
+                "reference": "12dbef76aa58b8545ef34d52c040ea26b42e6817"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/268c2095dd32f68b65b8cfc0af26f58d61ff320c",
-                "reference": "268c2095dd32f68b65b8cfc0af26f58d61ff320c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/12dbef76aa58b8545ef34d52c040ea26b42e6817",
+                "reference": "12dbef76aa58b8545ef34d52c040ea26b42e6817",
                 "shasum": ""
             },
             "conflict": {
@@ -346,8 +346,9 @@
                 "miniorange/miniorange-saml": "<1.4.3",
                 "mittwald/typo3_forum": "<1.2.1",
                 "modx/revolution": "<= 2.8.3-pl|<2.8",
+                "mojo42/jirafeau": "<4.4",
                 "monolog/monolog": ">=1.8,<1.12",
-                "moodle/moodle": "<3.9.13|>=3.10-beta,<3.10.10|>=3.11,<3.11.6",
+                "moodle/moodle": "<4.0.1",
                 "mustache/mustache": ">=2,<2.14.1",
                 "namshi/jose": "<2.2",
                 "neoan3-apps/template": "<1.1.1",
@@ -625,7 +626,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-25T23:04:15+00:00"
+            "time": "2022-06-02T16:04:34+00:00"
         }
     ],
     "aliases": [],
