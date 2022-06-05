@@ -54,7 +54,7 @@ use function mb_strlen;
 )]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
-class LogRequest extends AbstractLogEntity implements EntityInterface
+class LogRequest extends LogEntity implements EntityInterface
 {
     use LogRequestProcessRequestTrait;
     use Uuid;
@@ -106,8 +106,8 @@ class LogRequest extends AbstractLogEntity implements EntityInterface
      */
     public function __construct(
         private readonly array $sensitiveProperties,
-        readonly ?Request $request = null,
-        readonly ?Response $response = null,
+        readonly Request|null $request = null,
+        readonly Response|null $response = null,
         #[ORM\ManyToOne(
             targetEntity: User::class,
             inversedBy: 'logsRequest',

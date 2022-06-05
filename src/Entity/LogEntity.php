@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Entity/AbstractLogEntity.php
+ * /src/Entity/LogEntity.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -17,13 +17,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
 /**
- * Class AbstractLogEntity
+ * Class LogEntity
  *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\MappedSuperclass]
-abstract class AbstractLogEntity
+abstract class LogEntity
 {
     #[ORM\Column(
         name: 'time',

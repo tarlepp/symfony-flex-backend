@@ -49,7 +49,7 @@ use function is_array;
 )]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
-class LogLogin extends AbstractLogEntity implements EntityInterface
+class LogLogin extends LogEntity implements EntityInterface
 {
     use Uuid;
 
