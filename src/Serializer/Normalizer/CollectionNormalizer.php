@@ -44,10 +44,8 @@ class CollectionNormalizer implements NormalizerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param array<array-key, mixed> $context Context options for the normalizer
      */
-    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return $format === 'json' && $data instanceof Collection && is_object($data->first());
     }
