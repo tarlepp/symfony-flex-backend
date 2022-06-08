@@ -35,7 +35,7 @@ class EntityReferenceExists extends Constraint
     /**
      * {@inheritdoc}
      *
-     * @var array<string, string>
+     * @psalm-var array<string, string>
      */
     protected const ERROR_NAMES = [
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
@@ -46,7 +46,10 @@ class EntityReferenceExists extends Constraint
     /**
      * EntityReferenceExists constructor.
      *
+     * @inheritDoc
+     *
      * @param array<string, string> $options
+     * @param array<array-key, string> $groups
      */
     public function __construct(
         ?string $entityClass = null,
