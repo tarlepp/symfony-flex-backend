@@ -128,6 +128,7 @@ return [
                 'src/Security/Handler/TranslatedAuthenticationFailureHandler.php',
                 'src/Security/Provider/ApiKeyUserProvider.php',
                 'src/Security/Voter/IsUserHimselfVoter.php',
+                'src/Serializer/Normalizer/CollectionNormalizer.php',
                 'src/Validator/Constraints/LanguageValidator.php',
                 'src/Validator/Constraints/LocaleValidator.php',
                 'src/Validator/Constraints/TimezoneValidator.php',
