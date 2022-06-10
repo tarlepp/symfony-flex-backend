@@ -14,7 +14,6 @@ use App\Repository\LogLoginFailureRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use function assert;
 
 /**
  * Class LogLoginFailureRepositoryTest
