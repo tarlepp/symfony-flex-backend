@@ -49,6 +49,7 @@ class RolesControllerTest extends WebTestCase
 
         $info = "\nResponse:\n" . $response;
 
+        self::assertIsObject($responseContent);
         self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
@@ -79,6 +80,7 @@ class RolesControllerTest extends WebTestCase
 
         $info = "\nResponse:\n" . $response;
 
+        self::assertIsObject($responseContent);
         self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
@@ -134,6 +136,7 @@ class RolesControllerTest extends WebTestCase
 
         $info = "\nResponse:\n" . $response;
 
+        self::assertIsObject($responseContent);
         self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
@@ -221,6 +224,8 @@ class RolesControllerTest extends WebTestCase
     public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
+
+        self::assertInstanceOf(RolesService::class, $rolesService);
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {

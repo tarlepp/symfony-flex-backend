@@ -82,6 +82,10 @@ class HealthzRepositoryTest extends KernelTestCase
 
     private function getRepository(): HealthzRepository
     {
-        return self::getContainer()->get(HealthzRepository::class);
+        $repository = self::getContainer()->get(HealthzRepository::class);
+
+        self::assertInstanceOf(HealthzRepository::class, $repository);
+
+        return $repository;
     }
 }

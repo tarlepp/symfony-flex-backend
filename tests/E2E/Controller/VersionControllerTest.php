@@ -46,6 +46,8 @@ class VersionControllerTest extends WebTestCase
     {
         $resource = self::getContainer()->get(LogRequestResource::class);
 
+        self::assertInstanceOf(LogRequestResource::class, $resource);
+
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();

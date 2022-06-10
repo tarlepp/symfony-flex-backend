@@ -36,9 +36,12 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
         $userRepository = self::getContainer()->get(UserRepository::class);
         $logLoginFailureRepository = self::getContainer()->get(LogLoginFailureRepository::class);
 
+        self::assertInstanceOf(UserRepository::class, $userRepository);
+        self::assertInstanceOf(LogLoginFailureRepository::class, $logLoginFailureRepository);
+
         $user = $userRepository->find('20000000-0000-1000-8000-000000000001');
 
-        assert($user instanceof User);
+        self::assertInstanceOf(User::class, $user);
 
         $entity = new LogLoginFailure($user);
 
