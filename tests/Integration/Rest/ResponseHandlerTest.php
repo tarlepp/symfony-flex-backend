@@ -35,6 +35,8 @@ class ResponseHandlerTest extends KernelTestCase
     {
         $serializer = self::getContainer()->get(SerializerInterface::class);
 
+        self::assertInstanceOf(SerializerInterface::class, $serializer);
+
         $responseClass = new ResponseHandler($serializer);
 
         self::assertSame($serializer, $responseClass->getSerializer());
@@ -55,6 +57,8 @@ class ResponseHandlerTest extends KernelTestCase
         string $expectedContent
     ): void {
         $serializer = self::getContainer()->get(SerializerInterface::class);
+
+        self::assertInstanceOf(SerializerInterface::class, $serializer);
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
@@ -111,6 +115,8 @@ class ResponseHandlerTest extends KernelTestCase
         );
 
         $serializer = self::getContainer()->get(SerializerInterface::class);
+
+        self::assertInstanceOf(SerializerInterface::class, $serializer);
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 

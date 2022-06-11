@@ -186,6 +186,8 @@ class GroupsControllerTest extends WebTestCase
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
+        self::assertInstanceOf(RolesService::class, $rolesService);
+
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {
                 yield [str_pad($rolesService->getShort($role), 40, '_')];

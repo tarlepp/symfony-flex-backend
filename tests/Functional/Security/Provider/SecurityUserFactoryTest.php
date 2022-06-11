@@ -134,11 +134,19 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     private function getSecurityUserFactory(): SecurityUserFactory
     {
-        return self::getContainer()->get(SecurityUserFactory::class);
+        $securityUserFactory = self::getContainer()->get(SecurityUserFactory::class);
+
+        self::assertInstanceOf(SecurityUserFactory::class, $securityUserFactory);
+
+        return $securityUserFactory;
     }
 
     private function getUserRepository(): UserRepository
     {
-        return self::getContainer()->get(UserRepository::class);
+        $userRepository = self::getContainer()->get(UserRepository::class);
+
+        self::assertInstanceOf(UserRepository::class, $userRepository);
+
+        return $userRepository;
     }
 }

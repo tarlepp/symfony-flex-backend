@@ -34,9 +34,9 @@ class UniqueUsername extends Constraint
     /**
      * {@inheritdoc}
      *
-     * @var array<string, string>
+     * @psalm-var array<string, string>
      */
-    protected static $errorNames = [
+    protected const ERROR_NAMES = [
         self::IS_UNIQUE_USERNAME_ERROR => 'IS_UNIQUE_USERNAME_ERROR',
     ];
 

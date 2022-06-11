@@ -29,11 +29,9 @@ class CollectionNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      *
-     * @psalm-param mixed $object
-     *
      * @return array<int, mixed>
      */
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {
         $output = [];
 
@@ -46,9 +44,11 @@ class CollectionNormalizer implements NormalizerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<string, mixed> $context
      */
-    public function supportsNormalization($data, ?string $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return $format === 'json' && is_object($data) && $data instanceof Collection && is_object($data->first());
+        return $format === 'json' && $data instanceof Collection && is_object($data->first());
     }
 }

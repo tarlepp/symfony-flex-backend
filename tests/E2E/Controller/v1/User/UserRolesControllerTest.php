@@ -10,7 +10,6 @@ namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\Security\Interfaces\RolesServiceInterface;
-use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
@@ -134,7 +133,9 @@ class UserRolesControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetUserRolesReturns200ForUserHimself(): Generator
     {
-        $RolesServiceInterface = self::getContainer()->get(RolesService::class);
+        $rolesService = self::getContainer()->get(RolesServiceInterface::class);
+
+        self::assertInstanceOf(RolesServiceInterface::class, $rolesService);
 
         yield [
             LoadUserData::$uuids['john'],
@@ -148,35 +149,35 @@ class UserRolesControllerTest extends WebTestCase
                 LoadUserData::$uuids['john-api'],
                 'john-api',
                 'password-api',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_API])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_API])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-logged'],
                 'john-logged',
                 'password-logged',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_LOGGED])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_LOGGED])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-user'],
                 'john-user',
                 'password-user',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_USER])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_USER])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-admin'],
                 'john-admin',
                 'password-admin',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_ADMIN])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_ADMIN])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-root'],
                 'john-root',
                 'password-root',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_ROOT])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_ROOT])),
             ];
         }
 
@@ -192,35 +193,35 @@ class UserRolesControllerTest extends WebTestCase
                 LoadUserData::$uuids['john-api'],
                 'john.doe-api@test.com',
                 'password-api',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_API])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_API])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-logged'],
                 'john.doe-logged@test.com',
                 'password-logged',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_LOGGED])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_LOGGED])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-user'],
                 'john.doe-user@test.com',
                 'password-user',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_USER])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_USER])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-admin'],
                 'john.doe-admin@test.com',
                 'password-admin',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_ADMIN])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_ADMIN])),
             ];
 
             yield [
                 LoadUserData::$uuids['john-root'],
                 'john.doe-root@test.com',
                 'password-root',
-                JSON::encode($RolesServiceInterface->getInheritedRoles([RolesServiceInterface::ROLE_ROOT])),
+                JSON::encode($rolesService->getInheritedRoles([RolesServiceInterface::ROLE_ROOT])),
             ];
         }
     }
@@ -233,6 +234,8 @@ class UserRolesControllerTest extends WebTestCase
     public function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
     {
         $rolesService = self::getContainer()->get(RolesServiceInterface::class);
+
+        self::assertInstanceOf(RolesServiceInterface::class, $rolesService);
 
         yield [LoadUserData::$uuids['john'], '[]'];
 

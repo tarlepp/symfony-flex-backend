@@ -134,6 +134,10 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     {
         self::bootKernel();
 
-        return self::getContainer()->get(UserRepository::class);
+        $repository = self::getContainer()->get(UserRepository::class);
+
+        self::assertInstanceOf(UserRepository::class, $repository);
+
+        return $repository;
     }
 }
