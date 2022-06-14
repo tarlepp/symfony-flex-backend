@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51e6718b42be94629a325c41325825a1",
+    "content-hash": "723a43660b1d2351be74e34f1b9a5943",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1876,16 +1876,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.15.1",
+            "version": "v2.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "b7a640b135fc572d69375d97e4a87524a5e886d0"
+                "reference": "0a0922a2442c52724c09deb099b263300cc12d54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/b7a640b135fc572d69375d97e4a87524a5e886d0",
-                "reference": "b7a640b135fc572d69375d97e4a87524a5e886d0",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/0a0922a2442c52724c09deb099b263300cc12d54",
+                "reference": "0a0922a2442c52724c09deb099b263300cc12d54",
                 "shasum": ""
             },
             "require": {
@@ -1980,7 +1980,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lexik/LexikJWTAuthenticationBundle/issues",
-                "source": "https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.15.1"
+                "source": "https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.16.0"
             },
             "funding": [
                 {
@@ -1992,7 +1992,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-08T12:31:19+00:00"
+            "time": "2022-06-12T16:22:12+00:00"
         },
         {
             "name": "mark-gerarts/auto-mapper-plus",
