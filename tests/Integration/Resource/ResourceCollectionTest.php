@@ -237,7 +237,11 @@ class ResourceCollectionTest extends KernelTestCase
 
     private function getCollection(): ResourceCollection
     {
-        return self::getContainer()->get(ResourceCollection::class);
+        $service = self::getContainer()->get(ResourceCollection::class);
+
+        self::assertInstanceOf(ResourceCollection::class, $service);
+
+        return $service;
     }
 
     /**

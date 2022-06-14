@@ -17,7 +17,6 @@ use App\Controller\v1\User\UserController;
 use App\Controller\v1\UserGroup\UserGroupController;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
-use App\Rest\Interfaces\ControllerInterface;
 use ArrayObject;
 use Generator;
 use InvalidArgumentException;
@@ -138,11 +137,12 @@ class ControllerCollectionTest extends KernelTestCase
         yield [false, GetTokenController::class];
     }
 
-    /**
-     * @return ControllerCollection<ControllerInterface>
-     */
     private function getCollection(): ControllerCollection
     {
-        return self::getContainer()->get(ControllerCollection::class);
+        $service = self::getContainer()->get(ControllerCollection::class);
+
+        self::assertInstanceOf(ControllerCollection::class, $service);
+
+        return $service;
     }
 }

@@ -135,6 +135,10 @@ class RestResourceConverterTest extends KernelTestCase
 
     private function getConverter(): RestResourceConverter
     {
-        return new RestResourceConverter(self::getContainer()->get(ResourceCollection::class));
+        $resourceCollection = self::getContainer()->get(ResourceCollection::class);
+
+        self::assertInstanceOf(ResourceCollection::class, $resourceCollection);
+
+        return new RestResourceConverter($resourceCollection);
     }
 }

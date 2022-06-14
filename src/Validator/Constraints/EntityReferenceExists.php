@@ -32,21 +32,24 @@ class EntityReferenceExists extends Constraint
     public const MESSAGE_SINGLE = 'Invalid id value "{{ id }}" given for entity "{{ entity }}".';
     public const MESSAGE_MULTIPLE = 'Invalid id values "{{ id }}" given for entity "{{ entity }}".';
 
-    public string $entityClass = '';
-
     /**
      * {@inheritdoc}
      *
-     * @var array<string, string>
+     * @psalm-var array<string, string>
      */
-    protected static $errorNames = [
+    protected const ERROR_NAMES = [
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
     ];
+
+    public string $entityClass = '';
 
     /**
      * EntityReferenceExists constructor.
      *
+     * @inheritDoc
+     *
      * @param array<string, string> $options
+     * @param array<array-key, string> $groups
      */
     public function __construct(
         ?string $entityClass = null,

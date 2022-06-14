@@ -119,6 +119,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
+        self::assertInstanceOf(RolesService::class, $rolesService);
+
         $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
 
         return array_map($iterator, $rolesService->getRoles());
@@ -130,11 +132,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
-        /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = self::getContainer()->get('doctrine');
-
-        /** @var RolesService $rolesService */
         $rolesService = self::getContainer()->get(RolesService::class);
+
+        self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
+        self::assertInstanceOf(RolesService::class, $rolesService);
 
         $repositoryClass = ApiKeyRepository::class;
         $repository = new $repositoryClass($managerRegistry);
@@ -160,11 +162,12 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         self::bootKernel();
 
-        /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = self::getContainer()->get('doctrine');
         $rolesService = self::getContainer()->get(RolesService::class);
-
         $repository = ApiKeyRepository::class;
+
+        self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
+        self::assertInstanceOf(RolesService::class, $rolesService);
 
         return new ApiKeyUserProvider(new $repository($managerRegistry), $rolesService);
     }

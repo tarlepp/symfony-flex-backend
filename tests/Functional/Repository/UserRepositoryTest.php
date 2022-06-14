@@ -144,6 +144,8 @@ class UserRepositoryTest extends KernelTestCase
             self::bootKernel();
 
             $cache = self::getContainer()->get(UserRepository::class);
+
+            self::assertInstanceOf(UserRepository::class, $cache);
         }
 
         return $cache;
