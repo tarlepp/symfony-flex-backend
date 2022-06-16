@@ -25,8 +25,10 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
 use function array_intersect;
 use function array_key_exists;
+use function assert;
 use function class_implements;
 use function in_array;
+use function is_int;
 use function method_exists;
 use function spl_object_hash;
 
@@ -175,24 +177,27 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private function determineStatusCode(Throwable $exception, bool $isUser): int
     {
         // Default status code is always 500
-        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        $output = Response::HTTP_INTERNAL_SERVER_ERROR;
 
         // HttpExceptionInterface is a special type of exception that holds status code and header details
         if ($exception instanceof AuthenticationException) {
-            $statusCode = Response::HTTP_UNAUTHORIZED;
+            $output = Response::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof AccessDeniedException) {
-            $statusCode = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
+            $output = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof HttpExceptionInterface) {
-            $statusCode = $exception->getStatusCode();
+            $output = $exception->getStatusCode();
         } elseif ($this->isClientExceptions($exception)) {
-            $statusCode = (int)$exception->getCode();
+            $code = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : $exception->getCode();
 
-            if (method_exists($exception, 'getStatusCode')) {
-                $statusCode = $exception->getStatusCode();
-            }
+            assert(is_int($code));
+
+            $output = match (true) {
+                $code > 0 => $code,
+                default => Response::HTTP_INTERNAL_SERVER_ERROR,
+            };
         }
 
-        return $statusCode === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $statusCode;
+        return $output;
     }
 
     /**

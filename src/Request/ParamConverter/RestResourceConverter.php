@@ -13,6 +13,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use function assert;
+use function is_string;
 
 /**
  * Class RestResourceConverter
@@ -38,8 +40,12 @@ class RestResourceConverter implements ParamConverterInterface
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         $name = $configuration->getName();
-        $identifier = (string)$request->attributes->get($name, '');
-        $resource = $this->collection->get((string)$configuration->getClass());
+        $identifier = $request->attributes->get($name, '');
+        $class = $configuration->getClass();
+
+        assert(is_string($identifier) && is_string($class));
+
+        $resource = $this->collection->get($class);
 
         if ($identifier !== '') {
             // Reminder make throw to exist on options
