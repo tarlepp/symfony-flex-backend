@@ -25,7 +25,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
 use function array_intersect;
 use function array_key_exists;
-use function assert;
 use function class_implements;
 use function in_array;
 use function is_int;
@@ -187,17 +186,13 @@ class ExceptionSubscriber implements EventSubscriberInterface
         } elseif ($exception instanceof HttpExceptionInterface) {
             $output = $exception->getStatusCode();
         } elseif ($this->isClientExceptions($exception)) {
+            /** @var int|string $code */
             $code = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : $exception->getCode();
 
-            assert(is_int($code));
-
-            $output = match (true) {
-                $code > 0 => $code,
-                default => Response::HTTP_INTERNAL_SERVER_ERROR,
-            };
+            $output = is_int($code) && $code > 0 ? $code : Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        return $output;
+        return $output > 0 ? $output : Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     /**
