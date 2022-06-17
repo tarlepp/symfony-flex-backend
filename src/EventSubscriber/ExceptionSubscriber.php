@@ -12,7 +12,7 @@ use App\Exception\interfaces\ClientErrorInterface;
 use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
 use Doctrine\DBAL\Exception;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Exception\ORMException;
 use JsonException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
