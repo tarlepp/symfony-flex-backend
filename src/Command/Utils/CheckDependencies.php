@@ -67,6 +67,13 @@ class CheckDependencies extends Command
             InputOption::VALUE_NONE,
             'Only check for minor updates',
         );
+
+        $this->addOption(
+            'patch',
+            'p',
+            InputOption::VALUE_NONE,
+            'Only check for patch updates',
+        );
     }
 
     /**
@@ -77,18 +84,23 @@ class CheckDependencies extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $onlyMinor = $input->getOption('minor');
+        $onlyPatch = $input->getOption('patch');
 
         $io = $this->getSymfonyStyle($input, $output);
         $io->info([
             'Starting to check dependencies...',
-            $onlyMinor ? 'Checking only minor version updates' : 'Checking for latest version updates',
+            match (true) {
+                $onlyPatch => 'Checking only patch version updates',
+                $onlyMinor => 'Checking only minor version updates',
+                default => 'Checking for latest version updates',
+            }
         ]);
 
         $directories = $this->getNamespaceDirectories();
 
         array_unshift($directories, $this->projectDir);
 
-        $rows = $this->determineTableRows($io, $directories, $onlyMinor);
+        $rows = $this->determineTableRows($io, $directories, $onlyMinor, $onlyPatch);
 
         /**
          * @psalm-suppress RedundantCastGivenDocblockType
@@ -157,7 +169,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function determineTableRows(SymfonyStyle $io, array $directories, bool $onlyMinor): array
+    private function determineTableRows(SymfonyStyle $io, array $directories, bool $onlyMinor, bool $onlyPatch): array
     {
         // Initialize progress bar for process
         $progressBar = $this->getProgressBar($io, count($directories), 'Checking all vendor dependencies');
@@ -165,8 +177,8 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($io, $onlyMinor, $progressBar, &$rows): void {
-            foreach ($this->processNamespacePath($directory, $onlyMinor) as $row => $data) {
+        $iterator = function (string $directory) use ($io, $onlyMinor, $onlyPatch, $progressBar, &$rows): void {
+            foreach ($this->processNamespacePath($directory, $onlyMinor, $onlyPatch) as $row => $data) {
                 $relativePath = '';
 
                 // First row of current library
@@ -217,7 +229,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function processNamespacePath(string $path, bool $onlyMinor): array
+    private function processNamespacePath(string $path, bool $onlyMinor, bool $onlyPatch): array
     {
         $command = [
             'composer',
@@ -229,6 +241,8 @@ class CheckDependencies extends Command
 
         if ($onlyMinor) {
             $command[] = '-m';
+        } elseif ($onlyPatch) {
+            $command[] = '-p';
         }
 
         $process = new Process($command, $path);
