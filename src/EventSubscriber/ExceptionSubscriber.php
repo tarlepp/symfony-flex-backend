@@ -185,9 +185,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $output = match (true) {
             $exception instanceof AuthenticationException => Response::HTTP_UNAUTHORIZED,
             $exception instanceof AccessDeniedException => $accessDeniedException($isUser),
-            $exception instanceof HttpExceptionInterface => $exception->getStatusCode(),
             $this->isClientExceptions($exception) => $clientException($exception),
-            default => Response::HTTP_INTERNAL_SERVER_ERROR,
+            default => 0,
         };
 
         return $output > 0 ? $output : Response::HTTP_INTERNAL_SERVER_ERROR;
