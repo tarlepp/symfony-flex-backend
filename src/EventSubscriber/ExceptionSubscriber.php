@@ -43,7 +43,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private static array $cache = [];
 
     /**
-     * @var array<int, string>
+     * @var array<int, class-string>
      */
     private static array $clientExceptions = [
         HttpExceptionInterface::class,
@@ -178,18 +178,18 @@ class ExceptionSubscriber implements EventSubscriberInterface
             : Response::HTTP_UNAUTHORIZED;
 
         $clientException = static fn (HttpExceptionInterface|ClientErrorInterface|Throwable $exception): int =>
-            $exception instanceof HttpExceptionInterface || $exception instanceof  ClientErrorInterface
+            $exception instanceof HttpExceptionInterface || $exception instanceof ClientErrorInterface
                 ? $exception->getStatusCode()
                 : (int)$exception->getCode();
 
-        $output = match (true) {
+        $statusCode = match (true) {
             $exception instanceof AuthenticationException => Response::HTTP_UNAUTHORIZED,
             $exception instanceof AccessDeniedException => $accessDeniedException($isUser),
             $this->isClientExceptions($exception) => $clientException($exception),
             default => 0,
         };
 
-        return $output > 0 ? $output : Response::HTTP_INTERNAL_SERVER_ERROR;
+        return $statusCode > 0 ? $statusCode : Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     /**
