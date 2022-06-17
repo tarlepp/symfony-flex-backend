@@ -124,7 +124,7 @@ OR
 
 ```bash
 make fish
-``
+```
 
 ### 5. Building containers [ᐞ](#table-of-contents)
 
