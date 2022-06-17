@@ -493,6 +493,16 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php bash
 endif
 
+fish: ## Get fish inside PHP container
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php fish
+endif
+
 logs: ## Show logs from all containers
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
