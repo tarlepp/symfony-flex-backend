@@ -162,6 +162,9 @@ jobs:
       - name: Run The Easiest Way to Use Any Coding Standard
         run: make ecs
 
+      - name: Run PHPLint tool
+        run: make phplint
+
       - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
         run: make psalm-github
 
