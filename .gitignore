@@ -11,12 +11,6 @@
 /secrets/application.*.json
 docker-compose.*.yml
 
-# User-specific stuff:
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/dictionaries
-.idea/shelf
-
 ## File-based project format:
 *.iws
 
