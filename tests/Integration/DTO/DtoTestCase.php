@@ -42,8 +42,6 @@ abstract class DtoTestCase extends KernelTestCase
      */
     protected string $dtoClass;
 
-    private static ?PropertyInfoExtractor $propertyInfo = null;
-
     /**
      * @throws Throwable
      *
@@ -195,34 +193,42 @@ abstract class DtoTestCase extends KernelTestCase
         return array_map($iterator, $this->getDtoProperties());
     }
 
-    private static function initializePropertyExtractor(): void
+    private static function initializePropertyExtractor(): PropertyInfoExtractor
     {
-        // a full list of extractors is shown further below
-        $phpDocExtractor = new PhpDocExtractor();
-        $reflectionExtractor = new ReflectionExtractor();
+        static $cache;
 
-        // list of PropertyListExtractorInterface (any iterable)
-        $listExtractors = [$reflectionExtractor];
+        if ($cache === null) {
+            // a full list of extractors is shown further below
+            $phpDocExtractor = new PhpDocExtractor();
+            $reflectionExtractor = new ReflectionExtractor();
 
-        // list of PropertyTypeExtractorInterface (any iterable)
-        $typeExtractors = [$phpDocExtractor, $reflectionExtractor];
+            // list of PropertyListExtractorInterface (any iterable)
+            $listExtractors = [$reflectionExtractor];
 
-        // list of PropertyDescriptionExtractorInterface (any iterable)
-        $descriptionExtractors = [$phpDocExtractor];
+            // list of PropertyTypeExtractorInterface (any iterable)
+            $typeExtractors = [$phpDocExtractor, $reflectionExtractor];
 
-        // list of PropertyAccessExtractorInterface (any iterable)
-        $accessExtractors = [$reflectionExtractor];
+            // list of PropertyDescriptionExtractorInterface (any iterable)
+            $descriptionExtractors = [$phpDocExtractor];
 
-        // list of PropertyInitializableExtractorInterface (any iterable)
-        $propertyInitializableExtractors = [$reflectionExtractor];
+            // list of PropertyAccessExtractorInterface (any iterable)
+            $accessExtractors = [$reflectionExtractor];
 
-        self::$propertyInfo = new PropertyInfoExtractor(
-            $listExtractors,
-            $typeExtractors,
-            $descriptionExtractors,
-            $accessExtractors,
-            $propertyInitializableExtractors
-        );
+            // list of PropertyInitializableExtractorInterface (any iterable)
+            $propertyInitializableExtractors = [$reflectionExtractor];
+
+            $cache = new PropertyInfoExtractor(
+                $listExtractors,
+                $typeExtractors,
+                $descriptionExtractors,
+                $accessExtractors,
+                $propertyInitializableExtractors
+            );
+        }
+
+        self::assertInstanceOf(PropertyInfoExtractor::class, $cache);
+
+        return $cache;
     }
 
     /**
@@ -261,13 +267,8 @@ abstract class DtoTestCase extends KernelTestCase
 
     private function getType(string $class, string $property): string
     {
-        if (self::$propertyInfo === null) {
-            self::initializePropertyExtractor();
-        }
-
-        assert(self::$propertyInfo instanceof PropertyInfoExtractor);
-
-        $types = self::$propertyInfo->getTypes($class, $property);
+        $propertyInfo = self::initializePropertyExtractor();
+        $types = $propertyInfo->getTypes($class, $property);
 
         self::assertNotNull($types);
 

@@ -406,7 +406,7 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        assert($te !== null);
+        self::assertNotNull($te);
 
         self::assertInstanceOf(
             get_class($te),
