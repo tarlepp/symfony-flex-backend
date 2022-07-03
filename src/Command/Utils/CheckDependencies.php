@@ -93,7 +93,7 @@ class CheckDependencies extends Command
                 $onlyPatch => 'Checking only patch version updates',
                 $onlyMinor => 'Checking only minor version updates',
                 default => 'Checking for latest version updates',
-            }
+            },
         ]);
 
         $directories = $this->getNamespaceDirectories();
