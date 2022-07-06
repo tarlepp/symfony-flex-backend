@@ -71,6 +71,9 @@ daemon-build                # Build containers and start application in
                             # development mode in background
 daemon                      # Start application in development mode in
                             # background
+docker-kill-containers      # Kill all running docker containers
+docker-remove-containers    # Remove all docker containers
+docker-remove-images        # Remove all docker images
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
