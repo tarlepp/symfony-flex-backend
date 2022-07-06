@@ -637,3 +637,24 @@ else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-security
 endif
+
+docker-kill-containers: ## Kill all running docker containers
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker kill $$(docker ps -q)
+endif
+
+docker-remove-containers: ## Remove all docker containers
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker rm $$(docker ps -a -q)
+endif
+
+docker-remove-images: ## Remove all docker images
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker rmi $$(docker images -q)
+endif
