@@ -26,7 +26,6 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
-use function assert;
 
 /**
  * Class GenericResourceTest

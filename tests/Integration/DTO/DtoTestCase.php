@@ -21,7 +21,6 @@ use Throwable;
 use TypeError;
 use function array_filter;
 use function array_map;
-use function assert;
 use function count;
 use function gettype;
 use function is_object;

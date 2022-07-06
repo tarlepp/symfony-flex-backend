@@ -23,7 +23,6 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_values;
-use function assert;
 use function class_exists;
 use function get_class;
 use function gettype;
