@@ -12,6 +12,7 @@
 		"symfony/phpunit-bridge": "6.1.0"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
 			"php": "8.1.0"
 		},

@@ -9,6 +9,7 @@
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
 			"php": "8.1.0"
 		},
