@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da568321ac7dff4783b2b550a83302c1",
+    "content-hash": "eb2083f7fe6f1bd9536004d7ac908916",
     "packages": [],
     "packages-dev": [
         {
@@ -604,21 +604,20 @@
         },
         {
             "name": "maglnet/composer-require-checker",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maglnet/ComposerRequireChecker.git",
-                "reference": "baa11a4e9e5072117e3d180ef16c07036cafa4a2"
+                "reference": "4d18781ae098802cb784f42454ef2477d6a95a4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/baa11a4e9e5072117e3d180ef16c07036cafa4a2",
-                "reference": "baa11a4e9e5072117e3d180ef16c07036cafa4a2",
+                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/4d18781ae098802cb784f42454ef2477d6a95a4f",
+                "reference": "4d18781ae098802cb784f42454ef2477d6a95a4f",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0.0",
-                "ext-json": "*",
                 "ext-phar": "*",
                 "nikic/php-parser": "^4.13.0",
                 "php": "^8.0",
@@ -679,9 +678,9 @@
             ],
             "support": {
                 "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
-                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.0.0"
+                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.1.0"
             },
-            "time": "2021-12-13T16:44:32+00:00"
+            "time": "2022-07-06T17:01:47+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -926,12 +925,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "bc4d989050885c9c2138e0da74519efaad597076"
+                "reference": "2a1896038681217c0ee6363cb472aad856396eea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bc4d989050885c9c2138e0da74519efaad597076",
-                "reference": "bc4d989050885c9c2138e0da74519efaad597076",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2a1896038681217c0ee6363cb472aad856396eea",
+                "reference": "2a1896038681217c0ee6363cb472aad856396eea",
                 "shasum": ""
             },
             "conflict": {
@@ -1090,6 +1089,7 @@
                 "illuminate/view": "<6.20.42|>=7,<7.30.6|>=8,<8.75",
                 "impresscms/impresscms": "<=1.4.3",
                 "in2code/femanager": "<5.5.1|>=6,<6.3.1",
+                "in2code/lux": "<17.6.1|>=18,<24.0.2",
                 "intelliants/subrion": "<=4.2.1",
                 "ivankristianto/phpwhois": "<=4.3",
                 "jackalope/jackalope-doctrine-dbal": "<1.7.4",
@@ -1424,7 +1424,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-06T08:13:54+00:00"
+            "time": "2022-07-12T11:07:36+00:00"
         },
         {
             "name": "symfony/config",

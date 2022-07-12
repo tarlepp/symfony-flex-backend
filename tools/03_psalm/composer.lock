@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8c43ee1487f61757106b3e3bb37e57d",
+    "content-hash": "8c88448515d528fc0934adab939a4158",
     "packages": [],
     "packages-dev": [
         {
@@ -1255,12 +1255,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "bc4d989050885c9c2138e0da74519efaad597076"
+                "reference": "2a1896038681217c0ee6363cb472aad856396eea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bc4d989050885c9c2138e0da74519efaad597076",
-                "reference": "bc4d989050885c9c2138e0da74519efaad597076",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2a1896038681217c0ee6363cb472aad856396eea",
+                "reference": "2a1896038681217c0ee6363cb472aad856396eea",
                 "shasum": ""
             },
             "conflict": {
@@ -1419,6 +1419,7 @@
                 "illuminate/view": "<6.20.42|>=7,<7.30.6|>=8,<8.75",
                 "impresscms/impresscms": "<=1.4.3",
                 "in2code/femanager": "<5.5.1|>=6,<6.3.1",
+                "in2code/lux": "<17.6.1|>=18,<24.0.2",
                 "intelliants/subrion": "<=4.2.1",
                 "ivankristianto/phpwhois": "<=4.3",
                 "jackalope/jackalope-doctrine-dbal": "<1.7.4",
@@ -1753,7 +1754,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-06T08:13:54+00:00"
+            "time": "2022-07-12T11:07:36+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -3849,16 +3850,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "4.23.0",
+            "version": "4.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "f1fe6ff483bf325c803df9f510d09a03fd796f88"
+                "reference": "06dd975cb55d36af80f242561738f16c5f58264f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/f1fe6ff483bf325c803df9f510d09a03fd796f88",
-                "reference": "f1fe6ff483bf325c803df9f510d09a03fd796f88",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/06dd975cb55d36af80f242561738f16c5f58264f",
+                "reference": "06dd975cb55d36af80f242561738f16c5f58264f",
                 "shasum": ""
             },
             "require": {
@@ -3950,9 +3951,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/4.23.0"
+                "source": "https://github.com/vimeo/psalm/tree/4.24.0"
             },
-            "time": "2022-04-28T17:35:49+00:00"
+            "time": "2022-06-26T11:47:54+00:00"
         },
         {
             "name": "webmozart/assert",
