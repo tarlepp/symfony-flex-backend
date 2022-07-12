@@ -4,21 +4,19 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"psalm/plugin-phpunit": "0.16.1",
-		"psalm/plugin-symfony": "3.1.6",
+		"psalm/plugin-phpunit": "0.17.0",
+		"psalm/plugin-symfony": "3.1.7",
 		"vimeo/psalm": "4.23.0",
 		"weirdan/doctrine-psalm-plugin": "2.3.0"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
 			"php": "8.1.0"
 		},
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true,
-		"allow-plugins": {
-			"composer/package-versions-deprecated": true
-		}
+		"sort-packages": true
 	}
 }

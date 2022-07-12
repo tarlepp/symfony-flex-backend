@@ -27,9 +27,9 @@
 		"doctrine/annotations": "1.13.2",
 		"doctrine/doctrine-bundle": "2.7.0",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
-		"doctrine/orm": "2.12.2",
+		"doctrine/orm": "2.12.3",
 		"gedmo/doctrine-extensions": "3.7.0",
-		"lexik/jwt-authentication-bundle": "2.15.1",
+		"lexik/jwt-authentication-bundle": "2.16.0",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
 		"matomo/device-detector": "6.0.1",
 		"matthiasnoback/symfony-console-form": "5.3.0",
@@ -40,25 +40,25 @@
 		"sensio/framework-extra-bundle": "6.2.6",
 		"symfony/asset": "6.1.0",
 		"symfony/config": "6.1.0",
-		"symfony/console": "6.1.1",
+		"symfony/console": "6.1.2",
 		"symfony/dotenv": "6.1.0",
-		"symfony/expression-language": "6.1.0",
-		"symfony/flex": "2.2.1",
-		"symfony/form": "6.1.1",
-		"symfony/framework-bundle": "6.1.1",
+		"symfony/expression-language": "6.1.2",
+		"symfony/flex": "2.2.2",
+		"symfony/form": "6.1.2",
+		"symfony/framework-bundle": "6.1.2",
 		"symfony/monolog-bundle": "3.8.0",
 		"symfony/process": "6.1.0",
 		"symfony/property-access": "6.1.0",
-		"symfony/property-info": "6.1.1",
+		"symfony/property-info": "6.1.2",
 		"symfony/routing": "6.1.1",
 		"symfony/runtime": "6.1.1",
 		"symfony/security-bundle": "6.1.0",
-		"symfony/serializer": "6.1.1",
-		"symfony/string": "6.1.0",
+		"symfony/serializer": "6.1.2",
+		"symfony/string": "6.1.2",
 		"symfony/translation": "6.1.0",
 		"symfony/twig-bundle": "6.1.1",
 		"symfony/validator": "6.1.1",
-		"symfony/yaml": "6.1.0"
+		"symfony/yaml": "6.1.2"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
@@ -75,7 +75,7 @@
 		"symfony/requirements-checker": "2.0.1",
 		"symfony/stopwatch": "6.1.0",
 		"symfony/var-dumper": "6.1.0",
-		"symfony/web-profiler-bundle": "6.1.1"
+		"symfony/web-profiler-bundle": "6.1.2"
 	},
 	"replace": {
 		"symfony/polyfill-ctype": "*",
@@ -85,17 +85,11 @@
 		"symfony/polyfill-php81": "*"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
 			"php": "8.1.0"
 		},
-		"sort-packages": true,
-		"allow-plugins": {
-			"composer/package-versions-deprecated": true,
-			"ergebnis/composer-normalize": true,
-			"bamarni/composer-bin-plugin": true,
-			"symfony/flex": true,
-			"symfony/runtime": true
-		}
+		"sort-packages": true
 	},
 	"extra": {
 		"allow-contrib": "true",
