@@ -9,6 +9,7 @@
 		"symplify/easy-coding-standard": "11.0.8"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
 			"php": "8.1.0"
 		},
