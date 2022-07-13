@@ -157,7 +157,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /** @var InputBag<string> $parameterBag */
         $request->query = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -194,8 +194,9 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /** @var InputBag<string> $parameterBag */
         $request->query = $parameterBag;
+        /** @var InputBag<bool|float|int|string> $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -237,8 +238,9 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getAssociations')
             ->willReturn(['AnotherFakeEntity']);
 
-        /** @var InputBag $parameterBag */
+        /** @var InputBag<string> $parameterBag */
         $request->query = $parameterBag;
+        /** @var InputBag<bool|float|int|string> $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -275,8 +277,9 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /** @var InputBag<string> $parameterBag */
         $request->query = $parameterBag;
+        /** @var InputBag<bool|float|int|string> $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -313,8 +316,9 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /** @var InputBag<string> $parameterBag */
         $request->query = $parameterBag;
+        /** @var InputBag<bool|float|int|string> $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -362,7 +366,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getSerializerContext')
             ->willReturn($expected);
 
-        /** @var InputBag $parameterBag */
+        /** @var InputBag<string> $parameterBag */
         $request->query = $parameterBag;
 
         self::assertSame(

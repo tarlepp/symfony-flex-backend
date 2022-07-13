@@ -226,13 +226,13 @@ class PhpUnitUtil
                 $output = self::getInvalidValueForType(self::TYPE_ARRAY);
             } else {
                 $output = match ($type) {
-                    stdClass::class, DateTimeImmutable::class
-                        => new DateTime(),
+                    stdClass::class, DateTimeImmutable::class => new DateTime(),
                     self::TYPE_CUSTOM_CLASS, self::TYPE_INT, self::TYPE_INTEGER, self::TYPE_STRING, self::TYPE_ARRAY,
                     self::TYPE_BOOL, self::TYPE_BOOLEAN, DateTime::class, 'enumLanguage', 'enumLocale', 'enumLogLogin'
                         => new stdClass(),
-                    default
-                        => throw new LogicException(sprintf("Cannot create invalid value for type '%s'.", $type)),
+                    default => throw new LogicException(
+                        sprintf("Cannot create invalid value for type '%s'.", $type),
+                    ),
                 };
             }
 
