@@ -1,7 +1,6 @@
 {
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
-	"require": {},
 	"require-dev": {
 		"ergebnis/composer-normalize": "2.28.3",
 		"icanhazstring/composer-unused": "0.8.2",
