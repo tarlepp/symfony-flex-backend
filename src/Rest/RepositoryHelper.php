@@ -311,6 +311,7 @@ class RepositoryHelper
      */
     private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
     {
+        /** @var stdClass $comparisonObject */
         $comparisonObject = (object)array_combine(['field', 'operator', 'value'], $comparison);
 
         // Increase parameter count
