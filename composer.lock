@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88e80c1345c99eb7a74e63fe1b27e1da",
+    "content-hash": "dd07f15bfcbb3e1e5118330c087ffd8b",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1569,16 +1569,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v3.7.0",
+            "version": "v3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine-extensions/DoctrineExtensions.git",
-                "reference": "42d9acf02281bb46f9b741f4a9f033e3453e2d36"
+                "reference": "4ba5377b1a1d9a988205c4e37f5d5287eb8ebd28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/42d9acf02281bb46f9b741f4a9f033e3453e2d36",
-                "reference": "42d9acf02281bb46f9b741f4a9f033e3453e2d36",
+                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/4ba5377b1a1d9a988205c4e37f5d5287eb8ebd28",
+                "reference": "4ba5377b1a1d9a988205c4e37f5d5287eb8ebd28",
                 "shasum": ""
             },
             "require": {
@@ -1669,10 +1669,10 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
-                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.7.0",
+                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.8.0",
                 "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/main/doc"
             },
-            "time": "2022-05-17T06:58:52+00:00"
+            "time": "2022-07-17T12:04:16+00:00"
         },
         {
             "name": "laminas/laminas-code",
