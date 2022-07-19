@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "892ed39226e50732a5428a46752a3334",
+    "content-hash": "d0341483791cb38183bf00fbf4185c50",
     "packages": [],
     "packages-dev": [
         {
@@ -120,22 +120,22 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.2.5",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "85be852a17fd5a6b67d4fc6daed21e794f935b2d"
+                "reference": "b3df0da98adc391d23204d843b6320d480084ee1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/85be852a17fd5a6b67d4fc6daed21e794f935b2d",
-                "reference": "85be852a17fd5a6b67d4fc6daed21e794f935b2d",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/b3df0da98adc391d23204d843b6320d480084ee1",
+                "reference": "b3df0da98adc391d23204d843b6320d480084ee1",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.6"
+                "phpstan/phpstan": "^1.8"
             },
             "conflict": {
                 "symfony/framework-bundle": "<3.0"
@@ -185,9 +185,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.5"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.6"
             },
-            "time": "2022-06-10T08:44:35+00:00"
+            "time": "2022-07-18T15:46:26+00:00"
         },
         {
             "name": "roave/security-advisories",
