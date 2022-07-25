@@ -28,7 +28,7 @@
 		"doctrine/doctrine-bundle": "2.7.0",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
 		"doctrine/orm": "2.12.3",
-		"gedmo/doctrine-extensions": "3.7.0",
+		"gedmo/doctrine-extensions": "3.8.0",
 		"lexik/jwt-authentication-bundle": "2.16.0",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
 		"matomo/device-detector": "6.0.2",
@@ -66,12 +66,12 @@
 		"symfony/twig-bundle": "<3.3"
 	},
 	"require-dev": {
-		"bamarni/composer-bin-plugin": "1.7.0",
+		"bamarni/composer-bin-plugin": "1.8.0",
 		"doctrine/doctrine-fixtures-bundle": "3.4.2",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.1.0",
 		"symfony/debug-bundle": "6.1.0",
-		"symfony/maker-bundle": "1.43.0",
+		"symfony/maker-bundle": "1.44.0",
 		"symfony/requirements-checker": "2.0.1",
 		"symfony/stopwatch": "6.1.0",
 		"symfony/var-dumper": "6.1.0",
