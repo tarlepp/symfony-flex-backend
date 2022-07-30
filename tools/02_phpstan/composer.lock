@@ -195,12 +195,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "cac27edea0578f194ba24dd8e0c4ee85ec622078"
+                "reference": "66afddaae8d97c72945ae2f49bb94aff47084804"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/cac27edea0578f194ba24dd8e0c4ee85ec622078",
-                "reference": "cac27edea0578f194ba24dd8e0c4ee85ec622078",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/66afddaae8d97c72945ae2f49bb94aff47084804",
+                "reference": "66afddaae8d97c72945ae2f49bb94aff47084804",
                 "shasum": ""
             },
             "conflict": {
@@ -280,7 +280,7 @@
                 "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1|>=2.8.3,<2.8.4",
                 "dolibarr/dolibarr": "<16|= 12.0.5|>= 3.3.beta1, < 13.0.2",
                 "dompdf/dompdf": "<2",
-                "drupal/core": ">=7,<7.88|>=8,<9.2.13|>=9.3,<9.3.6",
+                "drupal/core": ">=7,<7.91|>=8,<9.3.19|>=9.4,<9.4.3",
                 "drupal/drupal": ">=7,<7.80|>=8,<8.9.16|>=9,<9.1.12|>=9.2,<9.2.4",
                 "dweeves/magmi": "<=0.7.24",
                 "ecodev/newsletter": "<=4",
@@ -362,6 +362,7 @@
                 "in2code/femanager": "<5.5.1|>=6,<6.3.1",
                 "in2code/lux": "<17.6.1|>=18,<24.0.2",
                 "intelliants/subrion": "<=4.2.1",
+                "islandora/islandora": ">=2,<2.4.1",
                 "ivankristianto/phpwhois": "<=4.3",
                 "jackalope/jackalope-doctrine-dbal": "<1.7.4",
                 "james-heinrich/getid3": "<1.9.21",
@@ -379,6 +380,7 @@
                 "krayin/laravel-crm": "<1.2.2",
                 "kreait/firebase-php": ">=3.2,<3.8.1",
                 "la-haute-societe/tcpdf": "<6.2.22",
+                "laminas/laminas-diactoros": "<2.11.1",
                 "laminas/laminas-form": "<2.17.1|>=3,<3.0.2|>=3.1,<3.1.1",
                 "laminas/laminas-http": "<2.14.2",
                 "laravel/fortify": "<1.11.1",
@@ -503,7 +505,7 @@
                 "shopware/core": "<=6.4.9",
                 "shopware/platform": "<=6.4.9",
                 "shopware/production": "<=6.3.5.2",
-                "shopware/shopware": "<5.7.12",
+                "shopware/shopware": "<=5.7.13",
                 "shopware/storefront": "<=6.4.8.1",
                 "shopxo/shopxo": "<2.2.6",
                 "showdoc/showdoc": "<2.10.4",
@@ -699,7 +701,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-21T22:04:13+00:00"
+            "time": "2022-07-27T23:04:16+00:00"
         }
     ],
     "aliases": [],
