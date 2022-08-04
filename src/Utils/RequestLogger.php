@@ -14,6 +14,7 @@ use App\Resource\LogRequestResource;
 use App\Resource\UserResource;
 use App\Utils\Interfaces\RequestLoggerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -34,11 +35,15 @@ class RequestLogger implements RequestLoggerInterface
     private ?string $apiKeyId = null;
     private bool $mainRequest = false;
 
+    /**
+     * @param array<int, string> $sensitiveProperties
+     */
     public function __construct(
         private readonly LogRequestResource $logRequestResource,
         private readonly UserResource $userResource,
         private readonly ApiKeyResource $apiKeyResource,
         private readonly LoggerInterface $logger,
+        #[Autowire('%env(key:REQUEST_LOG_SENSITIVE_PROPERTIES:json:file:APPLICATION_CONFIG)%')]
         private readonly array $sensitiveProperties,
     ) {
     }
