@@ -12,6 +12,7 @@ use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
@@ -40,6 +41,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly RequestLogger $requestLogger,
         private readonly UserTypeIdentification $userService,
+        #[Autowire('%env(key:REQUEST_LOG_IGNORED_ROUTES:json:file:APPLICATION_CONFIG)%')]
         private readonly array $ignoredRoutes,
     ) {
     }
