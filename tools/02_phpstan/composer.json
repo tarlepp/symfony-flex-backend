@@ -3,12 +3,13 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"phpstan/phpstan": "1.7.12",
+		"phpstan/phpstan": "1.8.2",
 		"phpstan/phpstan-phpunit": "1.1.1",
-		"phpstan/phpstan-symfony": "1.2.5",
+		"phpstan/phpstan-symfony": "1.2.8",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
 			"php": "8.1.0"
 		},
