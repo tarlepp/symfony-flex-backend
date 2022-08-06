@@ -57,6 +57,8 @@ check-dependencies-latest   # Checks if any vendor dependency can be updated
                             # (latest versions)
 check-dependencies-minor    # Checks if any vendor dependency can be updated 
                             # (only minor versions)
+check-dependencies-patch    # Checks if any vendor dependency can be updated 
+                            # (only patch versions)
 check-licenses              # Check vendor licenses
 check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
