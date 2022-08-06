@@ -86,6 +86,7 @@ local-configuration         # Create local configuration files
 logs                        # Show logs from all containers
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
+phplint                     # Runs PHPLint
 phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
 phpstan-github              # Runs PHPStan static analysis tool (GitHub)

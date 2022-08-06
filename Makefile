@@ -291,6 +291,19 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpinsights
 endif
 
+phplint: ## Runs PHPLint
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@echo "\033[32mRunning PHPLint\033[39m"
+	@php ./vendor/bin/phplint --no-cache
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phplint
+endif
+
 psalm: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
