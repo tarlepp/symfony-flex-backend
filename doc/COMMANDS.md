@@ -59,6 +59,8 @@ check-dependencies-latest   # Checks if any vendor dependency can be updated
                             # (latest versions)
 check-dependencies-minor    # Checks if any vendor dependency can be updated 
                             # (only minor versions)
+check-dependencies-patch    # Checks if any vendor dependency can be updated 
+                            # (only patch versions)
 check-licenses              # Check vendor licenses
 check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
@@ -87,6 +89,7 @@ local-configuration         # Create local configuration files
 logs                        # Show logs from all containers
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
+phplint                     # Runs PHPLint
 phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
 phpstan-github              # Runs PHPStan static analysis tool (GitHub)
