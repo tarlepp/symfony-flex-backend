@@ -40,5 +40,6 @@ class VersionControllerTest extends KernelTestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertNotFalse($content);
         self::assertJson($content);
+        self::assertJsonStringEqualsJsonString('{"version": "1.0.0"}', $content);
     }
 }
