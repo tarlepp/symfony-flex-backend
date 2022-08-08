@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use function sprintf;
 
 /**
  * Class HealthzControllerTest
@@ -67,7 +68,7 @@ class HealthzControllerTest extends KernelTestCase
             ->willReturn(
                 new JsonResponse(
                     [
-                        'timestamp' => $healthz->getTimestamp(),
+                        'timestamp' => $healthz->getTimestamp()->format('c'),
                     ],
                 ),
             );
@@ -78,5 +79,12 @@ class HealthzControllerTest extends KernelTestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertNotFalse($content);
         self::assertJson($content);
+        self::assertJsonStringEqualsJsonString(
+            sprintf(
+                '{"timestamp": "%s"}',
+                $healthz->getTimestamp()->format('c'),
+            ),
+            $content,
+        );
     }
 }

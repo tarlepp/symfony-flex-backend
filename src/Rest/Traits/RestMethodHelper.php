@@ -26,6 +26,7 @@ use function array_key_exists;
 use function class_implements;
 use function in_array;
 use function is_array;
+use function is_int;
 use function sprintf;
 
 /**
@@ -104,9 +105,9 @@ trait RestMethodHelper
      */
     private function getExceptionCode(Throwable $exception): int
     {
-        $code = (int)$exception->getCode();
+        $code = $exception->getCode();
 
-        return $code !== 0 ? $code : Response::HTTP_BAD_REQUEST;
+        return is_int($code) && $code !== 0 ? $code : Response::HTTP_BAD_REQUEST;
     }
 
     /**

@@ -30,5 +30,6 @@ class IndexControllerTest extends KernelTestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertNotFalse($content);
         self::assertJson($content);
+        self::assertJsonStringEqualsJsonString('{}', $content);
     }
 }
