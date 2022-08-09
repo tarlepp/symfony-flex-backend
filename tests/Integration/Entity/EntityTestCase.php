@@ -23,7 +23,6 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_values;
-use function assert;
 use function class_exists;
 use function get_class;
 use function gettype;
@@ -406,7 +405,7 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        assert($te !== null);
+        self::assertNotNull($te);
 
         self::assertInstanceOf(
             get_class($te),
