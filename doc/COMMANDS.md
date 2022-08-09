@@ -24,13 +24,15 @@ There is also exception for this;
 
 ```bash
 make bash
+OR
+make fish
 ```
 
-That command is shortcut for `docker-compose exec php bash` command and you
-can use that command within your host machine. Note that default user inside
-that `php` container is `dev` and it has been bind to your host machine user
-and group (uid = 1000, gid = 1000) - so that you don't have issues within file
-permissions.
+That command is shortcut for `docker-compose exec php bash/fish` command and
+you can use that command within your host machine. Note that default user
+inside that `php` container is `dev` and it has been bind to your host machine
+user and group (uid = 1000, gid = 1000) - so that you don't have issues within
+file permissions.
 
 Note that if you host machine user _isn't_ bind to those mentioned values:
 
@@ -76,6 +78,7 @@ daemon                      # Start application in development mode in
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
+fish                        # Get fish inside PHP container
 generate-jwt-keys           # Generates JWT auth keys
 infection                   # Runs Infection to codebase
 install-bin                 # Install composer bin dependencies
