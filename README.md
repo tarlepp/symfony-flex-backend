@@ -113,15 +113,18 @@ password: password
 After you've run `make start` / `docker-compose up` command you can list all
 running containers with `docker ps` command.
 
-And to eg. get shell access inside one of those containers you can run following
-command:
+And to eg. get shell (bash or fish) access inside one of those containers you
+can run following command:
 
 ```bash
 make bash
 ```
 
-Where that `php` is that actual container where this backend application is
-running.
+OR
+
+```bash
+make fish
+```
 
 ### 5. Building containers [ᐞ](#table-of-contents)
 
@@ -130,13 +133,13 @@ that you should do everytime if you have some problems to get containers up and
 running. This you can do with following command:
 
 ```bash
-make build
+make daemon-build
 ```
 
 If you like to see containers logs directly use following command:
 
 ```bash
-make watch-build
+make start-build
 ```
 
 ## Frontend? [ᐞ](#table-of-contents)
