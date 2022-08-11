@@ -1,4 +1,4 @@
-FROM php:8.1.6-fpm
+FROM php:8.1.8-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -10,17 +10,17 @@ ARG HOST_GID
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION v0.39.1
-ENV NODE_VERSION 18.2.0
+ENV NODE_VERSION 18.5.0
 
 # Update package list and install necessary libraries
 RUN apt-get update \
     && apt-get install -y \
         zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo wget \
-        python3-dev python3-pip python3-setuptools \
+        python3-dev python3-pip python3-setuptools fish \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:1.5.16 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:1.5.29 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Enable all necessary PHP packages
 RUN install-php-extensions \
@@ -34,7 +34,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.3.9 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
@@ -77,11 +77,6 @@ ENV PATH "$PATH:/home/dev/.local/bin"
 
 RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc
 
-# Install following common tools;
-#   - ergebnis/composer-normalize, to "normalize" composer.json contents
-RUN composer --no-cache global require \
-    ergebnis/composer-normalize
-
 # Install Node Version Manager (nvm)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
 
@@ -95,6 +90,11 @@ RUN source ~/.nvm/nvm.sh \
 # Add necessary stuff to bash autocomplete
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
     && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc
+
+RUN mkdir -p /home/dev/.config/fish/completions \
+    && mkdir -p /home/dev/.config/fish/functions
+
+COPY ./docker/fish /home/dev/.config/fish/
 
 EXPOSE 9000
 

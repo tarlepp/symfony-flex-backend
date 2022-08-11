@@ -291,6 +291,19 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpinsights
 endif
 
+phplint: ## Runs PHPLint
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@echo "\033[32mRunning PHPLint\033[39m"
+	@php ./vendor/bin/phplint --no-cache
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phplint
+endif
+
 psalm: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
@@ -434,6 +447,19 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-minor
 endif
 
+check-dependencies-patch: ## Checks if any vendor dependency can be updated (only patch versions)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@echo "\033[32mChecking vendor dependencies (minor)\033[39m"
+	@bin/console check-dependencies --patch
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-patch
+endif
+
 check-licenses: ## Check vendor licenses
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mChecking vendor licenses\033[39m"
@@ -491,6 +517,16 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php bash
+endif
+
+fish: ## Get fish inside PHP container
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php fish
 endif
 
 logs: ## Show logs from all containers
