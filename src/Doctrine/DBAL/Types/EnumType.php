@@ -70,11 +70,4 @@ abstract class EnumType extends Type
     {
         return static::$name;
     }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        parent::requiresSQLCommentHint($platform);
-
-        return true;
-    }
 }
