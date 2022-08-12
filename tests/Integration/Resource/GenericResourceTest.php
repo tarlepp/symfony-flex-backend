@@ -26,7 +26,6 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
-use function assert;
 
 /**
  * Class GenericResourceTest
@@ -713,7 +712,7 @@ class GenericResourceTest extends KernelTestCase
     {
         $doctrine = self::getContainer()->get('doctrine');
 
-        assert($doctrine instanceof Registry);
+        self::assertInstanceOf(Registry::class, $doctrine);
 
         $repository = $this
             ->getMockBuilder(UserRepository::class)
@@ -727,7 +726,7 @@ class GenericResourceTest extends KernelTestCase
 
         $validator = self::getContainer()->get(ValidatorInterface::class);
 
-        assert($validator instanceof ValidatorInterface);
+        self::assertInstanceOf(ValidatorInterface::class, $validator);
 
         $resource = new UserResource($repository, new RolesService($roleHierarchy));
         $resource->setValidator($validator);
