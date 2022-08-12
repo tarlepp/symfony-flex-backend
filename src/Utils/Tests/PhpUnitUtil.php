@@ -45,6 +45,7 @@ class PhpUnitUtil
     public const TYPE_INTEGER = 'integer';
     public const TYPE_STRING = 'string';
     public const TYPE_ARRAY = 'array';
+    public const TYPE_JSON = 'json';
     public const TYPE_BOOL = 'bool';
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_CUSTOM_CLASS = 'CustomClass';
@@ -159,7 +160,7 @@ class PhpUnitUtil
         $exception = new LogicException(
             sprintf(
                 "Currently type '%s' is not supported within type normalizer",
-                $type instanceof Type ? $type->getName() : (string)$type,
+                $type instanceof Type ? $type::class : (string)$type,
             ),
         );
 
@@ -168,6 +169,7 @@ class PhpUnitUtil
             'time_immutable', 'date_immutable', 'datetime_immutable' => DateTimeImmutable::class,
             self::TYPE_INT, self::TYPE_INTEGER, 'bigint' => self::TYPE_INT,
             self::TYPE_STRING, 'text', 'EnumLanguage', 'EnumLocale', 'EnumLogLogin' => self::TYPE_STRING,
+            self::TYPE_JSON => self::TYPE_JSON,
             self::TYPE_ARRAY => self::TYPE_ARRAY,
             self::TYPE_BOOL, self::TYPE_BOOLEAN => self::TYPE_BOOL,
             default => throw $exception,
