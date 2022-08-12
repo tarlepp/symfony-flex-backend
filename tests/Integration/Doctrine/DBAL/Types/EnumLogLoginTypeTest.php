@@ -73,19 +73,6 @@ class EnumLogLoginTypeTest extends KernelTestCase
     }
 
     /**
-     * @throws Throwable
-     *
-     * @testdox Test that `requiresSQLCommentHint` method returns expected
-     */
-    public function testThatRequiresSQLCommentHintReturnsExpected(): void
-    {
-        $type = $this->getType();
-        $platform = $this->getPlatform();
-
-        self::assertTrue($type->requiresSQLCommentHint($platform));
-    }
-
-    /**
      * @return Generator<array{0: 'failure'|'success'}>
      */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
@@ -111,18 +98,22 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return new MySqlPlatform();
+        return new MySQLPlatform();
     }
 
     /**
      * @throws Throwable
      */
-    private function getType(): Type
+    private function getType(): EnumLogLoginType
     {
         Type::hasType('EnumLogLogin')
             ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
             : Type::addType('EnumLogLogin', EnumLogLoginType::class);
 
-        return Type::getType('EnumLogLogin');
+        $type = Type::getType('EnumLogLogin');
+
+        self::assertInstanceOf(EnumLogLoginType::class, $type);
+
+        return $type;
     }
 }
