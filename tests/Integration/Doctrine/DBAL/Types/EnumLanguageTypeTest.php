@@ -73,19 +73,6 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `requiresSQLCommentHint` method returns expected
-     *
-     * @throws Throwable
-     */
-    public function testThatRequiresSQLCommentHintReturnsExpected(): void
-    {
-        $type = $this->getType();
-        $platform = $this->getPlatform();
-
-        self::assertTrue($type->requiresSQLCommentHint($platform));
-    }
-
-    /**
      * @return Generator<array{0: 'en'|'fi'}>
      */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
@@ -111,18 +98,22 @@ class EnumLanguageTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return new MySqlPlatform();
+        return new MySQLPlatform();
     }
 
     /**
      * @throws Throwable
      */
-    private function getType(): Type
+    private function getType(): EnumLanguageType
     {
         Type::hasType('EnumLanguage')
             ? Type::overrideType('EnumLanguage', EnumLanguageType::class)
             : Type::addType('EnumLanguage', EnumLanguageType::class);
 
-        return Type::getType('EnumLanguage');
+        $type = Type::getType('EnumLanguage');
+
+        self::assertInstanceOf(EnumLanguageType::class, $type);
+
+        return $type;
     }
 }

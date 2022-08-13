@@ -73,19 +73,6 @@ class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @throws Throwable
-     *
-     * @testdox Test that `requiresSQLCommentHint` method returns expected
-     */
-    public function testThatRequiresSQLCommentHintReturnsExpected(): void
-    {
-        $type = $this->getType();
-        $platform = $this->getPlatform();
-
-        self::assertTrue($type->requiresSQLCommentHint($platform));
-    }
-
-    /**
      * @return Generator<array{0: 'en'|'fi'}>
      */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
@@ -111,18 +98,22 @@ class EnumLocaleTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return new MySqlPlatform();
+        return new MySQLPlatform();
     }
 
     /**
      * @throws Throwable
      */
-    private function getType(): Type
+    private function getType(): EnumLocaleType
     {
         Type::hasType('EnumLocale')
             ? Type::overrideType('EnumLocale', EnumLocaleType::class)
             : Type::addType('EnumLocale', EnumLocaleType::class);
 
-        return Type::getType('EnumLocale');
+        $type = Type::getType('EnumLocale');
+
+        self::assertInstanceOf(EnumLocaleType::class, $type);
+
+        return $type;
     }
 }
