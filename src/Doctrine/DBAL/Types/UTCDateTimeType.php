@@ -62,13 +62,6 @@ class UTCDateTimeType extends DateTimeType
         return parent::convertToPHPValue($value, $platform);
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        parent::requiresSQLCommentHint($platform);
-
-        return true;
-    }
-
     /**
      * Method to initialize DateTimeZone as in UTC.
      */

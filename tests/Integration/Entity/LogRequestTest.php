@@ -118,7 +118,7 @@ class LogRequestTest extends EntityTestCase
         );
 
         try {
-            $method = 'assertIs' . ucfirst($type);
+            $method = $type === 'json' ? 'assertIsArray' : 'assertIs' . ucfirst($type);
 
             self::$method($value, $message);
         } catch (Throwable $error) {

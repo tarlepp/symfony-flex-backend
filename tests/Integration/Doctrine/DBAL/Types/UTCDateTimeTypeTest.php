@@ -132,19 +132,6 @@ class UTCDateTimeTypeTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `requiresSQLCommentHint` method returns expected
-     */
-    public function testThatRequiresSQLCommentHintReturnsExpected(): void
-    {
-        $type = $this->getType();
-        $platform = $this->getPlatform();
-
-        self::assertTrue($type->requiresSQLCommentHint($platform));
-    }
-
-    /**
-     * @throws Throwable
-     *
      * @return Generator<array{0: string, 1: string|DateTime}>
      */
     public function dataProviderTestDateTimeConvertsToPHPValue(): Generator
@@ -173,12 +160,16 @@ class UTCDateTimeTypeTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    private function getType(): Type
+    private function getType(): UTCDateTimeType
     {
         Type::hasType('datetime')
             ? Type::overrideType('datetime', UTCDateTimeType::class)
             : Type::addType('datetime', UTCDateTimeType::class);
 
-        return Type::getType('datetime');
+        $type = Type::getType('datetime');
+
+        self::assertInstanceOf(UTCDateTimeType::class, $type);
+
+        return $type;
     }
 }
