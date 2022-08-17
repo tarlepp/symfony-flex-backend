@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-    rememberPropertyAssignmentsAfterCall="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config file://./tools/03_psalm/vendor/vimeo/psalm/config.xsd"
-    phpVersion="8.1"
+    errorLevel="2"
+    rememberPropertyAssignmentsAfterCall="false"
 >
     <projectFiles>
         <directory name="src/" />
