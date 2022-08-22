@@ -32,7 +32,7 @@
 		"lexik/jwt-authentication-bundle": "2.16.0",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
 		"matomo/device-detector": "6.0.2",
-		"matthiasnoback/symfony-console-form": "5.3.1",
+		"matthiasnoback/symfony-console-form": "5.3.2",
 		"nelmio/api-doc-bundle": "4.9.0",
 		"nelmio/cors-bundle": "2.2.0",
 		"phpdocumentor/reflection-docblock": "5.3.0",
