@@ -5,7 +5,7 @@
 	"require-dev": {
 		"phpstan/phpstan": "1.8.2",
 		"phpstan/phpstan-phpunit": "1.1.1",
-		"phpstan/phpstan-symfony": "1.2.9",
+		"phpstan/phpstan-symfony": "1.2.10",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
