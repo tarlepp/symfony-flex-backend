@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6c173c7b352f8733a0235be648c35b1",
+    "content-hash": "96037c0b4fe0e78e0d870594718c48cf",
     "packages": [],
     "packages-dev": [
         {
@@ -120,16 +120,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.2.10",
+            "version": "1.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "82d54e8d9070a131770732afd0492b9acff73227"
+                "reference": "a14d467083e8a4ca6860921e68f646831a88260c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/82d54e8d9070a131770732afd0492b9acff73227",
-                "reference": "82d54e8d9070a131770732afd0492b9acff73227",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/a14d467083e8a4ca6860921e68f646831a88260c",
+                "reference": "a14d467083e8a4ca6860921e68f646831a88260c",
                 "shasum": ""
             },
             "require": {
@@ -185,9 +185,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.10"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.11"
             },
-            "time": "2022-08-25T15:30:20+00:00"
+            "time": "2022-08-25T20:39:28+00:00"
         },
         {
             "name": "roave/security-advisories",
