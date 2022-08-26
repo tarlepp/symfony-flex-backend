@@ -23,7 +23,10 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.3.10 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.4.1 /usr/bin/composer /usr/bin/composer
+
+# Enable Composer autocompletion
+RUN composer completion bash > /etc/bash_completion.d/composer
 
 WORKDIR /app
 
