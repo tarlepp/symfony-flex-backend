@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use function assert;
 
 /**
  * Class LogRequestRepository
@@ -55,6 +56,8 @@ class LogRequestRepository extends BaseRepository
         // Determine date
         $date = (new DateTimeImmutable(timezone:  new DateTimeZone('UTC')))
             ->sub(new DateInterval('P3Y'));
+
+        assert($date instanceof DateTimeImmutable);
 
         // Create query builder and define delete query
         $queryBuilder = $this
