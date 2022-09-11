@@ -177,9 +177,8 @@ jobs:
       - name: Run `phploc` to collect LOC stats
         run: make phploc
 
-      # And disabled once again...
-      #- name: Run `PHP Insights` static analysis tool
-      #  run: make phpinsights
+      - name: Run `PHP Insights` static analysis tool
+        run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
         uses: actions/upload-artifact@v1
