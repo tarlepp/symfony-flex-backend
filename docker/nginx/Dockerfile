@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM nginx:1.23.1
 
 ADD nginx.conf /etc/nginx/conf.d/default.conf
 ADD php-upstream.conf /etc/nginx/conf.d/upstream.conf
