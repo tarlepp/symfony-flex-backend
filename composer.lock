@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15901d2d22dcd0d32b2b5356c664aa1a",
+    "content-hash": "14920459afe68c1d9e163bd15c01e1ce",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2449,16 +2449,16 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v4.9.0",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "da02f3ad339437b939a6d309e9c98b62afe53c6c"
+                "reference": "f808eafbe49f66180d7e73451a3c19fa4cf20b49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/da02f3ad339437b939a6d309e9c98b62afe53c6c",
-                "reference": "da02f3ad339437b939a6d309e9c98b62afe53c6c",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/f808eafbe49f66180d7e73451a3c19fa4cf20b49",
+                "reference": "f808eafbe49f66180d7e73451a3c19fa4cf20b49",
                 "shasum": ""
             },
             "require": {
@@ -2478,21 +2478,22 @@
                 "symfony/options-resolver": "^4.4|^5.0|^6.0",
                 "symfony/property-info": "^4.4|^5.0|^6.0",
                 "symfony/routing": "^4.4|^5.0|^6.0",
-                "zircote/swagger-php": "^3.2|^4.0"
+                "zircote/swagger-php": "^4.2.15"
             },
             "conflict": {
                 "symfony/framework-bundle": "4.2.7"
             },
             "require-dev": {
-                "api-platform/core": "^2.6.8",
+                "api-platform/core": "^2.7.0",
                 "composer/package-versions-deprecated": "1.11.99.1",
                 "friendsofsymfony/rest-bundle": "^2.8|^3.0",
                 "jms/serializer": "^1.14|^3.0",
-                "jms/serializer-bundle": "^2.3|^3.0|^4.0",
+                "jms/serializer-bundle": "^2.3|^3.0|^4.0|^5.0@beta",
                 "sensio/framework-extra-bundle": "^4.4|^5.2|^6.0",
                 "symfony/asset": "^4.4|^5.2|^6.0",
                 "symfony/browser-kit": "^4.4|^5.2|^6.0",
                 "symfony/cache": "^4.4|^5.2|^6.0",
+                "symfony/deprecation-contracts": "^2.1|^3",
                 "symfony/dom-crawler": "^4.4|^5.2|^6.0",
                 "symfony/form": "^4.4|^5.2|^6.0",
                 "symfony/phpunit-bridge": "^5.2",
@@ -2513,8 +2514,8 @@
                 "symfony/form": "For describing your form type models.",
                 "symfony/monolog-bundle": "For using a PSR-3 compatible logger implementation with the API PHP describer.",
                 "symfony/serializer": "For describing your models.",
+                "symfony/twig-bundle": "For using the Swagger UI.",
                 "symfony/validator": "For describing the validation constraints in your models.",
-                "twig/twig-bundle": "For using the Swagger UI.",
                 "willdurand/hateoas-bundle": "For extracting HATEOAS metadata."
             },
             "type": "symfony-bundle",
@@ -2554,9 +2555,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioApiDocBundle/issues",
-                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.9.0"
+                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.10.0"
             },
-            "time": "2022-04-30T18:28:05+00:00"
+            "time": "2022-09-25T17:56:43+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
