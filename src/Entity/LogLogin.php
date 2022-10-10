@@ -10,7 +10,6 @@ namespace App\Entity;
 
 use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
-use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\Uuid;
 use DeviceDetector\DeviceDetector;
 use Doctrine\DBAL\Types\Types;
@@ -50,9 +49,8 @@ use function is_array;
 )]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
-class LogLogin implements EntityInterface
+class LogLogin extends LogEntity implements EntityInterface
 {
-    use LogEntityTrait;
     use Uuid;
 
     /**
@@ -68,7 +66,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.id',
     ])]
-    private UuidInterface $id;
+    private readonly UuidInterface $id;
 
     #[ORM\Column(
         name: 'username',
@@ -80,7 +78,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.username',
     ])]
-    private string $username = '';
+    private readonly string $username;
 
     #[ORM\Column(
         name: 'client_type',
@@ -92,7 +90,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientType',
     ])]
-    private ?string $clientType = null;
+    private readonly string $clientType;
 
     #[ORM\Column(
         name: 'client_name',
@@ -104,7 +102,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientName',
     ])]
-    private ?string $clientName = null;
+    private readonly string $clientName;
 
     #[ORM\Column(
         name: 'client_short_name',
@@ -116,7 +114,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientShortName',
     ])]
-    private ?string $clientShortName = null;
+    private readonly string $clientShortName;
 
     #[ORM\Column(
         name: 'client_version',
@@ -128,7 +126,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientVersion',
     ])]
-    private ?string $clientVersion = null;
+    private readonly string $clientVersion;
 
     #[ORM\Column(
         name: 'client_engine',
@@ -140,7 +138,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.clientEngine',
     ])]
-    private ?string $clientEngine = null;
+    private readonly string $clientEngine;
 
     #[ORM\Column(
         name: 'os_name',
@@ -152,7 +150,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osName',
     ])]
-    private ?string $osName = null;
+    private readonly string $osName;
 
     #[ORM\Column(
         name: 'os_short_name',
@@ -164,7 +162,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osShortName',
     ])]
-    private ?string $osShortName = null;
+    private readonly string $osShortName;
 
     #[ORM\Column(
         name: 'os_version',
@@ -176,7 +174,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osVersion',
     ])]
-    private ?string $osVersion = null;
+    private readonly string $osVersion;
 
     #[ORM\Column(
         name: 'os_platform',
@@ -188,7 +186,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.osPlatform',
     ])]
-    private ?string $osPlatform = null;
+    private readonly string $osPlatform;
 
     #[ORM\Column(
         name: 'device_name',
@@ -200,7 +198,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.deviceName',
     ])]
-    private ?string $deviceName = null;
+    private readonly string $deviceName;
 
     #[ORM\Column(
         name: 'brand_name',
@@ -212,7 +210,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.brandName',
     ])]
-    private ?string $brandName = null;
+    private readonly string $brandName;
 
     #[ORM\Column(
         name: 'model',
@@ -224,9 +222,7 @@ class LogLogin implements EntityInterface
         'LogLogin',
         'LogLogin.model',
     ])]
-    private ?string $model = null;
-
-    private DeviceDetector $deviceDetector;
+    private readonly string $model;
 
     /**
      * LogLogin constructor.
@@ -242,9 +238,9 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.type',
         ])]
-        private string $type,
-        Request $request,
-        DeviceDetector $deviceDetector,
+        private readonly string $type,
+        readonly Request $request,
+        private readonly DeviceDetector $deviceDetector,
         #[ORM\ManyToOne(
             targetEntity: User::class,
             inversedBy: 'logsLogin',
@@ -257,19 +253,24 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.user',
         ])]
-        private ?User $user = null
+        private readonly ?User $user = null
     ) {
+        parent::__construct($request);
+
         $this->id = $this->createUuid();
-
-        $this->deviceDetector = $deviceDetector;
-
-        $this->processTimeAndDate();
-        $this->processRequestData($request);
-        $this->processClientData();
-
-        if ($this->user !== null) {
-            $this->username = $this->user->getUsername();
-        }
+        $this->clientType = $this->getClientData('getClient', 'type');
+        $this->clientName = $this->getClientData('getClient', 'name');
+        $this->clientShortName = $this->getClientData('getClient', 'short_name');
+        $this->clientVersion = $this->getClientData('getClient', 'version');
+        $this->clientEngine = $this->getClientData('getClient', 'engine');
+        $this->osName = $this->getClientData('getOs', 'name');
+        $this->osShortName = $this->getClientData('getOs', 'short_name');
+        $this->osVersion = $this->getClientData('getOs', 'version');
+        $this->osPlatform = $this->getClientData('getOs', 'platform');
+        $this->deviceName = $this->deviceDetector->getDeviceName();
+        $this->brandName = $this->deviceDetector->getBrandName();
+        $this->model = $this->deviceDetector->getModel();
+        $this->username = $this->user?->getUsername() ?? '';
     }
 
     public function getId(): string
@@ -350,22 +351,6 @@ class LogLogin implements EntityInterface
     public function getModel(): ?string
     {
         return $this->model;
-    }
-
-    private function processClientData(): void
-    {
-        $this->clientType = $this->getClientData('getClient', 'type');
-        $this->clientName = $this->getClientData('getClient', 'name');
-        $this->clientShortName = $this->getClientData('getClient', 'short_name');
-        $this->clientVersion = $this->getClientData('getClient', 'version');
-        $this->clientEngine = $this->getClientData('getClient', 'engine');
-        $this->osName = $this->getClientData('getOs', 'name');
-        $this->osShortName = $this->getClientData('getOs', 'short_name');
-        $this->osVersion = $this->getClientData('getOs', 'version');
-        $this->osPlatform = $this->getClientData('getOs', 'platform');
-        $this->deviceName = $this->deviceDetector->getDeviceName();
-        $this->brandName = $this->deviceDetector->getBrandName();
-        $this->model = $this->deviceDetector->getModel();
     }
 
     private function getClientData(string $method, string $attribute): string

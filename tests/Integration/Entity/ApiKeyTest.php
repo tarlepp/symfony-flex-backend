@@ -31,6 +31,13 @@ class ApiKeyTest extends EntityTestCase
      */
     protected string $entityName = ApiKey::class;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::bootKernel();
+    }
+
     /**
      * @dataProvider dataProviderTestThatApiKeyHasExpectedRoles
      *

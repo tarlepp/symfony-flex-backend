@@ -58,7 +58,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.id',
     ])]
-    private UuidInterface $id;
+    private readonly UuidInterface $id;
 
     #[ORM\Column(
         name: 'year',
@@ -71,7 +71,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.year',
     ])]
-    private int $year;
+    private readonly int $year;
 
     #[ORM\Column(
         name: 'month',
@@ -84,7 +84,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.month',
     ])]
-    private int $month;
+    private readonly int $month;
 
     #[ORM\Column(
         name: 'day',
@@ -97,7 +97,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.day',
     ])]
-    private int $day;
+    private readonly int $day;
 
     #[ORM\Column(
         name: 'quarter',
@@ -110,7 +110,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.quarter',
     ])]
-    private int $quarter;
+    private readonly int $quarter;
 
     #[ORM\Column(
         name: 'week_number',
@@ -123,7 +123,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.weekNumber',
     ])]
-    private int $weekNumber;
+    private readonly int $weekNumber;
 
     #[ORM\Column(
         name: 'day_number_of_week',
@@ -136,7 +136,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.dayNumber',
     ])]
-    private int $dayNumberOfWeek;
+    private readonly int $dayNumberOfWeek;
 
     #[ORM\Column(
         name: 'day_number_of_year',
@@ -149,7 +149,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.dayNumberOfYear',
     ])]
-    private int $dayNumberOfYear;
+    private readonly int $dayNumberOfYear;
 
     #[ORM\Column(
         name: 'leap_year',
@@ -162,7 +162,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.leapYear',
     ])]
-    private bool $leapYear;
+    private readonly bool $leapYear;
 
     #[ORM\Column(
         name: 'week_numbering_year',
@@ -175,7 +175,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.weekNumberingYear',
     ])]
-    private int $weekNumberingYear;
+    private readonly int $weekNumberingYear;
 
     #[ORM\Column(
         name: 'unix_time',
@@ -188,7 +188,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.unixTime',
     ])]
-    private int $unixTime;
+    private readonly int $unixTime;
 
     public function __construct(
         #[ORM\Column(
@@ -199,7 +199,7 @@ class DateDimension implements EntityInterface
             'DateDimension',
             'DateDimension.date',
         ])]
-        private DateTimeImmutable $date
+        private readonly DateTimeImmutable $date
     ) {
         $this->id = $this->createUuid();
 
