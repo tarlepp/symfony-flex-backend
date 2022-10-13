@@ -58,7 +58,7 @@
 		"symfony/translation": "6.1.4",
 		"symfony/twig-bundle": "6.1.1",
 		"symfony/validator": "6.1.5",
-		"symfony/yaml": "6.1.4"
+		"symfony/yaml": "6.1.6"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
