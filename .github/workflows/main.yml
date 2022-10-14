@@ -361,7 +361,7 @@ jobs:
 
       - name: Set tag var
         id: vars
-        run: echo ::set-output name=docker_tag::$(echo ${GITHUB_REF} | cut -d'/' -f3)-${GITHUB_SHA}
+        run: echo "DOCKER_TAG=$(echo ${GITHUB_REF} | sed -r 's/[\/()\.]+/_/g')-${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
+        run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
