@@ -24,7 +24,7 @@ jobs:
         php-versions: [ '8.1' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -39,7 +39,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -57,7 +57,7 @@ jobs:
           composer --version
 
       - name: PHP Security Checker
-        uses: symfonycorp/security-checker-action@v3
+        uses: symfonycorp/security-checker-action@v4
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: make check-security
@@ -71,7 +71,7 @@ jobs:
         php-versions: [ '8.1' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -86,7 +86,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -124,7 +124,7 @@ jobs:
         php-versions: ['8.1']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -139,7 +139,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -181,13 +181,13 @@ jobs:
         run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: phploc.json
           path: ./build/phploc.json
@@ -214,7 +214,7 @@ jobs:
         php-versions: ['8.1']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -231,7 +231,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -295,25 +295,25 @@ jobs:
         run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: PhpMetrics
           path: ./build/report
 
       - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
@@ -324,7 +324,7 @@ jobs:
 
     steps:
       - name: Make checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Lint `./README.md`
         uses: avto-dev/markdown-lint@v1
@@ -357,7 +357,7 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
 
       - name: Set tag var
         id: vars
