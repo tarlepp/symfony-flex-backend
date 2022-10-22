@@ -41,7 +41,7 @@ RUN echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3
     && curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_11/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg > /dev/null \
     && apt-get update \
     && apt-get install -y \
-      fish \
+        fish \
     && rm -rf /var/lib/apt/lists
 
 # Set the locale
