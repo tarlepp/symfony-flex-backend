@@ -24,7 +24,7 @@ jobs:
         php-versions: [ '8.1' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -71,7 +71,7 @@ jobs:
         php-versions: [ '8.1' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -124,7 +124,7 @@ jobs:
         php-versions: ['8.1']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -214,7 +214,7 @@ jobs:
         php-versions: ['8.1']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -324,7 +324,7 @@ jobs:
 
     steps:
       - name: Make checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Lint `./README.md`
         uses: avto-dev/markdown-lint@v1
@@ -357,7 +357,7 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
 
       - name: Set tag var
         id: vars
