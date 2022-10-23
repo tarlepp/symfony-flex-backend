@@ -57,7 +57,7 @@ jobs:
           composer --version
 
       - name: PHP Security Checker
-        uses: symfonycorp/security-checker-action@v3
+        uses: symfonycorp/security-checker-action@v4
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: make check-security
