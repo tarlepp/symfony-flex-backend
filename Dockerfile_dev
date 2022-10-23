@@ -15,9 +15,42 @@ ENV NODE_VERSION 18.10.0
 # Update package list and install necessary libraries
 RUN apt-get update \
     && apt-get install -y \
-        zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo wget \
-        python3-dev python3-pip python3-setuptools fish \
+        bash-completion \
+        fish \
+        g++ \
+        git \
+        gnupg \
+        iproute2 \
+        jq \
+        libicu-dev \
+        libxml2-dev \
+        libzip-dev \
+        locales \
+        nano \
+        python3-dev \
+        python3-pip \
+        python3-setuptools \
+        sudo \
+        unzip \
+        vim \
+        wget \
+        zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_11/ /' | tee /etc/apt/sources.list.d/shells:fish:release:3.list \
+    && curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_11/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg > /dev/null \
+    && apt-get update \
+    && apt-get install -y \
+        fish \
+    && rm -rf /var/lib/apt/lists
+
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
 COPY --from=mlocati/php-extension-installer:1.5.42 /usr/bin/install-php-extensions /usr/local/bin/
