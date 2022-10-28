@@ -85,7 +85,8 @@ class LoginFailureTest extends WebTestCase
         $response = $client->getResponse();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertEmpty(
+        self::assertCount(
+            0,
             $resource->find(),
             'There is `LogLoginFailure` entries in database, while there should not be any',
         );
