@@ -79,13 +79,14 @@ class RequestHandlerTest extends KernelTestCase
      * @psalm-param StringableArrayObject $parameters
      * @psalm-param StringableArrayObject $expected
      *
-     * @testdox Test that `getOrderBy` method returns `$expected` when using `$parameters` as an input
+     * @testdox Test that `getOrderBy` method returns `$expected` when using `$method` and `$parameters` as an input
      */
     public function testThatGetOrderByReturnsExpectedValue(
+        string $method,
         StringableArrayObject $parameters,
         StringableArrayObject $expected
     ): void {
-        $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
+        $fakeRequest = Request::create('/', $method, $parameters->getArrayCopy());
 
         self::assertSame(
             $expected->getArrayCopy(),
@@ -326,164 +327,180 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetOrderByReturnsExpectedValue' test.
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
-        yield [
-            new StringableArrayObject([
-                'order' => 'column1',
-            ]),
-            new StringableArrayObject([
-                'column1' => 'ASC',
-            ]),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                'order' => '-column1',
-            ]),
-            new StringableArrayObject([
-                'column1' => 'DESC',
-            ]),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                'order' => 't.column1',
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'ASC',
-            ]),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                'order' => '-t.column1',
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'DESC',
-            ]),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                'order' => [
+        foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => 'column1',
+                ]),
+                new StringableArrayObject([
                     'column1' => 'ASC',
-                ],
-            ]),
-            new StringableArrayObject([
-                'column1' => 'ASC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => '-column1',
+                ]),
+                new StringableArrayObject([
                     'column1' => 'DESC',
-                ],
-            ]),
-            new StringableArrayObject([
-                'column1' => 'DESC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
-                    'column1' => 'foobar',
-                ],
-            ]),
-            new StringableArrayObject([
-                'column1' => 'ASC',
-            ]),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => 't.column1',
+                ]),
+                new StringableArrayObject([
                     't.column1' => 'ASC',
-                ],
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'ASC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => '-t.column1',
+                ]),
+                new StringableArrayObject([
                     't.column1' => 'DESC',
-                ],
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'DESC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
-                    't.column1' => 'foobar',
-                ],
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'ASC',
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        'column1' => 'ASC',
+                    ],
+                ]),
+                new StringableArrayObject([
+                    'column1' => 'ASC',
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        'column1' => 'DESC',
+                    ],
+                ]),
+                new StringableArrayObject([
+                    'column1' => 'DESC',
+                ]),
+            ];
+
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        'column1' => 'foobar',
+                    ],
+                ]),
+                new StringableArrayObject([
+                    'column1' => 'ASC',
+                ]),
+            ];
+
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        't.column1' => 'ASC',
+                    ],
+                ]),
+                new StringableArrayObject([
+                    't.column1' => 'ASC',
+                ]),
+            ];
+
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        't.column1' => 'DESC',
+                    ],
+                ]),
+                new StringableArrayObject([
+                    't.column1' => 'DESC',
+                ]),
+            ];
+
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        't.column1' => 'foobar',
+                    ],
+                ]),
+                new StringableArrayObject([
+                    't.column1' => 'ASC',
+                ]),
+            ];
+
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        'column1' => 'ASC',
+                        'column2' => 'DESC',
+                    ],
+                ]),
+                new StringableArrayObject([
                     'column1' => 'ASC',
                     'column2' => 'DESC',
-                ],
-            ]),
-            new StringableArrayObject([
-                'column1' => 'ASC',
-                'column2' => 'DESC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        't.column1' => 'ASC',
+                        't.column2' => 'DESC',
+                    ],
+                ]),
+                new StringableArrayObject([
                     't.column1' => 'ASC',
                     't.column2' => 'DESC',
-                ],
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'ASC',
-                't.column2' => 'DESC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        't.column1' => 'ASC',
+                        'column2' => 'ASC',
+                    ],
+                ]),
+                new StringableArrayObject([
                     't.column1' => 'ASC',
                     'column2' => 'ASC',
-                ],
-            ]),
-            new StringableArrayObject([
-                't.column1' => 'ASC',
-                'column2' => 'ASC',
-            ]),
-        ];
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'order' => [
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'order' => [
+                        'column1' => 'ASC',
+                        'column2' => 'foobar',
+                    ],
+                ]),
+                new StringableArrayObject([
                     'column1' => 'ASC',
-                    'column2' => 'foobar',
-                ],
-            ]),
-            new StringableArrayObject([
-                'column1' => 'ASC',
-                'column2' => 'ASC',
-            ]),
-        ];
+                    'column2' => 'ASC',
+                ]),
+            ];
+        }
     }
 
     /**
