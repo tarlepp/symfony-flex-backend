@@ -26,16 +26,18 @@ use function json_encode;
 class RequestHandlerTest extends KernelTestCase
 {
     /**
-     * @testdox Test that `getCriteria` method throws an exception with invalid (non JSON) `?where` parameter
+     * @dataProvider dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter
+     *
+     * @testdox Test that `getCriteria` method throws an exception with `$method` invalid (non JSON) `?where` parameter
      */
-    public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): void
+    public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(string $method): void
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
         $fakeRequest = Request::create(
             '/',
-            'GET',
+            $method,
             [
                 'where' => '{foo bar',
             ]
@@ -47,16 +49,12 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator
      *
-     * @testdox Test that `getCriteria` method returns `$expected` when using `$where` as `?where` parameter
-     *
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: StringableArrayObject}> $expected
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: StringableArrayObject}> $where
-     * @psalm-param StringableArrayObject $expected
-     * @psalm-param StringableArrayObject $where
+     * @testdox Test that `getCriteria` returns `$expected` when using `$method` and `$where` as `?where` parameter
      *
      * @throws JsonException
      */
     public function testThatGetCriteriaMethodsReturnsExpectedGenerator(
+        string $method,
         StringableArrayObject $expected,
         StringableArrayObject $where
     ): void {
@@ -73,11 +71,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetOrderByReturnsExpectedValue
-     *
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: StringableArrayObject}> $parameters
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: StringableArrayObject}> $expected
-     * @psalm-param StringableArrayObject $parameters
-     * @psalm-param StringableArrayObject $expected
      *
      * @testdox Test that `getOrderBy` method returns `$expected` when using `$method` and `$parameters` as an input
      */
@@ -96,11 +89,13 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getLimit` method returns `null` when there is no `?limit` parameter on request
+     * @dataProvider dataProviderTestThatGetLimitReturnsNullWithoutParameter
+     *
+     * @testdox Test that `getLimit` method returns `null` when there is no `?limit` parameter on `$method` request
      */
-    public function testThatGetLimitReturnsNullWithoutParameter(): void
+    public function testThatGetLimitReturnsNullWithoutParameter(string $method): void
     {
-        $fakeRequest = Request::create('/');
+        $fakeRequest = Request::create('/', $method);
 
         self::assertNull(
             RequestHandler::getLimit($fakeRequest),
@@ -111,14 +106,14 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetLimitReturnsExpectedValue
      *
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: int}> $parameters
-     * @psalm-param StringableArrayObject $parameters
-     *
-     * @testdox Test that `getLimit` method returns `$expected` when using `$parameters` as request parameter
+     * @testdox Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter
      */
-    public function testThatGetLimitReturnsExpectedValue(StringableArrayObject $parameters, int $expected): void
-    {
-        $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
+    public function testThatGetLimitReturnsExpectedValue(
+        string $method,
+        StringableArrayObject $parameters,
+        int $expected
+    ): void {
+        $fakeRequest = Request::create('/', $method, $parameters->getArrayCopy());
 
         $actual = RequestHandler::getLimit($fakeRequest);
 
@@ -135,11 +130,13 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getOffset` method returns `null` when there is no `?offset` parameter on request
+     * @dataProvider dataProviderTestThatGetOffsetReturnsNullWithoutParameter
+     *
+     * @testdox Test that `getOffset` method returns `null` when there is no `?offset` parameter on `$method` request
      */
-    public function testThatGetOffsetReturnsNullWithoutParameter(): void
+    public function testThatGetOffsetReturnsNullWithoutParameter(string $method): void
     {
-        $fakeRequest = Request::create('/');
+        $fakeRequest = Request::create('/', $method);
 
         self::assertNull(
             RequestHandler::getOffset($fakeRequest),
@@ -150,14 +147,14 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
      *
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: int}> $parameters
-     * @psalm-param StringableArrayObject $parameters
-     *
-     * @testdox Test that `getOffset` method returns `$expected` when using `$parameters` as request parameter
+     * @testdox Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter
      */
-    public function testThatGetOffsetReturnsExpectedValue(StringableArrayObject $parameters, int $expected): void
-    {
-        $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
+    public function testThatGetOffsetReturnsExpectedValue(
+        string $method,
+        StringableArrayObject $parameters,
+        int $expected,
+    ): void {
+        $fakeRequest = Request::create('/', $method, $parameters->getArrayCopy());
 
         $actual = RequestHandler::getOffset($fakeRequest);
 
@@ -174,11 +171,13 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getSearchTerms` method returns empty array when there is no `?search` parameter on request
+     * @dataProvider dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters
+     *
+     * @testdox Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request
      */
-    public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): void
+    public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(string $method): void
     {
-        $fakeRequest = Request::create('/');
+        $fakeRequest = Request::create('/', $method);
 
         self::assertSame(
             [],
@@ -188,9 +187,11 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getSearchTerms` method throws an exception when `?search` parameter contains invalid JSON
+     * @dataProvider dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson
+     *
+     * @testdox Test that `getSearchTerms` throws an exception when `$method` `search` parameter contains invalid JSON
      */
-    public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): void
+    public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(string $method): void
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage(
@@ -201,7 +202,7 @@ class RequestHandlerTest extends KernelTestCase
             'search' => '{"foo": "bar"}',
         ];
 
-        $fakeRequest = Request::create('/', 'GET', $parameters);
+        $fakeRequest = Request::create('/', $method, $parameters);
 
         RequestHandler::getSearchTerms($fakeRequest);
     }
@@ -209,20 +210,18 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSearchTermsReturnsExpectedValue
      *
-     * @phpstan-param StringableArrayObject<array{0: StringableArrayObject, 1: boolean|string}> $expected
-     * @psalm-param StringableArrayObject $expected
-     *
-     * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `?search` parameter
+     * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `$method` `search` parameter
      */
     public function testThatGetSearchTermsReturnsExpectedValue(
+        string $method,
         StringableArrayObject $expected,
-        string | bool $search
+        string | bool $search,
     ): void {
         $parameters = [
             'search' => (string)$search,
         ];
 
-        $fakeRequest = Request::create('/', 'GET', $parameters);
+        $fakeRequest = Request::create('/', $method, $parameters);
 
         self::assertSame(
             $expected->getArrayCopy(),
@@ -232,103 +231,120 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @return Generator<array{0: string}>
+     */
+    public function dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): Generator
+    {
+        yield [Request::METHOD_GET];
+        yield [Request::METHOD_POST];
+    }
+
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
-        yield [
-            new StringableArrayObject([
-                'foo' => 'bar',
-            ]),
-            new StringableArrayObject([
-                'foo' => 'bar',
-            ]),
-        ];
+        foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo' => 'bar',
+                ]),
+                new StringableArrayObject([
+                    'foo' => 'bar',
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'foo' => '',
-            ]),
-            new StringableArrayObject([
-                'foo' => '',
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo' => '',
+                ]),
+                new StringableArrayObject([
+                    'foo' => '',
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'foo' => '0',
-            ]),
-            new StringableArrayObject([
-                'foo' => '0',
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo' => '0',
+                ]),
+                new StringableArrayObject([
+                    'foo' => '0',
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'foo' => 0,
-            ]),
-            new StringableArrayObject([
-                'foo' => 0,
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo' => 0,
+                ]),
+                new StringableArrayObject([
+                    'foo' => 0,
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'foo' => true,
-            ]),
-            new StringableArrayObject([
-                'foo' => true,
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo' => true,
+                ]),
+                new StringableArrayObject([
+                    'foo' => true,
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'foo' => false,
-            ]),
-            new StringableArrayObject([
-                'foo' => false,
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo' => false,
+                ]),
+                new StringableArrayObject([
+                    'foo' => false,
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([]),
-            new StringableArrayObject([
-                'foo' => null,
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([]),
+                new StringableArrayObject([
+                    'foo' => null,
+                ]),
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'foo1' => 'bar',
-                'foo2' => '',
-                'foo3' => '0',
-                'foo4' => 0,
-                'foo5' => true,
-                'foo6' => false,
-            ]),
-            new StringableArrayObject([
-                'foo1' => 'bar',
-                'foo11' => null,
-                'foo2' => '',
-                'foo21' => null,
-                'foo3' => '0',
-                'foo31' => null,
-                'foo4' => 0,
-                'foo41' => null,
-                'foo5' => true,
-                'foo51' => null,
-                'foo6' => false,
-                'foo61' => null,
-            ]),
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'foo1' => 'bar',
+                    'foo2' => '',
+                    'foo3' => '0',
+                    'foo4' => 0,
+                    'foo5' => true,
+                    'foo6' => false,
+                ]),
+                new StringableArrayObject([
+                    'foo1' => 'bar',
+                    'foo11' => null,
+                    'foo2' => '',
+                    'foo21' => null,
+                    'foo3' => '0',
+                    'foo31' => null,
+                    'foo4' => 0,
+                    'foo41' => null,
+                    'foo5' => true,
+                    'foo51' => null,
+                    'foo6' => false,
+                    'foo61' => null,
+                ]),
+            ];
+        }
     }
 
     /**
      * Data provider method for 'testThatGetOrderByReturnsExpectedValue' test.
      *
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
@@ -504,188 +520,245 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
+     * @return Generator<array{0: string}>
+     */
+    public function dataProviderTestThatGetLimitReturnsNullWithoutParameter(): Generator
+    {
+        yield [Request::METHOD_GET];
+        yield [Request::METHOD_POST];
+    }
+
+    /**
      * Data provider method for 'testThatGetLimitReturnsExpectedValue' test.
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: int}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: int}>
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: int}>
      */
     public function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
-        yield [
-            new StringableArrayObject([
-                'limit' => 10,
-            ]),
-            10,
-        ];
+        foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'limit' => 10,
+                ]),
+                10,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'limit' => 'ddd',
-            ]),
-            0,
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'limit' => 'ddd',
+                ]),
+                0,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'limit' => 'E10',
-            ]),
-            0,
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'limit' => 'E10',
+                ]),
+                0,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'limit' => -10,
-            ]),
-            10,
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'limit' => -10,
+                ]),
+                10,
+            ];
+        }
+    }
+
+    /**
+     * @return Generator<array{0: string}>
+     */
+    public function dataProviderTestThatGetOffsetReturnsNullWithoutParameter(): Generator
+    {
+        yield [Request::METHOD_GET];
+        yield [Request::METHOD_POST];
     }
 
     /**
      * Data provider method for 'testThatGetOffsetReturnsExpectedValue' test.
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: int}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: int}>
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: int}>
      */
     public function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
-        yield [
-            new StringableArrayObject([
-                'offset' => 10,
-            ]),
-            10,
-        ];
+        foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'offset' => 10,
+                ]),
+                10,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'offset' => 'ddd',
-            ]),
-            0,
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'offset' => 'ddd',
+                ]),
+                0,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'offset' => 'E10',
-            ]),
-            0,
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'offset' => 'E10',
+                ]),
+                0,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'offset' => -10,
-            ]),
-            10,
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'offset' => -10,
+                ]),
+                10,
+            ];
+        }
+    }
+
+    /**
+     * @return Generator<array{0: string}>
+     */
+    public function dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): Generator
+    {
+        yield [Request::METHOD_GET];
+        yield [Request::METHOD_POST];
+    }
+
+    /**
+     * @return Generator<array{0: string}>
+     */
+    public function dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): Generator
+    {
+        yield [Request::METHOD_GET];
+        yield [Request::METHOD_POST];
     }
 
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: boolean|string}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: boolean|string}>
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: boolean|string}>
      */
     public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    '1',
-                ],
-            ]),
-            true,
-        ];
+        foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        '1',
+                    ],
+                ]),
+                true,
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    'bar',
-                ],
-            ]),
-            'bar',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        'bar',
+                    ],
+                ]),
+                'bar',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    'bar',
-                    'foo',
-                ],
-            ]),
-            'bar foo',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        'bar',
+                        'foo',
+                    ],
+                ]),
+                'bar foo',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    'bar',
-                    'f',
-                    'oo',
-                ],
-            ]),
-            'bar  f    oo ',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        'bar',
+                        'f',
+                        'oo',
+                    ],
+                ]),
+                'bar  f    oo ',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'and' => [
-                    'foo',
-                ],
-            ]),
-            '{"and": ["foo"]}',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'and' => [
+                        'foo',
+                    ],
+                ]),
+                '{"and": ["foo"]}',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    'bar',
-                ],
-            ]),
-            '{"or": ["bar"]}',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        'bar',
+                    ],
+                ]),
+                '{"or": ["bar"]}',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'and' => [
-                    'foo',
-                    'bar',
-                ],
-            ]),
-            '{"and": ["foo", "bar"]}',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'and' => [
+                        'foo',
+                        'bar',
+                    ],
+                ]),
+                '{"and": ["foo", "bar"]}',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    'bar',
-                    'foo',
-                ],
-            ]),
-            '{"or": ["bar", "foo"]}',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        'bar',
+                        'foo',
+                    ],
+                ]),
+                '{"or": ["bar", "foo"]}',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    'bar',
-                    'foo',
-                ],
-                'and' => [
-                    'foo',
-                    'bar',
-                ],
-            ]),
-            '{"or": ["bar", "foo"], "and": ["foo", "bar"]}',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        'bar',
+                        'foo',
+                    ],
+                    'and' => [
+                        'foo',
+                        'bar',
+                    ],
+                ]),
+                '{"or": ["bar", "foo"], "and": ["foo", "bar"]}',
+            ];
 
-        yield [
-            new StringableArrayObject([
-                'or' => [
-                    '{"or":',
-                    '["bar",',
-                    '"foo"],',
-                ],
-            ]),
-            // With invalid JSON input it should fallback to string handling
-            '{"or": ["bar", "foo"], ',
-        ];
+            yield [
+                $method,
+                new StringableArrayObject([
+                    'or' => [
+                        '{"or":',
+                        '["bar",',
+                        '"foo"],',
+                    ],
+                ]),
+                // With invalid JSON input it should fallback to string handling
+                '{"or": ["bar", "foo"], ',
+            ];
+        }
     }
 }
