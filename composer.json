@@ -27,7 +27,7 @@
 		"doctrine/annotations": "1.13.3",
 		"doctrine/doctrine-bundle": "2.7.1",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
-		"doctrine/orm": "2.13.3",
+		"doctrine/orm": "2.13.4",
 		"gedmo/doctrine-extensions": "3.9.0",
 		"lexik/jwt-authentication-bundle": "2.16.0",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
