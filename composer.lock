@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1625baf2bf7d2528c86dd371f0c20f57",
+    "content-hash": "2efb41aac8f1ca7e8281e63385b14134",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4651,16 +4651,16 @@
         },
         {
             "name": "symfony/form",
-            "version": "v6.1.7",
+            "version": "v6.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/form.git",
-                "reference": "6f5d13bb996dea03bbb5e43e1bbd90cbfdca1a83"
+                "reference": "821d02c6d3a47bbf38a53f86c1c59e06360f97f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/form/zipball/6f5d13bb996dea03bbb5e43e1bbd90cbfdca1a83",
-                "reference": "6f5d13bb996dea03bbb5e43e1bbd90cbfdca1a83",
+                "url": "https://api.github.com/repos/symfony/form/zipball/821d02c6d3a47bbf38a53f86c1c59e06360f97f4",
+                "reference": "821d02c6d3a47bbf38a53f86c1c59e06360f97f4",
                 "shasum": ""
             },
             "require": {
@@ -4687,7 +4687,7 @@
                 "symfony/twig-bridge": "<5.4"
             },
             "require-dev": {
-                "doctrine/collections": "~1.0",
+                "doctrine/collections": "^1.0|^2.0",
                 "symfony/config": "^5.4|^6.0",
                 "symfony/console": "^5.4|^6.0",
                 "symfony/dependency-injection": "^5.4|^6.0",
@@ -4733,7 +4733,7 @@
             "description": "Allows to easily create, process and reuse HTML forms",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/form/tree/v6.1.7"
+                "source": "https://github.com/symfony/form/tree/v6.1.8"
             },
             "funding": [
                 {
@@ -4749,7 +4749,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-23T10:33:34+00:00"
+            "time": "2022-11-28T12:27:40+00:00"
         },
         {
             "name": "symfony/framework-bundle",
