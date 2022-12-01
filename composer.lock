@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1625baf2bf7d2528c86dd371f0c20f57",
+    "content-hash": "35e22f76125c5a54b2efbae57b359aa8",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5852,16 +5852,16 @@
         },
         {
             "name": "symfony/property-info",
-            "version": "v6.1.7",
+            "version": "v6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "b5a46ec66a4b77d4bd39d58c22710be888e55b68"
+                "reference": "ddfa5c49812d7bcfea21f9ad5341092daa82e4cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/b5a46ec66a4b77d4bd39d58c22710be888e55b68",
-                "reference": "b5a46ec66a4b77d4bd39d58c22710be888e55b68",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/ddfa5c49812d7bcfea21f9ad5341092daa82e4cc",
+                "reference": "ddfa5c49812d7bcfea21f9ad5341092daa82e4cc",
                 "shasum": ""
             },
             "require": {
@@ -5921,7 +5921,7 @@
                 "validator"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-info/tree/v6.1.7"
+                "source": "https://github.com/symfony/property-info/tree/v6.2.0"
             },
             "funding": [
                 {
@@ -5937,7 +5937,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-28T16:23:08+00:00"
+            "time": "2022-11-25T07:37:13+00:00"
         },
         {
             "name": "symfony/routing",
