@@ -41,7 +41,7 @@
 		"symfony/asset": "6.1.5",
 		"symfony/config": "6.1.3",
 		"symfony/console": "6.1.7",
-		"symfony/dotenv": "6.1.0",
+		"symfony/dotenv": "6.2.0",
 		"symfony/expression-language": "6.1.6",
 		"symfony/flex": "2.2.3",
 		"symfony/form": "6.1.7",
