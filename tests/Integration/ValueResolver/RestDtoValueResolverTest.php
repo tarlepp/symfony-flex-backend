@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/ArgumentResolver/RestDtoValueResolverTest.php
+ * /tests/Integration/ValueResolver/RestDtoValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\ArgumentResolver;
+namespace App\Tests\Integration\ValueResolver;
 
-use App\ArgumentResolver\RestDtoValueResolver;
+use App\ValueResolver\RestDtoValueResolver;
 use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
@@ -23,7 +23,7 @@ use Throwable;
 /**
  * Class RestDtoValueResolverTest
  *
- * @package App\Tests\Integration\ArgumentResolver
+ * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RestDtoValueResolverTest extends KernelTestCase
@@ -44,34 +44,6 @@ class RestDtoValueResolverTest extends KernelTestCase
         $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);
 
         self::assertSame($expected, $resolver->supports($request, $argumentMetadata));
-    }
-
-    /**
-     * @throws Throwable
-     *
-     * @testdox Test that `resolve` method throws an exception if support method is not called
-     */
-    public function testThatResolveMethodThrowsAnExceptionIfSupportMethodIsNotCalledFirst(): void
-    {
-        $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
-
-        $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);
-        $metadata = new ArgumentMetadata('foo', null, false, false, null);
-        $request = Request::create('/');
-
-        $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                'You cannot call `%1$s::resolve(...)` method without calling `%1$s::supports(...)` first',
-                RestDtoValueResolver::class
-            )
-        );
-
-        // Note that we need to actually get current value here
-        $resolver->resolve($request, $metadata)->current();
     }
 
     /**
@@ -98,7 +70,7 @@ class RestDtoValueResolverTest extends KernelTestCase
 
         $dto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
         $controllerCollection
-            ->expects(self::once())
+            ->expects(self::exactly(2))
             ->method('has')
             ->with('foo')
             ->willReturn(true);

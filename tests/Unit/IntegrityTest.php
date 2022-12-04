@@ -22,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
@@ -399,11 +399,11 @@ FORMAT;
     }
 
     /**
-     * @dataProvider dataProviderTestThatArgumentValueResolverServiceHasIntegrationTest
+     * @dataProvider dataProviderTestThatValueResolverServiceHasIntegrationTest
      *
      * @testdox Test that argument value resolver service `$class` has integration test class `$testClass`
      */
-    public function testThatArgumentValueResolverServiceHasIntegrationTest(string $testClass, string $class): void
+    public function testThatValueResolverServiceHasIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
             'Argument value resolver service "%s" does not have required test class "%s".',
@@ -771,14 +771,14 @@ FORMAT;
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatArgumentValueResolverServiceHasIntegrationTest(): array
+    public function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
     {
         $this->bootKernelCached();
 
-        $folder = self::$kernel->getProjectDir() . '/src/ArgumentResolver/';
-        $namespace = '\\App\\ArgumentResolver\\';
-        $namespaceTest = '\\App\\Tests\\Integration\\ArgumentResolver\\';
-        $filter = $this->getInterfaceFilter(ArgumentValueResolverInterface::class);
+        $folder = self::$kernel->getProjectDir() . '/src/ValueResolver/';
+        $namespace = '\\App\\ValueResolver\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\ValueResolver\\';
+        $filter = $this->getInterfaceFilter(ValueResolverInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }

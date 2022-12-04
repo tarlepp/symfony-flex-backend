@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Functional\ArgumentResolver;
 
-use App\ArgumentResolver\LoggedInUserValueResolver;
+use App\ValueResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Provider\ApiKeyUserProvider;

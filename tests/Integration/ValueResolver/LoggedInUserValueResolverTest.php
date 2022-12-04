@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/ArgumentResolver/LoggedInUserValueResolverTest.php
+ * /tests/Integration/ValueResolver/LoggedInUserValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\ArgumentResolver;
+namespace App\Tests\Integration\ValueResolver;
 
-use App\ArgumentResolver\LoggedInUserValueResolver;
+use App\ValueResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
@@ -26,7 +26,7 @@ use function iterator_to_array;
 /**
  * Class LoggedInUserValueResolverTest
  *
- * @package App\Tests\Integration\ArgumentResolver
+ * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggedInUserValueResolverTest extends KernelTestCase
@@ -161,14 +161,21 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatResolveCallsExpectedResourceMethod(): void
     {
+        $securityUser = new SecurityUser(new User());
+
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+
+        $userService
+            ->expects(self::exactly(2))
+            ->method('getSecurityUser')
+            ->willReturn($securityUser);
 
         $userService
             ->expects(self::once())
             ->method('getUser');
 
         $resolver = new LoggedInUserValueResolver($userService);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
 
         $resolver->supports($request, $metadata);
@@ -187,6 +194,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
+        $securityUser = new SecurityUser($user);
+
+        $userService
+            ->expects(self::exactly(2))
+            ->method('getSecurityUser')
+            ->willReturn($securityUser);
 
         $userService
             ->expects(self::once())
@@ -194,7 +207,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             ->willReturn($user);
 
         $resolver = new LoggedInUserValueResolver($userService);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
 
         $resolver->supports($request, $metadata);

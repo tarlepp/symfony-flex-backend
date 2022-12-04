@@ -59,7 +59,7 @@ services:
         resource: '../src/Controller/'
         tags: [ 'controller.service_arguments' ]
 
-    App\ArgumentResolver\EntityValueResolver:
+    App\ValueResolver\EntityValueResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 150 }
 
