@@ -43,7 +43,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foobar', null, false, false, null);
 
-        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports($metadata));
     }
 
     /**
@@ -58,7 +58,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', null, false, false, null);
 
-        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports($metadata));
     }
 
     /**
@@ -73,7 +73,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foobar', User::class, false, false, null);
 
-        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports($metadata));
     }
 
     /**
@@ -88,7 +88,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null, true);
 
-        self::assertTrue($resolver->supports(Request::create('/'), $metadata));
+        self::assertTrue($resolver->supports($metadata));
     }
 
     /**
@@ -106,7 +106,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        $resolver->supports(Request::create('/'), $metadata);
+        $resolver->supports($metadata);
     }
 
     /**
@@ -129,7 +129,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        $resolver->supports(Request::create('/'), $metadata);
+        $resolver->supports($metadata);
     }
 
     /**
@@ -151,7 +151,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        self::assertTrue($resolver->supports(Request::create('/'), $metadata));
+        self::assertTrue($resolver->supports($metadata));
     }
 
     /**
@@ -166,7 +166,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $userService
-            ->expects(self::exactly(2))
+            ->expects(self::once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
@@ -177,8 +177,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
-
-        $resolver->supports($request, $metadata);
 
         // Note that we need to actually get current value here
         $resolver->resolve($request, $metadata)->current();
@@ -197,7 +195,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
 
         $userService
-            ->expects(self::exactly(2))
+            ->expects(self::once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
@@ -209,8 +207,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
-
-        $resolver->supports($request, $metadata);
 
         self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }

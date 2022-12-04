@@ -42,7 +42,7 @@ class LoggedInUserValueResolver implements ValueResolverInterface
     ) {
     }
 
-    public function supports(Request $request, ArgumentMetadata $argument): bool
+    public function supports(ArgumentMetadata $argument): bool
     {
         $output = false;
 
@@ -67,7 +67,7 @@ class LoggedInUserValueResolver implements ValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        if (!$this->supports($request, $argument)) {
+        if (!$this->supports($argument)) {
             return [];
         }
 
