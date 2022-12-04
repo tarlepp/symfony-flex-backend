@@ -8,10 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\ValueResolver;
 
-use App\ValueResolver\EntityValueResolver;
 use App\Entity\User;
 use App\Resource\ResourceCollection;
 use App\Resource\UserResource;
+use App\ValueResolver\EntityValueResolver;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;

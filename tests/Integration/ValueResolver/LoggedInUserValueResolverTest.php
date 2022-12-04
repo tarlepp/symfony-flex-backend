@@ -8,10 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\ValueResolver;
 
-use App\ValueResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
+use App\ValueResolver\LoggedInUserValueResolver;
 use Closure;
 use Generator;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;

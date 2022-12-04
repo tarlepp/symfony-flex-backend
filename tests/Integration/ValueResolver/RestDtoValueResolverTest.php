@@ -8,12 +8,11 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\ValueResolver;
 
-use App\ValueResolver\RestDtoValueResolver;
 use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
+use App\ValueResolver\RestDtoValueResolver;
 use AutoMapperPlus\AutoMapperInterface;
-use BadMethodCallException;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;

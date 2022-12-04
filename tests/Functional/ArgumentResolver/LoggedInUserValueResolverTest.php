@@ -8,12 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Tests\Functional\ArgumentResolver;
 
-use App\ValueResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
+use App\ValueResolver\LoggedInUserValueResolver;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;

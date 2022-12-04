@@ -181,10 +181,8 @@ class ResponseHandler implements ResponseHandlerInterface
      */
     private function getFormat(Request $request, ?string $format = null): string
     {
-        return $format ?? ($request->getContentTypeFormat() === self::FORMAT_XML
-            ? self::FORMAT_XML
-            : self::FORMAT_JSON
-        );
+        return $format
+            ?? ($request->getContentTypeFormat() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON);
     }
 
     /**
