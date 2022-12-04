@@ -187,11 +187,6 @@ class ResponseHandler implements ResponseHandlerInterface
         );
     }
 
-    /**
-     * @param array<int|string, mixed> $context
-     *
-     * @throws HttpException
-     */
     private function getResponse(mixed $data, int $httpStatus, string $format, array $context): Response
     {
         try {

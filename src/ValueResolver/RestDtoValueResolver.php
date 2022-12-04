@@ -92,7 +92,7 @@ class RestDtoValueResolver implements ValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        if (!$this->supports($request, $argument)) {
+        if (!$this->supports($request, $argument) || $this->controllerName === null) {
             return [];
         }
 
