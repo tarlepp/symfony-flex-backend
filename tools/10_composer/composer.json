@@ -2,9 +2,9 @@
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
 	"require-dev": {
-		"ergebnis/composer-normalize": "2.28.3",
-		"icanhazstring/composer-unused": "0.8.4",
-		"maglnet/composer-require-checker": "4.2.0",
+		"ergebnis/composer-normalize": "2.29.0",
+		"icanhazstring/composer-unused": "0.8.5",
+		"maglnet/composer-require-checker": "4.3.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
