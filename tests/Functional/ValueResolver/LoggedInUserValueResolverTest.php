@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Functional/ArgumentResolver/LoggedInUserValueResolverTest.php
+ * /tests/Functional/ValueResolver/LoggedInUserValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Functional\ArgumentResolver;
+namespace App\Tests\Functional\ValueResolver;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -28,7 +28,7 @@ use function iterator_to_array;
 /**
  * Class LoggedInUserValueResolverTest
  *
- * @package App\Tests\Functional\ArgumentResolver
+ * @package App\Tests\Functional\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggedInUserValueResolverTest extends KernelTestCase
@@ -61,8 +61,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
-
-        $resolver->supports($request, $metadata);
 
         self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
