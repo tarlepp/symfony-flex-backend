@@ -20,7 +20,8 @@ use App\Rest\Interfaces\RestResourceInterface;
 abstract class AbstractController extends Controller
 {
     public function __construct(
-        protected RestResourceInterface $resource,
+        RestResourceInterface $resource,
     ) {
+        parent::__construct($resource);
     }
 }

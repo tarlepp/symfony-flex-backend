@@ -56,7 +56,7 @@ class RestDtoValueResolverTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
-        $controller = $this->getMockBuilder(Controller::class)->getMock();
+        $controller = $this->getMockBuilder(Controller::class)->disableOriginalConstructor()->getMock();
         $restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
         $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);

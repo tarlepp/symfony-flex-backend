@@ -54,7 +54,8 @@ class UserGroupController extends Controller
     ];
 
     public function __construct(
-        protected UserGroupResource $resource,
+        UserGroupResource $resource,
     ) {
+        parent::__construct($resource);
     }
 }
