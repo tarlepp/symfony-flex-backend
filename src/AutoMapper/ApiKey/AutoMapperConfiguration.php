@@ -33,7 +33,8 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
     ];
 
     public function __construct(
-        protected readonly RequestMapper $requestMapper,
+        RequestMapper $requestMapper,
     ) {
+        parent::__construct($requestMapper);
     }
 }
