@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/ArgumentResolver/EntityValueResolverTest.php
+ * /tests/Integration/ValueResolver/EntityValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\ArgumentResolver;
+namespace App\Tests\Integration\ValueResolver;
 
-use App\ArgumentResolver\EntityValueResolver;
 use App\Entity\User;
 use App\Resource\ResourceCollection;
 use App\Resource\UserResource;
+use App\ValueResolver\EntityValueResolver;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use function iterator_to_array;
 /**
  * Class EntityValueResolverTest
  *
- * @package App\Tests\Integration\ArgumentResolver
+ * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EntityValueResolverTest extends KernelTestCase
@@ -117,6 +117,12 @@ class EntityValueResolverTest extends KernelTestCase
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
+
+        $resourceCollection
+            ->expects(self::once())
+            ->method('hasEntityResource')
+            ->with(User::class)
+            ->willReturn(true);
 
         $resourceCollection
             ->expects(self::once())

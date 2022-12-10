@@ -1,21 +1,20 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/ArgumentResolver/RestDtoValueResolver.php
+ * /src/ValueResolver/RestDtoValueResolver.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\ArgumentResolver;
+namespace App\ValueResolver;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
 use AutoMapperPlus\AutoMapperInterface;
-use BadMethodCallException;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
 use function count;
@@ -25,10 +24,10 @@ use function in_array;
 /**
  * Class RestDtoValueResolver
  *
- * @package App\ArgumentResolver
+ * @package App\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RestDtoValueResolver implements ArgumentValueResolverInterface
+class RestDtoValueResolver implements ValueResolverInterface
 {
     private const CONTROLLER_KEY = '_controller';
 
@@ -93,13 +92,8 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        if ($this->controllerName === null || $this->actionName === null) {
-            $message = sprintf(
-                'You cannot call `%1$s::resolve(...)` method without calling `%1$s::supports(...)` first',
-                self::class,
-            );
-
-            throw new BadMethodCallException($message);
+        if (!$this->supports($request, $argument) || $this->controllerName === null) {
+            return [];
         }
 
         $dtoClass = $this->controllerCollection

@@ -1,18 +1,18 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/ArgumentResolver/EntityValueResolver.php
+ * /src/ValueResolver/EntityValueResolver.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\ArgumentResolver;
+namespace App\ValueResolver;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Resource\ResourceCollection;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
 use function is_string;
@@ -36,10 +36,10 @@ use function is_subclass_of;
  * Only thing that you need check is that parameter in your `path` definition matches with
  * method argument name.
  *
- * @package App\ArgumentResolver
+ * @package App\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class EntityValueResolver implements ArgumentValueResolverInterface
+class EntityValueResolver implements ValueResolverInterface
 {
     public function __construct(
         private readonly ResourceCollection $resourceCollection,
@@ -60,6 +60,10 @@ class EntityValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
+        if (!$this->supports($request, $argument)) {
+            return [];
+        }
+
         yield $this->resourceCollection
             ->getEntityResource((string)$argument->getType())
             ->findOne((string)($this->getUuid($argument, $request)), !$argument->isNullable());
