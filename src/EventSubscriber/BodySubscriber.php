@@ -61,7 +61,7 @@ class BodySubscriber implements EventSubscriberInterface
      */
     private function isJsonRequest(Request $request): bool
     {
-        return in_array($request->getContentType(), [null, 'json', 'txt'], true);
+        return in_array($request->getContentTypeFormat(), [null, 'json', 'txt'], true);
     }
 
     /**

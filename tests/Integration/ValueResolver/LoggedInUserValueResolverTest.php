@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/ArgumentResolver/LoggedInUserValueResolverTest.php
+ * /tests/Integration/ValueResolver/LoggedInUserValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\ArgumentResolver;
+namespace App\Tests\Integration\ValueResolver;
 
-use App\ArgumentResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
+use App\ValueResolver\LoggedInUserValueResolver;
 use Closure;
 use Generator;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
@@ -26,7 +26,7 @@ use function iterator_to_array;
 /**
  * Class LoggedInUserValueResolverTest
  *
- * @package App\Tests\Integration\ArgumentResolver
+ * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggedInUserValueResolverTest extends KernelTestCase
@@ -43,7 +43,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foobar', null, false, false, null);
 
-        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports($metadata));
     }
 
     /**
@@ -58,7 +58,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', null, false, false, null);
 
-        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports($metadata));
     }
 
     /**
@@ -73,7 +73,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foobar', User::class, false, false, null);
 
-        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports($metadata));
     }
 
     /**
@@ -88,7 +88,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null, true);
 
-        self::assertTrue($resolver->supports(Request::create('/'), $metadata));
+        self::assertTrue($resolver->supports($metadata));
     }
 
     /**
@@ -106,7 +106,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        $resolver->supports(Request::create('/'), $metadata);
+        $resolver->supports($metadata);
     }
 
     /**
@@ -129,7 +129,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        $resolver->supports(Request::create('/'), $metadata);
+        $resolver->supports($metadata);
     }
 
     /**
@@ -151,7 +151,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        self::assertTrue($resolver->supports(Request::create('/'), $metadata));
+        self::assertTrue($resolver->supports($metadata));
     }
 
     /**
@@ -161,17 +161,22 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatResolveCallsExpectedResourceMethod(): void
     {
+        $securityUser = new SecurityUser(new User());
+
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+
+        $userService
+            ->expects(self::once())
+            ->method('getSecurityUser')
+            ->willReturn($securityUser);
 
         $userService
             ->expects(self::once())
             ->method('getUser');
 
         $resolver = new LoggedInUserValueResolver($userService);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
-
-        $resolver->supports($request, $metadata);
 
         // Note that we need to actually get current value here
         $resolver->resolve($request, $metadata)->current();
@@ -187,6 +192,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
+        $securityUser = new SecurityUser($user);
+
+        $userService
+            ->expects(self::once())
+            ->method('getSecurityUser')
+            ->willReturn($securityUser);
 
         $userService
             ->expects(self::once())
@@ -194,10 +205,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             ->willReturn($user);
 
         $resolver = new LoggedInUserValueResolver($userService);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
-
-        $resolver->supports($request, $metadata);
 
         self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
