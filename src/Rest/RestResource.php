@@ -30,6 +30,11 @@ abstract class RestResource implements RestResourceInterface
     private ValidatorInterface $validator;
     private string $dtoClass = '';
 
+    public function __construct(
+        protected readonly BaseRepositoryInterface $repository,
+    ) {
+    }
+
     public function getSerializerContext(): array
     {
         return [];

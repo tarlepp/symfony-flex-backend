@@ -39,7 +39,8 @@ use App\Rest\RestResource;
 class DateDimensionResource extends RestResource
 {
     public function __construct(
-        protected Repository $repository,
+        Repository $repository,
     ) {
+        parent::__construct($repository);
     }
 }
