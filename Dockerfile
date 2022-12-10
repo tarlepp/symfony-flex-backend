@@ -1,4 +1,4 @@
-FROM php:8.1.12-fpm
+FROM php:8.2.0-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -6,11 +6,19 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN apt-get update \
     && apt-get install -y \
-        zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
+        g++ \
+        git \
+        jq \
+        libicu-dev \
+        libxml2-dev \
+        libzip-dev \
+        unzip \
+        wget \
+        zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:1.5.46 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:1.5.51 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
