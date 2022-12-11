@@ -45,9 +45,10 @@ use function in_array;
 class UserResource extends RestResource
 {
     public function __construct(
-        protected Repository $repository,
-        private RolesService $rolesService,
+        Repository $repository,
+        private readonly RolesService $rolesService,
     ) {
+        parent::__construct($repository);
     }
 
     /**

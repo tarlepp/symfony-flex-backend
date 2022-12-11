@@ -46,7 +46,8 @@ class AnonActionsController extends Controller
     ];
 
     public function __construct(
-        protected UserResource $resource,
+        UserResource $resource,
     ) {
+        parent::__construct($resource);
     }
 }

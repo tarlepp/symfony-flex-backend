@@ -3,19 +3,17 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"overtrue/phplint": "5.3.0",
+		"overtrue/phplint": "6.0.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
+		"allow-plugins": true,
 		"platform": {
-			"php": "8.1.0"
+			"php": "8.2.0"
 		},
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true,
-		"allow-plugins": {
-			"icanhazstring/composer-unused": true
-		}
+		"sort-packages": true
 	}
 }

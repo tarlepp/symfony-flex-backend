@@ -31,8 +31,9 @@ class ControllerForLifeCycleTests extends Controller
     use Methods\FindOneMethod;
 
     public function __construct(
-        protected ResourceForLifeCycleTests $resource,
+        ResourceForLifeCycleTests $resource,
     ) {
+        parent::__construct($resource);
     }
 
     /**

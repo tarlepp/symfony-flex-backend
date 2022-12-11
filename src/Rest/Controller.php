@@ -49,6 +49,11 @@ abstract class Controller implements ControllerInterface
 
     protected ?ResponseHandlerInterface $responseHandler = null;
 
+    public function __construct(
+        protected readonly RestResourceInterface $resource
+    ) {
+    }
+
     public function getResource(): RestResourceInterface
     {
         return $this->resource ?? throw new UnexpectedValueException('Resource service not set', 500);

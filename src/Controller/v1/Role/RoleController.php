@@ -37,7 +37,8 @@ class RoleController extends Controller
     use Actions\Admin\IdsAction;
 
     public function __construct(
-        protected RoleResource $resource,
+        RoleResource $resource,
     ) {
+        parent::__construct($resource);
     }
 }

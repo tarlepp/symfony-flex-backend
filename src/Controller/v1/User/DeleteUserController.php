@@ -35,8 +35,9 @@ class DeleteUserController extends Controller
     use Methods\DeleteMethod;
 
     public function __construct(
-        protected UserResource $resource,
+        UserResource $resource,
     ) {
+        parent::__construct($resource);
     }
 
     /**

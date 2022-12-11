@@ -324,7 +324,7 @@ phpinsights: ## Runs PHP Insights
 phpinsights: info_msg := @printf $(_TITLE) "OK" "Running PHP Insights"
 phpinsights: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction --min-quality=98 --min-complexity=85 --min-architecture=100 --min-style=100
+	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction --min-quality=95 --min-complexity=85 --min-architecture=100 --min-style=100
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -427,7 +427,7 @@ phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan -v --error-format=github
+	@./vendor/bin/phpstan -v --xdebug --error-format=github
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)

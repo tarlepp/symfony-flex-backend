@@ -40,8 +40,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ResourceForLifeCycleTests extends RestResource
 {
     public function __construct(
-        protected Repository $repository,
+        Repository $repository,
     ) {
+        parent::__construct($repository);
     }
 
     public function afterFindOne(string &$id, ?EntityInterface $entity = null): void
