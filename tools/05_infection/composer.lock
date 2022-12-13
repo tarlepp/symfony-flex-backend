@@ -851,12 +851,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "cd9af30140f6f34d9132986f4c6f04cf5e90cdc8"
+                "reference": "3e59e9dfd2585e12a905c1f769c3214f7a957d41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/cd9af30140f6f34d9132986f4c6f04cf5e90cdc8",
-                "reference": "cd9af30140f6f34d9132986f4c6f04cf5e90cdc8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3e59e9dfd2585e12a905c1f769c3214f7a957d41",
+                "reference": "3e59e9dfd2585e12a905c1f769c3214f7a957d41",
                 "shasum": ""
             },
             "conflict": {
@@ -1274,7 +1274,7 @@
                 "thelia/thelia": ">=2.1-beta.1,<2.1.3",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "thinkcmf/thinkcmf": "<=5.1.7",
-                "thorsten/phpmyfaq": "<3.1.8",
+                "thorsten/phpmyfaq": "<3.1.9",
                 "tinymce/tinymce": "<5.10.7|>=6,<6.3.1",
                 "titon/framework": ">=0,<9.9.99",
                 "tobiasbg/tablepress": "<= 2.0-RC1",
@@ -1388,7 +1388,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-09T21:04:12+00:00"
+            "time": "2022-12-12T23:04:14+00:00"
         },
         {
             "name": "sanmai/later",
