@@ -42,7 +42,7 @@
 		"symfony/config": "6.2.0",
 		"symfony/console": "6.2.1",
 		"symfony/dotenv": "6.2.0",
-		"symfony/expression-language": "6.2.0",
+		"symfony/expression-language": "6.2.2",
 		"symfony/flex": "2.2.3",
 		"symfony/form": "6.2.0",
 		"symfony/framework-bundle": "6.2.1",
