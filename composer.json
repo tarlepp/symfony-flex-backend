@@ -45,7 +45,7 @@
 		"symfony/expression-language": "6.2.0",
 		"symfony/flex": "2.2.3",
 		"symfony/form": "6.2.0",
-		"symfony/framework-bundle": "6.2.1",
+		"symfony/framework-bundle": "6.2.2",
 		"symfony/monolog-bundle": "3.8.0",
 		"symfony/process": "6.2.0",
 		"symfony/property-access": "6.2.0",
