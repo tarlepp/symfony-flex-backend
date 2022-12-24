@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1da8cb6835cc0ddf775e973c4e567198",
+    "content-hash": "c1677f56c1c5ad4041a76e80d3ce2f32",
     "packages": [],
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "709999b91448d4f2bb07daffffedc889b33e461c"
+                "reference": "d03bccee595e2146b7c9d174486b84f4dc61b0f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/709999b91448d4f2bb07daffffedc889b33e461c",
-                "reference": "709999b91448d4f2bb07daffffedc889b33e461c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d03bccee595e2146b7c9d174486b84f4dc61b0f2",
+                "reference": "d03bccee595e2146b7c9d174486b84f4dc61b0f2",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.3"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.4"
             },
             "funding": [
                 {
@@ -64,20 +64,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-13T10:28:10+00:00"
+            "time": "2022-12-17T13:33:52+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "cd9c6938f8bbfcb6da3ed5a3c7ea60873825d088"
+                "reference": "54a24bd23e9e80ee918cdc24f909d376c2e273f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/cd9c6938f8bbfcb6da3ed5a3c7ea60873825d088",
-                "reference": "cd9c6938f8bbfcb6da3ed5a3c7ea60873825d088",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/54a24bd23e9e80ee918cdc24f909d376c2e273f7",
+                "reference": "54a24bd23e9e80ee918cdc24f909d376c2e273f7",
                 "shasum": ""
             },
             "require": {
@@ -114,22 +114,22 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.2"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.3"
             },
-            "time": "2022-12-13T15:08:22+00:00"
+            "time": "2022-12-21T15:25:00+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.2.18",
+            "version": "1.2.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "3178f15a60b62df21ddd202f6a668851eeb138c7"
+                "reference": "dac2474904b092267f0a19dfba8c46b6f21eab6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/3178f15a60b62df21ddd202f6a668851eeb138c7",
-                "reference": "3178f15a60b62df21ddd202f6a668851eeb138c7",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/dac2474904b092267f0a19dfba8c46b6f21eab6a",
+                "reference": "dac2474904b092267f0a19dfba8c46b6f21eab6a",
                 "shasum": ""
             },
             "require": {
@@ -185,9 +185,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.18"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.19"
             },
-            "time": "2022-12-16T09:43:26+00:00"
+            "time": "2022-12-22T20:05:46+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -195,12 +195,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "648a1a2e7bb5d18dfaefe5f93da438127cebc5b2"
+                "reference": "57a3ee3eb79b9538f3012e6b66c04cdac0b551d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/648a1a2e7bb5d18dfaefe5f93da438127cebc5b2",
-                "reference": "648a1a2e7bb5d18dfaefe5f93da438127cebc5b2",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/57a3ee3eb79b9538f3012e6b66c04cdac0b551d1",
+                "reference": "57a3ee3eb79b9538f3012e6b66c04cdac0b551d1",
                 "shasum": ""
             },
             "conflict": {
@@ -255,7 +255,7 @@
                 "cesnet/simplesamlphp-module-proxystatistics": "<3.1",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<=3.0.6",
-                "codeigniter4/framework": "<4.2.7",
+                "codeigniter4/framework": "<4.2.11",
                 "codeigniter4/shield": "= 1.0.0-beta",
                 "codiad/codiad": "<=2.8.4",
                 "composer/composer": "<1.10.26|>=2-alpha.1,<2.2.12|>=2.3,<2.3.5",
@@ -547,7 +547,7 @@
                 "silverstripe/registry": ">=2.1,<2.1.2|>=2.2,<2.2.1",
                 "silverstripe/restfulserver": ">=1,<1.0.9|>=2,<2.0.4",
                 "silverstripe/silverstripe-omnipay": "<2.5.2|>=3,<3.0.2|>=3.1,<3.1.4|>=3.2,<3.2.1",
-                "silverstripe/subsites": ">=2,<2.1.1",
+                "silverstripe/subsites": ">=2,<2.6.1",
                 "silverstripe/taxonomy": ">=1.3,<1.3.1|>=2,<2.0.1",
                 "silverstripe/userforms": "<3",
                 "silverstripe/versioned-admin": ">=1,<1.11.1",
@@ -629,7 +629,7 @@
                 "tribalsystems/zenario": "<=9.3.57595",
                 "truckersmp/phpwhois": "<=4.3.1",
                 "twig/twig": "<1.44.7|>=2,<2.15.3|>=3,<3.4.3",
-                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.38|>=9,<9.5.29|>=10,<10.4.33|>=11,<11.5.20|>=12,<12.1.1",
+                "typo3/cms": "<2.0.5|>=3,<3.0.3|>=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.38|>=9,<9.5.29|>=10,<10.4.33|>=11,<11.5.20|>=12,<12.1.1",
                 "typo3/cms-backend": ">=7,<=7.6.50|>=8,<=8.7.39|>=9,<=9.5.24|>=10,<=10.4.13|>=11,<=11.1",
                 "typo3/cms-core": "<8.7.49|>=9,<9.5.38|>=10,<10.4.33|>=11,<11.5.20|>=12,<12.1.1",
                 "typo3/cms-form": ">=8,<=8.7.39|>=9,<=9.5.24|>=10,<=10.4.13|>=11,<=11.1",
@@ -667,7 +667,7 @@
                 "yiisoft/yii2-bootstrap": "<2.0.4",
                 "yiisoft/yii2-dev": "<2.0.43",
                 "yiisoft/yii2-elasticsearch": "<2.0.5",
-                "yiisoft/yii2-gii": "<2.0.4",
+                "yiisoft/yii2-gii": "<=2.2.4",
                 "yiisoft/yii2-jui": "<2.0.4",
                 "yiisoft/yii2-redis": "<2.0.8",
                 "yikesinc/yikes-inc-easy-mailchimp-extender": "<6.8.6",
@@ -734,7 +734,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-16T00:14:52+00:00"
+            "time": "2022-12-22T20:04:36+00:00"
         }
     ],
     "aliases": [],
