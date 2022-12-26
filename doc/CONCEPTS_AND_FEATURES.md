@@ -156,15 +156,15 @@ use App\DTO\FooBarDtoCreate;
 use App\DTO\FooBarDtoUpdate;
 use App\DTO\FooBarDtoPatch;
 use App\Rest\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * @Route(path="/foo-bar")
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
- *
  * @method FooBarResource getResource()
  */
+#[Route(path: '/foo-bar')]
+#[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class FooBarController extends Controller
 {
     use Actions\Root\CountAction;
