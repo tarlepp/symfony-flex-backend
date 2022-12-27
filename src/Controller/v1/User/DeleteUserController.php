@@ -44,23 +44,19 @@ class DeleteUserController extends Controller
      * @throws Throwable
      */
     #[Route(
-        path: '/v1/user/{requestUser}',
+        path: '/v1/user/{user}',
         requirements: [
             'requestUser' => '%app.uuid_v1_regex%',
         ],
         methods: [Request::METHOD_DELETE],
     )]
     #[IsGranted(RolesService::ROLE_ROOT)]
-    #[ParamConverter(
-        data: 'requestUser',
-        class: UserResource::class,
-    )]
-    public function __invoke(Request $request, User $requestUser, User $loggedInUser): Response
+    public function __invoke(Request $request, User $user, User $loggedInUser): Response
     {
-        if ($loggedInUser === $requestUser) {
+        if ($loggedInUser === $user) {
             throw new HttpException(Response::HTTP_BAD_REQUEST, 'You cannot remove yourself...');
         }
 
-        return $this->deleteMethod($request, $requestUser->getId());
+        return $this->deleteMethod($request, $user->getId());
     }
 }
