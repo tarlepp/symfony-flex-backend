@@ -4,7 +4,7 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"psalm/plugin-phpunit": "0.18.3",
+		"psalm/plugin-phpunit": "0.18.4",
 		"psalm/plugin-symfony": "4.0.0",
 		"vimeo/psalm": "4.30.0",
 		"weirdan/doctrine-psalm-plugin": "2.5.0"
