@@ -10,13 +10,11 @@ namespace App\Controller\v1\UserGroup;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
 use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -86,10 +84,6 @@ class UsersController
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(RolesService::ROLE_ADMIN)]
-    #[ParamConverter(
-        data: 'userGroup',
-        class: UserGroupResource::class,
-    )]
     public function __invoke(Request $request, UserGroup $userGroup): Response
     {
         return $this->responseHandler

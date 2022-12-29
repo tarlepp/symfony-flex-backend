@@ -15,7 +15,6 @@ use App\Resource\UserResource;
 use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -124,14 +123,6 @@ class AttachUserController
         methods: [Request::METHOD_POST],
     )]
     #[IsGranted(RolesService::ROLE_ROOT)]
-    #[ParamConverter(
-        data: 'userGroup',
-        class: UserGroupResource::class,
-    )]
-    #[ParamConverter(
-        data: 'user',
-        class: UserResource::class,
-    )]
     public function __invoke(UserGroup $userGroup, User $user): JsonResponse
     {
         $status = $userGroup->getUsers()->contains($user) ? 200 : 201;

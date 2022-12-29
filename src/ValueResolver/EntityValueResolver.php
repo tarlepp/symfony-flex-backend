@@ -15,8 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
+use function end;
+use function explode;
 use function is_string;
 use function is_subclass_of;
+use function Symfony\Component\String\u;
 
 /**
  * Class EntityValueResolver
@@ -46,10 +49,28 @@ class EntityValueResolver implements ValueResolverInterface
     ) {
     }
 
+    /**
+     * With this we check following cases:
+     *  1. Request parameter is a string (query, request, attributes)
+     *  2. Argument type is subclass of EntityInterface
+     *  3. Argument name is same as entity name (argument type) as in camel case format
+     *  4. Our REST resource collection has resource for this entity
+     *
+     * Examples:
+     *  public function __invoke(UserGroup $userGroup): JsonResponse    => Works
+     *  public function __invoke(User $user): JsonResponse              => Works
+     *  public function __invoke(UserGroup $UserGroup): JsonResponse    => Doesn't work
+     *  public function __invoke(UserGroup $group): JsonResponse        => Doesn't work
+     *  public function __invoke(User $requestUser): JsonResponse       => Doesn't work (another resolver does this)
+     */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
+        $bits = explode('\\', (string)$argument->getType());
+        $entity = end($bits);
+
         return is_string($this->getUuid($argument, $request))
             && is_subclass_of((string)$argument->getType(), EntityInterface::class, true)
+            && $argument->getName() === u($entity)->camel()->toString()
             && $this->resourceCollection->hasEntityResource($argument->getType());
     }
 
