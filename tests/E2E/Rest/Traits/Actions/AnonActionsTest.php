@@ -42,6 +42,9 @@ class AnonActionsTest extends RestTraitTestCase
         }
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     */
     public function getInvalidUsers(): Generator
     {
         yield from [];
