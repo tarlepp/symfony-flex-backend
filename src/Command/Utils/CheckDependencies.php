@@ -102,11 +102,7 @@ class CheckDependencies extends Command
 
         $rows = $this->determineTableRows($io, $directories, $onlyMinor, $onlyPatch);
 
-        /**
-         * @psalm-suppress RedundantCastGivenDocblockType
-         * @psalm-suppress ArgumentTypeCoercion
-         */
-        $packageNameLength = (int)max(
+        $packageNameLength = max(
             array_map(
                 static fn (array $row): int => isset($row[1]) ? strlen($row[1]) : 0,
                 array_filter($rows, static fn (mixed $row): bool => !$row instanceof TableSeparator)

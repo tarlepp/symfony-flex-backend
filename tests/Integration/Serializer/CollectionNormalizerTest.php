@@ -58,7 +58,7 @@ class CollectionNormalizerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: bool, 1: mixed}>
+     * @return Generator<array{0: bool, 1: mixed, 2: 'json'|'not-json'|null}>
      */
     public function dataProviderTestThatSupportsNormalizationReturnsExpected(): Generator
     {
