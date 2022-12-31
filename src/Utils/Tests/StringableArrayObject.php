@@ -16,6 +16,8 @@ use Stringable;
 /**
  * Class StringableArrayObject
  *
+ * @psalm-suppress MissingTemplateParam
+ *
  * @package App\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

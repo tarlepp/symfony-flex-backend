@@ -43,8 +43,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return array<string, string|array<int, string|int>>
      */
     public static function getSubscribedEvents(): array
     {

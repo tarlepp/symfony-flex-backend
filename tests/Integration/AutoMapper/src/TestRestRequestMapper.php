@@ -20,7 +20,7 @@ use function str_rot13;
 class TestRestRequestMapper extends RestRequestMapper
 {
     /**
-     * @var array<int, string>
+     * @var array<int, non-empty-string>
      */
     protected static array $properties = [
         'someProperty',

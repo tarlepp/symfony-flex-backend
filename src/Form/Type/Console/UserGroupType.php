@@ -24,6 +24,8 @@ use Throwable;
 /**
  * Class UserGroupType
  *
+ * @psalm-suppress MissingTemplateParam
+ *
  * @package App\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

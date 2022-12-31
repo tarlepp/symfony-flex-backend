@@ -106,7 +106,7 @@ class PhpUnitUtil
      * Method to call specified 'protected' or 'private' method on given class.
      *
      * @param object $object The instantiated instance of your class
-     * @param string $name The name of your private/protected method
+     * @param non-empty-string $name The name of your private/protected method
      * @param array<int, mixed> $args Method arguments
      *
      * @throws ReflectionException
@@ -124,7 +124,7 @@ class PhpUnitUtil
      *      $foo->invoke($cls, $...);
      *
      * @param object $object The instantiated instance of your class
-     * @param string $name The name of your private/protected method
+     * @param non-empty-string $name The name of your private/protected method
      *
      * @return ReflectionMethod The method you asked for
      *
@@ -142,6 +142,8 @@ class PhpUnitUtil
 
     /**
      * Helper method to get any property value from given class.
+     *
+     * @param non-empty-string $property
      *
      * @throws ReflectionException
      */
@@ -179,6 +181,7 @@ class PhpUnitUtil
     /**
      * Helper method to override any property value within given class.
      *
+     * @param non-empty-string $property
      * @param UuidInterface|array<array-key, string>|null $value
      *
      * @throws ReflectionException

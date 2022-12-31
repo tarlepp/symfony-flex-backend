@@ -25,7 +25,7 @@ class RequestMapper extends RestRequestMapper
     /**
      * Properties to map to destination object.
      *
-     * @var array<int, string>
+     * @var array<int, non-empty-string>
      */
     protected static array $properties = [
         'description',
