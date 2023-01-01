@@ -11,12 +11,14 @@ namespace App\Repository\Traits;
 use App\Entity\Interfaces\EntityInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
+use ArrayIterator;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
 use function array_column;
+use function assert;
 
 /**
  * Trait RepositoryMethodsTrait
@@ -105,8 +107,11 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        return (new Paginator($queryBuilder, true))->getIterator()->getArrayCopy();
+        $iterator = (new Paginator($queryBuilder, true))->getIterator();
+
+        assert($iterator instanceof ArrayIterator);
+
+        return $iterator->getArrayCopy();
     }
 
     /**

@@ -10,14 +10,13 @@ namespace App\Controller\v1\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -87,18 +86,14 @@ class UserGroupsController
      *  )
      */
     #[Route(
-        path: '/v1/user/{requestUser}/groups',
+        path: '/v1/user/{user}/groups',
         requirements: [
-            'requestUser' => '%app.uuid_v1_regex%',
+            'user' => '%app.uuid_v1_regex%',
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[Security('is_granted("IS_USER_HIMSELF", requestUser) or is_granted("ROLE_ROOT")')]
-    #[ParamConverter(
-        data: 'requestUser',
-        class: UserResource::class,
-    )]
-    public function __invoke(User $requestUser): JsonResponse
+    #[IsGranted(new Expression('is_granted("IS_USER_HIMSELF", object) or "ROLE_ROOT" in role_names'), 'user')]
+    public function __invoke(User $user): JsonResponse
     {
         $groups = [
             'groups' => [
@@ -107,7 +102,7 @@ class UserGroupsController
         ];
 
         return new JsonResponse(
-            $this->serializer->serialize($requestUser->getUserGroups()->getValues(), 'json', $groups),
+            $this->serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
             json: true
         );
     }

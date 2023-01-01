@@ -31,6 +31,10 @@ class EntityValueResolverTest extends KernelTestCase
     {
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
+        $resourceCollection
+            ->expects(static::never())
+            ->method('hasEntityResource');
+
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', null, false, false, null);
 
@@ -50,8 +54,37 @@ class EntityValueResolverTest extends KernelTestCase
     {
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
+        $resourceCollection
+            ->expects(static::never())
+            ->method('hasEntityResource');
+
         $resolver = new EntityValueResolver($resourceCollection);
-        $metadata = new ArgumentMetadata('foo', stdClass::class, false, false, null);
+        $metadata = new ArgumentMetadata('user', stdClass::class, false, false, null);
+
+        self::assertFalse($resolver->supports(Request::create('/', 'GET', [
+            'foo' => 'bar',
+        ]), $metadata));
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `resolve()` method returns empty array when argument name is wrong
+     */
+    public function testThatResolveReturnEmptyArrayWhenArgumentNameIsWrong(): void
+    {
+        $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
+
+        $resourceCollection
+            ->expects(static::never())
+            ->method('hasEntityResource');
+
+        $resourceCollection
+            ->expects(static::never())
+            ->method('hasEntityResource');
+
+        $resolver = new EntityValueResolver($resourceCollection);
+        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         self::assertFalse($resolver->supports(Request::create('/', 'GET', [
             'foo' => 'bar',
@@ -69,14 +102,14 @@ class EntityValueResolverTest extends KernelTestCase
             ->willReturn(false);
 
         $resolver = new EntityValueResolver($resourceCollection);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $metadata = new ArgumentMetadata('user', User::class, false, false, null);
 
         $resolver->supports(
             Request::create(
                 '/',
                 'GET',
                 [
-                    'foo' => 'bar',
+                    'user' => 'bar',
                 ]
             ),
             $metadata
@@ -94,14 +127,14 @@ class EntityValueResolverTest extends KernelTestCase
             ->willReturn(false);
 
         $resolver = new EntityValueResolver($resourceCollection);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $metadata = new ArgumentMetadata('user', User::class, false, false, null);
 
         self::assertFalse($resolver->supports(
             Request::create(
                 '/',
                 'GET',
                 [
-                    'foo' => 'bar',
+                    'user' => 'bar',
                 ]
             ),
             $metadata

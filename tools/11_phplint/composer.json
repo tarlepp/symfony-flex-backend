@@ -3,7 +3,7 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"overtrue/phplint": "6.0.0",
+		"overtrue/phplint": "6.1.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {

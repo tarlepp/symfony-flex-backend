@@ -14,9 +14,9 @@ use App\DTO\User\UserUpdate;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Logged as Actions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Class LoggedActionsController

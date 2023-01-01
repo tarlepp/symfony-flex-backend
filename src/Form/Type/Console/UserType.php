@@ -27,6 +27,8 @@ use function array_map;
 /**
  * Class UserType
  *
+ * @psalm-suppress MissingTemplateParam
+ *
  * @package App\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

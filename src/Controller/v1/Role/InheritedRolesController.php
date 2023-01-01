@@ -9,11 +9,9 @@ declare(strict_types = 1);
 namespace App\Controller\v1\Role;
 
 use App\Entity\Role;
-use App\Resource\RoleResource;
 use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -80,10 +78,6 @@ class InheritedRolesController
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(RolesServiceInterface::ROLE_ADMIN)]
-    #[ParamConverter(
-        data: 'role',
-        class: RoleResource::class,
-    )]
     public function __invoke(Role $role): JsonResponse
     {
         return new JsonResponse($this->rolesService->getInheritedRoles([$role->getId()]));

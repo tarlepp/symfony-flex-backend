@@ -249,6 +249,7 @@ class ResourceCollectionTest extends KernelTestCase
      */
     private function getEmptyIteratorAggregate(): IteratorAggregate
     {
+        /** @psalm-suppress MissingTemplateParam */
         return new class([]) implements IteratorAggregate {
             /**
              * @phpstan-var ArrayObject<int, mixed>
@@ -256,7 +257,7 @@ class ResourceCollectionTest extends KernelTestCase
             private ArrayObject $iterator;
 
             /**
-             * @param array<mixed> $input
+             * @param array<int, mixed> $input
              */
             public function __construct(array $input)
             {
@@ -278,6 +279,7 @@ class ResourceCollectionTest extends KernelTestCase
      */
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {
+        /** @psalm-suppress MissingTemplateParam */
         return new class() implements IteratorAggregate {
             /**
              * @phpstan-return ArrayObject<int, mixed>

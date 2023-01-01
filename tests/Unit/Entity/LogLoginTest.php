@@ -106,7 +106,7 @@ class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector, 3: User}>
      */
     public function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
     {
