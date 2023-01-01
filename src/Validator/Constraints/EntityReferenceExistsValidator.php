@@ -9,10 +9,11 @@ declare(strict_types = 1);
 namespace App\Validator\Constraints;
 
 use App\Entity\Interfaces\EntityInterface;
+use App\Validator\Constraints\EntityReferenceExists as Constraint;
 use Closure;
 use Doctrine\ORM\EntityNotFoundException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraint as BaseConstraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
@@ -39,10 +40,10 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
-    public function validate(mixed $value, Constraint $constraint): void
+    public function validate(mixed $value, BaseConstraint $constraint): void
     {
-        if (!$constraint instanceof EntityReferenceExists) {
-            throw new UnexpectedTypeException($constraint, EntityReferenceExists::class);
+        if (!$constraint instanceof Constraint) {
+            throw new UnexpectedTypeException($constraint, Constraint::class);
         }
 
         $values = $this->normalize($constraint->entityClass, $value);
@@ -53,38 +54,35 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param EntityInterface|array<int, EntityInterface>|mixed $input
-     *
-     * @return array<int, EntityInterface>
+     * @return array<array-key, EntityInterface>
      */
     private function normalize(string $target, mixed $input): array
     {
-        $values = is_array($input) ? $input : [$input];
+        return array_map(
+            static function ($value) use ($target) {
+                if (!$value instanceof $target) {
+                    throw new UnexpectedValueException($value, $target);
+                }
 
-        foreach ($values as $value) {
-            if (!$value instanceof $target) {
-                throw new UnexpectedValueException($value, $target);
-            }
+                if (!$value instanceof EntityInterface) {
+                    throw new UnexpectedValueException($value, EntityInterface::class);
+                }
 
-            if (!$value instanceof EntityInterface) {
-                throw new UnexpectedValueException($value, EntityInterface::class);
-            }
-        }
-
-        return $values;
+                return $value;
+            },
+            is_array($input) ? $input : [$input]
+        );
     }
 
     /**
-     * @param array<int, EntityInterface> $entities
+     * @param array<array-key, EntityInterface> $entities
      */
     private function check(array $entities): void
     {
         $invalidIds = $this->getInvalidValues($entities);
 
         if ($invalidIds !== []) {
-            $message = count($invalidIds) === 1
-                ? EntityReferenceExists::MESSAGE_SINGLE
-                : EntityReferenceExists::MESSAGE_MULTIPLE;
+            $message = count($invalidIds) === 1 ? Constraint::MESSAGE_SINGLE : Constraint::MESSAGE_MULTIPLE;
             $entity = $entities[0]::class;
 
             $parameterEntity = str_replace('Proxies\\__CG__\\', '', $entity);
@@ -94,15 +92,15 @@ class EntityReferenceExistsValidator extends ConstraintValidator
                 ->buildViolation($message)
                 ->setParameter('{{ entity }}', $parameterEntity)
                 ->setParameter('{{ id }}', $parameterId)
-                ->setCode(EntityReferenceExists::ENTITY_REFERENCE_EXISTS_ERROR)
+                ->setCode(Constraint::ENTITY_REFERENCE_EXISTS_ERROR)
                 ->addViolation();
         }
     }
 
     /**
-     * @param array<int, EntityInterface> $entities
+     * @param array<array-key, EntityInterface> $entities
      *
-     * @return array<int, string>
+     * @return array<array-key, string>
      */
     private function getInvalidValues(array $entities): array
     {
