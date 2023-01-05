@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\ApiKey;
+use App\Enum\Role;
 use App\Repository\ApiKeyRepository;
 use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
@@ -69,7 +70,7 @@ class ApiKeyTest extends EntityTestCase
 
         foreach ($rolesService->getRoles() as $role) {
             yield [
-                new StringableArrayObject(array_unique([RolesServiceInterface::ROLE_API, $role])),
+                new StringableArrayObject(array_unique([Role::API->value, $role])),
                 new StringableArrayObject([
                     'description' => 'ApiKey Description: ' . $rolesService->getShort($role),
                 ]),
