@@ -10,9 +10,9 @@ namespace App\Controller\v1\UserGroup;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Role;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
-use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +83,7 @@ class UsersController
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ADMIN)]
+    #[IsGranted(Role::ROOT->value)]
     public function __invoke(Request $request, UserGroup $userGroup): Response
     {
         return $this->responseHandler
