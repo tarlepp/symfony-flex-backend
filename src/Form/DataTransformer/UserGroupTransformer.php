@@ -21,6 +21,8 @@ use function sprintf;
 /**
  * Class UserGroupTransformer
  *
+ * @psalm-suppress MissingTemplateParam
+ *
  * @package App\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -38,9 +40,9 @@ class UserGroupTransformer implements DataTransformerInterface
      * (UserGroup id).
      *
      * @psalm-param array<int, string|UserGroup>|mixed $value
-     * @psalm-return array<int, string>
+     * @psalm-return array<array-key, string>
      */
-    public function transform($value): array
+    public function transform(mixed $value): array
     {
         $callback = static fn (UserGroup | Stringable $userGroup): string =>
             $userGroup instanceof UserGroup ? $userGroup->getId() : (string)$userGroup;
@@ -55,11 +57,11 @@ class UserGroupTransformer implements DataTransformerInterface
      * (UserGroup).
      *
      * @psalm-param array<int, string>|mixed $value
-     * @psalm-return array<int, UserGroup>|null
+     * @psalm-return array<array-key, UserGroup>|null
      *
      * @throws Throwable
      */
-    public function reverseTransform($value): ?array
+    public function reverseTransform(mixed $value): ?array
     {
         return is_array($value)
             ? array_map(

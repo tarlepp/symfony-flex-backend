@@ -23,6 +23,8 @@ use Throwable;
 /**
  * Class ApiKeyType
  *
+ * @psalm-suppress MissingTemplateParam
+ *
  * @package App\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

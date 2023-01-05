@@ -33,7 +33,7 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * Properties to map to destination object.
      *
-     * @var array<int, string>
+     * @var array<int, non-empty-string>
      */
     protected static array $properties = [];
 
@@ -124,7 +124,7 @@ abstract class RestRequestMapper implements MapperInterface
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int, non-empty-string>
      */
     private function getValidProperties(Request $request): array
     {
