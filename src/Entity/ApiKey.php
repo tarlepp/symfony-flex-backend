@@ -13,7 +13,7 @@ use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\Uuid;
-use App\Security\Interfaces\RolesServiceInterface;
+use App\Enum\Role as RoleEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -215,7 +215,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                 '\strval',
                 array_unique(
                     array_merge(
-                        [RolesServiceInterface::ROLE_API],
+                        [RoleEnum::API->value],
                         $this->userGroups
                             ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
                             ->toArray(),

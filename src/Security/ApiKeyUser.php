@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\ApiKey;
+use App\Enum\Role;
 use App\Security\Interfaces\ApiKeyUserInterface;
-use App\Security\Interfaces\RolesServiceInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function array_merge;
 use function array_unique;
@@ -38,7 +38,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     {
         $this->identifier = $apiKey->getToken();
         $this->apiKeyIdentifier = $apiKey->getId();
-        $this->roles = array_unique(array_merge($roles, [RolesServiceInterface::ROLE_API]));
+        $this->roles = array_unique(array_merge($roles, [Role::API->value]));
     }
 
     public function getUserIdentifier(): string

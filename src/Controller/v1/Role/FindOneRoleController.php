@@ -8,10 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Controller\v1\Role;
 
+use App\Enum\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
-use App\Security\Interfaces\RolesServiceInterface;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,7 @@ class FindOneRoleController extends Controller
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesServiceInterface::ROLE_ADMIN)]
+    #[IsGranted(Role::ADMIN->value)]
     public function __invoke(Request $request, string $role): Response
     {
         return $this->findOneMethod($request, $role);

@@ -10,9 +10,9 @@ namespace App\Controller\v1\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Role;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
-use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -120,7 +120,7 @@ class DetachUserGroupController
         ],
         methods: [Request::METHOD_DELETE],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT->value)]
     public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
         $this->userResource->save($user->removeUserGroup($userGroup), false);
