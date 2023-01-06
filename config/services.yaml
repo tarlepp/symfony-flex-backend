@@ -13,8 +13,6 @@ parameters:
     env(CORS_ALLOW_ORIGIN): '%env(string:key:CORS_ALLOW_ORIGIN:json:file:APPLICATION_CONFIG)%'
     env(TRUSTED_PROXIES): '%env(string:key:TRUSTED_PROXIES:json:file:APPLICATION_CONFIG)%'
     locale: 'en'
-    app.uuid_v1_regex: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-f]{3}-[0-9a-fA-F]{12}$'
-    app.uuid_v4_regex: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-f]{3}-[0-9a-fA-F]{12}$'
 
 services:
     # default configuration for services in *this* file
@@ -24,8 +22,6 @@ services:
         bind:
             $projectDir: '%kernel.project_dir%'
             $environment: '%kernel.environment%'
-            $uuidV1Regex: '%app.uuid_v1_regex%'
-            $uuidV4Regex: '%app.uuid_v4_regex%'
             $locale: '%locale%'
     _instanceof:
         App\Rest\Interfaces\ControllerInterface:
