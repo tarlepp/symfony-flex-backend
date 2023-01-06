@@ -8,12 +8,14 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Rest\src\Controller;
 
+use App\Enum\Role;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Throwable;
 
 /**
@@ -42,7 +44,7 @@ class ControllerForLifeCycleTests extends Controller
     #[Route(
         path: '/{role}',
         requirements: [
-            'role' => '^ROLE_\w+$',
+            'role' => new EnumRequirement(Role::class),
         ],
         methods: [Request::METHOD_GET],
     )]
