@@ -18,13 +18,6 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  */
 interface RolesServiceInterface
 {
-    // Used role constants
-    public const ROLE_LOGGED = 'ROLE_LOGGED';
-    public const ROLE_USER = 'ROLE_USER';
-    public const ROLE_ADMIN = 'ROLE_ADMIN';
-    public const ROLE_ROOT = 'ROLE_ROOT';
-    public const ROLE_API = 'ROLE_API';
-
     public function __construct(
         RoleHierarchyInterface $roleHierarchy,
     );

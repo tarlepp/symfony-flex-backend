@@ -10,9 +10,9 @@ namespace App\Controller\v1\UserGroup;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Role;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
-use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -122,7 +122,7 @@ class AttachUserController
         ],
         methods: [Request::METHOD_POST],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT->value)]
     public function __invoke(UserGroup $userGroup, User $user): JsonResponse
     {
         $status = $userGroup->getUsers()->contains($user) ? 200 : 201;
