@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
@@ -129,8 +130,8 @@ class AttachUserGroupController
     #[Route(
         path: '/v1/user/{user}/group/{userGroup}',
         requirements: [
-            'user' => '%app.uuid_v1_regex%',
-            'userGroup' => '%app.uuid_v1_regex%',
+            'user' => Requirement::UUID_V1,
+            'userGroup' => Requirement::UUID_V1,
         ],
         methods: [Request::METHOD_POST],
     )]
