@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Rest;
 
+use App\Enum\Role;
 use App\Repository\RoleRepository;
-use App\Security\Interfaces\RolesServiceInterface;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 use Generator;
@@ -51,11 +51,9 @@ class ResourceLifeCycleTest extends WebTestCase
      */
     public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
-        yield [RolesServiceInterface::ROLE_ADMIN];
-        yield [RolesServiceInterface::ROLE_API];
-        yield [RolesServiceInterface::ROLE_LOGGED];
-        yield [RolesServiceInterface::ROLE_ROOT];
-        yield [RolesServiceInterface::ROLE_USER];
+        foreach (Role::cases() as $role) {
+            yield [$role->value];
+        }
     }
 
     private function getRepository(): RoleRepository

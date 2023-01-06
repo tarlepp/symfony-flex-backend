@@ -9,10 +9,10 @@ declare(strict_types = 1);
 namespace App\Controller\v1\User;
 
 use App\Entity\User;
+use App\Enum\Role;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
-use App\Security\RolesService;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +49,7 @@ class DeleteUserController extends Controller
         ],
         methods: [Request::METHOD_DELETE],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT->value)]
     public function __invoke(Request $request, User $user, User $loggedInUser): Response
     {
         if ($loggedInUser === $user) {
