@@ -18,6 +18,7 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
@@ -104,8 +105,8 @@ class DetachUserController
     #[Route(
         path: '/v1/user_group/{userGroup}/user/{user}',
         requirements: [
-            'userGroup' => '%app.uuid_v1_regex%',
-            'user' => '%app.uuid_v1_regex%',
+            'userGroup' => Requirement::UUID_V1,
+            'user' => Requirement::UUID_V1,
         ],
         methods: [Request::METHOD_DELETE],
     )]

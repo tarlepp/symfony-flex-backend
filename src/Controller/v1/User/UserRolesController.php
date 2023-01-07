@@ -15,6 +15,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -81,7 +82,7 @@ class UserRolesController
     #[Route(
         path: '/v1/user/{user}/roles',
         requirements: [
-            'user' => '%app.uuid_v1_regex%',
+            'user' => Requirement::UUID_V1,
         ],
         methods: [Request::METHOD_GET],
     )]
