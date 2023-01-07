@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Profile;
 
-use App\Security\Interfaces\RolesServiceInterface;
+use App\Enum\Role;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -179,7 +179,7 @@ class IndexControllerTest extends WebTestCase
                 yield [str_pad($rolesService->getShort($role), 40, '_')];
             }
         } else {
-            yield [str_pad($rolesService->getShort(RolesServiceInterface::ROLE_LOGGED), 40, '_')];
+            yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_')];
         }
     }
 }

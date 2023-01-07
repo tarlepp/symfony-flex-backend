@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller\v1\Role;
 
 use App\Entity\Role;
-use App\Security\Interfaces\RolesServiceInterface;
+use App\Enum\Role as RoleEnum;
 use App\Security\RolesService;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -77,7 +77,7 @@ class InheritedRolesController
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesServiceInterface::ROLE_ADMIN)]
+    #[IsGranted(RoleEnum::ADMIN->value)]
     public function __invoke(Role $role): JsonResponse
     {
         return new JsonResponse($this->rolesService->getInheritedRoles([$role->getId()]));

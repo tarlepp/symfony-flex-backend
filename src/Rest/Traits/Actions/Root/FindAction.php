@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Root;
 
+use App\Enum\Role;
 use App\Rest\Traits\Methods\FindMethod;
-use App\Security\RolesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,7 +37,7 @@ trait FindAction
         path: '',
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[IsGranted(Role::ROOT->value)]
     public function findAction(Request $request): Response
     {
         return $this->findMethod($request);

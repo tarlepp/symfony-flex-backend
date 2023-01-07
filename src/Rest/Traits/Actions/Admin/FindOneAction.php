@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Admin;
 
+use App\Enum\Role;
 use App\Rest\Traits\Methods\FindOneMethod;
-use App\Security\RolesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +40,7 @@ trait FindOneAction
         ],
         methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ADMIN)]
+    #[IsGranted(Role::ADMIN->value)]
     public function findOneAction(Request $request, string $id): Response
     {
         return $this->findOneMethod($request, $id);
