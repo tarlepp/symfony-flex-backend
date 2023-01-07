@@ -12,6 +12,10 @@ doctrine:
             EnumLanguage: App\Doctrine\DBAL\Types\EnumLanguageType
             EnumLocale: App\Doctrine\DBAL\Types\EnumLocaleType
             EnumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var
+        #server_version: '14'
+
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -35,6 +39,7 @@ when@prod:
             logging: false
         orm:
             auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
             query_cache_driver:
                 type: pool
                 pool: doctrine.system_cache_pool
