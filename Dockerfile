@@ -1,4 +1,4 @@
-FROM php:8.2.0-fpm
+FROM php:8.2.1-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
