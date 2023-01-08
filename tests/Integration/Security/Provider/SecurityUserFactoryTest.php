@@ -56,7 +56,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->with('test_user')
             ->willReturn(null);
 
-        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('test_user');
     }
 
@@ -89,7 +89,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
 
-        $securityUser = (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+        $securityUser = (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('test_user');
 
         self::assertSame($user->getId(), $securityUser->getUserIdentifier());
@@ -112,7 +112,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->getMock();
 
         self::assertFalse(
-            (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+            (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
                 ->supportsClass((string)$input)
         );
     }
@@ -133,7 +133,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->getMock();
 
         self::assertTrue(
-            (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+            (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
                 ->supportsClass(SecurityUser::class)
         );
     }
@@ -156,7 +156,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
-        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
             ->refreshUser(new InMemoryUser('username', 'password'));
     }
 
@@ -183,7 +183,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->method('find')
             ->willReturn(null);
 
-        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
             ->refreshUser(new SecurityUser(new User()));
     }
 
@@ -217,7 +217,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
 
-        $newSecurityUser = (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
+        $newSecurityUser = (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
             ->refreshUser($securityUser);
 
         self::assertNotSame($securityUser, $newSecurityUser);
