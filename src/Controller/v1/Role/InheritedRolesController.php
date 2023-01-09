@@ -15,6 +15,7 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -73,7 +74,7 @@ class InheritedRolesController
     #[Route(
         path: '/v1/role/{role}/inherited',
         requirements: [
-            'role' => '^ROLE_\w+$',
+            'role' => new EnumRequirement(RoleEnum::class),
         ],
         methods: [Request::METHOD_GET],
     )]
