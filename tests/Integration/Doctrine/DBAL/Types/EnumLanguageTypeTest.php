@@ -150,6 +150,7 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield [true];
         yield [''];
         yield [' '];
+        yield [1];
         yield ['foobar'];
     }
 
