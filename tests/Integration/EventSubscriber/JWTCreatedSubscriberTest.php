@@ -9,13 +9,16 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
+use App\Enum\Language;
 use App\EventSubscriber\JWTCreatedSubscriber;
 use App\Security\SecurityUser;
+use App\Service\Localization;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 
 /**
  * Class JWTCreatedSubscriberTest
@@ -97,5 +100,66 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 
         (new JWTCreatedSubscriber(new RequestStack(), $logger))
             ->onJWTCreated($event);
+    }
+
+    public function testThatExpectedLocalizationDataIsSetWhenUsingSecurityUser(): void
+    {
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        // Create new user for JWT
+        $user = (new User())
+            ->setFirstName('first name')
+            ->setLastName('last name')
+            ->setEmail('firstname.surname@test.com')
+            ->setLanguage(Language::FI)
+            ->setLocale('fi')
+            ->setTimezone('UTC');
+
+        // Create RequestStack and push pure Request to it
+        $requestStack = new RequestStack();
+        $requestStack->push(new Request());
+
+        // Create JWTCreatedEvent
+        $event = new JWTCreatedEvent([], new SecurityUser($user));
+
+        (new JWTCreatedSubscriber($requestStack, $logger))
+            ->onJWTCreated($event);
+
+        $keys = ['language', 'locale', 'timezone'];
+
+        foreach ($keys as $key) {
+            self::assertArrayHasKey($key, $event->getData());
+        }
+
+        self::assertSame(Language::FI->value, $event->getData()['language']);
+        self::assertSame('fi', $event->getData()['locale']);
+        self::assertSame('UTC', $event->getData()['timezone']);
+    }
+
+    public function testThatDefaultLocalizationDataIsSetWhenNotUsingSecurityUser(): void
+    {
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $user = new InMemoryUser('user', 'password');
+
+        // Create RequestStack and push pure Request to it
+        $requestStack = new RequestStack();
+        $requestStack->push(new Request());
+
+        // Create JWTCreatedEvent
+        $event = new JWTCreatedEvent([], $user);
+
+        (new JWTCreatedSubscriber($requestStack, $logger))
+            ->onJWTCreated($event);
+
+        $keys = ['language', 'locale', 'timezone'];
+
+        foreach ($keys as $key) {
+            self::assertArrayHasKey($key, $event->getData());
+        }
+
+        self::assertSame(Language::getDefault()->value, $event->getData()['language']);
+        self::assertSame(Localization::DEFAULT_LOCALE, $event->getData()['locale']);
+        self::assertSame(Localization::DEFAULT_TIMEZONE, $event->getData()['timezone']);
     }
 }
