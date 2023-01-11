@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Service;
 
-use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
+use App\Enum\Language;
 use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -29,7 +29,6 @@ use function str_replace;
  */
 class Localization
 {
-    public const DEFAULT_LANGUAGE = EnumLanguageType::LANGUAGE_EN;
     public const DEFAULT_LOCALE = EnumLocaleType::LOCALE_EN;
     public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
@@ -44,7 +43,7 @@ class Localization
      */
     public function getLanguages(): array
     {
-        return EnumLanguageType::getValues();
+        return Language::getValues();
     }
 
     /**
