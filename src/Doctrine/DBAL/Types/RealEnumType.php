@@ -89,4 +89,13 @@ abstract class RealEnumType extends Type
             'One of: "' . implode('", "', static::getValues()) . '"',
         );
     }
+
+    /**
+     * Parent method is deprecated, so remove this after it has been removed.
+     *
+     * @codeCoverageIgnore
+     */
+    public function getName(): void
+    {
+    }
 }
