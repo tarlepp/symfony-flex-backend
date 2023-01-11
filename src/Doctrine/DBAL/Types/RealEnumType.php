@@ -95,7 +95,8 @@ abstract class RealEnumType extends Type
      *
      * @codeCoverageIgnore
      */
-    public function getName(): void
+    public function getName(): string
     {
+        return '';
     }
 }

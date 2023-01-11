@@ -41,7 +41,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
      *
-     * @param class-string<DTO\User> $dtoClass
+     * @param class-string $dtoClass
      *
      * @throws Throwable
      *
@@ -73,7 +73,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @dataProvider dataProviderTestThatTransformLanguageWorksAsExpected
      *
-     * @param class-string<DTO\User> $dtoClass
+     * @param class-string $dtoClass
      *
      * @throws Throwable
      *
@@ -95,7 +95,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string<DTO\User>}>
+     * @return Generator<array{0: class-string}>
      */
     public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
@@ -105,7 +105,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<array{0: Language, 1: class-string<DTO\User>, 2: string}>
+     * @return Generator<array{0: Language, 1: class-string, 2: string}>
      */
     public function dataProviderTestThatTransformLanguageWorksAsExpected(): Generator
     {
