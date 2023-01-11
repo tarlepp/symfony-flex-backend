@@ -132,7 +132,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Language, 0: 'en'|'fi'}>
+     * @return Generator<array{0: Language, 1: 'en'|'fi'}>
      */
     public function dataProviderTestThatConvertToPHPValueWorksWithValidInput(): Generator
     {
