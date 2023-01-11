@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Form\Type\Console;
 
 use App\DTO\User\User as UserDto;
+use App\Enum\Language;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
@@ -155,12 +156,12 @@ class UserType extends AbstractType
         $builder
             ->add(
                 'language',
-                Type\ChoiceType::class,
+                Type\EnumType::class,
                 [
+                    FormTypeLabelInterface::CLASS_NAME => Language::class,
                     FormTypeLabelInterface::LABEL => 'Language',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LANGUAGE,
-                    FormTypeLabelInterface::CHOICES => array_combine($languages, $languages),
+                    FormTypeLabelInterface::EMPTY_DATA => Language::getDefault(),
                 ],
             );
 
