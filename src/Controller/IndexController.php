@@ -10,6 +10,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsController]
 class IndexController
 {
     /**
