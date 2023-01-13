@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Throwable;
 use function sprintf;
 
@@ -39,8 +40,9 @@ class ResourceCollection implements Countable
      * @param IteratorAggregate<int, RestResourceInterface> $items
      */
     public function __construct(
-        private IteratorAggregate $items,
-        private LoggerInterface $logger,
+        #[TaggedIterator('app.rest.resource')]
+        private readonly IteratorAggregate $items,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
