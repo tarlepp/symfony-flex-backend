@@ -14,6 +14,7 @@ use App\Rest\Traits\Methods;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Throwable;
@@ -27,6 +28,7 @@ use Throwable;
 #[Route(
     path: '/test_lifecycle_behaviour',
 )]
+#[AsController]
 class ControllerForLifeCycleTests extends Controller
 {
     // Traits
