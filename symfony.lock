@@ -216,9 +216,6 @@
     "roave/security-advisories": {
         "version": "dev-master"
     },
-    "stella-maris/clock": {
-        "version": "0.1.4"
-    },
     "symfony/asset": {
         "version": "v4.4.3"
     },
