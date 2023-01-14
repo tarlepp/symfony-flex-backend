@@ -12,6 +12,7 @@ use App\Enum\Role;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -29,6 +30,7 @@ use Throwable;
     path: '/test_lifecycle_behaviour',
 )]
 #[AsController]
+#[AutoconfigureTag('app.rest.controller')]
 class ControllerForLifeCycleTests extends Controller
 {
     // Traits
