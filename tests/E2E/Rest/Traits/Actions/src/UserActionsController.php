@@ -14,6 +14,7 @@ use App\DTO\User\UserUpdate;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\User as Actions;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -24,6 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsController]
 #[Route(
     path: '/test_user_actions',
 )]

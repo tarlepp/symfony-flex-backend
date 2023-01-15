@@ -12,6 +12,7 @@ use App\Service\Localization;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsController]
 class LanguageController
 {
     public function __construct(

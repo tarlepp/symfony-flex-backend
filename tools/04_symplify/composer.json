@@ -3,10 +3,10 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "3.13.1",
+		"friendsofphp/php-cs-fixer": "3.13.2",
 		"roave/security-advisories": "dev-latest",
-		"symplify/config-transformer": "11.1.24",
-		"symplify/easy-coding-standard": "11.1.24"
+		"symplify/config-transformer": "11.1.27.72",
+		"symplify/easy-coding-standard": "11.2.2.72"
 	},
 	"config": {
 		"allow-plugins": true,

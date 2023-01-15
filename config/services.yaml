@@ -49,12 +49,6 @@ services:
             - '../src/Utils/Tests/'
             - '../src/Kernel.php'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: [ 'controller.service_arguments' ]
-
     App\ValueResolver\EntityValueResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 150 }
@@ -78,13 +72,11 @@ when@dev:
         App\Tests\E2E\Rest\src\Controller\:
             resource: '../tests/E2E/Rest/src/Controller/*'
             tags:
-                - 'controller.service_arguments'
                 - 'app.rest.controller'
 
         App\Tests\E2E\Rest\Traits\Actions\src\:
             resource: '../tests/E2E/Rest/Traits/Actions/src/*'
             tags:
-                - 'controller.service_arguments'
                 - 'app.rest.controller'
 
         App\Tests\Integration\Helpers\src\:
@@ -125,13 +117,11 @@ when@test:
         App\Tests\E2E\Rest\src\Controller\:
             resource: '../tests/E2E/Rest/src/Controller/*'
             tags:
-                - 'controller.service_arguments'
                 - 'app.rest.controller'
 
         App\Tests\E2E\Rest\Traits\Actions\src\:
             resource: '../tests/E2E/Rest/Traits/Actions/src/*'
             tags:
-                - 'controller.service_arguments'
                 - 'app.rest.controller'
 
         App\Tests\Integration\Helpers\src\:

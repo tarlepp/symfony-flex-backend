@@ -14,6 +14,7 @@ use App\DTO\User\UserUpdate;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Anon as Actions;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AsController]
 #[Route(
     path: '/test_anon_actions',
 )]
