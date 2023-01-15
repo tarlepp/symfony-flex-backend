@@ -19,10 +19,7 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind:
-            $projectDir: '%kernel.project_dir%'
-            $environment: '%kernel.environment%'
-            $locale: '%locale%'
+
     _instanceof:
         AutoMapperPlus\MapperInterface:
             tags: [ 'app.stopwatch' ]
