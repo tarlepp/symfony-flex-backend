@@ -47,17 +47,12 @@ services:
         tags:
             - { name: controller.argument_value_resolver, priority: 150 }
 
-    App\Resource\ResourceCollection:
-        arguments: [ !tagged app.rest.resource ]
-
-    App\Rest\ControllerCollection:
-        arguments: [ !tagged app.rest.controller ]
-
 when@dev:
     services:
         _defaults:
             autowire: true
             autoconfigure: true
+
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
 
