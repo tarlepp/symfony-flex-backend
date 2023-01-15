@@ -10,6 +10,7 @@ namespace App\Rest\Interfaces;
 
 use App\Rest\ResponseHandler;
 use LogicException;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
@@ -21,6 +22,7 @@ use UnexpectedValueException;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AutoconfigureTag('app.rest.controller')]
 interface ControllerInterface
 {
     /**
