@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -57,6 +58,7 @@ class CheckDependencies extends Command
     use SymfonyStyleTrait;
 
     public function __construct(
+        #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
     ) {
         parent::__construct();
