@@ -13,6 +13,7 @@ use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Throwable;
 use function array_map;
 
@@ -24,6 +25,7 @@ use function array_map;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
+#[AutoconfigureTag('doctrine.fixture.orm')]
 final class LoadRoleData extends Fixture implements OrderedFixtureInterface
 {
     public function __construct(
