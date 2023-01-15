@@ -104,12 +104,12 @@ class ResourceCollectionTest extends KernelTestCase
 
     public function testThatGetAllReturnsCorrectCountOfResources(): void
     {
-        self::assertCount(9, $this->getCollection()->getAll());
+        self::assertCount(10, $this->getCollection()->getAll());
     }
 
     public function testThatCountMethodReturnsExpectedCount(): void
     {
-        self::assertSame(9, $this->getCollection()->count(), 'REST resource count from collection was not expected');
+        self::assertSame(10, $this->getCollection()->count(), 'REST resource count from collection was not expected');
     }
 
     /**
