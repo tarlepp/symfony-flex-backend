@@ -1128,23 +1128,23 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.5.3",
+            "version": "3.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "01f89a1082b6971ba53ba76f95741fc8ad4a5fd2"
+                "reference": "4b1e2b6ba71d21d0c5be22ed03b6fc954d20b204"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/01f89a1082b6971ba53ba76f95741fc8ad4a5fd2",
-                "reference": "01f89a1082b6971ba53ba76f95741fc8ad4a5fd2",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/4b1e2b6ba71d21d0c5be22ed03b6fc954d20b204",
+                "reference": "4b1e2b6ba71d21d0c5be22ed03b6fc954d20b204",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2",
                 "doctrine/dbal": "^3.5.1",
                 "doctrine/deprecations": "^0.5.3 || ^1",
-                "doctrine/event-manager": "^1.0",
+                "doctrine/event-manager": "^1.2 || ^2.0",
                 "friendsofphp/proxy-manager-lts": "^1.0",
                 "php": "^7.4 || ^8.0",
                 "psr/log": "^1.1.3 || ^2 || ^3",
@@ -1210,7 +1210,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.5.3"
+                "source": "https://github.com/doctrine/migrations/tree/3.5.5"
             },
             "funding": [
                 {
@@ -1226,7 +1226,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-11T07:13:35+00:00"
+            "time": "2023-01-18T12:44:30+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -7994,12 +7994,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d69f15ccfded11d661206313e0a984ddac14c42c"
+                "reference": "7868bedd3ec39dc3efe827e0be27cf88c0f6ecaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d69f15ccfded11d661206313e0a984ddac14c42c",
-                "reference": "d69f15ccfded11d661206313e0a984ddac14c42c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7868bedd3ec39dc3efe827e0be27cf88c0f6ecaf",
+                "reference": "7868bedd3ec39dc3efe827e0be27cf88c0f6ecaf",
                 "shasum": ""
             },
             "conflict": {
@@ -8047,7 +8047,7 @@
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "bytefury/crater": "<6.0.2",
                 "cachethq/cachet": "<2.5.1",
-                "cakephp/cakephp": "<3.10.3|>=4,<4.0.10|>=4.1,<4.1.4",
+                "cakephp/cakephp": "<3.10.3|= 1.3.7|>=4,<4.0.10|>=4.1,<4.1.4",
                 "cardgate/magento2": "<2.0.33",
                 "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
                 "cartalyst/sentry": "<=2.1.6",
@@ -8338,8 +8338,8 @@
                 "scheb/two-factor-bundle": ">=0,<3.26|>=4,<4.11",
                 "sensiolabs/connect": "<4.2.3",
                 "serluck/phpwhois": "<=4.2.6",
-                "shopware/core": "<=6.4.9",
-                "shopware/platform": "<=6.4.9",
+                "shopware/core": "<=6.4.18",
+                "shopware/platform": "<=6.4.18",
                 "shopware/production": "<=6.3.5.2",
                 "shopware/shopware": "<=5.7.14",
                 "shopware/storefront": "<=6.4.8.1",
@@ -8551,7 +8551,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-14T06:04:34+00:00"
+            "time": "2023-01-18T00:15:17+00:00"
         },
         {
             "name": "symfony/browser-kit",
