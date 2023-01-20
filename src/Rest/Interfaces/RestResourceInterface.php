@@ -11,6 +11,7 @@ namespace App\Rest\Interfaces;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -21,6 +22,8 @@ use UnexpectedValueException;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AutoconfigureTag('app.rest.resource')]
+#[AutoconfigureTag('app.stopwatch')]
 interface RestResourceInterface
 {
     /**

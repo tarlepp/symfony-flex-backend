@@ -14,6 +14,7 @@ use Closure;
 use Countable;
 use IteratorAggregate;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use function sprintf;
 
 /**
@@ -37,6 +38,7 @@ class ControllerCollection implements Countable
      * @phpstan-param IteratorAggregate<int, ControllerInterface> $items
      */
     public function __construct(
+        #[TaggedIterator('app.rest.controller')]
         protected readonly IteratorAggregate $items,
         protected readonly LoggerInterface $logger,
     ) {
