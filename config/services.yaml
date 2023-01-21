@@ -107,5 +107,3 @@ when@test:
 
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
-
-        test.app.utils.tests.auth: '@App\Utils\Tests\Auth'
