@@ -3,7 +3,7 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"infection/infection": "0.26.17",
+		"infection/infection": "0.26.18",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
