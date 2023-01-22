@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3629251b9f800235859ef8afd03ecb5",
+    "content-hash": "c434f7214a8406ecf69f9648e57c7726",
     "packages": [],
     "packages-dev": [
         {
@@ -2698,16 +2698,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "11.2.3.72",
+            "version": "11.2.4.72",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "394c7a0e479804749285d21b2fa8be1fa5b1fceb"
+                "reference": "313027a266b6343479d4bb7380fd4ca449107f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/394c7a0e479804749285d21b2fa8be1fa5b1fceb",
-                "reference": "394c7a0e479804749285d21b2fa8be1fa5b1fceb",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/313027a266b6343479d4bb7380fd4ca449107f54",
+                "reference": "313027a266b6343479d4bb7380fd4ca449107f54",
                 "shasum": ""
             },
             "require": {
@@ -2733,7 +2733,7 @@
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer",
             "support": {
                 "issues": "https://github.com/symplify/easy-coding-standard/issues",
-                "source": "https://github.com/symplify/easy-coding-standard/tree/11.2.3.72"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/11.2.4.72"
             },
             "funding": [
                 {
@@ -2745,7 +2745,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-20T20:16:18+00:00"
+            "time": "2023-01-21T14:47:36+00:00"
         }
     ],
     "aliases": [],
