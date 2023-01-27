@@ -127,10 +127,7 @@
 			"PHPStan\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony",
 			"PHPStan\\Type\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Type/PHPUnit",
 			"PHPStan\\Type\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony",
-			"Rector\\Core\\": "tools/09_rector/vendor/rector/rector/src",
-			"Rector\\Php74\\": "tools/09_rector/vendor/rector/rector/rules/Php74",
-			"Rector\\Php80\\": "tools/09_rector/vendor/rector/rector/rules/Php80",
-			"Rector\\Set\\": "tools/09_rector/vendor/rector/rector/packages/Set"
+			"Rector\\": "tools/09_rector/vendor/rector"
 		}
 	},
 	"scripts": {
