@@ -7,6 +7,10 @@ ifndef APPLICATION_CONFIG
 	endif
 endif
 
+ifndef VERBOSE
+MAKEFLAGS += --no-print-directory
+endif
+
 # Define used JWT keys paths and passphrase
 JWT_PUBLIC_KEY=$$(echo | jq -r .JWT_PUBLIC_KEY ${APPLICATION_CONFIG})
 JWT_SECRET_KEY=$$(echo | jq -r .JWT_SECRET_KEY ${APPLICATION_CONFIG})
