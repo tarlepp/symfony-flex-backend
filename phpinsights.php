@@ -42,6 +42,7 @@ return [
         'var',
         'vendor',
         'tools',
+        'rector.php',
     ],
     'add' => [
         //  ExampleMetric::class => [
