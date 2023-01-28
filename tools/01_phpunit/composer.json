@@ -4,12 +4,12 @@
 	"require": {},
 	"require-dev": {
 		"liuggio/fastest": "1.10.0",
-		"phpunit/php-code-coverage": "9.2.23",
+		"phpunit/php-code-coverage": "9.2.24",
 		"phpunit/phpcov": "8.2.1",
 		"phpunit/phpunit": "9.5.28",
 		"roave/security-advisories": "dev-latest",
-		"symfony/browser-kit": "6.2.0",
-		"symfony/phpunit-bridge": "6.2.3"
+		"symfony/browser-kit": "6.2.5",
+		"symfony/phpunit-bridge": "6.2.5"
 	},
 	"config": {
 		"allow-plugins": true,
