@@ -3,7 +3,7 @@
 	"description": "",
 	"require-dev": {
 		"ergebnis/composer-normalize": "2.29.0",
-		"icanhazstring/composer-unused": "0.8.5",
+		"icanhazstring/composer-unused": "0.8.6",
 		"maglnet/composer-require-checker": "4.5.0",
 		"roave/security-advisories": "dev-latest"
 	},
