@@ -13,6 +13,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use function property_exists;
 
 /**
  * Class LoggerAwareTraitTest
@@ -24,7 +25,7 @@ class LoggerAwareTraitTest extends KernelTestCase
 {
     public function testThatLoggerAttributeExists(): void
     {
-        self::assertClassHasAttribute('logger', LoggerAwareService::class);
+        self::assertTrue(property_exists(LoggerAwareService::class, 'logger'));
     }
 
     /**
@@ -34,9 +35,7 @@ class LoggerAwareTraitTest extends KernelTestCase
     {
         self::bootKernel();
 
-        /** @var LoggerAwareService $service */
         $service = self::$kernel->getContainer()->get(LoggerAwareService::class);
-
         $logger = PhpUnitUtil::getProperty('logger', $service);
 
         self::assertInstanceOf(LoggerInterface::class, $logger);

@@ -154,7 +154,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->getMock();
 
         $this->expectException(UnsupportedUserException::class);
-        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
+        $this->expectExceptionMessageMatches('#^Invalid user class(.*)#');
 
         (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock))
             ->refreshUser(new InMemoryUser('username', 'password'));

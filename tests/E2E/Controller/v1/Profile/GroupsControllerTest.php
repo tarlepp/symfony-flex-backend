@@ -19,6 +19,7 @@ use stdClass;
 use Throwable;
 use function array_map;
 use function getenv;
+use function property_exists;
 
 /**
  * Class GroupsControllerTest
@@ -48,11 +49,13 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -78,11 +81,13 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -92,9 +97,6 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatGroupsActionReturnExpected
-     *
-     * @psalm-param StringableArrayObject $e
-     * @phpstan-param StringableArrayObject<array<int, string>> $e
      *
      * @throws Throwable
      *
@@ -116,9 +118,26 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsArray($responseContent);
         self::assertSame(
             $e->getArrayCopy(),
-            array_map(static fn (stdClass $userGroup): string => $userGroup->role->id, $responseContent),
+            array_map(
+                static function (stdClass $userGroup): string {
+                    self::assertTrue(property_exists($userGroup, 'role'));
+
+                    $role = $userGroup->role;
+
+                    self::assertIsObject($role);
+                    self::assertTrue(property_exists($role, 'id'));
+
+                    $id = $role->id;
+
+                    self::assertIsString($id);
+
+                    return $id;
+                },
+                $responseContent
+            ),
         );
     }
 
@@ -142,11 +161,13 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -155,10 +176,7 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * return Generator<array{0: string, 1: string, 2: array<int, string>}>
-     *
-     * @psalm-return Generator<array{0: string, 1: string, 2: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: string, 1: string, 2: StringableArrayObject<array<int, string>>}>
+     * @return Generator<array-key, array{0: string, 1: string, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatGroupsActionReturnExpected(): Generator
     {
@@ -180,7 +198,9 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<array-key, array{0: string}>
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {

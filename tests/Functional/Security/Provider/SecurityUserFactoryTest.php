@@ -111,7 +111,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
+        $this->expectExceptionMessageMatches('#^Invalid user class(.*)#');
 
         $user = new InMemoryUser('username', 'password');
 
@@ -119,8 +119,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<array<int, string>>}>
+     * @return Generator<array-key, array{0: string, 1: StringableArrayObject}>
      */
     public function dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance(): Generator
     {
