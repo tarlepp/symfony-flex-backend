@@ -14,6 +14,7 @@ use Generator;
 use Throwable;
 use function getenv;
 use function json_encode;
+use function property_exists;
 
 /**
  * Class GetTokenControllerTest
@@ -86,6 +87,8 @@ class GetTokenControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         // Attributes that should be present...
         $attributes = [
             'token',
@@ -96,7 +99,7 @@ class GetTokenControllerTest extends WebTestCase
             $messageNotPresent = 'getToken did not return all expected attributes, missing \'' . $attribute . '\'.';
             $messageEmpty = 'Attribute \'' . $attribute . '\' is empty, this is fail...';
 
-            self::assertObjectHasAttribute($attribute, $responseContent, $messageNotPresent);
+            self::assertTrue(property_exists($responseContent, $attribute), $messageNotPresent);
             self::assertNotEmpty($responseContent->{$attribute}, $messageEmpty);
         }
     }
@@ -132,11 +135,13 @@ class GetTokenControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse: \n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'Invalid credentials.',
             $responseContent->message,
@@ -145,7 +150,7 @@ class GetTokenControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<array-key, array{0: string}>
      */
     public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): Generator
     {
@@ -159,7 +164,7 @@ class GetTokenControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<array-key, array{0: string, 1: string}>
      */
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
