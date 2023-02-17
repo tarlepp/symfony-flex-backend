@@ -13,6 +13,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
+use function property_exists;
 
 /**
  * Class StopwatchAwareTraitTest
@@ -24,7 +25,7 @@ class StopwatchAwareTraitTest extends KernelTestCase
 {
     public function testThatStopwatchAttributeExists(): void
     {
-        self::assertClassHasAttribute('stopwatch', StopwatchAwareService::class);
+        self::assertTrue(property_exists(StopwatchAwareService::class, 'stopwatch'));
     }
 
     /**
@@ -34,9 +35,7 @@ class StopwatchAwareTraitTest extends KernelTestCase
     {
         self::bootKernel();
 
-        /** @var StopwatchAwareService $service */
         $service = self::$kernel->getContainer()->get(StopwatchAwareService::class);
-
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);
 
         self::assertInstanceOf(Stopwatch::class, $stopwatch);
