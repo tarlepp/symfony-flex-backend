@@ -26,6 +26,8 @@ interface RequestLoggerInterface
     /**
      * RequestLogger constructor.
      *
+     * @codeCoverageIgnore This is needed because variables are multiline
+     *
      * @param array<int, string> $sensitiveProperties
      */
     public function __construct(
