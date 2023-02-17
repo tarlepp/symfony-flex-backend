@@ -34,7 +34,7 @@
 		"matomo/device-detector": "6.0.6",
 		"matthiasnoback/symfony-console-form": "5.3.2",
 		"nelmio/api-doc-bundle": "4.11.1",
-		"nelmio/cors-bundle": "2.2.0",
+		"nelmio/cors-bundle": "2.3.1",
 		"phpdocumentor/reflection-docblock": "5.3.0",
 		"ramsey/uuid-doctrine": "2.0.0",
 		"symfony/asset": "6.2.5",
