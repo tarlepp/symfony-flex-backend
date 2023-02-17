@@ -1,4 +1,4 @@
-FROM php:8.2.2-fpm
+FROM php:8.2.3-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -31,7 +31,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.5.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.5.4 /usr/bin/composer /usr/bin/composer
 
 # Enable Composer autocompletion
 RUN composer completion bash > /etc/bash_completion.d/composer
