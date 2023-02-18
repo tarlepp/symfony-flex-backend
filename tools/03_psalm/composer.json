@@ -1,7 +1,9 @@
 {
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
-	"require": {},
+	"require": {
+		"php": "^8.2.0"
+	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
 		"psalm/plugin-phpunit": "0.18.4",

@@ -1,11 +1,13 @@
 {
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
-	"require": {},
+	"require": {
+		"php": "^8.2.0"
+	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "3.14.4",
 		"roave/security-advisories": "dev-latest",
-		"symplify/config-transformer": "12.0.1.72",
+		"symplify/config-transformer": "12.0.2",
 		"symplify/easy-coding-standard": "11.2.8"
 	},
 	"config": {

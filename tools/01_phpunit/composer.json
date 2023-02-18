@@ -1,7 +1,9 @@
 {
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
-	"require": {},
+	"require": {
+		"php": "^8.2.0"
+	},
 	"require-dev": {
 		"liuggio/fastest": "1.10.0",
 		"phpunit/php-code-coverage": "10.0.0",
