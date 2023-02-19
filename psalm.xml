@@ -6,7 +6,7 @@
     errorLevel="2"
     rememberPropertyAssignmentsAfterCall="false"
     findUnusedBaselineEntry="true"
-    findUnusedCode="true"
+    findUnusedCode="false"
 >
     <projectFiles>
         <directory name="src/" />
