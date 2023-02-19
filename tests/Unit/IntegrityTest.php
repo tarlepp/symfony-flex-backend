@@ -100,9 +100,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
      *
-     * @phpstan-param  StringableArrayObject<array<int, string>> $methods
-     * @psalm-param  StringableArrayObject $methods
-     *
      * @testdox Test that repository `$class` has functional test class `$testClass` for `$methods` methods
      */
     public function testThatRepositoryHaveFunctionalTests(
@@ -444,8 +441,7 @@ FORMAT;
     }
 
     /**
-     * @psalm-return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
-     * @phpstan-return array<int, array{0: string, 1: string, 2: StringableArrayObject<mixed>}>
+     * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
