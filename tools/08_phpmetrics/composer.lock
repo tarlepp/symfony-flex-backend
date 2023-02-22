@@ -137,12 +137,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "9206ad5e9490993f471ef1503f630afd7a849170"
+                "reference": "778a428cd06a290d890e6bc1111b4e651b8a9da8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9206ad5e9490993f471ef1503f630afd7a849170",
-                "reference": "9206ad5e9490993f471ef1503f630afd7a849170",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/778a428cd06a290d890e6bc1111b4e651b8a9da8",
+                "reference": "778a428cd06a290d890e6bc1111b4e651b8a9da8",
                 "shasum": ""
             },
             "conflict": {
@@ -457,6 +457,7 @@
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pimcore/data-hub": "<1.2.4",
                 "pimcore/pimcore": "<10.5.17",
+                "pixelfed/pixelfed": "<=0.11.4",
                 "pocketmine/bedrock-protocol": "<8.0.2",
                 "pocketmine/pocketmine-mp": "<4.12.5|>= 4.0.0-BETA5, < 4.4.2",
                 "pressbooks/pressbooks": "<5.18",
@@ -712,7 +713,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-17T21:04:14+00:00"
+            "time": "2023-02-22T00:14:39+00:00"
         }
     ],
     "aliases": [],
