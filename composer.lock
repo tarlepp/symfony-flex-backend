@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "212441c1385e87d116fd176a860c4f99",
+    "content-hash": "895147b8b83554a0d7887e54a3f547c9",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1579,16 +1579,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v3.11.0",
+            "version": "v3.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine-extensions/DoctrineExtensions.git",
-                "reference": "a2364710d2f367f74d9f041c3356f2929b8c6690"
+                "reference": "ae4bdf0d567e06b6bb1902a560ee78961b230953"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/a2364710d2f367f74d9f041c3356f2929b8c6690",
-                "reference": "a2364710d2f367f74d9f041c3356f2929b8c6690",
+                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/ae4bdf0d567e06b6bb1902a560ee78961b230953",
+                "reference": "ae4bdf0d567e06b6bb1902a560ee78961b230953",
                 "shasum": ""
             },
             "require": {
@@ -1660,16 +1660,18 @@
                     "email": "david@liip.ch"
                 }
             ],
-            "description": "Doctrine2 behavioral extensions",
+            "description": "Doctrine behavioral extensions",
             "homepage": "http://gediminasm.org/",
             "keywords": [
                 "Blameable",
                 "behaviors",
-                "doctrine2",
+                "doctrine",
                 "extensions",
                 "gedmo",
                 "loggable",
                 "nestedset",
+                "odm",
+                "orm",
                 "sluggable",
                 "sortable",
                 "timestampable",
@@ -1680,10 +1682,10 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
-                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.11.0",
+                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.11.1",
                 "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/main/doc"
             },
-            "time": "2023-01-26T00:14:07+00:00"
+            "time": "2023-02-20T19:24:07+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -2114,16 +2116,16 @@
         },
         {
             "name": "matomo/device-detector",
-            "version": "6.0.6",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "ce5ef5e6776c16af306d38e20674973f072e05ed"
+                "reference": "bcbf10f2e0e158b338c6c5db9e89862313405215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/ce5ef5e6776c16af306d38e20674973f072e05ed",
-                "reference": "ce5ef5e6776c16af306d38e20674973f072e05ed",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/bcbf10f2e0e158b338c6c5db9e89862313405215",
+                "reference": "bcbf10f2e0e158b338c6c5db9e89862313405215",
                 "shasum": ""
             },
             "require": {
@@ -2179,7 +2181,7 @@
                 "source": "https://github.com/matomo-org/matomo",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2023-01-16T08:18:02+00:00"
+            "time": "2023-02-22T10:17:31+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -8010,12 +8012,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "9206ad5e9490993f471ef1503f630afd7a849170"
+                "reference": "778a428cd06a290d890e6bc1111b4e651b8a9da8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9206ad5e9490993f471ef1503f630afd7a849170",
-                "reference": "9206ad5e9490993f471ef1503f630afd7a849170",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/778a428cd06a290d890e6bc1111b4e651b8a9da8",
+                "reference": "778a428cd06a290d890e6bc1111b4e651b8a9da8",
                 "shasum": ""
             },
             "conflict": {
@@ -8330,6 +8332,7 @@
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pimcore/data-hub": "<1.2.4",
                 "pimcore/pimcore": "<10.5.17",
+                "pixelfed/pixelfed": "<=0.11.4",
                 "pocketmine/bedrock-protocol": "<8.0.2",
                 "pocketmine/pocketmine-mp": "<4.12.5|>= 4.0.0-BETA5, < 4.4.2",
                 "pressbooks/pressbooks": "<5.18",
@@ -8585,7 +8588,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-17T21:04:14+00:00"
+            "time": "2023-02-22T00:14:39+00:00"
         },
         {
             "name": "symfony/browser-kit",
