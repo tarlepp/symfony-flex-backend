@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d3f5a75e0a0abb9f704deb5db2ca3ce",
+    "content-hash": "4243abd9836b43ec834493003e1aecbc",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2114,16 +2114,16 @@
         },
         {
             "name": "matomo/device-detector",
-            "version": "6.0.6",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "ce5ef5e6776c16af306d38e20674973f072e05ed"
+                "reference": "bcbf10f2e0e158b338c6c5db9e89862313405215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/ce5ef5e6776c16af306d38e20674973f072e05ed",
-                "reference": "ce5ef5e6776c16af306d38e20674973f072e05ed",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/bcbf10f2e0e158b338c6c5db9e89862313405215",
+                "reference": "bcbf10f2e0e158b338c6c5db9e89862313405215",
                 "shasum": ""
             },
             "require": {
@@ -2179,7 +2179,7 @@
                 "source": "https://github.com/matomo-org/matomo",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2023-01-16T08:18:02+00:00"
+            "time": "2023-02-22T10:17:31+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
