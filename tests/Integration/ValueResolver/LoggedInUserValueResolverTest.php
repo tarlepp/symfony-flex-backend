@@ -247,7 +247,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that integration with `ArgumentResolver` returns null when there is not user present
+     * @testdox Test that integration with `ArgumentResolver` returns null when there is no user present
      */
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
@@ -261,20 +261,13 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
-    /**
-     * @return Generator<array{0: Closure}>
-     */
     public function dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(): Generator
     {
-        yield [static function (?User $loggedInUser = null): void {
+        yield 'closure with nullable user' => [static function (?User $loggedInUser = null): void {
             // Do nothing
         }];
 
-        yield [static function (?User $loggedInUser = null): void {
-            // Do nothing
-        }];
-
-        yield [static function (?User $loggedInUser): void {
+        yield 'closure without nullable user' => [static function (?User $loggedInUser): void {
             // Do nothing
         }];
     }
