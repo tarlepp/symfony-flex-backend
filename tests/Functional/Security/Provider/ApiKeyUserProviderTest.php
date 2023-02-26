@@ -34,6 +34,8 @@ use function str_pad;
 class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `getApiKeyForToken` method returns expected when using `$shortRole` as token base.
      */
     #[DataProvider('dataProviderTestThatGetApiKeyReturnsExpected')]
@@ -47,6 +49,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `getApiKeyForToken` method returns null when using `$shortRole` as an invalid token base.
      */
     #[DataProvider('dataProviderTestThatGetApiKeyReturnsExpected')]
@@ -71,11 +75,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
+     *
      * @testdox Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input
      */
     #[DataProvider('dataProviderTestThatLoadUserByIdentifierWorksAsExpected')]
@@ -101,6 +105,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `supportsClass` returns `$expected` when using `$class` as an input.
      */
     #[DataProvider('dataProviderTestThatSupportsClassReturnsExpected')]
@@ -110,6 +116,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @return array<int, array{0: string}>
      */
     public static function dataProviderTestThatGetApiKeyReturnsExpected(): array
@@ -126,6 +134,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @psalm-return array<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return array<int, array{0: string, 1: StringableArrayObject<array<int, string>>}>
      */
@@ -159,6 +169,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
         yield [true, ApiKeyUser::class];
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getApiKeyUserProvider(): ApiKeyUserProvider
     {
         self::bootKernel();

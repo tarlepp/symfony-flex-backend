@@ -11,7 +11,6 @@ namespace App\Tests\Integration\Repository;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\Role;
 use App\Repository\ApiKeyRepository;
-use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Utils\Tests\StringableArrayObject;

@@ -11,7 +11,6 @@ namespace App\Tests\Integration\Rest\Traits\Actions\Root;
 use App\DTO\ApiKey\ApiKeyCreate;
 use App\DTO\ApiKey\ApiKeyPatch;
 use App\DTO\ApiKey\ApiKeyUpdate;
-use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -40,6 +39,7 @@ class ActionTest extends KernelTestCase
      * @psalm-param trait-string $class
      *
      * @throws Throwable
+     *
      * @testdox Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters
      */
     #[DataProvider('dataProviderTestThatTraitCallsExpectedMethod')]

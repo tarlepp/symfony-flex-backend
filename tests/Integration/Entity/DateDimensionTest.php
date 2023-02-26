@@ -59,8 +59,8 @@ class DateDimensionTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     *
      * @throws Throwable
+     *
      * @testdox Test that getter method for `$type $property` property returns expected
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]

@@ -54,8 +54,8 @@ class IdsMethodTest extends KernelTestCase
     }
 
     /**
-     *
      * @throws Throwable
+     *
      * @testdox Test that `idsMethod` throws an exception when using `$httpMethod` HTTP method
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
@@ -80,8 +80,8 @@ class IdsMethodTest extends KernelTestCase
     }
 
     /**
-     *
      * @throws Throwable
+     *
      * @testdox Test that `patchMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitHandlesException')]
@@ -113,13 +113,13 @@ class IdsMethodTest extends KernelTestCase
     }
 
     /**
-     *
      * @phpstan-param StringableArrayObject<mixed> $criteria
      * @phpstan-param StringableArrayObject<mixed> $search
      * @psalm-param StringableArrayObject $criteria
      * @psalm-param StringableArrayObject $search
      *
      * @throws Throwable
+     *
      * @testdox Test that `idsMethod` method calls expected service methods when using `$queryString` as query string
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitCallsServiceMethods')]

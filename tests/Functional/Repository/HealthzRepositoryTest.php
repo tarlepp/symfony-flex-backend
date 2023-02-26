@@ -11,7 +11,6 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 use App\Utils\Tests\PhpUnitUtil;
-use Exception;
 use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
