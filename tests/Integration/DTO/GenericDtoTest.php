@@ -64,7 +64,9 @@ class GenericDtoTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that `patch` method throws an exception if DTO class contains multiple `getters` for same property')]
+    #[TestDox(
+        'Test that `patch` method throws an exception if DTO class contains multiple `getters` for same property'
+    )]
     public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
     {
         $this->expectException(LogicException::class);

@@ -97,7 +97,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     #[DataProvider('dataProviderTestThatGetLimitReturnsExpectedValue')]
-    #[TestDox('Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter')]
+    #[TestDox(
+        'Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter'
+    )]
     public function testThatGetLimitReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -132,7 +134,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     #[DataProvider('dataProviderTestThatGetOffsetReturnsExpectedValue')]
-    #[TestDox('Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter')]
+    #[TestDox(
+        'Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter'
+    )]
     public function testThatGetOffsetReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -155,7 +159,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     #[DataProvider('dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters')]
-    #[TestDox('Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request')]
+    #[TestDox(
+        'Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request'
+    )]
     public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(string $method): void
     {
         $fakeRequest = Request::create('/', $method);

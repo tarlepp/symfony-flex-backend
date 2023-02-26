@@ -225,7 +225,9 @@ class RequestLogSubscriberTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard')]
-    #[TestDox("Test that `RequestLogger` service isn't used when making request to `\$url` with `\$ignored` ignored route")]
+    #[TestDox(
+        'Test that `RequestLogger` service isn\'t used when making request to `$url` with `$ignored` ignored route'
+    )]
     public function testThatLoggerServiceIsNotCalledWhenUsingSpecifiedIgnoredRoute(string $url, string $ignored): void
     {
         self::bootKernel();

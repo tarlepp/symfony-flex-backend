@@ -234,7 +234,9 @@ abstract class EntityTestCase extends KernelTestCase
      * @psalm-param class-string | null $o
      */
     #[DataProvider('dataProviderTestThatAssociationMethodsExists')]
-    #[TestDox('Test that association method `$m` exists for `$p` property, and it returns `$o` when using `$i` as input')]
+    #[TestDox(
+        'Test that association method `$m` exists for `$p` property, and it returns `$o` when using `$i` as input'
+    )]
     public function testThatAssociationMethodsExistsAndThoseReturnsCorrectValue(
         ?string $m,
         ?string $p,

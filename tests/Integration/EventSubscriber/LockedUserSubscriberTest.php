@@ -39,7 +39,9 @@ class LockedUserSubscriberTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported')]
+    #[TestDox(
+        'Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported'
+    )]
     public function testThatOnAuthenticationSuccessThrowsUserNotFoundException(): void
     {
         $this->expectException(UnsupportedUserException::class);
@@ -108,7 +110,9 @@ class LockedUserSubscriberTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked')]
+    #[TestDox(
+        'Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked'
+    )]
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();

@@ -96,7 +96,9 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that calling `getAssociations` method calls expected repository methods and returns expected value')]
+    #[TestDox(
+        'Test that calling `getAssociations` method calls expected repository methods and returns expected value'
+    )]
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
         [$resource, $repository] = $this->getResourceAndRepository();
@@ -115,7 +117,9 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that calling `getDtoForEntity` method calls expected repository methods and returns expected value')]
+    #[TestDox(
+        'Test that calling `getDtoForEntity` method calls expected repository methods and returns expected value'
+    )]
     public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
     {
         [$resource, $repository] = $this->getResourceAndRepository();
@@ -163,7 +167,9 @@ class GenericResourceTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters')]
-    #[TestDox('Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments')]
+    #[TestDox(
+        'Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments'
+    )]
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
@@ -291,7 +297,9 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox("Test that `findOneBy` method doesn't throw an exception if entity not found and exception bit is not set")]
+    #[TestDox(
+        'Test that `findOneBy` method doesn\'t throw an exception if entity not found and exception bit is not set'
+    )]
     public function testThatFindOneByDoesNotThrowAnExceptionIfEntityWasNotFound(): void
     {
         [$resource, $repository] = $this->getResourceAndRepository();
@@ -333,7 +341,9 @@ class GenericResourceTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters')]
-    #[TestDox('Test that `countAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.')]
+    #[TestDox(
+        'Test that `countAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.'
+    )]
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,

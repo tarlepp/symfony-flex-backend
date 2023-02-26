@@ -114,7 +114,9 @@ class CountMethodTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
-    #[TestDox('Test that `countMethod` method calls expected service methods when using `$queryString` as query string')]
+    #[TestDox(
+        'Test that `countMethod` method calls expected service methods when using `$queryString` as query string'
+    )]
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,

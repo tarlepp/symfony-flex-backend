@@ -67,7 +67,9 @@ class UserControllerTest extends WebTestCase
     }
 
     #[DataProvider('dataProviderValidApiKeyUsers')]
-    #[TestDox('Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role')]
+    #[TestDox(
+        'Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role'
+    )]
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $r): void
     {
         $client = $this->getApiKeyClient($r);

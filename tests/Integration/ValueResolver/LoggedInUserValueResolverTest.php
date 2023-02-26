@@ -109,7 +109,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`')]
+    #[TestDox(
+        'Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`'
+    )]
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
         $this->expectException(MissingTokenException::class);

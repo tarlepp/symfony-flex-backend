@@ -99,7 +99,9 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestResponseHasExpectedStatusCode')]
-    #[TestDox("Test that `Response` has status code `\$status` and message `\$message` with environment: '\$environment'.")]
+    #[TestDox(
+        'Test that `Response` has status code `$status` and message `$message` with environment: `$environment`'
+    )]
     public function testThatResponseHasExpectedStatusCode(
         int $status,
         Throwable $exception,
