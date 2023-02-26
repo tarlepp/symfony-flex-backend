@@ -13,6 +13,7 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Tests\Integration\DTO\DtoTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function count;
 
@@ -30,9 +31,7 @@ class ApiKeyTest extends DtoTestCase
      */
     protected static string $dtoClass = ApiKeyDto::class;
 
-    /**
-     * @testdox Test that `load` method actually loads entity data correctly
-     */
+    #[TestDox('Test that `load` method actually loads entity data correctly')]
     public function testThatLoadMethodWorks(): void
     {
         // Create Role entity
@@ -57,9 +56,8 @@ class ApiKeyTest extends DtoTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `update` method calls expected entity methods when `setUserGroups` method is used
      */
+    #[TestDox('Test that `update` method calls expected entity methods when `setUserGroups` method is used')]
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
         $userGroups = [

@@ -15,6 +15,7 @@ use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use function array_unique;
 
 /**
@@ -37,9 +38,9 @@ class ApiKeyTest extends EntityTestCase
      * @phpstan-param StringableArrayObject<array> $criteria
      * @psalm-param StringableArrayObject $expectedRoles
      * @psalm-param StringableArrayObject $criteria
-     * @testdox Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`
      */
     #[DataProvider('dataProviderTestThatApiKeyHasExpectedRoles')]
+    #[TestDox('Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`')]
     public function testThatApiKeyHasExpectedRoles(
         StringableArrayObject $expectedRoles,
         StringableArrayObject $criteria

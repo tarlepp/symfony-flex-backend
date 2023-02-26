@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Validator\Constraints\UniqueUsername;
 use App\Validator\Constraints\UniqueUsernameValidator;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
@@ -27,9 +28,8 @@ class UniqueUsernameValidatorTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `UniqueEmailValidator::validate` method calls expected service methods
      */
+    #[TestDox('Test that `UniqueEmailValidator::validate` method calls expected service methods')]
     public function testThatValidateCallsExpectedMethods(): void
     {
         $repositoryMock = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();

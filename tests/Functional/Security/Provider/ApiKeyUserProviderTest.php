@@ -17,6 +17,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Persistence\ManagerRegistry;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -35,10 +36,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getApiKeyForToken` method returns expected when using `$shortRole` as token base.
      */
     #[DataProvider('dataProviderTestThatGetApiKeyReturnsExpected')]
+    #[TestDox('Test that `getApiKeyForToken` method returns expected when using `$shortRole` as token base.')]
     public function testThatGetApiKeyReturnsExpected(string $shortRole): void
     {
         $token = str_pad($shortRole, 40, '_');
@@ -50,10 +50,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getApiKeyForToken` method returns null when using `$shortRole` as an invalid token base.
      */
     #[DataProvider('dataProviderTestThatGetApiKeyReturnsExpected')]
+    #[TestDox('Test that `getApiKeyForToken` method returns null when using `$shortRole` as an invalid token base.')]
     public function testThatGetApiKeyReturnsNullForInvalidToken(string $shortRole): void
     {
         $token = str_pad($shortRole, 40, '-');
@@ -79,10 +78,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
-     *
-     * @testdox Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input
      */
     #[DataProvider('dataProviderTestThatLoadUserByIdentifierWorksAsExpected')]
+    #[TestDox('Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input')]
     public function testThatLoadUserByIdentifierWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
         $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
@@ -106,10 +104,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supportsClass` returns `$expected` when using `$class` as an input.
      */
     #[DataProvider('dataProviderTestThatSupportsClassReturnsExpected')]
+    #[TestDox('Test that `supportsClass` returns `$expected` when using `$class` as an input.')]
     public function testThatSupportsClassReturnsExpected(bool $expected, string $class): void
     {
         self::assertSame($expected, $this->getApiKeyUserProvider()->supportsClass($class));

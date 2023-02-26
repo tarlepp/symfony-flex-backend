@@ -17,6 +17,7 @@ use App\Security\RolesService;
 use App\Security\SecurityUser;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -35,9 +36,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `loadUserByIdentifier` method throws an exception when user is not found
      */
+    #[TestDox('Test that `loadUserByIdentifier` method throws an exception when user is not found')]
     public function testThatLoadUserByIdentifierThrowsAnExceptionIfUserNotFound(): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -63,9 +63,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `loadUserByIdentifier` method returns expected `SecurityUser` instance
      */
+    #[TestDox('Test that `loadUserByIdentifier` method returns expected `SecurityUser` instance')]
     public function testThatLoadByUsernameReturnsExpectedSecurityUser(): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -97,10 +96,8 @@ class SecurityUserFactoryTest extends KernelTestCase
         self::assertSame(['FOO', 'BAR'], $securityUser->getRoles());
     }
 
-    /**
-     * @testdox Test that `supportsClass` method returns `false` when using `$input` as input
-     */
     #[DataProvider('dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType')]
+    #[TestDox('Test that `supportsClass` method returns `false` when using `$input` as input')]
     public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(bool | int | string $input): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -119,9 +116,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supportsClass` method returns `true` when using `SecurityUser::class` as input
      */
+    #[TestDox('Test that `supportsClass` method returns `true` when using `SecurityUser::class` as input')]
     public function testThatSupportsMethodsReturnsTrueWithSupportedType(): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -140,9 +136,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `refreshUser` method throws an exception with not supported user instance
      */
+    #[TestDox('Test that `refreshUser` method throws an exception with not supported user instance')]
     public function testThatRefreshUserThrowsAnExceptionWithNotSupportedUser(): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -162,9 +157,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `refreshUser` method throws an exception when user is not found
      */
+    #[TestDox('Test that `refreshUser` method throws an exception when user is not found')]
     public function testThatRefreshUserThrowsAnExceptionIfUserNotFound(): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -189,9 +183,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `refreshUser` method returns new instance of `SecurityUser` and it matches with old one
      */
+    #[TestDox('Test that `refreshUser` method returns new instance of `SecurityUser` and it matches with old one')]
     public function testThatRefreshUserReturnsNewInstanceOfSecurityUser(): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)

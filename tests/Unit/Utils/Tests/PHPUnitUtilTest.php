@@ -16,6 +16,7 @@ use DateTimeImmutable;
 use Generator;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -28,9 +29,7 @@ use Throwable;
  */
 class PHPUnitUtilTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `getType` method throws exception with not know type
-     */
+    #[TestDox('Test that `getType` method throws exception with not know type')]
     public function testThatGetTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
@@ -39,10 +38,8 @@ class PHPUnitUtilTest extends KernelTestCase
         PhpUnitUtil::getType('666');
     }
 
-    /**
-     * @testdox Test that `getType` method returns `$expected` when using `$input` as input
-     */
     #[DataProvider('dataProviderTestThatGetTypeReturnExpected')]
+    #[TestDox('Test that `getType` method returns `$expected` when using `$input` as input')]
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
     {
         self::assertSame($expected, PhpUnitUtil::getType($input));
@@ -50,9 +47,8 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getValidValueForType` method throws exception with not know type
      */
+    #[TestDox('Test that `getValidValueForType` method throws exception with not know type')]
     public function testThatGetValidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
@@ -63,10 +59,9 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`
      */
     #[DataProvider('dataProviderTestThatGetValidValueReturnsExpectedValue')]
+    #[TestDox('Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`')]
     public function testThatGetValidValueReturnsExpectedValue(mixed $expected, string $input, bool $strict): void
     {
         $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
@@ -83,9 +78,8 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getValidValueForType` works as expected with custom type
      */
+    #[TestDox('Test that `getValidValueForType` works as expected with custom type')]
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
         self::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
@@ -95,10 +89,9 @@ class PHPUnitUtilTest extends KernelTestCase
      * @param int|string|array<int, string> $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that `getValidValueForType` returns `$expected` when using `$type` as input type
      */
     #[DataProvider('dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType')]
+    #[TestDox('Test that `getValidValueForType` returns `$expected` when using `$type` as input type')]
     public function testThatGetValidValueForTypeWorksIfThereIsAPipeOnType(
         int | string | array $expected,
         string $type,
@@ -108,9 +101,8 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getInvalidValueForType` method throws exception with not know type
      */
+    #[TestDox('Test that `getInvalidValueForType` method throws exception with not know type')]
     public function testThatGetInvalidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
@@ -123,10 +115,9 @@ class PHPUnitUtilTest extends KernelTestCase
      * @param class-string $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that `getInvalidValueForType` method returns `$expected` when using `$input` as input
      */
     #[DataProvider('dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue')]
+    #[TestDox('Test that `getInvalidValueForType` method returns `$expected` when using `$input` as input')]
     public function testThatGetInvalidValueForTypeReturnsExpectedValue(string $expected, string $input): void
     {
         self::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));

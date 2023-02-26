@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Controller\v1\Localization;
 
 use App\Controller\v1\Localization\TimeZoneController;
 use App\Service\Localization;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -20,9 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class TimeZoneControllerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that controller calls expected service method(s) and returns expected response
-     */
+    #[TestDox('Test that controller calls expected service method(s) and returns expected response')]
     public function testThatInvokeMethodCallsExpectedServiceMethods(): void
     {
         $Localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();

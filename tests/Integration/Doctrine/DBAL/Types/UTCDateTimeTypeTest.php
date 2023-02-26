@@ -18,6 +18,7 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -31,9 +32,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method works as expected
      */
+    #[TestDox('Test that `convertToDatabaseValue` method works as expected')]
     public function testThatDateTimeConvertsToDatabaseValue(): void
     {
         $type = $this->getType();
@@ -51,9 +51,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method creates DateTimeZone instance as expected
      */
+    #[TestDox('Test that `convertToDatabaseValue` method creates DateTimeZone instance as expected')]
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         $type = $this->getType();
@@ -76,10 +75,9 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`
      */
     #[DataProvider('dataProviderTestDateTimeConvertsToPHPValue')]
+    #[TestDox('Test that `convertToPHPValue` method converts `$value` to `$expected`')]
     public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
     {
         $type = $this->getType();
@@ -93,9 +91,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method creates DateTimeZone instance as expected
      */
+    #[TestDox('Test that `convertToPHPValue` method creates DateTimeZone instance as expected')]
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         $type = $this->getType();
@@ -116,9 +113,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method throws an exception when invalid value is used
      */
+    #[TestDox('Test that `convertToPHPValue` method throws an exception when invalid value is used')]
     public function testThatConvertToPHPValueThrowsAnExceptionWithInvalidValue(): void
     {
         $this->expectException(ConversionException::class);

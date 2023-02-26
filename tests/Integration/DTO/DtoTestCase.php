@@ -11,6 +11,7 @@ namespace App\Tests\Integration\DTO;
 use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use ReflectionProperty;
@@ -44,9 +45,8 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that DTO class properties have `getter` methods defined
      */
+    #[TestDox('Test that DTO class properties have `getter` methods defined')]
     public function testThatPropertiesHaveGetters(): void
     {
         $dtoReflection = new ReflectionClass(static::$dtoClass);
@@ -67,9 +67,8 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that DTO class properties have `setter` methods defined
      */
+    #[TestDox('Test that DTO class properties have `setter` methods defined')]
     public function testThatPropertiesHaveSetters(): void
     {
         $dtoReflection = new ReflectionClass(static::$dtoClass);
@@ -90,9 +89,8 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that DTO class `setter` methods calls `setVisited` method
      */
+    #[TestDox('Test that DTO class `setter` methods calls `setVisited` method')]
     public function testThatSetterCallsSetVisitedMethod(): void
     {
         /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
@@ -125,9 +123,8 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that DTO class `getter` method returns expected value after `setter` method call
      */
+    #[TestDox('Test that DTO class `getter` method returns expected value after `setter` method call')]
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
         /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
@@ -152,9 +149,9 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
-     * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type
      */
     #[DataProvider('dataProviderTestThatSetterOnlyAcceptSpecifiedType')]
+    #[TestDox('Test that `setter` method for `$field` will fail if parameter is not `$type` type')]
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {
         // Get "valid" value for current property

@@ -19,6 +19,8 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -36,9 +38,8 @@ class FindMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `findMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
+    #[TestDox("Test that `findMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
         $inValidTestClassMock = $this->getMockForAbstractClass(FindMethodInvalidTestClass::class);
@@ -55,10 +56,9 @@ class FindMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `findMethod` throws an exception when using `$httpMethod` HTTP method
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
+    #[DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
+    #[TestDox('Test that `findMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -77,10 +77,9 @@ class FindMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `findMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitHandlesException')]
+    #[DataProvider('dataProviderTestThatTraitHandlesException')]
+    #[TestDox('Test that `findMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -115,10 +114,9 @@ class FindMethodTest extends KernelTestCase
      * @psalm-param StringableArrayObject $search
      *
      * @throws Throwable
-     *
-     * @testdox Test that `findMethod` method calls expected service methods when using `$queryString` as query string
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
+    #[DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
+    #[TestDox('Test that `findMethod` method calls expected service methods when using `$queryString` as query string')]
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,
@@ -160,9 +158,8 @@ class FindMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `findMethod` throws an exception when `?where` parameter is not valid JSON
      */
+    #[TestDox('Test that `findMethod` throws an exception when `?where` parameter is not valid JSON')]
     public function testThatTraitThrowsAnExceptionWhenWhereParameterIsNotValidJson(): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();

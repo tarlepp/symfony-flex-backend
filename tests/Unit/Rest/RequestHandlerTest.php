@@ -13,6 +13,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -26,10 +27,10 @@ use function json_encode;
  */
 class RequestHandlerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `getCriteria` method throws an exception with `$method` invalid (non JSON) `?where` parameter
-     */
     #[DataProvider('dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter')]
+    #[TestDox(
+        'Test that `getCriteria` method throws an exception with `$method` invalid (non JSON) `?where` parameter'
+    )]
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(string $method): void
     {
         $this->expectException(HttpException::class);
@@ -47,11 +48,10 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getCriteria` returns `$expected` when using `$method` and `$where` as `?where` parameter
-     *
      * @throws JsonException
      */
     #[DataProvider('dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator')]
+    #[TestDox('Test that `getCriteria` returns `$expected` when using `$method` and `$where` as `?where` parameter')]
     public function testThatGetCriteriaMethodsReturnsExpectedGenerator(
         string $method,
         StringableArrayObject $expected,
@@ -68,10 +68,8 @@ class RequestHandlerTest extends KernelTestCase
         self::assertSame($expected->getArrayCopy(), RequestHandler::getCriteria($fakeRequest));
     }
 
-    /**
-     * @testdox Test that `getOrderBy` method returns `$expected` when using `$method` and `$parameters` as an input
-     */
     #[DataProvider('dataProviderTestThatGetOrderByReturnsExpectedValue')]
+    #[TestDox('Test that `getOrderBy` method returns `$expected` when using `$method` and `$parameters` as an input')]
     public function testThatGetOrderByReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -86,10 +84,8 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `getLimit` method returns `null` when there is no `?limit` parameter on `$method` request
-     */
     #[DataProvider('dataProviderTestThatGetLimitReturnsNullWithoutParameter')]
+    #[TestDox('Test that `getLimit` method returns `null` when there is no `?limit` parameter on `$method` request')]
     public function testThatGetLimitReturnsNullWithoutParameter(string $method): void
     {
         $fakeRequest = Request::create('/', $method);
@@ -100,10 +96,8 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter
-     */
     #[DataProvider('dataProviderTestThatGetLimitReturnsExpectedValue')]
+    #[TestDox('Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter')]
     public function testThatGetLimitReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -125,10 +119,8 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `getOffset` method returns `null` when there is no `?offset` parameter on `$method` request
-     */
     #[DataProvider('dataProviderTestThatGetOffsetReturnsNullWithoutParameter')]
+    #[TestDox('Test that `getOffset` method returns `null` when there is no `?offset` parameter on `$method` request')]
     public function testThatGetOffsetReturnsNullWithoutParameter(string $method): void
     {
         $fakeRequest = Request::create('/', $method);
@@ -139,10 +131,8 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter
-     */
     #[DataProvider('dataProviderTestThatGetOffsetReturnsExpectedValue')]
+    #[TestDox('Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter')]
     public function testThatGetOffsetReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -164,10 +154,8 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request
-     */
     #[DataProvider('dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters')]
+    #[TestDox('Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request')]
     public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(string $method): void
     {
         $fakeRequest = Request::create('/', $method);
@@ -179,10 +167,8 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `getSearchTerms` throws an exception when `$method` `search` parameter contains invalid JSON
-     */
     #[DataProvider('dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson')]
+    #[TestDox('Test that `getSearchTerms` throws an exception when `$method` `search` parameter contains invalid JSON')]
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(string $method): void
     {
         $this->expectException(HttpException::class);
@@ -199,10 +185,8 @@ class RequestHandlerTest extends KernelTestCase
         RequestHandler::getSearchTerms($fakeRequest);
     }
 
-    /**
-     * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `$method` `search` parameter
-     */
     #[DataProvider('dataProviderTestThatGetSearchTermsReturnsExpectedValue')]
+    #[TestDox('Test that `getSearchTerms` returns `$expected` when using `$search` as `$method` `search` parameter')]
     public function testThatGetSearchTermsReturnsExpectedValue(
         string $method,
         StringableArrayObject $expected,

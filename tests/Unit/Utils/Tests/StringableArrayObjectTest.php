@@ -11,6 +11,7 @@ namespace App\Tests\Unit\Utils\Tests;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -24,10 +25,9 @@ class StringableArrayObjectTest extends KernelTestCase
     /**
      * @phpstan-param StringableArrayObject<array<string, string>> $input
      * @psalm-param StringableArrayObject $input
-     *
-     * @testdox Test that casting to string with `$input` input (array converted to JSON) returns `$expected`
      */
     #[DataProvider('dataProviderTestThatCastingToStringReturnsExpected')]
+    #[TestDox('Test that casting to string with `$input` input (array converted to JSON) returns `$expected`')]
     public function testThatCastingToStringReturnsExpected(StringableArrayObject $input, string $expected): void
     {
         self::assertSame($expected, (string)(new StringableArrayObject($input)));

@@ -16,6 +16,7 @@ use Closure;
 use Generator;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -34,9 +35,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` methods returns `false` if the parameter name isn't `loggedInUser`
      */
+    #[TestDox("Test that `supports` methods returns `false` if the parameter name isn't `loggedInUser`")]
     public function testThatSupportsReturnFalseWithWrongName(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -49,9 +49,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` methods returns `false` if the parameter name is `loggedInUser` but type is wrong
      */
+    #[TestDox('Test that `supports` methods returns `false` if the parameter name is `loggedInUser` but type is wrong')]
     public function testThatSupportsReturnFalseWithWrongType(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -64,9 +63,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` returns `false` if the parameter name isn't `loggedInUser` but type is correct
      */
+    #[TestDox("Test that `supports` returns `false` if the parameter name isn't `loggedInUser` but type is correct")]
     public function testThatSupportsReturnFalseWithWrongNameAndCorrectType(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -79,9 +77,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` method returns `true` if parameter is nullable
      */
+    #[TestDox('Test that `supports` method returns `true` if parameter is nullable')]
     public function testThatSupportsReturnFalseWithNullable(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -94,9 +91,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` method throws an exception when `userService->getSecurityUser` returns null
      */
+    #[TestDox('Test that `supports` method throws an exception when `userService->getSecurityUser` returns null')]
     public function testThatSupportsReturnFalseWithNoToken(): void
     {
         $this->expectException(MissingTokenException::class);
@@ -112,9 +108,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`
      */
+    #[TestDox('Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`')]
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
         $this->expectException(MissingTokenException::class);
@@ -135,9 +130,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `supports` methods returns `true` with proper `SecurityUser`
      */
+    #[TestDox('Test that `supports` methods returns `true` with proper `SecurityUser`')]
     public function testThatSupportsReturnsTrueWithProperUser(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -157,9 +151,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `resolve` method calls expected `UserService` service method
      */
+    #[TestDox('Test that `resolve` method calls expected `UserService` service method')]
     public function testThatResolveCallsExpectedResourceMethod(): void
     {
         $securityUser = new SecurityUser(new User());
@@ -185,9 +178,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `resolve` method returns expected user
      */
+    #[TestDox('Test that `resolve` method returns expected user')]
     public function testThatResolveReturnsExpectedUser(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -214,9 +206,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that integration with `ArgumentResolver` returns expected user
      */
+    #[TestDox('Test that integration with `ArgumentResolver` returns expected user')]
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -245,10 +236,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that integration with `ArgumentResolver` returns null when there is no user present
      */
     #[DataProvider('dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet')]
+    #[TestDox('Test that integration with `ArgumentResolver` returns null when there is no user present')]
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();

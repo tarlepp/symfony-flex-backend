@@ -17,6 +17,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Closure;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -46,10 +47,8 @@ use const DIRECTORY_SEPARATOR;
  */
 class IntegrityTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that controller `$class` has E2E test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatControllerHasE2ETests')]
+    #[TestDox('Test that controller `$class` has E2E test class `$testClass`')]
     public function testThatControllerHasE2ETests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -61,10 +60,8 @@ class IntegrityTest extends KernelTestCase
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that REST controller `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatRestControllerHaveIntegrationTests')]
+    #[TestDox('Test that REST controller `$class` has integration test class `$testClass`')]
     public function testThatRestControllerHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -76,10 +73,8 @@ class IntegrityTest extends KernelTestCase
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that repository `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatRepositoryClassHasIntegrationTests')]
+    #[TestDox('Test that repository `$class` has integration test class `$testClass`')]
     public function testThatRepositoryClassHasIntegrationTests(string $testClass, string $class): void
     {
         $format = <<<FORMAT
@@ -95,10 +90,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that repository `$class` has functional test class `$testClass` for `$methods` methods
-     */
     #[DataProvider('dataProviderTestThatRepositoryHaveFunctionalTests')]
+    #[TestDox('Test that repository `$class` has functional test class `$testClass` for `$methods` methods')]
     public function testThatRepositoryHaveFunctionalTests(
         string $testClass,
         string $class,
@@ -118,10 +111,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that repository `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatRestRepositoryHaveIntegrationTests')]
+    #[TestDox('Test that repository `$class` has integration test class `$testClass`')]
     public function testThatRestRepositoryHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -133,10 +124,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that entity `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatEntityHaveIntegrationTests')]
+    #[TestDox('Test that entity `$class` has integration test class `$testClass`')]
     public function testThatEntityHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -148,10 +137,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that event subscriber `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatEventSubscriberHaveIntegrationTest')]
+    #[TestDox('Test that event subscriber `$class` has integration test class `$testClass`')]
     public function testThatEventSubscriberHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -163,10 +150,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that event listener `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatEventListenerHaveIntegrationTest')]
+    #[TestDox('Test that event listener `$class` has integration test class `$testClass`')]
     public function testThatEventListenerHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -178,10 +163,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that resource `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatResourceHaveIntegrationTest')]
+    #[TestDox('Test that resource `$class` has integration test class `$testClass`')]
     public function testThatResourceHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -193,10 +176,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that authenticator `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest')]
+    #[TestDox('Test that authenticator `$class` has integration test class `$testClass`')]
     public function testThatSecurityAuthenticatorHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -208,10 +189,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that security provider `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatSecurityProvidersHaveIntegrationTest')]
+    #[TestDox('Test that security provider `$class` has integration test class `$testClass`')]
     public function testThatSecurityProvidersHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -223,10 +202,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that security voter `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatSecurityVoterHaveIntegrationTest')]
+    #[TestDox('Test that security voter `$class` has integration test class `$testClass`')]
     public function testThatSecurityVoterHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -238,10 +215,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that REST DTO `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatDtoHaveIntegrationTest')]
+    #[TestDox('Test that REST DTO `$class` has integration test class `$testClass`')]
     public function testThatDtoHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -253,10 +228,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that form type `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatFormTypeHaveIntegrationTest')]
+    #[TestDox('Test that form type `$class` has integration test class `$testClass`')]
     public function testThatFormTypeHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -268,10 +241,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that data transformer `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatDataTransformerHaveIntegrationTest')]
+    #[TestDox('Test that data transformer `$class` has integration test class `$testClass`')]
     public function testThatDataTransformerHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -283,10 +254,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that constraint `$class` has unit test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatConstraintHasUnitTest')]
+    #[TestDox('Test that constraint `$class` has unit test class `$testClass`')]
     public function testThatConstraintHasUnitTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -298,10 +267,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`
-     */
     #[DataProvider('dataProviderTestThatEventSubscriberHasUnitTest')]
+    #[TestDox('Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`')]
     public function testThatEventSubscriberHasUnitTest(
         string $eventSubscriberTestClass,
         string $eventSubscriberClass
@@ -315,10 +282,8 @@ FORMAT;
         self::assertTrue(class_exists($eventSubscriberTestClass), $message);
     }
 
-    /**
-     * @testdox Test that validator `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatValidatorConstraintsHaveIntegrationTest')]
+    #[TestDox('Test that validator `$class` has integration test class `$testClass`')]
     public function testThatValidatorConstraintsHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -330,10 +295,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that DBAL type `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatCustomDBALTypeHaveIntegrationTest')]
+    #[TestDox('Test that DBAL type `$class` has integration test class `$testClass`')]
     public function testThatCustomDBALTypeHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -345,10 +308,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that REST request mapper `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatRestRequestMapperHaveIntegrationTest')]
+    #[TestDox('Test that REST request mapper `$class` has integration test class `$testClass`')]
     public function testThatRestRequestMapperHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -360,10 +321,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that generic service `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatGenericServiceHaveIntegrationTests')]
+    #[TestDox('Test that generic service `$class` has integration test class `$testClass`')]
     public function testThatGenericServiceHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -375,10 +334,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @testdox Test that argument value resolver service `$class` has integration test class `$testClass`
-     */
     #[DataProvider('dataProviderTestThatValueResolverServiceHasIntegrationTest')]
+    #[TestDox('Test that argument value resolver service `$class` has integration test class `$testClass`')]
     public function testThatValueResolverServiceHasIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(

@@ -16,6 +16,7 @@ use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
 use App\Utils\Tests\PhpUnitUtil;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
@@ -33,9 +34,8 @@ class ControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getResource` method throws an exception if `Resource` service is not set
      */
+    #[TestDox('Test that `getResource` method throws an exception if `Resource` service is not set')]
     public function testThatGetResourceThrowsAnExceptionIfNotSet(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -47,9 +47,8 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getResource` method doesn't throw an exception if `Resource` service is set
      */
+    #[TestDox("Test that `getResource` method doesn't throw an exception if `Resource` service is set")]
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
@@ -62,9 +61,8 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getResponseHandler` method throws an exception if `ResponseHandler` service is not set
      */
+    #[TestDox('Test that `getResponseHandler` method throws an exception if `ResponseHandler` service is not set')]
     public function testThatGetResponseHandlerThrowsAnExceptionIfNotSet(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -76,9 +74,8 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getResponseHandler` method doesn't throw an exception if `ResponseHandler` service is set
      */
+    #[TestDox("Test that `getResponseHandler` method doesn't throw an exception if `ResponseHandler` service is set")]
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
@@ -91,9 +88,8 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getDtoClass` method calls expected `Resource` service method
      */
+    #[TestDox('Test that `getDtoClass` method calls expected `Resource` service method')]
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
         $dtoClassMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -112,9 +108,8 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getDtoClass` method throws an exception when `Resource` class not returning expected
      */
+    #[TestDox('Test that `getDtoClass` method throws an exception when `Resource` class not returning expected')]
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
@@ -137,9 +132,8 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getDtoClass` returns expected when using custom DTO class mapping
      */
+    #[TestDox('Test that `getDtoClass` returns expected when using custom DTO class mapping')]
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();

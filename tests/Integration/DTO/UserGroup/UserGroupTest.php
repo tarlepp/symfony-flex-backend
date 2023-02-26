@@ -12,6 +12,7 @@ use App\DTO\UserGroup\UserGroup;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Tests\Integration\DTO\DtoTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Class UserGroupTest
@@ -27,9 +28,7 @@ class UserGroupTest extends DtoTestCase
      */
     protected static string $dtoClass = UserGroup::class;
 
-    /**
-     * @testdox Test that `load` method actually loads entity data correctly
-     */
+    #[TestDox('Test that `load` method actually loads entity data correctly')]
     public function testThatLoadCallsExpectedEntityMethods(): void
     {
         // Create Role entity
@@ -47,9 +46,7 @@ class UserGroupTest extends DtoTestCase
         self::assertSame($roleEntity, $dto->getRole());
     }
 
-    /**
-     * @testdox Test that `update` method trigger expected entity method calls
-     */
+    #[TestDox('Test that `update` method trigger expected entity method calls')]
     public function testThatUpdateMethodCallsExpectedEntityMethods(): void
     {
         $roleEntity = new RoleEntity('test role');

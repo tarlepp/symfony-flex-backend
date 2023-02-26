@@ -13,6 +13,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -42,9 +43,8 @@ class DeleteUserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `DELETE /v1/user/{id}` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `DELETE /v1/user/{id}` request returns `401` for non-logged in user')]
     public function testThatDeleteUserReturns401(): void
     {
         $client = $this->getTestClient();
@@ -59,9 +59,9 @@ class DeleteUserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     * @testdox Test that `DELETE /v1/user/{id}` request returns `403` when using user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatDeleteUserReturns403')]
+    #[TestDox('Test that `DELETE /v1/user/{id}` request returns `403` when using user `$u` + `$p`')]
     public function testThatDeleteUserReturns403(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -76,9 +76,8 @@ class DeleteUserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `DELETE /v1/user/{id}` request returns `400` if user tries to remove him/herself
      */
+    #[TestDox('Test that `DELETE /v1/user/{id}` request returns `400` if user tries to remove him/herself')]
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
         $client = $this->getTestClient('john-root', 'password-root');
@@ -97,9 +96,8 @@ class DeleteUserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `DELETE /v1/user/{id}` request returns `200` for root user
      */
+    #[TestDox('Test that `DELETE /v1/user/{id}` request returns `200` for root user')]
     public function testThatDeleteActionReturns200(): void
     {
         $client = $this->getTestClient('john-root', 'password-root');

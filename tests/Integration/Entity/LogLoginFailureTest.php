@@ -12,6 +12,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function array_key_exists;
 use function ucfirst;
@@ -31,11 +32,11 @@ class LogLoginFailureTest extends EntityTestCase
      */
     protected static string $entityName = LogLoginFailure::class;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -44,11 +45,11 @@ class LogLoginFailureTest extends EntityTestCase
         self::markTestSkipped('There is not setter in read only entity...');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -60,9 +61,9 @@ class LogLoginFailureTest extends EntityTestCase
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @throws Throwable
-     * @testdox Test that getter method for `$type $property` property returns expected
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that getter method for `$type $property` property returns expected')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);

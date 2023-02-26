@@ -21,6 +21,7 @@ use Generator;
 use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,9 +40,8 @@ class PatchMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patchMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
+    #[TestDox("Test that `patchMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -61,10 +61,9 @@ class PatchMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patchMethod` throws an exception when using `$httpMethod` HTTP method
      */
     #[DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
+    #[TestDox('Test that `patchMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -86,10 +85,9 @@ class PatchMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patchMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
     #[DataProvider('dataProviderTestThatTraitHandlesException')]
+    #[TestDox('Test that `patchMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -119,9 +117,8 @@ class PatchMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patchMethod` method calls expected service methods
      */
+    #[TestDox('Test that `patchMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();

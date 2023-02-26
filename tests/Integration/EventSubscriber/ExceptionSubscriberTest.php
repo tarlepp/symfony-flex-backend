@@ -22,6 +22,7 @@ use Exception;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,10 +52,9 @@ class ExceptionSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `onKernelException` method calls logger with environment: '$environment'.
      */
     #[DataProvider('dataProviderEnvironment')]
+    #[TestDox("Test that `onKernelException` method calls logger with environment: '\$environment'.")]
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
@@ -75,10 +75,9 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `ExceptionEvent::setResponse` method is called with environment: '$environment'.
      */
     #[DataProvider('dataProviderEnvironment')]
+    #[TestDox('Test that `ExceptionEvent::setResponse` method is called with environment: `$environment`')]
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
@@ -98,10 +97,9 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `Response` has status code `$status` and message `$message` with environment: '$environment'.
      */
     #[DataProvider('dataProviderTestResponseHasExpectedStatusCode')]
+    #[TestDox("Test that `Response` has status code `\$status` and message `\$message` with environment: '\$environment'.")]
     public function testThatResponseHasExpectedStatusCode(
         int $status,
         Throwable $exception,
@@ -145,10 +143,9 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param array<int, string> $expectedKeys
      *
      * @throws Throwable
-     *
-     * @testdox Test that `Response` has expected keys in JSON response with environment: '$environment'.
      */
     #[DataProvider('dataProviderTestThatResponseHasExpectedKeys')]
+    #[TestDox("Test that `Response` has expected keys in JSON response with environment: '\$environment'.")]
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
@@ -183,10 +180,9 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getStatusCode` returns `$expectedStatusCode` with environment: '$environment'.
      */
     #[DataProvider('dataProviderTestThatGetStatusCodeReturnsExpected')]
+    #[TestDox("Test that `getStatusCode` returns `\$expectedStatusCode` with environment: '\$environment'.")]
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
         Throwable $exception,
@@ -213,10 +209,9 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `$environment` environment exception message is `$expectedMessage`.
      */
     #[DataProvider('dataProviderTestThatGetExceptionMessageReturnsExpected')]
+    #[TestDox('Test that `$environment` environment exception message is `$expectedMessage`.')]
     public function testThatGetExceptionMessageReturnsExpected(
         string $expectedMessage,
         Throwable $exception,

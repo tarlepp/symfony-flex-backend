@@ -17,6 +17,7 @@ use BadMethodCallException;
 use Generator;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -30,9 +31,8 @@ class GenericDtoTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patch` method throws an exception if `getter` method does not exist on DTO class
      */
+    #[TestDox('Test that `patch` method throws an exception if `getter` method does not exist on DTO class')]
     public function testThatPatchThrowsAnExceptionIfGetterMethodDoesNotExist(): void
     {
         $this->expectException(BadMethodCallException::class);
@@ -50,10 +50,9 @@ class GenericDtoTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `determineGetterMethod` method returns `$expected` when using `$dto::$property` property
      */
     #[DataProvider('dataProviderTestThatDetermineGetterMethodReturnsExpected')]
+    #[TestDox('Test that `determineGetterMethod` method returns `$expected` when using `$dto::$property` property')]
     public function testThatDetermineGetterMethodReturnsExpected(
         string $expected,
         string $property,
@@ -64,9 +63,8 @@ class GenericDtoTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patch` method throws an exception if DTO class contains multiple `getters` for same property
      */
+    #[TestDox('Test that `patch` method throws an exception if DTO class contains multiple `getters` for same property')]
     public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
     {
         $this->expectException(LogicException::class);
@@ -81,9 +79,8 @@ class GenericDtoTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `patch` method calls expected methods
      */
+    #[TestDox('Test that `patch` method calls expected methods')]
     public function testThatPatchCallsExpectedMethods(): void
     {
         $dtoUser = $this->createMock(User::class);
@@ -113,9 +110,8 @@ class GenericDtoTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `update` method calls expected methods
      */
+    #[TestDox('Test that `update` method calls expected methods')]
     public function testThatUpdateMethodCallsExpectedMethods(): void
     {
         $userEntity = $this->createMock(UserEntity::class);

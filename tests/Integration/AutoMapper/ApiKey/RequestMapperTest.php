@@ -16,6 +16,7 @@ use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -43,10 +44,9 @@ class RequestMapperTest extends RestRequestMapperTestCase
      * @param class-string $dtoClass
      *
      * @throws Throwable
-     *
-     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object
      */
     #[DataProvider('dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod')]
+    #[TestDox('Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object')]
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
         $resource = $this->getResource();

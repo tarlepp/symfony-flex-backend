@@ -18,6 +18,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Exception;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -34,9 +35,9 @@ class ApiKeyUserTest extends KernelTestCase
      * @psalm-param StringableArrayObject $expectedRoles
      *
      * @throws Throwable
-     * @testdox Test that `$apiKey` has expected roles `$expectedRoles`
      */
     #[DataProvider('dataProviderTestThatGetRolesReturnsExpected')]
+    #[TestDox('Test that `$apiKey` has expected roles `$expectedRoles`')]
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
     {
         $rolesService = self::getContainer()->get(RolesService::class);

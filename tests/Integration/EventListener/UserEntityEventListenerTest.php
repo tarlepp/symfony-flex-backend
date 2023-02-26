@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use LengthException;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Throwable;
@@ -28,10 +29,9 @@ use Throwable;
 class UserEntityEventListenerTest extends KernelTestCase
 {
     /**
-     * @testdox Test that too short password throws an exception with `prePersist` event
-     *
      * @throws Throwable
      */
+    #[TestDox('Test that too short password throws an exception with `prePersist` event')]
     public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
     {
         $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
@@ -60,10 +60,9 @@ class UserEntityEventListenerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that too short password throws an exception with `preUpdate` event
-     *
      * @throws Throwable
      */
+    #[TestDox('Test that too short password throws an exception with `preUpdate` event')]
     public function testThatTooShortPasswordThrowsAnExceptionWithPreUpdate(): void
     {
         $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
@@ -92,10 +91,9 @@ class UserEntityEventListenerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `prePersist` method works as expected
-     *
      * @throws Throwable
      */
+    #[TestDox('Test that `prePersist` method works as expected')]
     public function testListenerPrePersistMethodWorksAsExpected(): void
     {
         $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
@@ -140,10 +138,9 @@ class UserEntityEventListenerTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `preUpdate` method works as expected
-     *
      * @throws Throwable
      */
+    #[TestDox('Test that `preUpdate` method works as expected')]
     public function testListenerPreUpdateMethodWorksAsExpected(): void
     {
         $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');

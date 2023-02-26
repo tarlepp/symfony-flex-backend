@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use TypeError;
@@ -47,9 +48,9 @@ abstract class EntityTestCase extends KernelTestCase
      */
     protected static string $entityName;
 
-    /**
-     * @testdox Test that `getUuid` method returns UUID object which contains same UUID string value as `getId` method
-     */
+    #[TestDox(
+        'Test that `getUuid` method returns UUID object which contains same UUID string value as `getId` method'
+    )]
     public function testThatGetUuidMethodReturnsExpected(): void
     {
         $entity = $this->getEntity();
@@ -61,9 +62,7 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertSame($entity->getUuid()->toString(), $entity->getId());
     }
 
-    /**
-     * @testdox Test that `getId` method returns expected UUID string
-     */
+    #[TestDox('Test that `getId` method returns expected UUID string')]
     public function testThatGetIdReturnsCorrectUuid(): void
     {
         $entity = $this->getEntity();
@@ -76,10 +75,9 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @param array<string, mixed> $meta
-     *
-     * @testdox Test that `getter` and `setter` methods exists for `$type $property` property
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
     public function testThatGetterAndSetterExists(string $property, string $type, array $meta, bool $readOnly): void
     {
         $entity = $this->getEntity();
@@ -117,10 +115,9 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, mixed> $meta
      *
      * @throws Throwable
-     *
-     * @testdox Test that `setter` method for `$property` property only accepts `$type` parameter
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that `setter` method for `$property` property only accepts `$type` parameter')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $property,
         string $type,
@@ -151,10 +148,9 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, string> $meta
      *
      * @throws Throwable
-     *
-     * @testdox Test that `setter` method for `$type $property` property is fluent
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that `setter` method for `$type $property` property is fluent')]
     public function testThatSetterReturnsInstanceOfEntity(
         string $property,
         string $type,
@@ -186,10 +182,9 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, string> $meta
      *
      * @throws Throwable
-     *
-     * @testdox Test that `getter` method for `$property` property returns value of expected type `$type`
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that `getter` method for `$property` property returns value of expected type `$type`')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $entity = $this->getEntity();
@@ -237,10 +232,9 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @psalm-param class-string | null $o
-     *
-     * @testdox Test that association method `$m` exists for `$p` property, and it returns `$o` when using `$i` as input
      */
     #[DataProvider('dataProviderTestThatAssociationMethodsExists')]
+    #[TestDox('Test that association method `$m` exists for `$p` property, and it returns `$o` when using `$i` as input')]
     public function testThatAssociationMethodsExistsAndThoseReturnsCorrectValue(
         ?string $m,
         ?string $p,
@@ -272,10 +266,9 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @param array<mixed> $m
-     *
-     * @testdox Test that `many-to-many` association methods `$g, $a, $r, $c` works as expected for `$e + $p` combo
      */
     #[DataProvider('dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected')]
+    #[TestDox('Test that `many-to-many` association methods `$g, $a, $r, $c` works as expected for `$e + $p` combo')]
     public function testThatManyToManyAssociationMethodsWorksAsExpected(
         ?string $g,
         ?string $a,
@@ -370,10 +363,8 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertTrue($collection->isEmpty());
     }
 
-    /**
-     * @testdox Test that `many-to-many` association methods `$g` and `$s` works for `$p + $te` combo
-     */
     #[DataProvider('dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected')]
+    #[TestDox('Test that `many-to-many` association methods `$g` and `$s` works for `$p + $te` combo')]
     public function testThatManyToOneAssociationMethodsWorksAsExpected(
         ?string $s,
         ?string $g,
@@ -413,10 +404,8 @@ abstract class EntityTestCase extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `one-to-many` association `$getter` method works as expected for `$property` property
-     */
     #[DataProvider('dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected')]
+    #[TestDox('Test that `one-to-many` association `$getter` method works as expected for `$property` property')]
     public function testThatOneToManyAssociationMethodsWorksAsExpected(?string $getter, ?string $property): void
     {
         if ($getter === null) {

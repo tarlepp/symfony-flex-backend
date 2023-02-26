@@ -17,6 +17,7 @@ use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,9 +35,8 @@ class RequestLogSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that all expected methods are called from `RequestLogger` class
      */
+    #[TestDox('Test that all expected methods are called from `RequestLogger` class')]
     public function testThatMethodCallsExpectedLoggerMethods(): void
     {
         self::bootKernel();
@@ -96,9 +96,8 @@ class RequestLogSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `RequestLogger::setUserId` method is called
      */
+    #[TestDox('Test that `RequestLogger::setUserId` method is called')]
     public function testThatSetUserIsCalled(): void
     {
         self::bootKernel();
@@ -145,9 +144,8 @@ class RequestLogSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `RequestLogger::setApiKeyId` method is called
      */
+    #[TestDox('Test that `RequestLogger::setApiKeyId` method is called')]
     public function testThatSetApiKeyIsCalled(): void
     {
         self::bootKernel();
@@ -194,9 +192,8 @@ class RequestLogSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that any methods of `RequestLogger` service aren't called when request method is `OPTIONS`
      */
+    #[TestDox("Test that any methods of `RequestLogger` service aren't called when request method is `OPTIONS`")]
     public function testThatLoggerServiceIsNotCalledIfOptionsRequest(): void
     {
         self::bootKernel();
@@ -226,10 +223,9 @@ class RequestLogSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `RequestLogger` service isn't used when making request to `$url` with `$ignored` ignored route
      */
     #[DataProvider('dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard')]
+    #[TestDox("Test that `RequestLogger` service isn't used when making request to `\$url` with `\$ignored` ignored route")]
     public function testThatLoggerServiceIsNotCalledWhenUsingSpecifiedIgnoredRoute(string $url, string $ignored): void
     {
         self::bootKernel();

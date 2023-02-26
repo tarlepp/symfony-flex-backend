@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -27,9 +28,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/user` request returns `401` for non-logged in user')]
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getTestClient();
@@ -50,10 +50,9 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/count` request returns expected response when using valid user `$u` + `$p`
      */
     #[DataProvider('dataProviderValidUsers')]
+    #[TestDox('Test that `GET /v1/user/count` request returns expected response when using valid user `$u` + `$p`')]
     public function testThatCountActionReturnsExpected(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -67,10 +66,8 @@ class UserControllerTest extends WebTestCase
         self::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
-    /**
-     * @testdox Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role
-     */
     #[DataProvider('dataProviderValidApiKeyUsers')]
+    #[TestDox('Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role')]
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $r): void
     {
         $client = $this->getApiKeyClient($r);
@@ -86,10 +83,9 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/count` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderInvalidUsers')]
+    #[TestDox('Test that `GET /v1/user/count` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatCountActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -107,10 +103,8 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    /**
-     * @testdox Test that `GET /v1/user/count` request returns `403` when using API key token for `$role` role
-     */
     #[DataProvider('dataProviderInvalidApiKeyUsers')]
+    #[TestDox('Test that `GET /v1/user/count` request returns `403` when using API key token for `$role` role')]
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
         $client = $this->getApiKeyClient($role);
@@ -130,10 +124,9 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user` request returns expected when using valid user `$username` + `$password`
      */
     #[DataProvider('dataProviderValidUsers')]
+    #[TestDox('Test that `GET /v1/user` request returns expected when using valid user `$username` + `$password`')]
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -154,10 +147,9 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user` request returns 403 when using invalid user `$username` + `$password`
      */
     #[DataProvider('dataProviderInvalidUsers')]
+    #[TestDox('Test that `GET /v1/user` request returns 403 when using invalid user `$username` + `$password`')]
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -177,10 +169,9 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/ids` request returns expected when using valid user `$username` + `$password`
      */
     #[DataProvider('dataProviderValidUsers')]
+    #[TestDox('Test that `GET /v1/user/ids` request returns expected when using valid user `$username` + `$password`')]
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -201,10 +192,9 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/ids` request returns `403` when using invalid user `$username` + `$password`
      */
     #[DataProvider('dataProviderInvalidUsers')]
+    #[TestDox('Test that `GET /v1/user/ids` request returns `403` when using invalid user `$username` + `$password`')]
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);

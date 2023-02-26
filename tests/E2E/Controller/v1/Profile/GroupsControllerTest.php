@@ -16,6 +16,7 @@ use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Throwable;
 use function array_map;
@@ -34,9 +35,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` without Json Web Token
      */
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` without Json Web Token')]
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
         $client = $this->getTestClient();
@@ -66,9 +66,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` with invalid API key token
      */
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with invalid API key token')]
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -98,10 +97,9 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGroupsActionReturnExpected')]
+    #[TestDox('Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`')]
     public function testThatGroupsActionReturnExpected(
         string $u,
         string $p,
@@ -143,10 +141,9 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token
      */
     #[DataProvider('dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey')]
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token')]
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);

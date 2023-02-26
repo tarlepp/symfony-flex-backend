@@ -16,6 +16,7 @@ use App\Security\UserTypeIdentification;
 use App\ValueResolver\LoggedInUserValueResolver;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -36,10 +37,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `resolve` method with `$username` input returns expected `User` object.
      */
     #[DataProvider('dataProviderValidUsers')]
+    #[TestDox('Test that `resolve` method with `$username` input returns expected `User` object.')]
     public function testThatResolveReturnsExpectedUserObject(string $username): void
     {
         $repository = $this->getRepository();
@@ -67,10 +67,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that integration with argument resolver with `$username` returns expected `User` object.
      */
     #[DataProvider('dataProviderValidUsers')]
+    #[TestDox('Test that integration with argument resolver with `$username` returns expected `User` object.')]
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(string $username): void
     {
         $repository = $this->getRepository();

@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -25,9 +26,8 @@ class UserCreateInvalidUserTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `POST /v1/user` request returns `401` for non-logged in user')]
     public function testThatGetUserGroupsReturnsReturns401(): void
     {
         $data = [
@@ -49,10 +49,9 @@ class UserCreateInvalidUserTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user` request returns code `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatCreateActionReturns403ForInvalidUser')]
+    #[TestDox('Test that `POST /v1/user` request returns code `403` when using invalid user `$u` + `$p`')]
     public function testThatCreateActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [

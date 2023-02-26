@@ -13,6 +13,7 @@ use App\Rest\RepositoryHelper;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -29,10 +30,9 @@ class RepositoryHelperTest extends KernelTestCase
      * @psalm-param StringableArrayObject $input
      *
      * @throws Throwable
-     *
-     * @testdox Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input
      */
     #[DataProvider('dataProviderTestThatProcessCriteriaWorksAsExpected')]
+    #[TestDox('Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input')]
     public function testThatProcessCriteriaWorksAsExpected(string $expected, StringableArrayObject $input): void
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
@@ -46,9 +46,8 @@ class RepositoryHelperTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `processCriteria` method call doesn't change DQL with empty `criteria` parameter
      */
+    #[TestDox("Test that `processCriteria` method call doesn't change DQL with empty `criteria` parameter")]
     public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
@@ -65,9 +64,8 @@ DQL;
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `processSearchTerms` method call doesn't change DQL with empty `columns` parameter
      */
+    #[TestDox("Test that `processSearchTerms` method call doesn't change DQL with empty `columns` parameter")]
     public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
@@ -95,10 +93,9 @@ DQL;
      * @psalm-param StringableArrayObject $terms
      *
      * @throws Throwable
-     *
-     * @testdox Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms
      */
     #[DataProvider('dataProviderTestThatProcessSearchTermsWorksLikeExpected')]
+    #[TestDox('Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms')]
     public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(
         string $expected,
         StringableArrayObject $terms
@@ -117,10 +114,9 @@ DQL;
      * @psalm-param StringableArrayObject $input
      *
      * @throws Throwable
-     *
-     * @testdox Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input
      */
     #[DataProvider('dataProviderTestThatProcessOrderByWorksLikeExpected')]
+    #[TestDox('Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input')]
     public function testThatProcessOrderByWorksLikeExpected(string $expected, StringableArrayObject $input): void
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
@@ -134,9 +130,8 @@ DQL;
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getExpression` method doesn't modify expression with empty `criteria` parameter
      */
+    #[TestDox("Test that `getExpression` method doesn't modify expression with empty `criteria` parameter")]
     public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
     {
         $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
@@ -156,10 +151,9 @@ DQL;
      * @psalm-param StringableArrayObject $params
      *
      * @throws Throwable
-     *
-     * @testdox Test that after `getExpression` call DQL is `$dql` and parameters are `$params` when using `$criteria`
      */
     #[DataProvider('dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria')]
+    #[TestDox('Test that after `getExpression` call DQL is `$dql` and parameters are `$params` when using `$criteria`')]
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         StringableArrayObject $criteria,
         string $dql,

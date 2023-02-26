@@ -15,6 +15,7 @@ use App\ValueResolver\RestDtoValueResolver;
 use AutoMapperPlus\AutoMapperInterface;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,10 +32,9 @@ class RestDtoValueResolverTest extends KernelTestCase
 {
     /**
      * @psalm-param ControllerCollection<Controller> $controllerCollection
-     *
-     * @testdox Test that `supports` method returns expected result `$expected`
      */
     #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
+    #[TestDox('Test that `supports` method returns expected result `$expected`')]
     public function testThatSupportMethodWorksAsExpected(
         bool $expected,
         ControllerCollection $controllerCollection,
@@ -50,9 +50,8 @@ class RestDtoValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `resolve` method works as expected
      */
+    #[TestDox('Test that `resolve` method works as expected')]
     public function testThatResolveMethodWorksAsExpected(): void
     {
         $controllerCollection = $this->getMockBuilder(ControllerCollection::class)

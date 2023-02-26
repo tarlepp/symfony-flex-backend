@@ -12,6 +12,7 @@ use App\AutoMapper\RestRequestMapper;
 use App\Rest\Interfaces\RestResourceInterface;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,10 +38,9 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
      * @param class-string $expectedDto
      *
      * @throws Throwable
-     *
-     * @testdox Test that `map` method returns `$expectedDto` DTO object
      */
     #[DataProvider('dataProviderTestThatMapMethodWorksAsExpected')]
+    #[TestDox('Test that `map` method returns `$expectedDto` DTO object')]
     public function testThatMapMethodWorksAsExpected(string $expectedDto): void
     {
         self::assertInstanceOf(
@@ -53,10 +53,9 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
      * @param class-string $expectedDto
      *
      * @throws Throwable
-     *
-     * @testdox Test that `mapToObject` method returns `$expectedDto` DTO object
      */
     #[DataProvider('dataProviderTestThatMapToObjectReturnsExpectedDtoObject')]
+    #[TestDox('Test that `mapToObject` method returns `$expectedDto` DTO object')]
     public function testThatMapToObjectReturnsExpectedDtoObject(string $expectedDto): void
     {
         self::assertTrue(class_exists($expectedDto));

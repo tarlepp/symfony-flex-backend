@@ -15,6 +15,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -44,9 +45,8 @@ class AttachUserGroupControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `POST /v1/user/{id}/group/{id}` request returns `401` for non-logged in user')]
     public function testThatAttachUserGroupReturns401(): void
     {
         $userUuid = LoadUserData::$uuids['john'];
@@ -64,9 +64,9 @@ class AttachUserGroupControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatAttachUserGroupReturns403')]
+    #[TestDox('Test that `POST /v1/user/{id}/group/{id}` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatAttachUserGroupReturns403(string $u, string $p): void
     {
         $userUuid = LoadUserData::$uuids['john'];
@@ -84,9 +84,9 @@ class AttachUserGroupControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `$expectedStatus` when using root user
      */
     #[DataProvider('dataProviderTestThatAttachUserGroupWorksAsExpected')]
+    #[TestDox('Test that `POST /v1/user/{id}/group/{id}` request returns `$expectedStatus` when using root user')]
     public function testThatAttachUserGroupWorksAsExpected(int $expectedStatus): void
     {
         $userUuid = LoadUserData::$uuids['john'];

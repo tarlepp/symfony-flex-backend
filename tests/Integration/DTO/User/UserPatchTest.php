@@ -13,6 +13,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Tests\Integration\DTO\DtoTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Class UserPatchTest
@@ -28,9 +29,7 @@ class UserPatchTest extends DtoTestCase
      */
     protected static string $dtoClass = UserPatch::class;
 
-    /**
-     * @testdox Test that `setUserGroups` method updates entity correctly
-     */
+    #[TestDox('Test that `setUserGroups` method updates entity correctly')]
     public function testThatUserGroupsAreExpected(): void
     {
         $userGroup1 = (new UserGroup())

@@ -14,6 +14,7 @@ use App\DTO\ApiKey\ApiKeyUpdate;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,9 +40,11 @@ class ActionTest extends KernelTestCase
      * @psalm-param trait-string $class
      *
      * @throws Throwable
-     * @testdox Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters
      */
     #[DataProvider('dataProviderTestThatTraitCallsExpectedMethod')]
+    #[TestDox(
+        'Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters'
+    )]
     public function testThatTraitCallsExpectedMethod(
         string $class,
         string $method,

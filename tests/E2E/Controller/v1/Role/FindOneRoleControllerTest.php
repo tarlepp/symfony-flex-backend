@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Role;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -26,9 +27,8 @@ class FindOneRoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN` request returns `401` for non-logged in user')]
     public function testThatFindOneRoleReturns401(): void
     {
         $client = $this->getTestClient();
@@ -44,10 +44,9 @@ class FindOneRoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatFindOneRoleReturns403')]
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatFindOneRoleReturns403(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -62,10 +61,9 @@ class FindOneRoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` request returns `200` when using valid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatFindOneActionWorksAsExpected')]
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN` request returns `200` when using valid user `$u` + `$p`')]
     public function testThatFindOneActionWorksAsExpected(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -81,10 +79,9 @@ class FindOneRoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_FOOBAR` request returns `404` when using valid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatFindOneActionReturns404')]
+    #[TestDox('Test that `GET /v1/role/ROLE_FOOBAR` request returns `404` when using valid user `$u` + `$p`')]
     public function testThatFindOneActionReturns404(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);

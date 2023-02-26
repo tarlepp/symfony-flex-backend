@@ -22,6 +22,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\AbstractManagerRegistry;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use UnexpectedValueException;
@@ -192,10 +193,9 @@ class GenericRepositoryTest extends KernelTestCase
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add left join works as expected, using $parameters and expecting '$expected'
      */
     #[DataProvider('dataProviderTestThatAddLeftJoinWorksAsExpected')]
+    #[TestDox("Test that add left join works as expected, using \$parameters and expecting '\$expected'")]
     public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
@@ -219,10 +219,9 @@ class GenericRepositoryTest extends KernelTestCase
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add inner join works as expected, using $parameters and expecting '$expected'
      */
     #[DataProvider('dataProviderTestThatAddInnerJoinWorksAsExpected')]
+    #[TestDox("Test that add inner join works as expected, using \$parameters and expecting '\$expected'")]
     public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
@@ -246,10 +245,9 @@ class GenericRepositoryTest extends KernelTestCase
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add left join adds same join just once, using $parameters and expecting '$expected'
      */
     #[DataProvider('dataProviderTestThatAddLeftJoinWorksAsExpected')]
+    #[TestDox("Test that add left join adds same join just once, using \$parameters and expecting '\$expected'")]
     public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
@@ -275,9 +273,9 @@ class GenericRepositoryTest extends KernelTestCase
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     * @testdox Test that add inner join adds same join just once, using $parameters and expecting '$expected'
      */
     #[DataProvider('dataProviderTestThatAddInnerJoinWorksAsExpected')]
+    #[TestDox("Test that add inner join adds same join just once, using \$parameters and expecting '\$expected'")]
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);

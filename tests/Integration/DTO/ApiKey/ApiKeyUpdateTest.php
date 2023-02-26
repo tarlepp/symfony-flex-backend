@@ -13,6 +13,7 @@ use App\Entity\ApiKey;
 use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Tests\Integration\DTO\DtoTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Class ApiKeyUpdateTest
@@ -28,9 +29,7 @@ class ApiKeyUpdateTest extends DtoTestCase
      */
     protected static string $dtoClass = ApiKeyUpdate::class;
 
-    /**
-     * @testdox Test that `setUserGroups` method updates entity correctly
-     */
+    #[TestDox('Test that `setUserGroups` method updates entity correctly')]
     public function testThatUserGroupsAreExpected(): void
     {
         $userGroup1 = (new UserGroup())

@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Role;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -26,9 +27,8 @@ class RoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/role` request returns `401` for non-logged in user')]
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getTestClient();
@@ -43,10 +43,9 @@ class RoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role` request returns `403` when using invalid user `$username` + `$password`
      */
     #[DataProvider('dataProviderTestThatGetBaseRouteReturn403')]
+    #[TestDox('Test that `GET /v1/role` request returns `403` when using invalid user `$username` + `$password`')]
     public function testThatGetBaseRouteReturn403(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -61,10 +60,9 @@ class RoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role` request returns `200` when using valid user `$username` + `$password`
      */
     #[DataProvider('dataProviderTestThatGetBaseRouteReturn200')]
+    #[TestDox('Test that `GET /v1/role` request returns `200` when using valid user `$username` + `$password`')]
     public function testThatGetBaseRouteReturn200(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);

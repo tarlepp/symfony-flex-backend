@@ -15,6 +15,7 @@ use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -32,9 +33,8 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile` request returns `401` without Json Web Token
      */
+    #[TestDox('Test that `GET /v1/profile` request returns `401` without Json Web Token')]
     public function testThatProfileActionReturns401WithoutToken(): void
     {
         $client = $this->getTestClient();
@@ -64,10 +64,9 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile` request returns `200` with valid user `$username` + `$password`
      */
     #[DataProvider('dataProviderTestThatProfileActionReturnExpectedWithValidUser')]
+    #[TestDox('Test that `GET /v1/profile` request returns `200` with valid user `$username` + `$password`')]
     public function testThatProfileActionReturnExpectedWithValidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -82,9 +81,8 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile` request returns `401` with invalid API key token
      */
+    #[TestDox('Test that `GET /v1/profile` request returns `401` with invalid API key token')]
     public function testThatProfileActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -114,10 +112,9 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile` request returns `401` with valid `$token` API key token
      */
     #[DataProvider('dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken')]
+    #[TestDox('Test that `GET /v1/profile` request returns `401` with valid `$token` API key token')]
     public function testThatProfileActionReturnsExpectedWithValidApiKeyToken(string $token): void
     {
         $client = $this->getApiKeyClient($token);

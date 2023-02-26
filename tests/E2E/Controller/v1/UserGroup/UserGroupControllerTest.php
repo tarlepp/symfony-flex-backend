@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\UserGroup;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -26,9 +27,8 @@ class UserGroupControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user_group` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/user_group` request returns `401` for non-logged in user')]
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getTestClient();
@@ -41,10 +41,9 @@ class UserGroupControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user_group` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGetBaseRouteReturns403ForInvalidUser')]
+    #[TestDox('Test that `GET /v1/user_group` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatGetBaseRouteReturns403ForInvalidUser(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -64,10 +63,9 @@ class UserGroupControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user_group` request returns `200` when using valid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGetBaseRouteReturns200ForValidUser')]
+    #[TestDox('Test that `GET /v1/user_group` request returns `200` when using valid user `$u` + `$p`')]
     public function testThatGetBaseRouteReturns200ForValidUser(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);

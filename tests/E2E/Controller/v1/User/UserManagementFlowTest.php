@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\User;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -25,9 +26,8 @@ class UserManagementFlowTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user` request returns `201` with expected data on response
      */
+    #[TestDox('Test that `POST /v1/user` request returns `201` with expected data on response')]
     public function testThatCreateActionWorksLikeExpected(): string
     {
         $data = [
@@ -61,10 +61,9 @@ class UserManagementFlowTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `PUT /v1/user/{id}` request returns `200` with expected data on response
      */
     #[Depends('testThatCreateActionWorksLikeExpected')]
+    #[TestDox('Test that `PUT /v1/user/{id}` request returns `200` with expected data on response')]
     public function testThatUpdateActionWorksLikeExpected(string $id): string
     {
         $data = [
@@ -96,10 +95,9 @@ class UserManagementFlowTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `PUT /v1/user/{id}` request returns `400` with partial payload
      */
     #[Depends('testThatCreateActionWorksLikeExpected')]
+    #[TestDox('Test that `PUT /v1/user/{id}` request returns `400` with partial payload')]
     public function testThatUpdateActionDoesNotWorkWithPartialData(string $id): string
     {
         $data = [
@@ -121,10 +119,9 @@ class UserManagementFlowTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `PATCH /v1/user/{id}` request returns `200` and expected data when using partial payload
      */
     #[Depends('testThatUpdateActionWorksLikeExpected')]
+    #[TestDox('Test that `PATCH /v1/user/{id}` request returns `200` and expected data when using partial payload')]
     public function testThatPatchActionWorksWithPartialData(string $id): string
     {
         $data = [
@@ -159,10 +156,9 @@ class UserManagementFlowTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `DELETE /v1/user/{id}` request returns `200`
      */
     #[Depends('testThatUpdateActionWorksLikeExpected')]
+    #[TestDox('Test that `DELETE /v1/user/{id}` request returns `200`')]
     public function testThatDeleteActionWorksLikeExpected(string $id): void
     {
         $client = $this->getTestClient('john-root', 'password-root');

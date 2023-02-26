@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Controller;
 
 use App\Controller\VersionController;
 use App\Service\Version;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -20,9 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class VersionControllerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `__invoke` method calls expected service methods
-     */
+    #[TestDox('Test that `__invoke` method calls expected service methods')]
     public function testThatInvokeMethodIsCallingExpectedMethods(): void
     {
         $version = $this->getMockBuilder(Version::class)

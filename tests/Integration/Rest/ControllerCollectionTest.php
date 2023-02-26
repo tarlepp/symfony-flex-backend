@@ -22,8 +22,10 @@ use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class ControllerCollectionTest
@@ -34,8 +36,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class ControllerCollectionTest extends KernelTestCase
 {
     /**
-     * @testdox Test that `get` method throws an exception when specified `REST` controller is not found
+     * @throws Throwable
      */
+    #[TestDox('Test that `get` method throws an exception when specified `REST` controller is not found')]
     public function testThatGetMethodThrowsAnException(): void
     {
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -72,9 +75,7 @@ class ControllerCollectionTest extends KernelTestCase
         (new ControllerCollection($iteratorAggregate, $stubLogger))->get('FooBar');
     }
 
-    /**
-     * @testdox Test that `getAll` method returns expected count of `REST` controllers
-     */
+    #[TestDox('Test that `getAll` method returns expected count of `REST` controllers')]
     public function testThatGetAllReturnsCorrectCountOfRestControllers(): void
     {
         $collection = $this->getCollection();
@@ -84,9 +85,9 @@ class ControllerCollectionTest extends KernelTestCase
 
     /**
      * @param class-string<Controller> $controllerName
-     * @testdox Test that `get` method with `$controllerName` input returns instance of that controller
      */
     #[DataProvider('dataProviderTestThatGetReturnsExpectedController')]
+    #[TestDox('Test that `get` method with `$controllerName` input returns instance of that controller')]
     public function testThatGetReturnsExpectedController(string $controllerName): void
     {
         $collection = $this->getCollection();
@@ -96,9 +97,9 @@ class ControllerCollectionTest extends KernelTestCase
 
     /**
      * @param class-string<Controller>|string|null $controller
-     * @testdox Test that `has` method returns `$expected` with `$controller` input
      */
     #[DataProvider('dataProviderTestThatHasReturnsExpected')]
+    #[TestDox('Test that `has` method returns `$expected` with `$controller` input')]
     public function testThatHasReturnsExpected(bool $expected, ?string $controller): void
     {
         $collection = $this->getCollection();

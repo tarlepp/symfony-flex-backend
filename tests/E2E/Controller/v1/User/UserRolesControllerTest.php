@@ -15,6 +15,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -30,9 +31,8 @@ class UserRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/{id}/roles` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/user/{id}/roles` request returns `401` for non-logged in user')]
     public function testThatGetUserRolesReturnsReturns401(): void
     {
         $client = $this->getTestClient();
@@ -47,10 +47,9 @@ class UserRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/$id/roles` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGetRolesActionsReturns403ForInvalidUser')]
+    #[TestDox('Test that `GET /v1/user/$id/roles` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatGetUserRolesReturns403ForInvalidUser(string $id, string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -65,10 +64,9 @@ class UserRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/$id/roles` request returns `$e` for user `$u` + `$p` him/herself
      */
     #[DataProvider('dataProviderTestThatGetUserRolesReturns200ForUserHimself')]
+    #[TestDox('Test that `GET /v1/user/$id/roles` request returns `$e` for user `$u` + `$p` him/herself')]
     public function testThatGetUserRolesReturns200ForUserHimself(string $id, string $u, string $p, string $e): void
     {
         $client = $this->getTestClient($u, $p);
@@ -84,10 +82,9 @@ class UserRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/$id/roles` request returns expected `$e` for root user
      */
     #[DataProvider('dataProviderTestThatGetRolesReturns200ForRootRoleUser')]
+    #[TestDox('Test that `GET /v1/user/$id/roles` request returns expected `$e` for root user')]
     public function testThatGetUserRolesReturns200ForRootRoleUser(string $id, string $e): void
     {
         $client = $this->getTestClient('john-root', 'password-root');

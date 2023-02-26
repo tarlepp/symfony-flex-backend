@@ -9,11 +9,11 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Security;
 
 use App\Enum\Role;
-use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -25,9 +25,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  */
 class RolesServiceTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `getInheritedRoles(array $roles)` method calls expected service method
-     */
+    #[TestDox('Test that `getInheritedRoles(array $roles)` method calls expected service method')]
     public function testThatGetInheritedRolesMethodCallsExpectedServiceMethod(): void
     {
         $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)->getMock();
@@ -41,9 +39,7 @@ class RolesServiceTest extends KernelTestCase
         (new RolesService($roleHierarchy))->getInheritedRoles(['RoleA', 'RoleB']);
     }
 
-    /**
-     * @testdox Test that `RolesServiceInterface::getRoles` method returns expected
-     */
+    #[TestDox('Test that `RolesServiceInterface::getRoles` method returns expected')]
     public function testThatGetRolesReturnsExpected(): void
     {
         self::assertSame(
@@ -59,19 +55,15 @@ class RolesServiceTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `RolesServiceInterface::getRoleLabel` method returns `$expected` when using `$role` as input
-     */
     #[DataProvider('dataProviderTestThatGetRoleLabelReturnsExpected')]
+    #[TestDox('Test that `RolesServiceInterface::getRoleLabel` method returns `$expected` when using `$role` as input')]
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
     {
         self::assertSame($expected, $this->getService()->getRoleLabel($role), 'Role label was not expected one.');
     }
 
-    /**
-     * @testdox Test that `RolesServiceInterface::getShort` method returns `$expected` when using `$input` as input
-     */
     #[DataProvider('dataProviderTestThatGetShortReturnsExpected')]
+    #[TestDox('Test that `RolesServiceInterface::getShort` method returns `$expected` when using `$input` as input')]
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
     {
         self::assertSame($expected, $this->getService()->getShort($input), 'Short role name was not expected');
@@ -82,10 +74,9 @@ class RolesServiceTest extends KernelTestCase
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $expected
      * @psalm-param StringableArrayObject $roles
-     *
-     * @testdox Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input
      */
     #[DataProvider('dataProviderTestThatGetInheritedRolesReturnsExpected')]
+    #[TestDox('Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input')]
     public function testThatGetInheritedRolesReturnsExpected(
         StringableArrayObject $expected,
         StringableArrayObject $roles

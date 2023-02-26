@@ -15,6 +15,7 @@ use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -29,9 +30,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getSQLDeclaration` method returns expected
      */
+    #[TestDox('Test that `getSQLDeclaration` method returns expected')]
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
         $type = $this->getType();
@@ -42,10 +42,9 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
     #[DataProvider('dataProviderTestThatConvertToDatabaseValueWorksWithProperValues')]
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$value`')]
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
         $type = $this->getType();
@@ -56,10 +55,9 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
     #[DataProvider('dataProviderTestThatConvertToDatabaseValueThrowsAnException')]
+    #[TestDox('Test that `convertToDatabaseValue` method throws an exception with `$value` input')]
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);

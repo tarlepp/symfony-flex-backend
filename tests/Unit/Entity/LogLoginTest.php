@@ -16,6 +16,7 @@ use DateTimeZone;
 use DeviceDetector\DeviceDetector;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -30,10 +31,9 @@ class LogLoginTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLogin::getCreatedAt` method returns expected with `$type` type
      */
     #[DataProvider('dataProviderTestThatGetCreatedAtReturnsExpected')]
+    #[TestDox('Test that `LogLogin::getCreatedAt` method returns expected with `$type` type')]
     public function testThatGetCreatedAtReturnsExpected(
         string $type,
         Request $request,
@@ -52,10 +52,9 @@ class LogLoginTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLogin::getUser` method returns `null` if user is not provided with `$type` type
      */
     #[DataProvider('dataProviderTestThatGetUserReturnsNullIfUserNotGiven')]
+    #[TestDox('Test that `LogLogin::getUser` method returns `null` if user is not provided with `$type` type')]
     public function testThatGetUserReturnsNullIfUserNotGiven(
         string $type,
         Request $request,
@@ -68,10 +67,9 @@ class LogLoginTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLogin::getUser` method returns provided user with `$type` type
      */
     #[DataProvider('dataProviderTestThatGetUserReturnsExpectedUser')]
+    #[TestDox('Test that `LogLogin::getUser` method returns provided user with `$type` type')]
     public function testThatGetUserReturnsExpectedUser(
         string $type,
         Request $request,

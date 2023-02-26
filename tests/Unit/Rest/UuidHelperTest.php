@@ -11,6 +11,7 @@ namespace App\Tests\Unit\Rest;
 use App\Rest\UuidHelper;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -26,9 +27,7 @@ use Throwable;
  */
 class UuidHelperTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `UuidHelper::getFactory` method returns always same instance of `UuidFactory`
-     */
+    #[TestDox('Test that `UuidHelper::getFactory` method returns always same instance of `UuidFactory`')]
     public function testThatGetFactoryReturnsSameInstance(): void
     {
         $factory = UuidHelper::getFactory();
@@ -38,18 +37,14 @@ class UuidHelperTest extends KernelTestCase
         self::assertSame($factory, UuidHelper::getFactory());
     }
 
-    /**
-     * @testdox test that `UuidHelper::getType` method returns `$expected` when using `$value` as an input
-     */
     #[DataProvider('dataProviderTestThatGetTypeReturnsExpected')]
+    #[TestDox('test that `UuidHelper::getType` method returns `$expected` when using `$value` as an input')]
     public function testThatGetTypeReturnsExpected(?string $expected, string $value): void
     {
         self::assertSame($expected, UuidHelper::getType($value));
     }
 
-    /**
-     * @testdox Test that `UuidHelper::getBytes` method throws expected exception with non UUID value
-     */
+    #[TestDox('Test that `UuidHelper::getBytes` method throws expected exception with non UUID value')]
     public function testThatGetBytesThrowsAnExceptionWithNonUuidValue(): void
     {
         $this->expectException(InvalidUuidStringException::class);
@@ -59,9 +54,8 @@ class UuidHelperTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `UuidHelper::getBytes` method returns expected when using valid UUID value
      */
+    #[TestDox('Test that `UuidHelper::getBytes` method returns expected when using valid UUID value')]
     public function testThatGetBytesReturnsExpected(): void
     {
         $factory = UuidHelper::getFactory();

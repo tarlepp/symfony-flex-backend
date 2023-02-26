@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\ApiKey;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -26,9 +27,8 @@ class ApiKeyControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/api_key` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/api_key` request returns `401` for non-logged in user')]
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getTestClient();
@@ -43,9 +43,9 @@ class ApiKeyControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     * @testdox Test that `GET /v1/api_key` request returns `$e` with user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatFindActionWorksAsExpected')]
+    #[TestDox('Test that `GET /v1/api_key` request returns `$e` with user `$u` + `$p`')]
     public function testThatFindActionWorksAsExpected(string $u, string $p, int $e): void
     {
         $client = $this->getTestClient($u, $p);

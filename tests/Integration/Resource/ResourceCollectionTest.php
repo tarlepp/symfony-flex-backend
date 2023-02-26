@@ -35,6 +35,7 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -118,10 +119,9 @@ class ResourceCollectionTest extends KernelTestCase
      * @param class-string<RestResource> $resourceClass
      *
      * @throws Throwable
-     *
-     * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
      */
     #[DataProvider('dataProviderTestThatGetReturnsExpectedResource')]
+    #[TestDox('Test that `get` method with `$resourceClass` input returns instance of that resource class.')]
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
     {
         self::assertInstanceOf($resourceClass, $this->getCollection()->get($resourceClass));
@@ -132,10 +132,9 @@ class ResourceCollectionTest extends KernelTestCase
      * @param class-string<EntityInterface> $entityClass
      *
      * @throws Throwable
-     *
-     * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
     #[DataProvider('dataProviderTestThatGetEntityResourceReturnsExpectedResource')]
+    #[TestDox('Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.')]
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
@@ -146,10 +145,9 @@ class ResourceCollectionTest extends KernelTestCase
      * @param class-string<RestResource>|string|null $resource
      *
      * @throws Throwable
-     *
-     * @testdox Test that `has` method returns `$expected` with `$resource` input.
      */
     #[DataProvider('dataProviderTestThatHasReturnsExpected')]
+    #[TestDox('Test that `has` method returns `$expected` with `$resource` input.')]
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
     {
         self::assertSame($expected, $this->getCollection()->has($resource));
@@ -159,10 +157,9 @@ class ResourceCollectionTest extends KernelTestCase
      * @param class-string<EntityInterface>|string|null $entity
      *
      * @throws Throwable
-     *
-     * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input.
      */
     #[DataProvider('dataProviderTestThatHasEntityResourceReturnsExpected')]
+    #[TestDox('Test that `hasEntityResource` method returns `$expected` with `$entity` input.')]
     public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
     {
         self::assertSame($expected, $this->getCollection()->hasEntityResource($entity));

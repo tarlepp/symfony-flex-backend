@@ -15,6 +15,7 @@ use App\Security\SecurityUser;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -44,10 +45,9 @@ class SecurityUserFactoryTest extends KernelTestCase
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
-     *
-     * @testdox Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles
      */
     #[DataProvider('dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance')]
+    #[TestDox('Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles')]
     public function testThatLoadUserByIdentifierReturnsExpectedUserInstance(
         string $username,
         StringableArrayObject $roles

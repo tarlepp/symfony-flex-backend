@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -39,9 +40,10 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself
      */
+    #[TestDox(
+        'Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself'
+    )]
     public function testThatInvokeMethodThrowsAnExceptionIfUserTriesToDeleteHimself(): void
     {
         $this->expectException(HttpException::class);
@@ -61,9 +63,8 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `__invoke($request, $requestUser, $loggedInUser)` method calls expected service methods
      */
+    #[TestDox('Test that `__invoke($request, $requestUser, $loggedInUser)` method calls expected service methods')]
     public function testThatInvokeMethodCallsExpectedMethods(): void
     {
         $resource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();

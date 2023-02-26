@@ -13,6 +13,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -26,10 +27,9 @@ class UserUpdateInvalidUserTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `PUT /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatPutActionReturns403ForInvalidUser')]
+    #[TestDox('Test that `PUT /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatPutActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [
@@ -56,10 +56,9 @@ class UserUpdateInvalidUserTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `PATCH /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatPatchActionReturns403ForInvalidUser')]
+    #[TestDox('Test that `PATCH /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatPatchActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [

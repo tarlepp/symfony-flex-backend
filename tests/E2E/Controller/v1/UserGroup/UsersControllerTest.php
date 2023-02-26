@@ -13,6 +13,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -25,10 +26,9 @@ class UsersControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user_group/$id/users` request returns `200` and expected count `$c` of users
      */
     #[DataProvider('dataProviderTestThatGetUserGroupUsersActionReturnsExpected')]
+    #[TestDox('Test that `GET /v1/user_group/$id/users` request returns `200` and expected count `$c` of users')]
     public function testThatGetUserGroupUsersActionReturnsExpected(int $c, string $id): void
     {
         $client = $this->getTestClient('john-root', 'password-root');

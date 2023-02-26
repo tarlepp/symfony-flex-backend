@@ -13,6 +13,7 @@ use App\Rest\ResponseHandler;
 use Exception;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
@@ -47,10 +48,9 @@ class ResponseHandlerTest extends KernelTestCase
      * @param array<string, string> $data
      *
      * @throws Throwable
-     *
-     * @testdox Test that response is `$expectedContent` when using `$request` request with `$data` data.
      */
     #[DataProvider('dataProviderTestThatCreateResponseReturnsExpected')]
+    #[TestDox('Test that response is `$expectedContent` when using `$request` request with `$data` data.')]
     public function testThatCreateResponseReturnsExpected(
         Request $request,
         array $data,
@@ -92,10 +92,9 @@ class ResponseHandlerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that non supported serializer format `$format` throws an exception.
      */
     #[DataProvider('dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException')]
+    #[TestDox('Test that non supported serializer format `$format` throws an exception.')]
     public function testThatNonSupportedSerializerFormatThrowsHttpException(string $format): void
     {
         $this->expectException(HttpException::class);

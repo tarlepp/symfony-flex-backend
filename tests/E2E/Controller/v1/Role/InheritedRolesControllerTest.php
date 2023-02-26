@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function array_search;
 use function array_slice;
@@ -29,9 +30,8 @@ class InheritedRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `401` for non-logged in user')]
     public function testThatGetInheritedRoles401(): void
     {
         $client = $this->getTestClient();
@@ -47,10 +47,9 @@ class InheritedRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGetInheritedRoles403')]
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatGetInheritedRoles403(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -65,10 +64,9 @@ class InheritedRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `200` when using valid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGetInheritedRoles200')]
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `200` when using valid user `$u` + `$p`')]
     public function testThatGetInheritedRoles200(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -83,10 +81,9 @@ class InheritedRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/{role}/inherited` request returns expected roles for valid user `$u` + `$p`
      */
     #[DataProvider('dataProviderTestThatGetInheritedRolesActionWorksAsExpected')]
+    #[TestDox('Test that `GET /v1/role/{role}/inherited` request returns expected roles for valid user `$u` + `$p`')]
     public function testThatGetInheritedRolesActionWorksAsExpected(string $u, string $p): void
     {
         $roles = ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'];

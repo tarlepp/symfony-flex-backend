@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Controller\v1\User;
 
 use App\Controller\v1\User\UserGroupsController;
 use App\Entity\User;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
@@ -24,9 +25,8 @@ class UserGroupsControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `__invoke(User $requestUser)` method calls expected service methods
      */
+    #[TestDox('Test that `__invoke(User $requestUser)` method calls expected service methods')]
     public function testThatInvokeMethodCallsExpectedMethods(): void
     {
         $user = new User();

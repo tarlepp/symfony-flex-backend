@@ -16,6 +16,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Collections\ArrayCollection;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -42,11 +43,11 @@ class LogRequestTest extends EntityTestCase
      */
     protected static string $entityName = LogRequest::class;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -55,11 +56,11 @@ class LogRequestTest extends EntityTestCase
         self::markTestSkipped('There is not setter in read only entity...');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -71,9 +72,9 @@ class LogRequestTest extends EntityTestCase
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @throws Throwable
-     * @testdox Test that getter method for `$type $property` returns expected
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that getter method for `$type $property` returns expected')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);
@@ -135,10 +136,9 @@ class LogRequestTest extends EntityTestCase
      * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`
      */
     #[DataProvider('dataProviderTestThatSensitiveDataIsCleaned')]
+    #[TestDox('Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`')]
     public function testThatSensitiveDataIsCleanedFromHeaders(
         StringableArrayObject $properties,
         StringableArrayObject $headers,
@@ -161,10 +161,9 @@ class LogRequestTest extends EntityTestCase
      * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`
      */
     #[DataProvider('dataProviderTestThatSensitiveDataIsCleaned')]
+    #[TestDox('Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`')]
     public function testThatSensitiveDataIsCleanedFromParameters(
         StringableArrayObject $properties,
         StringableArrayObject $parameters,
@@ -183,10 +182,9 @@ class LogRequestTest extends EntityTestCase
      * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input
      */
     #[DataProvider('dataProviderTestThatDetermineParametersWorksLikeExpected')]
+    #[TestDox('Test that `determineParameters` method returns `$expected` when using `$content` as input')]
     public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
     {
         $logRequest = new LogRequest([], Request::create(''), new Response());

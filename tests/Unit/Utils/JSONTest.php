@@ -14,6 +14,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function is_array;
@@ -28,10 +29,9 @@ class JSONTest extends KernelTestCase
 {
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `JSON::encode` method returns `$expected` when using `$value` as input
      */
     #[DataProvider('dataProviderTestThatEncodeWorksLikeExpected')]
+    #[TestDox('Test that `JSON::encode` method returns `$expected` when using `$value` as input')]
     public function testThatEncodeWorksLikeExpected(mixed $value, mixed $expected): void
     {
         self::assertSame($expected, JSON::encode($value));
@@ -42,10 +42,9 @@ class JSONTest extends KernelTestCase
      * @psalm-param  StringableArrayObject $parameters
      *
      * @throws JsonException
-     *
-     * @testdox Test that `JSON::decode` method returns `$expected` when using `$parameters` as input
      */
     #[DataProvider('dataProviderTestThatDecodeWorksLikeExpected')]
+    #[TestDox('Test that `JSON::decode` method returns `$expected` when using `$parameters` as input')]
     public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, mixed $expected): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -57,9 +56,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `JSON::encode` method throws exception when maximum stack depth exceeded
      */
+    #[TestDox('Test that `JSON::encode` method throws exception when maximum stack depth exceeded')]
     public function testThatEncodeThrowsAnExceptionOnMaximumDepth(): void
     {
         $this->expectException(JsonException::class);
@@ -84,9 +82,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `JSON::decode` method throws exception when maximum stack depth exceeded
      */
+    #[TestDox('Test that `JSON::decode` method throws exception when maximum stack depth exceeded')]
     public function testThatDecodeThrowsAnExceptionOnMaximumDepth(): void
     {
         $this->expectException(JsonException::class);
@@ -103,10 +100,9 @@ class JSONTest extends KernelTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `JSON::decode` method throws an exception with malformed JSON: `$json`
      */
     #[DataProvider('dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson')]
+    #[TestDox('Test that `JSON::decode` method throws an exception with malformed JSON: `$json`')]
     public function testThatDecodeThrowsAnExceptionOnMalformedJson(string $json): void
     {
         $this->expectException(JsonException::class);
@@ -117,10 +113,9 @@ class JSONTest extends KernelTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `JSON::decode` method throws an exception with invalid UTF characters in JSON: `$input`
      */
     #[DataProvider('dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters')]
+    #[TestDox('Test that `JSON::decode` method throws an exception with invalid UTF characters in JSON: `$input`')]
     public function testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(string $input): void
     {
         $this->expectException(JsonException::class);

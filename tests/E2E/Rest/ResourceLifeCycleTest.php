@@ -14,6 +14,7 @@ use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function sprintf;
 
@@ -27,10 +28,9 @@ class ResourceLifeCycleTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that modified entity `$role` is not flushed if life cycle method throws exception
      */
     #[DataProvider('dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException')]
+    #[TestDox('Test that modified entity `$role` is not flushed if life cycle method throws exception')]
     public function testThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(string $role): void
     {
         $client = $this->getTestClient();
