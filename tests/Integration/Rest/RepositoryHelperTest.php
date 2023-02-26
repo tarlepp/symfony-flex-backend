@@ -350,7 +350,8 @@ DQL;
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
-    public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
+    public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria()
+    : Generator
     {
         yield [
             new StringableArrayObject(['u.id', 'eq', 123]),
