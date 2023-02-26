@@ -13,6 +13,7 @@ use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -27,8 +28,6 @@ use Throwable;
 class UserGroupTransformerTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatTransformReturnsExpected
-     *
      * @phpstan-param StringableArrayObject<mixed> $expected
      * @phpstan-param StringableArrayObject<mixed>|null $input
      * @psalm-param StringableArrayObject $expected
@@ -36,6 +35,7 @@ class UserGroupTransformerTest extends KernelTestCase
      *
      * @testdox Test that `transform` method returns `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatTransformReturnsExpected')]
     public function testThatTransformReturnsExpected(
         StringableArrayObject $expected,
         ?StringableArrayObject $input
@@ -120,7 +120,7 @@ class UserGroupTransformerTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: ?StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: ?StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatTransformReturnsExpected(): Generator
+    public static function dataProviderTestThatTransformReturnsExpected(): Generator
     {
         yield [new StringableArrayObject([]), null];
 

@@ -12,6 +12,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use function serialize;
 use function unserialize;
 
@@ -28,13 +29,12 @@ class UserTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = User::class;
+    protected static string $entityName = User::class;
 
     /**
-     * @dataProvider dataProviderTestThatPasswordHashingIsWorkingAsExpected
-     *
      * @testdox Test that password `$password` is hashed to `$expected` when using `$callable` callable
      */
+    #[DataProvider('dataProviderTestThatPasswordHashingIsWorkingAsExpected')]
     public function testThatPasswordHashingIsWorkingAsExpected(
         callable $callable,
         string $password,
@@ -132,7 +132,7 @@ class UserTest extends EntityTestCase
     /**
      * @return Generator<array{0: string, 1: string, 2: string}>
      */
-    public function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): Generator
+    public static function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): Generator
     {
         yield ['str_rot13', 'password', 'cnffjbeq'];
         yield ['base64_encode', 'password', 'cGFzc3dvcmQ='];

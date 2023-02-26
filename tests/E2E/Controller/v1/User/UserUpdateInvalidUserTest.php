@@ -12,6 +12,7 @@ use App\DataFixtures\ORM\LoadUserData;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -24,12 +25,11 @@ use function getenv;
 class UserUpdateInvalidUserTest extends WebTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatPutActionReturns403ForInvalidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `PUT /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatPutActionReturns403ForInvalidUser')]
     public function testThatPutActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [
@@ -55,12 +55,11 @@ class UserUpdateInvalidUserTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatPatchActionReturns403ForInvalidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `PATCH /v1/user/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatPatchActionReturns403ForInvalidUser')]
     public function testThatPatchActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [
@@ -88,7 +87,7 @@ class UserUpdateInvalidUserTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatPutActionReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatPutActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
 
@@ -112,8 +111,8 @@ class UserUpdateInvalidUserTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatPatchActionReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatPatchActionReturns403ForInvalidUser(): Generator
     {
-        return $this->dataProviderTestThatPutActionReturns403ForInvalidUser();
+        return self::dataProviderTestThatPutActionReturns403ForInvalidUser();
     }
 }

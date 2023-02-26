@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Controller\v1\Role;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -41,12 +42,11 @@ class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetBaseRouteReturn403
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/role` request returns `403` when using invalid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderTestThatGetBaseRouteReturn403')]
     public function testThatGetBaseRouteReturn403(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -60,12 +60,11 @@ class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetBaseRouteReturn200
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/role` request returns `200` when using valid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderTestThatGetBaseRouteReturn200')]
     public function testThatGetBaseRouteReturn200(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -81,7 +80,7 @@ class RoleControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetBaseRouteReturn403(): Generator
+    public static function dataProviderTestThatGetBaseRouteReturn403(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];
@@ -103,7 +102,7 @@ class RoleControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetBaseRouteReturn200(): Generator
+    public static function dataProviderTestThatGetBaseRouteReturn200(): Generator
     {
         yield ['john-admin', 'password-admin'];
 

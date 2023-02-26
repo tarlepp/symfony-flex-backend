@@ -19,6 +19,7 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,22 +47,20 @@ class FindOneMethodTest extends KernelTestCase
 
         $this->expectException(LogicException::class);
 
-        /* @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageMatches(
-            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
-        );
-        /* @codingStandardsIgnoreEnd */
+        $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
+            '(.*)ControllerInterface\'/';
+
+        $this->expectExceptionMessageMatches($regex);
 
         $inValidTestClassMock->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
      * @throws Throwable
      *
      * @testdox Test that `findOneMethod` throws an exception when using `$httpMethod` HTTP method
      */
+    #[DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -81,12 +80,11 @@ class FindOneMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitHandlesException
-     *
      * @throws Throwable
      *
      * @testdox Test that `findOneMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
+    #[DataProvider('dataProviderTestThatTraitHandlesException')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -149,7 +147,7 @@ class FindOneMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
+    public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
         yield ['DELETE'];
@@ -164,7 +162,7 @@ class FindOneMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: Throwable, 1: int}>
      */
-    public function dataProviderTestThatTraitHandlesException(): Generator
+    public static function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];

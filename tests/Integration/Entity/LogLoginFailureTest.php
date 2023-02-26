@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function array_key_exists;
 use function ucfirst;
@@ -28,14 +29,13 @@ class LogLoginFailureTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = LogLoginFailure::class;
+    protected static string $entityName = LogLoginFailure::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
      * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -46,10 +46,9 @@ class LogLoginFailureTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
      * @testdox No setter for `$property` property in read only entity - so cannot test this
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -60,12 +59,10 @@ class LogLoginFailureTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
      * @throws Throwable
-     *
      * @testdox Test that getter method for `$type $property` property returns expected
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);

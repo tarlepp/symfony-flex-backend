@@ -28,7 +28,7 @@ class ApiKeyTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<ApiKeyDto>
      */
-    protected string $dtoClass = ApiKeyDto::class;
+    protected static string $dtoClass = ApiKeyDto::class;
 
     /**
      * @testdox Test that `load` method actually loads entity data correctly

@@ -16,6 +16,7 @@ use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -224,12 +225,11 @@ class RequestLogSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard
-     *
      * @throws Throwable
      *
      * @testdox Test that `RequestLogger` service isn't used when making request to `$url` with `$ignored` ignored route
      */
+    #[DataProvider('dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard')]
     public function testThatLoggerServiceIsNotCalledWhenUsingSpecifiedIgnoredRoute(string $url, string $ignored): void
     {
         self::bootKernel();
@@ -288,7 +288,7 @@ class RequestLogSubscriberTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard(): Generator
+    public static function dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard(): Generator
     {
         yield ['/', '/'];
         yield ['/healthz', '/healthz'];

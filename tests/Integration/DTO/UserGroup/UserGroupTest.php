@@ -25,7 +25,7 @@ class UserGroupTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<UserGroup>
      */
-    protected string $dtoClass = UserGroup::class;
+    protected static string $dtoClass = UserGroup::class;
 
     /**
      * @testdox Test that `load` method actually loads entity data correctly

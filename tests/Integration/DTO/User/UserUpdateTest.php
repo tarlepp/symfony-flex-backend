@@ -26,7 +26,7 @@ class UserUpdateTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<UserUpdate>
      */
-    protected string $dtoClass = UserUpdate::class;
+    protected static string $dtoClass = UserUpdate::class;
 
     /**
      * @testdox Test that `setUserGroups` method updates entity correctly

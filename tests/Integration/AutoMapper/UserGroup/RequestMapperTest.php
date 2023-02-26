@@ -15,9 +15,11 @@ use App\Entity\Role;
 use App\Resource\RoleResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use function class_exists;
 
 /**
  * Class RequestMapperTest
@@ -30,7 +32,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @var array<int, class-string>
      */
-    protected array $restDtoClasses = [
+    protected static array $restDtoClasses = [
         DTO\UserGroup::class,
         DTO\UserGroupCreate::class,
         DTO\UserGroupUpdate::class,
@@ -38,14 +40,13 @@ class RequestMapperTest extends RestRequestMapperTestCase
     ];
 
     /**
-     * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
-     *
      * @param class-string $dtoClass
      *
      * @throws Throwable
      *
      * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object
      */
+    #[DataProvider('dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod')]
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
         $resource = $this->getResource();
@@ -65,18 +66,20 @@ class RequestMapperTest extends RestRequestMapperTestCase
             ]
         );
 
-        /** @var DTO\UserGroup $dto */
+        self::assertTrue(class_exists($dtoClass));
+
         $dto = $requestMapper->mapToObject($request, new $dtoClass());
 
+        self::assertInstanceOf(DTO\UserGroup::class, $dto);
         self::assertSame($role, $dto->getRole());
     }
 
     /**
      * @return Generator<array{0: class-string}>
      */
-    public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
+    public static function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
-        foreach ($this->restDtoClasses as $dtoClass) {
+        foreach (static::$restDtoClasses as $dtoClass) {
             yield [$dtoClass];
         }
     }

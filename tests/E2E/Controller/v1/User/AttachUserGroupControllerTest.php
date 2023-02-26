@@ -14,6 +14,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -62,12 +63,10 @@ class AttachUserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAttachUserGroupReturns403
-     *
      * @throws Throwable
-     *
      * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatAttachUserGroupReturns403')]
     public function testThatAttachUserGroupReturns403(string $u, string $p): void
     {
         $userUuid = LoadUserData::$uuids['john'];
@@ -84,12 +83,10 @@ class AttachUserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAttachUserGroupWorksAsExpected
-     *
      * @throws Throwable
-     *
      * @testdox Test that `POST /v1/user/{id}/group/{id}` request returns `$expectedStatus` when using root user
      */
+    #[DataProvider('dataProviderTestThatAttachUserGroupWorksAsExpected')]
     public function testThatAttachUserGroupWorksAsExpected(int $expectedStatus): void
     {
         $userUuid = LoadUserData::$uuids['john'];
@@ -109,7 +106,7 @@ class AttachUserGroupControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatAttachUserGroupReturns403(): Generator
+    public static function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];
@@ -133,7 +130,7 @@ class AttachUserGroupControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: int}>
      */
-    public function dataProviderTestThatAttachUserGroupWorksAsExpected(): Generator
+    public static function dataProviderTestThatAttachUserGroupWorksAsExpected(): Generator
     {
         yield [201];
         yield [200];

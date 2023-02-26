@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
 use ProxyManager\Proxy\AccessInterceptorValueHolderInterface;
 use stdClass;
@@ -33,12 +34,11 @@ use Throwable;
 class StopwatchDecoratorTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatDecorateMethodReturnsExpected
-     *
      * @param class-string $expected
      *
      * @testdox Test that `decorate` method returns `$expected` when using `$service` instance as an input
      */
+    #[DataProvider('dataProviderTestThatDecorateMethodReturnsExpected')]
     public function testThatDecorateMethodReturnsExpected(string $expected, object $service): void
     {
         self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
@@ -177,7 +177,7 @@ class StopwatchDecoratorTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: object}>
      */
-    public function dataProviderTestThatDecorateMethodReturnsExpected(): Generator
+    public static function dataProviderTestThatDecorateMethodReturnsExpected(): Generator
     {
         yield [AccessInterceptorValueHolderInterface::class, new EntityReferenceExists()];
         yield [stdClass::class, new stdClass()];

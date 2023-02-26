@@ -13,6 +13,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function is_array;
@@ -26,20 +27,17 @@ use function serialize;
 class JSONTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatEncodeWorksLikeExpected
-     *
      * @throws JsonException
      *
      * @testdox Test that `JSON::encode` method returns `$expected` when using `$value` as input
      */
+    #[DataProvider('dataProviderTestThatEncodeWorksLikeExpected')]
     public function testThatEncodeWorksLikeExpected(mixed $value, mixed $expected): void
     {
         self::assertSame($expected, JSON::encode($value));
     }
 
     /**
-     * @dataProvider dataProviderTestThatDecodeWorksLikeExpected
-     *
      * @phpstan-param  StringableArrayObject<string> $parameters
      * @psalm-param  StringableArrayObject $parameters
      *
@@ -47,6 +45,7 @@ class JSONTest extends KernelTestCase
      *
      * @testdox Test that `JSON::decode` method returns `$expected` when using `$parameters` as input
      */
+    #[DataProvider('dataProviderTestThatDecodeWorksLikeExpected')]
     public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, mixed $expected): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -103,12 +102,11 @@ class JSONTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson
-     *
      * @throws JsonException
      *
      * @testdox Test that `JSON::decode` method throws an exception with malformed JSON: `$json`
      */
+    #[DataProvider('dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson')]
     public function testThatDecodeThrowsAnExceptionOnMalformedJson(string $json): void
     {
         $this->expectException(JsonException::class);
@@ -118,12 +116,11 @@ class JSONTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters
-     *
      * @throws JsonException
      *
      * @testdox Test that `JSON::decode` method throws an exception with invalid UTF characters in JSON: `$input`
      */
+    #[DataProvider('dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters')]
     public function testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(string $input): void
     {
         $this->expectException(JsonException::class);
@@ -137,7 +134,7 @@ class JSONTest extends KernelTestCase
      *
      * @return Generator<array{0: mixed, 1: string}>
      */
-    public function dataProviderTestThatEncodeWorksLikeExpected(): Generator
+    public static function dataProviderTestThatEncodeWorksLikeExpected(): Generator
     {
         yield [
             null,
@@ -181,14 +178,14 @@ class JSONTest extends KernelTestCase
      *
      * @return Generator<array<int, mixed>>
      */
-    public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
+    public static function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
         $iterator = static fn (array $data): array => [
             new StringableArrayObject([$data[1], is_array($data[0])]),
             $data[0],
         ];
 
-        foreach ($this->dataProviderTestThatEncodeWorksLikeExpected() as $data) {
+        foreach (self::dataProviderTestThatEncodeWorksLikeExpected() as $data) {
             yield $iterator($data);
         }
     }
@@ -198,7 +195,7 @@ class JSONTest extends KernelTestCase
      *
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): Generator
+    public static function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): Generator
     {
         yield ['{foo:bar}'];
         yield ["{'foo':'bar'}"];
@@ -211,7 +208,7 @@ class JSONTest extends KernelTestCase
      *
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
+    public static function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
     {
         yield ["\xB1\x31"];
         yield [mb_convert_encoding('{"data":"äöäö"}', 'ISO-8859-15', 'UTF8')];

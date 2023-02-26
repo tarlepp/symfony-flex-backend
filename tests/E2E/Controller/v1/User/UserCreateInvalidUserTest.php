@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\User;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -47,12 +48,11 @@ class UserCreateInvalidUserTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatCreateActionReturns403ForInvalidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `POST /v1/user` request returns code `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatCreateActionReturns403ForInvalidUser')]
     public function testThatCreateActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $data = [
@@ -80,7 +80,7 @@ class UserCreateInvalidUserTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatCreateActionReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatCreateActionReturns403ForInvalidUser(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];

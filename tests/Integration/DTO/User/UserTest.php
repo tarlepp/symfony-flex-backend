@@ -28,7 +28,7 @@ class UserTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<UserDto>
      */
-    protected string $dtoClass = UserDto::class;
+    protected static string $dtoClass = UserDto::class;
 
     /**
      * @testdox Test that `load` method actually loads entity data correctly

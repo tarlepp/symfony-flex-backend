@@ -16,6 +16,7 @@ use App\Security\SecurityUser;
 use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -26,6 +27,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Throwable;
+use function property_exists;
 
 /**
  * Class ApiKeyAuthenticatorTest
@@ -36,12 +38,10 @@ use Throwable;
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatSupportReturnsExpected
-     *
      * @throws Throwable
-     *
      * @testdox Test that `supports` method returns `$expected` for request `$request`
      */
+    #[DataProvider('dataProviderTestThatSupportReturnsExpected')]
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
         $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
@@ -139,13 +139,15 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $decoded = JSON::decode($content);
 
+        self::assertIsObject($decoded);
+        self::assertTrue(property_exists($decoded, 'message'));
         self::assertSame('Invalid API key', $decoded->message);
     }
 
     /**
      * @return Generator<array{0: boolean, 1: Request}>
      */
-    public function dataProviderTestThatSupportReturnsExpected(): Generator
+    public static function dataProviderTestThatSupportReturnsExpected(): Generator
     {
         yield [false, new Request()];
 

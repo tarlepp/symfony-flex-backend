@@ -12,6 +12,7 @@ use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 use App\Utils\Tests\PhpUnitUtil;
 use Exception;
+use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -50,10 +51,9 @@ class HealthzRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @depends testThatReadValueMethodReturnsExpectedWithEmptyDatabase
-     *
      * @throws Throwable
      */
+    #[Depends('testThatReadValueMethodReturnsExpectedWithEmptyDatabase')]
     public function testThatCreateValueReturnsExpected(): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
@@ -61,25 +61,26 @@ class HealthzRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @depends testThatCreateValueReturnsExpected
-     *
      * @throws Throwable
      */
+    #[Depends('testThatCreateValueReturnsExpected')]
     public function testThatReadValueReturnExpectedAfterCreate(): void
     {
         self::assertNotNull($this->getRepository()->read());
     }
 
     /**
-     * @depends testThatReadValueReturnExpectedAfterCreate
-     *
-     * @throws Exception
+     * @throws Throwable
      */
+    #[Depends('testThatReadValueReturnExpectedAfterCreate')]
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
     {
         self::assertSame(0, $this->getRepository()->cleanup());
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getRepository(): HealthzRepository
     {
         $repository = self::getContainer()->get(HealthzRepository::class);

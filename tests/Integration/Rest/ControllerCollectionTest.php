@@ -21,6 +21,7 @@ use ArrayObject;
 use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -82,12 +83,10 @@ class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetReturnsExpectedController
-     *
      * @param class-string<Controller> $controllerName
-     *
      * @testdox Test that `get` method with `$controllerName` input returns instance of that controller
      */
+    #[DataProvider('dataProviderTestThatGetReturnsExpectedController')]
     public function testThatGetReturnsExpectedController(string $controllerName): void
     {
         $collection = $this->getCollection();
@@ -96,12 +95,10 @@ class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatHasReturnsExpected
-     *
      * @param class-string<Controller>|string|null $controller
-     *
      * @testdox Test that `has` method returns `$expected` with `$controller` input
      */
+    #[DataProvider('dataProviderTestThatHasReturnsExpected')]
     public function testThatHasReturnsExpected(bool $expected, ?string $controller): void
     {
         $collection = $this->getCollection();
@@ -112,7 +109,7 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @return Generator<array{0: class-string<Controller>}>
      */
-    public function dataProviderTestThatGetReturnsExpectedController(): Generator
+    public static function dataProviderTestThatGetReturnsExpectedController(): Generator
     {
         yield [ApiKeyController::class];
         yield [RoleController::class];
@@ -125,7 +122,7 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @return Generator<array{0: boolean, 1: class-string<Controller>|string|null}>
      */
-    public function dataProviderTestThatHasReturnsExpected(): Generator
+    public static function dataProviderTestThatHasReturnsExpected(): Generator
     {
         yield [true, ApiKeyController::class];
         yield [true, RoleController::class];
@@ -140,6 +137,8 @@ class ControllerCollectionTest extends KernelTestCase
 
     private function getCollection(): ControllerCollection
     {
+        self::bootKernel();
+
         $service = self::getContainer()->get(ControllerCollection::class);
 
         self::assertInstanceOf(ControllerCollection::class, $service);

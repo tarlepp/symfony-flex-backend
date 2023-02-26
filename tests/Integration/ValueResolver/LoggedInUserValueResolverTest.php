@@ -15,6 +15,7 @@ use App\ValueResolver\LoggedInUserValueResolver;
 use Closure;
 use Generator;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -243,12 +244,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet
-     *
      * @throws Throwable
      *
      * @testdox Test that integration with `ArgumentResolver` returns null when there is no user present
      */
+    #[DataProvider('dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet')]
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
@@ -261,7 +261,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
-    public function dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(): Generator
+    public static function dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(): Generator
     {
         yield 'closure with nullable user' => [static function (?User $loggedInUser = null): void {
             // Do nothing

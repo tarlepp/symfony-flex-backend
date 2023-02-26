@@ -15,6 +15,7 @@ use DateTime;
 use DateTimeImmutable;
 use Generator;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -39,10 +40,9 @@ class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetTypeReturnExpected
-     *
      * @testdox Test that `getType` method returns `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatGetTypeReturnExpected')]
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
     {
         self::assertSame($expected, PhpUnitUtil::getType($input));
@@ -62,12 +62,11 @@ class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetValidValueReturnsExpectedValue
-     *
      * @throws Throwable
      *
      * @testdox Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`
      */
+    #[DataProvider('dataProviderTestThatGetValidValueReturnsExpectedValue')]
     public function testThatGetValidValueReturnsExpectedValue(mixed $expected, string $input, bool $strict): void
     {
         $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
@@ -93,14 +92,13 @@ class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType
-     *
      * @param int|string|array<int, string> $expected
      *
      * @throws Throwable
      *
      * @testdox Test that `getValidValueForType` returns `$expected` when using `$type` as input type
      */
+    #[DataProvider('dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType')]
     public function testThatGetValidValueForTypeWorksIfThereIsAPipeOnType(
         int | string | array $expected,
         string $type,
@@ -122,14 +120,13 @@ class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue
-     *
      * @param class-string $expected
      *
      * @throws Throwable
      *
      * @testdox Test that `getInvalidValueForType` method returns `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue')]
     public function testThatGetInvalidValueForTypeReturnsExpectedValue(string $expected, string $input): void
     {
         self::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));
@@ -138,7 +135,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @return Generator<array<int, mixed>>
      */
-    public function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
+    public static function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
         yield [DateTime::class, stdClass::class];
         yield [DateTime::class, DateTimeImmutable::class];
@@ -156,7 +153,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @return Generator<array<int, mixed>>
      */
-    public function dataProviderTestThatGetTypeReturnExpected(): Generator
+    public static function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
         yield ['int', 'integer'];
         yield ['int', 'bigint'];
@@ -176,7 +173,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @return Generator<array<int, mixed>>
      */
-    public function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
+    public static function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
         yield [666, 'int', true];
         yield [666, 'integer', true];
@@ -197,7 +194,7 @@ class PHPUnitUtilTest extends KernelTestCase
      * @psalm-return Generator<array{0: int|string|array, 1: string}>
      * @phpstan-return Generator<array{0: int|string|array<mixed>, 1: string}>
      */
-    public function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
+    public static function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
     {
         yield ['Some text here', 'string|int'];
         yield [666, 'int|string'];

@@ -12,6 +12,7 @@ use App\Rest\RequestHandler;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -26,10 +27,9 @@ use function json_encode;
 class RequestHandlerTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter
-     *
      * @testdox Test that `getCriteria` method throws an exception with `$method` invalid (non JSON) `?where` parameter
      */
+    #[DataProvider('dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter')]
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(string $method): void
     {
         $this->expectException(HttpException::class);
@@ -47,12 +47,11 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator
-     *
      * @testdox Test that `getCriteria` returns `$expected` when using `$method` and `$where` as `?where` parameter
      *
      * @throws JsonException
      */
+    #[DataProvider('dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator')]
     public function testThatGetCriteriaMethodsReturnsExpectedGenerator(
         string $method,
         StringableArrayObject $expected,
@@ -70,10 +69,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetOrderByReturnsExpectedValue
-     *
      * @testdox Test that `getOrderBy` method returns `$expected` when using `$method` and `$parameters` as an input
      */
+    #[DataProvider('dataProviderTestThatGetOrderByReturnsExpectedValue')]
     public function testThatGetOrderByReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -89,10 +87,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetLimitReturnsNullWithoutParameter
-     *
      * @testdox Test that `getLimit` method returns `null` when there is no `?limit` parameter on `$method` request
      */
+    #[DataProvider('dataProviderTestThatGetLimitReturnsNullWithoutParameter')]
     public function testThatGetLimitReturnsNullWithoutParameter(string $method): void
     {
         $fakeRequest = Request::create('/', $method);
@@ -104,10 +101,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetLimitReturnsExpectedValue
-     *
      * @testdox Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter
      */
+    #[DataProvider('dataProviderTestThatGetLimitReturnsExpectedValue')]
     public function testThatGetLimitReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -130,10 +126,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetOffsetReturnsNullWithoutParameter
-     *
      * @testdox Test that `getOffset` method returns `null` when there is no `?offset` parameter on `$method` request
      */
+    #[DataProvider('dataProviderTestThatGetOffsetReturnsNullWithoutParameter')]
     public function testThatGetOffsetReturnsNullWithoutParameter(string $method): void
     {
         $fakeRequest = Request::create('/', $method);
@@ -145,10 +140,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
-     *
      * @testdox Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter
      */
+    #[DataProvider('dataProviderTestThatGetOffsetReturnsExpectedValue')]
     public function testThatGetOffsetReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
@@ -171,10 +165,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters
-     *
      * @testdox Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request
      */
+    #[DataProvider('dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters')]
     public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(string $method): void
     {
         $fakeRequest = Request::create('/', $method);
@@ -187,10 +180,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson
-     *
      * @testdox Test that `getSearchTerms` throws an exception when `$method` `search` parameter contains invalid JSON
      */
+    #[DataProvider('dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson')]
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(string $method): void
     {
         $this->expectException(HttpException::class);
@@ -208,10 +200,9 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetSearchTermsReturnsExpectedValue
-     *
      * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `$method` `search` parameter
      */
+    #[DataProvider('dataProviderTestThatGetSearchTermsReturnsExpectedValue')]
     public function testThatGetSearchTermsReturnsExpectedValue(
         string $method,
         StringableArrayObject $expected,
@@ -233,7 +224,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): Generator
+    public static function dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): Generator
     {
         yield [Request::METHOD_GET];
         yield [Request::METHOD_POST];
@@ -242,7 +233,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
+    public static function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
         foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
             yield [
@@ -346,7 +337,7 @@ class RequestHandlerTest extends KernelTestCase
      *
      * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
+    public static function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
         foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
             yield [
@@ -522,7 +513,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatGetLimitReturnsNullWithoutParameter(): Generator
+    public static function dataProviderTestThatGetLimitReturnsNullWithoutParameter(): Generator
     {
         yield [Request::METHOD_GET];
         yield [Request::METHOD_POST];
@@ -533,7 +524,7 @@ class RequestHandlerTest extends KernelTestCase
      *
      * @return Generator<array{0: string, 1: StringableArrayObject, 2: int}>
      */
-    public function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
+    public static function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
         foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
             yield [
@@ -573,7 +564,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatGetOffsetReturnsNullWithoutParameter(): Generator
+    public static function dataProviderTestThatGetOffsetReturnsNullWithoutParameter(): Generator
     {
         yield [Request::METHOD_GET];
         yield [Request::METHOD_POST];
@@ -584,7 +575,7 @@ class RequestHandlerTest extends KernelTestCase
      *
      * @return Generator<array{0: string, 1: StringableArrayObject, 2: int}>
      */
-    public function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
+    public static function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
         foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
             yield [
@@ -624,7 +615,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): Generator
+    public static function dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): Generator
     {
         yield [Request::METHOD_GET];
         yield [Request::METHOD_POST];
@@ -633,7 +624,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): Generator
+    public static function dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): Generator
     {
         yield [Request::METHOD_GET];
         yield [Request::METHOD_POST];
@@ -644,7 +635,7 @@ class RequestHandlerTest extends KernelTestCase
      *
      * @return Generator<array{0: string, 1: StringableArrayObject, 2: boolean|string}>
      */
-    public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
+    public static function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {
         foreach ([Request::METHOD_GET, Request::METHOD_POST] as $method) {
             yield [

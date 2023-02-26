@@ -16,6 +16,7 @@ use App\Utils\Tests\PhpUnitUtil;
 use BadMethodCallException;
 use Generator;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -48,12 +49,11 @@ class GenericDtoTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatDetermineGetterMethodReturnsExpected
-     *
      * @throws Throwable
      *
      * @testdox Test that `determineGetterMethod` method returns `$expected` when using `$dto::$property` property
      */
+    #[DataProvider('dataProviderTestThatDetermineGetterMethodReturnsExpected')]
     public function testThatDetermineGetterMethodReturnsExpected(
         string $expected,
         string $property,
@@ -103,10 +103,10 @@ class GenericDtoTest extends KernelTestCase
             ->method('getEmail')
             ->willReturn('email@com');
 
-        /** @var User $dto */
         $dto = (new User())
             ->patch($dtoUser);
 
+        self::assertInstanceOf(User::class, $dto);
         self::assertSame('username', $dto->getUsername());
         self::assertSame('email@com', $dto->getEmail());
     }
@@ -148,7 +148,7 @@ class GenericDtoTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: string, 2: User}>
      */
-    public function dataProviderTestThatDetermineGetterMethodReturnsExpected(): Generator
+    public static function dataProviderTestThatDetermineGetterMethodReturnsExpected(): Generator
     {
         yield [
             'getUsername',

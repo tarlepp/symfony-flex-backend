@@ -14,6 +14,7 @@ use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -40,12 +41,11 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
-     *
      * @throws Throwable
      *
      * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueWorksWithProperValues')]
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
         $type = $this->getType();
@@ -55,12 +55,11 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
-     *
      * @throws Throwable
      *
      * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueThrowsAnException')]
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -75,7 +74,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: 'en'|'fi'}>
      */
-    public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
+    public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
         yield ['en'];
         yield ['fi'];
@@ -84,7 +83,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: mixed}>
      */
-    public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
+    public static function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
         yield [null];
         yield [false];

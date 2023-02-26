@@ -16,6 +16,7 @@ use App\Security\Provider\SecurityUserFactory;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -97,10 +98,9 @@ class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType
-     *
      * @testdox Test that `supportsClass` method returns `false` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType')]
     public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(bool | int | string $input): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
@@ -228,7 +228,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @return Generator<array{0: boolean|string|int}>
      */
-    public function dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType(): Generator
+    public static function dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType(): Generator
     {
         yield [true];
         yield ['foobar'];

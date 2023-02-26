@@ -14,6 +14,7 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -62,12 +63,11 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatProfileActionReturnExpectedWithValidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/profile` request returns `200` with valid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderTestThatProfileActionReturnExpectedWithValidUser')]
     public function testThatProfileActionReturnExpectedWithValidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -113,12 +113,11 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken
-     *
      * @throws JsonException
      *
      * @testdox Test that `GET /v1/profile` request returns `401` with valid `$token` API key token
      */
+    #[DataProvider('dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken')]
     public function testThatProfileActionReturnsExpectedWithValidApiKeyToken(string $token): void
     {
         $client = $this->getApiKeyClient($token);
@@ -149,7 +148,7 @@ class IndexControllerTest extends WebTestCase
     /**
      * @return Generator<array-key, array{0: string, 1:  string}>
      */
-    public function dataProviderTestThatProfileActionReturnExpectedWithValidUser(): Generator
+    public static function dataProviderTestThatProfileActionReturnExpectedWithValidUser(): Generator
     {
         yield ['john', 'password'];
 
@@ -177,7 +176,7 @@ class IndexControllerTest extends WebTestCase
      *
      * @throws Throwable
      */
-    public function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
+    public static function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 

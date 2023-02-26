@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use App\Rest\RepositoryHelper;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -23,13 +24,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RepositoryHelperTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
-     *
      * @phpstan-param StringableArrayObject<mixed> $input
      * @psalm-param StringableArrayObject $input
      *
      * @testdox Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatProcessCriteriaWorksAsExpected')]
     public function testThatProcessCriteriaWorksAsExpected(string $expected, StringableArrayObject $input): void
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
@@ -84,13 +84,12 @@ DQL;
     }
 
     /**
-     * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
-     *
      * @phpstan-param StringableArrayObject<array> $terms
      * @psalm-param StringableArrayObject $terms
      *
      * @testdox Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms
      */
+    #[DataProvider('dataProviderTestThatProcessSearchTermsWorksLikeExpected')]
     public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(
         string $expected,
         StringableArrayObject $terms
@@ -105,13 +104,12 @@ DQL;
     }
 
     /**
-     * @dataProvider dataProviderTestThatProcessOrderByWorksLikeExpected
-     *
      * @phpstan-param StringableArrayObject<array> $input
      * @psalm-param StringableArrayObject $input
      *
      * @testdox Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatProcessOrderByWorksLikeExpected')]
     public function testThatProcessOrderByWorksLikeExpected(string $expected, StringableArrayObject $input): void
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
@@ -139,8 +137,6 @@ DQL;
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria
-     *
      * @phpstan-param StringableArrayObject<array> $criteria
      * @phpstan-param StringableArrayObject<array> $params
      * @psalm-param StringableArrayObject $criteria
@@ -148,6 +144,7 @@ DQL;
      *
      * @testdox Test that after `getExpression` call DQL is `$dql` and parameters are `$params` when using `$criteria`
      */
+    #[DataProvider('dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria')]
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         StringableArrayObject $criteria,
         string $dql,
@@ -173,7 +170,7 @@ DQL;
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
+    public static function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
     {
         yield [
             /* @lang text */
@@ -247,7 +244,7 @@ DQL;
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
+    public static function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
     {
         // @codingStandardsIgnoreStart
         yield [
@@ -297,7 +294,7 @@ DQL;
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
+    public static function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
     {
         yield [
             /* @lang text */
@@ -353,7 +350,7 @@ DQL;
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
+    public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
     {
         yield [
             new StringableArrayObject(['u.id', 'eq', 123]),

@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Controller\v1\UserGroup;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -39,12 +40,11 @@ class UserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetBaseRouteReturns403ForInvalidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user_group` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetBaseRouteReturns403ForInvalidUser')]
     public function testThatGetBaseRouteReturns403ForInvalidUser(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -63,12 +63,11 @@ class UserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetBaseRouteReturns200ForValidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user_group` request returns `200` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetBaseRouteReturns200ForValidUser')]
     public function testThatGetBaseRouteReturns200ForValidUser(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -82,7 +81,7 @@ class UserGroupControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetBaseRouteReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatGetBaseRouteReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
 
@@ -104,7 +103,7 @@ class UserGroupControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetBaseRouteReturns200ForValidUser(): Generator
+    public static function dataProviderTestThatGetBaseRouteReturns200ForValidUser(): Generator
     {
         yield ['john-admin', 'password-admin'];
 

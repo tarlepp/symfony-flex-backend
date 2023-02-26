@@ -23,5 +23,5 @@ class UserCreateTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<UserCreate>
      */
-    protected string $dtoClass = UserCreate::class;
+    protected static string $dtoClass = UserCreate::class;
 }

@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Auth;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 use function json_encode;
@@ -27,12 +28,11 @@ class GetTokenControllerTest extends WebTestCase
     private string $baseUrl = '/v1/auth/get_token';
 
     /**
-     * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
-     *
      * @throws Throwable
      *
      * @testdox Test that `$method /v1/auth/get_token` request returns `405`
      */
+    #[DataProvider('dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost')]
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
         $client = $this->getTestClient();
@@ -46,12 +46,11 @@ class GetTokenControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
-     *
      * @throws Throwable
      *
      * @testdox Test that `POST /v1/auth/get_token` request returns `200` with proper JWT with `$u` + `$p` credentials
      */
+    #[DataProvider('dataProviderTestThatGetTokenReturnsJwtWithValidCredentials')]
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $u, string $p): void
     {
         $payload = json_encode(
@@ -152,7 +151,7 @@ class GetTokenControllerTest extends WebTestCase
     /**
      * @return Generator<array-key, array{0: string}>
      */
-    public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): Generator
+    public static function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): Generator
     {
         yield ['HEAD'];
         yield ['PUT'];
@@ -166,7 +165,7 @@ class GetTokenControllerTest extends WebTestCase
     /**
      * @return Generator<array-key, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
+    public static function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
         yield ['john', 'password'];
 

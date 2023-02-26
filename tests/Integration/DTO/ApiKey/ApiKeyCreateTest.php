@@ -23,5 +23,5 @@ class ApiKeyCreateTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<ApiKeyCreate>
      */
-    protected string $dtoClass = ApiKeyCreate::class;
+    protected static string $dtoClass = ApiKeyCreate::class;
 }

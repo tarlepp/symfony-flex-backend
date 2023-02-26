@@ -45,22 +45,20 @@ class FindMethodTest extends KernelTestCase
 
         $this->expectException(LogicException::class);
 
-        /* @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageMatches(
-            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
-        );
-        /* @codingStandardsIgnoreEnd */
+        $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
+            '(.*)ControllerInterface\'/';
+
+        $this->expectExceptionMessageMatches($regex);
 
         $inValidTestClassMock->findMethod(Request::create('/'));
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
      * @throws Throwable
      *
      * @testdox Test that `findMethod` throws an exception when using `$httpMethod` HTTP method
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -78,12 +76,11 @@ class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitHandlesException
-     *
      * @throws Throwable
      *
      * @testdox Test that `findMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitHandlesException')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -110,8 +107,6 @@ class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitCallsServiceMethods
-     *
      * @phpstan-param StringableArrayObject<mixed> $criteria
      * @phpstan-param StringableArrayObject<mixed> $orderBy
      * @phpstan-param StringableArrayObject<mixed> $search
@@ -123,6 +118,7 @@ class FindMethodTest extends KernelTestCase
      *
      * @testdox Test that `findMethod` method calls expected service methods when using `$queryString` as query string
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,
@@ -188,7 +184,7 @@ class FindMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
+    public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
         yield ['PATCH'];
@@ -203,7 +199,7 @@ class FindMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: Throwable, 1: int}>
      */
-    public function dataProviderTestThatTraitHandlesException(): Generator
+    public static function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];
@@ -225,7 +221,7 @@ class FindMethodTest extends KernelTestCase
      *  }>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatTraitCallsServiceMethods(): Generator
+    public static function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
         yield [
             '',

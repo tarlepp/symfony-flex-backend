@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Role;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function array_search;
 use function array_slice;
@@ -45,12 +46,11 @@ class InheritedRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetInheritedRoles403
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetInheritedRoles403')]
     public function testThatGetInheritedRoles403(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -64,12 +64,11 @@ class InheritedRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetInheritedRoles200
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `200` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetInheritedRoles200')]
     public function testThatGetInheritedRoles200(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -83,12 +82,11 @@ class InheritedRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetInheritedRolesActionWorksAsExpected
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/role/{role}/inherited` request returns expected roles for valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetInheritedRolesActionWorksAsExpected')]
     public function testThatGetInheritedRolesActionWorksAsExpected(string $u, string $p): void
     {
         $roles = ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'];
@@ -116,7 +114,7 @@ class InheritedRolesControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetInheritedRoles403(): Generator
+    public static function dataProviderTestThatGetInheritedRoles403(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];
@@ -138,7 +136,7 @@ class InheritedRolesControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetInheritedRoles200(): Generator
+    public static function dataProviderTestThatGetInheritedRoles200(): Generator
     {
         yield ['john-admin', 'password-admin'];
 
@@ -156,7 +154,7 @@ class InheritedRolesControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
+    public static function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
     {
         yield ['john-admin', 'password-admin'];
 

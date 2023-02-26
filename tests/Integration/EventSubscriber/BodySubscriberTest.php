@@ -12,6 +12,7 @@ use App\EventSubscriber\BodySubscriber;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -73,15 +74,13 @@ class BodySubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
-     *
      * @phpstan-param StringableArrayObject<mixed> $expectedParameters
      * @psalm-param StringableArrayObject $expectedParameters
      *
      * @throws JsonException
-     *
      * @testdox Test that subscriber converts `$content` content with `$contentType` type to `$expectedParameters`.
      */
+    #[DataProvider('dataProviderTestThatJsonContentReplaceParametersAsExpected')]
     public function testThatJsonContentReplaceParametersAsExpected(
         StringableArrayObject $expectedParameters,
         string $contentType,
@@ -159,7 +158,7 @@ class BodySubscriberTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2:  string}>
      */
-    public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
+    public static function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
         yield [
             new StringableArrayObject([

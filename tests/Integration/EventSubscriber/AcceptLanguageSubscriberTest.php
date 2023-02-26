@@ -10,6 +10,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\AcceptLanguageSubscriber;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -39,10 +40,9 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatLocaleIsSetAsExpected
-     *
      * @testdox Test that when default locale is `$default` and when asking `$asked` locale result is `$expected`.
      */
+    #[DataProvider('dataProviderTestThatLocaleIsSetAsExpected')]
     public function testThatLocaleIsSetAsExpected(string $expected, string $default, string $asked): void
     {
         self::bootKernel();
@@ -61,7 +61,7 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: string, 2: string}>
      */
-    public function dataProviderTestThatLocaleIsSetAsExpected(): Generator
+    public static function dataProviderTestThatLocaleIsSetAsExpected(): Generator
     {
         yield ['fi', 'fi', 'fi'];
         yield ['fi', 'fi', 'sv'];

@@ -17,6 +17,7 @@ use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -66,20 +67,19 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $type->convertToDatabaseValue($dateInput, $platform);
 
-        /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type);
 
+        self::assertNotNull($property);
         self::assertInstanceOf(DateTimeZone::class, $property);
         self::assertSame('UTC', $property->getName());
     }
 
     /**
-     * @dataProvider dataProviderTestDateTimeConvertsToPHPValue
-     *
      * @throws Throwable
      *
      * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`
      */
+    #[DataProvider('dataProviderTestDateTimeConvertsToPHPValue')]
     public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
     {
         $type = $this->getType();
@@ -107,9 +107,9 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $type->convertToPHPValue('1981-04-07 10:00:00', $platform);
 
-        /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type);
 
+        self::assertNotNull($property);
         self::assertInstanceOf(DateTimeZone::class, $property);
         self::assertSame('UTC', $property->getName());
     }
@@ -134,7 +134,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
      *
      * @return Generator<array{0: string, 1: string|DateTime}>
      */
-    public function dataProviderTestDateTimeConvertsToPHPValue(): Generator
+    public static function dataProviderTestDateTimeConvertsToPHPValue(): Generator
     {
         yield [
             '1981-04-07 10:00:00',

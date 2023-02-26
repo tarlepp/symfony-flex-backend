@@ -13,6 +13,7 @@ use App\Repository\RoleRepository;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function sprintf;
 
@@ -25,12 +26,11 @@ use function sprintf;
 class ResourceLifeCycleTest extends WebTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException
-     *
      * @throws Throwable
      *
      * @testdox Test that modified entity `$role` is not flushed if life cycle method throws exception
      */
+    #[DataProvider('dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException')]
     public function testThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(string $role): void
     {
         $client = $this->getTestClient();
@@ -49,13 +49,16 @@ class ResourceLifeCycleTest extends WebTestCase
     /**
      * @return Generator<array<int, string>>
      */
-    public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
+    public static function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
         foreach (Role::cases() as $role) {
             yield [$role->value];
         }
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getRepository(): RoleRepository
     {
         $resource = self::getContainer()->get(ResourceForLifeCycleTests::class);

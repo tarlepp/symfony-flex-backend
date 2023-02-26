@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Utils\Tests;
 
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -21,13 +22,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class StringableArrayObjectTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatCastingToStringReturnsExpected
-     *
-     * @phpstan-param  StringableArrayObject<array<string, string>> $input
-     * @psalm-param  StringableArrayObject $input
+     * @phpstan-param StringableArrayObject<array<string, string>> $input
+     * @psalm-param StringableArrayObject $input
      *
      * @testdox Test that casting to string with `$input` input (array converted to JSON) returns `$expected`
      */
+    #[DataProvider('dataProviderTestThatCastingToStringReturnsExpected')]
     public function testThatCastingToStringReturnsExpected(StringableArrayObject $input, string $expected): void
     {
         self::assertSame($expected, (string)(new StringableArrayObject($input)));
@@ -37,7 +37,7 @@ class StringableArrayObjectTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string}>
      */
-    public function dataProviderTestThatCastingToStringReturnsExpected(): Generator
+    public static function dataProviderTestThatCastingToStringReturnsExpected(): Generator
     {
         yield [
             new StringableArrayObject([

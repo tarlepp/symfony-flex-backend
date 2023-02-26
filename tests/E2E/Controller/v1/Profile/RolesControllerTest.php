@@ -15,6 +15,7 @@ use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -94,12 +95,11 @@ class RolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRolesActionReturnsExpected
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/profile/roles` request returns expected `$e` roles with valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRolesActionReturnsExpected')]
     public function testThatRolesActionReturnsExpected(string $u, string $p, StringableArrayObject $e): void
     {
         $client = $this->getTestClient($u, $p);
@@ -114,12 +114,11 @@ class RolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey
-     *
      * @throws JsonException
      *
      * @testdox Test that `GET /v1/profile/roles` request returns `401` with valid API key `$token` token
      */
+    #[DataProvider('dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey')]
     public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);
@@ -150,7 +149,7 @@ class RolesControllerTest extends WebTestCase
     /**
      * @return Generator<array-key, array{0: string, 1: string, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatRolesActionReturnsExpected(): Generator
+    public static function dataProviderTestThatRolesActionReturnsExpected(): Generator
     {
         yield [
             'john',
@@ -222,7 +221,7 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      */
-    public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
+    public static function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 

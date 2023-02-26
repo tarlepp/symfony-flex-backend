@@ -17,6 +17,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -162,8 +163,6 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
-     *
      * @phpstan-param StringableArrayObject<mixed> $expectedArguments
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
@@ -173,6 +172,7 @@ class GenericResourceTest extends KernelTestCase
      *
      * @testdox Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments
      */
+    #[DataProvider('dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters')]
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
@@ -254,8 +254,6 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
-     *
      * @phpstan-param StringableArrayObject<mixed> $expectedArguments
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
@@ -265,6 +263,7 @@ class GenericResourceTest extends KernelTestCase
      *
      * @testdox Test that `findOneBy` method is called with `$expectedArguments` when using `$arguments` arguments
      */
+    #[DataProvider('dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters')]
     public function testThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
@@ -342,8 +341,6 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
-     *
      * @phpstan-param StringableArrayObject<mixed> $expectedArguments
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
@@ -353,6 +350,7 @@ class GenericResourceTest extends KernelTestCase
      *
      * @testdox Test that `countAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.
      */
+    #[DataProvider('dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters')]
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
@@ -577,8 +575,6 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
-     *
      * @phpstan-param StringableArrayObject<mixed> $expectedArguments
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
@@ -588,6 +584,7 @@ class GenericResourceTest extends KernelTestCase
      *
      * @testdox Test that `findIds` method is called with `$expectedArguments` when using `$arguments` arguments.
      */
+    #[DataProvider('dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters')]
     public function testThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
@@ -606,7 +603,7 @@ class GenericResourceTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
+    public static function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
             new StringableArrayObject([[], []]),
@@ -628,7 +625,7 @@ class GenericResourceTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
+    public static function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
             new StringableArrayObject([[], [], 0, 0, []]),
@@ -665,7 +662,7 @@ class GenericResourceTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
+    public static function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
             new StringableArrayObject([[], []]),
@@ -687,7 +684,7 @@ class GenericResourceTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
+    public static function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
             new StringableArrayObject([[], []]),

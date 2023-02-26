@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\User;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -48,12 +49,11 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderValidUsers
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/count` request returns expected response when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderValidUsers')]
     public function testThatCountActionReturnsExpected(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -68,10 +68,9 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderValidApiKeyUsers
-     *
      * @testdox Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role
      */
+    #[DataProvider('dataProviderValidApiKeyUsers')]
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $r): void
     {
         $client = $this->getApiKeyClient($r);
@@ -86,12 +85,11 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderInvalidUsers
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/count` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderInvalidUsers')]
     public function testThatCountActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -110,10 +108,9 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderInvalidApiKeyUsers
-     *
      * @testdox Test that `GET /v1/user/count` request returns `403` when using API key token for `$role` role
      */
+    #[DataProvider('dataProviderInvalidApiKeyUsers')]
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
         $client = $this->getApiKeyClient($role);
@@ -132,12 +129,11 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderValidUsers
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user` request returns expected when using valid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderValidUsers')]
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -147,17 +143,21 @@ class UserControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
+        self::assertJson($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        self::assertCount(6, JSON::decode($content), "Response:\n" . $response);
+
+        $json = JSON::decode($content);
+
+        self::assertIsArray($json);
+        self::assertCount(6, $json, "Response:\n" . $response);
     }
 
     /**
-     * @dataProvider dataProviderInvalidUsers
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user` request returns 403 when using invalid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderInvalidUsers')]
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -176,12 +176,11 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderValidUsers
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/ids` request returns expected when using valid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderValidUsers')]
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -191,17 +190,21 @@ class UserControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
+        self::assertJson($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        self::assertCount(6, JSON::decode($content), "Response:\n" . $response);
+
+        $json = JSON::decode($content);
+
+        self::assertIsArray($json);
+        self::assertCount(6, $json, "Response:\n" . $response);
     }
 
     /**
-     * @dataProvider dataProviderInvalidUsers
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/ids` request returns `403` when using invalid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderInvalidUsers')]
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -222,7 +225,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderValidUsers(): Generator
+    public static function dataProviderValidUsers(): Generator
     {
         yield ['john-admin', 'password-admin'];
 
@@ -240,7 +243,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderValidApiKeyUsers(): Generator
+    public static function dataProviderValidApiKeyUsers(): Generator
     {
         yield ['admin'];
 
@@ -252,7 +255,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderInvalidUsers(): Generator
+    public static function dataProviderInvalidUsers(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];
@@ -274,7 +277,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderInvalidApiKeyUsers(): Generator
+    public static function dataProviderInvalidApiKeyUsers(): Generator
     {
         yield ['logged'];
 

@@ -15,6 +15,7 @@ use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -32,12 +33,10 @@ use Throwable;
 class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatSupportClassReturnsExpected
-     *
      * @throws Throwable
-     *
      * @testdox Test that `supportsClass` method returns `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatSupportClassReturnsExpected')]
     public function testThatSupportClassReturnsExpected(bool $expected, mixed $input): void
     {
         $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
@@ -168,7 +167,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @return Generator<array{0: boolean, 1: boolean|string|int}>
      */
-    public function dataProviderTestThatSupportClassReturnsExpected(): Generator
+    public static function dataProviderTestThatSupportClassReturnsExpected(): Generator
     {
         yield [false, true];
         yield [false, 'foobar'];

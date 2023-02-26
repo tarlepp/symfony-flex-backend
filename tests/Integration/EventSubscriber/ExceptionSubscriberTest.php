@@ -21,6 +21,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorException;
 use Throwable;
 use function array_keys;
+use function property_exists;
 
 /**
  * Class ExceptionSubscriberTest
@@ -48,12 +50,11 @@ use function array_keys;
 class ExceptionSubscriberTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderEnvironment
-     *
-     * @throws JsonException
+     * @throws Throwable
      *
      * @testdox Test that `onKernelException` method calls logger with environment: '$environment'.
      */
+    #[DataProvider('dataProviderEnvironment')]
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
@@ -73,12 +74,11 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderEnvironment
-     *
-     * @throws JsonException
+     * @throws Throwable
      *
      * @testdox Test that `ExceptionEvent::setResponse` method is called with environment: '$environment'.
      */
+    #[DataProvider('dataProviderEnvironment')]
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
@@ -97,12 +97,11 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestResponseHasExpectedStatusCode
-     *
-     * @throws JsonException
+     * @throws Throwable
      *
      * @testdox Test that `Response` has status code `$status` and message `$message` with environment: '$environment'.
      */
+    #[DataProvider('dataProviderTestResponseHasExpectedStatusCode')]
     public function testThatResponseHasExpectedStatusCode(
         int $status,
         Throwable $exception,
@@ -128,24 +127,28 @@ class ExceptionSubscriberTest extends KernelTestCase
         $response = $event->getResponse();
 
         self::assertInstanceOf(Response::class, $response);
+        self::assertSame($status, $response->getStatusCode());
 
         $content = $response->getContent();
 
         self::assertNotFalse($content);
+        self::assertJson($content);
 
-        self::assertSame($status, $response->getStatusCode());
-        self::assertSame($message, JSON::decode($content)->message);
+        $json = JSON::decode($content);
+
+        self::assertIsObject($json);
+        self::assertTrue(property_exists($json, 'message'));
+        self::assertSame($message, $json->message);
     }
 
     /**
-     * @dataProvider dataProviderTestThatResponseHasExpectedKeys
-     *
      * @param array<int, string> $expectedKeys
      *
      * @throws Throwable
      *
      * @testdox Test that `Response` has expected keys in JSON response with environment: '$environment'.
      */
+    #[DataProvider('dataProviderTestThatResponseHasExpectedKeys')]
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
@@ -174,16 +177,16 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $result = JSON::decode($content, true);
 
+        self::assertIsArray($result);
         self::assertSame($expectedKeys, array_keys($result));
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetStatusCodeReturnsExpected
-     *
      * @throws Throwable
      *
      * @testdox Test that `getStatusCode` returns `$expectedStatusCode` with environment: '$environment'.
      */
+    #[DataProvider('dataProviderTestThatGetStatusCodeReturnsExpected')]
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
         Throwable $exception,
@@ -209,12 +212,11 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetExceptionMessageReturnsExpected
-     *
      * @throws Throwable
      *
      * @testdox Test that `$environment` environment exception message is `$expectedMessage`.
      */
+    #[DataProvider('dataProviderTestThatGetExceptionMessageReturnsExpected')]
     public function testThatGetExceptionMessageReturnsExpected(
         string $expectedMessage,
         Throwable $exception,
@@ -235,7 +237,7 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderEnvironment(): Generator
+    public static function dataProviderEnvironment(): Generator
     {
         yield ['dev'];
 
@@ -249,7 +251,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws JsonException
      */
-    public function dataProviderTestResponseHasExpectedStatusCode(): Generator
+    public static function dataProviderTestResponseHasExpectedStatusCode(): Generator
     {
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -390,7 +392,7 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @return Generator<array{0: array<int, string>, 1: string}>
      */
-    public function dataProviderTestThatResponseHasExpectedKeys(): Generator
+    public static function dataProviderTestThatResponseHasExpectedKeys(): Generator
     {
         yield [
             ['message', 'code', 'status'],
@@ -413,7 +415,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws JsonException
      */
-    public function dataProviderTestThatGetStatusCodeReturnsExpected(): Generator
+    public static function dataProviderTestThatGetStatusCodeReturnsExpected(): Generator
     {
         yield [Response::HTTP_INTERNAL_SERVER_ERROR, new Exception(), false, 'dev'];
 
@@ -478,7 +480,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws JsonException
      */
-    public function dataProviderTestThatGetExceptionMessageReturnsExpected(): Generator
+    public static function dataProviderTestThatGetExceptionMessageReturnsExpected(): Generator
     {
         yield [
             'Internal server error.',

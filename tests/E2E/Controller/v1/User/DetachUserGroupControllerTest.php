@@ -13,6 +13,7 @@ use App\DataFixtures\ORM\LoadUserGroupData;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -61,12 +62,10 @@ class DetachUserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAttachUserGroupReturns403
-     *
      * @throws Throwable
-     *
      * @testdox Test that `DELETE /v1/user/{id}/group/{id}` request returns `403` when using user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatAttachUserGroupReturns403')]
     public function testThatDetachUserGroupReturns403(string $u, string $p): void
     {
         $userUuid = LoadUserData::$uuids['john-user'];
@@ -105,7 +104,7 @@ class DetachUserGroupControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatAttachUserGroupReturns403(): Generator
+    public static function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];

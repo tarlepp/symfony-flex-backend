@@ -16,6 +16,7 @@ use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Persistence\ManagerRegistry;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -33,10 +34,9 @@ use function str_pad;
 class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
-     *
      * @testdox Test that `getApiKeyForToken` method returns expected when using `$shortRole` as token base.
      */
+    #[DataProvider('dataProviderTestThatGetApiKeyReturnsExpected')]
     public function testThatGetApiKeyReturnsExpected(string $shortRole): void
     {
         $token = str_pad($shortRole, 40, '_');
@@ -47,10 +47,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
-     *
      * @testdox Test that `getApiKeyForToken` method returns null when using `$shortRole` as an invalid token base.
      */
+    #[DataProvider('dataProviderTestThatGetApiKeyReturnsExpected')]
     public function testThatGetApiKeyReturnsNullForInvalidToken(string $shortRole): void
     {
         $token = str_pad($shortRole, 40, '-');
@@ -72,15 +71,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoadUserByIdentifierWorksAsExpected
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
-     *
      * @testdox Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input
      */
+    #[DataProvider('dataProviderTestThatLoadUserByIdentifierWorksAsExpected')]
     public function testThatLoadUserByIdentifierWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
         $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
@@ -103,10 +101,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatSupportsClassReturnsExpected
-     *
      * @testdox Test that `supportsClass` returns `$expected` when using `$class` as an input.
      */
+    #[DataProvider('dataProviderTestThatSupportsClassReturnsExpected')]
     public function testThatSupportsClassReturnsExpected(bool $expected, string $class): void
     {
         self::assertSame($expected, $this->getApiKeyUserProvider()->supportsClass($class));
@@ -115,9 +112,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @return array<int, array{0: string}>
      */
-    public function dataProviderTestThatGetApiKeyReturnsExpected(): array
+    public static function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        $rolesService = self::getContainer()->get(RolesService::class);
+        self::bootKernel();
+
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         self::assertInstanceOf(RolesService::class, $rolesService);
 
@@ -130,10 +129,12 @@ class ApiKeyUserProviderTest extends KernelTestCase
      * @psalm-return array<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return array<int, array{0: string, 1: StringableArrayObject<array<int, string>>}>
      */
-    public function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
+    public static function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
-        $managerRegistry = self::getContainer()->get('doctrine');
-        $rolesService = self::getContainer()->get(RolesService::class);
+        self::bootKernel();
+
+        $managerRegistry = static::getContainer()->get('doctrine');
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
         self::assertInstanceOf(RolesService::class, $rolesService);
@@ -152,7 +153,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @return Generator<array{0: boolean, 1: class-string<\Symfony\Component\Security\Core\User\UserInterface>}>
      */
-    public function dataProviderTestThatSupportsClassReturnsExpected(): Generator
+    public static function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {
         yield [false, InMemoryUser::class];
         yield [true, ApiKeyUser::class];
@@ -162,8 +163,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $managerRegistry = self::getContainer()->get('doctrine');
-        $rolesService = self::getContainer()->get(RolesService::class);
+        $managerRegistry = static::getContainer()->get('doctrine');
+        $rolesService = static::getContainer()->get(RolesService::class);
         $repository = ApiKeyRepository::class;
 
         self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);

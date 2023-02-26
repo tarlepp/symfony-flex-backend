@@ -10,6 +10,7 @@ namespace App\Tests\Integration\DTO;
 
 use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use ReflectionProperty;
@@ -39,7 +40,7 @@ abstract class DtoTestCase extends KernelTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<RestDtoInterface>
      */
-    protected string $dtoClass;
+    protected static string $dtoClass;
 
     /**
      * @throws Throwable
@@ -48,14 +49,14 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function testThatPropertiesHaveGetters(): void
     {
-        $dtoReflection = new ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass(static::$dtoClass);
 
-        foreach ($this->getDtoProperties() as $reflectionProperty) {
+        foreach (self::getDtoProperties() as $reflectionProperty) {
             $method = 'get' . ucfirst($reflectionProperty->getName());
 
             $message = sprintf(
                 "REST DTO class '%s' does not have required getter method '%s' for property '%s'.",
-                $this->dtoClass,
+                static::$dtoClass,
                 $method,
                 $reflectionProperty->getName()
             );
@@ -71,14 +72,14 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function testThatPropertiesHaveSetters(): void
     {
-        $dtoReflection = new ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass(static::$dtoClass);
 
-        foreach ($this->getDtoProperties() as $reflectionProperty) {
+        foreach (self::getDtoProperties() as $reflectionProperty) {
             $method = 'set' . ucfirst($reflectionProperty->getName());
 
             $message = sprintf(
                 "REST DTO class '%s' does not have required setter method '%s' for property '%s'.",
-                $this->dtoClass,
+                static::$dtoClass,
                 $method,
                 $reflectionProperty->getName()
             );
@@ -95,11 +96,11 @@ abstract class DtoTestCase extends KernelTestCase
     public function testThatSetterCallsSetVisitedMethod(): void
     {
         /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
-        $dtoReflection = new ReflectionClass($this->dtoClass);
-        $properties = $this->getDtoProperties();
+        $dtoReflection = new ReflectionClass(static::$dtoClass);
+        $properties = self::getDtoProperties();
 
         /** @psalm-var RestDtoInterface&MockObject $mock */
-        $mock = $this->getMockBuilder($this->dtoClass)
+        $mock = $this->getMockBuilder(static::$dtoClass)
             ->onlyMethods(['setVisited'])
             ->getMock();
 
@@ -130,11 +131,11 @@ abstract class DtoTestCase extends KernelTestCase
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
         /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
-        $dtoReflection = new ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass(static::$dtoClass);
 
-        $dto = new $this->dtoClass();
+        $dto = new static::$dtoClass();
 
-        foreach ($this->getDtoProperties() as $reflectionProperty) {
+        foreach (self::getDtoProperties() as $reflectionProperty) {
             // Get "valid" value for current property
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
@@ -150,12 +151,10 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatSetterOnlyAcceptSpecifiedType
-     *
      * @throws Throwable
-     *
      * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type
      */
+    #[DataProvider('dataProviderTestThatSetterOnlyAcceptSpecifiedType')]
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {
         // Get "valid" value for current property
@@ -165,7 +164,7 @@ abstract class DtoTestCase extends KernelTestCase
 
         $setter = 'set' . ucfirst($field);
 
-        $dto = new $this->dtoClass();
+        $dto = new static::$dtoClass();
         $dto->{$setter}($value);
 
         $message = sprintf(
@@ -182,14 +181,14 @@ abstract class DtoTestCase extends KernelTestCase
      *
      * @throws Throwable
      */
-    public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
+    public static function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
     {
-        $iterator = fn (ReflectionProperty $reflectionProperty): array => [
+        $iterator = static fn (ReflectionProperty $reflectionProperty): array => [
             $reflectionProperty->getName(),
-            $this->getType($this->dtoClass, $reflectionProperty->getName()),
+            self::getType(static::$dtoClass, $reflectionProperty->getName()),
         ];
 
-        return array_map($iterator, $this->getDtoProperties());
+        return array_map($iterator, self::getDtoProperties());
     }
 
     private static function initializePropertyExtractor(): PropertyInfoExtractor
@@ -238,7 +237,7 @@ abstract class DtoTestCase extends KernelTestCase
     private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty): mixed
     {
         return PhpUnitUtil::getValidValueForType(
-            $this->getType($dtoReflection->getName(), $reflectionProperty->getName())
+            self::getType($dtoReflection->getName(), $reflectionProperty->getName())
         );
     }
 
@@ -247,9 +246,9 @@ abstract class DtoTestCase extends KernelTestCase
      *
      * @throws Throwable
      */
-    private function getDtoProperties(): array
+    private static function getDtoProperties(): array
     {
-        $dtoClass = $this->dtoClass;
+        $dtoClass = static::$dtoClass;
         $dtoReflection = new ReflectionClass($dtoClass);
         $dto = new $dtoClass();
 
@@ -264,7 +263,7 @@ abstract class DtoTestCase extends KernelTestCase
         return array_filter($dtoReflection->getProperties(), $filter);
     }
 
-    private function getType(string $class, string $property): string
+    private static function getType(string $class, string $property): string
     {
         $propertyInfo = self::initializePropertyExtractor();
         $types = $propertyInfo->getTypes($class, $property);

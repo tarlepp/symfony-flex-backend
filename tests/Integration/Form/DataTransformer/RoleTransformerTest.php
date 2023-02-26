@@ -12,6 +12,7 @@ use App\Entity\Role;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Resource\RoleResource;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -26,10 +27,9 @@ use Throwable;
 class RoleTransformerTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatTransformReturnsExpected
-     *
      * @testdox Test that `transform` method returns `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatTransformReturnsExpected')]
     public function testThatTransformReturnsExpected(string $expected, ?Role $input): void
     {
         $resource = $this->getRoleResource();
@@ -107,7 +107,7 @@ class RoleTransformerTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: Role|null}>
      */
-    public function dataProviderTestThatTransformReturnsExpected(): Generator
+    public static function dataProviderTestThatTransformReturnsExpected(): Generator
     {
         yield ['', null];
 

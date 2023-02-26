@@ -13,6 +13,7 @@ use App\DataFixtures\ORM\LoadUserGroupData;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -61,12 +62,10 @@ class DetachUserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatDetachUserReturns403
-     *
      * @throws Throwable
-     *
      * @testdox Test that `DELETE /v1/user_group/{id}/user/{id}` request returns `403` for not root user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatDetachUserReturns403')]
     public function testThatDetachUserReturns403(string $u, string $p): void
     {
         $groupUuid = LoadUserGroupData::$uuids['Role-user'];
@@ -105,7 +104,7 @@ class DetachUserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatDetachUserReturns403(): Generator
+    public static function dataProviderTestThatDetachUserReturns403(): Generator
     {
         yield ['john', 'password'];
 

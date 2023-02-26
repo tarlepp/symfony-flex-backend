@@ -34,9 +34,11 @@ use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class ResourceCollectionTest
@@ -113,25 +115,27 @@ class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetReturnsExpectedResource
-     *
      * @param class-string<RestResource> $resourceClass
+     *
+     * @throws Throwable
      *
      * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
      */
+    #[DataProvider('dataProviderTestThatGetReturnsExpectedResource')]
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
     {
         self::assertInstanceOf($resourceClass, $this->getCollection()->get($resourceClass));
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetEntityResourceReturnsExpectedResource
-     *
      * @param class-string<RestResource> $resourceClass
      * @param class-string<EntityInterface> $entityClass
      *
+     * @throws Throwable
+     *
      * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
+    #[DataProvider('dataProviderTestThatGetEntityResourceReturnsExpectedResource')]
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
@@ -139,24 +143,26 @@ class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatHasReturnsExpected
-     *
      * @param class-string<RestResource>|string|null $resource
+     *
+     * @throws Throwable
      *
      * @testdox Test that `has` method returns `$expected` with `$resource` input.
      */
+    #[DataProvider('dataProviderTestThatHasReturnsExpected')]
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
     {
         self::assertSame($expected, $this->getCollection()->has($resource));
     }
 
     /**
-     * @dataProvider dataProviderTestThatHasEntityResourceReturnsExpected
-     *
      * @param class-string<EntityInterface>|string|null $entity
+     *
+     * @throws Throwable
      *
      * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input.
      */
+    #[DataProvider('dataProviderTestThatHasEntityResourceReturnsExpected')]
     public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
     {
         self::assertSame($expected, $this->getCollection()->hasEntityResource($entity));
@@ -165,7 +171,7 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @return Generator<array{0: class-string<RestResource>}>
      */
-    public function dataProviderTestThatGetReturnsExpectedResource(): Generator
+    public static function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
         yield [ApiKeyResource::class];
         yield [DateDimensionResource::class];
@@ -184,7 +190,7 @@ class ResourceCollectionTest extends KernelTestCase
      *      1: class-string<EntityInterface>
      *  }>
      */
-    public function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
+    public static function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
     {
         yield [ApiKeyResource::class, ApiKey::class];
         yield [DateDimensionResource::class, DateDimension::class];
@@ -200,7 +206,7 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @return Generator<array{0: boolean, 1: class-string<RestResource>|string|null}>
      */
-    public function dataProviderTestThatHasReturnsExpected(): Generator
+    public static function dataProviderTestThatHasReturnsExpected(): Generator
     {
         yield [true, ApiKeyResource::class];
         yield [true, DateDimensionResource::class];
@@ -219,7 +225,7 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @return Generator<array{0: boolean, 1: class-string<EntityInterface>|string|null}>
      */
-    public function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
+    public static function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {
         yield [true, ApiKey::class];
         yield [true, DateDimension::class];
@@ -235,6 +241,9 @@ class ResourceCollectionTest extends KernelTestCase
         yield [false, stdClass::class];
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getCollection(): ResourceCollection
     {
         $service = self::getContainer()->get(ResourceCollection::class);

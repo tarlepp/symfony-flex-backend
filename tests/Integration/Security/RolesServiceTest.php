@@ -13,6 +13,7 @@ use App\Security\Interfaces\RolesServiceInterface;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -59,28 +60,24 @@ class RolesServiceTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetRoleLabelReturnsExpected
-     *
      * @testdox Test that `RolesServiceInterface::getRoleLabel` method returns `$expected` when using `$role` as input
      */
+    #[DataProvider('dataProviderTestThatGetRoleLabelReturnsExpected')]
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
     {
         self::assertSame($expected, $this->getService()->getRoleLabel($role), 'Role label was not expected one.');
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetShortReturnsExpected
-     *
      * @testdox Test that `RolesServiceInterface::getShort` method returns `$expected` when using `$input` as input
      */
+    #[DataProvider('dataProviderTestThatGetShortReturnsExpected')]
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
     {
         self::assertSame($expected, $this->getService()->getShort($input), 'Short role name was not expected');
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetInheritedRolesReturnsExpected
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $expected
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $expected
@@ -88,6 +85,7 @@ class RolesServiceTest extends KernelTestCase
      *
      * @testdox Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input
      */
+    #[DataProvider('dataProviderTestThatGetInheritedRolesReturnsExpected')]
     public function testThatGetInheritedRolesReturnsExpected(
         StringableArrayObject $expected,
         StringableArrayObject $roles
@@ -102,7 +100,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
+    public static function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
     {
         yield [Role::LOGGED->value, 'Logged in users'];
         yield [Role::USER->value, 'Normal users'];
@@ -115,7 +113,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetShortReturnsExpected(): Generator
+    public static function dataProviderTestThatGetShortReturnsExpected(): Generator
     {
         yield [Role::LOGGED->value, 'logged'];
         yield [Role::USER->value, 'user'];
@@ -129,7 +127,7 @@ class RolesServiceTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
+    public static function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {
         yield [
             new StringableArrayObject([Role::LOGGED->value]),

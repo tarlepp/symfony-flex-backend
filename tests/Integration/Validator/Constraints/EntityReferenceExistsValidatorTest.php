@@ -14,6 +14,7 @@ use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
 use Doctrine\ORM\EntityNotFoundException;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -49,14 +50,13 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatValidateMethodThrowsUnexpectedValueException
-     *
      * @param string|stdClass|array<mixed> $value
      *
      * @testdox Test that `validate` method throws `$expectedMessage` with `$value` using entity class `$entityClass`
      */
+    #[DataProvider('dataProviderTestThatValidateMethodThrowsUnexpectedValueException')]
     public function testThatValidateMethodThrowsUnexpectedValueException(
-        string | stdClass | array $value,
+        string|stdClass|array $value,
         string $entityClass,
         string $expectedMessage
     ): void {
@@ -179,7 +179,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     /**
      * @return Generator<array{0: string|stdClass|array<mixed>, 1: string, 2: string}>
      */
-    public function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
+    public static function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
     {
         yield ['', stdClass::class, 'Expected argument of type "stdClass", "string" given'];
 

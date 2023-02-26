@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Rest;
 
 use App\Rest\UuidHelper;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -38,10 +39,9 @@ class UuidHelperTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetTypeReturnsExpected
-     *
      * @testdox test that `UuidHelper::getType` method returns `$expected` when using `$value` as an input
      */
+    #[DataProvider('dataProviderTestThatGetTypeReturnsExpected')]
     public function testThatGetTypeReturnsExpected(?string $expected, string $value): void
     {
         self::assertSame($expected, UuidHelper::getType($value));
@@ -73,7 +73,7 @@ class UuidHelperTest extends KernelTestCase
     /**
      * @return Generator<array{0: string|null, 1: string}>
      */
-    public function dataProviderTestThatGetTypeReturnsExpected(): Generator
+    public static function dataProviderTestThatGetTypeReturnsExpected(): Generator
     {
         yield [null, 'foo'];
 

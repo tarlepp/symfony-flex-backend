@@ -26,7 +26,7 @@ class ApiKeyPatchTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<ApiKeyPatch>
      */
-    protected string $dtoClass = ApiKeyPatch::class;
+    protected static string $dtoClass = ApiKeyPatch::class;
 
     /**
      * @testdox Test that `setUserGroups` method updates entity correctly

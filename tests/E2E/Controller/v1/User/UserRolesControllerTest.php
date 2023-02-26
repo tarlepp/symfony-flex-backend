@@ -14,6 +14,7 @@ use App\Security\Interfaces\RolesServiceInterface;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 use function getenv;
 
@@ -45,12 +46,11 @@ class UserRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetRolesActionsReturns403ForInvalidUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/$id/roles` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetRolesActionsReturns403ForInvalidUser')]
     public function testThatGetUserRolesReturns403ForInvalidUser(string $id, string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -64,12 +64,11 @@ class UserRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserRolesReturns200ForUserHimself
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/$id/roles` request returns `$e` for user `$u` + `$p` him/herself
      */
+    #[DataProvider('dataProviderTestThatGetUserRolesReturns200ForUserHimself')]
     public function testThatGetUserRolesReturns200ForUserHimself(string $id, string $u, string $p, string $e): void
     {
         $client = $this->getTestClient($u, $p);
@@ -84,12 +83,11 @@ class UserRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetRolesReturns200ForRootRoleUser
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /v1/user/$id/roles` request returns expected `$e` for root user
      */
+    #[DataProvider('dataProviderTestThatGetRolesReturns200ForRootRoleUser')]
     public function testThatGetUserRolesReturns200ForRootRoleUser(string $id, string $e): void
     {
         $client = $this->getTestClient('john-root', 'password-root');
@@ -106,7 +104,7 @@ class UserRolesControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string, 2: string}>
      */
-    public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): Generator
     {
         yield [LoadUserData::$uuids['john-api'], 'john', 'password'];
 
@@ -132,7 +130,7 @@ class UserRolesControllerTest extends WebTestCase
      *
      * @return Generator<array{0: string, 1: string, 2: string, 3: string}>
      */
-    public function dataProviderTestThatGetUserRolesReturns200ForUserHimself(): Generator
+    public static function dataProviderTestThatGetUserRolesReturns200ForUserHimself(): Generator
     {
         $rolesService = self::getContainer()->get(RolesServiceInterface::class);
 
@@ -232,7 +230,7 @@ class UserRolesControllerTest extends WebTestCase
      *
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
+    public static function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
     {
         $rolesService = self::getContainer()->get(RolesServiceInterface::class);
 
