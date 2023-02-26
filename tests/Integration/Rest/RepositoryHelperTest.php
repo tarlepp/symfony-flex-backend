@@ -14,6 +14,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class RepositoryHelperTest
@@ -26,6 +27,8 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @phpstan-param StringableArrayObject<mixed> $input
      * @psalm-param StringableArrayObject $input
+     *
+     * @throws Throwable
      *
      * @testdox Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input
      */
@@ -42,6 +45,8 @@ class RepositoryHelperTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `processCriteria` method call doesn't change DQL with empty `criteria` parameter
      */
     public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
@@ -59,6 +64,8 @@ DQL;
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `processSearchTerms` method call doesn't change DQL with empty `columns` parameter
      */
     public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
@@ -87,6 +94,8 @@ DQL;
      * @phpstan-param StringableArrayObject<array> $terms
      * @psalm-param StringableArrayObject $terms
      *
+     * @throws Throwable
+     *
      * @testdox Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms
      */
     #[DataProvider('dataProviderTestThatProcessSearchTermsWorksLikeExpected')]
@@ -107,6 +116,8 @@ DQL;
      * @phpstan-param StringableArrayObject<array> $input
      * @psalm-param StringableArrayObject $input
      *
+     * @throws Throwable
+     *
      * @testdox Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input
      */
     #[DataProvider('dataProviderTestThatProcessOrderByWorksLikeExpected')]
@@ -122,6 +133,8 @@ DQL;
     }
 
     /**
+     * @throws Throwable
+     *
      * @testdox Test that `getExpression` method doesn't modify expression with empty `criteria` parameter
      */
     public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
@@ -142,9 +155,11 @@ DQL;
      * @psalm-param StringableArrayObject $criteria
      * @psalm-param StringableArrayObject $params
      *
+     * @throws Throwable
+     *
      * @testdox Test that after `getExpression` call DQL is `$dql` and parameters are `$params` when using `$criteria`
      */
-    #[DataProvider('dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria')]
+    #[DataProvider('dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria')]
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         StringableArrayObject $criteria,
         string $dql,
@@ -350,8 +365,7 @@ DQL;
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
-    public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria()
-    : Generator
+    public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria(): Generator
     {
         yield [
             new StringableArrayObject(['u.id', 'eq', 123]),
@@ -573,6 +587,9 @@ DQL
         // @codingStandardsIgnoreEnd
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getRepository(): UserRepository
     {
         /** @var UserRepository $userRepository */
