@@ -622,11 +622,13 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = function (array $mapping) use ($meta): array {
+        $iterator = static function (array $mapping) use ($meta): array {
             /** @var class-string $target */
             $target = $mapping['targetEntity'];
 
-            $input = $this->createMock($target);
+            self::assertTrue(class_exists($target));
+
+            $input = new $target();
 
             $methods = [
                 ['get' . ucfirst($mapping['fieldName']), $mapping['fieldName'], false, null],
