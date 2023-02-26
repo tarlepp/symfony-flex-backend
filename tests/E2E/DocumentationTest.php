@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E;
 
 use App\Utils\Tests\WebTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -21,9 +22,8 @@ class DocumentationTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /api/doc` request returns `200`
      */
+    #[TestDox('Test that `GET /api/doc` request returns `200`')]
     public function testThatDocumentationUiWorks(): void
     {
         $client = $this->getTestClient();
@@ -34,9 +34,8 @@ class DocumentationTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /api/doc.json` request returns `200`
      */
+    #[TestDox('Test that `GET /api/doc.json` request returns `200`')]
     public function testThatDocumentationJsonWorks(): void
     {
         $client = $this->getTestClient();

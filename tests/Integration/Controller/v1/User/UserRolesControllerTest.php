@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Controller\v1\User;
 use App\Controller\v1\User\UserRolesController;
 use App\Entity\User;
 use App\Security\RolesService;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -24,9 +25,8 @@ class UserRolesControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `__invoke(User $requestUser)` method calls expected service methods
      */
+    #[TestDox('Test that `__invoke(User $requestUser)` method calls expected service methods')]
     public function testThatInvokeMethodCallsExpectedMethods(): void
     {
         $user = new User();

@@ -10,6 +10,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\ResponseSubscriber;
 use App\Service\Version;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,8 @@ class ResponseSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `ResponseSubscriber` adds expected `X-API-VERSION` header to response
      */
+    #[TestDox('Test that `ResponseSubscriber` adds expected `X-API-VERSION` header to response')]
     public function testThatSubscriberAddsHeader(): void
     {
         self::bootKernel();

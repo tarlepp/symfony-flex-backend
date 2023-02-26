@@ -12,6 +12,8 @@ use App\DataFixtures\ORM\LoadUserGroupData;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -23,12 +25,10 @@ use Throwable;
 class UsersControllerTest extends WebTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatGetUserGroupUsersActionReturnsExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user_group/$id/users` request returns `200` and expected count `$c` of users
      */
+    #[DataProvider('dataProviderTestThatGetUserGroupUsersActionReturnsExpected')]
+    #[TestDox('Test that `GET /v1/user_group/$id/users` request returns `200` and expected count `$c` of users')]
     public function testThatGetUserGroupUsersActionReturnsExpected(int $c, string $id): void
     {
         $client = $this->getTestClient('john-root', 'password-root');
@@ -45,7 +45,7 @@ class UsersControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: int, 1: string}>
      */
-    public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
+    public static function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
     {
         yield [1, LoadUserGroupData::$uuids['Role-root']];
         yield [2, LoadUserGroupData::$uuids['Role-admin']];

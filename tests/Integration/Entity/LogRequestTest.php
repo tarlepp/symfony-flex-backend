@@ -15,6 +15,8 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Collections\ArrayCollection;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -39,14 +41,13 @@ class LogRequestTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = LogRequest::class;
+    protected static string $entityName = LogRequest::class;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -55,12 +56,11 @@ class LogRequestTest extends EntityTestCase
         self::markTestSkipped('There is not setter in read only entity...');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -71,12 +71,10 @@ class LogRequestTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
      * @throws Throwable
-     *
-     * @testdox Test that getter method for `$type $property` returns expected
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that getter method for `$type $property` returns expected')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);
@@ -130,8 +128,6 @@ class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $properties
      * @phpstan-param StringableArrayObject<array<string, string>> $headers
      * @phpstan-param StringableArrayObject<array<string, string>> $expected
@@ -140,9 +136,9 @@ class LogRequestTest extends EntityTestCase
      * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`
      */
+    #[DataProvider('dataProviderTestThatSensitiveDataIsCleaned')]
+    #[TestDox('Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`')]
     public function testThatSensitiveDataIsCleanedFromHeaders(
         StringableArrayObject $properties,
         StringableArrayObject $headers,
@@ -157,8 +153,6 @@ class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $properties
      * @phpstan-param StringableArrayObject<array<string, string>> $parameters
      * @phpstan-param StringableArrayObject<array<string, string>> $expected
@@ -167,9 +161,9 @@ class LogRequestTest extends EntityTestCase
      * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`
      */
+    #[DataProvider('dataProviderTestThatSensitiveDataIsCleaned')]
+    #[TestDox('Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`')]
     public function testThatSensitiveDataIsCleanedFromParameters(
         StringableArrayObject $properties,
         StringableArrayObject $parameters,
@@ -184,15 +178,13 @@ class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
-     *
      * @phpstan-param StringableArrayObject<array<string, string>> $expected
      * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
-     *
-     * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input
      */
+    #[DataProvider('dataProviderTestThatDetermineParametersWorksLikeExpected')]
+    #[TestDox('Test that `determineParameters` method returns `$expected` when using `$content` as input')]
     public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
     {
         $logRequest = new LogRequest([], Request::create(''), new Response());
@@ -213,7 +205,7 @@ class LogRequestTest extends EntityTestCase
      *      2: StringableArrayObject<mixed>,
      *  }>
      */
-    public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
+    public static function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
         yield [
             new StringableArrayObject(['password']),
@@ -281,7 +273,7 @@ class LogRequestTest extends EntityTestCase
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
+    public static function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
     {
         yield [
             '{"foo":"bar"}',

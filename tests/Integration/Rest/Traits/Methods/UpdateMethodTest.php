@@ -20,6 +20,8 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,9 +40,8 @@ class UpdateMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `updateMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
+    #[TestDox("Test that `updateMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -62,12 +63,10 @@ class UpdateMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `updateMethod` throws an exception when using `$httpMethod` HTTP method
      */
+    #[DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
+    #[TestDox('Test that `updateMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -91,12 +90,10 @@ class UpdateMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitHandlesException
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `updateMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
+    #[DataProvider('dataProviderTestThatTraitHandlesException')]
+    #[TestDox('Test that `updateMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -127,9 +124,8 @@ class UpdateMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `updateMethod` method calls expected service methods
      */
+    #[TestDox('Test that `updateMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -165,7 +161,7 @@ class UpdateMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
+    public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
         yield ['DELETE'];
@@ -180,7 +176,7 @@ class UpdateMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: Throwable, 1: int}>
      */
-    public function dataProviderTestThatTraitHandlesException(): Generator
+    public static function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];

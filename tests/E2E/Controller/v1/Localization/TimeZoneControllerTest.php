@@ -11,6 +11,8 @@ namespace App\Tests\E2E\Controller\v1\Localization;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -24,12 +26,10 @@ class TimeZoneControllerTest extends WebTestCase
     private string $baseUrl = '/v1/localization/timezone';
 
     /**
-     * @dataProvider dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$method /v1/localization/timezone` request returns `405`
      */
+    #[DataProvider('dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet')]
+    #[TestDox('Test that `$method /v1/localization/timezone` request returns `405`')]
     public function testThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
         $client = $this->getTestClient();
@@ -44,9 +44,8 @@ class TimeZoneControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/localization/timezone` request returns `200`
      */
+    #[TestDox('Test that `GET /v1/localization/timezone` request returns `200`')]
     public function testThatTimeZoneRouteReturns200(): void
     {
         $client = $this->getTestClient();
@@ -61,9 +60,8 @@ class TimeZoneControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/localization/timezone` request returns and array of timezones
      */
+    #[TestDox('Test that `GET /v1/localization/timezone` request returns and array of timezones')]
     public function testThatTimeZoneRouteReturnsAnArrayOfTimeZones(): void
     {
         $client = $this->getTestClient();
@@ -81,9 +79,8 @@ class TimeZoneControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/localization/timezone` request returns data as in expected structure
      */
+    #[TestDox('Test that `GET /v1/localization/timezone` request returns data as in expected structure')]
     public function testThatTimeZoneRouteReturnsDataAsInExpectedStructure(): void
     {
         $client = $this->getTestClient();
@@ -105,7 +102,7 @@ class TimeZoneControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(): Generator
+    public static function dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];
         yield ['POST'];

@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Validator\Constraints;
 use App\Service\Localization;
 use App\Validator\Constraints\Language;
 use App\Validator\Constraints\LanguageValidator;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
@@ -23,9 +24,7 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
  */
 class LanguageValidatorTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `LanguageValidator::validate` method calls expected service methods
-     */
+    #[TestDox('Test that `LanguageValidator::validate` method calls expected service methods')]
     public function testThatValidateCallsExpectedMethods(): void
     {
         $localizationMock = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();

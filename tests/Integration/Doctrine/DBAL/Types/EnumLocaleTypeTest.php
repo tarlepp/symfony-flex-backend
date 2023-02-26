@@ -14,6 +14,8 @@ use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -28,9 +30,8 @@ class EnumLocaleTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getSQLDeclaration` method returns expected
      */
+    #[TestDox('Test that `getSQLDeclaration` method returns expected')]
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
         $type = $this->getType();
@@ -40,12 +41,10 @@ class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method returns `$value`.
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueWorksWithProperValues')]
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$value`.')]
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
         $type = $this->getType();
@@ -55,12 +54,10 @@ class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueThrowsAnException')]
+    #[TestDox('Test that `convertToDatabaseValue` method throws an exception with `$value` input')]
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -75,7 +72,7 @@ class EnumLocaleTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: 'en'|'fi'}>
      */
-    public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
+    public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
         yield ['en'];
         yield ['fi'];
@@ -84,7 +81,7 @@ class EnumLocaleTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: mixed}>
      */
-    public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
+    public static function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
         yield [null];
         yield [false];

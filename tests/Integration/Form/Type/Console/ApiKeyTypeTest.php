@@ -14,6 +14,7 @@ use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\ApiKeyType;
 use App\Resource\UserGroupResource;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -27,9 +28,7 @@ use function array_keys;
  */
 class ApiKeyTypeTest extends TypeTestCase
 {
-    /**
-     * @testdox Test that form submit with valid input data works as expected
-     */
+    #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
         $resource = $this->getUserGroupResource();

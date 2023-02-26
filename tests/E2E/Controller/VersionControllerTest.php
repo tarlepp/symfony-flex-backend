@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller;
 use App\Resource\LogRequestResource;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function file_get_contents;
 
@@ -24,9 +25,8 @@ class VersionControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /version` request returns `200`
      */
+    #[TestDox('Test that `GET /version` request returns `200`')]
     public function testThatVersionRouteReturns200(): void
     {
         $client = $this->getTestClient();
@@ -39,9 +39,8 @@ class VersionControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /version` request doesn't add request log row to database
      */
+    #[TestDox("Test that `GET /version` request doesn't add request log row to database")]
     public function testThatVersionRouteDoesNotMakeRequestLog(): void
     {
         $resource = self::getContainer()->get(LogRequestResource::class);
@@ -58,9 +57,8 @@ class VersionControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `X-API-VERSION` header is added to response with expected value
      */
+    #[TestDox('Test that `X-API-VERSION` header is added to response with expected value')]
     public function testThatApiVersionIsAddedToResponseHeaders(): void
     {
         $client = $this->getTestClient();

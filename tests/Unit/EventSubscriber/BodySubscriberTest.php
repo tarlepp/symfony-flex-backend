@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\BodySubscriber;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -20,9 +21,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class BodySubscriberTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `getSubscribedEvents` method returns expected
-     */
+    #[TestDox('Test that `getSubscribedEvents` method returns expected')]
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [

@@ -17,6 +17,7 @@ use App\Rest\UuidHelper;
 use App\Security\SecurityUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -37,9 +38,10 @@ class LockedUserSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported
      */
+    #[TestDox(
+        'Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported'
+    )]
     public function testThatOnAuthenticationSuccessThrowsUserNotFoundException(): void
     {
         $this->expectException(UnsupportedUserException::class);
@@ -64,9 +66,8 @@ class LockedUserSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `onAuthenticationSuccess` throws `LockedException` when user is locked
      */
+    #[TestDox('Test that `onAuthenticationSuccess` throws `LockedException` when user is locked')]
     public function testThatOnAuthenticationSuccessThrowsLockedException(): void
     {
         $this->expectException(LockedException::class);
@@ -108,9 +109,10 @@ class LockedUserSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked
      */
+    #[TestDox(
+        'Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked'
+    )]
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -142,9 +144,8 @@ class LockedUserSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLoginFailureResource::save` method is not called when user is not found
      */
+    #[TestDox('Test that `LogLoginFailureResource::save` method is not called when user is not found')]
     public function testThatOnAuthenticationFailureTestThatResourceMethodsAreNotCalledWhenWrongUser(): void
     {
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -173,9 +174,8 @@ class LockedUserSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLoginFailureResource::save` method is called when user is found
      */
+    #[TestDox('Test that `LogLoginFailureResource::save` method is called when user is found')]
     public function testThatOnAuthenticationFailureTestThatResourceSaveMethodIsCalled(): void
     {
         $user = new User();

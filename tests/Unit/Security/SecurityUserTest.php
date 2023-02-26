@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Security;
 
 use App\Entity\User;
 use App\Security\SecurityUser;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function str_rot13;
 
@@ -21,9 +22,7 @@ use function str_rot13;
  */
 class SecurityUserTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `SecurityUser::getRoles` method returns expected roles
-     */
+    #[TestDox('Test that `SecurityUser::getRoles` method returns expected roles')]
     public function testThatGetRolesReturnsExpected(): void
     {
         $securityUser = new SecurityUser(new User(), ['Foo', 'Bar']);
@@ -31,9 +30,7 @@ class SecurityUserTest extends KernelTestCase
         self::assertSame(['Foo', 'Bar'], $securityUser->getRoles());
     }
 
-    /**
-     * @testdox Test that `SecurityUser::getPassword` method returns expected when using `str_rot13` as encoder
-     */
+    #[TestDox('Test that `SecurityUser::getPassword` method returns expected when using `str_rot13` as encoder')]
     public function testThatGetPasswordReturnsExpected(): void
     {
         $encoder = fn (string $password): string => str_rot13($password);
@@ -43,17 +40,13 @@ class SecurityUserTest extends KernelTestCase
         self::assertSame('sbbone', $securityUser->getPassword());
     }
 
-    /**
-     * @testdox Test that `SecurityUser::getSalt` method returns null
-     */
+    #[TestDox('Test that `SecurityUser::getSalt` method returns null')]
     public function testThatGetSaltReturnNothing(): void
     {
         self::assertNull((new SecurityUser(new User()))->getSalt());
     }
 
-    /**
-     * @testdox Test that `SecurityUser::getUsername` method returns expected UUID
-     */
+    #[TestDox('Test that `SecurityUser::getUsername` method returns expected UUID')]
     public function testThatGetUsernameReturnsExpected(): void
     {
         $user = new User();
@@ -61,9 +54,7 @@ class SecurityUserTest extends KernelTestCase
         self::assertSame($user->getId(), (new SecurityUser($user))->getUserIdentifier());
     }
 
-    /**
-     * @testdox Test that `SecurityUser::getUuid` method returns expected UUID
-     */
+    #[TestDox('Test that `SecurityUser::getUuid` method returns expected UUID')]
     public function testThatGetUuidReturnsExpected(): void
     {
         $user = new User();
@@ -71,9 +62,7 @@ class SecurityUserTest extends KernelTestCase
         self::assertSame($user->getId(), (new SecurityUser($user))->getUuid());
     }
 
-    /**
-     * @testdox Test that password is present after `SecurityUser::eraseCredentials` method call
-     */
+    #[TestDox('Test that password is present after `SecurityUser::eraseCredentials` method call')]
     public function testThatPasswordIsPresentAfterEraseCredential(): void
     {
         $encoder = fn (string $password): string => str_rot13($password);

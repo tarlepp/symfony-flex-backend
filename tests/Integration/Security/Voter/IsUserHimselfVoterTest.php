@@ -11,9 +11,9 @@ namespace App\Tests\Integration\Security\Voter;
 use App\Entity\User;
 use App\Security\SecurityUser;
 use App\Security\Voter\IsUserHimselfVoter;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
@@ -24,9 +24,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class IsUserHimselfVoterTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `vote` method returns `Voter::ACCESS_ABSTAIN` when subject is not supported
-     */
+    #[TestDox('Test that `vote` method returns `Voter::ACCESS_ABSTAIN` when subject is not supported')]
     public function testThatVoteReturnsExpectedIfSubjectIsNotSupported(): void
     {
         $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
@@ -37,9 +35,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `vote` method returns `Voter::ACCESS_DENIED` when subject mismatch with given token user
-     */
+    #[TestDox('Test that `vote` method returns `Voter::ACCESS_DENIED` when subject mismatch with given token user')]
     public function testThatVoteReturnsExpectedWhenUserMismatch(): void
     {
         $token = new UsernamePasswordToken(new SecurityUser(new User()), 'firewall');
@@ -50,9 +46,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
         );
     }
 
-    /**
-     * @testdox Test that `vote` method returns `Voter::ACCESS_GRANTED` when subject match with given token user
-     */
+    #[TestDox('Test that `vote` method returns `Voter::ACCESS_GRANTED` when subject match with given token user')]
     public function testThatVoteReturnsExpectedWhenUserMatch(): void
     {
         $user = new User();

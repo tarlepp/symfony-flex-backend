@@ -14,6 +14,8 @@ use App\Security\Provider\SecurityUserFactory;
 use App\Security\SecurityUser;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -39,15 +41,13 @@ class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
-     *
-     * @testdox Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles
      */
+    #[DataProvider('dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance')]
+    #[TestDox('Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles')]
     public function testThatLoadUserByIdentifierReturnsExpectedUserInstance(
         string $username,
         StringableArrayObject $roles
@@ -121,7 +121,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @return Generator<array-key, array{0: string, 1: StringableArrayObject}>
      */
-    public function dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance(): Generator
+    public static function dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance(): Generator
     {
         yield ['john', new StringableArrayObject([])];
         yield ['john-api', new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];

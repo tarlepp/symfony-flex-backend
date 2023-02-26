@@ -13,6 +13,8 @@ use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -28,9 +30,8 @@ class UserGroupsControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/{id}/groups` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/user/{id}/groups` request returns `401` for non-logged in user')]
     public function testThatGetUserGroupsReturnsReturns401(): void
     {
         $client = $this->getTestClient();
@@ -44,12 +45,10 @@ class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserGroupsReturns403ForInvalidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/$id/groups` request returns `403` when using user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetUserGroupsReturns403ForInvalidUser')]
+    #[TestDox('Test that `GET /v1/user/$id/groups` request returns `403` when using user `$u` + `$p`')]
     public function testThatGetUserGroupsReturns403ForInvalidUser(string $id, string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -63,15 +62,13 @@ class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself
-     *
      * @psalm-param StringableArrayObject $e
      * @phpstan-param StringableArrayObject<int, string> $e
      *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself')]
+    #[TestDox('Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for user `$u` + `$p`')]
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $id,
         string $u,
@@ -93,15 +90,13 @@ class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser
-     *
      * @psalm-param StringableArrayObject $e
      * @phpstan-param StringableArrayObject<int, string> $e
      *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for root user
      */
+    #[DataProvider('dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser')]
+    #[TestDox('Test that `GET /v1/user/$id/groups` request returns expected `$e` groups for root user')]
     public function testThatGetUserGroupsReturns200ForRootRoleUser(string $id, StringableArrayObject $e): void
     {
         $client = $this->getTestClient('john-root', 'password-root');
@@ -121,7 +116,7 @@ class UserGroupsControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string, 2: string}>
      */
-    public function dataProviderTestThatGetUserGroupsReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatGetUserGroupsReturns403ForInvalidUser(): Generator
     {
         yield [LoadUserData::$uuids['john-api'], 'john', 'password'];
 
@@ -142,7 +137,7 @@ class UserGroupsControllerTest extends WebTestCase
      * @psalm-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject<int, string>}>
      */
-    public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): Generator
+    public static function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): Generator
     {
         yield [LoadUserData::$uuids['john'], 'john', 'password', new StringableArrayObject([])];
         yield [
@@ -235,7 +230,7 @@ class UserGroupsControllerTest extends WebTestCase
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<int, string>}>
      */
-    public function dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser(): Generator
+    public static function dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser(): Generator
     {
         yield [LoadUserData::$uuids['john'], new StringableArrayObject([])];
         yield [

@@ -12,6 +12,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use App\Repository\LogLoginFailureRepository;
 use App\Repository\UserRepository;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -25,9 +26,8 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `clear` method works as expected
      */
+    #[TestDox('Test that `clear` method works as expected')]
     public function testThatClearMethodWorksAssExpected(): void
     {
         self::bootKernel();
