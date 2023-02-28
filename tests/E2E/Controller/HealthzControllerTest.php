@@ -42,9 +42,6 @@ class HealthzControllerTest extends WebTestCase
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
         $resource = self::getContainer()->get(LogRequestResource::class);
-
-        self::assertInstanceOf(LogRequestResource::class, $resource);
-
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();
