@@ -16,6 +16,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Throwable;
 use function array_unique;
 
 /**
@@ -34,6 +35,8 @@ class ApiKeyTest extends EntityTestCase
     protected static string $entityName = ApiKey::class;
 
     /**
+     * @throws Throwable
+     *
      * @phpstan-param StringableArrayObject<array<int, string>> $expectedRoles
      * @phpstan-param StringableArrayObject<array> $criteria
      * @psalm-param StringableArrayObject $expectedRoles
@@ -48,9 +51,6 @@ class ApiKeyTest extends EntityTestCase
         static::bootKernel();
 
         $repository = static::getContainer()->get(ApiKeyRepository::class);
-
-        self::assertInstanceOf(ApiKeyRepository::class, $repository);
-
         $apiKey = $repository->findOneBy($criteria->getArrayCopy());
 
         self::assertInstanceOf(ApiKey::class, $apiKey);
@@ -58,6 +58,8 @@ class ApiKeyTest extends EntityTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */

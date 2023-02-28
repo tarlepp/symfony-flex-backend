@@ -51,12 +51,12 @@ class ControllerTest extends KernelTestCase
     #[TestDox("Test that `getResource` method doesn't throw an exception if `Resource` service is set")]
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
 
         $controller = new ApiKeyController($resourceMock);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
-
-        self::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
     /**

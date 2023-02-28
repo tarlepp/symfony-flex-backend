@@ -67,6 +67,6 @@ class UserResourceTest extends ResourceTestCase
             ->with(['Some Role'])
             ->willReturn(['Some Role']);
 
-        self::assertIsArray((new UserResource($repository, $rolesService))->getUsersForGroup($userGroup));
+        self::assertSame([$user], (new UserResource($repository, $rolesService))->getUsersForGroup($userGroup));
     }
 }

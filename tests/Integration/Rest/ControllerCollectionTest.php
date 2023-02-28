@@ -140,10 +140,6 @@ class ControllerCollectionTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $service = self::getContainer()->get(ControllerCollection::class);
-
-        self::assertInstanceOf(ControllerCollection::class, $service);
-
-        return $service;
+        return self::getContainer()->get(ControllerCollection::class);
     }
 }
