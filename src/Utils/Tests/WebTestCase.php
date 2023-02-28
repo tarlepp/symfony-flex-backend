@@ -139,11 +139,7 @@ abstract class WebTestCase extends BaseWebTestCase
         $output = [];
 
         if (getenv('ENV_TEST_CHANNEL_READABLE')) {
-            $testChannel = getenv('ENV_TEST_CHANNEL_READABLE');
-
-            if (!is_string($testChannel)) {
-                throw new UnexpectedValueException('Could not get `ENV_TEST_CHANNEL_READABLE` environment variable.');
-            }
+            $testChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
 
             $output = [
                 'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => $testChannel,
