@@ -12,7 +12,6 @@ use App\Controller\v1\ApiKey\ApiKeyController;
 use App\DTO\ApiKey\ApiKey;
 use App\DTO\RestDtoInterface;
 use App\Resource\ApiKeyResource;
-use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
 use App\Utils\Tests\PhpUnitUtil;

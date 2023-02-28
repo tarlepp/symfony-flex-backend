@@ -693,9 +693,7 @@ class GenericResourceTest extends KernelTestCase
      */
     private function getResourceAndRepository(): array
     {
-        /**
-         * @var Registry $doctrine
-         */
+        /** @var Registry $doctrine */
         $doctrine = self::getContainer()->get('doctrine');
 
         $repository = $this

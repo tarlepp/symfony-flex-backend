@@ -11,12 +11,10 @@ namespace App\Utils\Tests;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Throwable;
-use UnexpectedValueException;
 use function array_merge;
 use function gc_collect_cycles;
 use function gc_enable;
 use function getenv;
-use function is_string;
 
 /**
  * Class WebTestCase
