@@ -85,7 +85,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
 
-        self::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
         self::assertSame($roles->getArrayCopy(), $apiKeyUser->getRoles());
     }
 
@@ -119,11 +118,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public static function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        self::bootKernel();
-
-        $rolesService = static::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $rolesService);
+        [, $rolesService] = self::getServices();
 
         $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
 
@@ -138,16 +133,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public static function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
-        self::bootKernel();
+        [$managerRegistry, $rolesService] = self::getServices();
 
-        $managerRegistry = static::getContainer()->get('doctrine');
-        $rolesService = static::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
-        self::assertInstanceOf(RolesService::class, $rolesService);
-
-        $repositoryClass = ApiKeyRepository::class;
-        $repository = new $repositoryClass($managerRegistry);
+        $repository = new ApiKeyRepository($managerRegistry);
 
         $iterator = static fn (ApiKey $apiKey): array => [
             $apiKey->getToken(),
@@ -171,15 +159,27 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     private function getApiKeyUserProvider(): ApiKeyUserProvider
     {
-        self::bootKernel();
-
-        $managerRegistry = static::getContainer()->get('doctrine');
-        $rolesService = static::getContainer()->get(RolesService::class);
+        [$managerRegistry, $rolesService] = self::getServices();
         $repository = ApiKeyRepository::class;
 
-        self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
-        self::assertInstanceOf(RolesService::class, $rolesService);
-
         return new ApiKeyUserProvider(new $repository($managerRegistry), $rolesService);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @return array{0: ManagerRegistry, 1: RolesService}
+     */
+    private static function getServices(): array
+    {
+        self::bootKernel();
+
+        /** @psalm-var ManagerRegistry $managerRegistry */
+        $managerRegistry = static::getContainer()->get('doctrine');
+
+        /** @psalm-var RolesService $rolesService */
+        $rolesService = static::getContainer()->get(RolesService::class);
+
+        return [$managerRegistry, $rolesService];
     }
 }

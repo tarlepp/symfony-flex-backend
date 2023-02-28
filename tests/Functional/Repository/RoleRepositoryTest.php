@@ -42,7 +42,6 @@ class RoleRepositoryTest extends KernelTestCase
     {
         $repository = self::getContainer()->get(RoleRepository::class);
 
-        self::assertInstanceOf(RoleRepository::class, $repository);
         self::assertSame(5, $repository->countAdvanced());
         self::assertSame(5, $repository->reset());
         self::assertSame(0, $repository->countAdvanced());
