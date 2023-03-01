@@ -49,15 +49,12 @@ class UpdateMethodTest extends KernelTestCase
 
         $this->expectException(LogicException::class);
 
-        /* @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageMatches(
-            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
-        );
-        /** @codingStandardsIgnoreEnd */
-        $request = Request::create('/' . Uuid::uuid4()->toString(), 'PUT');
+        $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
+            '(.*)ControllerInterface\'/';
 
-        self::assertInstanceOf(UpdateMethodInvalidTestClass::class, $inValidTestClassMock);
-        self::assertInstanceOf(RestDtoInterface::class, $restDtoMock);
+        $this->expectExceptionMessageMatches($regex);
+
+        $request = Request::create('/' . Uuid::uuid4()->toString(), 'PUT');
 
         $inValidTestClassMock->updateMethod($request, $restDtoMock, 'some-id');
     }
@@ -83,9 +80,6 @@ class UpdateMethodTest extends KernelTestCase
 
         $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
 
-        self::assertInstanceOf(UpdateMethodTestClass::class, $validTestClassMock);
-        self::assertInstanceOf(RestDtoInterface::class, $restDtoMock);
-
         $validTestClassMock->updateMethod($request, $restDtoMock, 'some-id')->getContent();
     }
 
@@ -97,7 +91,6 @@ class UpdateMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -128,7 +121,6 @@ class UpdateMethodTest extends KernelTestCase
     #[TestDox('Test that `updateMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()

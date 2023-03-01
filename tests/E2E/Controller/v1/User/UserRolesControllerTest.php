@@ -131,8 +131,6 @@ class UserRolesControllerTest extends WebTestCase
     {
         $rolesService = self::getContainer()->get(RolesServiceInterface::class);
 
-        self::assertInstanceOf(RolesServiceInterface::class, $rolesService);
-
         yield [
             LoadUserData::$uuids['john'],
             'john',
@@ -230,8 +228,6 @@ class UserRolesControllerTest extends WebTestCase
     public static function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
     {
         $rolesService = self::getContainer()->get(RolesServiceInterface::class);
-
-        self::assertInstanceOf(RolesServiceInterface::class, $rolesService);
 
         yield [LoadUserData::$uuids['john'], '[]'];
 

@@ -687,13 +687,14 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     *
      * @phpstan-return array{0: UserResource, 1: MockObject&UserRepository}
      */
     private function getResourceAndRepository(): array
     {
+        /** @var Registry $doctrine */
         $doctrine = self::getContainer()->get('doctrine');
-
-        self::assertInstanceOf(Registry::class, $doctrine);
 
         $repository = $this
             ->getMockBuilder(UserRepository::class)
@@ -706,8 +707,6 @@ class GenericResourceTest extends KernelTestCase
             ->getMock();
 
         $validator = self::getContainer()->get(ValidatorInterface::class);
-
-        self::assertInstanceOf(ValidatorInterface::class, $validator);
 
         $resource = new UserResource($repository, new RolesService($roleHierarchy));
         $resource->setValidator($validator);

@@ -34,11 +34,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     #[TestDox('Test that too short password throws an exception with `prePersist` event')]
     public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
     {
-        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
-        $hasher = self::getContainer()->get('security.user_password_hasher');
-
-        self::assertInstanceOf(EntityManager::class, $entityManager);
-        self::assertInstanceOf(UserPasswordHasherInterface::class, $hasher);
+        [$entityManager, $hasher] = $this->getServices();
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -65,11 +61,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     #[TestDox('Test that too short password throws an exception with `preUpdate` event')]
     public function testThatTooShortPasswordThrowsAnExceptionWithPreUpdate(): void
     {
-        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
-        $hasher = self::getContainer()->get('security.user_password_hasher');
-
-        self::assertInstanceOf(EntityManager::class, $entityManager);
-        self::assertInstanceOf(UserPasswordHasherInterface::class, $hasher);
+        [$entityManager, $hasher] = $this->getServices();
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -96,11 +88,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     #[TestDox('Test that `prePersist` method works as expected')]
     public function testListenerPrePersistMethodWorksAsExpected(): void
     {
-        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
-        $hasher = self::getContainer()->get('security.user_password_hasher');
-
-        self::assertInstanceOf(EntityManager::class, $entityManager);
-        self::assertInstanceOf(UserPasswordHasherInterface::class, $hasher);
+        [$entityManager, $hasher] = $this->getServices();
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -143,11 +131,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     #[TestDox('Test that `preUpdate` method works as expected')]
     public function testListenerPreUpdateMethodWorksAsExpected(): void
     {
-        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
-        $hasher = self::getContainer()->get('security.user_password_hasher');
-
-        self::assertInstanceOf(EntityManager::class, $entityManager);
-        self::assertInstanceOf(UserPasswordHasherInterface::class, $hasher);
+        [$entityManager, $hasher] = $this->getServices();
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -189,5 +173,22 @@ class UserEntityEventListenerTest extends KernelTestCase
             $hasher->isPasswordValid(new SecurityUser($entity), 'test_test_test'),
             'Changed password is not valid.'
         );
+    }
+
+
+    /**
+     * @throws Throwable
+     *
+     * @return array{0: EntityManager, 1: UserPasswordHasherInterface}
+     */
+    private function getServices(): array
+    {
+        /** @psalm-var EntityManager $entityManager */
+        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
+
+        /** @psalm-var UserPasswordHasherInterface $hasher */
+        $hasher = self::getContainer()->get('security.user_password_hasher');
+
+        return [$entityManager, $hasher];
     }
 }

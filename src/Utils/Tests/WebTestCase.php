@@ -11,12 +11,10 @@ namespace App\Utils\Tests;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Throwable;
-use UnexpectedValueException;
 use function array_merge;
 use function gc_collect_cycles;
 use function gc_enable;
 use function getenv;
-use function is_string;
 
 /**
  * Class WebTestCase
@@ -139,11 +137,7 @@ abstract class WebTestCase extends BaseWebTestCase
         $output = [];
 
         if (getenv('ENV_TEST_CHANNEL_READABLE')) {
-            $testChannel = getenv('ENV_TEST_CHANNEL_READABLE');
-
-            if (!is_string($testChannel)) {
-                throw new UnexpectedValueException('Could not get `ENV_TEST_CHANNEL_READABLE` environment variable.');
-            }
+            $testChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
 
             $output = [
                 'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => $testChannel,

@@ -61,10 +61,6 @@ class ResourceLifeCycleTest extends WebTestCase
      */
     private function getRepository(): RoleRepository
     {
-        $resource = self::getContainer()->get(ResourceForLifeCycleTests::class);
-
-        self::assertInstanceOf(ResourceForLifeCycleTests::class, $resource);
-
-        return $resource->getRepository();
+        return self::getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
     }
 }

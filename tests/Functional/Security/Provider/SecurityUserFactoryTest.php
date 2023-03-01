@@ -54,7 +54,6 @@ class SecurityUserFactoryTest extends KernelTestCase
     ): void {
         $domainUser = $this->getSecurityUserFactory()->loadUserByIdentifier($username);
 
-        self::assertInstanceOf(SecurityUser::class, $domainUser);
         self::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
     }
 
@@ -78,7 +77,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         ]);
 
         self::assertNotNull($user);
-        self::assertInstanceOf(User::class, $user);
 
         $securityUser = new SecurityUser($user);
 
@@ -98,7 +96,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         ]);
 
         self::assertNotNull($user);
-        self::assertInstanceOf(User::class, $user);
 
         $securityUser = new SecurityUser($user);
 
@@ -131,21 +128,19 @@ class SecurityUserFactoryTest extends KernelTestCase
         yield ['john-root', new StringableArrayObject(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getSecurityUserFactory(): SecurityUserFactory
     {
-        $securityUserFactory = self::getContainer()->get(SecurityUserFactory::class);
-
-        self::assertInstanceOf(SecurityUserFactory::class, $securityUserFactory);
-
-        return $securityUserFactory;
+        return self::getContainer()->get(SecurityUserFactory::class);
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getUserRepository(): UserRepository
     {
-        $userRepository = self::getContainer()->get(UserRepository::class);
-
-        self::assertInstanceOf(UserRepository::class, $userRepository);
-
-        return $userRepository;
+        return self::getContainer()->get(UserRepository::class);
     }
 }

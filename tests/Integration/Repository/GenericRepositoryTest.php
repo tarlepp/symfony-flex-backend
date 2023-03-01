@@ -41,10 +41,8 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetReferenceReturnsExpected(): void
     {
         $entity = new ApiKeyEntity();
-
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        self::assertInstanceOf(ApiKeyResource::class, $resource);
         self::assertInstanceOf(ApiKeyEntity::class, $resource->getRepository()->getReference($entity->getId()));
     }
 
@@ -55,7 +53,6 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $repository = self::getContainer()->get(RoleRepository::class);
 
-        self::assertInstanceOf(RoleRepository::class, $repository);
         self::assertInstanceOf(Role::class, $repository->getReference('some-role'));
     }
 
@@ -66,7 +63,6 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        self::assertInstanceOf(ApiKeyResource::class, $resource);
         self::assertSame(
             ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
             array_keys($resource->getRepository()->getAssociations())
@@ -80,7 +76,6 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        self::assertInstanceOf(ApiKeyResource::class, $resource);
         self::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
     }
 
@@ -199,9 +194,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -225,9 +217,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -251,9 +240,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -279,9 +265,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -302,9 +285,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackWorks(): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -325,9 +305,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackCallsCallbackJustOnce(): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
 
         $count = 0;

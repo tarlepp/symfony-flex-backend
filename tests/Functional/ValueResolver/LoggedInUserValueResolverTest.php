@@ -126,14 +126,13 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         }
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getRepository(): UserRepository
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $repository = self::getContainer()->get(UserRepository::class);
-
-        self::assertInstanceOf(UserRepository::class, $repository);
-
-        return $repository;
+        return self::getContainer()->get(UserRepository::class);
     }
 }

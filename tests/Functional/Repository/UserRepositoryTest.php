@@ -136,6 +136,9 @@ class UserRepositoryTest extends KernelTestCase
         self::assertSame(0, $this->getRepository()->countAdvanced());
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getRepository(): UserRepository
     {
         static $cache;
@@ -143,9 +146,8 @@ class UserRepositoryTest extends KernelTestCase
         if ($cache === null) {
             self::bootKernel();
 
+            /** @psalm-var UserRepository $cache */
             $cache = self::getContainer()->get(UserRepository::class);
-
-            self::assertInstanceOf(UserRepository::class, $cache);
         }
 
         return $cache;

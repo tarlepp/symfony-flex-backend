@@ -42,8 +42,6 @@ class ApiKeyUserTest extends KernelTestCase
     {
         $rolesService = self::getContainer()->get(RolesService::class);
 
-        self::assertInstanceOf(RolesService::class, $rolesService);
-
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService->getInheritedRoles($apiKey->getRoles()));
 
         self::assertEqualsCanonicalizing($expectedRoles->getArrayCopy(), $apiKeyUser->getRoles());
@@ -60,8 +58,6 @@ class ApiKeyUserTest extends KernelTestCase
         self::bootKernel();
 
         $userGroupResource = static::getContainer()->get(UserGroupResource::class);
-
-        self::assertInstanceOf(UserGroupResource::class, $userGroupResource);
 
         yield [
             (new ApiKey())->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED'))),

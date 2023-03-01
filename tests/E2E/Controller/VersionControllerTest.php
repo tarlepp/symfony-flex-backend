@@ -44,9 +44,6 @@ class VersionControllerTest extends WebTestCase
     public function testThatVersionRouteDoesNotMakeRequestLog(): void
     {
         $resource = self::getContainer()->get(LogRequestResource::class);
-
-        self::assertInstanceOf(LogRequestResource::class, $resource);
-
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();
@@ -65,7 +62,6 @@ class VersionControllerTest extends WebTestCase
         $client->request('GET', '/version');
 
         $response = $client->getResponse();
-
         $version = $response->headers->get('X-API-VERSION');
 
         self::assertNotNull($version);

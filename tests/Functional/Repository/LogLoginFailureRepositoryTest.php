@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Functional\Repository;
 
 use App\Entity\LogLoginFailure;
-use App\Entity\User;
 use App\Repository\LogLoginFailureRepository;
 use App\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -32,15 +31,15 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
 
+        /** @psalm-var UserRepository $userRepository */
         $userRepository = self::getContainer()->get(UserRepository::class);
-        $logLoginFailureRepository = self::getContainer()->get(LogLoginFailureRepository::class);
 
-        self::assertInstanceOf(UserRepository::class, $userRepository);
-        self::assertInstanceOf(LogLoginFailureRepository::class, $logLoginFailureRepository);
+        /** @psalm-var LogLoginFailureRepository $logLoginFailureRepository */
+        $logLoginFailureRepository = self::getContainer()->get(LogLoginFailureRepository::class);
 
         $user = $userRepository->find('20000000-0000-1000-8000-000000000001');
 
-        self::assertInstanceOf(User::class, $user);
+        self::assertNotNull($user);
 
         $entity = new LogLoginFailure($user);
 

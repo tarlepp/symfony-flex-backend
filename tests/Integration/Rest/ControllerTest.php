@@ -12,7 +12,6 @@ use App\Controller\v1\ApiKey\ApiKeyController;
 use App\DTO\ApiKey\ApiKey;
 use App\DTO\RestDtoInterface;
 use App\Resource\ApiKeyResource;
-use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
 use App\Utils\Tests\PhpUnitUtil;
@@ -51,12 +50,12 @@ class ControllerTest extends KernelTestCase
     #[TestDox("Test that `getResource` method doesn't throw an exception if `Resource` service is set")]
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
 
         $controller = new ApiKeyController($resourceMock);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
-
-        self::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
     /**

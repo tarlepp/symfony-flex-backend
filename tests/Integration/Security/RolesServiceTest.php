@@ -157,10 +157,6 @@ class RolesServiceTest extends KernelTestCase
 
     private function getService(): RolesService
     {
-        $service = self::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $service);
-
-        return $service;
+        return self::getContainer()->get(RolesService::class);
     }
 }
