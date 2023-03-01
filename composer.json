@@ -52,7 +52,7 @@
 		"symfony/routing": "6.2.5",
 		"symfony/runtime": "6.2.5",
 		"symfony/security-bundle": "6.2.6",
-		"symfony/serializer": "6.2.5",
+		"symfony/serializer": "6.2.7",
 		"symfony/string": "6.2.5",
 		"symfony/translation": "6.2.5",
 		"symfony/twig-bundle": "6.2.5",
