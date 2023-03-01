@@ -40,7 +40,7 @@
 		"symfony/asset": "6.2.5",
 		"symfony/config": "6.2.5",
 		"symfony/console": "6.2.5",
-		"symfony/dotenv": "6.2.5",
+		"symfony/dotenv": "6.2.7",
 		"symfony/expression-language": "6.2.5",
 		"symfony/flex": "2.2.5",
 		"symfony/form": "6.2.5",
