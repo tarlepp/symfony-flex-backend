@@ -1017,12 +1017,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "6ab259b93537fda94e80a3e7c545957ce0848052"
+                "reference": "2f3a048ff643e4aff8308eaeea738c82dfac0a81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/6ab259b93537fda94e80a3e7c545957ce0848052",
-                "reference": "6ab259b93537fda94e80a3e7c545957ce0848052",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2f3a048ff643e4aff8308eaeea738c82dfac0a81",
+                "reference": "2f3a048ff643e4aff8308eaeea738c82dfac0a81",
                 "shasum": ""
             },
             "conflict": {
@@ -1277,7 +1277,7 @@
                 "modx/revolution": "<= 2.8.3-pl|<2.8",
                 "mojo42/jirafeau": "<4.4",
                 "monolog/monolog": ">=1.8,<1.12",
-                "moodle/moodle": "<4.0.5",
+                "moodle/moodle": "<4.0.6|>=4.1-beta,<4.1.1",
                 "mustache/mustache": ">=2,<2.14.1",
                 "namshi/jose": "<2.2",
                 "neoan3-apps/template": "<1.1.1",
@@ -1337,7 +1337,7 @@
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pimcore/data-hub": "<1.2.4",
-                "pimcore/pimcore": "<=10.5.17",
+                "pimcore/pimcore": "<10.5.18",
                 "pixelfed/pixelfed": "<=0.11.4",
                 "pocketmine/bedrock-protocol": "<8.0.2",
                 "pocketmine/pocketmine-mp": "<4.12.5|>= 4.0.0-BETA5, < 4.4.2",
@@ -1595,7 +1595,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-01T00:18:15+00:00"
+            "time": "2023-03-02T19:04:12+00:00"
         },
         {
             "name": "sebastian/cli-parser",
