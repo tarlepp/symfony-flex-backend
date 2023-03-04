@@ -140,6 +140,8 @@
       <path value="$PROJECT_DIR$/vendor/stella-maris/clock" />
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-code" />
       <path value="$PROJECT_DIR$/vendor/friendsofphp/proxy-manager-lts" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-eventmanager" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
