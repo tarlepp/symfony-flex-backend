@@ -64,7 +64,7 @@ check-dependencies-patch    # Checks if any vendor dependency can be updated
 check-licenses              # Check vendor licenses
 check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
-clear                       # Clean vendor and tool dependencies
+clear                       # Clear _all_ vendor and tool dependencies
 clear-tools                 # Clears all tools dependencies
 composer-normalize          # Normalizes `composer.json` file content
 composer-require-checker    # Check the defined dependencies against your code
