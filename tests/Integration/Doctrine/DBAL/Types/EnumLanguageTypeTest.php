@@ -9,8 +9,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLanguageType;
+use App\Enum\Language;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
@@ -44,13 +46,13 @@ class EnumLanguageTypeTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatConvertToDatabaseValueWorksWithProperValues')]
-    #[TestDox('Test that `convertToDatabaseValue` method returns `$value`')]
-    public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$expected` when using `$language`')]
+    public function testThatConvertToDatabaseValueWorksWithProperValues(string $expected, Language $language): void
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
 
-        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
+        self::assertSame($expected, $type->convertToDatabaseValue($language, $platform));
     }
 
     /**
@@ -70,12 +72,41 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: 'en'|'fi'}>
+     * @throws Throwable
+     */
+    #[DataProvider('dataProviderTestThatConvertToPHPValueWorksWithValidInput')]
+    #[TestDox('Test that `convertToPHPValue` method returns `$expected` when using `$input`')]
+    public function testThatConvertToPHPValueWorksWithValidInput(Language $expected, string $input): void
+    {
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame($expected, $type->convertToPHPValue($input, $platform));
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[DataProvider('dataProviderTestThatConvertToPHPValueThrowsAnException')]
+    #[TestDox('Test that `convertToPHPValue` method throws an exception with `$value` input')]
+    public function testThatConvertToPHPValueThrowsAnException(mixed $value): void
+    {
+        $this->expectException(ConversionException::class);
+        $this->expectExceptionMessage('Could not convert database value');
+
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        $type->convertToPHPValue($value, $platform);
+    }
+
+    /**
+     * @return Generator<array{0: 'en'|'fi', 1: Language}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
-        yield ['en'];
-        yield ['fi'];
+        yield ['en', Language::EN];
+        yield ['fi', Language::FI];
     }
 
     /**
@@ -91,6 +122,29 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
+    }
+
+    /**
+     * @return Generator<array{0: Language, 1: 'en'|'fi'}>
+     */
+    public static function dataProviderTestThatConvertToPHPValueWorksWithValidInput(): Generator
+    {
+        yield [Language::EN, 'en'];
+        yield [Language::FI, 'fi'];
+    }
+
+    /**
+     * @return Generator<array{0: mixed}>
+     */
+    public static function dataProviderTestThatConvertToPHPValueThrowsAnException(): Generator
+    {
+        yield [null];
+        yield [false];
+        yield [true];
+        yield [''];
+        yield [' '];
+        yield [1];
+        yield ['foobar'];
     }
 
     private function getPlatform(): AbstractPlatform

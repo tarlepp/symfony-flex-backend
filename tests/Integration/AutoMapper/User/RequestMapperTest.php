@@ -12,6 +12,7 @@ use App\AutoMapper\RestRequestMapper;
 use App\AutoMapper\User\RequestMapper;
 use App\DTO\User as DTO;
 use App\Entity\UserGroup;
+use App\Enum\Language;
 use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
@@ -72,12 +73,45 @@ class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
+     * @param class-string $dtoClass
+     *
+     * @throws Throwable
+     */
+    #[DataProvider('dataProviderTestThatTransformLanguageWorksAsExpected')]
+    #[TestDox('Test that `transformLanguage` returns `$expected` when using `$dtoClass` DTO and `$input` as an input')]
+    public function testThatTransformLanguageWorksAsExpected(Language $expected, string $dtoClass, string $input): void
+    {
+        $requestMapper = new RequestMapper($this->getResource());
+
+        $request = new Request([], [
+            'language' => $input,
+        ]);
+
+        $dto = new $dtoClass();
+        $output = $requestMapper->mapToObject($request, $dto);
+
+        self::assertInstanceOf(DTO\User::class, $output);
+        self::assertSame($expected, $output->getLanguage());
+    }
+
+    /**
      * @return Generator<array{0: class-string}>
      */
     public static function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
         foreach (static::$restDtoClasses as $dtoClass) {
             yield [$dtoClass];
+        }
+    }
+
+    /**
+     * @return Generator<array{0: Language, 1: class-string, 2: string}>
+     */
+    public static function dataProviderTestThatTransformLanguageWorksAsExpected(): Generator
+    {
+        foreach (static::$restDtoClasses as $dtoClass) {
+            yield [Language::EN, $dtoClass, 'en'];
+            yield [Language::FI, $dtoClass, 'fi'];
         }
     }
 

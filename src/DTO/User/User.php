@@ -13,6 +13,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Enum\Language;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,6 +26,8 @@ use function array_map;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method Entity|EntityInterface update(EntityInterface $entity)
+ *
+ * @psalm-consistent-constructor
  */
 #[AppAssert\UniqueEmail]
 #[AppAssert\UniqueUsername]
@@ -60,8 +63,8 @@ class User extends RestDto
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[AppAssert\Language]
-    protected string $language = Localization::DEFAULT_LANGUAGE;
+    //#[AppAssert\Language]
+    protected Language $language;
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -80,6 +83,11 @@ class User extends RestDto
     protected array $userGroups = [];
 
     protected string $password = '';
+
+    public function __construct()
+    {
+        $this->language = Language::getDefault();
+    }
 
     public function getUsername(): string
     {
@@ -137,12 +145,12 @@ class User extends RestDto
         return $this;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->setVisited('language');
 

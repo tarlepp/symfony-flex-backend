@@ -8,24 +8,22 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Interfaces\DatabaseEnumInterface;
+use App\Enum\Language;
+use BackedEnum;
+
 /**
  * Class EnumLanguageType
  *
  * @package App\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class EnumLanguageType extends EnumType
+class EnumLanguageType extends RealEnumType
 {
-    public const LANGUAGE_EN = 'en';
-    public const LANGUAGE_FI = 'fi';
-
     protected static string $name = Types::ENUM_LANGUAGE;
 
     /**
-     * @var array<int, string>
+     * @psalm-var class-string<DatabaseEnumInterface&BackedEnum>
      */
-    protected static array $values = [
-        self::LANGUAGE_EN,
-        self::LANGUAGE_FI,
-    ];
+    protected static string $enum = Language::class;
 }

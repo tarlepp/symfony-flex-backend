@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Form\Type\Console;
 use App\DTO\User\User as UserDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
+use App\Enum\Language;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
@@ -55,11 +56,6 @@ class UserTypeTest extends TypeTestCase
 
         $localization
             ->expects(self::once())
-            ->method('getLanguages')
-            ->willReturn(['en', 'fi']);
-
-        $localization
-            ->expects(self::once())
             ->method('getLocales')
             ->willReturn(['en', 'fi']);
 
@@ -91,13 +87,13 @@ class UserTypeTest extends TypeTestCase
             ->setLastName('Doe')
             ->setEmail('john.doe@test.com')
             ->setPassword('password')
-            ->setLanguage('fi')
+            ->setLanguage(Language::FI)
             ->setLocale('fi')
             ->setTimezone('Europe/Stockholm')
             ->setUserGroups([$userGroupEntity]);
 
         // Specify used form data
-        $formData = [
+        $rawData = [
             'username' => 'username',
             'firstName' => 'John',
             'lastName' => 'Doe',
@@ -113,27 +109,31 @@ class UserTypeTest extends TypeTestCase
         ];
 
         // submit the data to the form directly
-        $form->submit($formData);
+        $form->submit($rawData);
 
         // Test that data transformers have not been failed
         self::assertTrue($form->isSynchronized());
 
+        $formData = $form->getData();
+
+        self::assertInstanceOf(UserDto::class, $formData);
+
         // Test that form data matches with the DTO mapping
-        self::assertSame($dto->getId(), $form->getData()->getId());
-        self::assertSame($dto->getUsername(), $form->getData()->getUsername());
-        self::assertSame($dto->getFirstName(), $form->getData()->getFirstName());
-        self::assertSame($dto->getLastName(), $form->getData()->getLastName());
-        self::assertSame($dto->getEmail(), $form->getData()->getEmail());
-        self::assertSame($dto->getLanguage(), $form->getData()->getLanguage());
-        self::assertSame($dto->getLocale(), $form->getData()->getLocale());
-        self::assertSame($dto->getTimezone(), $form->getData()->getTimezone());
-        self::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
+        self::assertSame($dto->getId(), $formData->getId());
+        self::assertSame($dto->getUsername(), $formData->getUsername());
+        self::assertSame($dto->getFirstName(), $formData->getFirstName());
+        self::assertSame($dto->getLastName(), $formData->getLastName());
+        self::assertSame($dto->getEmail(), $formData->getEmail());
+        self::assertSame($dto->getLanguage(), $formData->getLanguage());
+        self::assertSame($dto->getLocale(), $formData->getLocale());
+        self::assertSame($dto->getTimezone(), $formData->getTimezone());
+        self::assertSame($dto->getUserGroups(), $formData->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (array_keys($formData) as $key) {
+        foreach (array_keys($rawData) as $key) {
             self::assertArrayHasKey($key, $children);
         }
     }
@@ -158,7 +158,7 @@ class UserTypeTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return  MockObject&UserGroupResource
+     * @phpstan-return MockObject&UserGroupResource
      */
     private function getUserGroupResource(): MockObject
     {
@@ -172,7 +172,7 @@ class UserTypeTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return  MockObject&Localization
+     * @phpstan-return MockObject&Localization
      */
     private function getLocalization(): MockObject
     {

@@ -8,7 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
+use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Role;
+use App\Enum\Language;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
@@ -49,6 +51,7 @@ class PhpUnitUtil
     public const TYPE_BOOL = 'bool';
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_CUSTOM_CLASS = 'CustomClass';
+    public const TYPE_ENUM = 'ENUM';
 
     /**
      * @var array<string, mixed>
@@ -173,8 +176,9 @@ class PhpUnitUtil
         return match ($type) {
             'time', 'date', 'datetime' => DateTime::class,
             'time_immutable', 'date_immutable', 'datetime_immutable' => DateTimeImmutable::class,
+            AppTypes::ENUM_LANGUAGE => Language::class,
             self::TYPE_INT, self::TYPE_INTEGER, 'bigint' => self::TYPE_INT,
-            self::TYPE_STRING, 'text', 'EnumLanguage', 'EnumLocale', 'EnumLogLogin' => self::TYPE_STRING,
+            self::TYPE_STRING, 'text', 'EnumLocale', 'EnumLogLogin' => self::TYPE_STRING,
             self::TYPE_JSON => self::TYPE_JSON,
             self::TYPE_ARRAY => self::TYPE_ARRAY,
             self::TYPE_BOOL, self::TYPE_BOOLEAN => self::TYPE_BOOL,
@@ -267,18 +271,24 @@ class PhpUnitUtil
 
         if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
             /** @var class-string $class */
-            $class = $meta !== [] ? $meta['targetEntity'] : $type;
+            $class = $meta !== [] && array_key_exists('targetEntity', $meta) ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
 
-            $cleanClass = $class[0] === '\\' ? ltrim($class, '\\') : $class;
+            if ((new ReflectionClass($class))->isEnum()) {
+                $type = self::TYPE_ENUM;
+            } else {
+                /** @var class-string $class */
+                $class = $class[0] === '\\' ? ltrim($class, '\\') : $class;
+            }
 
-            if ($cleanClass === Role::class) {
+            if ($class === Role::class) {
                 $params = ['Some Role'];
             }
         }
 
         $output = match ($type) {
+            self::TYPE_ENUM => current($class::cases()), // TODO: fix this
             self::TYPE_CUSTOM_CLASS => new $class(...$params),
             self::TYPE_INT, self::TYPE_INTEGER => 666,
             self::TYPE_STRING => 'Some text here',
