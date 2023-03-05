@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Entity;
 
 use App\Entity\UserGroup;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -19,9 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class UserGroupTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `UserGroup::__toString` method returns expected
-     */
+    #[TestDox('Test that `UserGroup::__toString` method returns expected')]
     public function testThatToStringMethodReturnsExpected(): void
     {
         self::assertSame(UserGroup::class, (string)(new UserGroup()));

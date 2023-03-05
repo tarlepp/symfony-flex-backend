@@ -10,6 +10,8 @@ namespace App\Tests\E2E\Controller\v1\Role;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -25,9 +27,8 @@ class FindOneRoleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN` request returns `401` for non-logged in user')]
     public function testThatFindOneRoleReturns401(): void
     {
         $client = $this->getTestClient();
@@ -42,12 +43,10 @@ class FindOneRoleControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatFindOneRoleReturns403
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` request returns `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatFindOneRoleReturns403')]
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN` request returns `403` when using invalid user `$u` + `$p`')]
     public function testThatFindOneRoleReturns403(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -61,12 +60,10 @@ class FindOneRoleControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatFindOneActionWorksAsExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_ADMIN` request returns `200` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatFindOneActionWorksAsExpected')]
+    #[TestDox('Test that `GET /v1/role/ROLE_ADMIN` request returns `200` when using valid user `$u` + `$p`')]
     public function testThatFindOneActionWorksAsExpected(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -81,12 +78,10 @@ class FindOneRoleControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatFindOneActionReturns404
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/role/ROLE_FOOBAR` request returns `404` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatFindOneActionReturns404')]
+    #[TestDox('Test that `GET /v1/role/ROLE_FOOBAR` request returns `404` when using valid user `$u` + `$p`')]
     public function testThatFindOneActionReturns404(string $u, string $p): void
     {
         $client = $this->getTestClient($u, $p);
@@ -103,7 +98,7 @@ class FindOneRoleControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatFindOneRoleReturns403(): Generator
+    public static function dataProviderTestThatFindOneRoleReturns403(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['john', 'password'];
@@ -125,7 +120,7 @@ class FindOneRoleControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
+    public static function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
     {
         yield ['john-admin', 'password-admin'];
 
@@ -143,8 +138,8 @@ class FindOneRoleControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatFindOneActionReturns404(): Generator
+    public static function dataProviderTestThatFindOneActionReturns404(): Generator
     {
-        return $this->dataProviderTestThatFindOneActionWorksAsExpected();
+        return static::dataProviderTestThatFindOneActionWorksAsExpected();
     }
 }

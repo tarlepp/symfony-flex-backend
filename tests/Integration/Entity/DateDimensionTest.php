@@ -11,6 +11,8 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\DateDimension;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function in_array;
 use function ucfirst;
@@ -28,14 +30,13 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = DateDimension::class;
+    protected static string $entityName = DateDimension::class;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -44,12 +45,11 @@ class DateDimensionTest extends EntityTestCase
         self::markTestSkipped('There is not setter in read only entity...');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @testdox No setter for `$property` property in read only entity - so cannot test this
+     * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -60,12 +60,10 @@ class DateDimensionTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
      * @throws Throwable
-     *
-     * @testdox Test that getter method for `$type $property` property returns expected
      */
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[TestDox('Test that getter method for `$type $property` property returns expected')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);

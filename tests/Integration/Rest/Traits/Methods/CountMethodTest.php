@@ -19,6 +19,8 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -36,31 +38,27 @@ class CountMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `countMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
+    #[TestDox("Test that `countMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
         $inValidTestClassMock = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
 
         $this->expectException(LogicException::class);
 
-        /* @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageMatches(
-            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
-        );
-        /* @codingStandardsIgnoreEnd */
+        $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
+            '(.*)ControllerInterface\'/';
+
+        $this->expectExceptionMessageMatches($regex);
 
         $inValidTestClassMock->countMethod(Request::create('/'));
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `countMethod` throws an exception when using `$httpMethod` HTTP method
      */
+    #[DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
+    #[TestDox('Test that `countMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -78,12 +76,10 @@ class CountMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitHandlesException
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `countMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
+    #[DataProvider('dataProviderTestThatTraitHandlesException')]
+    #[TestDox('Test that `countMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -110,17 +106,17 @@ class CountMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitCallsServiceMethods
-     *
      * @phpstan-param StringableArrayObject<mixed> $criteria
      * @phpstan-param StringableArrayObject<mixed> $search
      * @psalm-param StringableArrayObject $criteria
      * @psalm-param StringableArrayObject $search
      *
      * @throws Throwable
-     *
-     * @testdox Test that `countMethod` method calls expected service methods when using `$queryString` as query string
      */
+    #[DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
+    #[TestDox(
+        'Test that `countMethod` method calls expected service methods when using `$queryString` as query string'
+    )]
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,
@@ -159,9 +155,8 @@ class CountMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `countMethod` throws an exception when `?where` parameter is not valid JSON
      */
+    #[TestDox('Test that `countMethod` throws an exception when `?where` parameter is not valid JSON')]
     public function testThatTraitThrowsAnExceptionWhenWhereParameterIsNotValidJson(): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
@@ -183,7 +178,7 @@ class CountMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
+    public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
         yield ['PATCH'];
@@ -198,7 +193,7 @@ class CountMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: Throwable, 1: int}>
      */
-    public function dataProviderTestThatTraitHandlesException(): Generator
+    public static function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];
@@ -213,7 +208,7 @@ class CountMethodTest extends KernelTestCase
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatTraitCallsServiceMethods(): Generator
+    public static function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
         yield ['', new StringableArrayObject([]), new StringableArrayObject([])];
 

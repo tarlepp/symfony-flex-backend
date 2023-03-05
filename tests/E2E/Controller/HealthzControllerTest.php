@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Controller;
 
 use App\Resource\LogRequestResource;
 use App\Utils\Tests\WebTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -22,9 +23,8 @@ class HealthzControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /healthz` request returns `200`
      */
+    #[TestDox('Test that `GET /healthz` request returns `200`')]
     public function testThatHealthzRouteReturns200(): void
     {
         $client = $this->getTestClient();
@@ -37,15 +37,11 @@ class HealthzControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /healthz` request doesn't add request log row to database
      */
+    #[TestDox("Test that `GET /healthz` request doesn't add request log row to database")]
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
         $resource = self::getContainer()->get(LogRequestResource::class);
-
-        self::assertInstanceOf(LogRequestResource::class, $resource);
-
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();

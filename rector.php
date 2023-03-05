@@ -2,36 +2,43 @@
 declare(strict_types = 1);
 /**
  * rector.php
+ *
+ * @see following for actual rules
+ *  ./tools/09_rector/vendor/rector/rector/packages/Set/ValueObject/LevelSetList.php
+ *  ./tools/09_rector/vendor/rector/rector/vendor/rector/rector-symfony/src/Set/SymfonyLevelSetList.php
  */
 
-use Rector\Core\Configuration\Option;
-use Rector\Core\ValueObject\PhpVersion;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
+use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Set\ValueObject\LevelSetList;
+use Rector\Symfony\Set\SymfonyLevelSetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->paths([
+        //__DIR__ . '/config',
+        //__DIR__ . '/migrations',
+        //__DIR__ . '/public',
+        //__DIR__ . '/src',
+        /**
+         * First run some rule(s) or sets to whole codebase and
+         * run all the tests (phpunit, ecs, psalm and phpstan),
+         * after that fix possible issues of those and run those
+         * again until you don't have any issues left.
+         *
+         * After that enable this directory and run rector again
+         * and do that whole process again.
+         */
+        //__DIR__ . '/tests',
+    ]);
 
-    // paths to refactor; solid alternative to CLI arguments
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
+    // Enable single or multiple rules with rector
+    //$rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
 
-    // is your PHP version different from the one your refactor to, uses PHP_VERSION_ID format
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_80);
-
-    // Path to phpstan with extensions, that PHPSTan in Rector uses to determine types
-    //$parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan.neon.dist');
-
-    // Define what rule sets will be applied
-    $containerConfigurator->import(SetList::CODE_QUALITY);
-    $containerConfigurator->import(SetList::CODE_QUALITY_STRICT);
-    $containerConfigurator->import(SetList::DEAD_CODE);
-    //$containerConfigurator->import(SetList::TYPE_DECLARATION);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
-    $containerConfigurator->import(SetList::PHP_80);
-
-    // get services (needed for register a single rule)
-    $services = $containerConfigurator->services();
-    $services->set(TypedPropertyRector::class);
+    // Enable the set(s) that you want to run with rector
+    $rectorConfig->sets([
+        //LevelSetList::UP_TO_PHP_82, // This is for PHP version upgrade
+        //PHPUnitSetList::PHPUNIT_100,
+        //SymfonyLevelSetList::UP_TO_SYMFONY_62, // This is for Symfony version upgrade
+    ]);
 };

@@ -18,9 +18,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  */
 interface RolesServiceInterface
 {
-    public function __construct(
-        RoleHierarchyInterface $roleHierarchy,
-    );
+    public function __construct(RoleHierarchyInterface $roleHierarchy);
 
     /**
      * Getter method to return all roles in single dimensional array.

@@ -90,6 +90,8 @@ interface RestResourceInterface
     /**
      * Getter method DTO class with loaded entity data.
      *
+     * @codeCoverageIgnore This is needed because variables are multiline
+     *
      * @throws Throwable
      */
     public function getDtoForEntity(
@@ -102,6 +104,8 @@ interface RestResourceInterface
     /**
      * Generic find method to return an array of items from database. Return
      * value is an array of specified repository entities.
+     *
+     * @codeCoverageIgnore This is needed because variables are multiline
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
      * @param array<string, string>|null $orderBy
@@ -137,6 +141,8 @@ interface RestResourceInterface
      * Generic findOneBy method to return single item from database by given
      * criteria. Return value is single entity from specified repository or
      * null if entity was not found.
+     *
+     * @codeCoverageIgnore This is needed because variables are multiline
      *
      * @param array<int|string, string|array<mixed>> $criteria
      * @param array<int, string>|null $orderBy
@@ -177,6 +183,8 @@ interface RestResourceInterface
     /**
      * Generic method to update specified entity with new data.
      *
+     * @codeCoverageIgnore This is needed because variables are multiline
+     *
      * @throws Throwable
      */
     public function update(
@@ -189,7 +197,9 @@ interface RestResourceInterface
     /**
      * Generic method to patch specified entity with new data.
      *
-     * throws Throwable
+     * @codeCoverageIgnore This is needed because variables are multiline
+     *
+     * @throws Throwable
      */
     public function patch(
         string $id,

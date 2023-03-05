@@ -12,12 +12,16 @@ use App\AutoMapper\RestRequestMapper;
 use App\AutoMapper\User\RequestMapper;
 use App\DTO\User as DTO;
 use App\Entity\UserGroup;
+use App\Enum\Language;
 use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use function class_exists;
 
 /**
  * Class RequestMapperTest
@@ -30,7 +34,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @var array<int, class-string>
      */
-    protected array $restDtoClasses = [
+    protected static array $restDtoClasses = [
         DTO\User::class,
         DTO\UserCreate::class,
         DTO\UserUpdate::class,
@@ -38,14 +42,12 @@ class RequestMapperTest extends RestRequestMapperTestCase
     ];
 
     /**
-     * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
-     *
      * @param class-string $dtoClass
      *
      * @throws Throwable
-     *
-     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object
      */
+    #[DataProvider('dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod')]
+    #[TestDox('Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object')]
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
         $resource = $this->getResource();
@@ -62,19 +64,54 @@ class RequestMapperTest extends RestRequestMapperTestCase
             'userGroups' => [$userGroup->getId()],
         ]);
 
-        /** @var DTO\User $dto */
+        self::assertTrue(class_exists($dtoClass));
+
         $dto = $requestMapper->mapToObject($request, new $dtoClass());
 
+        self::assertInstanceOf(DTO\User::class, $dto);
         self::assertSame([$userGroup], $dto->getUserGroups());
+    }
+
+    /**
+     * @param class-string $dtoClass
+     *
+     * @throws Throwable
+     */
+    #[DataProvider('dataProviderTestThatTransformLanguageWorksAsExpected')]
+    #[TestDox('Test that `transformLanguage` returns `$expected` when using `$dtoClass` DTO and `$input` as an input')]
+    public function testThatTransformLanguageWorksAsExpected(Language $expected, string $dtoClass, string $input): void
+    {
+        $requestMapper = new RequestMapper($this->getResource());
+
+        $request = new Request([], [
+            'language' => $input,
+        ]);
+
+        $dto = new $dtoClass();
+        $output = $requestMapper->mapToObject($request, $dto);
+
+        self::assertInstanceOf(DTO\User::class, $output);
+        self::assertSame($expected, $output->getLanguage());
     }
 
     /**
      * @return Generator<array{0: class-string}>
      */
-    public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
+    public static function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
-        foreach ($this->restDtoClasses as $dtoClass) {
+        foreach (static::$restDtoClasses as $dtoClass) {
             yield [$dtoClass];
+        }
+    }
+
+    /**
+     * @return Generator<array{0: Language, 1: class-string, 2: string}>
+     */
+    public static function dataProviderTestThatTransformLanguageWorksAsExpected(): Generator
+    {
+        foreach (static::$restDtoClasses as $dtoClass) {
+            yield [Language::EN, $dtoClass, 'en'];
+            yield [Language::FI, $dtoClass, 'fi'];
         }
     }
 

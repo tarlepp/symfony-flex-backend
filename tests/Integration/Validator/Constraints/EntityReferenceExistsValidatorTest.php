@@ -14,6 +14,8 @@ use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
 use Doctrine\ORM\EntityNotFoundException;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -22,6 +24,7 @@ use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
+use Throwable;
 
 /**
  * Class EntityReferenceExistsValidatorTest
@@ -32,8 +35,9 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 class EntityReferenceExistsValidatorTest extends KernelTestCase
 {
     /**
-     * @testdox Test that `validate` method throws exception if constraint is not `EntityReferenceExists`
+     * @throws Throwable
      */
+    #[TestDox('Test that `validate` method throws exception if constraint is not `EntityReferenceExists`')]
     public function testThatValidateMethodThrowsUnexpectedTypeException(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -49,14 +53,12 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatValidateMethodThrowsUnexpectedValueException
-     *
      * @param string|stdClass|array<mixed> $value
-     *
-     * @testdox Test that `validate` method throws `$expectedMessage` with `$value` using entity class `$entityClass`
      */
+    #[DataProvider('dataProviderTestThatValidateMethodThrowsUnexpectedValueException')]
+    #[TestDox('Test that `validate` method throws `$expectedMessage` with `$value` using entity class `$entityClass`')]
     public function testThatValidateMethodThrowsUnexpectedValueException(
-        string | stdClass | array $value,
+        string|stdClass|array $value,
         string $entityClass,
         string $expectedMessage
     ): void {
@@ -71,9 +73,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         (new EntityReferenceExistsValidator($loggerMock))->validate($value, $constraint);
     }
 
-    /**
-     * @testdox Test that `validate` method throws an exception if value is `stdClass`
-     */
+    #[TestDox('Test that `validate` method throws an exception if value is `stdClass`')]
     public function testThatValidateMethodThrowsUnexpectedValueExceptionWhenValueIsNotEntityInterface(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -90,8 +90,9 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `validate` method doesn't call `Context` nor `Logger` methods with happy path
+     * @throws Throwable
      */
+    #[TestDox("Test that `validate` method doesn't call `Context` nor `Logger` methods with happy path")]
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -123,8 +124,9 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `validate` method calls expected `Context` and `Logger` service methods with unhappy path
+     * @throws Throwable
      */
+    #[TestDox('Test that `validate` method calls expected `Context` and `Logger` service methods with unhappy path')]
     public function testThatContextAndLoggerMethodsAreCalledIfEntityReferenceIsNotValidEntity(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -179,7 +181,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     /**
      * @return Generator<array{0: string|stdClass|array<mixed>, 1: string, 2: string}>
      */
-    public function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
+    public static function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
     {
         yield ['', stdClass::class, 'Expected argument of type "stdClass", "string" given'];
 

@@ -16,6 +16,8 @@ use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use Closure;
 use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -45,11 +47,8 @@ use const DIRECTORY_SEPARATOR;
  */
 class IntegrityTest extends KernelTestCase
 {
-    /**
-     * @dataProvider dataProviderTestThatControllerHasE2ETests
-     *
-     * @testdox Test that controller `$class` has E2E test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatControllerHasE2ETests')]
+    #[TestDox('Test that controller `$class` has E2E test class `$testClass`')]
     public function testThatControllerHasE2ETests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -61,11 +60,8 @@ class IntegrityTest extends KernelTestCase
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatRestControllerHaveIntegrationTests
-     *
-     * @testdox Test that REST controller `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatRestControllerHaveIntegrationTests')]
+    #[TestDox('Test that REST controller `$class` has integration test class `$testClass`')]
     public function testThatRestControllerHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -77,11 +73,8 @@ class IntegrityTest extends KernelTestCase
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatRepositoryClassHasIntegrationTests
-     *
-     * @testdox Test that repository `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatRepositoryClassHasIntegrationTests')]
+    #[TestDox('Test that repository `$class` has integration test class `$testClass`')]
     public function testThatRepositoryClassHasIntegrationTests(string $testClass, string $class): void
     {
         $format = <<<FORMAT
@@ -97,14 +90,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
-     *
-     * @phpstan-param  StringableArrayObject<array<int, string>> $methods
-     * @psalm-param  StringableArrayObject $methods
-     *
-     * @testdox Test that repository `$class` has functional test class `$testClass` for `$methods` methods
-     */
+    #[DataProvider('dataProviderTestThatRepositoryHaveFunctionalTests')]
+    #[TestDox('Test that repository `$class` has functional test class `$testClass` for `$methods` methods')]
     public function testThatRepositoryHaveFunctionalTests(
         string $testClass,
         string $class,
@@ -124,11 +111,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatRestRepositoryHaveIntegrationTests
-     *
-     * @testdox Test that repository `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatRestRepositoryHaveIntegrationTests')]
+    #[TestDox('Test that repository `$class` has integration test class `$testClass`')]
     public function testThatRestRepositoryHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -140,11 +124,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatEntityHaveIntegrationTests
-     *
-     * @testdox Test that entity `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatEntityHaveIntegrationTests')]
+    #[TestDox('Test that entity `$class` has integration test class `$testClass`')]
     public function testThatEntityHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -156,11 +137,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatEventSubscriberHaveIntegrationTest
-     *
-     * @testdox Test that event subscriber `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatEventSubscriberHaveIntegrationTest')]
+    #[TestDox('Test that event subscriber `$class` has integration test class `$testClass`')]
     public function testThatEventSubscriberHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -172,11 +150,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatEventListenerHaveIntegrationTest
-     *
-     * @testdox Test that event listener `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatEventListenerHaveIntegrationTest')]
+    #[TestDox('Test that event listener `$class` has integration test class `$testClass`')]
     public function testThatEventListenerHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -188,11 +163,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatResourceHaveIntegrationTest
-     *
-     * @testdox Test that resource `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatResourceHaveIntegrationTest')]
+    #[TestDox('Test that resource `$class` has integration test class `$testClass`')]
     public function testThatResourceHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -204,11 +176,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest
-     *
-     * @testdox Test that authenticator `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest')]
+    #[TestDox('Test that authenticator `$class` has integration test class `$testClass`')]
     public function testThatSecurityAuthenticatorHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -220,11 +189,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatSecurityProvidersHaveIntegrationTest
-     *
-     * @testdox Test that security provider `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatSecurityProvidersHaveIntegrationTest')]
+    #[TestDox('Test that security provider `$class` has integration test class `$testClass`')]
     public function testThatSecurityProvidersHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -236,11 +202,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatSecurityVoterHaveIntegrationTest
-     *
-     * @testdox Test that security voter `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatSecurityVoterHaveIntegrationTest')]
+    #[TestDox('Test that security voter `$class` has integration test class `$testClass`')]
     public function testThatSecurityVoterHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -252,11 +215,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatDtoHaveIntegrationTest
-     *
-     * @testdox Test that REST DTO `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatDtoHaveIntegrationTest')]
+    #[TestDox('Test that REST DTO `$class` has integration test class `$testClass`')]
     public function testThatDtoHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -268,11 +228,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatFormTypeHaveIntegrationTest
-     *
-     * @testdox Test that form type `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatFormTypeHaveIntegrationTest')]
+    #[TestDox('Test that form type `$class` has integration test class `$testClass`')]
     public function testThatFormTypeHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -284,11 +241,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatDataTransformerHaveIntegrationTest
-     *
-     * @testdox Test that data transformer `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatDataTransformerHaveIntegrationTest')]
+    #[TestDox('Test that data transformer `$class` has integration test class `$testClass`')]
     public function testThatDataTransformerHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -300,11 +254,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatConstraintHasUnitTest
-     *
-     * @testdox Test that constraint `$class` has unit test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatConstraintHasUnitTest')]
+    #[TestDox('Test that constraint `$class` has unit test class `$testClass`')]
     public function testThatConstraintHasUnitTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -316,11 +267,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatEventSubscriberHasUnitTest
-     *
-     * @testdox Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`
-     */
+    #[DataProvider('dataProviderTestThatEventSubscriberHasUnitTest')]
+    #[TestDox('Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`')]
     public function testThatEventSubscriberHasUnitTest(
         string $eventSubscriberTestClass,
         string $eventSubscriberClass
@@ -334,11 +282,8 @@ FORMAT;
         self::assertTrue(class_exists($eventSubscriberTestClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatValidatorConstraintsHaveIntegrationTest
-     *
-     * @testdox Test that validator `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatValidatorConstraintsHaveIntegrationTest')]
+    #[TestDox('Test that validator `$class` has integration test class `$testClass`')]
     public function testThatValidatorConstraintsHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -350,11 +295,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatCustomDBALTypeHaveIntegrationTest
-     *
-     * @testdox Test that DBAL type `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatCustomDBALTypeHaveIntegrationTest')]
+    #[TestDox('Test that DBAL type `$class` has integration test class `$testClass`')]
     public function testThatCustomDBALTypeHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -366,11 +308,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatRestRequestMapperHaveIntegrationTest
-     *
-     * @testdox Test that REST request mapper `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatRestRequestMapperHaveIntegrationTest')]
+    #[TestDox('Test that REST request mapper `$class` has integration test class `$testClass`')]
     public function testThatRestRequestMapperHaveIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -382,11 +321,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatGenericServiceHaveIntegrationTests
-     *
-     * @testdox Test that generic service `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatGenericServiceHaveIntegrationTests')]
+    #[TestDox('Test that generic service `$class` has integration test class `$testClass`')]
     public function testThatGenericServiceHaveIntegrationTests(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -398,11 +334,8 @@ FORMAT;
         self::assertTrue(class_exists($testClass), $message);
     }
 
-    /**
-     * @dataProvider dataProviderTestThatValueResolverServiceHasIntegrationTest
-     *
-     * @testdox Test that argument value resolver service `$class` has integration test class `$testClass`
-     */
+    #[DataProvider('dataProviderTestThatValueResolverServiceHasIntegrationTest')]
+    #[TestDox('Test that argument value resolver service `$class` has integration test class `$testClass`')]
     public function testThatValueResolverServiceHasIntegrationTest(string $testClass, string $class): void
     {
         $message = sprintf(
@@ -417,39 +350,38 @@ FORMAT;
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatControllerHasE2ETests(): array
+    public static function dataProviderTestThatControllerHasE2ETests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Controller/';
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\E2E\\Controller\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        return self::getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
+    public static function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
-        $filter = $this->getInterfaceFilter(BaseRepositoryInterface::class);
+        $filter = self::getInterfaceFilter(BaseRepositoryInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
-     * @psalm-return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
-     * @phpstan-return array<int, array{0: string, 1: string, 2: StringableArrayObject<mixed>}>
+     * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
+    public static function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
@@ -493,300 +425,300 @@ FORMAT;
             ];
         };
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter, $formatter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter, $formatter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
+    public static function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
-        $filter = $this->getInterfaceFilter(BaseRepositoryInterface::class);
+        $filter = self::getInterfaceFilter(BaseRepositoryInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatEntityHaveIntegrationTests(): array
+    public static function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Entity/';
         $namespace = '\\App\\Entity\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Entity\\';
-        $filter = $this->getInterfaceFilter(EntityInterface::class);
+        $filter = self::getInterfaceFilter(EntityInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
+    public static function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/EventSubscriber/';
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        return self::getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatEventListenerHaveIntegrationTest(): array
+    public static function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/EventListener/';
         $namespace = '\\App\\EventListener\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventListener\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        return self::getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatResourceHaveIntegrationTest(): array
+    public static function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Resource/';
         $namespace = '\\App\\Resource\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Resource\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        return self::getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
+    public static function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Security/Authenticator/';
         $namespace = '\\App\\Security\\Authenticator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Authenticator\\';
-        $filter = fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
+        $filter = static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
             && !$reflectionClass->isInterface()
             && $reflectionClass->implementsInterface(AuthenticatorInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
+    public static function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Security/Provider/';
         $namespace = '\\App\\Security\\Provider\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Provider\\';
-        $filter = $this->getInterfaceFilter(UserProviderInterface::class);
+        $filter = self::getInterfaceFilter(UserProviderInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
+    public static function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Security/Voter/';
         $namespace = '\\App\\Security\\Voter\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Voter\\';
-        $filter = $this->getInterfaceFilter(VoterInterface::class);
+        $filter = self::getInterfaceFilter(VoterInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatDtoHaveIntegrationTest(): array
+    public static function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/DTO/';
         $namespace = '\\App\\DTO\\';
         $namespaceTest = '\\App\\Tests\\Integration\\DTO\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        return self::getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatFormTypeHaveIntegrationTest(): array
+    public static function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Form/';
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
-        $filter = $this->getInterfaceFilter(FormTypeInterface::class);
+        $filter = self::getInterfaceFilter(FormTypeInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
+    public static function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Form/';
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
-        $filter = $this->getInterfaceFilter(DataTransformerInterface::class);
+        $filter = self::getInterfaceFilter(DataTransformerInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatRestControllerHaveIntegrationTests(): array
+    public static function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Controller/';
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Controller\\';
-        $filter = $this->getInterfaceFilter(ControllerInterface::class);
+        $filter = self::getInterfaceFilter(ControllerInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatConstraintHasUnitTest(): array
+    public static function dataProviderTestThatConstraintHasUnitTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Validator/';
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Unit\\Validator\\';
-        $filter = $this->getSubclassOfFilter(Constraint::class);
+        $filter = self::getSubclassOfFilter(Constraint::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatEventSubscriberHasUnitTest(): array
+    public static function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/EventSubscriber/';
 
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Unit\\EventSubscriber\\';
 
-        $filter = $this->getInterfaceFilter(EventSubscriberInterface::class);
+        $filter = self::getInterfaceFilter(EventSubscriberInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
+    public static function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Validator/';
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Validator\\';
-        $filter = $this->getInterfaceFilter(ConstraintValidatorInterface::class);
+        $filter = self::getInterfaceFilter(ConstraintValidatorInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
+    public static function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
-        $filter = fn (ReflectionClass $reflectionClass): bool =>
+        $filter = static fn (ReflectionClass $reflectionClass): bool =>
             !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
+    public static function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/AutoMapper/';
         $namespace = '\\App\\AutoMapper\\';
         $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
-        $filter = fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
+        $filter = static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
             && !$reflectionClass->isTrait()
             && $reflectionClass->isSubclassOf(RestRequestMapper::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
+    public static function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/Service/';
         $namespace = '\\App\\Service\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Service\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        return self::getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
      * @return array<int, array{0: string, 1: string}>
      */
-    public function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
+    public static function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
     {
-        $this->bootKernelCached();
+        self::bootKernelCached();
 
         $folder = self::$kernel->getProjectDir() . '/src/ValueResolver/';
         $namespace = '\\App\\ValueResolver\\';
         $namespaceTest = '\\App\\Tests\\Integration\\ValueResolver\\';
-        $filter = $this->getInterfaceFilter(ValueResolverInterface::class);
+        $filter = self::getInterfaceFilter(ValueResolverInterface::class);
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+        return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
      * @return array<int, mixed>
      */
-    private function getTestCases(
+    private static function getTestCases(
         string $folder,
         string $namespace,
         string $namespaceTest,
@@ -796,8 +728,8 @@ FORMAT;
         $pattern = '/^.+\.php$/i';
 
         $filter ??= static fn (ReflectionClass $r): bool => !$r->isInterface() && !$r->isAbstract() && !$r->isTrait();
-        $formatter ??= $this->getFormatterClosure($folder, $namespace, $namespaceTest);
-        $iterator = $this->getReflectionClass($folder, $namespace);
+        $formatter ??= self::getFormatterClosure($folder, $namespace, $namespaceTest);
+        $iterator = self::getReflectionClass($folder, $namespace);
 
         return array_map(
             $formatter,
@@ -811,7 +743,7 @@ FORMAT;
         );
     }
 
-    private function getReflectionClass(string $folder, string $namespace): Closure
+    private static function getReflectionClass(string $folder, string $namespace): Closure
     {
         return static function (string $file) use ($folder, $namespace): ReflectionClass {
             /** @psalm-var class-string $class */
@@ -824,7 +756,7 @@ FORMAT;
     /**
      * Formatter closure to return an array which contains names of expected test class and actual class.
      */
-    private function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
+    private static function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
     {
         return static function (ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest): array {
             $file = (string)$reflectionClass->getFileName();
@@ -842,7 +774,7 @@ FORMAT;
     /**
      * Method to boot kernel as a cached one, no need to actually boot kernel each time within this test class.
      */
-    private function bootKernelCached(): void
+    private static function bootKernelCached(): void
     {
         static $cache = null;
 
@@ -856,7 +788,7 @@ FORMAT;
     /**
      * @param class-string $interface
      */
-    private function getInterfaceFilter(string $interface): Closure
+    private static function getInterfaceFilter(string $interface): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
             && !$reflectionClass->isAbstract()
@@ -866,7 +798,7 @@ FORMAT;
     /**
      * @param class-string $class
      */
-    private function getSubclassOfFilter(string $class): Closure
+    private static function getSubclassOfFilter(string $class): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
             && $reflectionClass->isSubclassOf($class);

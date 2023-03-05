@@ -14,6 +14,7 @@ use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -27,9 +28,7 @@ use function array_keys;
  */
 class UserGroupTypeTest extends TypeTestCase
 {
-    /**
-     * @testdox Test that form submit with valid input data works as expected
-     */
+    #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
         $resource = $this->getRoleResource();

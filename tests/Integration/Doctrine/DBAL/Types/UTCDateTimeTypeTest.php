@@ -17,6 +17,8 @@ use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -30,9 +32,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method works as expected
      */
+    #[TestDox('Test that `convertToDatabaseValue` method works as expected')]
     public function testThatDateTimeConvertsToDatabaseValue(): void
     {
         $type = $this->getType();
@@ -50,9 +51,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method creates DateTimeZone instance as expected
      */
+    #[TestDox('Test that `convertToDatabaseValue` method creates DateTimeZone instance as expected')]
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         $type = $this->getType();
@@ -66,20 +66,21 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $type->convertToDatabaseValue($dateInput, $platform);
 
-        /** @var DateTimeZone $property */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var DateTimeZone $property
+         */
         $property = PhpUnitUtil::getProperty('utc', $type);
 
-        self::assertInstanceOf(DateTimeZone::class, $property);
         self::assertSame('UTC', $property->getName());
     }
 
     /**
-     * @dataProvider dataProviderTestDateTimeConvertsToPHPValue
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`
      */
+    #[DataProvider('dataProviderTestDateTimeConvertsToPHPValue')]
+    #[TestDox('Test that `convertToPHPValue` method converts `$value` to `$expected`')]
     public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
     {
         $type = $this->getType();
@@ -93,9 +94,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method creates DateTimeZone instance as expected
      */
+    #[TestDox('Test that `convertToPHPValue` method creates DateTimeZone instance as expected')]
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         $type = $this->getType();
@@ -107,18 +107,20 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $type->convertToPHPValue('1981-04-07 10:00:00', $platform);
 
-        /** @var DateTimeZone $property */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var DateTimeZone $property
+         */
         $property = PhpUnitUtil::getProperty('utc', $type);
 
-        self::assertInstanceOf(DateTimeZone::class, $property);
         self::assertSame('UTC', $property->getName());
     }
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method throws an exception when invalid value is used
      */
+    #[TestDox('Test that `convertToPHPValue` method throws an exception when invalid value is used')]
     public function testThatConvertToPHPValueThrowsAnExceptionWithInvalidValue(): void
     {
         $this->expectException(ConversionException::class);
@@ -134,7 +136,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
      *
      * @return Generator<array{0: string, 1: string|DateTime}>
      */
-    public function dataProviderTestDateTimeConvertsToPHPValue(): Generator
+    public static function dataProviderTestDateTimeConvertsToPHPValue(): Generator
     {
         yield [
             '1981-04-07 10:00:00',

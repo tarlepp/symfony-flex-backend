@@ -14,6 +14,9 @@ use App\Rest\ControllerCollection;
 use App\ValueResolver\RestDtoValueResolver;
 use AutoMapperPlus\AutoMapperInterface;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\MockBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -28,10 +31,10 @@ use Throwable;
 class RestDtoValueResolverTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatSupportMethodWorksAsExpected
-     *
-     * @testdox Test that `supports` method returns expected result `$expected`
+     * @psalm-param ControllerCollection<Controller> $controllerCollection
      */
+    #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
+    #[TestDox('Test that `supports` method returns expected result `$expected`')]
     public function testThatSupportMethodWorksAsExpected(
         bool $expected,
         ControllerCollection $controllerCollection,
@@ -47,9 +50,8 @@ class RestDtoValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `resolve` method works as expected
      */
+    #[TestDox('Test that `resolve` method works as expected')]
     public function testThatResolveMethodWorksAsExpected(): void
     {
         $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
@@ -93,15 +95,14 @@ class RestDtoValueResolverTest extends KernelTestCase
             ->willReturn($restDto);
 
         $resolver->supports($request, $metadata);
+
         static::assertSame($restDto, $resolver->resolve($request, $metadata)->current());
     }
 
-    /**
-     * @phpstan-return Generator<array{0: bool, 1: ControllerCollection, 2: Request, 3: ArgumentMetadata}>
-     */
-    public function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
+    public static function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
     {
-        $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
+        /** @psalm-suppress InternalMethod */
+        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,7 +126,8 @@ class RestDtoValueResolverTest extends KernelTestCase
             $argumentMetaData,
         ];
 
-        $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
+        /** @psalm-suppress InternalMethod */
+        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,7 +150,8 @@ class RestDtoValueResolverTest extends KernelTestCase
             $argumentMetaData,
         ];
 
-        $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
+        /** @psalm-suppress InternalMethod */
+        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -170,7 +173,8 @@ class RestDtoValueResolverTest extends KernelTestCase
             $argumentMetaData,
         ];
 
-        $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
+        /** @psalm-suppress InternalMethod */
+        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
 

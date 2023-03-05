@@ -23,5 +23,5 @@ class UserGroupPatchTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<UserGroupPatch>
      */
-    protected string $dtoClass = UserGroupPatch::class;
+    protected static string $dtoClass = UserGroupPatch::class;
 }

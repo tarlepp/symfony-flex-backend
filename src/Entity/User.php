@@ -16,6 +16,7 @@ use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
 use App\Entity\Traits\Uuid;
+use App\Enum\Language;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -186,8 +187,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[AppAssert\Language]
-    private string $language = Localization::DEFAULT_LANGUAGE;
+    //#[AppAssert\Language]
+    private Language $language;
 
     #[ORM\Column(
         name: 'locale',
@@ -252,6 +253,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     public function __construct()
     {
         $this->id = $this->createUuid();
+        $this->language = Language::getDefault();
 
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
@@ -312,12 +314,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->language = $language;
 

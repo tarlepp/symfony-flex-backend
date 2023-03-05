@@ -119,6 +119,8 @@ interface BaseRepositoryInterface
      * Generic replacement for basic 'findBy' method if/when you want to use
      * generic LIKE search.
      *
+     * @codeCoverageIgnore This is needed because variables are multiline
+     *
      * @param array<int|string, mixed> $criteria
      * @param array<string, string>|null $orderBy
      * @param array<string, string>|null $search

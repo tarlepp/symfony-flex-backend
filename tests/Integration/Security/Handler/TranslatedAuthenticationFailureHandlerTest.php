@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Security\Handler;
 
 use App\Security\Handler\TranslatedAuthenticationFailureHandler;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -23,9 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `onAuthenticationFailure` method calls expected service methods
-     */
+    #[TestDox('Test that `onAuthenticationFailure` method calls expected service methods')]
     public function testThatOnAuthenticationFailureMethodCallsExpectedServiceMethods(): void
     {
         $dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();

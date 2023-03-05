@@ -23,7 +23,7 @@ class RoleTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = Role::class;
+    protected static string $entityName = Role::class;
 
     /**
      * @noinspection PhpMissingParentCallCommonInspection

@@ -17,6 +17,7 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RestResource;
 use App\Security\RolesService;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -44,9 +45,8 @@ class UserResourceTest extends ResourceTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getUsersForGroup(UserGroup $userGroup)` method calls expected service methods
      */
+    #[TestDox('Test that `getUsersForGroup(UserGroup $userGroup)` method calls expected service methods')]
     public function testThatGetUsersForGroupMethodCallsExpectedServiceMethods(): void
     {
         $repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -67,6 +67,6 @@ class UserResourceTest extends ResourceTestCase
             ->with(['Some Role'])
             ->willReturn(['Some Role']);
 
-        self::assertIsArray((new UserResource($repository, $rolesService))->getUsersForGroup($userGroup));
+        self::assertSame([$user], (new UserResource($repository, $rolesService))->getUsersForGroup($userGroup));
     }
 }

@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Utils;
 use App\Resource\LogLoginResource;
 use App\Utils\LoginLogger;
 use BadMethodCallException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,9 +28,8 @@ class LoginLoggerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that exception is thrown if request stack does not contain request at all
      */
+    #[TestDox('Test that exception is thrown if request stack does not contain request at all')]
     public function testThatExceptionIsThrownIfRequestIsNotAvailable(): void
     {
         $this->expectException(BadMethodCallException::class);
@@ -41,9 +41,8 @@ class LoginLoggerTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `createEntry` method calls expected resource service method
      */
+    #[TestDox('Test that `createEntry` method calls expected resource service method')]
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
         $resource = $this->getResource();
