@@ -16,6 +16,7 @@ namespace App\Form\Type;
  */
 interface FormTypeLabelInterface
 {
+    // @codeCoverageIgnoreStart
     public const LABEL = 'label';
     public const REQUIRED = 'required';
     public const EMPTY_DATA = 'empty_data';
@@ -27,4 +28,5 @@ interface FormTypeLabelInterface
     public const CHOICES = 'choices';
     public const CHOICE_LABEL = 'choice_label';
     public const CLASS_NAME = 'class';
+    // @codeCoverageIgnoreEnd
 }

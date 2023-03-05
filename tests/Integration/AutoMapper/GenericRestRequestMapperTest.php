@@ -14,6 +14,7 @@ use App\Tests\Integration\AutoMapper\src\TestRestRequestMapper;
 use App\Tests\Integration\AutoMapper\src\TestRestRequestMapperDto;
 use InvalidArgumentException;
 use LengthException;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,8 @@ class GenericRestRequestMapperTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `mapToObject` method throws an exception if `source` is an array
      */
+    #[TestDox('Test that `mapToObject` method throws an exception if `source` is an array')]
     public function testThatMapToObjectThrowsAnExceptionIfSourceIsAnArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -44,9 +44,8 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `mapToObject` method throws an exception if `source` is not `Request` object
      */
+    #[TestDox('Test that `mapToObject` method throws an exception if `source` is not `Request` object')]
     public function testThatMapToObjectThrowsAnExceptionIfSourceIsNotRequestObject(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -59,9 +58,8 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `mapToObject` throws an exception if `destination` is not instance of `RestDtoInterface`
      */
+    #[TestDox('Test that `mapToObject` throws an exception if `destination` is not instance of `RestDtoInterface`')]
     public function testThatMapToObjectThrowsAnExceptionIfDestinationIsNotRestDtoInterface(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -92,9 +90,8 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `mapToObject` method works as expected
      */
+    #[TestDox('Test that `mapToObject` method works as expected')]
     public function testThatMapToObjectWorksAsExpected(): void
     {
         $request = new Request([], [
@@ -105,7 +102,6 @@ class GenericRestRequestMapperTest extends KernelTestCase
         /** @var TestRestRequestMapperDto $transformedObject */
         $transformedObject = (new TestRestRequestMapper())->mapToObject($request, new TestRestRequestMapperDto());
 
-        self::assertInstanceOf(TestRestRequestMapperDto::class, $transformedObject);
         self::assertSame('someValue', $transformedObject->getSomeProperty());
         self::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());
     }

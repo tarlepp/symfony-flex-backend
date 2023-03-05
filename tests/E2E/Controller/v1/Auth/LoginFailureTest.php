@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Auth;
 use App\Resource\LogLoginFailureResource;
 use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Throwable;
@@ -41,9 +42,8 @@ class LoginFailureTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLoginFailure` entity is created when using valid user with invalid password
      */
+    #[TestDox('Test that `LogLoginFailure` entity is created when using valid user with invalid password')]
     public function testThatLogLoginFailureEntityIsCreated(): void
     {
         $client = static::createClient();
@@ -65,9 +65,8 @@ class LoginFailureTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogLoginFailure` entries are reset after successfully login
      */
+    #[TestDox('Test that `LogLoginFailure` entries are reset after successfully login')]
     public function testThatLogLoginFailuresAreResetAfterSuccessfullyLogin(): void
     {
         $client = static::createClient();
@@ -94,9 +93,8 @@ class LoginFailureTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that locked user cannot log-in to application
      */
+    #[TestDox('Test that locked user cannot log-in to application')]
     public function testThatLockedUserCannotLogin(): void
     {
         $client = static::createClient();

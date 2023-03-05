@@ -17,6 +17,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
 use ProxyManager\Proxy\AccessInterceptorValueHolderInterface;
 use stdClass;
@@ -33,12 +35,10 @@ use Throwable;
 class StopwatchDecoratorTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatDecorateMethodReturnsExpected
-     *
      * @param class-string $expected
-     *
-     * @testdox Test that `decorate` method returns `$expected` when using `$service` instance as an input
      */
+    #[DataProvider('dataProviderTestThatDecorateMethodReturnsExpected')]
+    #[TestDox('Test that `decorate` method returns `$expected` when using `$service` instance as an input')]
     public function testThatDecorateMethodReturnsExpected(string $expected, object $service): void
     {
         self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
@@ -50,9 +50,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         */
     }
 
-    /**
-     * @testdox Test that decorator calls expected methods from `StopWatch` service
-     */
+    #[TestDox('Test that decorator calls expected methods from `StopWatch` service')]
     public function testThatDecoratorCallsStopWatchStartAndStopMethods(): void
     {
         self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
@@ -78,9 +76,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         */
     }
 
-    /**
-     * @testdox Test that `decorate` method returns exact same service if factory throws an exception
-     */
+    #[TestDox('Test that `decorate` method returns exact same service if factory throws an exception')]
     public function testThatDecoratorReturnsTheSameInstanceIfFactoryFails(): void
     {
         $service = new EntityReferenceExists();
@@ -103,9 +99,8 @@ class StopwatchDecoratorTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `decorate` method decorates possible inner objects / services
      */
+    #[TestDox('Test that `decorate` method decorates possible inner objects / services')]
     public function testThatDecoratorAlsoDecoratesInnerObjects(): void
     {
         $managerRegistry = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
@@ -136,9 +131,8 @@ class StopwatchDecoratorTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `decorate` method does not decorate entity objects
      */
+    #[TestDox('Test that `decorate` method does not decorate entity objects')]
     public function testThatDecoratorDoesNotTryToDecorateEntityObjects(): void
     {
         $apiKey = new ApiKey();
@@ -177,7 +171,7 @@ class StopwatchDecoratorTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: object}>
      */
-    public function dataProviderTestThatDecorateMethodReturnsExpected(): Generator
+    public static function dataProviderTestThatDecorateMethodReturnsExpected(): Generator
     {
         yield [AccessInterceptorValueHolderInterface::class, new EntityReferenceExists()];
         yield [stdClass::class, new stdClass()];

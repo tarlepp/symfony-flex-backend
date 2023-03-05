@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Controller;
 
 use App\Controller\IndexController;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -19,9 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class IndexControllerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `__invoke` method returns proper response
-     */
+    #[TestDox('Test that `__invoke` method returns proper response')]
     public function testThatInvokeMethodReturnsExpectedResponse(): void
     {
         $response = (new IndexController())();

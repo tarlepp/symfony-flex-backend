@@ -25,8 +25,10 @@ interface ResponseHandlerInterface
     /**
      * Constants for response output formats.
      */
+    // @codeCoverageIgnoreStart
     public const FORMAT_JSON = 'json';
     public const FORMAT_XML = 'xml';
+    // @codeCoverageIgnoreEnd
 
     public function __construct(SerializerInterface $serializer);
 
@@ -44,6 +46,8 @@ interface ResponseHandlerInterface
 
     /**
      * Helper method to create response for request.
+     *
+     * @codeCoverageIgnore This is needed because variables are multiline
      *
      * @param array<int|string, bool|array<int, string>>|null $context
      *

@@ -23,5 +23,5 @@ class UserGroupCreateTest extends DtoTestCase
      * @psalm-var class-string
      * @phpstan-var class-string<UserGroupCreate>
      */
-    protected string $dtoClass = UserGroupCreate::class;
+    protected static string $dtoClass = UserGroupCreate::class;
 }

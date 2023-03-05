@@ -15,6 +15,7 @@ use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use function array_map;
 use function array_merge;
 use function array_unshift;
@@ -30,6 +31,8 @@ use function spl_object_hash;
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AutoconfigureTag('app.rest.repository')]
+#[AutoconfigureTag('app.stopwatch')]
 abstract class BaseRepository implements BaseRepositoryInterface
 {
     use RepositoryMethodsTrait;

@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Utils;
 
 use App\Repository\HealthzRepository;
 use App\Utils\HealthzService;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -24,9 +25,8 @@ class HealthzServiceTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `HealthzService::check` method calls expected repository methods
      */
+    #[TestDox('Test that `HealthzService::check` method calls expected repository methods')]
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
         $repository = $this->getRepository();

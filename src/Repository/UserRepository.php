@@ -13,6 +13,7 @@ use App\Rest\UuidHelper;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use function array_key_exists;
 
 /**
@@ -47,6 +48,7 @@ class UserRepository extends BaseRepository
 
     public function __construct(
         protected ManagerRegistry $managerRegistry,
+        #[Autowire('%kernel.environment%')]
         private string $environment,
     ) {
     }

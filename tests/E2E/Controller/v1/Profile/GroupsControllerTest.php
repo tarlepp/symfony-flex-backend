@@ -15,10 +15,13 @@ use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Throwable;
 use function array_map;
 use function getenv;
+use function property_exists;
 
 /**
  * Class GroupsControllerTest
@@ -32,9 +35,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` without Json Web Token
      */
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` without Json Web Token')]
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
         $client = $this->getTestClient();
@@ -48,11 +50,13 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -62,9 +66,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` with invalid API key token
      */
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with invalid API key token')]
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -78,11 +81,13 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -91,15 +96,10 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGroupsActionReturnExpected
-     *
-     * @psalm-param StringableArrayObject $e
-     * @phpstan-param StringableArrayObject<array<int, string>> $e
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGroupsActionReturnExpected')]
+    #[TestDox('Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`')]
     public function testThatGroupsActionReturnExpected(
         string $u,
         string $p,
@@ -116,19 +116,34 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsArray($responseContent);
         self::assertSame(
             $e->getArrayCopy(),
-            array_map(static fn (stdClass $userGroup): string => $userGroup->role->id, $responseContent),
+            array_map(
+                static function (stdClass $userGroup): string {
+                    self::assertTrue(property_exists($userGroup, 'role'));
+
+                    $role = $userGroup->role;
+
+                    self::assertIsObject($role);
+                    self::assertTrue(property_exists($role, 'id'));
+
+                    $id = $role->id;
+
+                    self::assertIsString($id);
+
+                    return $id;
+                },
+                $responseContent
+            ),
         );
     }
 
     /**
-     * @dataProvider dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey
-     *
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token
      */
+    #[DataProvider('dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey')]
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token')]
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);
@@ -142,11 +157,13 @@ class GroupsControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -155,12 +172,9 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * return Generator<array{0: string, 1: string, 2: array<int, string>}>
-     *
-     * @psalm-return Generator<array{0: string, 1: string, 2: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: string, 1: string, 2: StringableArrayObject<array<int, string>>}>
+     * @return Generator<array-key, array{0: string, 1: string, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatGroupsActionReturnExpected(): Generator
+    public static function dataProviderTestThatGroupsActionReturnExpected(): Generator
     {
         yield ['john', 'password', new StringableArrayObject([])];
         yield ['john-logged', 'password-logged', new StringableArrayObject(['ROLE_LOGGED'])];
@@ -180,13 +194,13 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<array-key, array{0: string}>
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
+    public static function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $rolesService);
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {

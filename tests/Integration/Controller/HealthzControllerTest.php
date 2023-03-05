@@ -13,6 +13,7 @@ use App\Entity\Healthz;
 use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,8 @@ class HealthzControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `__invoke` method calls expected service methods
      */
+    #[TestDox('Test that `__invoke` method calls expected service methods')]
     public function testThatInvokeMethodIsCallingExpectedMethods(): void
     {
         $request = Request::create('/healthz');

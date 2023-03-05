@@ -33,3 +33,6 @@ phpstan.neon
 
 ### Vendor bin dependencies
 /tools/*/vendor/
+
+### PHPUnit cache
+.phpunit.cache

@@ -16,6 +16,8 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -30,9 +32,8 @@ class EnumLanguageTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getSQLDeclaration` method returns expected
      */
+    #[TestDox('Test that `getSQLDeclaration` method returns expected')]
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
         $type = $this->getType();
@@ -42,12 +43,10 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method returns `$expected` when using `$language`
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueWorksWithProperValues')]
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$expected` when using `$language`')]
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $expected, Language $language): void
     {
         $type = $this->getType();
@@ -57,12 +56,10 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueThrowsAnException')]
+    #[TestDox('Test that `convertToDatabaseValue` method throws an exception with `$value` input')]
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -75,12 +72,10 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToPHPValueWorksWithValidInput
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method returns `$expected` when using `$input`
      */
+    #[DataProvider('dataProviderTestThatConvertToPHPValueWorksWithValidInput')]
+    #[TestDox('Test that `convertToPHPValue` method returns `$expected` when using `$input`')]
     public function testThatConvertToPHPValueWorksWithValidInput(Language $expected, string $input): void
     {
         $type = $this->getType();
@@ -90,12 +85,10 @@ class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatConvertToPHPValueThrowsAnException
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `convertToPHPValue` method throws an exception with `$value` input
      */
+    #[DataProvider('dataProviderTestThatConvertToPHPValueThrowsAnException')]
+    #[TestDox('Test that `convertToPHPValue` method throws an exception with `$value` input')]
     public function testThatConvertToPHPValueThrowsAnException(mixed $value): void
     {
         $this->expectException(ConversionException::class);
@@ -110,7 +103,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: 'en'|'fi', 1: Language}>
      */
-    public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
+    public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
         yield ['en', Language::EN];
         yield ['fi', Language::FI];
@@ -119,7 +112,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: mixed}>
      */
-    public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
+    public static function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
         yield [null];
         yield [false];
@@ -134,7 +127,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: Language, 1: 'en'|'fi'}>
      */
-    public function dataProviderTestThatConvertToPHPValueWorksWithValidInput(): Generator
+    public static function dataProviderTestThatConvertToPHPValueWorksWithValidInput(): Generator
     {
         yield [Language::EN, 'en'];
         yield [Language::FI, 'fi'];
@@ -143,7 +136,7 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @return Generator<array{0: mixed}>
      */
-    public function dataProviderTestThatConvertToPHPValueThrowsAnException(): Generator
+    public static function dataProviderTestThatConvertToPHPValueThrowsAnException(): Generator
     {
         yield [null];
         yield [false];

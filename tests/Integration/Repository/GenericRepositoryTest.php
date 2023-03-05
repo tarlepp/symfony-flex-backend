@@ -11,7 +11,6 @@ namespace App\Tests\Integration\Repository;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\Role;
 use App\Repository\ApiKeyRepository;
-use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Utils\Tests\StringableArrayObject;
@@ -22,6 +21,8 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\AbstractManagerRegistry;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use UnexpectedValueException;
@@ -40,10 +41,8 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetReferenceReturnsExpected(): void
     {
         $entity = new ApiKeyEntity();
-
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        self::assertInstanceOf(ApiKeyResource::class, $resource);
         self::assertInstanceOf(ApiKeyEntity::class, $resource->getRepository()->getReference($entity->getId()));
     }
 
@@ -53,8 +52,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetReferenceReturnsExpectedWithNonUuidInput(): void
     {
         $repository = self::getContainer()->get(RoleRepository::class);
-
-        self::assertInstanceOf(RoleRepository::class, $repository);
 
         self::assertInstanceOf(Role::class, $repository->getReference('some-role'));
     }
@@ -66,7 +63,6 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        self::assertInstanceOf(ApiKeyResource::class, $resource);
         self::assertSame(
             ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
             array_keys($resource->getRepository()->getAssociations())
@@ -80,7 +76,6 @@ class GenericRepositoryTest extends KernelTestCase
     {
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        self::assertInstanceOf(ApiKeyResource::class, $resource);
         self::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
     }
 
@@ -189,23 +184,17 @@ class GenericRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add left join works as expected, using $parameters and expecting '$expected'
      */
+    #[DataProvider('dataProviderTestThatAddLeftJoinWorksAsExpected')]
+    #[TestDox("Test that add left join works as expected, using \$parameters and expecting '\$expected'")]
     public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
-
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         $repository
@@ -218,23 +207,17 @@ class GenericRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add inner join works as expected, using $parameters and expecting '$expected'
      */
+    #[DataProvider('dataProviderTestThatAddInnerJoinWorksAsExpected')]
+    #[TestDox("Test that add inner join works as expected, using \$parameters and expecting '\$expected'")]
     public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
-
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         $repository
@@ -247,23 +230,17 @@ class GenericRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add left join adds same join just once, using $parameters and expecting '$expected'
      */
+    #[DataProvider('dataProviderTestThatAddLeftJoinWorksAsExpected')]
+    #[TestDox("Test that add left join adds same join just once, using \$parameters and expecting '\$expected'")]
     public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
-
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         // Add same join twice to query
@@ -278,23 +255,17 @@ class GenericRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
      *
      * @throws Throwable
-     *
-     * @testdox Test that add inner join adds same join just once, using $parameters and expecting '$expected'
      */
+    #[DataProvider('dataProviderTestThatAddInnerJoinWorksAsExpected')]
+    #[TestDox("Test that add inner join adds same join just once, using \$parameters and expecting '\$expected'")]
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
-
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         // Add same join twice to query
@@ -314,11 +285,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackWorks(): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
-
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder): void {
@@ -338,9 +305,6 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackCallsCallbackJustOnce(): void
     {
         $apiKeyResource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ApiKeyResource::class, $apiKeyResource);
-
         $repository = $apiKeyResource->getRepository();
 
         $count = 0;
@@ -497,7 +461,6 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
-        /** @var BaseRepositoryInterface $repository */
         $repository = new ApiKeyRepository($managerObject);
         $repository->findBy(...$arguments);
     }
@@ -545,7 +508,7 @@ class GenericRepositoryTest extends KernelTestCase
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatAddLeftJoinWorksAsExpected(): Generator
+    public static function dataProviderTestThatAddLeftJoinWorksAsExpected(): Generator
     {
         yield [
             /* @lang text */
@@ -572,7 +535,7 @@ class GenericRepositoryTest extends KernelTestCase
      * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
-    public function dataProviderTestThatAddInnerJoinWorksAsExpected(): Generator
+    public static function dataProviderTestThatAddInnerJoinWorksAsExpected(): Generator
     {
         yield [
             /* @lang text */
@@ -586,12 +549,16 @@ class GenericRepositoryTest extends KernelTestCase
             new StringableArrayObject(['entity.someProperty', 'someAlias']),
         ];
 
-        // @codingStandardsIgnoreStart
         yield [
             /* @lang text */
-            'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
-            new StringableArrayObject(['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1']),
+            'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias WITH ' .
+            'someAlias.someAnotherProperty = 1',
+            new StringableArrayObject([
+                'entity.someProperty',
+                'someAlias',
+                Expr\Join::WITH,
+                'someAlias.someAnotherProperty = 1',
+            ]),
         ];
-        // @codingStandardsIgnoreEnd
     }
 }

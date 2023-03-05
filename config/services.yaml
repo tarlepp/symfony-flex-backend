@@ -19,17 +19,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind:
-            $projectDir: '%kernel.project_dir%'
-            $environment: '%kernel.environment%'
-            $locale: '%locale%'
+
     _instanceof:
-        App\Rest\Interfaces\ControllerInterface:
-            tags: [ 'app.rest.controller' ]
-        App\Rest\Interfaces\RestResourceInterface:
-            tags: [ 'app.rest.resource', 'app.stopwatch' ]
-        App\Repository\BaseRepository:
-            tags: [ 'app.rest.repository', 'app.stopwatch' ]
         AutoMapperPlus\MapperInterface:
             tags: [ 'app.stopwatch' ]
         Symfony\Component\EventDispatcher\EventSubscriberInterface:
@@ -49,30 +40,18 @@ services:
             - '../src/Utils/Tests/'
             - '../src/Kernel.php'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: [ 'controller.service_arguments' ]
-
     App\ValueResolver\EntityValueResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 150 }
-
-    App\Resource\ResourceCollection:
-        arguments: [ !tagged app.rest.resource ]
-
-    App\Rest\ControllerCollection:
-        arguments: [ !tagged app.rest.controller ]
 
 when@dev:
     services:
         _defaults:
             autowire: true
             autoconfigure: true
+
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
-            tags: [ 'doctrine.fixture.orm' ]
 
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
@@ -82,15 +61,9 @@ when@dev:
 
         App\Tests\E2E\Rest\src\Controller\:
             resource: '../tests/E2E/Rest/src/Controller/*'
-            tags:
-                - 'controller.service_arguments'
-                - 'app.rest.controller'
 
         App\Tests\E2E\Rest\Traits\Actions\src\:
             resource: '../tests/E2E/Rest/Traits/Actions/src/*'
-            tags:
-                - 'controller.service_arguments'
-                - 'app.rest.controller'
 
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
@@ -119,7 +92,6 @@ when@test:
 
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
-            tags: [ 'doctrine.fixture.orm' ]
 
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
@@ -129,17 +101,9 @@ when@test:
 
         App\Tests\E2E\Rest\src\Controller\:
             resource: '../tests/E2E/Rest/src/Controller/*'
-            tags:
-                - 'controller.service_arguments'
-                - 'app.rest.controller'
 
         App\Tests\E2E\Rest\Traits\Actions\src\:
             resource: '../tests/E2E/Rest/Traits/Actions/src/*'
-            tags:
-                - 'controller.service_arguments'
-                - 'app.rest.controller'
 
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
-
-        test.app.utils.tests.auth: '@App\Utils\Tests\Auth'

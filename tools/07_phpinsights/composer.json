@@ -1,9 +1,11 @@
 {
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
-	"require": {},
+	"require": {
+		"php": "^8.2.0"
+	},
 	"require-dev": {
-		"nunomaduro/phpinsights": "2.6.1",
+		"nunomaduro/phpinsights": "2.7.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {

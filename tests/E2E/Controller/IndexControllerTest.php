@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller;
 
 use App\Utils\Tests\WebTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -21,9 +22,8 @@ class IndexControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /` request returns `200`
      */
+    #[TestDox('Test that `GET /` request returns `200`')]
     public function testThatDefaultRouteReturns200(): void
     {
         $client = $this->getTestClient();

@@ -8,9 +8,13 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Actions\User;
 
-use App\DTO\RestDtoInterface;
+use App\DTO\ApiKey\ApiKeyCreate;
+use App\DTO\ApiKey\ApiKeyPatch;
+use App\DTO\ApiKey\ApiKeyUpdate;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,16 +35,16 @@ use const DIRECTORY_SEPARATOR;
 class ActionTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatTraitCallsExpectedMethod
-     *
      * @phpstan-param StringableArrayObject<array<mixed>> $parameters
      * @psalm-param StringableArrayObject $parameters
      * @psalm-param trait-string $class
      *
      * @throws Throwable
-     *
-     * @testdox Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters
      */
+    #[DataProvider('dataProviderTestThatTraitCallsExpectedMethod')]
+    #[TestDox(
+        'Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters'
+    )]
     public function testThatTraitCallsExpectedMethod(
         string $class,
         string $method,
@@ -74,32 +78,33 @@ class ActionTest extends KernelTestCase
      * @psalm-return array<int, array{0: trait-string, 1: string, 2: string, 3: StringableArrayObject}>
      * @phpstan-return array<int, array{0: trait-string, 1: string, 2: string, 3: StringableArrayObject<mixed>}|mixed>
      */
-    public function dataProviderTestThatTraitCallsExpectedMethod(): array
+    public static function dataProviderTestThatTraitCallsExpectedMethod(): array
     {
         self::bootKernel();
 
         $folder = self::$kernel->getProjectDir() . '/src/Rest/Traits/Actions/User/';
         $pattern = '/^.+\.php$/i';
 
-        $namespace = '\\App\\Rest\\Traits\\Actions\\User\\';
-
-        $iterator = function (string $filename) use ($folder, $namespace): array {
+        $iterator = static function (string $filename) use ($folder): array {
             $base = str_replace([$folder, DIRECTORY_SEPARATOR, '.php'], ['', '\\', ''], $filename);
 
             /** @psalm-var trait-string $class */
-            $class = $namespace . $base;
+            $class = '\\App\\Rest\\Traits\\Actions\\User\\' . $base;
 
             $parameters = [
-                $request = $this->createMock(Request::class),
+                new Request(),
             ];
 
             switch ($base) {
                 case 'CreateAction':
-                    $parameters[] = $this->createMock(RestDtoInterface::class);
+                    $parameters[] = new ApiKeyCreate();
                     break;
                 case 'PatchAction':
+                    $parameters[] = new ApiKeyPatch();
+                    $parameters[] = Uuid::uuid4()->toString();
+                    break;
                 case 'UpdateAction':
-                    $parameters[] = $this->createMock(RestDtoInterface::class);
+                    $parameters[] = new ApiKeyUpdate();
                     $parameters[] = Uuid::uuid4()->toString();
                     break;
                 case 'DeleteAction':

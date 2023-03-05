@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Validator\Constraints;
 
 use App\Validator\Constraints\Locale;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -19,9 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class LocaleTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `getTargets` method returns expected
-     */
+    #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
         self::assertSame('property', (new Locale())->getTargets());

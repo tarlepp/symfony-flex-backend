@@ -15,6 +15,8 @@ use DateTime;
 use DateTimeZone;
 use DeviceDetector\DeviceDetector;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -28,12 +30,10 @@ use Throwable;
 class LogLoginTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatGetCreatedAtReturnsExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `LogLogin::getCreatedAt` method returns expected with `$type` type
      */
+    #[DataProvider('dataProviderTestThatGetCreatedAtReturnsExpected')]
+    #[TestDox('Test that `LogLogin::getCreatedAt` method returns expected with `$type` type')]
     public function testThatGetCreatedAtReturnsExpected(
         string $type,
         Request $request,
@@ -51,12 +51,10 @@ class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserReturnsNullIfUserNotGiven
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `LogLogin::getUser` method returns `null` if user is not provided with `$type` type
      */
+    #[DataProvider('dataProviderTestThatGetUserReturnsNullIfUserNotGiven')]
+    #[TestDox('Test that `LogLogin::getUser` method returns `null` if user is not provided with `$type` type')]
     public function testThatGetUserReturnsNullIfUserNotGiven(
         string $type,
         Request $request,
@@ -68,12 +66,10 @@ class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserReturnsExpectedUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `LogLogin::getUser` method returns provided user with `$type` type
      */
+    #[DataProvider('dataProviderTestThatGetUserReturnsExpectedUser')]
+    #[TestDox('Test that `LogLogin::getUser` method returns provided user with `$type` type')]
     public function testThatGetUserReturnsExpectedUser(
         string $type,
         Request $request,
@@ -88,7 +84,7 @@ class LogLoginTest extends KernelTestCase
     /**
      * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
      */
-    public function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
+    public static function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
 
@@ -98,7 +94,7 @@ class LogLoginTest extends KernelTestCase
     /**
      * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
      */
-    public function dataProviderTestThatGetUserReturnsNullIfUserNotGiven(): Generator
+    public static function dataProviderTestThatGetUserReturnsNullIfUserNotGiven(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
 
@@ -108,7 +104,7 @@ class LogLoginTest extends KernelTestCase
     /**
      * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector, 3: User}>
      */
-    public function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
+    public static function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector(''), new User()];
 

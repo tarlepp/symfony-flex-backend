@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\EventSubscriber\DoctrineExtensionSubscriber;
 use App\Security\UserTypeIdentification;
 use Gedmo\Blameable\BlameableListener;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -26,9 +27,8 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that user is not set to `BlameableListener` when there isn't logged-in user
      */
+    #[TestDox("Test that user is not set to `BlameableListener` when there isn't logged-in user")]
     public function testThatUserIsNotSetToBlameableListenerWhenThereIsNotLoggedInUser(): void
     {
         $userTypeIdentification = $this->getUserTypeIdentification();
@@ -49,9 +49,8 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that user is set to `BlameableListener` when there is logged in user
      */
+    #[TestDox('Test that user is set to `BlameableListener` when there is logged in user')]
     public function testThatUserIsSetToBlameableListenerWhenThereIsLoggedInUser(): void
     {
         $userTypeIdentification = $this->getUserTypeIdentification();

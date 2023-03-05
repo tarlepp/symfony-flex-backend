@@ -23,5 +23,5 @@ class HealthzTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = Healthz::class;
+    protected static string $entityName = Healthz::class;
 }

@@ -11,6 +11,8 @@ namespace App\Tests\E2E\Controller\v1\Localization;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -24,12 +26,10 @@ class LanguageControllerTest extends WebTestCase
     private string $baseUrl = '/v1/localization/language';
 
     /**
-     * @dataProvider dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$method /v1/localization/language` request returns 405
      */
+    #[DataProvider('dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet')]
+    #[TestDox('Test that `$method /v1/localization/language` request returns 405')]
     public function testThatLanguageRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
         $client = $this->getTestClient();
@@ -44,9 +44,8 @@ class LanguageControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/localization/language` request returns `200`
      */
+    #[TestDox('Test that `GET /v1/localization/language` request returns `200`')]
     public function testThatLanguageRouteReturns200(): void
     {
         $client = $this->getTestClient();
@@ -61,9 +60,8 @@ class LanguageControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `/v1/localization/language` request returns expected count of languages (2)
      */
+    #[TestDox('Test that `/v1/localization/language` request returns expected count of languages (2)')]
     public function testThatLanguageRouteReturnsExpectedNumberOfLanguages(): void
     {
         $client = $this->getTestClient();
@@ -73,14 +71,14 @@ class LanguageControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-
+        self::assertJson($content);
         self::assertCount(2, JSON::decode($content));
     }
 
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet(): Generator
+    public static function dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];
         yield ['POST'];

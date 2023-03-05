@@ -12,6 +12,8 @@ use App\EventSubscriber\BodySubscriber;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -30,6 +32,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @throws JsonException
      */
+    #[TestDox('Test that `empty` body works like expected')]
     public function testThatEmptyBodyWorksLikeExpected(): void
     {
         self::bootKernel();
@@ -48,6 +51,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @throws JsonException
      */
+    #[TestDox('Test that `non` JSON content type works like expected')]
     public function testThatNonJsonContentTypeWorksLikeExpected(): void
     {
         self::bootKernel();
@@ -73,15 +77,13 @@ class BodySubscriberTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
-     *
      * @phpstan-param StringableArrayObject<mixed> $expectedParameters
      * @psalm-param StringableArrayObject $expectedParameters
      *
      * @throws JsonException
-     *
-     * @testdox Test that subscriber converts `$content` content with `$contentType` type to `$expectedParameters`.
      */
+    #[DataProvider('dataProviderTestThatJsonContentReplaceParametersAsExpected')]
+    #[TestDox('Test that subscriber converts `$content` content with `$contentType` type to `$expectedParameters`.')]
     public function testThatJsonContentReplaceParametersAsExpected(
         StringableArrayObject $expectedParameters,
         string $contentType,
@@ -113,6 +115,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @throws JsonException
      */
+    #[TestDox('Test that invalid JSON content throws an exception')]
     public function testThatInvalidJsonContentThrowsAnException(): void
     {
         $this->expectException(JsonException::class);
@@ -130,6 +133,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @throws JsonException
      */
+    #[TestDox('Test that with empty body replace is not called')]
     public function testThatWithEmptyBodyReplaceIsNotCalled(): void
     {
         self::bootKernel();
@@ -146,7 +150,11 @@ class BodySubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('replace');
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->request = $parameterBag;
 
         $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
@@ -159,7 +167,7 @@ class BodySubscriberTest extends KernelTestCase
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2:  string}>
      */
-    public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
+    public static function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
         yield [
             new StringableArrayObject([

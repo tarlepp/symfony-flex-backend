@@ -15,6 +15,7 @@ use App\Resource\LogRequestResource;
 use App\Resource\UserResource;
 use App\Utils\RequestLogger;
 use Exception;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -29,9 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RequestLoggerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that log is not created if `Request` and `Response` object are not set
-     */
+    #[TestDox('Test that log is not created if `Request` and `Response` object are not set')]
     public function testThatLogIsNotCreatedIfRequestAndResponseObjectsAreNotSet(): void
     {
         $logRequestResource = $this->getLogRequestResource();
@@ -47,9 +46,7 @@ class RequestLoggerTest extends KernelTestCase
             ->handle();
     }
 
-    /**
-     * @testdox Test that log is not created if `Request` object is not set
-     */
+    #[TestDox('Test that log is not created if `Request` object is not set')]
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
         $logRequestResource = $this->getLogRequestResource();
@@ -66,9 +63,7 @@ class RequestLoggerTest extends KernelTestCase
             ->handle();
     }
 
-    /**
-     * @testdox Test that log is not created if `Response` object is not set
-     */
+    #[TestDox('Test that log is not created if `Response` object is not set')]
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
         $logRequestResource = $this->getLogRequestResource();
@@ -85,9 +80,7 @@ class RequestLoggerTest extends KernelTestCase
             ->handle();
     }
 
-    /**
-     * @testdox Test that log is created when `Request` and `Response` object are set
-     */
+    #[TestDox('Test that log is created when `Request` and `Response` object are set')]
     public function testThatResourceSaveMethodIsCalled(): void
     {
         $logRequestResource = $this->getLogRequestResource();
@@ -106,9 +99,7 @@ class RequestLoggerTest extends KernelTestCase
             ->handle();
     }
 
-    /**
-     * @testdox Test that `LoggerInterface::error` method is called when exception is thrown
-     */
+    #[TestDox('Test that `LoggerInterface::error` method is called when exception is thrown')]
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
         $logRequestResource = $this->getLogRequestResource();
@@ -132,9 +123,7 @@ class RequestLoggerTest extends KernelTestCase
             ->handle();
     }
 
-    /**
-     * @testdox Test that `UserResource::getReference` method is called when `userId` is set
-     */
+    #[TestDox('Test that `UserResource::getReference` method is called when `userId` is set')]
     public function testThatUserResourceMethodIsCalledWhenUserIdIsSet(): void
     {
         $logRequestResource = $this->getLogRequestResource();
@@ -165,9 +154,7 @@ class RequestLoggerTest extends KernelTestCase
             ->handle();
     }
 
-    /**
-     * @testdox Test that `ApiKeyResource::getReference` method is called when `userId` is set
-     */
+    #[TestDox('Test that `ApiKeyResource::getReference` method is called when `userId` is set')]
     public function testThatApiKeyResourceMethodIsCalledWhenUserIdIsSet(): void
     {
         $logRequestResource = $this->getLogRequestResource();

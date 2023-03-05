@@ -20,6 +20,8 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -37,9 +39,8 @@ class CreateMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `createMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
+    #[TestDox("Test that `createMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -47,22 +48,19 @@ class CreateMethodTest extends KernelTestCase
 
         $this->expectException(LogicException::class);
 
-        /* @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageMatches(
-            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
-        );
-        /* @codingStandardsIgnoreEnd */
+        $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
+            '(.*)ControllerInterface\'/';
+
+        $this->expectExceptionMessageMatches($regex);
 
         $inValidTestClassMock->createMethod(Request::create('/', 'POST'), $restDtoMock);
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `createMethod` throws an exception when using `$httpMethod` HTTP method
      */
+    #[DataProvider('dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod')]
+    #[TestDox('Test that `createMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -83,12 +81,10 @@ class CreateMethodTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatTraitHandlesException
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `createMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
+    #[DataProvider('dataProviderTestThatTraitHandlesException')]
+    #[TestDox('Test that `createMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatHandleRestMethodExceptionIsCalled(Throwable $exception, int $expectedCode): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -117,9 +113,8 @@ class CreateMethodTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `createMethod` method calls expected service methods
      */
+    #[TestDox('Test that `createMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
         $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -152,7 +147,7 @@ class CreateMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
+    public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
         yield ['GET'];
@@ -167,7 +162,7 @@ class CreateMethodTest extends KernelTestCase
     /**
      * @return Generator<array{0: Throwable, 1: int}>
      */
-    public function dataProviderTestThatTraitHandlesException(): Generator
+    public static function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];

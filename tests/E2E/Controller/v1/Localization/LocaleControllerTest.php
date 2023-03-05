@@ -11,6 +11,8 @@ namespace App\Tests\E2E\Controller\v1\Localization;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
@@ -24,12 +26,10 @@ class LocaleControllerTest extends WebTestCase
     private string $baseUrl = '/v1/localization/locale';
 
     /**
-     * @dataProvider dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$method /v1/localization/locale` request returns `405`
      */
+    #[DataProvider('dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet')]
+    #[TestDox('Test that `$method /v1/localization/locale` request returns `405`')]
     public function testThatLocaleRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
         $client = $this->getTestClient();
@@ -44,9 +44,8 @@ class LocaleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/localization/locale` request returns `200`
      */
+    #[TestDox('Test that `GET /v1/localization/locale` request returns `200`')]
     public function testThatLocaleRouteReturns200(): void
     {
         $client = $this->getTestClient();
@@ -61,9 +60,8 @@ class LocaleControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/localization/locale` request returns expected count of locales (2)
      */
+    #[TestDox('Test that `GET /v1/localization/locale` request returns expected count of locales (2)')]
     public function testThatLocaleRouteReturnsExpectedNumberOfLocales(): void
     {
         $client = $this->getTestClient();
@@ -79,7 +77,7 @@ class LocaleControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string}>
      */
-    public function dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet(): Generator
+    public static function dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];
         yield ['POST'];

@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Tests\Functional\Repository;
 
 use App\Entity\LogLoginFailure;
-use App\Entity\User;
 use App\Repository\LogLoginFailureRepository;
 use App\Repository\UserRepository;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -25,22 +25,21 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `clear` method works as expected
      */
+    #[TestDox('Test that `clear` method works as expected')]
     public function testThatClearMethodWorksAssExpected(): void
     {
         self::bootKernel();
 
+        /** @psalm-var UserRepository $userRepository */
         $userRepository = self::getContainer()->get(UserRepository::class);
-        $logLoginFailureRepository = self::getContainer()->get(LogLoginFailureRepository::class);
 
-        self::assertInstanceOf(UserRepository::class, $userRepository);
-        self::assertInstanceOf(LogLoginFailureRepository::class, $logLoginFailureRepository);
+        /** @psalm-var LogLoginFailureRepository $logLoginFailureRepository */
+        $logLoginFailureRepository = self::getContainer()->get(LogLoginFailureRepository::class);
 
         $user = $userRepository->find('20000000-0000-1000-8000-000000000001');
 
-        self::assertInstanceOf(User::class, $user);
+        self::assertNotNull($user);
 
         $entity = new LogLoginFailure($user);
 

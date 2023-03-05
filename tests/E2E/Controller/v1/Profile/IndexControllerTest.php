@@ -14,8 +14,11 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
+use function property_exists;
 use function str_pad;
 
 /**
@@ -30,9 +33,8 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile` request returns `401` without Json Web Token
      */
+    #[TestDox('Test that `GET /v1/profile` request returns `401` without Json Web Token')]
     public function testThatProfileActionReturns401WithoutToken(): void
     {
         $client = $this->getTestClient();
@@ -46,11 +48,13 @@ class IndexControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -59,12 +63,10 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatProfileActionReturnExpectedWithValidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile` request returns `200` with valid user `$username` + `$password`
      */
+    #[DataProvider('dataProviderTestThatProfileActionReturnExpectedWithValidUser')]
+    #[TestDox('Test that `GET /v1/profile` request returns `200` with valid user `$username` + `$password`')]
     public function testThatProfileActionReturnExpectedWithValidUser(string $username, string $password): void
     {
         $client = $this->getTestClient($username, $password);
@@ -79,9 +81,8 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile` request returns `401` with invalid API key token
      */
+    #[TestDox('Test that `GET /v1/profile` request returns `401` with invalid API key token')]
     public function testThatProfileActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -95,11 +96,13 @@ class IndexControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -108,12 +111,10 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken
-     *
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile` request returns `401` with valid `$token` API key token
      */
+    #[DataProvider('dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken')]
+    #[TestDox('Test that `GET /v1/profile` request returns `401` with valid `$token` API key token')]
     public function testThatProfileActionReturnsExpectedWithValidApiKeyToken(string $token): void
     {
         $client = $this->getApiKeyClient($token);
@@ -127,11 +128,13 @@ class IndexControllerTest extends WebTestCase
 
         $responseContent = JSON::decode($content);
 
+        self::assertIsObject($responseContent);
+
         $info = "\nResponse:\n" . $response;
 
-        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
             $responseContent->message,
@@ -140,9 +143,9 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1:  string}>
+     * @return Generator<array-key, array{0: string, 1:  string}>
      */
-    public function dataProviderTestThatProfileActionReturnExpectedWithValidUser(): Generator
+    public static function dataProviderTestThatProfileActionReturnExpectedWithValidUser(): Generator
     {
         yield ['john', 'password'];
 
@@ -166,13 +169,13 @@ class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<array-key, array{0: string}>
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
+    public static function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $rolesService);
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {
