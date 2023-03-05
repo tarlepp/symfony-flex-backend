@@ -56,11 +56,6 @@ class UserTypeTest extends TypeTestCase
 
         $localization
             ->expects(self::once())
-            ->method('getLanguages')
-            ->willReturn(['en', 'fi']);
-
-        $localization
-            ->expects(self::once())
             ->method('getLocales')
             ->willReturn(['en', 'fi']);
 
@@ -163,7 +158,7 @@ class UserTypeTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return  MockObject&UserGroupResource
+     * @phpstan-return MockObject&UserGroupResource
      */
     private function getUserGroupResource(): MockObject
     {
@@ -177,7 +172,7 @@ class UserTypeTest extends TypeTestCase
     }
 
     /**
-     * @phpstan-return  MockObject&Localization
+     * @phpstan-return MockObject&Localization
      */
     private function getLocalization(): MockObject
     {
