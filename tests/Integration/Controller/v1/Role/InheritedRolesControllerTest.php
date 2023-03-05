@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Controller\v1\Role;
 use App\Controller\v1\Role\InheritedRolesController;
 use App\Entity\Role;
 use App\Security\RolesService;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -21,9 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class InheritedRolesControllerTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `__invoke($role)` method calls expected service methods
-     */
+    #[TestDox('Test that `__invoke($role)` method calls expected service methods')]
     public function testThatInvokeMethodCallsExpectedMethods(): void
     {
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();

@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Resource\ResourceCollection;
 use App\Resource\UserResource;
 use App\ValueResolver\EntityValueResolver;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,9 +69,8 @@ class EntityValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `resolve()` method returns empty array when argument name is wrong
      */
+    #[TestDox('Test that `resolve()` method returns empty array when argument name is wrong')]
     public function testThatResolveReturnEmptyArrayWhenArgumentNameIsWrong(): void
     {
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();

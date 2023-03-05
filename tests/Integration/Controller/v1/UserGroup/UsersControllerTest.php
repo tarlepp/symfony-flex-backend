@@ -14,6 +14,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -28,9 +29,8 @@ class UsersControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `__invoke(Request $request, UserGroup $userGroup)` method calls expected service methods
      */
+    #[TestDox('Test that `__invoke(Request $request, UserGroup $userGroup)` method calls expected service methods')]
     public function testThatInvokeMethodCallsExpectedMethods(): void
     {
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();

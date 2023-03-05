@@ -23,5 +23,5 @@ class UserGroupTest extends EntityTestCase
     /**
      * @var class-string
      */
-    protected string $entityName = UserGroup::class;
+    protected static string $entityName = UserGroup::class;
 }

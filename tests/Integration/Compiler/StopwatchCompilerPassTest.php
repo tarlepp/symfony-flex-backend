@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Compiler;
 
 use App\Compiler\StopwatchCompilerPass;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,9 +23,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class StopwatchCompilerPassTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `findTaggedServiceIds` method is called expected times
-     */
+    #[TestDox('Test that `findTaggedServiceIds` method is called expected times')]
     public function testThatFindTaggedServiceIdsMethodIsCalled(): void
     {
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
@@ -37,9 +36,7 @@ class StopwatchCompilerPassTest extends KernelTestCase
         (new StopwatchCompilerPass())->process($container);
     }
 
-    /**
-     * @testdox Test that no other container methods are called when tagged service is not supported
-     */
+    #[TestDox('Test that no other container methods are called when tagged service is not supported')]
     public function testThatIfServiceStartsWithAppNoOtherContainerMethodsAreCalled(): void
     {
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();

@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\Role;
 use App\Entity\UserGroup;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -20,9 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class RoleTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `Role::getUserGroups` returns expected
-     */
+    #[TestDox('Test that `Role::getUserGroups` returns expected')]
     public function testThatGetUserGroupsWorksLikeExpected(): void
     {
         $userGroup = (new UserGroup())

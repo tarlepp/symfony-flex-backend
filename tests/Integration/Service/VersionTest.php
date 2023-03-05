@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Service;
 
 use App\Service\Version;
 use Exception;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -23,9 +24,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class VersionTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `LoggerInterface::error` method is called when `CacheInterface::get` throws an exception
-     */
+    #[TestDox('Test that `LoggerInterface::error` method is called when `CacheInterface')]
     public function testThatLoggerIsCalledWhenCacheThrowsAnException(): void
     {
         $exception = new Exception('test exception');

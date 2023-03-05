@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\ApiKey;
 use App\Enum\Role;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function strlen;
 
@@ -21,17 +22,13 @@ use function strlen;
  */
 class ApiKeyTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that token is generated on creation of ApiKey entity
-     */
+    #[TestDox('Test that token is generated on creation of ApiKey entity')]
     public function testThatTokenIsGenerated(): void
     {
         self::assertSame(40, strlen((new ApiKey())->getToken()));
     }
 
-    /**
-     * @testdox Test that ApiKey entity has `ROLE_API` role
-     */
+    #[TestDox('Test that ApiKey entity has `ROLE_API` role')]
     public function testThatGetRolesContainsExpectedRole(): void
     {
         self::assertContainsEquals(Role::API->value, (new ApiKey())->getRoles());

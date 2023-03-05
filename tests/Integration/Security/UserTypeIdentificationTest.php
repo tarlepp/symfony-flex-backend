@@ -15,8 +15,9 @@ use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
-use Doctrine\ORM\NonUniqueResultException;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
@@ -35,10 +36,10 @@ use Throwable;
 class UserTypeIdentificationTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid
-     *
-     * @testdox Test that `getApiKey` returns null when using `$token` as a token
+     * @throws Throwable
      */
+    #[DataProvider('dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid')]
+    #[TestDox('Test that `getApiKey` returns null when using `$token` as a token')]
     public function testThatGetApiKeyReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -56,8 +57,9 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getApiKey` returns correct user
+     * @throws Throwable
      */
+    #[TestDox('Test that `getApiKey` returns correct user')]
     public function testThatGetApiKeyReturnsExpectedApiKey(): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -86,12 +88,10 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid
-     *
-     * @throws NonUniqueResultException
-     *
-     * @testdox Test that `getUser` returns null when using `$token` as a token
+     * @throws Throwable
      */
+    #[DataProvider('dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid')]
+    #[TestDox('Test that `getUser` returns null when using `$token` as a token')]
     public function testThatGetUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -110,9 +110,8 @@ class UserTypeIdentificationTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `getUser` returns correct user
      */
+    #[TestDox('Test that `getUser` returns correct user')]
     public function testThatGetUserReturnsExpectedUser(): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -141,10 +140,10 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid
-     *
-     * @testdox Test that `getIdentity` returns null when using `$token` as a token
+     * @throws Throwable
      */
+    #[DataProvider('dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid')]
+    #[TestDox('Test that `getIdentity` returns null when using `$token` as a token')]
     public function testThatGetIdentityReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -166,8 +165,9 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getIdentity` returns correct `SecurityUser` instance
+     * @throws Throwable
      */
+    #[TestDox('Test that `getIdentity` returns correct `SecurityUser` instance')]
     public function testThatGetIdentityReturnsExpectedSecurityUser(): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -189,8 +189,9 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getIdentity` returns correct `ApiKeyUser` instance
+     * @throws Throwable
      */
+    #[TestDox('Test that `getIdentity` returns correct `ApiKeyUser` instance')]
     public function testThatGetIdentityReturnsExpectedApiKeyUser(): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -212,10 +213,10 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid
-     *
-     * @testdox Test that `getApiKeyUser` returns null when using `$token` as a token
+     * @throws Throwable
      */
+    #[DataProvider('dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid')]
+    #[TestDox('Test that `getApiKeyUser` returns null when using `$token` as a token')]
     public function testThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -237,8 +238,9 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getApiKeyUser` returns correct user
+     * @throws Throwable
      */
+    #[TestDox('Test that `getApiKeyUser` returns correct user')]
     public function testThatGetApiKeyUserReturnsExpectedUser(): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -264,10 +266,10 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid
-     *
-     * @testdox Test that `getSecurityUser` returns null when using `$token` as a token
+     * @throws Throwable
      */
+    #[DataProvider('dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid')]
+    #[TestDox('Test that `getSecurityUser` returns null when using `$token` as a token')]
     public function testThatGetSecurityUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -289,8 +291,9 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getSecurityUser` returns correct user
+     * @throws Throwable
      */
+    #[TestDox('Test that `getSecurityUser` returns correct user')]
     public function testThatGetSecurityUserReturnsExpectedUser(): void
     {
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
@@ -318,47 +321,47 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
      */
-    public function dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid(): Generator
+    public static function dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid(): Generator
     {
-        return $this->getInvalidTokens();
+        return self::getInvalidTokens();
     }
 
     /**
      * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
      */
-    public function dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid(): Generator
+    public static function dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid(): Generator
     {
-        return $this->getInvalidTokens();
+        return self::getInvalidTokens();
     }
 
     /**
      * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
      */
-    public function dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid(): Generator
+    public static function dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid(): Generator
     {
-        return $this->getInvalidTokens();
+        return self::getInvalidTokens();
     }
 
     /**
      * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
      */
-    public function dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(): Generator
+    public static function dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(): Generator
     {
-        return $this->getInvalidTokens();
+        return self::getInvalidTokens();
     }
 
     /**
      * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
      */
-    public function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
+    public static function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
-        return $this->getInvalidTokens();
+        return self::getInvalidTokens();
     }
 
     /**
      * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
      */
-    private function getInvalidTokens(): Generator
+    private static function getInvalidTokens(): Generator
     {
         yield [null];
 

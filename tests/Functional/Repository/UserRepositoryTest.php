@@ -11,6 +11,7 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\Tests\PhpUnitUtil;
+use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function array_fill;
@@ -124,11 +125,10 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @depends testThatIsUsernameAvailableMethodReturnsExpected
-     * @depends testThatIsEmailAvailableMethodReturnsExpected
-     *
      * @throws Throwable
      */
+    #[Depends('testThatIsUsernameAvailableMethodReturnsExpected')]
+    #[Depends('testThatIsEmailAvailableMethodReturnsExpected')]
     public function testThatResetMethodDeletesAllRecords(): void
     {
         self::assertSame(6, $this->getRepository()->countAdvanced());
@@ -136,6 +136,9 @@ class UserRepositoryTest extends KernelTestCase
         self::assertSame(0, $this->getRepository()->countAdvanced());
     }
 
+    /**
+     * @throws Throwable
+     */
     private function getRepository(): UserRepository
     {
         static $cache;
@@ -143,9 +146,8 @@ class UserRepositoryTest extends KernelTestCase
         if ($cache === null) {
             self::bootKernel();
 
+            /** @psalm-var UserRepository $cache */
             $cache = self::getContainer()->get(UserRepository::class);
-
-            self::assertInstanceOf(UserRepository::class, $cache);
         }
 
         return $cache;

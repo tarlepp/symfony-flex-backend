@@ -17,6 +17,8 @@ use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Exception;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -29,20 +31,16 @@ use Throwable;
 class ApiKeyUserTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatGetRolesReturnsExpected
-     *
      * @phpstan-param StringableArrayObject<array<int, string>> $expectedRoles
      * @psalm-param StringableArrayObject $expectedRoles
      *
      * @throws Throwable
-     *
-     * @testdox Test that `$apiKey` has expected roles `$expectedRoles`
      */
+    #[DataProvider('dataProviderTestThatGetRolesReturnsExpected')]
+    #[TestDox('Test that `$apiKey` has expected roles `$expectedRoles`')]
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
     {
         $rolesService = self::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $rolesService);
 
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService->getInheritedRoles($apiKey->getRoles()));
 
@@ -55,11 +53,11 @@ class ApiKeyUserTest extends KernelTestCase
      *
      * @throws Throwable
      */
-    public function dataProviderTestThatGetRolesReturnsExpected(): Generator
+    public static function dataProviderTestThatGetRolesReturnsExpected(): Generator
     {
-        $userGroupResource = self::getContainer()->get(UserGroupResource::class);
+        self::bootKernel();
 
-        self::assertInstanceOf(UserGroupResource::class, $userGroupResource);
+        $userGroupResource = static::getContainer()->get(UserGroupResource::class);
 
         yield [
             (new ApiKey())->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED'))),

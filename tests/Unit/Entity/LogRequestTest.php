@@ -12,6 +12,7 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use DateTimeImmutable;
 use DateTimeZone;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -25,9 +26,8 @@ class LogRequestTest extends KernelTestCase
 {
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogRequest::getCreatedAt` method returns expected
      */
+    #[TestDox('Test that `LogRequest::getCreatedAt` method returns expected')]
     public function testThatGetCreatedAtReturnsExpected(): void
     {
         $entity = new LogRequest([]);
@@ -43,9 +43,8 @@ class LogRequestTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogRequest::getUser` method returns `null` if user is not provided
      */
+    #[TestDox('Test that `LogRequest::getUser` method returns `null` if user is not provided')]
     public function testThatGetUserReturnsNullIfUserNotGiven(): void
     {
         $entity = new LogRequest([]);
@@ -55,9 +54,8 @@ class LogRequestTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `LogRequest::getUser` method returns provided user
      */
+    #[TestDox('Test that `LogRequest::getUser` method returns provided user')]
     public function testThatGetUserReturnsExpectedUser(): void
     {
         $user = new User();

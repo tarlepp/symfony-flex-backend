@@ -15,6 +15,8 @@ use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -32,9 +34,8 @@ class RolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/roles` request returns `401` without Json Web Token
      */
+    #[TestDox('Test that `GET /v1/profile/roles` request returns `401` without Json Web Token')]
     public function testThatRolesActionReturns401WithoutToken(): void
     {
         $client = $this->getTestClient();
@@ -63,9 +64,8 @@ class RolesControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/roles` request returns `401` with invalid API Key token
      */
+    #[TestDox('Test that `GET /v1/profile/roles` request returns `401` with invalid API Key token')]
     public function testThatRolesActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -94,12 +94,10 @@ class RolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRolesActionReturnsExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/roles` request returns expected `$e` roles with valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRolesActionReturnsExpected')]
+    #[TestDox('Test that `GET /v1/profile/roles` request returns expected `$e` roles with valid user `$u` + `$p`')]
     public function testThatRolesActionReturnsExpected(string $u, string $p, StringableArrayObject $e): void
     {
         $client = $this->getTestClient($u, $p);
@@ -114,12 +112,10 @@ class RolesControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey
-     *
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/roles` request returns `401` with valid API key `$token` token
      */
+    #[DataProvider('dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey')]
+    #[TestDox('Test that `GET /v1/profile/roles` request returns `401` with valid API key `$token` token')]
     public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);
@@ -150,7 +146,7 @@ class RolesControllerTest extends WebTestCase
     /**
      * @return Generator<array-key, array{0: string, 1: string, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatRolesActionReturnsExpected(): Generator
+    public static function dataProviderTestThatRolesActionReturnsExpected(): Generator
     {
         yield [
             'john',
@@ -222,11 +218,9 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      */
-    public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
+    public static function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $rolesService);
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {

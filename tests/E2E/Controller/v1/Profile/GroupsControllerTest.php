@@ -15,6 +15,8 @@ use App\Utils\Tests\StringableArrayObject;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Throwable;
 use function array_map;
@@ -33,9 +35,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` without Json Web Token
      */
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` without Json Web Token')]
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
         $client = $this->getTestClient();
@@ -65,9 +66,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` with invalid API key token
      */
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with invalid API key token')]
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -96,12 +96,10 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGroupsActionReturnExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatGroupsActionReturnExpected')]
+    #[TestDox('Test that `GET /v1/profile/groups` request returns expected groups `$e` with `$u` + `$p`')]
     public function testThatGroupsActionReturnExpected(
         string $u,
         string $p,
@@ -142,12 +140,10 @@ class GroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey
-     *
      * @throws JsonException
-     *
-     * @testdox Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token
      */
+    #[DataProvider('dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey')]
+    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token')]
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);
@@ -178,7 +174,7 @@ class GroupsControllerTest extends WebTestCase
     /**
      * @return Generator<array-key, array{0: string, 1: string, 2: StringableArrayObject}>
      */
-    public function dataProviderTestThatGroupsActionReturnExpected(): Generator
+    public static function dataProviderTestThatGroupsActionReturnExpected(): Generator
     {
         yield ['john', 'password', new StringableArrayObject([])];
         yield ['john-logged', 'password-logged', new StringableArrayObject(['ROLE_LOGGED'])];
@@ -202,11 +198,9 @@ class GroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      */
-    public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
+    public static function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
         $rolesService = self::getContainer()->get(RolesService::class);
-
-        self::assertInstanceOf(RolesService::class, $rolesService);
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {

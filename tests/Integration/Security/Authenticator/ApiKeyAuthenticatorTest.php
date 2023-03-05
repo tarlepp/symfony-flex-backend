@@ -16,6 +16,8 @@ use App\Security\SecurityUser;
 use App\Utils\JSON;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -26,6 +28,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Throwable;
+use function property_exists;
 
 /**
  * Class ApiKeyAuthenticatorTest
@@ -36,12 +39,10 @@ use Throwable;
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatSupportReturnsExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `supports` method returns `$expected` for request `$request`
      */
+    #[DataProvider('dataProviderTestThatSupportReturnsExpected')]
+    #[TestDox('Test that `supports` method returns `$expected` for request `$request`')]
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
         $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
@@ -53,9 +54,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         self::assertSame($expected, $authenticator->supports($request));
     }
 
-    /**
-     * @testdox Test that `authenticate` method returns expected `passport` which have `UserBadge` set
-     */
+    #[TestDox('Test that `authenticate` method returns expected `passport` which have `UserBadge` set')]
     public function testThatAuthenticateMethodCallsExpectedServiceMethodAndReturnsExpectedBadge(): void
     {
         $apiKey = new ApiKey();
@@ -85,9 +84,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         self::assertTrue($badge->isResolved());
     }
 
-    /**
-     * @testdox Test that `authenticate` method throws an exception if API key is not found
-     */
+    #[TestDox('Test that `authenticate` method throws an exception if API key is not found')]
     public function testThatAuthenticateMethodThrowsAnExceptionWhenTokenNotFound(): void
     {
         $this->expectException(UserNotFoundException::class);
@@ -102,9 +99,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `onAuthenticationSuccess` method return `null` when using anonymous token
      */
+    #[TestDox('Test that `onAuthenticationSuccess` method return `null` when using anonymous token')]
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
@@ -120,6 +116,10 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         ));
     }
 
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `onAuthenticationFailure` method returns expected response')]
     public function testThatOnAuthenticationFailureMethodReturnsExpectedResponse(): void
     {
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
@@ -136,16 +136,19 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         $content = $response->getContent();
 
         self::assertIsString($content);
+        self::assertJson($content);
 
         $decoded = JSON::decode($content);
 
+        self::assertIsObject($decoded);
+        self::assertTrue(property_exists($decoded, 'message'));
         self::assertSame('Invalid API key', $decoded->message);
     }
 
     /**
      * @return Generator<array{0: boolean, 1: Request}>
      */
-    public function dataProviderTestThatSupportReturnsExpected(): Generator
+    public static function dataProviderTestThatSupportReturnsExpected(): Generator
     {
         yield [false, new Request()];
 

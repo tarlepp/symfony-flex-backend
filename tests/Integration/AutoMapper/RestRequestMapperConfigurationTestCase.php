@@ -12,6 +12,7 @@ use App\AutoMapper\RestAutoMapperConfiguration;
 use AutoMapperPlus\AutoMapperPlusBundle\AutoMapperConfiguratorInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
 use AutoMapperPlus\Configuration\MappingInterface;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function count;
 
@@ -38,9 +39,7 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
      */
     protected static array $requestMapperClasses;
 
-    /**
-     * @testdox Test that `AutoMapperConfiguration` instance is created
-     */
+    #[TestDox('Test that `AutoMapperConfiguration` instance is created')]
     public function testThatInstanceCanBeCreated(): void
     {
         $requestMapper = $this->getMockBuilder($this->requestMapper)
@@ -50,9 +49,7 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
         self::assertInstanceOf(RestAutoMapperConfiguration::class, new $this->autoMapperConfiguration($requestMapper));
     }
 
-    /**
-     * @testdox Test that `AutoMapperConfiguration` instance is configured as expected
-     */
+    #[TestDox('Test that `AutoMapperConfiguration` instance is configured as expected')]
     public function testThatConfigureMethodIsCallingExpectedMethods(): void
     {
         $requestMapper = $this->getMockBuilder($this->requestMapper)

@@ -15,6 +15,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
 use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function array_walk;
 use function implode;
@@ -27,9 +28,7 @@ use function implode;
  */
 class SchemaTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that entity mappings are valid
-     */
+    #[TestDox('Test that entity mappings are valid')]
     public function testThatMappingsAreValid(): void
     {
         $errors = $this->getValidator()->validateMapping();
@@ -45,9 +44,7 @@ class SchemaTest extends KernelTestCase
         self::assertEmpty($errors, implode("\n", $messages));
     }
 
-    /**
-     * @testdox Test that database schema is sync with entity metadata
-     */
+    #[TestDox('Test that database schema is sync with entity metadata')]
     public function testThatSchemaInSyncWithMetadata(): void
     {
         self::assertTrue(

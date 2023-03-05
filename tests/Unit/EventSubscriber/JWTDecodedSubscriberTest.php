@@ -10,6 +10,7 @@ namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\JWTDecodedSubscriber;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -20,9 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class JWTDecodedSubscriberTest extends KernelTestCase
 {
-    /**
-     * @testdox Test that `getSubscribedEvents` method returns expected
-     */
+    #[TestDox('Test that `getSubscribedEvents` method returns expected')]
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [

@@ -14,6 +14,8 @@ use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
@@ -43,9 +45,8 @@ class AttachUserControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user_group/{id}/user/{id}` request returns `401` for non-logged in user
      */
+    #[TestDox('Test that `POST /v1/user_group/{id}/user/{id}` request returns `401` for non-logged in user')]
     public function testThatAttachUserGroupReturns401(): void
     {
         $groupUuid = LoadUserGroupData::$uuids['Role-root'];
@@ -62,12 +63,10 @@ class AttachUserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAttachUserActionReturns403ForInvalidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user_group/{id}/user/{id}` request returns `403` for not root user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatAttachUserActionReturns403ForInvalidUser')]
+    #[TestDox('Test that `POST /v1/user_group/{id}/user/{id}` request returns `403` for not root user `$u` + `$p`')]
     public function testThatAttachUserActionReturns403ForInvalidUser(string $u, string $p): void
     {
         $groupUuid = LoadUserGroupData::$uuids['Role-root'];
@@ -89,12 +88,10 @@ class AttachUserControllerTest extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatAttachUserActionWorksAsExpected
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `POST /v1/user_group/{id}/user/{id}` request returns `$e` for root user
      */
+    #[DataProvider('dataProviderTestThatAttachUserActionWorksAsExpected')]
+    #[TestDox('Test that `POST /v1/user_group/{id}/user/{id}` request returns `$e` for root user')]
     public function testThatAttachUserActionWorksAsExpected(int $e): void
     {
         $groupUuid = LoadUserGroupData::$uuids['Role-root'];
@@ -114,7 +111,7 @@ class AttachUserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: string, 1: string}>
      */
-    public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
+    public static function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
 
@@ -138,7 +135,7 @@ class AttachUserControllerTest extends WebTestCase
     /**
      * @return Generator<array{0: int}>
      */
-    public function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
+    public static function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
     {
         yield [201];
         yield [200];

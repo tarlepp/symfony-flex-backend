@@ -27,7 +27,6 @@ class LogRequestRepositoryTest extends KernelTestCase
     {
         $repository = self::getContainer()->get(LogRequestRepository::class);
 
-        self::assertInstanceOf(LogRequestRepository::class, $repository);
         self::assertSame(0, $repository->cleanHistory());
     }
 }
