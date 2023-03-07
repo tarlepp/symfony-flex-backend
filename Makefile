@@ -472,21 +472,18 @@ else
 	$(ALL_DONE)
 endif
 
+clear: ## Clean vendor and tool dependencies
+clear: info_msg := @printf $(_TITLE) "OK" "Clearing vendor dependencies"
+clear: info
+	@rm -rf vendor
+	@${MAKE} clear-tools
+
 clear-tools: ## Clears all tools dependencies
 clear-tools: info_msg := @printf $(_TITLE) "OK" "Clearing tools dependencies"
 clear-tools: info
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@find -type d -name vendor | grep tools | xargs rm -rf
-	@printf $(_TITLE) "OK" "remember to run 'make install/update' command after this"
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make clear-tools
+	@printf $(_TITLE) "OK" "remember to restart your containers after this"
 	$(ALL_DONE)
-endif
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
 check-dependencies-latest: info_msg := @printf $(_TITLE) "OK" "Checking vendor dependencies (latest)"
