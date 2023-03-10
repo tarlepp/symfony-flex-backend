@@ -8,7 +8,7 @@
 		"liuggio/fastest": "1.10.0",
 		"phpunit/php-code-coverage": "10.0.1",
 		"phpunit/phpcov": "9.0.0",
-		"phpunit/phpunit": "10.0.14",
+		"phpunit/phpunit": "10.0.15",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.2.7",
 		"symfony/phpunit-bridge": "6.2.7"
