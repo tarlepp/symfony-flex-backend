@@ -91,15 +91,22 @@ application:
 By default `make start` / `docker-compose up` command starts all the containers
 and exposes following ports on `localhost` on your host machine:
 
-* symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
-  * PHP-FPM status page -  [http://localhost:8000/status](http://localhost:8000/status)
+* symfony-backend-nginx - [https://localhost:8000](https://localhost:8000) (nginx)
+  * PHP-FPM status page -  [https://localhost:8000/status](https://localhost:8000/status)
+  * SSL with selfsigned certificates
+* symfony-backend-nginx - [http://localhost:8080](http://localhost:8080) (nginx)
+  * PHP-FPM status page -  [http://localhost:8080/status](http://localhost:8080/status)
+  * Normal HTTP
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
 * symfony-backend-mariadb - [http://localhost:33060](http://localhost:33060) (mariadb)
 * symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
 * symfony-backend-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
 
-And this application is usable within your browser on `http://localhost:8000`
-address.
+And this application is usable within your browser on `https://localhost:8000`
+address. When you first time open that site you will see "Your connection is
+not private" warning - see [this](./docker/nginx/ssl/README.md) to resolve that.
+
+Another choice is to use `http://localhost:8080` which is not using SSL.
 
 MariaDB credentials:
 

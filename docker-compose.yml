@@ -29,9 +29,11 @@ services:
         depends_on:
             - php
         ports:
-            - "8000:80"
+            - "8080:80"
+            - "8000:443"
         volumes:
             - ./:/app:cached
+            - ./docker/nginx/ssl/:/etc/nginx/ssl/:ro
         tmpfs:
             - /app/var/:uid=$HOST_UID,gid=$HOST_GID
 
