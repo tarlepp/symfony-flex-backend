@@ -19,8 +19,8 @@ Note that this directory contains following SSL certification files:
 * [tls.csr](tls.csr)
 * [tls.key](tls.key)
 
-And these are just for _local_ development environment and these should be
-used in _production_ environment. These certificates are valid until 2050,
+And these are just for _local_ development environment and these should **not**
+be used in _production_ environment. These certificates are valid until 2050,
 so I think that is long enough - and if not I'll update those certificates.
 
 Because application is running on `https` by default now, you will see
