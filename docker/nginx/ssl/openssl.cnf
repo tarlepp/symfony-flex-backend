@@ -1,0 +1,12 @@
+# Extensions to add to a certificate request
+basicConstraints = CA:FALSE
+authorityKeyIdentifier = keyid:always, issuer:always
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = *.localhost
+DNS.2 = localhost
