@@ -36,6 +36,9 @@ For that second option see eg.
 [this](https://dgu2000.medium.com/working-with-self-signed-certificates-in-chrome-walkthrough-edition-a238486e6858)
 article - Specially that `Step 4: Adding CA as trusted to Chrome` part.
 
+Also [this](https://www.pico.net/kb/how-do-you-get-chrome-to-accept-a-self-signed-certificate/)
+article should help you with that process.
+
 ---
 
 [Back to main README.md](../../../README.md)
