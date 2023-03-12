@@ -86,6 +86,7 @@ ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
 fish                        # Get fish inside PHP container
 generate-jwt-keys           # Generates JWT auth keys
+generate-ssl-cert           # Generate self signed SSL certificates
 infection                   # Runs Infection to codebase
 install-bin                 # Install composer bin dependencies
 lint-configuration          # Lint current defined `application.json` that it

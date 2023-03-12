@@ -836,3 +836,11 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker rmi $$(docker images -q)
 	$(ALL_DONE)
 endif
+
+generate-ssl-cert: ## Generate self signed SSL certificates
+ifeq ($(INSIDE_DOCKER), 1)
+	$(WARNING_HOST)
+else
+	@echo "\033[32mGenerating self signed SSL certificates\033[39m"
+	@cd docker/nginx/ssl && ./create-keys.sh
+endif
