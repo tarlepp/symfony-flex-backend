@@ -168,8 +168,9 @@ jobs:
       - name: Run PHPStan static analysis tool
         run: make phpstan-github
 
-      - name: Run `phploc` to collect LOC stats
-        run: make phploc
+      # Disabled this because of - https://github.com/nunomaduro/phpinsights/issues/622
+      #- name: Run `phploc` to collect LOC stats
+      #  run: make phploc
 
       - name: Run `PHP Insights` static analysis tool
         run: make phpinsights
