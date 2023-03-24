@@ -27,7 +27,7 @@
 		"ext-pdo": "*",
 		"ext-random": "*",
 		"doctrine/annotations": "1.14.3",
-		"doctrine/doctrine-bundle": "2.8.3",
+		"doctrine/doctrine-bundle": "2.9.0",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
 		"doctrine/orm": "2.14.1",
 		"gedmo/doctrine-extensions": "3.11.1",
