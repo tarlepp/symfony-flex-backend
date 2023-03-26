@@ -44,11 +44,11 @@ class SearchTermTest extends KernelTestCase
     #[TestDox('Test that `getCriteria` method returns `$expected` with given `$inputArguments` arguments')]
     public function testThatReturnedCriteriaIsExpected(
         StringableArrayObject $inputArguments,
-        StringableArrayObject | null $expected
+        StringableArrayObject|null $expected
     ): void {
         self::assertSame(
             $expected?->getArrayCopy(),
-            call_user_func_array([SearchTerm::class, 'getCriteria'], $inputArguments->getArrayCopy())
+            call_user_func_array(SearchTerm::getCriteria(...), $inputArguments->getArrayCopy())
         );
     }
 

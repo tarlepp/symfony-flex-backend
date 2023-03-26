@@ -16,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function array_fill;
 use function array_map;
-use function array_merge;
 use function count;
 
 /**
@@ -87,10 +86,10 @@ class UserRepositoryTest extends KernelTestCase
 
         $users = $this->getRepository()->findAll();
 
-        $data = array_merge(
-            array_map($iterator, $users, array_fill(0, count($users), true)),
-            array_map($iterator, $users, array_fill(0, count($users), false))
-        );
+        $data = [
+            ...array_map($iterator, $users, array_fill(0, count($users), true)),
+            ...array_map($iterator, $users, array_fill(0, count($users), false)),
+        ];
 
         foreach ($data as $set) {
             [$expected, $username, $id] = $set;
@@ -112,10 +111,10 @@ class UserRepositoryTest extends KernelTestCase
 
         $users = $this->getRepository()->findAll();
 
-        $data = array_merge(
-            array_map($iterator, $users, array_fill(0, count($users), true)),
-            array_map($iterator, $users, array_fill(0, count($users), false))
-        );
+        $data = [
+            ...array_map($iterator, $users, array_fill(0, count($users), true)),
+            ...array_map($iterator, $users, array_fill(0, count($users), false)),
+        ];
 
         foreach ($data as $set) {
             [$expected, $email, $id] = $set;

@@ -48,13 +48,13 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
 
         $originalDatabaseUrl = $configuration['DATABASE_URL'];
 
-        $databaseName = trim(((array)parse_url($originalDatabaseUrl))['path'] ?? '', '/');
+        $databaseName = trim(((array)parse_url((string)$originalDatabaseUrl))['path'] ?? '', '/');
 
         // Replace DATABASE_URL variable with proper database name
         $databaseUrl = str_replace(
             '/' . $databaseName . '?',
             '/' . $databaseName . '_' . $readableChannel . '?',
-            $originalDatabaseUrl
+            (string)$originalDatabaseUrl
         );
 
         $cache[$readableChannel] = $databaseUrl;
@@ -79,7 +79,7 @@ $InitializeEnvironment = static function (): void {
         && ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? $env['APP_ENV'] ?? null) === ($env['APP_ENV'] ?? null)
     ) {
         foreach ($env as $k => $v) {
-            $_ENV[$k] ??= (isset($_SERVER[$k]) && strncmp($k, 'HTTP_', 5) !== 0 ? $_SERVER[$k] : $v);
+            $_ENV[$k] ??= (isset($_SERVER[$k]) && !str_starts_with($k, 'HTTP_') ? $_SERVER[$k] : $v);
         }
     }
 

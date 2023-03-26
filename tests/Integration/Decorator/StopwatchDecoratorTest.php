@@ -25,6 +25,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
+use function method_exists;
 
 /**
  * Class StopwatchDecoratorTest
@@ -41,21 +42,14 @@ class StopwatchDecoratorTest extends KernelTestCase
     #[TestDox('Test that `decorate` method returns `$expected` when using `$service` instance as an input')]
     public function testThatDecorateMethodReturnsExpected(string $expected, object $service): void
     {
-        self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
-
-        /*
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), new Stopwatch());
 
         self::assertInstanceOf($expected, $decorator->decorate($service));
-        */
     }
 
     #[TestDox('Test that decorator calls expected methods from `StopWatch` service')]
     public function testThatDecoratorCallsStopWatchStartAndStopMethods(): void
     {
-        self::markTestSkipped('This one fails with Symfony 5.4 for some reason');
-
-        /*
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $stopWatch
@@ -72,8 +66,8 @@ class StopwatchDecoratorTest extends KernelTestCase
 
         $decoratedService = $decorator->decorate(new EntityReferenceExists());
 
+        self::assertTrue(method_exists($decoratedService, 'getTargets'));
         self::assertSame('property', $decoratedService->getTargets());
-        */
     }
 
     #[TestDox('Test that `decorate` method returns exact same service if factory throws an exception')]

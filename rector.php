@@ -29,7 +29,7 @@ return static function (RectorConfig $rectorConfig): void {
          * After that enable this directory and run rector again
          * and do that whole process again.
          */
-        //__DIR__ . '/tests',
+        __DIR__ . '/tests',
     ]);
 
     // Enable single or multiple rules with rector
@@ -37,7 +37,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // Enable the set(s) that you want to run with rector
     $rectorConfig->sets([
-        //LevelSetList::UP_TO_PHP_82, // This is for PHP version upgrade
+        LevelSetList::UP_TO_PHP_82, // This is for PHP version upgrade
         //PHPUnitSetList::PHPUNIT_100,
         //SymfonyLevelSetList::UP_TO_SYMFONY_62, // This is for Symfony version upgrade
     ]);
