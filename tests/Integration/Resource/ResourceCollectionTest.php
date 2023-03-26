@@ -256,7 +256,7 @@ class ResourceCollectionTest extends KernelTestCase
             /**
              * @phpstan-var ArrayObject<int, mixed>
              */
-            private ArrayObject $iterator;
+            private readonly ArrayObject $iterator;
 
             /**
              * @param array<int, mixed> $input
