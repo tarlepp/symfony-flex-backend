@@ -22,6 +22,43 @@ class AnonActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_anon_actions';
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    public function testThatCountRouteDoesNotAllowInvalidUser(
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
+    ): void {
+        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    public function testThatRootRouteDoesNotAllowInvalidUser(
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
+    ): void {
+        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
+        string $uuid = '',
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
+    ): void {
+        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    public function testThatIdsRouteDoesNotAllowInvalidUser(
+        ?string $u = null,
+        ?string $p = null,
+        ?string $m = null
+    ): void {
+        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+    }
+
     public function getValidUsers(): Generator
     {
         yield [null, null];
