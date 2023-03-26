@@ -22,7 +22,9 @@ class AnonActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_anon_actions';
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
@@ -31,7 +33,9 @@ class AnonActionsTest extends RestTraitTestCase
         static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
@@ -40,7 +44,9 @@ class AnonActionsTest extends RestTraitTestCase
         static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
         string $uuid = '',
         ?string $u = null,
@@ -50,7 +56,9 @@ class AnonActionsTest extends RestTraitTestCase
         static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
