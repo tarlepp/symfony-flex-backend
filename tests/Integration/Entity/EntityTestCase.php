@@ -9,15 +9,21 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\Interfaces\EntityInterface;
+use App\Entity\LogLogin;
+use App\Entity\LogLoginFailure;
+use App\Entity\LogRequest;
 use App\Entity\Role;
+use App\Entity\User;
 use App\Rest\UuidHelper;
 use App\Utils\Tests\PhpUnitUtil;
+use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 use TypeError;
 use function array_filter;
@@ -619,7 +625,15 @@ abstract class EntityTestCase extends KernelTestCase
 
             self::assertTrue(class_exists($target));
 
-            $input = new $target();
+            $arguments = match ($target) {
+                LogLogin::class => ['', new Request(), new DeviceDetector()],
+                LogLoginFailure::class => [new User()],
+                LogRequest::class => [[]],
+                Role::class => ['some role'],
+                default => [],
+            };
+
+            $input = new $target(...$arguments);
 
             $methods = [
                 ['get' . ucfirst($mapping['fieldName']), $mapping['fieldName'], false, null],
