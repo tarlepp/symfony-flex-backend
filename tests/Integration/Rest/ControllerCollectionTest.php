@@ -51,7 +51,7 @@ class ControllerCollectionTest extends KernelTestCase
             /**
              * @phpstan-var ArrayObject<int, mixed>
              */
-            private ArrayObject $iterator;
+            private readonly ArrayObject $iterator;
 
             /**
              * Constructor of the class.

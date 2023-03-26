@@ -21,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
 use UnexpectedValueException;
-use function get_class;
 
 /**
  * Class ControllerTest
@@ -100,7 +99,7 @@ class ControllerTest extends KernelTestCase
         $resourceMock
             ->expects(self::once())
             ->method('getDtoClass')
-            ->willReturn(get_class($dtoClassMock));
+            ->willReturn($dtoClassMock::class);
 
         $controller->getDtoClass();
     }

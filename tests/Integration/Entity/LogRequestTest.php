@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_key_exists;
-use function get_class;
 use function in_array;
 use function is_array;
 use function is_object;
@@ -102,7 +101,7 @@ class LogRequestTest extends EntityTestCase
         $returnValue = $value;
 
         if (is_object($value)) {
-            $returnValue = get_class($value);
+            $returnValue = $value::class;
         } elseif (is_array($value)) {
             $returnValue = 'array';
         }

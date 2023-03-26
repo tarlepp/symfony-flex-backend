@@ -139,7 +139,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $iterator = static fn (ApiKey $apiKey): array => [
             $apiKey->getToken(),
-            new StringableArrayObject(array_merge($rolesService->getInheritedRoles($apiKey->getRoles()))),
+            new StringableArrayObject([...$rolesService->getInheritedRoles($apiKey->getRoles())]),
         ];
 
         return array_map($iterator, $repository->findAll());
