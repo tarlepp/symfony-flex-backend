@@ -734,12 +734,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ca6f1d633e0a8d82bd27376fe7e27a92500417f1"
+                "reference": "08c832d96735c46a9d5849a5412fc4304e12d242"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ca6f1d633e0a8d82bd27376fe7e27a92500417f1",
-                "reference": "ca6f1d633e0a8d82bd27376fe7e27a92500417f1",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/08c832d96735c46a9d5849a5412fc4304e12d242",
+                "reference": "08c832d96735c46a9d5849a5412fc4304e12d242",
                 "shasum": ""
             },
             "conflict": {
@@ -1125,6 +1125,7 @@
                 "simplesamlphp/simplesamlphp-module-openid": "<1",
                 "simplesamlphp/simplesamlphp-module-openidprovider": "<0.9",
                 "simplito/elliptic-php": "<1.0.6",
+                "sitegeist/fluid-components": "<3.5",
                 "slim/slim": "<2.6",
                 "smarty/smarty": "<3.1.47|>=4,<4.2.1",
                 "snipe/snipe-it": "<=6.0.14|>= 6.0.0-RC-1, <= 6.0.0-RC-5",
@@ -1320,7 +1321,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-24T00:14:17+00:00"
+            "time": "2023-03-27T09:04:40+00:00"
         },
         {
             "name": "symfony/config",
