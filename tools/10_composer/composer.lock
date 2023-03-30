@@ -1107,12 +1107,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "08c832d96735c46a9d5849a5412fc4304e12d242"
+                "reference": "a4b9d03301c113a84cd5fb06e418d1591987dc3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/08c832d96735c46a9d5849a5412fc4304e12d242",
-                "reference": "08c832d96735c46a9d5849a5412fc4304e12d242",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a4b9d03301c113a84cd5fb06e418d1591987dc3a",
+                "reference": "a4b9d03301c113a84cd5fb06e418d1591987dc3a",
                 "shasum": ""
             },
             "conflict": {
@@ -1431,7 +1431,7 @@
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pimcore/data-hub": "<1.2.4",
-                "pimcore/pimcore": "<11",
+                "pimcore/pimcore": "<10.5.19",
                 "pixelfed/pixelfed": "<=0.11.4",
                 "pocketmine/bedrock-protocol": "<8.0.2",
                 "pocketmine/pocketmine-mp": "<4.12.5|>= 4.0.0-BETA5, < 4.4.2",
@@ -1500,7 +1500,7 @@
                 "simplito/elliptic-php": "<1.0.6",
                 "sitegeist/fluid-components": "<3.5",
                 "slim/slim": "<2.6",
-                "smarty/smarty": "<3.1.47|>=4,<4.2.1",
+                "smarty/smarty": "<3.1.48|>=4,<4.3.1",
                 "snipe/snipe-it": "<=6.0.14|>= 6.0.0-RC-1, <= 6.0.0-RC-5",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
@@ -1694,7 +1694,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-27T09:04:40+00:00"
+            "time": "2023-03-30T15:04:36+00:00"
         },
         {
             "name": "symfony/config",
