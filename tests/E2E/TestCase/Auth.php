@@ -62,7 +62,9 @@ readonly class Auth
     {
         return [
             ...$this->getContentTypeHeader(),
-            ...['HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_')],
+            ...[
+                'HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_'),
+            ],
         ];
     }
 
@@ -75,7 +77,9 @@ readonly class Auth
     {
         return [
             ...$this->getContentTypeHeader(),
-            ...['HTTP_AUTHORIZATION' => 'Bearer ' . $token],
+            ...[
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
+            ],
         ];
     }
 
@@ -130,7 +134,9 @@ readonly class Auth
                 [
                     ...$this->getJwtHeaders(),
                     ...$this->getContentTypeHeader(),
-                    ...['HTTP_X-Requested-With' => 'XMLHttpRequest'],
+                    ...[
+                        'HTTP_X-Requested-With' => 'XMLHttpRequest',
+                    ],
                 ],
                 JSON::encode(compact('username', 'password'))
             );

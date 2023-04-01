@@ -81,7 +81,9 @@ abstract class WebTestCase extends BaseWebTestCase
         return static::createClient(
             [
                 ...$options,
-                ...['debug' => false],
+                ...[
+                    'debug' => false,
+                ],
             ],
             $server
         );
