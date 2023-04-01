@@ -33,10 +33,10 @@ use const DIRECTORY_SEPARATOR;
  * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-readonly class Auth
+class Auth
 {
     public function __construct(
-        private KernelInterface $kernel,
+        private readonly KernelInterface $kernel,
     ) {
     }
 
