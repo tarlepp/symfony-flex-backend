@@ -13,7 +13,7 @@ use App\AutoMapper\ApiKey\RequestMapper;
 use App\DTO\ApiKey\ApiKeyCreate;
 use App\DTO\ApiKey\ApiKeyPatch;
 use App\DTO\ApiKey\ApiKeyUpdate;
-use App\Tests\Integration\AutoMapper\RestRequestMapperConfigurationTestCase;
+use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
 /**
  * Class AutoMapperConfigurationTest

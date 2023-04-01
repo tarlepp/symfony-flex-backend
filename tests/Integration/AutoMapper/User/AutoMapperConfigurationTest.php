@@ -13,7 +13,7 @@ use App\AutoMapper\User\RequestMapper;
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
-use App\Tests\Integration\AutoMapper\RestRequestMapperConfigurationTestCase;
+use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
 /**
  * Class AutoMapperConfigurationTest
