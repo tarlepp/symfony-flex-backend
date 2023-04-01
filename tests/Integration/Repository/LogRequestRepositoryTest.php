@@ -14,6 +14,7 @@ use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\LogRequestRepository;
 use App\Resource\LogRequestResource;
 use App\Rest\Interfaces\RestResourceInterface;
+use App\Tests\Integration\TestCase\RepositoryTestCase;
 
 /**
  * Class LogRequestRepositoryTest
