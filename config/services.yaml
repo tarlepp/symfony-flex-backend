@@ -37,7 +37,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
-            - '../src/Utils/Tests/'
             - '../src/Kernel.php'
 
     App\ValueResolver\EntityValueResolver:
@@ -52,9 +51,6 @@ when@dev:
 
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
-
-        App\Utils\Tests\:
-            resource: '../src/Utils/Tests'
 
         App\Tests\E2E\Rest\src\:
             resource: '../tests/E2E/Rest/src/*'
@@ -91,10 +87,7 @@ when@test:
             public: true
 
         App\DataFixtures\:
-            resource: '../src/DataFixtures/'
-
-        App\Utils\Tests\:
-            resource: '../src/Utils/Tests'
+            resource: '../src/DataFixtures/*'
 
         App\Tests\E2E\TestCase\:
             resource: '../tests/E2E/TestCase/*'
@@ -110,3 +103,6 @@ when@test:
 
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
+
+        App\Tests\Utils\:
+            resource: '../tests/Utils/*'
