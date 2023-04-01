@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller;
 
 use App\Resource\LogRequestResource;
-use App\Utils\Tests\WebTestCase;
+use App\Tests\E2E\TestCase\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 

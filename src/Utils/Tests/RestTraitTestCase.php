@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
+use App\Tests\E2E\TestCase\WebTestCase;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

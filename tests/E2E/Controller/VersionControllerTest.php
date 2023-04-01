@@ -10,7 +10,7 @@ namespace App\Tests\E2E\Controller;
 
 use App\Resource\LogRequestResource;
 use App\Utils\JSON;
-use App\Utils\Tests\WebTestCase;
+use App\Tests\E2E\TestCase\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function file_get_contents;

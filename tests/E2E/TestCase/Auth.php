@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/Auth.php
+ * /tests/E2E/TestCase/Auth.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\E2E\TestCase;
 
 use App\Utils\JSON;
 use JsonException;
@@ -30,7 +30,7 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Class Auth
  *
- * @package App\Utils\Tests
+ * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class Auth
@@ -120,7 +120,7 @@ class Auth
         // Create hash for username + password
         $hash = sha1($username . $password);
 
-        // User + password doesn't exists on cache - so we need to make real login
+        // User + password doesn't exist on cache - so we need to make real login
         if (!array_key_exists($hash, $cache)) {
             /** @var KernelBrowser $client */
             $client = $this->kernel->getContainer()->get('test.client');

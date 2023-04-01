@@ -11,7 +11,7 @@ namespace App\Tests\E2E\Controller\v1\User;
 use App\DataFixtures\ORM\LoadUserData;
 use App\DataFixtures\ORM\LoadUserGroupData;
 use App\Utils\Tests\PhpUnitUtil;
-use App\Utils\Tests\WebTestCase;
+use App\Tests\E2E\TestCase\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

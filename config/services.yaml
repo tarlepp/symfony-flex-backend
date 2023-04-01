@@ -96,6 +96,9 @@ when@test:
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
 
+        App\Tests\E2E\TestCase\:
+            resource: '../tests/E2E/TestCase/*'
+
         App\Tests\E2E\Rest\src\:
             resource: '../tests/E2E/Rest/src/*'
 

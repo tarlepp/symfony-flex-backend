@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/WebTestCase.php
+ * /tests/E2E/TestCase/WebTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\E2E\TestCase;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
@@ -19,7 +19,7 @@ use function getenv;
 /**
  * Class WebTestCase
  *
- * @package App\Tests
+ * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class WebTestCase extends BaseWebTestCase
