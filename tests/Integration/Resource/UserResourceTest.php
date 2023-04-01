@@ -17,6 +17,7 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RestResource;
 use App\Security\RolesService;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 

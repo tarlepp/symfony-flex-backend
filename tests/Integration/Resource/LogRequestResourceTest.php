@@ -14,6 +14,7 @@ use App\Repository\BaseRepository;
 use App\Repository\LogRequestRepository;
 use App\Resource\LogRequestResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 
 /**
  * Class LogRequestResourceTest

@@ -14,6 +14,7 @@ use App\Repository\BaseRepository;
 use App\Repository\RoleRepository;
 use App\Resource\RoleResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 
 /**
  * Class RoleResourceTest
