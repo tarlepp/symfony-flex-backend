@@ -11,7 +11,7 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\ApiKey;
 use App\Entity\LogRequest;
 use App\Entity\User;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Collections\ArrayCollection;
 use Generator;

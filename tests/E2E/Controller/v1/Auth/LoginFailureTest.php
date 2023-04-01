@@ -10,7 +10,7 @@ namespace App\Tests\E2E\Controller\v1\Auth;
 
 use App\Resource\LogLoginFailureResource;
 use App\Utils\JSON;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

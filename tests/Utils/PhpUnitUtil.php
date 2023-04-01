@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/PHPUnitUtil.php
+ * /tests/Utils/PhpUnitUtil.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\Utils;
 
 use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Role;
@@ -38,7 +38,7 @@ use function substr_count;
 /**
  * Class PHPUnitUtil
  *
- * @package App\Utils\Tests
+ * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class PhpUnitUtil

@@ -12,7 +12,7 @@ use App\AutoMapper\RestRequestMapper;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\ControllerInterface;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use Closure;
 use Doctrine\DBAL\Types\Type;

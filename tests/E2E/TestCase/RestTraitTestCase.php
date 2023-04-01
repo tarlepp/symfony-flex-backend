@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\TestCase;
 
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

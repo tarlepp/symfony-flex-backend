@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Helpers;
 
 use App\Tests\Integration\Helpers\src\StopwatchAwareService;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;

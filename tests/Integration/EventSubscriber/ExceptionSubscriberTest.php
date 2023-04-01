@@ -14,7 +14,7 @@ use App\Exception\ValidatorException;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use BadMethodCallException;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\ORM\Exception\ORMException;
