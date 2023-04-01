@@ -12,7 +12,7 @@ use App\Entity\ApiKey;
 use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Tests\Utils\PhpUnitUtil;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Doctrine\Common\Collections\ArrayCollection;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;

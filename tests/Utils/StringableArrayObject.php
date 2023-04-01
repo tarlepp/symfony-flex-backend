@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/StringableArrayObject.php
+ * /tests/Utils/StringableArrayObject.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\Utils;
 
 use App\Utils\JSON;
 use ArrayObject;
@@ -18,7 +18,7 @@ use Stringable;
  *
  * @psalm-suppress MissingTemplateParam
  *
- * @package App\Utils\Tests
+ * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StringableArrayObject extends ArrayObject implements Stringable

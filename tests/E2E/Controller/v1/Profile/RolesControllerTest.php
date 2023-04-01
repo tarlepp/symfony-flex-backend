@@ -11,7 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Profile;
 use App\Enum\Role;
 use App\Security\RolesService;
 use App\Utils\JSON;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use App\Tests\E2E\TestCase\WebTestCase;
 use Generator;
 use JsonException;

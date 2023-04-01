@@ -10,7 +10,7 @@ namespace App\Tests\Unit\Utils\Tests;
 
 use App\Entity\User;
 use App\Tests\Utils\PhpUnitUtil;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use DateTime;
 use DateTimeImmutable;
 use Generator;

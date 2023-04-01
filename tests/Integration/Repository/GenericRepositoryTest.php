@@ -13,7 +13,7 @@ use App\Entity\Role;
 use App\Repository\ApiKeyRepository;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
