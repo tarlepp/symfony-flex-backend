@@ -12,7 +12,7 @@ use App\DTO\ApiKey\ApiKeyUpdate;
 use App\Entity\ApiKey;
 use App\Entity\Role;
 use App\Entity\UserGroup;
-use App\Tests\Integration\DTO\DtoTestCase;
+use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**
