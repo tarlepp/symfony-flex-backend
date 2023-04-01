@@ -68,7 +68,10 @@ abstract class WebTestCase extends BaseWebTestCase
             $username === null || $password === null
                 ? []
                 : $authService->getAuthorizationHeadersForUser($username, $password),
-            array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
+            [
+                ...$this->getJsonHeaders(),
+                ...$this->getFastestHeaders(),
+            ],
             $authService->getJwtHeaders(),
             $server
         );
@@ -76,12 +79,10 @@ abstract class WebTestCase extends BaseWebTestCase
         self::ensureKernelShutdown();
 
         return static::createClient(
-            array_merge(
-                $options,
-                [
-                    'debug' => false,
-                ]
-            ),
+            [
+                ...$options,
+                ...['debug' => false],
+            ],
             $server
         );
     }
@@ -106,7 +107,10 @@ abstract class WebTestCase extends BaseWebTestCase
                     'HTTP_AUTHORIZATION' => 'ApiKey invalid-api-key',
                 ]
                 : $authService->getAuthorizationHeadersForApiKey($role),
-            array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
+            [
+                ...$this->getJsonHeaders(),
+                ...$this->getFastestHeaders(),
+            ],
             $authService->getJwtHeaders(),
             $server
         );
@@ -151,6 +155,10 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         static::bootKernel();
 
-        return static::getContainer()->get(Auth::class);
+        $auth = static::getContainer()->get(Auth::class);
+
+        self::assertInstanceOf(Auth::class, $auth);
+
+        return $auth;
     }
 }

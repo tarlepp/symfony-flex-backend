@@ -27,6 +27,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use function array_key_exists;
@@ -43,15 +44,15 @@ use function substr_count;
  */
 class PhpUnitUtil
 {
-    public const TYPE_INT = 'int';
-    public const TYPE_INTEGER = 'integer';
-    public const TYPE_STRING = 'string';
-    public const TYPE_ARRAY = 'array';
-    public const TYPE_JSON = 'json';
-    public const TYPE_BOOL = 'bool';
-    public const TYPE_BOOLEAN = 'boolean';
-    public const TYPE_CUSTOM_CLASS = 'CustomClass';
-    public const TYPE_ENUM = 'ENUM';
+    final public const TYPE_INT = 'int';
+    final public const TYPE_INTEGER = 'integer';
+    final public const TYPE_STRING = 'string';
+    final public const TYPE_ARRAY = 'array';
+    final public const TYPE_JSON = 'json';
+    final public const TYPE_BOOL = 'bool';
+    final public const TYPE_BOOLEAN = 'boolean';
+    final public const TYPE_CUSTOM_CLASS = 'CustomClass';
+    final public const TYPE_ENUM = 'ENUM';
 
     /**
      * @var array<string, mixed>
@@ -81,7 +82,7 @@ class PhpUnitUtil
 
         $input->setInteractive(false);
 
-        $application->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+        $application->run($input, new ConsoleOutput(OutputInterface::VERBOSITY_QUIET));
     }
 
     /**

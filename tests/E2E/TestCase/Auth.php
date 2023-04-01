@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use UnexpectedValueException;
 use function array_key_exists;
-use function array_merge;
+use function compact;
 use function file_get_contents;
 use function file_put_contents;
 use function getenv;
@@ -33,10 +33,10 @@ use const DIRECTORY_SEPARATOR;
  * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class Auth
+readonly class Auth
 {
     public function __construct(
-        private readonly KernelInterface $kernel,
+        private KernelInterface $kernel,
     ) {
     }
 
@@ -60,12 +60,10 @@ class Auth
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
-        return array_merge(
-            $this->getContentTypeHeader(),
-            [
-                'HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_'),
-            ]
-        );
+        return [
+            ...$this->getContentTypeHeader(),
+            ...['HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_')],
+        ];
     }
 
     /**
@@ -75,12 +73,10 @@ class Auth
      */
     public function getAuthorizationHeaders(string $token): array
     {
-        return array_merge(
-            $this->getContentTypeHeader(),
-            [
-                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
-            ]
-        );
+        return [
+            ...$this->getContentTypeHeader(),
+            ...['HTTP_AUTHORIZATION' => 'Bearer ' . $token],
+        ];
     }
 
     /**
@@ -131,17 +127,12 @@ class Auth
                 '/v1/auth/get_token',
                 [],
                 [],
-                array_merge(
-                    $this->getJwtHeaders(),
-                    $this->getContentTypeHeader(),
-                    [
-                        'HTTP_X-Requested-With' => 'XMLHttpRequest',
-                    ]
-                ),
-                JSON::encode([
-                    'username' => $username,
-                    'password' => $password,
-                ])
+                [
+                    ...$this->getJwtHeaders(),
+                    ...$this->getContentTypeHeader(),
+                    ...['HTTP_X-Requested-With' => 'XMLHttpRequest'],
+                ],
+                JSON::encode(compact('username', 'password'))
             );
 
             $response = $client->getResponse();
@@ -161,7 +152,7 @@ class Auth
         // And finally store cache for later usage
         file_put_contents($filename, JSON::encode($cache));
 
-        return $cache[$hash];
+        return (string)$cache[$hash];
     }
 
     /**
