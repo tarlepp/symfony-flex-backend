@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Controller\v1\ApiKey;
 
 use App\Controller\v1\ApiKey\ApiKeyController;
 use App\Resource\ApiKeyResource;
-use App\Utils\Tests\RestIntegrationControllerTestCase;
+use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
  * Class ApiKeyControllerTest
