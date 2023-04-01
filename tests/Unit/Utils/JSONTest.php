@@ -9,8 +9,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\Unit\Utils;
 
-use App\Utils\JSON;
 use App\Tests\Utils\StringableArrayObject;
+use App\Utils\JSON;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;

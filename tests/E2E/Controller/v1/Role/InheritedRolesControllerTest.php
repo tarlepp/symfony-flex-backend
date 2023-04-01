@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Role;
 
-use App\Utils\JSON;
 use App\Tests\E2E\TestCase\WebTestCase;
+use App\Utils\JSON;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

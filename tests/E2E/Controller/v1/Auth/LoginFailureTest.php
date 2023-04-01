@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller\v1\Auth;
 
 use App\Resource\LogLoginFailureResource;
-use App\Utils\JSON;
 use App\Tests\Utils\PhpUnitUtil;
+use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

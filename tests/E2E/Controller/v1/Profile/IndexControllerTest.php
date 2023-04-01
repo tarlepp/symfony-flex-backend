@@ -10,8 +10,8 @@ namespace App\Tests\E2E\Controller\v1\Profile;
 
 use App\Enum\Role;
 use App\Security\RolesService;
-use App\Utils\JSON;
 use App\Tests\E2E\TestCase\WebTestCase;
+use App\Utils\JSON;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;

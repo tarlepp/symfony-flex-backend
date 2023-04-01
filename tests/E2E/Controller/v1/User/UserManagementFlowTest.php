@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\User;
 
-use App\Utils\JSON;
 use App\Tests\E2E\TestCase\WebTestCase;
+use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
