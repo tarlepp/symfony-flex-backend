@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Entity/EntityTestCase.php
+ * /tests/Integration/TestCase/EntityTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Entity;
+namespace App\Tests\Integration\TestCase;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\LogLogin;
@@ -36,6 +36,8 @@ use function gettype;
 use function in_array;
 use function is_object;
 use function is_string;
+use function mb_strlen;
+use function mb_substr;
 use function method_exists;
 use function sprintf;
 use function ucfirst;
@@ -43,7 +45,7 @@ use function ucfirst;
 /**
  * Class EntityTestCase
  *
- * @package App\Tests\Helpers
+ * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class EntityTestCase extends KernelTestCase

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\DateDimension;
+use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\DataProvider;

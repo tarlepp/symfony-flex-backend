@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\UserGroup;
+use App\Tests\Integration\TestCase\EntityTestCase;
 
 /**
  * Class UserGroupTest

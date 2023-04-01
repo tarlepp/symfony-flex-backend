@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
+use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;

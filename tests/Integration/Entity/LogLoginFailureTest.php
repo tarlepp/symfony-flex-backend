@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\LogLoginFailure;
 use App\Entity\User;
+use App\Tests\Integration\TestCase\EntityTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

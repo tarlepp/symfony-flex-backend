@@ -12,6 +12,7 @@ use App\Entity\ApiKey;
 use App\Enum\Role;
 use App\Repository\ApiKeyRepository;
 use App\Security\RolesService;
+use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;

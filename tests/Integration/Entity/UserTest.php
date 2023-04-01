@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Tests\Integration\TestCase\EntityTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
