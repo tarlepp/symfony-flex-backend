@@ -45,24 +45,6 @@ services:
 
 when@dev:
     services:
-        _defaults:
-            <<: *_services_defaults
-
-        App\DataFixtures\:
-            resource: '../src/DataFixtures/'
-
-        App\Tests\E2E\Rest\src\:
-            resource: '../tests/E2E/Rest/src/*'
-
-        App\Tests\E2E\Rest\src\Controller\:
-            resource: '../tests/E2E/Rest/src/Controller/*'
-
-        App\Tests\E2E\Rest\Traits\Actions\src\:
-            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
-
-        App\Tests\Integration\Helpers\src\:
-            resource: '../tests/Integration/Helpers/src/*'
-
         ProxyManager\Factory\AccessInterceptorValueHolderFactory:
             class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
 
