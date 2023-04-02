@@ -49,7 +49,7 @@ when@dev:
             resource: '../tests/E2E/Rest/src/*'
 
         App\Tests\E2E\Rest\Traits\Actions\src\:
-            resource: '../tes ts/E2E/Rest/Traits/Actions/src/*'
+            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
 
         App\Tests\E2E\TestCase\:
             resource: '../tests/E2E/TestCase/*'
