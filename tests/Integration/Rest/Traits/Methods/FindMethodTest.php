@@ -12,7 +12,7 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindMethodTestClass;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Exception;

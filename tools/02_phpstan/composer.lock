@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12514d7cc9965cee42172aa5ade88234",
+    "content-hash": "341bdf0eb12f616714fe6791c8ed5755",
     "packages": [],
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.8",
+            "version": "1.10.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9"
+                "reference": "9b13dafe3d66693d20fe5729c3dde1d31bb64703"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0166aef76e066f0dd2adc2799bdadfa1635711e9",
-                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b13dafe3d66693d20fe5729c3dde1d31bb64703",
+                "reference": "9b13dafe3d66693d20fe5729c3dde1d31bb64703",
                 "shasum": ""
             },
             "require": {
@@ -67,20 +67,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-24T10:28:16+00:00"
+            "time": "2023-03-30T08:58:01+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "1.3.10",
+            "version": "1.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "4cc5c6cc38e56bce7ea47c4091814e516d172dc3"
+                "reference": "9e1b9de6d260461f6e99b6a8f2dbb0bbb98b579c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/4cc5c6cc38e56bce7ea47c4091814e516d172dc3",
-                "reference": "4cc5c6cc38e56bce7ea47c4091814e516d172dc3",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/9e1b9de6d260461f6e99b6a8f2dbb0bbb98b579c",
+                "reference": "9e1b9de6d260461f6e99b6a8f2dbb0bbb98b579c",
                 "shasum": ""
             },
             "require": {
@@ -117,28 +117,28 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.10"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.11"
             },
-            "time": "2023-03-02T10:25:13+00:00"
+            "time": "2023-03-25T19:42:13+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.2.23",
+            "version": "1.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "8a8d0538ca943b20beda7e9799e14fb3683262d4"
+                "reference": "db81b1861aac7cc2e66115cb33b4d1ea2a73d096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/8a8d0538ca943b20beda7e9799e14fb3683262d4",
-                "reference": "8a8d0538ca943b20beda7e9799e14fb3683262d4",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/db81b1861aac7cc2e66115cb33b4d1ea2a73d096",
+                "reference": "db81b1861aac7cc2e66115cb33b4d1ea2a73d096",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.9.4"
+                "phpstan/phpstan": "^1.9.18"
             },
             "conflict": {
                 "symfony/framework-bundle": "<3.0"
@@ -148,7 +148,7 @@
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^8.5.29 || ^9.5",
                 "psr/container": "1.0 || 1.1.1",
                 "symfony/config": "^5.4 || ^6.1",
                 "symfony/console": "^5.4 || ^6.1",
@@ -188,9 +188,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.23"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.2.24"
             },
-            "time": "2023-02-06T10:42:02+00:00"
+            "time": "2023-03-30T08:38:10+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ca6f1d633e0a8d82bd27376fe7e27a92500417f1"
+                "reference": "859e034a7425f6fd0c30c58198f831ac6c7e6bfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ca6f1d633e0a8d82bd27376fe7e27a92500417f1",
-                "reference": "ca6f1d633e0a8d82bd27376fe7e27a92500417f1",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/859e034a7425f6fd0c30c58198f831ac6c7e6bfb",
+                "reference": "859e034a7425f6fd0c30c58198f831ac6c7e6bfb",
                 "shasum": ""
             },
             "conflict": {
@@ -517,12 +517,13 @@
                 "phpoffice/phpspreadsheet": "<1.16",
                 "phpseclib/phpseclib": "<2.0.31|>=3,<3.0.19",
                 "phpservermon/phpservermon": "<=3.5.2",
+                "phpsysinfo/phpsysinfo": "<3.2.5",
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5,<5.6.3",
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pimcore/data-hub": "<1.2.4",
-                "pimcore/pimcore": "<11",
+                "pimcore/pimcore": "<10.5.20",
                 "pixelfed/pixelfed": "<=0.11.4",
                 "pocketmine/bedrock-protocol": "<8.0.2",
                 "pocketmine/pocketmine-mp": "<4.12.5|>= 4.0.0-BETA5, < 4.4.2",
@@ -548,6 +549,7 @@
                 "rainlab/debugbar-plugin": "<3.1",
                 "rankmath/seo-by-rank-math": "<=1.0.95",
                 "react/http": ">=0.7,<1.7",
+                "really-simple-plugins/complianz-gdpr": "<6.4.2",
                 "remdex/livehelperchat": "<3.99",
                 "rmccue/requests": ">=1.6,<1.8",
                 "robrichards/xmlseclibs": "<3.0.4",
@@ -589,8 +591,9 @@
                 "simplesamlphp/simplesamlphp-module-openid": "<1",
                 "simplesamlphp/simplesamlphp-module-openidprovider": "<0.9",
                 "simplito/elliptic-php": "<1.0.6",
+                "sitegeist/fluid-components": "<3.5",
                 "slim/slim": "<2.6",
-                "smarty/smarty": "<3.1.47|>=4,<4.2.1",
+                "smarty/smarty": "<3.1.48|>=4,<4.3.1",
                 "snipe/snipe-it": "<=6.0.14|>= 6.0.0-RC-1, <= 6.0.0-RC-5",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
@@ -656,7 +659,7 @@
                 "thelia/thelia": ">=2.1-beta.1,<2.1.3",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "thinkcmf/thinkcmf": "<=5.1.7",
-                "thorsten/phpmyfaq": "<3.1.11",
+                "thorsten/phpmyfaq": "<3.1.12",
                 "tinymce/tinymce": "<5.10.7|>=6,<6.3.1",
                 "tinymighty/wiki-seo": "<1.2.2",
                 "titon/framework": ">=0,<9.9.99",
@@ -784,7 +787,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-24T00:14:17+00:00"
+            "time": "2023-03-31T23:04:35+00:00"
         }
     ],
     "aliases": [],

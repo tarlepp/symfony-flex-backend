@@ -14,7 +14,7 @@ use App\DTO\User as DTO;
 use App\Entity\UserGroup;
 use App\Enum\Language;
 use App\Resource\UserGroupResource;
-use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
+use App\Tests\Integration\TestCase\RestRequestMapperTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

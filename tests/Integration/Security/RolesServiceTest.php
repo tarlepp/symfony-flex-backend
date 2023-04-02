@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Security;
 
 use App\Enum\Role;
 use App\Security\RolesService;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

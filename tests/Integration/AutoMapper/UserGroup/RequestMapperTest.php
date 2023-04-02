@@ -13,7 +13,7 @@ use App\AutoMapper\UserGroup\RequestMapper;
 use App\DTO\UserGroup as DTO;
 use App\Entity\Role;
 use App\Resource\RoleResource;
-use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
+use App\Tests\Integration\TestCase\RestRequestMapperTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

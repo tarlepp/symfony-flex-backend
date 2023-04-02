@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\Auth;
 
+use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
-use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

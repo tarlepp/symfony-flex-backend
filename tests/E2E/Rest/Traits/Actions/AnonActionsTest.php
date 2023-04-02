@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Rest\Traits\Actions;
 
-use App\Utils\Tests\RestTraitTestCase;
+use App\Tests\E2E\TestCase\RestTraitTestCase;
 use Generator;
 use function getenv;
 

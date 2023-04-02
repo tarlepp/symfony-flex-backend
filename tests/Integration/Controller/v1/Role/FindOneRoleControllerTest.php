@@ -12,7 +12,7 @@ use App\Controller\v1\Role\FindOneRoleController;
 use App\Entity\Role;
 use App\Resource\RoleResource;
 use App\Rest\ResponseHandler;
-use App\Utils\Tests\RestIntegrationControllerTestCase;
+use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;

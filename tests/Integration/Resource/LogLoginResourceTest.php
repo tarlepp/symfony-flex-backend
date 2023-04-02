@@ -14,6 +14,7 @@ use App\Repository\BaseRepository;
 use App\Repository\LogLoginRepository;
 use App\Resource\LogLoginResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 
 /**
  * Class LogLoginResourceTest

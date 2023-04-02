@@ -14,6 +14,7 @@ use App\Repository\BaseRepository;
 use App\Repository\DateDimensionRepository;
 use App\Resource\DateDimensionResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 
 /**
  * Class DateDimensionResourceTest

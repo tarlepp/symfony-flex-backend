@@ -12,7 +12,7 @@ use App\DTO\User\User as UserDto;
 use App\Entity\Role as RoleEntity;
 use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Tests\Integration\DTO\DtoTestCase;
+use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function count;

@@ -55,7 +55,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch
             ->expects(self::once())
             ->method('start')
-            ->with('EntityReferenceExists->getTargets', 'App\Validator\Constraints\EntityReferenceExists');
+            ->with('EntityReferenceExists->getTargets', EntityReferenceExists::class);
 
         $stopWatch
             ->expects(self::once())

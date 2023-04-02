@@ -12,7 +12,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Provider\SecurityUserFactory;
 use App\Security\SecurityUser;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

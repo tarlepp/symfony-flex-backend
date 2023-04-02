@@ -13,7 +13,7 @@ use App\AutoMapper\UserGroup\RequestMapper;
 use App\DTO\UserGroup\UserGroupCreate;
 use App\DTO\UserGroup\UserGroupPatch;
 use App\DTO\UserGroup\UserGroupUpdate;
-use App\Tests\Integration\AutoMapper\RestRequestMapperConfigurationTestCase;
+use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
 /**
  * Class AutoMapperConfigurationTest

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/Auth.php
+ * /tests/E2E/TestCase/Auth.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\E2E\TestCase;
 
 use App\Utils\JSON;
 use JsonException;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use UnexpectedValueException;
 use function array_key_exists;
-use function array_merge;
+use function compact;
 use function file_get_contents;
 use function file_put_contents;
 use function getenv;
@@ -30,7 +30,7 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Class Auth
  *
- * @package App\Utils\Tests
+ * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class Auth
@@ -60,12 +60,12 @@ class Auth
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
-        return array_merge(
-            $this->getContentTypeHeader(),
-            [
+        return [
+            ...$this->getContentTypeHeader(),
+            ...[
                 'HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_'),
-            ]
-        );
+            ],
+        ];
     }
 
     /**
@@ -75,12 +75,12 @@ class Auth
      */
     public function getAuthorizationHeaders(string $token): array
     {
-        return array_merge(
-            $this->getContentTypeHeader(),
-            [
+        return [
+            ...$this->getContentTypeHeader(),
+            ...[
                 'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
-            ]
-        );
+            ],
+        ];
     }
 
     /**
@@ -120,7 +120,7 @@ class Auth
         // Create hash for username + password
         $hash = sha1($username . $password);
 
-        // User + password doesn't exists on cache - so we need to make real login
+        // User + password doesn't exist on cache - so we need to make real login
         if (!array_key_exists($hash, $cache)) {
             /** @var KernelBrowser $client */
             $client = $this->kernel->getContainer()->get('test.client');
@@ -131,17 +131,14 @@ class Auth
                 '/v1/auth/get_token',
                 [],
                 [],
-                array_merge(
-                    $this->getJwtHeaders(),
-                    $this->getContentTypeHeader(),
-                    [
+                [
+                    ...$this->getJwtHeaders(),
+                    ...$this->getContentTypeHeader(),
+                    ...[
                         'HTTP_X-Requested-With' => 'XMLHttpRequest',
-                    ]
-                ),
-                JSON::encode([
-                    'username' => $username,
-                    'password' => $password,
-                ])
+                    ],
+                ],
+                JSON::encode(compact('username', 'password'))
             );
 
             $response = $client->getResponse();
@@ -161,7 +158,7 @@ class Auth
         // And finally store cache for later usage
         file_put_contents($filename, JSON::encode($cache));
 
-        return $cache[$hash];
+        return (string)$cache[$hash];
     }
 
     /**

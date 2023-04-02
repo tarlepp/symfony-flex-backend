@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\UTCDateTimeType;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

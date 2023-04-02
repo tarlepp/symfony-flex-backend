@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\Healthz;
+use App\Tests\Integration\TestCase\EntityTestCase;
 
 /**
  * Class HealthzTest

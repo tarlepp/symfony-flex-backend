@@ -12,7 +12,7 @@ use App\DTO\RestDtoInterface;
 use App\DTO\User\User;
 use App\Entity\User as UserEntity;
 use App\Tests\Integration\DTO\src\DummyDto;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use BadMethodCallException;
 use Generator;
 use LogicException;

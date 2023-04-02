@@ -14,6 +14,7 @@ use App\Repository\BaseRepository;
 use App\Repository\HealthzRepository;
 use App\Resource\HealthzResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 
 /**
  * Class HealthzResourceTest

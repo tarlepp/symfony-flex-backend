@@ -14,7 +14,7 @@ use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Exception;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;

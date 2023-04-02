@@ -15,6 +15,7 @@ use App\Repository\BaseRepository;
 use App\Repository\LogLoginFailureRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 use Throwable;
 
 /**

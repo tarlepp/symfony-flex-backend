@@ -1,15 +1,15 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/DTO/DtoTestCase.php
+ * /tests/Integration/TestCase/DtoTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\DTO;
+namespace App\Tests\Integration\TestCase;
 
 use App\DTO\RestDtoInterface;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -32,7 +32,7 @@ use function ucfirst;
 /**
  * Class DtoTestCase
  *
- * @package App\Tests\Integration\DTO
+ * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class DtoTestCase extends KernelTestCase

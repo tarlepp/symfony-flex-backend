@@ -1,13 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/RestTraitTestCase.php
+ * /tests/E2E/TestCase/RestTraitTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\E2E\TestCase;
 
+use App\Tests\Utils\PhpUnitUtil;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ use function array_merge;
  *
  * @codeCoverageIgnore
  *
- * @package App\Utils\Tests
+ * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestTraitTestCase extends WebTestCase

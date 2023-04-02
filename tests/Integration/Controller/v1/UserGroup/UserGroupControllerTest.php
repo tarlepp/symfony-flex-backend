@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Controller\v1\UserGroup;
 
 use App\Controller\v1\UserGroup\UserGroupController;
 use App\Resource\UserGroupResource;
-use App\Utils\Tests\RestIntegrationControllerTestCase;
+use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
  * Class UserGroupControllerTest

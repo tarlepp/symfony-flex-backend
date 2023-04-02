@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\ApiKey;
 
-use App\Utils\Tests\WebTestCase;
+use App\Tests\E2E\TestCase\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

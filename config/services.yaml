@@ -37,7 +37,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
-            - '../src/Utils/Tests/'
             - '../src/Kernel.php'
 
     App\ValueResolver\EntityValueResolver:
@@ -46,6 +45,24 @@ services:
 
 when@dev:
     services:
+        _defaults:
+            <<: *_services_defaults
+
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+
+        App\Tests\E2E\Rest\src\:
+            resource: '../tests/E2E/Rest/src/*'
+
+        App\Tests\E2E\Rest\src\Controller\:
+            resource: '../tests/E2E/Rest/src/Controller/*'
+
+        App\Tests\E2E\Rest\Traits\Actions\src\:
+            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
+
+        App\Tests\Integration\Helpers\src\:
+            resource: '../tests/Integration/Helpers/src/*'
+
         ProxyManager\Factory\AccessInterceptorValueHolderFactory:
             class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
 
@@ -68,10 +85,10 @@ when@test:
             public: true
 
         App\DataFixtures\:
-            resource: '../src/DataFixtures/'
+            resource: '../src/DataFixtures/*'
 
-        App\Utils\Tests\:
-            resource: '../src/Utils/Tests'
+        App\Tests\E2E\TestCase\:
+            resource: '../tests/E2E/TestCase/*'
 
         App\Tests\E2E\Rest\src\:
             resource: '../tests/E2E/Rest/src/*'
@@ -81,3 +98,6 @@ when@test:
 
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
+
+        App\Tests\Utils\:
+            resource: '../tests/Utils/*'

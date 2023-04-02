@@ -13,7 +13,7 @@ use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Security\RolesService;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;

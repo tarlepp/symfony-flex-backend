@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Functional\Repository;
 
 use App\Repository\HealthzRepository;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use DateTimeImmutable;
 use DateTimeZone;
 use PHPUnit\Framework\Attributes\Depends;

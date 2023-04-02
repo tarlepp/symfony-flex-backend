@@ -12,7 +12,7 @@ use App\Controller\v1\User\DeleteUserController;
 use App\Entity\User;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
-use App\Utils\Tests\RestIntegrationControllerTestCase;
+use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;

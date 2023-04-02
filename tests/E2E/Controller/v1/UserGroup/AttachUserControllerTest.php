@@ -10,9 +10,9 @@ namespace App\Tests\E2E\Controller\v1\UserGroup;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\DataFixtures\ORM\LoadUserGroupData;
+use App\Tests\E2E\TestCase\WebTestCase;
+use App\Tests\Utils\PhpUnitUtil;
 use App\Utils\JSON;
-use App\Utils\Tests\PhpUnitUtil;
-use App\Utils\Tests\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
