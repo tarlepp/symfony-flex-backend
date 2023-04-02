@@ -16,7 +16,7 @@ parameters:
 
 services:
     # default configuration for services in *this* file
-    _defaults:
+    _defaults: &_services_defaults
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
@@ -45,24 +45,20 @@ services:
 
 when@dev:
     services:
-        _defaults:
-            autowire: true
-            autoconfigure: true
-
-        App\DataFixtures\:
-            resource: '../src/DataFixtures/'
-
         App\Tests\E2E\Rest\src\:
             resource: '../tests/E2E/Rest/src/*'
-
-        App\Tests\E2E\Rest\src\Controller\:
-            resource: '../tests/E2E/Rest/src/Controller/*'
 
         App\Tests\E2E\Rest\Traits\Actions\src\:
             resource: '../tests/E2E/Rest/Traits/Actions/src/*'
 
+        App\Tests\E2E\TestCase\:
+            resource: '../tests/E2E/TestCase/*'
+
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
+
+        App\Tests\Utils\:
+            resource: '../tests/Utils/*'
 
         ProxyManager\Factory\AccessInterceptorValueHolderFactory:
             class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
@@ -82,24 +78,20 @@ when@dev:
 when@test:
     services:
         _defaults:
-            autowire: true
-            autoconfigure: true
+            <<: *_services_defaults
             public: true
 
         App\DataFixtures\:
             resource: '../src/DataFixtures/*'
 
-        App\Tests\E2E\TestCase\:
-            resource: '../tests/E2E/TestCase/*'
-
         App\Tests\E2E\Rest\src\:
             resource: '../tests/E2E/Rest/src/*'
 
-        App\Tests\E2E\Rest\src\Controller\:
-            resource: '../tests/E2E/Rest/src/Controller/*'
-
         App\Tests\E2E\Rest\Traits\Actions\src\:
             resource: '../tests/E2E/Rest/Traits/Actions/src/*'
+
+        App\Tests\E2E\TestCase\:
+            resource: '../tests/E2E/TestCase/*'
 
         App\Tests\Integration\Helpers\src\:
             resource: '../tests/Integration/Helpers/src/*'
