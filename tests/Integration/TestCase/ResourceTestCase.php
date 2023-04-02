@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Resource/ResourceTestCase.php
+ * /tests/Integration/TestCase/ResourceTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Resource;
+namespace App\Tests\Integration\TestCase;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\BaseRepository;
@@ -19,7 +19,7 @@ use function sprintf;
 /**
  * Class ResourceTestCase
  *
- * @package App\Tests\Integration\Resource
+ * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class ResourceTestCase extends KernelTestCase

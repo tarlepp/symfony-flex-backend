@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Repository/RepositoryTestCase.php
+ * /tests/Integration/TestCase/RepositoryTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Tests\Integration\Repository;
+namespace App\Tests\Integration\TestCase;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
@@ -19,7 +19,7 @@ use function sort;
 /**
  * Class RepositoryTestCase
  *
- * @package App\Tests\Integration\Repository
+ * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RepositoryTestCase extends KernelTestCase

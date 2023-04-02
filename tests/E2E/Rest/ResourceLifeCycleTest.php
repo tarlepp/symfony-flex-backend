@@ -11,7 +11,7 @@ namespace App\Tests\E2E\Rest;
 use App\Enum\Role;
 use App\Repository\RoleRepository;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
-use App\Utils\Tests\WebTestCase;
+use App\Tests\E2E\TestCase\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/AutoMapper/RestRequestMapperTestCase.php
+ * /tests/Integration/TestCase/RestRequestMapperTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\AutoMapper;
+namespace App\Tests\Integration\TestCase;
 
 use App\AutoMapper\RestRequestMapper;
 use App\Rest\Interfaces\RestResourceInterface;
@@ -22,7 +22,7 @@ use function class_exists;
 /**
  * Class RestRequestMapperTestCase
  *
- * @package App\Tests\Integration\AutoMapper
+ * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestRequestMapperTestCase extends KernelTestCase

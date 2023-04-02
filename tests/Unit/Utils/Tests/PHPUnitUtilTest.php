@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Utils\Tests;
 
 use App\Entity\User;
-use App\Utils\Tests\PhpUnitUtil;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\PhpUnitUtil;
+use App\Tests\Utils\StringableArrayObject;
 use DateTime;
 use DateTimeImmutable;
 use Generator;

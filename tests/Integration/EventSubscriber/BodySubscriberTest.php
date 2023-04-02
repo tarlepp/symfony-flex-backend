@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\BodySubscriber;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Unit\Utils\Tests;
 
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

@@ -11,7 +11,7 @@ namespace App\Tests\Integration\DTO\UserGroup;
 use App\DTO\UserGroup\UserGroup;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Tests\Integration\DTO\DtoTestCase;
+use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**

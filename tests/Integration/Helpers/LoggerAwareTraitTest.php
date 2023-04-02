@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Helpers;
 
 use App\Tests\Integration\Helpers\src\LoggerAwareService;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;

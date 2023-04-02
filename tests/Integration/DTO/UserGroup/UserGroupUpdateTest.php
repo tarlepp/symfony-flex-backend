@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\DTO\UserGroup;
 
 use App\DTO\UserGroup\UserGroupUpdate;
-use App\Tests\Integration\DTO\DtoTestCase;
+use App\Tests\Integration\TestCase\DtoTestCase;
 
 /**
  * Class UserGroupUpdateTest

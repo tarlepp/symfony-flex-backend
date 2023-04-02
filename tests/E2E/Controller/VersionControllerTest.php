@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller;
 
 use App\Resource\LogRequestResource;
+use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
-use App\Utils\Tests\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function file_get_contents;

@@ -14,6 +14,7 @@ use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\UserGroupRepository;
 use App\Resource\UserGroupResource;
 use App\Rest\Interfaces\RestResourceInterface;
+use App\Tests\Integration\TestCase\RepositoryTestCase;
 
 /**
  * Class UserGroupRepositoryTest

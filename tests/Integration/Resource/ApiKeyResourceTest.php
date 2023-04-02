@@ -14,6 +14,7 @@ use App\Repository\ApiKeyRepository;
 use App\Repository\BaseRepository;
 use App\Resource\ApiKeyResource;
 use App\Rest\RestResource;
+use App\Tests\Integration\TestCase\ResourceTestCase;
 
 /**
  * Class ApiKeyResourceTest

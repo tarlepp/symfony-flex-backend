@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Rest;
 
 use App\Rest\SearchTerm;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

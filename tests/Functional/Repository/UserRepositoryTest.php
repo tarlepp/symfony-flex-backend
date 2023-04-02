@@ -10,7 +10,7 @@ namespace App\Tests\Functional\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;

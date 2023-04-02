@@ -12,7 +12,7 @@ use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

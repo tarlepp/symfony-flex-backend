@@ -14,7 +14,7 @@ use App\DTO\RestDtoInterface;
 use App\Resource\ApiKeyResource;
 use App\Rest\ResponseHandler;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
-use App\Utils\Tests\PhpUnitUtil;
+use App\Tests\Utils\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

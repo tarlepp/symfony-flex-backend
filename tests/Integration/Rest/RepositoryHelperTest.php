@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Rest;
 
 use App\Repository\UserRepository;
 use App\Rest\RepositoryHelper;
-use App\Utils\Tests\StringableArrayObject;
+use App\Tests\Utils\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

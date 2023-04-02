@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/Tests/RestIntegrationControllerTestCase.php
+ * /tests/Integration/TestCase/RestIntegrationControllerTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Utils\Tests;
+namespace App\Tests\Integration\TestCase;
 
 use App\Rest\Controller;
 use ReflectionClass;
@@ -21,7 +21,7 @@ use function sprintf;
 /**
  * Class RestIntegrationControllerTestCase
  *
- * @package App\Utils\Tests
+ * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestIntegrationControllerTestCase extends KernelTestCase

@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Controller\v1\User;
 
 use App\Controller\v1\User\UserController;
 use App\Resource\UserResource;
-use App\Utils\Tests\RestIntegrationControllerTestCase;
+use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
  * Class UserControllerTest

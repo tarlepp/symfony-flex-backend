@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Controller\v1\Role;
 
 use App\Controller\v1\Role\RoleController;
 use App\Resource\RoleResource;
-use App\Utils\Tests\RestIntegrationControllerTestCase;
+use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
  * Class RoleControllerTest
