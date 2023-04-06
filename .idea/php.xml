@@ -142,12 +142,81 @@
       <path value="$PROJECT_DIR$/vendor/friendsofphp/proxy-manager-lts" />
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-eventmanager" />
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/cache" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/cache-contracts" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/symfony/var-exporter" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/composer" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/tools/11_phplint/vendor/overtrue/phplint" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/composer" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/doctrine/collections" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/complexity" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/cli-parser" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/liuggio/fastest" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/lines-of-code" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/type" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/code-unit" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-invoker" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/phpcov" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/dom-crawler" />
+      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/masterminds/html5" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="7377c17b-0802-4cb1-95f7-8eb151a88214" name="Docker-PHP" home="docker-compose://DATA" debugger_id="php.debugger.XDebug">
-        <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="php" DOCKER_REMOTE_PROJECT_PATH="/opt/project">
+      <interpreter id="7377c17b-0802-4cb1-95f7-8eb151a88214" name="Docker-PHP" home="docker-compose://DATA" false="false" debugger_id="php.debugger.XDebug">
+        <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="php" DOCKER_REMOTE_PROJECT_PATH="/opt/project">
           <type_data command="EXEC" />
           <dockerComposeConfigurationPaths>
             <item value="$PROJECT_DIR$/docker-compose.yml" />
