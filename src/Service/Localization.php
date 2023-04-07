@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Service;
 
-use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\Enum\Language;
 use App\Enum\Locale;
 use Closure;
