@@ -11,6 +11,7 @@ namespace App\AutoMapper\User;
 use App\AutoMapper\RestRequestMapper;
 use App\Entity\UserGroup;
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Resource\UserGroupResource;
 use InvalidArgumentException;
 use Throwable;
@@ -62,5 +63,10 @@ class RequestMapper extends RestRequestMapper
     protected function transformLanguage(string $language): Language
     {
         return Language::tryFrom($language) ?? throw new InvalidArgumentException('Invalid language');
+    }
+
+    protected function transformLocale(string $locale): Locale
+    {
+        return Locale::tryFrom($locale) ?? throw new InvalidArgumentException('Invalid locale');
     }
 }
