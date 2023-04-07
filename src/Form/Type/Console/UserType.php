@@ -10,6 +10,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\User\User as UserDto;
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
@@ -167,12 +168,12 @@ class UserType extends AbstractType
         $builder
             ->add(
                 'locale',
-                Type\ChoiceType::class,
+                Type\EnumType::class,
                 [
+                    FormTypeLabelInterface::CLASS_NAME => Locale::class,
                     FormTypeLabelInterface::LABEL => 'Locale',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LOCALE,
-                    FormTypeLabelInterface::CHOICES => array_combine($locales, $locales),
+                    FormTypeLabelInterface::EMPTY_DATA => Locale::getDefault(),
                 ],
             );
 
