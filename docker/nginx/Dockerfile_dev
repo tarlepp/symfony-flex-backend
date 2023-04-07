@@ -1,5 +1,8 @@
 FROM nginx:latest
 
+# Note that this `nginx-dev.conf` is also mounted within `docker-compose.yml`
+# so you don't need to build containers if you change something there, restart
+# should do the trick
 ADD nginx-dev.conf /etc/nginx/conf.d/default.conf
 ADD php-upstream.conf /etc/nginx/conf.d/upstream.conf
 
