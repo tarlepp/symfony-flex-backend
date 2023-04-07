@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLocaleType;
+use App\Enum\Locale;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -44,13 +45,13 @@ class EnumLocaleTypeTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatConvertToDatabaseValueWorksWithProperValues')]
-    #[TestDox('Test that `convertToDatabaseValue` method returns `$value`.')]
-    public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$expected` when using `$locale`')]
+    public function testThatConvertToDatabaseValueWorksWithProperValues(string $expected, Locale $locale): void
     {
         $type = $this->getType();
         $platform = $this->getPlatform();
 
-        self::assertSame($value, $type->convertToDatabaseValue($value, $platform));
+        self::assertSame($expected, $type->convertToDatabaseValue($locale, $platform));
     }
 
     /**
@@ -74,8 +75,8 @@ class EnumLocaleTypeTest extends KernelTestCase
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
-        yield ['en'];
-        yield ['fi'];
+        yield ['en', Locale::EN];
+        yield ['fi', Locale::FI];
     }
 
     /**

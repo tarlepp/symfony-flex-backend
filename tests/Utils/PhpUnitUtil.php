@@ -11,6 +11,7 @@ namespace App\Tests\Utils;
 use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Role;
 use App\Enum\Language;
+use App\Enum\Locale;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
@@ -178,6 +179,7 @@ class PhpUnitUtil
             'time', 'date', 'datetime' => DateTime::class,
             'time_immutable', 'date_immutable', 'datetime_immutable' => DateTimeImmutable::class,
             AppTypes::ENUM_LANGUAGE => Language::class,
+            AppTypes::ENUM_LOCALE => Locale::class,
             self::TYPE_INT, self::TYPE_INTEGER, 'bigint' => self::TYPE_INT,
             self::TYPE_STRING, 'text', 'EnumLocale', 'EnumLogLogin' => self::TYPE_STRING,
             self::TYPE_JSON => self::TYPE_JSON,

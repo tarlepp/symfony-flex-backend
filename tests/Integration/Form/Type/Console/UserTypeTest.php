@@ -12,6 +12,7 @@ use App\DTO\User\User as UserDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
@@ -88,7 +89,7 @@ class UserTypeTest extends TypeTestCase
             ->setEmail('john.doe@test.com')
             ->setPassword('password')
             ->setLanguage(Language::FI)
-            ->setLocale('fi')
+            ->setLocale(Locale::FI)
             ->setTimezone('Europe/Stockholm')
             ->setUserGroups([$userGroupEntity]);
 
