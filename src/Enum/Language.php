@@ -12,9 +12,9 @@ use App\Enum\Interfaces\DatabaseEnumInterface;
 use App\Enum\Traits\GetValues;
 
 /**
- * Language Role
+ * Language enum
  *
- * @package App\Entity
+ * @package App\Enum
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 enum Language: string implements DatabaseEnumInterface
