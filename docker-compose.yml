@@ -34,6 +34,7 @@ services:
             - "8000:443"
         volumes:
             - ./:/app:cached
+            - ./docker/nginx/nginx-dev.conf:/etc/nginx/conf.d/default.conf
             - ./docker/nginx/ssl/:/etc/nginx/ssl/:ro
         tmpfs:
             - /app/var/:uid=$HOST_UID,gid=$HOST_GID
