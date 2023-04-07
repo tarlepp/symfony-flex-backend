@@ -10,6 +10,7 @@ namespace App\Service;
 
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\Enum\Language;
+use App\Enum\Locale;
 use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -29,7 +30,6 @@ use function str_replace;
  */
 class Localization
 {
-    public const DEFAULT_LOCALE = EnumLocaleType::LOCALE_EN;
     public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
@@ -51,7 +51,7 @@ class Localization
      */
     public function getLocales(): array
     {
-        return EnumLocaleType::getValues();
+        return Locale::getValues();
     }
 
     /**
