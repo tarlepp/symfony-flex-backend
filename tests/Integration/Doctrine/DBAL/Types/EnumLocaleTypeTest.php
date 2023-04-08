@@ -71,7 +71,7 @@ class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: 'en'|'fi'}>
+     * @return Generator<array{0: 'en'|'fi', 1: Locale}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {

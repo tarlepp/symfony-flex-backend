@@ -181,7 +181,7 @@ class PhpUnitUtil
             AppTypes::ENUM_LANGUAGE => Language::class,
             AppTypes::ENUM_LOCALE => Locale::class,
             self::TYPE_INT, self::TYPE_INTEGER, 'bigint' => self::TYPE_INT,
-            self::TYPE_STRING, 'text', 'EnumLocale', 'EnumLogLogin' => self::TYPE_STRING,
+            self::TYPE_STRING, 'text', 'EnumLogLogin' => self::TYPE_STRING,
             self::TYPE_JSON => self::TYPE_JSON,
             self::TYPE_ARRAY => self::TYPE_ARRAY,
             self::TYPE_BOOL, self::TYPE_BOOLEAN => self::TYPE_BOOL,

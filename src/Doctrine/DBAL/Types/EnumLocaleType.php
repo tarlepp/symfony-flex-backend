@@ -8,7 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Interfaces\DatabaseEnumInterface;
 use App\Enum\Locale;
+use BackedEnum;
 
 /**
  * Class EnumLocaleType

@@ -150,8 +150,6 @@ class UserType extends AbstractType
 
     private function addLocalizationFieldsToForm(FormBuilderInterface $builder): void
     {
-        $locales = $this->localization->getLocales();
-
         $builder
             ->add(
                 'language',
