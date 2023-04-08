@@ -57,11 +57,6 @@ class UserTypeTest extends TypeTestCase
 
         $localization
             ->expects(self::once())
-            ->method('getLocales')
-            ->willReturn(['en', 'fi']);
-
-        $localization
-            ->expects(self::once())
             ->method('getFormattedTimezones')
             ->willReturn([
                 [
