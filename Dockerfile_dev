@@ -76,6 +76,10 @@ COPY --from=composer:2.5.5 /usr/bin/composer /usr/bin/composer
 RUN composer completion bash > /etc/bash_completion.d/composer
 
 # Copy development `php.ini` configuration to container
+#
+# Also note that this is mounted within `docker-compose.yml` file, so
+# you don't need to build containers again if you change something just
+# restart containers and you're good
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
 
 # Define used work directory
