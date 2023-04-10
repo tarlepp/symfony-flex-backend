@@ -414,7 +414,7 @@ phpstan: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan -v --xdebug
+	@./vendor/bin/phpstan -v
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -431,7 +431,7 @@ phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan -v --xdebug --error-format=github
+	@./vendor/bin/phpstan -v --error-format=github
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
