@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Security\SecurityUser;
 use App\Service\Localization;
 use DateTime;
@@ -83,8 +84,8 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
             : Language::getDefault()->value;
 
         $payload['locale'] = $user instanceof SecurityUser
-            ? $user->getLocale()
-            : Localization::DEFAULT_LOCALE;
+            ? $user->getLocale()->value
+            : Locale::getDefault()->value;
 
         $payload['timezone'] = $user instanceof SecurityUser
             ? $user->getTimezone()

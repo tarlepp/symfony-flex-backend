@@ -10,6 +10,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\EventSubscriber\JWTCreatedSubscriber;
 use App\Security\SecurityUser;
 use App\Service\Localization;
@@ -112,7 +113,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com')
             ->setLanguage(Language::FI)
-            ->setLocale('fi')
+            ->setLocale(Locale::FI)
             ->setTimezone('UTC');
 
         // Create RequestStack and push pure Request to it
@@ -132,7 +133,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         }
 
         self::assertSame(Language::FI->value, $event->getData()['language']);
-        self::assertSame('fi', $event->getData()['locale']);
+        self::assertSame(Locale::FI->value, $event->getData()['locale']);
         self::assertSame('UTC', $event->getData()['timezone']);
     }
 
@@ -159,7 +160,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         }
 
         self::assertSame(Language::getDefault()->value, $event->getData()['language']);
-        self::assertSame(Localization::DEFAULT_LOCALE, $event->getData()['locale']);
+        self::assertSame(Locale::getDefault()->value, $event->getData()['locale']);
         self::assertSame(Localization::DEFAULT_TIMEZONE, $event->getData()['timezone']);
     }
 }

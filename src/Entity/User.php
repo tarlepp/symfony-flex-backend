@@ -17,6 +17,7 @@ use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
 use App\Entity\Traits\Uuid;
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -187,7 +188,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    //#[AppAssert\Language]
     private Language $language;
 
     #[ORM\Column(
@@ -207,8 +207,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[AppAssert\Locale]
-    private string $locale = Localization::DEFAULT_LOCALE;
+    private Locale $locale;
 
     #[ORM\Column(
         name: 'timezone',
@@ -254,6 +253,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     {
         $this->id = $this->createUuid();
         $this->language = Language::getDefault();
+        $this->locale = Locale::getDefault();
 
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
@@ -326,12 +326,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    public function getLocale(): string
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
 
-    public function setLocale(string $locale): self
+    public function setLocale(Locale $locale): self
     {
         $this->locale = $locale;
 

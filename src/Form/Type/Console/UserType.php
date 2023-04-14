@@ -10,6 +10,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\User\User as UserDto;
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
@@ -22,7 +23,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
-use function array_combine;
 use function array_map;
 
 /**
@@ -150,8 +150,6 @@ class UserType extends AbstractType
 
     private function addLocalizationFieldsToForm(FormBuilderInterface $builder): void
     {
-        $locales = $this->localization->getLocales();
-
         $builder
             ->add(
                 'language',
@@ -167,12 +165,12 @@ class UserType extends AbstractType
         $builder
             ->add(
                 'locale',
-                Type\ChoiceType::class,
+                Type\EnumType::class,
                 [
+                    FormTypeLabelInterface::CLASS_NAME => Locale::class,
                     FormTypeLabelInterface::LABEL => 'Locale',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LOCALE,
-                    FormTypeLabelInterface::CHOICES => array_combine($locales, $locales),
+                    FormTypeLabelInterface::EMPTY_DATA => Locale::getDefault(),
                 ],
             );
 

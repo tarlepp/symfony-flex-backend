@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Enum/Language.php
+ * /src/Enum/Locale.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -12,12 +12,12 @@ use App\Enum\Interfaces\DatabaseEnumInterface;
 use App\Enum\Traits\GetValues;
 
 /**
- * Language enum
+ * Locale enum
  *
  * @package App\Enum
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-enum Language: string implements DatabaseEnumInterface
+enum Locale: string implements DatabaseEnumInterface
 {
     use GetValues;
 
