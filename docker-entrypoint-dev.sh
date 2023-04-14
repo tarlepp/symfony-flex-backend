@@ -4,9 +4,12 @@ set -e
 #
 # If we're starting web-server we need to do following:
 #   0) Basic linting of current JSON configuration file
-#   1) Modify docker-php-ext-xdebug.ini file to contain correct remote host value, note that for mac we need to use
-#      another value within this. Also we want to export host IP so that we can use that within `check.php` to check
-#      that current environment is compatible with Symfony.
+#   1) Determine docker container IP address, so that we can use it within
+#      XDebug configuration. Copy php.ini file to correct location and modify
+#      it to contain correct remote host value. With this we don't need to
+#      build container each time we want to change something in php.ini file.
+#      Also we want to export host IP so that we can use that within
+#      `check.php` to check that current environment is compatible with Symfony
 #   2) Install all dependencies
 #   3) Generate JWT encryption keys
 #   4) Create database if it not exists yet
@@ -26,6 +29,7 @@ else
     HOST="docker.for.mac.localhost"
 fi
 
+cp /app/docker/php/php-dev.ini /usr/local/etc/php/php.ini
 sed -i "s/xdebug\.client_host \=.*/xdebug\.client_host\ = $HOST/g" /usr/local/etc/php/php.ini
 
 DOCKER_IP=$(/sbin/ip route|awk '/default/ { print $3 }')
