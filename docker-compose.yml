@@ -15,7 +15,6 @@ services:
             - mariadb
         volumes:
             - ./:/app:cached
-            - ./docker/php/php-dev.ini:/usr/local/etc/php/php.ini
         tmpfs:
             - /app/var/:uid=$HOST_UID,gid=$HOST_GID
         environment:
