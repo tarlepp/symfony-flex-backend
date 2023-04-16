@@ -2,11 +2,9 @@
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
-    backupGlobals="false"
+    xsi:noNamespaceSchemaLocation="tools/01_phpunit/vendor/phpunit/phpunit/phpunit.xsd"
     colors="true"
     testdox="true"
-    beStrictAboutTestsThatDoNotTestAnything="true"
     beStrictAboutOutputDuringTests="true"
     stopOnError="true"
     stopOnFailure="true"
@@ -29,8 +27,8 @@
             <file>./src/Kernel.php</file>
         </exclude>
         <report>
-            <clover outputFile="build/logs/clover.xml"/>
-            <html outputDirectory="build/report" lowUpperBound="55" highLowerBound="90" />
+            <clover outputFile="build/logs/clover.xml" />
+            <html outputDirectory="build/report" lowUpperBound="75" highLowerBound="95" />
             <text outputFile="php://stdout" showOnlySummary="true" showUncoveredFiles="true" />
         </report>
     </coverage>
@@ -54,7 +52,7 @@
 
             https://symfony.com/doc/current/components/phpunit_bridge.html#direct-and-indirect-deprecations
         -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
     </php>
     <testsuites>
         <testsuite name="Unit">
