@@ -101,6 +101,7 @@ phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
 phpstan-github              # Runs PHPStan static analysis tool (GitHub)
 phpstan                     # Runs PHPStan static analysis tool
+project-stats               # Create simple project stats
 psalm                       # Runs Psalm static analysis tool
 psalm-github                # Runs Psalm static analysis tool (GitHub)
 psalm-shepherd              # Runs Psalm static analysis tool + report results

@@ -844,3 +844,18 @@ else
 	@echo "\033[32mGenerating self signed SSL certificates\033[39m"
 	@cd docker/nginx/ssl && ./create-keys.sh
 endif
+
+project-stats: ## Create simple project stats
+project-stats: info_msg := @printf $(_TITLE) "OK" "Creating simple project stats"
+project-stats: info
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@./scripts/project-stats.sh
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make project-stats
+	$(ALL_DONE)
+endif

@@ -173,6 +173,7 @@ build _your_ own application - right?
 * [Testing guide](doc/TESTING.md)
 * [Usage checklist](doc/USAGE_CHECKLIST.md)
 * [Using Xdebug](doc/XDEBUG.md)
+* [Scripts](scripts/README.md)
 
 ## External links / resources [ᐞ](#table-of-contents)
 
