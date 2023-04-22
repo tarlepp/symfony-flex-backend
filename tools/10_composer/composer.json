@@ -7,7 +7,7 @@
 	"require-dev": {
 		"ergebnis/composer-normalize": "2.30.2",
 		"icanhazstring/composer-unused": "0.8.7",
-		"maglnet/composer-require-checker": "4.5.0",
+		"maglnet/composer-require-checker": "4.6.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
