@@ -38,7 +38,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     {
         $this->identifier = $apiKey->getToken();
         $this->apiKeyIdentifier = $apiKey->getId();
-        $this->roles = array_unique(array_merge($roles, [Role::API->value]));
+        $this->roles = array_unique([...$roles, Role::API->value]);
     }
 
     public function getUserIdentifier(): string

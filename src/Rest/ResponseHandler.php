@@ -85,7 +85,7 @@ class ResponseHandler implements ResponseHandlerInterface
                 $restResource
             );
 
-            $groups = array_merge([$entityName], $populate);
+            $groups = [$entityName, ...$populate];
             $filter = static fn (string $groupName): bool => strncmp($groupName, 'Set.', 4) === 0;
 
             if (array_key_exists('populateOnly', $request->query->all())
