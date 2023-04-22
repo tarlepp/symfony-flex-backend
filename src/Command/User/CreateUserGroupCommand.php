@@ -39,7 +39,7 @@ class CreateUserGroupCommand extends Command
     use GetApplicationTrait;
     use SymfonyStyleTrait;
 
-    public const NAME = 'user:create-group';
+    final public const NAME = 'user:create-group';
 
     /**
      * @var array<int, array<string, string>>

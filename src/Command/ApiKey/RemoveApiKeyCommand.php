@@ -31,7 +31,7 @@ class RemoveApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public const NAME = 'api-key:remove';
+    final public const NAME = 'api-key:remove';
 
     public function __construct(
         private readonly ApiKeyResource $apiKeyResource,

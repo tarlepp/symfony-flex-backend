@@ -31,7 +31,7 @@ class RemoveUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public const NAME = 'user:remove-group';
+    final public const NAME = 'user:remove-group';
 
     public function __construct(
         private readonly UserGroupResource $userGroupResource,

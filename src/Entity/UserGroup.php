@@ -40,8 +40,8 @@ class UserGroup implements EntityInterface, Stringable
     use Timestampable;
     use Uuid;
 
-    public const SET_USER_PROFILE_GROUPS = 'set.UserProfileGroups';
-    public const SET_USER_GROUP_BASIC = 'set.UserGroupBasic';
+    final public const SET_USER_PROFILE_GROUPS = 'set.UserProfileGroups';
+    final public const SET_USER_GROUP_BASIC = 'set.UserGroupBasic';
 
     /**
      * @OA\Property(type="string", format="uuid")

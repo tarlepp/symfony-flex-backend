@@ -40,7 +40,7 @@ class CreateApiKeyCommand extends Command
     use ApiKeyUserManagementHelperTrait;
     use SymfonyStyleTrait;
 
-    public const NAME = 'api-key:create';
+    final public const NAME = 'api-key:create';
 
     /**
      * @var array<int, array<string, string>>

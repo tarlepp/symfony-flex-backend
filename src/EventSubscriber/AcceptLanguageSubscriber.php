@@ -22,10 +22,10 @@ use function in_array;
 class AcceptLanguageSubscriber implements EventSubscriberInterface
 {
     // Supported locales
-    public const LOCALE_EN = 'en';
-    public const LOCALE_FI = 'fi';
+    final public const LOCALE_EN = 'en';
+    final public const LOCALE_FI = 'fi';
 
-    public const SUPPORTED_LOCALES = [
+    final public const SUPPORTED_LOCALES = [
         self::LOCALE_EN,
         self::LOCALE_FI,
     ];

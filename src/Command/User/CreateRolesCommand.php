@@ -36,7 +36,7 @@ class CreateRolesCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public const NAME = 'user:create-roles';
+    final public const NAME = 'user:create-roles';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

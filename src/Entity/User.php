@@ -62,8 +62,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use UserRelations;
     use Uuid;
 
-    public const SET_USER_PROFILE = 'set.UserProfile';
-    public const SET_USER_BASIC = 'set.UserBasic';
+    final public const SET_USER_PROFILE = 'set.UserProfile';
+    final public const SET_USER_BASIC = 'set.UserBasic';
 
     /**
      * @OA\Property(type="string", format="uuid")

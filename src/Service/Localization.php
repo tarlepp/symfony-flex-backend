@@ -29,7 +29,7 @@ use function str_replace;
  */
 class Localization
 {
-    public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
+    final public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
         private readonly CacheInterface $appCacheApcu,
@@ -107,7 +107,7 @@ class Localization
     {
         return function (ItemInterface $item): array {
             // One year
-            $item->expiresAfter(31536000);
+            $item->expiresAfter(31_536_000);
 
             return $this->getFormattedTimezones();
         };
