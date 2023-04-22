@@ -696,7 +696,7 @@ abstract class EntityTestCase extends KernelTestCase
                             ],
                         ];
 
-                        $methods = array_merge($methods, $setters);
+                        $methods = [...$methods, ...$setters];
                     }
                     break;
             }
