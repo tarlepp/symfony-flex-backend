@@ -19,7 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
         //__DIR__ . '/config',
         //__DIR__ . '/migrations',
         //__DIR__ . '/public',
-        __DIR__ . '/src',
+        //__DIR__ . '/src',
         /**
          * First run some rule(s) or sets to whole codebase and
          * run all the tests (phpunit, ecs, psalm and phpstan),
@@ -29,7 +29,7 @@ return static function (RectorConfig $rectorConfig): void {
          * After that enable this directory and run rector again
          * and do that whole process again.
          */
-        //__DIR__ . '/tests',
+        __DIR__ . '/tests',
     ]);
 
     // Enable single or multiple rules with rector
