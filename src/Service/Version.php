@@ -57,7 +57,7 @@ class Version
     {
         return function (ItemInterface $item): string {
             // One year
-            $item->expiresAfter(31536000);
+            $item->expiresAfter(31_536_000);
 
             $composerData = JSON::decode((string)file_get_contents($this->projectDir . '/composer.json'), true);
 
