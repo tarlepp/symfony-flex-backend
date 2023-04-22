@@ -175,7 +175,7 @@ class IndexControllerTest extends WebTestCase
      */
     public static function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
     {
-        $rolesService = self::getContainer()->get(RolesService::class);
+        $rolesService = self::getRolesService();
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {
@@ -184,5 +184,13 @@ class IndexControllerTest extends WebTestCase
         } else {
             yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_')];
         }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private static function getRolesService(): RolesService
+    {
+        return self::getContainer()->get(RolesService::class);
     }
 }
