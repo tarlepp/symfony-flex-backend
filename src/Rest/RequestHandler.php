@@ -27,7 +27,7 @@ use function is_array;
 use function is_string;
 use function mb_strtoupper;
 use function mb_substr;
-use function strncmp;
+use function str_starts_with;
 
 /**
  * Class RequestHandler
@@ -266,7 +266,7 @@ final class RequestHandler
             $order = in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
             $column = is_string($key) ? $key : $value;
 
-            if (strncmp($column, '-', 1) === 0) {
+            if (str_starts_with($column, '-')) {
                 $column = mb_substr($column, 1);
                 $order = 'DESC';
             }
