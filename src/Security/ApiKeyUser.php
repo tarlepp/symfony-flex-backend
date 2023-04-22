@@ -12,7 +12,6 @@ use App\Entity\ApiKey;
 use App\Enum\Role;
 use App\Security\Interfaces\ApiKeyUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function array_merge;
 use function array_unique;
 
 /**

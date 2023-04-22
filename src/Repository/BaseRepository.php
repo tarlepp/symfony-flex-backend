@@ -17,7 +17,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use function array_map;
-use function array_merge;
 use function array_unshift;
 use function implode;
 use function in_array;
