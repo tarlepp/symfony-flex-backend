@@ -226,8 +226,6 @@ class LogLogin implements EntityInterface
     ])]
     private ?string $model = null;
 
-    private DeviceDetector $deviceDetector;
-
     /**
      * LogLogin constructor.
      *
@@ -242,9 +240,9 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.type',
         ])]
-        private string $type,
+        private readonly string $type,
         Request $request,
-        DeviceDetector $deviceDetector,
+        private readonly DeviceDetector $deviceDetector,
         #[ORM\ManyToOne(
             targetEntity: User::class,
             inversedBy: 'logsLogin',
@@ -260,8 +258,6 @@ class LogLogin implements EntityInterface
         private ?User $user = null
     ) {
         $this->id = $this->createUuid();
-
-        $this->deviceDetector = $deviceDetector;
 
         $this->processTimeAndDate();
         $this->processRequestData($request);

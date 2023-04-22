@@ -49,7 +49,7 @@ class UserRepository extends BaseRepository
     public function __construct(
         protected ManagerRegistry $managerRegistry,
         #[Autowire('%kernel.environment%')]
-        private string $environment,
+        private readonly string $environment,
     ) {
     }
 

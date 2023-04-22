@@ -23,13 +23,13 @@ use function array_unique;
  */
 class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
-    private string $identifier;
-    private string $apiKeyIdentifier;
+    private readonly string $identifier;
+    private readonly string $apiKeyIdentifier;
 
     /**
      * @var array<int, string>
      */
-    private array $roles;
+    private readonly array $roles;
 
     /**
      * {@inheritdoc}
