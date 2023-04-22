@@ -22,6 +22,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector/rector/rules/Php80" isTestSource="true" packagePrefix="Rector\Php80\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector/rector/src" isTestSource="true" packagePrefix="Rector\Core\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/src" isTestSource="true" packagePrefix="Symplify\EasyCodingStandard\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
