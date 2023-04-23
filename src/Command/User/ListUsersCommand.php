@@ -37,7 +37,7 @@ class ListUsersCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public const NAME = 'user:list';
+    final public const NAME = 'user:list';
 
     public function __construct(
         private readonly UserResource $userResource,

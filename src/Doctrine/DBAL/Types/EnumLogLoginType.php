@@ -16,8 +16,8 @@ namespace App\Doctrine\DBAL\Types;
  */
 class EnumLogLoginType extends EnumType
 {
-    public const TYPE_FAILURE = 'failure';
-    public const TYPE_SUCCESS = 'success';
+    final public const TYPE_FAILURE = 'failure';
+    final public const TYPE_SUCCESS = 'success';
 
     protected static string $name = Types::ENUM_LOG_LOGIN;
 

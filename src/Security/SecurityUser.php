@@ -22,11 +22,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private string $identifier;
-    private string | null $password;
-    private Language $language;
-    private Locale $locale;
-    private string $timezone;
+    private readonly string $identifier;
+    private readonly string | null $password;
+    private readonly Language $language;
+    private readonly Locale $locale;
+    private readonly string $timezone;
 
     /**
      * SecurityUser constructor.

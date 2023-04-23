@@ -25,7 +25,7 @@ trait AddBasicFieldToForm
     protected function addBasicFieldToForm(FormBuilderInterface $builder, array $fields): void
     {
         foreach ($fields as $params) {
-            call_user_func_array([$builder, 'add'], $params);
+            call_user_func_array($builder->add(...), $params);
         }
     }
 }

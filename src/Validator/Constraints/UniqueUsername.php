@@ -28,8 +28,8 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class UniqueUsername extends Constraint
 {
-    public const IS_UNIQUE_USERNAME_ERROR = 'ea62740a-4d9b-4a25-9a56-46fb4c3d5fea';
-    public const MESSAGE = 'This username is already taken.';
+    final public const IS_UNIQUE_USERNAME_ERROR = 'ea62740a-4d9b-4a25-9a56-46fb4c3d5fea';
+    final public const MESSAGE = 'This username is already taken.';
 
     /**
      * {@inheritdoc}

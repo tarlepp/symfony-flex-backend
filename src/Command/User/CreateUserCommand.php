@@ -40,7 +40,7 @@ class CreateUserCommand extends Command
     use ApiKeyUserManagementHelperTrait;
     use SymfonyStyleTrait;
 
-    public const NAME = 'user:create';
+    final public const NAME = 'user:create';
 
     private const PARAMETER_NAME = 'name';
     private const PARAMETER_DESCRIPTION = 'description';

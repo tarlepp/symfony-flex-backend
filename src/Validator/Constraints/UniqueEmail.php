@@ -28,8 +28,8 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class UniqueEmail extends Constraint
 {
-    public const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
-    public const MESSAGE = 'This email is already taken.';
+    final public const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
+    final public const MESSAGE = 'This email is already taken.';
 
     /**
      * {@inheritdoc}

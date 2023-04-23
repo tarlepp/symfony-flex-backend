@@ -27,7 +27,7 @@ use function end;
 use function explode;
 use function implode;
 use function sprintf;
-use function strncmp;
+use function str_starts_with;
 
 /**
  * Class ResponseHandler
@@ -85,8 +85,8 @@ class ResponseHandler implements ResponseHandlerInterface
                 $restResource
             );
 
-            $groups = array_merge([$entityName], $populate);
-            $filter = static fn (string $groupName): bool => strncmp($groupName, 'Set.', 4) === 0;
+            $groups = [$entityName, ...$populate];
+            $filter = static fn (string $groupName): bool => str_starts_with($groupName, 'Set.');
 
             if (array_key_exists('populateOnly', $request->query->all())
                 || array_values(array_filter($groups, $filter)) !== []

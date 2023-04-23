@@ -28,8 +28,8 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Timezone extends Constraint
 {
-    public const INVALID_TIMEZONE = '1f8dd2a3-5b61-43ca-a6b2-af553f86ac17';
-    public const MESSAGE = 'This timezone "{{ timezone }}" is not valid.';
+    final public const INVALID_TIMEZONE = '1f8dd2a3-5b61-43ca-a6b2-af553f86ac17';
+    final public const MESSAGE = 'This timezone "{{ timezone }}" is not valid.';
 
     /**
      * {@inheritdoc}
