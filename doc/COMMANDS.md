@@ -88,7 +88,7 @@ fish                        # Get fish inside PHP container
 generate-jwt-keys           # Generates JWT auth keys
 generate-ssl-cert           # Generate self signed SSL certificates
 infection                   # Runs Infection to codebase
-install-bin                 # Install composer bin dependencies
+install-tools               # Install composer tools dependencies
 lint-configuration          # Lint current defined `application.json` that it
                             # contains valid JSON
 lint-yaml                   # Lint config YAML files
@@ -121,7 +121,7 @@ start-build                 # Build containers and start application in
                             # development mode + watch output
 stop                        # Stop application containers
 update                      # Update composer dependencies
-update-bin                  # Update composer bin dependencies
+update-tools                # Update composer tools dependencies
 ```
 
 ### Symfony console [ᐞ](#table-of-contents)
