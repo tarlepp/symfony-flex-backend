@@ -560,9 +560,9 @@ else
 	$(ALL_DONE)
 endif
 
-update-bin: ## Update composer bin dependencies
-update-bin: info_msg := @printf $(_TITLE) "OK" "Updating composer bin dependencies"
-update-bin: info
+update-tools: ## Update composer tools dependencies
+update-tools: info_msg := @printf $(_TITLE) "OK" "Updating composer tools dependencies"
+update-tools: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -571,13 +571,13 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update-bin
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update-tools
 	$(ALL_DONE)
 endif
 
-install-bin: ## Install composer bin dependencies
-install-bin: info_msg := @printf $(_TITLE) "OK" "Installing composer bin dependencies"
-install-bin: info
+install-tools: ## Install composer tools dependencies
+install-tools: info_msg := @printf $(_TITLE) "OK" "Installing composer tools dependencies"
+install-tools: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -586,7 +586,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make install-bin
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make install-tools
 	$(ALL_DONE)
 endif
 
