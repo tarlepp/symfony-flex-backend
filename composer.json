@@ -28,7 +28,7 @@
 		"ext-random": "*",
 		"doctrine/doctrine-bundle": "2.9.1",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
-		"doctrine/orm": "2.14.2",
+		"doctrine/orm": "2.14.3",
 		"gedmo/doctrine-extensions": "3.11.1",
 		"lexik/jwt-authentication-bundle": "2.18.1",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
