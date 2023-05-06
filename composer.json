@@ -28,7 +28,8 @@
 		"ext-random": "*",
 		"doctrine/doctrine-bundle": "2.9.1",
 		"doctrine/doctrine-migrations-bundle": "3.2.2",
-		"doctrine/orm": "2.14.2",
+		"doctrine/orm": "2.15.0",
+		"friendsofphp/proxy-manager-lts": "1.0.14",
 		"gedmo/doctrine-extensions": "3.11.1",
 		"lexik/jwt-authentication-bundle": "2.18.1",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
@@ -67,7 +68,7 @@
 	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.8.2",
-		"doctrine/doctrine-fixtures-bundle": "3.4.3",
+		"doctrine/doctrine-fixtures-bundle": "3.4.4",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.2.7",
 		"symfony/debug-bundle": "6.2.7",
