@@ -1,4 +1,6 @@
 # Default ignored files
+/commandlinetools/
+/dictionaries/
 /shelf/
 /workspace.xml
 # Editor-based HTTP Client requests
@@ -6,3 +8,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Other 
+codeception.xml
+phpspec.xml
