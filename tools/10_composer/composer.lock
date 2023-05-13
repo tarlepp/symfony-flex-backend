@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cef9f7f7b664a555d57a8ac525d09d4a",
+    "content-hash": "a465f1f1ddce41749d9785e61d1ac90b",
     "packages": [],
     "packages-dev": [
         {
             "name": "composer-unused/contracts",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer-unused/contracts.git",
-                "reference": "d2caa711faac838ee2404a985ab59db9bf5a02a1"
+                "reference": "5ec448d3ee80735dccad6a21a3266c377d0845ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/contracts/zipball/d2caa711faac838ee2404a985ab59db9bf5a02a1",
-                "reference": "d2caa711faac838ee2404a985ab59db9bf5a02a1",
+                "url": "https://api.github.com/repos/composer-unused/contracts/zipball/5ec448d3ee80735dccad6a21a3266c377d0845ae",
+                "reference": "5ec448d3ee80735dccad6a21a3266c377d0845ae",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
             "description": "Contract repository for composer-unused",
             "support": {
                 "issues": "https://github.com/composer-unused/contracts/issues",
-                "source": "https://github.com/composer-unused/contracts/tree/0.2.0"
+                "source": "https://github.com/composer-unused/contracts/tree/0.3.0"
             },
             "funding": [
                 {
@@ -51,24 +51,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-03T10:51:59+00:00"
+            "time": "2023-03-17T00:41:49+00:00"
         },
         {
             "name": "composer-unused/symbol-parser",
-            "version": "0.1.13",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer-unused/symbol-parser.git",
-                "reference": "7d95ce3283e922c1ca39110197401e5812c1a13c"
+                "reference": "a395a555aa38b63cadf9b2f396880ac86abb44a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/symbol-parser/zipball/7d95ce3283e922c1ca39110197401e5812c1a13c",
-                "reference": "7d95ce3283e922c1ca39110197401e5812c1a13c",
+                "url": "https://api.github.com/repos/composer-unused/symbol-parser/zipball/a395a555aa38b63cadf9b2f396880ac86abb44a9",
+                "reference": "a395a555aa38b63cadf9b2f396880ac86abb44a9",
                 "shasum": ""
             },
             "require": {
-                "composer-unused/contracts": "^0.1 || ^0.2",
+                "composer-unused/contracts": "^0.3",
                 "nikic/php-parser": "^4.15",
                 "php": "^7.4 || ^8.0",
                 "phpstan/phpdoc-parser": "^1.16",
@@ -122,7 +122,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2023-03-16T08:54:29+00:00"
+            "time": "2023-03-17T00:45:47+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -518,21 +518,21 @@
         },
         {
             "name": "icanhazstring/composer-unused",
-            "version": "0.8.7",
+            "version": "0.8.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer-unused/composer-unused.git",
-                "reference": "2fce1ea1121a2aa9ba93cfe58d965f368b69f795"
+                "reference": "e375a6cdc423fb8ba5637fccb1a238e8feab972a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/composer-unused/zipball/2fce1ea1121a2aa9ba93cfe58d965f368b69f795",
-                "reference": "2fce1ea1121a2aa9ba93cfe58d965f368b69f795",
+                "url": "https://api.github.com/repos/composer-unused/composer-unused/zipball/e375a6cdc423fb8ba5637fccb1a238e8feab972a",
+                "reference": "e375a6cdc423fb8ba5637fccb1a238e8feab972a",
                 "shasum": ""
             },
             "require": {
-                "composer-unused/contracts": "^0.2",
-                "composer-unused/symbol-parser": "^0.1.12",
+                "composer-unused/contracts": "^0.3",
+                "composer-unused/symbol-parser": "^0.2.1",
                 "ext-json": "*",
                 "nikic/php-parser": "^4.15",
                 "ondram/ci-detector": "^4.1",
@@ -555,11 +555,12 @@
                 "ext-ds": "*",
                 "ext-zend-opcache": "*",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "phpspec/prophecy-phpunit": "^2.0.1",
-                "phpstan/extension-installer": "^1.2",
+                "php-ds/php-ds": "^1.4",
+                "phpspec/prophecy-phpunit": "^2.0.2",
+                "phpstan/extension-installer": "^1.3",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^9.6.5",
+                "phpunit/phpunit": "^9.6.8",
                 "roave/security-advisories": "dev-master",
                 "squizlabs/php_codesniffer": "^3.7"
             },
@@ -569,6 +570,7 @@
             "type": "library",
             "extra": {
                 "bamarni-bin": {
+                    "bin-links": true,
                     "forward-command": true
                 }
             },
@@ -609,7 +611,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2023-03-15T15:23:34+00:00"
+            "time": "2023-05-12T05:53:34+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -1109,12 +1111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f86a07b7eb07f9297e939d8c5f97178b2c189dfe"
+                "reference": "d1af11449398214f9664514ce705c5154ead9c38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f86a07b7eb07f9297e939d8c5f97178b2c189dfe",
-                "reference": "f86a07b7eb07f9297e939d8c5f97178b2c189dfe",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d1af11449398214f9664514ce705c5154ead9c38",
+                "reference": "d1af11449398214f9664514ce705c5154ead9c38",
                 "shasum": ""
             },
             "conflict": {
@@ -1299,6 +1301,7 @@
                 "ibexa/core": ">=4,<4.0.7|>=4.1,<4.1.4|>=4.2,<4.2.3",
                 "ibexa/graphql": ">=2.5,<2.5.31|>=3.3,<3.3.28|>=4.2,<4.2.3",
                 "ibexa/post-install": "<=1.0.4",
+                "ibexa/user": ">=4,<4.4.3",
                 "icecoder/icecoder": "<=8.1",
                 "idno/known": "<=1.3.1",
                 "illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
@@ -1341,7 +1344,7 @@
                 "laravel/framework": "<6.20.42|>=7,<7.30.6|>=8,<8.75",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
                 "latte/latte": "<2.10.8",
-                "lavalite/cms": "<=5.8",
+                "lavalite/cms": "<=9",
                 "lcobucci/jwt": ">=3.4,<3.4.6|>=4,<4.0.4|>=4.1,<4.1.5",
                 "league/commonmark": "<0.18.3",
                 "league/flysystem": "<1.1.4|>=2,<2.1.1",
@@ -1439,6 +1442,7 @@
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
+                "pimcore/customer-management-framework-bundle": "<3.3.9",
                 "pimcore/data-hub": "<1.2.4",
                 "pimcore/perspective-editor": "<1.5.1",
                 "pimcore/pimcore": "<10.5.21",
@@ -1625,7 +1629,7 @@
                 "wp-graphql/wp-graphql": "<0.3.5",
                 "wpanel/wpanel4-cms": "<=4.3.1",
                 "wpcloud/wp-stateless": "<3.2",
-                "wwbn/avideo": "<12.4",
+                "wwbn/avideo": "<=12.4",
                 "xataface/xataface": "<3",
                 "xpressengine/xpressengine": "<3.0.15",
                 "yeswiki/yeswiki": "<4.1",
@@ -1707,7 +1711,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-06T00:13:11+00:00"
+            "time": "2023-05-12T21:03:58+00:00"
         },
         {
             "name": "symfony/config",
