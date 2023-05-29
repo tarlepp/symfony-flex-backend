@@ -58,7 +58,7 @@
 		"symfony/string": "6.2.8",
 		"symfony/translation": "6.2.8",
 		"symfony/twig-bundle": "6.2.7",
-		"symfony/validator": "6.2.10",
+		"symfony/validator": "6.2.11",
 		"symfony/yaml": "6.2.10"
 	},
 	"conflict": {
