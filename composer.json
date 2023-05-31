@@ -41,7 +41,7 @@
 		"ramsey/uuid-doctrine": "2.0.0",
 		"symfony/asset": "6.2.7",
 		"symfony/config": "6.2.7",
-		"symfony/console": "6.2.10",
+		"symfony/console": "6.3.0",
 		"symfony/dotenv": "6.2.8",
 		"symfony/expression-language": "6.2.7",
 		"symfony/flex": "2.3.0",
