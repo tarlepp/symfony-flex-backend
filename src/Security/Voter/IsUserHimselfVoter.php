@@ -18,6 +18,11 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template TAttribute of string
+ * @template TSubject of mixed
+ *
+ * @extends Voter<TAttribute, TSubject>
  */
 class IsUserHimselfVoter extends Voter
 {
