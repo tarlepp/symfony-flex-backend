@@ -10,6 +10,8 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
 use App\Tests\Utils\PhpUnitUtil;
@@ -84,6 +86,8 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
             ->setFirstName('John')
             ->setLastName('Doe')
             ->setEmail('john.doe' . $suffix . '@test.com')
+            ->setLanguage(Language::EN)
+            ->setLocale(Locale::EN)
             ->setPlainPassword('password' . $suffix);
 
         if ($role !== null) {
