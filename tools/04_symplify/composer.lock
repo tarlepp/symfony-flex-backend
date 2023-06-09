@@ -682,12 +682,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "3ee134dbd68d15df3dd8f1e43399bc71cccd2c03"
+                "reference": "9c9ca2f0d98a07cd23c775deba37639036cfd00a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3ee134dbd68d15df3dd8f1e43399bc71cccd2c03",
-                "reference": "3ee134dbd68d15df3dd8f1e43399bc71cccd2c03",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9c9ca2f0d98a07cd23c775deba37639036cfd00a",
+                "reference": "9c9ca2f0d98a07cd23c775deba37639036cfd00a",
                 "shasum": ""
             },
             "conflict": {
@@ -763,7 +763,7 @@
                 "contao/core-bundle": "<4.9.40|>=4.10,<4.11.7|>=4.13,<4.13.21|>=5.1,<5.1.4|= 4.10.0",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/managed-edition": "<=1.5",
-                "craftcms/cms": "<4.4.12|>= 4.0.0-RC1, <= 4.4.5|>= 4.0.0-RC1, <= 4.4.6|>= 4.0.0-RC1, < 4.4.6|>= 4.0.0-RC1, < 4.3.7|>= 4.0.0-RC1, < 4.2.1",
+                "craftcms/cms": ">= 4.0.0-RC1, < 4.4.12|>= 4.0.0-RC1, <= 4.4.5|>= 4.0.0-RC1, <= 4.4.6|<=3.8.5|>=4,<4.4.6|>= 4.0.0-RC1, < 4.4.6|>= 4.0.0-RC1, < 4.3.7|>= 4.0.0-RC1, < 4.2.1",
                 "croogo/croogo": "<3.0.7",
                 "cuyz/valinor": "<0.12",
                 "czproject/git-php": "<4.0.3",
@@ -1283,7 +1283,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-06T02:31:03+00:00"
+            "time": "2023-06-06T21:04:56+00:00"
         },
         {
             "name": "sebastian/diff",
