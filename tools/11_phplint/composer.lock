@@ -298,12 +298,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "9c9ca2f0d98a07cd23c775deba37639036cfd00a"
+                "reference": "22b763b5abdc69572b66c462cd85c2b2135f56aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9c9ca2f0d98a07cd23c775deba37639036cfd00a",
-                "reference": "9c9ca2f0d98a07cd23c775deba37639036cfd00a",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/22b763b5abdc69572b66c462cd85c2b2135f56aa",
+                "reference": "22b763b5abdc69572b66c462cd85c2b2135f56aa",
                 "shasum": ""
             },
             "conflict": {
@@ -459,7 +459,7 @@
                 "friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
                 "friendsoftypo3/mediace": ">=7.6.2,<7.6.5",
                 "froala/wysiwyg-editor": "<3.2.7",
-                "froxlor/froxlor": "<2.0.16",
+                "froxlor/froxlor": "<2.0.20",
                 "fuel/core": "<1.8.1",
                 "funadmin/funadmin": "<=3.2",
                 "gaoming13/wechat-php-sdk": "<=1.10.2",
@@ -561,7 +561,7 @@
                 "melisplatform/melis-front": "<5.0.1",
                 "mezzio/mezzio-swoole": "<3.7|>=4,<4.3",
                 "mgallegos/laravel-jqgrid": "<=1.3",
-                "microweber/microweber": "<1.3.4",
+                "microweber/microweber": "<=1.3.4",
                 "miniorange/miniorange-saml": "<1.4.3",
                 "mittwald/typo3_forum": "<1.2.1",
                 "mobiledetect/mobiledetectlib": "<2.8.32",
@@ -899,7 +899,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-06T21:04:56+00:00"
+            "time": "2023-06-09T23:04:09+00:00"
         },
         {
             "name": "symfony/cache",
