@@ -1,4 +1,4 @@
-FROM php:8.2.6-fpm
+FROM php:8.2.7-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -18,7 +18,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.1.22 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.1.28 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
@@ -31,7 +31,7 @@ RUN install-php-extensions \
     zip
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.5.5 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.5.7 /usr/bin/composer /usr/bin/composer
 
 # Enable Composer autocompletion
 RUN composer completion bash > /etc/bash_completion.d/composer
