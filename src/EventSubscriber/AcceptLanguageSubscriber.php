@@ -28,7 +28,6 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
     ) {
     }
 
-
     public static function getSubscribedEvents(): array
     {
         return [
