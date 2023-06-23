@@ -28,7 +28,7 @@
 		"ext-random": "*",
 		"doctrine/doctrine-bundle": "2.10.0",
 		"doctrine/doctrine-migrations-bundle": "3.2.4",
-		"doctrine/orm": "2.15.2",
+		"doctrine/orm": "2.15.3",
 		"friendsofphp/proxy-manager-lts": "1.0.16",
 		"gedmo/doctrine-extensions": "3.11.1",
 		"lexik/jwt-authentication-bundle": "2.19.0",
