@@ -76,7 +76,7 @@
 		"symfony/requirements-checker": "2.0.1",
 		"symfony/stopwatch": "6.3.0",
 		"symfony/var-dumper": "6.3.0",
-		"symfony/web-profiler-bundle": "6.3.0"
+		"symfony/web-profiler-bundle": "6.3.1"
 	},
 	"replace": {
 		"symfony/polyfill-ctype": "*",
