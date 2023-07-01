@@ -74,6 +74,21 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueReturnsExpectedWithStringInput')]
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$expected` when using `$input` as a string input')]
+    public function testThatConvertToDatabaseValueReturnsExpectedWithStringInput(
+        Language $expected,
+        string $input,
+    ): void {
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame($expected->value, $type->convertToDatabaseValue($input, $platform));
+    }
+
+    /**
+     * @throws Throwable
+     */
     #[DataProvider('dataProviderTestThatConvertToPHPValueWorksWithValidInput')]
     #[TestDox('Test that `convertToPHPValue` method returns `$expected` when using `$input`')]
     public function testThatConvertToPHPValueWorksWithValidInput(Language $expected, string $input): void
@@ -122,6 +137,15 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
+    }
+
+    /**
+     * @return Generator<array{0: Language, 1: 'en'|'fi'}>
+     */
+    public static function dataProviderTestThatConvertToDatabaseValueReturnsExpectedWithStringInput(): Generator
+    {
+        yield [Language::EN, 'en'];
+        yield [Language::FI, 'fi'];
     }
 
     /**

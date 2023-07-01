@@ -71,6 +71,21 @@ class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
+     * @throws Throwable
+     */
+    #[DataProvider('dataProviderTestThatConvertToDatabaseValueReturnsExpectedWithStringInput')]
+    #[TestDox('Test that `convertToDatabaseValue` method returns `$expected` when using `$input` as a string input')]
+    public function testThatConvertToDatabaseValueReturnsExpectedWithStringInput(
+        Locale $expected,
+        string $input,
+    ): void {
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame($expected->value, $type->convertToDatabaseValue($input, $platform));
+    }
+
+    /**
      * @return Generator<array{0: 'en'|'fi', 1: Locale}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
@@ -92,6 +107,15 @@ class EnumLocaleTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
+    }
+
+    /**
+     * @return Generator<array{0: Locale, 1: 'en'|'fi'}>
+     */
+    public static function dataProviderTestThatConvertToDatabaseValueReturnsExpectedWithStringInput(): Generator
+    {
+        yield [Locale::EN, 'en'];
+        yield [Locale::FI, 'fi'];
     }
 
     private function getPlatform(): AbstractPlatform
