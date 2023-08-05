@@ -11,6 +11,7 @@
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=security_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tarlepp/symfony-flex-backend/badge)](https://securityscorecards.dev/viewer/?platform=github.com&org=tarlepp&repo=symfony-flex-backend)
 
 JSON REST API which is build on top of [Symfony](https://symfony.com/)
 framework.
