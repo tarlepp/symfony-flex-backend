@@ -10,7 +10,7 @@
 		"phpunit/phpcov": "9.0.0",
 		"phpunit/phpunit": "10.0.19",
 		"roave/security-advisories": "dev-latest",
-		"symfony/browser-kit": "6.3.0",
+		"symfony/browser-kit": "6.3.2",
 		"symfony/phpunit-bridge": "6.3.0"
 	},
 	"config": {
