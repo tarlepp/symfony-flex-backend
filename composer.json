@@ -54,7 +54,7 @@
 		"symfony/routing": "6.3.1",
 		"symfony/runtime": "6.3.1",
 		"symfony/security-bundle": "6.3.1",
-		"symfony/serializer": "6.3.1",
+		"symfony/serializer": "6.3.3",
 		"symfony/string": "6.3.0",
 		"symfony/translation": "6.3.0",
 		"symfony/twig-bundle": "6.3.0",
