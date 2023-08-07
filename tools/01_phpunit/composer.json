@@ -11,7 +11,7 @@
 		"phpunit/phpunit": "10.0.19",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.3.0",
-		"symfony/phpunit-bridge": "6.3.0"
+		"symfony/phpunit-bridge": "6.3.2"
 	},
 	"config": {
 		"allow-plugins": true,
