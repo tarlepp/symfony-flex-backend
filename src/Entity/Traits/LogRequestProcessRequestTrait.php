@@ -20,6 +20,7 @@ use function array_walk;
 use function basename;
 use function explode;
 use function is_array;
+use function is_string;
 use function mb_strtolower;
 use function parse_str;
 use function preg_replace;
@@ -413,11 +414,15 @@ trait LogRequestProcessRequestTrait
     private function cleanContent(string $inputContent): string
     {
         $iterator = static function (string $search) use (&$inputContent): void {
-            $inputContent = (string)preg_replace(
+            $alteredContent = preg_replace(
                 '/(' . $search . '":)\s*"(.*)"/',
                 '$1"*** REPLACED ***"',
-                $inputContent
+                $inputContent,
             );
+
+            if (is_string($alteredContent)) {
+                $inputContent = $alteredContent;
+            }
         };
 
         array_map($iterator, $this->getSensitiveProperties());
