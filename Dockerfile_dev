@@ -117,6 +117,13 @@ RUN groupadd --gid ${HOST_GID} dev \
     && usermod -a -G www-data,sudo dev \
     && chgrp -hR dev /app
 
+RUN mkdir -p /home/dev/.config/fish/completions \
+    && mkdir -p /home/dev/.config/fish/functions \
+    && mkdir -p /home/dev/.local/share \
+    && mkdir -p /home/dev/.npm \
+    && mkdir -p /home/dev/.nvm \
+    && chmod 777 -R /home/dev
+
 USER dev
 
 RUN pip3 install thefuck --user --break-system-packages
@@ -129,6 +136,12 @@ RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc
 # Install Node Version Manager (nvm)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
 
+USER root
+
+RUN chmod 777 -R /home/dev
+
+USER dev
+
 # Node setup
 #   1) Install defined version of node and use it as default
 #   2) Install `composer-version` helper tool globally
@@ -140,10 +153,15 @@ RUN source ~/.nvm/nvm.sh \
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
     && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc
 
-RUN mkdir -p /home/dev/.config/fish/completions \
-    && mkdir -p /home/dev/.config/fish/functions
-
 COPY ./docker/fish /home/dev/.config/fish/
+
+USER root
+
+RUN chmod 777 -R /home/dev /tmp \
+    && rm -rf /tmp/fish.node \
+    && chgrp -hR dev /home/dev
+
+USER dev
 
 EXPOSE 9000
 
