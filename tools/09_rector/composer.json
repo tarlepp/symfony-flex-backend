@@ -5,7 +5,7 @@
 		"php": "^8.2.0"
 	},
 	"require-dev": {
-		"rector/rector": "0.17.10",
+		"rector/rector": "0.18.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
