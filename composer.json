@@ -30,7 +30,7 @@
 		"doctrine/doctrine-migrations-bundle": "3.2.4",
 		"doctrine/orm": "2.16.2",
 		"friendsofphp/proxy-manager-lts": "1.0.16",
-		"gedmo/doctrine-extensions": "3.12.0",
+		"gedmo/doctrine-extensions": "3.13.0",
 		"lexik/jwt-authentication-bundle": "2.19.1",
 		"mark-gerarts/automapper-plus-bundle": "1.4.1",
 		"matomo/device-detector": "6.1.5",
