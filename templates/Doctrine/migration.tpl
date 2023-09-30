@@ -33,8 +33,8 @@ final class <className> extends AbstractMigration
     }
 
     /**
-    * @noinspection PhpMissingParentCallCommonInspection
-    */
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs

@@ -11,14 +11,14 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220312135411 extends AbstractMigration
+final class Version20230930102814 extends AbstractMigration
 {
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function getDescription(): string
     {
-        return 'Added missing cascade on delete for the `log_login_failure` table';
+        return 'TODO: Describe reason for this migration';
     }
 
     public function up(Schema $schema): void
@@ -29,8 +29,13 @@ final class Version20220312135411 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-        $this->addSql('ALTER TABLE log_login_failure DROP FOREIGN KEY FK_EDB4AF3A76ED395');
-        $this->addSql('ALTER TABLE log_login_failure ADD CONSTRAINT FK_EDB4AF3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        $sql = <<<SQL
+ALTER TABLE log_request 
+CHANGE headers headers JSON NOT NULL COMMENT '(DC2Type:json)', 
+CHANGE parameters parameters JSON NOT NULL COMMENT '(DC2Type:json)'
+SQL;
+
+        $this->addSql($sql);
     }
 
     /**
@@ -44,7 +49,12 @@ final class Version20220312135411 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-        $this->addSql('ALTER TABLE log_login_failure DROP FOREIGN KEY FK_EDB4AF3A76ED395');
-        $this->addSql('ALTER TABLE log_login_failure ADD CONSTRAINT FK_EDB4AF3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $sql = <<<SQL
+ALTER TABLE log_request 
+CHANGE headers headers LONGTEXT NOT NULL COMMENT '(DC2Type:json)', 
+CHANGE parameters parameters LONGTEXT NOT NULL COMMENT '(DC2Type:json)'
+SQL;
+
+        $this->addSql($sql);
     }
 }
