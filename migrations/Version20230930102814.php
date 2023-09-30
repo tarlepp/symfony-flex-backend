@@ -55,7 +55,6 @@ CHANGE headers headers LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
 CHANGE parameters parameters LONGTEXT NOT NULL COMMENT '(DC2Type:json)'
 SQL;
 
-
-        $this->addSql('');
+        $this->addSql($sql);
     }
 }
