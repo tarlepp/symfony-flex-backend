@@ -25,8 +25,8 @@ final class Version20220324162224 extends AbstractMigration
     }
 
     /**
-    * @noinspection PhpMissingParentCallCommonInspection
-    */
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE log_login DROP username');
