@@ -115,7 +115,8 @@ RUN groupadd --gid ${HOST_GID} dev \
         --shell /bin/bash \
         --create-home dev \
     && usermod -a -G www-data,sudo dev \
-    && chgrp -hR dev /app
+    && chgrp -hR dev /app \
+    && echo 'dev ALL=(ALL) ALL' >> /etc/sudoers
 
 RUN mkdir -p /home/dev/.config/fish/completions \
     && mkdir -p /home/dev/.config/fish/functions \
