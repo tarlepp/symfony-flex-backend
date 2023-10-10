@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3ca5e084488ee913fec8dad35bab898",
+    "content-hash": "fdff37d46c5adaff7b5a60140e79796d",
     "packages": [],
     "packages-dev": [
         {
@@ -475,16 +475,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.27.3",
+            "version": "0.27.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "3fe68ec001d6abd7f9494f4dfadeb61848d2c9d0"
+                "reference": "2789fdd689689b0c85f2c0ae9db50c8d2b39fb92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/3fe68ec001d6abd7f9494f4dfadeb61848d2c9d0",
-                "reference": "3fe68ec001d6abd7f9494f4dfadeb61848d2c9d0",
+                "url": "https://api.github.com/repos/infection/infection/zipball/2789fdd689689b0c85f2c0ae9db50c8d2b39fb92",
+                "reference": "2789fdd689689b0c85f2c0ae9db50c8d2b39fb92",
                 "shasum": ""
             },
             "require": {
@@ -591,7 +591,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.27.3"
+                "source": "https://github.com/infection/infection/tree/0.27.4"
             },
             "funding": [
                 {
@@ -603,7 +603,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-09-28T07:13:56+00:00"
+            "time": "2023-10-09T12:03:22+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -1653,16 +1653,16 @@
         },
         {
             "name": "sanmai/pipeline",
-            "version": "v6.8.1",
+            "version": "v6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sanmai/pipeline.git",
-                "reference": "2e88e466dd49f20c10a15330b3953d4d49c326e3"
+                "reference": "c48f45c22c3ce4140d071f7658fb151df1cc08ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/2e88e466dd49f20c10a15330b3953d4d49c326e3",
-                "reference": "2e88e466dd49f20c10a15330b3953d4d49c326e3",
+                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/c48f45c22c3ce4140d071f7658fb151df1cc08ea",
+                "reference": "c48f45c22c3ce4140d071f7658fb151df1cc08ea",
                 "shasum": ""
             },
             "require": {
@@ -1706,7 +1706,7 @@
             "description": "General-purpose collections pipeline",
             "support": {
                 "issues": "https://github.com/sanmai/pipeline/issues",
-                "source": "https://github.com/sanmai/pipeline/tree/v6.8.1"
+                "source": "https://github.com/sanmai/pipeline/tree/v6.9"
             },
             "funding": [
                 {
@@ -1714,7 +1714,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-15T09:14:47+00:00"
+            "time": "2023-10-08T11:56:54+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -2838,5 +2838,5 @@
     "platform-overrides": {
         "php": "8.2.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
