@@ -15,7 +15,6 @@ have all basic configuration ready.
     * [PhpStorm basic configuration](#phpstorm-basic-configuration-table-of-contents)
     * [First connection](#first-connection-table-of-contents)
     * [Configuring debugging server](#configuring-debugging-server-table-of-contents)
-  * [Mac users](#mac-users-table-of-contents)
   * [Debug CLI commands](#debug-cli-commands-table-of-contents)
   * [Debug Postman requests](#debug-postman-requests-table-of-contents)
   * [External links / resources](#external-links--resources-table-of-contents)
@@ -26,9 +25,6 @@ have all basic configuration ready.
 These instructions relies heavily to screenshots, so you might need to use
 your own brains for some parts of these instructions - but I bet you can get
 this working in couple of minutes.
-
-Note that if you're using Mac, read [Mac users](#mac-users-table-of-contents)
-section first.
 
 ### PhpStorm basic configuration [ᐞ](#table-of-contents)
 
@@ -70,25 +66,6 @@ Last step is to configure used paths on debugging server to match with your
 local paths. See the image below:
 
 ![Path mappings](images/xdebug_05.png)
-
-## Mac users [ᐞ](#table-of-contents)
-
-Mac users need to create a `docker-compose.override.yml` file with following
-content:
-
-```yaml
-version: '3'
-services:
-  php:
-    environment:
-      - DOCKER_WITH_MAC=1
-```
-
-And if you're reading this you might want to read [Speed problems with docker-compose?](SPEED_UP_DOCKER_COMPOSE.md)
-document, which will tell you how to speed your Mac environment quite lot.
-
-You just need to combine those both configurations to your local
-`docker-compose.override.yml` file
 
 ## Debug CLI commands [ᐞ](#table-of-contents)
 
