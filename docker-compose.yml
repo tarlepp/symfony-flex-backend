@@ -19,6 +19,8 @@ services:
             - /app/var/:uid=$HOST_UID,gid=$HOST_GID
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
     nginx:
         container_name: symfony-backend-nginx
