@@ -3,358 +3,358 @@
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: CI
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the master branch
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-  schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    # Trigger the workflow on push or pull request,
+    # but only for the master branch
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+    schedule:
+        -   cron: '0 0 * * *'
+    workflow_dispatch:
 jobs:
-  security-check:
-    name: PHP Security Checker
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.0
-        with:
-          fetch-depth: '0'
+    security-check:
+        name: PHP Security Checker
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4.1.0
+                with:
+                    fetch-depth: '0'
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
-        with:
-          php-version: '8.2'
-          tools: composer:v2
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
+                with:
+                    php-version: '8.2'
+                    tools: composer:v2
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+            -   name: Cache composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --optimize-autoloader
 
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
+            -   name: Check which versions we're using
+                run: |
+                    mysql --version
+                    php --version
+                    php ./bin/console --version
+                    php ./vendor/bin/phpunit --version
+                    composer --version
 
-      - name: PHP Security Checker
-        uses: symfonycorp/security-checker-action@v5
+            -   name: PHP Security Checker
+                uses: symfonycorp/security-checker-action@v5
 
-      - name: Check that application doesn't have installed dependencies with known security vulnerabilities
-        run: make check-security
+            -   name: Check that application doesn't have installed dependencies with known security vulnerabilities
+                run: make check-security
 
-  lint-configuration:
-    name: Lint configuration
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.0
-        with:
-          fetch-depth: '0'
+    lint-configuration:
+        name: Lint configuration
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4.1.0
+                with:
+                    fetch-depth: '0'
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
-        with:
-          php-version: '8.2'
-          tools: composer:v2
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
+                with:
+                    php-version: '8.2'
+                    tools: composer:v2
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+            -   name: Cache composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --optimize-autoloader
 
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
+            -   name: Check which versions we're using
+                run: |
+                    mysql --version
+                    php --version
+                    php ./bin/console --version
+                    php ./vendor/bin/phpunit --version
+                    composer --version
 
-      - name: Validate main `composer.json` and `composer.lock` files
-        run: composer validate --no-check-version
+            -   name: Validate main `composer.json` and `composer.lock` files
+                run: composer validate --no-check-version
 
-      - name: Check that environment is configured correctly
-        run: php ./vendor/bin/requirements-checker
+            -   name: Check that environment is configured correctly
+                run: php ./vendor/bin/requirements-checker
 
-      - name: Lint YAML configurations
-        run: make lint-yaml
+            -   name: Lint YAML configurations
+                run: make lint-yaml
 
-  static:
-    name: Static analyzers
-    runs-on: ubuntu-latest
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.0
-        with:
-          fetch-depth: '0'
+    static:
+        name: Static analyzers
+        runs-on: ubuntu-latest
+        needs:
+            - security-check
+            - lint-configuration
+        strategy:
+            fail-fast: false
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4.1.0
+                with:
+                    fetch-depth: '0'
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
-        with:
-          php-version: '8.2'
-          tools: composer:v2
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
+                with:
+                    php-version: '8.2'
+                    tools: composer:v2
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+            -   name: Cache composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --optimize-autoloader
 
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
+            -   name: Check which versions we're using
+                run: |
+                    mysql --version
+                    php --version
+                    php ./bin/console --version
+                    php ./vendor/bin/phpunit --version
+                    composer --version
 
-      - name: Run PHP CodeSniffer
-        run: make phpcs
+            -   name: Run PHP CodeSniffer
+                run: make phpcs
 
-      - name: Run The Easiest Way to Use Any Coding Standard
-        run: make ecs
+            -   name: Run The Easiest Way to Use Any Coding Standard
+                run: make ecs
 
-      - name: Run PHPLint tool
-        run: make phplint
+            -   name: Run PHPLint tool
+                run: make phplint
 
-      - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
-        run: make psalm-github
+            -   name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
+                run: make psalm-github
 
-      #- name: Run Psalm static analysis tool
-      #  run: make psalm
+            #- name: Run Psalm static analysis tool
+            #  run: make psalm
 
-      - name: Run PHPStan static analysis tool
-        run: make phpstan-github
+            -   name: Run PHPStan static analysis tool
+                run: make phpstan-github
 
-      # Disabled this because of - https://github.com/nunomaduro/phpinsights/issues/622
-      #- name: Run `phploc` to collect LOC stats
-      #  run: make phploc
+            # Disabled this because of - https://github.com/nunomaduro/phpinsights/issues/622
+            #- name: Run `phploc` to collect LOC stats
+            #  run: make phploc
 
-      - name: Run `PHP Insights` static analysis tool
-        run: make phpinsights
+            -   name: Run `PHP Insights` static analysis tool
+                run: make phpinsights
 
-      - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@v3
-        with:
-          name: psalm.json
-          path: ./build/psalm.json
+            -   name: Archive Psalm results (psalm.json)
+                uses: actions/upload-artifact@v3
+                with:
+                    name: psalm.json
+                    path: ./build/psalm.json
 
-      - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@v3
-        with:
-          name: phploc.json
-          path: ./build/phploc.json
+            -   name: Archive `phploc` results (phploc.json)
+                uses: actions/upload-artifact@v3
+                with:
+                    name: phploc.json
+                    path: ./build/phploc.json
 
-  test:
-    name: PHPUnit tests
-    runs-on: ubuntu-latest
-    needs:
-      - static
-      - lint-documentation
-    services:
-      mariadb:
-        image: mariadb:10.7.1
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: symfony
-          MYSQL_DATABASE: symfony
-        ports:
-          - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.0
-        with:
-          fetch-depth: '0'
+    test:
+        name: PHPUnit tests
+        runs-on: ubuntu-latest
+        needs:
+            - static
+            - lint-documentation
+        services:
+            mariadb:
+                image: mariadb:10.7.1
+                env:
+                    MYSQL_ALLOW_EMPTY_PASSWORD: false
+                    MYSQL_ROOT_PASSWORD: symfony
+                    MYSQL_DATABASE: symfony
+                ports:
+                    - 3306/tcp
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        strategy:
+            fail-fast: false
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4.1.0
+                with:
+                    fetch-depth: '0'
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
-        with:
-          php-version: '8.2'
-          extensions: pdo_mysql, mysql
-          coverage: xdebug
-          tools: composer:v2
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
+                with:
+                    php-version: '8.2'
+                    extensions: pdo_mysql, mysql
+                    coverage: xdebug
+                    tools: composer:v2
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+            -   name: Cache composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
 
-      - name: Configure application for CI run
-        run: |
-          cp .env.gh-actions .env
-          cp .env.gh-actions .env.test
-          make generate-jwt-keys
-          chmod 644 ./config/jwt/private.pem
+            -   name: Configure application for CI run
+                run: |
+                    cp .env.gh-actions .env
+                    cp .env.gh-actions .env.test
+                    make generate-jwt-keys
+                    chmod 644 ./config/jwt/private.pem
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --optimize-autoloader
 
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
+            -   name: Check which versions we're using
+                run: |
+                    mysql --version
+                    php --version
+                    php ./bin/console --version
+                    php ./vendor/bin/phpunit --version
+                    composer --version
 
-      - name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
+            -   name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
+                run: |
+                    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                    chmod +x ./cc-test-reporter
+                    GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
+                env:
+                    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
-      - name: Run application test suites with PHPUnit
-        run: make run-tests-php
-        env:
-          DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
+            -   name: Run application test suites with PHPUnit
+                run: make run-tests-php
+                env:
+                    DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
 
-      - name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
-        run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --id ${{ secrets.CC_TEST_REPORTER_ID }} --coverage-input-type clover --exit-code $?
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
+            -   name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
+                run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --id ${{ secrets.CC_TEST_REPORTER_ID }} --coverage-input-type clover --exit-code $?
+                env:
+                    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
-      - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
-        run: |
-          composer global require scrutinizer/ocular
-          ~/.composer/vendor/bin/ocular code-coverage:upload --access-token ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
+            -   name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
+                run: |
+                    composer global require scrutinizer/ocular
+                    ~/.composer/vendor/bin/ocular code-coverage:upload --access-token ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
 
-      - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
-        run: php ./vendor/bin/php-coveralls -v
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          COVERALLS_RUN_LOCALLY: 1
+            -   name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
+                run: php ./vendor/bin/php-coveralls -v
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+                    COVERALLS_RUN_LOCALLY: 1
 
-      - name: SonarCloud Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
+            -   name: SonarCloud Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+                uses: sonarsource/sonarcloud-github-action@master
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
 
-      - name: Create PhpMetrics report
-        run: make phpmetrics
+            -   name: Create PhpMetrics report
+                run: make phpmetrics
 
-      - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@v3
-        with:
-          name: clover.xml
-          path: ./build/logs/clover.xml
+            -   name: Archive code coverage results (clover.xml)
+                uses: actions/upload-artifact@v3
+                with:
+                    name: clover.xml
+                    path: ./build/logs/clover.xml
 
-      - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@v3
-        with:
-          name: junit.xml
-          path: ./build/logs/junit.xml
+            -   name: Archive code coverage results (junit.xml)
+                uses: actions/upload-artifact@v3
+                with:
+                    name: junit.xml
+                    path: ./build/logs/junit.xml
 
-      - name: Archive Code Coverage
-        uses: actions/upload-artifact@v3
-        with:
-          name: PhpMetrics
-          path: ./build/report
+            -   name: Archive Code Coverage
+                uses: actions/upload-artifact@v3
+                with:
+                    name: PhpMetrics
+                    path: ./build/report
 
-      - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@v3
-        with:
-          name: PhpMetrics
-          path: ./build/phpmetrics
+            -   name: Archive PhpMetrics results
+                uses: actions/upload-artifact@v3
+                with:
+                    name: PhpMetrics
+                    path: ./build/phpmetrics
 
-  lint-documentation:
-    name: Lint documentation files
-    runs-on: ubuntu-latest
+    lint-documentation:
+        name: Lint documentation files
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Make checkout
-        uses: actions/checkout@v4.1.0
+        steps:
+            -   name: Make checkout
+                uses: actions/checkout@v4.1.0
 
-      - name: Lint `./README.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './README.md'
+            -   name: Lint `./README.md`
+                uses: avto-dev/markdown-lint@v1
+                with:
+                    config: './markdown-lint.yml'
+                    args: './README.md'
 
-      - name: Lint all the resource docs under `./doc/` directory
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/*.md'
+            -   name: Lint all the resource docs under `./doc/` directory
+                uses: avto-dev/markdown-lint@v1
+                with:
+                    config: './markdown-lint.yml'
+                    args: './doc/*.md'
 
-      - name: Lint all the docs under `./docker/` directory
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './docker/*.md'
+            -   name: Lint all the docs under `./docker/` directory
+                uses: avto-dev/markdown-lint@v1
+                with:
+                    config: './markdown-lint.yml'
+                    args: './docker/*.md'
 
-      - name: Lint all the docs under `./secrets/` directory
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './secrets/*.md'
+            -   name: Lint all the docs under `./secrets/` directory
+                uses: avto-dev/markdown-lint@v1
+                with:
+                    config: './markdown-lint.yml'
+                    args: './secrets/*.md'
 
-  build:
-    name: Build application Docker image
-    runs-on: ubuntu-latest
-    needs:
-      - test
+    build:
+        name: Build application Docker image
+        runs-on: ubuntu-latest
+        needs:
+            - test
 
-    steps:
-      - uses: actions/checkout@v4.1.0
+        steps:
+            -   uses: actions/checkout@v4.1.0
 
-      - name: Set tag var
-        id: vars
-        run: echo "DOCKER_TAG=$(echo ${GITHUB_REF} | sed -r 's/[\/()\.]+/_/g')-${GITHUB_SHA}" >> $GITHUB_OUTPUT
+            -   name: Set tag var
+                id: vars
+                run: echo "DOCKER_TAG=$(echo ${GITHUB_REF} | sed -r 's/[\/()\.]+/_/g')-${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
+            -   name: Build the Docker image
+                run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}

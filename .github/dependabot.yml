@@ -1,119 +1,119 @@
 version: 2
 updates:
-- package-ecosystem: "github-actions"
-  directory: "/"
-  schedule:
-    interval: daily
-  groups:
-    github_actions_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/"
-  schedule:
-    interval: daily
-  groups:
-    symfony_dependencies:
-      patterns:
-        - "symfony*"
-    dependencies:
-      patterns:
-        - "*"
-      exclude-patterns:
-        - "symfony*"
-- package-ecosystem: docker
-  directory: "/"
-  schedule:
-    interval: daily
-  groups:
-    docker_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/01_phpunit"
-  schedule:
-    interval: daily
-  groups:
-    tools_phpunit_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/02_phpstan"
-  schedule:
-    interval: daily
-  groups:
-    tools_phpstan_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/03_psalm"
-  schedule:
-    interval: daily
-  groups:
-    tools_psalm_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/04_ecs"
-  schedule:
-    interval: daily
-  groups:
-    tools_ecs_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/05_infection"
-  schedule:
-    interval: daily
-  groups:
-    tools_infection_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/06_php-coveralls"
-  schedule:
-    interval: daily
-  groups:
-    tools_php-coveralls_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/07_phpinsights"
-  schedule:
-    interval: daily
-  groups:
-    tools_phpinsights_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/08_phpmetrics"
-  schedule:
-    interval: daily
-  groups:
-    tools_phpmetrics_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/09_changelog-linker"
-  schedule:
-    interval: daily
-  groups:
-    tools_changelog-linker_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/10_composer"
-  schedule:
-    interval: daily
-  groups:
-    tools_composer_dependencies:
-      patterns:
-        - "*"
-- package-ecosystem: composer
-  directory: "/tools/11_phplint"
-  schedule:
-    interval: daily
-  groups:
-    tools_phplint-dependencies:
-      patterns:
-        - "*"
+    -   package-ecosystem: "github-actions"
+        directory: "/"
+        schedule:
+            interval: daily
+        groups:
+            github_actions_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/"
+        schedule:
+            interval: daily
+        groups:
+            symfony_dependencies:
+                patterns:
+                    - "symfony*"
+            dependencies:
+                patterns:
+                    - "*"
+                exclude-patterns:
+                    - "symfony*"
+    -   package-ecosystem: docker
+        directory: "/"
+        schedule:
+            interval: daily
+        groups:
+            docker_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/01_phpunit"
+        schedule:
+            interval: daily
+        groups:
+            tools_phpunit_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/02_phpstan"
+        schedule:
+            interval: daily
+        groups:
+            tools_phpstan_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/03_psalm"
+        schedule:
+            interval: daily
+        groups:
+            tools_psalm_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/04_ecs"
+        schedule:
+            interval: daily
+        groups:
+            tools_ecs_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/05_infection"
+        schedule:
+            interval: daily
+        groups:
+            tools_infection_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/06_php-coveralls"
+        schedule:
+            interval: daily
+        groups:
+            tools_php-coveralls_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/07_phpinsights"
+        schedule:
+            interval: daily
+        groups:
+            tools_phpinsights_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/08_phpmetrics"
+        schedule:
+            interval: daily
+        groups:
+            tools_phpmetrics_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/09_changelog-linker"
+        schedule:
+            interval: daily
+        groups:
+            tools_changelog-linker_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/10_composer"
+        schedule:
+            interval: daily
+        groups:
+            tools_composer_dependencies:
+                patterns:
+                    - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/11_phplint"
+        schedule:
+            interval: daily
+        groups:
+            tools_phplint-dependencies:
+                patterns:
+                    - "*"
