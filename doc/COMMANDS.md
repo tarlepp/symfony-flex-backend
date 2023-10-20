@@ -6,14 +6,14 @@ application during development stage.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-    * [Table of Contents](#table-of-contents)
-    * [Commands](#commands-table-of-contents)
-        * [Makefile](#makefile-table-of-contents)
-        * [Symfony console](#symfony-console-table-of-contents)
-        * [Custom commands](#custom-commands-table-of-contents)
-            * [user:management](#usermanagement-table-of-contents)
-            * [api-key:management](#api-keymanagement-table-of-contents)
-            * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities-table-of-contents)
+  * [Table of Contents](#table-of-contents)
+  * [Commands](#commands-table-of-contents)
+    * [Makefile](#makefile-table-of-contents)
+    * [Symfony console](#symfony-console-table-of-contents)
+    * [Custom commands](#custom-commands-table-of-contents)
+      * [user:management](#usermanagement-table-of-contents)
+      * [api-key:management](#api-keymanagement-table-of-contents)
+      * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities-table-of-contents)
 
 ## Commands [ᐞ](#table-of-contents)
 

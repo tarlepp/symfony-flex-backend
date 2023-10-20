@@ -7,8 +7,8 @@ application.
 ## Table of Contents
 
 * [What is this](#what-is-this)
-    * [Table of Contents](#table-of-contents)
-    * [Resources](#resources-table-of-contents)
+  * [Table of Contents](#table-of-contents)
+  * [Resources](#resources-table-of-contents)
 
 ## Resources [ᐞ](#table-of-contents)
 

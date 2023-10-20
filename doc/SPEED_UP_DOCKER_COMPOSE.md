@@ -6,16 +6,16 @@ usage in development stage.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-    * [Table of Contents](#table-of-contents)
-    * [Reasons?](#reasons-table-of-contents)
-    * [Environments with problems](#environments-with-problems-table-of-contents)
-        * [Windows](#windows-table-of-contents)
-        * [Mac](#mac-table-of-contents)
-        * [Linux](#linux-table-of-contents)
-    * [Installation of docker-sync](#installation-of-docker-sync-table-of-contents)
-        * [Configuration](#configuration-table-of-contents)
-        * [Startup](#startup-table-of-contents)
-    * [Notes](#notes-table-of-contents)
+  * [Table of Contents](#table-of-contents)
+  * [Reasons?](#reasons-table-of-contents)
+  * [Environments with problems](#environments-with-problems-table-of-contents)
+    * [Windows](#windows-table-of-contents)
+    * [Mac](#mac-table-of-contents)
+    * [Linux](#linux-table-of-contents)
+  * [Installation of docker-sync](#installation-of-docker-sync-table-of-contents)
+    * [Configuration](#configuration-table-of-contents)
+    * [Startup](#startup-table-of-contents)
+  * [Notes](#notes-table-of-contents)
 
 ## Reasons? [ᐞ](#table-of-contents)
 
@@ -71,17 +71,17 @@ Create a `docker-compose.override.yml` file with following content:
 #
 version: '3'
 services:
-    php:
-        volumes:
-            - backend-code:/app:cached
-            - /app/var/
-    nginx:
-        volumes:
-            - backend-code:/app:cached
-            - /app/var/
+  php:
+    volumes:
+      - backend-code:/app:cached
+      - /app/var/
+  nginx:
+    volumes:
+      - backend-code:/app:cached
+      - /app/var/
 volumes:
-    backend-code:
-        external: true
+  backend-code:
+    external: true
 ```
 
 ### Startup [ᐞ](#table-of-contents)

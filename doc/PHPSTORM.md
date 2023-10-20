@@ -9,13 +9,13 @@ section of this documentation.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-    * [Table of Contents](#table-of-contents)
-    * [Setup](#setup-table-of-contents)
-        * [CLI Interpreter](#cli-interpreter-table-of-contents)
-        * [Server](#server-table-of-contents)
-        * [Test Frameworks](#test-frameworks-table-of-contents)
-        * [Debugging](#debugging-table-of-contents)
-    * [External links / resources](#external-links--resources-table-of-contents)
+  * [Table of Contents](#table-of-contents)
+  * [Setup](#setup-table-of-contents)
+    * [CLI Interpreter](#cli-interpreter-table-of-contents)
+    * [Server](#server-table-of-contents)
+    * [Test Frameworks](#test-frameworks-table-of-contents)
+    * [Debugging](#debugging-table-of-contents)
+  * [External links / resources](#external-links--resources-table-of-contents)
 
 ## Setup [ᐞ](#table-of-contents)
 
