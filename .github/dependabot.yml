@@ -4,286 +4,116 @@ updates:
   directory: "/"
   schedule:
     interval: daily
+  groups:
+    github_actions_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  versioning-strategy: increase-if-necessary
-  ignore:
-  - dependency-name: nelmio/cors-bundle
-    versions:
-    - 2.1.1
-  - dependency-name: doctrine/doctrine-migrations-bundle
-    versions:
-    - 3.1.0
-    - 3.1.1
-  - dependency-name: sensio/framework-extra-bundle
-    versions:
-    - 6.0.0
-    - 6.1.1
-    - 6.1.2
-  - dependency-name: doctrine/orm
-    versions:
-    - 2.8.2
-    - 2.8.3
-    - 2.8.4
-  - dependency-name: doctrine/doctrine-bundle
-    versions:
-    - 2.2.4
-    - 2.3.0
-    - 2.3.1
-  - dependency-name: symfony/monolog-bundle
-    versions:
-    - 3.7.0
-  - dependency-name: symfony/translation
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.5
-    - 5.2.6
-  - dependency-name: symfony/framework-bundle
-    versions:
-    - 5.2.3
-    - 5.2.6
-  - dependency-name: symfony/validator
-    versions:
-    - 5.2.3
-    - 5.2.6
-  - dependency-name: symfony/console
-    versions:
-    - 5.2.6
-  - dependency-name: symfony/form
-    versions:
-    - 5.2.3
-    - 5.2.6
-  - dependency-name: symfony/security-bundle
-    versions:
-    - 5.2.4
-    - 5.2.5
-    - 5.2.6
-  - dependency-name: symfony/web-profiler-bundle
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.6
-  - dependency-name: symfony/routing
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.6
-  - dependency-name: gedmo/doctrine-extensions
-    versions:
-    - 3.0.4
-  - dependency-name: symfony/maker-bundle
-    versions:
-    - 1.29.0
-    - 1.29.1
-    - 1.30.0
-    - 1.30.1
-    - 1.30.2
-  - dependency-name: symfony/dotenv
-    versions:
-    - 5.2.4
-    - 5.2.5
-  - dependency-name: symfony/process
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.5
-  - dependency-name: symfony/debug-bundle
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.5
-  - dependency-name: symfony/yaml
-    versions:
-    - 5.2.4
-    - 5.2.5
-  - dependency-name: symfony/asset
-    versions:
-    - 5.2.4
-    - 5.2.5
-  - dependency-name: symfony/browser-kit
-    versions:
-    - 5.2.4
-    - 5.2.5
-  - dependency-name: matomo/device-detector
-    versions:
-    - 4.2.2
-  - dependency-name: doctrine/annotations
-    versions:
-    - 1.12.1
-  - dependency-name: lexik/jwt-authentication-bundle
-    versions:
-    - 2.11.0
-    - 2.11.1
-    - 2.11.2
-  - dependency-name: matthiasnoback/symfony-console-form
-    versions:
-    - 5.0.0
-  - dependency-name: symfony/flex
-    versions:
-    - 1.12.1
+  groups:
+    symfony_dependencies:
+      patterns:
+        - "symfony*"
+    dependencies:
+      patterns:
+        - "*"
+      exclude-patterns:
+        - "symfony*"
 - package-ecosystem: docker
   directory: "/"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: php
-    versions:
-    - 8.0.1.pre.fpm
-    - 8.0.2.pre.fpm
-    - 8.0.3.pre.fpm
+  groups:
+    docker_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/01_phpunit"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: symfony/phpunit-bridge
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.5
-    - 5.2.6
-  - dependency-name: phpunit/php-code-coverage
-    versions:
-    - 9.2.6
-  - dependency-name: phpunit/phpunit
-    versions:
-    - 9.5.2
-    - 9.5.3
-    - 9.5.4
-  - dependency-name: symfony/browser-kit
-    versions:
-    - 5.2.3
-    - 5.2.4
-    - 5.2.5
+  groups:
+    tools_phpunit_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/02_phpstan"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: phpstan/phpstan
-    versions:
-    - 0.12.71
-    - 0.12.73
-    - 0.12.74
-    - 0.12.75
-    - 0.12.76
-    - 0.12.77
-    - 0.12.78
-    - 0.12.80
-    - 0.12.81
-    - 0.12.83
-    - 0.12.84
-  - dependency-name: phpstan/phpstan-symfony
-    versions:
-    - 0.12.17
-    - 0.12.19
-    - 0.12.21
-    - 0.12.23
-    - 0.12.24
-    - 0.12.25
-    - 0.12.26
-  - dependency-name: phpstan/phpstan-phpunit
-    versions:
-    - 0.12.18
+  groups:
+    tools_phpstan_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/03_psalm"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: vimeo/psalm
-    versions:
-    - 4.5.0
-    - 4.5.1
-    - 4.5.2
-    - 4.6.0
-    - 4.6.1
-    - 4.6.2
-    - 4.6.3
-    - 4.6.4
-    - 4.7.0
-  - dependency-name: psalm/plugin-symfony
-    versions:
-    - 2.2.0
-    - 2.2.1
-    - 2.2.2
-    - 2.2.3
-    - 2.2.4
+  groups:
+    tools_psalm_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/04_ecs"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: symplify/easy-coding-standard
-    versions:
-    - 9.0.50
-    - 9.1.1
-    - 9.1.3
-    - 9.1.4
-    - 9.1.5
-    - 9.1.8
-    - 9.1.9
-    - 9.2.1
+  groups:
+    tools_ecs_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/05_infection"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: infection/infection
-    versions:
-    - 0.21.2
-    - 0.21.3
-    - 0.21.4
-    - 0.21.5
-    - 0.22.0
+  groups:
+    tools_infection_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/06_php-coveralls"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
+  groups:
+    tools_php-coveralls_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/07_phpinsights"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
+  groups:
+    tools_phpinsights_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/08_phpmetrics"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
+  groups:
+    tools_phpmetrics_dependencies:
+      patterns:
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/09_changelog-linker"
   schedule:
     interval: daily
-    time: "03:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: symplify/changelog-linker
-    versions:
-    - 9.0.50
-    - 9.1.1
-    - 9.1.3
-    - 9.1.4
-    - 9.1.5
-    - 9.1.8
-    - 9.1.9
-    - 9.2.1
+  groups:
+    tools_changelog-linker_dependencies:
+      patterns:
+        - "*"
+- package-ecosystem: composer
+  directory: "/tools/10_composer"
+  schedule:
+    interval: daily
+  groups:
+    tools_composer_dependencies:
+      patterns:
+        - "*"
+- package-ecosystem: composer
+  directory: "/tools/11_phplint"
+  schedule:
+    interval: daily
+  groups:
+    tools_phplint-dependencies:
+      patterns:
+        - "*"
