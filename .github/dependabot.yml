@@ -11,7 +11,7 @@ updates:
 - package-ecosystem: composer
   directory: "/"
   schedule:
-   interval: daily
+    interval: daily
   groups:
     symfony_dependencies:
       patterns:
@@ -52,7 +52,7 @@ updates:
   groups:
     tools_psalm_dependencies:
       patterns:
-         - "*"
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/04_ecs"
   schedule:
@@ -108,7 +108,7 @@ updates:
   groups:
     tools_composer_dependencies:
       patterns:
-         - "*"
+        - "*"
 - package-ecosystem: composer
   directory: "/tools/11_phplint"
   schedule:
