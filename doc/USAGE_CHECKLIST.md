@@ -34,11 +34,11 @@ started to use this template.
     changes to [application_test.json](../secrets/application_test.json)
     files.
   * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
-    contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
-    - and made necessary changes.
+    contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest) -
+    and made necessary changes.
   * [ ] [robots.txt](../public/robots.txt) - check that file contents -
-    [information](https://developers.google.com/search/docs/advanced/robots/intro)
-    - and made necessary changes.
+    [information](https://developers.google.com/search/docs/advanced/robots/intro) -
+    and made necessary changes.
   * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
     to match your brand.
   * [ ] [docker-compose.yml](../docker-compose.yml) Change `container_name` to

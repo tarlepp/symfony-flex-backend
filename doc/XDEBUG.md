@@ -10,15 +10,15 @@ have all basic configuration ready.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-    * [Table of Contents](#table-of-contents)
-    * [Configuration and usage](#configuration-and-usage-table-of-contents)
-        * [PhpStorm basic configuration](#phpstorm-basic-configuration-table-of-contents)
-        * [First connection](#first-connection-table-of-contents)
-        * [Configuring debugging server](#configuring-debugging-server-table-of-contents)
-    * [Debug CLI commands](#debug-cli-commands-table-of-contents)
-    * [Debug Postman requests](#debug-postman-requests-table-of-contents)
-    * [External links / resources](#external-links--resources-table-of-contents)
-    * [Closure](#closure-table-of-contents)
+  * [Table of Contents](#table-of-contents)
+  * [Configuration and usage](#configuration-and-usage-table-of-contents)
+    * [PhpStorm basic configuration](#phpstorm-basic-configuration-table-of-contents)
+    * [First connection](#first-connection-table-of-contents)
+    * [Configuring debugging server](#configuring-debugging-server-table-of-contents)
+  * [Debug CLI commands](#debug-cli-commands-table-of-contents)
+  * [Debug Postman requests](#debug-postman-requests-table-of-contents)
+  * [External links / resources](#external-links--resources-table-of-contents)
+  * [Closure](#closure-table-of-contents)
 
 ## Configuration and usage [ᐞ](#table-of-contents)
 
