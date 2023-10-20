@@ -22,20 +22,20 @@ application(s) or different backend application(s) uses as they like.
 ## Table of Contents
 
 * [What is this](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [Requirements](#requirements-table-of-contents)
-    * [Recommendations](#recommendations-table-of-contents)
-  * [Installation](#installation-table-of-contents)
-    * [1. Clone repository](#1-clone-repository-table-of-contents)
-    * [2. Start containers](#2-start-containers-table-of-contents)
-    * [3. Using application](#3-using-application-table-of-contents)
-    * [4. Getting shell to container](#4-getting-shell-to-container-table-of-contents)
-    * [5. Building containers](#5-building-containers-table-of-contents)
-  * [Frontend?](#frontend-table-of-contents)
-  * [Resources](#resources-table-of-contents)
-  * [External links / resources](#external-links--resources-table-of-contents)
-  * [Authors](#authors-table-of-contents)
-  * [License](#license-table-of-contents)
+    * [Table of Contents](#table-of-contents)
+    * [Requirements](#requirements-table-of-contents)
+        * [Recommendations](#recommendations-table-of-contents)
+    * [Installation](#installation-table-of-contents)
+        * [1. Clone repository](#1-clone-repository-table-of-contents)
+        * [2. Start containers](#2-start-containers-table-of-contents)
+        * [3. Using application](#3-using-application-table-of-contents)
+        * [4. Getting shell to container](#4-getting-shell-to-container-table-of-contents)
+        * [5. Building containers](#5-building-containers-table-of-contents)
+    * [Frontend?](#frontend-table-of-contents)
+    * [Resources](#resources-table-of-contents)
+    * [External links / resources](#external-links--resources-table-of-contents)
+    * [Authors](#authors-table-of-contents)
+    * [License](#license-table-of-contents)
 
 ## Requirements [ᐞ](#table-of-contents)
 
@@ -93,11 +93,11 @@ By default `make start` / `docker-compose up` command starts all the containers
 and exposes following ports on `localhost` on your host machine:
 
 * symfony-backend-nginx - [https://localhost:8000](https://localhost:8000) (nginx)
-  * PHP-FPM status page -  [https://localhost:8000/status](https://localhost:8000/status)
-  * SSL with selfsigned certificates
+    * PHP-FPM status page -  [https://localhost:8000/status](https://localhost:8000/status)
+    * SSL with selfsigned certificates
 * symfony-backend-nginx - [http://localhost:8080](http://localhost:8080) (nginx)
-  * PHP-FPM status page -  [http://localhost:8080/status](http://localhost:8080/status)
-  * Normal HTTP
+    * PHP-FPM status page -  [http://localhost:8080/status](http://localhost:8080/status)
+    * Normal HTTP
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
 * symfony-backend-mariadb - [http://localhost:33060](http://localhost:33060) (mariadb)
 * symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)

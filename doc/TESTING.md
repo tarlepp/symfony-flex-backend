@@ -6,13 +6,13 @@ application.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [Testing](#testing-table-of-contents)
-    * [Commands to run tests](#commands-to-run-tests-table-of-contents)
-    * [Parallel testing](#parallel-testing-table-of-contents)
-    * [Own environment for testing](#own-environment-for-testing-table-of-contents)
-  * [Metrics](#metrics-table-of-contents)
-  * [PhpStorm](#phpstorm-table-of-contents)
+    * [Table of Contents](#table-of-contents)
+    * [Testing](#testing-table-of-contents)
+        * [Commands to run tests](#commands-to-run-tests-table-of-contents)
+        * [Parallel testing](#parallel-testing-table-of-contents)
+        * [Own environment for testing](#own-environment-for-testing-table-of-contents)
+    * [Metrics](#metrics-table-of-contents)
+    * [PhpStorm](#phpstorm-table-of-contents)
 
 ## Testing [ᐞ](#table-of-contents)
 

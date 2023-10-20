@@ -6,11 +6,11 @@ configuration for this application.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [Prologue](#prologue-table-of-contents)
-  * [Creating custom files](#creating-custom-files-table-of-contents)
-  * [Detailed configuration](#detailed-configuration-table-of-contents)
-  * [External links / resources](#external-links--resources-table-of-contents)
+    * [Table of Contents](#table-of-contents)
+    * [Prologue](#prologue-table-of-contents)
+    * [Creating custom files](#creating-custom-files-table-of-contents)
+    * [Detailed configuration](#detailed-configuration-table-of-contents)
+    * [External links / resources](#external-links--resources-table-of-contents)
 
 ## Prologue [ᐞ](#table-of-contents)
 

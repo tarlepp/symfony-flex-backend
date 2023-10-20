@@ -6,11 +6,11 @@ application.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [Development](#development-table-of-contents)
-    * [IDE](#ide-table-of-contents)
-    * [PHP Code Sniffer](#php-code-sniffer-table-of-contents)
-    * [Database changes](#database-changes-table-of-contents)
+    * [Table of Contents](#table-of-contents)
+    * [Development](#development-table-of-contents)
+        * [IDE](#ide-table-of-contents)
+        * [PHP Code Sniffer](#php-code-sniffer-table-of-contents)
+        * [Database changes](#database-changes-table-of-contents)
 
 ## Development [ᐞ](#table-of-contents)
 

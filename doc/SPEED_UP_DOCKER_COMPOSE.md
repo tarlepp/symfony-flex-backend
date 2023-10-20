@@ -6,16 +6,16 @@ usage in development stage.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [Reasons?](#reasons-table-of-contents)
-  * [Environments with problems](#environments-with-problems-table-of-contents)
-    * [Windows](#windows-table-of-contents)
-    * [Mac](#mac-table-of-contents)
-    * [Linux](#linux-table-of-contents)
-  * [Installation of docker-sync](#installation-of-docker-sync-table-of-contents)
-    * [Configuration](#configuration-table-of-contents)
-    * [Startup](#startup-table-of-contents)
-  * [Notes](#notes-table-of-contents)
+    * [Table of Contents](#table-of-contents)
+    * [Reasons?](#reasons-table-of-contents)
+    * [Environments with problems](#environments-with-problems-table-of-contents)
+        * [Windows](#windows-table-of-contents)
+        * [Mac](#mac-table-of-contents)
+        * [Linux](#linux-table-of-contents)
+    * [Installation of docker-sync](#installation-of-docker-sync-table-of-contents)
+        * [Configuration](#configuration-table-of-contents)
+        * [Startup](#startup-table-of-contents)
+    * [Notes](#notes-table-of-contents)
 
 ## Reasons? [ᐞ](#table-of-contents)
 
@@ -36,12 +36,13 @@ virtual machine.
 
 Another way is to use [docker-sync](#installation-of-docker-sync-table-of-contents).
 Application itself already contains necessary [docker-sync.yml](../docker-sync.yml)
-configuration  file to help with this.
+configuration file to help with this.
 
 ### Mac [ᐞ](#table-of-contents)
 
 With Mac there is a bit speed difference versus pure _*inux_ installation, but
-you could try to speed that up by using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
+you could try to speed that up by
+using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
 
 Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`
 [here](https://medium.com/@somwhatparanoid/tweaking-docker-for-mac-performance-for-php-and-symfony-b63f3395a1da)

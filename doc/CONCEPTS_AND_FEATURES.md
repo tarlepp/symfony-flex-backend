@@ -9,30 +9,30 @@ new developers - so this document is trying to solve that issue.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [REST API wtf?](#rest-api-wtf-table-of-contents)
-    * [Explanation](#explanation-table-of-contents)
-    * [Base workflow](#base-workflow-table-of-contents)
-    * [REST traits](#rest-traits-table-of-contents)
-    * [How to make new REST API?](#how-to-make-new-rest-api-table-of-contents)
-    * [Alternatives](#alternatives-table-of-contents)
-  * [Authentication and authorization](#authentication-and-authorization-table-of-contents)
-    * [Authentication](#authentication-table-of-contents)
-      * [Normal users](#normal-users-table-of-contents)
-      * [ApiKey "users"](#apikey-users-table-of-contents)
-  * [Controllers](#controllers-table-of-contents)
-  * [Resources](#resources-table-of-contents)
-    * [Lifecycle callbacks](#lifecycle-callbacks-table-of-contents)
-  * [Repositories](#repositories-table-of-contents)
-    * [Parameter handling](#parameter-handling-table-of-contents)
-    * [Query builder callbacks and joins](#query-builder-callbacks-and-joins-table-of-contents)
-  * [Argument value resolvers](#argument-value-resolvers-table-of-contents)
-    * [Entity value resolver](#entity-value-resolver-table-of-contents)
-    * [Logged in user value resolver](#logged-in-user-value-resolver-table-of-contents)
-    * [REST DTO value resolver](#rest-dto-value-resolver-table-of-contents)
-  * [Common helpers](#common-helpers-table-of-contents)
-    * [LoggerAwareTrait](#loggerawaretrait-table-of-contents)
-    * [StopwatchAwareTrait](#stopwatchawaretrait-table-of-contents)
+    * [Table of Contents](#table-of-contents)
+    * [REST API wtf?](#rest-api-wtf-table-of-contents)
+        * [Explanation](#explanation-table-of-contents)
+        * [Base workflow](#base-workflow-table-of-contents)
+        * [REST traits](#rest-traits-table-of-contents)
+        * [How to make new REST API?](#how-to-make-new-rest-api-table-of-contents)
+        * [Alternatives](#alternatives-table-of-contents)
+    * [Authentication and authorization](#authentication-and-authorization-table-of-contents)
+        * [Authentication](#authentication-table-of-contents)
+            * [Normal users](#normal-users-table-of-contents)
+            * [ApiKey "users"](#apikey-users-table-of-contents)
+    * [Controllers](#controllers-table-of-contents)
+    * [Resources](#resources-table-of-contents)
+        * [Lifecycle callbacks](#lifecycle-callbacks-table-of-contents)
+    * [Repositories](#repositories-table-of-contents)
+        * [Parameter handling](#parameter-handling-table-of-contents)
+        * [Query builder callbacks and joins](#query-builder-callbacks-and-joins-table-of-contents)
+    * [Argument value resolvers](#argument-value-resolvers-table-of-contents)
+        * [Entity value resolver](#entity-value-resolver-table-of-contents)
+        * [Logged in user value resolver](#logged-in-user-value-resolver-table-of-contents)
+        * [REST DTO value resolver](#rest-dto-value-resolver-table-of-contents)
+    * [Common helpers](#common-helpers-table-of-contents)
+        * [LoggerAwareTrait](#loggerawaretrait-table-of-contents)
+        * [StopwatchAwareTrait](#stopwatchawaretrait-table-of-contents)
 
 ## REST API wtf? [ᐞ](#table-of-contents)
 
@@ -56,8 +56,8 @@ The main points to make this from scratch are following things;
 * Docker support for development and production setups
 * Separate user entity from security context
 * Authentication
-  * User with JWT for normal applications
-  * ApiKey authentication for server-to-server communication
+    * User with JWT for normal applications
+    * ApiKey authentication for server-to-server communication
 * Code and type coverage
 * Provide common tools for development process that are easy to use
 * Role based REST actions - this will cover like 99% use cases in real world
@@ -116,7 +116,7 @@ structure if you look how `ApiKey` endpoint has been built to this application.
 
 By default this application is providing a "normal" user and "apikey"
 authentication implementations. Another quite _big_ difference to traditional
-Symfony  applications is that this application does not bind `Entities` to
+Symfony applications is that this application does not bind `Entities` to
 `Symfony\Component\Security\Core\User\UserInterface` - this application uses
 separated DTO's for that.
 
@@ -259,7 +259,8 @@ attached to following resource methods;
 
 Each of these you can use `before` and `after` methods within your resource
 service to control your request and response as you like. For more information
-about these see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
+about these
+see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
 
 ## Repositories [ᐞ](#table-of-contents)
 
@@ -343,7 +344,8 @@ your own application.
 
 ### Entity value resolver [ᐞ](#table-of-contents)
 
-This is basically replacement for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
+This is basically replacement
+for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
 `@ParamConverter` annotation, so that you can easily inject _any_ entity to
 your controller action method which will use specified `resource` method to
 resolve that entity value.
