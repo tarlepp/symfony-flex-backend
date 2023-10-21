@@ -82,17 +82,6 @@ RUN composer completion bash > /etc/bash_completion.d/composer
 # restart containers and you're good
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
 
-# Define used work directory
-WORKDIR /app
-
-# Add everything inside docker image
-COPY . .
-
-# Ensure that all required files has execute rights
-RUN chmod +x /app/bin/console \
-    && chmod +x /app/docker-entrypoint-dev.sh \
-    && chmod +x /usr/bin/composer
-
 RUN chmod -R o+s+w /usr/local/etc/php
 
 # Enable PHP-FPM status page
@@ -108,14 +97,12 @@ RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/relea
 
 RUN groupadd --gid ${HOST_GID} dev \
     && useradd \
-        -p $(perl \
-        -e 'print crypt($ARGV[0], "password")' 'dev') \
+        -p $(perl -e 'print crypt($ARGV[0], "password")' 'dev') \
         --uid ${HOST_UID} \
         --gid ${HOST_GID} \
         --shell /bin/bash \
         --create-home dev \
     && usermod -a -G www-data,sudo dev \
-    && chgrp -hR dev /app \
     && echo 'dev ALL=(ALL) ALL' >> /etc/sudoers
 
 RUN mkdir -p /home/dev/.config/fish/completions \
@@ -124,6 +111,17 @@ RUN mkdir -p /home/dev/.config/fish/completions \
     && mkdir -p /home/dev/.npm \
     && mkdir -p /home/dev/.nvm \
     && chmod 777 -R /home/dev
+
+# Define used work directory
+WORKDIR /app
+
+# Add everything inside docker image
+COPY --chown=dev:dev . .
+
+# Ensure that all required files has execute rights
+RUN chmod +x /app/bin/console \
+    && chmod +x /app/docker-entrypoint-dev.sh \
+    && chmod +x /usr/bin/composer
 
 USER dev
 
