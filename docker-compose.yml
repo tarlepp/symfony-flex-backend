@@ -16,6 +16,7 @@ services:
         volumes:
             - ./:/app:cached
             - ./docker/php/php-dev.ini:/usr/local/etc/php/php.ini
+            - ./docker/php/www-dev.conf:/usr/local/etc/php-fpm.d/www.conf
         tmpfs:
             - /app/var/:uid=$HOST_UID,gid=$HOST_GID
         environment:
