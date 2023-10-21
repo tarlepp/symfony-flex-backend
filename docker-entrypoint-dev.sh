@@ -4,8 +4,7 @@ set -e
 #
 # If we're starting web-server we need to do following:
 #   0) Basic linting of current JSON configuration file
-#   1) Copy updated php configuration file, with this we can change php
-#      configuration without rebuilding image
+#   1) Export needed environment variables
 #   2) Install all dependencies
 #   3) Generate JWT encryption keys
 #   4) Create database if it not exists yet
@@ -17,8 +16,6 @@ set -e
 make lint-configuration
 
 # Step 1
-cp /app/docker/php/php-dev.ini /usr/local/etc/php/php.ini
-
 DOCKER_IP=$(/sbin/ip route|awk '/default/ { print $3 }')
 
 export DOCKER_IP
