@@ -45,20 +45,20 @@
 		"symfony/dotenv": "6.3.0",
 		"symfony/expression-language": "6.3.0",
 		"symfony/flex": "2.3.3",
-		"symfony/form": "6.3.5",
-		"symfony/framework-bundle": "6.3.5",
+		"symfony/form": "6.3.6",
+		"symfony/framework-bundle": "6.3.6",
 		"symfony/monolog-bundle": "3.8.0",
 		"symfony/process": "6.3.4",
 		"symfony/property-access": "6.3.2",
 		"symfony/property-info": "6.3.0",
 		"symfony/routing": "6.3.5",
 		"symfony/runtime": "6.3.2",
-		"symfony/security-bundle": "6.3.5",
-		"symfony/serializer": "6.3.5",
+		"symfony/security-bundle": "6.3.6",
+		"symfony/serializer": "6.3.6",
 		"symfony/string": "6.3.5",
-		"symfony/translation": "6.3.3",
+		"symfony/translation": "6.3.6",
 		"symfony/twig-bundle": "6.3.0",
-		"symfony/validator": "6.3.5",
+		"symfony/validator": "6.3.6",
 		"symfony/yaml": "6.3.3"
 	},
 	"conflict": {
@@ -75,8 +75,8 @@
 		"symfony/maker-bundle": "1.51.1",
 		"symfony/requirements-checker": "2.0.1",
 		"symfony/stopwatch": "6.3.0",
-		"symfony/var-dumper": "6.3.5",
-		"symfony/web-profiler-bundle": "6.3.2"
+		"symfony/var-dumper": "6.3.6",
+		"symfony/web-profiler-bundle": "6.3.6"
 	},
 	"replace": {
 		"symfony/polyfill-ctype": "*",
