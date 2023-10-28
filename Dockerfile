@@ -40,6 +40,7 @@ WORKDIR /app
 
 COPY . /app
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 RUN chmod +x /app/bin/console
 RUN chmod +x /app/docker-entrypoint.sh
