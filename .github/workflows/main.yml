@@ -14,6 +14,9 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   security-check:
     name: PHP Security Checker
