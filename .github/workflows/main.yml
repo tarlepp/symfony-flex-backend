@@ -22,12 +22,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@sha256:b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@sha256:7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
+        uses: shivammathur/setup-php@7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
         with:
           php-version: '8.2'
           tools: composer:v2
@@ -37,7 +37,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@sha256:704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -55,7 +55,7 @@ jobs:
           composer --version
 
       - name: PHP Security Checker
-        uses: symfonycorp/security-checker-action@sha256:258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
+        uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: make check-security
@@ -67,12 +67,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@sha256:b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@sha256:7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
+        uses: shivammathur/setup-php@7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
         with:
           php-version: '8.2'
           tools: composer:v2
@@ -82,7 +82,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@sha256:704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -118,12 +118,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@sha256:b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@sha256:7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
+        uses: shivammathur/setup-php@7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
         with:
           php-version: '8.2'
           tools: composer:v2
@@ -133,7 +133,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@sha256:704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -176,13 +176,13 @@ jobs:
         run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@sha256:a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@sha256:a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: phploc.json
           path: ./build/phploc.json
@@ -207,12 +207,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@sha256:b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@sha256:7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
+        uses: shivammathur/setup-php@7fdd3ece872ec7ec4c098ae5ab7637d5e0a96067 # v2.26.0
         with:
           php-version: '8.2'
           extensions: pdo_mysql, mysql
@@ -224,7 +224,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@sha256:704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -288,25 +288,25 @@ jobs:
         run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@sha256:a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@sha256:a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@sha256:a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: PhpMetrics
           path: ./build/report
 
       - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@sha256:a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
@@ -317,28 +317,28 @@ jobs:
 
     steps:
       - name: Make checkout
-        uses: actions/checkout@sha256:b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Lint `./README.md`
-        uses: avto-dev/markdown-lint@sha256:04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
+        uses: avto-dev/markdown-lint@04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './README.md'
 
       - name: Lint all the resource docs under `./doc/` directory
-        uses: avto-dev/markdown-lint@sha256:04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
+        uses: avto-dev/markdown-lint@04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './doc/*.md'
 
       - name: Lint all the docs under `./docker/` directory
-        uses: avto-dev/markdown-lint@sha256:04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
+        uses: avto-dev/markdown-lint@04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './docker/*.md'
 
       - name: Lint all the docs under `./secrets/` directory
-        uses: avto-dev/markdown-lint@sha256:04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
+        uses: avto-dev/markdown-lint@04d43ee9191307b50935a753da3b775ab695eceb # v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './secrets/*.md'
@@ -350,7 +350,7 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@sha256:b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Set tag var
         id: vars
