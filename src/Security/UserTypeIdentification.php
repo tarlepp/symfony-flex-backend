@@ -58,7 +58,7 @@ class UserTypeIdentification
     /**
      * Helper method to get user identity object via token storage.
      */
-    public function getIdentity(): ?UserInterface
+    public function getIdentity(): SecurityUser|ApiKeyUser|null
     {
         return $this->getSecurityUser() ?? $this->getApiKeyUser();
     }
@@ -88,10 +88,8 @@ class UserTypeIdentification
      * object implementing a __toString method, or the username as a regular
      * string.
      */
-    private function getUserToken(): UserInterface | null
+    private function getUserToken(): UserInterface|null
     {
-        $token = $this->tokenStorage->getToken();
-
-        return $token?->getUser();
+        return $this->tokenStorage->getToken()?->getUser();
     }
 }
