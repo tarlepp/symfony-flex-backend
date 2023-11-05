@@ -1,4 +1,4 @@
-FROM php:8.2.11-fpm
+FROM php:8.2.11-fpm@sha256:202df6c6d8e4ecb716e5e6b2836ba91993705b3c7e97eba2c0f905d96b77cdc8
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
