@@ -148,6 +148,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpdoc-parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/clock" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php83" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/masterminds" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/nikic" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/11_phplint" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

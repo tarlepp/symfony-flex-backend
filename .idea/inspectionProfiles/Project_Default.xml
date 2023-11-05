@@ -64,7 +64,6 @@
     <inspection_tool class="PhpCSFixerValidationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="SHOW_SNIFF_NAMES" value="true" />
-      <option name="EXTENSIONS" value="php,js,css,inc" />
     </inspection_tool>
     <inspection_tool class="PhpDivisionByZeroInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpDocMissingReturnTagInspection" enabled="true" level="WARNING" enabled_by_default="true">
@@ -174,5 +173,6 @@
     <inspection_tool class="UnusedGotoLabelInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UselessUnsetInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UsingInclusionReturnValueInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="YAMLSchemaValidation" enabled="true" level="INFORMATION" enabled_by_default="true" />
   </profile>
 </component>
