@@ -282,7 +282,7 @@ jobs:
           COVERALLS_RUN_LOCALLY: 1
 
       - name: SonarCloud Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
-        uses: sonarsource/sonarcloud-github-action@master
+        uses: sonarsource/sonarcloud-github-action@5ee47de3c96f0c1c51b09d2ff1fec0cfeefcf67c # master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
