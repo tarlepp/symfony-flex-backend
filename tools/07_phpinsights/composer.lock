@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9782ecced73ec5b3cc3ea9e371c1e5eb",
+    "content-hash": "7a24e05dbbb243dea24159d2f970ee74",
     "packages": [],
     "packages-dev": [
         {
@@ -370,16 +370,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.37.1",
+            "version": "v3.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "c3fe76976081ab871aa654e872da588077e19679"
+                "reference": "7e6070026e76aa09d77a47519625c86593fb8e31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/c3fe76976081ab871aa654e872da588077e19679",
-                "reference": "c3fe76976081ab871aa654e872da588077e19679",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/7e6070026e76aa09d77a47519625c86593fb8e31",
+                "reference": "7e6070026e76aa09d77a47519625c86593fb8e31",
                 "shasum": ""
             },
             "require": {
@@ -451,7 +451,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.37.1"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.38.0"
             },
             "funding": [
                 {
@@ -459,7 +459,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-29T20:51:23+00:00"
+            "time": "2023-11-07T08:44:54+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -615,16 +615,16 @@
         },
         {
             "name": "nunomaduro/phpinsights",
-            "version": "v2.9.0",
+            "version": "v2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/phpinsights.git",
-                "reference": "52d69d895239b1e9a90d7212dffc6c7e73ec822e"
+                "reference": "e0988110b32f79a33cfcab5968a4bd426924b191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/52d69d895239b1e9a90d7212dffc6c7e73ec822e",
-                "reference": "52d69d895239b1e9a90d7212dffc6c7e73ec822e",
+                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/e0988110b32f79a33cfcab5968a4bd426924b191",
+                "reference": "e0988110b32f79a33cfcab5968a4bd426924b191",
                 "shasum": ""
             },
             "require": {
@@ -701,7 +701,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nunomaduro/phpinsights/issues",
-                "source": "https://github.com/nunomaduro/phpinsights/tree/v2.9.0"
+                "source": "https://github.com/nunomaduro/phpinsights/tree/v2.10.0"
             },
             "funding": [
                 {
@@ -717,7 +717,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-20T15:58:50+00:00"
+            "time": "2023-11-10T03:23:41+00:00"
         },
         {
             "name": "php-parallel-lint/php-parallel-lint",
