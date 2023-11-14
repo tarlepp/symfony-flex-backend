@@ -27,7 +27,7 @@
 		"ext-pdo": "*",
 		"ext-random": "*",
 		"doctrine/doctrine-bundle": "2.10.2",
-		"doctrine/doctrine-migrations-bundle": "3.2.4",
+		"doctrine/doctrine-migrations-bundle": "3.3.0",
 		"doctrine/orm": "2.16.2",
 		"friendsofphp/proxy-manager-lts": "1.0.16",
 		"gedmo/doctrine-extensions": "3.13.0",
