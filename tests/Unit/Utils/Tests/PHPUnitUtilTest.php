@@ -147,7 +147,8 @@ class PHPUnitUtilTest extends KernelTestCase
     public static function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
         yield ['int', 'integer'];
-        yield ['int', 'bigint'];
+        yield ['int', 'int'];
+        yield ['string', 'bigint'];
         yield [DateTime::class, 'time'];
         yield [DateTime::class, 'date'];
         yield [DateTime::class, 'datetime'];
@@ -168,7 +169,7 @@ class PHPUnitUtilTest extends KernelTestCase
     {
         yield [666, 'int', true];
         yield [666, 'integer', true];
-        yield [666, 'bigint', true];
+        yield ['Some text here', 'bigint', true];
         yield [DateTime::class, 'time', false];
         yield [DateTime::class, 'date', false];
         yield [DateTime::class, 'datetime', false];
