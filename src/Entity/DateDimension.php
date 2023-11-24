@@ -188,7 +188,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.unixTime',
     ])]
-    private int $unixTime;
+    private string $unixTime;
 
     public function __construct(
         #[ORM\Column(
@@ -199,7 +199,7 @@ class DateDimension implements EntityInterface
             'DateDimension',
             'DateDimension.date',
         ])]
-        private DateTimeImmutable $date
+        private readonly DateTimeImmutable $date
     ) {
         $this->id = $this->createUuid();
 
@@ -212,7 +212,7 @@ class DateDimension implements EntityInterface
         $this->dayNumberOfYear = (int)$date->format('z');
         $this->leapYear = (bool)$date->format('L');
         $this->weekNumberingYear = (int)$date->format('o');
-        $this->unixTime = (int)$date->format('U');
+        $this->unixTime = $date->format('U');
     }
 
     public function getId(): string
@@ -270,7 +270,7 @@ class DateDimension implements EntityInterface
         return $this->weekNumberingYear;
     }
 
-    public function getUnixTime(): int
+    public function getUnixTime(): string
     {
         return $this->unixTime;
     }
@@ -280,7 +280,7 @@ class DateDimension implements EntityInterface
      */
     public function getCreatedAt(): DateTimeImmutable
     {
-        $output = DateTimeImmutable::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
+        $output = DateTimeImmutable::createFromFormat('U', $this->getUnixTime(), new DateTimeZone('UTC'));
 
         return $output === false ? new DateTimeImmutable(timezone: new DateTimeZone('UTC')) : $output;
     }

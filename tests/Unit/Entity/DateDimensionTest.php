@@ -46,6 +46,6 @@ class DateDimensionTest extends KernelTestCase
         self::assertSame((int)$dateTime->format('z'), $entity->getDayNumberOfYear());
         self::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
         self::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
-        self::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
+        self::assertSame($dateTime->format('U'), $entity->getUnixTime());
     }
 }
