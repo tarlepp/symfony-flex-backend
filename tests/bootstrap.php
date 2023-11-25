@@ -47,9 +47,7 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
          */
         $variables = (new Dotenv())->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
 
-        /**
-         * @var array<string, string> $configuration
-         */
+        /** @var array<string, string> $configuration */
         $configuration = JSON::decode((string)file_get_contents($variables['APPLICATION_CONFIG']), true);
 
         if (!array_key_exists('DATABASE_URL', $configuration)) {
