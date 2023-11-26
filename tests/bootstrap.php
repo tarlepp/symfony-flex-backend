@@ -34,27 +34,35 @@ require dirname(__DIR__) . '/vendor/autoload.php';
  * @throws Throwable
  */
 $InitializeFastestEnvironmentVariables = static function (string $readableChannel): void {
+    /**
+     * @var array<string, string> $cache
+     */
     static $cache = [];
 
     if (!array_key_exists($readableChannel, $cache)) {
-        // Parse current environment file
+        /**
+         * Parse current environment file
+         *
+         * @var array<string, string> $variables
+         */
         $variables = (new Dotenv())->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
 
+        /** @var array<string, string> $configuration */
         $configuration = JSON::decode((string)file_get_contents($variables['APPLICATION_CONFIG']), true);
 
-        if (!is_array($configuration) || !array_key_exists('DATABASE_URL', $configuration)) {
+        if (!array_key_exists('DATABASE_URL', $configuration)) {
             throw new RuntimeException('Cannot get `DATABASE_URL from specified env file.');
         }
 
         $originalDatabaseUrl = $configuration['DATABASE_URL'];
 
-        $databaseName = trim(((array)parse_url((string)$originalDatabaseUrl))['path'] ?? '', '/');
+        $databaseName = trim(((array)parse_url($originalDatabaseUrl))['path'] ?? '', '/');
 
         // Replace DATABASE_URL variable with proper database name
         $databaseUrl = str_replace(
             '/' . $databaseName . '?',
             '/' . $databaseName . '_' . $readableChannel . '?',
-            (string)$originalDatabaseUrl
+            $originalDatabaseUrl
         );
 
         $cache[$readableChannel] = $databaseUrl;
@@ -70,7 +78,10 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
 $InitializeEnvironment = static function (): void {
     $localPhpEnvFile = dirname(__DIR__) . '/.env.local.php';
 
-    /** @psalm-suppress MissingFile */
+    /**
+     * @psalm-suppress MissingFile
+     * @var array<string, string>|null $env
+     */
     $env = is_readable($localPhpEnvFile) ? include $localPhpEnvFile : null;
 
     // Load cached env vars if the .env.local.php file exists
