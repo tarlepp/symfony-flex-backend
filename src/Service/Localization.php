@@ -73,12 +73,13 @@ class Localization
     /**
      * @throws Throwable
      *
-     * @return array<int, array{timezone: string, identifier: string,  offset: string, value: string}>
+     * @return array<int, array{timezone: string, identifier: non-empty-string,  offset: string, value: string}>
      */
     public function getFormattedTimezones(): array
     {
         $output = [];
 
+        /** @var array<int, non-empty-string> $identifiers */
         $identifiers = DateTimeZone::listIdentifiers();
 
         foreach ($identifiers as $identifier) {

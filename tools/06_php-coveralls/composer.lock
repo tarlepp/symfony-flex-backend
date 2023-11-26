@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bda0320b831ce361e7415724f2cdb70b",
+    "content-hash": "b7ded8ae3f87c795d977ba38ecc4b263",
     "packages": [],
     "packages-dev": [
         {
@@ -334,28 +334,28 @@
         },
         {
             "name": "php-coveralls/php-coveralls",
-            "version": "v2.6.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-coveralls/php-coveralls.git",
-                "reference": "9e88d7d38e9eab7c675da674481784321ea7a9bc"
+                "reference": "b36fa4394e519dafaddc04ae03976bc65a25ba15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-coveralls/php-coveralls/zipball/9e88d7d38e9eab7c675da674481784321ea7a9bc",
-                "reference": "9e88d7d38e9eab7c675da674481784321ea7a9bc",
+                "url": "https://api.github.com/repos/php-coveralls/php-coveralls/zipball/b36fa4394e519dafaddc04ae03976bc65a25ba15",
+                "reference": "b36fa4394e519dafaddc04ae03976bc65a25ba15",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^6.0 || ^7.0",
-                "php": "^5.5 || ^7.0 || ^8.0",
+                "php": "^7.0 || ^8.0",
                 "psr/log": "^1.0 || ^2.0",
-                "symfony/config": "^2.1 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
-                "symfony/console": "^2.1 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
-                "symfony/stopwatch": "^2.0 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
-                "symfony/yaml": "^2.0.5 || ^3.0 || ^4.0 || ^5.0 || ^6.0"
+                "symfony/config": "^2.1 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/console": "^2.1 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/stopwatch": "^2.0 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/yaml": "^2.0.5 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.35 || ^5.4.3 || ^6.0 || ^7.0 || >=8.0 <8.5.29 || >=9.0 <9.5.23",
@@ -411,9 +411,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-coveralls/php-coveralls/issues",
-                "source": "https://github.com/php-coveralls/php-coveralls/tree/v2.6.0"
+                "source": "https://github.com/php-coveralls/php-coveralls/tree/v2.7.0"
             },
-            "time": "2023-07-16T08:39:10+00:00"
+            "time": "2023-11-22T10:21:01+00:00"
         },
         {
             "name": "psr/container",
@@ -728,17 +728,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ed4318ac306a1a1d467d19c1a768ff17e2d454b1"
+                "reference": "2b23329e299c9a6cd98a82f5137ab4909c8e506d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ed4318ac306a1a1d467d19c1a768ff17e2d454b1",
-                "reference": "ed4318ac306a1a1d467d19c1a768ff17e2d454b1",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2b23329e299c9a6cd98a82f5137ab4909c8e506d",
+                "reference": "2b23329e299c9a6cd98a82f5137ab4909c8e506d",
                 "shasum": ""
             },
             "conflict": {
                 "3f/pygmentize": "<1.2",
-                "admidio/admidio": "<4.2.11",
+                "admidio/admidio": "<4.2.13",
                 "adodb/adodb-php": "<=5.20.20|>=5.21,<=5.21.3",
                 "aheinze/cockpit": "<2.2",
                 "aimeos/aimeos-typo3": "<19.10.12|>=20,<20.10.5",
@@ -811,7 +811,7 @@
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<3.1.9",
                 "codeigniter4/framework": "<=4.4.2",
-                "codeigniter4/shield": "<1.0.0.0-beta4",
+                "codeigniter4/shield": "<1.0.0.0-beta8",
                 "codiad/codiad": "<=2.8.4",
                 "composer/composer": "<1.10.27|>=2,<2.2.22|>=2.3,<2.6.4",
                 "concrete5/concrete5": "<9.2.2",
@@ -1154,6 +1154,7 @@
                 "really-simple-plugins/complianz-gdpr": "<6.4.2",
                 "remdex/livehelperchat": "<3.99",
                 "reportico-web/reportico": "<=7.1.21",
+                "rhukster/dom-sanitizer": "<1.0.7",
                 "rmccue/requests": ">=1.6,<1.8",
                 "robrichards/xmlseclibs": "<3.0.4",
                 "roots/soil": "<4.1",
@@ -1213,7 +1214,7 @@
                 "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
                 "ssddanbrown/bookstack": "<22.02.3",
-                "statamic/cms": "<4.34",
+                "statamic/cms": "<4.36",
                 "stormpath/sdk": "<9.9.99",
                 "studio-42/elfinder": "<2.1.62",
                 "subhh/libconnect": "<7.0.8|>=8,<8.1",
@@ -1222,6 +1223,7 @@
                 "sumocoders/framework-user-bundle": "<1.4",
                 "swag/paypal": "<5.4.4",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
+                "swiftyedit/swiftyedit": "<1.2",
                 "sylius/admin-bundle": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
                 "sylius/grid": ">=1,<1.1.19|>=1.2,<1.2.18|>=1.3,<1.3.13|>=1.4,<1.4.5|>=1.5,<1.5.1",
                 "sylius/grid-bundle": "<1.10.1",
@@ -1422,7 +1424,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-17T23:04:10+00:00"
+            "time": "2023-11-23T04:04:32+00:00"
         },
         {
             "name": "symfony/config",
