@@ -15,7 +15,6 @@ use App\Entity\Traits\Uuid;
 use DeviceDetector\DeviceDetector;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use OpenApi\Annotations as OA;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,9 +54,6 @@ class LogLogin implements EntityInterface
     use LogEntityTrait;
     use Uuid;
 
-    /**
-     * @OA\Property(type="string", format="uuid")
-     */
     #[ORM\Id]
     #[ORM\Column(
         name: 'id',
