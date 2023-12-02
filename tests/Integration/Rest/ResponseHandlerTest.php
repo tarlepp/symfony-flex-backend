@@ -147,7 +147,11 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->query = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -184,7 +188,11 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->query = $parameterBag;
 
         /** @var InputBag $parameterBag */
@@ -229,7 +237,11 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getAssociations')
             ->willReturn(['AnotherFakeEntity']);
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->query = $parameterBag;
 
         /** @var InputBag $parameterBag */
@@ -269,7 +281,11 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->query = $parameterBag;
 
         /** @var InputBag $parameterBag */
@@ -309,7 +325,11 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->query = $parameterBag;
 
         /** @var InputBag $parameterBag */
@@ -360,7 +380,11 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getSerializerContext')
             ->willReturn($expected);
 
-        /** @var InputBag $parameterBag */
+        /**
+         * @phpstan-ignore-next-line
+         *
+         * @var InputBag $parameterBag
+         */
         $request->query = $parameterBag;
 
         self::assertSame(
