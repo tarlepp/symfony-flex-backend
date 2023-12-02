@@ -24,6 +24,8 @@ use Throwable;
  *
  * @package App\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template-implements UserProviderInterface<SecurityUser>
  */
 class SecurityUserFactory implements UserProviderInterface
 {
