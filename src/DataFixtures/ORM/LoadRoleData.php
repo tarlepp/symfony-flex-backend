@@ -13,6 +13,7 @@ use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Throwable;
 use function array_map;
@@ -36,6 +37,7 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface
     /**
      * @throws Throwable
      */
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         // Create entities

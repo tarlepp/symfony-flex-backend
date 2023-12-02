@@ -76,7 +76,7 @@ class GetTokenController
         path: '/v1/auth/get_token',
         methods: [Request::METHOD_POST],
     )]
-    public function __invoke(): void
+    public function __invoke(): never
     {
         $message = sprintf(
             'You need to send JSON body to obtain token eg. %s',

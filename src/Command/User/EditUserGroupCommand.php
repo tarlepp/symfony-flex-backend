@@ -14,6 +14,7 @@ use App\Entity\UserGroup as UserGroupEntity;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
+use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,6 +49,7 @@ class EditUserGroupCommand extends Command
      *
      * @throws Throwable
      */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
