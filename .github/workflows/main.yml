@@ -30,7 +30,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@81cd5ae0920b34eef300e1775313071038a53429 # v2.27.0
+        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
           php-version: '8.2'
           tools: composer:v2
@@ -75,7 +75,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@81cd5ae0920b34eef300e1775313071038a53429 # v2.27.0
+        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
           php-version: '8.2'
           tools: composer:v2
@@ -126,7 +126,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@81cd5ae0920b34eef300e1775313071038a53429 # v2.27.0
+        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
           php-version: '8.2'
           tools: composer:v2
@@ -215,7 +215,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@81cd5ae0920b34eef300e1775313071038a53429 # v2.27.0
+        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
           php-version: '8.2'
           extensions: pdo_mysql, mysql
