@@ -150,7 +150,7 @@ class ResponseHandlerTest extends KernelTestCase
         /**
          * @phpstan-ignore-next-line
          *
-         * @var InputBag<string> $parameterBag
+         * @var InputBag $parameterBag
          */
         $request->query = $parameterBag;
 
@@ -191,15 +191,11 @@ class ResponseHandlerTest extends KernelTestCase
         /**
          * @phpstan-ignore-next-line
          *
-         * @var InputBag<string> $parameterBag
+         * @var InputBag $parameterBag
          */
         $request->query = $parameterBag;
 
-        /**
-         * @phpstan-ignore-next-line
-         *
-         * @var InputBag<bool|float|int|string> $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -244,15 +240,11 @@ class ResponseHandlerTest extends KernelTestCase
         /**
          * @phpstan-ignore-next-line
          *
-         * @var InputBag<string> $parameterBag
+         * @var InputBag $parameterBag
          */
         $request->query = $parameterBag;
 
-        /**
-         * @phpstan-ignore-next-line
-         *
-         * @var InputBag<bool|float|int|string> $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -292,15 +284,11 @@ class ResponseHandlerTest extends KernelTestCase
         /**
          * @phpstan-ignore-next-line
          *
-         * @var InputBag<string> $parameterBag
+         * @var InputBag $parameterBag
          */
         $request->query = $parameterBag;
 
-        /**
-         * @phpstan-ignore-next-line
-         *
-         * @var InputBag<bool|float|int|string> $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -340,15 +328,11 @@ class ResponseHandlerTest extends KernelTestCase
         /**
          * @phpstan-ignore-next-line
          *
-         * @var InputBag<string> $parameterBag
+         * @var InputBag $parameterBag
          */
         $request->query = $parameterBag;
 
-        /**
-         * @phpstan-ignore-next-line
-         *
-         * @var InputBag<bool|float|int|string> $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
         $context = (new ResponseHandler($serializer))
@@ -399,7 +383,7 @@ class ResponseHandlerTest extends KernelTestCase
         /**
          * @phpstan-ignore-next-line
          *
-         * @var InputBag<string> $parameterBag
+         * @var InputBag $parameterBag
          */
         $request->query = $parameterBag;
 

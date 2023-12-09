@@ -16,7 +16,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use OpenApi\Annotations as OA;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
@@ -43,9 +42,6 @@ class UserGroup implements EntityInterface, Stringable
     final public const SET_USER_PROFILE_GROUPS = 'set.UserProfileGroups';
     final public const SET_USER_GROUP_BASIC = 'set.UserGroupBasic';
 
-    /**
-     * @OA\Property(type="string", format="uuid")
-     */
     #[ORM\Id]
     #[ORM\Column(
         name: 'id',
