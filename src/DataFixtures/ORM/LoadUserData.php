@@ -18,6 +18,7 @@ use App\Tests\Utils\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Override;
 use Throwable;
 use function array_map;
 
@@ -51,6 +52,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
     /**
      * @throws Throwable
      */
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         // Create entities

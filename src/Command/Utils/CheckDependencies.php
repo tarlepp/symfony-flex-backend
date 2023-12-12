@@ -12,6 +12,7 @@ use App\Command\Traits\SymfonyStyleTrait;
 use InvalidArgumentException;
 use JsonException;
 use LogicException;
+use Override;
 use SplFileInfo;
 use stdClass;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -83,6 +84,7 @@ class CheckDependencies extends Command
      *
      * @throws Throwable
      */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $onlyMinor = $input->getOption('minor');

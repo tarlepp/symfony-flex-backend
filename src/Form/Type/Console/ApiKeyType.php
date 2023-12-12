@@ -14,6 +14,7 @@ use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
+use Override;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -61,6 +62,7 @@ class ApiKeyType extends AbstractType
      *
      * @throws Throwable
      */
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -82,6 +84,7 @@ class ApiKeyType extends AbstractType
         $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
