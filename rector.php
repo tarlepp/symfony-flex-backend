@@ -16,10 +16,10 @@ use Rector\Symfony\Set\SymfonyLevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        //__DIR__ . '/config',
-        //__DIR__ . '/migrations',
-        //__DIR__ . '/public',
-        //__DIR__ . '/src',
+        __DIR__ . '/config',
+        __DIR__ . '/migrations',
+        __DIR__ . '/public',
+        __DIR__ . '/src',
         /**
          * First run some rule(s) or sets to whole codebase and
          * run all the tests (phpunit, ecs, psalm and phpstan),
@@ -29,7 +29,7 @@ return static function (RectorConfig $rectorConfig): void {
          * After that enable this directory and run rector again
          * and do that whole process again.
          */
-        __DIR__ . '/tests',
+        //__DIR__ . '/tests',
     ]);
 
     // Enable single or multiple rules with rector
@@ -37,7 +37,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // Enable the set(s) that you want to run with rector
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_82, // This is for PHP version upgrade
+        LevelSetList::UP_TO_PHP_83, // This is for PHP version upgrade
         //PHPUnitSetList::PHPUNIT_100,
         //SymfonyLevelSetList::UP_TO_SYMFONY_62, // This is for Symfony version upgrade
     ]);

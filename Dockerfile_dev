@@ -1,4 +1,4 @@
-FROM php:8.2.12-fpm
+FROM php:8.3.0-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -10,7 +10,7 @@ ARG HOST_GID
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION v0.39.5
-ENV NODE_VERSION 21.1.0
+ENV NODE_VERSION 21.3.0
 
 # Update package list and install necessary libraries
 RUN apt-get update \
@@ -56,7 +56,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.1.61 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.1.68 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Enable all necessary PHP packages
 RUN install-php-extensions \

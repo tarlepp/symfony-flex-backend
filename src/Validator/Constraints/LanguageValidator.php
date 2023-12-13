@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Validator\Constraints;
 
 use App\Service\Localization;
+use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use function in_array;
@@ -29,6 +30,7 @@ class LanguageValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (in_array($value, $this->localization->getLanguages(), true) !== true) {

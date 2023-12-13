@@ -13,6 +13,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
 use App\Validator\Constraints as AppAssert;
+use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -66,6 +67,7 @@ class UserGroup extends RestDto
      *
      * @param EntityInterface|Entity $entity
      */
+    #[Override]
     public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {

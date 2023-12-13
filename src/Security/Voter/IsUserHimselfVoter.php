@@ -10,6 +10,7 @@ namespace App\Security\Voter;
 
 use App\Entity\User;
 use App\Security\SecurityUser;
+use Override;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -31,6 +32,7 @@ class IsUserHimselfVoter extends Voter
     /**
      * {@inheritdoc}
      */
+    #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         return $attribute === self::ATTRIBUTE && $subject instanceof User;
@@ -39,6 +41,7 @@ class IsUserHimselfVoter extends Voter
     /**
      * {@inheritdoc}
      */
+    #[Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();

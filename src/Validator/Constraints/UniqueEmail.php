@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Validator\Constraints;
 
 use Attribute;
+use Override;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -40,6 +41,7 @@ class UniqueEmail extends Constraint
         self::IS_UNIQUE_EMAIL_ERROR => 'IS_UNIQUE_EMAIL_ERROR',
     ];
 
+    #[Override]
     public function getTargets(): string
     {
         $output = null;

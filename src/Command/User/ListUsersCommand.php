@@ -14,6 +14,7 @@ use App\Entity\UserGroup;
 use App\Resource\UserResource;
 use App\Security\RolesService;
 use Closure;
+use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,6 +52,7 @@ class ListUsersCommand extends Command
      *
      * @throws Throwable
      */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
