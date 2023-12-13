@@ -11,7 +11,6 @@ namespace App\Doctrine\DBAL\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
-use Override;
 use function array_map;
 use function implode;
 use function in_array;
@@ -41,7 +40,6 @@ abstract class EnumType extends Type
         return static::$values;
     }
 
-    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         $iterator = static fn (string $value): string => "'" . $value . "'";
@@ -52,7 +50,6 @@ abstract class EnumType extends Type
     /**
      * {@inheritdoc}
      */
-    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         $value = (string)parent::convertToDatabaseValue(is_string($value) ? $value : '', $platform);
@@ -69,7 +66,6 @@ abstract class EnumType extends Type
         return $value;
     }
 
-    #[Override]
     public function getName(): string
     {
         return static::$name;

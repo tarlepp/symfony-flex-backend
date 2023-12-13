@@ -16,7 +16,6 @@ use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
-use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -63,7 +62,6 @@ class CreateUserGroupCommand extends Command
         parent::__construct();
     }
 
-    #[Override]
     protected function configure(): void
     {
         parent::configure();
@@ -76,7 +74,6 @@ class CreateUserGroupCommand extends Command
      *
      * @throws Throwable
      */
-    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);

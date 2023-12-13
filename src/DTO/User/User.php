@@ -17,7 +17,6 @@ use App\Enum\Language;
 use App\Enum\Locale;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
-use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
@@ -229,7 +228,6 @@ class User extends RestDto
      *
      * @param EntityInterface|Entity $entity
      */
-    #[Override]
     public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {

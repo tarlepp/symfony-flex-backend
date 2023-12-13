@@ -15,7 +15,6 @@ use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
-use Override;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -63,7 +62,6 @@ class UserGroupType extends AbstractType
      *
      * @throws Throwable
      */
-    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -84,7 +82,6 @@ class UserGroupType extends AbstractType
         $builder->get('role')->addModelTransformer($this->roleTransformer);
     }
 
-    #[Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

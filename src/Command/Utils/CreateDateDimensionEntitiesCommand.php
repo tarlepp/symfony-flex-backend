@@ -16,7 +16,6 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
-use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -52,7 +51,6 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws Throwable
      */
-    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Create output decorator helpers for the Symfony Style Guide.
