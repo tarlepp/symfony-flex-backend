@@ -296,7 +296,11 @@ class PhpUnitUtil
             }
         }
 
-        /** @var mixed $output */
+        /**
+         * @psalm-suppress MixedArgument, MixedMethodCall
+         *
+         * @var mixed $output
+         */
         $output = match ($type) {
             self::TYPE_ENUM => current($class::cases()), // TODO: fix this
             self::TYPE_CUSTOM_CLASS => new $class(...$params),
