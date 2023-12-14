@@ -214,6 +214,7 @@ class PhpUnitUtil
         $cacheKey = $type . serialize($meta);
 
         if (!array_key_exists($cacheKey, self::$validValueCache)) {
+            /** @psalm-suppress MixedAssignment */
             self::$validValueCache[$cacheKey] = self::getValidValue($meta, $type);
         }
 
