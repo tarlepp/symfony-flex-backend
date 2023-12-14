@@ -14,7 +14,6 @@ use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
-use Override;
 
 /**
  * Class UTCDateTimeType
@@ -33,7 +32,6 @@ class UTCDateTimeType extends DateTimeType
      *
      * @throws ConversionException
      */
-    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         if ($value instanceof DateTime) {
@@ -52,7 +50,6 @@ class UTCDateTimeType extends DateTimeType
      *
      * @throws ConversionException
      */
-    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): DateTimeInterface|null
     {
         if ($value instanceof DateTime) {

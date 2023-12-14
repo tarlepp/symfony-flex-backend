@@ -11,7 +11,6 @@ namespace App\Validator\Constraints;
 use App\Entity\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -33,7 +32,6 @@ class UniqueEmailValidator extends ConstraintValidator
      *
      * @throws NonUniqueResultException
      */
-    #[Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if ($value instanceof UserInterface

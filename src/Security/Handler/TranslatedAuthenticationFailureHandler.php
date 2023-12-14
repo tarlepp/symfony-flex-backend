@@ -11,7 +11,6 @@ namespace App\Security\Handler;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationFailureHandler;
-use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -40,7 +39,6 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
      *
      * @noinspection PhpMissingParentCallCommonInspection
      */
-    #[Override]
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         /**
