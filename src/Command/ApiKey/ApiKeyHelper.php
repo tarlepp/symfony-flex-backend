@@ -93,7 +93,7 @@ class ApiKeyHelper
         /** @var array<string, string> $choices */
         $choices = [];
 
-        foreach ($this->apiKeyResource->find(orderBy: ['token' => 'ASC']) as $apiKey) {
+        foreach ($this->apiKeyResource->find() as $apiKey) {
             $choices[$apiKey->getId()] = sprintf(
                 '[Token: %s] %s - Roles: %s',
                 $apiKey->getToken(),
