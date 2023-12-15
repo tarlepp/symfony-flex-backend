@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbd49944addab3b9b2690febcc1582c2",
+    "content-hash": "7e71f1b907adb853dd9753aff2b3dc66",
     "packages": [],
     "packages-dev": [
         {
@@ -475,16 +475,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.27.8",
+            "version": "0.27.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "673ce762abf3355fcdc186ca17eb89edf86993bf"
+                "reference": "61e6d0645b89104fbd660218d3408219ad7176b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/673ce762abf3355fcdc186ca17eb89edf86993bf",
-                "reference": "673ce762abf3355fcdc186ca17eb89edf86993bf",
+                "url": "https://api.github.com/repos/infection/infection/zipball/61e6d0645b89104fbd660218d3408219ad7176b5",
+                "reference": "61e6d0645b89104fbd660218d3408219ad7176b5",
                 "shasum": ""
             },
             "require": {
@@ -591,7 +591,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.27.8"
+                "source": "https://github.com/infection/infection/tree/0.27.9"
             },
             "funding": [
                 {
@@ -603,7 +603,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-11-08T14:29:03+00:00"
+            "time": "2023-12-07T17:42:43+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -677,16 +677,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.17.1",
+            "version": "v4.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d"
+                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
-                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bcbb2179f97633e98bbbc87044ee2611c7d7999",
+                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999",
                 "shasum": ""
             },
             "require": {
@@ -727,9 +727,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.17.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.18.0"
             },
-            "time": "2023-08-13T19:53:39+00:00"
+            "time": "2023-12-10T21:03:43+00:00"
         },
         {
             "name": "ondram/ci-detector",
