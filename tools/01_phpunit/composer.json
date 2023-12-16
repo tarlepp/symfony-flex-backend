@@ -6,7 +6,7 @@
 	},
 	"require-dev": {
 		"liuggio/fastest": "1.11.0",
-		"phpunit/php-code-coverage": "10.1.9",
+		"phpunit/php-code-coverage": "10.1.10",
 		"phpunit/phpcov": "9.0.2",
 		"phpunit/phpunit": "10.0.19",
 		"roave/security-advisories": "dev-latest",
