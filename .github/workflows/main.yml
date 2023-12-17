@@ -32,7 +32,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           tools: composer:v2
 
       - name: Get composer cache directory
@@ -77,7 +77,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           tools: composer:v2
 
       - name: Get composer cache directory
@@ -128,7 +128,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           tools: composer:v2
 
       - name: Get composer cache directory
@@ -171,9 +171,8 @@ jobs:
       - name: Run PHPStan static analysis tool
         run: make phpstan-github
 
-      # Disabled this because of - https://github.com/nunomaduro/phpinsights/issues/622
-      #- name: Run `phploc` to collect LOC stats
-      #  run: make phploc
+      - name: Run `phploc` to collect LOC stats
+        run: make phploc
 
       - name: Run `PHP Insights` static analysis tool
         run: make phpinsights
@@ -217,7 +216,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           extensions: pdo_mysql, mysql
           coverage: xdebug
           tools: composer:v2

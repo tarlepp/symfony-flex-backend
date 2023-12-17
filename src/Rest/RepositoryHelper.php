@@ -376,7 +376,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array<int|string, string>> $condition
+     * @param array<int|string, array<array-key, array<int, string>|mixed|string>|string> $condition
      */
     private static function getIterator(array &$condition): Closure
     {

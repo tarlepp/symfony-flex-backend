@@ -7,6 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -16,11 +17,13 @@ final class Version20220312135411 extends AbstractMigration
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function getDescription(): string
     {
         return 'Added missing cascade on delete for the `log_login_failure` table';
     }
 
+    #[Override]
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
@@ -36,6 +39,7 @@ final class Version20220312135411 extends AbstractMigration
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs

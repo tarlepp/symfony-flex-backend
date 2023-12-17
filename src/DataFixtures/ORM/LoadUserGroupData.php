@@ -70,7 +70,7 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
     private function createUserGroup(ObjectManager $manager, string $role): bool
     {
         /** @var Role $roleReference */
-        $roleReference = $this->getReference('Role-' . $this->rolesService->getShort($role));
+        $roleReference = $this->getReference('Role-' . $this->rolesService->getShort($role), Role::class);
 
         // Create new entity
         $entity = new UserGroup();
