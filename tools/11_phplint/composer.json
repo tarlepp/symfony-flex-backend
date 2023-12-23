@@ -2,16 +2,16 @@
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
 	"require": {
-		"php": "^8.2.0"
+		"php": "^8.3.0"
 	},
 	"require-dev": {
-		"overtrue/phplint": "9.0.6",
+		"overtrue/phplint": "9.1.0",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.2.0"
+			"php": "8.3.0"
 		},
 		"preferred-install": {
 			"*": "dist"
