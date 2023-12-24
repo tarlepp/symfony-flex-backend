@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
@@ -54,9 +54,6 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     use Timestampable;
     use Uuid;
 
-    /**
-     * @OA\Property(type="string", format="uuid")
-     */
     #[ORM\Id]
     #[ORM\Column(
         name: 'id',
@@ -69,6 +66,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
         'LogRequest.apiKey',
     ])]
+    #[OA\Property(type: 'string', format: 'uuid')]
     private UuidInterface $id;
 
     #[ORM\Column(
