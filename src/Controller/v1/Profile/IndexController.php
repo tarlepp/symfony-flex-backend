@@ -13,7 +13,9 @@ use App\Security\RolesService;
 use App\Utils\JSON;
 use JsonException;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Property;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -40,41 +42,6 @@ class IndexController
     /**
      * Endpoint action to get current user profile data.
      *
-     * @OA\Parameter(
-     *      name="Authorization",
-     *      in="header",
-     *      required=true,
-     *      description="Authorization header",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="Bearer _your_jwt_here_",
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=200,
-     *      description="User profile data",
-     *      @OA\Schema(
-     *          ref=@Model(
-     *              type=User::class,
-     *              groups={"set.UserProfile"},
-     *          ),
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=401,
-     *      description="Invalid token",
-     *      @OA\Schema(
-     *          type="object",
-     *          example={
-     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *          },
-     *          @OA\Property(property="code", type="integer", description="Error code"),
-     *          @OA\Property(property="message", type="string", description="Error description"),
-     *      ),
-     *  )
-     * @OA\Tag(name="Profile")
-     *
      * @throws JsonException
      */
     #[Route(
@@ -82,6 +49,56 @@ class IndexController
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
+    #[OA\SecurityScheme(
+        securityScheme: 'bearerAuth',
+        type: 'http',
+        description: 'Authorization header',
+        name: 'bearerAuth',
+        in: 'header',
+        bearerFormat: 'JWT',
+        scheme: 'bearer',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'User profile data',
+        content: new JsonContent(
+            ref: new Model(
+                type: User::class,
+                groups: ['set.UserProfile'],
+            ),
+            type: 'object',
+        ),
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'Invalid token',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Token not found' => "{code: 401, message: 'JWT Token not found'}",
+                'Expired token' => "{code: 401, message: 'Expired JWT Token'}",
+            ],
+        ),
+    )]
+    #[OA\Response(
+        response: 403,
+        description: 'Access denied',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Access denied' => "{code: 403, message: 'Access denied'}",
+            ],
+        ),
+    )]
+    #[OA\Tag(name: 'Profile')]
     public function __invoke(User $loggedInUser): JsonResponse
     {
         /** @var array<string, string|array<string, string>> $output */

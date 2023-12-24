@@ -14,7 +14,9 @@ use App\Enum\Role;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Property;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -43,78 +45,6 @@ class AttachUserController
     /**
      * Endpoint action to attach specified user to specified user group.
      *
-     * @OA\Tag(name="UserGroup Management")
-     * @OA\Parameter(
-     *      name="Authorization",
-     *      in="header",
-     *      required=true,
-     *      description="Authorization header",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="Bearer _your_jwt_here_",
-     *      )
-     *  )
-     * @OA\Parameter(
-     *      name="userGroupId",
-     *      in="path",
-     *      required=true,
-     *      description="User Group GUID",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="User Group GUID",
-     *      )
-     *  )
-     * @OA\Parameter(
-     *      name="userId",
-     *      in="path",
-     *      required=true,
-     *      description="User GUID",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="User GUID",
-     *      )
-     *  )
-     * @OA\Response(
-     *      response=200,
-     *      description="List of user group users - specified user already exists on this group",
-     *      @OA\Schema(
-     *          type="array",
-     *          @OA\Items(
-     *              ref=@Model(
-     *                  type=\App\Entity\User::class,
-     *                  groups={"User"},
-     *              ),
-     *          ),
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=201,
-     *      description="List of user group users - specified user has been attached to this group",
-     *      @OA\Schema(
-     *          type="array",
-     *          @OA\Items(
-     *              ref=@Model(
-     *                  type=\App\Entity\User::class,
-     *                  groups={"User"},
-     *              ),
-     *          ),
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=401,
-     *      description="Invalid token",
-     *      @OA\Schema(
-     *          example={
-     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *          },
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=403,
-     *      description="Access denied",
-     *  )
-     *
      * @throws Throwable
      */
     #[Route(
@@ -126,6 +56,67 @@ class AttachUserController
         methods: [Request::METHOD_POST],
     )]
     #[IsGranted(Role::ROOT->value)]
+    #[OA\Tag(name: 'UserGroup Management')]
+    #[OA\SecurityScheme(
+        securityScheme: 'bearerAuth',
+        type: 'http',
+        description: 'Authorization header',
+        name: 'bearerAuth',
+        in: 'header',
+        bearerFormat: 'JWT',
+        scheme: 'bearer',
+    )]
+    #[OA\Parameter(name: 'userGroup', description: 'User Group GUID', in: 'path', required: true)]
+    #[OA\Parameter(name: 'user', description: 'User GUID', in: 'path', required: true)]
+    #[OA\Response(
+        response: 200,
+        description: 'List of user group users - specified user already exists on this group',
+        content: new JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: new Model(type: User::class, groups: ['User']),
+            ),
+        ),
+    )]
+    #[OA\Response(
+        response: 201,
+        description: 'List of user group users - specified user has been attached to this group',
+        content: new JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: new Model(type: User::class, groups: ['User']),
+            ),
+        ),
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'Invalid token',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Token not found' => "{code: 401, message: 'JWT Token not found'}",
+                'Expired token' => "{code: 401, message: 'Expired JWT Token'}",
+            ],
+        ),
+    )]
+    #[OA\Response(
+        response: 403,
+        description: 'Access denied',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Access denied' => "{code: 403, message: 'Access denied'}",
+            ],
+        ),
+    )]
     public function __invoke(UserGroup $userGroup, User $user): JsonResponse
     {
         $status = $userGroup->getUsers()->contains($user) ? 200 : 201;

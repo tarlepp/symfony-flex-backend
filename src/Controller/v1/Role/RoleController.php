@@ -11,7 +11,7 @@ namespace App\Controller\v1\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -19,8 +19,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Class RoleController
- *
- * @OA\Tag(name="Role Management")
  *
  * @package App\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
@@ -32,6 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
     path: '/v1/role',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
+#[OA\Tag(name: 'Role Management')]
 class RoleController extends Controller
 {
     use Actions\Admin\CountAction;

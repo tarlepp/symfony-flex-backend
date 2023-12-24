@@ -9,7 +9,9 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Service\Version;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Property;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -30,26 +32,33 @@ class VersionController
     }
 
     /**
-     * Route for get API version.
-     *
-     * @OA\Get(
-     *      operationId="version",
-     *      responses={
-     *          @OA\Response(
-     *               response=200,
-     *               description="success",
-     *               @OA\Schema(
-     *                   type="object",
-     *                   example={"version": "1.2.3"},
-     *                   @OA\Property(property="version", type="string", description="Version number"),
-     *               ),
-     *           ),
-     *      },
-     *  )
+     * Route to get API version.
      */
     #[Route(
         path: '/version',
         methods: [Request::METHOD_GET],
+    )]
+    #[OA\Get(
+        operationId: 'version',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'success',
+                content: new JsonContent(
+                    properties: [
+                        new Property(
+                            property: 'version',
+                            description: 'Version number of the API in semver format',
+                            type: 'string',
+                        ),
+                    ],
+                    type: 'object',
+                    example: [
+                        'version' => '1.2.3',
+                    ],
+                ),
+            ),
+        ],
     )]
     public function __invoke(): JsonResponse
     {

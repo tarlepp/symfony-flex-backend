@@ -14,7 +14,9 @@ use App\Enum\Role;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Property;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -41,42 +43,6 @@ class UsersController
     /**
      * Endpoint action to list specified user group users.
      *
-     * @OA\Tag(name="UserGroup Management")
-     * @OA\Parameter(
-     *      name="Authorization",
-     *      in="header",
-     *      required=true,
-     *      description="Authorization header",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="Bearer _your_jwt_here_",
-     *      )
-     *  )
-     * @OA\Response(
-     *      response=200,
-     *      description="User group users",
-     * @OA\Schema(
-     *          ref=@Model(
-     *              type=User::class,
-     *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},
-     *          ),
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=401,
-     *      description="Invalid token",
-     *      @OA\Schema(
-     *          example={
-     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *          },
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=404,
-     *      description="User Group not found",
-     *  )
-     *
      * @throws Throwable
      */
     #[Route(
@@ -87,6 +53,58 @@ class UsersController
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(Role::ROOT->value)]
+    #[OA\Tag(name: 'UserGroup Management')]
+    #[OA\SecurityScheme(
+        securityScheme: 'bearerAuth',
+        type: 'http',
+        description: 'Authorization header',
+        name: 'bearerAuth',
+        in: 'header',
+        bearerFormat: 'JWT',
+        scheme: 'bearer',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'User group users',
+        content: new JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: new Model(
+                    type: User::class,
+                    groups: ['User', 'User.userGroups', 'User.roles', 'UserGroup', 'UserGroup.role']
+                ),
+            ),
+        ),
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'Invalid token',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Token not found' => "{code: 401, message: 'JWT Token not found'}",
+                'Expired token' => "{code: 401, message: 'Expired JWT Token'}",
+            ],
+        ),
+    )]
+    #[OA\Response(
+        response: 403,
+        description: 'Access denied',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Access denied' => "{code: 403, message: 'Access denied'}",
+            ],
+        ),
+    )]
     public function __invoke(Request $request, UserGroup $userGroup): Response
     {
         return $this->responseHandler

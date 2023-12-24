@@ -14,7 +14,9 @@ use App\Enum\Role;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Property;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -43,76 +45,6 @@ class DetachUserGroupController
     /**
      * Endpoint action to detach specified user group from specified user.
      *
-     * @OA\Tag(name="User Management")
-     * @OA\Parameter(
-     *      name="Authorization",
-     *      in="header",
-     *      required=true,
-     *      description="Authorization header",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="Bearer _your_jwt_here_",
-     *      ),
-     *  )
-     * @OA\Parameter(
-     *      name="userId",
-     *      in="path",
-     *      required=true,
-     *      description="User GUID",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="User GUID",
-     *      ),
-     *  )
-     * @OA\Parameter(
-     *      name="userGroupId",
-     *      in="path",
-     *      required=true,
-     *      description="User Group GUID",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="User Group GUID",
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=200,
-     *      description="User groups",
-     *      @OA\Schema(
-     *          type="array",
-     *          @OA\Items(
-     *              ref=@Model(
-     *                  type=\App\Entity\UserGroup::class,
-     *                  groups={"UserGroup", "UserGroup.role"},
-     *              ),
-     *          ),
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=401,
-     *      description="Unauthorized",
-     *      @OA\Schema(
-     *          type="object",
-     *          example={
-     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *          },
-     *          @OA\Property(property="code", type="integer", description="Error code"),
-     *          @OA\Property(property="message", type="string", description="Error description"),
-     *      ),
-     *  )
-     * @OA\Response(
-     *      response=403,
-     *      description="Forbidden",
-     *      @OA\Schema(
-     *          type="object",
-     *          example={
-     *              "Access denied": "{code: 403, message: 'Access denied'}",
-     *          },
-     *          @OA\Property(property="code", type="integer", description="Error code"),
-     *          @OA\Property(property="message", type="string", description="Error description"),
-     *      ),
-     *  )
-     *
      * @throws Throwable
      */
     #[Route(
@@ -124,6 +56,57 @@ class DetachUserGroupController
         methods: [Request::METHOD_DELETE],
     )]
     #[IsGranted(Role::ROOT->value)]
+    #[OA\Tag(name: 'User Management')]
+    #[OA\SecurityScheme(
+        securityScheme: 'bearerAuth',
+        type: 'http',
+        description: 'Authorization header',
+        name: 'bearerAuth',
+        in: 'header',
+        bearerFormat: 'JWT',
+        scheme: 'bearer',
+    )]
+    #[OA\Parameter(name: 'user', description: 'User GUID', in: 'path', required: true)]
+    #[OA\Parameter(name: 'userGroup', description: 'User Group GUID', in: 'path', required: true)]
+    #[OA\Response(
+        response: 200,
+        description: 'User groups',
+        content: new JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: new Model(type: UserGroup::class, groups: ['UserGroup', 'UserGroup.role']),
+            ),
+        ),
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'Invalid token',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Token not found' => "{code: 401, message: 'JWT Token not found'}",
+                'Expired token' => "{code: 401, message: 'Expired JWT Token'}",
+            ],
+        ),
+    )]
+    #[OA\Response(
+        response: 403,
+        description: 'Access denied',
+        content: new JsonContent(
+            properties: [
+                new Property(property: 'code', type: 'integer'),
+                new Property(property: 'message', type: 'string'),
+            ],
+            type: 'object',
+            example: [
+                'Access denied' => "{code: 403, message: 'Access denied'}",
+            ],
+        ),
+    )]
     public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
         $this->userResource->save($user->removeUserGroup($userGroup), false);
