@@ -11,7 +11,9 @@ namespace App\Controller;
 use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Property;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -39,26 +41,33 @@ class HealthzController
      *
      * @see https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
      *
-     * @OA\Get(
-     *     operationId="healthz",
-     *     responses={
-     *          @OA\Response(
-     *              response=200,
-     *              description="success",
-     *              @OA\Schema(
-     *                  type="object",
-     *                  example={"timestamp": "2018-01-01T13:08:05+00:00"},
-     *                  @OA\Property(property="timestamp", type="string"),
-     *              ),
-     *          ),
-     *     },
-     *  )
-     *
      * @throws Throwable
      */
     #[Route(
         path: '/healthz',
         methods: [Request::METHOD_GET],
+    )]
+    #[OA\Get(
+        operationId: 'healthz',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'success',
+                content: new JsonContent(
+                    properties: [
+                        new Property(
+                            property: 'timestamp',
+                            description: 'Timestamp when health check was performed',
+                            type: 'string',
+                        ),
+                    ],
+                    type: 'object',
+                    example: [
+                        'timestamp' => '2018-01-01T13:08:05+00:00',
+                    ],
+                ),
+            ),
+        ],
     )]
     public function __invoke(Request $request): Response
     {
