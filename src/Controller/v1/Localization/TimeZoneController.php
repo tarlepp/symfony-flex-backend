@@ -9,7 +9,8 @@ declare(strict_types = 1);
 namespace App\Controller\v1\Localization;
 
 use App\Service\Localization;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
+use OpenApi\Attributes\JsonContent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -18,12 +19,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class TimezoneController
  *
- * @OA\Tag(name="Localization")
- *
  * @package App\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[AsController]
+#[OA\Tag(name: 'Localization')]
 class TimeZoneController
 {
     public function __construct(
@@ -35,45 +35,49 @@ class TimeZoneController
      * Endpoint action to get list of supported timezones. This is for use to
      * choose what timezone your frontend application can use within its date,
      * time, datetime, etc. formatting.
-     *
-     * @OA\Response(
-     *      response=200,
-     *      description="List of timezone objects.",
-     *      @OA\Schema(
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="timezone",
-     *                  type="string",
-     *                  example="Europe",
-     *                  description="Africa,America,Antarctica,Arctic,Asia,Atlantic,Australia,Europe,Indian,Pacific,UTC.",
-     *              ),
-     *              @OA\Property(
-     *                  property="identier",
-     *                  type="string",
-     *                  example="Europe/Helsinki",
-     *                  description="Timezone identifier that you can use with other librariers.",
-     *              ),
-     *              @OA\Property(
-     *                  property="offset",
-     *                  type="string",
-     *                  example="GMT+2:00",
-     *                  description="GMT offset of identifier.",
-     *              ),
-     *              @OA\Property(
-     *                  property="value",
-     *                  type="string",
-     *                  example="Europe/Helsinki",
-     *                  description="User friendly value of identifier value eg. '_' characters are replaced by space.",
-     *              ),
-     *          ),
-     *      ),
-     *  )
      */
     #[Route(
         path: '/v1/localization/timezone',
         methods: [Request::METHOD_GET],
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of timezone objects.',
+        content: new JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                properties: [
+                    new OA\Property(
+                        property: 'timezone',
+                        description: 'Africa, America, Antarctica, Arctic, Asia, Atlantic, Australia, Europe, ' .
+                            'Indian,Pacific,UTC.',
+                        type: 'string',
+                        example: 'Europe',
+                    ),
+                    new OA\Property(
+                        property: 'identifier',
+                        description: 'Timezone identifier that you can use with other libraries.',
+                        type: 'string',
+                        example: 'Europe/Helsinki',
+                    ),
+                    new OA\Property(
+                        property: 'offset',
+                        description: 'GMT offset of identifier.',
+                        type: 'string',
+                        example: 'GMT+2:00',
+                    ),
+                    new OA\Property(
+                        property: 'value',
+                        description: 'User friendly value of identifier value eg. `_` characters are replaced ' .
+                            'by space.',
+                        type: 'string',
+                        example: 'Europe/Helsinki',
+                    ),
+                ],
+                type: 'object'
+            ),
+            example: ['en', 'fi']
+        ),
     )]
     public function __invoke(): JsonResponse
     {
