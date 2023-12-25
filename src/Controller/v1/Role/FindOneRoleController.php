@@ -12,7 +12,7 @@ use App\Enum\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -24,12 +24,11 @@ use Throwable;
 /**
  * Class FindOneRoleController
  *
- * @OA\Tag(name="Role Management")
- *
  * @package App\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[AsController]
+#[OA\Tag(name: 'Role Management')]
 class FindOneRoleController extends Controller
 {
     use Methods\FindOneMethod;
