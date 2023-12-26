@@ -44,14 +44,13 @@ class GroupsController
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
-    #[OA\SecurityScheme(
-        securityScheme: 'bearerAuth',
-        type: 'http',
+    #[OA\Parameter(
+        name: 'Authorization',
         description: 'Authorization header',
-        name: 'bearerAuth',
         in: 'header',
-        bearerFormat: 'JWT',
-        scheme: 'bearer',
+        required: true,
+        example: 'Bearer {token}',
+        allowReserved: true,
     )]
     #[OA\Response(
         response: 200,
