@@ -14,7 +14,7 @@ use App\DTO\ApiKey\ApiKeyUpdate;
 use App\Resource\ApiKeyResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -22,8 +22,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Class ApiKeyController
- *
- * @OA\Tag(name="ApiKey Management")
  *
  * @package App\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
@@ -35,6 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
     path: '/v1/api_key',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
+#[OA\Tag(name: 'ApiKey Management')]
 class ApiKeyController extends Controller
 {
     use Actions\Root\CountAction;
