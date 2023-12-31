@@ -16,7 +16,7 @@ nelmio_api_doc:
             path_patterns:
                 - ^/api/doc
                 - ^/api/doc.json
-                - ^/(auth|healthz|version|profile|localization)
+                - ^/(healthz|version|v1/auth|v1/profile|v1/localization)
         internal:
             path_patterns: # an array of regexps
                 - ^/[a-z]
