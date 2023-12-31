@@ -57,14 +57,13 @@ class DetachUserController
     )]
     #[IsGranted(Role::ROOT->value)]
     #[OA\Tag(name: 'UserGroup Management')]
-    #[OA\SecurityScheme(
-        securityScheme: 'bearerAuth',
-        type: 'http',
+    #[OA\Parameter(
+        name: 'Authorization',
         description: 'Authorization header',
-        name: 'bearerAuth',
         in: 'header',
-        bearerFormat: 'JWT',
-        scheme: 'bearer',
+        required: true,
+        example: 'Bearer {token}',
+        allowReserved: true,
     )]
     #[OA\Parameter(name: 'userGroup', description: 'User Group GUID', in: 'path', required: true)]
     #[OA\Parameter(name: 'user', description: 'User GUID', in: 'path', required: true)]
