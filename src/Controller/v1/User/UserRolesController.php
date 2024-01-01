@@ -47,14 +47,13 @@ class UserRolesController
     )]
     #[IsGranted(new Expression('is_granted("IS_USER_HIMSELF", object) or "ROLE_ROOT" in role_names'), 'user')]
     #[OA\Tag(name: 'User Management')]
-    #[OA\SecurityScheme(
-        securityScheme: 'bearerAuth',
-        type: 'http',
+    #[OA\Parameter(
+        name: 'Authorization',
         description: 'Authorization header',
-        name: 'bearerAuth',
         in: 'header',
-        bearerFormat: 'JWT',
-        scheme: 'bearer',
+        required: true,
+        example: 'Bearer {token}',
+        allowReserved: true,
     )]
     #[OA\Response(
         response: 200,

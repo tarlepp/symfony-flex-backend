@@ -76,7 +76,12 @@ class TimeZoneController
                 ],
                 type: 'object'
             ),
-            example: ['en', 'fi']
+            example: [
+                'timezone' => 'Europe',
+                'identifier' => 'Europe/Helsinki',
+                'offset' => 'GMT+2:00',
+                'value' => 'Europe/Helsinki',
+            ],
         ),
     )]
     public function __invoke(): JsonResponse

@@ -48,14 +48,13 @@ class InheritedRolesController
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(RoleEnum::ADMIN->value)]
-    #[OA\SecurityScheme(
-        securityScheme: 'bearerAuth',
-        type: 'http',
+    #[OA\Parameter(
+        name: 'Authorization',
         description: 'Authorization header',
-        name: 'bearerAuth',
         in: 'header',
-        bearerFormat: 'JWT',
-        scheme: 'bearer',
+        required: true,
+        example: 'Bearer {token}',
+        allowReserved: true,
     )]
     #[OA\Response(
         response: 200,
