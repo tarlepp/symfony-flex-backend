@@ -3,11 +3,7 @@ services:
     Gedmo\Timestampable\TimestampableListener:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ '@annotation_reader' ] ]
 
     Gedmo\Blameable\BlameableListener:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ '@annotation_reader' ] ]
