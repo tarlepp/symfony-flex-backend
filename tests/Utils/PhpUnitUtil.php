@@ -97,11 +97,9 @@ class PhpUnitUtil
         $ite = new RecursiveIteratorIterator($dir);
 
         /**
-         * @phpstan-ignore-next-line
-         *
          * @var array<int, string> $files
          */
-        $files = new RegexIterator($ite, $pattern, RegexIterator::GET_MATCH);
+        $files = new RegexIterator($ite, $pattern, RegexIterator::GET_MATCH); // @phpstan-ignore-line
         $fileList = [];
 
         foreach ($files as $file) {

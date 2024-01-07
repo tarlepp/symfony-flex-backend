@@ -57,10 +57,8 @@ class LogLoginFailureResourceTest extends ResourceTestCase
             ->willReturn(0);
 
         /**
-         * @phpstan-ignore-next-line
-         *
          * @var LogLoginFailureRepository $repository
          */
-        (new LogLoginFailureResource($repository))->reset($user);
+        (new LogLoginFailureResource($repository))->reset($user); // @phpstan-ignore-line
     }
 }

@@ -151,11 +151,9 @@ class BodySubscriberTest extends KernelTestCase
             ->method('replace');
 
         /**
-         * @phpstan-ignore-next-line
-         *
          * @var InputBag $parameterBag
          */
-        $request->request = $parameterBag;
+        $request->request = $parameterBag; // @phpstan-ignore-line
 
         $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
