@@ -66,9 +66,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $type->convertToDatabaseValue($dateInput, $platform);
 
-        /**
-         * @var DateTimeZone $property
-         */
+        /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type); // @phpstan-ignore-line
 
         self::assertSame('UTC', $property->getName());
@@ -105,9 +103,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $type->convertToPHPValue('1981-04-07 10:00:00', $platform);
 
-        /**
-         * @var DateTimeZone $property
-         */
+        /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type); // @phpstan-ignore-line
 
         self::assertSame('UTC', $property->getName());

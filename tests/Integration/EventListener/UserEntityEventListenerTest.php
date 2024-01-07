@@ -175,7 +175,6 @@ class UserEntityEventListenerTest extends KernelTestCase
         );
     }
 
-
     /**
      * @throws Throwable
      *

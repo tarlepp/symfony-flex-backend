@@ -147,9 +147,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag; // @phpstan-ignore-line
 
         $context = (new ResponseHandler($serializer))
@@ -186,9 +184,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag; // @phpstan-ignore-line
 
         /** @var InputBag $parameterBag */
@@ -233,9 +229,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getAssociations')
             ->willReturn(['AnotherFakeEntity']);
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag; // @phpstan-ignore-line
 
         /** @var InputBag $parameterBag */
@@ -275,9 +269,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag; // @phpstan-ignore-line
 
         /** @var InputBag $parameterBag */
@@ -317,9 +309,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag; // @phpstan-ignore-line
 
         /** @var InputBag $parameterBag */
@@ -370,9 +360,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getSerializerContext')
             ->willReturn($expected);
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag; // @phpstan-ignore-line
 
         self::assertSame(
