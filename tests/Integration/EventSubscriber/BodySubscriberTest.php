@@ -150,12 +150,8 @@ class BodySubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('replace');
 
-        /**
-         * @phpstan-ignore-next-line
-         *
-         * @var InputBag $parameterBag
-         */
-        $request->request = $parameterBag;
+        /** @var InputBag $parameterBag */
+        $request->request = $parameterBag; // @phpstan-ignore-line
 
         $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
