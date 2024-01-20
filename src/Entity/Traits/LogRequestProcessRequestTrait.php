@@ -24,7 +24,7 @@ use function is_string;
 use function mb_strtolower;
 use function parse_str;
 use function preg_replace;
-use function strpos;
+use function str_contains;
 
 /**
  * Trait LogRequestProcessRequestTrait
@@ -349,7 +349,7 @@ trait LogRequestProcessRequestTrait
     private function determineAction(Request $request): string
     {
         $rawAction = (string)($request->query->get('_controller') ?? $request->request->get('_controller', ''));
-        $rawAction = explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
+        $rawAction = explode(str_contains($rawAction, '::') ? '::' : ':', $rawAction);
 
         return $rawAction[1] ?? '';
     }
