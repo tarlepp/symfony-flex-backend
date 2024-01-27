@@ -142,7 +142,7 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         $output = [];
 
-        if (getenv('ENV_TEST_CHANNEL_READABLE')) {
+        if (getenv('ENV_TEST_CHANNEL_READABLE') !== false) {
             $testChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
 
             $output = [

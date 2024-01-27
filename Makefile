@@ -361,7 +361,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --show-info=true --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
