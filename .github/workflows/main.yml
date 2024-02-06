@@ -30,7 +30,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
+        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2.29.0
         with:
           php-version: '8.3'
           tools: composer:v2
@@ -40,7 +40,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -75,7 +75,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
+        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2.29.0
         with:
           php-version: '8.3'
           tools: composer:v2
@@ -85,7 +85,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -126,7 +126,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
+        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2.29.0
         with:
           php-version: '8.3'
           tools: composer:v2
@@ -136,7 +136,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -178,13 +178,13 @@ jobs:
         run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: phploc.json
           path: ./build/phploc.json
@@ -214,7 +214,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2.28.0
+        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2.29.0
         with:
           php-version: '8.3'
           extensions: pdo_mysql, mysql
@@ -226,7 +226,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -290,25 +290,25 @@ jobs:
         run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: PhpMetrics
           path: ./build/report
 
       - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
