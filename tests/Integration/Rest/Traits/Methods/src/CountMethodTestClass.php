@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\CountMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-abstract class CountMethodTestClass extends Controller
+class CountMethodTestClass extends Controller
 {
     use CountMethod;
 

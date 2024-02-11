@@ -21,7 +21,7 @@ use BadMethodCallException;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-abstract class FindOneMethodInvalidTestClass
+class FindOneMethodInvalidTestClass
 {
     use FindOneMethod;
     use RestActionBase;

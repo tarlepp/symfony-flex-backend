@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\PatchMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-abstract class PatchMethodTestClass extends Controller
+class PatchMethodTestClass extends Controller
 {
     use PatchMethod;
 
