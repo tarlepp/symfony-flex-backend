@@ -20,8 +20,6 @@ use Throwable;
 use function getenv;
 
 /**
- * Class AttachUserGroupControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -21,8 +21,6 @@ use function is_array;
 use function is_string;
 
 /**
- * Class Version
- *
  * @package App\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

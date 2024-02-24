@@ -12,8 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 /**
- * Class Kernel
- *
  * @package App
  */
 class Kernel extends BaseKernel

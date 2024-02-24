@@ -15,8 +15,6 @@ use App\Repository\HealthzRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class HealthzResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

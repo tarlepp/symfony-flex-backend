@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 /**
- * Class UsersControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

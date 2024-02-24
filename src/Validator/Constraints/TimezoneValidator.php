@@ -16,8 +16,6 @@ use function in_array;
 use function is_string;
 
 /**
- * Class TimezoneValidator
- *
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

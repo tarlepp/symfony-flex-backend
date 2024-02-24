@@ -20,8 +20,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Throwable;
 
 /**
- * Class SecurityUserFactory
- *
  * @package App\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

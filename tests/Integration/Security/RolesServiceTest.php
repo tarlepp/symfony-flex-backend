@@ -18,8 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
- * Class RolesServiceTest
- *
  * @package App\Tests\Integration\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

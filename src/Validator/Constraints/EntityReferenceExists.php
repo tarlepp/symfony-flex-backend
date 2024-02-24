@@ -12,8 +12,6 @@ use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class EntityReferenceExists
- *
  * Usage example;
  *  #[App\Validator\Constraints\EntityReferenceExists(SomeEntityClass::class)]
  *

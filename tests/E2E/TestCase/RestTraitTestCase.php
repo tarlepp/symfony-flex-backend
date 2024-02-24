@@ -16,8 +16,6 @@ use Throwable;
 use function array_merge;
 
 /**
- * Class RestTraitTestCase
- *
  * @codeCoverageIgnore
  *
  * @package App\Tests\E2E\TestCase

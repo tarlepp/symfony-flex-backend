@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Exception\interfaces;
 
 /**
- * Class ClientErrorInterface
- *
  * If you want to expose _your_ exception class message as-is on `prod`
  * environment that should implement either this interface or
  * `Symfony\Component\HttpKernel\HttpKernelInterface` to get that message to

@@ -24,8 +24,6 @@ use function hash;
 use function implode;
 
 /**
- * Class JWTCreatedSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

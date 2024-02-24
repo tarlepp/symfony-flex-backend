@@ -17,8 +17,6 @@ use Throwable;
 use function sprintf;
 
 /**
- * Class ResourceTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

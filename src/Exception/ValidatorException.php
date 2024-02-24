@@ -19,8 +19,6 @@ use function array_map;
 use function iterator_to_array;
 
 /**
- * Class ValidatorException
- *
  * @package App\Exception
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

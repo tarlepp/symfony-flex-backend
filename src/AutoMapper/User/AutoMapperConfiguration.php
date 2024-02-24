@@ -14,8 +14,6 @@ use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
 
 /**
- * Class AutoMapperConfiguration
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

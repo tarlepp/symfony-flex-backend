@@ -19,8 +19,6 @@ use function mb_substr;
 use function sprintf;
 
 /**
- * Class RestIntegrationControllerTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

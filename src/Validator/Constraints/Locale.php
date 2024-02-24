@@ -12,8 +12,6 @@ use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class Locale
- *
  * Usage example;
  *  App\Validator\Constraints\Locale()
  *

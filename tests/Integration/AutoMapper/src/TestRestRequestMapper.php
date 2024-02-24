@@ -12,8 +12,6 @@ use App\AutoMapper\RestRequestMapper;
 use function str_rot13;
 
 /**
- * Class TestRestRequestMapper
- *
  * @package App\Tests\Integration\AutoMapper\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

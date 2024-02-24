@@ -13,8 +13,6 @@ use App\Resource\UserGroupResource;
 use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
- * Class UserGroupControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

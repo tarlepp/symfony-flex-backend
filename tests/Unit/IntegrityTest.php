@@ -40,8 +40,6 @@ use function str_replace;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Class IntegrityTest
- *
  * @package App\Tests\Unit
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

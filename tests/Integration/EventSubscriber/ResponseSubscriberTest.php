@@ -21,8 +21,6 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Throwable;
 
 /**
- * Class ResponseSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

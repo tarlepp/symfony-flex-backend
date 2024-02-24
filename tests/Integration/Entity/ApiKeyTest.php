@@ -21,8 +21,6 @@ use Throwable;
 use function array_unique;
 
 /**
- * Class ApiKeyTest
- *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

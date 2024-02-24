@@ -24,8 +24,6 @@ use function str_contains;
 use function substr;
 
 /**
- * Class RequestLogSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

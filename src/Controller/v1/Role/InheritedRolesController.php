@@ -22,8 +22,6 @@ use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Class InheritedRolesController
- *
  * @package App\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

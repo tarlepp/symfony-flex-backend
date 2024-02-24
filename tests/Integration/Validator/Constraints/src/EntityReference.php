@@ -11,8 +11,6 @@ namespace App\Tests\Integration\Validator\Constraints\src;
 use App\Entity\Interfaces\EntityInterface;
 
 /**
- * Class EntityReference
- *
  * @package App\Tests\Integration\Validator\Constraints\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

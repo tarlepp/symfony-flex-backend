@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * Class HealthzController
- *
  * @package App\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

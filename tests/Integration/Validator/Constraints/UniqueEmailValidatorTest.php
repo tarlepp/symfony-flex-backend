@@ -19,8 +19,6 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 use Throwable;
 
 /**
- * Class UniqueEmailValidatorTest
- *
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -30,8 +30,6 @@ use function sprintf;
 use function str_starts_with;
 
 /**
- * Class ResponseHandler
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

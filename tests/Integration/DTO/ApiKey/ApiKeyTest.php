@@ -18,8 +18,6 @@ use Throwable;
 use function count;
 
 /**
- * Class ApiKeyTest
- *
  * @package App\Tests\Integration\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

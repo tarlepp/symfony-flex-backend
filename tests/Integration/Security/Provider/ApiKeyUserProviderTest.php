@@ -26,8 +26,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
 /**
- * Class ApiKeyUserProviderTest
- *
  * @package App\Tests\Integration\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -31,8 +31,6 @@ use function array_unique;
 use function array_values;
 
 /**
- * Class ApiKey
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

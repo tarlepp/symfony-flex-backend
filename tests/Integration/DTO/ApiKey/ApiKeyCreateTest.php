@@ -12,8 +12,6 @@ use App\DTO\ApiKey\ApiKeyCreate;
 use App\Tests\Integration\TestCase\DtoTestCase;
 
 /**
- * Class ApiKeyCreateTest
- *
  * @package App\Tests\Integration\DTO\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

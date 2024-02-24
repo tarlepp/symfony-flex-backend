@@ -19,8 +19,6 @@ use function is_array;
 use function sprintf;
 
 /**
- * Class UserGroupTransformer
- *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Form\Console\DataTransformer

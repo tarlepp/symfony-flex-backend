@@ -17,8 +17,6 @@ use function in_array;
 use function is_array;
 
 /**
- * Class BodySubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

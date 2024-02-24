@@ -13,8 +13,6 @@ use App\Resource\ApiKeyResource;
 use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
- * Class ApiKeyControllerTest
- *
  * @package App\Tests\Integration\Controller\v1
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

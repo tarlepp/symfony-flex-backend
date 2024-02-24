@@ -24,8 +24,6 @@ use function implode;
 use function sprintf;
 
 /**
- * Class ListUsersCommand
- *
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

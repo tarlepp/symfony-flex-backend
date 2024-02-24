@@ -16,8 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Class StopwatchCompilerPassTest
- *
  * @package App\Tests\Compiler\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

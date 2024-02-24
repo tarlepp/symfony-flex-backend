@@ -12,8 +12,6 @@ use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class UniqueUsername
- *
  * Usage example;
  *  App\Validator\Constraints\UniqueUsername()
  *

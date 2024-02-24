@@ -23,8 +23,6 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 
 /**
- * Class SecurityUserFactoryTest
- *
  * @package App\Tests\Integration\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

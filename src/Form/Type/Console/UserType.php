@@ -26,8 +26,6 @@ use Throwable;
 use function array_map;
 
 /**
- * Class UserType
- *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Form\Type\Console

@@ -17,8 +17,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class TranslatedAuthenticationFailureHandlerTest
- *
  * @package App\Tests\Integration\Security\Handler
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -23,8 +23,6 @@ use function array_sum;
 use function sprintf;
 
 /**
- * Class CreateRolesCommand
- *
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

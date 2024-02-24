@@ -18,8 +18,6 @@ use function is_string;
 use function sprintf;
 
 /**
- * Class EnumType
- *
  * @package App\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

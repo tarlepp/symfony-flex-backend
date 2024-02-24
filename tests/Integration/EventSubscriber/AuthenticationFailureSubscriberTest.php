@@ -21,8 +21,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
 
 /**
- * Class AuthenticationFailureSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -14,8 +14,6 @@ use AutoMapperPlus\MapperInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class RestAutoMapperConfiguration
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

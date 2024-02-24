@@ -17,8 +17,6 @@ use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\TestCase\RepositoryTestCase;
 
 /**
- * Class HealthzRepositoryTest
- *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

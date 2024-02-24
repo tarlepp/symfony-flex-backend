@@ -18,8 +18,6 @@ use function array_values;
 use function mb_strtolower;
 
 /**
- * Class RolesService
- *
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

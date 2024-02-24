@@ -13,8 +13,6 @@ use Generator;
 use function getenv;
 
 /**
- * Class AdminActionsTest
- *
  * @package App\Tests\E2E\Rest\Traits\Actions
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

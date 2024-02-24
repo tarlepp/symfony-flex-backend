@@ -17,8 +17,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Throwable;
 
 /**
- * Class AuthenticationFailureSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

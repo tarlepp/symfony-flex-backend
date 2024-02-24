@@ -22,8 +22,6 @@ use function explode;
 use function in_array;
 
 /**
- * Class RestDtoValueResolver
- *
  * @package App\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

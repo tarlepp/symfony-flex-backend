@@ -26,8 +26,6 @@ use Throwable;
 use function sprintf;
 
 /**
- * Class CreateDateDimensionEntitiesCommand
- *
  * @package App\Command\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

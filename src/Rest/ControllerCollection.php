@@ -18,8 +18,6 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use function sprintf;
 
 /**
- * Class ControllerCollection
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

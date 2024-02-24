@@ -14,8 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class RoleRepositoryTest
- *
  * @package Functional\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

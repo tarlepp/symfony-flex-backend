@@ -17,8 +17,6 @@ use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\TestCase\RepositoryTestCase;
 
 /**
- * Class UserGroupRepositoryTest
- *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

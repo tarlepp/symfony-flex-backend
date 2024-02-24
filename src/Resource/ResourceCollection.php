@@ -22,8 +22,6 @@ use Throwable;
 use function sprintf;
 
 /**
- * Class ResourceCollection
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

@@ -16,8 +16,6 @@ use App\DTO\User\UserUpdate;
 use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
 /**
- * Class AutoMapperConfigurationTest
- *
  * @package App\Tests\Integration\AutoMapper\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

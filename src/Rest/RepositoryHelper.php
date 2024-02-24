@@ -28,8 +28,6 @@ use function strtolower;
 use function syslog;
 
 /**
- * Class RepositoryHelper
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

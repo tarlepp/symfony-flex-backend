@@ -42,8 +42,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class ResourceCollectionTest
- *
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

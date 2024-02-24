@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Doctrine\DBAL\Types;
 
 /**
- * Class EnumLogLoginType
- *
  * @package App\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -17,8 +17,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * Class IsUserHimselfVoterTest
- *
  * @package App\Tests\Integration\Security\Voter
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

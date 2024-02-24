@@ -18,8 +18,6 @@ use Throwable;
 use function array_map;
 
 /**
- * Class LoadRoleData
- *
  * @package App\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

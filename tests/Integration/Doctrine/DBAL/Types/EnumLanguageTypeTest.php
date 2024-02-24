@@ -23,8 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class EnumLanguageTypeTest
- *
  * @package App\Tests\Integration\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

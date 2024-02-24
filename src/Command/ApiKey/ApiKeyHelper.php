@@ -19,8 +19,6 @@ use function implode;
 use function sprintf;
 
 /**
- * Class ApiKeyHelper
- *
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

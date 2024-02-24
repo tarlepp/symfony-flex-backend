@@ -28,8 +28,6 @@ use function sys_get_temp_dir;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Class Auth
- *
  * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

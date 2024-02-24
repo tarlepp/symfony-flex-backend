@@ -13,8 +13,6 @@ use App\Enum\Locale;
 use BackedEnum;
 
 /**
- * Class EnumLocaleType
- *
  * @package App\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

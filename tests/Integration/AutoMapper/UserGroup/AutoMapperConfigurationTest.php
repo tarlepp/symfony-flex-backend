@@ -16,8 +16,6 @@ use App\DTO\UserGroup\UserGroupUpdate;
 use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
 /**
- * Class AutoMapperConfigurationTest
- *
  * @package App\Tests\Integration\AutoMapper\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

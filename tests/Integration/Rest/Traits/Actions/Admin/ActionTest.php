@@ -27,8 +27,6 @@ use function str_replace;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Class ActionTest
- *
  * @package App\Tests\Integration\Rest\Traits\Actions\Admin
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

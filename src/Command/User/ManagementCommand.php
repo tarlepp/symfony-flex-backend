@@ -14,8 +14,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 
 /**
- * Class ManagementCommand
- *
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

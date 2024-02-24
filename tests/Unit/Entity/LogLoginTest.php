@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 /**
- * Class LogLoginTest
- *
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

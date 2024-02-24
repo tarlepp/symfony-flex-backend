@@ -22,8 +22,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 use function preg_match;
 
 /**
- * Class ApiKeyAuthenticator
- *
  * @package App\Security\Authenticator
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

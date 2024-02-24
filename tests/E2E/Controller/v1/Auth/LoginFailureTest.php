@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Throwable;
 
 /**
- * Class LoginFailureTest
- *
  * @package App\Tests\E2E\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

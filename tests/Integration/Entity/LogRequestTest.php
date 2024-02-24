@@ -29,8 +29,6 @@ use function sprintf;
 use function ucfirst;
 
 /**
- * Class LogRequestTest
- *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

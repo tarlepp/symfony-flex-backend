@@ -23,8 +23,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
 
 /**
- * Class RestDtoValueResolverTest
- *
  * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

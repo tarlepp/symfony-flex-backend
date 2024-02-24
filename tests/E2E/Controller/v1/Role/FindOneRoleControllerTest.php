@@ -16,8 +16,6 @@ use Throwable;
 use function getenv;
 
 /**
- * Class FindOneRoleControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

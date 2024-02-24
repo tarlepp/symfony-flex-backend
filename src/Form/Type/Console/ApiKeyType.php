@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
 /**
- * Class ApiKeyType
- *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Form\Type\Console

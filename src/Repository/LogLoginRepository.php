@@ -12,8 +12,6 @@ use App\Entity\LogLogin as Entity;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Class LogLoginRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

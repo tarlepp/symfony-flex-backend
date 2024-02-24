@@ -28,8 +28,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class ControllerCollectionTest
- *
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

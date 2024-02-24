@@ -20,8 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class UuidHelperTest
- *
  * @package App\Tests\Unit\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

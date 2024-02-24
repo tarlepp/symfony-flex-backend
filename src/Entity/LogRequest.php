@@ -24,8 +24,6 @@ use Throwable;
 use function mb_strlen;
 
 /**
- * Class LogRequest
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

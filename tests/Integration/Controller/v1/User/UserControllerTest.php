@@ -13,8 +13,6 @@ use App\Resource\UserResource;
 use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
 
 /**
- * Class UserControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

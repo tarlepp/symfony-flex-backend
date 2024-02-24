@@ -24,8 +24,6 @@ use Throwable;
 use function class_exists;
 
 /**
- * Class RequestMapperTest
- *
  * @package App\Tests\Integration\AutoMapper\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

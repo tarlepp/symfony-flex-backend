@@ -13,8 +13,6 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 use function str_replace;
 
 /**
- * Class ValidatorError
- *
  * @package App\Exception\models
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

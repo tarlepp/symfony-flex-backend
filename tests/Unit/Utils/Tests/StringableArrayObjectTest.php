@@ -15,8 +15,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class StringableArrayObjectTest
- *
  * @package App\Tests\Unit\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

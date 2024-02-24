@@ -17,8 +17,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
- * Class UsersControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
