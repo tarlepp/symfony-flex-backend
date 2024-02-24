@@ -12,8 +12,6 @@ use App\Entity\Role as Entity;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Class RoleRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

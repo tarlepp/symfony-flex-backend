@@ -16,8 +16,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
- * Class LogRequestRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

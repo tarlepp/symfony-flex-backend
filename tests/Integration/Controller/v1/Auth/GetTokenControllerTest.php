@@ -14,8 +14,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
- * Class GetTokenControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

@@ -31,8 +31,6 @@ use function in_array;
 use function spl_object_hash;
 
 /**
- * Class ExceptionSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

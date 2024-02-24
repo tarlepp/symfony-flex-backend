@@ -14,8 +14,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
- * Class HealthzControllerTest
- *
  * @package App\Tests\E2E\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

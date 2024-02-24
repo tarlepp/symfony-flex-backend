@@ -25,8 +25,6 @@ use function str_replace;
 use function trim;
 
 /**
- * Class SearchTerm
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

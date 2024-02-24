@@ -19,8 +19,6 @@ use App\Tests\Integration\TestCase\ResourceTestCase;
 use Throwable;
 
 /**
- * Class LogLoginFailureResourceTest
- *
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

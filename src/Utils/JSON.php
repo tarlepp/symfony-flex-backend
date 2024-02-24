@@ -13,8 +13,6 @@ use function json_decode;
 use function json_encode;
 
 /**
- * Class JSON
- *
  * @package App\Util
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

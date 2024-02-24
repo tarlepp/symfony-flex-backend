@@ -12,8 +12,6 @@ use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class Language
- *
  * Usage example;
  *  App\Validator\Constraints\Language()
  *

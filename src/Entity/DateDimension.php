@@ -23,8 +23,6 @@ use Throwable;
 use function floor;
 
 /**
- * Class DateDimension
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

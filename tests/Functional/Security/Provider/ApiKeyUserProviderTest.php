@@ -27,8 +27,6 @@ use function array_map;
 use function str_pad;
 
 /**
- * Class ApiKeyUserProviderTest
- *
  * @package App\Tests\Functional\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

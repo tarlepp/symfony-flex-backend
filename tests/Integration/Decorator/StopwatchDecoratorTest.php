@@ -28,8 +28,6 @@ use Throwable;
 use function method_exists;
 
 /**
- * Class StopwatchDecoratorTest
- *
  * @package App\Tests\Decorator\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

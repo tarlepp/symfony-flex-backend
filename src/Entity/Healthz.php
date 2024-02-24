@@ -21,8 +21,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
 /**
- * Class Healthz
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

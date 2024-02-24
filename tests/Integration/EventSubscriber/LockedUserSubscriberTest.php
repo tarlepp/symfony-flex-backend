@@ -31,8 +31,6 @@ use Throwable;
 use function range;
 
 /**
- * Class LockedUserSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -21,8 +21,6 @@ use function array_walk;
 use function implode;
 
 /**
- * Class SchemaTest
- *
  * @package App\Tests\Integration
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

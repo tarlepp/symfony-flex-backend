@@ -12,8 +12,6 @@ use App\Entity\UserGroup;
 use App\Tests\Integration\TestCase\EntityTestCase;
 
 /**
- * Class UserGroupTest
- *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

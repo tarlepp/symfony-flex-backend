@@ -19,8 +19,6 @@ use Throwable;
 use function sprintf;
 
 /**
- * Class ResourceLifeCycleTest
- *
  * @package App\Tests\E2E\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

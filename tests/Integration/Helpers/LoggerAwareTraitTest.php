@@ -16,8 +16,6 @@ use Throwable;
 use function property_exists;
 
 /**
- * Class LoggerAwareTraitTest
- *
  * @package App\Tests\Integration\Helpers
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

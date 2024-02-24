@@ -21,8 +21,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Class AdminActionsController
- *
  * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

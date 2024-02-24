@@ -19,8 +19,6 @@ use function hash;
 use function implode;
 
 /**
- * Class JWTDecodedSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

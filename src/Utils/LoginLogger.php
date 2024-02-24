@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
 /**
- * Class LoginLogger
- *
  * @package App\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -13,8 +13,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
- * Class IndexControllerTest
- *
  * @package App\Tests\E2E\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

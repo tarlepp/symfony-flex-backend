@@ -13,8 +13,6 @@ use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 
 /**
- * Class TestRestRequestMapperDto
- *
  * @package App\Tests\Integration\AutoMapper\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

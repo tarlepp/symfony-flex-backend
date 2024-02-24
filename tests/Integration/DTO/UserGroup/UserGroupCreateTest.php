@@ -12,8 +12,6 @@ use App\DTO\UserGroup\UserGroupCreate;
 use App\Tests\Integration\TestCase\DtoTestCase;
 
 /**
- * Class UserGroupCreateTest
- *
  * @package App\Tests\Integration\DTO\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

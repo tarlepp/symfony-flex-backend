@@ -24,8 +24,6 @@ use function implode;
 use function sprintf;
 
 /**
- * Class ListApiKeysCommand
- *
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

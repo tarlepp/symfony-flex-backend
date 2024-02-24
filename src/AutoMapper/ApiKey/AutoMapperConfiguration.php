@@ -14,8 +14,6 @@ use App\DTO\ApiKey\ApiKeyPatch;
 use App\DTO\ApiKey\ApiKeyUpdate;
 
 /**
- * Class AutoMapperConfiguration
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

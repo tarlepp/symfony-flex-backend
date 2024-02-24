@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 /**
- * Class GenericRestRequestMapperTest
- *
  * @package App\Tests\Integration\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

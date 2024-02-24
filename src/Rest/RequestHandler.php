@@ -30,8 +30,6 @@ use function mb_substr;
 use function str_starts_with;
 
 /**
- * Class RequestHandler
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

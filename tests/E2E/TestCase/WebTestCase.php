@@ -17,8 +17,6 @@ use function gc_enable;
 use function getenv;
 
 /**
- * Class WebTestCase
- *
  * @package App\Tests\E2E\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

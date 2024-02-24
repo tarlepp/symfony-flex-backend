@@ -17,8 +17,6 @@ use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 /**
- * Class LanguageValidatorTest
- *
  * @package App\Tests\Integration\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

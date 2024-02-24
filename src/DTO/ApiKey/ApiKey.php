@@ -18,8 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
 /**
- * Class ApiKey
- *
  * @package App\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

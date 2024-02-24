@@ -12,8 +12,6 @@ use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class Timezone
- *
  * Usage example;
  *  App\Validator\Constraints\Timezone()
  *

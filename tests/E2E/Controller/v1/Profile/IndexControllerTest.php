@@ -22,8 +22,6 @@ use function property_exists;
 use function str_pad;
 
 /**
- * Class IndexControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Throwable;
 
 /**
- * Class ControllerForLifeCycleTests
- *
  * @package App\Tests\E2E\Rest\src\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

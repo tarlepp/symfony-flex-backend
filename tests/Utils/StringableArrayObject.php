@@ -14,8 +14,6 @@ use JsonException;
 use Stringable;
 
 /**
- * Class StringableArrayObject
- *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Tests\Utils

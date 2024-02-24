@@ -12,8 +12,6 @@ use App\Entity\ApiKey as Entity;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Class ApiKeyRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

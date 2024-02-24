@@ -21,8 +21,6 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
 
 /**
- * Class UserGroupTransformerTest
- *
  * @package App\Tests\Integration\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

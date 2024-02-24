@@ -17,8 +17,6 @@ use UnexpectedValueException;
 use function preg_replace;
 
 /**
- * Class RepositoryWrappersTrait
- *
  * @package App\Repository\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -11,8 +11,6 @@ namespace App\DTO\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class UserCreate
- *
  * @package App\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -19,8 +19,6 @@ use function array_map;
 use function count;
 
 /**
- * Class UserRepositoryTest
- *
  * @package App\Tests\Functional\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

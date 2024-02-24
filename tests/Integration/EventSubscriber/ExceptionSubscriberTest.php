@@ -43,8 +43,6 @@ use function array_keys;
 use function property_exists;
 
 /**
- * Class ExceptionSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

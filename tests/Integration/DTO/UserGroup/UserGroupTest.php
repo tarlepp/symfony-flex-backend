@@ -15,8 +15,6 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**
- * Class UserGroupTest
- *
  * @package App\Tests\Integration\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

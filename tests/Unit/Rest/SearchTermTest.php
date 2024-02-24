@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function call_user_func_array;
 
 /**
- * Class SearchTermTest
- *
  * @package App\Tests\Unit\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

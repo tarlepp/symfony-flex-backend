@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\DTO\User;
 
 /**
- * Class UserUpdate
- *
  * @package App\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

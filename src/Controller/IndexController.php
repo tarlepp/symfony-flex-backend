@@ -14,8 +14,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class IndexController
- *
  * @package App\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

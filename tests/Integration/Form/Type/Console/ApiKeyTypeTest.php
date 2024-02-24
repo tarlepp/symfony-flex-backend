@@ -21,8 +21,6 @@ use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
 
 /**
- * Class ApiKeyTypeTest
- *
  * @package App\Tests\Integration\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

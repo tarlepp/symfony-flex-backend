@@ -44,8 +44,6 @@ use function strlen;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Class CheckDependencies
- *
  * @package App\Command\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

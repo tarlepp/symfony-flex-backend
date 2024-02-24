@@ -25,8 +25,6 @@ use function is_array;
 use function str_replace;
 
 /**
- * Class EntityReferenceExistsValidator
- *
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

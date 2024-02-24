@@ -19,8 +19,6 @@ use function array_map;
 use function sprintf;
 
 /**
- * Class UserHelper
- *
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -19,8 +19,6 @@ use function array_key_exists;
 use function ucfirst;
 
 /**
- * Class LogLoginFailureTest
- *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

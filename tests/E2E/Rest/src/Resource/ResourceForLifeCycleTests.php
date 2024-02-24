@@ -16,8 +16,6 @@ use App\Rest\RestResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Class ResourceForLifeCycleTests
- *
  * @package App\Tests\E2E\Rest\src\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

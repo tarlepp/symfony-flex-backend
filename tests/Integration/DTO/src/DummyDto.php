@@ -13,8 +13,6 @@ use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 
 /**
- * Class DummyDto
- *
  * @package App\Tests\Integration\Dto\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

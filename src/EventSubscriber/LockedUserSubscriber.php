@@ -27,8 +27,6 @@ use function count;
 use function is_string;
 
 /**
- * Class LockedUserSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

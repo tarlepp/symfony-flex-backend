@@ -15,8 +15,6 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use function in_array;
 
 /**
- * Class AcceptLanguageSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

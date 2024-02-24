@@ -14,8 +14,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class VersionControllerTest
- *
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

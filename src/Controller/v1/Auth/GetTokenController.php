@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use function sprintf;
 
 /**
- * Class GetTokenController
- *
  * @package App\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

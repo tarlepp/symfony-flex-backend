@@ -17,8 +17,6 @@ use Throwable;
 use function floor;
 
 /**
- * Class DateDimensionTest
- *
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

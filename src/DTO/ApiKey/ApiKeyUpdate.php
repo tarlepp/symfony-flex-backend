@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\DTO\ApiKey;
 
 /**
- * Class ApiKeyUpdate
- *
  * @package App\DTO\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

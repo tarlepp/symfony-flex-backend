@@ -19,8 +19,6 @@ use function json_encode;
 use function property_exists;
 
 /**
- * Class GetTokenControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

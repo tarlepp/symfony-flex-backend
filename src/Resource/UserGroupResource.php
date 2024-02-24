@@ -15,8 +15,6 @@ use App\Repository\UserGroupRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class UserGroupResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

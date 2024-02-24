@@ -12,8 +12,6 @@ use App\Entity\DateDimension as Entity;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Class DateDimensionRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

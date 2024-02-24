@@ -19,8 +19,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class AnonActionsController
- *
  * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

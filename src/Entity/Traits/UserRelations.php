@@ -19,8 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Class UserRelations
- *
  * @package App\Entity\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

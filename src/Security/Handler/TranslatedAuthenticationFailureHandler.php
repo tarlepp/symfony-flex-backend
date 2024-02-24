@@ -18,8 +18,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class TranslatedAuthenticationFailureHandler
- *
  * @package App\Security\Handler
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

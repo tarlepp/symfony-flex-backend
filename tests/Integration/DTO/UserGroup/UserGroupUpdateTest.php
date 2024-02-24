@@ -12,8 +12,6 @@ use App\DTO\UserGroup\UserGroupUpdate;
 use App\Tests\Integration\TestCase\DtoTestCase;
 
 /**
- * Class UserGroupUpdateTest
- *
  * @package App\Tests\Integration\DTO\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

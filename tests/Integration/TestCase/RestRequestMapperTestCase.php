@@ -20,8 +20,6 @@ use Throwable;
 use function class_exists;
 
 /**
- * Class RestRequestMapperTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -16,8 +16,6 @@ use Throwable;
 use function getenv;
 
 /**
- * Class ApiKeyControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

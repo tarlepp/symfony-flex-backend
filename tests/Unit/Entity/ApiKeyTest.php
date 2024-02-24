@@ -15,8 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function strlen;
 
 /**
- * Class ApiKeyTest
- *
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

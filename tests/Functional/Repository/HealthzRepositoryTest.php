@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class HealthzRepositoryTest
- *
  * @package App\Tests\Functional\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

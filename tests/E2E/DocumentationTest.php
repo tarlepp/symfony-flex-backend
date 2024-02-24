@@ -13,8 +13,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
- * Class DocumentationTest
- *
  * @package App\Tests\Functional
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

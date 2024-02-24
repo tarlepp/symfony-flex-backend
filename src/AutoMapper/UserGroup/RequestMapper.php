@@ -14,8 +14,6 @@ use App\Resource\RoleResource;
 use Throwable;
 
 /**
- * Class RequestMapper
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

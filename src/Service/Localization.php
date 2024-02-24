@@ -22,8 +22,6 @@ use function floor;
 use function str_replace;
 
 /**
- * Class Localization
- *
  * @package App\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
