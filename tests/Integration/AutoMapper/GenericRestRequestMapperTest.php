@@ -8,10 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\AutoMapper;
 
-use App\AutoMapper\RestRequestMapper;
+use App\AutoMapper\ApiKey\RequestMapper;
 use App\DTO\RestDtoInterface;
+use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\src\TestRestRequestMapper;
 use App\Tests\Integration\AutoMapper\src\TestRestRequestMapperDto;
+use App\Tests\Integration\AutoMapper\src\TestRestRequestMapperWithoutProperties;
 use InvalidArgumentException;
 use LengthException;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -35,9 +37,9 @@ class GenericRestRequestMapperTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('RestRequestMapper expects that $source is Request object, "array" provided');
 
-        $mockRestRequestMapper = $this->getMockForAbstractClass(RestRequestMapper::class, [], 'MockMapper');
+        $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        $mockRestRequestMapper->mapToObject([], new stdClass());
+        (new RequestMapper($resource))->mapToObject([], new stdClass());
     }
 
     /**
@@ -49,9 +51,9 @@ class GenericRestRequestMapperTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('RestRequestMapper expects that $source is Request object, "stdClass" provided');
 
-        $mockRestRequestMapper = $this->getMockForAbstractClass(RestRequestMapper::class, [], 'MockMapper');
+        $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        $mockRestRequestMapper->mapToObject(new stdClass(), new stdClass());
+        (new RequestMapper($resource))->mapToObject(new stdClass(), new stdClass());
     }
 
     /**
@@ -65,9 +67,9 @@ class GenericRestRequestMapperTest extends KernelTestCase
             'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "stdClass" provided'
         );
 
-        $mockRestRequestMapper = $this->getMockForAbstractClass(RestRequestMapper::class, [], 'MockMapper');
+        $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        $mockRestRequestMapper->mapToObject(new Request(), new stdClass());
+        (new RequestMapper($resource))->mapToObject(new Request(), new stdClass());
     }
 
     /**
@@ -77,13 +79,13 @@ class GenericRestRequestMapperTest extends KernelTestCase
     {
         $this->expectException(LengthException::class);
         $this->expectExceptionMessage(
-            'RestRequestMapper expects that mapper "MockMapper::$properties" contains properties to convert'
+            'RestRequestMapper expects that mapper "' . TestRestRequestMapperWithoutProperties::class .
+            '::$properties" contains properties to convert'
         );
 
-        $mockRestRequestMapper = $this->getMockForAbstractClass(RestRequestMapper::class, [], 'MockMapper');
         $mockRestDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
-        $mockRestRequestMapper->mapToObject(new Request(), $mockRestDtoInterface);
+        (new TestRestRequestMapperWithoutProperties())->mapToObject(new Request(), $mockRestDtoInterface);
     }
 
     /**
