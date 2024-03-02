@@ -16,69 +16,69 @@
     displayDetailsOnTestsThatTriggerWarnings="true"
     displayDetailsOnTestsThatTriggerErrors="true"
 >
-  <coverage>
-    <report>
-      <clover outputFile="build/logs/clover.xml"/>
-      <html outputDirectory="build/report" lowUpperBound="75" highLowerBound="95"/>
-      <text outputFile="php://stdout" showOnlySummary="true" showUncoveredFiles="true"/>
-    </report>
-  </coverage>
+    <coverage>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+            <html outputDirectory="build/report" lowUpperBound="75" highLowerBound="95"/>
+            <text outputFile="php://stdout" showOnlySummary="true" showUncoveredFiles="true"/>
+        </report>
+    </coverage>
 
-  <php>
-    <ini name="error_reporting" value="-1"/>
-    <ini name="display_errors" value="On"/>
-    <ini name="display_startup_errors" value="On"/>
-    <ini name="date.timezone" value="UTC"/>
-    <env name="KERNEL_CLASS" value="App\Kernel"/>
-    <env name="SHELL_VERBOSITY" value="-1"/>
-    <env name="USE_ALL_USER_COMBINATIONS" value="no"/>
-    <env name="APP_ENV" value="test" force="true"/>
-    <env name="APP_DEBUG" value="false" force="true"/>
-    <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb"/>
-    <!--
-    To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
-    indirect deprecations are just shown on test output to help to track those.
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="display_errors" value="On"/>
+        <ini name="display_startup_errors" value="On"/>
+        <ini name="date.timezone" value="UTC"/>
+        <env name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="SHELL_VERBOSITY" value="-1"/>
+        <env name="USE_ALL_USER_COMBINATIONS" value="no"/>
+        <env name="APP_ENV" value="test" force="true"/>
+        <env name="APP_DEBUG" value="false" force="true"/>
+        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb"/>
+        <!--
+        To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
+        indirect deprecations are just shown on test output to help to track those.
 
-    Note that you can change this behaviour if you want to, just see following documentation and see
-    how you can configure that.
+        Note that you can change this behaviour if you want to, just see following documentation and see
+        how you can configure that.
 
-    https://symfony.com/doc/current/components/phpunit_bridge.html#direct-and-indirect-deprecations
-    -->
-    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
-  </php>
+        https://symfony.com/doc/current/components/phpunit_bridge.html#direct-and-indirect-deprecations
+        -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
+    </php>
 
-  <testsuites>
-    <testsuite name="Unit">
-      <directory>./tests/Unit/</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>./tests/Unit/</directory>
+        </testsuite>
 
-    <testsuite name="Integration">
-      <directory>./tests/Integration/</directory>
-    </testsuite>
+        <testsuite name="Integration">
+            <directory>./tests/Integration/</directory>
+        </testsuite>
 
-    <testsuite name="Functional">
-      <directory>./tests/Functional/</directory>
-    </testsuite>
+        <testsuite name="Functional">
+            <directory>./tests/Functional/</directory>
+        </testsuite>
 
-    <testsuite name="E2E">
-      <directory>./tests/E2E/</directory>
-    </testsuite>
-  </testsuites>
+        <testsuite name="E2E">
+            <directory>./tests/E2E/</directory>
+        </testsuite>
+    </testsuites>
 
-  <logging>
-    <junit outputFile="build/logs/junit.xml"/>
-  </logging>
+    <logging>
+        <junit outputFile="build/logs/junit.xml"/>
+    </logging>
 
-  <source>
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
 
-    <exclude>
-      <directory>./src/Command</directory>
-      <directory>./src/DataFixtures</directory>
-      <directory>./src/Migrations</directory>
-      <file>./src/Kernel.php</file>
-    </exclude>
-  </source>
+        <exclude>
+            <directory>./src/Command</directory>
+            <directory>./src/DataFixtures</directory>
+            <directory>./src/Migrations</directory>
+            <file>./src/Kernel.php</file>
+        </exclude>
+    </source>
 </phpunit>
