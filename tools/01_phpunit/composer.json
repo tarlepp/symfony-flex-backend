@@ -6,12 +6,12 @@
 	},
 	"require-dev": {
 		"liuggio/fastest": "1.11.0",
-		"phpunit/php-code-coverage": "10.1.11",
+		"phpunit/php-code-coverage": "10.1.12",
 		"phpunit/phpcov": "9.0.2",
-		"phpunit/phpunit": "10.5.10",
+		"phpunit/phpunit": "10.5.11",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.4.3",
-		"symfony/phpunit-bridge": "6.4.3"
+		"symfony/phpunit-bridge": "6.4.4"
 	},
 	"config": {
 		"allow-plugins": true,
