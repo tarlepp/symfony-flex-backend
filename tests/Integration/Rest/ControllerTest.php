@@ -12,8 +12,8 @@ use App\Controller\v1\ApiKey\ApiKeyController;
 use App\DTO\ApiKey\ApiKey;
 use App\DTO\RestDtoInterface;
 use App\Resource\ApiKeyResource;
-use App\Rest\ResponseHandler;
 use App\Rest\Controller;
+use App\Rest\ResponseHandler;
 use App\Tests\Utils\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
@@ -37,7 +37,7 @@ class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Resource service not set');
 
-        $class = new class extends Controller {
+        $class = new class() extends Controller {
             public function __construct()
             {
             }
@@ -69,7 +69,7 @@ class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('ResponseHandler service not set');
 
-        $class = new class extends Controller {
+        $class = new class() extends Controller {
             public function __construct()
             {
             }

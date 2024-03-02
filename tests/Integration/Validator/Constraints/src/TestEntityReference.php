@@ -14,8 +14,6 @@ use Doctrine\ORM\EntityNotFoundException;
 use Override;
 
 /**
- * Class TestEntityReference
- *
  * @package App\Tests\Integration\Validator\Constraints\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Validator\Constraints;
 
 use App\Entity\Interfaces\EntityInterface;
-use App\Tests\Integration\Validator\Constraints\src\TestEntityReference;
 use App\Tests\Integration\Validator\Constraints\src\TestConstraint;
+use App\Tests\Integration\Validator\Constraints\src\TestEntityReference;
 use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
 use Generator;
