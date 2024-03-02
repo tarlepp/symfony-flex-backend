@@ -17,8 +17,6 @@ use function is_string;
 use function sprintf;
 
 /**
- * Class RoleTransformer
- *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Form\Console\DataTransformer

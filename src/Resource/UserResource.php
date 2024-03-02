@@ -21,8 +21,6 @@ use function array_values;
 use function in_array;
 
 /**
- * Class UserResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

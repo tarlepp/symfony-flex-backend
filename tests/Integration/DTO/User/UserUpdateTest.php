@@ -16,8 +16,6 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**
- * Class UserUpdateTest
- *
  * @package App\Tests\Integration\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -16,8 +16,6 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**
- * Class ApiKeyPatchTest
- *
  * @package App\Tests\Integration\DTO\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

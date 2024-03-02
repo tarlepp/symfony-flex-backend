@@ -43,8 +43,6 @@ use function sprintf;
 use function ucfirst;
 
 /**
- * Class EntityTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

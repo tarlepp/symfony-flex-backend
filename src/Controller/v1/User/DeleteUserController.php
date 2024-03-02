@@ -24,8 +24,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Class DeleteUserController
- *
  * @package App\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

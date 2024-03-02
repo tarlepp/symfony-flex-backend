@@ -15,8 +15,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
- * Class DoctrineExtensionSubscriber
- *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

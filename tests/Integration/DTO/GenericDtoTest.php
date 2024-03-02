@@ -22,8 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class GenericDtoTest
- *
  * @package App\Tests\Integration\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

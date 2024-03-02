@@ -25,8 +25,6 @@ use function sha1;
 use function spl_object_hash;
 
 /**
- * Class BaseRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

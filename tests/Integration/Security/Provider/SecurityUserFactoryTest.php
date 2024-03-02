@@ -27,8 +27,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
 /**
- * Class SecurityUserFactoryTest
- *
  * @package App\Tests\Integration\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

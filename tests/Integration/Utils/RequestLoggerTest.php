@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RequestLoggerTest
- *
  * @package App\Tests\Integration\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

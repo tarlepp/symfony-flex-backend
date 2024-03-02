@@ -21,8 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class EnumLogLoginTypeTest
- *
  * @package App\Tests\Integration\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

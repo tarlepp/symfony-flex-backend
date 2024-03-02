@@ -16,8 +16,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
- * Class TimeZoneControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

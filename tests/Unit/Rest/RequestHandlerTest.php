@@ -20,8 +20,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use function json_encode;
 
 /**
- * Class RequestHandlerTest
- *
  * @package App\Tests\Unit\Rest;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

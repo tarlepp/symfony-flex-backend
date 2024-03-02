@@ -26,8 +26,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Class UsersController
- *
  * @package App\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

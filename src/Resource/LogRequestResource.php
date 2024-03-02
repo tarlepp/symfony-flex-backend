@@ -15,8 +15,6 @@ use App\Repository\LogRequestRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class LogRequestResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

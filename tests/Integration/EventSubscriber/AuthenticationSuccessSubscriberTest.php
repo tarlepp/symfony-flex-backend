@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
- * Class AuthenticationSuccessSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

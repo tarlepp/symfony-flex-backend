@@ -19,8 +19,6 @@ use Exception;
 use Throwable;
 
 /**
- * Class HealthzRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

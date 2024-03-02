@@ -16,8 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class UserRolesControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

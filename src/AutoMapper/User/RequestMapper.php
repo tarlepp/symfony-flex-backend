@@ -18,8 +18,6 @@ use Throwable;
 use function array_map;
 
 /**
- * Class RequestMapper
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

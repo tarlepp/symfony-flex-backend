@@ -38,8 +38,6 @@ use function str_contains;
 use function substr_count;
 
 /**
- * Class PHPUnitUtil
- *
  * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

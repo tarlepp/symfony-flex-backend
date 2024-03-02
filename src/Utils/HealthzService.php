@@ -13,8 +13,6 @@ use App\Repository\HealthzRepository;
 use Throwable;
 
 /**
- * Class HealthzService
- *
  * @package App\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

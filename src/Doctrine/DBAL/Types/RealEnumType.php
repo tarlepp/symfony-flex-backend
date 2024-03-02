@@ -21,8 +21,6 @@ use function in_array;
 use function is_string;
 
 /**
- * Class RealEnumType
- *
  * @package App\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

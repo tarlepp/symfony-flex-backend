@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use function array_key_exists;
 
 /**
- * Class UserRepository
- *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

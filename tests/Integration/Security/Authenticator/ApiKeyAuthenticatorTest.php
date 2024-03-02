@@ -31,8 +31,6 @@ use Throwable;
 use function property_exists;
 
 /**
- * Class ApiKeyAuthenticatorTest
- *
  * @package App\Tests\Integration\Security\Authenticator
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

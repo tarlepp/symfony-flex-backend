@@ -14,8 +14,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * Class IsUserHimselfVoter
- *
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

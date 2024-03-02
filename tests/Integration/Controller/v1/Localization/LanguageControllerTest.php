@@ -14,8 +14,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class LanguageControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

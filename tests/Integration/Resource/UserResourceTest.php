@@ -22,8 +22,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
 /**
- * Class UserResourceTest
- *
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

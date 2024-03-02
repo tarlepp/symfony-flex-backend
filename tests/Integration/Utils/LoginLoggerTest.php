@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
 /**
- * Class LoginLoggerTest
- *
  * @package App\Tests\Integration\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

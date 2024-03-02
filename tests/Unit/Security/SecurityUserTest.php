@@ -15,8 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function str_rot13;
 
 /**
- * Class SecurityUserTest
- *
  * @package App\Tests\Unit\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

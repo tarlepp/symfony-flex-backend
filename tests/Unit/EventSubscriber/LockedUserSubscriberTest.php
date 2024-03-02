@@ -15,8 +15,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class LockedUserSubscriberTest
- *
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

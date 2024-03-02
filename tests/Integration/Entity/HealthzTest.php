@@ -12,8 +12,6 @@ use App\Entity\Healthz;
 use App\Tests\Integration\TestCase\EntityTestCase;
 
 /**
- * Class HealthzTest
- *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

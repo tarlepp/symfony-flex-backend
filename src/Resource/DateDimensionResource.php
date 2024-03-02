@@ -15,8 +15,6 @@ use App\Repository\DateDimensionRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class DateDimensionResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

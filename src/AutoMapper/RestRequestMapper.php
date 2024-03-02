@@ -23,8 +23,6 @@ use function sprintf;
 use function ucfirst;
 
 /**
- * Class RestRequestMapper
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

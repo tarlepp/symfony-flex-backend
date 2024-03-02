@@ -30,8 +30,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 /**
- * Class FindMethodTest
- *
  * @package App\Tests\Integration\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

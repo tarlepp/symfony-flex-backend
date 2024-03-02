@@ -12,8 +12,6 @@ use App\Rest\Controller;
 use App\Rest\Interfaces\RestResourceInterface;
 
 /**
- * Class AbstractController
- *
  * @package App\Tests\Integration\Rest\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

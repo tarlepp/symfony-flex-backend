@@ -31,8 +31,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 /**
- * Class DeleteMethodTest
- *
  * @package Integration\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

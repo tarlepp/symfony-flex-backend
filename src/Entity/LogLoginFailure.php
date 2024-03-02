@@ -20,8 +20,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
 /**
- * Class LogLoginFailure
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

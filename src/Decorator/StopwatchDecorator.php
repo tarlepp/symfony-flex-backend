@@ -20,8 +20,6 @@ use function str_contains;
 use function str_starts_with;
 
 /**
- * Class StopwatchDecorator
- *
  * @package App\Decorator
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -21,8 +21,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Throwable;
 
 /**
- * Class UserEntityEventListenerTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -12,8 +12,6 @@ use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class UniqueEmail
- *
  * Usage example;
  *  App\Validator\Constraints\UniqueEmail()
  *

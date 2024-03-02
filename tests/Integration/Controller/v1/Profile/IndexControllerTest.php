@@ -17,8 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
 /**
- * Class IndexControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

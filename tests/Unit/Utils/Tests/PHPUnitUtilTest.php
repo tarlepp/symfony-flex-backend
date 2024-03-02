@@ -22,8 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class PHPUnitUtilTest
- *
  * @package App\Tests\Unit\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

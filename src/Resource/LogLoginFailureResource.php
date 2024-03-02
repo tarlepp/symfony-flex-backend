@@ -17,8 +17,6 @@ use App\Rest\RestResource;
 use Throwable;
 
 /**
- * Class LogLoginFailureResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

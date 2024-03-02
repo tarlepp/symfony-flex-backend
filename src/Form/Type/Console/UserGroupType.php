@@ -22,8 +22,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
 /**
- * Class UserGroupType
- *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Form\Type\Console

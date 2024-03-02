@@ -19,8 +19,6 @@ use function in_array;
 use function ucfirst;
 
 /**
- * Class DateDimensionTest
- *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

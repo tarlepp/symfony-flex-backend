@@ -28,8 +28,6 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * Class GenericRepositoryTest
- *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

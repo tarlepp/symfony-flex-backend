@@ -17,8 +17,6 @@ use function array_keys;
 use function sort;
 
 /**
- * Class RepositoryTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

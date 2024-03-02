@@ -18,8 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Class Role
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -26,8 +26,6 @@ use Throwable;
 use function iterator_to_array;
 
 /**
- * Class LoggedInUserValueResolverTest
- *
  * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -14,8 +14,6 @@ use App\DTO\UserGroup\UserGroupPatch;
 use App\DTO\UserGroup\UserGroupUpdate;
 
 /**
- * Class AutoMapperConfiguration
- *
  * @package App\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

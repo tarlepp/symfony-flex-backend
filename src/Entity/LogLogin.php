@@ -24,8 +24,6 @@ use function implode;
 use function is_array;
 
 /**
- * Class LogLogin
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

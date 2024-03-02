@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
- * Class RequestLogger
- *
  * @package App\Services
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

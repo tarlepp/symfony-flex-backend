@@ -22,8 +22,6 @@ use Throwable;
 use function array_map;
 
 /**
- * Class LoadUserData
- *
  * @package App\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

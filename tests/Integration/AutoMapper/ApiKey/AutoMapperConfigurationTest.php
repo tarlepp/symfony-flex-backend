@@ -16,8 +16,6 @@ use App\DTO\ApiKey\ApiKeyUpdate;
 use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
 /**
- * Class AutoMapperConfigurationTest
- *
  * @package App\Tests\Integration\AutoMapper\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

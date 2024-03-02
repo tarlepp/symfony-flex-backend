@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Class VersionTest
- *
  * @package App\Tests\Integration\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

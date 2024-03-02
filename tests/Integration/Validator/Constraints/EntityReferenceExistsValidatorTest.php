@@ -26,8 +26,6 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 use Throwable;
 
 /**
- * Class EntityReferenceExistsValidatorTest
- *
  * @package App\Tests\Integration\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

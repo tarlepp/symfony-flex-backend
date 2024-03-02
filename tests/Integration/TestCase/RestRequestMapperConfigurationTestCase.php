@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function count;
 
 /**
- * Class RestRequestMapperConfigurationTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

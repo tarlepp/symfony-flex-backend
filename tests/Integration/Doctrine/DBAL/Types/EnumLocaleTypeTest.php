@@ -22,8 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class EnumLocaleTypeTest
- *
  * @package App\Tests\Integration\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -19,8 +19,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
- * Class DeleteUserControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

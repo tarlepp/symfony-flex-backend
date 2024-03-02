@@ -15,8 +15,6 @@ use App\Repository\ApiKeyRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class ApiKeyResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

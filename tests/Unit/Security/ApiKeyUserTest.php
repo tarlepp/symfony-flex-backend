@@ -23,8 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
 /**
- * Class ApiKeyUserTest
- *
  * @package App\Tests\Unit\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

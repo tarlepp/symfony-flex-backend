@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 /**
- * Class FindOneRoleControllerTest
- *
  * @package App\Tests\Integration\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

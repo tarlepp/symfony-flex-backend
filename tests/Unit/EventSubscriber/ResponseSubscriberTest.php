@@ -14,8 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
- * Class ResponseSubscriberTest
- *
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

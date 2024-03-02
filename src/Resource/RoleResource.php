@@ -15,8 +15,6 @@ use App\Repository\RoleRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class RoleResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

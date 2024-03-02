@@ -15,8 +15,6 @@ use App\Repository\LogLoginRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * Class LogLoginResource
- *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *

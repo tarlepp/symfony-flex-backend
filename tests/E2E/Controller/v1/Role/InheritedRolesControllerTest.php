@@ -19,8 +19,6 @@ use function array_slice;
 use function getenv;
 
 /**
- * Class InheritedRolesControllerTest
- *
  * @package App\Tests\E2E\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

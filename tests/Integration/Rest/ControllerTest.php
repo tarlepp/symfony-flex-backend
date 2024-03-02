@@ -23,8 +23,6 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * Class ControllerTest
- *
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

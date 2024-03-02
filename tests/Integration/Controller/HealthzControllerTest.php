@@ -21,8 +21,6 @@ use Throwable;
 use function sprintf;
 
 /**
- * Class HealthzControllerTest
- *
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

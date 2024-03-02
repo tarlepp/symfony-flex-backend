@@ -17,8 +17,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 
 /**
- * Class Controller
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

@@ -26,8 +26,6 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Throwable;
 
 /**
- * Class RequestLogSubscriberTest
- *
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

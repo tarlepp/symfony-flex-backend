@@ -13,8 +13,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class UserGroupTest
- *
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

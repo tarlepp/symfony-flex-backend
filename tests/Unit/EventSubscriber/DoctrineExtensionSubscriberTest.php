@@ -13,8 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
- * Class DoctrineExtensionSubscriberTest
- *
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

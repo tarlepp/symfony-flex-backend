@@ -11,8 +11,6 @@ namespace App\DTO\ApiKey;
 use App\DTO\Traits\PatchUserGroups;
 
 /**
- * Class ApiKeyPatch
- *
  * @package App\DTO\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

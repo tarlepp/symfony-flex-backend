@@ -21,8 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
 /**
- * Class EditApiKeyCommand
- *
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

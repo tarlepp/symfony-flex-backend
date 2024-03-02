@@ -12,8 +12,6 @@ use App\DTO\User\UserCreate;
 use App\Tests\Integration\TestCase\DtoTestCase;
 
 /**
- * Class UserCreateTest
- *
  * @package App\Tests\Integration\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

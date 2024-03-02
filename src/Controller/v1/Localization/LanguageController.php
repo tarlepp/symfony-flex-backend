@@ -17,8 +17,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class LanguageController
- *
  * @package App\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

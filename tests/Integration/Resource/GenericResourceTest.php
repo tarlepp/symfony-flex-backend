@@ -30,8 +30,6 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * Class GenericResourceTest
- *
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

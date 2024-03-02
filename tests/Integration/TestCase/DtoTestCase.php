@@ -30,8 +30,6 @@ use function sprintf;
 use function ucfirst;
 
 /**
- * Class DtoTestCase
- *
  * @package App\Tests\Integration\TestCase
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -12,8 +12,6 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 /**
- * Class AppFixtures
- *
  * @package App\DataFixtures
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -21,8 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
 /**
- * Class User
- *
  * @package App\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

@@ -22,8 +22,6 @@ use function is_subclass_of;
 use function Symfony\Component\String\u;
 
 /**
- * Class EntityValueResolver
- *
  * Example how to use this within your controller;
  *
  *  #[Route(path: 'some_path_to_your_route/{user}/{apikey}')]
