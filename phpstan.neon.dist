@@ -11,9 +11,12 @@ parameters:
     ignoreErrors:
         -
             messages:
-                - '#Call to method (.*) on an unknown class PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker.#'
-                - '#Parameter (.*) of method PHPUnit\\Framework\\MockObject\\MockObject::expects\(\) expects PHPUnit\\Framework\\MockObject\\Rule\\InvocationOrder, PHPUnit\\Framework\\MockObject\\Rule\\InvokedCount given.#'
-                - '#Parameter (.*) of method PHPUnit\\Framework\\MockObject\\MockObject::expects\(\) expects PHPUnit\\Framework\\MockObject\\Rule\\InvocationOrder, PHPUnit\\Framework\\MockObject\\Rule\\InvokedAtLeastCount given.#'
+                - '#Access to constant class on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
+                - '#Access to property (.*) on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
+                - '#Call to method (.*) on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
+                - '#Cloning object of an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
+                - '#Method (.*) has invalid return type PHPUnit\\Framework\\MockObject\\MockObject.#'
+                - '#PHPDoc tag @var for variable (.*) contains unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
             paths:
                 - tests/Integration/*
 includes:
