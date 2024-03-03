@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "835474fc1246df4ffe707281e9d28290",
+    "content-hash": "e1db9a8da1faaed739f6e5a69e67a0ba",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2420,16 +2420,16 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v4.20.0",
+            "version": "v4.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "61c08f139e104db21b12832173b08fa37c22e619"
+                "reference": "b306289e2127b723c7e0ceaed4d233a21b9001d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/61c08f139e104db21b12832173b08fa37c22e619",
-                "reference": "61c08f139e104db21b12832173b08fa37c22e619",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/b306289e2127b723c7e0ceaed4d233a21b9001d4",
+                "reference": "b306289e2127b723c7e0ceaed4d233a21b9001d4",
                 "shasum": ""
             },
             "require": {
@@ -2499,11 +2499,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Nelmio\\ApiDocBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "Tests/"
-                ]
+                    "Nelmio\\ApiDocBundle\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2524,9 +2521,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioApiDocBundle/issues",
-                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.20.0"
+                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.22.1"
             },
-            "time": "2024-02-13T14:15:29+00:00"
+            "time": "2024-03-02T17:04:42+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
