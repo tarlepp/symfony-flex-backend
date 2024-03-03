@@ -31,5 +31,11 @@
                 <referencedProperty name="App\Rest\RestResource::$validator" />
             </errorLevel>
         </PropertyNotSetInConstructor>
+
+        <UndefinedMethod>
+            <errorLevel type="suppress">
+                <directory name="tests/Integration" />
+            </errorLevel>
+        </UndefinedMethod>
     </issueHandlers>
 </psalm>

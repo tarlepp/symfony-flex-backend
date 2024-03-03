@@ -9,17 +9,16 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Validator\Constraints;
 
 use App\Entity\Interfaces\EntityInterface;
-use App\Tests\Integration\Validator\Constraints\src\EntityReference;
+use App\Tests\Integration\Validator\Constraints\src\TestConstraint;
+use App\Tests\Integration\Validator\Constraints\src\TestEntityReference;
 use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
-use Doctrine\ORM\EntityNotFoundException;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
@@ -42,10 +41,10 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
 
         $this->expectException(UnexpectedTypeException::class);
         $this->expectExceptionMessage(
-            'Expected argument of type "App\Validator\Constraints\EntityReferenceExists", "SomeConstraint" given'
+            'Expected argument of type "' . EntityReferenceExists::class . '", "' . TestConstraint::class . '" given'
         );
 
-        $constraint = $this->getMockForAbstractClass(Constraint::class, [], 'SomeConstraint');
+        $constraint = new TestConstraint();
 
         (new EntityReferenceExistsValidator($loggerMock))->validate('', $constraint);
     }
@@ -97,7 +96,6 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $value = $this->getMockForAbstractClass(EntityReference::class, [], 'TestClass');
 
         $contextMock
             ->expects(self::never())
@@ -106,19 +104,14 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock
             ->expects(self::never())
             ->method(self::anything());
-
-        $value
-            ->expects(self::once())
-            ->method('getCreatedAt')
-            ->willReturn(null);
 
         $constraint = new EntityReferenceExists();
-        $constraint->entityClass = 'TestClass';
+        $constraint->entityClass = TestEntityReference::class;
 
         // Run validator
         $validator = new EntityReferenceExistsValidator($loggerMock);
         $validator->initialize($contextMock);
-        $validator->validate($value, $constraint);
+        $validator->validate(new TestEntityReference(), $constraint);
     }
 
     /**
@@ -132,9 +125,6 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $value = $this->getMockForAbstractClass(EntityReference::class);
-
-        $exception = new EntityNotFoundException('Entity not found');
 
         $violation
             ->expects(self::exactly(2))
@@ -162,18 +152,13 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             ->method('error')
             ->with('Entity not found');
 
-        $value
-            ->expects(self::once())
-            ->method('getCreatedAt')
-            ->willThrowException($exception);
-
         $constraint = new EntityReferenceExists();
-        $constraint->entityClass = EntityReference::class;
+        $constraint->entityClass = TestEntityReference::class;
 
         // Run validator
         $validator = new EntityReferenceExistsValidator($loggerMock);
         $validator->initialize($contextMock);
-        $validator->validate($value, $constraint);
+        $validator->validate(new TestEntityReference(true), $constraint);
     }
 
     /**

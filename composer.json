@@ -130,6 +130,10 @@
 			"PHPStan\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony",
 			"PHPStan\\Type\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Type/PHPUnit",
 			"PHPStan\\Type\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony",
+			"PHPUnit\\Framework\\MockObject\\": [
+				"tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject",
+				"tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/Runtime"
+			],
 			"Rector\\": "tools/09_rector/vendor/rector"
 		}
 	},

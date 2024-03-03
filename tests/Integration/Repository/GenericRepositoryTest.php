@@ -19,10 +19,10 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\AbstractManagerRegistry;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use UnexpectedValueException;
@@ -85,15 +85,9 @@ class GenericRepositoryTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Cannot get entity manager for entity \'App\Entity\ApiKey\'');
 
-        $managerObject = $this->getMockForAbstractClass(
-            AbstractManagerRegistry::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getManagerForClass']
-        );
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $managerObject
             ->expects(self::once())
@@ -109,15 +103,9 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatGetEntityManagerDoNotResetExistingManagerIfItIsOpen(): void
     {
-        $managerObject = $this->getMockForAbstractClass(
-            AbstractManagerRegistry::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getManagerForClass', 'isOpen']
-        );
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
@@ -143,15 +131,9 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatGetEntityManagerResetManagerIfItIsNotOpen(): void
     {
-        $managerObject = $this->getMockForAbstractClass(
-            AbstractManagerRegistry::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getManagerForClass', 'isOpen', 'resetManager']
-        );
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
@@ -333,10 +315,8 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatFindMethodCallsExpectedEntityManagerMethod(): void
     {
-        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
-            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -373,10 +353,8 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatFindOneByMethodCallsExpectedEntityManagerMethod(): void
     {
-        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
-            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -417,10 +395,8 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatFindByMethodCallsExpectedEntityManagerMethod(): void
     {
-        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
-            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -468,10 +444,8 @@ class GenericRepositoryTest extends KernelTestCase
      */
     public function testThatFindAllMethodCallsExpectedEntityManagerMethod(): void
     {
-        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+        $managerObject = $this->getMockBuilder(ManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getManagerForClass', 'getService', 'resetService'])
-            ->addMethods(['getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)

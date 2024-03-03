@@ -23,6 +23,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,16 +41,14 @@ class CountMethodTest extends KernelTestCase
     #[TestDox("Test that `countMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
-        $inValidTestClassMock = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
-
-        $this->expectException(LogicException::class);
-
         $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
             '(.*)ControllerInterface\'/';
 
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        $inValidTestClassMock->countMethod(Request::create('/'));
+        (new CountMethodInvalidTestClass())
+            ->countMethod(Request::create('/'));
     }
 
     /**
@@ -59,18 +58,16 @@ class CountMethodTest extends KernelTestCase
     #[TestDox('Test that `countMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $this->expectException(MethodNotAllowedHttpException::class);
+
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            CountMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
 
-        $this->expectException(MethodNotAllowedHttpException::class);
-
-        $validTestClassMock->countMethod(Request::create('/', $httpMethod))->getContent();
+        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+            ->countMethod(Request::create('/', $httpMethod))
+            ->getContent();
     }
 
     /**
@@ -80,16 +77,13 @@ class CountMethodTest extends KernelTestCase
     #[TestDox('Test that `countMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode($expectedCode);
+
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            CountMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
-
-        $request = Request::create('/');
 
         $resourceMock
             ->expects(self::once())
@@ -97,10 +91,8 @@ class CountMethodTest extends KernelTestCase
             ->with([], [])
             ->willThrowException($exception);
 
-        $this->expectException(HttpException::class);
-        $this->expectExceptionCode($expectedCode);
-
-        $validTestClassMock->countMethod($request);
+        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+            ->countMethod(Request::create('/'));
     }
 
     /**
@@ -124,10 +116,6 @@ class CountMethodTest extends KernelTestCase
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            CountMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
 
         $request = Request::create('/' . $queryString);
 
@@ -148,7 +136,8 @@ class CountMethodTest extends KernelTestCase
                 $resourceMock
             );
 
-        $validTestClassMock->countMethod($request);
+        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+            ->countMethod($request);
     }
 
     /**
@@ -161,16 +150,13 @@ class CountMethodTest extends KernelTestCase
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            CountMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $validTestClassMock->countMethod(Request::create('/?where=foo'));
+        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+            ->countMethod(Request::create('/?where=foo'));
     }
 
     /**
@@ -178,14 +164,13 @@ class CountMethodTest extends KernelTestCase
      */
     public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
-        yield ['HEAD'];
-        yield ['PATCH'];
-        yield ['POST'];
-        yield ['PUT'];
-        yield ['DELETE'];
-        yield ['OPTIONS'];
-        yield ['CONNECT'];
-        yield ['foobar'];
+        yield [Request::METHOD_HEAD];
+        yield [Request::METHOD_PATCH];
+        yield [Request::METHOD_POST];
+        yield [Request::METHOD_PUT];
+        yield [Request::METHOD_DELETE];
+        yield [Request::METHOD_OPTIONS];
+        yield [Request::METHOD_CONNECT];
     }
 
     /**
@@ -193,13 +178,17 @@ class CountMethodTest extends KernelTestCase
      */
     public static function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400, '', null, [], 400), 400];
-        yield [new NoResultException(), 404];
-        yield [new NotFoundHttpException(), 404];
-        yield [new NonUniqueResultException(), 500];
-        yield [new Exception(), 400];
-        yield [new LogicException(), 400];
-        yield [new InvalidArgumentException(), 400];
+        yield [
+            new HttpException(Response::HTTP_BAD_REQUEST, code: Response::HTTP_BAD_REQUEST),
+            Response::HTTP_BAD_REQUEST,
+        ];
+
+        yield [new NoResultException(), Response::HTTP_NOT_FOUND];
+        yield [new NotFoundHttpException(), Response::HTTP_NOT_FOUND];
+        yield [new NonUniqueResultException(), Response::HTTP_INTERNAL_SERVER_ERROR];
+        yield [new Exception(), Response::HTTP_BAD_REQUEST];
+        yield [new LogicException(), Response::HTTP_BAD_REQUEST];
+        yield [new InvalidArgumentException(), Response::HTTP_BAD_REQUEST];
     }
 
     /**

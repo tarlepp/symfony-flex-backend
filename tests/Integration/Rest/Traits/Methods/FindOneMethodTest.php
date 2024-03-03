@@ -24,6 +24,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -41,16 +42,14 @@ class FindOneMethodTest extends KernelTestCase
     #[TestDox("Test that `findOneMethod` throws an exception if class doesn't implement `ControllerInterface`")]
     public function testThatTraitThrowsAnException(): void
     {
-        $inValidTestClassMock = $this->getMockForAbstractClass(FindOneMethodInvalidTestClass::class);
-
-        $this->expectException(LogicException::class);
-
         $regex = '/You cannot use (.*) controller class with REST traits if that does not implement ' .
             '(.*)ControllerInterface\'/';
 
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        $inValidTestClassMock->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
+        (new FindOneMethodInvalidTestClass())
+            ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
     }
 
     /**
@@ -60,18 +59,14 @@ class FindOneMethodTest extends KernelTestCase
     #[TestDox('Test that `findOneMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $this->expectException(MethodNotAllowedHttpException::class);
+
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            FindOneMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
 
-        $this->expectException(MethodNotAllowedHttpException::class);
-
-        $validTestClassMock
+        (new FindOneMethodTestClass($resourceMock, $responseHandlerMock))
             ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id')
             ->getContent();
     }
@@ -83,17 +78,13 @@ class FindOneMethodTest extends KernelTestCase
     #[TestDox('Test that `findOneMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode($expectedCode);
+
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            FindOneMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
-
-        $this->expectException(HttpException::class);
-        $this->expectExceptionCode($expectedCode);
 
         $uuid = Uuid::uuid4()->toString();
 
@@ -103,7 +94,8 @@ class FindOneMethodTest extends KernelTestCase
             ->with($uuid)
             ->willThrowException($exception);
 
-        $validTestClassMock->findOneMethod(Request::create('/' . $uuid), $uuid);
+        (new FindOneMethodTestClass($resourceMock, $responseHandlerMock))
+            ->findOneMethod(Request::create('/' . $uuid), $uuid);
     }
 
     /**
@@ -116,10 +108,6 @@ class FindOneMethodTest extends KernelTestCase
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validTestClassMock = $this->getMockForAbstractClass(
-            FindOneMethodTestClass::class,
-            [$resourceMock, $responseHandlerMock]
-        );
         $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
 
         $uuid = Uuid::uuid4()->toString();
@@ -136,7 +124,8 @@ class FindOneMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 
-        $validTestClassMock->findOneMethod($request, $uuid);
+        (new FindOneMethodTestClass($resourceMock, $responseHandlerMock))
+            ->findOneMethod($request, $uuid);
     }
 
     /**
@@ -144,14 +133,13 @@ class FindOneMethodTest extends KernelTestCase
      */
     public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
-        yield ['HEAD'];
-        yield ['DELETE'];
-        yield ['PATCH'];
-        yield ['PUT'];
-        yield ['POST'];
-        yield ['OPTIONS'];
-        yield ['CONNECT'];
-        yield ['foobar'];
+        yield [Request::METHOD_HEAD];
+        yield [Request::METHOD_PATCH];
+        yield [Request::METHOD_POST];
+        yield [Request::METHOD_PUT];
+        yield [Request::METHOD_DELETE];
+        yield [Request::METHOD_OPTIONS];
+        yield [Request::METHOD_CONNECT];
     }
 
     /**
@@ -159,12 +147,16 @@ class FindOneMethodTest extends KernelTestCase
      */
     public static function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400, '', null, [], 400), 400];
-        yield [new NoResultException(), 404];
-        yield [new NotFoundHttpException(), 404];
-        yield [new NonUniqueResultException(), 500];
-        yield [new Exception(), 400];
-        yield [new LogicException(), 400];
-        yield [new InvalidArgumentException(), 400];
+        yield [
+            new HttpException(Response::HTTP_BAD_REQUEST, code: Response::HTTP_BAD_REQUEST),
+            Response::HTTP_BAD_REQUEST,
+        ];
+
+        yield [new NoResultException(), Response::HTTP_NOT_FOUND];
+        yield [new NotFoundHttpException(), Response::HTTP_NOT_FOUND];
+        yield [new NonUniqueResultException(), Response::HTTP_INTERNAL_SERVER_ERROR];
+        yield [new Exception(), Response::HTTP_BAD_REQUEST];
+        yield [new LogicException(), Response::HTTP_BAD_REQUEST];
+        yield [new InvalidArgumentException(), Response::HTTP_BAD_REQUEST];
     }
 }
