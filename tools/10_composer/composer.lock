@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e201e2295704d5ca3cb47eafa65a5875",
+    "content-hash": "b9c7ce0e9cd0a67df1d611f9aea124b6",
     "packages": [],
     "packages-dev": [
         {
@@ -764,22 +764,22 @@
         },
         {
             "name": "maglnet/composer-require-checker",
-            "version": "4.8.0",
+            "version": "4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maglnet/ComposerRequireChecker.git",
-                "reference": "1c7498e4c31ff7e467ac1b5138d277736c838393"
+                "reference": "0a6f7ba8fb130a601109f9d59356b7780c95f65c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/1c7498e4c31ff7e467ac1b5138d277736c838393",
-                "reference": "1c7498e4c31ff7e467ac1b5138d277736c838393",
+                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/0a6f7ba8fb130a601109f9d59356b7780c95f65c",
+                "reference": "0a6f7ba8fb130a601109f9d59356b7780c95f65c",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0.0",
                 "ext-phar": "*",
-                "nikic/php-parser": "^4.17.1",
+                "nikic/php-parser": "^4.18.0",
                 "php": "~8.2.0 || ~8.3.0",
                 "symfony/console": "^6.4.1 || ^7.0.1",
                 "webmozart/assert": "^1.11.0",
@@ -790,10 +790,10 @@
                 "ext-zend-opcache": "*",
                 "mikey179/vfsstream": "^1.6.11",
                 "phing/phing": "^2.17.4",
-                "phpstan/phpstan": "^1.10.47",
-                "phpunit/phpunit": "^10.5.1",
+                "phpstan/phpstan": "^1.10.59",
+                "phpunit/phpunit": "^10.5.11",
                 "roave/infection-static-analysis-plugin": "^1.34.0",
-                "vimeo/psalm": "^5.16.0"
+                "vimeo/psalm": "^5.22.2"
             },
             "bin": [
                 "bin/composer-require-checker"
@@ -838,9 +838,9 @@
             ],
             "support": {
                 "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
-                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.8.0"
+                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.9.0"
             },
-            "time": "2023-12-03T22:28:20+00:00"
+            "time": "2024-03-05T10:02:59+00:00"
         },
         {
             "name": "nikic/php-parser",
