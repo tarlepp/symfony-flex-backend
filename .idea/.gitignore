@@ -11,3 +11,5 @@
 # Other 
 codeception.xml
 phpspec.xml
+# GitHub Copilot persisted chat sessions
+/copilot/chatSessions
