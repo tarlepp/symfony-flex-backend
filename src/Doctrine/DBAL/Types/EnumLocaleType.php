@@ -16,7 +16,7 @@ use BackedEnum;
  * @package App\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class EnumLocaleType extends RealEnumType
+class EnumLocaleType extends EnumType
 {
     protected static string $name = Types::ENUM_LOCALE;
 
