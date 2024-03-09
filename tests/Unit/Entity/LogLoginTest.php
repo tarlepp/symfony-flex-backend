@@ -8,9 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Tests\Unit\Entity;
 
-use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Entity\LogLogin;
 use App\Entity\User;
+use App\Enum\LogLogin as LogLoginEnum;
 use DateTime;
 use DateTimeZone;
 use DeviceDetector\DeviceDetector;
@@ -33,7 +33,7 @@ class LogLoginTest extends KernelTestCase
     #[DataProvider('dataProviderTestThatGetCreatedAtReturnsExpected')]
     #[TestDox('Test that `LogLogin::getCreatedAt` method returns expected with `$type` type')]
     public function testThatGetCreatedAtReturnsExpected(
-        string $type,
+        LogLoginEnum $type,
         Request $request,
         DeviceDetector $deviceDetector
     ): void {
@@ -54,7 +54,7 @@ class LogLoginTest extends KernelTestCase
     #[DataProvider('dataProviderTestThatGetUserReturnsNullIfUserNotGiven')]
     #[TestDox('Test that `LogLogin::getUser` method returns `null` if user is not provided with `$type` type')]
     public function testThatGetUserReturnsNullIfUserNotGiven(
-        string $type,
+        LogLoginEnum $type,
         Request $request,
         DeviceDetector $deviceDetector
     ): void {
@@ -69,10 +69,10 @@ class LogLoginTest extends KernelTestCase
     #[DataProvider('dataProviderTestThatGetUserReturnsExpectedUser')]
     #[TestDox('Test that `LogLogin::getUser` method returns provided user with `$type` type')]
     public function testThatGetUserReturnsExpectedUser(
-        string $type,
+        LogLoginEnum $type,
         Request $request,
         DeviceDetector $deviceDetector,
-        User $user
+        User $user,
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector, $user);
 
@@ -80,32 +80,32 @@ class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     * @return Generator<array{0: LogLoginEnum, 1: Request, 2: DeviceDetector}>
      */
     public static function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
     {
-        yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
+        yield [LogLoginEnum::SUCCESS, new Request(), new DeviceDetector('')];
 
-        yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector('')];
+        yield [LogLoginEnum::FAILURE, new Request(), new DeviceDetector('')];
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     * @return Generator<array{0: LogLoginEnum, 1: Request, 2: DeviceDetector}>
      */
     public static function dataProviderTestThatGetUserReturnsNullIfUserNotGiven(): Generator
     {
-        yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
+        yield [LogLoginEnum::SUCCESS, new Request(), new DeviceDetector('')];
 
-        yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector('')];
+        yield [LogLoginEnum::FAILURE, new Request(), new DeviceDetector('')];
     }
 
     /**
-     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector, 3: User}>
+     * @return Generator<array{0: LogLoginEnum, 1: Request, 2: DeviceDetector, 3: User}>
      */
     public static function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
     {
-        yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector(''), new User()];
+        yield [LogLoginEnum::SUCCESS, new Request(), new DeviceDetector(''), new User()];
 
-        yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector(''), new User()];
+        yield [LogLoginEnum::FAILURE, new Request(), new DeviceDetector(''), new User()];
     }
 }
