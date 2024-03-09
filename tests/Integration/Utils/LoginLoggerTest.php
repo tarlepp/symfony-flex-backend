@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Utils;
 
+use App\Enum\LogLogin;
 use App\Resource\LogLoginResource;
 use App\Utils\LoginLogger;
 use BadMethodCallException;
@@ -34,7 +35,7 @@ class LoginLoggerTest extends KernelTestCase
         $this->expectExceptionMessage('Could not get request from current request stack');
 
         (new LoginLogger($this->getResource(), new RequestStack()))
-            ->process('');
+            ->process(LogLogin::SUCCESS);
     }
 
     /**
@@ -53,7 +54,7 @@ class LoginLoggerTest extends KernelTestCase
         $requestStack->push(new Request());
 
         (new LoginLogger($resource, $requestStack))
-            ->process('');
+            ->process(LogLogin::SUCCESS);
     }
 
     /**
