@@ -21,6 +21,6 @@ enum LogLogin: string implements DatabaseEnumInterface
 {
     use GetValues;
 
-    case TYPE_FAILURE = 'failure';
-    case TYPE_SUCCESS = 'success';
+    case FAILURE = 'failure';
+    case SUCCESS = 'success';
 }
