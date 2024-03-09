@@ -12,6 +12,7 @@ use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Role;
 use App\Enum\Language;
 use App\Enum\Locale;
+use App\Enum\LogLogin;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
@@ -174,8 +175,9 @@ class PhpUnitUtil
             'time_immutable', 'date_immutable', 'datetime_immutable' => DateTimeImmutable::class,
             AppTypes::ENUM_LANGUAGE => Language::class,
             AppTypes::ENUM_LOCALE => Locale::class,
+            AppTypes::ENUM_LOG_LOGIN => LogLogin::class,
             self::TYPE_INT, self::TYPE_INTEGER => self::TYPE_INT,
-            self::TYPE_STRING, 'bigint', 'text', 'EnumLogLogin' => self::TYPE_STRING,
+            self::TYPE_STRING, 'bigint', 'text' => self::TYPE_STRING,
             self::TYPE_JSON => self::TYPE_JSON,
             self::TYPE_ARRAY => self::TYPE_ARRAY,
             self::TYPE_BOOL, self::TYPE_BOOLEAN => self::TYPE_BOOL,
