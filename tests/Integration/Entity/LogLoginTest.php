@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
+use App\Enum\LogLogin as LogLoginEnum;
 use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
@@ -82,10 +83,10 @@ class LogLoginTest extends EntityTestCase
         $deviceDetector->parse();
 
         $logRequest = new LogLogin(
-            '',
+            LogLoginEnum::SUCCESS,
             $request,
             $deviceDetector,
-            new User()
+            new User(),
         );
 
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
@@ -119,6 +120,6 @@ class LogLoginTest extends EntityTestCase
         $deviceDetector = new DeviceDetector((string)$request->headers->get('User-Agent'));
         $deviceDetector->parse();
 
-        return new LogLogin('', $request, $deviceDetector, new User());
+        return new LogLogin(LogLoginEnum::SUCCESS, $request, $deviceDetector, new User());
     }
 }

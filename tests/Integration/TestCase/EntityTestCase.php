@@ -14,6 +14,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\LogRequest;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Enum\LogLogin as LogLoginEnum;
 use App\Rest\UuidHelper;
 use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
@@ -627,7 +628,7 @@ abstract class EntityTestCase extends KernelTestCase
             self::assertTrue(class_exists($target));
 
             $arguments = match ($target) {
-                LogLogin::class => ['', new Request(), new DeviceDetector()],
+                LogLogin::class => [LogLoginEnum::SUCCESS, new Request(), new DeviceDetector()],
                 LogLoginFailure::class => [new User()],
                 LogRequest::class => [[]],
                 Role::class => ['some role'],

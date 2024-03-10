@@ -8,14 +8,17 @@ declare(strict_types = 1);
 
 namespace App\Doctrine\DBAL\Types;
 
+use App\Enum\Interfaces\DatabaseEnumInterface;
+use BackedEnum;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
 use function array_map;
+use function gettype;
 use function implode;
 use function in_array;
 use function is_string;
-use function sprintf;
 
 /**
  * @package App\Doctrine\DBAL\Types
@@ -26,46 +29,76 @@ abstract class EnumType extends Type
     protected static string $name;
 
     /**
-     * @var array<int, string>
+     * @psalm-var class-string<DatabaseEnumInterface&BackedEnum>
      */
-    protected static array $values = [];
+    protected static string $enum;
 
     /**
      * @return array<int, string>
      */
     public static function getValues(): array
     {
-        return static::$values;
+        return static::$enum::getValues();
     }
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        $iterator = static fn (string $value): string => "'" . $value . "'";
+        $enumDefinition = implode(
+            ', ',
+            array_map(static fn (string $value): string => "'" . $value . "'", static::getValues()),
+        );
 
-        return 'ENUM(' . implode(', ', array_map($iterator, self::getValues())) . ')';
+        return 'ENUM(' . $enumDefinition . ')';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
-        $value = (string)parent::convertToDatabaseValue(is_string($value) ? $value : '', $platform);
+        if (is_string($value) && in_array($value, static::$enum::getValues(), true)) {
+            $value = static::$enum::from($value);
+        }
 
-        if (!in_array($value, static::$values, true)) {
+        if (!in_array($value, static::$enum::cases(), true)) {
             $message = sprintf(
-                "Invalid '%s' value",
-                $this->getName()
+                "Invalid '%s' value '%s'",
+                static::$name,
+                is_string($value) ? $value : gettype($value),
             );
 
             throw new InvalidArgumentException($message);
         }
 
-        return $value;
+        return (string)parent::convertToDatabaseValue($value->value, $platform);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function convertToPHPValue($value, AbstractPlatform $platform): DatabaseEnumInterface
+    {
+        $value = (string)parent::convertToPHPValue($value, $platform);
+        $enum = static::$enum::tryFrom($value);
+
+        if ($enum !== null) {
+            return $enum;
+        }
+
+        throw ConversionException::conversionFailedFormat(
+            gettype($value),
+            static::$name,
+            'One of: "' . implode('", "', static::getValues()) . '"',
+        );
+    }
+
+    /**
+     * Parent method is deprecated, so remove this after it has been removed.
+     *
+     * @codeCoverageIgnore
+     */
     public function getName(): string
     {
-        return static::$name;
+        return '';
     }
 }
