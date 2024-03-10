@@ -298,7 +298,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
@@ -310,7 +310,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_GET],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
@@ -322,7 +322,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_GET],
         ];
 
-        return static::createDataForTest(static::getInvalidUsers(), $methods);
+        return self::createDataForTest(static::getInvalidUsers(), $methods);
     }
 
     /**
@@ -338,7 +338,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
@@ -351,7 +351,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_POST],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
@@ -364,7 +364,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_POST],
         ];
 
-        return static::createDataForTest(static::getInvalidUsers(), $methods);
+        return self::createDataForTest(static::getInvalidUsers(), $methods);
     }
 
     /**
@@ -379,7 +379,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods, true);
+        return self::createDataForTest(static::getValidUsers(), $methods, true);
     }
 
     /**
@@ -394,7 +394,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_PATCH],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods, true);
+        return self::createDataForTest(static::getValidUsers(), $methods, true);
     }
 
     /**
@@ -409,7 +409,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_PATCH],
         ];
 
-        return static::createDataForTest(static::getInvalidUsers(), $methods, true);
+        return self::createDataForTest(static::getInvalidUsers(), $methods, true);
     }
 
     /**
@@ -426,7 +426,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
@@ -438,7 +438,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_GET],
         ];
 
-        return static::createDataForTest(static::getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
@@ -450,7 +450,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_GET],
         ];
 
-        return static::createDataForTest(static::getInvalidUsers(), $methods);
+        return self::createDataForTest(static::getInvalidUsers(), $methods);
     }
 
     /**
