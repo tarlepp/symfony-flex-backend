@@ -65,7 +65,7 @@ class AnonActionsTest extends RestTraitTestCase
         static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
     }
 
-    public function getValidUsers(): Generator
+    public static function getValidUsers(): Generator
     {
         yield [null, null];
 
@@ -88,7 +88,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @psalm-suppress InvalidReturnType
      */
-    public function getInvalidUsers(): Generator
+    public static function getInvalidUsers(): Generator
     {
         yield from [];
     }

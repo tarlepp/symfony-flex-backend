@@ -20,13 +20,13 @@ class RootActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_root_actions';
 
-    public function getValidUsers(): Generator
+    public static function getValidUsers(): Generator
     {
         yield ['john-root', 'password-root'];
         yield ['john.doe-root@test.com', 'password-root'];
     }
 
-    public function getInvalidUsers(): Generator
+    public static function getInvalidUsers(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield [null, null];
