@@ -45,12 +45,12 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @return Generator<array<int, string|null>>
      */
-    abstract public function getValidUsers(): Generator;
+    abstract public static function getValidUsers(): Generator;
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    abstract public function getInvalidUsers(): Generator;
+    abstract public static function getInvalidUsers(): Generator;
 
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
@@ -286,7 +286,7 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): Generator
+    public static function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_POST],
@@ -298,37 +298,37 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): Generator
+    public static function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_GET],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): Generator
+    public static function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
             [Request::METHOD_GET],
         ];
 
-        return $this->createDataForTest($this->getInvalidUsers(), $methods);
+        return self::createDataForTest(static::getInvalidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): Generator
+    public static function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_PUT],
@@ -338,39 +338,39 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): Generator
+    public static function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_GET],
             [Request::METHOD_POST],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): Generator
+    public static function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
             [Request::METHOD_GET],
             [Request::METHOD_POST],
         ];
 
-        return $this->createDataForTest($this->getInvalidUsers(), $methods);
+        return self::createDataForTest(static::getInvalidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): Generator
+    public static function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_POST],
@@ -379,13 +379,13 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods, true);
+        return self::createDataForTest(static::getValidUsers(), $methods, true);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): Generator
+    public static function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_DELETE],
@@ -394,13 +394,13 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_PATCH],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods, true);
+        return self::createDataForTest(static::getValidUsers(), $methods, true);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): Generator
+    public static function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
             [Request::METHOD_DELETE],
@@ -409,13 +409,13 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_PATCH],
         ];
 
-        return $this->createDataForTest($this->getInvalidUsers(), $methods, true);
+        return self::createDataForTest(static::getInvalidUsers(), $methods, true);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): Generator
+    public static function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_POST],
@@ -426,31 +426,31 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): Generator
+    public static function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
             [Request::METHOD_GET],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return self::createDataForTest(static::getValidUsers(), $methods);
     }
 
     /**
      * @return Generator<array<int, string|null>>
      */
-    public function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): Generator
+    public static function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
             [Request::METHOD_GET],
         ];
 
-        return $this->createDataForTest($this->getInvalidUsers(), $methods);
+        return self::createDataForTest(static::getInvalidUsers(), $methods);
     }
 
     /**
@@ -459,7 +459,7 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @return Generator<array<int, string|null>>
      */
-    private function createDataForTest(Generator $users, array $methods, ?bool $uuid = null): Generator
+    private static function createDataForTest(Generator $users, array $methods, ?bool $uuid = null): Generator
     {
         $uuid ??= false;
 

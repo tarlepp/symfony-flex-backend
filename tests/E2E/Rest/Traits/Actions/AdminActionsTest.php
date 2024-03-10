@@ -20,7 +20,7 @@ class AdminActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_admin_actions';
 
-    public function getValidUsers(): Generator
+    public static function getValidUsers(): Generator
     {
         yield ['john-admin', 'password-admin'];
 
@@ -35,7 +35,7 @@ class AdminActionsTest extends RestTraitTestCase
         }
     }
 
-    public function getInvalidUsers(): Generator
+    public static function getInvalidUsers(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield [null, null];

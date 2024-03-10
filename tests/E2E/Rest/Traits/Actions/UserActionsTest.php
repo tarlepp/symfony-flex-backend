@@ -20,7 +20,7 @@ class UserActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_user_actions';
 
-    public function getValidUsers(): Generator
+    public static function getValidUsers(): Generator
     {
         yield ['john-user', 'password-user'];
 
@@ -37,7 +37,7 @@ class UserActionsTest extends RestTraitTestCase
         }
     }
 
-    public function getInvalidUsers(): Generator
+    public static function getInvalidUsers(): Generator
     {
         yield [null, null];
         yield ['john', 'password'];
