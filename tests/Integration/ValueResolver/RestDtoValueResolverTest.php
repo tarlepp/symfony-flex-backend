@@ -28,9 +28,6 @@ use Throwable;
  */
 class RestDtoValueResolverTest extends KernelTestCase
 {
-    /**
-     * @psalm-param ControllerCollection<Controller> $controllerCollection
-     */
     #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
     #[TestDox('Test that `supports` method returns expected result `$expected`')]
     public function testThatSupportMethodWorksAsExpected(
@@ -41,6 +38,8 @@ class RestDtoValueResolverTest extends KernelTestCase
         string $method,
     ): void {
         $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
+
+        self::assertTrue(method_exists($controllerCollection, $method));
 
         $controllerCollection
             ->expects($this->{$method}())
