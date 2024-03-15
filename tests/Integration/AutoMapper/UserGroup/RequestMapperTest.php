@@ -52,7 +52,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         $role = new Role('Some Role');
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getReference')
             ->with($role->getId())
             ->willReturn($role);

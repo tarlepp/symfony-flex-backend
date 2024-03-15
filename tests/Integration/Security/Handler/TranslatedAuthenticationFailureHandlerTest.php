@@ -29,7 +29,7 @@ class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
         $translator = $this->getMockBuilder(TranslatorInterface::class)->getMock();
 
         $translator
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('trans')
             ->with(
                 'Invalid credentials.',
@@ -39,7 +39,7 @@ class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
             ->willReturn('Invalid credentials.');
 
         $dispatcher
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('dispatch');
 
         $request = new Request();

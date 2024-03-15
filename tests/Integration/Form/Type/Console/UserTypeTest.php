@@ -43,18 +43,18 @@ class UserTypeTest extends TypeTestCase
             ->setRole($roleEntity);
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
         $localization
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFormattedTimezones')
             ->willReturn([
                 [

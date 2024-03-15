@@ -29,7 +29,7 @@ class RolesServiceTest extends KernelTestCase
         $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)->getMock();
 
         $roleHierarchy
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getReachableRoleNames')
             ->with(['RoleA', 'RoleB'])
             ->willReturn(['RoleA', 'RoleB', 'RoleC']);

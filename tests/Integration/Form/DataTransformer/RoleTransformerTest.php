@@ -47,7 +47,7 @@ class RoleTransformerTest extends KernelTestCase
         $entity = new Role('Some Role');
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with($entity->getId())
             ->willReturn($entity);
@@ -68,7 +68,7 @@ class RoleTransformerTest extends KernelTestCase
         $resource = $this->getRoleResource();
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with('role_name')
             ->willReturn(null);
@@ -88,7 +88,7 @@ class RoleTransformerTest extends KernelTestCase
         $entity = new Role('Some Role');
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with('Some Role')
             ->willReturn($entity);

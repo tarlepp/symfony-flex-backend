@@ -51,12 +51,12 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $stopWatch
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('start')
             ->with('EntityReferenceExists->getTargets', EntityReferenceExists::class);
 
         $stopWatch
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('stop')
             ->with('EntityReferenceExists->getTargets');
 
@@ -80,7 +80,7 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $factory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createProxy')
             ->willThrowException(new Exception('foo'));
 
@@ -100,16 +100,16 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $managerRegistry
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
         $stopWatch
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('start');
 
         $stopWatch
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('stop');
 
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
@@ -134,21 +134,21 @@ class StopwatchDecoratorTest extends KernelTestCase
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $managerRegistry
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
         $entityManager
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->willReturn($apiKey);
 
         $stopWatch
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('start');
 
         $stopWatch
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('stop');
 
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);

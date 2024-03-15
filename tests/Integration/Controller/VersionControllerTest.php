@@ -27,7 +27,7 @@ class VersionControllerTest extends KernelTestCase
             ->getMock();
 
         $version
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->willReturn('1.0.0');
 

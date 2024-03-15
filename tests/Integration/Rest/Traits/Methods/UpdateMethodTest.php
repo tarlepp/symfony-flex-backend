@@ -97,7 +97,7 @@ class UpdateMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
 
         $resourceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('update')
             ->with($uuid, $restDtoMock, true)
             ->willThrowException($exception);
@@ -126,13 +126,13 @@ class UpdateMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid, Request::METHOD_PUT);
 
         $resourceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('update')
             ->with($uuid, $restDtoMock, true)
             ->willReturn($entityMock);
 
         $responseHandlerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 

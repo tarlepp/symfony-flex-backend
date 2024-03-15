@@ -38,7 +38,7 @@ class GenericDtoTest extends KernelTestCase
         $dtoMock = $this->createMock(RestDtoInterface::class);
 
         $dtoMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getVisited')
             ->willReturn(['foo']);
 
@@ -86,17 +86,17 @@ class GenericDtoTest extends KernelTestCase
         $dtoUser = $this->createMock(User::class);
 
         $dtoUser
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getVisited')
             ->willReturn(['username', 'email']);
 
         $dtoUser
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUsername')
             ->willReturn('username');
 
         $dtoUser
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEmail')
             ->willReturn('email@com');
 
@@ -117,19 +117,19 @@ class GenericDtoTest extends KernelTestCase
         $userEntity = $this->createMock(UserEntity::class);
 
         $userEntity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setUsername')
             ->with('username')
             ->willReturn($userEntity);
 
         $userEntity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setEmail')
             ->with('email@com')
             ->willReturn($userEntity);
 
         $userEntity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setPlainPassword')
             ->with('password')
             ->willReturn($userEntity);

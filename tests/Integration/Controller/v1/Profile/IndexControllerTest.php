@@ -37,7 +37,7 @@ class IndexControllerTest extends KernelTestCase
             ->getMock();
 
         $serializer
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('serialize')
             ->with(
                 $user,
@@ -49,7 +49,7 @@ class IndexControllerTest extends KernelTestCase
             ->willReturn('{"roles": ["foo", "bar"]}');
 
         $rolesService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getInheritedRoles')
             ->with(['foo', 'bar'])
             ->willReturn(['foo', 'bar']);

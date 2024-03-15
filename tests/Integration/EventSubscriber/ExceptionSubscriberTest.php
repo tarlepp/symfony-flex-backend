@@ -63,7 +63,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $stubLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error')
             ->with((string)$exception);
 
@@ -194,7 +194,7 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         if ($user) {
             $stubUserTypeIdentification
-                ->expects(self::once())
+                ->expects($this->once())
                 ->method('getSecurityUser')
                 ->willReturn(new SecurityUser(new User()));
         }

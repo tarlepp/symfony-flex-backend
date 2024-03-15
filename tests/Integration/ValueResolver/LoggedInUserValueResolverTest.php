@@ -118,7 +118,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn(null);
 
@@ -139,7 +139,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $securityUser = new SecurityUser(new User());
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
@@ -160,12 +160,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUser');
 
         $resolver = new LoggedInUserValueResolver($userService);
@@ -188,12 +188,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUser')
             ->willReturn($user);
 
@@ -216,12 +216,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
         $userService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUser')
             ->willReturn($user);
 

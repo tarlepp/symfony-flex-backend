@@ -27,7 +27,7 @@ class StopwatchCompilerPassTest extends KernelTestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
 
         $container
-            ->expects(self::exactly(5))
+            ->expects($this->exactly(5))
             ->method('findTaggedServiceIds')
             ->willReturn([]);
 
@@ -40,7 +40,7 @@ class StopwatchCompilerPassTest extends KernelTestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
 
         $container
-            ->expects(self::exactly(5))
+            ->expects($this->exactly(5))
             ->method('findTaggedServiceIds')
             ->willReturn([
                 stdClass::class => [],
@@ -63,20 +63,20 @@ class StopwatchCompilerPassTest extends KernelTestCase
         $definition = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
 
         $container
-            ->expects(self::exactly(5))
+            ->expects($this->exactly(5))
             ->method('findTaggedServiceIds')
             ->willReturn([
                 'App\Foo' => [],
             ]);
 
         $container
-            ->expects(self::exactly(5))
+            ->expects($this->exactly(5))
             ->method('getDefinition')
             ->with('App\Foo')
             ->willReturn($definition);
 
         $container
-            ->expects(self::exactly(5))
+            ->expects($this->exactly(5))
             ->method('setDefinition')
             ->with('App\Foo.stopwatch');
 

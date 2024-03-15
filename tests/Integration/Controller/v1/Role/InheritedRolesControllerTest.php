@@ -27,7 +27,7 @@ class InheritedRolesControllerTest extends KernelTestCase
         $role = new Role('Test');
 
         $rolesService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getInheritedRoles')
             ->with([$role->getId()])
             ->willReturn([$role]);

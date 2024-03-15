@@ -31,12 +31,12 @@ class LocalizationTest extends KernelTestCase
         $logger = $this->getLogger();
 
         $cache
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->willThrowException($exception);
 
         $logger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 

@@ -39,19 +39,19 @@ class DetachUserControllerTest extends KernelTestCase
         $user = (new User())->addUserGroup($userGroup);
 
         $userResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with($user, true, true)
             ->willReturn($user);
 
         $userGroupResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with($userGroup, false)
             ->willReturn($userGroup);
 
         $serializer
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('serialize')
             ->willReturn('[]');
 

@@ -67,16 +67,16 @@ class ApiKeyTest extends DtoTestCase
             ->getMock();
 
         $entity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setDescription')
             ->willReturn($entity);
 
         $entity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearUserGroups');
 
         $entity
-            ->expects(self::exactly(count($userGroups)))
+            ->expects($this->exactly(count($userGroups)))
             ->method('addUserGroup')
             ->willReturn($entity);
 

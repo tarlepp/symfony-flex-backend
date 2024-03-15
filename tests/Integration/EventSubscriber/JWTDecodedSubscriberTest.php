@@ -113,7 +113,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error')
             ->with('Request not available');
 

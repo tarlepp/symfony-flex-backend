@@ -63,12 +63,12 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
             ->getMock();
 
         $config
-            ->expects(self::exactly(count(static::$requestMapperClasses)))
+            ->expects($this->exactly(count(static::$requestMapperClasses)))
             ->method('registerMapping')
             ->willReturn($mapping);
 
         $mapping
-            ->expects(self::exactly(count(static::$requestMapperClasses)))
+            ->expects($this->exactly(count(static::$requestMapperClasses)))
             ->method('useCustomMapper')
             ->with($requestMapper);
 

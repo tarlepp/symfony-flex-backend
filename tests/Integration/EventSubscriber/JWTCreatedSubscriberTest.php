@@ -84,7 +84,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('alert')
             ->with('Request not available');
 

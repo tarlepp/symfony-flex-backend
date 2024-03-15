@@ -140,7 +140,7 @@ class BodySubscriberTest extends KernelTestCase
         $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
 
         $request
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getContent')
             ->willReturn('');
 

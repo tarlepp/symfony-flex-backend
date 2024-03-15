@@ -45,7 +45,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
@@ -69,12 +69,12 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
         $apiKeyUserProviderMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getApiKeyForToken')
             ->with($apiKeyUser->getUserIdentifier())
             ->willReturn($apiKey);
@@ -97,7 +97,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
@@ -121,12 +121,12 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
         $userRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with($user->getId(), true)
             ->willReturn($user);
@@ -149,7 +149,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $tokenStorageMock
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
@@ -176,7 +176,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
@@ -200,7 +200,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
@@ -222,7 +222,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
@@ -249,7 +249,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
@@ -275,7 +275,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 
@@ -302,7 +302,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
 
         $tokenStorageMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getToken')
             ->willReturn($token);
 

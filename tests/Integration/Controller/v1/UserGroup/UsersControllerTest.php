@@ -39,13 +39,13 @@ class UsersControllerTest extends KernelTestCase
         $user = (new User())->addUserGroup($userGroup);
 
         $userResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUsersForGroup')
             ->with($userGroup)
             ->willReturn([$user]);
 
         $responseHandler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createResponse')
             ->with($request, [$user], $userResource);
 

@@ -67,7 +67,7 @@ class UserTest extends DtoTestCase
         $entity = $this->getMockBuilder(UserEntity::class)->getMock();
 
         $entity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setPlainPassword')
             ->with('password');
 
@@ -90,11 +90,11 @@ class UserTest extends DtoTestCase
         $entity = $this->getMockBuilder(UserEntity::class)->getMock();
 
         $entity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearUserGroups');
 
         $entity
-            ->expects(self::exactly(count($userGroups)))
+            ->expects($this->exactly(count($userGroups)))
             ->method('addUserGroup')
             ->willReturn($entity);
 
