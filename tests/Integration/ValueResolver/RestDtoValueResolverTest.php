@@ -43,7 +43,7 @@ class RestDtoValueResolverTest extends KernelTestCase
         $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
 
         $controllerCollection
-            ->expects($this->$method())
+            ->expects($this->{$method}())
             ->method('has')
             ->with('foo')
             ->willReturn($expected);
