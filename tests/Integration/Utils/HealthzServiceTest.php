@@ -30,15 +30,15 @@ class HealthzServiceTest extends KernelTestCase
         $repository = $this->getRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('cleanup');
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('create');
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('read');
 
         (new HealthzService($repository))

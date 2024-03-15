@@ -47,7 +47,7 @@ class LoginLoggerTest extends KernelTestCase
         $resource = $this->getResource();
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save');
 
         $requestStack = new RequestStack();

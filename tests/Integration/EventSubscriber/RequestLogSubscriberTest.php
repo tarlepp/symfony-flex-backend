@@ -55,25 +55,25 @@ class RequestLogSubscriberTest extends KernelTestCase
         $userTypeIdentification = $this->getUserTypeIdentification();
 
         $requestLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setRequest')
             ->with($request)
             ->willReturn($requestLogger);
 
         $requestLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setResponse')
             ->with($event->getResponse())
             ->willReturn($requestLogger);
 
         $requestLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setMainRequest')
             ->with($event->isMainRequest())
             ->willReturn($requestLogger);
 
         $requestLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('handle');
 
         $requestLogger
@@ -118,12 +118,12 @@ class RequestLogSubscriberTest extends KernelTestCase
         $userTypeIdentification = $this->getUserTypeIdentification();
 
         $userTypeIdentification
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($securityUser);
 
         $requestLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setUserId')
             ->with($user->getId())
             ->willReturn($requestLogger);
@@ -166,12 +166,12 @@ class RequestLogSubscriberTest extends KernelTestCase
         $userTypeIdentification = $this->getUserTypeIdentification();
 
         $userTypeIdentification
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($apiKeyUser);
 
         $requestLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setApiKeyId')
             ->with($apiKey->getId())
             ->willReturn($requestLogger);

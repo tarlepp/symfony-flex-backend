@@ -32,7 +32,7 @@ class UserGroupsControllerTest extends KernelTestCase
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
 
         $serializer
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('serialize')
             ->with(
                 $user->getUserGroups()->getValues(),

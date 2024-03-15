@@ -36,18 +36,18 @@ class UserGroupTypeTest extends TypeTestCase
         $roleEntity = new Role('ROLE_ADMIN');
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->willReturn([$roleEntity]);
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with($roleEntity->getId())
             ->willReturn($roleEntity);
 
         $service
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRoleLabel')
             ->willReturn('role name');
 

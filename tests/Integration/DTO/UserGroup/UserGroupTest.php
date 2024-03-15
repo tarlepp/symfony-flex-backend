@@ -53,13 +53,13 @@ class UserGroupTest extends DtoTestCase
             ->getMock();
 
         $userGroupEntity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setName')
             ->with('test name')
             ->willReturn($userGroupEntity);
 
         $userGroupEntity
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setRole')
             ->with($roleEntity)
             ->willReturn($userGroupEntity);

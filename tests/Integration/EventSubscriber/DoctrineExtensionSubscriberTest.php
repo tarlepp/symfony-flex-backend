@@ -33,7 +33,7 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
         $blameableListener = $this->getBlameableListener();
 
         $userTypeIdentification
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUser')
             ->willReturn(null);
 
@@ -57,12 +57,12 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
         $user = new User();
 
         $userTypeIdentification
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getUser')
             ->willReturn($user);
 
         $blameableListener
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setUserValue')
             ->with($user);
 

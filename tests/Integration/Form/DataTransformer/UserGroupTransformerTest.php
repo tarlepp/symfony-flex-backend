@@ -60,7 +60,7 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity2 = new UserGroup();
 
         $resource
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('findOne')
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
@@ -82,7 +82,7 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity = new UserGroup();
 
         $resource
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('findOne')
             ->willReturnOnConsecutiveCalls($entity, null);
 
@@ -102,7 +102,7 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity2 = new UserGroup();
 
         $resource
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('findOne')
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 

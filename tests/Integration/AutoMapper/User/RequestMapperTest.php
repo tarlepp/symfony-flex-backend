@@ -53,7 +53,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         $userGroup = new UserGroup();
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getReference')
             ->with($userGroup->getId())
             ->willReturn($userGroup);

@@ -39,19 +39,19 @@ class AttachUserGroupControllerTest extends KernelTestCase
         $userGroup = (new UserGroup())->setRole(new Role('role'));
 
         $userResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with($user, false)
             ->willReturn($user);
 
         $userGroupResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with($userGroup, true, true)
             ->willReturn($userGroup);
 
         $serializer
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('serialize')
             ->willReturn('[]');
 

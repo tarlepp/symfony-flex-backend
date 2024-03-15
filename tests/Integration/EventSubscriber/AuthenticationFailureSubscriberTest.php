@@ -47,19 +47,19 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $userRepository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
         $loginLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setUser')
             ->with($user)
             ->willReturn($loginLogger);
 
         $loginLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('process');
 
         (new AuthenticationFailureSubscriber($loginLogger, $userRepository))
@@ -82,19 +82,19 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $userRepository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn(null);
 
         $loginLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setUser')
             ->with(null)
             ->willReturn($loginLogger);
 
         $loginLogger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('process');
 
         $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);

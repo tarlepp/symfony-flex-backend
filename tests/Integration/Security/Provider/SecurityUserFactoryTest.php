@@ -50,7 +50,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->expectExceptionMessage('User not found for UUID:');
 
         $userRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with('test_user')
             ->willReturn(null);
@@ -76,13 +76,13 @@ class SecurityUserFactoryTest extends KernelTestCase
         $user = new User();
 
         $userRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with('test_user')
             ->willReturn($user);
 
         $rolesServiceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getInheritedRoles')
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
@@ -171,7 +171,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->expectExceptionMessage('User not found for UUID:');
 
         $userRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->willReturn(null);
 
@@ -197,13 +197,13 @@ class SecurityUserFactoryTest extends KernelTestCase
         $securityUser = new SecurityUser($user, ['FOO', 'BAR']);
 
         $userRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->with($securityUser->getUserIdentifier())
             ->willReturn($user);
 
         $rolesServiceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getInheritedRoles')
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);

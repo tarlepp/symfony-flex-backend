@@ -35,11 +35,18 @@ class RestDtoValueResolverTest extends KernelTestCase
     #[TestDox('Test that `supports` method returns expected result `$expected`')]
     public function testThatSupportMethodWorksAsExpected(
         bool $expected,
-        ControllerCollection $controllerCollection,
+        mixed $controllerCollection,
         Request $request,
-        ArgumentMetadata $argumentMetadata
+        ArgumentMetadata $argumentMetadata,
+        string $method,
     ): void {
         $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
+
+        $controllerCollection
+            ->expects($this->$method())
+            ->method('has')
+            ->with('foo')
+            ->willReturn($expected);
 
         $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);
 
@@ -67,27 +74,26 @@ class RestDtoValueResolverTest extends KernelTestCase
 
         $resolver->supports($request, $metadata);
 
-        $dto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
         $controllerCollection
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('has')
             ->with('foo')
             ->willReturn(true);
 
         $controllerCollection
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('foo')
             ->willReturn($controller);
 
         $controller
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getDtoClass')
             ->with('createMethod')
             ->willReturn(RestDtoInterface::class);
 
         $autoMapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('map')
             ->with($request, RestDtoInterface::class)
             ->willReturn($restDto);
@@ -111,6 +117,7 @@ class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollection,
             Request::create('/'),
             $argumentMetaData,
+            'never',
         ];
 
         $request = new Request(attributes: [
@@ -122,18 +129,13 @@ class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollection,
             $request,
             $argumentMetaData,
+            'never',
         ];
 
         /** @psalm-suppress InternalMethod */
         $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
-
-        $controllerCollection
-            ->expects(self::once())
-            ->method('has')
-            ->with('foo')
-            ->willReturn(false);
 
         $request = new Request(attributes: [
             '_controller' => 'foo::createAction',
@@ -146,17 +148,13 @@ class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollection,
             $request,
             $argumentMetaData,
+            'once',
         ];
 
         /** @psalm-suppress InternalMethod */
         $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
-
-        $controllerCollection
-            ->expects(self::never())
-            ->method('has')
-            ->with('foo');
 
         $request = new Request(attributes: [
             '_controller' => 'foo::createAction',
@@ -169,18 +167,13 @@ class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollection,
             $request,
             $argumentMetaData,
+            'never',
         ];
 
         /** @psalm-suppress InternalMethod */
         $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
             ->disableOriginalConstructor()
             ->getMock();
-
-        $controllerCollection
-            ->expects(self::once())
-            ->method('has')
-            ->with('foo')
-            ->willReturn(true);
 
         $request = new Request(attributes: [
             '_controller' => 'foo::createAction',
@@ -193,6 +186,7 @@ class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollection,
             $request,
             $argumentMetaData,
+            'once',
         ];
     }
 }

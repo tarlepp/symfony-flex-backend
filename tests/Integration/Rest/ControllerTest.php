@@ -105,7 +105,7 @@ class ControllerTest extends KernelTestCase
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
         $resourceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getDtoClass')
             ->willReturn($dtoClassMock::class);
 
@@ -129,7 +129,7 @@ class ControllerTest extends KernelTestCase
         );
 
         $resourceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getDtoClass')
             ->willReturn(stdClass::class);
 

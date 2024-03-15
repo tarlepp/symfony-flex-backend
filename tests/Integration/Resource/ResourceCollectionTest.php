@@ -68,7 +68,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->getMock();
 
         $logger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error');
 
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
@@ -96,7 +96,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->getMock();
 
         $logger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error');
 
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))

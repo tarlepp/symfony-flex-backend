@@ -39,7 +39,7 @@ class ResponseSubscriberTest extends KernelTestCase
             ->getMock();
 
         $cacheStub
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->willReturn('1.2.3');
 

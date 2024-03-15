@@ -73,13 +73,13 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
         $loggedInUser = new User();
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('delete')
             ->with($requestUser->getId())
             ->willReturn($requestUser);
 
         $responseHandler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createResponse')
             ->with($request, $requestUser, $resource);
 

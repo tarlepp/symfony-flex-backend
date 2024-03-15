@@ -44,12 +44,12 @@ class HealthzControllerTest extends KernelTestCase
             ->getMock();
 
         $healthzService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('check')
             ->willReturn($healthz);
 
         $responseHandler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createResponse')
             ->with(
                 $request,

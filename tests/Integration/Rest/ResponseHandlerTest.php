@@ -73,7 +73,7 @@ class ResponseHandlerTest extends KernelTestCase
         $exception = new Exception('Some exception');
 
         $stubSerializer
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('serialize')
             ->withAnyParameters()
             ->willThrowException($exception);
@@ -131,17 +131,17 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->willReturn([]);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('all')
             ->willReturn([]);
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -165,20 +165,20 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('populate')
             ->willReturn(null);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('all')
             ->willReturn([
                 'populateAll' => '',
             ]);
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -205,25 +205,25 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('populate')
             ->willReturn(null);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('all')
             ->willReturn([
                 'populateAll' => '',
             ]);
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getAssociations')
             ->willReturn(['AnotherFakeEntity']);
 
@@ -250,20 +250,20 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('populate')
             ->willReturn(null);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
             ]);
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -290,20 +290,20 @@ class ResponseHandlerTest extends KernelTestCase
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $parameterBag
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
             ]);
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
@@ -336,25 +336,25 @@ class ResponseHandlerTest extends KernelTestCase
         ];
 
         $parameterBag
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
 
         $parameterBag
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('all')
             ->willReturn([
                 'populateOnly' => '',
             ]);
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
         $restResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSerializerContext')
             ->willReturn($expected);
 
@@ -382,18 +382,18 @@ class ResponseHandlerTest extends KernelTestCase
         $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
 
         $formInterface
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getErrors')
             ->withAnyParameters()
             ->willReturn($formErrorIterator);
 
         $formInterface
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getName')
             ->willReturn('foo');
 
         $formError
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOrigin')
             ->willReturn($formInterface);
 
@@ -421,18 +421,18 @@ class ResponseHandlerTest extends KernelTestCase
         $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
 
         $formInterface
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getErrors')
             ->withAnyParameters()
             ->willReturn($formErrorIterator);
 
         $formInterface
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getName')
             ->willReturn('');
 
         $formError
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOrigin')
             ->willReturn($formInterface);
 

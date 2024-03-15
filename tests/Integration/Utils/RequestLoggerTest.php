@@ -87,7 +87,7 @@ class RequestLoggerTest extends KernelTestCase
         $logger = $this->getLogger();
 
         $logRequestResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with();
 
@@ -106,12 +106,12 @@ class RequestLoggerTest extends KernelTestCase
         $logger = $this->getLogger();
 
         $logRequestResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->willThrowException(new Exception('test exception'));
 
         $logger
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error')
             ->with('test exception');
 
@@ -131,7 +131,7 @@ class RequestLoggerTest extends KernelTestCase
         $user = new User();
 
         $userResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getReference')
             ->with($user->getId())
             ->willReturn($user);
@@ -141,7 +141,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('getReference');
 
         $logRequestResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with();
 
@@ -162,7 +162,7 @@ class RequestLoggerTest extends KernelTestCase
         $user = new ApiKey();
 
         $apiKeyResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getReference')
             ->with($user->getId())
             ->willReturn($user);
@@ -172,7 +172,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('getReference');
 
         $logRequestResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with();
 

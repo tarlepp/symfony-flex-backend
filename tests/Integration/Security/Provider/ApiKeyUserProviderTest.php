@@ -89,7 +89,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $apiKeyRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with([
                 'token' => 'guid',
@@ -120,7 +120,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = new ApiKey();
 
         $apiKeyRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with([
                 'token' => 'guid',
@@ -148,7 +148,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $apiKeyRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with([
                 'token' => 'some_token',

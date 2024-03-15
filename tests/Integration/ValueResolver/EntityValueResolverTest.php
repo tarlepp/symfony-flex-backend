@@ -94,7 +94,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resourceCollection
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasEntityResource')
             ->with(User::class)
             ->willReturn(false);
@@ -119,7 +119,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resourceCollection
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasEntityResource')
             ->with(User::class)
             ->willReturn(false);
@@ -150,19 +150,19 @@ class EntityValueResolverTest extends KernelTestCase
         $user = new User();
 
         $resourceCollection
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasEntityResource')
             ->with(User::class)
             ->willReturn(true);
 
         $resourceCollection
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityResource')
             ->with(User::class)
             ->willReturn($userResource);
 
         $userResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with($user->getId())
             ->willReturn($user);

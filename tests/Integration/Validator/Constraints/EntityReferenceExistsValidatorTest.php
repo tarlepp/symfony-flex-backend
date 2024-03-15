@@ -127,28 +127,28 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         $violation
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('setParameter')
             ->willReturn($violation);
 
         $violation
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setCode')
             ->with('64888b5e-bded-449b-82ed-0cc1f73df14d')
             ->willReturn($violation);
 
         $violation
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('addViolation');
 
         $contextMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('buildViolation')
             ->with('Invalid id value "{{ id }}" given for entity "{{ entity }}".')
             ->willReturn($violation);
 
         $loggerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('error')
             ->with('Entity not found');
 

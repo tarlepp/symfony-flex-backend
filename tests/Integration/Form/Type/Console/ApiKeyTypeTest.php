@@ -40,12 +40,12 @@ class ApiKeyTypeTest extends TypeTestCase
             ->setName('Some name');
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);

@@ -96,7 +96,7 @@ class PatchMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
 
         $resourceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('patch')
             ->with($uuid, $restDtoMock, true)
             ->willThrowException($exception);
@@ -130,13 +130,13 @@ class PatchMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid, 'PATCH');
 
         $resourceMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('patch')
             ->with($uuid, $restDtoMock, true)
             ->willReturn($entityMock);
 
         $responseHandlerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 

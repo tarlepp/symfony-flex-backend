@@ -34,7 +34,7 @@ class UserRolesControllerTest extends KernelTestCase
             ->getMock();
 
         $rolesService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getInheritedRoles')
             ->with($user->getRoles())
             ->willReturn([]);

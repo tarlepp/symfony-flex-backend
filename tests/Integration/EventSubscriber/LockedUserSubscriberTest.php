@@ -85,27 +85,27 @@ class LockedUserSubscriberTest extends KernelTestCase
         $uuid = UuidHelper::getFactory()->uuid1();
 
         $user
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getLanguage')
             ->willReturn(Language::EN);
 
         $user
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getLocale')
             ->willReturn(Locale::EN);
 
         $user
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($uuid->toString());
 
         $user
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getLogsLoginFailure')
             ->willReturn(new ArrayCollection(range(0, 11)));
 
         $userRepository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
@@ -135,13 +135,13 @@ class LockedUserSubscriberTest extends KernelTestCase
         $user = new UserEntity();
 
         $userRepository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
         $logLoginFailureResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('reset')
             ->with($user);
 
@@ -164,7 +164,7 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->getMock();
 
         $userRepository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(null);
@@ -199,13 +199,13 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->getMock();
 
         $userRepository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with('john')
             ->willReturn($user);
 
         $logLoginFailureResource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save');
 
         $request = new Request([

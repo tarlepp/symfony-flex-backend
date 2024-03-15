@@ -55,13 +55,13 @@ class UserResourceTest extends ResourceTestCase
         $user = (new User())->addUserGroup($userGroup);
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findByAdvanced')
             ->with()
             ->willReturn([$user]);
 
         $rolesService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getInheritedRoles')
             ->with(['Some Role'])
             ->willReturn(['Some Role']);

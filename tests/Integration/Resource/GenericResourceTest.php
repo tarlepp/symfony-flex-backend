@@ -65,7 +65,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn('someEntity');
 
@@ -83,7 +83,7 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getReference')
             ->with($entity->getId())
             ->willReturn($entity);
@@ -102,7 +102,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getAssociations')
             ->willReturn([
                 'entity1' => 'foo',
@@ -125,7 +125,7 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->with($entity->getId())
             ->willReturn($entity);
@@ -148,7 +148,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
@@ -181,7 +181,7 @@ class GenericResourceTest extends KernelTestCase
         ];
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findByAdvanced')
             ->with(...$expectedArguments->getArrayCopy())
             ->willReturn($results);
@@ -200,7 +200,7 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findAdvanced')
             ->with($entity->getId())
             ->willReturn($entity);
@@ -217,7 +217,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findAdvanced')
             ->with('some id')
             ->willReturn(null);
@@ -237,7 +237,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findAdvanced')
             ->with('some id')
             ->willReturn(null);
@@ -264,7 +264,7 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with(...$expectedArguments->getArrayCopy())
             ->willReturn($entity);
@@ -284,7 +284,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn(null);
@@ -303,7 +303,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn(null);
@@ -322,7 +322,7 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn($entity);
@@ -349,7 +349,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('countAdvanced')
             ->with(...$expectedArguments->getArrayCopy())
             ->willReturn(10);
@@ -368,7 +368,7 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with($entity);
 
@@ -405,7 +405,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn(UserEntity::class);
 
@@ -421,30 +421,30 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getEntityName')
             ->willReturn(UserEntity::class);
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save');
 
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
         $constraintViolationList = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
 
         $constraintViolationList
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('count')
             ->willReturn(0);
 
         $validator
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('validate')
             ->willReturn($constraintViolationList);
 
         $dto = $this->getMockBuilder(UserDto::class)->getMock();
 
-        $dto->expects(self::once())
+        $dto->expects($this->once())
             ->method('update');
 
         $resource
@@ -464,7 +464,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
@@ -496,13 +496,13 @@ class GenericResourceTest extends KernelTestCase
         }
 
         $repository
-            ->expects(self::exactly(2))
+            ->expects($this->exactly(2))
             ->method('find')
             ->with('some id')
             ->willReturn($entity);
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('save')
             ->with($dto->update($entity));
 
@@ -520,13 +520,13 @@ class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->with('some id')
             ->willReturn($entity);
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('remove')
             ->with($entity);
 
@@ -545,7 +545,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
@@ -574,7 +574,7 @@ class GenericResourceTest extends KernelTestCase
         [$resource, $repository] = $this->getResourceAndRepository();
 
         $repository
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findIds')
             ->with(...$expectedArguments->getArrayCopy());
 

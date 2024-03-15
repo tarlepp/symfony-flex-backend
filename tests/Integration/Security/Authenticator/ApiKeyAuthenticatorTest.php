@@ -62,7 +62,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
             ->getMock();
 
         $apiKeyUserProvider
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getApiKeyForToken')
             ->with('SomeToken')
             ->willReturn($apiKey);

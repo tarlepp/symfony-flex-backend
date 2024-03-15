@@ -48,13 +48,13 @@ class FindOneRoleControllerTest extends RestIntegrationControllerTestCase
         $request = Request::create('/');
 
         $resource
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOne')
             ->with('role', true)
             ->willReturn($role);
 
         $responseHandler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createResponse')
             ->with($request, $role, $resource);
 
