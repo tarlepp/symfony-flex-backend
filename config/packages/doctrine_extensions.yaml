@@ -2,8 +2,12 @@
 services:
     Gedmo\Timestampable\TimestampableListener:
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_listener, connection: default, event: 'prePersist' }
+            - { name: doctrine.event_listener, connection: default, event: 'onFlush' }
+            - { name: doctrine.event_listener, connection: default, event: 'loadClassMetadata' }
 
     Gedmo\Blameable\BlameableListener:
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_listener, connection: default, event: 'prePersist' }
+            - { name: doctrine.event_listener, connection: default, event: 'onFlush' }
+            - { name: doctrine.event_listener, connection: default, event: 'loadClassMetadata' }
