@@ -15,7 +15,7 @@ framework:
         default_path: '%kernel.project_dir%/translations'
 
     serializer:
-        enable_annotations: true
+        enable_attributes: true
 
     php_errors:
         log: true
