@@ -23,7 +23,6 @@ use function array_map;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-#[AutoconfigureTag('doctrine.fixture.orm')]
 final class LoadRoleData extends Fixture implements OrderedFixtureInterface
 {
     public function __construct(
