@@ -10,6 +10,8 @@ namespace App\Tests\E2E\TestCase;
 
 use App\Tests\Utils\PhpUnitUtil;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -53,16 +55,14 @@ abstract class RestTraitTestCase extends WebTestCase
     abstract public static function getInvalidUsers(): Generator;
 
     /**
-     * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /count` request returns `405` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods')]
+    #[TestDox('Test that `$m /count` request returns `405` when using invalid user `$u` + `$p`')]
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
@@ -70,16 +70,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatCountRouteWorksWithAllowedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /count` request returns `200` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatCountRouteWorksWithAllowedHttpMethods')]
+    #[TestDox('Test that `$m /count` request returns `200` when using valid user `$u` + `$p`')]
     public function testThatCountRouteWorksWithAllowedHttpMethods(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
@@ -87,16 +85,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatCountRouteDoesNotAllowInvalidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /count` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatCountRouteDoesNotAllowInvalidUser')]
+    #[TestDox('Test that `$m /count` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
@@ -108,16 +104,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /` request returns `405` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods')]
+    #[TestDox('Test that `$m /` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
@@ -125,16 +119,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRootRouteWorksWithAllowedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /` request returns `200` or `400` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRootRouteWorksWithAllowedHttpMethods')]
+    #[TestDox('Test that `$m /` request returns `200` or `400` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWorksWithAllowedHttpMethods(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
@@ -144,16 +136,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRootRouteDoesNotAllowInvalidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRootRouteDoesNotAllowInvalidUser')]
+    #[TestDox('Test that `$m /` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
@@ -165,17 +155,15 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods')]
+    #[TestDox('Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
         string $uuid,
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
@@ -183,17 +171,15 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods')]
+    #[TestDox('Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
         string $uuid,
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
@@ -207,17 +193,15 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser')]
+    #[TestDox('Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
         string $uuid,
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
@@ -229,16 +213,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /ids` request returns `405` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods')]
+    #[TestDox('Test that `$m /ids` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
@@ -246,16 +228,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /ids` request returns `200` when using valid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods')]
+    #[TestDox('Test that `$m /ids` request returns `200` when using valid user `$u` + `$p`')]
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
@@ -263,16 +243,14 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowInvalidUser
-     *
      * @throws Throwable
-     *
-     * @testdox Test that `$m /ids` request returns `401` or `403` when using invalid user `$u` + `$p`
      */
+    #[DataProvider('dataProviderTestThatIdsRouteDoesNotAllowInvalidUser')]
+    #[TestDox('Test that `$m /ids` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
