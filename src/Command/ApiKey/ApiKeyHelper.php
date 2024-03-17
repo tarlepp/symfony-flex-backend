@@ -11,10 +11,8 @@ namespace App\Command\ApiKey;
 use App\Entity\ApiKey;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
-use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-use function array_map;
 use function implode;
 use function sprintf;
 
