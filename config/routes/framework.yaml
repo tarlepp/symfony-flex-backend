@@ -2,3 +2,12 @@ when@dev:
     _errors:
         resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
         prefix: /_error
+
+when@test:
+    test_controllers:
+        resource: '../../tests/E2E/Rest/Traits/Actions/src/'
+        type: attribute
+
+    test_life_cycle_controllers:
+        resource: '../../tests/E2E/Rest/src/Controller'
+        type: attribute
