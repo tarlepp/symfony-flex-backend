@@ -1,6 +1,7 @@
 {
 	"name": "tarlepp/symfony-flex-backend-tools",
 	"description": "",
+	"version": "1.0.0",
 	"require": {
 		"php": "^8.3.0"
 	},
