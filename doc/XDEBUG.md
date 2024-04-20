@@ -71,7 +71,7 @@ local paths. See the image below:
 
 By default this application assumes that you're using `app.localhost` as your
 PHP server that you've configured to your IDE. If you need to change that, just
-override that in your local `docker-compose.override.yml` file.
+override that in your local `compose.override.yaml` file.
 
 See those [External links / resources](#external-links--resources-table-of-contents)
 on this documentation to get more information.

@@ -1,6 +1,6 @@
 # What is this?
 
-This document contains information about how you can speed up docker-compose
+This document contains information about how you can speed up Docker Engine
 usage in development stage.
 
 ## Table of Contents
@@ -61,14 +61,13 @@ website.
 
 ### Configuration [ᐞ](#table-of-contents)
 
-Create a `docker-compose.override.yml` file with following content:
+Create a `compose.override.yaml` file with following content:
 
 ```yaml
 #
 # This file should NOT be added to your VCS, only purpose of this is to
 # override those volumes with docker-sync.yml config
 #
-version: '3'
 services:
     php:
         volumes:

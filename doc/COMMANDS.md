@@ -28,7 +28,7 @@ OR
 make fish
 ```
 
-That command is shortcut for `docker-compose exec php bash/fish` command and
+That command is shortcut for `docker compose exec php bash/fish` command and
 you can use that command within your host machine. Note that default user
 inside that `php` container is `dev` and it has been bind to your host machine
 user and group (uid = 1000, gid = 1000) - so that you don't have issues within
@@ -41,7 +41,7 @@ uid = 1000
 gid = 1000
 ```
 
-You need to create `docker-compose.override.yml` file and specify used user
+You need to create `compose.override.yaml` file and specify used user
 information there.
 
 ### Makefile [ᐞ](#table-of-contents)
