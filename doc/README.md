@@ -18,7 +18,7 @@ application.
 * [Development guide](DEVELOPMENT.md)
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
 * [PhpStorm configuration](PHPSTORM.md)
-* [Speed problems with docker-compose?](SPEED_UP_DOCKER_COMPOSE.md)
+* [Speed problems with Docker Engige?](SPEED_UP_DOCKER_COMPOSE.md)
 * [Testing guide](TESTING.md)
 * [Usage checklist](USAGE_CHECKLIST.md)
 * [Using Xdebug](XDEBUG.md)

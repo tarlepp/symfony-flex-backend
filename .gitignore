@@ -9,7 +9,7 @@
 ###< symfony/framework-bundle ###
 
 /secrets/application.*.json
-docker-compose.*.yml
+compose.*.yaml
 
 ## File-based project format:
 *.iws

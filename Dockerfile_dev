@@ -3,7 +3,7 @@ FROM php:8.3.6-fpm
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
 
-# Decrale used arguments from `docker-compose.yml` file
+# Decrale used arguments from `compose.yaml` file
 ARG HOST_UID
 ARG HOST_GID
 
@@ -77,7 +77,7 @@ RUN composer completion bash > /etc/bash_completion.d/composer
 
 # Copy development `php.ini` and PHP-FPM pool configuration to container
 #
-# Also note that these files mounted within `docker-compose.yml` file, so
+# Also note that these files mounted within `compose.yaml` file, so
 # you don't need to build containers again if you change something just
 # restart containers and you're good
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini

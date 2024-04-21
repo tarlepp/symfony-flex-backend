@@ -41,7 +41,7 @@ started to use this template.
         - and made necessary changes.
   * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
         to match your brand.
-  * [ ] [docker-compose.yml](../docker-compose.yml) Change `container_name` to
+  * [ ] [compose.yaml](../compose.yaml) Change `container_name` to
         match your application.
   * [ ] [mysql_custom.cnf](../docker/mysql/mysql_custom.cnf) Check that MySQL
         has custom configuration that your application needs. Also check that

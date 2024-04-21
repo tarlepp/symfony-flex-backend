@@ -8,7 +8,7 @@
 ###< symfony/framework-bundle ###
 
 /secrets/application.*.json
-docker-compose.*.yml
+compose.*.yaml
 
 # User-specific stuff:
 .idea/**/workspace.xml

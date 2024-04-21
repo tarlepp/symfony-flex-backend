@@ -39,8 +39,8 @@ application(s) or different backend application(s) uses as they like.
 
 ## Requirements [ᐞ](#table-of-contents)
 
-* [docker-compose](https://docs.docker.com/compose/install/)
-* If you are not using docker / docker-compose then follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md)
+[Docker Engige](https://docs.docker.com/engine/install/)
+If you are not using Docker Engine then follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md)
 
 ### Recommendations [ᐞ](#table-of-contents)
 
@@ -51,7 +51,7 @@ application(s) or different backend application(s) uses as they like.
 
 ## Installation [ᐞ](#table-of-contents)
 
-This installation guide expects that you're using docker-compose.
+This installation guide expects that you're using Docker Engine.
 
 ### 1. Clone repository [ᐞ](#table-of-contents)
 
@@ -89,8 +89,8 @@ application:
 
 ### 3. Using application [ᐞ](#table-of-contents)
 
-By default `make start` / `docker-compose up` command starts all the containers
-and exposes following ports on `localhost` on your host machine:
+By default `make start` command starts all the containers and exposes
+following ports on `localhost` on your host machine:
 
 * symfony-backend-nginx - [https://localhost:8000](https://localhost:8000) (nginx)
   * PHP-FPM status page -  [https://localhost:8000/status](https://localhost:8000/status)
@@ -118,8 +118,8 @@ password: password
 
 ### 4. Getting shell to container [ᐞ](#table-of-contents)
 
-After you've run `make start` / `docker-compose up` command you can list all
-running containers with `docker ps` command.
+After you've run `make start` command you can list all running containers with
+`docker ps` command.
 
 And to eg. get shell (bash or fish) access inside one of those containers you
 can run following command:
@@ -170,7 +170,7 @@ build _your_ own application - right?
 * [Development guide](doc/DEVELOPMENT.md)
 * [Installation without docker](doc/INSTALLATION_WITHOUT_DOCKER.md)
 * [PhpStorm configuration](doc/PHPSTORM.md)
-* [Speed problems with docker-compose?](doc/SPEED_UP_DOCKER_COMPOSE.md)
+* [Speed problems with Docker Engine?](doc/SPEED_UP_DOCKER_COMPOSE.md)
 * [Testing guide](doc/TESTING.md)
 * [Usage checklist](doc/USAGE_CHECKLIST.md)
 * [Using Xdebug](doc/XDEBUG.md)
@@ -191,4 +191,4 @@ build _your_ own application - right?
 
 [The MIT License (MIT)](LICENSE)
 
-Copyright © 2021 Tarmo Leppänen
+Copyright © 2024 Tarmo Leppänen

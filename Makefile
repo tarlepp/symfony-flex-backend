@@ -32,8 +32,8 @@ OPENSSL_BIN := $(shell which openssl)
 PHPDBG := $(shell which phpdbg)
 COMPOSER_BIN := $(shell which composer)
 DOCKER := $(shell which docker)
-CONTAINER_PREFIX := 'symfony-backend' # Check your `docker-compose.yml` file `container_name` property for this one
-CONTAINER_COUNT := 5 # Check your `docker-compose.yml` file service count for this one
+CONTAINER_PREFIX := 'symfony-backend' # Check your `compose.yaml` file `container_name` property for this one
+CONTAINER_COUNT := 5 # Check your `compose.yaml` file service count for this one
 
 ifdef DOCKER
 	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
@@ -50,7 +50,7 @@ else
 endif
 
 ERROR_DOCKER = @printf "\033[31mSeems like that all necessary Docker containers are not running atm.\nCheck logs for detailed information about the reason of this\033[39m\n"
-NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker-compose exec' command\033[39m\n"
+NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker compose exec' command\033[39m\n"
 WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
 WARNING_DOCKER = @printf "\033[31mThis command must be run inside specified docker container and it's not\nrunning atm. Use \`make start\` and/or \`make daemon\` command to get\nnecessary container(s) running and after that run this command again.\033[39m\n"
 WARNING_DOCKER_RUNNING = @printf "\033[31mDocker is already running - you cannot execute this command multiple times\033[39m\n"
@@ -81,7 +81,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make configuration
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make configuration
 	$(ALL_DONE)
 endif
 
@@ -124,7 +124,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make generate-jwt-keys
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make generate-jwt-keys
 	$(ALL_DONE)
 endif
 
@@ -158,7 +158,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-php
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-php
 	$(ALL_DONE)
 endif
 
@@ -178,7 +178,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-phpdbg
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-phpdbg
 	$(ALL_DONE)
 endif
 
@@ -197,7 +197,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-fastest-php
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-fastest-php
 	$(ALL_DONE)
 endif
 
@@ -216,7 +216,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-fastest-phpdbg
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-fastest-phpdbg
 	$(ALL_DONE)
 endif
 
@@ -234,7 +234,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make report-fastest
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make report-fastest
 	$(ALL_DONE)
 endif
 
@@ -251,7 +251,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make infection
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make infection
 	$(ALL_DONE)
 endif
 
@@ -273,7 +273,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpmetrics
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpmetrics
 endif
 
 phpcs: ## Runs PHP CodeSniffer
@@ -288,7 +288,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpcs
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpcs
 	$(ALL_DONE)
 endif
 
@@ -304,7 +304,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make ecs
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make ecs
 	$(ALL_DONE)
 endif
 
@@ -320,7 +320,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make ecs-fix
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make ecs-fix
 	$(ALL_DONE)
 endif
 
@@ -335,7 +335,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpinsights
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpinsights
 	$(ALL_DONE)
 endif
 
@@ -350,7 +350,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phplint
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phplint
 	$(ALL_DONE)
 endif
 
@@ -368,7 +368,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make psalm
 	$(ALL_DONE)
 endif
 
@@ -386,7 +386,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm-shepherd
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make psalm-shepherd
 	$(ALL_DONE)
 endif
 
@@ -404,7 +404,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm-github
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make psalm-github
 	$(ALL_DONE)
 endif
 
@@ -421,7 +421,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpstan
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpstan
 	$(ALL_DONE)
 endif
 
@@ -438,7 +438,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpstan
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpstan
 	$(ALL_DONE)
 endif
 
@@ -453,7 +453,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make lint-configuration
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-configuration
 	$(ALL_DONE)
 endif
 
@@ -468,7 +468,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make lint-yaml
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-yaml
 	$(ALL_DONE)
 endif
 
@@ -496,7 +496,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-latest
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-dependencies-latest
 	$(ALL_DONE)
 endif
 
@@ -511,7 +511,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-minor
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-dependencies-minor
 	$(ALL_DONE)
 endif
 
@@ -526,7 +526,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-patch
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-dependencies-patch
 	$(ALL_DONE)
 endif
 
@@ -541,7 +541,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-licenses
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-licenses
 	$(ALL_DONE)
 endif
 
@@ -556,7 +556,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make update
 	$(ALL_DONE)
 endif
 
@@ -571,7 +571,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update-tools
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make update-tools
 	$(ALL_DONE)
 endif
 
@@ -586,7 +586,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make install-tools
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make install-tools
 	$(ALL_DONE)
 endif
 
@@ -599,7 +599,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php bash
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php bash
 endif
 
 fish: ## Get fish inside PHP container
@@ -611,7 +611,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php fish
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php fish
 endif
 
 logs: ## Show logs from all containers
@@ -624,7 +624,7 @@ else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose logs --follow php nginx mariadb
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose logs --follow php nginx mariadb
 endif
 
 daemon: ## Start application in development mode in background
@@ -635,7 +635,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --detach
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up --detach
 	@printf $(_TITLE) "OK" "Containers are running background, check logs for detailed information!"
 endif
 
@@ -647,7 +647,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up --build --detach
 	@printf $(_TITLE) "OK" "Containers are built and those are running background, check logs for detailed information!"
 endif
 
@@ -657,7 +657,7 @@ stop: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose down
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose down
 	$(ALL_DONE)
 endif
 
@@ -669,7 +669,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up
 	$(ALL_DONE)
 endif
 
@@ -681,7 +681,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up --build
 	$(ALL_DONE)
 endif
 
@@ -699,7 +699,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make local-configuration
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make local-configuration
 	$(ALL_DONE)
 endif
 
@@ -714,7 +714,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-normalize
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-normalize
 	$(ALL_DONE)
 endif
 
@@ -729,7 +729,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-validate
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-validate
 	$(ALL_DONE)
 endif
 
@@ -744,7 +744,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-require-checker
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-require-checker
 	$(ALL_DONE)
 endif
 
@@ -759,7 +759,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make composer-unused
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-unused
 	$(ALL_DONE)
 endif
 
@@ -774,7 +774,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phploc
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phploc
 	$(ALL_DONE)
 endif
 
@@ -790,7 +790,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-security
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-security
 	$(ALL_DONE)
 endif
 
@@ -856,6 +856,6 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make project-stats
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make project-stats
 	$(ALL_DONE)
 endif
