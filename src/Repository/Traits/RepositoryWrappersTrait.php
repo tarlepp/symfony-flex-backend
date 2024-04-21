@@ -43,6 +43,9 @@ trait RepositoryWrappersTrait
         return $this->getClassMetaData()->getAssociationMappings();
     }
 
+    /**
+     * @psalm-suppress ArgumentTypeCoercion
+     */
     public function getClassMetaData(): ClassMetadataInfo
     {
         return $this->getEntityManager()->getClassMetadata($this->getEntityName());
