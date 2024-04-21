@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5af202f4b2cdf2e2aa960e667ebaad2",
+    "content-hash": "c02f128e85ef36bed0ad82f474e15809",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4514,23 +4514,23 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v6.4.0",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "11d736e97f116ac375a81f96e662911a34cd50ce"
+                "reference": "6e5688d69f7cfc4ed4a511e96007e06c2d34ce56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/11d736e97f116ac375a81f96e662911a34cd50ce",
-                "reference": "11d736e97f116ac375a81f96e662911a34cd50ce",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/6e5688d69f7cfc4ed4a511e96007e06c2d34ce56",
+                "reference": "6e5688d69f7cfc4ed4a511e96007e06c2d34ce56",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "require-dev": {
-                "symfony/filesystem": "^6.0|^7.0"
+                "symfony/filesystem": "^6.4|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -4558,7 +4558,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v6.4.0"
+                "source": "https://github.com/symfony/finder/tree/v7.0.0"
             },
             "funding": [
                 {
@@ -4574,7 +4574,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-31T17:30:12+00:00"
+            "time": "2023-10-31T17:59:56+00:00"
         },
         {
             "name": "symfony/flex",
@@ -7661,16 +7661,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.8.6",
+            "version": "4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "fe45a0e98a156999ddafc31c9ad333fdcadbcb2d"
+                "reference": "b46a36d006f4db4d761995a5add1e7ab0386ed1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/fe45a0e98a156999ddafc31c9ad333fdcadbcb2d",
-                "reference": "fe45a0e98a156999ddafc31c9ad333fdcadbcb2d",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/b46a36d006f4db4d761995a5add1e7ab0386ed1d",
+                "reference": "b46a36d006f4db4d761995a5add1e7ab0386ed1d",
                 "shasum": ""
             },
             "require": {
@@ -7736,9 +7736,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.8.6"
+                "source": "https://github.com/zircote/swagger-php/tree/4.9.0"
             },
-            "time": "2024-03-15T01:13:55+00:00"
+            "time": "2024-04-18T22:32:11+00:00"
         }
     ],
     "packages-dev": [
