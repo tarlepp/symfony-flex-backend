@@ -60,7 +60,8 @@
 		"symfony/twig-bundle": "6.4.4",
 		"symfony/validator": "6.4.6",
 		"symfony/var-exporter": "6.4.4",
-		"symfony/yaml": "6.4.3"
+		"symfony/yaml": "6.4.3",
+		"zircote/swagger-php": "4.8.6"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
