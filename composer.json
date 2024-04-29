@@ -31,7 +31,7 @@
 		"doctrine/orm": "2.19.4",
 		"friendsofphp/proxy-manager-lts": "1.0.18",
 		"gedmo/doctrine-extensions": "3.15.0",
-		"lexik/jwt-authentication-bundle": "2.20.3",
+		"lexik/jwt-authentication-bundle": "2.21.0",
 		"mark-gerarts/automapper-plus-bundle": "1.5.0",
 		"matomo/device-detector": "6.3.1",
 		"matthiasnoback/symfony-console-form": "5.3.2",
@@ -61,7 +61,7 @@
 		"symfony/validator": "6.4.6",
 		"symfony/var-exporter": "6.4.4",
 		"symfony/yaml": "6.4.3",
-		"zircote/swagger-php": "4.8.6"
+		"zircote/swagger-php": "4.9.0"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
