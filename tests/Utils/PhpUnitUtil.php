@@ -44,15 +44,15 @@ use function substr_count;
  */
 class PhpUnitUtil
 {
-    final public const TYPE_INT = 'int';
-    final public const TYPE_INTEGER = 'integer';
-    final public const TYPE_STRING = 'string';
-    final public const TYPE_ARRAY = 'array';
-    final public const TYPE_JSON = 'json';
-    final public const TYPE_BOOL = 'bool';
-    final public const TYPE_BOOLEAN = 'boolean';
-    final public const TYPE_CUSTOM_CLASS = 'CustomClass';
-    final public const TYPE_ENUM = 'ENUM';
+    final public const string TYPE_INT = 'int';
+    final public const string TYPE_INTEGER = 'integer';
+    final public const string TYPE_STRING = 'string';
+    final public const string TYPE_ARRAY = 'array';
+    final public const string TYPE_JSON = 'json';
+    final public const string TYPE_BOOL = 'bool';
+    final public const string TYPE_BOOLEAN = 'boolean';
+    final public const string TYPE_CUSTOM_CLASS = 'CustomClass';
+    final public const string TYPE_ENUM = 'ENUM';
 
     /**
      * @var array<string, mixed>
