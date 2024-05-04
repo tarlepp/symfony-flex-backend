@@ -33,7 +33,7 @@ use function sprintf;
 )]
 class ListApiKeysCommand extends Command
 {
-    final public const NAME = 'api-key:list';
+    final public const string NAME = 'api-key:list';
 
     public function __construct(
         private readonly ApiKeyResource $apiKeyResource,

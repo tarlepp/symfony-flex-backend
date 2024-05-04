@@ -26,15 +26,15 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Locale extends Constraint
 {
-    final public const INVALID_LOCALE = '44e3862f-2d38-46d4-b1ae-632990814af6';
-    final public const MESSAGE = 'This locale "{{ locale }}" is not valid.';
+    final public const string INVALID_LOCALE = '44e3862f-2d38-46d4-b1ae-632990814af6';
+    final public const string MESSAGE = 'This locale "{{ locale }}" is not valid.';
 
     /**
      * {@inheritdoc}
      *
      * @psalm-var array<string, string>
      */
-    protected const ERROR_NAMES = [
+    protected const array ERROR_NAMES = [
         self::INVALID_LOCALE => 'INVALID_LOCALE',
     ];
 }

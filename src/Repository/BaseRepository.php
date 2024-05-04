@@ -35,8 +35,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
     use RepositoryMethodsTrait;
     use RepositoryWrappersTrait;
 
-    private const INNER_JOIN = 'innerJoin';
-    private const LEFT_JOIN = 'leftJoin';
+    private const string INNER_JOIN = 'innerJoin';
+    private const string LEFT_JOIN = 'leftJoin';
 
     /**
      * @psalm-var class-string

@@ -26,15 +26,15 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Language extends Constraint
 {
-    final public const INVALID_LANGUAGE = '08bd61cf-ba27-45a3-9916-78c39253833a';
-    final public const MESSAGE = 'This language "{{ language }}" is not valid.';
+    final public const string INVALID_LANGUAGE = '08bd61cf-ba27-45a3-9916-78c39253833a';
+    final public const string MESSAGE = 'This language "{{ language }}" is not valid.';
 
     /**
      * {@inheritdoc}
      *
      * @psalm-var array<string, string>
      */
-    protected const ERROR_NAMES = [
+    protected const array ERROR_NAMES = [
         self::INVALID_LANGUAGE => 'INVALID_LANGUAGE',
     ];
 }

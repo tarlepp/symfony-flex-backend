@@ -32,7 +32,7 @@ class EditUserCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    final public const NAME = 'user:edit';
+    final public const string NAME = 'user:edit';
 
     public function __construct(
         private readonly UserResource $userResource,

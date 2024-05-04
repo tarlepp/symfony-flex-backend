@@ -18,13 +18,13 @@ interface SearchTermInterface
 {
     // @codeCoverageIgnoreStart
     // Used OPERAND constants
-    public const OPERAND_OR = 'or';
-    public const OPERAND_AND = 'and';
+    public const string OPERAND_OR = 'or';
+    public const string OPERAND_AND = 'and';
 
     // Used MODE constants
-    public const MODE_STARTS_WITH = 1;
-    public const MODE_ENDS_WITH = 2;
-    public const MODE_FULL = 3;
+    public const int MODE_STARTS_WITH = 1;
+    public const int MODE_ENDS_WITH = 2;
+    public const int MODE_FULL = 3;
     // @codeCoverageIgnoreEnd
 
     /**

@@ -26,16 +26,16 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class EntityReferenceExists extends Constraint
 {
-    final public const ENTITY_REFERENCE_EXISTS_ERROR = '64888b5e-bded-449b-82ed-0cc1f73df14d';
-    final public const MESSAGE_SINGLE = 'Invalid id value "{{ id }}" given for entity "{{ entity }}".';
-    final public const MESSAGE_MULTIPLE = 'Invalid id values "{{ id }}" given for entity "{{ entity }}".';
+    final public const string ENTITY_REFERENCE_EXISTS_ERROR = '64888b5e-bded-449b-82ed-0cc1f73df14d';
+    final public const string MESSAGE_SINGLE = 'Invalid id value "{{ id }}" given for entity "{{ entity }}".';
+    final public const string MESSAGE_MULTIPLE = 'Invalid id values "{{ id }}" given for entity "{{ entity }}".';
 
     /**
      * {@inheritdoc}
      *
      * @psalm-var array<string, string>
      */
-    protected const ERROR_NAMES = [
+    protected const array ERROR_NAMES = [
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
     ];
 
