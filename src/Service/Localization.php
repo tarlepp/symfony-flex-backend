@@ -27,7 +27,7 @@ use function str_replace;
  */
 class Localization
 {
-    final public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
+    final public const string DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
         private readonly CacheInterface $appCacheApcu,

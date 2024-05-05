@@ -27,23 +27,23 @@ abstract class Controller implements ControllerInterface
     use RestActionBase;
     use RestMethodHelper;
 
-    public const ACTION_COUNT = 'countAction';
-    public const ACTION_CREATE = 'createAction';
-    public const ACTION_DELETE = 'deleteAction';
-    public const ACTION_FIND = 'findAction';
-    public const ACTION_FIND_ONE = 'findOneAction';
-    public const ACTION_IDS = 'idsAction';
-    public const ACTION_PATCH = 'patchAction';
-    public const ACTION_UPDATE = 'updateAction';
+    public const string ACTION_COUNT = 'countAction';
+    public const string ACTION_CREATE = 'createAction';
+    public const string ACTION_DELETE = 'deleteAction';
+    public const string ACTION_FIND = 'findAction';
+    public const string ACTION_FIND_ONE = 'findOneAction';
+    public const string ACTION_IDS = 'idsAction';
+    public const string ACTION_PATCH = 'patchAction';
+    public const string ACTION_UPDATE = 'updateAction';
 
-    public const METHOD_COUNT = 'countMethod';
-    public const METHOD_CREATE = 'createMethod';
-    public const METHOD_DELETE = 'deleteMethod';
-    public const METHOD_FIND = 'findMethod';
-    public const METHOD_FIND_ONE = 'findOneMethod';
-    public const METHOD_IDS = 'idsMethod';
-    public const METHOD_PATCH = 'patchMethod';
-    public const METHOD_UPDATE = 'updateMethod';
+    public const string METHOD_COUNT = 'countMethod';
+    public const string METHOD_CREATE = 'createMethod';
+    public const string METHOD_DELETE = 'deleteMethod';
+    public const string METHOD_FIND = 'findMethod';
+    public const string METHOD_FIND_ONE = 'findOneMethod';
+    public const string METHOD_IDS = 'idsMethod';
+    public const string METHOD_PATCH = 'patchMethod';
+    public const string METHOD_UPDATE = 'updateMethod';
 
     protected ?ResponseHandlerInterface $responseHandler = null;
 

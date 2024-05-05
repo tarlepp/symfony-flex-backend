@@ -32,7 +32,7 @@ class EditUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    final public const NAME = 'user:edit-group';
+    final public const string NAME = 'user:edit-group';
 
     public function __construct(
         private readonly UserGroupResource $userGroupResource,

@@ -25,8 +25,8 @@ use function array_merge;
  */
 abstract class RestTraitTestCase extends WebTestCase
 {
-    private const END_POINT_COUNT = '/count';
-    private const INVALID_METHOD = 'foobar';
+    private const string END_POINT_COUNT = '/count';
+    private const string INVALID_METHOD = 'foobar';
 
     protected static string $route;
 

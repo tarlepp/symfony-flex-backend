@@ -59,8 +59,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use UserRelations;
     use Uuid;
 
-    final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_BASIC = 'set.UserBasic';
+    final public const string SET_USER_PROFILE = 'set.UserProfile';
+    final public const string SET_USER_BASIC = 'set.UserBasic';
 
     #[ORM\Id]
     #[ORM\Column(

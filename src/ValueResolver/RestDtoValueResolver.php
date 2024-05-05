@@ -27,7 +27,7 @@ use function in_array;
  */
 class RestDtoValueResolver implements ValueResolverInterface
 {
-    private const CONTROLLER_KEY = '_controller';
+    private const string CONTROLLER_KEY = '_controller';
 
     /**
      * @var array<int, string>

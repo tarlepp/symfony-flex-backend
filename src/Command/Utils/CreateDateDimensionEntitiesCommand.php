@@ -35,8 +35,8 @@ use function sprintf;
 )]
 class CreateDateDimensionEntitiesCommand extends Command
 {
-    private const YEAR_MIN = 1970;
-    private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
+    private const int YEAR_MIN = 1970;
+    private const int YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
     public function __construct(
         private readonly DateDimensionRepository $dateDimensionRepository,

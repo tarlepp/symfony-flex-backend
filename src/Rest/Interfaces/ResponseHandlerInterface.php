@@ -26,8 +26,8 @@ interface ResponseHandlerInterface
      * Constants for response output formats.
      */
     // @codeCoverageIgnoreStart
-    public const FORMAT_JSON = 'json';
-    public const FORMAT_XML = 'xml';
+    public const string FORMAT_JSON = 'json';
+    public const string FORMAT_XML = 'xml';
     // @codeCoverageIgnoreEnd
 
     public function __construct(SerializerInterface $serializer);

@@ -29,7 +29,7 @@ class ChangeTokenCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    final public const NAME = 'api-key:change-token';
+    final public const string NAME = 'api-key:change-token';
 
     public function __construct(
         private readonly ApiKeyResource $apiKeyResource,
