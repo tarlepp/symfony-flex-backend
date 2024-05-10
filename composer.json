@@ -70,11 +70,11 @@
 	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.8.2",
-		"doctrine/doctrine-fixtures-bundle": "3.5.1",
+		"doctrine/doctrine-fixtures-bundle": "3.6.0",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "6.4.7",
 		"symfony/debug-bundle": "6.4.7",
-		"symfony/maker-bundle": "1.59.0",
+		"symfony/maker-bundle": "1.59.1",
 		"symfony/requirements-checker": "2.0.1",
 		"symfony/stopwatch": "6.4.7",
 		"symfony/var-dumper": "6.4.7",
