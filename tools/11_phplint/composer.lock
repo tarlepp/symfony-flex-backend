@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e979c5db56133d2c0f670919270f7bb",
+    "content-hash": "317d942b008020a5613a87a240ba3642",
     "packages": [],
     "packages-dev": [
         {
             "name": "overtrue/phplint",
-            "version": "9.2.0",
+            "version": "9.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/phplint.git",
-                "reference": "b211fe17b8b9e8f2b3db10243f6adcb6397715c3"
+                "reference": "1e43e92e425c953f7c154460f0644517ea4f9317"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/phplint/zipball/b211fe17b8b9e8f2b3db10243f6adcb6397715c3",
-                "reference": "b211fe17b8b9e8f2b3db10243f6adcb6397715c3",
+                "url": "https://api.github.com/repos/overtrue/phplint/zipball/1e43e92e425c953f7c154460f0644517ea4f9317",
+                "reference": "1e43e92e425c953f7c154460f0644517ea4f9317",
                 "shasum": ""
             },
             "require": {
@@ -61,7 +61,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "9.2.x-dev"
+                    "dev-main": "9.3.x-dev"
                 }
             },
             "autoload": {
@@ -93,7 +93,7 @@
             ],
             "support": {
                 "issues": "https://github.com/overtrue/phplint/issues",
-                "source": "https://github.com/overtrue/phplint/tree/9.2.0"
+                "source": "https://github.com/overtrue/phplint/tree/9.3.1"
             },
             "funding": [
                 {
@@ -101,7 +101,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-03T07:14:21+00:00"
+            "time": "2024-05-17T03:39:25+00:00"
         },
         {
             "name": "psr/cache",
