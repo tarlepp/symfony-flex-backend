@@ -4,11 +4,12 @@ parameters:
         - src
         - tests
     editorUrl: '%%file%%:%%line%%'
-    checkGenericClassInNonGenericObjectType: false
     symfony:
         container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
     checkExplicitMixed: false
     ignoreErrors:
+        -
+            identifier: missingType.generics
         -
             messages:
                 - '#Access to constant class on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
