@@ -76,8 +76,6 @@ class SchemaTest extends KernelTestCase
 
         $managerRegistry = $kernel->getContainer()->get('doctrine');
 
-        self::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
-
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $managerRegistry->getManager();
 

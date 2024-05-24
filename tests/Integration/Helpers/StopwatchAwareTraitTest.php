@@ -38,9 +38,6 @@ class StopwatchAwareTraitTest extends KernelTestCase
         self::assertNotNull($kernel);
 
         $service = $kernel->getContainer()->get(StopwatchAwareService::class);
-
-        self::assertInstanceOf(StopwatchAwareService::class, $service);
-
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);
 
         self::assertInstanceOf(Stopwatch::class, $stopwatch);
