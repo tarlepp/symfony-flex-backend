@@ -14,7 +14,6 @@ use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
-use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
