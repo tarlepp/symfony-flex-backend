@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d2209246e1dc484cec3dfd586eb0f84",
+    "content-hash": "b31f95e59ad51373673294018d0cf881",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -759,16 +759,16 @@
         },
         {
             "name": "doctrine/event-manager",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/event-manager.git",
-                "reference": "750671534e0241a7c50ea5b43f67e23eb5c96f32"
+                "reference": "b680156fa328f1dfd874fd48c7026c41570b9c6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/750671534e0241a7c50ea5b43f67e23eb5c96f32",
-                "reference": "750671534e0241a7c50ea5b43f67e23eb5c96f32",
+                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/b680156fa328f1dfd874fd48c7026c41570b9c6e",
+                "reference": "b680156fa328f1dfd874fd48c7026c41570b9c6e",
                 "shasum": ""
             },
             "require": {
@@ -778,10 +778,10 @@
                 "doctrine/common": "<2.9"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^10",
+                "doctrine/coding-standard": "^12",
                 "phpstan/phpstan": "^1.8.8",
-                "phpunit/phpunit": "^9.5",
-                "vimeo/psalm": "^4.28"
+                "phpunit/phpunit": "^10.5",
+                "vimeo/psalm": "^5.24"
             },
             "type": "library",
             "autoload": {
@@ -830,7 +830,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/event-manager/issues",
-                "source": "https://github.com/doctrine/event-manager/tree/2.0.0"
+                "source": "https://github.com/doctrine/event-manager/tree/2.0.1"
             },
             "funding": [
                 {
@@ -846,7 +846,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-12T20:59:15+00:00"
+            "time": "2024-05-22T20:47:39+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -2150,33 +2150,34 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "v5.3.2",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/symfony-console-form.git",
-                "reference": "6529c0ea7502c9d90126660012f30aeb25e7b549"
+                "reference": "233d6c10e10cd5ce3502afd25a9c420a57ba18af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/6529c0ea7502c9d90126660012f30aeb25e7b549",
-                "reference": "6529c0ea7502c9d90126660012f30aeb25e7b549",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/233d6c10e10cd5ce3502afd25a9c420a57ba18af",
+                "reference": "233d6c10e10cd5ce3502afd25a9c420a57ba18af",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
-                "symfony/console": "~5.0 || ~6.0",
-                "symfony/form": "~5.0 || ~6.0",
-                "symfony/translation": "~5.0 || ~6.0"
+                "symfony/console": "~5.4 || ~6.0 || ~7.0",
+                "symfony/form": "~5.4 || ~6.0 || ~7.0",
+                "symfony/translation": "~5.4 || ~6.0 || ~7.0"
             },
             "require-dev": {
                 "beberlei/assert": "~2.1",
                 "behat/behat": "^3.6",
                 "phpunit/phpunit": "^9.5",
-                "symfony/finder": "~5 || ~6.0.0",
-                "symfony/framework-bundle": "~5.0 || ~6.0",
-                "symfony/security-csrf": "~5.0 || ~6.0",
-                "symfony/validator": "~5.0 || ~6.0",
-                "symfony/yaml": "~5.0 || ~6.0",
+                "symfony/finder": "~5.4 || ~6.0 || ~7.0",
+                "symfony/framework-bundle": "~5.4 || ~6.0 || ~7.0",
+                "symfony/intl": "~5.4 || ~6.0 || ~7.0",
+                "symfony/security-csrf": "~5.4 || ~6.0 || ~7.0",
+                "symfony/validator": "~5.4 || ~6.0 || ~7.0",
+                "symfony/yaml": "~5.4 || ~6.0 || ~7.0",
                 "symplify/coding-standard": "^9.4",
                 "symplify/easy-coding-standard": "^9.4"
             },
@@ -2206,9 +2207,9 @@
             ],
             "support": {
                 "issues": "https://github.com/matthiasnoback/symfony-console-form/issues",
-                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v5.3.2"
+                "source": "https://github.com/matthiasnoback/symfony-console-form/tree/v6.0.0"
             },
-            "time": "2022-08-19T09:04:21+00:00"
+            "time": "2024-05-24T08:23:48+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2664,16 +2665,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.4.0",
+            "version": "5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "298d2febfe79d03fe714eb871d5538da55205b1a"
+                "reference": "9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/298d2febfe79d03fe714eb871d5538da55205b1a",
-                "reference": "298d2febfe79d03fe714eb871d5538da55205b1a",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c",
+                "reference": "9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c",
                 "shasum": ""
             },
             "require": {
@@ -2722,9 +2723,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.4.0"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.4.1"
             },
-            "time": "2024-04-09T21:13:58+00:00"
+            "time": "2024-05-21T05:55:05+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -8115,12 +8116,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "4a1ce99ead02e286f024fc7d032c7233ac01091b"
+                "reference": "0ec6bad5f4523eda2514e89d5ea48cde6ebe7f99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4a1ce99ead02e286f024fc7d032c7233ac01091b",
-                "reference": "4a1ce99ead02e286f024fc7d032c7233ac01091b",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0ec6bad5f4523eda2514e89d5ea48cde6ebe7f99",
+                "reference": "0ec6bad5f4523eda2514e89d5ea48cde6ebe7f99",
                 "shasum": ""
             },
             "conflict": {
@@ -8688,7 +8689,7 @@
                 "sylius/grid-bundle": "<1.10.1",
                 "sylius/paypal-plugin": ">=1,<1.2.4|>=1.3,<1.3.1",
                 "sylius/resource-bundle": ">=1,<1.3.14|>=1.4,<1.4.7|>=1.5,<1.5.2|>=1.6,<1.6.4",
-                "sylius/sylius": "<1.12.16|>=1.13.0.0-alpha1,<1.13.1",
+                "sylius/sylius": "<1.9.10|>=1.10,<1.10.11|>=1.11,<1.11.2|>=1.12.0.0-alpha1,<1.12.16|>=1.13.0.0-alpha1,<1.13.1",
                 "symbiote/silverstripe-multivaluefield": ">=3,<3.0.99",
                 "symbiote/silverstripe-queuedjobs": ">=3,<3.0.2|>=3.1,<3.1.4|>=4,<4.0.7|>=4.1,<4.1.2|>=4.2,<4.2.4|>=4.3,<4.3.3|>=4.4,<4.4.3|>=4.5,<4.5.1|>=4.6,<4.6.4",
                 "symbiote/silverstripe-seed": "<6.0.3",
@@ -8777,12 +8778,14 @@
                 "uvdesk/core-framework": "<=1.1.1",
                 "vanilla/safecurl": "<0.9.2",
                 "verbb/comments": "<1.5.5",
+                "verbb/formie": "<2.1.6",
                 "verbb/image-resizer": "<2.0.9",
                 "verbb/knock-knock": "<1.2.8",
                 "verot/class.upload.php": "<=2.1.6",
                 "villagedefrance/opencart-overclocked": "<=1.11.1",
                 "vova07/yii2-fileapi-widget": "<0.1.9",
                 "vrana/adminer": "<4.8.1",
+                "vufind/vufind": ">=2,<9.1.1",
                 "waldhacker/hcaptcha": "<2.1.2",
                 "wallabag/tcpdf": "<6.2.22",
                 "wallabag/wallabag": "<2.6.7",
@@ -8808,7 +8811,7 @@
                 "wpanel/wpanel4-cms": "<=4.3.1",
                 "wpcloud/wp-stateless": "<3.2",
                 "wpglobus/wpglobus": "<=1.9.6",
-                "wwbn/avideo": "<=12.4",
+                "wwbn/avideo": "<14.3",
                 "xataface/xataface": "<3",
                 "xpressengine/xpressengine": "<3.0.15",
                 "yab/quarx": "<2.4.5",
@@ -8903,7 +8906,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-18T00:15:00+00:00"
+            "time": "2024-05-23T15:04:32+00:00"
         },
         {
             "name": "symfony/browser-kit",
