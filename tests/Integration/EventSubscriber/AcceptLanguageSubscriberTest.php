@@ -28,10 +28,14 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request();
         $request->headers->set('Accept-Language', 'foo');
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new AcceptLanguageSubscriber('bar');
         $subscriber->onKernelRequest($event);
@@ -45,10 +49,14 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request();
         $request->headers->set('Accept-Language', $asked);
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new AcceptLanguageSubscriber($default))
             ->onKernelRequest($event);
