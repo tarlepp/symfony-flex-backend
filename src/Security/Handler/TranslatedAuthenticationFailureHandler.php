@@ -49,6 +49,6 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
 
         $this->dispatcher->dispatch($event);
 
-        return $event->getResponse();
+        return $event->getResponse() ?? new JWTAuthenticationFailureResponse();
     }
 }

@@ -33,9 +33,13 @@ class DetachUserGroupControllerTest extends WebTestCase
     {
         self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(self::$kernel);
+        $kernel = self::$kernel;
 
-        self::$kernel->shutdown();
+        self::assertNotNull($kernel);
+
+        PhpUnitUtil::loadFixtures($kernel);
+
+        $kernel->shutdown();
 
         parent::tearDownAfterClass();
     }

@@ -20,11 +20,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use ReflectionClass;
 use ReflectionMethod;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
@@ -45,6 +47,17 @@ use const DIRECTORY_SEPARATOR;
  */
 class IntegrityTest extends KernelTestCase
 {
+    public static function getKernel(): KernelInterface
+    {
+        self::bootKernelCached();
+
+        if (self::$kernel === null) {
+            throw new RuntimeException('Kernel is not booting.');
+        }
+
+        return self::$kernel;
+    }
+
     #[DataProvider('dataProviderTestThatControllerHasE2ETests')]
     #[TestDox('Test that controller `$class` has E2E test class `$testClass`')]
     public function testThatControllerHasE2ETests(string $testClass, string $class): void
@@ -350,9 +363,7 @@ FORMAT;
      */
     public static function dataProviderTestThatControllerHasE2ETests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Controller/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Controller/';
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\E2E\\Controller\\';
 
@@ -364,9 +375,7 @@ FORMAT;
      */
     public static function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Repository/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
         $filter = self::getInterfaceFilter(BaseRepositoryInterface::class);
@@ -379,9 +388,7 @@ FORMAT;
      */
     public static function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Repository/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Functional\\Repository\\';
 
@@ -431,9 +438,7 @@ FORMAT;
      */
     public static function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Repository/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
         $filter = self::getInterfaceFilter(BaseRepositoryInterface::class);
@@ -446,9 +451,7 @@ FORMAT;
      */
     public static function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Entity/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Entity/';
         $namespace = '\\App\\Entity\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Entity\\';
         $filter = self::getInterfaceFilter(EntityInterface::class);
@@ -461,9 +464,7 @@ FORMAT;
      */
     public static function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/EventSubscriber/';
+        $folder = self::getKernel()->getProjectDir() . '/src/EventSubscriber/';
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
 
@@ -475,9 +476,7 @@ FORMAT;
      */
     public static function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/EventListener/';
+        $folder = self::getKernel()->getProjectDir() . '/src/EventListener/';
         $namespace = '\\App\\EventListener\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventListener\\';
 
@@ -489,9 +488,7 @@ FORMAT;
      */
     public static function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Resource/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Resource/';
         $namespace = '\\App\\Resource\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Resource\\';
 
@@ -503,9 +500,7 @@ FORMAT;
      */
     public static function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Security/Authenticator/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Security/Authenticator/';
         $namespace = '\\App\\Security\\Authenticator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Authenticator\\';
         $filter = static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
@@ -520,9 +515,7 @@ FORMAT;
      */
     public static function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Security/Provider/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Security/Provider/';
         $namespace = '\\App\\Security\\Provider\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Provider\\';
         $filter = self::getInterfaceFilter(UserProviderInterface::class);
@@ -535,9 +528,7 @@ FORMAT;
      */
     public static function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Security/Voter/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Security/Voter/';
         $namespace = '\\App\\Security\\Voter\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Voter\\';
         $filter = self::getInterfaceFilter(VoterInterface::class);
@@ -550,9 +541,7 @@ FORMAT;
      */
     public static function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/DTO/';
+        $folder = self::getKernel()->getProjectDir() . '/src/DTO/';
         $namespace = '\\App\\DTO\\';
         $namespaceTest = '\\App\\Tests\\Integration\\DTO\\';
 
@@ -564,9 +553,7 @@ FORMAT;
      */
     public static function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Form/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Form/';
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
         $filter = self::getInterfaceFilter(FormTypeInterface::class);
@@ -579,9 +566,7 @@ FORMAT;
      */
     public static function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Form/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Form/';
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
         $filter = self::getInterfaceFilter(DataTransformerInterface::class);
@@ -594,9 +579,7 @@ FORMAT;
      */
     public static function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Controller/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Controller/';
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Controller\\';
         $filter = self::getInterfaceFilter(ControllerInterface::class);
@@ -609,9 +592,7 @@ FORMAT;
      */
     public static function dataProviderTestThatConstraintHasUnitTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Validator/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Validator/';
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Unit\\Validator\\';
         $filter = self::getSubclassOfFilter(Constraint::class);
@@ -624,13 +605,9 @@ FORMAT;
      */
     public static function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/EventSubscriber/';
-
+        $folder = self::getKernel()->getProjectDir() . '/src/EventSubscriber/';
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Unit\\EventSubscriber\\';
-
         $filter = self::getInterfaceFilter(EventSubscriberInterface::class);
 
         return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
@@ -641,9 +618,7 @@ FORMAT;
      */
     public static function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Validator/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Validator/';
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Validator\\';
         $filter = self::getInterfaceFilter(ConstraintValidatorInterface::class);
@@ -656,9 +631,7 @@ FORMAT;
      */
     public static function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Doctrine/DBAL/Types/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
         $filter = static fn (ReflectionClass $reflectionClass): bool =>
@@ -672,9 +645,7 @@ FORMAT;
      */
     public static function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/AutoMapper/';
+        $folder = self::getKernel()->getProjectDir() . '/src/AutoMapper/';
         $namespace = '\\App\\AutoMapper\\';
         $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
         $filter = static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
@@ -689,9 +660,7 @@ FORMAT;
      */
     public static function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/Service/';
+        $folder = self::getKernel()->getProjectDir() . '/src/Service/';
         $namespace = '\\App\\Service\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Service\\';
 
@@ -703,9 +672,7 @@ FORMAT;
      */
     public static function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
     {
-        self::bootKernelCached();
-
-        $folder = self::$kernel->getProjectDir() . '/src/ValueResolver/';
+        $folder = self::getKernel()->getProjectDir() . '/src/ValueResolver/';
         $namespace = '\\App\\ValueResolver\\';
         $namespaceTest = '\\App\\Tests\\Integration\\ValueResolver\\';
         $filter = self::getInterfaceFilter(ValueResolverInterface::class);

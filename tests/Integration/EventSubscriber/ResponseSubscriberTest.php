@@ -34,6 +34,10 @@ class ResponseSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $cacheStub = $this->createMock(CacheInterface::class);
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
@@ -46,8 +50,8 @@ class ResponseSubscriberTest extends KernelTestCase
         $request = new Request();
         $response = new Response();
 
-        $event = new ResponseEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
-        $version = new Version(self::$kernel->getProjectDir(), $cacheStub, $logger);
+        $event = new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
+        $version = new Version($kernel->getProjectDir(), $cacheStub, $logger);
 
         (new ResponseSubscriber($version))
             ->onKernelResponse($event);

@@ -33,7 +33,11 @@ class LoggerAwareTraitTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $service = self::$kernel->getContainer()->get(LoggerAwareService::class);
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
+        $service = $kernel->getContainer()->get(LoggerAwareService::class);
         $logger = PhpUnitUtil::getProperty('logger', $service);
 
         self::assertInstanceOf(LoggerInterface::class, $logger);

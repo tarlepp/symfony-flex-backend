@@ -39,6 +39,10 @@ class RequestLogSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request(
             [],
             [],
@@ -50,7 +54,7 @@ class RequestLogSubscriberTest extends KernelTestCase
             ]
         );
         $response = new Response();
-        $event = new TerminateEvent(self::$kernel, $request, $response);
+        $event = new TerminateEvent($kernel, $request, $response);
         $requestLogger = $this->getRequestLogger();
         $userTypeIdentification = $this->getUserTypeIdentification();
 
@@ -100,6 +104,10 @@ class RequestLogSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request(
             [],
             [],
@@ -111,7 +119,7 @@ class RequestLogSubscriberTest extends KernelTestCase
             ]
         );
         $response = new Response();
-        $event = new TerminateEvent(self::$kernel, $request, $response);
+        $event = new TerminateEvent($kernel, $request, $response);
         $user = new User();
         $securityUser = new SecurityUser($user);
         $requestLogger = $this->getRequestLogger();
@@ -148,6 +156,10 @@ class RequestLogSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request(
             [],
             [],
@@ -159,7 +171,7 @@ class RequestLogSubscriberTest extends KernelTestCase
             ]
         );
         $response = new Response();
-        $event = new TerminateEvent(self::$kernel, $request, $response);
+        $event = new TerminateEvent($kernel, $request, $response);
         $apiKey = new ApiKey();
         $apiKeyUser = new ApiKeyUser($apiKey, []);
         $requestLogger = $this->getRequestLogger();
@@ -196,12 +208,16 @@ class RequestLogSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request([], [], [], [], [], [
             'REQUEST_METHOD' => 'OPTIONS',
             'REQUEST_URI' => '/foobar',
         ]);
         $response = new Response();
-        $event = new TerminateEvent(self::$kernel, $request, $response);
+        $event = new TerminateEvent($kernel, $request, $response);
         $requestLogger = $this->getRequestLogger();
         $userTypeIdentification = $this->getUserTypeIdentification();
 
@@ -230,6 +246,10 @@ class RequestLogSubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request(
             [],
             [],
@@ -241,7 +261,7 @@ class RequestLogSubscriberTest extends KernelTestCase
             ]
         );
         $response = new Response();
-        $event = new TerminateEvent(self::$kernel, $request, $response);
+        $event = new TerminateEvent($kernel, $request, $response);
         $requestLogger = $this->getRequestLogger();
         $userTypeIdentification = $this->getUserTypeIdentification();
 

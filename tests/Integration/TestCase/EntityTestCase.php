@@ -23,8 +23,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use TypeError;
 use function array_filter;
@@ -53,6 +55,17 @@ abstract class EntityTestCase extends KernelTestCase
      * @var class-string
      */
     protected static string $entityName;
+
+    public static function getKernel(): KernelInterface
+    {
+        self::bootKernel();
+
+        if (self::$kernel === null) {
+            throw new RuntimeException('Kernel is not booting.');
+        }
+
+        return self::$kernel;
+    }
 
     #[TestDox(
         'Test that `getUuid` method returns UUID object which contains same UUID string value as `getId` method'
@@ -445,10 +458,10 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public static function dataProviderTestThatSetterAndGettersWorks(): array
     {
-        self::bootKernel();
+        $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = self::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -500,10 +513,10 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public static function dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected(): array
     {
-        self::bootKernel();
+        $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = self::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -537,7 +550,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $entityManager->close();
 
-        self::$kernel->shutdown();
+        $kernel->shutdown();
 
         $items = array_filter(
             $meta->getAssociationMappings(),
@@ -560,10 +573,10 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public static function dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected(): array
     {
-        self::bootKernel();
+        $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = self::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -590,7 +603,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $entityManager->close();
 
-        self::$kernel->shutdown();
+        $kernel->shutdown();
 
         $items = array_filter(
             $meta->getAssociationMappings(),
@@ -613,10 +626,10 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public static function dataProviderTestThatAssociationMethodsExists(): array
     {
-        self::bootKernel();
+        $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = self::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -705,7 +718,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $entityManager->close();
 
-        self::$kernel->shutdown();
+        $kernel->shutdown();
 
         // There isn't associations, so return special values that marks test skipped
         if (empty($meta->getAssociationMappings())) {
@@ -724,10 +737,10 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public static function dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected(): array
     {
-        self::bootKernel();
+        $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = self::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -742,7 +755,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $entityManager->close();
 
-        self::$kernel->shutdown();
+        $kernel->shutdown();
 
         $items = array_filter(
             $meta->getAssociationMappings(),

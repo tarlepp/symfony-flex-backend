@@ -35,9 +35,13 @@ class BodySubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request();
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new BodySubscriber())
             ->onKernelRequest($event);
@@ -54,6 +58,10 @@ class BodySubscriberTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $inputQuery = [
             'foo' => 'bar',
         ];
@@ -65,7 +73,7 @@ class BodySubscriberTest extends KernelTestCase
         $request = new Request($inputQuery, $inputRequest, [], [], [], [], 'Some content');
         $request->headers->set('Content-Type', 'text/xml');
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new BodySubscriber())
             ->onKernelRequest($event);
@@ -89,6 +97,10 @@ class BodySubscriberTest extends KernelTestCase
     ): void {
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request(
             [],
             [
@@ -102,7 +114,7 @@ class BodySubscriberTest extends KernelTestCase
         );
         $request->headers->set('Content-Type', $contentType);
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -120,9 +132,13 @@ class BodySubscriberTest extends KernelTestCase
 
         self::bootKernel();
 
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
+
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -135,6 +151,10 @@ class BodySubscriberTest extends KernelTestCase
     public function testThatWithEmptyBodyReplaceIsNotCalled(): void
     {
         self::bootKernel();
+
+        $kernel = self::$kernel;
+
+        self::assertNotNull($kernel);
 
         $request = $this->getMockBuilder(Request::class)->getMock();
         $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
@@ -151,7 +171,7 @@ class BodySubscriberTest extends KernelTestCase
         /** @var InputBag $parameterBag */
         $request->request = $parameterBag; // @phpstan-ignore-line
 
-        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
