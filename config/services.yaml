@@ -25,7 +25,7 @@ services:
             tags: [ 'app.stopwatch' ]
         Symfony\Component\EventDispatcher\EventSubscriberInterface:
             tags: [ 'app.stopwatch' ]
-        Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface:
+        Symfony\Component\HttpKernel\Controller\ValueResolverInterface:
             tags: [ 'app.stopwatch' ]
 
     # makes classes in src/ available to be used as services
