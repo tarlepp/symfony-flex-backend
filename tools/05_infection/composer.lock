@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1322ced685852ff5b5d84276b2d4835b",
+    "content-hash": "7da4d11857f8a35c8c1cb10325e91417",
     "packages": [],
     "packages-dev": [
         {
@@ -475,16 +475,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.28.1",
+            "version": "0.29.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "1ee4ffa1f971e74c285d2cfc344cead82055df6e"
+                "reference": "9468799542aa19179118ded1fe3bc9f025ec9aa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/1ee4ffa1f971e74c285d2cfc344cead82055df6e",
-                "reference": "1ee4ffa1f971e74c285d2cfc344cead82055df6e",
+                "url": "https://api.github.com/repos/infection/infection/zipball/9468799542aa19179118ded1fe3bc9f025ec9aa4",
+                "reference": "9468799542aa19179118ded1fe3bc9f025ec9aa4",
                 "shasum": ""
             },
             "require": {
@@ -499,6 +499,7 @@
                 "infection/abstract-testframework-adapter": "^0.5.0",
                 "infection/extension-installer": "^0.1.0",
                 "infection/include-interceptor": "^0.2.5",
+                "infection/mutator": "^0.4",
                 "justinrainbow/json-schema": "^5.2.10",
                 "nikic/php-parser": "^5.0",
                 "ondram/ci-detector": "^4.1.0",
@@ -589,7 +590,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.28.1"
+                "source": "https://github.com/infection/infection/tree/0.29.1"
             },
             "funding": [
                 {
@@ -601,7 +602,60 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-03-25T09:50:25+00:00"
+            "time": "2024-06-01T09:26:12+00:00"
+        },
+        {
+            "name": "infection/mutator",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/infection/mutator.git",
+                "reference": "51d6d01a2357102030aee9d603063c4bad86b144"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/infection/mutator/zipball/51d6d01a2357102030aee9d603063c4bad86b144",
+                "reference": "51d6d01a2357102030aee9d603063c4bad86b144",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.6 || ^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Infection\\Mutator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Maks Rafalko",
+                    "email": "maks.rafalko@gmail.com"
+                }
+            ],
+            "description": "Mutator interface to implement custom mutators (mutation operators) for Infection",
+            "support": {
+                "issues": "https://github.com/infection/mutator/issues",
+                "source": "https://github.com/infection/mutator/tree/0.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/infection",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/infection",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2024-05-14T22:39:59+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
