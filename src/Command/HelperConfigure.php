@@ -33,9 +33,7 @@ class HelperConfigure
     private static function getParameterIterator(): Closure
     {
         return static function (array $input): InputOption {
-            /**
-             * @var int-mask-of<InputOption::*>|null $mode
-             */
+            /** @var int-mask-of<InputOption::*>|null $mode */
             $mode = $input['mode'];
 
             return new InputOption(
