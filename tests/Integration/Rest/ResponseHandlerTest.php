@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest;
 
+use App\Resource\ApiKeyResource;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use Exception;
@@ -193,6 +194,58 @@ class ResponseHandlerTest extends KernelTestCase
             ->willReturn('test error');
 
         (new ResponseHandler($serializer))->handleFormError($formInterface);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `getSerializeContext` return expected when using `populateAll` query parameter')]
+    public function testThatGetSerializeContextReturnsExpectedWhenUsingPopulateAll(): void
+    {
+        self::bootKernel();
+
+        $serializer = $this->createMock(SerializerInterface::class);
+        $resource = static::getContainer()->get(ApiKeyResource::class);
+
+        $request = Request::create('', parameters: ['populateAll' => true]);
+
+        $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
+
+        $expectedContext = [
+            'groups' => [
+                'ApiKey',
+                'ApiKey.userGroups',
+                'ApiKey.logsRequest',
+                'ApiKey.createdBy',
+                'ApiKey.updatedBy',
+            ],
+        ];
+
+        self::assertSame($expectedContext, $output);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `getSerializeContext` return expected when using `populateOnly` query parameter')]
+    public function testThatGetSerializeContextReturnsExpectedWhenUsingPopulateOnly(): void
+    {
+        self::bootKernel();
+
+        $serializer = $this->createMock(SerializerInterface::class);
+        $resource = static::getContainer()->get(ApiKeyResource::class);
+
+        $request = Request::create('', parameters: ['populateOnly' => true]);
+
+        $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
+
+        $expectedContext = [
+            'groups' => [
+                'ApiKey',
+            ],
+        ];
+
+        self::assertSame($expectedContext, $output);
     }
 
     /**
