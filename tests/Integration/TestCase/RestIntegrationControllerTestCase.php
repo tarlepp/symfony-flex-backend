@@ -68,7 +68,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
             $this->controllerClass
         );
 
-        static::assertSame($expected, (new ReflectionClass($this->getController()))->getShortName(), $message);
+        self::assertSame($expected, (new ReflectionClass($this->getController()))->getShortName(), $message);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
     public function testThatGetResourceReturnsExpected(): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf($this->resourceClass, $this->getController()->getResource());
+        self::assertInstanceOf($this->resourceClass, $this->getController()->getResource());
     }
 
     protected function getController(): Controller

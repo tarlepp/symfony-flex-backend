@@ -153,7 +153,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
     private function getAuthService(): Auth
     {
-        static::bootKernel();
+        self::bootKernel();
 
         return static::getContainer()->get(Auth::class);
     }
