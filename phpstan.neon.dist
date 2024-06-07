@@ -13,7 +13,6 @@ parameters:
         -
             messages:
                 - '#Access to constant class on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
-                - '#Access to property (.*) on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
                 - '#Call to method (.*) on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
                 - '#Cloning object of an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
                 - '#Method (.*) has invalid return type PHPUnit\\Framework\\MockObject\\MockObject.#'
