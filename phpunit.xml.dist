@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="tools/01_phpunit/vendor/phpunit/phpunit/phpunit.xsd"
     colors="true"
-    testdox="true"
+    testdox="false"
     beStrictAboutOutputDuringTests="true"
     stopOnError="true"
     stopOnFailure="true"
