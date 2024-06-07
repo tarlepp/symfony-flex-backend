@@ -207,7 +207,12 @@ class ResponseHandlerTest extends KernelTestCase
         $serializer = $this->createMock(SerializerInterface::class);
         $resource = static::getContainer()->get(ApiKeyResource::class);
 
-        $request = Request::create('', parameters: ['populateAll' => true]);
+        $request = Request::create(
+            '',
+            parameters: [
+                'populateAll' => true,
+            ],
+        );
 
         $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
 
@@ -235,7 +240,12 @@ class ResponseHandlerTest extends KernelTestCase
         $serializer = $this->createMock(SerializerInterface::class);
         $resource = static::getContainer()->get(ApiKeyResource::class);
 
-        $request = Request::create('', parameters: ['populateOnly' => true]);
+        $request = Request::create(
+            '',
+            parameters: [
+                'populateOnly' => true,
+            ],
+        );
 
         $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
 
