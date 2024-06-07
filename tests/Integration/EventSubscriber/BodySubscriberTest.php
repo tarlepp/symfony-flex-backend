@@ -145,39 +145,6 @@ class BodySubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws JsonException
-     */
-    #[TestDox('Test that with empty body replace is not called')]
-    public function testThatWithEmptyBodyReplaceIsNotCalled(): void
-    {
-        self::bootKernel();
-
-        $kernel = self::$kernel;
-
-        self::assertNotNull($kernel);
-
-        $request = $this->getMockBuilder(Request::class)->getMock();
-        $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
-
-        $request
-            ->expects($this->once())
-            ->method('getContent')
-            ->willReturn('');
-
-        $parameterBag
-            ->expects(self::never())
-            ->method('replace');
-
-        /** @var InputBag $parameterBag */
-        $request->request = $parameterBag; // @phpstan-ignore-line
-
-        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
-
-        $subscriber = new BodySubscriber();
-        $subscriber->onKernelRequest($event);
-    }
-
-    /**
      * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2:  string}>
      */

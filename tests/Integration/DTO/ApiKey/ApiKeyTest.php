@@ -64,6 +64,7 @@ class ApiKeyTest extends DtoTestCase
         ];
 
         $entity = $this->getMockBuilder(ApiKeyEntity::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $entity
