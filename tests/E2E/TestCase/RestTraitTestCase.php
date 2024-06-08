@@ -70,7 +70,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
-        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
-        static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $u, $p, $m);
 
-        static::assertSame(
+        self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
@@ -119,7 +119,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
-        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -135,8 +135,8 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
         $m === Request::METHOD_GET
-            ? static::assertSame(200, $response->getStatusCode(), (string)$response->getContent())
-            : static::assertSame(400, $response->getStatusCode(), (string)$response->getContent());
+            ? self::assertSame(200, $response->getStatusCode(), (string)$response->getContent())
+            : self::assertSame(400, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -151,7 +151,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route, $u, $p, $m);
 
-        static::assertSame(
+        self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
@@ -171,7 +171,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
-        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -188,8 +188,8 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
         $m === Request::METHOD_PUT
-            ? static::assertSame(400, $response->getStatusCode(), (string)$response->getContent())
-            : static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
+            ? self::assertSame(400, $response->getStatusCode(), (string)$response->getContent())
+            : self::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
 
         if ($m === Request::METHOD_DELETE) {
             self::tearDownAfterClass();
@@ -209,7 +209,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
-        static::assertSame(
+        self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()
@@ -228,7 +228,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
-        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -243,7 +243,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
-        static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -258,7 +258,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $response = $this->getClientResponse(static::$route . '/ids', $u, $p, $m);
 
-        static::assertSame(
+        self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
             (string)$response->getContent()

@@ -97,7 +97,7 @@ class RestDtoValueResolverTest extends KernelTestCase
 
         $resolver->supports($request, $metadata);
 
-        static::assertSame($restDto, $resolver->resolve($request, $metadata)->current());
+        self::assertSame($restDto, $resolver->resolve($request, $metadata)->current());
     }
 
     public static function dataProviderTestThatSupportMethodWorksAsExpected(): Generator

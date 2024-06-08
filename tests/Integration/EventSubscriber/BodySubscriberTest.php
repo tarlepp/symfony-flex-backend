@@ -15,8 +15,6 @@ use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\InputBag;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -137,39 +135,6 @@ class BodySubscriberTest extends KernelTestCase
         self::assertNotNull($kernel);
 
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
-
-        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
-
-        $subscriber = new BodySubscriber();
-        $subscriber->onKernelRequest($event);
-    }
-
-    /**
-     * @throws JsonException
-     */
-    #[TestDox('Test that with empty body replace is not called')]
-    public function testThatWithEmptyBodyReplaceIsNotCalled(): void
-    {
-        self::bootKernel();
-
-        $kernel = self::$kernel;
-
-        self::assertNotNull($kernel);
-
-        $request = $this->getMockBuilder(Request::class)->getMock();
-        $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
-
-        $request
-            ->expects($this->once())
-            ->method('getContent')
-            ->willReturn('');
-
-        $parameterBag
-            ->expects(self::never())
-            ->method('replace');
-
-        /** @var InputBag $parameterBag */
-        $request->request = $parameterBag; // @phpstan-ignore-line
 
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 

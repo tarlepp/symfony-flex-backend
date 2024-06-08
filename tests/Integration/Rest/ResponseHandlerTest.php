@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest;
 
+use App\Resource\ApiKeyResource;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use Exception;
@@ -18,8 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\InputBag;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -123,253 +122,6 @@ class ResponseHandlerTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatGetSerializeContextMethodCallsExpectedServiceMethods(): void
-    {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $request = $this->createMock(Request::class);
-        $parameterBag = $this->createMock(ParameterBag::class);
-        $restResource = $this->createMock(RestResourceInterface::class);
-
-        $parameterBag
-            ->expects($this->once())
-            ->method('get')
-            ->willReturn([]);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('all')
-            ->willReturn([]);
-
-        $restResource
-            ->expects($this->once())
-            ->method('getEntityName')
-            ->willReturn('FakeEntity');
-
-        /** @var InputBag $parameterBag */
-        $request->query = $parameterBag; // @phpstan-ignore-line
-
-        $context = (new ResponseHandler($serializer))
-            ->getSerializeContext($request, $restResource);
-
-        self::assertSame(['FakeEntity'], $context['groups']);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenNonAnyAssociations(): void
-    {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $request = $this->createMock(Request::class);
-        $parameterBag = $this->createMock(ParameterBag::class);
-        $restResource = $this->createMock(RestResourceInterface::class);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with('populate')
-            ->willReturn(null);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('all')
-            ->willReturn([
-                'populateAll' => '',
-            ]);
-
-        $restResource
-            ->expects($this->once())
-            ->method('getEntityName')
-            ->willReturn('FakeEntity');
-
-        /** @var InputBag $parameterBag */
-        $request->query = $parameterBag; // @phpstan-ignore-line
-
-        /** @var InputBag $parameterBag */
-        $request->request = $parameterBag;
-
-        $context = (new ResponseHandler($serializer))
-            ->getSerializeContext($request, $restResource);
-
-        self::assertSame(['FakeEntity'], $context['groups']);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenAssociations(): void
-    {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $request = $this->createMock(Request::class);
-        $parameterBag = $this->createMock(ParameterBag::class);
-        $restResource = $this->createMock(RestResourceInterface::class);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with('populate')
-            ->willReturn(null);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('all')
-            ->willReturn([
-                'populateAll' => '',
-            ]);
-
-        $restResource
-            ->expects($this->once())
-            ->method('getEntityName')
-            ->willReturn('FakeEntity');
-
-        $restResource
-            ->expects($this->once())
-            ->method('getAssociations')
-            ->willReturn(['AnotherFakeEntity']);
-
-        /** @var InputBag $parameterBag */
-        $request->query = $parameterBag; // @phpstan-ignore-line
-
-        /** @var InputBag $parameterBag */
-        $request->request = $parameterBag;
-
-        $context = (new ResponseHandler($serializer))
-            ->getSerializeContext($request, $restResource);
-
-        self::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenNonAssociations(): void
-    {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $request = $this->createMock(Request::class);
-        $parameterBag = $this->createMock(ParameterBag::class);
-        $restResource = $this->createMock(RestResourceInterface::class);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with('populate')
-            ->willReturn(null);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('all')
-            ->willReturn([
-                'populateOnly' => '',
-            ]);
-
-        $restResource
-            ->expects($this->once())
-            ->method('getEntityName')
-            ->willReturn('FakeEntity');
-
-        /** @var InputBag $parameterBag */
-        $request->query = $parameterBag; // @phpstan-ignore-line
-
-        /** @var InputBag $parameterBag */
-        $request->request = $parameterBag;
-
-        $context = (new ResponseHandler($serializer))
-            ->getSerializeContext($request, $restResource);
-
-        self::assertSame(['FakeEntity'], $context['groups']);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityAssociations(): void
-    {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $request = $this->createMock(Request::class);
-        $parameterBag = $this->createMock(ParameterBag::class);
-        $restResource = $this->createMock(RestResourceInterface::class);
-
-        $parameterBag
-            ->expects($this->once())
-            ->method('get')
-            ->with('populate')
-            ->willReturn(['AnotherFakeEntity']);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('all')
-            ->willReturn([
-                'populateOnly' => '',
-            ]);
-
-        $restResource
-            ->expects($this->once())
-            ->method('getEntityName')
-            ->willReturn('FakeEntity');
-
-        /** @var InputBag $parameterBag */
-        $request->query = $parameterBag; // @phpstan-ignore-line
-
-        /** @var InputBag $parameterBag */
-        $request->request = $parameterBag;
-
-        $context = (new ResponseHandler($serializer))
-            ->getSerializeContext($request, $restResource);
-
-        self::assertSame(['AnotherFakeEntity'], $context['groups']);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatGetSerializeContextReturnsExpectedWhenResourceHasGetSerializerContextMethod(): void
-    {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $request = $this->createMock(Request::class);
-        $parameterBag = $this->createMock(ParameterBag::class);
-        $restResource = $this->createMock(RestResourceInterface::class);
-
-        $expected = [
-            'groups' => 'foo',
-            'some' => 'bar',
-            'another' => 'foobar',
-        ];
-
-        $parameterBag
-            ->expects($this->once())
-            ->method('get')
-            ->with('populate')
-            ->willReturn(['AnotherFakeEntity']);
-
-        $parameterBag
-            ->expects($this->exactly(2))
-            ->method('all')
-            ->willReturn([
-                'populateOnly' => '',
-            ]);
-
-        $restResource
-            ->expects($this->once())
-            ->method('getEntityName')
-            ->willReturn('FakeEntity');
-
-        $restResource
-            ->expects($this->once())
-            ->method('getSerializerContext')
-            ->willReturn($expected);
-
-        /** @var InputBag $parameterBag */
-        $request->query = $parameterBag; // @phpstan-ignore-line
-
-        self::assertSame(
-            $expected,
-            (new ResponseHandler($serializer))->getSerializeContext($request, $restResource)
-        );
-    }
-
-    /**
-     * @throws Throwable
-     */
     public function testThatHandleFormErrorThrowsExpectedExceptionWithProperty(): void
     {
         $this->expectException(HttpException::class);
@@ -442,6 +194,68 @@ class ResponseHandlerTest extends KernelTestCase
             ->willReturn('test error');
 
         (new ResponseHandler($serializer))->handleFormError($formInterface);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `getSerializeContext` return expected when using `populateAll` query parameter')]
+    public function testThatGetSerializeContextReturnsExpectedWhenUsingPopulateAll(): void
+    {
+        self::bootKernel();
+
+        $serializer = $this->createMock(SerializerInterface::class);
+        $resource = static::getContainer()->get(ApiKeyResource::class);
+
+        $request = Request::create(
+            '',
+            parameters: [
+                'populateAll' => true,
+            ],
+        );
+
+        $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
+
+        $expectedContext = [
+            'groups' => [
+                'ApiKey',
+                'ApiKey.userGroups',
+                'ApiKey.logsRequest',
+                'ApiKey.createdBy',
+                'ApiKey.updatedBy',
+            ],
+        ];
+
+        self::assertSame($expectedContext, $output);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `getSerializeContext` return expected when using `populateOnly` query parameter')]
+    public function testThatGetSerializeContextReturnsExpectedWhenUsingPopulateOnly(): void
+    {
+        self::bootKernel();
+
+        $serializer = $this->createMock(SerializerInterface::class);
+        $resource = static::getContainer()->get(ApiKeyResource::class);
+
+        $request = Request::create(
+            '',
+            parameters: [
+                'populateOnly' => true,
+            ],
+        );
+
+        $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
+
+        $expectedContext = [
+            'groups' => [
+                'ApiKey',
+            ],
+        ];
+
+        self::assertSame($expectedContext, $output);
     }
 
     /**
