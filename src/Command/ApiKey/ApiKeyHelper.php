@@ -11,10 +11,8 @@ namespace App\Command\ApiKey;
 use App\Entity\ApiKey;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
-use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-use function array_map;
 use function implode;
 use function sprintf;
 
@@ -90,35 +88,20 @@ class ApiKeyHelper
      */
     private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKey
     {
+        /** @var array<string, string> $choices */
         $choices = [];
 
-        array_map(
-            $this->getApiKeyIterator($choices),
-            $this->apiKeyResource->find(orderBy: [
-                'token' => 'ASC',
-            ])
-        );
-
-        $choices['Exit'] = 'Exit command';
-
-        return $this->apiKeyResource->findOne((string)$io->choice($question, $choices));
-    }
-
-    /**
-     * Method to return ApiKeyIterator closure. This will format ApiKey
-     * entities for choice list.
-     *
-     * @param array<string, string> $choices
-     */
-    private function getApiKeyIterator(array &$choices): Closure
-    {
-        return function (ApiKey $apiKey) use (&$choices): void {
+        foreach ($this->apiKeyResource->find() as $apiKey) {
             $choices[$apiKey->getId()] = sprintf(
                 '[Token: %s] %s - Roles: %s',
                 $apiKey->getToken(),
                 $apiKey->getDescription(),
                 implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles())),
             );
-        };
+        }
+
+        $choices['Exit'] = 'Exit command';
+
+        return $this->apiKeyResource->findOne((string)$io->choice($question, $choices));
     }
 }
