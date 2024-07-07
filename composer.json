@@ -28,7 +28,7 @@
 		"ext-random": "*",
 		"doctrine/doctrine-bundle": "2.12.0",
 		"doctrine/doctrine-migrations-bundle": "3.3.1",
-		"doctrine/orm": "2.19.6",
+		"doctrine/orm": "3.2.1",
 		"friendsofphp/proxy-manager-lts": "1.0.18",
 		"gedmo/doctrine-extensions": "3.16.1",
 		"lexik/jwt-authentication-bundle": "3.1.0",
@@ -62,7 +62,7 @@
 		"symfony/validator": "7.1.2",
 		"symfony/var-exporter": "7.1.2",
 		"symfony/yaml": "7.1.1",
-		"zircote/swagger-php": "4.9.2"
+		"zircote/swagger-php": "4.10.3"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
