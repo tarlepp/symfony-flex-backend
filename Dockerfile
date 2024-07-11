@@ -1,4 +1,4 @@
-FROM php:8.3.8-fpm
+FROM php:8.3.9-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -18,7 +18,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.2.16 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.2.18 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
