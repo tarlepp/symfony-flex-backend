@@ -11,8 +11,6 @@ namespace App\Security\Interfaces;
 use App\Entity\ApiKey;
 
 /**
- * Interface ApiKeyUserInterface
- *
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

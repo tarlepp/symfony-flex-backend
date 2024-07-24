@@ -17,8 +17,6 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * Interface ControllerInterface
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

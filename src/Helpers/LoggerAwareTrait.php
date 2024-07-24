@@ -12,8 +12,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
- * Trait LoggerAwareTrait
- *
  * NOTE: Do not use this in your services, just inject `LoggerInterface` to
  *       service where you need it. This trait is just for quick debug purposes
  *       and nothing else.

@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface RequestLoggerInterface
- *
  * @package App\Services\Interfaces
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

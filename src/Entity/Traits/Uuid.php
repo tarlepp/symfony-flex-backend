@@ -12,8 +12,6 @@ use App\Rest\UuidHelper;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * Trait Uuid
- *
  * @package App\Entity\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

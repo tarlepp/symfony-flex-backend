@@ -17,8 +17,6 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * Interface RestResourceInterface
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

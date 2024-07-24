@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 /**
- * Trait RestResourceLifeCycles
- *
  * @package App\Rest\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Form\Type;
 
 /**
- * Interface FormTypeLabelInterface
- *
  * @package App\Form\Type
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

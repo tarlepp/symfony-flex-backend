@@ -11,8 +11,6 @@ namespace App\Rest\Traits\Methods;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Trait RestMethodProcessCriteria
- *
  * @package App\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

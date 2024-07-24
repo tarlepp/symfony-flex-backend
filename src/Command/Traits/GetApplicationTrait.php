@@ -12,8 +12,6 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 
 /**
- * Trait GetApplicationTrait
- *
  * @package App\Command\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

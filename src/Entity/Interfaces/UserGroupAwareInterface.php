@@ -13,8 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Interface UserGroupAwareInterface
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

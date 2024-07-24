@@ -18,8 +18,6 @@ use UnexpectedValueException;
 use function assert;
 
 /**
- * Trait RestResourceBaseMethods
- *
  * @package App\Rest\Traits
  */
 trait RestResourceBaseMethods

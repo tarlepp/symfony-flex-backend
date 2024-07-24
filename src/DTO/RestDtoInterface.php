@@ -12,8 +12,6 @@ use App\Entity\Interfaces\EntityInterface;
 use Throwable;
 
 /**
- * Interface RestDtoInterface
- *
  * @package App\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

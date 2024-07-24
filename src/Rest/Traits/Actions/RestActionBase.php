@@ -12,8 +12,6 @@ use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Trait RestActionBase
- *
  * @package App\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

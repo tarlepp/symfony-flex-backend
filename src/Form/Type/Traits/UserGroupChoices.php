@@ -14,8 +14,6 @@ use Throwable;
 use function array_map;
 
 /**
- * Trait UserGroupChoices
- *
  * @package App\Form\Type\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

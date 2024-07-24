@@ -18,8 +18,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Trait DeleteAction
- *
  * Trait to add 'deleteAction' for REST controllers for 'ROLE_USER' users.
  *
  * @see \App\Rest\Traits\Methods\DeleteMethod for detailed documents.

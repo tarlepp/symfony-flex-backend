@@ -13,8 +13,6 @@ use App\Repository\ApiKeyRepository;
 use App\Security\RolesService;
 
 /**
- * Interface ApiKeyUserProviderInterface
- *
  * @package App\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

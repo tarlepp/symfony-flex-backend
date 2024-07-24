@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 /**
- * Trait RestResourceIds
- *
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits

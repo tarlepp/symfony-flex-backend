@@ -16,8 +16,6 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Throwable;
 
 /**
- * Trait DeleteAction
- *
  * Trait to add 'deleteAction' for REST controllers for anonymous users.
  *
  * @see \App\Rest\Traits\Methods\DeleteMethod for detailed documents.

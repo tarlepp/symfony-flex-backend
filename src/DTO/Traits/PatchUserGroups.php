@@ -13,8 +13,6 @@ use App\Entity\UserGroup as UserGroupEntity;
 use function array_map;
 
 /**
- * Trait PatchUserGroups
- *
  * @package App\DTO\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

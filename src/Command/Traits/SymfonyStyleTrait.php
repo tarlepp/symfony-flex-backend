@@ -13,8 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Trait SymfonyStyleTrait
- *
  * @package App\Command\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

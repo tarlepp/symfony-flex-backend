@@ -11,8 +11,6 @@ namespace App\Rest\Traits;
 use App\Entity\Interfaces\EntityInterface;
 
 /**
- * Trait RestResourceSave
- *
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits

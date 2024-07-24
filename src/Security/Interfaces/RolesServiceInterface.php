@@ -11,8 +11,6 @@ namespace App\Security\Interfaces;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
- * Interface RolesServiceInterface
- *
  * @package Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

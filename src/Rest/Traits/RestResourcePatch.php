@@ -12,8 +12,6 @@ use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 
 /**
- * Trait RestResourcePatch
- *
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits

@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Entity\Interfaces;
 
 /**
- * Interface UserInterface
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
