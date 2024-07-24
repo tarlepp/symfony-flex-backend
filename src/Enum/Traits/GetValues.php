@@ -11,8 +11,6 @@ namespace App\Enum\Traits;
 use function array_column;
 
 /**
- * Trait GetValues
- *
  * @package App\Enum\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

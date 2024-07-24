@@ -18,8 +18,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Trait CreateAction
- *
  * Trait to add 'createAction' for REST controllers for 'ROLE_LOGGED' users.
  *
  * @see \App\Rest\Traits\Methods\CreateMethod for detailed documents.

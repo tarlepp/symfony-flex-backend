@@ -30,8 +30,6 @@ use function is_int;
 use function sprintf;
 
 /**
- * Trait RestMethodHelper
- *
  * @package App\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

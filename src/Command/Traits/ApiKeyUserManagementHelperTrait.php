@@ -14,8 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
 /**
- * Trait ApiKeyUserManagementHelperTrait
- *
  * @package App\Command\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

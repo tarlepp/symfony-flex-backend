@@ -19,8 +19,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Trait PatchAction
- *
  * Trait to add 'patchAction' for REST controllers for 'ROLE_ROOT' users.
  *
  * @see \App\Rest\Traits\Methods\PatchMethod for detailed documents.

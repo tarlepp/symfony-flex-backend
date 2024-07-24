@@ -19,8 +19,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Trait UpdateAction
- *
  * Trait to add 'updateAction' for REST controllers for 'ROLE_USER' users.
  *
  * @see \App\Rest\Traits\Methods\UpdateMethod for detailed documents.

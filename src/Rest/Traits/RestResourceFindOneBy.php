@@ -11,8 +11,6 @@ namespace App\Rest\Traits;
 use App\Entity\Interfaces\EntityInterface;
 
 /**
- * Trait RestResourceFindOneBy
- *
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits

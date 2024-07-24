@@ -18,8 +18,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
 /**
- * Trait LogEntityTrait
- *
  * @package App\Entity\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *

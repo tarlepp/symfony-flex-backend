@@ -11,8 +11,6 @@ namespace App\Entity\Interfaces;
 use DateTimeImmutable;
 
 /**
- * Interface EntityInterface
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

@@ -21,8 +21,6 @@ use function array_column;
 use function assert;
 
 /**
- * Trait RepositoryMethodsTrait
- *
  * @package App\Repository\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

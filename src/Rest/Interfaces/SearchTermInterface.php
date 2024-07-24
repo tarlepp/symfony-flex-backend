@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Rest\Interfaces;
 
 /**
- * Interface SearchTermInterface
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

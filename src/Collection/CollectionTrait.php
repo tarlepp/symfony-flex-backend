@@ -17,8 +17,6 @@ use Throwable;
 use function iterator_count;
 
 /**
- * Trait CollectionTrait
- *
  * @package App\Collection
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */

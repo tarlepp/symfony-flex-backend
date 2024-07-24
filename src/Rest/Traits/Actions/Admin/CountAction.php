@@ -17,8 +17,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 /**
- * Trait CountAction
- *
  * Trait to add 'countAction' for REST controllers for 'ROLE_ADMIN' users.
  *
  * @see \App\Rest\Traits\Methods\CountMethod for detailed documents.

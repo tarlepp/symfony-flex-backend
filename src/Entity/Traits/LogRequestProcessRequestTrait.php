@@ -27,8 +27,6 @@ use function preg_replace;
 use function str_contains;
 
 /**
- * Trait LogRequestProcessRequestTrait
- *
  * @package App\Entity\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
