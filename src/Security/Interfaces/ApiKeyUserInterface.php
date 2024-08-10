@@ -17,8 +17,6 @@ use App\Entity\ApiKey;
 interface ApiKeyUserInterface
 {
     /**
-     * ApiKeyUser constructor.
-     *
      * @param array<int, string> $roles
      */
     public function __construct(ApiKey $apiKey, array $roles);

@@ -26,8 +26,6 @@ class ManagementCommand extends Command
     use ExecuteMultipleCommandTrait;
 
     /**
-     * ManagementCommand constructor.
-     *
      * @throws LogicException
      */
     public function __construct()

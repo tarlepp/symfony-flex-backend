@@ -42,8 +42,6 @@ class EntityReferenceExists extends Constraint
     public string $entityClass = '';
 
     /**
-     * EntityReferenceExists constructor.
-     *
      * @inheritDoc
      *
      * @param array<string, string> $options

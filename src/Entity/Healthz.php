@@ -57,8 +57,6 @@ class Healthz implements EntityInterface
     private DateTimeImmutable $timestamp;
 
     /**
-     * Healthz constructor.
-     *
      * @throws Throwable
      */
     public function __construct()

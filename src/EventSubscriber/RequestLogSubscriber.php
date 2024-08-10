@@ -32,8 +32,6 @@ use function substr;
 class RequestLogSubscriber implements EventSubscriberInterface
 {
     /**
-     * RequestLogSubscriber constructor.
-     *
      * @param array<int, string> $ignoredRoutes
      */
     public function __construct(

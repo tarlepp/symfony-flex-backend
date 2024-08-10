@@ -63,8 +63,6 @@ class LogLoginFailure implements EntityInterface
     private DateTimeImmutable $timestamp;
 
     /**
-     * LogLoginFailure constructor.
-     *
      * @throws Throwable
      */
     public function __construct(
