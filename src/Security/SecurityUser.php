@@ -27,8 +27,6 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     private readonly string $timezone;
 
     /**
-     * SecurityUser constructor.
-     *
      * @param array<int, string> $roles
      */
     public function __construct(

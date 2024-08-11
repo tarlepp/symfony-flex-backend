@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 interface RequestLoggerInterface
 {
     /**
-     * RequestLogger constructor.
-     *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
      * @param array<int, string> $sensitiveProperties
