@@ -11,7 +11,7 @@ namespace App\Rest\Traits\Actions\Anon;
 use App\Rest\Traits\Methods\FindMethod;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 
 /**
