@@ -16,7 +16,7 @@ use App\Rest\Controller;
 use App\Rest\Traits\Actions\Anon as Actions;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @package App\Tests\E2E\Rest\Traits\Actions\src
