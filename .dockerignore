@@ -2,6 +2,8 @@
 /.env.local
 /.env.*.local
 /.env.local.php
+/app/docker/nginx/ssl/rootCA.key
+/app/docker/nginx/ssl/tls.key
 /public/bundles/
 /var/
 /vendor/
