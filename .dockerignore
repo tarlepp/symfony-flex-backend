@@ -2,7 +2,6 @@
 /.env.local
 /.env.*.local
 /.env.local.php
-/docker/nginx/ssl/
 /public/bundles/
 /var/
 /vendor/

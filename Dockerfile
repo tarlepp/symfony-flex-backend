@@ -56,6 +56,7 @@ RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/relea
 
 RUN rm -rf /app/var \
     && mkdir -p /app/var \
+    && rm -rf /app/docker \
     && rm -rf /app/public/check.php \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader
 
