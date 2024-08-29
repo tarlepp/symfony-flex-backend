@@ -38,7 +38,7 @@ RUN composer completion bash > /etc/bash_completion.d/composer
 
 WORKDIR /app
 
-COPY . /app
+COPY --exclude=./docker . /app
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
