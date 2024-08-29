@@ -2,6 +2,7 @@
 /.env.local
 /.env.*.local
 /.env.local.php
+/docker/
 /public/bundles/
 /var/
 /vendor/
