@@ -58,8 +58,7 @@ RUN rm -rf /app/var \
     && mkdir -p /app/var \
     && rm -rf /app/docker \
     && rm -rf /app/public/check.php \
-    && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader \
-    && ls -la /app/docker
+    && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader
 
 EXPOSE 9000
 
