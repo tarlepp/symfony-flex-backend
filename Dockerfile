@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7-labs
 FROM php:8.3.10-fpm
 
 ENV APP_ENV prod
