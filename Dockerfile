@@ -49,7 +49,6 @@ RUN chmod +x /usr/bin/composer
 
 RUN rm -rf /app/var \
     && mkdir -p /app/var \
-    && rm -rf /app/docker \
     && rm -rf /app/public/check.php \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader \
     && php /usr/bin/composer audit
