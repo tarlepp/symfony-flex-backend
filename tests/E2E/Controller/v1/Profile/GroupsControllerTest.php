@@ -141,10 +141,12 @@ final class GroupsControllerTest extends WebTestCase
      * @throws JsonException
      */
     #[DataProvider('dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey')]
-    #[TestDox('Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token')]
-    public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
+    #[TestDox(
+        'Test that `GET /v1/profile/groups` request returns `401` with valid `$token` API key token ($role - ROLE)'
+    )]
+    public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token, string $role): void
     {
-        $client = $this->getApiKeyClient($token);
+        $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -163,7 +165,7 @@ final class GroupsControllerTest extends WebTestCase
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
-            'JWT Token not found',
+            'Invalid API key',
             $responseContent->message,
             'Response message was not expected' . $info,
         );
@@ -202,10 +204,10 @@ final class GroupsControllerTest extends WebTestCase
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {
-                yield [str_pad($rolesService->getShort($role), 40, '_')];
+                yield [str_pad($rolesService->getShort($role), 40, '_'), $role];
             }
         } else {
-            yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_')];
+            yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_'), Role::LOGGED->value];
         }
     }
 
