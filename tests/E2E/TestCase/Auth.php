@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\TestCase;
 
+use App\Enum\Role;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -58,10 +59,13 @@ final class Auth
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
+        // If role is not valid role enum value then we assume that it's API key token
+        $token = (Role::tryFrom($role) === null ? $role : str_pad($role, 40, '_'));
+
         return [
             ...$this->getContentTypeHeader(),
             ...[
-                'HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_'),
+                'HTTP_AUTHORIZATION' => 'ApiKey ' . $token,
             ],
         ];
     }

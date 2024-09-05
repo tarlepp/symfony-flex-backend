@@ -146,7 +146,7 @@ final class GroupsControllerTest extends WebTestCase
     )]
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token, string $role): void
     {
-        $client = $this->getApiKeyClient($role);
+        $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -165,7 +165,7 @@ final class GroupsControllerTest extends WebTestCase
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
-            'Invalid API key',
+            'JWT Token not found',
             $responseContent->message,
             'Response message was not expected' . $info,
         );
