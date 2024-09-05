@@ -168,9 +168,9 @@ final class IndexControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array-key, array{0: string}>
-     *
      * @throws Throwable
+     *
+     * @return Generator<array-key, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatProfileActionReturnsExpectedWithValidApiKeyToken(): Generator
     {
