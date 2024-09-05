@@ -59,13 +59,10 @@ final class Auth
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
-        // If role is not valid role enum value then we assume that it's API key token
-        $token = (Role::tryFrom($role) === null ? $role : str_pad($role, 40, '_'));
-
         return [
             ...$this->getContentTypeHeader(),
             ...[
-                'HTTP_AUTHORIZATION' => 'ApiKey ' . $token,
+                'HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_'),
             ],
         ];
     }

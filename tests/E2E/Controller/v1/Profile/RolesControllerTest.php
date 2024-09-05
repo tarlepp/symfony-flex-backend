@@ -113,10 +113,12 @@ final class RolesControllerTest extends WebTestCase
      * @throws JsonException
      */
     #[DataProvider('dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey')]
-    #[TestDox('Test that `GET /v1/profile/roles` request returns `401` with valid API key `$token` token')]
-    public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
+    #[TestDox(
+        'Test that `GET /v1/profile/roles` request returns `401` with valid API key `$token` token ($role - role)'
+    )]
+    public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token, string $role): void
     {
-        $client = $this->getApiKeyClient($token);
+        $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -135,7 +137,7 @@ final class RolesControllerTest extends WebTestCase
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
-            'JWT Token not found',
+            'Invalid API key',
             $responseContent->message,
             'Response message was not expected' . $info,
         );
@@ -212,7 +214,7 @@ final class RolesControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array-key, array{0: string}>
+     * @return Generator<array-key, array{0: string, 1: string}>
      *
      * @throws Throwable
      */
@@ -222,10 +224,10 @@ final class RolesControllerTest extends WebTestCase
 
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {
-                yield [str_pad($rolesService->getShort($role), 40, '_')];
+                yield [str_pad($rolesService->getShort($role), 40, '_'), $role];
             }
         } else {
-            yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_')];
+            yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_'), Role::LOGGED->value];
         }
     }
 
