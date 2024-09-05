@@ -176,13 +176,13 @@ final class IndexControllerTest extends WebTestCase
     {
         $rolesService = self::getRolesService();
 
-        #if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
+        if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             foreach ($rolesService->getRoles() as $role) {
                 yield [str_pad($rolesService->getShort($role), 40, '_'), $role];
             }
-        #} else {
+        } else {
             yield [str_pad($rolesService->getShort(Role::LOGGED->value), 40, '_'), Role::LOGGED->value];
-        #}
+        }
     }
 
     /**
