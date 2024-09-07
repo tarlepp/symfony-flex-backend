@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7-labs
 FROM php:8.3.10-fpm
 
 ENV APP_ENV prod
@@ -30,6 +31,14 @@ RUN install-php-extensions \
     pdo_mysql \
     zip
 
+# Install security updates
+RUN apt-get update \
+    && apt-get install -y \
+        debsecan \
+    && apt-get install --no-install-recommends -y \
+        $(debsecan --suite bookworm --format packages --only-fixed) \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer:2.7.7 /usr/bin/composer /usr/bin/composer
 
@@ -38,7 +47,7 @@ RUN composer completion bash > /etc/bash_completion.d/composer
 
 WORKDIR /app
 
-COPY . /app
+COPY --exclude=./docker/* . /app
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
@@ -46,18 +55,11 @@ RUN chmod +x /app/bin/console
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /usr/bin/composer
 
-RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest | \
-        grep -E "browser_download_url(.+)linux_amd64" | \
-        cut -d : -f 2,3 | \
-        tr -d \" | \
-        xargs -I{} wget -O local-php-security-checker {} \
-    && mv local-php-security-checker /usr/bin/local-php-security-checker \
-    && chmod +x /usr/bin/local-php-security-checker
-
 RUN rm -rf /app/var \
     && mkdir -p /app/var \
     && rm -rf /app/public/check.php \
-    && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader
+    && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader \
+    && php /usr/bin/composer audit
 
 EXPOSE 9000
 

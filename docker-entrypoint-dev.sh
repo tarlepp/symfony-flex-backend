@@ -6,10 +6,11 @@ set -e
 #   0) Basic linting of current JSON configuration file
 #   1) Export needed environment variables
 #   2) Install all dependencies
-#   3) Generate JWT encryption keys
-#   4) Create database if it not exists yet
-#   5) Run possible migrations, so that database is always up to date
-#   6) Add needed symfony console autocomplete for bash
+#   3) Check if there are any security issues in dependencies
+#   4) Generate JWT encryption keys
+#   5) Create database if it not exists yet
+#   6) Run possible migrations, so that database is always up to date
+#   7) Add needed symfony console autocomplete for bash
 #
 
 # Step 0
@@ -25,15 +26,18 @@ export XDEBUG_SESSION=PHPSTORM
 COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader
 
 # Step 3
-make generate-jwt-keys
+composer audit
 
 # Step 4
-./bin/console doctrine:database:create --no-interaction --if-not-exists
+make generate-jwt-keys
 
 # Step 5
-./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
+./bin/console doctrine:database:create --no-interaction --if-not-exists
 
 # Step 6
+./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
+
+# Step 7
 ./bin/console completion bash >> /home/dev/.bashrc
 
 exec "$@"
