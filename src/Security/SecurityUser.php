@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private readonly string $identifier;
-    private readonly string | null $password;
+    private readonly string $password;
     private readonly Language $language;
     private readonly Locale $locale;
     private readonly string $timezone;
