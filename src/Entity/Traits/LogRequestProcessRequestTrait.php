@@ -30,7 +30,7 @@ use function str_contains;
  * @package App\Entity\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method array getSensitiveProperties();
+ * @method array<int, string> getSensitiveProperties();
  */
 trait LogRequestProcessRequestTrait
 {
