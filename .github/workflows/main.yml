@@ -162,6 +162,9 @@ jobs:
       - name: Run PHPLint tool
         run: make phplint
 
+      - name: Run PHP Parallel Lint tool
+        run: make php-parallel-lint
+
       - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
         run: make psalm-github
 
