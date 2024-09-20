@@ -3,5 +3,7 @@ jobs: 8
 extensions:
     - php
 exclude:
+    - tools
+    - var
     - vendor
 warning: true
