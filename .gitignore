@@ -36,3 +36,6 @@ phpstan.neon
 
 ### PHPUnit cache
 .phpunit.cache
+
+### PHPLint
+.phplint.cache
