@@ -11,6 +11,7 @@ namespace App\Doctrine\DBAL\Types;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
@@ -47,6 +48,7 @@ class UTCDateTimeType extends DateTimeType
      * @template T
      *
      * @throws ConversionException
+     * @throws Exception
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): DateTimeInterface|null
     {
@@ -77,6 +79,7 @@ class UTCDateTimeType extends DateTimeType
      * Method to check if conversion was successfully or not.
      *
      * @throws ConversionException
+     * @throws Exception
      */
     private function checkConvertedValue(string $value, AbstractPlatform $platform, ?DateTime $converted): DateTime
     {
@@ -86,7 +89,7 @@ class UTCDateTimeType extends DateTimeType
 
         throw ConversionException::conversionFailedFormat(
             $value,
-            $this->getName(),
+            self::lookupName($this),
             $platform->getDateTimeFormatString()
         );
     }
