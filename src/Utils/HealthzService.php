@@ -16,10 +16,10 @@ use Throwable;
  * @package App\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class HealthzService
+readonly class HealthzService
 {
     public function __construct(
-        private readonly HealthzRepository $repository,
+        private HealthzRepository $repository,
     ) {
     }
 
