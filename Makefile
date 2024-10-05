@@ -354,6 +354,21 @@ else
 	$(ALL_DONE)
 endif
 
+php-parallel-lint: ## Lint PHP files with `php-parallel-lint`
+php-parallel-lint: info_msg := @printf $(_TITLE) "OK" "php-parallel-lint"
+php-parallel-lint: info
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@./vendor/bin/parallel-lint --exclude .git --exclude app --exclude tools --exclude var --exclude vendor --colors --show-deprecated --blame .
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make php-parallel-lint
+	$(ALL_DONE)
+endif
+
 psalm: ## Runs Psalm static analysis tool
 psalm: info_msg := @printf $(_TITLE) "OK" "Running Psalm - A static analysis tool for PHP"
 psalm: info

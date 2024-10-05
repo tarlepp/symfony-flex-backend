@@ -99,6 +99,7 @@ phpinsights                 # Runs PHP Insights
 phplint                     # Runs PHPLint
 phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
+php-parallel-lint           # Lint PHP files with `php-parallel-lint`
 phpstan-github              # Runs PHPStan static analysis tool (GitHub)
 phpstan                     # Runs PHPStan static analysis tool
 project-stats               # Create simple project stats

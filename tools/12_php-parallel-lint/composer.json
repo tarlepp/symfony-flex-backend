@@ -1,0 +1,23 @@
+{
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
+	"version": "1.0.0",
+	"require": {
+		"php": "^8.3.0"
+	},
+	"require-dev": {
+		"php-parallel-lint/php-console-highlighter": "1.0.0",
+		"php-parallel-lint/php-parallel-lint": "1.4.0",
+		"roave/security-advisories": "dev-latest"
+	},
+	"config": {
+		"allow-plugins": true,
+		"platform": {
+			"php": "8.3.0"
+		},
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}
