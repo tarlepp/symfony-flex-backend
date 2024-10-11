@@ -12,6 +12,7 @@ use App\DataFixtures\ORM\LoadUserData;
 use App\Tests\E2E\TestCase\WebTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use Generator;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
@@ -28,6 +29,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         self::bootKernel();

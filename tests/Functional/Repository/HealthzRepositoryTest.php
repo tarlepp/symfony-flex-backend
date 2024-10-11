@@ -12,6 +12,7 @@ use App\Repository\HealthzRepository;
 use App\Tests\Utils\PhpUnitUtil;
 use DateTimeImmutable;
 use DateTimeZone;
+use Override;
 use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -25,6 +26,7 @@ class HealthzRepositoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         self::bootKernel();

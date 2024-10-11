@@ -10,6 +10,7 @@ namespace App\Tests\Functional\Repository;
 
 use App\Repository\RoleRepository;
 use App\Tests\Utils\PhpUnitUtil;
+use Override;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -22,6 +23,7 @@ class RoleRepositoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         self::bootKernel();
