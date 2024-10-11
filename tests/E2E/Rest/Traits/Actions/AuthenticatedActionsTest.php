@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Tests\E2E\TestCase\RestTraitTestCase;
 use Generator;
+use Override;
 use function getenv;
 
 /**
@@ -20,6 +21,7 @@ class AuthenticatedActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_authenticated_actions';
 
+    #[Override]
     public static function getValidUsers(): Generator
     {
         yield ['john', 'password'];
@@ -43,6 +45,7 @@ class AuthenticatedActionsTest extends RestTraitTestCase
         }
     }
 
+    #[Override]
     public static function getInvalidUsers(): Generator
     {
         yield [null, null];

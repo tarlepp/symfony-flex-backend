@@ -29,7 +29,7 @@ return static function (RectorConfig $rectorConfig): void {
          * After that enable this directory and run rector again
          * and do that whole process again.
          */
-        //__DIR__ . '/tests',
+        __DIR__ . '/tests',
     ]);
 
     // Enable single or multiple rules with rector

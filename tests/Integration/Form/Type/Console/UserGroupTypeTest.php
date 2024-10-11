@@ -14,6 +14,7 @@ use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
+use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
@@ -88,6 +89,7 @@ class UserGroupTypeTest extends TypeTestCase
     /**
      * @return array<int, PreloadedExtension>
      */
+    #[Override]
     protected function getExtensions(): array
     {
         parent::getExtensions();

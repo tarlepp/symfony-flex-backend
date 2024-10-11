@@ -14,6 +14,7 @@ use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\ApiKeyType;
 use App\Resource\UserGroupResource;
+use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
@@ -87,6 +88,7 @@ class ApiKeyTypeTest extends TypeTestCase
     /**
      * @return array<int, PreloadedExtension>
      */
+    #[Override]
     protected function getExtensions(): array
     {
         parent::getExtensions();

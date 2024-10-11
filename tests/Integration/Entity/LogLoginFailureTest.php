@@ -12,6 +12,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use App\Tests\Integration\TestCase\EntityTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
@@ -36,6 +37,7 @@ class LogLoginFailureTest extends EntityTestCase
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
+    #[Override]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -49,6 +51,7 @@ class LogLoginFailureTest extends EntityTestCase
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
+    #[Override]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -63,6 +66,7 @@ class LogLoginFailureTest extends EntityTestCase
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that getter method for `$type $property` property returns expected')]
+    #[Override]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);
@@ -98,6 +102,7 @@ class LogLoginFailureTest extends EntityTestCase
      *
      * @throws Throwable
      */
+    #[Override]
     protected function createEntity(): LogLoginFailure
     {
         return new LogLoginFailure(new User());

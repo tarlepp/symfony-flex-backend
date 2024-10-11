@@ -12,6 +12,7 @@ use App\Entity\DateDimension;
 use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
@@ -36,6 +37,7 @@ class DateDimensionTest extends EntityTestCase
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
+    #[Override]
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
@@ -49,6 +51,7 @@ class DateDimensionTest extends EntityTestCase
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
+    #[Override]
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
@@ -63,6 +66,7 @@ class DateDimensionTest extends EntityTestCase
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that getter method for `$type $property` property returns expected')]
+    #[Override]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
         $getter = 'get' . ucfirst($property);
@@ -88,6 +92,7 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     protected function createEntity(): DateDimension
     {
         return new DateDimension(new DateTimeImmutable());

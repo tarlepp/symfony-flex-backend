@@ -17,6 +17,7 @@ use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
 use App\Service\Localization;
+use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
@@ -135,6 +136,7 @@ class UserTypeTest extends TypeTestCase
     /**
      * @return array<PreloadedExtension>
      */
+    #[Override]
     protected function getExtensions(): array
     {
         parent::getExtensions();

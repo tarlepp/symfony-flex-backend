@@ -13,6 +13,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role as Entity;
 use App\Repository\RoleRepository as Repository;
 use App\Rest\RestResource;
+use Override;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -43,6 +44,7 @@ class ResourceForLifeCycleTests extends RestResource
         parent::__construct($repository);
     }
 
+    #[Override]
     public function afterFindOne(string &$id, ?EntityInterface $entity = null): void
     {
         parent::afterFindOne($id, $entity);

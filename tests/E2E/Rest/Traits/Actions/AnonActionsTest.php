@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Tests\E2E\TestCase\RestTraitTestCase;
 use Generator;
+use Override;
 use function getenv;
 
 /**
@@ -23,6 +24,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
@@ -34,6 +36,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
@@ -45,6 +48,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
         string $uuid = '',
         ?string $u = null,
@@ -57,6 +61,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
@@ -65,6 +70,7 @@ class AnonActionsTest extends RestTraitTestCase
         static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
     }
 
+    #[Override]
     public static function getValidUsers(): Generator
     {
         yield [null, null];
@@ -88,6 +94,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @psalm-suppress InvalidReturnType
      */
+    #[Override]
     public static function getInvalidUsers(): Generator
     {
         yield from [];
