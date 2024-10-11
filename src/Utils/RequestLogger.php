@@ -13,6 +13,7 @@ use App\Resource\ApiKeyResource;
 use App\Resource\LogRequestResource;
 use App\Resource\UserResource;
 use App\Utils\Interfaces\RequestLoggerInterface;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +47,7 @@ class RequestLogger implements RequestLoggerInterface
     ) {
     }
 
+    #[Override]
     public function setResponse(Response $response): self
     {
         $this->response = $response;
@@ -53,6 +55,7 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
+    #[Override]
     public function setRequest(Request $request): self
     {
         $this->request = $request;
@@ -60,6 +63,7 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
+    #[Override]
     public function setUserId(string $userId): self
     {
         $this->userId = $userId;
@@ -67,6 +71,7 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
+    #[Override]
     public function setApiKeyId(string $apiKeyId): self
     {
         $this->apiKeyId = $apiKeyId;
@@ -74,6 +79,7 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
+    #[Override]
     public function setMainRequest(bool $mainRequest): self
     {
         $this->mainRequest = $mainRequest;
@@ -81,6 +87,7 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
+    #[Override]
     public function handle(): void
     {
         // Just check that we have all that we need

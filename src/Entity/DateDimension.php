@@ -16,6 +16,7 @@ use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes as OA;
+use Override;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -211,6 +212,7 @@ class DateDimension implements EntityInterface
         $this->unixTime = $date->format('U');
     }
 
+    #[Override]
     public function getId(): string
     {
         return $this->id->toString();
@@ -274,6 +276,7 @@ class DateDimension implements EntityInterface
     /**
      * @throws Throwable
      */
+    #[Override]
     public function getCreatedAt(): DateTimeImmutable
     {
         $output = DateTimeImmutable::createFromFormat('U', $this->getUnixTime(), new DateTimeZone('UTC'));

@@ -13,6 +13,7 @@ use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Override;
 use Throwable;
 use function array_map;
 
@@ -32,6 +33,7 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface
     /**
      * @throws Throwable
      */
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         // Create entities
@@ -41,6 +43,7 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
+    #[Override]
     public function getOrder(): int
     {
         return 1;
