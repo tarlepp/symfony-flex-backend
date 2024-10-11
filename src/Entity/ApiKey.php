@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes as OA;
+use Override;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
@@ -136,6 +137,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         $this->generateToken();
     }
 
+    #[Override]
     public function getId(): string
     {
         return $this->id->toString();
@@ -178,6 +180,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
+    #[Override]
     public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
@@ -218,6 +221,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         );
     }
 
+    #[Override]
     public function addUserGroup(UserGroup $userGroup): self
     {
         if ($this->userGroups->contains($userGroup) === false) {
@@ -228,6 +232,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         return $this;
     }
 
+    #[Override]
     public function removeUserGroup(UserGroup $userGroup): self
     {
         if ($this->userGroups->removeElement($userGroup)) {
@@ -237,6 +242,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         return $this;
     }
 
+    #[Override]
     public function clearUserGroups(): self
     {
         $this->userGroups->clear();

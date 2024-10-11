@@ -14,6 +14,7 @@ use App\Utils\JSON;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\Exception\ORMException;
 use JsonException;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -60,6 +61,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

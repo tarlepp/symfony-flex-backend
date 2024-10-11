@@ -11,6 +11,7 @@ namespace App\Security;
 use App\Entity\User;
 use App\Enum\Language;
 use App\Enum\Locale;
+use Override;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -45,6 +46,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->getUserIdentifier();
     }
 
+    #[Override]
     public function getRoles(): array
     {
         return $this->roles;
@@ -53,6 +55,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @codeCoverageIgnore
      */
+    #[Override]
     public function getPassword(): ?string
     {
         return $this->password;
@@ -69,10 +72,12 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @codeCoverageIgnore
      */
+    #[Override]
     public function eraseCredentials(): void
     {
     }
 
+    #[Override]
     public function getUserIdentifier(): string
     {
         return $this->identifier;

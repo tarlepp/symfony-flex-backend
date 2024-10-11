@@ -12,6 +12,7 @@ use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

@@ -12,6 +12,7 @@ use App\DTO\RestDtoInterface;
 use AutoMapperPlus\MapperInterface;
 use InvalidArgumentException;
 use LengthException;
+use Override;
 use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +42,7 @@ abstract class RestRequestMapper implements MapperInterface
      * @psalm-param array<array-key, mixed>|object $source
      * @psalm-param array<int, mixed> $context
      */
+    #[Override]
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
         /** @psalm-var class-string $targetClass */
@@ -56,6 +58,7 @@ abstract class RestRequestMapper implements MapperInterface
      * @psalm-param object $destination
      * @psalm-param array<int, mixed> $context
      */
+    #[Override]
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
         if (!is_object($source)) {

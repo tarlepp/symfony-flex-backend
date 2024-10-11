@@ -12,6 +12,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Validator\Constraints\EntityReferenceExists as Constraint;
 use Closure;
 use Doctrine\ORM\EntityNotFoundException;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Constraint as BaseConstraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -38,6 +39,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function validate(mixed $value, BaseConstraint $constraint): void
     {
         if (!$constraint instanceof Constraint) {

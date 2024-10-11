@@ -11,6 +11,7 @@ namespace App\Rest;
 use App\DTO\RestDtoInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
+use Override;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
@@ -33,22 +34,26 @@ abstract class RestResource implements RestResourceInterface
     ) {
     }
 
+    #[Override]
     public function getSerializerContext(): array
     {
         return [];
     }
 
+    #[Override]
     public function getRepository(): BaseRepositoryInterface
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getValidator(): ValidatorInterface
     {
         return $this->validator;
     }
 
     #[Required]
+    #[Override]
     public function setValidator(ValidatorInterface $validator): self
     {
         $this->validator = $validator;
@@ -56,6 +61,7 @@ abstract class RestResource implements RestResourceInterface
         return $this;
     }
 
+    #[Override]
     public function getDtoClass(): string
     {
         if ($this->dtoClass === '') {
@@ -70,6 +76,7 @@ abstract class RestResource implements RestResourceInterface
         return $this->dtoClass;
     }
 
+    #[Override]
     public function setDtoClass(string $dtoClass): RestResourceInterface
     {
         $this->dtoClass = $dtoClass;
@@ -77,21 +84,25 @@ abstract class RestResource implements RestResourceInterface
         return $this;
     }
 
+    #[Override]
     public function getEntityName(): string
     {
         return $this->getRepository()->getEntityName();
     }
 
+    #[Override]
     public function getReference(string $id): ?object
     {
         return $this->getRepository()->getReference($id);
     }
 
+    #[Override]
     public function getAssociations(): array
     {
         return array_keys($this->getRepository()->getAssociations());
     }
 
+    #[Override]
     public function getDtoForEntity(
         string $id,
         string $dtoClass,

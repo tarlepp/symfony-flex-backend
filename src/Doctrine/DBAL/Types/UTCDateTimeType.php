@@ -15,6 +15,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
+use Override;
 
 /**
  * @see http://doctrine-orm.readthedocs.org/en/latest/cookbook/working-with-datetime.html
@@ -31,6 +32,7 @@ class UTCDateTimeType extends DateTimeType
      *
      * @throws ConversionException
      */
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         if ($value instanceof DateTime) {
@@ -50,6 +52,7 @@ class UTCDateTimeType extends DateTimeType
      * @throws ConversionException
      * @throws Exception
      */
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): DateTimeInterface|null
     {
         if ($value instanceof DateTime) {
