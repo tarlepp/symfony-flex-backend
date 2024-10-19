@@ -5,6 +5,7 @@
     xsi:noNamespaceSchemaLocation="tools/01_phpunit/vendor/phpunit/phpunit/phpunit.xsd"
     colors="true"
     testdox="true"
+    testdoxSummary="true"
     beStrictAboutOutputDuringTests="true"
     stopOnError="true"
     stopOnFailure="true"
