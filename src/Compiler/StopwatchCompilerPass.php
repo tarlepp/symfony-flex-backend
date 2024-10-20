@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Compiler;
 
 use App\Decorator\StopwatchDecorator;
+use Override;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -29,6 +30,7 @@ class StopwatchCompilerPass implements CompilerPassInterface
         'app.stopwatch',
     ];
 
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         foreach (self::SERVICE_TAGS as $tag) {

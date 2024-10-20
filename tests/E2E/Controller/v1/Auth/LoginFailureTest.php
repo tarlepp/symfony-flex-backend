@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller\v1\Auth;
 use App\Resource\LogLoginFailureResource;
 use App\Tests\Utils\PhpUnitUtil;
 use App\Utils\JSON;
+use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -27,6 +28,7 @@ class LoginFailureTest extends WebTestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         self::bootKernel();

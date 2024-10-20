@@ -10,6 +10,7 @@ namespace App\Rest;
 
 use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
+use Override;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,6 +51,7 @@ class ResponseHandler implements ResponseHandlerInterface
     ) {
     }
 
+    #[Override]
     public function getSerializer(): SerializerInterface
     {
         return $this->serializer;
@@ -60,6 +62,7 @@ class ResponseHandler implements ResponseHandlerInterface
      *
      * @throws Throwable
      */
+    #[Override]
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array
     {
         /**
@@ -104,6 +107,7 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @throws Throwable
      */
+    #[Override]
     public function createResponse(
         Request $request,
         mixed $data,
@@ -123,6 +127,7 @@ class ResponseHandler implements ResponseHandlerInterface
         return $response;
     }
 
+    #[Override]
     public function handleFormError(FormInterface $form): void
     {
         $errors = [];

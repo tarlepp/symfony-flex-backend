@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Tests\E2E\TestCase\RestTraitTestCase;
 use Generator;
+use Override;
 use function getenv;
 
 /**
@@ -20,6 +21,7 @@ class AdminActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_admin_actions';
 
+    #[Override]
     public static function getValidUsers(): Generator
     {
         yield ['john-admin', 'password-admin'];
@@ -35,6 +37,7 @@ class AdminActionsTest extends RestTraitTestCase
         }
     }
 
+    #[Override]
     public static function getInvalidUsers(): Generator
     {
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {

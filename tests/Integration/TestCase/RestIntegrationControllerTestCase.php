@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\TestCase;
 
 use App\Rest\Controller;
+use Override;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use UnexpectedValueException;
@@ -36,6 +37,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
      */
     protected string $resourceClass;
 
+    #[Override]
     protected function setUp(): void
     {
         gc_enable();
@@ -49,6 +51,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
         $this->controller = $controller;
     }
 
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

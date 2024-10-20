@@ -13,6 +13,7 @@ use App\Rest\Controller;
 use App\Rest\ControllerCollection;
 use AutoMapperPlus\AutoMapperInterface;
 use Generator;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -86,6 +87,7 @@ class RestDtoValueResolver implements ValueResolverInterface
      *
      * @return Generator<RestDtoInterface>
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         if (!$this->supports($request, $argument) || $this->controllerName === null) {

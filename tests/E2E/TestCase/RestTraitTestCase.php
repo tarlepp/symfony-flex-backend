@@ -10,6 +10,7 @@ namespace App\Tests\E2E\TestCase;
 
 use App\Tests\Utils\PhpUnitUtil;
 use Generator;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,7 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         self::bootKernel();

@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\TestCase;
 
+use Override;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Throwable;
@@ -25,6 +26,7 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * @codeCoverageIgnore
      */
+    #[Override]
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -35,6 +37,7 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * @codeCoverageIgnore
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();

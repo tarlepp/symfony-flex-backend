@@ -11,6 +11,7 @@ namespace App\Tests\Integration\AutoMapper\src;
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
+use Override;
 
 /**
  * @package App\Tests\Integration\AutoMapper\src
@@ -21,6 +22,7 @@ class TestRestRequestMapperDto extends RestDto
     protected string $someProperty = '';
     protected string $someTransformProperty = '';
 
+    #[Override]
     public function load(EntityInterface $entity): RestDtoInterface
     {
         return $this;

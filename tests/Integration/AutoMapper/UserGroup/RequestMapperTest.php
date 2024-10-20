@@ -15,6 +15,7 @@ use App\Entity\Role;
 use App\Resource\RoleResource;
 use App\Tests\Integration\TestCase\RestRequestMapperTestCase;
 use Generator;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -85,6 +86,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @phpstan-return MockObject&RoleResource
      */
+    #[Override]
     protected function getResource(): MockObject
     {
         return $this->getMockBuilder(RoleResource::class)
@@ -92,6 +94,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
             ->getMock();
     }
 
+    #[Override]
     protected function getRequestMapper(): RestRequestMapper
     {
         return new RequestMapper($this->getResource());

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Validator\Constraints;
 
 use App\Service\Localization;
+use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use function array_column;
@@ -29,6 +30,7 @@ class TimezoneValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (is_string($value)

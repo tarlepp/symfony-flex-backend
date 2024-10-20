@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Security\UserTypeIdentification;
 use Generator;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -63,6 +64,7 @@ class LoggedInUserValueResolver implements ValueResolverInterface
      *
      * @return Generator<User|null>
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         if (!$this->supports($argument)) {

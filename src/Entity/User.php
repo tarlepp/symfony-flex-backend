@@ -23,6 +23,7 @@ use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
@@ -255,11 +256,13 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->logsLoginFailure = new ArrayCollection();
     }
 
+    #[Override]
     public function getId(): string
     {
         return $this->id->toString();
     }
 
+    #[Override]
     public function getUsername(): string
     {
         return $this->username;
@@ -296,6 +299,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
+    #[Override]
     public function getEmail(): string
     {
         return $this->email;

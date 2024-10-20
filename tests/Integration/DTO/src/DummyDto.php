@@ -11,6 +11,7 @@ namespace App\Tests\Integration\DTO\src;
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
+use Override;
 
 /**
  * @package App\Tests\Integration\Dto\src
@@ -47,6 +48,7 @@ class DummyDto extends RestDto
     /**
      * Method to load DummyDto data from specified entity.
      */
+    #[Override]
     public function load(EntityInterface $entity): RestDtoInterface
     {
         return $this;
@@ -55,6 +57,7 @@ class DummyDto extends RestDto
     /**
      * Method to update specified entity with DummyDto data.
      */
+    #[Override]
     public function update(EntityInterface $entity): EntityInterface
     {
         parent::update($entity);

@@ -13,6 +13,7 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\RestMethodHelper;
+use Override;
 use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 
@@ -52,17 +53,20 @@ abstract class Controller implements ControllerInterface
     ) {
     }
 
+    #[Override]
     public function getResource(): RestResourceInterface
     {
         return $this->resource ?? throw new UnexpectedValueException('Resource service not set', 500);
     }
 
+    #[Override]
     public function getResponseHandler(): ResponseHandlerInterface
     {
         return $this->responseHandler ?? throw new UnexpectedValueException('ResponseHandler service not set', 500);
     }
 
     #[Required]
+    #[Override]
     public function setResponseHandler(ResponseHandler $responseHandler): static
     {
         $this->responseHandler = $responseHandler;

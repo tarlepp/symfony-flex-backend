@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\Role;
 use App\Tests\Integration\TestCase\EntityTestCase;
+use Override;
 
 /**
  * @package App\Tests\Integration\Entity
@@ -27,6 +28,7 @@ class RoleTest extends EntityTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     public function testThatGetIdReturnsCorrectUuid(): void
     {
         self::markTestSkipped();
@@ -35,6 +37,7 @@ class RoleTest extends EntityTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
+    #[Override]
     protected function createEntity(): Role
     {
         return new Role('Some role');
