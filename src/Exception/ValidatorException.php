@@ -12,6 +12,7 @@ use App\Exception\interfaces\ClientErrorInterface;
 use App\Exception\models\ValidatorError;
 use App\Utils\JSON;
 use JsonException;
+use Override;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorException;
@@ -40,6 +41,7 @@ class ValidatorException extends BaseValidatorException implements ClientErrorIn
         );
     }
 
+    #[Override]
     public function getStatusCode(): int
     {
         return 400;

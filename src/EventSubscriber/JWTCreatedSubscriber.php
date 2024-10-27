@@ -16,6 +16,7 @@ use DateTime;
 use DateTimeZone;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -40,6 +41,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      *
      * @return array<string, string>
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

@@ -11,6 +11,7 @@ namespace App\ValueResolver;
 use App\Entity\Interfaces\EntityInterface;
 use App\Resource\ResourceCollection;
 use Generator;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -77,6 +78,7 @@ class EntityValueResolver implements ValueResolverInterface
      *
      * @return Generator<EntityInterface|null>
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         if (!$this->supports($request, $argument)) {

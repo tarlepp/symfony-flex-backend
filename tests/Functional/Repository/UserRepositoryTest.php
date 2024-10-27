@@ -11,6 +11,7 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Utils\PhpUnitUtil;
+use Override;
 use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -27,6 +28,7 @@ class UserRepositoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         self::bootKernel();

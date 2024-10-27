@@ -15,6 +15,7 @@ use App\Resource\LogLoginResource;
 use App\Utils\Interfaces\LoginLoggerInterface;
 use BadMethodCallException;
 use DeviceDetector\DeviceDetector;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
@@ -35,6 +36,7 @@ class LoginLogger implements LoginLoggerInterface
         $this->deviceDetector = new DeviceDetector();
     }
 
+    #[Override]
     public function setUser(?User $user = null): self
     {
         $this->user = $user;
@@ -42,6 +44,7 @@ class LoginLogger implements LoginLoggerInterface
         return $this;
     }
 
+    #[Override]
     public function process(LogLoginEnum $type): void
     {
         // Get current request

@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
+use Override;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -33,6 +34,7 @@ class SecurityUserFactory implements UserProviderInterface
     ) {
     }
 
+    #[Override]
     public function supportsClass(string $class): bool
     {
         return $class === SecurityUser::class;
@@ -43,6 +45,7 @@ class SecurityUserFactory implements UserProviderInterface
      *
      * @throws Throwable
      */
+    #[Override]
     public function loadUserByIdentifier(string $identifier): SecurityUser
     {
         $user = $this->userRepository->loadUserByIdentifier(
@@ -60,6 +63,7 @@ class SecurityUserFactory implements UserProviderInterface
     /**
      * @throws Throwable
      */
+    #[Override]
     public function refreshUser(UserInterface $user): SecurityUser
     {
         if (!($user instanceof SecurityUser)) {
