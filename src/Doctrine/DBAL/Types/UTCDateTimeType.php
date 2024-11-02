@@ -45,7 +45,7 @@ class UTCDateTimeType extends DateTimeType
     /**
      * @param T $value
      *
-     * @return (T is null ? null : DateTimeInterface)
+     * @return (T is null ? null : DateTime)
      *
      * @template T
      *
@@ -53,7 +53,7 @@ class UTCDateTimeType extends DateTimeType
      * @throws Exception
      */
     #[Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform): DateTimeInterface|null
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?DateTime
     {
         if ($value instanceof DateTime) {
             $value->setTimezone($this->getUtcDateTimeZone());

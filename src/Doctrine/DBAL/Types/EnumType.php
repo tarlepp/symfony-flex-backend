@@ -95,15 +95,4 @@ abstract class EnumType extends Type
             'One of: "' . implode('", "', static::getValues()) . '"',
         );
     }
-
-    /**
-     * Parent method is deprecated, so remove this after it has been removed.
-     *
-     * @codeCoverageIgnore
-     */
-    #[Override]
-    public function getName(): string
-    {
-        return '';
-    }
 }
