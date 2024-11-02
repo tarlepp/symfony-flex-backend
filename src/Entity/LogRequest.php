@@ -35,22 +35,22 @@ use function mb_strlen;
     name: 'log_request',
 )]
 #[ORM\Index(
+    name: 'user_id',
     columns: [
         'user_id',
     ],
-    name: 'user_id',
 )]
 #[ORM\Index(
+    name: 'api_key_id',
     columns: [
         'api_key_id',
     ],
-    name: 'api_key_id',
 )]
 #[ORM\Index(
+    name: 'request_date',
     columns: [
         'date',
     ],
-    name: 'request_date',
 )]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]

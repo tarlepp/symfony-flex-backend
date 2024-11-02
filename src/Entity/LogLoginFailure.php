@@ -31,10 +31,10 @@ use Throwable;
     name: 'log_login_failure',
 )]
 #[ORM\Index(
+    name: 'user_id',
     columns: [
         'user_id',
     ],
-    name: 'user_id',
 )]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class LogLoginFailure implements EntityInterface
