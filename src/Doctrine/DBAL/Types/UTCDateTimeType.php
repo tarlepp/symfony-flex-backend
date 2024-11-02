@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Doctrine\DBAL\Types;
 
 use DateTime;
-use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
