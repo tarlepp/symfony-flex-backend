@@ -16,8 +16,7 @@ use App\Security\UserTypeIdentification;
 use App\Tests\Utils\PhpUnitUtil;
 use App\Utils\JSON;
 use BadMethodCallException;
-use Doctrine\DBAL\Exception as DBALException;
-use Doctrine\ORM\Exception\ORMException;
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Exception;
 use Generator;
 use JsonException;
@@ -334,14 +333,14 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
-            new DBALException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
+            new InvalidArgumentException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
             'dev',
             'Error message',
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
-            new DBALException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
+            new InvalidArgumentException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
             'prod',
             'Database error.',
         ];
@@ -521,25 +520,25 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         yield [
             'Database error.',
-            new DBALException('some message'),
+            new InvalidArgumentException('some message'),
             'prod',
         ];
 
         yield [
             'some message',
-            new DBALException('some message'),
+            new InvalidArgumentException('some message'),
             'dev',
         ];
 
         yield [
             'Database error.',
-            new ORMException('some message'),
+            new InvalidArgumentException('some message'),
             'prod',
         ];
 
         yield [
             'some message',
-            new ORMException('some message'),
+            new InvalidArgumentException('some message'),
             'dev',
         ];
 
