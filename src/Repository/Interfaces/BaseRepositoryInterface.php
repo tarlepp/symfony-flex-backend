@@ -107,6 +107,7 @@ interface BaseRepositoryInterface
      *
      * @psalm-param array<string, mixed> $criteria
      * @psalm-param array<string, string>|null $orderBy
+     * @phpstan-param array<string, 'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
      *
      * @psalm-return list<object|EntityInterface>
      */

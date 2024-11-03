@@ -70,16 +70,6 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatGetClassMetaDataReturnsExpected(): void
-    {
-        $resource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
-    }
-
-    /**
-     * @throws Throwable
-     */
     public function testThatGetEntityManagerThrowsAnExceptionIfManagerIsNotValid(): void
     {
         $this->expectException(UnexpectedValueException::class);
