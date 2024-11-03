@@ -16,7 +16,6 @@ use App\Resource\ApiKeyResource;
 use App\Tests\Utils\StringableArrayObject;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Generator;
