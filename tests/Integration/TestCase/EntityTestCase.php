@@ -522,27 +522,24 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping): array {
-            $class = $mapping['targetEntity'];
+        $iterator = static function (AssociationMapping $mapping): array {
+            $class = $mapping->targetEntity;
 
-            self::assertIsString($class);
             self::assertTrue(class_exists($class));
 
             $targetEntity = new $class();
 
-            $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                : $mapping['fieldName'];
-
-            self::assertIsString($singular);
+            $singular = mb_substr($mapping->fieldName, -1) === 's'
+                ? mb_substr($mapping->fieldName, 0, -1)
+                : $mapping->fieldName;
 
             return [
                 [
-                    'get' . ucfirst((string)$mapping['fieldName']),
+                    'get' . ucfirst($mapping->fieldName),
                     'add' . ucfirst($singular),
                     'remove' . ucfirst($singular),
-                    'clear' . ucfirst((string)$mapping['fieldName']),
-                    $mapping['fieldName'],
+                    'clear' . ucfirst($mapping->fieldName),
+                    $mapping->fieldName,
                     $targetEntity,
                     $mapping,
                 ],
@@ -555,7 +552,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn ($mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_MANY
+            static fn (AssociationMapping $mapping): bool => $mapping->type() === ClassMetadata::MANY_TO_MANY
         );
 
         if (empty($items)) {
