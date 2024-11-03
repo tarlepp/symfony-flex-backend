@@ -13,7 +13,7 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -58,7 +58,7 @@ interface BaseRepositoryInterface
     /**
      * Returns the ORM metadata descriptor for a class.
      */
-    public function getClassMetaData(): ClassMetadataInfo;
+    public function getClassMetaData(): ClassMetadata;
 
     /**
      * Getter method for EntityManager for current entity.
