@@ -20,6 +20,7 @@ use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -745,10 +746,10 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static fn (array $mapping): array => [
+        $iterator = static fn (AssociationMapping $mapping): array => [
             [
-                'get' . ucfirst((string)$mapping['fieldName']),
-                $mapping['fieldName'],
+                'get' . ucfirst($mapping->fieldName),
+                $mapping->fieldName,
                 $mapping,
             ],
         ];
@@ -759,7 +760,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadata::ONE_TO_MANY,
+            static fn (AssociationMapping $mapping): bool => $mapping->type() === ClassMetadata::ONE_TO_MANY,
         );
 
         if (empty($items)) {
@@ -767,7 +768,7 @@ abstract class EntityTestCase extends KernelTestCase
                 [null, null, []],
             ];
         } else {
-            $output = array_merge(...array_values(array_map($iterator, (array)$items)));
+            $output = array_merge(...array_values(array_map($iterator, $items)));
         }
 
         return $output;
