@@ -635,10 +635,9 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping) use ($meta): array {
-            $target = $mapping['targetEntity'];
+        $iterator = static function (AssociationMapping $mapping) use ($meta): array {
+            $target = $mapping->targetEntity;
 
-            self::assertIsString($target);
             self::assertTrue(class_exists($target));
 
             $arguments = match ($target) {
@@ -652,35 +651,31 @@ abstract class EntityTestCase extends KernelTestCase
             $input = new $target(...$arguments);
 
             $methods = [
-                ['get' . ucfirst((string)$mapping['fieldName']), $mapping['fieldName'], false, null],
+                ['get' . ucfirst($mapping->fieldName), $mapping->fieldName, false, null],
             ];
 
-            switch ($mapping['type']) {
+            switch ($mapping->type()) {
                 case ClassMetadata::ONE_TO_MANY:
                 case ClassMetadata::ONE_TO_ONE:
                     break;
                 case ClassMetadata::MANY_TO_ONE:
                     if ($meta->isReadOnly === false) {
                         $methods[] = [
-                            'set' . ucfirst((string)$mapping['fieldName']),
-                            $mapping['fieldName'],
+                            'set' . ucfirst($mapping->fieldName),
+                            $mapping->fieldName,
                             $input,
                             static::$entityName,
                         ];
                     }
                     break;
                 case ClassMetadata::MANY_TO_MANY:
-                    self::assertArrayHasKey('fieldName', $mapping);
-
-                    $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                        ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                        : $mapping['fieldName'];
-
-                    self::assertIsString($singular);
+                    $singular = mb_substr($mapping->fieldName, -1) === 's'
+                        ? mb_substr($mapping->fieldName, 0, -1)
+                        : $mapping->fieldName;
 
                     $methods = [
                         [
-                            'get' . ucfirst((string)$mapping['fieldName']),
+                            'get' . ucfirst($mapping->fieldName),
                             $mapping['fieldName'],
                             $input,
                             ArrayCollection::class,
@@ -702,7 +697,7 @@ abstract class EntityTestCase extends KernelTestCase
                                 static::$entityName,
                             ],
                             [
-                                'clear' . ucfirst((string)$mapping['fieldName']),
+                                'clear' . ucfirst($mapping->fieldName),
                                 $mapping['fieldName'],
                                 $input,
                                 static::$entityName,
