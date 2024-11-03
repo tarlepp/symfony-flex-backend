@@ -582,21 +582,21 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping) use ($meta): array {
+        $iterator = static function (AssociationMapping $mapping) use ($meta): array {
             $params = [null];
 
-            if ($mapping['targetEntity'] === Role::class) {
+            if ($mapping->targetEntity === Role::class) {
                 $params = ['Some Role'];
             }
 
-            $targetEntity = new $mapping['targetEntity'](...$params);
+            $targetEntity = new $mapping->targetEntity(...$params);
 
             return [
                 [
-                    $meta->isReadOnly ? null : 'set' . ucfirst((string)$mapping['fieldName']),
-                    'get' . ucfirst((string)$mapping['fieldName']),
+                    $meta->isReadOnly ? null : 'set' . ucfirst($mapping->fieldName),
+                    'get' . ucfirst($mapping->fieldName),
                     $targetEntity,
-                    $mapping['fieldName'],
+                    $mapping->fieldName,
                     $mapping,
                 ],
             ];
@@ -608,7 +608,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_ONE
+            static fn (AssociationMapping $mapping): bool => $mapping->type() === ClassMetadata::MANY_TO_ONE
         );
 
         if (empty($items)) {
