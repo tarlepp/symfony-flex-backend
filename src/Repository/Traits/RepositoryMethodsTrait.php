@@ -26,10 +26,7 @@ use function assert;
  */
 trait RepositoryMethodsTrait
 {
-    /**
-     * @psalm-param LockMode::*|null $lockMode
-     */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
+    public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
@@ -39,7 +36,7 @@ trait RepositoryMethodsTrait
     /**
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      */
-    public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
+    public function findAdvanced(string $id, string|int|null $hydrationMode = null): null | array | EntityInterface
     {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder();
@@ -62,9 +59,7 @@ trait RepositoryMethodsTrait
 
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
-        $repository = $this->getEntityManager()->getRepository($this->getEntityName());
-
-        return $repository->findOneBy($criteria, $orderBy);
+        return $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy($criteria, $orderBy);
     }
 
     /**
@@ -90,7 +85,7 @@ trait RepositoryMethodsTrait
         ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
-        ?array $search = null
+        ?array $search = null,
     ): array {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder($criteria, $search, $orderBy, $limit, $offset);
@@ -200,7 +195,7 @@ trait RepositoryMethodsTrait
         ?array $search = null,
         ?array $orderBy = null,
         ?int $limit = null,
-        ?int $offset = null
+        ?int $offset = null,
     ): QueryBuilder {
         // Create new QueryBuilder for this instance
         $queryBuilder = $this->createQueryBuilder();
