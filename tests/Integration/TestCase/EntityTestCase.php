@@ -40,7 +40,6 @@ use function gettype;
 use function in_array;
 use function is_object;
 use function is_string;
-use function mb_strlen;
 use function mb_substr;
 use function method_exists;
 use function sprintf;
