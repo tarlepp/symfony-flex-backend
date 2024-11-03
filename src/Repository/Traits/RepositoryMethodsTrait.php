@@ -26,7 +26,7 @@ use function assert;
  */
 trait RepositoryMethodsTrait
 {
-    public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
+    public function find(string $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): ?EntityInterface
     {
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
