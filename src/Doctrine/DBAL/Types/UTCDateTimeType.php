@@ -14,6 +14,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Override;
 
 /**
@@ -89,7 +90,7 @@ class UTCDateTimeType extends DateTimeType
             return $converted;
         }
 
-        throw ConversionException::conversionFailedFormat(
+        throw InvalidFormat::new(
             $value,
             self::lookupName($this),
             $platform->getDateTimeFormatString()
