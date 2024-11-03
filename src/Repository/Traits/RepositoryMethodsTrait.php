@@ -28,6 +28,9 @@ trait RepositoryMethodsTrait
 {
     public function find(string $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): ?EntityInterface
     {
+        /**
+         * @psalm-suppress PossiblyInvalidArgument - we know that this is correct
+         */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
         return $output instanceof EntityInterface ? $output : null;
