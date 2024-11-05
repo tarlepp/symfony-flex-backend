@@ -9,10 +9,10 @@
 		"liuggio/fastest": "1.12.0",
 		"phpunit/php-code-coverage": "11.0.7",
 		"phpunit/phpcov": "10.0.0",
-		"phpunit/phpunit": "11.4.1",
+		"phpunit/phpunit": "11.4.3",
 		"roave/security-advisories": "dev-latest",
-		"symfony/browser-kit": "7.1.1",
-		"symfony/phpunit-bridge": "7.1.4"
+		"symfony/browser-kit": "7.1.6",
+		"symfony/phpunit-bridge": "7.1.6"
 	},
 	"config": {
 		"allow-plugins": true,

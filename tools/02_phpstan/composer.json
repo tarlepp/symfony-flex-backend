@@ -9,7 +9,7 @@
 		"phpstan/phpstan": "1.12.7",
 		"phpstan/phpstan-deprecation-rules": "1.2.1",
 		"phpstan/phpstan-phpunit": "1.4.0",
-		"phpstan/phpstan-symfony": "1.4.10",
+		"phpstan/phpstan-symfony": "1.4.11",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
