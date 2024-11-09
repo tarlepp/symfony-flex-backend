@@ -41,8 +41,8 @@ class DateDimensionTest extends EntityTestCase
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     #[Override]
     public function testThatSetterOnlyAcceptSpecifiedType(
-        ?string $property = null,
-        ?string $type = null,
+        string $property,
+        string $type,
         FieldMapping|AssociationMapping|null $meta,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
@@ -55,9 +55,9 @@ class DateDimensionTest extends EntityTestCase
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     #[Override]
     public function testThatSetterReturnsInstanceOfEntity(
-        ?string $property = null,
-        ?string $type = null,
-        FieldMapping|AssociationMapping|null $meta = null
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping|null $meta,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
