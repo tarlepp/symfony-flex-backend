@@ -209,7 +209,7 @@ class PhpUnitUtil
      *
      * @throws Throwable
      */
-    public static function getValidValueForType(string $type, FieldMapping|AssociationMapping $meta): mixed
+    public static function getValidValueForType(string $type, FieldMapping|AssociationMapping|null $meta): mixed
     {
         $cacheKey = $type . serialize($meta);
 
@@ -260,7 +260,7 @@ class PhpUnitUtil
      * @param class-string $type
      */
     private static function getValidValue(
-        FieldMapping|AssociationMapping $meta,
+        FieldMapping|AssociationMapping|null $meta,
         string $type
     ): mixed {
         $class = stdClass::class;
