@@ -23,7 +23,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\FieldMapping;
-use Doctrine\ORM\Mapping\ManyToManyOwningSideMapping;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
@@ -262,9 +261,7 @@ abstract class EntityTestCase extends KernelTestCase
         //if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
         if (isset($meta->fieldName) && $meta->columnDefinition === null) {
             $value = PhpUnitUtil::getValidValueForType($type, $meta);
-
             $entity->{$setter}($value);
-
             self::assertSame(
                 $value,
                 $callable(),
@@ -278,10 +275,9 @@ abstract class EntityTestCase extends KernelTestCase
             );
         } else {
             $type = ArrayCollection::class;
-
             self::assertInstanceOf($type, $callable());
         }
-        */
+         */
 
         try {
             $method = 'assertIs' . ucfirst($type);
@@ -366,8 +362,6 @@ abstract class EntityTestCase extends KernelTestCase
         $collection = $entity->{$g}();
 
         self::assertTrue($collection->contains($e));
-
-
 
         if (isset($m['mappedBy'])) {
             /** @var ArrayCollection<int, EntityInterface> $collection */

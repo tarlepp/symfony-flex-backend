@@ -24,10 +24,10 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use function method_exists;
 use function in_array;
 use function is_array;
 use function is_object;
+use function method_exists;
 use function sprintf;
 use function ucfirst;
 

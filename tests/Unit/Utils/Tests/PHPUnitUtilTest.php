@@ -13,7 +13,6 @@ use App\Tests\Utils\PhpUnitUtil;
 use App\Tests\Utils\StringableArrayObject;
 use DateTime;
 use DateTimeImmutable;
-use Doctrine\ORM\Mapping\FieldMapping;
 use Generator;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;

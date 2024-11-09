@@ -141,6 +141,7 @@ $getApplication = static function (): Application {
     // Create new application
     $application = new Application($kernel);
     $application->setAutoExit(false);
+
     return $application;
 };
 
@@ -218,7 +219,6 @@ array_map(
         $createDatabaseCreateCache,
     ]
 );
-
 
 /**
  * For some reason we need to re-create application to get loading of
