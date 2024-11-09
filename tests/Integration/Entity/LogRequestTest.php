@@ -27,7 +27,6 @@ use Throwable;
 use function in_array;
 use function is_array;
 use function is_object;
-use function method_exists;
 use function sprintf;
 use function ucfirst;
 

@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 use function in_array;
-use function method_exists;
 use function ucfirst;
 
 /**

@@ -18,7 +18,6 @@ use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
-use function method_exists;
 use function ucfirst;
 
 /**
