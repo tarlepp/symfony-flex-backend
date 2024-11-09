@@ -82,7 +82,8 @@ class LogLoginFailureTest extends EntityTestCase
 
         $logRequest = new LogLoginFailure(new User());
 
-        if (method_exists($meta, 'isManyToManyOwningSide')
+        if ($meta !== null
+            && method_exists($meta, 'isManyToManyOwningSide')
             && (
                 $meta->isManyToManyOwningSide()
                 || $meta->isOneToMany()
