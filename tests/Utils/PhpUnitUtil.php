@@ -163,7 +163,7 @@ class PhpUnitUtil
         return $property->getValue($object);
     }
 
-    public static function getType(Type | string | null $type): string
+    public static function getType(Type|string|null $type): string
     {
         $exception = new LogicException(
             sprintf(
@@ -195,7 +195,7 @@ class PhpUnitUtil
      *
      * @throws ReflectionException
      */
-    public static function setProperty(string $property, UuidInterface | array | null $value, object $object): void
+    public static function setProperty(string $property, UuidInterface|array| null $value, object $object): void
     {
         $clazz = new ReflectionClass($object::class);
 
@@ -208,6 +208,8 @@ class PhpUnitUtil
      * Helper method to get valid value for specified type.
      *
      * @throws Throwable
+     *
+     * @param string|class-string $type
      */
     public static function getValidValueForType(string $type, FieldMapping|AssociationMapping|null $meta): mixed
     {
@@ -225,7 +227,7 @@ class PhpUnitUtil
      *
      * @throws Throwable
      */
-    public static function getInvalidValueForType(string $type): DateTime | stdClass | string
+    public static function getInvalidValueForType(string $type): DateTime|stdClass|string
     {
         if ($type !== stdClass::class && substr_count($type, '\\') > 1) {
             $type = self::TYPE_CUSTOM_CLASS;
@@ -257,11 +259,11 @@ class PhpUnitUtil
     /**
      * @throws Throwable
      *
-     * @param class-string $type
+     * @param string|class-string $type
      */
     private static function getValidValue(
         FieldMapping|AssociationMapping|null $meta,
-        string $type
+        string $type,
     ): mixed {
         $class = stdClass::class;
         $params = [null];
