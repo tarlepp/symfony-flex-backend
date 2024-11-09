@@ -141,7 +141,7 @@ abstract class EntityTestCase extends KernelTestCase
         string $type,
         FieldMapping|AssociationMapping $meta,
     ): void {
-        if (method_exists($meta, 'isManyToManyOwningSide')
+        if ($meta instanceof AssociationMapping
             && (
                 $meta->isManyToManyOwningSide()
                 || $meta->isOneToMany()
@@ -178,7 +178,7 @@ abstract class EntityTestCase extends KernelTestCase
         string $type,
         FieldMapping|AssociationMapping $meta,
     ): void {
-        if (method_exists($meta, 'isManyToManyOwningSide')
+        if ($meta instanceof AssociationMapping
             && (
                 $meta->isManyToManyOwningSide()
                 || $meta->isOneToMany()
@@ -227,7 +227,7 @@ abstract class EntityTestCase extends KernelTestCase
         /** @var callable $callable */
         $callable = [$entity, $getter];
 
-        if (method_exists($meta, 'isManyToManyOwningSide')
+        if ($meta instanceof AssociationMapping
             && (
                 $meta->isManyToManyOwningSide()
                 || $meta->isOneToMany()

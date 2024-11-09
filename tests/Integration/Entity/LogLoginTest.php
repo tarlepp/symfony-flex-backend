@@ -98,7 +98,7 @@ class LogLoginTest extends EntityTestCase
             new User(),
         );
 
-        if (method_exists($meta, 'isManyToManyOwningSide')
+        if ($meta instanceof AssociationMapping
             && (
                 $meta->isManyToManyOwningSide()
                 || $meta->isOneToMany()

@@ -100,7 +100,7 @@ class LogRequestTest extends EntityTestCase
 
         $value = $logRequest->{$getter}();
 
-        if (method_exists($meta, 'isManyToManyOwningSide')
+        if ($meta instanceof AssociationMapping
             && (
                 $meta->isManyToManyOwningSide()
                 || $meta->isOneToMany()
