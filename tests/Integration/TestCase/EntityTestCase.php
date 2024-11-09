@@ -32,7 +32,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use TypeError;
 use function array_filter;
-use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_values;
