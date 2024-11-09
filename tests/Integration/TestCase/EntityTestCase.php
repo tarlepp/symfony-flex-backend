@@ -179,7 +179,6 @@ abstract class EntityTestCase extends KernelTestCase
         string $type,
         FieldMapping|AssociationMapping $meta,
     ): void {
-        //if (!(isset($meta->fieldName) && $meta->columnDefinition === null)) {
         if (method_exists($meta, 'isManyToManyOwningSide')
             && (
                 $meta->isManyToManyOwningSide()
@@ -256,28 +255,6 @@ abstract class EntityTestCase extends KernelTestCase
                 ),
             );
         }
-
-        /*
-        //if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
-        if (isset($meta->fieldName) && $meta->columnDefinition === null) {
-            $value = PhpUnitUtil::getValidValueForType($type, $meta);
-            $entity->{$setter}($value);
-            self::assertSame(
-                $value,
-                $callable(),
-                sprintf(
-                    'Getter method of %s:%s did not return expected value type (%s) and it returned (%s)',
-                    static::$entityName,
-                    $getter,
-                    gettype($value),
-                    gettype($callable()),
-                ),
-            );
-        } else {
-            $type = ArrayCollection::class;
-            self::assertInstanceOf($type, $callable());
-        }
-         */
 
         try {
             $method = 'assertIs' . ucfirst($type);
