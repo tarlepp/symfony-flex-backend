@@ -96,8 +96,12 @@ abstract class EntityTestCase extends KernelTestCase
 
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
-    public function testThatGetterAndSetterExists(string $property, string $type, FieldMapping|AssociationMapping $meta, bool $readOnly): void
-    {
+    public function testThatGetterAndSetterExists(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
+        bool $readOnly,
+    ): void {
         $entity = $this->getEntity();
         $getter = 'get' . ucfirst($property);
         $setter = 'set' . ucfirst($property);

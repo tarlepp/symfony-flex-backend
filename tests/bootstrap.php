@@ -133,8 +133,7 @@ if (is_readable($databaseCacheFile) && (string)getenv('ENV_TEST_CHANNEL_READABLE
     return;
 }
 
-function getApplication(): Application
-{
+$getApplication = static function (): Application {
     // Create and boot 'test' kernel
     $kernel = new Kernel((string)getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
     $kernel->boot();
@@ -143,9 +142,9 @@ function getApplication(): Application
     $application = new Application($kernel);
     $application->setAutoExit(false);
     return $application;
-}
+};
 
-$application = getApplication();
+$application = $getApplication();
 
 // Add the doctrine:database:drop command to the application and run it
 $dropDatabaseDoctrineCommand = static function () use ($application): void {
@@ -229,7 +228,7 @@ array_map(
  *  An exception occurred while executing a query: SQLSTATE[42000]: Syntax
  *  error or access violation: 1305 SAVEPOINT DOCTRINE_8 does not exist
  */
-$application = getApplication();
+$application = $getApplication();
 
 // Add the doctrine:fixtures:load command to the application and run it
 $loadFixturesDoctrineCommand = static function () use ($application): void {
