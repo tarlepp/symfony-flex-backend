@@ -12,6 +12,8 @@ use App\Entity\DateDimension;
 use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -41,7 +43,7 @@ class DateDimensionTest extends EntityTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null,
+        FieldMapping|AssociationMapping|null $meta,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -55,7 +57,7 @@ class DateDimensionTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        FieldMapping|AssociationMapping|null $meta = null
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -67,8 +69,11 @@ class DateDimensionTest extends EntityTestCase
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that getter method for `$type $property` property returns expected')]
     #[Override]
-    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
-    {
+    public function testThatGetterReturnsExpectedValue(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping|null $meta,
+    ): void {
         $getter = 'get' . ucfirst($property);
 
         if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {

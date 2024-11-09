@@ -16,6 +16,8 @@ use App\Enum\LogLogin;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Exception;
 use LogicException;
 use Ramsey\Uuid\UuidInterface;
@@ -205,11 +207,9 @@ class PhpUnitUtil
     /**
      * Helper method to get valid value for specified type.
      *
-     * @param array<string, string>|null $meta
-     *
      * @throws Throwable
      */
-    public static function getValidValueForType(string $type, ?array $meta = null): mixed
+    public static function getValidValueForType(string $type, FieldMapping|AssociationMapping $meta): mixed
     {
         $cacheKey = $type . serialize($meta);
 
@@ -255,22 +255,21 @@ class PhpUnitUtil
     }
 
     /**
-     * @param array<string, string>|null $meta
-     *
      * @throws Throwable
+     *
+     * @param class-string $type
      */
     private static function getValidValue(
-        ?array $meta,
+        FieldMapping|AssociationMapping $meta,
         string $type
     ): mixed {
-        $meta ??= [];
-
         $class = stdClass::class;
         $params = [null];
 
         if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
             /** @var class-string $class */
-            $class = $meta !== [] && array_key_exists('targetEntity', $meta) ? $meta['targetEntity'] : $type;
+            //$class = $meta !== [] && array_key_exists('targetEntity', $meta) ? $meta['targetEntity'] : $type;
+            $class = $meta->targetEntity ?? $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
 

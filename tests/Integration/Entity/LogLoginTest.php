@@ -15,12 +15,14 @@ use App\Tests\Integration\TestCase\EntityTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
-use function array_key_exists;
+use function method_exists;
 use function in_array;
 use function ucfirst;
 
@@ -44,9 +46,9 @@ class LogLoginTest extends EntityTestCase
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     #[Override]
     public function testThatSetterOnlyAcceptSpecifiedType(
-        ?string $property = null,
-        ?string $type = null,
-        ?array $meta = null
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -58,9 +60,9 @@ class LogLoginTest extends EntityTestCase
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     #[Override]
     public function testThatSetterReturnsInstanceOfEntity(
-        ?string $property = null,
-        ?string $type = null,
-        ?array $meta = null
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -72,8 +74,11 @@ class LogLoginTest extends EntityTestCase
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that getter method for `$type $property` property returns expected')]
     #[Override]
-    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
-    {
+    public function testThatGetterReturnsExpectedValue(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
+    ): void {
         $getter = 'get' . ucfirst($property);
 
         if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
@@ -93,7 +98,12 @@ class LogLoginTest extends EntityTestCase
             new User(),
         );
 
-        if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
+        if (method_exists($meta, 'isManyToManyOwningSide')
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+            )
+        ) {
             $type = ArrayCollection::class;
 
             self::assertInstanceOf($type, $logRequest->{$getter}());

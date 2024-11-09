@@ -22,6 +22,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\FieldMapping;
+use Doctrine\ORM\Mapping\ManyToManyOwningSideMapping;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
@@ -92,12 +94,9 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertSame($id, $factory->fromString($id)->toString());
     }
 
-    /**
-     * @param array<string, mixed> $meta
-     */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
-    public function testThatGetterAndSetterExists(string $property, string $type, array $meta, bool $readOnly): void
+    public function testThatGetterAndSetterExists(string $property, string $type, FieldMapping|AssociationMapping $meta, bool $readOnly): void
     {
         $entity = $this->getEntity();
         $getter = 'get' . ucfirst($property);
@@ -117,7 +116,7 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        if (array_key_exists('columnName', $meta)) {
+        if (isset($meta->columnDefinition)) {
             $message = $readOnly
                 ? "Entity '%s' has not expected setter '%s()' method for '%s' property."
                 : "Entity '%s' does not have expected setter '%s()' method for '%s' property.";
@@ -131,8 +130,6 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, mixed> $meta
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
@@ -140,9 +137,15 @@ abstract class EntityTestCase extends KernelTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $property,
         string $type,
-        array $meta,
+        FieldMapping|AssociationMapping $meta,
     ): void {
-        if (!array_key_exists('columnName', $meta) && !array_key_exists('joinColumns', $meta)) {
+        if (method_exists($meta, 'isManyToManyOwningSide')
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+                || $meta->isManyToMany()
+            )
+        ) {
             self::markTestSkipped('No need to test this setter...');
         }
 
@@ -164,8 +167,6 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, string> $meta
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
@@ -173,9 +174,16 @@ abstract class EntityTestCase extends KernelTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         string $property,
         string $type,
-        array $meta,
+        FieldMapping|AssociationMapping $meta,
     ): void {
-        if (!array_key_exists('columnName', $meta)) {
+        //if (!(isset($meta->fieldName) && $meta->columnDefinition === null)) {
+        if (method_exists($meta, 'isManyToManyOwningSide')
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+                || $meta->isManyToMany()
+            )
+        ) {
             self::markTestSkipped('No need to test this setter...');
         }
 
@@ -198,14 +206,15 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, string> $meta
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` method for `$property` property returns value of expected type `$type`')]
-    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
-    {
+    public function testThatGetterReturnsExpectedValue(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
+    ): void {
         $entity = $this->getEntity();
         $getter = 'get' . ucfirst($property);
         $setter = 'set' . ucfirst($property);
@@ -217,7 +226,37 @@ abstract class EntityTestCase extends KernelTestCase
         /** @var callable $callable */
         $callable = [$entity, $getter];
 
-        if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
+        if (method_exists($meta, 'isManyToManyOwningSide')
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+                || $meta->isManyToMany()
+            )
+        ) {
+            $type = ArrayCollection::class;
+
+            self::assertInstanceOf($type, $callable());
+        } else {
+            $value = PhpUnitUtil::getValidValueForType($type, $meta);
+
+            $entity->{$setter}($value);
+
+            self::assertSame(
+                $value,
+                $callable(),
+                sprintf(
+                    'Getter method of %s:%s did not return expected value type (%s) and it returned (%s)',
+                    static::$entityName,
+                    $getter,
+                    gettype($value),
+                    gettype($callable()),
+                ),
+            );
+        }
+
+        /*
+        //if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
+        if (isset($meta->fieldName) && $meta->columnDefinition === null) {
             $value = PhpUnitUtil::getValidValueForType($type, $meta);
 
             $entity->{$setter}($value);
@@ -238,6 +277,7 @@ abstract class EntityTestCase extends KernelTestCase
 
             self::assertInstanceOf($type, $callable());
         }
+        */
 
         try {
             $method = 'assertIs' . ucfirst($type);
@@ -285,9 +325,6 @@ abstract class EntityTestCase extends KernelTestCase
         }
     }
 
-    /**
-     * @param array<mixed> $m
-     */
     #[DataProvider('dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `many-to-many` association methods `$g, $a, $r, $c` works as expected for `$e + $p` combo')]
     public function testThatManyToManyAssociationMethodsWorksAsExpected(
@@ -297,7 +334,7 @@ abstract class EntityTestCase extends KernelTestCase
         ?string $c,
         ?string $p,
         ?EntityInterface $e,
-        array $m,
+        FieldMapping|AssociationMapping|null $m,
     ): void {
         if ($g === null) {
             self::markTestSkipped('Entity does not contain many-to-many relationships.');
@@ -325,6 +362,8 @@ abstract class EntityTestCase extends KernelTestCase
         $collection = $entity->{$g}();
 
         self::assertTrue($collection->contains($e));
+
+
 
         if (isset($m['mappedBy'])) {
             /** @var ArrayCollection<int, EntityInterface> $collection */
@@ -556,7 +595,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         if (empty($items)) {
             $output = [
-                [null, null, null, null, null, null, []],
+                [null, null, null, null, null, null, null],
             ];
         } else {
             $output = array_merge(...array_values(array_map($iterator, $items)));
