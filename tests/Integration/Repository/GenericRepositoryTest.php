@@ -325,12 +325,18 @@ class GenericRepositoryTest extends KernelTestCase
                 ApiKeyEntity::class,
                 'id',
                 null,
-                null
+                null,
             );
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $managerObject
             ->expects($this->once())
             ->method('getManagerForClass')
+            ->with(ApiKeyEntity::class)
             ->willReturn($entityManager);
 
         $repository = new ApiKeyRepository($managerObject);
@@ -369,6 +375,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $managerObject
             ->expects($this->once())
@@ -419,6 +430,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
 
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
+
         $managerObject
             ->expects($this->once())
             ->method('getManagerForClass')
@@ -455,6 +471,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $managerObject
             ->expects($this->once())
