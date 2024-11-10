@@ -20,7 +20,6 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject" isTestSource="true" packagePrefix="PHPUnit\Framework\MockObject\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/Runtime" isTestSource="true" packagePrefix="PHPUnit\Framework\MockObject\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
