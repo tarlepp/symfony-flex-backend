@@ -15,7 +15,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Throwable;
 
 /**
  * @package App\Entity\Traits
