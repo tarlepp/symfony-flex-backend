@@ -129,9 +129,6 @@ trait LogEntityTrait
         $this->agent = $request->headers->get('User-Agent') ?? '';
     }
 
-    /**
-     * @throws Throwable
-     */
     #[ORM\PrePersist]
     private function processTimeAndDate(): void
     {
