@@ -168,8 +168,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * Getter method for year start validator closure.
-     *
-     * @throws InvalidArgumentException
      */
     private function validatorYearStart(): Closure
     {
@@ -186,8 +184,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * Getter method for year end validator closure.
-     *
-     * @throws InvalidArgumentException
      */
     private function validatorYearEnd(int $yearStart): Closure
     {

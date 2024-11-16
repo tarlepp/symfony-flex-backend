@@ -1,11 +1,11 @@
 parameters:
-    level: max
+    level: 9
     paths:
         - src
         - tests
     editorUrl: '%%file%%:%%line%%'
     symfony:
-        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
     checkExplicitMixed: false
     ignoreErrors:
         -
