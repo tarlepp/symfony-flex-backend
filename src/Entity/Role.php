@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
@@ -64,9 +65,10 @@ class Role implements EntityInterface
 
     public function __construct(
         #[ORM\Id]
+        #[ORM\GeneratedValue(strategy: 'NONE')]
         #[ORM\Column(
             name: 'role',
-            type: Types::STRING,
+            type: AppTypes::PRIMARY_STRING,
             unique: true,
             nullable: false,
         )]
