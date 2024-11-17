@@ -27,6 +27,5 @@ class PrimaryStringType extends StringType
         $column['length'] = 255;
 
         return $platform->getStringTypeDeclarationSQL($column);
-
     }
 }
