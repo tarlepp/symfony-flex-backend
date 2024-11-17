@@ -232,7 +232,8 @@ abstract class DtoTestCase extends KernelTestCase
     private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty): mixed
     {
         return PhpUnitUtil::getValidValueForType(
-            self::getType($dtoReflection->getName(), $reflectionProperty->getName())
+            self::getType($dtoReflection->getName(), $reflectionProperty->getName()),
+            null,
         );
     }
 

@@ -36,16 +36,16 @@ use function is_array;
     name: 'log_login',
 )]
 #[ORM\Index(
+    name: 'user_id',
     columns: [
         'user_id',
     ],
-    name: 'user_id',
 )]
 #[ORM\Index(
+    name: 'date',
     columns: [
         'date',
     ],
-    name: 'date',
 )]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]

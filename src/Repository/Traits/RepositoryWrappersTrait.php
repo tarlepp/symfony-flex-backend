@@ -10,7 +10,8 @@ namespace App\Repository\Traits;
 
 use App\Rest\UuidHelper;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use UnexpectedValueException;
@@ -36,7 +37,7 @@ trait RepositoryWrappersTrait
     /**
      * {@inheritdoc}
      *
-     * @psalm-return array<string, array<string, mixed>>
+     * @psalm-return array<string, AssociationMapping>
      */
     public function getAssociations(): array
     {
@@ -46,7 +47,7 @@ trait RepositoryWrappersTrait
     /**
      * @psalm-suppress ArgumentTypeCoercion
      */
-    public function getClassMetaData(): ClassMetadataInfo
+    public function getClassMetaData(): ClassMetadata
     {
         return $this->getEntityManager()->getClassMetadata($this->getEntityName());
     }

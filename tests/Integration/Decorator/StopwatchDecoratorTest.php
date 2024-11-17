@@ -104,6 +104,11 @@ class StopwatchDecoratorTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
+
         $stopWatch
             ->expects($this->exactly(2))
             ->method('start');
@@ -142,6 +147,11 @@ class StopwatchDecoratorTest extends KernelTestCase
             ->expects($this->once())
             ->method('find')
             ->willReturn($apiKey);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $stopWatch
             ->expects($this->once())

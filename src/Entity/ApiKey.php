@@ -117,8 +117,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
     #[ORM\OneToMany(
-        mappedBy: 'apiKey',
         targetEntity: LogRequest::class,
+        mappedBy: 'apiKey',
     )]
     #[Groups([
         'ApiKey.logsRequest',

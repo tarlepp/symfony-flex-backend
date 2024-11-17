@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use App\Entity\User as Entity;
 use App\Rest\UuidHelper;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
@@ -23,7 +24,7 @@ use function array_key_exists;
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)
  * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)

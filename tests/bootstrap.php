@@ -133,13 +133,19 @@ if (is_readable($databaseCacheFile) && (string)getenv('ENV_TEST_CHANNEL_READABLE
     return;
 }
 
-// Create and boot 'test' kernel
-$kernel = new Kernel((string)getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
-$kernel->boot();
+$getApplication = static function (): Application {
+    // Create and boot 'test' kernel
+    $kernel = new Kernel((string)getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
+    $kernel->boot();
 
-// Create new application
-$application = new Application($kernel);
-$application->setAutoExit(false);
+    // Create new application
+    $application = new Application($kernel);
+    $application->setAutoExit(false);
+
+    return $application;
+};
+
+$application = $getApplication();
 
 // Add the doctrine:database:drop command to the application and run it
 $dropDatabaseDoctrineCommand = static function () use ($application): void {
@@ -169,18 +175,6 @@ $createDatabaseDoctrineCommand = static function () use ($application): void {
 $updateSchemaDoctrineCommand = static function () use ($application): void {
     $input = new ArrayInput([
         'command' => 'doctrine:migrations:migrate',
-        '--no-interaction' => true,
-    ]);
-
-    $input->setInteractive(false);
-
-    $application->run($input, new ConsoleOutput());
-};
-
-// Add the doctrine:fixtures:load command to the application and run it
-$loadFixturesDoctrineCommand = static function () use ($application): void {
-    $input = new ArrayInput([
-        'command' => 'doctrine:fixtures:load',
         '--no-interaction' => true,
     ]);
 
@@ -221,8 +215,36 @@ array_map(
         $dropDatabaseDoctrineCommand,
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
-        $loadFixturesDoctrineCommand,
         $createJwtAuthCache,
         $createDatabaseCreateCache,
+    ]
+);
+
+/**
+ * For some reason we need to re-create application to get loading of
+ * fixtures working correctly with ORM v3
+ *
+ * Without this we get error like:
+ *  An exception occurred while executing a query: SQLSTATE[42000]: Syntax
+ *  error or access violation: 1305 SAVEPOINT DOCTRINE_8 does not exist
+ */
+$application = $getApplication();
+
+// Add the doctrine:fixtures:load command to the application and run it
+$loadFixturesDoctrineCommand = static function () use ($application): void {
+    $input = new ArrayInput([
+        'command' => 'doctrine:fixtures:load',
+        '--no-interaction' => true,
+    ]);
+
+    $input->setInteractive(false);
+
+    $application->run($input, new ConsoleOutput());
+};
+
+array_map(
+    '\call_user_func',
+    [
+        $loadFixturesDoctrineCommand,
     ]
 );

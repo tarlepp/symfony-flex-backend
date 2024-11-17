@@ -34,10 +34,10 @@ use function floor;
     name: 'date_dimension',
 )]
 #[ORM\Index(
+    name: 'date',
     columns: [
         'date',
     ],
-    name: 'date',
 )]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class DateDimension implements EntityInterface

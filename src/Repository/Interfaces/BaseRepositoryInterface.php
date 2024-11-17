@@ -13,7 +13,8 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -51,14 +52,14 @@ interface BaseRepositoryInterface
     /**
      * Gets all association mappings of the class.
      *
-     * @psalm-return array<string, array<string, mixed>>
+     * @psalm-return array<string, AssociationMapping>
      */
     public function getAssociations(): array;
 
     /**
      * Returns the ORM metadata descriptor for a class.
      */
-    public function getClassMetaData(): ClassMetadataInfo;
+    public function getClassMetaData(): ClassMetadata;
 
     /**
      * Getter method for EntityManager for current entity.
@@ -73,13 +74,11 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository find method.
      *
-     * @psalm-param LockMode::*|null $lockMode
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
+    public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
 
     /**
      * Advanced version of find method, with this you can process query as you
@@ -108,6 +107,7 @@ interface BaseRepositoryInterface
      *
      * @psalm-param array<string, mixed> $criteria
      * @psalm-param array<string, string>|null $orderBy
+     * @phpstan-param array<string, 'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
      *
      * @psalm-return list<object|EntityInterface>
      */

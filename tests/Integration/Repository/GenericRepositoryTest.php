@@ -16,7 +16,6 @@ use App\Resource\ApiKeyResource;
 use App\Tests\Utils\StringableArrayObject;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Generator;
@@ -65,16 +64,6 @@ class GenericRepositoryTest extends KernelTestCase
             ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
             array_keys($resource->getRepository()->getAssociations())
         );
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatGetClassMetaDataReturnsExpected(): void
-    {
-        $resource = self::getContainer()->get(ApiKeyResource::class);
-
-        self::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
     }
 
     /**
@@ -336,12 +325,18 @@ class GenericRepositoryTest extends KernelTestCase
                 ApiKeyEntity::class,
                 'id',
                 null,
-                null
+                null,
             );
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $managerObject
             ->expects($this->once())
             ->method('getManagerForClass')
+            ->with(ApiKeyEntity::class)
             ->willReturn($entityManager);
 
         $repository = new ApiKeyRepository($managerObject);
@@ -380,6 +375,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $managerObject
             ->expects($this->once())
@@ -430,6 +430,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
 
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
+
         $managerObject
             ->expects($this->once())
             ->method('getManagerForClass')
@@ -466,6 +471,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getRepository')
             ->with(ApiKeyEntity::class)
             ->willReturn($repositoryMock);
+
+        $entityManager
+            ->expects($this->once())
+            ->method('isOpen')
+            ->willReturn(true);
 
         $managerObject
             ->expects($this->once())

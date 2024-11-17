@@ -12,11 +12,12 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use App\Tests\Integration\TestCase\EntityTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
-use function array_key_exists;
 use function ucfirst;
 
 /**
@@ -41,7 +42,7 @@ class LogLoginFailureTest extends EntityTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        FieldMapping|AssociationMapping|null $meta = null
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -55,7 +56,7 @@ class LogLoginFailureTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        FieldMapping|AssociationMapping|null $meta = null
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -67,19 +68,25 @@ class LogLoginFailureTest extends EntityTestCase
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that getter method for `$type $property` property returns expected')]
     #[Override]
-    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
-    {
+    public function testThatGetterReturnsExpectedValue(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping|null $meta,
+    ): void {
         $getter = 'get' . ucfirst($property);
 
         if ($type === 'boolean') {
             $getter = 'is' . ucfirst($property);
         }
 
-        $logRequest = new LogLoginFailure(
-            new User()
-        );
+        $logRequest = new LogLoginFailure(new User());
 
-        if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
+        if ($meta instanceof AssociationMapping
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+            )
+        ) {
             $type = ArrayCollection::class;
 
             self::assertInstanceOf($type, $logRequest->{$getter}());

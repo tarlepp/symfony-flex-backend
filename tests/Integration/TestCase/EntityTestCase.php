@@ -20,7 +20,9 @@ use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\AssociationMapping;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\FieldMapping;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
@@ -30,7 +32,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use TypeError;
 use function array_filter;
-use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -39,7 +40,6 @@ use function gettype;
 use function in_array;
 use function is_object;
 use function is_string;
-use function mb_strlen;
 use function mb_substr;
 use function method_exists;
 use function sprintf;
@@ -92,13 +92,14 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertSame($id, $factory->fromString($id)->toString());
     }
 
-    /**
-     * @param array<string, mixed> $meta
-     */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
-    public function testThatGetterAndSetterExists(string $property, string $type, array $meta, bool $readOnly): void
-    {
+    public function testThatGetterAndSetterExists(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
+        bool $readOnly,
+    ): void {
         $entity = $this->getEntity();
         $getter = 'get' . ucfirst($property);
         $setter = 'set' . ucfirst($property);
@@ -117,7 +118,7 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        if (array_key_exists('columnName', $meta)) {
+        if (isset($meta->columnDefinition)) {
             $message = $readOnly
                 ? "Entity '%s' has not expected setter '%s()' method for '%s' property."
                 : "Entity '%s' does not have expected setter '%s()' method for '%s' property.";
@@ -131,8 +132,6 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, mixed> $meta
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
@@ -140,9 +139,15 @@ abstract class EntityTestCase extends KernelTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $property,
         string $type,
-        array $meta,
+        FieldMapping|AssociationMapping $meta,
     ): void {
-        if (!array_key_exists('columnName', $meta) && !array_key_exists('joinColumns', $meta)) {
+        if ($meta instanceof AssociationMapping
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+                || $meta->isManyToMany()
+            )
+        ) {
             self::markTestSkipped('No need to test this setter...');
         }
 
@@ -164,8 +169,6 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, string> $meta
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
@@ -173,9 +176,15 @@ abstract class EntityTestCase extends KernelTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         string $property,
         string $type,
-        array $meta,
+        FieldMapping|AssociationMapping $meta,
     ): void {
-        if (!array_key_exists('columnName', $meta)) {
+        if ($meta instanceof AssociationMapping
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+                || $meta->isManyToMany()
+            )
+        ) {
             self::markTestSkipped('No need to test this setter...');
         }
 
@@ -198,14 +207,15 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, string> $meta
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` method for `$property` property returns value of expected type `$type`')]
-    public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
-    {
+    public function testThatGetterReturnsExpectedValue(
+        string $property,
+        string $type,
+        FieldMapping|AssociationMapping $meta,
+    ): void {
         $entity = $this->getEntity();
         $getter = 'get' . ucfirst($property);
         $setter = 'set' . ucfirst($property);
@@ -217,7 +227,17 @@ abstract class EntityTestCase extends KernelTestCase
         /** @var callable $callable */
         $callable = [$entity, $getter];
 
-        if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
+        if ($meta instanceof AssociationMapping
+            && (
+                $meta->isManyToManyOwningSide()
+                || $meta->isOneToMany()
+                || $meta->isManyToMany()
+            )
+        ) {
+            $type = ArrayCollection::class;
+
+            self::assertInstanceOf($type, $callable());
+        } else {
             $value = PhpUnitUtil::getValidValueForType($type, $meta);
 
             $entity->{$setter}($value);
@@ -233,10 +253,6 @@ abstract class EntityTestCase extends KernelTestCase
                     gettype($callable()),
                 ),
             );
-        } else {
-            $type = ArrayCollection::class;
-
-            self::assertInstanceOf($type, $callable());
         }
 
         try {
@@ -285,9 +301,6 @@ abstract class EntityTestCase extends KernelTestCase
         }
     }
 
-    /**
-     * @param array<mixed> $m
-     */
     #[DataProvider('dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `many-to-many` association methods `$g, $a, $r, $c` works as expected for `$e + $p` combo')]
     public function testThatManyToManyAssociationMethodsWorksAsExpected(
@@ -297,7 +310,7 @@ abstract class EntityTestCase extends KernelTestCase
         ?string $c,
         ?string $p,
         ?EntityInterface $e,
-        array $m,
+        FieldMapping|AssociationMapping|null $m,
     ): void {
         if ($g === null) {
             self::markTestSkipped('Entity does not contain many-to-many relationships.');
@@ -521,27 +534,24 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping): array {
-            $class = $mapping['targetEntity'];
+        $iterator = static function (AssociationMapping $mapping): array {
+            $class = $mapping->targetEntity;
 
-            self::assertIsString($class);
             self::assertTrue(class_exists($class));
 
             $targetEntity = new $class();
 
-            $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                : $mapping['fieldName'];
-
-            self::assertIsString($singular);
+            $singular = mb_substr($mapping->fieldName, -1) === 's'
+                ? mb_substr($mapping->fieldName, 0, -1)
+                : $mapping->fieldName;
 
             return [
                 [
-                    'get' . ucfirst((string)$mapping['fieldName']),
+                    'get' . ucfirst($mapping->fieldName),
                     'add' . ucfirst($singular),
                     'remove' . ucfirst($singular),
-                    'clear' . ucfirst((string)$mapping['fieldName']),
-                    $mapping['fieldName'],
+                    'clear' . ucfirst($mapping->fieldName),
+                    $mapping->fieldName,
                     $targetEntity,
                     $mapping,
                 ],
@@ -554,12 +564,12 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn ($mapping): bool => $mapping['type'] === ClassMetadataInfo::MANY_TO_MANY
+            static fn (AssociationMapping $mapping): bool => $mapping->type() === ClassMetadata::MANY_TO_MANY
         );
 
         if (empty($items)) {
             $output = [
-                [null, null, null, null, null, null, []],
+                [null, null, null, null, null, null, null],
             ];
         } else {
             $output = array_merge(...array_values(array_map($iterator, $items)));
@@ -581,21 +591,21 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping) use ($meta): array {
+        $iterator = static function (AssociationMapping $mapping) use ($meta): array {
             $params = [null];
 
-            if ($mapping['targetEntity'] === Role::class) {
+            if ($mapping->targetEntity === Role::class) {
                 $params = ['Some Role'];
             }
 
-            $targetEntity = new $mapping['targetEntity'](...$params);
+            $targetEntity = new $mapping->targetEntity(...$params);
 
             return [
                 [
-                    $meta->isReadOnly ? null : 'set' . ucfirst((string)$mapping['fieldName']),
-                    'get' . ucfirst((string)$mapping['fieldName']),
+                    $meta->isReadOnly ? null : 'set' . ucfirst($mapping->fieldName),
+                    'get' . ucfirst($mapping->fieldName),
                     $targetEntity,
-                    $mapping['fieldName'],
+                    $mapping->fieldName,
                     $mapping,
                 ],
             ];
@@ -607,7 +617,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadataInfo::MANY_TO_ONE
+            static fn (AssociationMapping $mapping): bool => $mapping->type() === ClassMetadata::MANY_TO_ONE
         );
 
         if (empty($items)) {
@@ -634,10 +644,9 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping) use ($meta): array {
-            $target = $mapping['targetEntity'];
+        $iterator = static function (AssociationMapping $mapping) use ($meta): array {
+            $target = $mapping->targetEntity;
 
-            self::assertIsString($target);
             self::assertTrue(class_exists($target));
 
             $arguments = match ($target) {
@@ -651,35 +660,31 @@ abstract class EntityTestCase extends KernelTestCase
             $input = new $target(...$arguments);
 
             $methods = [
-                ['get' . ucfirst((string)$mapping['fieldName']), $mapping['fieldName'], false, null],
+                ['get' . ucfirst($mapping->fieldName), $mapping->fieldName, false, null],
             ];
 
-            switch ($mapping['type']) {
-                case ClassMetadataInfo::ONE_TO_MANY:
-                case ClassMetadataInfo::ONE_TO_ONE:
+            switch ($mapping->type()) {
+                case ClassMetadata::ONE_TO_MANY:
+                case ClassMetadata::ONE_TO_ONE:
                     break;
-                case ClassMetadataInfo::MANY_TO_ONE:
+                case ClassMetadata::MANY_TO_ONE:
                     if ($meta->isReadOnly === false) {
                         $methods[] = [
-                            'set' . ucfirst((string)$mapping['fieldName']),
-                            $mapping['fieldName'],
+                            'set' . ucfirst($mapping->fieldName),
+                            $mapping->fieldName,
                             $input,
                             static::$entityName,
                         ];
                     }
                     break;
-                case ClassMetadataInfo::MANY_TO_MANY:
-                    self::assertArrayHasKey('fieldName', $mapping);
-
-                    $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                        ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                        : $mapping['fieldName'];
-
-                    self::assertIsString($singular);
+                case ClassMetadata::MANY_TO_MANY:
+                    $singular = mb_substr($mapping->fieldName, -1) === 's'
+                        ? mb_substr($mapping->fieldName, 0, -1)
+                        : $mapping->fieldName;
 
                     $methods = [
                         [
-                            'get' . ucfirst((string)$mapping['fieldName']),
+                            'get' . ucfirst($mapping->fieldName),
                             $mapping['fieldName'],
                             $input,
                             ArrayCollection::class,
@@ -701,7 +706,7 @@ abstract class EntityTestCase extends KernelTestCase
                                 static::$entityName,
                             ],
                             [
-                                'clear' . ucfirst((string)$mapping['fieldName']),
+                                'clear' . ucfirst($mapping->fieldName),
                                 $mapping['fieldName'],
                                 $input,
                                 static::$entityName,
@@ -745,10 +750,10 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static fn (array $mapping): array => [
+        $iterator = static fn (AssociationMapping $mapping): array => [
             [
-                'get' . ucfirst((string)$mapping['fieldName']),
-                $mapping['fieldName'],
+                'get' . ucfirst($mapping->fieldName),
+                $mapping->fieldName,
                 $mapping,
             ],
         ];
@@ -759,7 +764,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadataInfo::ONE_TO_MANY,
+            static fn (AssociationMapping $mapping): bool => $mapping->type() === ClassMetadata::ONE_TO_MANY,
         );
 
         if (empty($items)) {

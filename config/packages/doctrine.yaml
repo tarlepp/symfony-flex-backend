@@ -12,6 +12,7 @@ doctrine:
             EnumLanguage: App\Doctrine\DBAL\Types\EnumLanguageType
             EnumLocale: App\Doctrine\DBAL\Types\EnumLocaleType
             EnumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
+            PrimaryString: App\Doctrine\DBAL\Types\PrimaryStringType
         profiling_collect_backtrace: '%kernel.debug%'
         #use_savepoints: true
         # IMPORTANT: You MUST configure your server version,

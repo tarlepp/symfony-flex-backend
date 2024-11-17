@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
@@ -54,8 +55,8 @@ class Role implements EntityInterface
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     #[ORM\OneToMany(
-        mappedBy: 'role',
         targetEntity: UserGroup::class,
+        mappedBy: 'role',
     )]
     #[Groups([
         'Role.userGroups',
@@ -64,9 +65,10 @@ class Role implements EntityInterface
 
     public function __construct(
         #[ORM\Id]
+        #[ORM\GeneratedValue(strategy: 'NONE')]
         #[ORM\Column(
             name: 'role',
-            type: Types::STRING,
+            type: AppTypes::PRIMARY_STRING,
             unique: true,
             nullable: false,
         )]
@@ -80,7 +82,7 @@ class Role implements EntityInterface
             UserGroup::SET_USER_PROFILE_GROUPS,
             UserGroup::SET_USER_GROUP_BASIC,
         ])]
-        private string $id
+        private readonly string $id
     ) {
         $this->userGroups = new ArrayCollection();
     }

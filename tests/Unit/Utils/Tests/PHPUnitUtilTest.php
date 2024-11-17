@@ -52,7 +52,7 @@ class PHPUnitUtilTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Cannot create valid value for type \'666\'.');
 
-        PhpUnitUtil::getValidValueForType('666');
+        PhpUnitUtil::getValidValueForType('666', null);
     }
 
     /**
@@ -62,7 +62,7 @@ class PHPUnitUtilTest extends KernelTestCase
     #[TestDox('Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`')]
     public function testThatGetValidValueReturnsExpectedValue(mixed $expected, string $input, bool $strict): void
     {
-        $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
+        $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input), null);
 
         $expected = $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected;
 
@@ -80,7 +80,7 @@ class PHPUnitUtilTest extends KernelTestCase
     #[TestDox('Test that `getValidValueForType` works as expected with custom type')]
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
-        self::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
+        self::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class, null));
     }
 
     /**
@@ -94,7 +94,7 @@ class PHPUnitUtilTest extends KernelTestCase
         int | string | array $expected,
         string $type,
     ): void {
-        self::assertSame($expected, PhpUnitUtil::getValidValueForType($type));
+        self::assertSame($expected, PhpUnitUtil::getValidValueForType($type, null));
     }
 
     /**
