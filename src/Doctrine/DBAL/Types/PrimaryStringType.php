@@ -10,7 +10,6 @@ namespace App\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
-use Doctrine\DBAL\Types\Type;
 use Override;
 
 /**
