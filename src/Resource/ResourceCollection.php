@@ -16,6 +16,7 @@ use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Throwable;
@@ -61,11 +62,13 @@ class ResourceCollection implements Countable
         return $this->getFilteredItemByEntity($className ?? '') !== null;
     }
 
+    #[Override]
     public function filter(string $className): Closure
     {
         return static fn (RestResourceInterface $restResource): bool => $restResource instanceof $className;
     }
 
+    #[Override]
     public function getErrorMessage(string $className): string
     {
         return sprintf('Resource \'%s\' does not exist', $className);

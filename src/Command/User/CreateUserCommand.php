@@ -83,6 +83,7 @@ class CreateUserCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     public function getRolesService(): RolesService
     {
         return $this->rolesService;
