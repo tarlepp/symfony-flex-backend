@@ -13,7 +13,7 @@ use App\Entity\UserGroup;
 use App\Enum\Role;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
-use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use OpenApi\Attributes\JsonContent;
 use OpenApi\Attributes\Property;
