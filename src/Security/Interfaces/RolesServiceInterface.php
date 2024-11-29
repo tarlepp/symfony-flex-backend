@@ -21,17 +21,21 @@ interface RolesServiceInterface
     /**
      * Getter method to return all roles in single dimensional array.
      *
-     * @return array<int, string>
+     * @return array<int, non-empty-string>
      */
     public function getRoles(): array;
 
     /**
      * Getter method for role label.
+     *
+     * @return non-empty-string
      */
     public function getRoleLabel(string $role): string;
 
     /**
      * Getter method for short role.
+     *
+     * @return non-empty-string
      */
     public function getShort(string $role): string;
 
@@ -40,7 +44,7 @@ interface RolesServiceInterface
      *
      * @param array<int, string> $roles
      *
-     * @return array<int, string>
+     * @return array<int, non-empty-string>
      */
     public function getInheritedRoles(array $roles): array;
 }
