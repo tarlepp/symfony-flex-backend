@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DataFixtures/ORM/LoadApiKeyData.php
+ * /tests/DataFixtures/ORM/LoadApiKeyData.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\DataFixtures\ORM;
+namespace App\Tests\DataFixtures\ORM;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
@@ -22,7 +22,7 @@ use function array_map;
 use function str_pad;
 
 /**
- * @package App\DataFixtures\ORM
+ * @package App\Tests\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress PropertyNotSetInConstructor

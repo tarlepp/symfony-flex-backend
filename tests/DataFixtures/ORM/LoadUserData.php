@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DataFixtures/ORM/LoadUserData.php
+ * /tests/DataFixtures/ORM/LoadUserData.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\DataFixtures\ORM;
+namespace App\Tests\DataFixtures\ORM;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
@@ -23,7 +23,7 @@ use Throwable;
 use function array_map;
 
 /**
- * @package App\DataFixtures\ORM
+ * @package App\Tests\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress PropertyNotSetInConstructor
