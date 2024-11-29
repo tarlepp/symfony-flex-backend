@@ -231,7 +231,7 @@
             <configuration_option name="include_path" value=".:/usr/local/lib/php" />
           </configuration_options>
           <debuggers>
-            <debugger_info debugger="xdebug" debugger_version="3.4.0beta1">
+            <debugger_info debugger="xdebug" debugger_version="3.4.0">
               <debug_extensions />
             </debugger_info>
           </debuggers>
