@@ -10,7 +10,7 @@ namespace App\Controller\v1\Profile;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
-use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use OpenApi\Attributes\JsonContent;
 use OpenApi\Attributes\Property;

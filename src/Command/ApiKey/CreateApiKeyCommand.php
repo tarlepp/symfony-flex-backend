@@ -61,6 +61,7 @@ class CreateApiKeyCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     public function getRolesService(): RolesService
     {
         return $this->rolesService;

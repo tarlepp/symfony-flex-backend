@@ -12,7 +12,7 @@ use App\Entity\User;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use JsonException;
-use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use OpenApi\Attributes\JsonContent;
 use OpenApi\Attributes\Property;
