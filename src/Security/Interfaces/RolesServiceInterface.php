@@ -27,15 +27,11 @@ interface RolesServiceInterface
 
     /**
      * Getter method for role label.
-     *
-     * @return string
      */
     public function getRoleLabel(string $role): string;
 
     /**
      * Getter method for short role.
-     *
-     * @return string
      */
     public function getShort(string $role): string;
 
