@@ -66,7 +66,7 @@ RUN install-php-extensions \
     intl \
     opcache \
     pdo_mysql \
-    xdebug-^3@beta \
+    xdebug \
     zip
 
 # Install security updates
