@@ -69,7 +69,7 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for formatted user group rows for console table.
      *
-     * @return array<int, string>
+     * @return array<array-key, mixed>
      *
      * @throws Throwable
      */

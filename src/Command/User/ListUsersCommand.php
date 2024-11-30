@@ -73,7 +73,7 @@ class ListUsersCommand extends Command
     /**
      * Getter method for formatted user rows for console table.
      *
-     * @return array<int, string>
+     * @return array<array-key, mixed>
      *
      * @throws Throwable
      */
