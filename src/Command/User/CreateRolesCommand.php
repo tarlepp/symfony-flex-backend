@@ -84,6 +84,8 @@ class CreateRolesCommand extends Command
      * and persist it to database.
      *
      * @throws Throwable
+     *
+     * @param non-empty-string $role
      */
     private function createRole(string $role): int
     {
