@@ -25,12 +25,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: '8.4'
           tools: composer:v2
@@ -40,7 +40,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.1.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -70,12 +70,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: '8.4'
           tools: composer:v2
@@ -85,7 +85,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.1.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -121,12 +121,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: '8.4'
           tools: composer:v2
@@ -136,7 +136,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.1.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -181,13 +181,13 @@ jobs:
         run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: phploc.json
           path: ./build/phploc.json
@@ -212,12 +212,12 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: '8.4'
           extensions: pdo_mysql, mysql
@@ -229,7 +229,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.1.2
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -293,25 +293,25 @@ jobs:
         run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: CodeCoverage
           path: ./build/report
 
       - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
@@ -322,28 +322,28 @@ jobs:
 
     steps:
       - name: Make checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Lint `./README.md`
-        uses: avto-dev/markdown-lint@v1
+        uses: avto-dev/markdown-lint@v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './README.md'
 
       - name: Lint all the resource docs under `./doc/` directory
-        uses: avto-dev/markdown-lint@v1
+        uses: avto-dev/markdown-lint@v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './doc/*.md'
 
       - name: Lint all the docs under `./docker/` directory
-        uses: avto-dev/markdown-lint@v1
+        uses: avto-dev/markdown-lint@v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './docker/*.md'
 
       - name: Lint all the docs under `./secrets/` directory
-        uses: avto-dev/markdown-lint@v1
+        uses: avto-dev/markdown-lint@v1.5.0
         with:
           config: './markdown-lint.yml'
           args: './secrets/*.md'
@@ -355,7 +355,7 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
       - name: Set tag var
         id: vars
@@ -365,7 +365,7 @@ jobs:
         run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
 
       - name: Scan Docker image with Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: 'symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}'
           format: 'table'
