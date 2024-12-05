@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\User;
 
-use App\DataFixtures\ORM\LoadUserData;
+use App\Tests\DataFixtures\ORM\LoadUserData;
 use App\Tests\E2E\TestCase\WebTestCase;
 use App\Tests\Utils\StringableArrayObject;
 use App\Utils\JSON;

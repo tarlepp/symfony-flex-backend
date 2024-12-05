@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DataFixtures/ORM/LoadRoleData.php
+ * /tests/DataFixtures/ORM/LoadRoleData.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\DataFixtures\ORM;
+namespace App\Tests\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Security\Interfaces\RolesServiceInterface;
@@ -18,7 +18,7 @@ use Throwable;
 use function array_map;
 
 /**
- * @package App\DataFixtures\ORM
+ * @package App\Tests\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress PropertyNotSetInConstructor

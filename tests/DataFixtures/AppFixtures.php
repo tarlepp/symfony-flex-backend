@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DataFixtures/AppFixtures.php
+ * /tests/DataFixtures/AppFixtures.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\DataFixtures;
+namespace App\Tests\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;

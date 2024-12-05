@@ -1,15 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DataFixtures/ORM/LoadApiKeyData.php
+ * /tests/DataFixtures/ORM/LoadUserData.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\DataFixtures\ORM;
+namespace App\Tests\DataFixtures\ORM;
 
-use App\Entity\ApiKey;
+use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Enum\Language;
+use App\Enum\Locale;
 use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
 use App\Tests\Utils\PhpUnitUtil;
@@ -19,26 +21,25 @@ use Doctrine\Persistence\ObjectManager;
 use Override;
 use Throwable;
 use function array_map;
-use function str_pad;
 
 /**
- * @package App\DataFixtures\ORM
+ * @package App\Tests\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
+final class LoadUserData extends Fixture implements OrderedFixtureInterface
 {
     /**
-     * @var array<string, string>
+     * @var array<non-empty-string, non-empty-string>
      */
-    private array $uuids = [
-        '' => '30000000-0000-1000-8000-000000000001',
-        '-logged' => '30000000-0000-1000-8000-000000000002',
-        '-api' => '30000000-0000-1000-8000-000000000003',
-        '-user' => '30000000-0000-1000-8000-000000000004',
-        '-admin' => '30000000-0000-1000-8000-000000000005',
-        '-root' => '30000000-0000-1000-8000-000000000006',
+    public static array $uuids = [
+        'john' => '20000000-0000-1000-8000-000000000001',
+        'john-logged' => '20000000-0000-1000-8000-000000000002',
+        'john-api' => '20000000-0000-1000-8000-000000000003',
+        'john-user' => '20000000-0000-1000-8000-000000000004',
+        'john-admin' => '20000000-0000-1000-8000-000000000005',
+        'john-root' => '20000000-0000-1000-8000-000000000006',
     ];
 
     public function __construct(
@@ -54,7 +55,7 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
     {
         // Create entities
         array_map(
-            fn (?string $role): bool => $this->createApiKey($manager, $role),
+            fn (?string $role): bool => $this->createUser($manager, $role),
             [
                 null,
                 ...$this->rolesService->getRoles(),
@@ -68,41 +69,46 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
     #[Override]
     public function getOrder(): int
     {
-        return 4;
+        return 3;
     }
 
     /**
+     * Method to create User entity with specified role.
+     *
      * @throws Throwable
      */
-    private function createApiKey(ObjectManager $manager, ?string $role = null): bool
+    private function createUser(ObjectManager $manager, ?string $role = null): bool
     {
-        // Create new entity
-        $entity = (new ApiKey())
-            ->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->rolesService->getShort($role)))
-            ->setToken(str_pad($role === null ? '' : $this->rolesService->getShort($role), 40, '_'));
+        $suffix = $role === null ? '' : '-' . $this->rolesService->getShort($role);
 
-        $suffix = '';
+        // Create new entity
+        $entity = (new User())
+            ->setUsername('john' . $suffix)
+            ->setFirstName('John')
+            ->setLastName('Doe')
+            ->setEmail('john.doe' . $suffix . '@test.com')
+            ->setLanguage(Language::EN)
+            ->setLocale(Locale::EN)
+            ->setPlainPassword('password' . $suffix);
 
         if ($role !== null) {
             /** @var UserGroup $userGroup */
             $userGroup = $this->getReference('UserGroup-' . $this->rolesService->getShort($role), UserGroup::class);
 
             $entity->addUserGroup($userGroup);
-
-            $suffix = '-' . $this->rolesService->getShort($role);
         }
 
         PhpUnitUtil::setProperty(
             'id',
-            UuidHelper::fromString($this->uuids[$suffix]),
-            $entity
+            UuidHelper::fromString(self::$uuids['john' . $suffix]),
+            $entity,
         );
 
         // Persist entity
         $manager->persist($entity);
 
         // Create reference for later usage
-        $this->addReference('ApiKey' . $suffix, $entity);
+        $this->addReference('User-' . $entity->getUsername(), $entity);
 
         return true;
     }

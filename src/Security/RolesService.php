@@ -22,10 +22,10 @@ use function mb_strtolower;
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RolesService implements RolesServiceInterface
+readonly class RolesService implements RolesServiceInterface
 {
     public function __construct(
-        private readonly RoleHierarchyInterface $roleHierarchy,
+        private RoleHierarchyInterface $roleHierarchy,
     ) {
     }
 

@@ -33,7 +33,6 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DataFixtures/'
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
@@ -81,8 +80,8 @@ when@test:
             <<: *_services_defaults
             public: true
 
-        App\DataFixtures\:
-            resource: '../src/DataFixtures/*'
+        App\Tests\DataFixtures\:
+            resource: '../tests/DataFixtures/*'
 
         App\Tests\E2E\Rest\src\:
             resource: '../tests/E2E/Rest/src/*'

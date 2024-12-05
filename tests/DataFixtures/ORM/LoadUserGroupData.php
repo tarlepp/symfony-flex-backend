@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DataFixtures/ORM/LoadUserGroupData.php
+ * /tests/DataFixtures/ORM/LoadUserGroupData.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\DataFixtures\ORM;
+namespace App\Tests\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Entity\UserGroup;
@@ -21,7 +21,7 @@ use Throwable;
 use function array_map;
 
 /**
- * @package App\DataFixtures\ORM
+ * @package App\Tests\DataFixtures\ORM
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress PropertyNotSetInConstructor
@@ -29,7 +29,7 @@ use function array_map;
 final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 {
     /**
-     * @var array<string, string>
+     * @var array<non-empty-string, non-empty-string>
      */
     public static array $uuids = [
         'Role-logged' => '10000000-0000-1000-8000-000000000001',
@@ -74,14 +74,14 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         $roleReference = $this->getReference('Role-' . $this->rolesService->getShort($role), Role::class);
 
         // Create new entity
-        $entity = new UserGroup();
-        $entity->setRole($roleReference);
-        $entity->setName($this->rolesService->getRoleLabel($role));
+        $entity = (new UserGroup())
+            ->setRole($roleReference)
+            ->setName($this->rolesService->getRoleLabel($role));
 
         PhpUnitUtil::setProperty(
             'id',
             UuidHelper::fromString(self::$uuids['Role-' . $this->rolesService->getShort($role)]),
-            $entity
+            $entity,
         );
 
         // Persist entity

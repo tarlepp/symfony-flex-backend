@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Controller\v1\UserGroup;
 
-use App\DataFixtures\ORM\LoadUserGroupData;
+use App\Tests\DataFixtures\ORM\LoadUserGroupData;
 use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
 use Generator;
