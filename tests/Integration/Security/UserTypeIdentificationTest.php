@@ -19,6 +19,7 @@ use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -66,7 +67,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $apiKey = new ApiKey();
         $apiKeyUser = new ApiKeyUser($apiKey, []);
-        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
+        $token = new UsernamePasswordToken($apiKeyUser, 'firewallName', ['role']);
 
         $tokenStorageMock
             ->expects($this->once())
@@ -118,7 +119,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $user = (new User())->setUsername('some-username');
         $securityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
+        $token = new UsernamePasswordToken($securityUser, 'firewallName', ['role']);
 
         $tokenStorageMock
             ->expects($this->once())
@@ -173,7 +174,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $securityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
+        $token = new UsernamePasswordToken($securityUser, 'firewallName', ['role']);
 
         $tokenStorageMock
             ->expects($this->once())
@@ -197,7 +198,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $apiKeyUser = new ApiKeyUser(new ApiKey(), []);
-        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
+        $token = new UsernamePasswordToken($apiKeyUser, 'firewallName', ['role']);
 
         $tokenStorageMock
             ->expects($this->exactly(2))
@@ -246,7 +247,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $apiKeyUser = new ApiKeyUser(new ApiKey(), []);
-        $token = new UsernamePasswordToken($apiKeyUser, 'credentials', ['providerKey']);
+        $token = new UsernamePasswordToken($apiKeyUser, 'firewallName', ['role']);
 
         $tokenStorageMock
             ->expects($this->once())
@@ -299,7 +300,7 @@ class UserTypeIdentificationTest extends KernelTestCase
         $apiKeyUserProviderMock = $this->createMock(ApiKeyUserProvider::class);
 
         $securityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($securityUser, 'credentials', ['providerKey']);
+        $token = new UsernamePasswordToken($securityUser, 'firewallName', ['role']);
 
         $tokenStorageMock
             ->expects($this->once())
@@ -317,7 +318,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     * @return Generator<array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -325,7 +326,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     * @return Generator<array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -333,7 +334,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     * @return Generator<array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -341,7 +342,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     * @return Generator<array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -349,7 +350,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     * @return Generator<array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -357,7 +358,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     * @return Generator<array{0: AbstractToken|null}>
      */
     private static function getInvalidTokens(): Generator
     {
@@ -365,20 +366,19 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         yield [new UsernamePasswordToken(
             new InMemoryUser('username', 'password'),
-            'credentials',
-            ['providerKey']
+            'firewallName',
+            ['role']
         )];
 
         yield [new PreAuthenticatedToken(
             new InMemoryUser('username', 'password'),
-            'credentials',
-            ['providerKey'],
+            'firewallName',
+            ['role'],
         )];
 
         yield [new RememberMeToken(
             new InMemoryUser('username', 'password'),
-            'provider-key',
-            'some-secret',
+            'firewallName',
         )];
     }
 }

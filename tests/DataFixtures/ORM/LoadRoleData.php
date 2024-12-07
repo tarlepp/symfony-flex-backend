@@ -53,6 +53,8 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface
      * Method to create and persist role entity to database.
      *
      * @throws Throwable
+     *
+     * @param non-empty-string $role
      */
     private function createRole(ObjectManager $manager, string $role): bool
     {

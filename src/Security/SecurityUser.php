@@ -21,6 +21,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @var non-empty-string
+     */
     private readonly string $identifier;
     private readonly string $password;
     private readonly Language $language;
