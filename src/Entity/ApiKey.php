@@ -68,6 +68,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     #[OA\Property(type: 'string', format: 'uuid')]
     private UuidInterface $id;
 
+    /**
+     * @var non-empty-string
+     */
     #[ORM\Column(
         name: 'token',
         type: Types::STRING,
@@ -85,7 +88,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     #[Assert\Length(
         exactly: 40,
     )]
-    private string $token = '';
+    private string $token;
 
     #[ORM\Column(
         name: 'description',
@@ -131,10 +134,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     public function __construct()
     {
         $this->id = $this->createUuid();
+        $this->token = $this->generateToken()->getToken();
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
-
-        $this->generateToken();
     }
 
     #[Override]
@@ -143,11 +145,17 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         return $this->id->toString();
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getToken(): string
     {
         return $this->token;
     }
 
+    /**
+     * @param non-empty-string $token
+     */
     public function setToken(string $token): self
     {
         $this->token = $token;
@@ -160,7 +168,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      */
     public function generateToken(): self
     {
-        return $this->setToken(ByteString::fromRandom(40)->toString());
+        /** @var non-empty-string $token */
+        $token = ByteString::fromRandom(40)->toString();
+
+        return $this->setToken($token);
     }
 
     public function getDescription(): string

@@ -62,6 +62,9 @@ class Role implements EntityInterface
     ])]
     private Collection | ArrayCollection $userGroups;
 
+    /**
+     * @param non-empty-string $id
+     */
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(
@@ -80,7 +83,7 @@ class Role implements EntityInterface
             UserGroup::SET_USER_PROFILE_GROUPS,
             UserGroup::SET_USER_GROUP_BASIC,
         ])]
-        private string $id
+        private readonly string $id,
     ) {
         $this->userGroups = new ArrayCollection();
     }
