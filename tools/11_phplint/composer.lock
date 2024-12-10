@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef665f7546be8cdd272b264df40e5dbd",
+    "content-hash": "4b6536b776af026b570f69e2891f8c26",
     "packages": [],
     "packages-dev": [
         {
             "name": "overtrue/phplint",
-            "version": "9.5.4",
+            "version": "9.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/phplint.git",
-                "reference": "7999b43e4a898b8427959585e4960d71bedddb4e"
+                "reference": "c074e6a944ead268ad1fbecfef67e978c99ddc09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/phplint/zipball/7999b43e4a898b8427959585e4960d71bedddb4e",
-                "reference": "7999b43e4a898b8427959585e4960d71bedddb4e",
+                "url": "https://api.github.com/repos/overtrue/phplint/zipball/c074e6a944ead268ad1fbecfef67e978c99ddc09",
+                "reference": "c074e6a944ead268ad1fbecfef67e978c99ddc09",
                 "shasum": ""
             },
             "require": {
@@ -46,16 +46,16 @@
             ],
             "type": "library",
             "extra": {
-                "bamarni-bin": {
-                    "bin-links": true,
-                    "target-directory": "vendor-bin",
-                    "forward-command": true
-                },
                 "hooks": {
                     "pre-commit": [
                         "composer style:fix",
                         "composer code:check"
                     ]
+                },
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true,
+                    "target-directory": "vendor-bin"
                 },
                 "branch-alias": {
                     "dev-main": "9.5.x-dev"
@@ -90,7 +90,7 @@
             ],
             "support": {
                 "issues": "https://github.com/overtrue/phplint/issues",
-                "source": "https://github.com/overtrue/phplint/tree/9.5.4"
+                "source": "https://github.com/overtrue/phplint/tree/9.5.5"
             },
             "funding": [
                 {
@@ -98,7 +98,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-01T04:32:38+00:00"
+            "time": "2024-12-08T05:45:05+00:00"
         },
         {
             "name": "psr/cache",
@@ -1792,8 +1792,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -1868,8 +1868,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -1946,8 +1946,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -2474,7 +2474,7 @@
     "platform": {
         "php": "^8.4.0"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.4.0"
     },
