@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.4.1-fpm
+FROM php:8.4.2-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
