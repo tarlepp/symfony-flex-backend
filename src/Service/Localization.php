@@ -25,13 +25,13 @@ use function str_replace;
  * @package App\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class Localization
+readonly class Localization
 {
     final public const string DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
-        private readonly CacheInterface $appCacheApcu,
-        private readonly LoggerInterface $logger,
+        private CacheInterface $appCacheApcu,
+        private LoggerInterface $logger,
     ) {
     }
 
