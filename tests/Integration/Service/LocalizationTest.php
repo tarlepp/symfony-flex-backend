@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Service;
 
 use App\Enum\Language;
+use App\Enum\Locale;
 use App\Service\Localization;
 use Exception;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -23,6 +24,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class LocalizationTest extends KernelTestCase
 {
+    #[TestDox('Test that `getLanguages` returns expected')]
     public function testThatGetLanguagesReturnsExpected(): void
     {
         $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
@@ -34,6 +36,21 @@ class LocalizationTest extends KernelTestCase
         self::assertSame(
             $expected,
             (new Localization($cache, $logger, $requestStack))->getLanguages(),
+        );
+    }
+
+    #[TestDox('Test that `getLocales` returns expected')]
+    public function testThatGetLocalesReturnsExpected(): void
+    {
+        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $requestStack = new RequestStack();
+
+        $expected = Locale::getValues();
+
+        self::assertSame(
+            $expected,
+            (new Localization($cache, $logger, $requestStack))->getLocales(),
         );
     }
 
