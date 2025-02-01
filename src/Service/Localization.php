@@ -14,11 +14,13 @@ use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Throwable;
 use function explode;
 use function floor;
+use function in_array;
 use function str_replace;
 
 /**
@@ -32,6 +34,7 @@ readonly class Localization
     public function __construct(
         private CacheInterface $appCacheApcu,
         private LoggerInterface $logger,
+        private RequestStack $requestStack,
     ) {
     }
 
@@ -49,6 +52,13 @@ readonly class Localization
     public function getLocales(): array
     {
         return Locale::getValues();
+    }
+
+    public function getRequestLocale(): string
+    {
+        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? Locale::getDefault()->value;
+
+        return in_array($locale, $this->getLocales(), true) ? $locale : Locale::getDefault()->value;
     }
 
     /**
