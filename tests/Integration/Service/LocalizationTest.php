@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Service;
 
+use App\Enum\Language;
 use App\Service\Localization;
 use Exception;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -22,6 +23,20 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class LocalizationTest extends KernelTestCase
 {
+    public function testThatGetLanguagesReturnsExpected(): void
+    {
+        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $requestStack = new RequestStack();
+
+        $expected = Language::getValues();
+
+        self::assertSame(
+            $expected,
+            (new Localization($cache, $logger, $requestStack))->getLanguages(),
+        );
+    }
+
     #[TestDox('Test that `LoggerInterface::error` method is called when `CacheInterface` throws an exception')]
     public function testThatLoggerIsCalledWhenCacheThrowsAnException(): void
     {
