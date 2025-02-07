@@ -201,6 +201,8 @@ class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters'.
      *
+     * @psalm-suppress MoreSpecificReturnType
+     *
      * @return Generator<array{0: string}>
      */
     public static function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
