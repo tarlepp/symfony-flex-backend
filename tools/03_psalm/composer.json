@@ -9,7 +9,7 @@
 		"roave/security-advisories": "dev-latest",
 		"psalm/plugin-phpunit": "0.19.2",
 		"psalm/plugin-symfony": "5.2.7",
-		"vimeo/psalm": "6.1.0",
+		"vimeo/psalm": "6.5.0",
 		"weirdan/doctrine-psalm-plugin": "2.10.0"
 	},
 	"config": {

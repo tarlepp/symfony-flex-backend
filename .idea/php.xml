@@ -88,8 +88,6 @@
       <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/comparator" />
       <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/exporter" />
       <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/environment" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/code-unit" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/code-unit-reverse-lookup" />
       <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-file-iterator" />
       <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-timer" />
       <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-text-template" />
