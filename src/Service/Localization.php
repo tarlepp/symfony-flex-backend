@@ -14,24 +14,27 @@ use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Throwable;
 use function explode;
 use function floor;
+use function in_array;
 use function str_replace;
 
 /**
  * @package App\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class Localization
+readonly class Localization
 {
     final public const string DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
-        private readonly CacheInterface $appCacheApcu,
-        private readonly LoggerInterface $logger,
+        private CacheInterface $appCacheApcu,
+        private LoggerInterface $logger,
+        private RequestStack $requestStack,
     ) {
     }
 
@@ -49,6 +52,13 @@ class Localization
     public function getLocales(): array
     {
         return Locale::getValues();
+    }
+
+    public function getRequestLocale(): string
+    {
+        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? Locale::getDefault()->value;
+
+        return in_array($locale, $this->getLocales(), true) ? $locale : Locale::getDefault()->value;
     }
 
     /**
