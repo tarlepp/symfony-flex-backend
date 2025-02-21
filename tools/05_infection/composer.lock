@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a8e210730b698f5cd277cb018743736",
+    "content-hash": "4b1555fd2d91f61195bd80d80fa9623e",
     "packages": [],
     "packages-dev": [
         {
@@ -480,16 +480,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.29.10",
+            "version": "0.29.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "cac7d20e5d286a37488527e477f5a695a9d7a44c"
+                "reference": "e241c8f58cf4121818c5a20a74ebb321dd94bb25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/cac7d20e5d286a37488527e477f5a695a9d7a44c",
-                "reference": "cac7d20e5d286a37488527e477f5a695a9d7a44c",
+                "url": "https://api.github.com/repos/infection/infection/zipball/e241c8f58cf4121818c5a20a74ebb321dd94bb25",
+                "reference": "e241c8f58cf4121818c5a20a74ebb321dd94bb25",
                 "shasum": ""
             },
             "require": {
@@ -511,7 +511,7 @@
                 "php": "^8.2",
                 "sanmai/later": "^0.1.1",
                 "sanmai/pipeline": "^5.1 || ^6",
-                "sebastian/diff": "^3.0.2 || ^4.0 || ^5.0 || ^6.0",
+                "sebastian/diff": "^3.0.2 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
                 "shish/safe": "^2.6",
                 "symfony/console": "^5.4 || ^6.0 || ^7.0",
                 "symfony/filesystem": "^5.4 || ^6.0 || ^7.0",
@@ -592,7 +592,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.29.10"
+                "source": "https://github.com/infection/infection/tree/0.29.11"
             },
             "funding": [
                 {
@@ -604,7 +604,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-12-17T19:11:10+00:00"
+            "time": "2025-02-11T10:05:15+00:00"
         },
         {
             "name": "infection/mutator",
@@ -969,12 +969,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "24296413a9838930e7c039f5eaf985ccec766103"
+                "reference": "3dafa2bcf6675854ed6410d1c84c0f71f819fc26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/24296413a9838930e7c039f5eaf985ccec766103",
-                "reference": "24296413a9838930e7c039f5eaf985ccec766103",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3dafa2bcf6675854ed6410d1c84c0f71f819fc26",
+                "reference": "3dafa2bcf6675854ed6410d1c84c0f71f819fc26",
                 "shasum": ""
             },
             "conflict": {
@@ -991,7 +991,7 @@
                 "airesvsg/acf-to-rest-api": "<=3.1",
                 "akaunting/akaunting": "<2.1.13",
                 "akeneo/pim-community-dev": "<5.0.119|>=6,<6.0.53",
-                "alextselegidis/easyappointments": "<1.5",
+                "alextselegidis/easyappointments": "<=1.5",
                 "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amazing/media2click": ">=1,<1.3.3",
                 "ameos/ameos_tarteaucitron": "<1.2.23",
@@ -1325,11 +1325,12 @@
                 "localizationteam/l10nmgr": "<7.4|>=8,<8.7|>=9,<9.2",
                 "luyadev/yii-helpers": "<1.2.1",
                 "maestroerror/php-heic-to-jpg": "<1.0.5",
-                "magento/community-edition": "<2.4.5|==2.4.5|>=2.4.5.0-patch1,<2.4.5.0-patch10|==2.4.6|>=2.4.6.0-patch1,<2.4.6.0-patch8|>=2.4.7.0-beta1,<2.4.7.0-patch3",
+                "magento/community-edition": "<2.4.5|==2.4.5|>=2.4.5.0-patch1,<2.4.5.0-patch11|==2.4.6|>=2.4.6.0-patch1,<2.4.6.0-patch9|>=2.4.7.0-beta1,<2.4.7.0-patch4|>=2.4.8.0-beta1,<2.4.8.0-beta2",
                 "magento/core": "<=1.9.4.5",
                 "magento/magento1ce": "<1.9.4.3-dev",
                 "magento/magento1ee": ">=1,<1.14.4.3-dev",
                 "magento/product-community-edition": "<2.4.4.0-patch9|>=2.4.5,<2.4.5.0-patch8|>=2.4.6,<2.4.6.0-patch6|>=2.4.7,<2.4.7.0-patch1",
+                "magento/project-community-edition": "<=2.0.2",
                 "magneto/core": "<1.9.4.4-dev",
                 "maikuolan/phpmussel": ">=1,<1.6",
                 "mainwp/mainwp": "<=4.4.3.3",
@@ -1509,7 +1510,7 @@
                 "rap2hpoutre/laravel-log-viewer": "<0.13",
                 "react/http": ">=0.7,<1.9",
                 "really-simple-plugins/complianz-gdpr": "<6.4.2",
-                "redaxo/source": "<5.18",
+                "redaxo/source": "<=5.18.1",
                 "remdex/livehelperchat": "<4.29",
                 "reportico-web/reportico": "<=8.1",
                 "rhukster/dom-sanitizer": "<1.0.7",
@@ -1835,7 +1836,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-07T21:04:27+00:00"
+            "time": "2025-02-14T21:04:39+00:00"
         },
         {
             "name": "sanmai/later",
@@ -1968,29 +1969,29 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "6.0.2",
+            "version": "7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "b4ccd857127db5d41a5b676f24b51371d76d8544"
+                "reference": "7ab1ea946c012266ca32390913653d844ecd085f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/b4ccd857127db5d41a5b676f24b51371d76d8544",
-                "reference": "b4ccd857127db5d41a5b676f24b51371d76d8544",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/7ab1ea946c012266ca32390913653d844ecd085f",
+                "reference": "7ab1ea946c012266ca32390913653d844ecd085f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2"
+                "php": ">=8.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "^11.0",
-                "symfony/process": "^4.2 || ^5"
+                "phpunit/phpunit": "^12.0",
+                "symfony/process": "^7.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "6.0-dev"
+                    "dev-main": "7.0-dev"
                 }
             },
             "autoload": {
@@ -2023,7 +2024,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
                 "security": "https://github.com/sebastianbergmann/diff/security/policy",
-                "source": "https://github.com/sebastianbergmann/diff/tree/6.0.2"
+                "source": "https://github.com/sebastianbergmann/diff/tree/7.0.0"
             },
             "funding": [
                 {
@@ -2031,7 +2032,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T04:53:05+00:00"
+            "time": "2025-02-07T04:55:46+00:00"
         },
         {
             "name": "shish/safe",
