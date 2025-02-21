@@ -181,13 +181,13 @@ jobs:
         run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: phploc.json
           path: ./build/phploc.json
@@ -293,25 +293,25 @@ jobs:
         run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: CodeCoverage
           path: ./build/report
 
       - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
