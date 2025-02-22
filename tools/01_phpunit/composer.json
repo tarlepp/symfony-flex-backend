@@ -7,9 +7,9 @@
 	},
 	"require-dev": {
 		"liuggio/fastest": "1.12.0",
-		"phpunit/php-code-coverage": "12.0.2",
+		"phpunit/php-code-coverage": "12.0.3",
 		"phpunit/phpcov": "11.0.0",
-		"phpunit/phpunit": "12.0.2",
+		"phpunit/phpunit": "12.0.4",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "7.2.0",
 		"symfony/phpunit-bridge": "7.2.0"
