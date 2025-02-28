@@ -6,7 +6,7 @@
 		"php": "^8.4.0"
 	},
 	"require-dev": {
-		"infection/infection": "0.29.12",
+		"infection/infection": "0.29.13",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
