@@ -30,7 +30,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.31.1
+        uses: shivammathur/setup-php@2.32.0
         with:
           php-version: '8.4'
           tools: composer:v2
@@ -40,7 +40,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.1
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -75,7 +75,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.31.1
+        uses: shivammathur/setup-php@2.32.0
         with:
           php-version: '8.4'
           tools: composer:v2
@@ -85,7 +85,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.1
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -126,7 +126,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.31.1
+        uses: shivammathur/setup-php@2.32.0
         with:
           php-version: '8.4'
           tools: composer:v2
@@ -136,7 +136,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.1
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -181,13 +181,13 @@ jobs:
         run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: phploc.json
           path: ./build/phploc.json
@@ -217,7 +217,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.31.1
+        uses: shivammathur/setup-php@2.32.0
         with:
           php-version: '8.4'
           extensions: pdo_mysql, mysql
@@ -229,7 +229,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.1
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -293,25 +293,25 @@ jobs:
         run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: CodeCoverage
           path: ./build/report
 
       - name: Archive PhpMetrics results
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
