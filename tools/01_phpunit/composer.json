@@ -6,8 +6,8 @@
 		"php": "^8.4.0"
 	},
 	"require-dev": {
-		"liuggio/fastest": "1.12.0",
-		"phpunit/php-code-coverage": "12.0.4",
+		"liuggio/fastest": "1.13.0",
+		"phpunit/php-code-coverage": "12.0.5",
 		"phpunit/phpcov": "11.0.0",
 		"phpunit/phpunit": "12.0.7",
 		"roave/security-advisories": "dev-latest",
