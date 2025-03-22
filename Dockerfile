@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.4.4-fpm
+FROM php:8.4.5-fpm
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.7.24 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.7.28 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
@@ -40,7 +40,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.8.5 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.6 /usr/bin/composer /usr/bin/composer
 
 # Enable Composer autocompletion
 RUN composer completion bash > /etc/bash_completion.d/composer
