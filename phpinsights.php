@@ -53,6 +53,8 @@ return [
         //  ExampleInsight::class,
         NunoMaduro\PhpInsights\Domain\Insights\Composer\ComposerMustBeValid::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses::class,
+        // Disabled for now because of the - https://github.com/nunomaduro/phpinsights/issues/704
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenSecurityIssues::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
         NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
