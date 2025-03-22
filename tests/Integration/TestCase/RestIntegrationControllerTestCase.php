@@ -14,8 +14,6 @@ use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use UnexpectedValueException;
 use function assert;
-use function gc_collect_cycles;
-use function gc_enable;
 use function mb_substr;
 use function sprintf;
 
@@ -40,8 +38,6 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
     #[Override]
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         $controller = static::getContainer()->get($this->controllerClass);
@@ -49,16 +45,6 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
         assert($controller instanceof Controller);
 
         $this->controller = $controller;
-    }
-
-    #[Override]
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->controller);
-
-        gc_collect_cycles();
     }
 
     public function testThatGivenControllerIsCorrect(): void
