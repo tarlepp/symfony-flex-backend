@@ -40,7 +40,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.2.1
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -85,7 +85,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.2.1
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -136,7 +136,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.2.1
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -229,7 +229,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.2.1
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -365,7 +365,7 @@ jobs:
         run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
 
       - name: Scan Docker image with Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: 'symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}'
           format: 'table'
