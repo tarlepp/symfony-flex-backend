@@ -168,6 +168,7 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/masterminds" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/nikic" />
       <excludeFolder url="file://$MODULE_DIR$/tools/11_phplint" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/polyfill-php84" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
