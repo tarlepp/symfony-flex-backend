@@ -46,7 +46,7 @@ use Throwable;
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ResourceCollectionTest extends KernelTestCase
+final class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {

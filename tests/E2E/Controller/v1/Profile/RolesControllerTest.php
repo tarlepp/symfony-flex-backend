@@ -26,7 +26,7 @@ use function str_pad;
  * @package App\Tests\E2E\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RolesControllerTest extends WebTestCase
+final class RolesControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/profile/roles';
 

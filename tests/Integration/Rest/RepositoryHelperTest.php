@@ -21,7 +21,7 @@ use Throwable;
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RepositoryHelperTest extends KernelTestCase
+final class RepositoryHelperTest extends KernelTestCase
 {
     /**
      * @phpstan-param StringableArrayObject<mixed> $input

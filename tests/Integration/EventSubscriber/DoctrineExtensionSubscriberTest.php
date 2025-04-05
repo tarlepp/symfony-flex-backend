@@ -21,7 +21,7 @@ use Throwable;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DoctrineExtensionSubscriberTest extends KernelTestCase
+final class DoctrineExtensionSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable

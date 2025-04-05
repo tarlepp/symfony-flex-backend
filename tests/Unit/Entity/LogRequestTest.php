@@ -20,7 +20,7 @@ use Throwable;
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LogRequestTest extends KernelTestCase
+final class LogRequestTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -23,7 +23,7 @@ use Throwable;
  * @package App\Tests\Integration\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DetachUserControllerTest extends KernelTestCase
+final class DetachUserControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

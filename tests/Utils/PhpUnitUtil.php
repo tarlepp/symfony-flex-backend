@@ -42,7 +42,7 @@ use function substr_count;
  * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class PhpUnitUtil
+final class PhpUnitUtil
 {
     final public const string TYPE_INT = 'int';
     final public const string TYPE_INTEGER = 'integer';

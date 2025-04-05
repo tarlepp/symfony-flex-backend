@@ -19,7 +19,7 @@ use function property_exists;
  * @package App\Tests\Integration\Helpers
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class StopwatchAwareTraitTest extends KernelTestCase
+final class StopwatchAwareTraitTest extends KernelTestCase
 {
     public function testThatStopwatchAttributeExists(): void
     {

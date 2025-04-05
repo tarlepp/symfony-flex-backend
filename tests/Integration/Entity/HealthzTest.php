@@ -17,7 +17,7 @@ use App\Tests\Integration\TestCase\EntityTestCase;
  *
  * @method Healthz getEntity()
  */
-class HealthzTest extends EntityTestCase
+final class HealthzTest extends EntityTestCase
 {
     /**
      * @var class-string

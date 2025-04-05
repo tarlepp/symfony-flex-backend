@@ -15,7 +15,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
  * @package App\Tests\Integration\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserCreateTest extends DtoTestCase
+final class UserCreateTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

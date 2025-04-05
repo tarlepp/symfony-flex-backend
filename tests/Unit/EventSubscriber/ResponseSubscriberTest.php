@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ResponseSubscriberTest extends KernelTestCase
+final class ResponseSubscriberTest extends KernelTestCase
 {
     #[TestDox('Test that `getSubscribedEvents` method returns expected')]
     public function testThatGetSubscribedEventsReturnsExpected(): void

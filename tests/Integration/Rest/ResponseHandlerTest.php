@@ -28,7 +28,7 @@ use Throwable;
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ResponseHandlerTest extends KernelTestCase
+final class ResponseHandlerTest extends KernelTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {

@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DoctrineExtensionSubscriberTest extends KernelTestCase
+final class DoctrineExtensionSubscriberTest extends KernelTestCase
 {
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {

@@ -2,6 +2,7 @@ services:
     php:
         container_name: symfony-backend-php-fpm
         hostname: php-fpm
+        stop_signal: SIGKILL
         build:
             context: .
             dockerfile: ./Dockerfile_dev
@@ -26,6 +27,7 @@ services:
     nginx:
         container_name: symfony-backend-nginx
         hostname: nginx
+        stop_signal: SIGKILL
         build:
             context: ./docker/nginx/
             dockerfile: ./Dockerfile_dev
@@ -44,6 +46,7 @@ services:
     mariadb:
         container_name: symfony-backend-mariadb
         hostname: mariadb
+        stop_signal: SIGKILL
         build:
             context: ./docker/mariadb/
         command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -58,6 +61,7 @@ services:
         container_name: symfony-backend-dozzle
         hostname: dozzle
         image: amir20/dozzle
+        stop_signal: SIGKILL
         ports:
             - "8100:8080"
         volumes:
@@ -67,6 +71,7 @@ services:
         container_name: symfony-backend-adminer
         hostname: adminer
         image: adminer
+        stop_signal: SIGKILL
         environment:
             ADMINER_DEFAULT_SERVER: mariadb
             ADMINER_DESIGN: pepa-linha-dark

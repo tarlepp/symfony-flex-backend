@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(
     path: '/test_anon_actions',
 )]
-class AnonActionsController extends Controller
+final class AnonActionsController extends Controller
 {
     use Actions\CountAction;
     use Actions\CreateAction;

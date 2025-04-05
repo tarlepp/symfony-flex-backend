@@ -31,7 +31,7 @@ use function iterator_to_array;
  * @package App\Tests\Functional\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LoggedInUserValueResolverTest extends KernelTestCase
+final class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
      * @throws Throwable

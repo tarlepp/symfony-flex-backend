@@ -15,7 +15,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
  * @package App\Tests\Integration\DTO\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyCreateTest extends DtoTestCase
+final class ApiKeyCreateTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

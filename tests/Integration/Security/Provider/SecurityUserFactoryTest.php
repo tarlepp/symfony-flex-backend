@@ -30,7 +30,7 @@ use Throwable;
  * @package App\Tests\Integration\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class SecurityUserFactoryTest extends KernelTestCase
+final class SecurityUserFactoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -25,7 +25,7 @@ use function serialize;
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class JSONTest extends KernelTestCase
+final class JSONTest extends KernelTestCase
 {
     /**
      * @throws JsonException

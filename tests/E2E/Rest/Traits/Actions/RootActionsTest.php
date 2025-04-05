@@ -17,7 +17,7 @@ use function getenv;
  * @package App\Tests\E2E\Rest\Traits\Actions
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RootActionsTest extends RestTraitTestCase
+final class RootActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_root_actions';
 

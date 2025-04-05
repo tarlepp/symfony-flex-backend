@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\TestDox;
  * @package App\Tests\Integration\DTO\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyPatchTest extends DtoTestCase
+final class ApiKeyPatchTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

@@ -17,7 +17,7 @@ use Throwable;
  * @package App\Tests\E2E\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class HealthzControllerTest extends WebTestCase
+final class HealthzControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable

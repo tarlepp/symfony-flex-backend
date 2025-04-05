@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  * @package App\Tests\Integration\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RolesServiceTest extends KernelTestCase
+final class RolesServiceTest extends KernelTestCase
 {
     #[TestDox('Test that `getInheritedRoles(array $roles)` method calls expected service method')]
     public function testThatGetInheritedRolesMethodCallsExpectedServiceMethod(): void

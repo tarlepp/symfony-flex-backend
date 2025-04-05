@@ -34,7 +34,7 @@ use function range;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LockedUserSubscriberTest extends KernelTestCase
+final class LockedUserSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable

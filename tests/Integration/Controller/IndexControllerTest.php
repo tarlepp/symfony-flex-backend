@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IndexControllerTest extends KernelTestCase
+final class IndexControllerTest extends KernelTestCase
 {
     #[TestDox('Test that `__invoke` method returns proper response')]
     public function testThatInvokeMethodReturnsExpectedResponse(): void

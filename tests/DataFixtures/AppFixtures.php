@@ -16,7 +16,7 @@ use Override;
  * @package App\DataFixtures
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class AppFixtures extends Fixture
+final class AppFixtures extends Fixture
 {
     #[Override]
     public function load(ObjectManager $manager): void

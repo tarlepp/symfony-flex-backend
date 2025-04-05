@@ -30,7 +30,7 @@ use function ucfirst;
  *
  * @method LogLogin getEntity()
  */
-class LogLoginTest extends EntityTestCase
+final class LogLoginTest extends EntityTestCase
 {
     /**
      * @var class-string

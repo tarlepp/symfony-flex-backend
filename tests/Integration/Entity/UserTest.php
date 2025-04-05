@@ -24,7 +24,7 @@ use function unserialize;
  *
  * @method User getEntity()
  */
-class UserTest extends EntityTestCase
+final class UserTest extends EntityTestCase
 {
     /**
      * @var class-string

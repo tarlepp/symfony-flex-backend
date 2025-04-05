@@ -34,7 +34,7 @@ use function property_exists;
  * @package App\Tests\Integration\Security\Authenticator
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyAuthenticatorTest extends KernelTestCase
+final class ApiKeyAuthenticatorTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -23,7 +23,7 @@ use function json_encode;
  * @package App\Tests\Unit\Rest;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RequestHandlerTest extends KernelTestCase
+final class RequestHandlerTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter')]
     #[TestDox(

@@ -24,7 +24,7 @@ use Throwable;
  *
  * @method DeleteUserController getController()
  */
-class DeleteUserControllerTest extends RestIntegrationControllerTestCase
+final class DeleteUserControllerTest extends RestIntegrationControllerTestCase
 {
     /**
      * @var class-string

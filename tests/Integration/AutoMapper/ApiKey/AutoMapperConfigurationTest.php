@@ -19,7 +19,7 @@ use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
  * @package App\Tests\Integration\AutoMapper\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
+final class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
 {
     /**
      * @var class-string

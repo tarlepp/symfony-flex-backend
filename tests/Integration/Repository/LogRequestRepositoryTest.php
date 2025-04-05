@@ -23,7 +23,7 @@ use App\Tests\Integration\TestCase\RepositoryTestCase;
  * @method LogRequestResource getResource()
  * @method LogRequestRepository getRepository()
  */
-class LogRequestRepositoryTest extends RepositoryTestCase
+final class LogRequestRepositoryTest extends RepositoryTestCase
 {
     /**
      * @var class-string<EntityInterface>

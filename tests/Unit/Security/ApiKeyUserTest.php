@@ -26,7 +26,7 @@ use Throwable;
  * @package App\Tests\Unit\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyUserTest extends KernelTestCase
+final class ApiKeyUserTest extends KernelTestCase
 {
     /**
      * @phpstan-param StringableArrayObject<array<int, string>> $expectedRoles

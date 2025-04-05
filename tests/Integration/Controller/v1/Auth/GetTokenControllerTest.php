@@ -19,7 +19,7 @@ use Throwable;
  *
  * @property GetTokenController $controller
  */
-class GetTokenControllerTest extends KernelTestCase
+final class GetTokenControllerTest extends KernelTestCase
 {
     public function testThatGetTokenThrowsAnException(): void
     {

@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Integration\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class InheritedRolesControllerTest extends KernelTestCase
+final class InheritedRolesControllerTest extends KernelTestCase
 {
     #[TestDox('Test that `__invoke($role)` method calls expected service methods')]
     public function testThatInvokeMethodCallsExpectedMethods(): void

@@ -23,7 +23,7 @@ use Throwable;
  * @package App\Tests\Integration\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RoleTransformerTest extends KernelTestCase
+final class RoleTransformerTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatTransformReturnsExpected')]
     #[TestDox('Test that `transform` method returns `$expected` when using `$input` as input')]
