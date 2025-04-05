@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  * @package App\Tests\Integration\Security\Voter
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IsUserHimselfVoterTest extends KernelTestCase
+final class IsUserHimselfVoterTest extends KernelTestCase
 {
     #[TestDox('Test that `vote` method returns `Voter::ACCESS_ABSTAIN` when subject is not supported')]
     public function testThatVoteReturnsExpectedIfSubjectIsNotSupported(): void

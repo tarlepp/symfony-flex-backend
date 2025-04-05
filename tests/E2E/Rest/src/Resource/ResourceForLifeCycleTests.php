@@ -36,7 +36,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @codingStandardsIgnoreEnd
  */
-class ResourceForLifeCycleTests extends RestResource
+final class ResourceForLifeCycleTests extends RestResource
 {
     public function __construct(
         Repository $repository,

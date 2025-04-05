@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\TestDox;
  * @package App\Tests\Integration\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserPatchTest extends DtoTestCase
+final class UserPatchTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

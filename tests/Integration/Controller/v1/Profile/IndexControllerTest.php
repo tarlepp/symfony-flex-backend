@@ -20,7 +20,7 @@ use Throwable;
  * @package App\Tests\Integration\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IndexControllerTest extends KernelTestCase
+final class IndexControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package App\Tests\Integration\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RequestLoggerTest extends KernelTestCase
+final class RequestLoggerTest extends KernelTestCase
 {
     #[TestDox('Test that log is not created if `Request` and `Response` object are not set')]
     public function testThatLogIsNotCreatedIfRequestAndResponseObjectsAreNotSet(): void

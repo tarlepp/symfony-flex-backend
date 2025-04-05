@@ -18,7 +18,7 @@ use Throwable;
  * @package Functional\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RoleRepositoryTest extends KernelTestCase
+final class RoleRepositoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -21,7 +21,7 @@ use function getenv;
  * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserUpdateInvalidUserTest extends WebTestCase
+final class UserUpdateInvalidUserTest extends WebTestCase
 {
     /**
      * @throws Throwable

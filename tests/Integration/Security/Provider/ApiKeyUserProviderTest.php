@@ -29,7 +29,7 @@ use Throwable;
  * @package App\Tests\Integration\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyUserProviderTest extends KernelTestCase
+final class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
      * @throws Throwable
