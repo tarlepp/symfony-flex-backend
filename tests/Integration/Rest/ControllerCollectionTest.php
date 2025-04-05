@@ -21,6 +21,7 @@ use ArrayObject;
 use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
@@ -64,6 +65,7 @@ class ControllerCollectionTest extends KernelTestCase
             /**
              * @phpstan-return ArrayObject<int, mixed>
              */
+            #[Override]
             public function getIterator(): ArrayObject
             {
                 return $this->iterator;
