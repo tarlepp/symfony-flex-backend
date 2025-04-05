@@ -7,15 +7,15 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"psalm/plugin-phpunit": "0.19.3",
+		"psalm/plugin-phpunit": "0.19.5",
 		"psalm/plugin-symfony": "5.2.7",
-		"vimeo/psalm": "6.5.0",
+		"vimeo/psalm": "6.10.0",
 		"weirdan/doctrine-psalm-plugin": "2.10.0"
 	},
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.3.0"
+			"php": "8.4.5"
 		},
 		"preferred-install": {
 			"*": "dist"
