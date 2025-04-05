@@ -26,7 +26,7 @@ use function array_unique;
  *
  * @method ApiKey getEntity()
  */
-class ApiKeyTest extends EntityTestCase
+final class ApiKeyTest extends EntityTestCase
 {
     /**
      * @var class-string

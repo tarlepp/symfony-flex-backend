@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RoleTest extends KernelTestCase
+final class RoleTest extends KernelTestCase
 {
     #[TestDox('Test that `Role::getUserGroups` returns expected')]
     public function testThatGetUserGroupsWorksLikeExpected(): void

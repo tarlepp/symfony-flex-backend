@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
     path: '/test_authenticated_actions',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
-class AuthenticatedActionsController extends Controller
+final class AuthenticatedActionsController extends Controller
 {
     use Actions\CountAction;
     use Actions\CreateAction;

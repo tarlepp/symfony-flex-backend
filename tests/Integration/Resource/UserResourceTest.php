@@ -25,7 +25,7 @@ use Throwable;
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserResourceTest extends ResourceTestCase
+final class UserResourceTest extends ResourceTestCase
 {
     /**
      * @var class-string<EntityInterface>

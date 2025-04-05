@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\CreateMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class CreateMethodTestClass extends Controller
+final class CreateMethodTestClass extends Controller
 {
     use CreateMethod;
 

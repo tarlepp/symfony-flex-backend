@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class AcceptLanguageSubscriberTest extends KernelTestCase
+final class AcceptLanguageSubscriberTest extends KernelTestCase
 {
     #[TestDox('Test that specific default language is set')]
     public function testThatSpecifiedDefaultLanguageIsSet(): void

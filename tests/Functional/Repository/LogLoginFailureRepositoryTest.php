@@ -19,7 +19,7 @@ use Throwable;
  * @package App\Tests\Functional\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LogLoginFailureRepositoryTest extends KernelTestCase
+final class LogLoginFailureRepositoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable

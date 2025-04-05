@@ -19,7 +19,7 @@ use Throwable;
  * @package App\Tests\Integration\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class HealthzServiceTest extends KernelTestCase
+final class HealthzServiceTest extends KernelTestCase
 {
     /**
      * @throws Throwable

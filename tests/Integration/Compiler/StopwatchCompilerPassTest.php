@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Definition;
  * @package App\Tests\Compiler\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class StopwatchCompilerPassTest extends KernelTestCase
+final class StopwatchCompilerPassTest extends KernelTestCase
 {
     #[TestDox('Test that `findTaggedServiceIds` method is called expected times')]
     public function testThatFindTaggedServiceIdsMethodIsCalled(): void
