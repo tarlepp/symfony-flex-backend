@@ -34,6 +34,7 @@ use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
 use LogicException;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
@@ -267,6 +268,7 @@ class ResourceCollectionTest extends KernelTestCase
             /**
              * @phpstan-return ArrayObject<int, mixed>
              */
+            #[Override]
             public function getIterator(): ArrayObject
             {
                 return $this->iterator;
@@ -284,6 +286,7 @@ class ResourceCollectionTest extends KernelTestCase
             /**
              * @phpstan-return ArrayObject<int, mixed>
              */
+            #[Override]
             public function getIterator(): ArrayObject
             {
                 throw new LogicException('Exception with getIterator');
