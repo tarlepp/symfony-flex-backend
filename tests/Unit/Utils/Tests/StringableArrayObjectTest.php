@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Unit\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class StringableArrayObjectTest extends KernelTestCase
+final class StringableArrayObjectTest extends KernelTestCase
 {
     /**
      * @phpstan-param StringableArrayObject<array<string, string>> $input

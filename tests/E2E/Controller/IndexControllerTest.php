@@ -16,7 +16,7 @@ use Throwable;
  * @package App\Tests\E2E\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IndexControllerTest extends WebTestCase
+final class IndexControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable

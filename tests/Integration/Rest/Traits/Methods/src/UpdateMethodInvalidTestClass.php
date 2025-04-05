@@ -21,7 +21,7 @@ use BadMethodCallException;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UpdateMethodInvalidTestClass
+final class UpdateMethodInvalidTestClass
 {
     use UpdateMethod;
     use RestActionBase;

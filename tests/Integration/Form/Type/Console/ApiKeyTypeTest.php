@@ -25,7 +25,7 @@ use function array_keys;
  * @package App\Tests\Integration\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyTypeTest extends TypeTestCase
+final class ApiKeyTypeTest extends TypeTestCase
 {
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void

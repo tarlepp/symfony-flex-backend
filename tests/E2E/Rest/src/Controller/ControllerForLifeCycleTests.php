@@ -29,7 +29,7 @@ use Throwable;
 )]
 #[AsController]
 #[AutoconfigureTag('app.rest.controller')]
-class ControllerForLifeCycleTests extends Controller
+final class ControllerForLifeCycleTests extends Controller
 {
     // Traits
     use Methods\FindOneMethod;

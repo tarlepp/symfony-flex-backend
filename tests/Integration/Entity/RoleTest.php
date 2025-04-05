@@ -18,7 +18,7 @@ use Override;
  *
  * @method Role getEntity()
  */
-class RoleTest extends EntityTestCase
+final class RoleTest extends EntityTestCase
 {
     /**
      * @var class-string

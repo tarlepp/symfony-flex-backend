@@ -20,7 +20,7 @@ use Stringable;
  * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class StringableArrayObject extends ArrayObject implements Stringable
+final class StringableArrayObject extends ArrayObject implements Stringable
 {
     /**
      * @throws JsonException

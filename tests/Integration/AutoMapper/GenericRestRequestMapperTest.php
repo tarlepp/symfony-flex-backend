@@ -26,7 +26,7 @@ use Throwable;
  * @package App\Tests\Integration\AutoMapper
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class GenericRestRequestMapperTest extends KernelTestCase
+final class GenericRestRequestMapperTest extends KernelTestCase
 {
     /**
      * @throws Throwable

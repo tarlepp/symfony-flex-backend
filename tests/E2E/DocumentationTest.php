@@ -16,7 +16,7 @@ use Throwable;
  * @package App\Tests\Functional
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DocumentationTest extends WebTestCase
+final class DocumentationTest extends WebTestCase
 {
     /**
      * @throws Throwable

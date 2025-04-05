@@ -30,7 +30,7 @@
 		"doctrine/doctrine-migrations-bundle": "3.4.1",
 		"doctrine/orm": "2.20.2",
 		"friendsofphp/proxy-manager-lts": "1.0.18",
-		"gedmo/doctrine-extensions": "3.19.0",
+		"gedmo/doctrine-extensions": "3.20.0",
 		"lexik/jwt-authentication-bundle": "3.1.1",
 		"mark-gerarts/automapper-plus-bundle": "1.5.0",
 		"matomo/device-detector": "6.4.5",
@@ -91,7 +91,7 @@
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.0"
+			"php": "8.4.5"
 		},
 		"sort-packages": true
 	},

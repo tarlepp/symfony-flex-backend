@@ -18,7 +18,7 @@ use function str_rot13;
  * @package App\Tests\Unit\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class SecurityUserTest extends KernelTestCase
+final class SecurityUserTest extends KernelTestCase
 {
     #[TestDox('Test that `SecurityUser::getRoles` method returns expected roles')]
     public function testThatGetRolesReturnsExpected(): void

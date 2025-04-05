@@ -24,7 +24,7 @@ use Throwable;
  * @package App\Tests\Integration\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class EnumLogLoginTypeTest extends KernelTestCase
+final class EnumLogLoginTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable
