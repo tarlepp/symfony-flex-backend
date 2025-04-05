@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RequestLogSubscriberTest extends KernelTestCase
+final class RequestLogSubscriberTest extends KernelTestCase
 {
     #[TestDox('Test that `getSubscribedEvents` method returns expected')]
     public function testThatGetSubscribedEventsReturnsExpected(): void

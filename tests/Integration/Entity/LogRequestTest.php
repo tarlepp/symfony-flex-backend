@@ -35,7 +35,7 @@ use function ucfirst;
  *
  * @method LogRequest getEntity()
  */
-class LogRequestTest extends EntityTestCase
+final class LogRequestTest extends EntityTestCase
 {
     /**
      * @var class-string

@@ -18,7 +18,7 @@ use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
  *
  * @method \App\Controller\v1\UserGroup\UserGroupController getController()
  */
-class UserGroupControllerTest extends RestIntegrationControllerTestCase
+final class UserGroupControllerTest extends RestIntegrationControllerTestCase
 {
     /**
      * @var class-string

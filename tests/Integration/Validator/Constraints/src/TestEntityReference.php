@@ -17,7 +17,7 @@ use Override;
  * @package App\Tests\Integration\Validator\Constraints\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TestEntityReference implements EntityInterface
+final class TestEntityReference implements EntityInterface
 {
     public function __construct(
         private readonly bool $throwException = false

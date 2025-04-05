@@ -24,7 +24,7 @@ use function iterator_to_array;
  * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class EntityValueResolverTest extends KernelTestCase
+final class EntityValueResolverTest extends KernelTestCase
 {
     public function testThatSupportsReturnFalseWithNotSupportedRequestParameterType(): void
     {

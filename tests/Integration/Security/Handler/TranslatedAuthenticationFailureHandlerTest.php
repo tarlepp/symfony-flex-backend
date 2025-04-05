@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @package App\Tests\Integration\Security\Handler
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
+final class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
 {
     #[TestDox('Test that `onAuthenticationFailure` method calls expected service methods')]
     public function testThatOnAuthenticationFailureMethodCallsExpectedServiceMethods(): void

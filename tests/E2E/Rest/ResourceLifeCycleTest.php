@@ -22,7 +22,7 @@ use function sprintf;
  * @package App\Tests\E2E\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ResourceLifeCycleTest extends WebTestCase
+final class ResourceLifeCycleTest extends WebTestCase
 {
     /**
      * @throws Throwable
