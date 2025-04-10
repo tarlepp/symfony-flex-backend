@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cad69f0f1258c9d93648b0ece6dc1dc4",
+    "content-hash": "4978908ac2c68a9f49028eb819d09209",
     "packages": [],
     "packages-dev": [
         {
             "name": "overtrue/phplint",
-            "version": "9.5.6",
+            "version": "9.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/phplint.git",
-                "reference": "3fdc395a816d1401091062c7a3bfb31252aed6c5"
+                "reference": "91e88a743d87c6329eed6de54ab0c448de8f7534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/phplint/zipball/3fdc395a816d1401091062c7a3bfb31252aed6c5",
-                "reference": "3fdc395a816d1401091062c7a3bfb31252aed6c5",
+                "url": "https://api.github.com/repos/overtrue/phplint/zipball/91e88a743d87c6329eed6de54ab0c448de8f7534",
+                "reference": "91e88a743d87c6329eed6de54ab0c448de8f7534",
                 "shasum": ""
             },
             "require": {
@@ -58,7 +58,7 @@
                     "target-directory": "vendor-bin"
                 },
                 "branch-alias": {
-                    "dev-main": "9.5.x-dev"
+                    "dev-main": "9.6.x-dev"
                 }
             },
             "autoload": {
@@ -90,7 +90,7 @@
             ],
             "support": {
                 "issues": "https://github.com/overtrue/phplint/issues",
-                "source": "https://github.com/overtrue/phplint/tree/9.5.6"
+                "source": "https://github.com/overtrue/phplint/tree/9.6.1"
             },
             "funding": [
                 {
@@ -98,7 +98,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-15T05:41:15+00:00"
+            "time": "2025-04-09T18:56:34+00:00"
         },
         {
             "name": "psr/cache",
@@ -2511,9 +2511,9 @@
     "platform": {
         "php": "^8.4.0"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.4.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
