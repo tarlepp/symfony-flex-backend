@@ -17,7 +17,7 @@ use Override;
  * @package App\Tests\Integration\AutoMapper\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TestRestRequestMapperDto extends RestDto
+final class TestRestRequestMapperDto extends RestDto
 {
     protected string $someProperty = '';
     protected string $someTransformProperty = '';

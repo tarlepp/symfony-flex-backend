@@ -18,7 +18,7 @@ use function strlen;
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyTest extends KernelTestCase
+final class ApiKeyTest extends KernelTestCase
 {
     #[TestDox('Test that token is generated on creation of ApiKey entity')]
     public function testThatTokenIsGenerated(): void

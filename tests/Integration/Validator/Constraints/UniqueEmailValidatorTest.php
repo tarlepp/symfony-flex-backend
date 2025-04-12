@@ -22,7 +22,7 @@ use Throwable;
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UniqueEmailValidatorTest extends KernelTestCase
+final class UniqueEmailValidatorTest extends KernelTestCase
 {
     /**
      * @throws Throwable

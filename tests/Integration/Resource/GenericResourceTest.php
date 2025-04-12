@@ -33,7 +33,7 @@ use UnexpectedValueException;
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class GenericResourceTest extends KernelTestCase
+final class GenericResourceTest extends KernelTestCase
 {
     #[TestDox('Test without DTO class `getDtoClass` method call throws an exception')]
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void

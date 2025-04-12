@@ -23,7 +23,7 @@ use Throwable;
  * @package App\Tests\Integration\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LoginLoggerTest extends KernelTestCase
+final class LoginLoggerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

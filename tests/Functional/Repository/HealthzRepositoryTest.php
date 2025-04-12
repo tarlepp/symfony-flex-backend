@@ -21,7 +21,7 @@ use Throwable;
  * @package App\Tests\Functional\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class HealthzRepositoryTest extends KernelTestCase
+final class HealthzRepositoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable

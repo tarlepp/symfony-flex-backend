@@ -21,7 +21,7 @@ use function count;
  * @package App\Tests\Integration\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyTest extends DtoTestCase
+final class ApiKeyTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

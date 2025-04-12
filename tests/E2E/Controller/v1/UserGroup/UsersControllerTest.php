@@ -20,7 +20,7 @@ use Throwable;
  * @package App\Tests\E2E\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UsersControllerTest extends WebTestCase
+final class UsersControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable

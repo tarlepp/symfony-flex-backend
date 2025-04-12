@@ -20,7 +20,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @package App\Tests\Integration\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class VersionTest extends KernelTestCase
+final class VersionTest extends KernelTestCase
 {
     #[TestDox('Test that `LoggerInterface::error` method is called when `CacheInterface')]
     public function testThatLoggerIsCalledWhenCacheThrowsAnException(): void

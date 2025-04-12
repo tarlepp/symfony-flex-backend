@@ -14,7 +14,7 @@ use App\Helpers\LoggerAwareTrait;
  * @package App\Tests\Integration\Helpers\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LoggerAwareService
+final class LoggerAwareService
 {
     use LoggerAwareTrait;
 
