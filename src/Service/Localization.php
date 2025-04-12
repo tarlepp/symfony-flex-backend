@@ -95,8 +95,8 @@ readonly class Localization
 
             $dateTime = new DateTimeImmutable(timezone: $dateTimeZone);
 
-            $hours = floor($dateTimeZone->getOffset($dateTime) / 3600);
-            $minutes = floor(($dateTimeZone->getOffset($dateTime) - ($hours * 3600)) / 60);
+            $hours = (string)floor($dateTimeZone->getOffset($dateTime) / 3600);
+            $minutes = (string)floor(($dateTimeZone->getOffset($dateTime) - ((int)$hours * 3600)) / 60);
 
             $hours = 'GMT' . ($hours < 0 ? $hours : '+' . $hours);
             $minutes = ($minutes > 0 ? $minutes : '0' . $minutes);
