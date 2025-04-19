@@ -29,7 +29,7 @@ class LocaleControllerTest extends KernelTestCase
             ->method('getLocales')
             ->willReturn(['fi', 'en']);
 
-        $response = (new LocaleController($Localization))();
+        $response = new LocaleController($Localization)();
         $content = $response->getContent();
 
         self::assertSame(200, $response->getStatusCode());

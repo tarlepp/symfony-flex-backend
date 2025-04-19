@@ -33,7 +33,7 @@ class LogRequestTest extends KernelTestCase
 
         self::assertNotNull($createdAt);
         self::assertEqualsWithDelta(
-            (new DateTimeImmutable('now', new DateTimeZone('utc')))->getTimestamp(),
+            new DateTimeImmutable('now', new DateTimeZone('utc'))->getTimestamp(),
             $createdAt->getTimestamp(),
             1,
         );

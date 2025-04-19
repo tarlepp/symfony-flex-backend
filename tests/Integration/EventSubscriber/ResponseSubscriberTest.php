@@ -53,7 +53,7 @@ class ResponseSubscriberTest extends KernelTestCase
         $event = new ResponseEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
         $version = new Version($kernel->getProjectDir(), $cacheStub, $logger);
 
-        (new ResponseSubscriber($version))
+        new ResponseSubscriber($version)
             ->onKernelResponse($event);
 
         $version = $event->getResponse()->headers->get('X-API-VERSION');

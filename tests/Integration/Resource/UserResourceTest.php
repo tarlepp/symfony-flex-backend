@@ -51,8 +51,8 @@ class UserResourceTest extends ResourceTestCase
         $repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
-        $userGroup = (new UserGroup())->setRole(new Role('Some Role'));
-        $user = (new User())->addUserGroup($userGroup);
+        $userGroup = new UserGroup()->setRole(new Role('Some Role'));
+        $user = new User()->addUserGroup($userGroup);
 
         $repository
             ->expects($this->once())
@@ -66,6 +66,6 @@ class UserResourceTest extends ResourceTestCase
             ->with(['Some Role'])
             ->willReturn(['Some Role']);
 
-        self::assertSame([$user], (new UserResource($repository, $rolesService))->getUsersForGroup($userGroup));
+        self::assertSame([$user], new UserResource($repository, $rolesService)->getUsersForGroup($userGroup));
     }
 }

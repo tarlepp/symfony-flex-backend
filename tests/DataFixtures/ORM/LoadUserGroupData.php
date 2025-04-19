@@ -74,7 +74,7 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         $roleReference = $this->getReference('Role-' . $this->rolesService->getShort($role), Role::class);
 
         // Create new entity
-        $entity = (new UserGroup())
+        $entity = new UserGroup()
             ->setRole($roleReference)
             ->setName($this->rolesService->getRoleLabel($role));
 

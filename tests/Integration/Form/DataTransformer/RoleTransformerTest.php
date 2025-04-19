@@ -52,7 +52,7 @@ class RoleTransformerTest extends KernelTestCase
             ->with($entity->getId())
             ->willReturn($entity);
 
-        (new RoleTransformer($resource))
+        new RoleTransformer($resource)
             ->reverseTransform($entity->getId());
     }
 
@@ -73,7 +73,7 @@ class RoleTransformerTest extends KernelTestCase
             ->with('role_name')
             ->willReturn(null);
 
-        (new RoleTransformer($resource))
+        new RoleTransformer($resource)
             ->reverseTransform('role_name');
     }
 

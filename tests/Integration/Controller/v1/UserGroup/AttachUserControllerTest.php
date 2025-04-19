@@ -35,7 +35,7 @@ class AttachUserControllerTest extends KernelTestCase
         $userGroupResource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
 
-        $userGroup = (new UserGroup())->setRole(new Role('role'));
+        $userGroup = new UserGroup()->setRole(new Role('role'));
         $user = new User();
 
         $userResource
@@ -55,7 +55,7 @@ class AttachUserControllerTest extends KernelTestCase
             ->method('serialize')
             ->willReturn('[]');
 
-        (new AttachUserController($userResource, $userGroupResource, $serializer))($userGroup, $user);
+        new AttachUserController($userResource, $userGroupResource, $serializer)($userGroup, $user);
 
         self::assertTrue(
             $user->getUserGroups()->contains($userGroup),
