@@ -40,7 +40,7 @@ class UserTypeTest extends TypeTestCase
         $roleEntity = new Role('ROLE_ADMIN');
 
         // Create new user group entity
-        $userGroupEntity = (new UserGroup())
+        $userGroupEntity = new UserGroup()
             ->setRole($roleEntity);
 
         $resource
@@ -76,7 +76,7 @@ class UserTypeTest extends TypeTestCase
         $form = $this->factory->create(UserType::class);
 
         // Create new DTO object
-        $dto = (new UserDto())
+        $dto = new UserDto()
             ->setUsername('username')
             ->setFirstName('John')
             ->setLastName('Doe')

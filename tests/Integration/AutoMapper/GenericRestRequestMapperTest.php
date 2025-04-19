@@ -39,7 +39,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        (new RequestMapper($resource))->mapToObject([], new stdClass());
+        new RequestMapper($resource)->mapToObject([], new stdClass());
     }
 
     /**
@@ -53,7 +53,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        (new RequestMapper($resource))->mapToObject(new stdClass(), new stdClass());
+        new RequestMapper($resource)->mapToObject(new stdClass(), new stdClass());
     }
 
     /**
@@ -69,7 +69,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        (new RequestMapper($resource))->mapToObject(new Request(), new stdClass());
+        new RequestMapper($resource)->mapToObject(new Request(), new stdClass());
     }
 
     /**
@@ -85,7 +85,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
         $mockRestDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
-        (new TestRestRequestMapperWithoutProperties())->mapToObject(new Request(), $mockRestDtoInterface);
+        new TestRestRequestMapperWithoutProperties()->mapToObject(new Request(), $mockRestDtoInterface);
     }
 
     /**
@@ -100,7 +100,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
         ]);
 
         /** @var TestRestRequestMapperDto $transformedObject */
-        $transformedObject = (new TestRestRequestMapper())->mapToObject($request, new TestRestRequestMapperDto());
+        $transformedObject = new TestRestRequestMapper()->mapToObject($request, new TestRestRequestMapperDto());
 
         self::assertSame('someValue', $transformedObject->getSomeProperty());
         self::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());

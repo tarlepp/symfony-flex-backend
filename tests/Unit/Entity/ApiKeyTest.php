@@ -23,12 +23,12 @@ class ApiKeyTest extends KernelTestCase
     #[TestDox('Test that token is generated on creation of ApiKey entity')]
     public function testThatTokenIsGenerated(): void
     {
-        self::assertSame(40, strlen((new ApiKey())->getToken()));
+        self::assertSame(40, strlen(new ApiKey()->getToken()));
     }
 
     #[TestDox('Test that ApiKey entity has `ROLE_API` role')]
     public function testThatGetRolesContainsExpectedRole(): void
     {
-        self::assertContainsEquals(Role::API->value, (new ApiKey())->getRoles());
+        self::assertContainsEquals(Role::API->value, new ApiKey()->getRoles());
     }
 }

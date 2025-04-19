@@ -35,8 +35,8 @@ class UsersControllerTest extends KernelTestCase
         $responseHandler = $this->getMockBuilder(ResponseHandler::class)->disableOriginalConstructor()->getMock();
 
         $request = new Request();
-        $userGroup = (new UserGroup())->setRole(new Role('Some Role'));
-        $user = (new User())->addUserGroup($userGroup);
+        $userGroup = new UserGroup()->setRole(new Role('Some Role'));
+        $user = new User()->addUserGroup($userGroup);
 
         $userResource
             ->expects($this->once())
@@ -49,6 +49,6 @@ class UsersControllerTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, [$user], $userResource);
 
-        (new UsersController($userResource, $responseHandler))($request, $userGroup);
+        new UsersController($userResource, $responseHandler)($request, $userGroup);
     }
 }

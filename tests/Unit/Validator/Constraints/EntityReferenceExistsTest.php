@@ -21,6 +21,6 @@ class EntityReferenceExistsTest extends KernelTestCase
     #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
-        self::assertSame('property', (new EntityReferenceExists())->getTargets());
+        self::assertSame('property', new EntityReferenceExists()->getTargets());
     }
 }

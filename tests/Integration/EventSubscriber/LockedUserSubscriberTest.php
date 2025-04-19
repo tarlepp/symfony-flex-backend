@@ -60,7 +60,7 @@ class LockedUserSubscriberTest extends KernelTestCase
             new Response()
         );
 
-        (new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack))
+        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
             ->onAuthenticationSuccess($event);
     }
 
@@ -113,7 +113,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
-        (new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack))
+        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
             ->onAuthenticationSuccess($event);
     }
 
@@ -148,7 +148,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
-        (new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack))
+        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
             ->onAuthenticationSuccess($event);
     }
 
@@ -178,7 +178,7 @@ class LockedUserSubscriberTest extends KernelTestCase
             'username' => 'test-user',
         ]));
 
-        (new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack))
+        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
             ->onAuthenticationFailure();
     }
 
@@ -220,7 +220,7 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->expects(static::once())
             ->method('save');
 
-        (new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack))
+        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
             ->onAuthenticationFailure();
     }
 }

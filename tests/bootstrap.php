@@ -45,7 +45,7 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
          *
          * @var array<string, string> $variables
          */
-        $variables = (new Dotenv())->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
+        $variables = new Dotenv()->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
 
         /** @var array<string, string> $configuration */
         $configuration = JSON::decode((string)file_get_contents($variables['APPLICATION_CONFIG']), true);
@@ -95,7 +95,7 @@ $InitializeEnvironment = static function (): void {
     }
 
     // load all the .env files
-    (new Dotenv())->loadEnv(dirname(__DIR__) . '/.env');
+    new Dotenv()->loadEnv(dirname(__DIR__) . '/.env');
 
     /** @noinspection AdditionOperationOnArraysInspection */
     $_SERVER += $_ENV;
@@ -211,7 +211,7 @@ $createJwtAuthCache = static function (): void {
 // Create database cache file
 $createDatabaseCreateCache = static function () use ($databaseCacheFile): void {
     // Create database cache file
-    file_put_contents($databaseCacheFile, '{"init": ' . (new DateTime())->format(DATE_RFC3339) . '}');
+    file_put_contents($databaseCacheFile, '{"init": ' . new DateTime()->format(DATE_RFC3339) . '}');
 };
 
 // And finally call each of initialize functions to make test environment ready

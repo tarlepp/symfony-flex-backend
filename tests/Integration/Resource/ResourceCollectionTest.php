@@ -56,7 +56,7 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
-        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))
+        new ResourceCollection($this->getEmptyIteratorAggregate(), $logger)
             ->get('FooBar');
     }
 
@@ -72,7 +72,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects($this->once())
             ->method('error');
 
-        (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
+        new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger)
             ->get('FooBar');
     }
 
@@ -84,7 +84,7 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
-        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))
+        new ResourceCollection($this->getEmptyIteratorAggregate(), $logger)
             ->getEntityResource('FooBar');
     }
 
@@ -100,7 +100,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects($this->once())
             ->method('error');
 
-        (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
+        new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger)
             ->getEntityResource('FooBar');
     }
 

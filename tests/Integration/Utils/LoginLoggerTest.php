@@ -34,7 +34,7 @@ class LoginLoggerTest extends KernelTestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Could not get request from current request stack');
 
-        (new LoginLogger($this->getResource(), new RequestStack()))
+        new LoginLogger($this->getResource(), new RequestStack())
             ->process(LogLogin::SUCCESS);
     }
 
@@ -53,7 +53,7 @@ class LoginLoggerTest extends KernelTestCase
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
-        (new LoginLogger($resource, $requestStack))
+        new LoginLogger($resource, $requestStack)
             ->process(LogLogin::SUCCESS);
     }
 

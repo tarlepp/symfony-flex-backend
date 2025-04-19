@@ -103,7 +103,7 @@ class RestDtoValueResolverTest extends KernelTestCase
     public static function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
     {
         /** @psalm-suppress InternalMethod */
-        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
+        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -130,7 +130,7 @@ class RestDtoValueResolverTest extends KernelTestCase
         ];
 
         /** @psalm-suppress InternalMethod */
-        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
+        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,7 +149,7 @@ class RestDtoValueResolverTest extends KernelTestCase
         ];
 
         /** @psalm-suppress InternalMethod */
-        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
+        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -168,7 +168,7 @@ class RestDtoValueResolverTest extends KernelTestCase
         ];
 
         /** @psalm-suppress InternalMethod */
-        $controllerCollection = (new MockBuilder(new self(self::class), ControllerCollection::class))
+        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 

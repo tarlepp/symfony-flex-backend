@@ -47,7 +47,7 @@ class FindMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new FindMethodInvalidTestClass())
+        new FindMethodInvalidTestClass()
             ->findMethod(Request::create('/'));
     }
 
@@ -65,7 +65,7 @@ class FindMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new FindMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindMethodTestClass($resourceMock, $responseHandlerMock)
             ->findMethod(Request::create('/', $httpMethod))->getContent();
     }
 
@@ -90,7 +90,7 @@ class FindMethodTest extends KernelTestCase
             ->with([], [], null, null, [])
             ->willThrowException($exception);
 
-        (new FindMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindMethodTestClass($resourceMock, $responseHandlerMock)
             ->findMethod(Request::create('/'));
     }
 
@@ -138,7 +138,7 @@ class FindMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, [], $resourceMock);
 
-        (new FindMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindMethodTestClass($resourceMock, $responseHandlerMock)
             ->findMethod($request);
     }
 
@@ -157,7 +157,7 @@ class FindMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new FindMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindMethodTestClass($resourceMock, $responseHandlerMock)
             ->findMethod(Request::create('/?where=foo'));
     }
 

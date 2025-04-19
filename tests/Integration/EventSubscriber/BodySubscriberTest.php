@@ -41,7 +41,7 @@ class BodySubscriberTest extends KernelTestCase
 
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
-        (new BodySubscriber())
+        new BodySubscriber()
             ->onKernelRequest($event);
 
         self::assertEmpty($request->query->all());
@@ -73,7 +73,7 @@ class BodySubscriberTest extends KernelTestCase
 
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
-        (new BodySubscriber())
+        new BodySubscriber()
             ->onKernelRequest($event);
 
         self::assertSame($inputQuery, $request->query->all());

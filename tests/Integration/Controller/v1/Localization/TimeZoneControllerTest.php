@@ -36,7 +36,7 @@ class TimeZoneControllerTest extends KernelTestCase
                 ],
             ]);
 
-        $response = (new TimeZoneController($Localization))();
+        $response = new TimeZoneController($Localization)();
         $content = $response->getContent();
 
         self::assertSame(200, $response->getStatusCode());

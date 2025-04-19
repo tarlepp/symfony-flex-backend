@@ -65,7 +65,7 @@ class HealthzRepositoryTest extends KernelTestCase
     public function testThatCreateValueReturnsExpected(): void
     {
         self::assertEqualsWithDelta(
-            (new DateTimeImmutable('now', new DateTimeZone('utc')))->getTimestamp(),
+            new DateTimeImmutable('now', new DateTimeZone('utc'))->getTimestamp(),
             $this->getRepository()->create()->getCreatedAt()->getTimestamp(),
             1,
         );

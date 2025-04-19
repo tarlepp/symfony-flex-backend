@@ -31,7 +31,7 @@ class VersionControllerTest extends KernelTestCase
             ->method('get')
             ->willReturn('1.0.0');
 
-        $response = (new VersionController($version))();
+        $response = new VersionController($version)();
         $content = $response->getContent();
 
         self::assertSame(200, $response->getStatusCode());

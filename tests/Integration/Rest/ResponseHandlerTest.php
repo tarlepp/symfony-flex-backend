@@ -53,7 +53,7 @@ class ResponseHandlerTest extends KernelTestCase
         $serializer = self::getContainer()->get(SerializerInterface::class);
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
-        $httpResponse = (new ResponseHandler($serializer))->createResponse($request, $data, $stubResourceService, 200);
+        $httpResponse = new ResponseHandler($serializer)->createResponse($request, $data, $stubResourceService, 200);
 
         self::assertSame($expectedContent, $httpResponse->getContent());
     }
@@ -77,7 +77,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->withAnyParameters()
             ->willThrowException($exception);
 
-        (new ResponseHandler($stubSerializer))
+        new ResponseHandler($stubSerializer)
             ->createResponse($request, []);
     }
 
@@ -107,7 +107,7 @@ class ResponseHandlerTest extends KernelTestCase
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
-        (new ResponseHandler($serializer))
+        new ResponseHandler($serializer)
             ->createResponse(
                 $request,
                 [
@@ -154,7 +154,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        (new ResponseHandler($serializer))->handleFormError($formInterface);
+        new ResponseHandler($serializer)->handleFormError($formInterface);
     }
 
     /**
@@ -193,7 +193,7 @@ class ResponseHandlerTest extends KernelTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        (new ResponseHandler($serializer))->handleFormError($formInterface);
+        new ResponseHandler($serializer)->handleFormError($formInterface);
     }
 
     /**
@@ -214,7 +214,7 @@ class ResponseHandlerTest extends KernelTestCase
             ],
         );
 
-        $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
+        $output = new ResponseHandler($serializer)->getSerializeContext($request, $resource);
 
         $expectedContext = [
             'groups' => [
@@ -247,7 +247,7 @@ class ResponseHandlerTest extends KernelTestCase
             ],
         );
 
-        $output = (new ResponseHandler($serializer))->getSerializeContext($request, $resource);
+        $output = new ResponseHandler($serializer)->getSerializeContext($request, $resource);
 
         $expectedContext = [
             'groups' => [

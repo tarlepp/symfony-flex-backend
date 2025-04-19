@@ -40,7 +40,7 @@ class VersionTest extends KernelTestCase
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 
-        (new Version('', $cache, $logger))
+        new Version('', $cache, $logger)
             ->get();
     }
 
