@@ -32,7 +32,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
-        $user = (new User())
+        $user = new User()
             ->setFirstName('first name')
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
@@ -44,7 +44,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber($requestStack, $logger))
+        new JWTCreatedSubscriber($requestStack, $logger)
             ->onJWTCreated($event);
 
         $keys = ['exp', 'checksum'];
@@ -59,7 +59,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
-        $user = (new User())
+        $user = new User()
             ->setFirstName('first name')
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
@@ -67,7 +67,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber(new RequestStack(), $logger))
+        new JWTCreatedSubscriber(new RequestStack(), $logger)
             ->onJWTCreated($event);
 
         $keys = ['exp'];
@@ -89,7 +89,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             ->with('Request not available');
 
         // Create new user for JWT
-        $user = (new User())
+        $user = new User()
             ->setFirstName('first name')
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
@@ -97,7 +97,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber(new RequestStack(), $logger))
+        new JWTCreatedSubscriber(new RequestStack(), $logger)
             ->onJWTCreated($event);
     }
 
@@ -106,7 +106,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
-        $user = (new User())
+        $user = new User()
             ->setFirstName('first name')
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com')
@@ -121,7 +121,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber($requestStack, $logger))
+        new JWTCreatedSubscriber($requestStack, $logger)
             ->onJWTCreated($event);
 
         $keys = ['language', 'locale', 'timezone'];
@@ -148,7 +148,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], $user);
 
-        (new JWTCreatedSubscriber($requestStack, $logger))
+        new JWTCreatedSubscriber($requestStack, $logger)
             ->onJWTCreated($event);
 
         $keys = ['language', 'locale', 'timezone'];

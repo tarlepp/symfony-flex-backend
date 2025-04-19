@@ -21,7 +21,7 @@ class IndexControllerTest extends KernelTestCase
     #[TestDox('Test that `__invoke` method returns proper response')]
     public function testThatInvokeMethodReturnsExpectedResponse(): void
     {
-        $response = (new IndexController())();
+        $response = new IndexController()();
         $content = $response->getContent();
 
         self::assertSame(200, $response->getStatusCode());

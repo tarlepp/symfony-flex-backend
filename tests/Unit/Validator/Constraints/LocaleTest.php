@@ -21,6 +21,6 @@ class LocaleTest extends KernelTestCase
     #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
-        self::assertSame('property', (new Locale())->getTargets());
+        self::assertSame('property', new Locale()->getTargets());
     }
 }

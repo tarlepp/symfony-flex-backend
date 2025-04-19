@@ -31,7 +31,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserPresent(): void
     {
-        $user = (new User())
+        $user = new User()
             ->setUsername('test-user');
 
         $token = new UsernamePasswordToken(new SecurityUser($user), 'firewall');
@@ -62,7 +62,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
             ->expects($this->once())
             ->method('process');
 
-        (new AuthenticationFailureSubscriber($loginLogger, $userRepository))
+        new AuthenticationFailureSubscriber($loginLogger, $userRepository)
             ->onAuthenticationFailure($event);
     }
 

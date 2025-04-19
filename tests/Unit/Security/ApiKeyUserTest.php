@@ -58,15 +58,15 @@ class ApiKeyUserTest extends KernelTestCase
         $userGroupResource = static::getContainer()->get(UserGroupResource::class);
 
         yield [
-            (new ApiKey())->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED'))),
+            new ApiKey()->addUserGroup(new UserGroup()->setRole(new Role('ROLE_LOGGED'))),
             new StringableArrayObject(['ROLE_LOGGED', 'ROLE_API']),
         ];
 
         $exception = new Exception('Cannot find user group');
 
         yield [
-            (new ApiKey())
-                ->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED')))
+            new ApiKey()
+                ->addUserGroup(new UserGroup()->setRole(new Role('ROLE_LOGGED')))
                 ->addUserGroup($userGroupResource->findOneBy([
                     'name' => 'Normal users',
                 ]) ?? throw $exception),
@@ -74,8 +74,8 @@ class ApiKeyUserTest extends KernelTestCase
         ];
 
         yield [
-            (new ApiKey())
-                ->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED')))
+            new ApiKey()
+                ->addUserGroup(new UserGroup()->setRole(new Role('ROLE_LOGGED')))
                 ->addUserGroup($userGroupResource->findOneBy([
                     'name' => 'Admin users',
                 ]) ?? throw $exception),
@@ -83,8 +83,8 @@ class ApiKeyUserTest extends KernelTestCase
         ];
 
         yield [
-            (new ApiKey())
-                ->addUserGroup((new UserGroup())->setRole(new Role('ROLE_LOGGED')))
+            new ApiKey()
+                ->addUserGroup(new UserGroup()->setRole(new Role('ROLE_LOGGED')))
                 ->addUserGroup($userGroupResource->findOneBy([
                     'name' => 'Root users',
                 ]) ?? throw $exception),

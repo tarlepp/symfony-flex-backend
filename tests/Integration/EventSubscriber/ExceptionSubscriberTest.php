@@ -67,7 +67,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->method('error')
             ->with((string)$exception);
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment)
             ->onKernelException($event);
     }
 
@@ -87,7 +87,7 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $originalResponse = $event->getResponse();
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment)
             ->onKernelException($event);
 
         self::assertNotSame($originalResponse, $event->getResponse());
@@ -119,7 +119,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             $exception
         );
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment)
             ->onKernelException($event);
 
         $response = $event->getResponse();
@@ -161,7 +161,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             new Exception('error')
         );
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment)
             ->onKernelException($event);
 
         $response = $event->getResponse();

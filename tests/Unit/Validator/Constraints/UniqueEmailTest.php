@@ -21,6 +21,6 @@ class UniqueEmailTest extends KernelTestCase
     #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
-        self::assertSame('class', (new UniqueEmail())->getTargets());
+        self::assertSame('class', new UniqueEmail()->getTargets());
     }
 }

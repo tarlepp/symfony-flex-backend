@@ -120,7 +120,7 @@ abstract class RestResource implements RestResourceInterface
          * @var RestDtoInterface $restDto
          * @var class-string<RestDtoInterface> $dtoClass
          */
-        $restDto = (new $dtoClass())
+        $restDto = new $dtoClass()
             ->setId($id);
 
         if ($patch === true) {

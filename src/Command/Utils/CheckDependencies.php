@@ -139,7 +139,7 @@ class CheckDependencies extends Command
     private function getNamespaceDirectories(): array
     {
         // Find all main namespace directories under 'tools' directory
-        $finder = (new Finder())
+        $finder = new Finder()
             ->depth(1)
             ->ignoreDotFiles(true)
             ->directories()

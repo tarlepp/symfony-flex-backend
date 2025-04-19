@@ -105,7 +105,7 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        $iterator = (new Paginator($queryBuilder, true))->getIterator();
+        $iterator = new Paginator($queryBuilder, true)->getIterator();
 
         assert($iterator instanceof ArrayIterator);
 

@@ -34,7 +34,7 @@ class RolesServiceTest extends KernelTestCase
             ->with(['RoleA', 'RoleB'])
             ->willReturn(['RoleA', 'RoleB', 'RoleC']);
 
-        (new RolesService($roleHierarchy))->getInheritedRoles(['RoleA', 'RoleB']);
+        new RolesService($roleHierarchy)->getInheritedRoles(['RoleA', 'RoleB']);
     }
 
     #[TestDox('Test that `RolesServiceInterface::getRoles` method returns expected')]

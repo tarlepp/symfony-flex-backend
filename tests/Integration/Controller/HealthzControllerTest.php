@@ -71,7 +71,7 @@ class HealthzControllerTest extends KernelTestCase
                 ),
             );
 
-        $response = (new HealthzController($responseHandler, $healthzService))($request);
+        $response = new HealthzController($responseHandler, $healthzService)($request);
         $content = $response->getContent();
 
         self::assertSame(200, $response->getStatusCode());

@@ -48,7 +48,7 @@ class CreateMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new CreateMethodInvalidTestClass())
+        new CreateMethodInvalidTestClass()
             ->createMethod(
                 Request::create('/', Request::METHOD_POST),
                 $this->getMockBuilder(RestDtoInterface::class)->getMock(),
@@ -70,7 +70,7 @@ class CreateMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new CreateMethodTestClass($resourceMock, $responseHandlerMock))
+        new CreateMethodTestClass($resourceMock, $responseHandlerMock)
             ->createMethod(Request::create('/', $httpMethod), $restDtoMock)
             ->getContent();
     }
@@ -97,7 +97,7 @@ class CreateMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        (new CreateMethodTestClass($resourceMock, $responseHandlerMock))
+        new CreateMethodTestClass($resourceMock, $responseHandlerMock)
             ->createMethod(Request::create('/', Request::METHOD_POST), $restDtoMock)
             ->getContent();
     }
@@ -128,7 +128,7 @@ class CreateMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock, Response::HTTP_CREATED);
 
-        (new CreateMethodTestClass($resourceMock, $responseHandlerMock))
+        new CreateMethodTestClass($resourceMock, $responseHandlerMock)
             ->createMethod($request, $restDtoMock);
     }
 

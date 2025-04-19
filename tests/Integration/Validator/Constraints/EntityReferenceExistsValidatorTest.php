@@ -46,7 +46,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
 
         $constraint = new TestConstraint();
 
-        (new EntityReferenceExistsValidator($loggerMock))->validate('', $constraint);
+        new EntityReferenceExistsValidator($loggerMock)->validate('', $constraint);
     }
 
     /**
@@ -67,7 +67,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = $entityClass;
 
-        (new EntityReferenceExistsValidator($loggerMock))->validate($value, $constraint);
+        new EntityReferenceExistsValidator($loggerMock)->validate($value, $constraint);
     }
 
     #[TestDox('Test that `validate` method throws an exception if value is `stdClass`')]
@@ -83,7 +83,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = stdClass::class;
 
-        (new EntityReferenceExistsValidator($loggerMock))->validate(new stdClass(), $constraint);
+        new EntityReferenceExistsValidator($loggerMock)->validate(new stdClass(), $constraint);
     }
 
     /**

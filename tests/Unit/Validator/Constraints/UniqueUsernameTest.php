@@ -21,6 +21,6 @@ class UniqueUsernameTest extends KernelTestCase
     #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
-        self::assertSame('class', (new UniqueUsername())->getTargets());
+        self::assertSame('class', new UniqueUsername()->getTargets());
     }
 }

@@ -29,7 +29,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessMethodCallsExpectedLoggerMethods(): void
     {
-        $userEntity = (new User())->setUsername('test_user');
+        $userEntity = new User()->setUsername('test_user');
         $securityUser = new SecurityUser($userEntity);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
@@ -52,7 +52,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
             ->with($userEntity->getId())
             ->willReturn($userEntity);
 
-        (new AuthenticationSuccessSubscriber($loginLogger, $userRepository))
+        new AuthenticationSuccessSubscriber($loginLogger, $userRepository)
             ->onAuthenticationSuccess($event);
     }
 }

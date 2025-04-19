@@ -58,7 +58,7 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
 
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
-        (new AcceptLanguageSubscriber($default))
+        new AcceptLanguageSubscriber($default)
             ->onKernelRequest($event);
 
         self::assertSame($expected, $request->getLocale());

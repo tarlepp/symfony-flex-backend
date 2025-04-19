@@ -49,7 +49,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
 
     public function testThatGivenControllerIsCorrect(): void
     {
-        $expected = mb_substr((new ReflectionClass($this))->getShortName(), 0, -4);
+        $expected = mb_substr(new ReflectionClass($this)->getShortName(), 0, -4);
 
         $message = sprintf(
             'Your REST controller integration test \'%s\' uses likely wrong controller class \'%s\'',
@@ -57,7 +57,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
             $this->controllerClass
         );
 
-        self::assertSame($expected, (new ReflectionClass($this->getController()))->getShortName(), $message);
+        self::assertSame($expected, new ReflectionClass($this->getController())->getShortName(), $message);
     }
 
     /**

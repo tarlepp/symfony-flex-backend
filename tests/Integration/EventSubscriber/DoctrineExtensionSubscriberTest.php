@@ -41,7 +41,7 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('setUserValue');
 
-        (new DoctrineExtensionSubscriber($blameableListener, $userTypeIdentification))
+        new DoctrineExtensionSubscriber($blameableListener, $userTypeIdentification)
             ->onKernelRequest();
     }
 
@@ -66,7 +66,7 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
             ->method('setUserValue')
             ->with($user);
 
-        (new DoctrineExtensionSubscriber($blameableListener, $userTypeIdentification))
+        new DoctrineExtensionSubscriber($blameableListener, $userTypeIdentification)
             ->onKernelRequest();
     }
 

@@ -21,6 +21,6 @@ class LanguageTest extends KernelTestCase
     #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
-        self::assertSame('property', (new Language())->getTargets());
+        self::assertSame('property', new Language()->getTargets());
     }
 }
