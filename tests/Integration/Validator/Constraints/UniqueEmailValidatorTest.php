@@ -35,7 +35,7 @@ class UniqueEmailValidatorTest extends KernelTestCase
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         // Create new user
-        $user = (new User())
+        $user = new User()
             ->setEmail('john.doe@test.com');
 
         $repositoryMock

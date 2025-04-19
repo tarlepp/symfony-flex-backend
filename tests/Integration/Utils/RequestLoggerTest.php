@@ -40,7 +40,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(self::never())
             ->method('save');
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->handle();
     }
 
@@ -56,7 +56,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(self::never())
             ->method('save');
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->setResponse(new Response())
             ->handle();
     }
@@ -73,7 +73,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(self::never())
             ->method('save');
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->setRequest(new Request())
             ->handle();
     }
@@ -91,7 +91,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('save')
             ->with();
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->handle();
@@ -115,7 +115,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('error')
             ->with('test exception');
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->handle();
@@ -145,7 +145,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('save')
             ->with();
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->setUserId($user->getId())
@@ -176,7 +176,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('save')
             ->with();
 
-        (new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, []))
+        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->setApiKeyId($user->getId())

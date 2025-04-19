@@ -35,8 +35,8 @@ class DetachUserControllerTest extends KernelTestCase
         $userGroupResource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
 
-        $userGroup = (new UserGroup())->setRole(new Role('role'));
-        $user = (new User())->addUserGroup($userGroup);
+        $userGroup = new UserGroup()->setRole(new Role('role'));
+        $user = new User()->addUserGroup($userGroup);
 
         $userResource
             ->expects($this->once())
@@ -55,7 +55,7 @@ class DetachUserControllerTest extends KernelTestCase
             ->method('serialize')
             ->willReturn('[]');
 
-        (new DetachUserController($userResource, $userGroupResource, $serializer))($userGroup, $user);
+        new DetachUserController($userResource, $userGroupResource, $serializer)($userGroup, $user);
 
         self::assertFalse(
             $user->getUserGroups()->contains($userGroup),

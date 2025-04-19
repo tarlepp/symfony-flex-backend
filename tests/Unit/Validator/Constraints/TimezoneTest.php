@@ -21,6 +21,6 @@ class TimezoneTest extends KernelTestCase
     #[TestDox('Test that `getTargets` method returns expected')]
     public function testThatGetTargetsReturnsExpected(): void
     {
-        self::assertSame('property', (new Timezone())->getTargets());
+        self::assertSame('property', new Timezone()->getTargets());
     }
 }

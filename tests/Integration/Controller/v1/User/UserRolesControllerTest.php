@@ -39,6 +39,6 @@ class UserRolesControllerTest extends KernelTestCase
             ->with($user->getRoles())
             ->willReturn([]);
 
-        (new UserRolesController($rolesService))->__invoke($user);
+        new UserRolesController($rolesService)->__invoke($user);
     }
 }

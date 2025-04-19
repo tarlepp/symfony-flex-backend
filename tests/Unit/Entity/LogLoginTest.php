@@ -42,7 +42,7 @@ class LogLoginTest extends KernelTestCase
 
         self::assertNotNull($createdAt);
         self::assertEqualsWithDelta(
-            (new DateTime('now', new DateTimeZone('utc')))->getTimestamp(),
+            new DateTime('now', new DateTimeZone('utc'))->getTimestamp(),
             $createdAt->getTimestamp(),
             1
         );

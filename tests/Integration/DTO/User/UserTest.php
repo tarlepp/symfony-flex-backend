@@ -36,19 +36,19 @@ class UserTest extends DtoTestCase
         $roleEntity = new RoleEntity('test role');
 
         // Create UserGroup entity
-        $userGroupEntity = (new UserGroupEntity())
+        $userGroupEntity = new UserGroupEntity()
             ->setName('test user group')
             ->setRole($roleEntity);
 
         // Create User entity
-        $userEntity = (new UserEntity())
+        $userEntity = new UserEntity()
             ->setUsername('username')
             ->setFirstName('first name')
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com')
             ->addUserGroup($userGroupEntity);
 
-        $dto = (new UserDto())
+        $dto = new UserDto()
             ->load($userEntity);
 
         self::assertSame('username', $dto->getUsername());
@@ -71,7 +71,7 @@ class UserTest extends DtoTestCase
             ->method('setPlainPassword')
             ->with('password');
 
-        (new UserDto())
+        new UserDto()
             ->setPassword('password')
             ->update($entity);
     }
@@ -98,7 +98,7 @@ class UserTest extends DtoTestCase
             ->method('addUserGroup')
             ->willReturn($entity);
 
-        (new UserDto())
+        new UserDto()
             ->setUserGroups($userGroups)
             ->update($entity);
     }
