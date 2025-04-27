@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.4.6-fpm-bookworm
+FROM php:8.4.6-fpm-bullseye
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -36,7 +36,7 @@ RUN apt-get update \
     && apt-get install -y \
         debsecan \
     && apt-get install --no-install-recommends -y \
-        $(debsecan --suite bookworm --format packages --only-fixed) \
+        $(debsecan --suite bullseye --format packages --only-fixed) \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the Composer PHAR from the Composer image into the PHP image

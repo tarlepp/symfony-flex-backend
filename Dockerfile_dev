@@ -1,4 +1,4 @@
-FROM php:8.4.6-fpm-bookworm
+FROM php:8.4.6-fpm-bullseye
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -74,7 +74,7 @@ RUN apt-get update \
     && apt-get install -y \
         debsecan \
     && apt-get install --no-install-recommends -y \
-        $(debsecan --suite bookworm --format packages --only-fixed) \
+        $(debsecan --suite bullseye --format packages --only-fixed) \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the Composer PHAR from the Composer image into the PHP image
