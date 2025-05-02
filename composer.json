@@ -75,7 +75,7 @@
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "7.2.4",
 		"symfony/debug-bundle": "7.2.0",
-		"symfony/maker-bundle": "1.62.1",
+		"symfony/maker-bundle": "1.63.0",
 		"symfony/requirements-checker": "2.0.3",
 		"symfony/stopwatch": "7.2.4",
 		"symfony/var-dumper": "7.2.3",
