@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fcc85809aa2453cabb6eacbb654e919c",
+    "content-hash": "70e83816022a2f44bc71a12f9224b898",
     "packages": [],
     "packages-dev": [
         {
@@ -608,16 +608,16 @@
         },
         {
             "name": "infection/mutator",
-            "version": "0.4.0",
+            "version": "0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/mutator.git",
-                "reference": "51d6d01a2357102030aee9d603063c4bad86b144"
+                "reference": "3c976d721b02b32f851ee4e15d553ef1e9186d1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/mutator/zipball/51d6d01a2357102030aee9d603063c4bad86b144",
-                "reference": "51d6d01a2357102030aee9d603063c4bad86b144",
+                "url": "https://api.github.com/repos/infection/mutator/zipball/3c976d721b02b32f851ee4e15d553ef1e9186d1d",
+                "reference": "3c976d721b02b32f851ee4e15d553ef1e9186d1d",
                 "shasum": ""
             },
             "require": {
@@ -645,7 +645,7 @@
             "description": "Mutator interface to implement custom mutators (mutation operators) for Infection",
             "support": {
                 "issues": "https://github.com/infection/mutator/issues",
-                "source": "https://github.com/infection/mutator/tree/0.4.0"
+                "source": "https://github.com/infection/mutator/tree/0.4.1"
             },
             "funding": [
                 {
@@ -657,7 +657,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-05-14T22:39:59+00:00"
+            "time": "2025-04-29T08:19:52+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -1052,19 +1052,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c96e48da0eb4ba3f14ca6ab39a6fd5025a5d0838"
+                "reference": "45b01f4e60c350f72a8697056674e449e053935a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c96e48da0eb4ba3f14ca6ab39a6fd5025a5d0838",
-                "reference": "c96e48da0eb4ba3f14ca6ab39a6fd5025a5d0838",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/45b01f4e60c350f72a8697056674e449e053935a",
+                "reference": "45b01f4e60c350f72a8697056674e449e053935a",
                 "shasum": ""
             },
             "conflict": {
                 "3f/pygmentize": "<1.2",
                 "adaptcms/adaptcms": "<=1.3",
                 "admidio/admidio": "<4.3.12",
-                "adodb/adodb-php": "<=5.20.20|>=5.21,<=5.21.3",
+                "adodb/adodb-php": "<=5.22.8",
                 "aheinze/cockpit": "<2.2",
                 "aimeos/ai-admin-graphql": ">=2022.04.1,<2022.10.10|>=2023.04.1,<2023.10.6|>=2024.04.1,<2024.07.2",
                 "aimeos/ai-admin-jsonadm": "<2020.10.13|>=2021.04.1,<2021.10.6|>=2022.04.1,<2022.10.3|>=2023.04.1,<2023.10.4|==2024.04.1",
@@ -1449,7 +1449,7 @@
                 "luyadev/yii-helpers": "<1.2.1",
                 "macropay-solutions/laravel-crud-wizard-free": "<3.4.17",
                 "maestroerror/php-heic-to-jpg": "<1.0.5",
-                "magento/community-edition": "<2.4.5|==2.4.5|>=2.4.5.0-patch1,<2.4.5.0-patch11|==2.4.6|>=2.4.6.0-patch1,<2.4.6.0-patch9|>=2.4.7.0-beta1,<2.4.7.0-patch4|>=2.4.8.0-beta1,<2.4.8.0-beta2",
+                "magento/community-edition": "<2.4.5|==2.4.5|>=2.4.5.0-patch1,<2.4.5.0-patch12|==2.4.6|>=2.4.6.0-patch1,<2.4.6.0-patch10|>=2.4.7.0-beta1,<2.4.7.0-patch5|>=2.4.8.0-beta1,<2.4.8.0-beta2",
                 "magento/core": "<=1.9.4.5",
                 "magento/magento1ce": "<1.9.4.3-dev",
                 "magento/magento1ee": ">=1,<1.14.4.3-dev",
@@ -1883,7 +1883,7 @@
                 "xataface/xataface": "<3",
                 "xpressengine/xpressengine": "<3.0.15",
                 "yab/quarx": "<2.4.5",
-                "yeswiki/yeswiki": "<4.5.2",
+                "yeswiki/yeswiki": "<4.5.4",
                 "yetiforce/yetiforce-crm": "<6.5",
                 "yidashi/yii2cmf": "<=2",
                 "yii2mod/yii2-cms": "<1.9.2",
@@ -1974,7 +1974,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-25T17:04:56+00:00"
+            "time": "2025-05-01T20:05:59+00:00"
         },
         {
             "name": "sanmai/later",
@@ -3013,16 +3013,16 @@
         },
         {
             "name": "thecodingmachine/safe",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/safe.git",
-                "reference": "e14ac96126e6c19ea9d1f4029abb51487f4cf2cf"
+                "reference": "234f6fe34a0bead8c5ae1cfc0800539442e6f619"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/e14ac96126e6c19ea9d1f4029abb51487f4cf2cf",
-                "reference": "e14ac96126e6c19ea9d1f4029abb51487f4cf2cf",
+                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/234f6fe34a0bead8c5ae1cfc0800539442e6f619",
+                "reference": "234f6fe34a0bead8c5ae1cfc0800539442e6f619",
                 "shasum": ""
             },
             "require": {
@@ -3132,7 +3132,7 @@
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
             "support": {
                 "issues": "https://github.com/thecodingmachine/safe/issues",
-                "source": "https://github.com/thecodingmachine/safe/tree/v3.1.0"
+                "source": "https://github.com/thecodingmachine/safe/tree/v3.1.1"
             },
             "funding": [
                 {
@@ -3148,7 +3148,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-12T06:41:26+00:00"
+            "time": "2025-04-28T07:56:17+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -3221,7 +3221,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4.5"
+        "php": "8.4.6"
     },
     "plugin-api-version": "2.6.0"
 }
