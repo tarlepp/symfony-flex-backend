@@ -6,13 +6,13 @@
 		"php": "^8.4.0"
 	},
 	"require-dev": {
-		"rector/rector": "2.0.11",
+		"rector/rector": "2.0.14",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.5"
+			"php": "8.4.6"
 		},
 		"preferred-install": {
 			"*": "dist"

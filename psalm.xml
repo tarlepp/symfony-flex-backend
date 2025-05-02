@@ -45,24 +45,5 @@
                 <referencedProperty name="App\Rest\RestResource::$validator" />
             </errorLevel>
         </PropertyNotSetInConstructor>
-
-        <UndefinedClass>
-            <errorLevel type="suppress">
-                <directory name="tests/Integration" />
-            </errorLevel>
-        </UndefinedClass>
-
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress">
-                <directory name="tests/Functional" />
-                <directory name="tests/Integration" />
-            </errorLevel>
-        </UndefinedDocblockClass>
-
-        <UndefinedMethod>
-            <errorLevel type="suppress">
-                <directory name="tests/Integration" />
-            </errorLevel>
-        </UndefinedMethod>
     </issueHandlers>
 </psalm>

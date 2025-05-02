@@ -12,13 +12,18 @@ parameters:
             identifier: missingType.generics
         -
             messages:
-                - '#Access to constant class on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
-                - '#Call to method (.*) on an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
-                - '#Cloning object of an unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
-                - '#Method (.*) has invalid return type PHPUnit\\Framework\\MockObject\\MockObject.#'
-                - '#PHPDoc tag @var for variable (.*) contains unknown class PHPUnit\\Framework\\MockObject\\MockObject.#'
+                - '#Access to constant on internal class Symfony\\Component\\Validator\\Context\\ExecutionContext\.#'
+                - '#Method PHPUnit\\Framework\\MockObject\\InvocationStubber::with\(\) invoked with unpacked array with possibly string key(.*)#'
             paths:
                 - tests/Integration/*
+        -
+            messages:
+                - '#Call to method get\(\) of internal class Symfony\\Bundle\\FrameworkBundle\\Test\\TestContainer from outside its root namespace Symfony\.#'
+            paths:
+                - tests/E2E/*
+                - tests/Functional/*
+                - tests/Integration/*
+                - tests/Unit/*
         -
             messages:
                 - '#has PHPDoc tag \@method for method (.*)\(\) parameter \#(\d+) \$(.*) with no value type specified in iterable type array#'
