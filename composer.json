@@ -72,10 +72,15 @@
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.8.2",
 		"doctrine/doctrine-fixtures-bundle": "4.1.0",
+		"liuggio/fastest": "1.13.0",
+		"phpunit/php-code-coverage": "12.1.2",
+		"phpunit/phpcov": "11.0.0",
+		"phpunit/phpunit": "12.1.4",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "7.2.4",
 		"symfony/debug-bundle": "7.2.0",
 		"symfony/maker-bundle": "1.63.0",
+		"symfony/phpunit-bridge": "7.2.0",
 		"symfony/requirements-checker": "2.0.3",
 		"symfony/stopwatch": "7.2.4",
 		"symfony/var-dumper": "7.2.3",
@@ -118,12 +123,6 @@
 	"autoload-dev": {
 		"psr-4": {
 			"App\\Tests\\": "tests/",
-			"PHPUnit\\": "tools/01_phpunit/vendor/phpunit/phpunit/src",
-			"Symfony\\Bridge\\PhpUnit\\": "tools/01_phpunit/vendor/symfony/phpunit-bridge",
-			"Liuggio\\Fastest\\": [
-				"tools/01_phpunit/vendor/liuggio/fastest/src",
-				"tools/01_phpunit/vendor/liuggio/fastest/adapters"
-			],
 			"PhpCsFixer\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/friendsofphp/php-cs-fixer/src",
 			"Symplify\\CodingStandard\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/coding-standard/src",
 			"Symplify\\EasyCodingStandard\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/src",
@@ -133,10 +132,6 @@
 			"PHPStan\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony",
 			"PHPStan\\Type\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Type/PHPUnit",
 			"PHPStan\\Type\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony",
-			"PHPUnit\\Framework\\MockObject\\": [
-				"tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject",
-				"tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/Runtime"
-			],
 			"Rector\\": "tools/09_rector/vendor/rector"
 		}
 	},
