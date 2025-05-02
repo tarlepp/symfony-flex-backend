@@ -14,9 +14,7 @@ compose.*.yaml
 ## File-based project format:
 *.iws
 
-.phplint-cache
 .phpunit.result.cache
-phpunit.xml
 infection.json
 phpstan.neon
 
@@ -35,7 +33,10 @@ phpstan.neon
 /tools/*/vendor/
 
 ### PHPUnit cache
+phpunit.xml
 .phpunit.cache
 
 ### PHPLint
+.phplint-cache
 .phplint.cache
+
