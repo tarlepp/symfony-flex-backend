@@ -23,7 +23,7 @@ use App\Tests\Integration\TestCase\RepositoryTestCase;
  * @method DateDimensionResource getResource()
  * @method DateDimensionRepository getRepository()
  */
-class DateDimensionRepositoryTest extends RepositoryTestCase
+final class DateDimensionRepositoryTest extends RepositoryTestCase
 {
     /**
      * @var class-string<EntityInterface>

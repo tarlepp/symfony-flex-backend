@@ -19,7 +19,7 @@ use function getenv;
  * @package App\Tests\E2E\Controller\v1\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyControllerTest extends WebTestCase
+final class ApiKeyControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/api_key';
 

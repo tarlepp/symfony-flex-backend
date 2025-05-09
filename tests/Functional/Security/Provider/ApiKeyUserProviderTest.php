@@ -30,7 +30,7 @@ use function str_pad;
  * @package App\Tests\Functional\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyUserProviderTest extends KernelTestCase
+final class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
      * @throws Throwable

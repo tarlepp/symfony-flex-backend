@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
  * @package App\Tests\Integration\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LocaleValidatorTest extends KernelTestCase
+final class LocaleValidatorTest extends KernelTestCase
 {
     #[TestDox('Test that `LocaleValidator::validate` method calls expected service methods')]
     public function testThatValidateCallsExpectedMethods(): void

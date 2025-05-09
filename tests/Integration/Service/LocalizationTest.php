@@ -25,7 +25,7 @@ use function count;
  * @package App\Tests\Integration\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LocalizationTest extends KernelTestCase
+final class LocalizationTest extends KernelTestCase
 {
     #[TestDox('Test that `getLanguages` returns expected')]
     public function testThatGetLanguagesReturnsExpected(): void

@@ -22,7 +22,7 @@ use Throwable;
  * @package App\Tests\Integration\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UniqueUsernameValidatorTest extends KernelTestCase
+final class UniqueUsernameValidatorTest extends KernelTestCase
 {
     /**
      * @throws Throwable

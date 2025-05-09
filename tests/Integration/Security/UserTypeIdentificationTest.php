@@ -32,7 +32,7 @@ use Throwable;
  * @package App\Tests\Integration\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserTypeIdentificationTest extends KernelTestCase
+final class UserTypeIdentificationTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\TestDox;
  * @package App\Tests\Integration\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserGroupTest extends DtoTestCase
+final class UserGroupTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

@@ -34,7 +34,7 @@ use Throwable;
  * @package App\Tests\Integration\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class FindOneMethodTest extends KernelTestCase
+final class FindOneMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable

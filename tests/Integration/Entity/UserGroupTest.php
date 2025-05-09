@@ -17,7 +17,7 @@ use App\Tests\Integration\TestCase\EntityTestCase;
  *
  * @method UserGroup getEntity()
  */
-class UserGroupTest extends EntityTestCase
+final class UserGroupTest extends EntityTestCase
 {
     /**
      * @var class-string

@@ -25,7 +25,7 @@ use Throwable;
  * @package App\Tests\Integration\DTO
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class GenericDtoTest extends KernelTestCase
+final class GenericDtoTest extends KernelTestCase
 {
     /**
      * @throws Throwable

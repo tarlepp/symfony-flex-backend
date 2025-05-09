@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserGroupTest extends KernelTestCase
+final class UserGroupTest extends KernelTestCase
 {
     #[TestDox('Test that `UserGroup::__toString` method returns expected')]
     public function testThatToStringMethodReturnsExpected(): void

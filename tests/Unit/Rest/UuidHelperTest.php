@@ -23,7 +23,7 @@ use Throwable;
  * @package App\Tests\Unit\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UuidHelperTest extends KernelTestCase
+final class UuidHelperTest extends KernelTestCase
 {
     #[TestDox('Test that `UuidHelper::getFactory` method returns always same instance of `UuidFactory`')]
     public function testThatGetFactoryReturnsSameInstance(): void
