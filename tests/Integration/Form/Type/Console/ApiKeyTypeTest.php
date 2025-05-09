@@ -36,7 +36,7 @@ class ApiKeyTypeTest extends TypeTestCase
         $roleEntity = new Role('ROLE_ADMIN');
 
         // Create new apiKey group entity
-        $userGroupEntity = (new UserGroup())
+        $userGroupEntity = new UserGroup()
             ->setRole($roleEntity)
             ->setName('Some name');
 
@@ -55,7 +55,7 @@ class ApiKeyTypeTest extends TypeTestCase
         $form = $this->factory->create(ApiKeyType::class);
 
         // Create new DTO object
-        $dto = (new ApiKeyDto())
+        $dto = new ApiKeyDto()
             ->setDescription('description')
             ->setUserGroups([$userGroupEntity]);
 

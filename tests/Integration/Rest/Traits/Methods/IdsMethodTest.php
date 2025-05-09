@@ -47,7 +47,7 @@ class IdsMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new IdsMethodInvalidTestClass())
+        new IdsMethodInvalidTestClass()
             ->idsMethod(Request::create('/'));
     }
 
@@ -66,7 +66,7 @@ class IdsMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new IdsMethodTestClass($resourceMock, $responseHandlerMock))
+        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
             ->idsMethod(Request::create('/', $httpMethod))
             ->getContent();
     }
@@ -93,7 +93,7 @@ class IdsMethodTest extends KernelTestCase
             ->with([], [])
             ->willThrowException($exception);
 
-        (new IdsMethodTestClass($resourceMock, $responseHandlerMock))
+        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
             ->idsMethod(Request::create('/'));
     }
 
@@ -131,7 +131,7 @@ class IdsMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, [], $resourceMock);
 
-        (new IdsMethodTestClass($resourceMock, $responseHandlerMock))
+        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
             ->idsMethod($request);
     }
 
@@ -151,7 +151,7 @@ class IdsMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new IdsMethodTestClass($resourceMock, $responseHandlerMock))
+        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
             ->idsMethod(Request::create('/?where=foo'));
     }
 

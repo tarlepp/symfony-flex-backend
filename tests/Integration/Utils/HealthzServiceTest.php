@@ -41,7 +41,7 @@ class HealthzServiceTest extends KernelTestCase
             ->expects($this->once())
             ->method('read');
 
-        (new HealthzService($repository))
+        new HealthzService($repository)
             ->check();
     }
 

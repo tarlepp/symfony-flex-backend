@@ -31,7 +31,7 @@ class StopwatchCompilerPassTest extends KernelTestCase
             ->method('findTaggedServiceIds')
             ->willReturn([]);
 
-        (new StopwatchCompilerPass())->process($container);
+        new StopwatchCompilerPass()->process($container);
     }
 
     #[TestDox('Test that no other container methods are called when tagged service is not supported')]
@@ -54,7 +54,7 @@ class StopwatchCompilerPassTest extends KernelTestCase
             ->expects(self::never())
             ->method('setDefinition');
 
-        (new StopwatchCompilerPass())->process($container);
+        new StopwatchCompilerPass()->process($container);
     }
 
     public function testThatAllExpectedContainerMethodsAreCalled(): void
@@ -80,6 +80,6 @@ class StopwatchCompilerPassTest extends KernelTestCase
             ->method('setDefinition')
             ->with('App\Foo.stopwatch');
 
-        (new StopwatchCompilerPass())->process($container);
+        new StopwatchCompilerPass()->process($container);
     }
 }

@@ -48,7 +48,7 @@ class DeleteMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new DeleteMethodInvalidTestClass())
+        new DeleteMethodInvalidTestClass()
             ->deleteMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), Request::METHOD_DELETE),
                 'some-id',
@@ -69,7 +69,7 @@ class DeleteMethodTest extends KernelTestCase
 
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        (new DeleteMethodTestClass($resourceMock, $responseHandlerMock))
+        new DeleteMethodTestClass($resourceMock, $responseHandlerMock)
             ->deleteMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id');
     }
 
@@ -96,7 +96,7 @@ class DeleteMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        (new DeleteMethodTestClass($resourceMock, $responseHandlerMock))
+        new DeleteMethodTestClass($resourceMock, $responseHandlerMock)
             ->deleteMethod(Request::create('/' . $uuid, Request::METHOD_DELETE), $uuid);
     }
 
@@ -126,7 +126,7 @@ class DeleteMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 
-        (new DeleteMethodTestClass($resourceMock, $responseHandlerMock))
+        new DeleteMethodTestClass($resourceMock, $responseHandlerMock)
             ->deleteMethod($request, $uuid);
     }
 

@@ -64,7 +64,7 @@ class UserGroupTransformerTest extends KernelTestCase
             ->method('findOne')
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
-        (new UserGroupTransformer($resource))
+        new UserGroupTransformer($resource)
             ->reverseTransform(['1', '2']);
     }
 
@@ -86,7 +86,7 @@ class UserGroupTransformerTest extends KernelTestCase
             ->method('findOne')
             ->willReturnOnConsecutiveCalls($entity, null);
 
-        (new UserGroupTransformer($resource))
+        new UserGroupTransformer($resource)
             ->reverseTransform(['1', '2']);
     }
 

@@ -41,7 +41,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $event = new JWTDecodedEvent($payload);
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber($requestStack, $logger))
+        new JWTDecodedSubscriber($requestStack, $logger)
             ->onJWTDecoded($event);
 
         self::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
@@ -70,7 +70,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $event = new JWTDecodedEvent($payload);
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber($requestStack, $logger))
+        new JWTDecodedSubscriber($requestStack, $logger)
             ->onJWTDecoded($event);
 
         self::assertTrue($event->isValid(), 'JWTDecodedEvent did mark event as invalid.');
@@ -84,7 +84,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $event = new JWTDecodedEvent([]);
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber(new RequestStack(), $logger))
+        new JWTDecodedSubscriber(new RequestStack(), $logger)
             ->onJWTDecoded($event);
 
         self::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
@@ -101,7 +101,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $expectedEvent = clone $event;
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber(new RequestStack(), $logger))
+        new JWTDecodedSubscriber(new RequestStack(), $logger)
             ->onJWTDecoded($event);
 
         self::assertSame($expectedEvent->getPayload(), $event->getPayload());
@@ -119,7 +119,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
         $event = new JWTDecodedEvent([]);
 
-        (new JWTDecodedSubscriber(new RequestStack(), $logger))
+        new JWTDecodedSubscriber(new RequestStack(), $logger)
             ->onJWTDecoded($event);
 
         self::assertFalse($event->isValid());

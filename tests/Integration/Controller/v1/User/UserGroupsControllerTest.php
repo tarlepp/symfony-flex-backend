@@ -43,6 +43,6 @@ class UserGroupsControllerTest extends KernelTestCase
             )
             ->willReturn('[]');
 
-        (new UserGroupsController($serializer))($user);
+        new UserGroupsController($serializer)($user);
     }
 }

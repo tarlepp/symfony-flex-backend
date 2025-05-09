@@ -48,7 +48,7 @@ class FindOneMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new FindOneMethodInvalidTestClass())
+        new FindOneMethodInvalidTestClass()
             ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
     }
 
@@ -66,7 +66,7 @@ class FindOneMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new FindOneMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindOneMethodTestClass($resourceMock, $responseHandlerMock)
             ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id')
             ->getContent();
     }
@@ -94,7 +94,7 @@ class FindOneMethodTest extends KernelTestCase
             ->with($uuid)
             ->willThrowException($exception);
 
-        (new FindOneMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindOneMethodTestClass($resourceMock, $responseHandlerMock)
             ->findOneMethod(Request::create('/' . $uuid), $uuid);
     }
 
@@ -124,7 +124,7 @@ class FindOneMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 
-        (new FindOneMethodTestClass($resourceMock, $responseHandlerMock))
+        new FindOneMethodTestClass($resourceMock, $responseHandlerMock)
             ->findOneMethod($request, $uuid);
     }
 

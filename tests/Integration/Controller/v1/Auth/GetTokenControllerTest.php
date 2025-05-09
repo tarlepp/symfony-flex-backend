@@ -24,7 +24,7 @@ class GetTokenControllerTest extends KernelTestCase
     public function testThatGetTokenThrowsAnException(): void
     {
         try {
-            (new GetTokenController())();
+            new GetTokenController()();
         } catch (Throwable $exception) {
             self::assertInstanceOf(HttpException::class, $exception);
             self::assertSame(

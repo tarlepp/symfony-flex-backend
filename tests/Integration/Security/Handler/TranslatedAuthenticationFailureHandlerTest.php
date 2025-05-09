@@ -45,7 +45,7 @@ class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
         $request = new Request();
         $exception = new AuthenticationException('Invalid credentials.');
 
-        (new TranslatedAuthenticationFailureHandler($dispatcher, $translator))
+        new TranslatedAuthenticationFailureHandler($dispatcher, $translator)
             ->onAuthenticationFailure($request, $exception);
     }
 }

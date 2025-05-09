@@ -47,7 +47,7 @@ class CountMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new CountMethodInvalidTestClass())
+        new CountMethodInvalidTestClass()
             ->countMethod(Request::create('/'));
     }
 
@@ -65,7 +65,7 @@ class CountMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+        new CountMethodTestClass($resourceMock, $responseHandlerMock)
             ->countMethod(Request::create('/', $httpMethod))
             ->getContent();
     }
@@ -91,7 +91,7 @@ class CountMethodTest extends KernelTestCase
             ->with([], [])
             ->willThrowException($exception);
 
-        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+        new CountMethodTestClass($resourceMock, $responseHandlerMock)
             ->countMethod(Request::create('/'));
     }
 
@@ -136,7 +136,7 @@ class CountMethodTest extends KernelTestCase
                 $resourceMock
             );
 
-        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+        new CountMethodTestClass($resourceMock, $responseHandlerMock)
             ->countMethod($request);
     }
 
@@ -155,7 +155,7 @@ class CountMethodTest extends KernelTestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        (new CountMethodTestClass($resourceMock, $responseHandlerMock))
+        new CountMethodTestClass($resourceMock, $responseHandlerMock)
             ->countMethod(Request::create('/?where=foo'));
     }
 

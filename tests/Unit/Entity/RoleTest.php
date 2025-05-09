@@ -22,7 +22,7 @@ class RoleTest extends KernelTestCase
     #[TestDox('Test that `Role::getUserGroups` returns expected')]
     public function testThatGetUserGroupsWorksLikeExpected(): void
     {
-        $userGroup = (new UserGroup())
+        $userGroup = new UserGroup()
             ->setName('some name');
 
         $role = new Role('some role');
