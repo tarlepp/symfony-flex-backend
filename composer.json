@@ -45,7 +45,7 @@
 		"symfony/doctrine-bridge": "7.2.6",
 		"symfony/dotenv": "7.2.0",
 		"symfony/expression-language": "7.2.0",
-		"symfony/flex": "2.5.0",
+		"symfony/flex": "2.5.1",
 		"symfony/form": "7.2.6",
 		"symfony/framework-bundle": "7.2.5",
 		"symfony/monolog-bundle": "3.10.0",
