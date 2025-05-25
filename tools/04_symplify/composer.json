@@ -9,7 +9,7 @@
 		"friendsofphp/php-cs-fixer": "3.75.0",
 		"roave/security-advisories": "dev-latest",
 		"symplify/config-transformer": "12.4.0",
-		"symplify/easy-coding-standard": "12.5.16"
+		"symplify/easy-coding-standard": "12.5.18"
 	},
 	"config": {
 		"allow-plugins": true,
