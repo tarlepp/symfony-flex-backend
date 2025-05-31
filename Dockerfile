@@ -59,7 +59,7 @@ RUN rm -rf /app/var \
     && mkdir -p /app/var \
     && rm -rf /app/public/check.php \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader \
-    && php /usr/bin/composer audit
+    && php /usr/bin/composer audit --abandoned=ignore
 
 EXPOSE 9000
 

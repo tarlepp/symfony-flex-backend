@@ -18,14 +18,6 @@ parameters:
                 - tests/Integration/*
         -
             messages:
-                - '#Call to method get\(\) of internal class Symfony\\Bundle\\FrameworkBundle\\Test\\TestContainer from outside its root namespace Symfony\.#'
-            paths:
-                - tests/E2E/*
-                - tests/Functional/*
-                - tests/Integration/*
-                - tests/Unit/*
-        -
-            messages:
                 - '#has PHPDoc tag \@method for method (.*)\(\) parameter \#(\d+) \$(.*) with no value type specified in iterable type array#'
             paths:
                 - tests/*

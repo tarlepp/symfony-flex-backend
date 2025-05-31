@@ -428,8 +428,8 @@ phpstan: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analys
 phpstan: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
-	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan -v
+	@./tools/02_phpstan/vendor/bin/phpstan --version
+	@./tools/02_phpstan/vendor/bin/phpstan -v
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
