@@ -1,4 +1,4 @@
-FROM php:8.4.6-fpm-bullseye
+FROM php:8.4.7-fpm-bullseye
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
