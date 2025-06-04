@@ -19,7 +19,7 @@ use function property_exists;
  * @package App\Tests\Integration\Helpers
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LoggerAwareTraitTest extends KernelTestCase
+final class LoggerAwareTraitTest extends KernelTestCase
 {
     public function testThatLoggerAttributeExists(): void
     {

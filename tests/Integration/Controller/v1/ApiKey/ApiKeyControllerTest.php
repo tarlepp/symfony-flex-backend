@@ -18,7 +18,7 @@ use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
  *
  * @method ApiKeyController getController()
  */
-class ApiKeyControllerTest extends RestIntegrationControllerTestCase
+final class ApiKeyControllerTest extends RestIntegrationControllerTestCase
 {
     /**
      * @var class-string

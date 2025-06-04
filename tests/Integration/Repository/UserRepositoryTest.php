@@ -23,7 +23,7 @@ use App\Tests\Integration\TestCase\RepositoryTestCase;
  * @method UserResource getResource()
  * @method UserRepository getRepository()
  */
-class UserRepositoryTest extends RepositoryTestCase
+final class UserRepositoryTest extends RepositoryTestCase
 {
     /**
      * @var class-string<EntityInterface>

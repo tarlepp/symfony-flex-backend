@@ -24,7 +24,7 @@ use function sprintf;
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class HealthzControllerTest extends KernelTestCase
+final class HealthzControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

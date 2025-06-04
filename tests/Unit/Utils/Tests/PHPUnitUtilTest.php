@@ -25,7 +25,7 @@ use Throwable;
  * @package App\Tests\Unit\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class PHPUnitUtilTest extends KernelTestCase
+final class PHPUnitUtilTest extends KernelTestCase
 {
     #[TestDox('Test that `getType` method throws exception with not know type')]
     public function testThatGetTypeThrowsAnExceptionWithNotKnowType(): void

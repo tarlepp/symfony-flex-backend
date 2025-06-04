@@ -19,7 +19,7 @@ use Throwable;
  * @package App\Tests\E2E\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TimeZoneControllerTest extends WebTestCase
+final class TimeZoneControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/localization/timezone';
 

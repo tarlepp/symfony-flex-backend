@@ -26,7 +26,7 @@ use UnexpectedValueException;
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ControllerTest extends KernelTestCase
+final class ControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

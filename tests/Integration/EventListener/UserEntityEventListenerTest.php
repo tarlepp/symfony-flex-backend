@@ -24,7 +24,7 @@ use Throwable;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserEntityEventListenerTest extends KernelTestCase
+final class UserEntityEventListenerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

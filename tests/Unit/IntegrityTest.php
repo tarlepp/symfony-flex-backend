@@ -45,7 +45,7 @@ use const DIRECTORY_SEPARATOR;
  * @package App\Tests\Unit
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IntegrityTest extends KernelTestCase
+final class IntegrityTest extends KernelTestCase
 {
     public static function getKernel(): KernelInterface
     {

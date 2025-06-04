@@ -26,7 +26,7 @@ use Throwable;
  * @package App\Tests\Integration\ValueResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RestDtoValueResolverTest extends KernelTestCase
+final class RestDtoValueResolverTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
     #[TestDox('Test that `supports` method returns expected result `$expected`')]

@@ -17,7 +17,7 @@ use Override;
  * @package App\Tests\Integration\Dto\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DummyDto extends RestDto
+final class DummyDto extends RestDto
 {
     private string $foo = '';
 

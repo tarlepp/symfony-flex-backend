@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\UpdateMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UpdateMethodTestClass extends Controller
+final class UpdateMethodTestClass extends Controller
 {
     use UpdateMethod;
 

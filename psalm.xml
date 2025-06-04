@@ -30,7 +30,11 @@
             </errorLevel>
         </ArgumentTypeCoercion>
 
-        <ClassMustBeFinal errorLevel="suppress" />
+        <ClassMustBeFinal>
+            <errorLevel type="suppress">
+                <directory name="src" />
+            </errorLevel>
+        </ClassMustBeFinal>
 
         <ImplicitToStringCast>
             <errorLevel type="suppress">

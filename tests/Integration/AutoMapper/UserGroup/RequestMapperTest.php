@@ -27,7 +27,7 @@ use function class_exists;
  * @package App\Tests\Integration\AutoMapper\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RequestMapperTest extends RestRequestMapperTestCase
+final class RequestMapperTest extends RestRequestMapperTestCase
 {
     /**
      * @var array<int, class-string>
