@@ -82,6 +82,8 @@ class UuidHelper
     {
         /** @var UuidFactory $factory */
         $factory = clone Uuid::getFactory();
+
+        /** @psalm-suppress DeprecatedClass */
         $codec = new OrderedTimeCodec($factory->getUuidBuilder());
         $factory->setCodec($codec);
 
