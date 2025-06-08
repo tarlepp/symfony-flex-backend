@@ -21,6 +21,7 @@ use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
@@ -135,7 +136,7 @@ abstract class EntityTestCase extends KernelTestCase
      *
      * @throws Throwable
      */
-    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `setter` method for `$property` property only accepts `$type` parameter')]
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $property,
@@ -168,7 +169,7 @@ abstract class EntityTestCase extends KernelTestCase
      *
      * @throws Throwable
      */
-    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `setter` method for `$type $property` property is fluent')]
     public function testThatSetterReturnsInstanceOfEntity(
         string $property,
@@ -202,7 +203,7 @@ abstract class EntityTestCase extends KernelTestCase
      *
      * @throws Throwable
      */
-    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `getter` method for `$property` property returns value of expected type `$type`')]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
     {
@@ -471,7 +472,8 @@ abstract class EntityTestCase extends KernelTestCase
          * following data:
          *  1) Name
          *  2) Type
-         *  4) meta
+         *  3) Mapping data
+         *  4) Read-only flag
          *
          * @return array
          */
@@ -506,6 +508,19 @@ abstract class EntityTestCase extends KernelTestCase
                 static fn (string $field): bool => !in_array($field, $fieldsToOmit, true)
             )
         ), ...$assocFields];
+    }
+
+    public static function dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag(): Generator
+    {
+        foreach (self::dataProviderTestThatSetterAndGettersWorks() as $data) {
+            self::assertIsArray($data);
+            self::assertCount(4, $data);
+
+            // Remove 'Read-only flag' from data
+            unset($data[3]);
+
+            yield $data;
+        }
     }
 
     /**
@@ -596,7 +611,6 @@ abstract class EntityTestCase extends KernelTestCase
                     'get' . ucfirst((string)$mapping['fieldName']),
                     $targetEntity,
                     $mapping['fieldName'],
-                    $mapping,
                 ],
             ];
         };
@@ -612,7 +626,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         if (empty($items)) {
             $output = [
-                [null, null, null, null, []],
+                [null, null, null, null],
             ];
         } else {
             $output = array_merge(...array_values(array_map($iterator, $items)));
@@ -749,7 +763,6 @@ abstract class EntityTestCase extends KernelTestCase
             [
                 'get' . ucfirst((string)$mapping['fieldName']),
                 $mapping['fieldName'],
-                $mapping,
             ],
         ];
 
@@ -764,7 +777,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         if (empty($items)) {
             $output = [
-                [null, null, []],
+                [null, null],
             ];
         } else {
             $output = array_merge(...array_values(array_map($iterator, $items)));
