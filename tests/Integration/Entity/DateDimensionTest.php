@@ -35,7 +35,7 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
-    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     #[Override]
     public function testThatSetterOnlyAcceptSpecifiedType(
@@ -49,7 +49,7 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
-    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('No setter for `$property` property in read only entity - so cannot test this')]
     #[Override]
     public function testThatSetterReturnsInstanceOfEntity(
@@ -64,7 +64,7 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @throws Throwable
      */
-    #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
+    #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that getter method for `$type $property` property returns expected')]
     #[Override]
     public function testThatGetterReturnsExpectedValue(string $property, string $type, array $meta): void
