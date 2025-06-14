@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.4.6-fpm-bullseye
+FROM php:8.4.8-fpm-bullseye
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
