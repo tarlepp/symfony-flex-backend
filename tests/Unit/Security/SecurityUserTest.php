@@ -67,6 +67,7 @@ class SecurityUserTest extends KernelTestCase
 
         $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
 
+        /** @phpstan-ignore-next-line  */
         $securityUser->eraseCredentials();
 
         self::assertSame('sbbone', $securityUser->getPassword());

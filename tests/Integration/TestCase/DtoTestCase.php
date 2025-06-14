@@ -24,9 +24,12 @@ use TypeError;
 use function array_filter;
 use function array_map;
 use function count;
+use function explode;
 use function gettype;
 use function is_object;
+use function preg_replace;
 use function sprintf;
+use function str_contains;
 use function ucfirst;
 
 /**
@@ -261,17 +264,15 @@ abstract class DtoTestCase extends KernelTestCase
     private static function getType(string $class, string $property): string
     {
         $propertyInfo = self::initializePropertyExtractor();
-        $types = $propertyInfo->getTypes($class, $property);
 
-        self::assertNotNull($types);
-
-        $type = $types[0]->getBuiltinType();
-
-        if ($type === 'object') {
-            $type = $types[0]->getClassName();
-        }
+        $type = $propertyInfo->getType($class, $property);
+        $type = preg_replace('/^array<.*>$/', 'array', (string)$type);
 
         self::assertNotNull($type);
+
+        if (str_contains($type, '|')) {
+            $type = explode('|', $type)[1];
+        }
 
         return $type;
     }
