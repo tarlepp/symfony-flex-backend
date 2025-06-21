@@ -30,19 +30,19 @@ class ApiKeyPatchTest extends DtoTestCase
     #[TestDox('Test that `setUserGroups` method updates entity correctly')]
     public function testThatUserGroupsAreExpected(): void
     {
-        $userGroup1 = (new UserGroup())
+        $userGroup1 = new UserGroup()
             ->setName('Group 1')
             ->setRole(new Role('Role 1'));
 
-        $userGroup2 = (new UserGroup())
+        $userGroup2 = new UserGroup()
             ->setName('Group 2')
             ->setRole(new Role('Role 2'));
 
-        $user = (new ApiKey())
+        $user = new ApiKey()
             ->setDescription('description')
             ->addUserGroup($userGroup1);
 
-        $dto = (new ApiKeyPatch())
+        $dto = new ApiKeyPatch()
             ->load($user)
             ->setUserGroups([$userGroup2]);
 

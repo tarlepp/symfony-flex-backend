@@ -111,8 +111,8 @@ class UserTest extends EntityTestCase
     #[TestDox('Test that `getRoles` method returns expected roles')]
     public function testThatGetRolesReturnsExpectedRoles(): void
     {
-        $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
-        $user = (new User())->addUserGroup($group);
+        $group = new UserGroup()->setRole(new Role('ROLE_ROOT'));
+        $user = new User()->addUserGroup($group);
 
         self::assertSame(['ROLE_ROOT'], $user->getRoles());
     }

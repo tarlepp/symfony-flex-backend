@@ -87,7 +87,7 @@ class HealthzRepository extends BaseRepository
     public function cleanup(): int
     {
         // Determine date
-        $date = (new DateTimeImmutable(timezone: new DateTimeZone('UTC')))
+        $date = new DateTimeImmutable(timezone: new DateTimeZone('UTC'))
             ->sub(new DateInterval('P7D'));
 
         // Create query builder

@@ -38,7 +38,7 @@ class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             $expected,
-            (new Localization($cache, $logger, $requestStack))->getLanguages(),
+            new Localization($cache, $logger, $requestStack)->getLanguages(),
         );
     }
 
@@ -53,7 +53,7 @@ class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             $expected,
-            (new Localization($cache, $logger, $requestStack))->getLocales(),
+            new Localization($cache, $logger, $requestStack)->getLocales(),
         );
     }
 
@@ -76,7 +76,7 @@ class LocalizationTest extends KernelTestCase
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 
-        (new Localization($cache, $logger, $requestStack))
+        new Localization($cache, $logger, $requestStack)
             ->getTimezones();
     }
 
@@ -87,7 +87,7 @@ class LocalizationTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $requestStack = new RequestStack();
 
-        $output = (new Localization($cache, $logger, $requestStack))
+        $output = new Localization($cache, $logger, $requestStack)
             ->getFormattedTimezones();
 
         self::assertCount(count(DateTimeZone::listIdentifiers()), $output);
@@ -110,7 +110,7 @@ class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             Locale::getDefault()->value,
-            (new Localization($cache, $logger, $requestStack))->getRequestLocale(),
+            new Localization($cache, $logger, $requestStack)->getRequestLocale(),
         );
     }
 
@@ -128,7 +128,7 @@ class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             'en',
-            (new Localization($cache, $logger, $requestStack))->getRequestLocale(),
+            new Localization($cache, $logger, $requestStack)->getRequestLocale(),
         );
     }
 }

@@ -35,7 +35,7 @@ class UniqueUsernameValidatorTest extends KernelTestCase
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         // Create new user
-        $user = (new User())
+        $user = new User()
             ->setUsername('john');
 
         $repositoryMock

@@ -58,7 +58,7 @@ class FindOneRoleControllerTest extends RestIntegrationControllerTestCase
             ->method('createResponse')
             ->with($request, $role, $resource);
 
-        (new FindOneRoleController($resource))
+        new FindOneRoleController($resource)
             ->setResponseHandler($responseHandler)
             ->__invoke($request, 'role');
     }

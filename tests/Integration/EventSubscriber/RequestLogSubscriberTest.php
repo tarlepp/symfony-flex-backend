@@ -88,11 +88,11 @@ class RequestLogSubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('setApiKeyId');
 
-        (new RequestLogSubscriber(
+        new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
             []
-        ))
+        )
             ->onTerminateEvent($event);
     }
 
@@ -140,11 +140,11 @@ class RequestLogSubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('setApiKeyId');
 
-        (new RequestLogSubscriber(
+        new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
             []
-        ))
+        )
             ->onTerminateEvent($event);
     }
 
@@ -192,11 +192,11 @@ class RequestLogSubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('setUserId');
 
-        (new RequestLogSubscriber(
+        new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
             []
-        ))
+        )
             ->onTerminateEvent($event);
     }
 
@@ -227,11 +227,11 @@ class RequestLogSubscriberTest extends KernelTestCase
             ->with($request)
             ->willReturn($requestLogger);
 
-        (new RequestLogSubscriber(
+        new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
             []
-        ))
+        )
             ->onTerminateEvent($event);
     }
 
@@ -293,11 +293,11 @@ class RequestLogSubscriberTest extends KernelTestCase
             ->expects(self::never())
             ->method('setApiKeyId');
 
-        (new RequestLogSubscriber(
+        new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
             [$ignored]
-        ))
+        )
             ->onTerminateEvent($event);
     }
 

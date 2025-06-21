@@ -42,7 +42,7 @@ class GenericDtoTest extends KernelTestCase
             ->method('getVisited')
             ->willReturn(['foo']);
 
-        (new User())
+        new User()
             ->patch($dtoMock);
     }
 
@@ -70,10 +70,10 @@ class GenericDtoTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Property \'foo\' has multiple getter methods - this is insane!');
 
-        $dtoMock = (new DummyDto())
+        $dtoMock = new DummyDto()
             ->setFoo('foo');
 
-        (new User())
+        new User()
             ->patch($dtoMock);
     }
 
@@ -100,7 +100,7 @@ class GenericDtoTest extends KernelTestCase
             ->method('getEmail')
             ->willReturn('email@com');
 
-        $dto = (new User())
+        $dto = new User()
             ->patch($dtoUser);
 
         self::assertInstanceOf(User::class, $dto);
@@ -134,7 +134,7 @@ class GenericDtoTest extends KernelTestCase
             ->with('password')
             ->willReturn($userEntity);
 
-        (new User())
+        new User()
             ->setUsername('username')
             ->setEmail('email@com')
             ->setPassword('password')

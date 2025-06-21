@@ -32,6 +32,6 @@ class InheritedRolesControllerTest extends KernelTestCase
             ->with([$role->getId()])
             ->willReturn([$role]);
 
-        (new InheritedRolesController($rolesService))($role);
+        new InheritedRolesController($rolesService)($role);
     }
 }

@@ -34,7 +34,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     {
         [$entityManager, $hasher] = $this->getServices();
 
-        $entity = (new User())
+        $entity = new User()
             ->setUsername('john_doe_the_tester')
             ->setEmail('john.doe_the_tester@test.com')
             ->setFirstName('John')
@@ -50,7 +50,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         $event = new LifecycleEventArgs($entity, $entityManager);
 
         // Call listener method
-        (new UserEntityEventListener($hasher))->prePersist($event);
+        new UserEntityEventListener($hasher)->prePersist($event);
     }
 
     /**
@@ -61,7 +61,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     {
         [$entityManager, $hasher] = $this->getServices();
 
-        $entity = (new User())
+        $entity = new User()
             ->setUsername('john_doe_the_tester')
             ->setEmail('john.doe_the_tester@test.com')
             ->setFirstName('John')
@@ -77,7 +77,7 @@ class UserEntityEventListenerTest extends KernelTestCase
 
         $event = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        (new UserEntityEventListener($hasher))->preUpdate($event);
+        new UserEntityEventListener($hasher)->preUpdate($event);
     }
 
     /**
@@ -88,7 +88,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     {
         [$entityManager, $hasher] = $this->getServices();
 
-        $entity = (new User())
+        $entity = new User()
             ->setUsername('john_doe_the_tester')
             ->setEmail('john.doe_the_tester@test.com')
             ->setFirstName('John')
@@ -104,7 +104,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         $event = new LifecycleEventArgs($entity, $entityManager);
 
         // Call listener method
-        (new UserEntityEventListener($hasher))->prePersist($event);
+        new UserEntityEventListener($hasher)->prePersist($event);
 
         self::assertEmpty(
             $entity->getPlainPassword(),
@@ -131,7 +131,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     {
         [$entityManager, $hasher] = $this->getServices();
 
-        $entity = (new User())
+        $entity = new User()
             ->setUsername('john_doe_the_tester')
             ->setEmail('john.doe_the_tester@test.com')
             ->setFirstName('John')
@@ -154,7 +154,7 @@ class UserEntityEventListenerTest extends KernelTestCase
 
         $event = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        (new UserEntityEventListener($hasher))->preUpdate($event);
+        new UserEntityEventListener($hasher)->preUpdate($event);
 
         self::assertEmpty(
             $entity->getPlainPassword(),

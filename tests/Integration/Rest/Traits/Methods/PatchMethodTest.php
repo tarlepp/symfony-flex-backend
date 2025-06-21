@@ -49,7 +49,7 @@ class PatchMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches($regex);
 
-        (new PatchMethodInvalidTestClass())
+        new PatchMethodInvalidTestClass()
             ->patchMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), Request::METHOD_PATCH),
                 $this->getMockBuilder(RestDtoInterface::class)->getMock(),
@@ -71,7 +71,7 @@ class PatchMethodTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new PatchMethodTestClass($resourceMock, $responseHandlerMock))
+        new PatchMethodTestClass($resourceMock, $responseHandlerMock)
             ->patchMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
                 $this->getMockBuilder(RestDtoInterface::class)->getMock(),
@@ -104,7 +104,7 @@ class PatchMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        (new PatchMethodTestClass($resourceMock, $responseHandlerMock))
+        new PatchMethodTestClass($resourceMock, $responseHandlerMock)
             ->patchMethod(
                 Request::create('/' . $uuid, Request::METHOD_PATCH),
                 $restDtoMock,
@@ -140,7 +140,7 @@ class PatchMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 
-        (new PatchMethodTestClass($resourceMock, $responseHandlerMock))
+        new PatchMethodTestClass($resourceMock, $responseHandlerMock)
             ->patchMethod($request, $restDtoMock, $uuid);
     }
 

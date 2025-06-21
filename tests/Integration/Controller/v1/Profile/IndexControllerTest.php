@@ -54,6 +54,6 @@ class IndexControllerTest extends KernelTestCase
             ->with(['foo', 'bar'])
             ->willReturn(['foo', 'bar']);
 
-        (new IndexController($serializer, $rolesService))($user);
+        new IndexController($serializer, $rolesService)($user);
     }
 }

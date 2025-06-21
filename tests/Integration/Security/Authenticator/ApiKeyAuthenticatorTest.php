@@ -72,7 +72,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
             'Authorization' => 'ApiKey SomeToken',
         ]);
 
-        $passport = (new ApiKeyAuthenticator($apiKeyUserProvider))->authenticate($request);
+        $passport = new ApiKeyAuthenticator($apiKeyUserProvider)->authenticate($request);
 
         self::assertTrue($passport->hasBadge(UserBadge::class));
 
@@ -92,7 +92,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        (new ApiKeyAuthenticator($apiKeyUserProvider))->authenticate(new Request());
+        new ApiKeyAuthenticator($apiKeyUserProvider)->authenticate(new Request());
     }
 
     /**

@@ -70,7 +70,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $user = new InMemoryUser('username', 'password');
 
-        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
+        new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock)
             ->refreshUser($user);
     }
 
@@ -99,7 +99,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
-        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
+        new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock)
             ->loadUserByIdentifier('guid');
     }
 
@@ -127,7 +127,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ])
             ->willReturn($apiKey);
 
-        $user = (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
+        $user = new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock)
             ->loadUserByIdentifier('guid');
 
         self::assertSame($apiKey->getId(), $user->getApiKeyIdentifier());
@@ -155,7 +155,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
+        new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock)
             ->getApiKeyForToken('some_token');
     }
 

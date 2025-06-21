@@ -33,7 +33,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $encoder = fn (string $password): string => str_rot13($password);
 
-        $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
+        $securityUser = new SecurityUser(new User()->setPassword($encoder, 'foobar'));
 
         self::assertSame('sbbone', $securityUser->getPassword());
     }
@@ -41,7 +41,7 @@ class SecurityUserTest extends KernelTestCase
     #[TestDox('Test that `SecurityUser::getSalt` method returns null')]
     public function testThatGetSaltReturnNothing(): void
     {
-        self::assertNull((new SecurityUser(new User()))->getSalt());
+        self::assertNull(new SecurityUser(new User())->getSalt());
     }
 
     #[TestDox('Test that `SecurityUser::getUsername` method returns expected UUID')]
@@ -49,7 +49,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $user = new User();
 
-        self::assertSame($user->getId(), (new SecurityUser($user))->getUserIdentifier());
+        self::assertSame($user->getId(), new SecurityUser($user)->getUserIdentifier());
     }
 
     #[TestDox('Test that `SecurityUser::getUuid` method returns expected UUID')]
@@ -57,7 +57,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $user = new User();
 
-        self::assertSame($user->getId(), (new SecurityUser($user))->getUuid());
+        self::assertSame($user->getId(), new SecurityUser($user)->getUuid());
     }
 
     #[TestDox('Test that password is present after `SecurityUser::eraseCredentials` method call')]
@@ -65,7 +65,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $encoder = fn (string $password): string => str_rot13($password);
 
-        $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
+        $securityUser = new SecurityUser(new User()->setPassword($encoder, 'foobar'));
 
         /** @phpstan-ignore-next-line  */
         $securityUser->eraseCredentials();

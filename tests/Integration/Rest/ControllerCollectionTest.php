@@ -72,7 +72,7 @@ class ControllerCollectionTest extends KernelTestCase
             }
         };
 
-        (new ControllerCollection($iteratorAggregate, $stubLogger))->get('FooBar');
+        new ControllerCollection($iteratorAggregate, $stubLogger)->get('FooBar');
     }
 
     #[TestDox('Test that `getAll` method returns expected count of `REST` controllers')]

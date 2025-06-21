@@ -56,7 +56,7 @@ class UserGroupTypeTest extends TypeTestCase
         $form = $this->factory->create(UserGroupType::class);
 
         // Create new DTO object
-        $dto = (new UserGroupDto())
+        $dto = new UserGroupDto()
             ->setName('ROLE_ADMIN')
             ->setRole($roleEntity);
 

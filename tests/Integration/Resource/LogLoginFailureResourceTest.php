@@ -46,7 +46,7 @@ class LogLoginFailureResourceTest extends ResourceTestCase
     {
         $repository = $this->getMockBuilder($this->repositoryClass)->disableOriginalConstructor()->getMock();
 
-        $user = (new User())->setUsername('username');
+        $user = new User()->setUsername('username');
 
         $repository
             ->expects($this->once())
@@ -57,6 +57,6 @@ class LogLoginFailureResourceTest extends ResourceTestCase
         /**
          * @var LogLoginFailureRepository $repository
          */
-        (new LogLoginFailureResource($repository))->reset($user); // @phpstan-ignore-line
+        new LogLoginFailureResource($repository)->reset($user); // @phpstan-ignore-line
     }
 }

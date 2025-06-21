@@ -56,7 +56,7 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
         $request = Request::create('/');
         $user = new User();
 
-        (new DeleteUserController($resource))($request, $user, $user);
+        new DeleteUserController($resource)($request, $user, $user);
     }
 
     /**
@@ -83,7 +83,7 @@ class DeleteUserControllerTest extends RestIntegrationControllerTestCase
             ->method('createResponse')
             ->with($request, $requestUser, $resource);
 
-        (new DeleteUserController($resource))
+        new DeleteUserController($resource)
             ->setResponseHandler($responseHandler)
             ->__invoke($request, $requestUser, $loggedInUser);
     }
