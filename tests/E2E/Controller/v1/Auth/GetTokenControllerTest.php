@@ -22,7 +22,7 @@ use function property_exists;
  * @package App\Tests\E2E\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class GetTokenControllerTest extends WebTestCase
+final class GetTokenControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/auth/get_token';
 

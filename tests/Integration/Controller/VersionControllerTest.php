@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class VersionControllerTest extends KernelTestCase
+final class VersionControllerTest extends KernelTestCase
 {
     #[TestDox('Test that `__invoke` method calls expected service methods')]
     public function testThatInvokeMethodIsCallingExpectedMethods(): void

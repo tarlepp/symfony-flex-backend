@@ -14,6 +14,6 @@ use Symfony\Component\Validator\Constraint;
  * @package App\Tests\Integration\Validator\Constraints\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TestConstraint extends Constraint
+final class TestConstraint extends Constraint
 {
 }

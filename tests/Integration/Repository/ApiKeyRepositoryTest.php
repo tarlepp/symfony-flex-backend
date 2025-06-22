@@ -23,7 +23,7 @@ use App\Tests\Integration\TestCase\RepositoryTestCase;
  * @method ApiKeyResource getResource()
  * @method ApiKeyRepository getRepository()
  */
-class ApiKeyRepositoryTest extends RepositoryTestCase
+final class ApiKeyRepositoryTest extends RepositoryTestCase
 {
     /**
      * @var class-string<EntityInterface>

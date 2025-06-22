@@ -14,6 +14,6 @@ use App\AutoMapper\RestRequestMapper;
  * @package App\Tests\Integration\AutoMapper\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TestRestRequestMapperWithoutProperties extends RestRequestMapper
+final class TestRestRequestMapperWithoutProperties extends RestRequestMapper
 {
 }

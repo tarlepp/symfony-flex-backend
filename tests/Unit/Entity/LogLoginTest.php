@@ -25,7 +25,7 @@ use Throwable;
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LogLoginTest extends KernelTestCase
+final class LogLoginTest extends KernelTestCase
 {
     /**
      * @throws Throwable

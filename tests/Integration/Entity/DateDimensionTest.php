@@ -25,7 +25,7 @@ use function ucfirst;
  *
  * @method DateDimension getEntity()
  */
-class DateDimensionTest extends EntityTestCase
+final class DateDimensionTest extends EntityTestCase
 {
     /**
      * @var class-string

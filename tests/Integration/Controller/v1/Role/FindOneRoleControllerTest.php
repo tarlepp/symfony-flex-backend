@@ -23,7 +23,7 @@ use Throwable;
  *
  * @method FindOneRoleController getController()
  */
-class FindOneRoleControllerTest extends RestIntegrationControllerTestCase
+final class FindOneRoleControllerTest extends RestIntegrationControllerTestCase
 {
     /**
      * @var class-string

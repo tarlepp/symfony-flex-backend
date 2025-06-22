@@ -19,7 +19,7 @@ use Throwable;
  * @package App\Tests\Integration\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserRolesControllerTest extends KernelTestCase
+final class UserRolesControllerTest extends KernelTestCase
 {
     /**
      * @throws Throwable

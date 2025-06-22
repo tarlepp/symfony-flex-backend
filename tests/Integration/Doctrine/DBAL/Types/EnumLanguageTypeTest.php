@@ -26,7 +26,7 @@ use Throwable;
  * @package App\Tests\Integration\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class EnumLanguageTypeTest extends KernelTestCase
+final class EnumLanguageTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable

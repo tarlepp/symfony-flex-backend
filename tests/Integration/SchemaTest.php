@@ -24,7 +24,7 @@ use function implode;
  * @package App\Tests\Integration
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class SchemaTest extends KernelTestCase
+final class SchemaTest extends KernelTestCase
 {
     #[TestDox('Test that entity mappings are valid')]
     public function testThatMappingsAreValid(): void

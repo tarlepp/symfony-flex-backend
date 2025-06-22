@@ -31,7 +31,7 @@ use UnexpectedValueException;
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class GenericRepositoryTest extends KernelTestCase
+final class GenericRepositoryTest extends KernelTestCase
 {
     /**
      * @throws Throwable

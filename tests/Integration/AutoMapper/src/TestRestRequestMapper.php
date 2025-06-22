@@ -15,7 +15,7 @@ use function str_rot13;
  * @package App\Tests\Integration\AutoMapper\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TestRestRequestMapper extends RestRequestMapper
+final class TestRestRequestMapper extends RestRequestMapper
 {
     /**
      * @var array<int, non-empty-string>

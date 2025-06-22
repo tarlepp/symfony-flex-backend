@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\FindMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class FindMethodTestClass extends Controller
+final class FindMethodTestClass extends Controller
 {
     use FindMethod;
 

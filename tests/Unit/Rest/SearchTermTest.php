@@ -20,7 +20,7 @@ use function call_user_func_array;
  * @package App\Tests\Unit\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class SearchTermTest extends KernelTestCase
+final class SearchTermTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull')]
     #[TestDox('Test that `getCriteria` method returns null with `$column` + `$search` parameters')]

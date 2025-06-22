@@ -20,7 +20,7 @@ use function floor;
  * @package App\Tests\Unit\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DateDimensionTest extends KernelTestCase
+final class DateDimensionTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -31,7 +31,7 @@ use function method_exists;
  * @package App\Tests\Decorator\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class StopwatchDecoratorTest extends KernelTestCase
+final class StopwatchDecoratorTest extends KernelTestCase
 {
     /**
      * @param class-string $expected

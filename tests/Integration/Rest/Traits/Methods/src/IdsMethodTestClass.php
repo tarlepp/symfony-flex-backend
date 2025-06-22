@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\IdsMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IdsMethodTestClass extends Controller
+final class IdsMethodTestClass extends Controller
 {
     use IdsMethod;
 

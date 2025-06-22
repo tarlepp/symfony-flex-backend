@@ -18,7 +18,7 @@ use Throwable;
  * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserManagementFlowTest extends WebTestCase
+final class UserManagementFlowTest extends WebTestCase
 {
     private string $baseUrl = '/v1/user';
 

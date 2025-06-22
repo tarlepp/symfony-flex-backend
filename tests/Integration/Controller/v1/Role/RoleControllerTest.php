@@ -18,7 +18,7 @@ use App\Tests\Integration\TestCase\RestIntegrationControllerTestCase;
  *
  * @method RoleController getController()
  */
-class RoleControllerTest extends RestIntegrationControllerTestCase
+final class RoleControllerTest extends RestIntegrationControllerTestCase
 {
     /**
      * @var class-string

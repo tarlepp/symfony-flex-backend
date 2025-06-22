@@ -46,7 +46,7 @@ use function property_exists;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ExceptionSubscriberTest extends KernelTestCase
+final class ExceptionSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable

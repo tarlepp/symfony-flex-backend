@@ -20,7 +20,7 @@ use function getenv;
  * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserControllerTest extends WebTestCase
+final class UserControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/user';
 

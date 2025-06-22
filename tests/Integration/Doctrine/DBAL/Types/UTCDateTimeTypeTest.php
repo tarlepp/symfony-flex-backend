@@ -26,7 +26,7 @@ use Throwable;
  * @package App\Tests\Integration\Doctrine\DBAL\Types
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UTCDateTimeTypeTest extends KernelTestCase
+final class UTCDateTimeTypeTest extends KernelTestCase
 {
     /**
      * @throws Throwable

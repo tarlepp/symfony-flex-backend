@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Integration\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TimeZoneControllerTest extends KernelTestCase
+final class TimeZoneControllerTest extends KernelTestCase
 {
     #[TestDox('Test that controller calls expected service method(s) and returns expected response')]
     public function testThatInvokeMethodCallsExpectedServiceMethods(): void

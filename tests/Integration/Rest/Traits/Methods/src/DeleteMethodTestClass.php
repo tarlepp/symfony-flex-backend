@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\DeleteMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DeleteMethodTestClass extends Controller
+final class DeleteMethodTestClass extends Controller
 {
     use DeleteMethod;
 

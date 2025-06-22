@@ -23,7 +23,7 @@ use App\Tests\Integration\TestCase\RepositoryTestCase;
  * @method HealthzResource getResource()
  * @method HealthzRepository getRepository()
  */
-class HealthzRepositoryTest extends RepositoryTestCase
+final class HealthzRepositoryTest extends RepositoryTestCase
 {
     /**
      * @var class-string<EntityInterface>

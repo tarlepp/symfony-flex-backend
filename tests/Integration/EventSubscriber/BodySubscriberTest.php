@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class BodySubscriberTest extends KernelTestCase
+final class BodySubscriberTest extends KernelTestCase
 {
     /**
      * @throws JsonException

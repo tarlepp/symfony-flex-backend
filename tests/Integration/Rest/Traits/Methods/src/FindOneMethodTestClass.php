@@ -19,7 +19,7 @@ use App\Rest\Traits\Methods\FindOneMethod;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class FindOneMethodTestClass extends Controller
+final class FindOneMethodTestClass extends Controller
 {
     use FindOneMethod;
 

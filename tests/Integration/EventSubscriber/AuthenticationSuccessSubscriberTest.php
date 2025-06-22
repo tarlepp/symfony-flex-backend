@@ -22,7 +22,7 @@ use Throwable;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class AuthenticationSuccessSubscriberTest extends KernelTestCase
+final class AuthenticationSuccessSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable

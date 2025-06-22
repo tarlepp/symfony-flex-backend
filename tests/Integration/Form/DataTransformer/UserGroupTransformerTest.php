@@ -24,7 +24,7 @@ use Throwable;
  * @package App\Tests\Integration\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserGroupTransformerTest extends KernelTestCase
+final class UserGroupTransformerTest extends KernelTestCase
 {
     /**
      * @phpstan-param StringableArrayObject<mixed> $expected

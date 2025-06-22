@@ -34,7 +34,7 @@ use Throwable;
  * @package Integration\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DeleteMethodTest extends KernelTestCase
+final class DeleteMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable

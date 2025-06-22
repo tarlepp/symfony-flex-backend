@@ -22,7 +22,7 @@ use function implode;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class JWTDecodedSubscriberTest extends KernelTestCase
+final class JWTDecodedSubscriberTest extends KernelTestCase
 {
     public function testThatJwtIsMarkedInvalidIfChecksumDiffers(): void
     {

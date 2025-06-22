@@ -22,7 +22,7 @@ use Throwable;
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class LogLoginFailureResourceTest extends ResourceTestCase
+final class LogLoginFailureResourceTest extends ResourceTestCase
 {
     /**
      * @var class-string<EntityInterface>

@@ -19,7 +19,7 @@ use function file_get_contents;
  * @package App\Tests\E2E\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class VersionControllerTest extends WebTestCase
+final class VersionControllerTest extends WebTestCase
 {
     /**
      * @throws Throwable

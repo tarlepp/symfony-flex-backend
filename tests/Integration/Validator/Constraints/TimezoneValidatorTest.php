@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
  * @package App\Tests\Integration\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class TimezoneValidatorTest extends KernelTestCase
+final class TimezoneValidatorTest extends KernelTestCase
 {
     #[TestDox('Test that `TimezoneValidator::validate` method calls expected service methods')]
     public function testThatValidateCallsExpectedMethods(): void

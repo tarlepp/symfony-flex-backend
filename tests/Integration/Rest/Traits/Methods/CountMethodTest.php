@@ -33,7 +33,7 @@ use Throwable;
  * @package App\Tests\Integration\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class CountMethodTest extends KernelTestCase
+final class CountMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable

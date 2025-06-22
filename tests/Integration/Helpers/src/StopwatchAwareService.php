@@ -14,7 +14,7 @@ use App\Helpers\StopwatchAwareTrait;
  * @package App\Tests\Integration\Helpers\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class StopwatchAwareService
+final class StopwatchAwareService
 {
     use StopwatchAwareTrait;
 

@@ -15,7 +15,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
  * @package App\Tests\Integration\DTO\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class UserGroupPatchTest extends DtoTestCase
+final class UserGroupPatchTest extends DtoTestCase
 {
     /**
      * @psalm-var class-string

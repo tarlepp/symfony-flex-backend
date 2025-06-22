@@ -35,7 +35,7 @@ use Throwable;
  * @package App\Tests\Integration\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class PatchMethodTest extends KernelTestCase
+final class PatchMethodTest extends KernelTestCase
 {
     /**
      * @throws Throwable

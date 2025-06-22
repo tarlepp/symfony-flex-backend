@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
  * @package App\Tests\Integration\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class JWTCreatedSubscriberTest extends KernelTestCase
+final class JWTCreatedSubscriberTest extends KernelTestCase
 {
     public function testThatPayloadContainsExpectedDataWhenRequestIsPresent(): void
     {

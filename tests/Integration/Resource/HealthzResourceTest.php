@@ -20,7 +20,7 @@ use App\Tests\Integration\TestCase\ResourceTestCase;
  * @package App\Tests\Integration\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class HealthzResourceTest extends ResourceTestCase
+final class HealthzResourceTest extends ResourceTestCase
 {
     /**
      * @var class-string<EntityInterface>

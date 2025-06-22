@@ -19,7 +19,7 @@ use function getenv;
  * @package App\Tests\E2E\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class FindOneRoleControllerTest extends WebTestCase
+final class FindOneRoleControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/role';
 

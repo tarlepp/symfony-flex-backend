@@ -32,7 +32,7 @@ use Throwable;
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ControllerCollectionTest extends KernelTestCase
+final class ControllerCollectionTest extends KernelTestCase
 {
     /**
      * @throws Throwable

@@ -25,7 +25,7 @@ use function ucfirst;
  *
  * @method LogLoginFailure getEntity()
  */
-class LogLoginFailureTest extends EntityTestCase
+final class LogLoginFailureTest extends EntityTestCase
 {
     /**
      * @var class-string
