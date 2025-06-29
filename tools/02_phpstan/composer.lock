@@ -242,12 +242,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "e3520a4c9a252831ae009f8bf79a8d2a32ba4936"
+                "reference": "b79895bbbfcb549006a8ee8efae7f77edffe5329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/e3520a4c9a252831ae009f8bf79a8d2a32ba4936",
-                "reference": "e3520a4c9a252831ae009f8bf79a8d2a32ba4936",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b79895bbbfcb549006a8ee8efae7f77edffe5329",
+                "reference": "b79895bbbfcb549006a8ee8efae7f77edffe5329",
                 "shasum": ""
             },
             "conflict": {
@@ -519,7 +519,7 @@
                 "gaoming13/wechat-php-sdk": "<=1.10.2",
                 "genix/cms": "<=1.1.11",
                 "georgringer/news": "<1.3.3",
-                "geshi/geshi": "<1.0.8.11-dev",
+                "geshi/geshi": "<=1.0.9.1",
                 "getformwork/formwork": "<1.13.1|>=2.0.0.0-beta1,<2.0.0.0-beta4",
                 "getgrav/grav": "<1.7.46",
                 "getkirby/cms": "<3.9.8.3-dev|>=3.10,<3.10.1.2-dev|>=4,<4.7.1",
@@ -655,7 +655,7 @@
                 "luyadev/yii-helpers": "<1.2.1",
                 "macropay-solutions/laravel-crud-wizard-free": "<3.4.17",
                 "maestroerror/php-heic-to-jpg": "<1.0.5",
-                "magento/community-edition": "<2.4.5|==2.4.5|>=2.4.5.0-patch1,<2.4.5.0-patch12|==2.4.6|>=2.4.6.0-patch1,<2.4.6.0-patch10|>=2.4.7.0-beta1,<2.4.7.0-patch5|>=2.4.8.0-beta1,<2.4.8.0-beta2",
+                "magento/community-edition": "<2.4.5.0-patch13|==2.4.6|>=2.4.6.0-patch1,<2.4.6.0-patch11|>=2.4.7.0-beta1,<2.4.7.0-patch6|>=2.4.8.0-beta1,<2.4.8.0-patch1",
                 "magento/core": "<=1.9.4.5",
                 "magento/magento1ce": "<1.9.4.3-dev",
                 "magento/magento1ee": ">=1,<1.14.4.3-dev",
@@ -1188,7 +1188,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-19T20:06:27+00:00"
+            "time": "2025-06-24T22:05:35+00:00"
         }
     ],
     "aliases": [],
