@@ -2,6 +2,7 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit" isTestSource="true" packagePrefix="PHPStan\PhpDoc\PHPUnit\" />
@@ -14,7 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/coding-standard/src" isTestSource="true" packagePrefix="Symplify\CodingStandard\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/rule-doc-generator-contracts/src" isTestSource="true" packagePrefix="ECSPrefix20210928\Symplify\RuleDocGenerator\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector" isTestSource="true" packagePrefix="Rector\" />
-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/03_psalm" />
       <excludeFolder url="file://$MODULE_DIR$/tools/04_symplify" />
