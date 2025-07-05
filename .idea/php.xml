@@ -54,52 +54,6 @@
       <path value="$PROJECT_DIR$/tools/11_phplint/vendor/psr/event-dispatcher" />
       <path value="$PROJECT_DIR$/tools/11_phplint/vendor/psr/log" />
       <path value="$PROJECT_DIR$/tools/11_phplint/vendor/overtrue/phplint" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/type" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/comparator" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/composer" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/recursion-context" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/object-enumerator" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/complexity" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/environment" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/lines-of-code" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/cli-parser" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/masterminds/html5" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/version" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/psr/container" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/staabm/side-effects-detector" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/nikic/php-parser" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/myclabs/deep-copy" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/liuggio/fastest" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phar-io/version" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phar-io/manifest" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-file-iterator" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/phpcov" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/phpunit" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-invoker" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-code-coverage" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-text-template" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/browser-kit" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/phpunit/php-timer" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/dom-crawler" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/process" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-mbstring" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/string" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-php84" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/deprecation-contracts" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/stopwatch" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-ctype" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-intl-grapheme" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/service-contracts" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/polyfill-intl-normalizer" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/theseer/tokenizer" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/symfony/console" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/doctrine/collections" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/doctrine/deprecations" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/exporter" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/object-reflector" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/global-state" />
-      <path value="$PROJECT_DIR$/tools/01_phpunit/vendor/sebastian/diff" />
       <path value="$PROJECT_DIR$/vendor/symfony/cache" />
       <path value="$PROJECT_DIR$/vendor/symfony/finder" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
@@ -258,14 +212,14 @@
   <component name="PhpInterpretersPhpInfoCache">
     <phpInfoCache>
       <interpreter name="Docker-PHP">
-        <phpinfo binary_type="PHP" php_cli="/usr/local/bin/php" path_separator=":" version="8.4.6">
+        <phpinfo binary_type="PHP" php_cli="/usr/local/bin/php" path_separator=":" version="8.4.8">
           <additional_php_ini>/usr/local/etc/php/conf.d/docker-fpm.ini, /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini, /usr/local/etc/php/conf.d/docker-php-ext-bcmath.ini, /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini, /usr/local/etc/php/conf.d/docker-php-ext-intl.ini, /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini, /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/docker-php-ext-zip.ini</additional_php_ini>
           <configuration_file>/usr/local/etc/php/php.ini</configuration_file>
           <configuration_options>
             <configuration_option name="include_path" value=".:/usr/local/lib/php" />
           </configuration_options>
           <debuggers>
-            <debugger_info debugger="xdebug" debugger_version="3.4.2">
+            <debugger_info debugger="xdebug" debugger_version="3.4.4">
               <debug_extensions />
             </debugger_info>
           </debuggers>

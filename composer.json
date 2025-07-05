@@ -96,7 +96,7 @@
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.6"
+			"php": "8.4.8"
 		},
 		"sort-packages": true
 	},
