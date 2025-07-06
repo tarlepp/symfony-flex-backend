@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "483c86510810ae2712ad012d78ed5128",
+    "content-hash": "e29fb977f39ba9dcfe813dab8a4a30bf",
     "packages": [],
     "packages-dev": [
         {
@@ -131,12 +131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d4ca0cc4c49ba3437778e201d35844715d9b1bd9"
+                "reference": "a76f62e135c8b583602bd99df737b5c20f4d7200"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d4ca0cc4c49ba3437778e201d35844715d9b1bd9",
-                "reference": "d4ca0cc4c49ba3437778e201d35844715d9b1bd9",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a76f62e135c8b583602bd99df737b5c20f4d7200",
+                "reference": "a76f62e135c8b583602bd99df737b5c20f4d7200",
                 "shasum": ""
             },
             "conflict": {
@@ -242,7 +242,7 @@
                 "ckeditor/ckeditor": "<4.25",
                 "clickstorm/cs-seo": ">=6,<6.8|>=7,<7.5|>=8,<8.4|>=9,<9.3",
                 "co-stack/fal_sftp": "<0.2.6",
-                "cockpit-hq/cockpit": "<2.7|==2.7",
+                "cockpit-hq/cockpit": "<2.11.4",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<3.1.10",
                 "codeigniter4/framework": "<4.5.8",
@@ -814,7 +814,8 @@
                 "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
                 "ssddanbrown/bookstack": "<24.05.1",
-                "starcitizentools/citizen-skin": ">=2.4.2,<3.3.1",
+                "starcitizentools/citizen-skin": ">=1.9.4,<3.4",
+                "starcitizentools/short-description": ">=4,<4.0.1",
                 "starcitizentools/tabber-neue": ">=1.9.1,<2.7.2|>=3,<3.1.1",
                 "statamic/cms": "<=5.16",
                 "stormpath/sdk": "<9.9.99",
@@ -1077,7 +1078,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-27T21:05:09+00:00"
+            "time": "2025-07-04T13:13:44+00:00"
         }
     ],
     "aliases": [],
@@ -1092,7 +1093,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4.8"
+        "php": "8.4.10"
     },
     "plugin-api-version": "2.6.0"
 }
