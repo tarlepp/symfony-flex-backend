@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a16f498be4d22135d69d823ad9db5628",
+    "content-hash": "801b8b5150306d766d453ff2e97023c5",
     "packages": [],
     "packages-dev": [
         {
@@ -1052,12 +1052,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d4ca0cc4c49ba3437778e201d35844715d9b1bd9"
+                "reference": "a76f62e135c8b583602bd99df737b5c20f4d7200"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d4ca0cc4c49ba3437778e201d35844715d9b1bd9",
-                "reference": "d4ca0cc4c49ba3437778e201d35844715d9b1bd9",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a76f62e135c8b583602bd99df737b5c20f4d7200",
+                "reference": "a76f62e135c8b583602bd99df737b5c20f4d7200",
                 "shasum": ""
             },
             "conflict": {
@@ -1163,7 +1163,7 @@
                 "ckeditor/ckeditor": "<4.25",
                 "clickstorm/cs-seo": ">=6,<6.8|>=7,<7.5|>=8,<8.4|>=9,<9.3",
                 "co-stack/fal_sftp": "<0.2.6",
-                "cockpit-hq/cockpit": "<2.7|==2.7",
+                "cockpit-hq/cockpit": "<2.11.4",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<3.1.10",
                 "codeigniter4/framework": "<4.5.8",
@@ -1735,7 +1735,8 @@
                 "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
                 "ssddanbrown/bookstack": "<24.05.1",
-                "starcitizentools/citizen-skin": ">=2.4.2,<3.3.1",
+                "starcitizentools/citizen-skin": ">=1.9.4,<3.4",
+                "starcitizentools/short-description": ">=4,<4.0.1",
                 "starcitizentools/tabber-neue": ">=1.9.1,<2.7.2|>=3,<3.1.1",
                 "statamic/cms": "<=5.16",
                 "stormpath/sdk": "<9.9.99",
@@ -1998,7 +1999,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-27T21:05:09+00:00"
+            "time": "2025-07-04T13:13:44+00:00"
         },
         {
             "name": "sanmai/later",
@@ -2066,16 +2067,16 @@
         },
         {
             "name": "sanmai/pipeline",
-            "version": "6.17",
+            "version": "6.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sanmai/pipeline.git",
-                "reference": "491b172349d77c9e2f2f2aa1791c9de95bfd1abe"
+                "reference": "3707180c66dd6b3b9c4b5f9fe26155325812037d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/491b172349d77c9e2f2f2aa1791c9de95bfd1abe",
-                "reference": "491b172349d77c9e2f2f2aa1791c9de95bfd1abe",
+                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/3707180c66dd6b3b9c4b5f9fe26155325812037d",
+                "reference": "3707180c66dd6b3b9c4b5f9fe26155325812037d",
                 "shasum": ""
             },
             "require": {
@@ -2086,10 +2087,10 @@
                 "friendsofphp/php-cs-fixer": "^3.17",
                 "infection/infection": ">=0.10.5",
                 "league/pipeline": "^0.3 || ^1.0",
-                "phan/phan": ">=1.1",
                 "php-coveralls/php-coveralls": "^2.4.1",
-                "phpstan/phpstan": ">=0.10 <2",
+                "phpstan/phpstan": "^2",
                 "phpunit/phpunit": ">=9.4 <12",
+                "sanmai/phpstan-rules": "^0.3.0",
                 "vimeo/psalm": ">=2"
             },
             "type": "library",
@@ -2119,7 +2120,7 @@
             "description": "General-purpose collections pipeline",
             "support": {
                 "issues": "https://github.com/sanmai/pipeline/issues",
-                "source": "https://github.com/sanmai/pipeline/tree/6.17"
+                "source": "https://github.com/sanmai/pipeline/tree/6.19"
             },
             "funding": [
                 {
@@ -2127,7 +2128,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-06-16T07:09:33+00:00"
+            "time": "2025-07-05T14:39:33+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -3247,7 +3248,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4.8"
+        "php": "8.4.10"
     },
     "plugin-api-version": "2.6.0"
 }
