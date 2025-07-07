@@ -13,7 +13,6 @@ parameters:
         -
             messages:
                 - '#Access to constant on internal class Symfony\\Component\\Validator\\Context\\ExecutionContext\.#'
-                - '#Method PHPUnit\\Framework\\MockObject\\InvocationStubber::with\(\) invoked with unpacked array with possibly string key(.*)#'
             paths:
                 - tests/Integration/*
         -
