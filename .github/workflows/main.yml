@@ -102,6 +102,10 @@ jobs:
           php ./vendor/bin/phpunit --version
           composer --version
 
+      - name: Display Symfony application information
+        run: |
+          php ./bin/console about
+
       - name: Validate main `composer.json` and `composer.lock` files
         run: composer validate --no-check-version
 
