@@ -36,7 +36,7 @@ RUN apt-get update \
     && apt-get install -y \
         debsecan \
     && apt-get install --no-install-recommends -y \
-        $(debsecan --suite bullseye --format packages --only-fixed) \
+        $(debsecan --suite bookworm --format packages --only-fixed) \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the Composer PHAR from the Composer image into the PHP image
