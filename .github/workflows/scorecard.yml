@@ -14,8 +14,8 @@ on:
   schedule:
     # 09:29 UTC every Friday
     - cron: '29 9 * * 5'
-  push:
-    branches: [ "master" ]
+  #push:
+  #  branches: [ "master" ]
 
 # Declare default permissions as read only.
 permissions: read-all
