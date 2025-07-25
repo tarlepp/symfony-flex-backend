@@ -8,14 +8,14 @@ on:
   workflow_dispatch:
   # For Branch-Protection check. Only the default branch is supported. See
   # https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection
-  #branch_protection_rule:
+  branch_protection_rule:
   # To guarantee Maintained check is occasionally updated. See
   # https://github.com/ossf/scorecard/blob/main/docs/checks.md#maintained
   schedule:
     # 09:29 UTC every Friday
     - cron: '29 9 * * 5'
-  #push:
-  #  branches: [ "master" ]
+  push:
+    branches: [ "master" ]
 
 # Declare default permissions as read only.
 permissions: read-all
