@@ -13,7 +13,7 @@
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.10"
+			"php": "8.4.11"
 		},
 		"preferred-install": {
 			"*": "dist"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3099fb9a6ed8962a01a262638541653d",
+    "content-hash": "55103a0e0951d53e38970ea04297165e",
     "packages": [],
     "packages-dev": [
         {
@@ -242,12 +242,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "bbba44089fc15f183516c671398fc1547438c4d6"
+                "reference": "1e0e2464bb35bfcda29949fbdf1aea125669a7d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bbba44089fc15f183516c671398fc1547438c4d6",
-                "reference": "bbba44089fc15f183516c671398fc1547438c4d6",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1e0e2464bb35bfcda29949fbdf1aea125669a7d2",
+                "reference": "1e0e2464bb35bfcda29949fbdf1aea125669a7d2",
                 "shasum": ""
             },
             "conflict": {
@@ -871,6 +871,7 @@
                 "scheb/two-factor-bundle": "<3.26|>=4,<4.11",
                 "sensiolabs/connect": "<4.2.3",
                 "serluck/phpwhois": "<=4.2.6",
+                "setasign/fpdi": "<2.6.4",
                 "sfroemken/url_redirect": "<=1.2.1",
                 "sheng/yiicms": "<1.2.1",
                 "shopware/core": "<6.5.8.18-dev|>=6.6,<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
@@ -1195,7 +1196,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-04T16:07:43+00:00"
+            "time": "2025-08-05T16:06:15+00:00"
         }
     ],
     "aliases": [],
@@ -1210,7 +1211,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4.10"
+        "php": "8.4.11"
     },
     "plugin-api-version": "2.6.0"
 }
