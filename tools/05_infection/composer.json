@@ -6,13 +6,13 @@
 		"php": "^8.4.0"
 	},
 	"require-dev": {
-		"infection/infection": "0.30.2",
+		"infection/infection": "0.31.1",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.10"
+			"php": "8.4.11"
 		},
 		"preferred-install": {
 			"*": "dist"
