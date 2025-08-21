@@ -33,7 +33,7 @@
 		"gedmo/doctrine-extensions": "3.20.0",
 		"lexik/jwt-authentication-bundle": "3.1.1",
 		"mark-gerarts/automapper-plus-bundle": "1.5.0",
-		"matomo/device-detector": "6.4.6",
+		"matomo/device-detector": "6.4.7",
 		"matthiasnoback/symfony-console-form": "6.0.0",
 		"nelmio/api-doc-bundle": "4.38.2",
 		"nelmio/cors-bundle": "2.5.0",
