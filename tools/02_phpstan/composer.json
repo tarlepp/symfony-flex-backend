@@ -9,7 +9,7 @@
 		"phpstan/phpstan": "2.1.22",
 		"phpstan/phpstan-deprecation-rules": "2.0.3",
 		"phpstan/phpstan-phpunit": "2.0.7",
-		"phpstan/phpstan-symfony": "2.0.7",
+		"phpstan/phpstan-symfony": "2.0.8",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
