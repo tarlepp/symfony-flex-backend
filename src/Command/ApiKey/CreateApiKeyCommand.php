@@ -27,6 +27,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
 /**
+ * @psalm-import-type TInputOption from HelperConfigure
+ *
  * @package App\Command\ApiKey
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -42,7 +44,7 @@ class CreateApiKeyCommand extends Command
     final public const string NAME = 'api-key:create';
 
     /**
-     * @var array<int, array<string, string>>
+     * @var list<TInputOption>
      */
     private static array $commandParameters = [
         [

@@ -10,19 +10,31 @@ namespace App\Command;
 
 use Closure;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
+use Symfony\Component\Console\Completion\Suggestion;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
-use function array_key_exists;
 use function array_map;
 
 /**
+ * @psalm-type TInputOption=array{
+ *      name: string,
+ *      shortcut?: string,
+ *      mode?: int-mask-of<InputOption::*>,
+ *      description?: string,
+ *      default?: scalar|array<array-key, mixed>,
+ *      suggestedValues?: array<array-key, mixed>
+ *           |Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion>,
+ *  }
+ *
  * @package App\Command
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class HelperConfigure
 {
     /**
-     * @param array<int, array<string, int|string>> $parameters
+     * @param list<TInputOption> $parameters
      */
     public static function configure(Command $command, array $parameters): void
     {
@@ -30,19 +42,18 @@ class HelperConfigure
         $command->setDefinition(new InputDefinition(array_map(self::getParameterIterator(), $parameters)));
     }
 
+    /**
+     * @return Closure(TInputOption):InputOption
+     */
     private static function getParameterIterator(): Closure
     {
-        return static function (array $input): InputOption {
-            /** @var int-mask-of<InputOption::*>|null $mode */
-            $mode = $input['mode'];
-
-            return new InputOption(
-                (string)$input['name'],
-                array_key_exists('shortcut', $input) ? (string)$input['shortcut'] : null,
-                array_key_exists('mode', $input) ? $mode : InputOption::VALUE_OPTIONAL,
-                array_key_exists('description', $input) ? (string)$input['description'] : '',
-                array_key_exists('default', $input) ? (string)$input['default'] : null,
-            );
-        };
+        return static fn (array $input): InputOption => new InputOption(
+            $input['name'],
+            $input['shortcut'] ?? null,
+            $input['mode'] ?? InputOption::VALUE_OPTIONAL,
+            $input['description'] ?? '',
+            $input['default'] ?? null,
+            $input['suggestedValues'] ?? [],
+        );
     }
 }
