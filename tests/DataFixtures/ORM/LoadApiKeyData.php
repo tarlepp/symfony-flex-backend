@@ -74,7 +74,7 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
     /**
      * @throws Throwable
      */
-    private function createApiKey(ObjectManager $manager, ?string $role = null): bool
+    private function createApiKey(ObjectManager $manager, ?string $role = null): true
     {
         // Create new entity
         $entity = new ApiKey()

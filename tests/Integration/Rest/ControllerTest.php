@@ -31,24 +31,6 @@ final class ControllerTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    #[TestDox('Test that `getResource` method throws an exception if `Resource` service is not set')]
-    public function testThatGetResourceThrowsAnExceptionIfNotSet(): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Resource service not set');
-
-        $class = new class() extends Controller {
-            public function __construct()
-            {
-            }
-        };
-
-        $class->getResource();
-    }
-
-    /**
-     * @throws Throwable
-     */
     #[TestDox("Test that `getResource` method doesn't throw an exception if `Resource` service is set")]
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {

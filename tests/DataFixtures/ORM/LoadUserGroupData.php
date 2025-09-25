@@ -68,7 +68,7 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
      *
      * @throws Throwable
      */
-    private function createUserGroup(ObjectManager $manager, string $role): bool
+    private function createUserGroup(ObjectManager $manager, string $role): true
     {
         /** @var Role $roleReference */
         $roleReference = $this->getReference('Role-' . $this->rolesService->getShort($role), Role::class);

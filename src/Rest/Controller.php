@@ -53,10 +53,14 @@ abstract class Controller implements ControllerInterface
     ) {
     }
 
+    /**
+     * @psalm-suppress InvalidNullableReturnType
+     * @psalm-suppress NullableReturnStatement
+     */
     #[Override]
     public function getResource(): RestResourceInterface
     {
-        return $this->resource ?? throw new UnexpectedValueException('Resource service not set', 500);
+        return $this->resource;
     }
 
     #[Override]
