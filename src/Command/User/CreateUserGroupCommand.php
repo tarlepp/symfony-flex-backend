@@ -26,6 +26,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
 /**
+ * @psalm-import-type TInputOption from HelperConfigure
+ *
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -41,7 +43,7 @@ class CreateUserGroupCommand extends Command
     final public const string NAME = 'user:create-group';
 
     /**
-     * @var array<int, array<string, string>>
+     * @var list<TInputOption>
      */
     private static array $commandParameters = [
         [

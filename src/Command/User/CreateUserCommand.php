@@ -27,6 +27,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
 /**
+ * @psalm-import-type TInputOption from HelperConfigure
+ *
  * @package App\Command\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -45,7 +47,7 @@ class CreateUserCommand extends Command
     private const string PARAMETER_DESCRIPTION = 'description';
 
     /**
-     * @var array<int, array<string, string>>
+     * @var list<TInputOption>
      */
     private static array $commandParameters = [
         [
