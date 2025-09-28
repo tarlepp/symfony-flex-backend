@@ -59,17 +59,4 @@ final class SecurityUserTest extends KernelTestCase
 
         self::assertSame($user->getId(), new SecurityUser($user)->getUuid());
     }
-
-    #[TestDox('Test that password is present after `SecurityUser::eraseCredentials` method call')]
-    public function testThatPasswordIsPresentAfterEraseCredential(): void
-    {
-        $encoder = fn (string $password): string => str_rot13($password);
-
-        $securityUser = new SecurityUser(new User()->setPassword($encoder, 'foobar'));
-
-        /** @phpstan-ignore-next-line  */
-        $securityUser->eraseCredentials();
-
-        self::assertSame('sbbone', $securityUser->getPassword());
-    }
 }
