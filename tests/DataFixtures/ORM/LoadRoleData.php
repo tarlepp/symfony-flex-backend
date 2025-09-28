@@ -56,7 +56,7 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface
      *
      * @param non-empty-string $role
      */
-    private function createRole(ObjectManager $manager, string $role): bool
+    private function createRole(ObjectManager $manager, string $role): true
     {
         // Create new Role entity
         $entity = new Role($role)

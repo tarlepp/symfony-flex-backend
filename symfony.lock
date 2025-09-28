@@ -2,9 +2,6 @@
     "bamarni/composer-bin-plugin": {
         "version": "v1.3.0"
     },
-    "behat/transliterator": {
-        "version": "v1.3.0"
-    },
     "brick/math": {
         "version": "0.8.14"
     },
