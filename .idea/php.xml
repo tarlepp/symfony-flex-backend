@@ -121,7 +121,6 @@
       <path value="$PROJECT_DIR$/vendor/psr/cache" />
       <path value="$PROJECT_DIR$/vendor/psr/container" />
       <path value="$PROJECT_DIR$/vendor/twig/twig" />
-      <path value="$PROJECT_DIR$/vendor/behat/transliterator" />
       <path value="$PROJECT_DIR$/vendor/brick/math" />
       <path value="$PROJECT_DIR$/vendor/gedmo/doctrine-extensions" />
       <path value="$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle" />
@@ -363,8 +362,9 @@
   </component>
   <component name="PhpStan">
     <PhpStan_settings>
-      <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" />
       <phpstan_by_interpreter interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" tool_path="vendor/bin/phpstan" timeout="60000" />
+      <phpstan_by_interpreter asDefaultInterpreter="true" deletedFromTheList="true" interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" tool_path="vendor/bin/phpstan" timeout="60000" />
+      <PhpStanConfiguration deletedFromTheList="true" tool_path="$PROJECT_DIR$/vendor/bin/phpstan" />
     </PhpStan_settings>
   </component>
   <component name="PhpStanOptionsConfiguration">
@@ -388,6 +388,7 @@
     <Psalm_settings>
       <PsalmConfiguration tool_path="$PROJECT_DIR$/vendor/bin/psalm" />
       <psalm_fixer_by_interpreter interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" tool_path="vendor/bin/psalm" timeout="60000" />
+      <psalm_fixer_by_interpreter asDefaultInterpreter="true" interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" tool_path="vendor/bin/psalm" timeout="60000" />
     </Psalm_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
