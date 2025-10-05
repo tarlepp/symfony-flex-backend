@@ -26,7 +26,7 @@ export XDEBUG_SESSION=PHPSTORM
 COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader
 
 # Step 3
-composer audit
+composer audit --abandoned=report
 
 # Step 4
 make generate-jwt-keys
