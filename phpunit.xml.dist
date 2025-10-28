@@ -19,23 +19,23 @@
 >
     <coverage>
         <report>
-            <clover outputFile="build/logs/clover.xml"/>
-            <html outputDirectory="build/report" lowUpperBound="75" highLowerBound="95"/>
-            <text outputFile="php://stdout" showOnlySummary="true" showUncoveredFiles="true"/>
+            <clover outputFile="build/logs/clover.xml" />
+            <html outputDirectory="build/report" lowUpperBound="75" highLowerBound="95" />
+            <text outputFile="php://stdout" showOnlySummary="true" showUncoveredFiles="true" />
         </report>
     </coverage>
 
     <php>
-        <ini name="error_reporting" value="-1"/>
-        <ini name="display_errors" value="On"/>
-        <ini name="display_startup_errors" value="On"/>
-        <ini name="date.timezone" value="UTC"/>
-        <env name="KERNEL_CLASS" value="App\Kernel"/>
-        <env name="SHELL_VERBOSITY" value="-1"/>
-        <env name="USE_ALL_USER_COMBINATIONS" value="no"/>
-        <env name="APP_ENV" value="test" force="true"/>
-        <env name="APP_DEBUG" value="false" force="true"/>
-        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb"/>
+        <ini name="error_reporting" value="-1" />
+        <ini name="display_errors" value="On" />
+        <ini name="display_startup_errors" value="On" />
+        <ini name="date.timezone" value="UTC" />
+        <env name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="USE_ALL_USER_COMBINATIONS" value="no" />
+        <env name="APP_ENV" value="test" force="true" />
+        <env name="APP_DEBUG" value="false" force="true" />
+        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb" />
         <!--
         To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
         indirect deprecations are just shown on test output to help to track those.
@@ -45,8 +45,15 @@
 
         https://symfony.com/doc/current/components/phpunit_bridge.html#direct-and-indirect-deprecations
         -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
     </php>
+
+    <extensions>
+        <bootstrap class="Symfony\Bridge\PhpUnit\SymfonyExtension">
+            <parameter name="clock-mock-namespaces" value="App" />
+            <parameter name="dns-mock-namespaces" value="App" />
+        </bootstrap>
+    </extensions>
 
     <testsuites>
         <testsuite name="Unit">
@@ -67,7 +74,7 @@
     </testsuites>
 
     <logging>
-        <junit outputFile="build/logs/junit.xml"/>
+        <junit outputFile="build/logs/junit.xml" />
     </logging>
 
     <source
