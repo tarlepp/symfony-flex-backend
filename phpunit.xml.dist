@@ -55,6 +55,7 @@
         </bootstrap>
     </extensions>
 
+
     <testsuites>
         <testsuite name="Unit">
             <directory>./tests/Unit/</directory>
@@ -92,5 +93,10 @@
             <directory>./src/Migrations</directory>
             <file>./src/Kernel.php</file>
         </exclude>
+
+        <deprecationTrigger>
+            <method>Doctrine\Deprecations\Deprecation::trigger</method>
+            <method>Doctrine\Deprecations\Deprecation::delegateTriggerToBackend</method>
+        </deprecationTrigger>
     </source>
 </phpunit>
