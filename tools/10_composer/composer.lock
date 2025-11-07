@@ -4,9 +4,83 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2c6ab53b4e5c4a7111d39ff376b684c",
+    "content-hash": "12a1222ae4ef0c0aeb93891566dccd56",
     "packages": [],
     "packages-dev": [
+        {
+            "name": "azjezz/psl",
+            "version": "3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/azjezz/psl.git",
+                "reference": "78078f2c505473d2a28319ffe426b2a82ac76790"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/78078f2c505473d2a28319ffe426b2a82ac76790",
+                "reference": "78078f2c505473d2a28319ffe426b2a82ac76790",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-intl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-sodium": "*",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+                "revolt/event-loop": "^1.0.6"
+            },
+            "require-dev": {
+                "carthage-software/mago": "~0.13.1",
+                "php-coveralls/php-coveralls": "^2.7.0",
+                "php-standard-library/psalm-plugin": "^2.3.0",
+                "phpbench/phpbench": "^1.2.15",
+                "phpunit/phpunit": "^9.6.18",
+                "roave/infection-static-analysis-plugin": "^1.36.0",
+                "vimeo/psalm": "^6.0.0"
+            },
+            "suggest": {
+                "php-standard-library/phpstan-extension": "PHPStan integration",
+                "php-standard-library/psalm-plugin": "Psalm integration"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/hhvm/hsl",
+                    "name": "hhvm/hsl"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/bootstrap.php"
+                ],
+                "psr-4": {
+                    "Psl\\": "src/Psl"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "azjezz",
+                    "email": "azjezz@protonmail.com"
+                }
+            ],
+            "description": "PHP Standard Library",
+            "support": {
+                "issues": "https://github.com/azjezz/psl/issues",
+                "source": "https://github.com/azjezz/psl/tree/3.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/azjezz",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-03-03T00:07:00+00:00"
+        },
         {
             "name": "composer-unused/contracts",
             "version": "0.3.0",
@@ -966,37 +1040,39 @@
         },
         {
             "name": "maglnet/composer-require-checker",
-            "version": "4.16.1",
+            "version": "4.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maglnet/ComposerRequireChecker.git",
-                "reference": "2449a6298a0c39d940287d5d3afaf05a6f80fd0c"
+                "reference": "de930e82bb61e0161d909696950692523b8eaa3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/2449a6298a0c39d940287d5d3afaf05a6f80fd0c",
-                "reference": "2449a6298a0c39d940287d5d3afaf05a6f80fd0c",
+                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/de930e82bb61e0161d909696950692523b8eaa3f",
+                "reference": "de930e82bb61e0161d909696950692523b8eaa3f",
                 "shasum": ""
             },
             "require": {
+                "azjezz/psl": "^3.2.0",
                 "composer-runtime-api": "^2.0.0",
                 "ext-phar": "*",
                 "nikic/php-parser": "^5.4.0",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
-                "symfony/console": "^6.4.1 || ^7.0.1",
-                "webmozart/assert": "^1.11.0",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+                "symfony/console": "^7.2.1",
                 "webmozart/glob": "^4.7.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12.0.0",
+                "doctrine/coding-standard": "^14.0.0",
                 "ext-zend-opcache": "*",
                 "phing/phing": "^3.0.1",
-                "phpstan/phpstan": "^2.1.2",
-                "phpunit/phpunit": "^11.5.7",
-                "psalm/plugin-phpunit": "^0.19.2",
-                "roave/infection-static-analysis-plugin": "^1.36.0",
+                "php-standard-library/phpstan-extension": "^2.0",
+                "php-standard-library/psalm-plugin": "^2.3",
+                "phpstan/phpstan": "^2.1.19",
+                "phpunit/phpunit": "^11.5.27",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "roave/infection-static-analysis-plugin": "^1.38.0",
                 "spatie/temporary-directory": "^2.3.0",
-                "vimeo/psalm": "^6.4.0"
+                "vimeo/psalm": "^6.13.0"
             },
             "bin": [
                 "bin/composer-require-checker"
@@ -1041,9 +1117,9 @@
             ],
             "support": {
                 "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
-                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.16.1"
+                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.18.0"
             },
-            "time": "2025-02-07T09:09:45+00:00"
+            "time": "2025-10-30T11:58:39+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -1403,6 +1479,78 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
             "time": "2024-09-11T13:17:53+00:00"
+        },
+        {
+            "name": "revolt/event-loop",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/revoltphp/event-loop.git",
+                "reference": "09bf1bf7f7f574453efe43044b06fafe12216eb3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/revoltphp/event-loop/zipball/09bf1bf7f7f574453efe43044b06fafe12216eb3",
+                "reference": "09bf1bf7f7f574453efe43044b06fafe12216eb3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "jetbrains/phpstorm-stubs": "^2019.3",
+                "phpunit/phpunit": "^9",
+                "psalm/phar": "^5.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Revolt\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                },
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering"
+                },
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                }
+            ],
+            "description": "Rock-solid event loop for concurrent PHP applications.",
+            "keywords": [
+                "async",
+                "asynchronous",
+                "concurrency",
+                "event",
+                "event-loop",
+                "non-blocking",
+                "scheduler"
+            ],
+            "support": {
+                "issues": "https://github.com/revoltphp/event-loop/issues",
+                "source": "https://github.com/revoltphp/event-loop/tree/v1.0.7"
+            },
+            "time": "2025-01-25T19:27:39+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -2467,16 +2615,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v7.3.5",
+            "version": "v7.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "cdb80fa5869653c83cfe1a9084a673b6daf57ea7"
+                "reference": "c28ad91448f86c5f6d9d2c70f0cf68bf135f252a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/cdb80fa5869653c83cfe1a9084a673b6daf57ea7",
-                "reference": "cdb80fa5869653c83cfe1a9084a673b6daf57ea7",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c28ad91448f86c5f6d9d2c70f0cf68bf135f252a",
+                "reference": "c28ad91448f86c5f6d9d2c70f0cf68bf135f252a",
                 "shasum": ""
             },
             "require": {
@@ -2541,7 +2689,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v7.3.5"
+                "source": "https://github.com/symfony/console/tree/v7.3.6"
             },
             "funding": [
                 {
@@ -2561,7 +2709,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-14T15:46:26+00:00"
+            "time": "2025-11-04T01:21:42+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3879,16 +4027,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.12.0",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "541057574806f942c94662b817a50f63f7345360"
+                "reference": "9be6926d8b485f55b9229203f962b51ed377ba68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/541057574806f942c94662b817a50f63f7345360",
-                "reference": "541057574806f942c94662b817a50f63f7345360",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9be6926d8b485f55b9229203f962b51ed377ba68",
+                "reference": "9be6926d8b485f55b9229203f962b51ed377ba68",
                 "shasum": ""
             },
             "require": {
@@ -3931,9 +4079,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.12.0"
+                "source": "https://github.com/webmozarts/assert/tree/1.12.1"
             },
-            "time": "2025-10-20T12:43:39+00:00"
+            "time": "2025-10-29T15:56:20+00:00"
         },
         {
             "name": "webmozart/glob",
