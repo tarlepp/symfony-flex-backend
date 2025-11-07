@@ -257,23 +257,23 @@ jobs:
           php ./vendor/bin/phpunit --version
           composer --version
 
-      - name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
+      #- name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
+      #  run: |
+      #    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      #    chmod +x ./cc-test-reporter
+      #    GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
+      #  env:
+      #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
       - name: Run application test suites with PHPUnit
         run: make run-tests-php
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
 
-      - name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
-        run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --id ${{ secrets.CC_TEST_REPORTER_ID }} --coverage-input-type clover --exit-code $?
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
+      #- name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
+      #  run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --id ${{ secrets.CC_TEST_REPORTER_ID }} --coverage-input-type clover --exit-code $?
+      #  env:
+      #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
       - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
         run: |
