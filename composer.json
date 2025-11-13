@@ -59,7 +59,7 @@
 		"symfony/string": "7.3.4",
 		"symfony/translation": "7.3.4",
 		"symfony/twig-bundle": "7.3.4",
-		"symfony/validator": "7.3.6",
+		"symfony/validator": "7.3.7",
 		"symfony/var-exporter": "7.3.4",
 		"symfony/yaml": "7.3.5",
 		"zircote/swagger-php": "4.11.1"
