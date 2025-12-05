@@ -234,6 +234,8 @@ Use `make configuration` to view current application configuration.
 3. **Use strict types** - All PHP files should declare `declare(strict_types=1);`
 4. **Write tests** for any new functionality
 5. **Run code quality tools** after changes
+  - and fix any issues found before continuing
+6. **Document new features** in relevant documentation files if needed
 
 ## Common Patterns to Follow
 
