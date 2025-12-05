@@ -156,11 +156,11 @@ final class StopwatchDecoratorTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: object}>
+     * @return Generator<array-key, array{0: class-string, 1: object}>
      */
     public static function dataProviderTestThatDecorateMethodReturnsExpected(): Generator
     {
-        yield ['object', new EntityReferenceExists()];
+        yield [EntityReferenceExists::class, new EntityReferenceExists()];
         yield [stdClass::class, new stdClass()];
     }
 }
