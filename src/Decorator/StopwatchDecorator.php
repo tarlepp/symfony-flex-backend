@@ -231,19 +231,20 @@ class {$proxyClassName} extends {$originalClassName} {
 
     private function getDefaultValueString(\ReflectionParameter $param): string
     {
+        $result = '';
+
         try {
-            if (!$param->isDefaultValueAvailable()) {
-                return '';
+            if ($param->isDefaultValueAvailable()) {
+                /** @psalm-suppress MixedAssignment */
+                $defaultValue = $param->getDefaultValue();
+                $result = ' = ' . var_export($defaultValue, true);
             }
-
-            /** @psalm-suppress MixedAssignment */
-            $defaultValue = $param->getDefaultValue();
-
-            return ' = ' . var_export($defaultValue, true);
         } catch (Throwable) {
             // Default value cannot be determined for internal classes or certain parameter types
-            return '';
+            $result = '';
         }
+
+        return $result;
     }
 
     /**
@@ -251,19 +252,20 @@ class {$proxyClassName} extends {$originalClassName} {
      */
     private function getMethodReturnType(ReflectionMethod $method): array
     {
-        if (!$method->hasReturnType()) {
-            return ['', false];
+        $returnType = '';
+        $isVoid = false;
+
+        if ($method->hasReturnType()) {
+            $type = $method->getReturnType();
+
+            if ($type !== null) {
+                $typeString = (string)$type;
+                $returnType = ': ' . $typeString;
+                $isVoid = $typeString === 'void';
+            }
         }
 
-        $type = $method->getReturnType();
-
-        if ($type === null) {
-            return ['', false];
-        }
-
-        $typeString = (string)$type;
-
-        return [': ' . $typeString, $typeString === 'void'];
+        return [$returnType, $isVoid];
     }
 
     private function generateMethodBody(string $methodName, string $argsList, bool $isVoid): string
