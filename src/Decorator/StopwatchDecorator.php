@@ -16,8 +16,12 @@ use ReflectionMethod;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use function array_filter;
+use function implode;
 use function is_object;
 use function str_contains;
+use function str_replace;
+use function uniqid;
+use function var_export;
 
 /**
  * @package App\Decorator
