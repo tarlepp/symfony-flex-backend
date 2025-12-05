@@ -92,14 +92,8 @@
     "doctrine/sql-formatter": {
         "version": "1.0.1"
     },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.0"
-    },
     "gedmo/doctrine-extensions": {
         "version": "v2.4.42"
-    },
-    "laminas/laminas-code": {
-        "version": "3.4.1"
     },
     "lcobucci/clock": {
         "version": "2.0.0"
