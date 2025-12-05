@@ -47,8 +47,7 @@ class TimeZoneController
                 properties: [
                     new OA\Property(
                         property: 'timezone',
-                        description: 'Africa, America, Antarctica, Arctic, Asia, Atlantic, Australia, Europe, ' .
-                            'Indian,Pacific,UTC.',
+                        description: 'Timezone group (Africa, America, Antarctica, Arctic, Asia, Atlantic, etc.).',
                         type: 'string',
                         example: 'Europe',
                     ),
@@ -66,8 +65,7 @@ class TimeZoneController
                     ),
                     new OA\Property(
                         property: 'value',
-                        description: 'User friendly value of identifier value eg. `_` characters are replaced ' .
-                            'by space.',
+                        description: 'User friendly identifier value (underscores replaced with spaces).',
                         type: 'string',
                         example: 'Europe/Helsinki',
                     ),
