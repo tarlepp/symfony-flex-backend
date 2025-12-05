@@ -15,17 +15,14 @@ use App\Resource\ApiKeyResource;
 use App\Validator\Constraints\EntityReferenceExists;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
-use ProxyManager\Proxy\AccessInterceptorValueHolderInterface;
+use Psr\Log\NullLogger;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
-use function method_exists;
 
 /**
  * @package App\Tests\Decorator\Service
@@ -40,7 +37,7 @@ final class StopwatchDecoratorTest extends KernelTestCase
     #[TestDox('Test that `decorate` method returns `$expected` when using `$service` instance as an input')]
     public function testThatDecorateMethodReturnsExpected(string $expected, object $service): void
     {
-        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), new Stopwatch());
+        $decorator = new StopwatchDecorator(new Stopwatch(), new NullLogger());
 
         self::assertInstanceOf($expected, $decorator->decorate($service));
     }
@@ -60,33 +57,31 @@ final class StopwatchDecoratorTest extends KernelTestCase
             ->method('stop')
             ->with('EntityReferenceExists->getTargets');
 
-        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
 
         $decoratedService = $decorator->decorate(new EntityReferenceExists());
 
-        self::assertTrue(method_exists($decoratedService, 'getTargets'));
         self::assertSame('property', $decoratedService->getTargets());
     }
 
-    #[TestDox('Test that `decorate` method returns exact same service if factory throws an exception')]
-    public function testThatDecoratorReturnsTheSameInstanceIfFactoryFails(): void
+    #[TestDox('Test that `decorate` method returns service as-is if it cannot be proxied (e.g., final class)')]
+    public function testThatDecoratorReturnsTheSameInstanceIfCannotBeProxied(): void
     {
-        $service = new EntityReferenceExists();
-
-        $factory = $this->getMockBuilder(AccessInterceptorValueHolderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $service = new class() {
+            final public function someMethod(): string
+            {
+                return 'test';
+            }
+        };
 
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $factory
-            ->expects($this->once())
-            ->method('createProxy')
-            ->willThrowException(new Exception('foo'));
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
 
-        $decorator = new StopwatchDecorator($factory, $stopWatch);
+        $result = $decorator->decorate($service);
 
-        self::assertSame($service, $decorator->decorate($service));
+        // Since the class has final methods, it should return the same instance
+        self::assertSame('test', $result->someMethod());
     }
 
     /**
@@ -112,7 +107,7 @@ final class StopwatchDecoratorTest extends KernelTestCase
             ->expects($this->exactly(2))
             ->method('stop');
 
-        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
         $repository = new ApiKeyRepository($managerRegistry);
         $resource = new ApiKeyResource($repository);
 
@@ -151,7 +146,7 @@ final class StopwatchDecoratorTest extends KernelTestCase
             ->expects($this->once())
             ->method('stop');
 
-        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
         $repository = new ApiKeyRepository($managerRegistry);
 
         /** @var ApiKeyRepository $decoratedService */
@@ -165,7 +160,7 @@ final class StopwatchDecoratorTest extends KernelTestCase
      */
     public static function dataProviderTestThatDecorateMethodReturnsExpected(): Generator
     {
-        yield [AccessInterceptorValueHolderInterface::class, new EntityReferenceExists()];
+        yield ['object', new EntityReferenceExists()];
         yield [stdClass::class, new stdClass()];
     }
 }
