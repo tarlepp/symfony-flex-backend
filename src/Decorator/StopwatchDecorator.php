@@ -207,8 +207,9 @@ readonly class StopwatchDecorator
         $methods = $this->getProxyableMethods($reflection);
         $methodsCode = $this->generateProxyMethods($methods);
 
-        return "
-class {$proxyClassName} extends {$originalClassName} {
+        return <<<CODE
+
+class $proxyClassName extends $originalClassName {
     private object \$wrappedInstance;
     private array \$prefixInterceptors;
     private array \$suffixInterceptors;
@@ -218,8 +219,9 @@ class {$proxyClassName} extends {$originalClassName} {
         \$this->prefixInterceptors = \$prefixInterceptors;
         \$this->suffixInterceptors = \$suffixInterceptors;
     }
-{$methodsCode}
-}";
+$methodsCode
+}
+CODE;
     }
 
     /**
@@ -241,15 +243,17 @@ class {$proxyClassName} extends {$originalClassName} {
         $methodName = $method->getName();
         [$paramsList, $argsList] = $this->buildMethodParameters($method);
         [$returnType, $isVoid] = $this->getMethodReturnType($method);
+        $methodBody = $this->generateMethodBody($methodName, $argsList, $isVoid);
 
-        $code = "\n    public function {$methodName}({$paramsList}){$returnType} {\n";
-        $code .= "        if (isset(\$this->prefixInterceptors['{$methodName}'])) {\n";
-        $code .= "            (\$this->prefixInterceptors['{$methodName}'])();\n";
-        $code .= "        }\n";
-        $code .= $this->generateMethodBody($methodName, $argsList, $isVoid);
-        $code .= "    }\n";
+        return <<<CODE
 
-        return $code;
+    public function $methodName($paramsList)$returnType {
+        if (isset(\$this->prefixInterceptors['$methodName'])) {
+            (\$this->prefixInterceptors['$methodName'])();
+        }
+$methodBody    }
+
+CODE;
     }
 
     private function generateMethodBody(string $methodName, string $argsList, bool $isVoid): string
@@ -261,26 +265,29 @@ class {$proxyClassName} extends {$originalClassName} {
 
     private function generateVoidMethodBody(string $methodName, string $argsList): string
     {
-        $code = "        \$this->wrappedInstance->{$methodName}({$argsList});\n";
-        $code .= "        if (isset(\$this->suffixInterceptors['{$methodName}'])) {\n";
-        $code .= "            \$returnValue = null;\n";
-        $code .= "            (\$this->suffixInterceptors['{$methodName}'])";
-        $code .= "(null, null, null, func_get_args(), \$returnValue);\n";
-        $code .= "        }\n";
+        return <<<CODE
+        \$this->wrappedInstance->$methodName($argsList);
 
-        return $code;
+        if (isset(\$this->suffixInterceptors['$methodName'])) {
+            \$returnValue = null;
+            (\$this->suffixInterceptors['$methodName'])(null, null, null, func_get_args(), \$returnValue);
+        }
+
+CODE;
     }
 
     private function generateNonVoidMethodBody(string $methodName, string $argsList): string
     {
-        $code = "        \$returnValue = \$this->wrappedInstance->{$methodName}({$argsList});\n";
-        $code .= "        if (isset(\$this->suffixInterceptors['{$methodName}'])) {\n";
-        $code .= "            (\$this->suffixInterceptors['{$methodName}'])";
-        $code .= "(null, null, null, func_get_args(), \$returnValue);\n";
-        $code .= "        }\n";
-        $code .= "        return \$returnValue;\n";
+        return <<<CODE
+        \$returnValue = \$this->wrappedInstance->$methodName($argsList);
 
-        return $code;
+        if (isset(\$this->suffixInterceptors['$methodName'])) {
+            (\$this->suffixInterceptors['$methodName'])(null, null, null, func_get_args(), \$returnValue);
+        }
+
+        return \$returnValue;
+
+CODE;
     }
 
     // Method parameter handling
