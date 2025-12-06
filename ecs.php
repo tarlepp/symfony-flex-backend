@@ -28,6 +28,7 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
+use PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
@@ -43,11 +44,15 @@ return static function (ECSConfig $ecsConfig): void {
     $ruleConfigurations = [
         [
             IncrementStyleFixer::class,
-            ['style' => 'post'],
+            [
+                'style' => 'post',
+            ],
         ],
         [
             CastSpacesFixer::class,
-            ['space' => 'none'],
+            [
+                'space' => 'none',
+            ],
         ],
         [
             YodaStyleFixer::class,
@@ -59,15 +64,21 @@ return static function (ECSConfig $ecsConfig): void {
         ],
         [
             ConcatSpaceFixer::class,
-            ['spacing' => 'one'],
+            [
+                'spacing' => 'one',
+            ],
         ],
         [
             CastSpacesFixer::class,
-            ['space' => 'none'],
+            [
+                'space' => 'none',
+            ],
         ],
         [
             OrderedImportsFixer::class,
-            ['imports_order' => ['class', 'function', 'const']],
+            [
+                'imports_order' => ['class', 'function', 'const'],
+            ],
         ],
         [
             NoSuperfluousPhpdocTagsFixer::class,
@@ -79,15 +90,23 @@ return static function (ECSConfig $ecsConfig): void {
         ],
         [
             DeclareEqualNormalizeFixer::class,
-            ['space' => 'single'],
+            [
+                'space' => 'single',
+            ],
         ],
         [
             BlankLineBeforeStatementFixer::class,
-            ['statements' => ['continue', 'declare', 'return', 'throw', 'try']],
+            [
+                'statements' => ['continue', 'declare', 'return', 'throw', 'try'],
+            ],
         ],
         [
             BinaryOperatorSpacesFixer::class,
-            ['operators' => ['&' => 'align']],
+            [
+                'operators' => [
+                    '&' => 'align',
+                ],
+            ],
         ],
     ];
 
@@ -106,5 +125,6 @@ return static function (ECSConfig $ecsConfig): void {
         PhpdocAlignFixer::class => null,
         PhpdocToCommentFixer::class => null,
         NativeFunctionInvocationFixer::class => null,
+        ExplicitStringVariableFixer::class => null,
     ]);
 };
