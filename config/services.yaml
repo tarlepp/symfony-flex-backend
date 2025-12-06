@@ -60,9 +60,6 @@ when@dev:
         App\Tests\Utils\:
             resource: '../tests/Utils/*'
 
-        ProxyManager\Factory\AccessInterceptorValueHolderFactory:
-            class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
-
         doctrine.dbal.default_connection.stopwatch:
             class: Doctrine\DBAL\Connection
             decorates: doctrine.dbal.default_connection
