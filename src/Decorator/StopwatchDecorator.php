@@ -39,7 +39,9 @@ readonly class StopwatchDecorator
      * Decorates a service with stopwatch timing interceptors.
      *
      * @template T of object
+     *
      * @param T $service
+     *
      * @return T
      */
     public function decorate(object $service): object
@@ -50,12 +52,13 @@ readonly class StopwatchDecorator
             return $service;
         }
 
-        $className = $class->getName();
-        [$prefixInterceptors, $suffixInterceptors] = $this->getPrefixAndSuffixInterceptors($class, $className);
+        [$prefixInterceptors, $suffixInterceptors] = $this->getPrefixAndSuffixInterceptors($class);
 
         /** @var T */
         return $this->createProxyWithInterceptors($service, $prefixInterceptors, $suffixInterceptors);
     }
+
+    // Validation methods
 
     private function shouldSkipDecoration(ReflectionClass $class): bool
     {
@@ -70,6 +73,71 @@ readonly class StopwatchDecorator
             || str_contains($className, 'Mock_')
             || str_contains($className, 'StopwatchProxy_');
     }
+
+    // Interceptor creation methods
+
+    /**
+     * @return array{0: array<string, Closure>, 1: array<string, Closure>}
+     */
+    private function getPrefixAndSuffixInterceptors(ReflectionClass $class): array
+    {
+        $className = $class->getName();
+
+        $prefixInterceptors = [];
+        $suffixInterceptors = [];
+
+        $methods = $this->getProxyableMethods($class);
+
+        $stopwatch = $this->stopwatch;
+        $decorator = $this;
+
+        foreach ($methods as $method) {
+            $methodName = $method->getName();
+            $eventName = "{$class->getShortName()}->{$methodName}";
+
+            $prefixInterceptors[$methodName] = $this->createPrefixInterceptor($eventName, $className, $stopwatch);
+            $suffixInterceptors[$methodName] = $this->createSuffixInterceptor($eventName, $stopwatch, $decorator);
+        }
+
+        return [$prefixInterceptors, $suffixInterceptors];
+    }
+
+    private function createPrefixInterceptor(string $eventName, string $className, Stopwatch $stopwatch): Closure
+    {
+        return static function () use ($eventName, $className, $stopwatch): void {
+            $stopwatch->start($eventName, $className);
+        };
+    }
+
+    private function createSuffixInterceptor(
+        string $eventName,
+        Stopwatch $stopwatch,
+        self $decorator,
+    ): Closure {
+        return static function (
+            mixed $proxy,
+            mixed $instance,
+            mixed $method,
+            mixed $params,
+            mixed &$returnValue,
+        ) use (
+            $eventName,
+            $stopwatch,
+            $decorator,
+        ): void {
+            $stopwatch->stop($eventName);
+            $decorator->decorateReturnValue($returnValue);
+        };
+    }
+
+    private function decorateReturnValue(mixed &$returnValue): void
+    {
+        if (is_object($returnValue) && !$returnValue instanceof EntityInterface) {
+            $returnValue = $this->decorate($returnValue);
+        }
+    }
+
+    // Proxy creation methods
 
     /**
      * @param array<string, Closure> $prefixInterceptors
@@ -129,6 +197,8 @@ readonly class StopwatchDecorator
         }
     }
 
+    // Proxy class generation methods
+
     private function generateProxyClass(
         string $proxyClassName,
         string $originalClassName,
@@ -181,6 +251,39 @@ class {$proxyClassName} extends {$originalClassName} {
 
         return $code;
     }
+
+    private function generateMethodBody(string $methodName, string $argsList, bool $isVoid): string
+    {
+        return $isVoid
+            ? $this->generateVoidMethodBody($methodName, $argsList)
+            : $this->generateNonVoidMethodBody($methodName, $argsList);
+    }
+
+    private function generateVoidMethodBody(string $methodName, string $argsList): string
+    {
+        $code = "        \$this->wrappedInstance->{$methodName}({$argsList});\n";
+        $code .= "        if (isset(\$this->suffixInterceptors['{$methodName}'])) {\n";
+        $code .= "            \$returnValue = null;\n";
+        $code .= "            (\$this->suffixInterceptors['{$methodName}'])";
+        $code .= "(null, null, null, func_get_args(), \$returnValue);\n";
+        $code .= "        }\n";
+
+        return $code;
+    }
+
+    private function generateNonVoidMethodBody(string $methodName, string $argsList): string
+    {
+        $code = "        \$returnValue = \$this->wrappedInstance->{$methodName}({$argsList});\n";
+        $code .= "        if (isset(\$this->suffixInterceptors['{$methodName}'])) {\n";
+        $code .= "            (\$this->suffixInterceptors['{$methodName}'])";
+        $code .= "(null, null, null, func_get_args(), \$returnValue);\n";
+        $code .= "        }\n";
+        $code .= "        return \$returnValue;\n";
+
+        return $code;
+    }
+
+    // Method parameter handling
 
     /**
      * @return array{0: string, 1: string}
@@ -247,6 +350,8 @@ class {$proxyClassName} extends {$originalClassName} {
         return $result;
     }
 
+    // Return type handling
+
     /**
      * @return array{0: string, 1: bool}
      */
@@ -268,36 +373,7 @@ class {$proxyClassName} extends {$originalClassName} {
         return [$returnType, $isVoid];
     }
 
-    private function generateMethodBody(string $methodName, string $argsList, bool $isVoid): string
-    {
-        return $isVoid
-            ? $this->generateVoidMethodBody($methodName, $argsList)
-            : $this->generateNonVoidMethodBody($methodName, $argsList);
-    }
-
-    private function generateVoidMethodBody(string $methodName, string $argsList): string
-    {
-        $code = "        \$this->wrappedInstance->{$methodName}({$argsList});\n";
-        $code .= "        if (isset(\$this->suffixInterceptors['{$methodName}'])) {\n";
-        $code .= "            \$returnValue = null;\n";
-        $code .= "            (\$this->suffixInterceptors['{$methodName}'])";
-        $code .= "(null, null, null, func_get_args(), \$returnValue);\n";
-        $code .= "        }\n";
-
-        return $code;
-    }
-
-    private function generateNonVoidMethodBody(string $methodName, string $argsList): string
-    {
-        $code = "        \$returnValue = \$this->wrappedInstance->{$methodName}({$argsList});\n";
-        $code .= "        if (isset(\$this->suffixInterceptors['{$methodName}'])) {\n";
-        $code .= "            (\$this->suffixInterceptors['{$methodName}'])";
-        $code .= "(null, null, null, func_get_args(), \$returnValue);\n";
-        $code .= "        }\n";
-        $code .= "        return \$returnValue;\n";
-
-        return $code;
-    }
+    // Method filtering
 
     /**
      * @return array<ReflectionMethod>
@@ -316,64 +392,5 @@ class {$proxyClassName} extends {$originalClassName} {
             && !$method->isFinal()
             && !$method->isConstructor()
             && !$method->isDestructor();
-    }
-
-    /**
-     * @return array{0: array<string, Closure>, 1: array<string, Closure>}
-     */
-    private function getPrefixAndSuffixInterceptors(ReflectionClass $class, string $className): array
-    {
-        $prefixInterceptors = [];
-        $suffixInterceptors = [];
-
-        $methods = $this->getProxyableMethods($class);
-
-        $stopwatch = $this->stopwatch;
-        $decorator = $this;
-
-        foreach ($methods as $method) {
-            $methodName = $method->getName();
-            $eventName = "{$class->getShortName()}->{$methodName}";
-
-            $prefixInterceptors[$methodName] = $this->createPrefixInterceptor($eventName, $className, $stopwatch);
-            $suffixInterceptors[$methodName] = $this->createSuffixInterceptor($eventName, $stopwatch, $decorator);
-        }
-
-        return [$prefixInterceptors, $suffixInterceptors];
-    }
-
-    private function createPrefixInterceptor(string $eventName, string $className, Stopwatch $stopwatch): Closure
-    {
-        return static function () use ($eventName, $className, $stopwatch): void {
-            $stopwatch->start($eventName, $className);
-        };
-    }
-
-    private function createSuffixInterceptor(
-        string $eventName,
-        Stopwatch $stopwatch,
-        self $decorator,
-    ): Closure {
-        return static function (
-            mixed $p,
-            mixed $i,
-            mixed $m,
-            mixed $params,
-            mixed &$returnValue,
-        ) use (
-            $eventName,
-            $stopwatch,
-            $decorator,
-        ): void {
-            $stopwatch->stop($eventName);
-            $decorator->decorateReturnValue($returnValue);
-        };
-    }
-
-    private function decorateReturnValue(mixed &$returnValue): void
-    {
-        if (is_object($returnValue) && !$returnValue instanceof EntityInterface) {
-            $returnValue = $this->decorate($returnValue);
-        }
     }
 }
