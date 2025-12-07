@@ -18,4 +18,3 @@ final class FinalTestService
         return 'final-test';
     }
 }
-
