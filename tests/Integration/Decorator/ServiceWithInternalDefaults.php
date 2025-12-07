@@ -8,19 +8,13 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Decorator;
 
-use SplFileInfo;
-
 /**
  * Helper class for testing internal class default values
- * Extends an internal class to potentially trigger reflection edge cases
+ *
+ * @psalm-suppress ClassMustBeFinal
  */
-class ServiceWithInternalDefaults extends SplFileInfo
+class ServiceWithInternalDefaults
 {
-    public function __construct()
-    {
-        parent::__construct(__FILE__);
-    }
-
     /**
      * Method with parameter that has complex default values
      * This is for testing the catch block in getDefaultValueString when the decorator
