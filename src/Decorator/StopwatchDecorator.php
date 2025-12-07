@@ -46,16 +46,16 @@ readonly class StopwatchDecorator
      */
     public function decorate(object $service): object
     {
-        $class = new ReflectionClass($service);
+        $reflection = new ReflectionClass($service);
 
-        if ($this->shouldSkipDecoration($class)) {
+        if ($this->shouldSkipDecoration($reflection)) {
             return $service;
         }
 
-        [$prefixInterceptors, $suffixInterceptors] = $this->getPrefixAndSuffixInterceptors($class);
+        [$prefixInterceptors, $suffixInterceptors] = $this->getPrefixAndSuffixInterceptors($reflection);
 
         /** @var T */
-        return $this->createProxyWithInterceptors($service, $prefixInterceptors, $suffixInterceptors);
+        return $this->createProxy($service, $reflection, $prefixInterceptors, $suffixInterceptors) ?? $service;
     }
 
     // Validation methods
@@ -138,24 +138,6 @@ readonly class StopwatchDecorator
     }
 
     // Proxy creation methods
-
-    /**
-     * @param array<string, Closure> $prefixInterceptors
-     * @param array<string, Closure> $suffixInterceptors
-     */
-    private function createProxyWithInterceptors(
-        object $service,
-        array $prefixInterceptors,
-        array $suffixInterceptors,
-    ): object {
-        $reflection = new ReflectionClass($service);
-
-        if ($reflection->isFinal()) {
-            return $service;
-        }
-
-        return $this->createProxy($service, $reflection, $prefixInterceptors, $suffixInterceptors) ?? $service;
-    }
 
     /**
      * @param array<string, Closure> $prefixInterceptors
@@ -343,15 +325,10 @@ CODE;
     {
         $result = '';
 
-        try {
-            if ($param->isDefaultValueAvailable()) {
-                /** @psalm-suppress MixedAssignment */
-                $defaultValue = $param->getDefaultValue();
-                $result = ' = ' . var_export($defaultValue, true);
-            }
-        } catch (Throwable) {
-            // Default value cannot be determined for internal classes or certain parameter types
-            $result = '';
+        if ($param->isDefaultValueAvailable()) {
+            /** @psalm-suppress MixedAssignment */
+            $defaultValue = $param->getDefaultValue();
+            $result = ' = ' . var_export($defaultValue, true);
         }
 
         return $result;

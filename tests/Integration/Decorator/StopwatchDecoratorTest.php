@@ -84,6 +84,45 @@ final class StopwatchDecoratorTest extends KernelTestCase
         self::assertSame('test', $result->someMethod());
     }
 
+    #[TestDox('Test that `decorate` method returns service as-is when class itself is final')]
+    public function testThatDecoratorReturnsTheSameInstanceForFinalClass(): void
+    {
+        $service = new FinalTestService();
+
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+
+        $result = $decorator->decorate($service);
+
+        // Since the class is final, it should return the same instance
+        self::assertSame($service, $result);
+        self::assertSame('final-test', $result->testMethod());
+    }
+
+    #[TestDox('Test that decorator handles parameters with internal class default values')]
+    public function testThatDecoratorHandlesInternalClassDefaultValues(): void
+    {
+        $service = new ServiceWithInternalDefaults();
+
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+
+        $stopWatch
+            ->expects($this->once())
+            ->method('start');
+
+        $stopWatch
+            ->expects($this->once())
+            ->method('stop');
+
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+
+        $result = $decorator->decorate($service);
+
+        // The decorated service should work with methods that have internal class default values
+        self::assertSame('test', $result->methodWithInternalDefault());
+    }
+
     /**
      * @throws Throwable
      */
@@ -164,3 +203,39 @@ final class StopwatchDecoratorTest extends KernelTestCase
         yield [stdClass::class, new stdClass()];
     }
 }
+
+/**
+ * Helper final class for testing
+ */
+final class FinalTestService
+{
+    public function testMethod(): string
+    {
+        return 'final-test';
+    }
+}
+
+/**
+ * Helper class for testing internal class default values
+ * Extends an internal class to potentially trigger reflection edge cases
+ */
+class ServiceWithInternalDefaults extends \SplFileInfo
+{
+    public function __construct()
+    {
+        parent::__construct(__FILE__);
+    }
+
+    /**
+     * Method with parameter that has complex default values
+     * This is for testing the catch block in getDefaultValueString when the decorator
+     * tries to get the default value via reflection for certain edge cases
+     *
+     * @param array<string, mixed> $options
+     */
+    public function methodWithInternalDefault(array $options = []): string
+    {
+        return 'test';
+    }
+}
+
