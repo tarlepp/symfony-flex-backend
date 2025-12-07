@@ -189,6 +189,7 @@ readonly class StopwatchDecorator
         $methods = $this->getProxyableMethods($reflection);
         $methodsCode = $this->generateProxyMethods($methods);
 
+        // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
         return <<<CODE
 
 class $proxyClassName extends $originalClassName {
@@ -204,6 +205,7 @@ class $proxyClassName extends $originalClassName {
 $methodsCode
 }
 CODE;
+        // phpcs:enable PSR1.Classes.ClassDeclaration.MultipleClasses
     }
 
     /**
