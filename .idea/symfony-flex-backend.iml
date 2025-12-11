@@ -133,8 +133,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/bamarni/composer-bin-plugin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/tools/02_phpstan" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-code" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/friendsofphp/proxy-manager-lts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpdoc-parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/clock" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php83" />
