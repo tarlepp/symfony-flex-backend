@@ -3,7 +3,7 @@
 	"description": "",
 	"version": "1.0.0",
 	"require": {
-		"php": "^8.4.0"
+		"php": "^8.5.0"
 	},
 	"require-dev": {
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
@@ -13,7 +13,7 @@
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.11"
+			"php": "8.5.0"
 		},
 		"preferred-install": {
 			"*": "dist"
