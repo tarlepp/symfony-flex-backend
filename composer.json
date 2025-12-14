@@ -19,7 +19,7 @@
 		}
 	],
 	"require": {
-		"php": "^8.4.0",
+		"php": "^8.5.0",
 		"ext-apcu": "*",
 		"ext-iconv": "*",
 		"ext-json": "*",
@@ -95,7 +95,7 @@
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.4.11"
+			"php": "8.5.0"
 		},
 		"sort-packages": true
 	},
