@@ -90,13 +90,15 @@ class RestDtoValueResolver implements ValueResolverInterface
     #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        if (!$this->supports($request, $argument) || $this->controllerName === null) {
+        if (!$this->supports($request, $argument) || $this->controllerName === null || $this->actionName === null) {
             return [];
         }
 
+        $actionName = $this->actionName;
+
         $dtoClass = $this->controllerCollection
             ->get($this->controllerName)
-            ->getDtoClass($this->actionMethodMap[$this->actionName] ?? null);
+            ->getDtoClass($this->actionMethodMap[$actionName] ?? null);
 
         yield $this->autoMapper->map($request, $dtoClass);
     }
