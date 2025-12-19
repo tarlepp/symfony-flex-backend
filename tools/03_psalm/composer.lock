@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2c54b32f25220ad513da7d62232299f",
+    "content-hash": "5c60a4524a6aa707d87a042df1571798",
     "packages": [],
     "packages-dev": [
         {
@@ -1966,16 +1966,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.2.7",
+            "version": "v5.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "56dd7ba14c4ac9796e06077f00e45fbbecc640af"
+                "reference": "603010dd920df45a924acdf0376bffa604ffa97a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/56dd7ba14c4ac9796e06077f00e45fbbecc640af",
-                "reference": "56dd7ba14c4ac9796e06077f00e45fbbecc640af",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/603010dd920df45a924acdf0376bffa604ffa97a",
+                "reference": "603010dd920df45a924acdf0376bffa604ffa97a",
                 "shasum": ""
             },
             "require": {
@@ -2025,9 +2025,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.7"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.8"
             },
-            "time": "2025-01-26T10:27:48+00:00"
+            "time": "2025-12-18T11:18:29+00:00"
         },
         {
             "name": "psr/cache",
@@ -3484,16 +3484,16 @@
         },
         {
             "name": "spatie/array-to-xml",
-            "version": "3.4.3",
+            "version": "3.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/array-to-xml.git",
-                "reference": "7b9202dccfe18d4e3a13303156d6bbcc1c61dabf"
+                "reference": "88b2f3852a922dd73177a68938f8eb2ec70c7224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/7b9202dccfe18d4e3a13303156d6bbcc1c61dabf",
-                "reference": "7b9202dccfe18d4e3a13303156d6bbcc1c61dabf",
+                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/88b2f3852a922dd73177a68938f8eb2ec70c7224",
+                "reference": "88b2f3852a922dd73177a68938f8eb2ec70c7224",
                 "shasum": ""
             },
             "require": {
@@ -3536,7 +3536,7 @@
                 "xml"
             ],
             "support": {
-                "source": "https://github.com/spatie/array-to-xml/tree/3.4.3"
+                "source": "https://github.com/spatie/array-to-xml/tree/3.4.4"
             },
             "funding": [
                 {
@@ -3548,7 +3548,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-27T09:08:26+00:00"
+            "time": "2025-12-15T09:00:41+00:00"
         },
         {
             "name": "symfony/cache",
