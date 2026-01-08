@@ -28,15 +28,15 @@
 		"ext-random": "*",
 		"doctrine/doctrine-bundle": "2.18.2",
 		"doctrine/doctrine-migrations-bundle": "3.7.0",
-		"doctrine/orm": "2.20.9",
+		"doctrine/orm": "3.6.0",
 		"gedmo/doctrine-extensions": "3.22.0",
 		"lexik/jwt-authentication-bundle": "3.2.0",
 		"mark-gerarts/automapper-plus-bundle": "1.5.0",
 		"matomo/device-detector": "6.4.8",
 		"matthiasnoback/symfony-console-form": "6.0.0",
-		"nelmio/api-doc-bundle": "4.38.6",
+		"nelmio/api-doc-bundle": "5.9.2",
 		"nelmio/cors-bundle": "2.6.0",
-		"phpdocumentor/reflection-docblock": "5.6.6",
+		"phpdocumentor/reflection-docblock": "6.0.0",
 		"ramsey/uuid-doctrine": "2.1.0",
 		"symfony/asset": "7.4.0",
 		"symfony/config": "7.4.3",
@@ -61,7 +61,7 @@
 		"symfony/validator": "7.4.3",
 		"symfony/var-exporter": "7.4.0",
 		"symfony/yaml": "7.4.1",
-		"zircote/swagger-php": "4.11.1"
+		"zircote/swagger-php": "5.7.7"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
