@@ -6,10 +6,10 @@
 		"php": "^8.4.0"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "3.92.3",
+		"friendsofphp/php-cs-fixer": "3.92.4",
 		"roave/security-advisories": "dev-latest",
 		"symplify/config-transformer": "12.4.3",
-		"symplify/easy-coding-standard": "13.0.0"
+		"symplify/easy-coding-standard": "13.0.4"
 	},
 	"config": {
 		"allow-plugins": true,
