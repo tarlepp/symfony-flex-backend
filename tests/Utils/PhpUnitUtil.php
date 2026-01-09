@@ -136,12 +136,8 @@ final class PhpUnitUtil
      */
     public static function getMethod(object $object, string $name): ReflectionMethod
     {
-        // Get reflection and make specified method accessible
-        $class = new ReflectionClass($object);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-
-        return $method;
+        return new ReflectionClass($object)
+            ->getMethod($name);
     }
 
     /**
@@ -153,12 +149,9 @@ final class PhpUnitUtil
      */
     public static function getProperty(string $property, object $object): mixed
     {
-        $clazz = new ReflectionClass($object::class);
-
-        $property = $clazz->getProperty($property);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
+        return new ReflectionClass($object::class)
+            ->getProperty($property)
+            ->getValue($object);
     }
 
     public static function getType(Type | string | null $type): string
@@ -195,11 +188,9 @@ final class PhpUnitUtil
      */
     public static function setProperty(string $property, UuidInterface | array | null $value, object $object): void
     {
-        $clazz = new ReflectionClass($object::class);
-
-        $property = $clazz->getProperty($property);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
+        new ReflectionClass($object::class)
+            ->getProperty($property)
+            ->setValue($object, $value);
     }
 
     /**
