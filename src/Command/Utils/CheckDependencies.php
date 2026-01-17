@@ -38,6 +38,7 @@ use function dirname;
 use function implode;
 use function is_array;
 use function iterator_to_array;
+use function json_decode;
 use function sort;
 use function sprintf;
 use function str_replace;
@@ -257,8 +258,12 @@ class CheckDependencies extends Command
             throw new RuntimeException($message);
         }
 
-        /** @var stdClass $decoded */
+        /** @var stdClass|array<mixed> $decoded */
         $decoded = json_decode($process->getOutput(), flags: JSON_THROW_ON_ERROR);
+
+        if (is_array($decoded)) {
+            return [];
+        }
 
         /** @var array<int, stdClass>|string|null $installed */
         $installed = $decoded->installed;
