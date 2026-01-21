@@ -20,6 +20,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use function is_string;
 
 /**
  * @package App\Tests\Unit\Utils\Tests
@@ -64,13 +65,16 @@ final class PHPUnitUtilTest extends KernelTestCase
     {
         $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
 
+        /** @var StringableArrayObject|mixed $expected */
         $expected = $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected;
 
         if ($strict) {
             self::assertSame($expected, $value);
-        } else {
-            /** @psalm-var class-string $expected */
+        } elseif (is_string($expected)) {
+            /** @var class-string $expected */
             self::assertInstanceOf($expected, $value);
+        } else {
+            throw new LogicException('This should not happen...');
         }
     }
 
