@@ -48,7 +48,7 @@
 		"symfony/form": "7.4.3",
 		"symfony/framework-bundle": "7.4.3",
 		"symfony/monolog-bundle": "4.0.1",
-		"symfony/process": "7.4.3",
+		"symfony/process": "7.4.5",
 		"symfony/property-access": "7.4.3",
 		"symfony/property-info": "7.4.3",
 		"symfony/routing": "7.4.3",
