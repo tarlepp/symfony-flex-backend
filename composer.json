@@ -69,7 +69,7 @@
 		"symfony/twig-bundle": "<3.3"
 	},
 	"require-dev": {
-		"bamarni/composer-bin-plugin": "1.9.0",
+		"bamarni/composer-bin-plugin": "1.9.1",
 		"doctrine/doctrine-fixtures-bundle": "4.3.1",
 		"liuggio/fastest": "1.14.1",
 		"phpunit/php-code-coverage": "12.5.2",
