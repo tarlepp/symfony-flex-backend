@@ -348,12 +348,9 @@ CODE;
 
         if ($method->hasReturnType()) {
             $type = $method->getReturnType();
-
-            if ($type !== null) {
-                $typeString = (string)$type;
-                $returnType = ': ' . $typeString;
-                $isVoid = $typeString === 'void';
-            }
+            $typeString = (string)$type;
+            $returnType = ': ' . $typeString;
+            $isVoid = $typeString === 'void';
         }
 
         return [$returnType, $isVoid];
