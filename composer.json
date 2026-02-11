@@ -78,7 +78,7 @@
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "7.4.4",
 		"symfony/debug-bundle": "7.4.0",
-		"symfony/maker-bundle": "1.65.1",
+		"symfony/maker-bundle": "1.66.0",
 		"symfony/phpunit-bridge": "7.4.3",
 		"symfony/requirements-checker": "2.0.3",
 		"symfony/stopwatch": "7.4.0",
