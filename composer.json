@@ -74,7 +74,7 @@
 		"liuggio/fastest": "1.14.1",
 		"phpunit/php-code-coverage": "12.5.3",
 		"phpunit/phpcov": "11.0.4",
-		"phpunit/phpunit": "12.5.11",
+		"phpunit/phpunit": "12.5.14",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "7.4.4",
 		"symfony/debug-bundle": "7.4.0",
