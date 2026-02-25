@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\TestCase;
 
+use App\Enum\Role;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
