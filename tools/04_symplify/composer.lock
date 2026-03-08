@@ -1190,12 +1190,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "141cd1138ae2bdb6a168c4a13dbd7aac19718dd8"
+                "reference": "68e4c6721ef8cd2c366bd5e2290baf007d3f0e6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/141cd1138ae2bdb6a168c4a13dbd7aac19718dd8",
-                "reference": "141cd1138ae2bdb6a168c4a13dbd7aac19718dd8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/68e4c6721ef8cd2c366bd5e2290baf007d3f0e6d",
+                "reference": "68e4c6721ef8cd2c366bd5e2290baf007d3f0e6d",
                 "shasum": ""
             },
             "conflict": {
@@ -1324,7 +1324,7 @@
                 "commerceteam/commerce": ">=0.9.6,<0.9.9",
                 "components/jquery": ">=1.0.3,<3.5",
                 "composer/composer": "<1.10.27|>=2,<2.2.26|>=2.3,<2.9.3",
-                "concrete5/concrete5": "<9.4.3",
+                "concrete5/concrete5": "<9.4.8",
                 "concrete5/core": "<8.5.8|>=9,<9.1",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
                 "contao/comments-bundle": ">=2,<4.13.40|>=5.0.0.0-RC1-dev,<5.3.4",
@@ -1338,7 +1338,7 @@
                 "cosenary/instagram": "<=2.3",
                 "couleurcitron/tarteaucitron-wp": "<0.3",
                 "cpsit/typo3-mailqueue": "<0.4.3|>=0.5,<0.5.1",
-                "craftcms/cms": "<4.17.0.0-beta1|>=5,<5.9.0.0-beta1",
+                "craftcms/cms": "<4.17.0.0-beta2|>=5,<5.9.0.0-beta2",
                 "craftcms/commerce": ">=4.0.0.0-RC1-dev,<=4.10|>=5,<=5.5.1",
                 "craftcms/composer": ">=4.0.0.0-RC1-dev,<=4.10|>=5.0.0.0-RC1-dev,<=5.5.1",
                 "craftcms/craft": ">=3.5,<=4.16.17|>=5.0.0.0-RC1-dev,<=5.8.21",
@@ -1417,7 +1417,7 @@
                 "drupal/umami_analytics": "<1.0.1",
                 "duncanmcclean/guest-entries": "<3.1.2",
                 "dweeves/magmi": "<=0.7.24",
-                "ec-cube/ec-cube": "<2.4.4|>=2.11,<=2.17.1|>=3,<=3.0.18.0-patch4|>=4,<=4.1.2",
+                "ec-cube/ec-cube": "<2.4.4|>=2.11,<=2.17.1|>=3,<=3.0.18.0-patch4|>=4,<=4.3.1",
                 "ecodev/newsletter": "<=4",
                 "ectouch/ectouch": "<=2.7.2",
                 "egroupware/egroupware": "<23.1.20260113|>=26.0.20251208,<26.0.20260113",
@@ -1496,7 +1496,7 @@
                 "friendsoftypo3/openid": ">=4.5,<4.5.31|>=4.7,<4.7.16|>=6,<6.0.11|>=6.1,<6.1.6",
                 "froala/wysiwyg-editor": "<=4.3",
                 "frosh/adminer-platform": "<2.2.1",
-                "froxlor/froxlor": "<=2.2.5",
+                "froxlor/froxlor": "<=2.3.3",
                 "frozennode/administrator": "<=5.0.12",
                 "fuel/core": "<1.8.1",
                 "funadmin/funadmin": "<=7.1.0.0-RC4",
@@ -1520,7 +1520,7 @@
                 "gp247/core": "<1.1.24",
                 "gree/jose": "<2.2.1",
                 "gregwar/rst": "<1.0.3",
-                "grumpydictator/firefly-iii": "<6.1.17",
+                "grumpydictator/firefly-iii": "<6.1.17|>=6.4.23,<=6.5",
                 "gugoan/economizzer": "<=0.9.0.0-beta1",
                 "guzzlehttp/guzzle": "<6.5.8|>=7,<7.4.5",
                 "guzzlehttp/oauth-subscriber": "<0.8.1",
@@ -1546,7 +1546,7 @@
                 "ibexa/solr": ">=4.5,<4.5.4",
                 "ibexa/user": ">=4,<4.4.3|>=5,<5.0.4",
                 "icecoder/icecoder": "<=8.1",
-                "idno/known": "<=1.6.2",
+                "idno/known": "<1.6.4",
                 "ilicmiljan/secure-props": ">=1.2,<1.2.2",
                 "illuminate/auth": "<5.5.10",
                 "illuminate/cookie": ">=4,<=4.0.11|>=4.1,<6.18.31|>=7,<7.22.4",
@@ -1596,7 +1596,7 @@
                 "kelvinmo/simplexrd": "<3.1.1",
                 "kevinpapst/kimai2": "<1.16.7",
                 "khodakhah/nodcms": "<=3",
-                "kimai/kimai": "<2.46",
+                "kimai/kimai": "<=2.50",
                 "kitodo/presentation": "<3.2.3|>=3.3,<3.3.4",
                 "klaviyo/magento2-extension": ">=1,<3",
                 "knplabs/knp-snappy": "<=1.4.2",
@@ -1621,7 +1621,7 @@
                 "lavalite/cms": "<=10.1",
                 "lavitto/typo3-form-to-database": "<2.2.5|>=3,<3.2.2|>=4,<4.2.3|>=5,<5.0.2",
                 "lcobucci/jwt": ">=3.4,<3.4.6|>=4,<4.0.4|>=4.1,<4.1.5",
-                "league/commonmark": "<2.7",
+                "league/commonmark": "<=2.8",
                 "league/flysystem": "<1.1.4|>=2,<2.1.1",
                 "league/oauth2-server": ">=8.3.2,<8.4.2|>=8.5,<8.5.3",
                 "leantime/leantime": "<3.3",
@@ -1920,7 +1920,7 @@
                 "slim/slim": "<2.6",
                 "slub/slub-events": "<3.0.3",
                 "smarty/smarty": "<4.5.3|>=5,<5.1.1",
-                "snipe/snipe-it": "<=8.3.4",
+                "snipe/snipe-it": "<8.3.7",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
                 "solspace/craft-freeform": "<4.1.29|>=5,<=5.14.6",
@@ -1938,7 +1938,7 @@
                 "starcitizentools/short-description": ">=4,<4.0.1",
                 "starcitizentools/tabber-neue": ">=1.9.1,<2.7.2|>=3,<3.1.1",
                 "starcitizenwiki/embedvideo": "<=4",
-                "statamic/cms": "<5.73.10|>=6,<6.4",
+                "statamic/cms": "<5.73.11|>=6,<6.4",
                 "stormpath/sdk": "<9.9.99",
                 "studio-42/elfinder": "<=2.1.64",
                 "studiomitte/friendlycaptcha": "<0.1.4",
@@ -2111,7 +2111,7 @@
                 "wpanel/wpanel4-cms": "<=4.3.1",
                 "wpcloud/wp-stateless": "<3.2",
                 "wpglobus/wpglobus": "<=1.9.6",
-                "wwbn/avideo": "<=21",
+                "wwbn/avideo": "<25",
                 "xataface/xataface": "<3",
                 "xpressengine/xpressengine": "<3.0.15",
                 "yab/quarx": "<2.4.5",
@@ -2209,7 +2209,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-27T22:06:51+00:00"
+            "time": "2026-03-07T02:54:13+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -2292,16 +2292,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v8.0.6",
+            "version": "v8.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "488285876e807a4777f074041d8bb508623419fa"
+                "reference": "15ed9008a4ebe2d6a78e4937f74e0c13ef2e618a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/488285876e807a4777f074041d8bb508623419fa",
-                "reference": "488285876e807a4777f074041d8bb508623419fa",
+                "url": "https://api.github.com/repos/symfony/console/zipball/15ed9008a4ebe2d6a78e4937f74e0c13ef2e618a",
+                "reference": "15ed9008a4ebe2d6a78e4937f74e0c13ef2e618a",
                 "shasum": ""
             },
             "require": {
@@ -2358,7 +2358,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v8.0.6"
+                "source": "https://github.com/symfony/console/tree/v8.0.7"
             },
             "funding": [
                 {
@@ -2378,7 +2378,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-25T16:59:43+00:00"
+            "time": "2026-03-06T14:06:22+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
