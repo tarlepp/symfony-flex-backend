@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8a95ad083dcb0f309356db0b3c3b87d",
+    "content-hash": "0b21169bda76b6740b526e5d11b69810",
     "packages": [],
     "packages-dev": [
         {
             "name": "azjezz/psl",
-            "version": "4.3.0",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "74c95be0214eb7ea39146ed00ac4eb71b45d787b"
+                "reference": "8534d06d442b602970ee66ebc1d79c92361a4ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/74c95be0214eb7ea39146ed00ac4eb71b45d787b",
-                "reference": "74c95be0214eb7ea39146ed00ac4eb71b45d787b",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/8534d06d442b602970ee66ebc1d79c92361a4ba7",
+                "reference": "8534d06d442b602970ee66ebc1d79c92361a4ba7",
                 "shasum": ""
             },
             "require": {
@@ -26,16 +26,17 @@
                 "ext-intl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
+                "ext-openssl": "*",
                 "ext-sodium": "*",
-                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-                "revolt/event-loop": "^1.0.7"
+                "php": "~8.4.0 || ~8.5.0",
+                "revolt/event-loop": "^1.0.8"
             },
             "require-dev": {
-                "carthage-software/mago": "^1.6.0",
-                "infection/infection": "^0.31.2",
-                "php-coveralls/php-coveralls": "^2.7.0",
-                "phpbench/phpbench": "^1.4.0",
-                "phpunit/phpunit": "^9.6.22"
+                "carthage-software/mago": "^1.14.0",
+                "infection/infection": "^0.32.6",
+                "php-coveralls/php-coveralls": "^2.9.1",
+                "phpbench/phpbench": "^1.5.1",
+                "phpunit/phpunit": "^13.0.5"
             },
             "suggest": {
                 "php-standard-library/phpstan-extension": "PHPStan integration",
@@ -69,7 +70,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/azjezz/psl/issues",
-                "source": "https://github.com/azjezz/psl/tree/4.3.0"
+                "source": "https://github.com/azjezz/psl/tree/5.5.0"
             },
             "funding": [
                 {
@@ -81,7 +82,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-24T01:58:53+00:00"
+            "time": "2026-03-12T20:19:39+00:00"
         },
         {
             "name": "composer-unused/contracts",
@@ -1043,25 +1044,25 @@
         },
         {
             "name": "maglnet/composer-require-checker",
-            "version": "4.21.0",
+            "version": "4.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maglnet/ComposerRequireChecker.git",
-                "reference": "3f9bb5cb553412d72f02e1c38a3748fcc2b90f83"
+                "reference": "17a5f1401d3bc993ec386a73d83253fa320f9559"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/3f9bb5cb553412d72f02e1c38a3748fcc2b90f83",
-                "reference": "3f9bb5cb553412d72f02e1c38a3748fcc2b90f83",
+                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/17a5f1401d3bc993ec386a73d83253fa320f9559",
+                "reference": "17a5f1401d3bc993ec386a73d83253fa320f9559",
                 "shasum": ""
             },
             "require": {
-                "azjezz/psl": "^4.2.1",
+                "azjezz/psl": "^5.4.0",
                 "composer-runtime-api": "^2.0.0",
                 "ext-phar": "*",
                 "nikic/php-parser": "^5.7.0",
                 "php": "~8.4.0 || ~8.5.0",
-                "symfony/console": "^8.0.4",
+                "symfony/console": "^8.0.7",
                 "webmozart/glob": "^4.7.0"
             },
             "conflict": {
@@ -1071,10 +1072,10 @@
                 "doctrine/coding-standard": "^14.0.0",
                 "ext-zend-opcache": "*",
                 "phing/phing": "^3.1.2",
-                "php-standard-library/phpstan-extension": "^2.0.2",
+                "php-standard-library/phpstan-extension": "^2.0.3",
                 "php-standard-library/psalm-plugin": "^2.3",
-                "phpstan/phpstan": "^2.1.39",
-                "phpunit/phpunit": "^12.5.11",
+                "phpstan/phpstan": "^2.1.40",
+                "phpunit/phpunit": "^12.5.14",
                 "psalm/plugin-phpunit": "^0.19.5",
                 "roave/infection-static-analysis-plugin": "^1.43.0",
                 "spatie/temporary-directory": "^2.3.1",
@@ -1123,9 +1124,9 @@
             ],
             "support": {
                 "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
-                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.21.0"
+                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.22.0"
             },
-            "time": "2026-02-16T09:56:29+00:00"
+            "time": "2026-03-10T21:53:54+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
