@@ -30,7 +30,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.36.0
+        uses: shivammathur/setup-php@2.37.0
         with:
           php-version: '8.5'
           tools: composer:v2
@@ -40,7 +40,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5.0.4
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -75,7 +75,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.36.0
+        uses: shivammathur/setup-php@2.37.0
         with:
           php-version: '8.5'
           tools: composer:v2
@@ -85,7 +85,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5.0.4
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -130,7 +130,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.36.0
+        uses: shivammathur/setup-php@2.37.0
         with:
           php-version: '8.5'
           tools: composer:v2
@@ -141,7 +141,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5.0.4
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -222,7 +222,7 @@ jobs:
           fetch-depth: '0'
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.36.0
+        uses: shivammathur/setup-php@2.37.0
         with:
           php-version: '8.5'
           extensions: pdo_mysql, mysql
@@ -234,7 +234,7 @@ jobs:
         run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5.0.4
         with:
           path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
