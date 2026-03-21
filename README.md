@@ -1,5 +1,7 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/tarlepp/symfony-flex-backend/workflows/CI/badge.svg)](https://github.com/tarlepp/symfony-flex-backend/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/tarlepp/symfony-flex-backend/badge.svg?branch=master)](https://coveralls.io/github/tarlepp/symfony-flex-backend?branch=master)
@@ -13,50 +15,84 @@
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tarlepp/symfony-flex-backend/badge)](https://securityscorecards.dev/viewer/?platform=github.com&org=tarlepp&repo=symfony-flex-backend)
 
-JSON REST API which is build on top of [Symfony](https://symfony.com/)
+JSON REST API which is built on top of [Symfony](https://symfony.com/)
 framework.
 
-This application is mean to use as an `API` that some [frontend](#frontend-table-of-contents)
-application(s) or different backend application(s) uses as they like.
+This application is meant to be used as an `API` that frontend applications or
+different backend applications can use as needed. One example frontend is
+[this Angular template](https://github.com/tarlepp/angular-ngrx-frontend),
+though you can use any frontend solution.
+
+## Quick Start
+
+```bash
+git clone https://github.com/tarlepp/symfony-flex-backend.git
+cd symfony-flex-backend
+make start
+```
+
+Then open `https://localhost:8000` in your browser. For more details, see
+[Installation](#installation).
 
 ## Table of Contents
 
+<a id="table-of-contents"></a>
+
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Requirements](#requirements-table-of-contents)
-    * [Recommendations](#recommendations-table-of-contents)
-  * [Installation](#installation-table-of-contents)
-    * [1. Clone repository](#1-clone-repository-table-of-contents)
-    * [2. Start containers](#2-start-containers-table-of-contents)
-    * [3. Using application](#3-using-application-table-of-contents)
-    * [4. Getting shell to container](#4-getting-shell-to-container-table-of-contents)
-    * [5. Building containers](#5-building-containers-table-of-contents)
-  * [Frontend?](#frontend-table-of-contents)
-  * [Resources](#resources-table-of-contents)
-  * [External links / resources](#external-links--resources-table-of-contents)
-  * [Authors](#authors-table-of-contents)
-  * [License](#license-table-of-contents)
+  * [Requirements](#requirements)
+    * [Recommendations](#recommendations)
+  * [Installation](#installation)
+    * [1. Clone repository](#step-1-clone-repository)
+    * [2. Start containers](#step-2-start-containers)
+  * [Running the application](#running-the-application)
+    * [Using application](#using-application)
+    * [Getting shell to container](#getting-shell-to-container)
+    * [Building containers](#building-containers)
+    * [Health check](#health-check)
+  * [Dev Containers](#dev-containers)
+  * [Frontend?](#frontend)
+* [Resources](#resources)
+  * [External links / resources](#external-links--resources)
+  * [Authors](#authors)
+  * [License](#license)
 
 ## Requirements [ᐞ](#table-of-contents)
 
-[Docker Engige](https://docs.docker.com/engine/install/)
-If you are not using Docker Engine then follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md)
+<a id="requirements"></a>
+
+* [Docker Engine](https://docs.docker.com/engine/install/)
+* [Docker Compose v2](https://docs.docker.com/compose/install/)
+  (included with Docker Desktop)
+
+If you are not using Docker Engine, follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md).
 
 ### Recommendations [ᐞ](#table-of-contents)
 
+<a id="recommendations"></a>
+
 * `*nix platform` - most likely you're going to host your application on *nix
   platform - so I would recommend to do development also on that platform.
-* `Makefile` support - if you don't have this you need to look `Makefile` file
-  to see what each `make` command is doing.
+* `WSL2 on Windows` - if you develop on Windows, use WSL2 to get a Linux-like
+  development environment for Docker and tooling.
+* `Dev Container capable IDE` - recommended for the quickest setup (e.g. VS Code
+  or JetBrains IDEs with Dev Container support).
+* `Makefile` support - recommended if you run containers with Make commands;
+  if you do not have `make`, check `Makefile` to see equivalent Docker
+  commands.
 
 ## Installation [ᐞ](#table-of-contents)
+
+<a id="installation"></a>
 
 This installation guide expects that you're using Docker Engine.
 
 ### 1. Clone repository [ᐞ](#table-of-contents)
 
-Use your favorite IDE and get checkout from GitHub or just use following
-command
+<a id="step-1-clone-repository"></a>
+
+Use your favorite IDE and check out the repository from GitHub, or use the
+following command:
 
 ```bash
 git clone https://github.com/tarlepp/symfony-flex-backend.git
@@ -64,14 +100,23 @@ git clone https://github.com/tarlepp/symfony-flex-backend.git
 
 ### 2. Start containers [ᐞ](#table-of-contents)
 
-For this just run following command, which will start all the containers:
+<a id="step-2-start-containers"></a>
+
+You can run this project either with Dev Containers (for example in VS Code or
+JetBrains IDEs) or with Make commands.
+
+For Dev Containers, open this repository in your IDE and use its Dev Container
+workflow to reopen/start the project in a container (see
+[Dev Containers](#dev-containers) section for details).
+
+If you want to use Make commands instead, run the following command, which will
+start all the containers:
 
 ```bash
 make start
 ```
 
-If you like to start containers in background, then you can use following
-command:
+If you want to start containers in the background, use the following command:
 
 ```bash
 make daemon
@@ -87,27 +132,39 @@ application:
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
 * [adminer](https://www.adminer.org/) (to manage your database via browser)
 
-### 3. Using application [ᐞ](#table-of-contents)
+For next steps (application URLs, shell access, and rebuilding containers),
+see [Running the application](#running-the-application).
 
-By default `make start` command starts all the containers and exposes
-following ports on `localhost` on your host machine:
+## Running the application [ᐞ](#table-of-contents)
+
+<a id="running-the-application"></a>
+
+These instructions are shared for both Make-based and Dev Container-based
+workflows.
+
+### Using application [ᐞ](#table-of-contents)
+
+<a id="using-application"></a>
+
+When containers are running (either via Make commands or Dev Containers),
+following ports are exposed on `localhost` on your host machine:
 
 * symfony-backend-nginx - [https://localhost:8000](https://localhost:8000) (nginx)
   * PHP-FPM status page -  [https://localhost:8000/status](https://localhost:8000/status)
-  * SSL with selfsigned certificates
+  * SSL with self-signed certificates
 * symfony-backend-nginx - [http://localhost:8080](http://localhost:8080) (nginx)
   * PHP-FPM status page -  [http://localhost:8080/status](http://localhost:8080/status)
   * Normal HTTP
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
-* symfony-backend-mariadb - [http://localhost:33060](http://localhost:33060) (mariadb)
+* symfony-backend-mariadb - `localhost:33060` (mariadb)
 * symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
 * symfony-backend-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
 
-And this application is usable within your browser on `https://localhost:8000`
-address. When you first time open that site you will see "Your connection is
+And this application is usable in your browser at `https://localhost:8000`.
+When you open that site for the first time, you will see a "Your connection is
 not private" warning - see [this](./docker/nginx/ssl/README.md) to resolve that.
 
-Another choice is to use `http://localhost:8080` which is not using SSL.
+Another choice is to use `http://localhost:8080`, which does not use SSL.
 
 MariaDB credentials:
 
@@ -116,52 +173,126 @@ user: root
 password: password
 ```
 
-### 4. Getting shell to container [ᐞ](#table-of-contents)
+**Note:** These credentials are for local development only and should never be
+used in production.
 
-After you've run `make start` command you can list all running containers with
-`docker ps` command.
+### Getting shell to container [ᐞ](#table-of-contents)
 
-And to eg. get shell (bash or fish) access inside one of those containers you
-can run following command:
+<a id="getting-shell-to-container"></a>
+
+After you've started containers (`make start` / `make daemon` or via Dev
+Containers), you can list all running containers with `docker ps`.
+
+To get shell (bash or fish) access inside one of those containers, run the
+following command:
 
 ```bash
 make bash
 ```
 
-OR
+or
 
 ```bash
 make fish
 ```
 
-### 5. Building containers [ᐞ](#table-of-contents)
+If you are using Dev Containers, you can also use the IDE terminal that is
+already attached to the `php` container.
 
-For time to time you probably need to build containers again. This is something
-that you should do everytime if you have some problems to get containers up and
-running. This you can do with following command:
+### Building containers [ᐞ](#table-of-contents)
+
+<a id="building-containers"></a>
+
+From time to time you probably need to build containers again. This is something
+that you should do every time if you have some problems getting containers up
+and running.
+
+If you use Make commands, rebuild/start containers with:
 
 ```bash
 make daemon-build
 ```
 
-If you like to see containers logs directly use following command:
+If you want to see container logs directly, use the following command:
 
 ```bash
 make start-build
 ```
 
+If you use Dev Containers, use your IDE's Dev Container rebuild action (for
+example, "Rebuild Container" / "Rebuild and Reopen in Container").
+
+If you prefer CLI, you can rebuild with:
+
+```bash
+docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml build
+docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml up -d php mariadb nginx dozzle adminer
+```
+
+### Health check [ᐞ](#table-of-contents)
+
+<a id="health-check"></a>
+
+To verify your setup is working correctly, you can check:
+
+```bash
+# Check container status
+docker compose ps
+
+# Test HTTP endpoint
+curl -I http://localhost:8080
+
+# Test HTTPS endpoint (ignore SSL warning)
+curl -k -I https://localhost:8000
+```
+
+Alternatively, you can use **Dozzle** (container log viewer) to monitor all services:
+
+* Open [http://localhost:8100](http://localhost:8100) in your browser
+* View real-time logs for all running containers
+* Check container status and resource usage
+
+## Dev Containers [ᐞ](#table-of-contents)
+
+<a id="dev-containers"></a>
+
+This project also includes a Dev Container setup in `.devcontainer/` that can
+be used from VS Code and JetBrains IDEs with Dev Container support.
+
+When you reopen the repository in a container, it starts the full Docker
+Compose stack:
+
+* `php`
+* `nginx`
+* `mariadb`
+* `dozzle`
+* `adminer`
+
+For application URLs, shell access, and rebuild commands, see
+[Running the application](#running-the-application).
+
+For detailed usage, UID/GID notes, and port mappings, see
+[`.devcontainer/README.md`](.devcontainer/README.md).
+
 ## Frontend? [ᐞ](#table-of-contents)
 
-So this is an API backend what about frontend then? No worries I've made simple
-Angular NgRx powered template frontend which work with this backend just out of
-the box.
+<a id="frontend"></a>
 
-[Angular NgRx powered frontend template for Symfony backend](https://github.com/tarlepp/angular-ngrx-frontend)
+This backend API can be consumed by any frontend technology or framework. You
+can use React, Vue, Angular, Svelte, or any other frontend solution that can
+make HTTP requests.
 
-With these two _template_ applications it should be quite easy to start to
-build _your_ own application - right?
+As a reference example, I've created an [Angular NgRx powered frontend template
+project](https://github.com/tarlepp/angular-ngrx-frontend) that works with this
+backend. It demonstrates how to integrate with this API, but you're free to use
+any technology stack that fits your project needs.
+
+With this backend, it should be quite easy to start building _your_ own
+application with the frontend technology of your choice.
 
 ## Resources [ᐞ](#table-of-contents)
+
+<a id="resources"></a>
 
 * [Resource index](doc/README.md)
 * [Application commands](doc/COMMANDS.md)
@@ -178,6 +309,8 @@ build _your_ own application - right?
 
 ## External links / resources [ᐞ](#table-of-contents)
 
+<a id="external-links--resources"></a>
+
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
 * [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
 * [composer-version](https://github.com/vutran/composer-version)
@@ -185,9 +318,13 @@ build _your_ own application - right?
 
 ## Authors [ᐞ](#table-of-contents)
 
+<a id="authors"></a>
+
 * [Tarmo Leppänen](https://github.com/tarlepp)
 
 ## License [ᐞ](#table-of-contents)
+
+<a id="license"></a>
 
 [The MIT License (MIT)](LICENSE)
 

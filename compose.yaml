@@ -7,10 +7,10 @@ services:
             context: .
             dockerfile: ./Dockerfile_dev
             args:
-                HOST_UID: $HOST_UID
-                HOST_GID: $HOST_GID
+                HOST_UID: ${HOST_UID:-1000}
+                HOST_GID: ${HOST_GID:-1000}
         command: php-fpm
-        user: $HOST_UID:$HOST_GID
+        user: ${HOST_UID:-1000}:${HOST_GID:-1000}
         depends_on:
             - mariadb
         volumes:
@@ -18,7 +18,7 @@ services:
             - ./docker/php/php-dev.ini:/usr/local/etc/php/php.ini
             - ./docker/php/www-dev.conf:/usr/local/etc/php-fpm.d/www.conf
         tmpfs:
-            - /app/var/:uid=$HOST_UID,gid=$HOST_GID
+            - /app/var/:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
         extra_hosts:
@@ -41,7 +41,7 @@ services:
             - ./docker/nginx/nginx-dev.conf:/etc/nginx/conf.d/default.conf
             - ./docker/nginx/ssl/:/etc/nginx/ssl/:ro
         tmpfs:
-            - /app/var/:uid=$HOST_UID,gid=$HOST_GID
+            - /app/var/:uid=${HOST_UID:-1000},gid=${HOST_GID:-1000}
 
     mariadb:
         container_name: symfony-backend-mariadb

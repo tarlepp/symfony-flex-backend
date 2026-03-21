@@ -1,0 +1,7 @@
+MD013:
+    line_length: 80
+    code_blocks: false
+MD026:
+    punctuation: '.,;:!'
+MD033: false
+MD051: false

@@ -53,8 +53,8 @@ environment for dev.
 ### 3. File permissions [ᐞ](#table-of-contents)
 
 Next thing is to make sure that application `var` directory has correct
-permissions. Instructions for that you can find
-[here](https://symfony.com/doc/3.4/setup/file_permissions.html).
+permissions. Instructions for that you can find in the
+[Symfony file permissions documentation](https://symfony.com/doc/3.4/setup/file_permissions.html).
 
 _I really recommend_ that you use `ACL` option in your development environment.
 
