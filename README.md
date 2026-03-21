@@ -1,6 +1,6 @@
-<a id="what-is-this"></a>
-
 # What is this?
+
+<a id="what-is-this"></a>
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/tarlepp/symfony-flex-backend/workflows/CI/badge.svg)](https://github.com/tarlepp/symfony-flex-backend/actions?query=workflow%3ACI)
@@ -23,7 +23,7 @@ different backend applications can use as needed. One example frontend is
 [this Angular template](https://github.com/tarlepp/angular-ngrx-frontend),
 though you can use any frontend solution.
 
-### Quick Start
+## Quick Start
 
 ```bash
 git clone https://github.com/tarlepp/symfony-flex-backend.git
@@ -34,9 +34,9 @@ make start
 Then open `https://localhost:8000` in your browser. For more details, see
 [Installation](#installation).
 
-<a id="table-of-contents"></a>
-
 ## Table of Contents
+
+<a id="table-of-contents"></a>
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
@@ -57,18 +57,19 @@ Then open `https://localhost:8000` in your browser. For more details, see
   * [Authors](#authors)
   * [License](#license)
 
-<a id="requirements"></a>
-
 ## Requirements [ᐞ](#table-of-contents)
 
+<a id="requirements"></a>
+
 * [Docker Engine](https://docs.docker.com/engine/install/)
-* [Docker Compose v2](https://docs.docker.com/compose/install/) (included with Docker Desktop)
+* [Docker Compose v2](https://docs.docker.com/compose/install/)
+  (included with Docker Desktop)
 
 If you are not using Docker Engine, follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md).
 
-<a id="recommendations"></a>
-
 ### Recommendations [ᐞ](#table-of-contents)
+
+<a id="recommendations"></a>
 
 * `*nix platform` - most likely you're going to host your application on *nix
   platform - so I would recommend to do development also on that platform.
@@ -80,15 +81,15 @@ If you are not using Docker Engine, follow [this](doc/INSTALLATION_WITHOUT_DOCKE
   if you do not have `make`, check `Makefile` to see equivalent Docker
   commands.
 
-<a id="installation"></a>
-
 ## Installation [ᐞ](#table-of-contents)
+
+<a id="installation"></a>
 
 This installation guide expects that you're using Docker Engine.
 
-<a id="step-1-clone-repository"></a>
-
 ### 1. Clone repository [ᐞ](#table-of-contents)
+
+<a id="step-1-clone-repository"></a>
 
 Use your favorite IDE and check out the repository from GitHub, or use the
 following command:
@@ -97,9 +98,9 @@ following command:
 git clone https://github.com/tarlepp/symfony-flex-backend.git
 ```
 
-<a id="step-2-start-containers"></a>
-
 ### 2. Start containers [ᐞ](#table-of-contents)
+
+<a id="step-2-start-containers"></a>
 
 You can run this project either with Dev Containers (for example in VS Code or
 JetBrains IDEs) or with Make commands.
@@ -134,16 +135,16 @@ application:
 For next steps (application URLs, shell access, and rebuilding containers),
 see [Running the application](#running-the-application).
 
-<a id="running-the-application"></a>
-
 ## Running the application [ᐞ](#table-of-contents)
+
+<a id="running-the-application"></a>
 
 These instructions are shared for both Make-based and Dev Container-based
 workflows.
 
-<a id="using-application"></a>
-
 ### Using application [ᐞ](#table-of-contents)
+
+<a id="using-application"></a>
 
 When containers are running (either via Make commands or Dev Containers),
 following ports are exposed on `localhost` on your host machine:
@@ -175,9 +176,9 @@ password: password
 **Note:** These credentials are for local development only and should never be
 used in production.
 
-<a id="getting-shell-to-container"></a>
-
 ### Getting shell to container [ᐞ](#table-of-contents)
+
+<a id="getting-shell-to-container"></a>
 
 After you've started containers (`make start` / `make daemon` or via Dev
 Containers), you can list all running containers with `docker ps`.
@@ -198,9 +199,9 @@ make fish
 If you are using Dev Containers, you can also use the IDE terminal that is
 already attached to the `php` container.
 
-<a id="building-containers"></a>
-
 ### Building containers [ᐞ](#table-of-contents)
+
+<a id="building-containers"></a>
 
 From time to time you probably need to build containers again. This is something
 that you should do every time if you have some problems getting containers up
@@ -228,9 +229,9 @@ docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml 
 docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml up -d php mariadb nginx dozzle adminer
 ```
 
-<a id="health-check"></a>
-
 ### Health check [ᐞ](#table-of-contents)
+
+<a id="health-check"></a>
 
 To verify your setup is working correctly, you can check:
 
@@ -251,9 +252,9 @@ Alternatively, you can use **Dozzle** (container log viewer) to monitor all serv
 * View real-time logs for all running containers
 * Check container status and resource usage
 
-<a id="dev-containers"></a>
-
 ## Dev Containers [ᐞ](#table-of-contents)
+
+<a id="dev-containers"></a>
 
 This project also includes a Dev Container setup in `.devcontainer/` that can
 be used from VS Code and JetBrains IDEs with Dev Container support.
@@ -273,9 +274,9 @@ For application URLs, shell access, and rebuild commands, see
 For detailed usage, UID/GID notes, and port mappings, see
 [`.devcontainer/README.md`](.devcontainer/README.md).
 
-<a id="frontend"></a>
-
 ## Frontend? [ᐞ](#table-of-contents)
+
+<a id="frontend"></a>
 
 This backend API can be consumed by any frontend technology or framework. You
 can use React, Vue, Angular, Svelte, or any other frontend solution that can
@@ -289,9 +290,9 @@ any technology stack that fits your project needs.
 With this backend, it should be quite easy to start building _your_ own
 application with the frontend technology of your choice.
 
-<a id="resources"></a>
-
 ## Resources [ᐞ](#table-of-contents)
+
+<a id="resources"></a>
 
 * [Resource index](doc/README.md)
 * [Application commands](doc/COMMANDS.md)
@@ -306,24 +307,24 @@ application with the frontend technology of your choice.
 * [Using Xdebug](doc/XDEBUG.md)
 * [Scripts](scripts/README.md)
 
-<a id="external-links--resources"></a>
-
 ## External links / resources [ᐞ](#table-of-contents)
+
+<a id="external-links--resources"></a>
 
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
 * [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
 * [composer-version](https://github.com/vutran/composer-version)
 * [Symfony Recipes Server](https://symfony.sh/)
 
-<a id="authors"></a>
-
 ## Authors [ᐞ](#table-of-contents)
+
+<a id="authors"></a>
 
 * [Tarmo Leppänen](https://github.com/tarlepp)
 
-<a id="license"></a>
-
 ## License [ᐞ](#table-of-contents)
+
+<a id="license"></a>
 
 [The MIT License (MIT)](LICENSE)
 

@@ -332,7 +332,6 @@ jobs:
       - name: Lint all markdown documentation files
         uses: DavidAnson/markdownlint-cli2-action@v19
         with:
-          config: './markdown-lint.yml'
           globs: |
             README.md
             doc/*.md

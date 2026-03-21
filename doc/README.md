@@ -1,22 +1,22 @@
-<a id="what-is-this"></a>
-
 # What is this?
+
+<a id="what-is-this"></a>
 
 This directory contains different documentation resources about this
 application. Each of those docs are covering different topic about this
 application.
 
-<a id="table-of-contents"></a>
-
 ## Table of Contents
+
+<a id="table-of-contents"></a>
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
   * [Resources](#resources)
 
-<a id="resources"></a>
-
 ## Resources [ᐞ](#table-of-contents)
+
+<a id="resources"></a>
 
 * [Application commands](COMMANDS.md)
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)

@@ -43,8 +43,8 @@ configuration  file to help with this.
 With Mac there is a bit speed difference versus pure _*inux_ installation, but
 you could try to speed that up by using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
 
-Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`
-[here](https://medium.com/@somwhatparanoid/tweaking-docker-for-mac-performance-for-php-and-symfony-b63f3395a1da)
+Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`:
+[Docker for Mac performance benchmark](https://medium.com/@somwhatparanoid/tweaking-docker-for-mac-performance-for-php-and-symfony-b63f3395a1da)
 
 And if that [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
 isn't fast enough for you, you could also setup that [docker-sync](#installation-of-docker-sync-table-of-contents)
