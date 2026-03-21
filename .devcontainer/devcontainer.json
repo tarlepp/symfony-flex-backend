@@ -1,0 +1,65 @@
+{
+    "name": "Symfony Flex Backend",
+    "dockerComposeFile": [
+        "../compose.yaml",
+        "docker-compose.devcontainer.yml"
+    ],
+    "service": "php",
+    "workspaceFolder": "/app",
+    "runServices": [
+        "php",
+        "mariadb",
+        "nginx",
+        "dozzle",
+        "adminer"
+    ],
+    "shutdownAction": "stopCompose",
+    "overrideCommand": false,
+    "remoteUser": "dev",
+    "forwardPorts": [
+        8000,
+        8080,
+        8100,
+        8200,
+        33060
+    ],
+    "portsAttributes": {
+        "8000": {
+            "label": "Nginx HTTPS",
+            "onAutoForward": "notify"
+        },
+        "8080": {
+            "label": "Nginx HTTP",
+            "onAutoForward": "notify"
+        },
+        "8100": {
+            "label": "Dozzle",
+            "onAutoForward": "notify"
+        },
+        "8200": {
+            "label": "Adminer",
+            "onAutoForward": "notify"
+        },
+        "33060": {
+            "label": "MariaDB",
+            "onAutoForward": "silent"
+        }
+    },
+    "postCreateCommand": "bash -lc 'if [ ! -d vendor ]; then composer install; fi'",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "terminal.integrated.defaultProfile.linux": "bash"
+            },
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "xdebug.php-debug",
+                "mikestead.dotenv",
+                "EditorConfig.EditorConfig",
+                "mtxr.sqltools",
+                "mtxr.sqltools-driver-mysql"
+            ]
+        }
+    }
+}

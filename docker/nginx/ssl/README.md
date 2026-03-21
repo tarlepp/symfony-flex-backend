@@ -1,13 +1,19 @@
+<a id="what-is-this"></a>
+
 # What is this?
 
 This folder contains all docker configuration for local development
 environment.
 
+<a id="table-of-contents"></a>
+
 ## Table of Contents
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Selfsigned SSL certificates](#selfsigned-ssl-certificates-ᐞ)
+  * [Selfsigned SSL certificates](#selfsigned-ssl-certificates)
+
+<a id="selfsigned-ssl-certificates"></a>
 
 ## Selfsigned SSL certificates [ᐞ](#table-of-contents)
 

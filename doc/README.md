@@ -1,14 +1,20 @@
+<a id="what-is-this"></a>
+
 # What is this?
 
 This directory contains different documentation resources about this
 application. Each of those docs are covering different topic about this
 application.
 
+<a id="table-of-contents"></a>
+
 ## Table of Contents
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Resources](#resources-table-of-contents)
+  * [Resources](#resources)
+
+<a id="resources"></a>
 
 ## Resources [ᐞ](#table-of-contents)
 
@@ -16,6 +22,7 @@ application.
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)
 * [Custom configuration](CUSTOM_CONFIGURATION.md)
 * [Development guide](DEVELOPMENT.md)
+* [Dev Container setup](../.devcontainer/README.md)
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
 * [PhpStorm configuration](PHPSTORM.md)
 * [Speed problems with Docker Engige?](SPEED_UP_DOCKER_COMPOSE.md)
