@@ -205,6 +205,7 @@ final class PhpUnitUtil
         $cacheKey = $type . serialize($meta);
 
         if (!array_key_exists($cacheKey, self::$validValueCache)) {
+            /** @psalm-suppress MixedAssignment */
             self::$validValueCache[$cacheKey] = self::getValidValue($meta, $type);
         }
 
@@ -252,7 +253,7 @@ final class PhpUnitUtil
      */
     private static function getValidValue(
         ?array $meta,
-        string $type
+        string $type,
     ): mixed {
         $meta ??= [];
 
@@ -262,6 +263,16 @@ final class PhpUnitUtil
         if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
             /** @var class-string $class */
             $class = $meta !== [] && array_key_exists('targetEntity', $meta) ? $meta['targetEntity'] : $type;
+
+            if (!class_exists($class)) {
+                throw new LogicException(
+                    sprintf(
+                        "Cannot create valid value for type '%s' because class '%s' does not exist.",
+                        $type,
+                        $class,
+                    ),
+                );
+            }
 
             $type = self::TYPE_CUSTOM_CLASS;
 
@@ -277,6 +288,11 @@ final class PhpUnitUtil
             }
         }
 
+        /**
+         * @psalm-suppress MixedArgument, MixedMethodCall
+         *
+         * @var mixed $output
+         */
         $output = match ($type) {
             self::TYPE_ENUM => current($class::cases()), // TODO: fix this
             self::TYPE_CUSTOM_CLASS => new $class(...$params),
@@ -290,6 +306,7 @@ final class PhpUnitUtil
         };
 
         if (str_contains($type, '|')) {
+            /** @var mixed $output */
             $output = self::getValidValueForType(explode('|', $type)[0], $meta);
         } elseif (str_contains($type, '[]')) {
             /** @var array<mixed, object> $output */
