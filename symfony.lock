@@ -26,7 +26,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "1.0",
-            "ref": "87424683adc81d7dc305eefec1fced883084aab9"
+            "ref": "fdd756167454623e21f1d769c5b814b243782a67"
         }
     },
     "doctrine/doctrine-bundle": {
@@ -170,7 +170,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "11.1",
-            "ref": "1117deb12541f35793eec9fff7494d7aa12283fc"
+            "ref": "ca0bc067abfb40a8de1b2561b96cbfc2b833c314"
         },
         "files": [
             ".env.test",
@@ -366,12 +366,12 @@
         "version": "v5.3.0"
     },
     "symfony/phpunit-bridge": {
-        "version": "7.3",
+        "version": "7.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "7.3",
-            "ref": "dc13fec96bd527bd399c3c01f0aab915c67fd544"
+            "ref": "56f87409c45ff6654b0bf07c5cc359aebf6016ab"
         },
         "files": []
     },
@@ -481,12 +481,12 @@
         "version": "v4.4.3"
     },
     "symfony/twig-bundle": {
-        "version": "6.4",
+        "version": "7.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "6.4",
-            "ref": "cab5fd2a13a45c266d45a7d9337e28dee6272877"
+            "ref": "f250159ebe99153d0c640a3e7742876fc7453f2c"
         },
         "files": [
             "config/packages/twig.yaml",
