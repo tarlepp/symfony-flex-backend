@@ -19,6 +19,7 @@ application.
 <a id="resources"></a>
 
 * [Application commands](COMMANDS.md)
+* [GitHub Actions update guide](ACTIONS_UPDATE.md)
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)
 * [Custom configuration](CUSTOM_CONFIGURATION.md)
 * [Development guide](DEVELOPMENT.md)
