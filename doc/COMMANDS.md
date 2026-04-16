@@ -37,7 +37,7 @@ file permissions.
 Note that if you host machine user _isn't_ bind to those mentioned values:
 
 ```bash
-uid = 1000 
+uid = 1000
 gid = 1000
 ```
 
@@ -64,6 +64,7 @@ check-dependencies-patch    # Checks if any vendor dependency can be updated
 check-licenses              # Check vendor licenses
 check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
+check-action-updates        # Check pinned GitHub Actions and available updates
 clear                       # Clear _all_ vendor and tool dependencies
 clear-tools                 # Clears all tools dependencies
 composer-normalize          # Normalizes `composer.json` file content
@@ -123,6 +124,25 @@ start-build                 # Build containers and start application in
 stop                        # Stop application containers
 update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
+```
+
+Check pinned GitHub Actions and available updates:
+
+```bash
+make check-action-updates
+```
+
+Print current GitHub Action pins as markdown:
+
+```bash
+make bash
+bash scripts/check-action-updates.sh --current-pins-md
+```
+
+Rebuild and restart the development container:
+
+```bash
+make daemon-build
 ```
 
 ### Symfony console [ᐞ](#table-of-contents)

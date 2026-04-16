@@ -296,6 +296,7 @@ application with the frontend technology of your choice.
 
 * [Resource index](doc/README.md)
 * [Application commands](doc/COMMANDS.md)
+* [GitHub Actions update guide](doc/ACTIONS_UPDATE.md)
 * [Concepts and features](doc/CONCEPTS_AND_FEATURES.md)
 * [Custom configuration](doc/CUSTOM_CONFIGURATION.md)
 * [Development guide](doc/DEVELOPMENT.md)

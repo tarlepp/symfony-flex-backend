@@ -60,6 +60,20 @@ _WARNING := "\033[33m[%s]\033[0m %s\n" # Yellow text for "printf"
 _TITLE := "\033[32m[%s]\033[0m %s\n" # Green text for "printf"
 _ERROR := "\033[31m[%s]\033[0m %s\n" # Red text for "printf"
 
+# Run a command and decorate output for handled exit codes (1 and 2).
+# Usage: $(call RUN_WITH_DECORATED_EXIT_OUTPUT,<command>,<label>)
+define RUN_WITH_DECORATED_EXIT_OUTPUT
+	@$(1); \
+	status=$$?; \
+	case "$$status" in \
+		0) exit 0 ;; \
+		1|2) \
+			printf "\033[1;31m[%s]\033[0;31m exited with code \033[1;33m%s\033[0;31m - see output above.\033[39m\n" "$(2)" "$$status"; \
+			exit 0 ;; \
+		*) exit "$$status" ;; \
+	esac
+endef
+
 info_msg := Message
 info:
 	$(info_msg)
@@ -859,6 +873,18 @@ else
 	@echo "\033[32mGenerating self signed SSL certificates\033[39m"
 	@cd docker/nginx/ssl && ./create-keys.sh
 endif
+
+check-action-updates: ## Check pinned GitHub Actions and available updates
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@echo "\033[32mChecking GitHub Action pins and updates\033[39m"
+	$(call RUN_WITH_DECORATED_EXIT_OUTPUT,./scripts/check-action-updates.sh,check-action-updates)
+else ifeq ($(strip $(RUNNING_SOME_CONTAINERS)),)
+	$(WARNING_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-action-updates
+endif
+
 
 project-stats: ## Create simple project stats
 project-stats: info_msg := @printf $(_TITLE) "OK" "Creating simple project stats"
