@@ -28,7 +28,7 @@ final class StringableArrayObjectTest extends KernelTestCase
     #[TestDox('Test that casting to string with `$input` input (array converted to JSON) returns `$expected`')]
     public function testThatCastingToStringReturnsExpected(StringableArrayObject $input, string $expected): void
     {
-        self::assertSame($expected, (string)(new StringableArrayObject($input)));
+        self::assertSame($expected, (string)$input);
     }
 
     /**
