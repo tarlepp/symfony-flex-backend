@@ -16,6 +16,7 @@ use App\Repository\LogLoginFailureRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Rest\RestResource;
 use App\Tests\Integration\TestCase\ResourceTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
 /**
@@ -44,7 +45,7 @@ final class LogLoginFailureResourceTest extends ResourceTestCase
      */
     public function testThatResetMethodCallsExpectedRepositoryMethod(): void
     {
-        $repository = $this->getMockBuilder($this->repositoryClass)->disableOriginalConstructor()->getMock();
+        $repository = $this->getRepository();
 
         $user = new User()->setUsername('username');
 
@@ -54,9 +55,14 @@ final class LogLoginFailureResourceTest extends ResourceTestCase
             ->with($user)
             ->willReturn(0);
 
-        /**
-         * @var LogLoginFailureRepository $repository
-         */
         new LogLoginFailureResource($repository)->reset($user);
+    }
+
+    /**
+     * @phpstan-return MockObject&LogLoginFailureRepository
+     */
+    private function getRepository(): MockObject
+    {
+        return $this->getMockBuilder(LogLoginFailureRepository::class)->disableOriginalConstructor()->getMock();
     }
 }
