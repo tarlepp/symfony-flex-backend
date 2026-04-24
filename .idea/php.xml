@@ -193,6 +193,8 @@
       <path value="$PROJECT_DIR$/vendor/friendsofphp/proxy-manager-lts" />
       <path value="$PROJECT_DIR$/vendor/lcobucci/clock" />
       <path value="$PROJECT_DIR$/tools/01_mago/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/git-state" />
+      <path value="$PROJECT_DIR$/vendor/radebatz/type-info-extras" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
