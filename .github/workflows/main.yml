@@ -122,6 +122,11 @@ jobs:
           name: phploc.json
           path: ./build/phploc.json
 
+      - name: Gitleaks scan
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   static-summary:
     name: Static analyzers
     runs-on: ubuntu-24.04
