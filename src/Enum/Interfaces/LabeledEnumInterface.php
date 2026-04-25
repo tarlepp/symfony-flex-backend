@@ -21,4 +21,3 @@ interface LabeledEnumInterface
      */
     public function label(): string;
 }
-

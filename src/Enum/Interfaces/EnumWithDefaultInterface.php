@@ -21,4 +21,3 @@ interface EnumWithDefaultInterface
      */
     public static function getDefault(): self;
 }
-
