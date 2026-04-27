@@ -5,14 +5,8 @@
     "brick/math": {
         "version": "0.8.14"
     },
-    "doctrine/cache": {
-        "version": "1.10.0"
-    },
     "doctrine/collections": {
         "version": "1.6.4"
-    },
-    "doctrine/common": {
-        "version": "2.12.0"
     },
     "doctrine/data-fixtures": {
         "version": "1.4.2"

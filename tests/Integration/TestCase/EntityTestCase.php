@@ -20,7 +20,7 @@ use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -569,7 +569,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn ($mapping): bool => $mapping['type'] === ClassMetadataInfo::MANY_TO_MANY
+            static fn ($mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_MANY
         );
 
         if (empty($items)) {
@@ -621,7 +621,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadataInfo::MANY_TO_ONE
+            static fn (array $mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_ONE
         );
 
         if (empty($items)) {
@@ -669,10 +669,10 @@ abstract class EntityTestCase extends KernelTestCase
             ];
 
             switch ($mapping['type']) {
-                case ClassMetadataInfo::ONE_TO_MANY:
-                case ClassMetadataInfo::ONE_TO_ONE:
+                case ClassMetadata::ONE_TO_MANY:
+                case ClassMetadata::ONE_TO_ONE:
                     break;
-                case ClassMetadataInfo::MANY_TO_ONE:
+                case ClassMetadata::MANY_TO_ONE:
                     if ($meta->isReadOnly === false) {
                         $methods[] = [
                             'set' . ucfirst((string)$mapping['fieldName']),
@@ -682,7 +682,7 @@ abstract class EntityTestCase extends KernelTestCase
                         ];
                     }
                     break;
-                case ClassMetadataInfo::MANY_TO_MANY:
+                case ClassMetadata::MANY_TO_MANY:
                     self::assertArrayHasKey('fieldName', $mapping);
 
                     $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
@@ -772,7 +772,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadataInfo::ONE_TO_MANY,
+            static fn (array $mapping): bool => $mapping['type'] === ClassMetadata::ONE_TO_MANY,
         );
 
         if (empty($items)) {
