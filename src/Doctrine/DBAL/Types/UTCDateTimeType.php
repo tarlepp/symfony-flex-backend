@@ -9,11 +9,10 @@ declare(strict_types = 1);
 namespace App\Doctrine\DBAL\Types;
 
 use DateTime;
-use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Doctrine\DBAL\Types\DateTimeType;
 use Override;
 
@@ -30,10 +29,10 @@ class UTCDateTimeType extends DateTimeType
     /**
      * {@inheritdoc}
      *
-     * @throws ConversionException
+     * @throws InvalidFormat
      */
     #[Override]
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): string
     {
         if ($value instanceof DateTime) {
             $value->setTimezone($this->getUtcDateTimeZone());
@@ -45,15 +44,15 @@ class UTCDateTimeType extends DateTimeType
     /**
      * @param T $value
      *
-     * @return (T is null ? null : DateTimeInterface)
+     * @return (T is null ? null : DateTime)
      *
      * @template T
      *
-     * @throws ConversionException
+     * @throws InvalidFormat
      * @throws Exception
      */
     #[Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform): DateTimeInterface|null
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DateTime
     {
         if ($value instanceof DateTime) {
             $value->setTimezone($this->getUtcDateTimeZone());
@@ -81,7 +80,7 @@ class UTCDateTimeType extends DateTimeType
     /**
      * Method to check if conversion was successfully or not.
      *
-     * @throws ConversionException
+     * @throws InvalidFormat
      * @throws Exception
      */
     private function checkConvertedValue(string $value, AbstractPlatform $platform, ?DateTime $converted): DateTime
@@ -90,7 +89,7 @@ class UTCDateTimeType extends DateTimeType
             return $converted;
         }
 
-        throw ConversionException::conversionFailedFormat(
+        throw InvalidFormat::new(
             $value,
             self::lookupName($this),
             $platform->getDateTimeFormatString()
