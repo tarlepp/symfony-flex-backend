@@ -95,5 +95,4 @@ abstract class EnumType extends Type
             'One of: "' . implode('", "', static::getValues()) . '"',
         );
     }
-
 }
