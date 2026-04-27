@@ -79,7 +79,7 @@ interface BaseRepositoryInterface
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
+    public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
 
     /**
      * Advanced version of find method, with this you can process query as you

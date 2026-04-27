@@ -29,7 +29,7 @@ trait RepositoryMethodsTrait
     /**
      * @psalm-param LockMode::*|null $lockMode
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
+    public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
