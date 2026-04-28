@@ -538,6 +538,10 @@ abstract class EntityTestCase extends KernelTestCase
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
         $iterator = static function (AssociationMapping $mapping): array {
+            $class = $mapping['targetEntity'];
+
+            self::assertIsString($class);
+            self::assertTrue(class_exists($class));
 
             $targetEntity = new $class();
 
@@ -680,7 +684,7 @@ abstract class EntityTestCase extends KernelTestCase
                     }
                     break;
                 case ClassMetadata::MANY_TO_MANY:
-                    self::assertArrayHasKey('fieldName', $mapping);
+                    self::assertTrue(isset($mapping['fieldName']));
 
                     $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
                         ? mb_substr((string)$mapping['fieldName'], 0, -1)
