@@ -177,6 +177,24 @@ $updateSchemaDoctrineCommand = static function () use ($application): void {
     $application->run($input, new ConsoleOutput());
 };
 
+// Reset the doctrine entity manager and close the DBAL connection to ensure a clean
+// transaction state before loading fixtures. This is necessary because DBAL 4 always
+// uses savepoints for nested transactions in MySQL/MariaDB, and the migrations runner
+// can leave the transactionNestingLevel counter in an inconsistent state after DDL
+// statements trigger implicit commits.
+$resetDoctrineState = static function () use ($application): void {
+    $container = $application->getKernel()->getContainer();
+
+    /** @var \Doctrine\Persistence\ManagerRegistry $registry */
+    $registry = $container->get('doctrine');
+
+    // Close the connection to reset the DBAL transactionNestingLevel counter to 0
+    $registry->getConnection()->close();
+
+    // Reset the entity manager to discard any stale in-memory state
+    $registry->resetManager();
+};
+
 // Add the doctrine:fixtures:load command to the application and run it
 $loadFixturesDoctrineCommand = static function () use ($application): void {
     $input = new ArrayInput([
@@ -221,6 +239,7 @@ array_map(
         $dropDatabaseDoctrineCommand,
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
+        $resetDoctrineState,
         $loadFixturesDoctrineCommand,
         $createJwtAuthCache,
         $createDatabaseCreateCache,
