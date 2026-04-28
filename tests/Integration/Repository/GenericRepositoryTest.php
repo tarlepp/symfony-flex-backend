@@ -368,7 +368,7 @@ final class GenericRepositoryTest extends KernelTestCase
 
         $arguments = [
             ['some criteria'],
-            ['some order by'],
+            ['some' => 'ASC'],
         ];
 
         $repositoryMock
@@ -413,7 +413,7 @@ final class GenericRepositoryTest extends KernelTestCase
                 'foo' => 'some criteria',
             ],
             [
-                'bar' => 'some order by',
+                'bar' => 'ASC',
             ],
             10,
             20,
