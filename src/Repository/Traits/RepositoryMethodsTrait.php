@@ -13,7 +13,6 @@ use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
 use ArrayIterator;
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
@@ -27,7 +26,7 @@ use function assert;
 trait RepositoryMethodsTrait
 {
     /**
-     * @psalm-param LockMode::*|null $lockMode
+     * {@inheritdoc}
      */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
@@ -38,7 +37,7 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     * {@inheritdoc}
      */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
@@ -62,7 +61,7 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
+     * {@inheritdoc}
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
@@ -73,10 +72,6 @@ trait RepositoryMethodsTrait
 
     /**
      * {@inheritdoc}
-     *
-     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
-     *
-     * @psalm-return list<object|EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -88,8 +83,6 @@ trait RepositoryMethodsTrait
 
     /**
      * {@inheritdoc}
-     *
-     * @return array<int, EntityInterface>
      */
     public function findByAdvanced(
         array $criteria,
@@ -120,8 +113,6 @@ trait RepositoryMethodsTrait
 
     /**
      * {@inheritdoc}
-     *
-     * @psalm-return list<object|EntityInterface>
      */
     public function findAll(): array
     {
@@ -133,8 +124,6 @@ trait RepositoryMethodsTrait
 
     /**
      * {@inheritdoc}
-     *
-     * @return array<int, string>
      */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
