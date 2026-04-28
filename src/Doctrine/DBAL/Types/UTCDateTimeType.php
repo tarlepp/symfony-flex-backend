@@ -42,12 +42,6 @@ class UTCDateTimeType extends DateTimeType
     }
 
     /**
-     * @param T $value
-     *
-     * @return (T is null ? null : DateTime)
-     *
-     * @template T
-     *
      * @throws InvalidFormat
      * @throws Exception
      */

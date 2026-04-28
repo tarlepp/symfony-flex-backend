@@ -75,8 +75,8 @@ final class GenericRepositoryTest extends KernelTestCase
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
         $classMetaData = $resource->getRepository()->getClassMetaData();
-        /** @var mixed $classMetaData */
-        self::assertInstanceOf(ClassMetadata::class, $classMetaData);
+
+        self::assertInstanceOf(ClassMetadata::class, $classMetaData); // @phpstan-ignore staticMethod.alreadyNarrowedType
     }
 
     /**
