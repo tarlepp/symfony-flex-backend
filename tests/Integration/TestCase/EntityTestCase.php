@@ -20,6 +20,7 @@ use App\Tests\Utils\PhpUnitUtil;
 use DeviceDetector\DeviceDetector;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -536,11 +537,7 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping): array {
-            $class = $mapping['targetEntity'];
-
-            self::assertIsString($class);
-            self::assertTrue(class_exists($class));
+        $iterator = static function (AssociationMapping $mapping): array {
 
             $targetEntity = new $class();
 
@@ -596,7 +593,7 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping) use ($meta): array {
+        $iterator = static function (AssociationMapping $mapping) use ($meta): array {
             $params = [null];
 
             if ($mapping['targetEntity'] === Role::class) {
@@ -621,7 +618,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_ONE
+            static fn (AssociationMapping $mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_ONE
         );
 
         if (empty($items)) {
@@ -648,7 +645,7 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static function (array $mapping) use ($meta): array {
+        $iterator = static function (AssociationMapping $mapping) use ($meta): array {
             $target = $mapping['targetEntity'];
 
             self::assertIsString($target);
@@ -759,7 +756,7 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
-        $iterator = static fn (array $mapping): array => [
+        $iterator = static fn (AssociationMapping $mapping): array => [
             [
                 'get' . ucfirst((string)$mapping['fieldName']),
                 $mapping['fieldName'],
@@ -772,7 +769,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (array $mapping): bool => $mapping['type'] === ClassMetadata::ONE_TO_MANY,
+            static fn (AssociationMapping $mapping): bool => $mapping['type'] === ClassMetadata::ONE_TO_MANY,
         );
 
         if (empty($items)) {
