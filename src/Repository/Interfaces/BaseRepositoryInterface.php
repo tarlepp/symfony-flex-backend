@@ -98,7 +98,7 @@ interface BaseRepositoryInterface
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @psalm-param array<string, mixed> $criteria
-     * @psalm-param array<string, string>|null $orderBy
+     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return EntityInterface|object|null
      */
@@ -108,7 +108,7 @@ interface BaseRepositoryInterface
      * Wrapper for default Doctrine repository findBy method.
      *
      * @psalm-param array<string, mixed> $criteria
-     * @psalm-param array<string, string>|null $orderBy
+     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return list<object|EntityInterface>
      */

@@ -82,6 +82,7 @@ final class UTCDateTimeTypeTest extends KernelTestCase
 
         $date = $type->convertToPHPValue($value, $platform);
 
+        // @phpstan-ignore phpunit.alwaysTrue
         self::assertInstanceOf(DateTime::class, $date);
         self::assertSame($expected, $date->format('Y-m-d H:i:s'));
     }

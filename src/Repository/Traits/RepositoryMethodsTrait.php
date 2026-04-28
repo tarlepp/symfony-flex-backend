@@ -61,6 +61,9 @@ trait RepositoryMethodsTrait
         return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
     }
 
+    /**
+     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
+     */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
@@ -70,6 +73,8 @@ trait RepositoryMethodsTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return list<object|EntityInterface>
      */
