@@ -10,6 +10,7 @@ namespace App\Repository\Traits;
 
 use App\Rest\UuidHelper;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -33,6 +34,9 @@ trait RepositoryWrappersTrait
         return $this->getEntityManager()->getReference($this->getEntityName(), $referenceId);
     }
 
+    /**
+     * @psalm-return array<string, AssociationMapping>
+     */
     public function getAssociations(): array
     {
         return $this->getClassMetaData()->getAssociationMappings();

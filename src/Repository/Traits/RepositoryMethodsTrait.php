@@ -13,6 +13,7 @@ use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
 use ArrayIterator;
 use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
@@ -33,6 +34,11 @@ trait RepositoryMethodsTrait
         return $output instanceof EntityInterface ? $output : null;
     }
 
+    /**
+     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     *
+     * @psalm-return array<int|string, mixed>|EntityInterface|null
+     */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
         // Get query builder
@@ -61,6 +67,9 @@ trait RepositoryMethodsTrait
         return $repository->findOneBy($criteria, $orderBy);
     }
 
+    /**
+     * @psalm-return list<object|EntityInterface>
+     */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
         return $this
@@ -69,6 +78,9 @@ trait RepositoryMethodsTrait
             ->findBy($criteria, $orderBy, $limit, $offset);
     }
 
+    /**
+     * @return array<int, EntityInterface>
+     */
     public function findByAdvanced(
         array $criteria,
         ?array $orderBy = null,
@@ -96,6 +108,9 @@ trait RepositoryMethodsTrait
         return $iterator->getArrayCopy();
     }
 
+    /**
+     * @psalm-return list<object|EntityInterface>
+     */
     public function findAll(): array
     {
         return $this
@@ -104,6 +119,9 @@ trait RepositoryMethodsTrait
             ->findAll();
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
         // Get query builder
