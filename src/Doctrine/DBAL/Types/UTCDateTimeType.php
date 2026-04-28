@@ -27,8 +27,6 @@ class UTCDateTimeType extends DateTimeType
     private static ?DateTimeZone $utc = null;
 
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidFormat
      */
     #[Override]

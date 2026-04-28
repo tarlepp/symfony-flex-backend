@@ -25,9 +25,6 @@ use function assert;
  */
 trait RepositoryMethodsTrait
 {
-    /**
-     * {@inheritdoc}
-     */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
@@ -36,9 +33,6 @@ trait RepositoryMethodsTrait
         return $output instanceof EntityInterface ? $output : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
         // Get query builder
@@ -60,9 +54,6 @@ trait RepositoryMethodsTrait
         return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
@@ -70,9 +61,6 @@ trait RepositoryMethodsTrait
         return $repository->findOneBy($criteria, $orderBy);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
         return $this
@@ -81,9 +69,6 @@ trait RepositoryMethodsTrait
             ->findBy($criteria, $orderBy, $limit, $offset);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findByAdvanced(
         array $criteria,
         ?array $orderBy = null,
@@ -111,9 +96,6 @@ trait RepositoryMethodsTrait
         return $iterator->getArrayCopy();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findAll(): array
     {
         return $this
@@ -122,9 +104,6 @@ trait RepositoryMethodsTrait
             ->findAll();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
         // Get query builder

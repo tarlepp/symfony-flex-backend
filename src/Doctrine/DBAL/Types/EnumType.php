@@ -53,9 +53,6 @@ abstract class EnumType extends Type
         return 'ENUM(' . $enumDefinition . ')';
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
@@ -76,9 +73,6 @@ abstract class EnumType extends Type
         return (string)parent::convertToDatabaseValue($value->value, $platform);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): DatabaseEnumInterface
     {
