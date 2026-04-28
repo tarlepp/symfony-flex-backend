@@ -368,7 +368,9 @@ final class GenericRepositoryTest extends KernelTestCase
 
         $arguments = [
             ['some criteria'],
-            ['some' => 'ASC'],
+            [
+                'some' => 'ASC',
+            ],
         ];
 
         $repositoryMock
