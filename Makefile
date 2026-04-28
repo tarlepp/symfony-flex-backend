@@ -441,7 +441,7 @@ phpstan: ## Runs PHPStan static analysis tool
 phpstan: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analysis Tool"
 phpstan: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@@bin/console cache:clear --env=dev
+	@@bin/console cache:clear
 	@./tools/02_phpstan/vendor/bin/phpstan --version
 	@./tools/02_phpstan/vendor/bin/phpstan -v
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -458,7 +458,7 @@ phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
 phpstan-github: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analysis Tool"
 phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@@bin/console cache:clear --env=dev
+	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan -v --error-format=github
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
