@@ -126,15 +126,39 @@ readonly class StopwatchDecorator
             $decorator,
         ): void {
             $stopwatch->stop($eventName);
-            $decorator->decorateReturnValue($returnValue);
+
+            // Don't decorate if we can't determine safety of decoration
+            if ($instance !== null) {
+                $decorator->decorateReturnValueSafely($returnValue, $instance);
+            } else {
+                $decorator->decorateReturnValue($returnValue);
+            }
         };
     }
 
     private function decorateReturnValue(mixed &$returnValue): void
     {
-        if (is_object($returnValue) && !$returnValue instanceof EntityInterface) {
+        if (is_object($returnValue)
+            && !$returnValue instanceof EntityInterface
+            && !$this->isAlreadyProxied($returnValue)
+        ) {
             $returnValue = $this->decorate($returnValue);
         }
+    }
+
+    private function decorateReturnValueSafely(mixed &$returnValue, object $wrappedInstance): void
+    {
+        // Don't decorate if the return value is the wrapped instance itself (fluent interface)
+        if ($returnValue === $wrappedInstance) {
+            return;
+        }
+
+        $this->decorateReturnValue($returnValue);
+    }
+
+    private function isAlreadyProxied(object $obj): bool
+    {
+        return str_contains($obj::class, 'StopwatchProxy_');
     }
 
     // Proxy creation methods
@@ -254,7 +278,7 @@ CODE;
 
         if (isset(\$this->suffixInterceptors['$methodName'])) {
             \$returnValue = null;
-            (\$this->suffixInterceptors['$methodName'])(null, null, null, func_get_args(), \$returnValue);
+            (\$this->suffixInterceptors['$methodName'])(null, \$this->wrappedInstance, null, func_get_args(), \$returnValue);
         }
 
 CODE;
@@ -266,7 +290,12 @@ CODE;
         \$returnValue = \$this->wrappedInstance->$methodName($argsList);
 
         if (isset(\$this->suffixInterceptors['$methodName'])) {
-            (\$this->suffixInterceptors['$methodName'])(null, null, null, func_get_args(), \$returnValue);
+            (\$this->suffixInterceptors['$methodName'])(null, \$this->wrappedInstance, null, func_get_args(), \$returnValue);
+        }
+
+        // Handle fluent interfaces: if the wrapped instance returns itself, return the proxy
+        if (\$returnValue === \$this->wrappedInstance) {
+            return \$this;
         }
 
         return \$returnValue;
