@@ -278,7 +278,9 @@ CODE;
 
         if (isset(\$this->suffixInterceptors['$methodName'])) {
             \$returnValue = null;
-            (\$this->suffixInterceptors['$methodName'])(null, \$this->wrappedInstance, null, func_get_args(), \$returnValue);
+            (\$this->suffixInterceptors['$methodName'])(
+                null, \$this->wrappedInstance, null, func_get_args(), \$returnValue
+            );
         }
 
 CODE;
@@ -290,7 +292,9 @@ CODE;
         \$returnValue = \$this->wrappedInstance->$methodName($argsList);
 
         if (isset(\$this->suffixInterceptors['$methodName'])) {
-            (\$this->suffixInterceptors['$methodName'])(null, \$this->wrappedInstance, null, func_get_args(), \$returnValue);
+            (\$this->suffixInterceptors['$methodName'])(
+                null, \$this->wrappedInstance, null, func_get_args(), \$returnValue
+            );
         }
 
         // Handle fluent interfaces: if the wrapped instance returns itself, return the proxy
