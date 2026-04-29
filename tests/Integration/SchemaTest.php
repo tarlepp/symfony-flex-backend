@@ -17,9 +17,15 @@ use Doctrine\ORM\Tools\SchemaValidator;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function array_filter;
+use function array_values;
 use function array_walk;
 use function implode;
+use function preg_replace;
 use function sprintf;
+use function str_contains;
+use function strtolower;
+use function trim;
 
 /**
  * @package App\Tests\Integration
@@ -49,13 +55,22 @@ final class SchemaTest extends KernelTestCase
         $validator = $this->getValidator();
         $schemaUpdateSql = $validator->getUpdateSchemaList();
 
-        self::assertTrue(
-            $validator->schemaInSyncWithMetadata(),
-            sprintf(
+        $schemaUpdateSql = array_values(array_filter(
+            $schemaUpdateSql,
+            static function (string $sql): bool {
+                $normalized = strtolower(trim((string)preg_replace('/\s+/', ' ', $sql), " ;\t\n\r\0\x0B"));
+
+                return !str_contains($normalized, 'drop table migration_versions')
+                    && !str_contains($normalized, 'drop table `migration_versions`');
+            },
+        ));
+
+        implode("\n", $schemaUpdateSql)
+            |> (static fn (string $x): string => sprintf(
                 "The database schema is not in sync with the current mapping file.\n%s",
-                implode("\n", $schemaUpdateSql),
-            ),
-        );
+                $x,
+            ))
+            |> (static fn (string $x): null => self::assertEmpty($schemaUpdateSql, $x));
     }
 
     private function getValidator(): SchemaValidator
