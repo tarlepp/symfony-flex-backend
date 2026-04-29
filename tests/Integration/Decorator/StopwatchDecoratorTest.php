@@ -18,6 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -200,6 +201,53 @@ final class StopwatchDecoratorTest extends KernelTestCase
         $decoratedService = $decorator->decorate($repository);
 
         self::assertSame($apiKey, $decoratedService->find($apiKey->getId()));
+    }
+
+    #[TestDox('Test that decorator handles fluent interfaces (methods returning $this)')]
+    public function testThatDecoratorHandlesFluentInterfaces(): void
+    {
+        $service = new FluentService();
+
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+
+        $stopWatch
+            ->expects($this->atLeastOnce())
+            ->method('start');
+
+        $stopWatch
+            ->expects($this->atLeastOnce())
+            ->method('stop');
+
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+
+        /** @var FluentService $decoratedService */
+        $decoratedService = $decorator->decorate($service);
+
+        $result = $decoratedService->setValue('test');
+
+        // For fluent interfaces the proxy returns itself, not the wrapped instance
+        self::assertSame($decoratedService, $result);
+        self::assertSame('test', $decoratedService->getValue());
+    }
+
+    #[TestDox('Test that decorator logs an error and returns the original service when proxy creation fails')]
+    public function testThatDecoratorLogsErrorAndReturnsOriginalServiceWhenProxyCreationFails(): void
+    {
+        $service = new ServiceWithNeverReturnType();
+
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $logger
+            ->expects($this->once())
+            ->method('error');
+
+        $decorator = new StopwatchDecorator($stopWatch, $logger);
+
+        $result = $decorator->decorate($service);
+
+        // When proxy creation fails the original service is returned unchanged
+        self::assertSame($service, $result);
     }
 
     /**
