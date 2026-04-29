@@ -11,12 +11,11 @@ namespace App\Tests\Integration\Decorator;
 use RuntimeException;
 
 /**
- * Helper class for testing StopwatchDecorator's error handling.
+ * Helper class for testing StopwatchDecorator with `never`-returning methods.
  *
- * When the decorator tries to proxy this class it generates invalid PHP code
- * (a `return` statement inside a `never`-typed method), which causes eval()
- * to throw a compile-time fatal error. The decorator must fall back to
- * returning the original, un-proxied service instance.
+ * A `never` return type means the method will always throw an exception or call exit/die.
+ * The proxy generator must treat `never` like `void` (no `return` statement in the proxy body),
+ * otherwise PHP would raise a fatal error when compiling the generated proxy class.
  *
  * @psalm-suppress ClassMustBeFinal
  */

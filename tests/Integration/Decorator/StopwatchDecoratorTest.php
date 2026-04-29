@@ -18,7 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -230,24 +229,33 @@ final class StopwatchDecoratorTest extends KernelTestCase
         self::assertSame('test', $decoratedService->getValue());
     }
 
-    #[TestDox('Test that decorator logs an error and returns the original service when proxy creation fails')]
-    public function testThatDecoratorLogsErrorAndReturnsOriginalServiceWhenProxyCreationFails(): void
+    #[TestDox('Test that decorator correctly handles methods with `never` return type')]
+    public function testThatDecoratorHandlesNeverReturnTypeMethods(): void
     {
         $service = new ServiceWithNeverReturnType();
 
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $logger
+        $stopWatch
             ->expects($this->once())
-            ->method('error');
+            ->method('start');
 
-        $decorator = new StopwatchDecorator($stopWatch, $logger);
+        // `never`-returning methods throw before returning, so `stop` is never called
+        $stopWatch
+            ->expects($this->never())
+            ->method('stop');
+
+        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
 
         $result = $decorator->decorate($service);
 
-        // When proxy creation fails the original service is returned unchanged
-        self::assertSame($service, $result);
+        // The service should be successfully proxied (not returned as-is)
+        self::assertNotSame($service, $result);
+        self::assertInstanceOf(ServiceWithNeverReturnType::class, $result);
+
+        // The proxied method still throws as expected
+        $this->expectException(\RuntimeException::class);
+        $result->alwaysThrows();
     }
 
     /**

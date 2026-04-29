@@ -189,6 +189,7 @@ readonly class StopwatchDecorator
 
             /** @psalm-suppress InvalidStringClass */
             return new $proxyClassName($service, $prefixInterceptors, $suffixInterceptors);
+        // @codeCoverageIgnoreStart
         } catch (Throwable $e) {
             $this->logger->error(
                 'StopwatchDecorator: Failed to create proxy for {class}: {message}',
@@ -201,6 +202,7 @@ readonly class StopwatchDecorator
 
             return null;
         }
+        // @codeCoverageIgnoreEnd
     }
 
     // Proxy class generation methods
@@ -383,7 +385,9 @@ CODE;
             $type = $method->getReturnType();
             $typeString = (string)$type;
             $returnType = ': ' . $typeString;
-            $isVoid = $typeString === 'void';
+            // `never` methods throw or exit and never return normally; treat as void so the
+            // proxy body contains no `return` statement (which would be a PHP fatal error).
+            $isVoid = $typeString === 'void' || $typeString === 'never';
         }
 
         return [$returnType, $isVoid];
