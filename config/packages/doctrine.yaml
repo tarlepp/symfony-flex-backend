@@ -1,6 +1,7 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+        schema_filter: '~^(?!migration_versions)~'
         default_table_options:
             charset: utf8mb4
             collation: utf8mb4_swedish_ci
