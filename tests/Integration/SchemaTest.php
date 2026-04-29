@@ -19,6 +19,7 @@ use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function array_walk;
 use function implode;
+use function sprintf;
 
 /**
  * @package App\Tests\Integration
@@ -45,9 +46,15 @@ final class SchemaTest extends KernelTestCase
     #[TestDox('Test that database schema is sync with entity metadata')]
     public function testThatSchemaInSyncWithMetadata(): void
     {
+        $validator = $this->getValidator();
+        $schemaUpdateSql = $validator->getUpdateSchemaList();
+
         self::assertTrue(
-            $this->getValidator()->schemaInSyncWithMetadata(),
-            'The database schema is not in sync with the current mapping file.'
+            $validator->schemaInSyncWithMetadata(),
+            sprintf(
+                "The database schema is not in sync with the current mapping file.\n%s",
+                implode("\n", $schemaUpdateSql),
+            ),
         );
     }
 
