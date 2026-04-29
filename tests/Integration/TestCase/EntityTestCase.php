@@ -481,7 +481,7 @@ abstract class EntityTestCase extends KernelTestCase
         $iterator = static fn (string $field): array => [
             $field,
             PhpUnitUtil::getType($meta->getTypeOfField($field)),
-            $meta->getFieldMapping($field),
+            (array)$meta->getFieldMapping($field),
             $meta->isReadOnly,
         ];
 
@@ -499,7 +499,7 @@ abstract class EntityTestCase extends KernelTestCase
             $field = $mapping['fieldName'];
             $type = $mapping['targetEntity'];
 
-            $assocFields[] = [$field, $type, $mapping, $meta->isReadOnly];
+            $assocFields[] = [$field, $type, (array)$mapping, $meta->isReadOnly];
         }
 
         return [...array_map(
@@ -559,7 +559,7 @@ abstract class EntityTestCase extends KernelTestCase
                     'clear' . ucfirst((string)$mapping['fieldName']),
                     $mapping['fieldName'],
                     $targetEntity,
-                    $mapping,
+                    (array)$mapping,
                 ],
             ];
         };
