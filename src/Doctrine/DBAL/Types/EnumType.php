@@ -54,6 +54,12 @@ abstract class EnumType extends Type
     }
 
     #[Override]
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
+    }
+
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         if (is_string($value) && in_array($value, static::$enum::getValues(), true)) {
