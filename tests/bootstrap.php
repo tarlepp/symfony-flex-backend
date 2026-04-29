@@ -18,6 +18,7 @@ declare(strict_types = 1);
 
 use App\Kernel;
 use App\Utils\JSON;
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -189,7 +190,11 @@ $resetDoctrineState = static function () use ($application): void {
     $registry = $container->get('doctrine');
 
     // Close the connection to reset the DBAL transactionNestingLevel counter to 0
-    $registry->getConnection()->close();
+    $connection = $registry->getConnection();
+
+    assert($connection instanceof Connection);
+
+    $connection->close();
 
     // Reset the entity manager to discard any stale in-memory state
     $registry->resetManager();
