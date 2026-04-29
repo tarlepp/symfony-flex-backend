@@ -189,7 +189,7 @@ readonly class StopwatchDecorator
 
             /** @psalm-suppress InvalidStringClass */
             return new $proxyClassName($service, $prefixInterceptors, $suffixInterceptors);
-        // @codeCoverageIgnoreStart
+            // @codeCoverageIgnoreStart
         } catch (Throwable $e) {
             $this->logger->error(
                 'StopwatchDecorator: Failed to create proxy for {class}: {message}',
