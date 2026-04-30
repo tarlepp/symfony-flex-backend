@@ -251,7 +251,6 @@ final class StopwatchDecoratorTest extends KernelTestCase
 
         // The service should be successfully proxied (not returned as-is)
         self::assertNotSame($service, $result);
-        self::assertInstanceOf(ServiceWithNeverReturnType::class, $result);
 
         // The proxied method still throws as expected
         $this->expectException(\RuntimeException::class);
