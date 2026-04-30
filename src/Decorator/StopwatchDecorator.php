@@ -127,11 +127,8 @@ readonly class StopwatchDecorator
         ): void {
             $stopwatch->stop($eventName);
 
-            // Don't decorate if we can't determine safety of decoration
-            if ($instance !== null) {
+            if (is_object($instance)) {
                 $decorator->decorateReturnValueSafely($returnValue, $instance);
-            } else {
-                $decorator->decorateReturnValue($returnValue); // @codeCoverageIgnore
             }
         };
     }

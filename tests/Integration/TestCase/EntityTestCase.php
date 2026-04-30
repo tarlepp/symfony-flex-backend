@@ -684,7 +684,7 @@ abstract class EntityTestCase extends KernelTestCase
                     }
                     break;
                 case ClassMetadata::MANY_TO_MANY:
-                    self::assertTrue(isset($mapping['fieldName']));
+                    self::assertArrayHasKey('fieldName', (array)$mapping);
 
                     $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
                         ? mb_substr((string)$mapping['fieldName'], 0, -1)

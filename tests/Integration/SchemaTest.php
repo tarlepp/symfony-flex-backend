@@ -65,12 +65,13 @@ final class SchemaTest extends KernelTestCase
             },
         ));
 
-        implode("\n", $schemaUpdateSql)
-            |> (static fn (string $x): string => sprintf(
+        self::assertEmpty(
+            $schemaUpdateSql,
+            sprintf(
                 "The database schema is not in sync with the current mapping file.\n%s",
-                $x,
-            ))
-            |> (static fn (string $x): null => self::assertEmpty($schemaUpdateSql, $x));
+                implode("\n", $schemaUpdateSql),
+            ),
+        );
     }
 
     private function getValidator(): SchemaValidator
