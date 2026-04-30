@@ -131,7 +131,7 @@ readonly class StopwatchDecorator
             if ($instance !== null) {
                 $decorator->decorateReturnValueSafely($returnValue, $instance);
             } else {
-                $decorator->decorateReturnValue($returnValue);
+                $decorator->decorateReturnValue($returnValue); // @codeCoverageIgnore
             }
         };
     }
