@@ -355,7 +355,11 @@ DQL;
 
     /**
      * @psalm-return Generator<int, array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
-     * @phpstan-return Generator<int, array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
+     * @phpstan-return Generator<int, array{
+     *     0: StringableArrayObject<mixed>,
+     *     1: string,
+     *     2: StringableArrayObject<mixed>
+     * }>
      */
     public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria(): Generator
     {

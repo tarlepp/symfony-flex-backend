@@ -191,7 +191,11 @@ final class CountMethodTest extends KernelTestCase
 
     /**
      * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
-     * @phpstan-return Generator<int, array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
+     * @phpstan-return Generator<int, array{
+     *     0: string,
+     *     1: StringableArrayObject<mixed>,
+     *     2: StringableArrayObject<mixed>
+     * }>
      */
     public static function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
