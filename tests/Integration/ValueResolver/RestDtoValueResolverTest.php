@@ -31,6 +31,8 @@ final class RestDtoValueResolverTest extends KernelTestCase
 {
     /**
      * @psalm-param ControllerCollection<Controller>&MockObject $controllerCollection
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
     #[TestDox('Test that `supports` method returns expected result `$expected`')]
@@ -43,6 +45,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
     ): void {
         $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
 
+        /** @psalm-suppress MixedMethodCall, MixedArgument */
         $controllerCollection
             ->expects($this->{$method}())
             ->method('has')

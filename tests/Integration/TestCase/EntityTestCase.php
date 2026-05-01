@@ -99,6 +99,8 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @param array<string, mixed> $meta
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
@@ -139,6 +141,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, mixed> $meta
      *
      * @throws Throwable
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `setter` method for `$property` property only accepts `$type` parameter')]
@@ -172,6 +176,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, string> $meta
      *
      * @throws Throwable
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `setter` method for `$type $property` property is fluent')]
@@ -206,6 +212,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, string> $meta
      *
      * @throws Throwable
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `getter` method for `$property` property returns value of expected type `$type`')]
@@ -257,6 +265,8 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @psalm-param class-string | null $o
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatAssociationMethodsExists')]
     #[TestDox(
@@ -293,6 +303,8 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @param array<mixed> $m
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `many-to-many` association methods `$g, $a, $r, $c` works as expected for `$e + $p` combo')]
@@ -390,6 +402,9 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertTrue($collection->isEmpty());
     }
 
+    /**
+     * @psalm-suppress PossiblyInvalidArgument
+     */
     #[DataProvider('dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `many-to-many` association methods `$g` and `$s` works for `$p + $te` combo')]
     public function testThatManyToOneAssociationMethodsWorksAsExpected(
@@ -431,6 +446,9 @@ abstract class EntityTestCase extends KernelTestCase
         );
     }
 
+    /**
+     * @psalm-suppress PossiblyInvalidArgument
+     */
     #[DataProvider('dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `one-to-many` association `$getter` method works as expected for `$property` property')]
     public function testThatOneToManyAssociationMethodsWorksAsExpected(?string $getter, ?string $property): void
@@ -521,6 +539,7 @@ abstract class EntityTestCase extends KernelTestCase
     public static function dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag(): Generator
     {
         foreach (self::dataProviderTestThatSetterAndGettersWorks() as $data) {
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             self::assertIsArray($data);
             self::assertCount(4, $data);
 
@@ -548,6 +567,7 @@ abstract class EntityTestCase extends KernelTestCase
             /** @var class-string $class */
             $class = $mapping['targetEntity'];
 
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             self::assertIsString($class);
             self::assertTrue(class_exists($class));
 

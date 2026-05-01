@@ -88,6 +88,8 @@ final class PHPUnitUtilTest extends KernelTestCase
      * @param int|string|array<int, string> $expected
      *
      * @throws Throwable
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType')]
     #[TestDox('Test that `getValidValueForType` returns `$expected` when using `$type` as input type')]
@@ -123,7 +125,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array<int, mixed>>
+     * @return Generator<int, array{0: class-string, 1: string}>
      */
     public static function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
@@ -141,7 +143,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array<int, mixed>>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
@@ -162,7 +164,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array<int, mixed>>
+     * @return Generator<int, array{0: mixed, 1: string, 2: bool}>
      */
     public static function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
@@ -183,7 +185,7 @@ final class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @psalm-return Generator<int, array{0: int|string|array, 1: string}>
-     * @phpstan-return Generator<array{0: int|string|array<mixed>, 1: string}>
+     * @phpstan-return Generator<int, array{0: int|string|array<mixed>, 1: string}>
      */
     public static function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
     {

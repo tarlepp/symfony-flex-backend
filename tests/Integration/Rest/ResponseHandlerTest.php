@@ -259,7 +259,7 @@ final class ResponseHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Request, 1: array<string, string>, 2: string}>
+     * @return Generator<int, array{0: Request, 1: array<string, string>, 2: string}>
      */
     public static function dataProviderTestThatCreateResponseReturnsExpected(): Generator
     {
@@ -311,7 +311,7 @@ DATA
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException(): Generator
     {

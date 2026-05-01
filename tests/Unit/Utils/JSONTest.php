@@ -171,7 +171,7 @@ final class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatDecodeWorksLikeExpected'.
      *
-     * @return Generator<int, array<int, mixed>>
+     * @return Generator<int, array{0: StringableArrayObject, 1: mixed}>
      */
     public static function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
@@ -201,11 +201,16 @@ final class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters'.
      *
-     * @return Generator<int, array{0: string|false}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
     {
         yield ["\xB1\x31"];
-        yield [mb_convert_encoding('{"data":"äöäö"}', 'ISO-8859-15', 'UTF8')];
+
+        $converted = mb_convert_encoding('{"data":"äöäö"}', 'ISO-8859-15', 'UTF8');
+
+        self::assertIsString($converted);
+
+        yield [$converted];
     }
 }
