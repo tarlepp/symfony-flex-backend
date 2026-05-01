@@ -44,6 +44,7 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @psalm-suppress MixedMethodCall */
         self::assertInstanceOf(RestAutoMapperConfiguration::class, new $this->autoMapperConfiguration($requestMapper));
     }
 
@@ -72,6 +73,7 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
             ->method('useCustomMapper')
             ->with($requestMapper);
 
+        /** @psalm-suppress MixedMethodCall */
         $mapper = new $this->autoMapperConfiguration($requestMapper);
 
         self::assertInstanceOf(AutoMapperConfiguratorInterface::class, $mapper);

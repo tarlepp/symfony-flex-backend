@@ -127,7 +127,7 @@ final class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatEncodeWorksLikeExpected'.
      *
-     * @return Generator<array{0: mixed, 1: string}>
+     * @return Generator<int, array{0: mixed, 1: string}>
      */
     public static function dataProviderTestThatEncodeWorksLikeExpected(): Generator
     {
@@ -171,7 +171,7 @@ final class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatDecodeWorksLikeExpected'.
      *
-     * @return Generator<array<int, mixed>>
+     * @return Generator<int, array<int, mixed>>
      */
     public static function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
@@ -188,7 +188,7 @@ final class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatDecodeThrowsAnExceptionOnMalformedJson'.
      *
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): Generator
     {
@@ -201,7 +201,7 @@ final class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters'.
      *
-     * @return Generator<array{0: string|false}>
+     * @return Generator<int, array{0: string|false}>
      */
     public static function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
     {

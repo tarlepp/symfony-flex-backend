@@ -210,7 +210,7 @@ final class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): Generator
     {
@@ -219,7 +219,7 @@ final class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
     public static function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
@@ -323,7 +323,7 @@ final class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetOrderByReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
     public static function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
@@ -499,7 +499,7 @@ final class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatGetLimitReturnsNullWithoutParameter(): Generator
     {
@@ -510,7 +510,7 @@ final class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetLimitReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: string, 1: StringableArrayObject, 2: int}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: int}>
      */
     public static function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
@@ -550,7 +550,7 @@ final class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatGetOffsetReturnsNullWithoutParameter(): Generator
     {
@@ -561,7 +561,7 @@ final class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetOffsetReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: string, 1: StringableArrayObject, 2: int}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: int}>
      */
     public static function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
@@ -601,7 +601,7 @@ final class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): Generator
     {
@@ -610,7 +610,7 @@ final class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): Generator
     {
@@ -621,7 +621,7 @@ final class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: string, 1: StringableArrayObject, 2: boolean|string}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: boolean|string}>
      */
     public static function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {

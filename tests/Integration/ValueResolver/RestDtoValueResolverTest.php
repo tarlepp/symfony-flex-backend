@@ -17,6 +17,7 @@ use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -28,6 +29,9 @@ use Throwable;
  */
 final class RestDtoValueResolverTest extends KernelTestCase
 {
+    /**
+     * @psalm-param ControllerCollection<Controller>&MockObject $controllerCollection
+     */
     #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
     #[TestDox('Test that `supports` method returns expected result `$expected`')]
     public function testThatSupportMethodWorksAsExpected(
@@ -100,9 +104,12 @@ final class RestDtoValueResolverTest extends KernelTestCase
         self::assertSame($restDto, $resolver->resolve($request, $metadata)->current());
     }
 
+    /**
+     * @return Generator<array-key, array<int, mixed>>
+     */
     public static function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
     {
-        /** @psalm-suppress InternalMethod */
+        /** @psalm-suppress InternalMethod, MixedAssignment */
         $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -129,7 +136,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             'never',
         ];
 
-        /** @psalm-suppress InternalMethod */
+        /** @psalm-suppress InternalMethod, MixedAssignment */
         $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,7 +155,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             'once',
         ];
 
-        /** @psalm-suppress InternalMethod */
+        /** @psalm-suppress InternalMethod, MixedAssignment */
         $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -167,7 +174,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             'never',
         ];
 
-        /** @psalm-suppress InternalMethod */
+        /** @psalm-suppress InternalMethod, MixedAssignment */
         $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();

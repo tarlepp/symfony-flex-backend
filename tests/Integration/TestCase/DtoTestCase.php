@@ -110,6 +110,7 @@ abstract class DtoTestCase extends KernelTestCase
 
         foreach ($properties as $reflectionProperty) {
             // Get "valid" value for current property
+            /** @psalm-suppress MixedAssignment */
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
             // Determine setter method for current property
@@ -131,10 +132,12 @@ abstract class DtoTestCase extends KernelTestCase
         /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
         $dtoReflection = new ReflectionClass(static::$dtoClass);
 
+        /** @psalm-suppress MixedMethodCall */
         $dto = new static::$dtoClass();
 
         foreach (self::getDtoProperties() as $reflectionProperty) {
             // Get "valid" value for current property
+            /** @psalm-suppress MixedAssignment */
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
             // Determine setter and getter methods for current property
@@ -142,8 +145,10 @@ abstract class DtoTestCase extends KernelTestCase
             $getter = 'get' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
+            /** @psalm-suppress MixedMethodCall */
             $dto->{$setter}($value);
 
+            /** @psalm-suppress MixedMethodCall */
             self::assertSame($value, $dto->{$getter}());
         }
     }
@@ -162,7 +167,9 @@ abstract class DtoTestCase extends KernelTestCase
 
         $setter = 'set' . ucfirst($field);
 
+        /** @psalm-suppress MixedMethodCall */
         $dto = new static::$dtoClass();
+        /** @psalm-suppress MixedMethodCall */
         $dto->{$setter}($value);
 
         $message = sprintf(
@@ -248,6 +255,7 @@ abstract class DtoTestCase extends KernelTestCase
     {
         $dtoClass = static::$dtoClass;
         $dtoReflection = new ReflectionClass($dtoClass);
+        /** @psalm-suppress MixedMethodCall */
         $dto = new $dtoClass();
 
         $filter = static fn (ReflectionProperty $reflectionProperty): bool =>

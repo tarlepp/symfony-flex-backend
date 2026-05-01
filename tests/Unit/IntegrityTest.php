@@ -55,7 +55,10 @@ final class IntegrityTest extends KernelTestCase
             throw new RuntimeException('Kernel is not booting.');
         }
 
-        return self::$kernel;
+        /** @var KernelInterface $kernel */
+        $kernel = self::$kernel;
+
+        return $kernel;
     }
 
     #[DataProvider('dataProviderTestThatControllerHasE2ETests')]
@@ -116,7 +119,7 @@ FORMAT;
             $format,
             $class,
             $testClass,
-            implode('", "', $methods->getArrayCopy())
+            implode('", "', array_values(array_filter($methods->getArrayCopy(), 'is_string')))
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -359,6 +362,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatControllerHasE2ETests(): array
@@ -371,6 +376,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
@@ -384,6 +391,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
      */
     public static function dataProviderTestThatRepositoryHaveFunctionalTests(): array
@@ -434,6 +443,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
@@ -447,6 +458,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEntityHaveIntegrationTests(): array
@@ -460,6 +473,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
@@ -472,6 +487,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEventListenerHaveIntegrationTest(): array
@@ -484,6 +501,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatResourceHaveIntegrationTest(): array
@@ -496,6 +515,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
@@ -511,6 +532,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
@@ -524,6 +547,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
@@ -537,6 +562,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatDtoHaveIntegrationTest(): array
@@ -549,6 +576,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatFormTypeHaveIntegrationTest(): array
@@ -562,6 +591,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
@@ -575,6 +606,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRestControllerHaveIntegrationTests(): array
@@ -588,6 +621,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatConstraintHasUnitTest(): array
@@ -601,6 +636,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEventSubscriberHasUnitTest(): array
@@ -614,6 +651,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
@@ -627,6 +666,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
@@ -641,6 +682,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
@@ -656,6 +699,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
@@ -668,6 +713,8 @@ FORMAT;
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+
      * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
@@ -696,6 +743,7 @@ FORMAT;
         $formatter ??= self::getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = self::getReflectionClass($folder, $namespace);
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         return array_map(
             $formatter,
             array_filter(

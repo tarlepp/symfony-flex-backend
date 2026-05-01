@@ -144,7 +144,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: Request}>
+     * @return Generator<int, array{0: boolean, 1: Request}>
      */
     public static function dataProviderTestThatSupportReturnsExpected(): Generator
     {

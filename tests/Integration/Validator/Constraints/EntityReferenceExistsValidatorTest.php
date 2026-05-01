@@ -162,7 +162,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string|stdClass|array<mixed>, 1: string, 2: string}>
+     * @return Generator<int, array{0: string|stdClass|array<mixed>, 1: string, 2: string}>
      */
     public static function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
     {

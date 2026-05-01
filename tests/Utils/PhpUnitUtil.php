@@ -205,6 +205,7 @@ final class PhpUnitUtil
         $cacheKey = $type . serialize($meta);
 
         if (!array_key_exists($cacheKey, self::$validValueCache)) {
+            /** @psalm-suppress MixedAssignment */
             self::$validValueCache[$cacheKey] = self::getValidValue($meta, $type);
         }
 
@@ -277,8 +278,10 @@ final class PhpUnitUtil
             }
         }
 
+        /** @psalm-suppress MixedAssignment, MixedMethodCall, MixedArgument */
         $output = match ($type) {
             self::TYPE_ENUM => current($class::cases()), // TODO: fix this
+            /** @psalm-suppress MixedMethodCall */
             self::TYPE_CUSTOM_CLASS => new $class(...$params),
             self::TYPE_INT, self::TYPE_INTEGER => 666,
             self::TYPE_STRING => 'Some text here',
@@ -290,6 +293,7 @@ final class PhpUnitUtil
         };
 
         if (str_contains($type, '|')) {
+            /** @psalm-suppress MixedAssignment */
             $output = self::getValidValueForType(explode('|', $type)[0], $meta);
         } elseif (str_contains($type, '[]')) {
             /** @var array<mixed, object> $output */

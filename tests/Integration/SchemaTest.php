@@ -34,6 +34,7 @@ final class SchemaTest extends KernelTestCase
         $messages = [];
 
         $formatter = static function (array $errors, string $className) use (&$messages): void {
+            /** @psalm-suppress MixedArgumentTypeCoercion */
             $messages[] = $className . ': ' . implode(', ', $errors);
         };
 
@@ -75,6 +76,7 @@ final class SchemaTest extends KernelTestCase
 
         $managerRegistry = $kernel->getContainer()->get('doctrine');
 
+        /** @psalm-suppress MixedMethodCall */
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $managerRegistry->getManager();
 

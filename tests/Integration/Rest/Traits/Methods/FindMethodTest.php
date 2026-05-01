@@ -162,7 +162,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
@@ -176,7 +176,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Throwable, 1: int}>
+     * @return Generator<int, array{0: Throwable, 1: int}>
      */
     public static function dataProviderTestThatTraitHandlesException(): Generator
     {
@@ -194,7 +194,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{
+     * @psalm-return Generator<int, array{
      *      0: string,
      *      1: StringableArrayObject,
      *      2: StringableArrayObject,

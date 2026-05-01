@@ -65,7 +65,7 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string}>
+     * @return Generator<int, array{0: class-string}>
      */
     public static function dataProviderTestThatMapMethodWorksAsExpected(): Generator
     {
@@ -75,7 +75,7 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string}>
+     * @return Generator<int, array{0: class-string}>
      */
     public static function dataProviderTestThatMapToObjectReturnsExpectedDtoObject(): Generator
     {

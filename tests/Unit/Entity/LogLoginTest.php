@@ -80,7 +80,7 @@ final class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: LogLoginEnum, 1: Request, 2: DeviceDetector}>
+     * @return Generator<int, array{0: LogLoginEnum, 1: Request, 2: DeviceDetector}>
      */
     public static function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
     {
@@ -90,7 +90,7 @@ final class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: LogLoginEnum, 1: Request, 2: DeviceDetector}>
+     * @return Generator<int, array{0: LogLoginEnum, 1: Request, 2: DeviceDetector}>
      */
     public static function dataProviderTestThatGetUserReturnsNullIfUserNotGiven(): Generator
     {
@@ -100,7 +100,7 @@ final class LogLoginTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: LogLoginEnum, 1: Request, 2: DeviceDetector, 3: User}>
+     * @return Generator<int, array{0: LogLoginEnum, 1: Request, 2: DeviceDetector, 3: User}>
      */
     public static function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
     {

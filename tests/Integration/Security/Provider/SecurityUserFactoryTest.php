@@ -217,7 +217,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean|string|int}>
+     * @return Generator<int, array{0: boolean|string|int}>
      */
     public static function dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType(): Generator
     {

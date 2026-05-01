@@ -64,6 +64,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     {
         $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
 
+        /** @psalm-suppress MixedAssignment */
         $expected = $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected;
 
         if ($strict) {
@@ -122,7 +123,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array<int, mixed>>
+     * @return Generator<int, array<int, mixed>>
      */
     public static function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
@@ -140,7 +141,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array<int, mixed>>
+     * @return Generator<int, array<int, mixed>>
      */
     public static function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
@@ -161,7 +162,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array<int, mixed>>
+     * @return Generator<int, array<int, mixed>>
      */
     public static function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
@@ -181,7 +182,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: int|string|array, 1: string}>
+     * @psalm-return Generator<int, array{0: int|string|array, 1: string}>
      * @phpstan-return Generator<array{0: int|string|array<mixed>, 1: string}>
      */
     public static function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
