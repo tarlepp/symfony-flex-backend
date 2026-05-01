@@ -160,7 +160,9 @@ final class CountMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string}>(): Generator
+     * @return Generator<int, array{0: string}>
+     */
+    public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield [Request::METHOD_HEAD];
         yield [Request::METHOD_PATCH];
