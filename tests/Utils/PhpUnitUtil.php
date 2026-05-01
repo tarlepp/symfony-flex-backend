@@ -281,7 +281,6 @@ final class PhpUnitUtil
         /** @psalm-suppress MixedAssignment, MixedMethodCall, MixedArgument */
         $output = match ($type) {
             self::TYPE_ENUM => current($class::cases()), // TODO: fix this
-            /** @psalm-suppress MixedMethodCall */
             self::TYPE_CUSTOM_CLASS => new $class(...$params),
             self::TYPE_INT, self::TYPE_INTEGER => 666,
             self::TYPE_STRING => 'Some text here',

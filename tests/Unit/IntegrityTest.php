@@ -115,11 +115,14 @@ FORMAT;
 Repository '%s' doesn't have required test class '%s', repository has following methods that needs to be tested: '%s'.
 FORMAT;
 
+        /** @var array<int, string> $methodsCopy */
+        $methodsCopy = $methods->getArrayCopy();
+
         $message = sprintf(
             $format,
             $class,
             $testClass,
-            implode('", "', array_values(array_filter($methods->getArrayCopy(), 'is_string')))
+            implode('", "', $methodsCopy)
         );
 
         self::assertTrue(class_exists($testClass), $message);
