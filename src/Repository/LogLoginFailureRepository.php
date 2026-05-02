@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use App\Entity\LogLoginFailure as Entity;
 use App\Entity\User;
+use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 
@@ -20,7 +21,7 @@ use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)
  * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
