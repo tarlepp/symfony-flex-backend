@@ -161,6 +161,7 @@ final class GenericResourceTest extends KernelTestCase
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
+     * @psalm-suppress MixedArgument
      *
      * @throws Throwable
      */
@@ -250,6 +251,7 @@ final class GenericResourceTest extends KernelTestCase
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
+     * @psalm-suppress MixedArgument
      *
      * @throws Throwable
      */
@@ -335,6 +337,7 @@ final class GenericResourceTest extends KernelTestCase
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
+     * @psalm-suppress MixedArgument
      *
      * @throws Throwable
      */
@@ -562,6 +565,7 @@ final class GenericResourceTest extends KernelTestCase
      * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
+     * @psalm-suppress MixedArgument
      *
      * @throws Throwable
      */
