@@ -79,19 +79,15 @@ final class RolesServiceTest extends KernelTestCase
         StringableArrayObject $expected,
         StringableArrayObject $roles
     ): void {
-        /** @psalm-suppress MixedArgumentTypeCoercion */
-        $inheritedRoles = $this->getService()->getInheritedRoles($roles->getArrayCopy());
-
-        /** @psalm-suppress TypeDoesNotContainType */
         self::assertSame(
             $expected->getArrayCopy(),
-            $inheritedRoles,
+            $this->getService()->getInheritedRoles($roles->getArrayCopy()),
             'Inherited roles was not expected'
         );
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string}>
+     * @return Generator<array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
     {
@@ -104,7 +100,7 @@ final class RolesServiceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string}>
+     * @return Generator<array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetShortReturnsExpected(): Generator
     {
@@ -117,7 +113,8 @@ final class RolesServiceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {

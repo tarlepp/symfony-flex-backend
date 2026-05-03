@@ -200,11 +200,12 @@ final class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @return Generator<array{
-     *     0: StringableArrayObject<mixed>,
-     *     1: StringableArrayObject<mixed>,
-     *     2: StringableArrayObject<mixed>,
-     * }>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @phpstan-return Generator<array{
+     *      0: StringableArrayObject<mixed>,
+     *      1: StringableArrayObject<mixed>,
+     *      2: StringableArrayObject<mixed>,
+     *  }>
      */
     public static function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
@@ -271,7 +272,8 @@ final class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
     {

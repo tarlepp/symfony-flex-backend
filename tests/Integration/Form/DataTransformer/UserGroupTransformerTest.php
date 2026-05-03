@@ -112,9 +112,8 @@ final class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @psalm-suppress InvalidReturnType
-     *
-     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>|null}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: ?StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: ?StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatTransformReturnsExpected(): Generator
     {

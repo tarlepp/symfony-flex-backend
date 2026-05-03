@@ -46,7 +46,8 @@ final class ApiKeyUserTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: ApiKey, 1: StringableArrayObject<mixed>}>
+     * @psalm-return Generator<array{0: ApiKey, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: ApiKey, 1: StringableArrayObject<mixed>}>
      *
      * @throws Throwable
      */
