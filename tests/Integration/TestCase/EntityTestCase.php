@@ -101,7 +101,6 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @param array<string, mixed> $meta
-     *
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
@@ -142,7 +141,6 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, mixed> $meta
      *
      * @throws Throwable
-     *
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `setter` method for `$property` property only accepts `$type` parameter')]
@@ -176,7 +174,6 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, string> $meta
      *
      * @throws Throwable
-     *
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `setter` method for `$type $property` property is fluent')]
@@ -211,7 +208,6 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array<string, string> $meta
      *
      * @throws Throwable
-     *
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag')]
     #[TestDox('Test that `getter` method for `$property` property returns value of expected type `$type`')]
@@ -263,7 +259,6 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @psalm-param class-string | null $o
-     *
      */
     #[DataProvider('dataProviderTestThatAssociationMethodsExists')]
     #[TestDox(
@@ -300,7 +295,6 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @param array<mixed> $m
-     *
      */
     #[DataProvider('dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `many-to-many` association methods `$g, $a, $r, $c` works as expected for `$e + $p` combo')]
