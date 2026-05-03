@@ -87,7 +87,7 @@ final class UserGroupsControllerTest extends WebTestCase
 
         self::assertSame(
             $e->getArrayCopy(),
-            array_map(static fn (array $group): string => (string) $group['id'], $data),
+            array_map(static fn (array $group): string => (string)$group['id'], $data),
         );
     }
 
@@ -115,7 +115,7 @@ final class UserGroupsControllerTest extends WebTestCase
 
         self::assertSame(
             $e->getArrayCopy(),
-            array_map(static fn (array $group): string => (string) $group['id'], $data),
+            array_map(static fn (array $group): string => (string)$group['id'], $data),
         );
     }
 
