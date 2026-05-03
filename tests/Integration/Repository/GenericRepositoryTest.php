@@ -169,6 +169,7 @@ final class GenericRepositoryTest extends KernelTestCase
     /**
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
+     * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @throws Throwable
      */
@@ -192,6 +193,7 @@ final class GenericRepositoryTest extends KernelTestCase
     /**
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
+     * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @throws Throwable
      */
@@ -215,6 +217,7 @@ final class GenericRepositoryTest extends KernelTestCase
     /**
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
+     * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @throws Throwable
      */
@@ -240,6 +243,7 @@ final class GenericRepositoryTest extends KernelTestCase
     /**
      * @phpstan-param StringableArrayObject<array<int, string>> $parameters
      * @psalm-param StringableArrayObject $parameters
+     * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @throws Throwable
      */

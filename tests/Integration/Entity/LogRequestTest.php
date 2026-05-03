@@ -101,6 +101,7 @@ final class LogRequestTest extends EntityTestCase
             self::assertInstanceOf($type, $value);
         }
 
+        /** @psalm-suppress MixedAssignment */
         $returnValue = $value;
 
         if (is_object($value)) {

@@ -65,6 +65,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
 
         self::assertTrue(class_exists($dtoClass));
 
+        /** @psalm-suppress MixedMethodCall */
         $dto = $requestMapper->mapToObject($request, new $dtoClass());
 
         self::assertInstanceOf(DTO\User::class, $dto);
@@ -86,6 +87,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
             'language' => $input,
         ]);
 
+        /** @psalm-suppress MixedMethodCall */
         $dto = new $dtoClass();
         $output = $requestMapper->mapToObject($request, $dto);
 
