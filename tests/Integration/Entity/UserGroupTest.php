@@ -20,7 +20,7 @@ use App\Tests\Integration\TestCase\EntityTestCase;
 final class UserGroupTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = UserGroup::class;
 }

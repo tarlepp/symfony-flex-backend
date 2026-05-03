@@ -29,7 +29,7 @@ use function array_unique;
 final class ApiKeyTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = ApiKey::class;
 

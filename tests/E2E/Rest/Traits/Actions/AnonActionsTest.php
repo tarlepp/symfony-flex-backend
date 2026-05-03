@@ -92,7 +92,7 @@ final class AnonActionsTest extends RestTraitTestCase
     }
 
     /**
-     * @psalm-suppress InvalidReturnType
+     * @return Generator<array<int, string|null>>
      */
     #[Override]
     public static function getInvalidUsers(): Generator

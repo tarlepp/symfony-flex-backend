@@ -38,7 +38,7 @@ use function ucfirst;
 final class LogRequestTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = LogRequest::class;
 

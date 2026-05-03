@@ -27,7 +27,7 @@ use function unserialize;
 final class UserTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = User::class;
 

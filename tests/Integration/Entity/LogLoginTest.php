@@ -33,7 +33,7 @@ use function ucfirst;
 final class LogLoginTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = LogLogin::class;
 

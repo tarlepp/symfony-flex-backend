@@ -39,7 +39,7 @@ use function ucfirst;
 abstract class DtoTestCase extends KernelTestCase
 {
     /**
-     * @psalm-var class-string
+     * @psalm-var class-string<RestDtoInterface>
      * @phpstan-var class-string<RestDtoInterface>
      */
     protected static string $dtoClass;
@@ -132,7 +132,6 @@ abstract class DtoTestCase extends KernelTestCase
         /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
         $dtoReflection = new ReflectionClass(static::$dtoClass);
 
-        /** @psalm-suppress MixedMethodCall */
         $dto = new static::$dtoClass();
 
         foreach (self::getDtoProperties() as $reflectionProperty) {
@@ -167,7 +166,6 @@ abstract class DtoTestCase extends KernelTestCase
 
         $setter = 'set' . ucfirst($field);
 
-        /** @psalm-suppress MixedMethodCall */
         $dto = new static::$dtoClass();
         /** @psalm-suppress MixedMethodCall */
         $dto->{$setter}($value);
@@ -255,7 +253,6 @@ abstract class DtoTestCase extends KernelTestCase
     {
         $dtoClass = static::$dtoClass;
         $dtoReflection = new ReflectionClass($dtoClass);
-        /** @psalm-suppress MixedMethodCall */
         $dto = new $dtoClass();
 
         $filter = static fn (ReflectionProperty $reflectionProperty): bool =>

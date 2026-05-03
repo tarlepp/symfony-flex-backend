@@ -89,7 +89,6 @@ final class PHPUnitUtilTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @psalm-suppress PossiblyInvalidArgument
      */
     #[DataProvider('dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType')]
     #[TestDox('Test that `getValidValueForType` returns `$expected` when using `$type` as input type')]

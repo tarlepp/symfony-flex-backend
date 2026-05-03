@@ -21,7 +21,7 @@ use Override;
 final class RoleTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = Role::class;
 

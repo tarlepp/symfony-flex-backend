@@ -41,7 +41,7 @@ final class SchemaTest extends KernelTestCase
         $messages = [];
 
         $formatter = static function (array $errors, string $className) use (&$messages): void {
-            /** @psalm-suppress MixedArgumentTypeCoercion */
+            /** @var array<string> $errors */
             $messages[] = $className . ': ' . implode(', ', $errors);
         };
 
