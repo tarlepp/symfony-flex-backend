@@ -43,7 +43,7 @@ class Version
         $output = '0.0.0';
 
         try {
-            $output = (string)$this->appCacheApcu->get('application_version', $this->getClosure());
+            $output = $this->appCacheApcu->get('application_version', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
