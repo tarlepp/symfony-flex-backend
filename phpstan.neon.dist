@@ -11,10 +11,6 @@ parameters:
         -
             identifier: missingType.generics
         -
-            identifier: return.type
-            paths:
-                - tests/Unit/IntegrityTest.php
-        -
             messages:
                 - '#Call to static method PHPUnit\\Framework\\Assert::assertInstanceOf\(\) .* will always evaluate to true\.#'
             paths:
