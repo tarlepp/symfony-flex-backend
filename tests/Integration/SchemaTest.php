@@ -99,7 +99,7 @@ final class SchemaTest extends KernelTestCase
 
         $managerRegistry = $kernel->getContainer()->get('doctrine');
 
-        /** @psalm-suppress MixedMethodCall */
+        /** @psalm-suppress MixedMethodCall - $managerRegistry->getManager() is mixed from container */
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $managerRegistry->getManager();
 

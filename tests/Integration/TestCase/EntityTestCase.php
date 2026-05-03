@@ -533,6 +533,7 @@ abstract class EntityTestCase extends KernelTestCase
     public static function dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag(): Generator
     {
         foreach (self::dataProviderTestThatSetterAndGettersWorks() as $data) {
+            self::assertIsArray($data);
             self::assertCount(4, $data);
 
             // Remove 'Read-only flag' from data
@@ -559,6 +560,7 @@ abstract class EntityTestCase extends KernelTestCase
             /** @var class-string $class */
             $class = $mapping['targetEntity'];
 
+            self::assertIsString($class);
             self::assertTrue(class_exists($class));
 
             $targetEntity = new $class();
