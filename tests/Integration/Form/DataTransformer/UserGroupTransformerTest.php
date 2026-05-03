@@ -112,7 +112,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: ?StringableArrayObject<mixed>}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatTransformReturnsExpected(): Generator
     {

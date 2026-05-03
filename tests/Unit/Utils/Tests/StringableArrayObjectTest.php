@@ -32,7 +32,7 @@ final class StringableArrayObjectTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: StringableArrayObject<mixed>, 1: string}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, string}>
      */
     public static function dataProviderTestThatCastingToStringReturnsExpected(): Generator
     {

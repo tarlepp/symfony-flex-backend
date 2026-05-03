@@ -59,7 +59,7 @@ final class ApiKeyTest extends EntityTestCase
     /**
      * @throws Throwable
      *
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {

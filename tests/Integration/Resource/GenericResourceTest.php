@@ -582,7 +582,7 @@ final class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
@@ -603,7 +603,7 @@ final class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
@@ -639,7 +639,7 @@ final class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
@@ -660,7 +660,7 @@ final class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {

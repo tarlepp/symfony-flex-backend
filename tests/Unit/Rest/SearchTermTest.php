@@ -92,7 +92,7 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @return Generator<int, array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
+     * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {
