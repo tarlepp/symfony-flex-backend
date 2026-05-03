@@ -136,6 +136,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
         self::assertIsString($content);
         self::assertJson($content);
 
+        /** @var stdClass $decoded */
         $decoded = JSON::decode($content);
 
         self::assertIsObject($decoded);

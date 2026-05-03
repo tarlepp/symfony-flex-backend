@@ -104,7 +104,9 @@ final class AttachUserGroupControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-        self::assertCount(1, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount(1, $decoded);
     }
 
     /**

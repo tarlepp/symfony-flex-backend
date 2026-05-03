@@ -48,7 +48,9 @@ final class UserManagementFlowTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data['id'] = JSON::decode($content)->id;
+        /** @var stdClass $decoded */
+        $decoded = JSON::decode($content);
+        $data['id'] = $decoded->id;
 
         unset($data['password']);
 

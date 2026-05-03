@@ -38,6 +38,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorException;
+use stdClass;
 use Throwable;
 use function array_keys;
 use function property_exists;
@@ -132,6 +133,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
         self::assertNotFalse($content);
         self::assertJson($content);
 
+        /** @var stdClass $json */
         $json = JSON::decode($content);
 
         self::assertIsObject($json);
@@ -172,6 +174,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
 
         self::assertNotFalse($content);
 
+        /** @var array<mixed> $result */
         $result = JSON::decode($content, true);
 
         self::assertIsArray($result);

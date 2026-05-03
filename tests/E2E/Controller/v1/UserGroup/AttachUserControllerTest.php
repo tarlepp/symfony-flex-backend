@@ -109,7 +109,9 @@ final class AttachUserControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertSame($e, $response->getStatusCode(), "Response:\n" . $response);
-        self::assertCount(2, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount(2, $decoded);
     }
 
     /**

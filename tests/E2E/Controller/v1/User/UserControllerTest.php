@@ -139,6 +139,7 @@ final class UserControllerTest extends WebTestCase
         self::assertJson($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var array<mixed> $json */
         $json = JSON::decode($content);
 
         self::assertIsArray($json);
@@ -184,6 +185,7 @@ final class UserControllerTest extends WebTestCase
         self::assertJson($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var array<mixed> $json */
         $json = JSON::decode($content);
 
         self::assertIsArray($json);

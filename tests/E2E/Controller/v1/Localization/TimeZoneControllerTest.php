@@ -69,6 +69,7 @@ final class TimeZoneControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
+        /** @var array<mixed> $data */
         $data = JSON::decode((string)$response->getContent());
 
         self::assertIsArray($data, $content);
@@ -89,7 +90,9 @@ final class TimeZoneControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
 
-        $timezone = JSON::decode($content, true)[0];
+        /** @var array<int, array<string, mixed>> $decoded */
+        $decoded = JSON::decode($content, true);
+        $timezone = $decoded[0];
 
         self::assertArrayHasKey('timezone', $timezone);
         self::assertArrayHasKey('identifier', $timezone);

@@ -13,6 +13,7 @@ use App\Utils\JSON;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use stdClass;
 use Throwable;
 use function getenv;
 use function json_encode;
@@ -81,6 +82,7 @@ final class GetTokenControllerTest extends WebTestCase
             "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
         );
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);
@@ -128,6 +130,7 @@ final class GetTokenControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode());
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);

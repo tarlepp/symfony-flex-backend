@@ -46,6 +46,7 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);
@@ -77,6 +78,7 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);
@@ -112,6 +114,7 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var list<stdClass> $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsArray($responseContent);
@@ -121,11 +124,13 @@ final class GroupsControllerTest extends WebTestCase
                 static function (stdClass $userGroup): string {
                     self::assertTrue(property_exists($userGroup, 'role'));
 
+                    /** @var stdClass $role */
                     $role = $userGroup->role;
 
                     self::assertIsObject($role);
                     self::assertTrue(property_exists($role, 'id'));
 
+                    /** @var string $id */
                     $id = $role->id;
 
                     self::assertIsString($id);
@@ -153,6 +158,7 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);

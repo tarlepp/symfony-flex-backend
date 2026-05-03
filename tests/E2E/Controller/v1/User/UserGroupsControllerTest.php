@@ -82,9 +82,10 @@ final class UserGroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
+        /** @var list<array<string, mixed>> $data */
         $data = JSON::decode($content, true);
 
-        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => $group['id'], $data));
+        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => (string) $group['id'], $data));
     }
 
     /**
@@ -106,9 +107,10 @@ final class UserGroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
+        /** @var list<array<string, mixed>> $data */
         $data = JSON::decode($content, true);
 
-        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => $group['id'], $data));
+        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => (string) $group['id'], $data));
     }
 
     /**

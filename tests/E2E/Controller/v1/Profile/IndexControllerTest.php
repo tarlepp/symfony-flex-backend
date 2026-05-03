@@ -44,6 +44,7 @@ final class IndexControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);
@@ -92,6 +93,7 @@ final class IndexControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);
@@ -124,6 +126,7 @@ final class IndexControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         self::assertIsObject($responseContent);

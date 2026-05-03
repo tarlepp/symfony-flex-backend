@@ -63,10 +63,8 @@ final class VersionControllerTest extends WebTestCase
         $version = $response->headers->get('X-API-VERSION');
 
         self::assertNotNull($version);
-        /** @psalm-suppress MixedPropertyFetch */
-        self::assertSame(
-            JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'))->version,
-            $version,
-        );
+        /** @var stdClass $composerJson */
+        $composerJson = JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'));
+        self::assertSame($composerJson->version, $version);
     }
 }

@@ -69,7 +69,9 @@ final class LocaleControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertCount(2, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount(2, $decoded);
     }
 
     /**
