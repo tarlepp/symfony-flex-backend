@@ -684,7 +684,7 @@ abstract class EntityTestCase extends KernelTestCase
         $iterator = static function (AssociationMapping $mapping) use ($meta): array {
             $target = $mapping['targetEntity'];
 
-            self::assertIsString($target); // @phpstan-ignore-line
+            self::assertIsString($target);
             self::assertTrue(class_exists($target));
 
             $arguments = match ($target) {
