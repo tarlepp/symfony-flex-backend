@@ -23,8 +23,7 @@ use function count;
 abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
 {
     /**
-     * @psalm-var class-string<RestAutoMapperConfiguration>
-     * @phpstan-var class-string<RestAutoMapperConfiguration>
+     * @var class-string<RestAutoMapperConfiguration>
      */
     protected string $autoMapperConfiguration;
 

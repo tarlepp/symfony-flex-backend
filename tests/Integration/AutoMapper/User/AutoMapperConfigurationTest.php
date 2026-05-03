@@ -23,8 +23,7 @@ use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 final class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
 {
     /**
-     * @psalm-var class-string<RestAutoMapperConfiguration>
-     * @phpstan-var class-string<RestAutoMapperConfiguration>
+     * @var class-string<RestAutoMapperConfiguration>
      */
     protected string $autoMapperConfiguration = AutoMapperConfiguration::class;
 

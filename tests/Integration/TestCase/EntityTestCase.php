@@ -54,8 +54,7 @@ use function ucfirst;
 abstract class EntityTestCase extends KernelTestCase
 {
     /**
-     * @psalm-var class-string<EntityInterface>
-     * @phpstan-var class-string<EntityInterface>
+     * @var class-string<EntityInterface>
      */
     protected static string $entityName;
 
