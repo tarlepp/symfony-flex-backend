@@ -70,6 +70,7 @@ final class LanguageControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertJson($content);
+        /** @psalm-suppress MixedArgument */
         self::assertCount(2, JSON::decode($content));
     }
 
