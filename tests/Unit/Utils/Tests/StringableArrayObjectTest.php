@@ -32,6 +32,8 @@ final class StringableArrayObjectTest extends KernelTestCase
     }
 
     /**
+     * @psalm-suppress InvalidReturnType
+     *
      * @return Generator<int, list{StringableArrayObject<mixed>, string}>
      */
     public static function dataProviderTestThatCastingToStringReturnsExpected(): Generator

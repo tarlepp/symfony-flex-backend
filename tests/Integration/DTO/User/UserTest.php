@@ -24,7 +24,8 @@ use function count;
 final class UserTest extends DtoTestCase
 {
     /**
-     * @var class-string<UserDto>
+     * @psalm-var class-string
+     * @phpstan-var class-string<UserDto>
      */
     protected static string $dtoClass = UserDto::class;
 

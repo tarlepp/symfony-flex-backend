@@ -92,6 +92,8 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
+     * @psalm-suppress InvalidReturnType
+     *
      * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatReturnedCriteriaIsExpected(): Generator

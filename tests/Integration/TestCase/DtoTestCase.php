@@ -39,7 +39,8 @@ use function ucfirst;
 abstract class DtoTestCase extends KernelTestCase
 {
     /**
-     * @var class-string<RestDtoInterface>
+     * @psalm-var class-string
+     * @phpstan-var class-string<RestDtoInterface>
      */
     protected static string $dtoClass;
 

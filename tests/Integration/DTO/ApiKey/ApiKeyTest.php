@@ -24,7 +24,8 @@ use function count;
 final class ApiKeyTest extends DtoTestCase
 {
     /**
-     * @var class-string<ApiKeyDto>
+     * @psalm-var class-string
+     * @phpstan-var class-string<ApiKeyDto>
      */
     protected static string $dtoClass = ApiKeyDto::class;
 

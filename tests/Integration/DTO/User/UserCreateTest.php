@@ -18,7 +18,8 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 final class UserCreateTest extends DtoTestCase
 {
     /**
-     * @var class-string<UserCreate>
+     * @psalm-var class-string
+     * @phpstan-var class-string<UserCreate>
      */
     protected static string $dtoClass = UserCreate::class;
 }

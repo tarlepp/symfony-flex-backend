@@ -112,6 +112,8 @@ final class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
+     * @psalm-suppress InvalidReturnType
+     *
      * @return Generator<int, list{StringableArrayObject<mixed>, StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatTransformReturnsExpected(): Generator

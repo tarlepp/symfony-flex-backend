@@ -22,7 +22,8 @@ use PHPUnit\Framework\Attributes\TestDox;
 final class ApiKeyUpdateTest extends DtoTestCase
 {
     /**
-     * @var class-string<ApiKeyUpdate>
+     * @psalm-var class-string
+     * @phpstan-var class-string<ApiKeyUpdate>
      */
     protected static string $dtoClass = ApiKeyUpdate::class;
 

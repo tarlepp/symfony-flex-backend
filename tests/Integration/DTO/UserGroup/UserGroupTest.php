@@ -21,7 +21,8 @@ use PHPUnit\Framework\Attributes\TestDox;
 final class UserGroupTest extends DtoTestCase
 {
     /**
-     * @var class-string<UserGroup>
+     * @psalm-var class-string
+     * @phpstan-var class-string<UserGroup>
      */
     protected static string $dtoClass = UserGroup::class;
 
