@@ -11,6 +11,10 @@ parameters:
         -
             identifier: missingType.generics
         -
+            identifier: return.type
+            paths:
+                - tests/Unit/IntegrityTest.php
+        -
             messages:
                 - '#Access to constant on internal class Symfony\\Component\\Validator\\Context\\ExecutionContext\.#'
             paths:
