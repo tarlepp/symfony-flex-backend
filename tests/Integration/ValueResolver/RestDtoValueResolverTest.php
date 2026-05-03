@@ -31,7 +31,6 @@ final class RestDtoValueResolverTest extends KernelTestCase
 {
     /**
      * @psalm-param ControllerCollection<Controller>&MockObject $controllerCollection
-     *
      */
     #[DataProvider('dataProviderTestThatSupportMethodWorksAsExpected')]
     #[TestDox('Test that `supports` method returns expected result `$expected`')]

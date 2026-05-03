@@ -398,8 +398,6 @@ abstract class EntityTestCase extends KernelTestCase
         self::assertTrue($collection->isEmpty());
     }
 
-    /**
-     */
     #[DataProvider('dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `many-to-many` association methods `$g` and `$s` works for `$p + $te` combo')]
     public function testThatManyToOneAssociationMethodsWorksAsExpected(
@@ -441,8 +439,6 @@ abstract class EntityTestCase extends KernelTestCase
         );
     }
 
-    /**
-     */
     #[DataProvider('dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected')]
     #[TestDox('Test that `one-to-many` association `$getter` method works as expected for `$property` property')]
     public function testThatOneToManyAssociationMethodsWorksAsExpected(?string $getter, ?string $property): void

@@ -88,7 +88,6 @@ final class PHPUnitUtilTest extends KernelTestCase
      * @param int|string|array<int, string> $expected
      *
      * @throws Throwable
-     *
      */
     #[DataProvider('dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType')]
     #[TestDox('Test that `getValidValueForType` returns `$expected` when using `$type` as input type')]
