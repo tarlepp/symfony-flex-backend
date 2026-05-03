@@ -765,6 +765,7 @@ FORMAT;
      * @param class-string $interface
      */
     /**
+     * @param class-string $interface
      * @return Closure(ReflectionClass<object>):bool
      */
     private static function getInterfaceFilter(string $interface): Closure
