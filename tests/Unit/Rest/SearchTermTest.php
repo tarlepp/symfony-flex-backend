@@ -57,7 +57,10 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @psalm-return Generator<int, array{0: null|string|StringableArrayObject, 1: null|string|StringableArrayObject}, mixed, void>
+     * @psalm-return Generator<int, array{
+     *      0: null|string|StringableArrayObject,
+     *      1: null|string|StringableArrayObject,
+     *  }, mixed, void>
      * @phpstan-return Generator<array{
      *      0: null|string|StringableArrayObject<mixed>,
      *      1: null|string|StringableArrayObject<mixed>,
