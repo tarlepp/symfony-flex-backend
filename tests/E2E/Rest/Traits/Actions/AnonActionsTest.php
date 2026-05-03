@@ -92,7 +92,7 @@ final class AnonActionsTest extends RestTraitTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     #[Override]
     public static function getInvalidUsers(): Generator
