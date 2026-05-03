@@ -764,6 +764,9 @@ FORMAT;
     /**
      * @param class-string $interface
      */
+    /**
+     * @return Closure(ReflectionClass<object>):bool
+     */
     private static function getInterfaceFilter(string $interface): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
@@ -773,6 +776,7 @@ FORMAT;
 
     /**
      * @param class-string $class
+     * @return Closure(ReflectionClass<object>):bool
      */
     private static function getSubclassOfFilter(string $class): Closure
     {
