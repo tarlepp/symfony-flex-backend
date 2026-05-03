@@ -61,13 +61,13 @@ final class UserGroupTypeTest extends TypeTestCase
             ->setRole($roleEntity);
 
         // Specify used form data
-        $formData = [
+        $submitData = [
             'name' => 'ROLE_ADMIN',
             'role' => 'ROLE_ADMIN',
         ];
 
         // submit the data to the form directly
-        $form->submit($formData);
+        $form->submit($submitData);
 
         // Test that data transformers have not been failed
         self::assertTrue($form->isSynchronized());
@@ -83,7 +83,7 @@ final class UserGroupTypeTest extends TypeTestCase
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (array_keys($formData) as $key) {
+        foreach (array_keys($submitData) as $key) {
             self::assertArrayHasKey($key, $children);
         }
     }

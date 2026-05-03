@@ -60,13 +60,13 @@ final class ApiKeyTypeTest extends TypeTestCase
             ->setUserGroups([$userGroupEntity]);
 
         // Specify used form data
-        $formData = [
+        $submitData = [
             'description' => 'description',
             'userGroups' => [$userGroupEntity->getId()],
         ];
 
         // submit the data to the form directly
-        $form->submit($formData);
+        $form->submit($submitData);
 
         // Test that data transformers have not been failed
         self::assertTrue($form->isSynchronized());
@@ -82,7 +82,7 @@ final class ApiKeyTypeTest extends TypeTestCase
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (array_keys($formData) as $key) {
+        foreach (array_keys($submitData) as $key) {
             self::assertArrayHasKey($key, $children);
         }
     }

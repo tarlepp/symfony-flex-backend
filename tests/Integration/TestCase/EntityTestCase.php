@@ -704,8 +704,6 @@ abstract class EntityTestCase extends KernelTestCase
                         ? mb_substr($assocFieldName, 0, -1)
                         : $assocFieldName;
 
-                    self::assertIsString($singular);
-
                     $methods = [
                         [
                             'get' . ucfirst((string)$mapping['fieldName']),
