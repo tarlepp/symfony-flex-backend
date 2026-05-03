@@ -200,7 +200,11 @@ final class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
+     * @return Generator<array{
+     *     0: StringableArrayObject<mixed>,
+     *     1: StringableArrayObject<mixed>,
+     *     2: StringableArrayObject<mixed>,
+     * }>
      */
     public static function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {

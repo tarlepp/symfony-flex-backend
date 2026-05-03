@@ -57,7 +57,10 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @return Generator<int, array{0: null|string|StringableArrayObject<mixed>, 1: null|string|StringableArrayObject<mixed>}>
+     * @return Generator<int, array{
+     *     0: null|string|StringableArrayObject<mixed>,
+     *     1: null|string|StringableArrayObject<mixed>,
+     * }>
      */
     public static function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): Generator
     {
