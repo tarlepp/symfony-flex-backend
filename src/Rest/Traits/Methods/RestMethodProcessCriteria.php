@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 trait RestMethodProcessCriteria
 {
     /**
-     * @param array<int|string, string|array<mixed>> $criteria
+     * @param array<string, mixed> $criteria
      */
     public function processCriteria(array &$criteria, Request $request, string $method): void
     {
