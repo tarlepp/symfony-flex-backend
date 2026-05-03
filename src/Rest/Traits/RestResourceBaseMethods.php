@@ -14,8 +14,6 @@ use App\Exception\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
-use UnexpectedValueException;
-use function assert;
 
 /**
  * @package App\Rest\Traits
@@ -328,13 +326,7 @@ trait RestResourceBaseMethods
         /** @var class-string<EntityInterface> $entityClass */
         $entityClass = $this->getRepository()->getEntityName();
 
-        $entity = new $entityClass();
-
-        $exception = new UnexpectedValueException(
-            sprintf('Given `%s` class does not implement `EntityInterface`', $entityClass),
-        );
-
-        return assert($entity instanceof EntityInterface) ? $entity : throw $exception;
+        return new $entityClass();
     }
 
     /**
