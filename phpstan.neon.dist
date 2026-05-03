@@ -15,6 +15,11 @@ parameters:
             paths:
                 - tests/Unit/IntegrityTest.php
         -
+            identifier: phpunit.alwaysTrue
+            paths:
+                - tests/Integration/TestCase/EntityTestCase.php
+                - tests/Integration/TestCase/RestRequestMapperConfigurationTestCase.php
+        -
             messages:
                 - '#Access to constant on internal class Symfony\\Component\\Validator\\Context\\ExecutionContext\.#'
             paths:

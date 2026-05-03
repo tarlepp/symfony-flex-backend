@@ -46,7 +46,6 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
             ->getMock();
 
         /** @psalm-suppress UnsafeInstantiation */
-        // @phpstan-ignore phpunit.alwaysTrue
         self::assertInstanceOf(RestAutoMapperConfiguration::class, new $this->autoMapperConfiguration($requestMapper));
     }
 
@@ -78,7 +77,6 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
         /** @psalm-suppress UnsafeInstantiation */
         $mapper = new $this->autoMapperConfiguration($requestMapper);
 
-        // @phpstan-ignore phpunit.alwaysTrue
         self::assertInstanceOf(AutoMapperConfiguratorInterface::class, $mapper);
 
         $mapper->configure($config);

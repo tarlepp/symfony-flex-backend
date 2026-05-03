@@ -804,7 +804,6 @@ abstract class EntityTestCase extends KernelTestCase
     {
         $entity = new static::$entityName();
 
-        // @phpstan-ignore phpunit.alwaysTrue
         self::assertInstanceOf(EntityInterface::class, $entity);
 
         return $entity;
