@@ -580,7 +580,7 @@ abstract class EntityTestCase extends KernelTestCase
                 ? mb_substr((string)$mapping['fieldName'], 0, -1)
                 : $mapping['fieldName'];
 
-            self::assertIsString($singular); // @phpstan-ignore-line
+            self::assertIsString($singular);
 
             return [
                 [
@@ -684,7 +684,7 @@ abstract class EntityTestCase extends KernelTestCase
         $iterator = static function (AssociationMapping $mapping) use ($meta): array {
             $target = $mapping['targetEntity'];
 
-            self::assertIsString($target);
+            self::assertIsString($target); // @phpstan-ignore-line
             self::assertTrue(class_exists($target));
 
             $arguments = match ($target) {
@@ -721,7 +721,7 @@ abstract class EntityTestCase extends KernelTestCase
                         ? mb_substr((string)$mapping['fieldName'], 0, -1)
                         : $mapping['fieldName'];
 
-                    self::assertIsString($singular); // @phpstan-ignore-line
+                    self::assertIsString($singular);
 
                     $methods = [
                         [
