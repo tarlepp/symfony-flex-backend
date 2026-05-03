@@ -15,7 +15,8 @@ parameters:
             paths:
                 - tests/Unit/IntegrityTest.php
         -
-            identifier: phpunit.alwaysTrue
+            messages:
+                - '#Call to static method PHPUnit\\Framework\\Assert::assertInstanceOf\(\) .* will always evaluate to true\.#'
             paths:
                 - tests/Integration/TestCase/EntityTestCase.php
                 - tests/Integration/TestCase/RestRequestMapperConfigurationTestCase.php
