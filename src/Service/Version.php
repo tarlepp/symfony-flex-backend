@@ -51,9 +51,12 @@ class Version
         return $output;
     }
 
+    /**
+     * @return Closure(ItemInterface, bool): string
+     */
     private function getClosure(): Closure
     {
-        return function (ItemInterface $item): string {
+        return function (ItemInterface $item, bool $isHit): string {
             // One year
             $item->expiresAfter(31_536_000);
 

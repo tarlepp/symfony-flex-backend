@@ -325,7 +325,7 @@ trait RestResourceBaseMethods
 
     private function createEntity(): EntityInterface
     {
-        /** @var class-string $entityClass */
+        /** @var class-string<EntityInterface> $entityClass */
         $entityClass = $this->getRepository()->getEntityName();
 
         $entity = new $entityClass();

@@ -71,7 +71,7 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for formatted API key rows for console table.
      *
-     * @return array<int, string>
+     * @return list<array<int, string>>
      *
      * @throws Throwable
      */
@@ -88,6 +88,8 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for API key formatter closure. This closure will format
      * single ApiKey entity for console table.
+     *
+     * @return Closure(ApiKey): array<int, string>
      */
     private function getFormatterApiKey(): Closure
     {

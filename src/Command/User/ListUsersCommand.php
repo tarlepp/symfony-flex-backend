@@ -73,7 +73,7 @@ class ListUsersCommand extends Command
     /**
      * Getter method for formatted user rows for console table.
      *
-     * @return array<int, string>
+     * @return list<array<int, string>>
      *
      * @throws Throwable
      */
@@ -90,6 +90,8 @@ class ListUsersCommand extends Command
     /**
      * Getter method for user formatter closure. This closure will format
      * single User entity for console table.
+     *
+     * @return Closure(User): array<int, string>
      */
     private function getFormatterUser(): Closure
     {

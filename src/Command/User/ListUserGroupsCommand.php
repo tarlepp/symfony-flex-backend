@@ -69,7 +69,7 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for formatted user group rows for console table.
      *
-     * @return array<int, string>
+     * @return list<array<int, string>>
      *
      * @throws Throwable
      */
@@ -86,6 +86,8 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for user group formatter closure. This closure will
      * format single UserGroup entity for console table.
+     *
+     * @return Closure(UserGroup): array<int, string>
      */
     private function getFormatterUserGroup(): Closure
     {
