@@ -113,7 +113,12 @@ readonly class Localization
     }
 
     /**
-     * @return Closure(ItemInterface, bool): array<int, array{timezone: string, identifier: non-empty-string, offset: string, value: string}>
+     * @return Closure(ItemInterface, bool): array<int, array{
+     *     timezone: string,
+     *     identifier: non-empty-string,
+     *     offset: string,
+     *     value: string,
+     * }>
      */
     private function getClosure(): Closure
     {
