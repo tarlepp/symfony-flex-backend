@@ -540,7 +540,7 @@ abstract class EntityTestCase extends KernelTestCase
     {
         foreach (self::dataProviderTestThatSetterAndGettersWorks() as $data) {
             /** @psalm-suppress RedundantConditionGivenDocblockType */
-            self::assertIsArray($data);
+            self::assertIsArray($data); // @phpstan-ignore-line
             self::assertCount(4, $data);
 
             // Remove 'Read-only flag' from data
@@ -568,7 +568,7 @@ abstract class EntityTestCase extends KernelTestCase
             $class = $mapping['targetEntity'];
 
             /** @psalm-suppress RedundantConditionGivenDocblockType */
-            self::assertIsString($class);
+            self::assertIsString($class); // @phpstan-ignore-line
             self::assertTrue(class_exists($class));
 
             /** @psalm-suppress MixedMethodCall */
@@ -579,7 +579,7 @@ abstract class EntityTestCase extends KernelTestCase
                 ? mb_substr((string)$mapping['fieldName'], 0, -1)
                 : $mapping['fieldName'];
 
-            self::assertIsString($singular);
+            self::assertIsString($singular); // @phpstan-ignore-line
 
             return [
                 [
@@ -723,7 +723,7 @@ abstract class EntityTestCase extends KernelTestCase
                         ? mb_substr((string)$mapping['fieldName'], 0, -1)
                         : $mapping['fieldName'];
 
-                    self::assertIsString($singular);
+                    self::assertIsString($singular); // @phpstan-ignore-line
 
                     $methods = [
                         [
