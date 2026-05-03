@@ -1486,8 +1486,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     transactional?: bool|Param, // Whether or not to wrap migrations in a single transaction. // Default: true
  * }
  * @psalm-type NelmioApiDocConfig = array{
- *     type_info?: bool|Param, // Use the symfony/type-info component for determining types. // Default: false
- *     use_validation_groups?: bool|Param, // If true, `groups` passed to @Model annotations will be used to limit validation constraints // Default: false
+ *     type_info?: bool|Param, // Use the symfony/type-info component for determining types. // Default: true
+ *     use_validation_groups?: bool|Param, // If true, `groups` passed to #[Model] attributes will be used to limit validation constraints // Default: false
+ *     operation_id_generation?: \Nelmio\ApiDocBundle\Describer\OperationIdGeneration::ALWAYS_PREPEND|\Nelmio\ApiDocBundle\Describer\OperationIdGeneration::CONDITIONALLY_PREPEND|\Nelmio\ApiDocBundle\Describer\OperationIdGeneration::NO_PREPEND|"always_prepend"|"conditionally_prepend"|"no_prepend"|Param, // How to generate operation ids // Default: "always_prepend"
  *     cache?: array{
  *         pool?: scalar|Param|null, // define cache pool to use // Default: null
  *         item_id?: scalar|Param|null, // define cache item id // Default: null
@@ -1498,15 +1499,24 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         assets_mode?: scalar|Param|null, // Default: "cdn"
  *         swagger_ui_config?: array<mixed>,
  *         redocly_config?: array<mixed>,
+ *         scalar_config?: array<mixed>,
  *         stoplight_config?: array<mixed>,
  *     },
- *     areas?: array<string, array{ // Default: {"default":{"path_patterns":[],"host_patterns":[],"with_annotation":false,"with_attribute":false,"documentation":[],"name_patterns":[],"disable_default_routes":false,"cache":[]}}
+ *     areas?: array<string, array{ // Default: {"default":{"path_patterns":[],"host_patterns":[],"with_attribute":false,"documentation":[],"name_patterns":[],"disable_default_routes":false,"cache":[],"security":[]}}
  *         path_patterns?: list<scalar|Param|null>,
  *         host_patterns?: list<scalar|Param|null>,
  *         name_patterns?: list<scalar|Param|null>,
- *         with_annotation?: bool|Param, // Deprecated: The "with_annotation" option is deprecated. Use "with_attribute" instead. // whether to filter by annotation // Default: false
- *         with_attribute?: bool|Param, // whether to filter by attribute // Default: false
- *         disable_default_routes?: bool|Param, // if set disables default routes without annotations // Default: false
+ *         security?: array<string, array{ // Default: []
+ *             type?: scalar|Param|null,
+ *             scheme?: scalar|Param|null,
+ *             in?: scalar|Param|null,
+ *             name?: scalar|Param|null,
+ *             description?: scalar|Param|null,
+ *             openIdConnectUrl?: scalar|Param|null,
+ *             ...<string, mixed>
+ *         }>,
+ *         with_attribute?: bool|Param, // whether to filter by attributes // Default: false
+ *         disable_default_routes?: bool|Param, // if set disables default routes without attributes // Default: false
  *         documentation?: array<string, mixed>,
  *         cache?: array{
  *             pool?: scalar|Param|null, // define cache pool to use // Default: null
