@@ -136,7 +136,6 @@ final class ExceptionSubscriberTest extends KernelTestCase
         /** @var stdClass $json */
         $json = JSON::decode($content);
 
-        self::assertIsObject($json);
         self::assertTrue(property_exists($json, 'message'));
         self::assertSame($message, $json->message);
     }
@@ -177,7 +176,6 @@ final class ExceptionSubscriberTest extends KernelTestCase
         /** @var array<mixed> $result */
         $result = JSON::decode($content, true);
 
-        self::assertIsArray($result);
         self::assertSame($expectedKeys, array_keys($result));
     }
 

@@ -16,6 +16,7 @@ use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use stdClass;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -46,8 +47,6 @@ final class IndexControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 
@@ -96,8 +95,6 @@ final class IndexControllerTest extends WebTestCase
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        self::assertIsObject($responseContent);
-
         $info = "\nResponse:\n" . $response;
 
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
@@ -128,8 +125,6 @@ final class IndexControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 

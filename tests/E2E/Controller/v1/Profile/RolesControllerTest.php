@@ -51,7 +51,6 @@ final class RolesControllerTest extends WebTestCase
 
         $info = "\nResponse:\n" . $response;
 
-        self::assertIsObject($responseContent);
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
@@ -79,8 +78,6 @@ final class RolesControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 
@@ -130,8 +127,6 @@ final class RolesControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 

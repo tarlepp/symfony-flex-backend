@@ -85,8 +85,6 @@ final class GetTokenControllerTest extends WebTestCase
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        self::assertIsObject($responseContent);
-
         // Attributes that should be present...
         $attributes = [
             'token',
@@ -132,8 +130,6 @@ final class GetTokenControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse: \n" . $response;
 

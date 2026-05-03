@@ -139,7 +139,6 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
         /** @var stdClass $decoded */
         $decoded = JSON::decode($content);
 
-        self::assertIsObject($decoded);
         self::assertTrue(property_exists($decoded, 'message'));
         self::assertSame('Invalid API key', $decoded->message);
     }

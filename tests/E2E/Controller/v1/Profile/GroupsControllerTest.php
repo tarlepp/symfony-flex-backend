@@ -49,8 +49,6 @@ final class GroupsControllerTest extends WebTestCase
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        self::assertIsObject($responseContent);
-
         $info = "\nResponse:\n" . $response;
 
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
@@ -80,8 +78,6 @@ final class GroupsControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 
@@ -117,7 +113,6 @@ final class GroupsControllerTest extends WebTestCase
         /** @var list<stdClass> $responseContent */
         $responseContent = JSON::decode($content);
 
-        self::assertIsArray($responseContent);
         self::assertSame(
             $e->getArrayCopy(),
             array_map(
@@ -127,13 +122,10 @@ final class GroupsControllerTest extends WebTestCase
                     /** @var stdClass $role */
                     $role = $userGroup->role;
 
-                    self::assertIsObject($role);
                     self::assertTrue(property_exists($role, 'id'));
 
                     /** @var string $id */
                     $id = $role->id;
-
-                    self::assertIsString($id);
 
                     return $id;
                 },
@@ -160,8 +152,6 @@ final class GroupsControllerTest extends WebTestCase
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 

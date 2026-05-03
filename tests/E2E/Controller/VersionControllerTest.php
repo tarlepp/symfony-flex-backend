@@ -12,6 +12,7 @@ use App\Resource\LogRequestResource;
 use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\TestDox;
+use stdClass;
 use Throwable;
 use function file_get_contents;
 

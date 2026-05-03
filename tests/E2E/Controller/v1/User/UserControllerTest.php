@@ -142,7 +142,6 @@ final class UserControllerTest extends WebTestCase
         /** @var array<mixed> $json */
         $json = JSON::decode($content);
 
-        self::assertIsArray($json);
         self::assertCount(6, $json, "Response:\n" . $response);
     }
 
@@ -188,7 +187,6 @@ final class UserControllerTest extends WebTestCase
         /** @var array<mixed> $json */
         $json = JSON::decode($content);
 
-        self::assertIsArray($json);
         self::assertCount(6, $json, "Response:\n" . $response);
     }
 

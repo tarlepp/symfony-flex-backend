@@ -72,7 +72,6 @@ final class TimeZoneControllerTest extends WebTestCase
         /** @var array<mixed> $data */
         $data = JSON::decode((string)$response->getContent());
 
-        self::assertIsArray($data, $content);
         self::assertNotEmpty($data);
     }
 
