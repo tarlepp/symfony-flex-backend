@@ -49,6 +49,7 @@ final class ControllerCollectionTest extends KernelTestCase
         $iteratorAggregate = new class([]) implements IteratorAggregate {
             /**
              * @phpstan-var ArrayObject<int, mixed>
+             * @psalm-var ArrayObject<int, mixed>
              */
             private readonly ArrayObject $iterator;
 
@@ -59,11 +60,14 @@ final class ControllerCollectionTest extends KernelTestCase
              */
             public function __construct(array $input)
             {
-                $this->iterator = new ArrayObject($input);
+                /** @var ArrayObject<int, mixed> $ao */
+                $ao = new ArrayObject($input);
+                $this->iterator = $ao;
             }
 
             /**
              * @phpstan-return ArrayObject<int, mixed>
+             * @psalm-return ArrayObject<int, mixed>
              */
             #[Override]
             public function getIterator(): ArrayObject
@@ -72,6 +76,7 @@ final class ControllerCollectionTest extends KernelTestCase
             }
         };
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         new ControllerCollection($iteratorAggregate, $stubLogger)->get('FooBar');
     }
 
@@ -108,7 +113,7 @@ final class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string<Controller>}>
+     * @return Generator<int, array{0: class-string<Controller>}, mixed, void>
      */
     public static function dataProviderTestThatGetReturnsExpectedController(): Generator
     {
@@ -121,7 +126,7 @@ final class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<Controller>|string|null}>
+     * @return Generator<int, array{0: boolean, 1: class-string<Controller>|string|null}, mixed, void>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {

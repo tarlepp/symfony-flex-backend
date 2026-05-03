@@ -114,7 +114,7 @@ final class LogRequestTest extends EntityTestCase
             $getter,
             $property,
             $type,
-            $returnValue
+            is_string($returnValue) ? $returnValue : (string)$returnValue
         );
 
         try {
@@ -149,7 +149,9 @@ final class LogRequestTest extends EntityTestCase
         $request = Request::create('');
         $request->headers->replace($headers->getArrayCopy());
 
-        $logRequest = new LogRequest($properties->getArrayCopy(), $request, new Response());
+        /** @var array<int, string> $propertiesArray */
+        $propertiesArray = $properties->getArrayCopy();
+        $logRequest = new LogRequest($propertiesArray, $request, new Response());
 
         self::assertSame($expected->getArrayCopy(), $logRequest->getHeaders());
     }
@@ -172,9 +174,13 @@ final class LogRequestTest extends EntityTestCase
         StringableArrayObject $expected,
     ): void {
         $request = Request::create('', 'POST');
-        $request->request->replace($parameters->getArrayCopy());
+        /** @var array<string, mixed> $parametersArray */
+        $parametersArray = $parameters->getArrayCopy();
+        $request->request->replace($parametersArray);
 
-        $logRequest = new LogRequest($properties->getArrayCopy(), $request, new Response());
+        /** @var array<int, string> $propertiesArray */
+        $propertiesArray = $properties->getArrayCopy();
+        $logRequest = new LogRequest($propertiesArray, $request, new Response());
 
         self::assertSame($expected->getArrayCopy(), $logRequest->getParameters());
     }
@@ -200,7 +206,7 @@ final class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject, 2: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{
      *      0: StringableArrayObject<mixed>,
      *      1: StringableArrayObject<mixed>,
@@ -272,7 +278,7 @@ final class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator

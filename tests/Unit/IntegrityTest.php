@@ -365,7 +365,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatControllerHasE2ETests(): array
     {
@@ -377,7 +377,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
@@ -390,7 +390,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
@@ -440,7 +440,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
@@ -453,7 +453,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
@@ -466,7 +466,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
@@ -478,7 +478,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
@@ -490,7 +490,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
@@ -502,7 +502,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
@@ -517,7 +517,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
@@ -530,7 +530,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
@@ -543,7 +543,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
@@ -555,7 +555,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
@@ -568,7 +568,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
@@ -581,7 +581,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
@@ -594,7 +594,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatConstraintHasUnitTest(): array
     {
@@ -607,7 +607,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
@@ -620,7 +620,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
@@ -633,7 +633,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
@@ -647,7 +647,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
@@ -662,7 +662,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
@@ -674,7 +674,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string}>
+     * @return array<int, array<array-key, mixed>>
      */
     public static function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
     {
@@ -687,7 +687,9 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<mixed>>
+     * @psalm-param (Closure(ReflectionClass): bool)|null $filter
+     * @psalm-param (Closure(ReflectionClass): array<array-key, mixed>)|null $formatter
+     * @return array<int, array<array-key, mixed>>
      */
     private static function getTestCases(
         string $folder,
@@ -702,7 +704,8 @@ FORMAT;
         $formatter ??= self::getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = self::getReflectionClass($folder, $namespace);
 
-        return array_map(
+        /** @var array<int, array<array-key, mixed>> $result */
+        $result = array_map(
             $formatter,
             array_filter(
                 array_map(
@@ -712,6 +715,8 @@ FORMAT;
                 $filter
             )
         );
+
+        return $result;
     }
 
     private static function getReflectionClass(string $folder, string $namespace): Closure

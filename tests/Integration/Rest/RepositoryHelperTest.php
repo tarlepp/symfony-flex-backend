@@ -168,13 +168,15 @@ DQL;
         self::assertCount($params->count(), $queryBuilder->getParameters());
 
         foreach ($queryBuilder->getParameters()->toArray() as $key => $parameter) {
-            self::assertSame($params[$key]['name'], $parameter->getName());
-            self::assertSame($params[$key]['value'], $parameter->getValue());
+            /** @var array{name: string, value: mixed} $param */
+            $param = $params[$key];
+            self::assertSame($param['name'], $parameter->getName());
+            self::assertSame($param['value'], $parameter->getValue());
         }
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
@@ -248,7 +250,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
@@ -298,7 +300,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
@@ -354,7 +356,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria(): Generator

@@ -154,11 +154,13 @@ final class UserTypeTest extends TypeTestCase
     }
 
     /**
+     * @psalm-return MockObject&UserGroupResource
      * @phpstan-return MockObject&UserGroupResource
      */
     private function getUserGroupResource(): MockObject
     {
-        static $cache;
+        /** @psalm-var MockObject&UserGroupResource|null $cache */
+        static $cache = null;
 
         if ($cache === null) {
             $cache = $this->createMock(UserGroupResource::class);
@@ -168,11 +170,13 @@ final class UserTypeTest extends TypeTestCase
     }
 
     /**
+     * @psalm-return MockObject&Localization
      * @phpstan-return MockObject&Localization
      */
     private function getLocalization(): MockObject
     {
-        static $cache;
+        /** @psalm-var MockObject&Localization|null $cache */
+        static $cache = null;
 
         if ($cache === null) {
             $cache = $this->createMock(Localization::class);

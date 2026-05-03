@@ -144,7 +144,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<\Symfony\Component\Security\Core\User\UserInterface>}>
+     * @return Generator<int, array{0: boolean, 1: class-string<\Symfony\Component\Security\Core\User\UserInterface>}, mixed, void>
      */
     public static function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {

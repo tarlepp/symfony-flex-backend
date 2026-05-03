@@ -59,7 +59,7 @@ final class ApiKeyTest extends EntityTestCase
     /**
      * @throws Throwable
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject}, mixed, void>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatApiKeyHasExpectedRoles(): Generator

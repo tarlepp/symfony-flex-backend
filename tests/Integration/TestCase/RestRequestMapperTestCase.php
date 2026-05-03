@@ -59,14 +59,16 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
         self::assertTrue(class_exists($expectedDto));
 
         /** @var class-string $expectedDto */
+        /** @psalm-suppress MixedMethodCall */
+        $mappedObject = $this->getRequestMapper()->mapToObject(new Request(), new $expectedDto());
         self::assertInstanceOf(
             $expectedDto,
-            $this->getRequestMapper()->mapToObject(new Request(), new $expectedDto()),
+            $mappedObject,
         );
     }
 
     /**
-     * @return Generator<int, array{0: class-string}>
+     * @return Generator<int, array{0: class-string}, mixed, void>
      */
     public static function dataProviderTestThatMapMethodWorksAsExpected(): Generator
     {
@@ -76,7 +78,7 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: class-string}>
+     * @return Generator<int, array{0: class-string}, mixed, void>
      */
     public static function dataProviderTestThatMapToObjectReturnsExpectedDtoObject(): Generator
     {

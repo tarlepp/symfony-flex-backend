@@ -72,9 +72,11 @@ final class ApiKeyTypeTest extends TypeTestCase
         self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        self::assertSame($dto->getId(), $form->getData()->getId());
-        self::assertSame($dto->getDescription(), $form->getData()->getDescription());
-        self::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
+        /** @var ApiKeyDto $formData */
+        $formData = $form->getData();
+        self::assertSame($dto->getId(), $formData->getId());
+        self::assertSame($dto->getDescription(), $formData->getDescription());
+        self::assertSame($dto->getUserGroups(), $formData->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
@@ -105,11 +107,13 @@ final class ApiKeyTypeTest extends TypeTestCase
     }
 
     /**
+     * @psalm-return MockObject&UserGroupResource
      * @phpstan-return MockObject&UserGroupResource
      */
     private function getUserGroupResource(): MockObject
     {
-        static $cache;
+        /** @psalm-var MockObject&UserGroupResource|null $cache */
+        static $cache = null;
 
         if ($cache === null) {
             $cache = $this->createMock(UserGroupResource::class);

@@ -108,7 +108,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}, mixed, void>
      */
     public static function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
@@ -132,7 +132,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: int}>
+     * @return Generator<int, array{0: int}, mixed, void>
      */
     public static function dataProviderTestThatAttachUserGroupWorksAsExpected(): Generator
     {

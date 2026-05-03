@@ -230,7 +230,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}, mixed, void>
      */
     public static function dataProviderEnvironment(): Generator
     {
@@ -242,7 +242,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: int, 1: Throwable, 2: string, 3: string}>
+     * @return Generator<int, array{0: int, 1: Throwable, 2: string, 3: string}, mixed, void>
      *
      * @throws JsonException
      */
@@ -385,7 +385,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: array<int, string>, 1: string}>
+     * @return Generator<int, array{0: array<int, string>, 1: string}, mixed, void>
      */
     public static function dataProviderTestThatResponseHasExpectedKeys(): Generator
     {
@@ -406,7 +406,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: int, 1: Throwable, 2: boolean, 3: string}>
+     * @return Generator<int, array{0: int, 1: Throwable, 2: boolean, 3: string}, mixed, void>
      *
      * @throws JsonException
      */
@@ -471,7 +471,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: Throwable, 2: string}>
+     * @return Generator<int, array{0: string, 1: Throwable, 2: string}, mixed, void>
      *
      * @throws JsonException
      */

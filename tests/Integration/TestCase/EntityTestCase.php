@@ -501,7 +501,9 @@ abstract class EntityTestCase extends KernelTestCase
                 continue;
             }
 
+            /** @var string $field */
             $field = $mapping['fieldName'];
+            /** @var class-string $type */
             $type = $mapping['targetEntity'];
 
             $assocFields[] = [$field, $type, (array)$mapping, $meta->isReadOnly];
@@ -550,6 +552,7 @@ abstract class EntityTestCase extends KernelTestCase
 
             self::assertTrue(class_exists($class));
 
+            /** @psalm-suppress MixedMethodCall */
             $targetEntity = new $class();
 
             /** @var string $fieldName */
@@ -613,6 +616,7 @@ abstract class EntityTestCase extends KernelTestCase
 
             /** @var class-string $targetClass */
             $targetClass = $mapping['targetEntity'];
+            /** @psalm-suppress MixedMethodCall */
             $targetEntity = new $targetClass(...$params);
 
             return [
@@ -672,6 +676,7 @@ abstract class EntityTestCase extends KernelTestCase
                 default => [],
             };
 
+            /** @psalm-suppress MixedMethodCall */
             $input = new $target(...$arguments);
 
             $methods = [
@@ -693,9 +698,11 @@ abstract class EntityTestCase extends KernelTestCase
                     }
                     break;
                 case ClassMetadata::MANY_TO_MANY:
-                    $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                        ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                        : $mapping['fieldName'];
+                    /** @var string $assocFieldName */
+                    $assocFieldName = $mapping['fieldName'];
+                    $singular = $assocFieldName[mb_strlen($assocFieldName) - 1] === 's'
+                        ? mb_substr($assocFieldName, 0, -1)
+                        : $assocFieldName;
 
                     self::assertIsString($singular);
 

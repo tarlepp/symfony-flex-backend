@@ -118,7 +118,7 @@ final class UserTest extends EntityTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string, 2: string}>
+     * @return Generator<int, array{0: string, 1: string, 2: string}, mixed, void>
      */
     public static function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): Generator
     {

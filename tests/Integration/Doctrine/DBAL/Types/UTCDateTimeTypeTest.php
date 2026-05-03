@@ -123,7 +123,7 @@ final class UTCDateTimeTypeTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @return Generator<array{0: string, 1: string|DateTime}>
+     * @return Generator<int, array{0: string, 1: string|DateTime}, mixed, void>
      */
     public static function dataProviderTestDateTimeConvertsToPHPValue(): Generator
     {

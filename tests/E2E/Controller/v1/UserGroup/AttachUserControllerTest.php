@@ -113,7 +113,7 @@ final class AttachUserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}, mixed, void>
      */
     public static function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
@@ -137,7 +137,7 @@ final class AttachUserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: int}>
+     * @return Generator<int, array{0: int}, mixed, void>
      */
     public static function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
     {

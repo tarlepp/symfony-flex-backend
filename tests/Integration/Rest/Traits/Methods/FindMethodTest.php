@@ -162,7 +162,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}, mixed, void>
      */
     public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
@@ -176,7 +176,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Throwable, 1: int}>
+     * @return Generator<int, array{0: Throwable, 1: int}, mixed, void>
      */
     public static function dataProviderTestThatTraitHandlesException(): Generator
     {
@@ -194,14 +194,14 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{
+     * @psalm-return Generator<int, array{
      *      0: string,
      *      1: StringableArrayObject,
      *      2: StringableArrayObject,
      *      3: int|null,
      *      4: int|null,
      *      5: StringableArrayObject,
-     *  }>
+     *  }, mixed, void>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatTraitCallsServiceMethods(): Generator

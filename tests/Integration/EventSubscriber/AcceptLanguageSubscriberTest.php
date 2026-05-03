@@ -65,7 +65,7 @@ final class AcceptLanguageSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string, 2: string}>
+     * @return Generator<int, array{0: string, 1: string, 2: string}, mixed, void>
      */
     public static function dataProviderTestThatLocaleIsSetAsExpected(): Generator
     {

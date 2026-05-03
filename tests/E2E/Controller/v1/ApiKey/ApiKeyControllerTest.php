@@ -57,7 +57,7 @@ final class ApiKeyControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string, 2: int}>
+     * @return Generator<int, array{0: string, 1: string, 2: int}, mixed, void>
      */
     public static function dataProviderTestThatFindActionWorksAsExpected(): Generator
     {

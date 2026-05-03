@@ -165,7 +165,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string<RestResource>}>
+     * @return Generator<int, array{0: class-string<RestResource>}, mixed, void>
      */
     public static function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
@@ -181,10 +181,10 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{
+     * @return Generator<int, array{
      *      0: class-string<RestResource>,
      *      1: class-string<EntityInterface>
-     *  }>
+     *  }, mixed, void>
      */
     public static function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
     {
@@ -200,7 +200,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<RestResource>|string|null}>
+     * @return Generator<int, array{0: boolean, 1: class-string<RestResource>|string|null}, mixed, void>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {
@@ -219,7 +219,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<EntityInterface>|string|null}>
+     * @return Generator<int, array{0: boolean, 1: class-string<EntityInterface>|string|null}, mixed, void>
      */
     public static function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {
@@ -246,6 +246,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
+     * @psalm-return IteratorAggregate<int, mixed>
      * @return IteratorAggregate<mixed>
      */
     private function getEmptyIteratorAggregate(): IteratorAggregate
@@ -277,6 +278,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
+     * @psalm-return IteratorAggregate<int, mixed>
      * @return IteratorAggregate<mixed>
      */
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate

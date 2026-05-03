@@ -94,7 +94,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string}>
+     * @return Generator<int, array{0: class-string}, mixed, void>
      */
     public static function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
@@ -104,7 +104,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<array{0: Language, 1: class-string, 2: string}>
+     * @return Generator<int, array{0: Language, 1: class-string, 2: string}, mixed, void>
      */
     public static function dataProviderTestThatTransformLanguageWorksAsExpected(): Generator
     {

@@ -75,7 +75,7 @@ final class UserCreateInvalidUserTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}, mixed, void>
      */
     public static function dataProviderTestThatCreateActionReturns403ForInvalidUser(): Generator
     {
