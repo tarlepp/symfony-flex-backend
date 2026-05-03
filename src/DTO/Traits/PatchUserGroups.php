@@ -26,7 +26,7 @@ trait PatchUserGroups
     protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): self
     {
         array_map(
-            static fn (UserGroupEntity $userGroup): UserGroupAwareInterface => $entity->addUserGroup($userGroup),
+            static fn (UserGroupEntity $userGroup): mixed => $entity->addUserGroup($userGroup),
             $value,
         );
 

@@ -187,7 +187,7 @@ class User extends RestDto
     }
 
     /**
-     * @return array<int, UserGroupEntity>
+     * @return array<array-key, UserGroupEntity>
      */
     public function getUserGroups(): array
     {
@@ -269,7 +269,7 @@ class User extends RestDto
         $entity->clearUserGroups();
 
         array_map(
-            static fn (UserGroupEntity $userGroup): UserGroupAwareInterface => $entity->addUserGroup($userGroup),
+            static fn (UserGroupEntity $userGroup): mixed => $entity->addUserGroup($userGroup),
             $value,
         );
 
