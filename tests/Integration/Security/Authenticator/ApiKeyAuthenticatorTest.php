@@ -166,8 +166,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: null|StringableArrayObject, 1: Request}>
-     * @phpstan-return Generator<array{0: null|StringableArrayObject<mixed>, 1: Request}>
+     * @return Generator<array{0: null|StringableArrayObject<mixed>, 1: Request}>
      */
     public static function dataProviderTestThatGetCredentialsReturnsExpected(): Generator
     {
@@ -205,8 +204,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string|int|stdClass|StringableArrayObject|null}>
-     * @phpstan-return Generator<array{0: string|int|stdClass|StringableArrayObject<mixed>|null}>
+     * @return Generator<array{0: string|int|stdClass|StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatGetUserReturnsExpected(): Generator
     {
@@ -229,8 +227,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string|int|stdClass|StringableArrayObject|null}>
-     * @phpstan-return Generator<array{0: string|int|stdClass|StringableArrayObject<mixed>|null}>
+     * @return Generator<array{0: string|int|stdClass|StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatCheckCredentialsThrowsAnException(): Generator
     {

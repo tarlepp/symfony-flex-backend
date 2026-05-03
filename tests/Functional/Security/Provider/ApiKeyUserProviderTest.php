@@ -126,8 +126,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @psalm-return array<int, array{0: string, 1: StringableArrayObject}>
-     * @phpstan-return array<int, array{0: string, 1: StringableArrayObject<array<int, string>>}>
+     * @return array<int, array{0: string, 1: StringableArrayObject<string>}>
      */
     public static function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {

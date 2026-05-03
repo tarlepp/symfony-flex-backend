@@ -132,8 +132,7 @@ final class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject<int, string>}>
+     * @return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject<string>}>
      */
     public static function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): Generator
     {
@@ -225,8 +224,7 @@ final class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
-     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<int, string>}>
+     * @return Generator<array{0: string, 1: StringableArrayObject<string>}>
      */
     public static function dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser(): Generator
     {

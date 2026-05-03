@@ -184,8 +184,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<int, array{0: int|string|array, 1: string}>
-     * @phpstan-return Generator<int, array{0: int|string|array<mixed>, 1: string}>
+     * @return Generator<int, array{0: int|string|array<mixed>, 1: string}>
      */
     public static function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
     {

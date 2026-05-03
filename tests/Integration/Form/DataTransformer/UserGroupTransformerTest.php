@@ -112,8 +112,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: ?StringableArrayObject}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: ?StringableArrayObject<mixed>}>
+     * @return Generator<array{0: StringableArrayObject<mixed>, 1: ?StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatTransformReturnsExpected(): Generator
     {

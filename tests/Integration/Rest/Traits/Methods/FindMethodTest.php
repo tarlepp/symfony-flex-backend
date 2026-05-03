@@ -194,15 +194,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<int, array{
-     *      0: string,
-     *      1: StringableArrayObject,
-     *      2: StringableArrayObject,
-     *      3: int|null,
-     *      4: int|null,
-     *      5: StringableArrayObject,
-     *  }>
-     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>, 3: int|null, 4: int|null, 5: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {

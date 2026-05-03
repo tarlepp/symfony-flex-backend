@@ -18,8 +18,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 final class UserGroupPatchTest extends DtoTestCase
 {
     /**
-     * @psalm-var class-string
-     * @phpstan-var class-string<UserGroupPatch>
+     * @var class-string<UserGroupPatch>
      */
     protected static string $dtoClass = UserGroupPatch::class;
 }

@@ -57,11 +57,7 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @psalm-return Generator<int, array{0: null|string|StringableArrayObject, 1: null|string|StringableArrayObject}>
-     * @phpstan-return Generator<array{
-     *      0: null|string|StringableArrayObject<mixed>,
-     *      1: null|string|StringableArrayObject<mixed>,
-     *  }>
+     * @return Generator<int, array{0: null|string|StringableArrayObject<mixed>, 1: null|string|StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): Generator
     {
@@ -93,8 +89,7 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject|null}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
+     * @return Generator<int, array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {

@@ -18,8 +18,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 final class ApiKeyCreateTest extends DtoTestCase
 {
     /**
-     * @psalm-var class-string
-     * @phpstan-var class-string<ApiKeyCreate>
+     * @var class-string<ApiKeyCreate>
      */
     protected static string $dtoClass = ApiKeyCreate::class;
 }

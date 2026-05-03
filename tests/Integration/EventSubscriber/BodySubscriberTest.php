@@ -143,8 +143,7 @@ final class BodySubscriberTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2:  string}>
+     * @return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2:  string}>
      */
     public static function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {

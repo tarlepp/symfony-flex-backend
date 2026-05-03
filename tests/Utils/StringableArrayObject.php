@@ -15,7 +15,9 @@ use Override;
 use Stringable;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @template TValue
+ *
+ * @extends ArrayObject<array-key, TValue>
  *
  * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
