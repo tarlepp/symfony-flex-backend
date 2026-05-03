@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\AutoMapper\User;
 
+use App\AutoMapper\RestAutoMapperConfiguration;
 use App\AutoMapper\User\AutoMapperConfiguration;
 use App\AutoMapper\User\RequestMapper;
 use App\DTO\User\UserCreate;
@@ -22,7 +23,8 @@ use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 final class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
 {
     /**
-     * @var class-string
+     * @psalm-var class-string<RestAutoMapperConfiguration>
+     * @phpstan-var class-string<RestAutoMapperConfiguration>
      */
     protected string $autoMapperConfiguration = AutoMapperConfiguration::class;
 

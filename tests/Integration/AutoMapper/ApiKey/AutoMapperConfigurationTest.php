@@ -10,6 +10,7 @@ namespace App\Tests\Integration\AutoMapper\ApiKey;
 
 use App\AutoMapper\ApiKey\AutoMapperConfiguration;
 use App\AutoMapper\ApiKey\RequestMapper;
+use App\AutoMapper\RestAutoMapperConfiguration;
 use App\DTO\ApiKey\ApiKeyCreate;
 use App\DTO\ApiKey\ApiKeyPatch;
 use App\DTO\ApiKey\ApiKeyUpdate;
@@ -22,7 +23,8 @@ use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 final class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
 {
     /**
-     * @var class-string
+     * @psalm-var class-string<RestAutoMapperConfiguration>
+     * @phpstan-var class-string<RestAutoMapperConfiguration>
      */
     protected string $autoMapperConfiguration = AutoMapperConfiguration::class;
 
