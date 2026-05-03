@@ -12,6 +12,7 @@ use App\Entity\LogRequest as Entity;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -22,7 +23,7 @@ use Exception;
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)
  * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)

@@ -11,7 +11,7 @@ namespace App\Doctrine\DBAL\Types;
 use App\Enum\Interfaces\DatabaseEnumInterface;
 use BackedEnum;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
 use Override;
@@ -53,9 +53,6 @@ abstract class EnumType extends Type
         return 'ENUM(' . $enumDefinition . ')';
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
@@ -76,9 +73,6 @@ abstract class EnumType extends Type
         return (string)parent::convertToDatabaseValue($value->value, $platform);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): DatabaseEnumInterface
     {
@@ -89,21 +83,10 @@ abstract class EnumType extends Type
             return $enum;
         }
 
-        throw ConversionException::conversionFailedFormat(
+        throw InvalidFormat::new(
             gettype($value),
             static::$name,
             'One of: "' . implode('", "', static::getValues()) . '"',
         );
-    }
-
-    /**
-     * Parent method is deprecated, so remove this after it has been removed.
-     *
-     * @codeCoverageIgnore
-     */
-    #[Override]
-    public function getName(): string
-    {
-        return '';
     }
 }

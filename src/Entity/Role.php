@@ -70,6 +70,7 @@ class Role implements EntityInterface
         #[ORM\Column(
             name: 'role',
             type: Types::STRING,
+            length: 255,
             unique: true,
             nullable: false,
         )]

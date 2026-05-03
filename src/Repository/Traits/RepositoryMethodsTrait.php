@@ -26,11 +26,9 @@ use function assert;
  */
 trait RepositoryMethodsTrait
 {
-    /**
-     * @psalm-param LockMode::*|null $lockMode
-     */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
+    public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
+        /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
         return $output instanceof EntityInterface ? $output : null;
@@ -38,6 +36,8 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     *
+     * @psalm-return array<int|string, mixed>|EntityInterface|null
      */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
@@ -68,8 +68,6 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-return list<object|EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
@@ -81,8 +79,6 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array<int, EntityInterface>
      */
     public function findByAdvanced(
@@ -113,8 +109,6 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-return list<object|EntityInterface>
      */
     public function findAll(): array
@@ -126,8 +120,6 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array<int, string>
      */
     public function findIds(?array $criteria = null, ?array $search = null): array

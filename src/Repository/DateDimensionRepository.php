@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\DateDimension as Entity;
+use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)
  * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
