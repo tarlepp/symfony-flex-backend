@@ -199,6 +199,7 @@ class UserType extends AbstractType
         $choices = [];
 
         $iterator = static function (array $timezone) use (&$choices): void {
+            /** @var array{timezone: string, identifier: non-empty-string, offset: string, value: string} $timezone */
             $choices[$timezone['value'] . ' (' . $timezone['offset'] . ')'] = $timezone['identifier'];
         };
 

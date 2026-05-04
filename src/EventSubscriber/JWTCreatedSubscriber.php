@@ -61,6 +61,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         // Get current original payload
         $payload = $event->getData();
 
+        /** @var array<string, string> $payload */
         // Set localization data
         $this->setLocalizationData($payload, $event->getUser());
 

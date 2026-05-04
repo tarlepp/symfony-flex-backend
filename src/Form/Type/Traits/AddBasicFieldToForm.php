@@ -18,7 +18,7 @@ use function call_user_func_array;
 trait AddBasicFieldToForm
 {
     /**
-     * @param array<int, array<int, mixed>> $fields
+     * @param array<int, array{0: string, 1?: class-string, 2?: array<string, mixed>}> $fields
      */
     protected function addBasicFieldToForm(FormBuilderInterface $builder, array $fields): void
     {
