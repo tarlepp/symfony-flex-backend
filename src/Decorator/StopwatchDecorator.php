@@ -215,7 +215,7 @@ readonly class StopwatchDecorator
         // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
         return <<<CODE
 
-class $proxyClassName extends $originalClassName {
+class {$proxyClassName} extends {$originalClassName} {
     private object \$wrappedInstance;
     private array \$prefixInterceptors;
     private array \$suffixInterceptors;
@@ -225,7 +225,7 @@ class $proxyClassName extends $originalClassName {
         \$this->prefixInterceptors = \$prefixInterceptors;
         \$this->suffixInterceptors = \$suffixInterceptors;
     }
-$methodsCode
+{$methodsCode}
 }
 CODE;
         // phpcs:enable PSR1.Classes.ClassDeclaration.MultipleClasses
@@ -254,11 +254,11 @@ CODE;
 
         return <<<CODE
 
-    public function $methodName($paramsList)$returnType {
-        if (isset(\$this->prefixInterceptors['$methodName'])) {
-            (\$this->prefixInterceptors['$methodName'])();
+    public function {$methodName}({$paramsList}){$returnType} {
+        if (isset(\$this->prefixInterceptors['{$methodName}'])) {
+            (\$this->prefixInterceptors['{$methodName}'])();
         }
-$methodBody    }
+{$methodBody}    }
 
 CODE;
     }
@@ -273,11 +273,11 @@ CODE;
     private function generateVoidMethodBody(string $methodName, string $argsList): string
     {
         return <<<CODE
-        \$this->wrappedInstance->$methodName($argsList);
+        \$this->wrappedInstance->{$methodName}({$argsList});
 
-        if (isset(\$this->suffixInterceptors['$methodName'])) {
+        if (isset(\$this->suffixInterceptors['{$methodName}'])) {
             \$returnValue = null;
-            (\$this->suffixInterceptors['$methodName'])(
+            (\$this->suffixInterceptors['{$methodName}'])(
                 null, \$this->wrappedInstance, null, func_get_args(), \$returnValue
             );
         }
@@ -288,10 +288,10 @@ CODE;
     private function generateNonVoidMethodBody(string $methodName, string $argsList): string
     {
         return <<<CODE
-        \$returnValue = \$this->wrappedInstance->$methodName($argsList);
+        \$returnValue = \$this->wrappedInstance->{$methodName}({$argsList});
 
-        if (isset(\$this->suffixInterceptors['$methodName'])) {
-            (\$this->suffixInterceptors['$methodName'])(
+        if (isset(\$this->suffixInterceptors['{$methodName}'])) {
+            (\$this->suffixInterceptors['{$methodName}'])(
                 null, \$this->wrappedInstance, null, func_get_args(), \$returnValue
             );
         }
