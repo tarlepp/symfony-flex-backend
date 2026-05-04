@@ -189,7 +189,7 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param array<mixed> $context
+     * @param array<string, mixed> $context
      */
     private function getResponse(mixed $data, int $httpStatus, string $format, array $context): Response
     {

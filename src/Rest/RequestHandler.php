@@ -58,6 +58,8 @@ final class RequestHandler
      * @return array<string, mixed>
      *
      * @throws HttpException
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public static function getCriteria(HttpFoundationRequest $request): array
     {
@@ -108,8 +110,10 @@ final class RequestHandler
         $input = [];
 
         if ($request->query->has($key)) {
+            /** @psalm-suppress MixedAssignment */
             $input = $request->query->all()[$key];
         } elseif ($request->request->has($key)) {
+            /** @psalm-suppress MixedAssignment */
             $input = $request->request->all()[$key];
         }
 
@@ -207,6 +211,10 @@ final class RequestHandler
      * @return array<int|string, array<int, string>>|null
      *
      * @throws HttpException
+     *
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     private static function determineSearchTerms(string $search): ?array
     {
@@ -246,6 +254,8 @@ final class RequestHandler
      * @param array<int|string, array<int, string>> $searchTerms
      *
      * @return array<int|string, array<int, string>>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {

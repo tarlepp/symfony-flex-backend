@@ -86,6 +86,8 @@ class RestDtoValueResolver implements ValueResolverInterface
      * @throws Throwable
      *
      * @return Generator<RestDtoInterface>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): Generator

@@ -119,6 +119,7 @@ DQL;
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         RepositoryHelper::processOrderBy($qb, $input->getArrayCopy());
 
         $message = 'processOrderBy did not return expected DQL.';

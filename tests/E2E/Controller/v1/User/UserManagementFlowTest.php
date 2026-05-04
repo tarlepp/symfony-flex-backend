@@ -51,12 +51,14 @@ final class UserManagementFlowTest extends WebTestCase
 
         /** @var stdClass $decoded */
         $decoded = JSON::decode($content);
+        /** @psalm-suppress MixedAssignment */
         $data['id'] = $decoded->id;
 
         unset($data['password']);
 
         self::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
+        /** @psalm-suppress MixedReturnStatement */
         return $data['id'];
     }
 

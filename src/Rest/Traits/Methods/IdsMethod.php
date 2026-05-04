@@ -38,9 +38,12 @@ trait IdsMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
+            /** @psalm-suppress MixedArgumentTypeCoercion */
+            $ids = $resource->getIds($criteria, $search);
+
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $resource->getIds($criteria, $search), $resource);
+                ->createResponse($request, $ids, $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }

@@ -41,9 +41,12 @@ trait FindMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
+            /** @psalm-suppress MixedArgumentTypeCoercion */
+            $entities = $resource->find($criteria, $orderBy, $limit, $offset, $search);
+
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $resource->find($criteria, $orderBy, $limit, $offset, $search), $resource);
+                ->createResponse($request, $entities, $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }

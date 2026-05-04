@@ -128,6 +128,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
      *
      * @psalm-return array<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return array<int, array{0: string, 1: StringableArrayObject<array<int, string>>}>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public static function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {

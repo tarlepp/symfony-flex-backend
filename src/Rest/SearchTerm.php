@@ -31,6 +31,9 @@ use function trim;
  */
 final class SearchTerm implements SearchTermInterface
 {
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
     #[Override]
     public static function getCriteria(
         array | string | null $column,

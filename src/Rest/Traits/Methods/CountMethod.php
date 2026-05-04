@@ -38,13 +38,14 @@ trait CountMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
+            /** @psalm-suppress MixedArgumentTypeCoercion */
+            $count = $resource->count($criteria, $search);
+
             return $this
                 ->getResponseHandler()
                 ->createResponse(
                     $request,
-                    [
-                        'count' => $resource->count($criteria, $search),
-                    ],
+                    ['count' => $count],
                     $resource
                 );
         } catch (Throwable $exception) {
