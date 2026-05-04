@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\TestCase;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
-use AutoMapperPlus\AutoMapperPlusBundle\AutoMapperConfiguratorInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
 use AutoMapperPlus\Configuration\MappingInterface;
 use PHPUnit\Framework\Attributes\TestDox;
