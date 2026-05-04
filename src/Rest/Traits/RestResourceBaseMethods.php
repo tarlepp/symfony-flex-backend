@@ -86,6 +86,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
