@@ -39,14 +39,14 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
     #[TestDox('Test that `AutoMapperConfiguration` instance is created')]
     public function testThatInstanceCanBeCreated(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $requestMapper = $this->getMockBuilder($this->requestMapper)
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @psalm-suppress UnsafeInstantiation */
-        $instance = new $this->autoMapperConfiguration($requestMapper);
-
-        self::assertIsObject($instance);
+        new $this->autoMapperConfiguration($requestMapper);
     }
 
     #[TestDox('Test that `AutoMapperConfiguration` instance is configured as expected')]
