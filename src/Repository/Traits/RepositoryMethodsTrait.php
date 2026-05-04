@@ -63,11 +63,13 @@ trait RepositoryMethodsTrait
     /**
      * @psalm-return EntityInterface|null
      * @psalm-suppress MoreSpecificReturnType
+     * @phpstan-return EntityInterface|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
+        /** @phpstan-ignore return.type */
         return $repository->findOneBy($criteria, $orderBy);
     }
 
