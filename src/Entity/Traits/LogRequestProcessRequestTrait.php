@@ -316,6 +316,7 @@ trait LogRequestProcessRequestTrait
             },
         );
 
+        /** @var array<string, array<int, string|null>>|array<int, string|null> $rawHeaders */
         $this->headers = $rawHeaders;
 
         $rawParameters = $this->determineParameters($request);
@@ -326,6 +327,7 @@ trait LogRequestProcessRequestTrait
             fn (mixed &$value, string $key) => $this->cleanParameters($value, $key),
         );
 
+        /** @var array<string, string> $rawParameters */
         $this->parameters = $rawParameters;
     }
 

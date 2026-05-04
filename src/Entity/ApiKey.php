@@ -223,9 +223,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                 array_unique(
                     [
                         RoleEnum::API->value,
-                        ...$this->userGroups
-                            ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
-                            ->toArray(),
+                        ...array_map(
+                            static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId(),
+                            $this->userGroups->toArray(),
+                        ),
                     ],
                 ),
             ),
