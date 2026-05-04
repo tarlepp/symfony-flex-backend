@@ -309,7 +309,7 @@ class RepositoryHelper
     /**
      * @param array<int|string, string|array<mixed>> $comparison
      *
-     * @return array{0: stdClass, 1: list<mixed>}
+     * @return array{0: stdClass, 1: array<int, mixed>}
      *
      * @throws InvalidArgumentException
      */

@@ -58,7 +58,7 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      *
      * @throws Throwable
      */

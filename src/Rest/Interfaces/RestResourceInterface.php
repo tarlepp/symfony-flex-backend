@@ -27,7 +27,7 @@ interface RestResourceInterface
     /**
      * Getter method for serializer context.
      *
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      */
     public function getSerializerContext(): array;
 
@@ -142,8 +142,8 @@ interface RestResourceInterface
      *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
-     * @param array<int|string, string|array<mixed>> $criteria
-     * @param array<int, string>|null $orderBy
+     * @param array<string, mixed> $criteria
+     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return (
      *      $throwExceptionIfNotFound is true

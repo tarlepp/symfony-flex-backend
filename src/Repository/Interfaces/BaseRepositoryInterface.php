@@ -100,7 +100,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return EntityInterface|object|null
+     * @psalm-return EntityInterface|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
 
