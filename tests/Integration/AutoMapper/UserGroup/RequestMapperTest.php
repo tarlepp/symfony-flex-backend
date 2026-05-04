@@ -75,7 +75,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<int, array{0: class-string}, mixed, void>
+     * @return Generator<int, array{0: class-string}>
      */
     public static function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {

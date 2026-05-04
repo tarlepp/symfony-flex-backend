@@ -97,7 +97,7 @@ final class UserRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string, 2: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string, 2: string}>
      */
     public static function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): Generator
     {
@@ -123,7 +123,7 @@ final class UserRolesControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @return Generator<int, array{0: string, 1: string, 2: string, 3: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string, 2: string, 3: string}>
      */
     public static function dataProviderTestThatGetUserRolesReturns200ForUserHimself(): Generator
     {
@@ -221,7 +221,7 @@ final class UserRolesControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @return Generator<int, array{0: string, 1: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
     {

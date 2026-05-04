@@ -68,7 +68,7 @@ final class EnumLogLoginTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: 'failure'|'success'}, mixed, void>
+     * @return Generator<int, array{0: 'failure'|'success'}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
@@ -77,7 +77,7 @@ final class EnumLogLoginTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: mixed}, mixed, void>
+     * @return Generator<int, array{0: mixed}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {

@@ -211,7 +211,7 @@ final class LogRequestTest extends EntityTestCase
      *      0: StringableArrayObject,
      *      1: StringableArrayObject,
      *      2: StringableArrayObject,
-     *  }, mixed, void>
+     *  }>
      * @phpstan-return Generator<array{
      *      0: StringableArrayObject<mixed>,
      *      1: StringableArrayObject<mixed>,
@@ -283,7 +283,7 @@ final class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator

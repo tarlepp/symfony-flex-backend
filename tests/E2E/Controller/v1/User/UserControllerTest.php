@@ -213,7 +213,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderValidUsers(): Generator
     {
@@ -231,7 +231,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string}, mixed, void>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderValidApiKeyUsers(): Generator
     {
@@ -243,7 +243,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderInvalidUsers(): Generator
     {
@@ -265,7 +265,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string}, mixed, void>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderInvalidApiKeyUsers(): Generator
     {

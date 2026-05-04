@@ -178,7 +178,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
@@ -252,7 +252,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
@@ -302,7 +302,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}, mixed, void>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
@@ -358,7 +358,7 @@ DQL;
     }
 
     /**
-     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}, mixed, void>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria(): Generator

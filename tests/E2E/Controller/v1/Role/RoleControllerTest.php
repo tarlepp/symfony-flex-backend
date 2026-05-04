@@ -74,7 +74,7 @@ final class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetBaseRouteReturn403(): Generator
     {
@@ -96,7 +96,7 @@ final class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetBaseRouteReturn200(): Generator
     {

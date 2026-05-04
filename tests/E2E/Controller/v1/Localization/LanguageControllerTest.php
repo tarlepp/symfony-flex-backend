@@ -76,7 +76,7 @@ final class LanguageControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string}, mixed, void>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet(): Generator
     {

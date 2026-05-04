@@ -142,7 +142,7 @@ final class GenericDtoTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string, 1: string, 2: User}, mixed, void>
+     * @return Generator<int, array{0: string, 1: string, 2: User}>
      */
     public static function dataProviderTestThatDetermineGetterMethodReturnsExpected(): Generator
     {

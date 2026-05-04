@@ -113,7 +113,7 @@ final class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: class-string<Controller>}, mixed, void>
+     * @return Generator<int, array{0: class-string<Controller>}>
      */
     public static function dataProviderTestThatGetReturnsExpectedController(): Generator
     {
@@ -126,7 +126,7 @@ final class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: class-string<Controller>|string|null}, mixed, void>
+     * @return Generator<int, array{0: boolean, 1: class-string<Controller>|string|null}>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {

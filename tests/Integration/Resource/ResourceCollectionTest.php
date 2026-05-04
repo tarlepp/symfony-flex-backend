@@ -169,7 +169,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: class-string<RestResource>}, mixed, void>
+     * @return Generator<int, array{0: class-string<RestResource>}>
      */
     public static function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
@@ -188,7 +188,7 @@ final class ResourceCollectionTest extends KernelTestCase
      * @return Generator<int, array{
      *      0: class-string<RestResource>,
      *      1: class-string<EntityInterface>
-     *  }, mixed, void>
+     *  }>
      */
     public static function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
     {
@@ -204,7 +204,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: class-string<RestResource>|string|null}, mixed, void>
+     * @return Generator<int, array{0: boolean, 1: class-string<RestResource>|string|null}>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {
@@ -223,7 +223,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: class-string<EntityInterface>|string|null}, mixed, void>
+     * @return Generator<int, array{0: boolean, 1: class-string<EntityInterface>|string|null}>
      */
     public static function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {

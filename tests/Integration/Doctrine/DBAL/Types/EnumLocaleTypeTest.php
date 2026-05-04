@@ -84,7 +84,7 @@ final class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: 'en'|'fi', 1: Locale}, mixed, void>
+     * @return Generator<int, array{0: 'en'|'fi', 1: Locale}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
@@ -93,7 +93,7 @@ final class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: mixed}, mixed, void>
+     * @return Generator<int, array{0: mixed}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
@@ -108,7 +108,7 @@ final class EnumLocaleTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: Locale, 1: 'en'|'fi'}, mixed, void>
+     * @return Generator<int, array{0: Locale, 1: 'en'|'fi'}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueReturnsExpectedWithStringInput(): Generator
     {

@@ -60,7 +60,7 @@ final class SearchTermTest extends KernelTestCase
      * @psalm-return Generator<int, array{
      *      0: null|string|StringableArrayObject,
      *      1: null|string|StringableArrayObject,
-     *  }, mixed, void>
+     *  }>
      * @phpstan-return Generator<array{
      *      0: null|string|StringableArrayObject<mixed>,
      *      1: null|string|StringableArrayObject<mixed>,
@@ -96,7 +96,7 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject|null}, mixed, void>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject|null}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatReturnedCriteriaIsExpected(): Generator

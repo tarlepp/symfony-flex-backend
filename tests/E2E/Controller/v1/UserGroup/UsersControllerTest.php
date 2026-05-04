@@ -43,7 +43,7 @@ final class UsersControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<int, array{0: int, 1: string}, mixed, void>
+     * @return Generator<int, array{0: int, 1: string}>
      */
     public static function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
     {
