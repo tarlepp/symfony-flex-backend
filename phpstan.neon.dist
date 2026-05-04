@@ -12,12 +12,6 @@ parameters:
             identifier: missingType.generics
         -
             messages:
-                - '#Call to static method PHPUnit\\Framework\\Assert::assertInstanceOf\(\) .* will always evaluate to true\.#'
-            paths:
-                - tests/Integration/TestCase/EntityTestCase.php
-                - tests/Integration/TestCase/RestRequestMapperConfigurationTestCase.php
-        -
-            messages:
                 - '#Access to constant on internal class Symfony\\Component\\Validator\\Context\\ExecutionContext\.#'
             paths:
                 - tests/Integration/*

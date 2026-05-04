@@ -806,10 +806,6 @@ abstract class EntityTestCase extends KernelTestCase
 
     protected function createEntity(): EntityInterface
     {
-        $entity = new static::$entityName();
-
-        self::assertInstanceOf(EntityInterface::class, $entity);
-
-        return $entity;
+        return new static::$entityName();
     }
 }

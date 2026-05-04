@@ -45,7 +45,9 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
             ->getMock();
 
         /** @psalm-suppress UnsafeInstantiation */
-        self::assertInstanceOf(RestAutoMapperConfiguration::class, new $this->autoMapperConfiguration($requestMapper));
+        $instance = new $this->autoMapperConfiguration($requestMapper);
+
+        self::assertIsObject($instance);
     }
 
     #[TestDox('Test that `AutoMapperConfiguration` instance is configured as expected')]
@@ -75,8 +77,6 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
 
         /** @psalm-suppress UnsafeInstantiation */
         $mapper = new $this->autoMapperConfiguration($requestMapper);
-
-        self::assertInstanceOf(AutoMapperConfiguratorInterface::class, $mapper);
 
         $mapper->configure($config);
     }
