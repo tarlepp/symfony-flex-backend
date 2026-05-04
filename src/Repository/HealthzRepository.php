@@ -51,6 +51,9 @@ class HealthzRepository extends BaseRepository
      * Method to read value from database
      *
      * @throws NonUniqueResultException
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function read(): ?Entity
     {

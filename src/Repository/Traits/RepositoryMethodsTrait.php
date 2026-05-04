@@ -79,7 +79,13 @@ trait RepositoryMethodsTrait
     }
 
     /**
+     * @param array<int|string, mixed> $criteria
+     * @param array<string, string>|null $orderBy
+     * @param array<string, string>|null $search
+     *
      * @return array<int, EntityInterface>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function findByAdvanced(
         array $criteria,
@@ -120,7 +126,12 @@ trait RepositoryMethodsTrait
     }
 
     /**
+     * @param array<int|string, mixed>|null $criteria
+     * @param array<string, string>|null $search
+     *
      * @return array<int, string>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
@@ -145,6 +156,10 @@ trait RepositoryMethodsTrait
         return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
     }
 
+    /**
+     * @param array<int|string, mixed>|null $criteria
+     * @param array<string, string>|null $search
+     */
     public function countAdvanced(?array $criteria = null, ?array $search = null): int
     {
         // Get query builder

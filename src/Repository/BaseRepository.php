@@ -180,6 +180,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         foreach (self::$joins as $joinType => $joins) {
             array_map(
+                /** @psalm-suppress MixedReturnStatement */
                 static fn (array $joinParameters): QueryBuilder => $queryBuilder->{$joinType}(...$joinParameters),
                 $joins,
             );
