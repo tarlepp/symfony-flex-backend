@@ -71,6 +71,10 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @psalm-param array<string, mixed> $criteria
+     * @psalm-param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
+     */
     public function findOneBy(
         array $criteria,
         ?array $orderBy = null,

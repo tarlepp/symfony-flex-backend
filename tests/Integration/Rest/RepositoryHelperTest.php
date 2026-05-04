@@ -100,6 +100,7 @@ DQL;
     ): void {
         $qb = $this->getRepository()->createQueryBuilder('entity');
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         RepositoryHelper::processSearchTerms($qb, $this->getRepository()->getSearchColumns(), $terms->getArrayCopy());
 
         $message = 'processSearchTerms did not return expected DQL.';
