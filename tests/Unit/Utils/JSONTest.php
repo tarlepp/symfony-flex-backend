@@ -209,6 +209,8 @@ final class JSONTest extends KernelTestCase
 
         $converted = mb_convert_encoding('{"data":"äöäö"}', 'ISO-8859-15', 'UTF8');
 
+        assert(is_string($converted));
+
         yield [$converted];
     }
 }
