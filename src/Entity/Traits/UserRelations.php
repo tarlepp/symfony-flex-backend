@@ -141,7 +141,7 @@ trait UserRelations
     /**
      * Method to attach new user group to user.
      */
-    public function addUserGroup(UserGroup $userGroup): self
+    public function addUserGroup(UserGroup $userGroup): static
     {
         if ($this->userGroups->contains($userGroup) === false) {
             $this->userGroups->add($userGroup);
@@ -155,7 +155,7 @@ trait UserRelations
     /**
      * Method to remove specified user group from user.
      */
-    public function removeUserGroup(UserGroup $userGroup): self
+    public function removeUserGroup(UserGroup $userGroup): static
     {
         if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeUser($this);
@@ -168,7 +168,7 @@ trait UserRelations
      * Method to remove all many-to-many user group relations from current
      * user.
      */
-    public function clearUserGroups(): self
+    public function clearUserGroups(): static
     {
         $this->userGroups->clear();
 
