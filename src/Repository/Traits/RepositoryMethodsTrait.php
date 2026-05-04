@@ -60,6 +60,9 @@ trait RepositoryMethodsTrait
         return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
     }
 
+    /**
+     * @psalm-return EntityInterface|null
+     */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());

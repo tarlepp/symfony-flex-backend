@@ -105,6 +105,8 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
+     * @param array<string, mixed>|null $context
+     *
      * @throws Throwable
      */
     #[Override]
