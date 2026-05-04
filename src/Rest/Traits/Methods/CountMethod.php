@@ -45,7 +45,9 @@ trait CountMethod
                 ->getResponseHandler()
                 ->createResponse(
                     $request,
-                    ['count' => $count],
+                    [
+                        'count' => $count,
+                    ],
                     $resource
                 );
         } catch (Throwable $exception) {
