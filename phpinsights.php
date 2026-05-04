@@ -114,8 +114,8 @@ return [
         ],
         SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff::class => [
             'exclude' => [
-                'src/ArgumentResolver/LoggedInUserValueResolver.php',
-                'src/ArgumentResolver/RestDtoValueResolver.php',
+                'src/ValueResolver/LoggedInUserValueResolver.php',
+                'src/ValueResolver/RestDtoValueResolver.php',
                 'src/AutoMapper/RestRequestMapper.php',
                 'src/Decorator/StopwatchDecorator.php',
                 'src/Doctrine/DBAL/Types/EnumType.php',
@@ -135,6 +135,8 @@ return [
                 'src/Security/Provider/ApiKeyUserProvider.php',
                 'src/Security/Voter/IsUserHimselfVoter.php',
                 'src/Serializer/Normalizer/CollectionNormalizer.php',
+                'src/Service/Localization.php',
+                'src/Service/Version.php',
                 'src/Validator/Constraints/LanguageValidator.php',
                 'src/Validator/Constraints/LocaleValidator.php',
                 'src/Validator/Constraints/TimezoneValidator.php',

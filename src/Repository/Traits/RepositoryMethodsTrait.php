@@ -69,10 +69,7 @@ trait RepositoryMethodsTrait
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
-        /** @var EntityInterface|null $result */
-        $result = $repository->findOneBy($criteria, $orderBy);
-
-        return $result;
+        return $repository->findOneBy($criteria, $orderBy);
     }
 
     /**
