@@ -81,6 +81,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
+     * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
@@ -129,6 +130,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
+     * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      */
     public function findAll(): array
