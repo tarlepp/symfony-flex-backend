@@ -27,7 +27,7 @@ use Throwable;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @template TEntity of EntityInterface
+ * @template-covariant TEntity of EntityInterface
  */
 interface BaseRepositoryInterface
 {

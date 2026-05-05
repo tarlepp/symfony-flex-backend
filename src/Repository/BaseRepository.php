@@ -31,6 +31,7 @@ use function spl_object_hash;
  *
  * @template TEntity of EntityInterface
  * @implements BaseRepositoryInterface<TEntity>
+ * @use RepositoryMethodsTrait<TEntity>
  */
 #[AutoconfigureTag('app.rest.repository')]
 #[AutoconfigureTag('app.stopwatch')]

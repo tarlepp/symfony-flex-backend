@@ -23,6 +23,8 @@ use function assert;
 /**
  * @package App\Repository\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template TEntity of EntityInterface
  */
 trait RepositoryMethodsTrait
 {
@@ -63,6 +65,7 @@ trait RepositoryMethodsTrait
     /**
      * @return EntityInterface|null
      *
+     * @psalm-return TEntity|null
      * @psalm-suppress MoreSpecificReturnType
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
@@ -73,7 +76,7 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -88,7 +91,7 @@ trait RepositoryMethodsTrait
      * @param array<string, string>|null $orderBy
      * @param array<string, string>|null $search
      *
-     * @return array<int, EntityInterface>
+     * @psalm-return array<int, TEntity>
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
@@ -120,7 +123,7 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findAll(): array
     {
