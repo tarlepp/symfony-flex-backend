@@ -24,8 +24,6 @@ use InvalidArgumentException;
 use Throwable;
 
 /**
- * @template TEntity of EntityInterface
- *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -81,8 +79,6 @@ interface BaseRepositoryInterface
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
-     *
-     * @psalm-return TEntity|null
      */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
 
@@ -92,7 +88,7 @@ interface BaseRepositoryInterface
      *
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      *
-     * @psalm-return array<int|string, mixed>|TEntity|null
+     * @psalm-return array<int|string, mixed>|EntityInterface|null
      *
      * @throws NonUniqueResultException
      */
@@ -104,7 +100,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return TEntity|null
+     * @psalm-return EntityInterface|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
 
@@ -114,7 +110,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return list<TEntity>
+     * @psalm-return list<object|EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
@@ -128,7 +124,7 @@ interface BaseRepositoryInterface
      * @param array<string, string>|null $orderBy
      * @param array<string, string>|null $search
      *
-     * @return array<int, TEntity>
+     * @return array<int, EntityInterface>
      *
      * @throws Throwable
      */
@@ -143,7 +139,7 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findAll method.
      *
-     * @psalm-return list<TEntity>
+     * @psalm-return list<object|EntityInterface>
      */
     public function findAll(): array;
 
