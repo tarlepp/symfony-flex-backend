@@ -26,8 +26,6 @@ trait RestResourceBaseMethods
      * {@inheritdoc}
      *
      * @return array<int, EntityInterface>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function find(
         ?array $criteria = null,
@@ -44,7 +42,6 @@ trait RestResourceBaseMethods
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
 
         // After callback method call
@@ -86,7 +83,6 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -105,7 +101,6 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeCount($criteria, $search);
 
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $count = $this->getRepository()->countAdvanced($criteria, $search);
 
         // After callback method call
@@ -228,8 +223,6 @@ trait RestResourceBaseMethods
      * {@inheritdoc}
      *
      * @return array<int, string>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function getIds(?array $criteria = null, ?array $search = null): array
     {
@@ -240,11 +233,9 @@ trait RestResourceBaseMethods
         $this->beforeIds($criteria, $search);
 
         // Fetch data
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $ids = $this->getRepository()->findIds($criteria, $search);
 
         // After callback method call
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $this->afterIds($ids, $criteria, $search);
 
         return $ids;
