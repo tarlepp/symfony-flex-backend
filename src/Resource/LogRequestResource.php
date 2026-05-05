@@ -18,7 +18,7 @@ use App\Rest\RestResource;
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @psalm-suppress LessSpecificImplementedReturnType
+ * @extends RestResource<Entity>
  * @codingStandardsIgnoreStart
  *
  * @method Entity getReference(string $id)

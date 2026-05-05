@@ -17,6 +17,8 @@ use Throwable;
 
 /**
  * @package App\Rest\Traits
+ *
+ * @template TEntity of EntityInterface
  */
 trait RestResourceBaseMethods
 {
@@ -25,9 +27,7 @@ trait RestResourceBaseMethods
     /**
      * {@inheritdoc}
      *
-     * @return array<int, EntityInterface>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
+     * @return array<int, TEntity>
      */
     public function find(
         ?array $criteria = null,
@@ -228,8 +228,6 @@ trait RestResourceBaseMethods
      * {@inheritdoc}
      *
      * @return array<int, string>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function getIds(?array $criteria = null, ?array $search = null): array
     {
@@ -289,6 +287,8 @@ trait RestResourceBaseMethods
     }
 
     /**
+     * @return TEntity
+     *
      * @throws NotFoundHttpException
      */
     protected function getEntity(string $id): EntityInterface
@@ -333,6 +333,9 @@ trait RestResourceBaseMethods
         }
     }
 
+    /**
+     * @return TEntity
+     */
     private function createEntity(): EntityInterface
     {
         /** @var class-string<EntityInterface> $entityClass */
