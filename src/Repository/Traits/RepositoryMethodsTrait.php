@@ -28,6 +28,9 @@ use function assert;
  */
 trait RepositoryMethodsTrait
 {
+    /**
+     * @psalm-return TEntity|null
+     */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
@@ -39,7 +42,7 @@ trait RepositoryMethodsTrait
     /**
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      *
-     * @psalm-return array<int|string, mixed>|EntityInterface|null
+     * @psalm-return TEntity|array<int|string, mixed>|null
      */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
@@ -77,6 +80,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
+     * @psalm-suppress MoreSpecificReturnType
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -124,6 +128,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
+     * @psalm-suppress MoreSpecificReturnType
      */
     public function findAll(): array
     {

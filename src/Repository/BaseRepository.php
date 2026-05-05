@@ -31,12 +31,12 @@ use function spl_object_hash;
  *
  * @template TEntity of EntityInterface
  * @implements BaseRepositoryInterface<TEntity>
- * @use RepositoryMethodsTrait<TEntity>
  */
 #[AutoconfigureTag('app.rest.repository')]
 #[AutoconfigureTag('app.stopwatch')]
 abstract class BaseRepository implements BaseRepositoryInterface
 {
+    /** @use RepositoryMethodsTrait<TEntity> */
     use RepositoryMethodsTrait;
     use RepositoryWrappersTrait;
 
