@@ -30,6 +30,7 @@ trait RepositoryMethodsTrait
 {
     /**
      * @psalm-return TEntity|null
+     * @psalm-suppress LessSpecificReturnStatement
      */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
@@ -80,7 +81,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
-     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -128,7 +129,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
-     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
     public function findAll(): array
     {

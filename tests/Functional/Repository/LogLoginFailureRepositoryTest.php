@@ -45,6 +45,7 @@ final class LogLoginFailureRepositoryTest extends KernelTestCase
 
         self::assertCount(1, $logLoginFailureRepository->findAll());
         self::assertSame(1, $logLoginFailureRepository->clear($user));
+        /** @psalm-suppress TypeDoesNotContainType */
         self::assertCount(0, $logLoginFailureRepository->findAll());
     }
 }
