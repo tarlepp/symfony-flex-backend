@@ -15,10 +15,14 @@ use Override;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
+use App\Entity\Interfaces\EntityInterface;
 use function array_keys;
 use function sprintf;
 
 /**
+ * @template TEntity of EntityInterface
+ * @implements RestResourceInterface<TEntity>
+ *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -29,6 +33,9 @@ abstract class RestResource implements RestResourceInterface
     private ValidatorInterface $validator;
     private string $dtoClass = '';
 
+    /**
+     * @param BaseRepositoryInterface<TEntity> $repository
+     */
     public function __construct(
         protected readonly BaseRepositoryInterface $repository,
     ) {
