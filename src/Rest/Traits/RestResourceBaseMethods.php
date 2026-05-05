@@ -293,7 +293,7 @@ trait RestResourceBaseMethods
         // After callback method call
         $this->afterSave($entity);
 
-        return $entity;
+        return $entity; // @phpstan-ignore return.type
     }
 
     /**
@@ -366,7 +366,7 @@ trait RestResourceBaseMethods
      */
     private function createEntity(): EntityInterface
     {
-        /** @var class-string<EntityInterface> $entityClass */
+        /** @var class-string<TEntity> $entityClass */
         $entityClass = $this->getRepository()->getEntityName();
 
         return new $entityClass();

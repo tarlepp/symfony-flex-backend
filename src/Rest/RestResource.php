@@ -49,7 +49,7 @@ abstract class RestResource implements RestResourceInterface
     }
 
     /**
-     * @psalm-return BaseRepositoryInterface<TEntity>
+     * @return BaseRepositoryInterface<TEntity>
      */
     #[Override]
     public function getRepository(): BaseRepositoryInterface

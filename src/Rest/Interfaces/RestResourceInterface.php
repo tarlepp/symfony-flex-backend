@@ -36,7 +36,7 @@ interface RestResourceInterface
     /**
      * Getter method for entity repository.
      *
-     * @psalm-return BaseRepositoryInterface<TEntity>
+     * @return BaseRepositoryInterface<TEntity>
      *
      * @throws Throwable
      */
