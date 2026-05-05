@@ -274,8 +274,6 @@ trait RestResourceBaseMethods
     }
 
     /**
-     * @psalm-param TEntity $entity
-     *
      * @return TEntity
      */
     public function save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
