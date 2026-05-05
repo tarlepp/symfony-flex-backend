@@ -28,6 +28,9 @@ use function spl_object_hash;
 /**
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template TEntity of EntityInterface
+ * @implements BaseRepositoryInterface<TEntity>
  */
 #[AutoconfigureTag('app.rest.repository')]
 #[AutoconfigureTag('app.stopwatch')]
