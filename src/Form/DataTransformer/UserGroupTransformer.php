@@ -20,7 +20,7 @@ use function is_array;
 use function sprintf;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @implements DataTransformerInterface<array<int, UserGroup>|null, array<int, string>>
  *
  * @package App\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

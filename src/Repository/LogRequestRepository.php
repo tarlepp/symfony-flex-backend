@@ -20,7 +20,7 @@ use Exception;
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @psalm-suppress LessSpecificImplementedReturnType
+ * @extends BaseRepository<Entity>
  * @codingStandardsIgnoreStart
  *
  * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)

@@ -24,6 +24,8 @@ use InvalidArgumentException;
 use Throwable;
 
 /**
+ * @template TEntity of EntityInterface
+ *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -76,6 +78,8 @@ interface BaseRepositoryInterface
      *
      * @psalm-param LockMode::*|null $lockMode
      *
+     * @psalm-return TEntity|null
+     *
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
@@ -88,7 +92,7 @@ interface BaseRepositoryInterface
      *
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      *
-     * @psalm-return array<int|string, mixed>|EntityInterface|null
+     * @psalm-return array<int|string, mixed>|TEntity|null
      *
      * @throws NonUniqueResultException
      */
@@ -100,7 +104,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return EntityInterface|null
+     * @psalm-return TEntity|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
 
@@ -110,7 +114,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
@@ -124,7 +128,7 @@ interface BaseRepositoryInterface
      * @param array<string, string>|null $orderBy
      * @param array<string, string>|null $search
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, TEntity>
      *
      * @throws Throwable
      */
@@ -139,7 +143,7 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findAll method.
      *
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findAll(): array;
 

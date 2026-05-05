@@ -17,6 +17,8 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
+ * @template TEntity of EntityInterface
+ *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -33,6 +35,8 @@ interface RestResourceInterface
 
     /**
      * Getter method for entity repository.
+     *
+     * @return BaseRepositoryInterface<TEntity>
      *
      * @throws Throwable
      */
@@ -109,7 +113,7 @@ interface RestResourceInterface
      * @param array<string, string>|null $orderBy
      * @param array<string, string>|null $search
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, TEntity>
      *
      * @throws Throwable
      */
@@ -127,8 +131,8 @@ interface RestResourceInterface
      *
      * @psalm-return (
      *      $throwExceptionIfNotFound is true
-     *      ? EntityInterface
-     *      : EntityInterface|null
+     *      ? TEntity
+     *      : TEntity|null
      *  )
      *
      * @throws Throwable
@@ -147,8 +151,8 @@ interface RestResourceInterface
      *
      * @psalm-return (
      *      $throwExceptionIfNotFound is true
-     *      ? EntityInterface
-     *      : EntityInterface|null
+     *      ? TEntity
+     *      : TEntity|null
      *  )
      *
      * @throws Throwable
@@ -174,6 +178,8 @@ interface RestResourceInterface
      * Generic method to create new item (entity) to specified database
      * repository. Return value is created entity for specified repository.
      *
+     * @return TEntity
+     *
      * @throws Throwable
      */
     public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface;
@@ -182,6 +188,8 @@ interface RestResourceInterface
      * Generic method to update specified entity with new data.
      *
      * @codeCoverageIgnore This is needed because variables are multiline
+     *
+     * @return TEntity
      *
      * @throws Throwable
      */
@@ -197,6 +205,8 @@ interface RestResourceInterface
      *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
+     * @return TEntity
+     *
      * @throws Throwable
      */
     public function patch(
@@ -208,6 +218,8 @@ interface RestResourceInterface
 
     /**
      * Generic method to delete specified entity from database.
+     *
+     * @return TEntity
      *
      * @throws Throwable
      */
@@ -227,6 +239,8 @@ interface RestResourceInterface
     /**
      * Generic method to save given entity to specified repository. Return
      * value is created entity.
+     *
+     * @return TEntity
      *
      * @throws Throwable
      */

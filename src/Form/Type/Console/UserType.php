@@ -27,7 +27,7 @@ use Throwable;
 use function array_map;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @extends AbstractType<UserDto>
  *
  * @package App\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
