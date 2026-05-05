@@ -21,6 +21,11 @@ parameters:
             paths:
                 - tests/*
                 - src/*
+        -
+            messages:
+                - '#Call to static method PHPUnit\\Framework\\Assert::assertCount\(\) with 0 and .* will always evaluate to false\.#'
+            paths:
+                - tests/Functional/Repository/LogLoginFailureRepositoryTest.php
 includes:
     - tools/02_phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - tools/02_phpstan/vendor/phpstan/phpstan-deprecation-rules/rules.neon

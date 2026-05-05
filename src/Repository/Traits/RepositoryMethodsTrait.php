@@ -37,7 +37,7 @@ trait RepositoryMethodsTrait
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
-        return $output instanceof EntityInterface ? $output : null;
+        return $output instanceof EntityInterface ? $output : null; // @phpstan-ignore return.type
     }
 
     /**
@@ -89,7 +89,7 @@ trait RepositoryMethodsTrait
         return $this
             ->getEntityManager()
             ->getRepository($this->getEntityName())
-            ->findBy($criteria, $orderBy, $limit, $offset);
+            ->findBy($criteria, $orderBy, $limit, $offset); // @phpstan-ignore return.type
     }
 
     /**
@@ -138,7 +138,7 @@ trait RepositoryMethodsTrait
         return $this
             ->getEntityManager()
             ->getRepository($this->getEntityName())
-            ->findAll();
+            ->findAll(); // @phpstan-ignore return.type
     }
 
     /**
