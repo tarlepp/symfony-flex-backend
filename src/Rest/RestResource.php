@@ -9,13 +9,13 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use Override;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
-use App\Entity\Interfaces\EntityInterface;
 use function array_keys;
 use function sprintf;
 
