@@ -53,6 +53,13 @@ trait RestResourceBaseMethods
         return $entities;
     }
 
+    /**
+     * @psalm-return (
+     *      $throwExceptionIfNotFound is true
+     *      ? TEntity
+     *      : TEntity|null
+     *  )
+     */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
     {
         $throwExceptionIfNotFound ??= false;
@@ -60,7 +67,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOne($id);
 
-        /** @var EntityInterface|null $entity */
+        /** @var TEntity|null $entity */
         $entity = $this->getRepository()->findAdvanced($id);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -74,6 +81,12 @@ trait RestResourceBaseMethods
     /**
      * @psalm-param array<string, mixed> $criteria
      * @psalm-param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
+     *
+     * @psalm-return (
+     *      $throwExceptionIfNotFound is true
+     *      ? TEntity
+     *      : TEntity|null
+     *  )
      */
     public function findOneBy(
         array $criteria,
@@ -114,6 +127,9 @@ trait RestResourceBaseMethods
         return $count;
     }
 
+    /**
+     * @return TEntity
+     */
     public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
         $flush ??= true;
@@ -137,6 +153,9 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @return TEntity
+     */
     public function update(
         string $id,
         RestDtoInterface $dto,
@@ -171,6 +190,9 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @return TEntity
+     */
     public function patch(
         string $id,
         RestDtoInterface $dto,
@@ -205,6 +227,9 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @return TEntity
+     */
     public function delete(string $id, ?bool $flush = null): EntityInterface
     {
         $flush ??= true;
@@ -248,6 +273,11 @@ trait RestResourceBaseMethods
         return $ids;
     }
 
+    /**
+     * @psalm-param TEntity $entity
+     *
+     * @return TEntity
+     */
     public function save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
         $flush ??= true;
