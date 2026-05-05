@@ -86,10 +86,10 @@ trait RepositoryMethodsTrait
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
-        return $this
+        return $this // @phpstan-ignore return.type
             ->getEntityManager()
             ->getRepository($this->getEntityName())
-            ->findBy($criteria, $orderBy, $limit, $offset); // @phpstan-ignore return.type
+            ->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -135,10 +135,10 @@ trait RepositoryMethodsTrait
      */
     public function findAll(): array
     {
-        return $this
+        return $this // @phpstan-ignore return.type
             ->getEntityManager()
             ->getRepository($this->getEntityName())
-            ->findAll(); // @phpstan-ignore return.type
+            ->findAll();
     }
 
     /**
