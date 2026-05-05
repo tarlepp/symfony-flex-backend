@@ -53,6 +53,7 @@ trait RestResourceBaseMethods
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
 
+        /** @var array<int, TEntity> $entities */
         return $entities;
     }
 
