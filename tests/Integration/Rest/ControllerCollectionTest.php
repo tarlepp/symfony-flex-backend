@@ -45,7 +45,7 @@ final class ControllerCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('REST controller \'FooBar\' does not exist');
 
-        /** @implements IteratorAggregate<int, mixed> */
+        /** @psalm-suppress MissingTemplateParam */
         $iteratorAggregate = new class([]) implements IteratorAggregate {
             /**
              * @phpstan-var ArrayObject<int, mixed>
@@ -76,6 +76,7 @@ final class ControllerCollectionTest extends KernelTestCase
             }
         };
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         new ControllerCollection($iteratorAggregate, $stubLogger)->get('FooBar');
     }
 

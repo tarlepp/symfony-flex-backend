@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * @package App\Tests\E2E\Rest\src\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @extends RestResource<Entity>
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity getReference(string $id)

@@ -252,10 +252,12 @@ final class ResourceCollectionTest extends KernelTestCase
     /**
      * @psalm-return IteratorAggregate<int, mixed>
      * @return IteratorAggregate<mixed>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getEmptyIteratorAggregate(): IteratorAggregate
     {
-        /** @implements IteratorAggregate<int, mixed> */
+        /** @psalm-suppress MissingTemplateParam */
         return new class([]) implements IteratorAggregate {
             /**
              * @phpstan-var ArrayObject<int, mixed>
@@ -284,10 +286,12 @@ final class ResourceCollectionTest extends KernelTestCase
     /**
      * @psalm-return IteratorAggregate<int, mixed>
      * @return IteratorAggregate<mixed>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {
-        /** @implements IteratorAggregate<int, mixed> */
+        /** @psalm-suppress MissingTemplateParam */
         return new class() implements IteratorAggregate {
             /**
              * @phpstan-return ArrayObject<int, mixed>

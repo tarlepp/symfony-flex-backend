@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
 /**
- * @extends AbstractType<ApiKey>
+ * @psalm-suppress MissingTemplateParam
  *
  * @package App\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

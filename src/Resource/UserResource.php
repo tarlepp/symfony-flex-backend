@@ -24,7 +24,7 @@ use function in_array;
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @extends RestResource<Entity>
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity getReference(string $id)

@@ -15,7 +15,7 @@ use Override;
 use Stringable;
 
 /**
- * @extends ArrayObject<int, mixed>
+ * @psalm-suppress MissingTemplateParam
  *
  * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

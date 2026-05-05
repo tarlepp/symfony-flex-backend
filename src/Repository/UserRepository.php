@@ -21,7 +21,7 @@ use function array_key_exists;
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @extends BaseRepository<Entity>
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)
