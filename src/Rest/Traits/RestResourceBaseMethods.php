@@ -44,8 +44,10 @@ trait RestResourceBaseMethods
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        /** @var array<int, TEntity> $entities */
-        /** @psalm-suppress MixedArgumentTypeCoercion */
+        /**
+         * @var array<int, TEntity> $entities
+         * @psalm-suppress MixedArgumentTypeCoercion
+         */
         $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
 
         // After callback method call
