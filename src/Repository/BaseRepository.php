@@ -26,6 +26,9 @@ use function sha1;
 use function spl_object_hash;
 
 /**
+ * @template TEntity of EntityInterface
+ * @implements BaseRepositoryInterface<TEntity>
+ *
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
