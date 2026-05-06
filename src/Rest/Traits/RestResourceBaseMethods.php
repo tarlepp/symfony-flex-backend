@@ -272,8 +272,9 @@ trait RestResourceBaseMethods
 
         // After callback method call
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        $this->afterIds($ids, $criteria, $search);
+        $this->afterIds($criteria, $search, $ids);
 
+        /** @var array<int, string> $ids */
         return $ids;
     }
 
