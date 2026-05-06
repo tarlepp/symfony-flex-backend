@@ -86,8 +86,6 @@ class RestDtoValueResolver implements ValueResolverInterface
      * @throws Throwable
      *
      * @return Generator<RestDtoInterface>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
@@ -102,6 +100,9 @@ class RestDtoValueResolver implements ValueResolverInterface
             ->get($this->controllerName)
             ->getDtoClass($this->actionMethodMap[$actionName] ?? null);
 
-        yield $this->autoMapper->map($request, $dtoClass);
+        /** @var RestDtoInterface $dto */
+        $dto = $this->autoMapper->map($request, $dtoClass);
+
+        yield $dto;
     }
 }

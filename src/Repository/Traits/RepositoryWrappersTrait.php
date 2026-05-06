@@ -42,12 +42,12 @@ trait RepositoryWrappersTrait
         return $this->getClassMetaData()->getAssociationMappings();
     }
 
-    /**
-     * @psalm-suppress ArgumentTypeCoercion
-     */
     public function getClassMetaData(): ClassMetadata
     {
-        return $this->getEntityManager()->getClassMetadata($this->getEntityName());
+        /** @var class-string $entityName */
+        $entityName = $this->getEntityName();
+
+        return $this->getEntityManager()->getClassMetadata($entityName);
     }
 
     public function getEntityManager(): EntityManager

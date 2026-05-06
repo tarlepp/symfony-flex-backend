@@ -24,9 +24,6 @@ class JSON
      * @see http://php.net/manual/en/function.json-encode.php
      * @see http://php.net/manual/en/function.json-last-error.php
      *
-     * @psalm-suppress FalsableReturnStatement
-     * @psalm-suppress InvalidFalsableReturnType
-     *
      * @param mixed $input The value being encoded. Can be any type except a resource.
      * @param int|null $options Bitmask consisting of JSON_HEX_QUOT, JSON_HEX_TAG, JSON_HEX_AMP, JSON_HEX_APOS,
      *                          JSON_NUMERIC_CHECK, JSON_PRETTY_PRINT, JSON_UNESCAPED_SLASHES, JSON_FORCE_OBJECT,
@@ -41,7 +38,10 @@ class JSON
         $options ??= 0;
         $depth ??= 512;
 
-        return json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
+        /** @var string $encoded */
+        $encoded = json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
+
+        return $encoded;
     }
 
     /**

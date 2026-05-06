@@ -360,7 +360,7 @@ CODE;
         $result = '';
 
         if ($param->isDefaultValueAvailable()) {
-            /** @psalm-suppress MixedAssignment */
+            /** @var mixed $defaultValue */
             $defaultValue = $param->getDefaultValue();
             $result = ' = ' . var_export($defaultValue, true);
         }

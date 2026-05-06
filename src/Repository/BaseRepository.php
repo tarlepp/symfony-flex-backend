@@ -185,8 +185,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
         foreach (self::$joins as $joinType => $joins) {
             array_map(
                 static function (array $joinParameters) use ($queryBuilder, $joinType): QueryBuilder {
-                    /** @var QueryBuilder */
-                    return $queryBuilder->{$joinType}(...$joinParameters);
+                    /** @var QueryBuilder $result */
+                    $result = $queryBuilder->{$joinType}(...$joinParameters);
+
+                    return $result;
                 },
                 $joins,
             );
