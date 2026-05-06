@@ -115,10 +115,6 @@ final class RequestHandler
             $input = $request->request->all($key);
         }
 
-        if (!is_array($input)) {
-            $input = (array)$input;
-        }
-
         $input = array_filter($input);
 
         // Initialize output
@@ -182,7 +178,7 @@ final class RequestHandler
     /**
      * Method to return search term criteria as an array that repositories can easily use.
      *
-     * @return array<int|string, array<int, string>>
+     * @return array<string, array<int, string>>
      *
      * @throws HttpException
      */
@@ -206,7 +202,7 @@ final class RequestHandler
      * Method to determine used search terms. Note that this will first try to JSON decode given search term. This is
      * for cases that 'search' request parameter contains 'and' or 'or' terms.
      *
-     * @return array<int|string, array<int, string>>|null
+     * @return array<string, array<int, string>>|null
      *
      * @throws HttpException
      */
@@ -218,7 +214,7 @@ final class RequestHandler
 
             self::checkSearchTerms($searchTerms);
 
-            /** @var array<int|string, array<int, string>> $searchTerms */
+            /** @var array<string, array<int, string>> $searchTerms */
         } catch (JsonException | LogicException) {
             $searchTerms = null;
         }
@@ -248,16 +244,16 @@ final class RequestHandler
      * Method to normalize specified search terms. Within this we will just filter out any "empty" values and return
      * unique terms after that.
      *
-     * @param array<int|string, array<int, string>> $searchTerms
+     * @param array<string, array<int, string>> $searchTerms
      *
-     * @return array<int|string, array<int, string>>
+     * @return array<string, array<int, string>>
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {
         // Normalize user input, note that this support array and string formats on value
         array_walk($searchTerms, static fn (array $terms): array => array_unique(array_values(array_filter($terms))));
 
-        /** @var array<int|string, array<int, string>> $searchTerms */
+        /** @var array<string, array<int, string>> $searchTerms */
         return $searchTerms;
     }
 

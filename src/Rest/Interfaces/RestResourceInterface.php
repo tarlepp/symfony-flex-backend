@@ -111,7 +111,7 @@ interface RestResourceInterface
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
      * @param array<string, string>|null $orderBy
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, TEntity>
      *
@@ -168,7 +168,7 @@ interface RestResourceInterface
      * search terms.
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @throws Throwable
      */
@@ -230,7 +230,7 @@ interface RestResourceInterface
      * value is an array of specified repository entity id values.
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, string>
      */

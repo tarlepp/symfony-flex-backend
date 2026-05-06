@@ -126,7 +126,7 @@ interface BaseRepositoryInterface
      *
      * @param array<int|string, mixed> $criteria
      * @param array<string, string>|null $orderBy
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, TEntity>
      *
@@ -152,7 +152,7 @@ interface BaseRepositoryInterface
      * return those as an array.
      *
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, string>
      *
@@ -165,7 +165,7 @@ interface BaseRepositoryInterface
      * criteria and search term(s).
      *
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @throws InvalidArgumentException
      * @throws NonUniqueResultException

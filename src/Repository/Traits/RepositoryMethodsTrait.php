@@ -102,7 +102,7 @@ trait RepositoryMethodsTrait
     /**
      * @param array<int|string, mixed> $criteria
      * @param array<string, string>|null $orderBy
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @psalm-return array<int, TEntity>
      */
@@ -152,7 +152,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, string>
      */
@@ -184,7 +184,7 @@ trait RepositoryMethodsTrait
 
     /**
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      */
     public function countAdvanced(?array $criteria = null, ?array $search = null): int
     {
@@ -223,7 +223,7 @@ trait RepositoryMethodsTrait
      * Helper method to get QueryBuilder for current instance within specified default parameters.
      *
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, array<int, string>>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      * @param array<string, string>|null $orderBy
      *
      * @throws InvalidArgumentException
