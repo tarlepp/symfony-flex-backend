@@ -51,9 +51,6 @@ class HealthzRepository extends BaseRepository
      * Method to read value from database
      *
      * @throws NonUniqueResultException
-     *
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     public function read(): ?Entity
     {
@@ -64,7 +61,10 @@ class HealthzRepository extends BaseRepository
             ->setMaxResults(1)
             ->getQuery();
 
-        return $query->getOneOrNullResult();
+        /** @var Entity|null $result */
+        $result = $query->getOneOrNullResult();
+
+        return $result;
     }
 
     /**

@@ -30,14 +30,18 @@ trait RepositoryMethodsTrait
 {
     /**
      * @psalm-return TEntity|null
-     * @psalm-suppress LessSpecificReturnStatement
      */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
-        return $output instanceof EntityInterface ? $output : null; // @phpstan-ignore return.type
+        if (!$output instanceof EntityInterface) {
+            return null;
+        }
+
+        /** @var TEntity $output */
+        return $output;
     }
 
     /**
@@ -101,8 +105,6 @@ trait RepositoryMethodsTrait
      * @param array<string, string>|null $search
      *
      * @psalm-return array<int, TEntity>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function findByAdvanced(
         array $criteria,
@@ -128,7 +130,10 @@ trait RepositoryMethodsTrait
 
         assert($iterator instanceof ArrayIterator);
 
-        return $iterator->getArrayCopy();
+        /** @var array<int, TEntity> $result */
+        $result = $iterator->getArrayCopy();
+
+        return $result;
     }
 
     /**
@@ -150,8 +155,6 @@ trait RepositoryMethodsTrait
      * @param array<string, string>|null $search
      *
      * @return array<int, string>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
@@ -173,7 +176,10 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+        /** @var array<int, string> $ids */
+        $ids = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        return $ids;
     }
 
     /**
