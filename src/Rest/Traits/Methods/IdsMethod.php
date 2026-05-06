@@ -38,8 +38,6 @@ trait IdsMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
-            /** @var array<int|string, string|array<mixed>> $criteria */
-            /** @var array<string, string> $search */
             $ids = $resource->getIds($criteria, $search);
 
             return $this

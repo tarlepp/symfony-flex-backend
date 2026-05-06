@@ -107,15 +107,12 @@ final class RequestHandler
     {
         $key = 'order';
 
-        /** @var mixed $input */
         $input = [];
 
         if ($request->query->has($key)) {
-            /** @var mixed $input */
-            $input = $request->query->all()[$key];
+            $input = $request->query->all($key);
         } elseif ($request->request->has($key)) {
-            /** @var mixed $input */
-            $input = $request->request->all()[$key];
+            $input = $request->request->all($key);
         }
 
         if (!is_array($input)) {
@@ -171,7 +168,7 @@ final class RequestHandler
      *  ?search={"or": ["term1", "term2"]}
      *  ?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}
      *
-     * @return array<mixed>
+     * @return array<string, array<int, string>>
      *
      * @throws HttpException
      */
