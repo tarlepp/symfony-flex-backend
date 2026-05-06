@@ -20,7 +20,7 @@ use function is_array;
 use function sprintf;
 
 /**
- * @implements DataTransformerInterface<array<int, UserGroup>|null, array<array-key, string>|null>
+ * @implements DataTransformerInterface<array<array-key, UserGroup>|null, array<array-key, string>|null>
  *
  * @package App\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
