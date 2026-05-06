@@ -18,7 +18,7 @@ use function is_string;
 use function sprintf;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @implements DataTransformerInterface<Role|null, string>
  *
  * @package App\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
