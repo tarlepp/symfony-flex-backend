@@ -111,8 +111,10 @@ final class RequestHandler
         $input = [];
 
         if ($request->query->has($key)) {
+            /** @var mixed $input */
             $input = $request->query->all()[$key];
         } elseif ($request->request->has($key)) {
+            /** @var mixed $input */
             $input = $request->request->all()[$key];
         }
 

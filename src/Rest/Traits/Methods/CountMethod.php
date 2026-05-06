@@ -38,6 +38,8 @@ trait CountMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
+            /** @var array<int|string, string|array<mixed>> $criteria */
+            /** @var array<string, string> $search */
             $count = $resource->count($criteria, $search);
 
             return $this

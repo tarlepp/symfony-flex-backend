@@ -41,6 +41,8 @@ trait FindMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
+            /** @var array<int|string, string|array<mixed>> $criteria */
+            /** @var array<string, string> $search */
             $entities = $resource->find($criteria, $orderBy, $limit, $offset, $search);
 
             return $this

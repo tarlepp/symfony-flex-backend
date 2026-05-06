@@ -27,6 +27,10 @@ trait RestResourceBaseMethods
     /**
      * {@inheritdoc}
      *
+     * @psalm-param array<int|string, string|array<mixed>>|null $criteria
+     * @psalm-param array<string, string>|null $orderBy
+     * @psalm-param array<string, string>|null $search
+     *
      * @return array<int, TEntity>
      */
     public function find(
@@ -100,6 +104,8 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
+        /** @var array<string, mixed> $criteria */
+        /** @var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -110,6 +116,10 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @psalm-param array<int|string, string|array<mixed>>|null $criteria
+     * @psalm-param array<string, string>|null $search
+     */
     public function count(?array $criteria = null, ?array $search = null): int
     {
         $criteria ??= [];
@@ -250,6 +260,9 @@ trait RestResourceBaseMethods
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param array<int|string, string|array<mixed>>|null $criteria
+     * @psalm-param array<string, string>|null $search
      *
      * @return array<int, string>
      */

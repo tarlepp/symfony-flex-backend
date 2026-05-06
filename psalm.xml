@@ -30,6 +30,12 @@
             </errorLevel>
         </ArgumentTypeCoercion>
 
+        <MixedArgumentTypeCoercion>
+            <errorLevel type="suppress">
+                <directory name="tests/Integration" />
+            </errorLevel>
+        </MixedArgumentTypeCoercion>
+
         <PossiblyInvalidArgument>
             <errorLevel type="suppress">
                 <directory name="tests/" />
