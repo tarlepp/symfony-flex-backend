@@ -38,7 +38,7 @@ class JSON
         $options ??= 0;
         $depth ??= 512;
 
-        /** @var string $encoded */
+        /** @var non-empty-string $encoded */
         $encoded = json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
 
         return $encoded;
