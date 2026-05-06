@@ -43,7 +43,7 @@ abstract class RestRequestMapper implements MapperInterface
      * @psalm-param array<int, mixed> $context
      */
     #[Override]
-    public function map($source, string $targetClass, array $context = []): RestDtoInterface
+    public function map(mixed $source, string $targetClass, array $context = []): RestDtoInterface
     {
         /** @psalm-var class-string<RestDtoInterface> $targetClass */
         $destination = new $targetClass();
@@ -59,7 +59,7 @@ abstract class RestRequestMapper implements MapperInterface
      * @psalm-param array<int, mixed> $context
      */
     #[Override]
-    public function mapToObject($source, $destination, array $context = []): RestDtoInterface
+    public function mapToObject(mixed $source, object $destination, array $context = []): RestDtoInterface
     {
         if (!is_object($source)) {
             throw new InvalidArgumentException(
