@@ -107,12 +107,11 @@ final class RequestHandler
     {
         $key = 'order';
 
-        $input = [];
+        /** @psalm-suppress MixedAssignment – value can be scalar (e.g. ?order=col) or array; branched below */
+        $input = $request->query->all()[$key] ?? ($request->request->all()[$key] ?? []);
 
-        if ($request->query->has($key)) {
-            $input = $request->query->all($key);
-        } elseif ($request->request->has($key)) {
-            $input = $request->request->all($key);
+        if (!is_array($input)) {
+            $input = (array)$input;
         }
 
         $input = array_filter($input);
