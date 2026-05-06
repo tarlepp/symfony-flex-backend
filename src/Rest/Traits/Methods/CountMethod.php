@@ -38,7 +38,6 @@ trait CountMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
-            /** @psalm-suppress MixedArgumentTypeCoercion */
             $count = $resource->count($criteria, $search);
 
             return $this

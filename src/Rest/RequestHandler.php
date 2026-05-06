@@ -55,15 +55,14 @@ final class RequestHandler
      *  App\Repository\Base::getExpression method supports - and that is
      *  basically 99% that you need on advanced search criteria.
      *
-     * @return array<string, mixed>
+     * @return array<string, string|array<mixed>>
      *
      * @throws HttpException
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public static function getCriteria(HttpFoundationRequest $request): array
     {
         try {
+            /** @var array<string, string|array<mixed>> $where */
             $where = array_filter(
                 (array)JSON::decode(
                     (string)($request->query->get('where') ?? $request->request->get('where', '{}')),
@@ -107,13 +106,13 @@ final class RequestHandler
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
         $key = 'order';
+
+        /** @var mixed $input */
         $input = [];
 
         if ($request->query->has($key)) {
-            /** @psalm-suppress MixedAssignment */
             $input = $request->query->all()[$key];
         } elseif ($request->request->has($key)) {
-            /** @psalm-suppress MixedAssignment */
             $input = $request->request->all()[$key];
         }
 
@@ -211,17 +210,16 @@ final class RequestHandler
      * @return array<int|string, array<int, string>>|null
      *
      * @throws HttpException
-     *
-     * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     private static function determineSearchTerms(string $search): ?array
     {
         try {
+            /** @var mixed $searchTerms */
             $searchTerms = JSON::decode($search, true);
 
             self::checkSearchTerms($searchTerms);
+
+            /** @var array<int|string, array<int, string>> $searchTerms */
         } catch (JsonException | LogicException) {
             $searchTerms = null;
         }
@@ -254,14 +252,13 @@ final class RequestHandler
      * @param array<int|string, array<int, string>> $searchTerms
      *
      * @return array<int|string, array<int, string>>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {
         // Normalize user input, note that this support array and string formats on value
         array_walk($searchTerms, static fn (array $terms): array => array_unique(array_values(array_filter($terms))));
 
+        /** @var array<int|string, array<int, string>> $searchTerms */
         return $searchTerms;
     }
 

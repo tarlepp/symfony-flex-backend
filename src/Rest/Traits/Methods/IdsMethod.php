@@ -38,7 +38,6 @@ trait IdsMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
-            /** @psalm-suppress MixedArgumentTypeCoercion */
             $ids = $resource->getIds($criteria, $search);
 
             return $this

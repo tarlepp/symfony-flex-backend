@@ -41,7 +41,6 @@ trait FindMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
-            /** @psalm-suppress MixedArgumentTypeCoercion */
             $entities = $resource->find($criteria, $orderBy, $limit, $offset, $search);
 
             return $this

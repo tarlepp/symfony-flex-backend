@@ -20,8 +20,6 @@ use UnexpectedValueException;
 /**
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
- * @property ?RestResourceInterface $resource
  */
 abstract class Controller implements ControllerInterface
 {
@@ -53,10 +51,6 @@ abstract class Controller implements ControllerInterface
     ) {
     }
 
-    /**
-     * @psalm-suppress InvalidNullableReturnType
-     * @psalm-suppress NullableReturnStatement
-     */
     #[Override]
     public function getResource(): RestResourceInterface
     {
