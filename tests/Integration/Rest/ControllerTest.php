@@ -52,7 +52,8 @@ final class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('ResponseHandler service not set');
 
-        $class = new class($this->createMock(RestResourceInterface::class)) extends Controller {};
+        $class = new class($this->createMock(RestResourceInterface::class)) extends Controller {
+        };
 
         $class->getResponseHandler();
     }
