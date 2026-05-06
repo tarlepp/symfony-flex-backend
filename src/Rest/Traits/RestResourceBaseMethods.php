@@ -291,7 +291,8 @@ trait RestResourceBaseMethods
         // After callback method call
         $this->afterSave($entity);
 
-        return $entity; // @phpstan-ignore return.type
+        /** @var TEntity $entity */
+        return $entity;
     }
 
     /**

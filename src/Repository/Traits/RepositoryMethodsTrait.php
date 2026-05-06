@@ -70,26 +70,29 @@ trait RepositoryMethodsTrait
      * @return EntityInterface|null
      *
      * @psalm-return TEntity|null
-     * @psalm-suppress MoreSpecificReturnType
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
-        return $repository->findOneBy($criteria, $orderBy); // @phpstan-ignore return.type
+        /** @var TEntity|null $result */
+        $result = $repository->findOneBy($criteria, $orderBy);
+
+        return $result;
     }
 
     /**
      * @psalm-return list<TEntity>
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
-        return $this // @phpstan-ignore return.type
+        /** @var list<TEntity> $result */
+        $result = $this
             ->getEntityManager()
             ->getRepository($this->getEntityName())
             ->findBy($criteria, $orderBy, $limit, $offset);
+
+        return $result;
     }
 
     /**
@@ -130,15 +133,16 @@ trait RepositoryMethodsTrait
 
     /**
      * @psalm-return list<TEntity>
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      */
     public function findAll(): array
     {
-        return $this // @phpstan-ignore return.type
+        /** @var list<TEntity> $result */
+        $result = $this
             ->getEntityManager()
             ->getRepository($this->getEntityName())
             ->findAll();
+
+        return $result;
     }
 
     /**
