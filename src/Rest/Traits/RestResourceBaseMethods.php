@@ -44,10 +44,7 @@ trait RestResourceBaseMethods
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        /**
-         * @var array<int, TEntity> $entities
-         * @psalm-suppress MixedArgumentTypeCoercion
-         */
+        /** @var array<int, TEntity> $entities */
         $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
 
         // After callback method call
@@ -103,7 +100,6 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -122,7 +118,6 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeCount($criteria, $search);
 
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $count = $this->getRepository()->countAdvanced($criteria, $search);
 
         // After callback method call
@@ -267,11 +262,9 @@ trait RestResourceBaseMethods
         $this->beforeIds($criteria, $search);
 
         // Fetch data
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $ids = $this->getRepository()->findIds($criteria, $search);
 
         // After callback method call
-        /** @psalm-suppress MixedArgumentTypeCoercion */
         $this->afterIds($criteria, $search, $ids);
 
         /** @var array<int, string> $ids */
