@@ -43,17 +43,10 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
-        /** @var array<string, string> $repositoryOrderBy */
-        $repositoryOrderBy = [];
-
-        foreach ($orderBy as $key => $value) {
-            $repositoryOrderBy[(string)$key] = (string)$value;
-        }
-
         // Fetch data
         /** @var array<int, TEntity> $entities */
         /** @psalm-var array<string, array<int, string>|string> $search */
-        $entities = $this->getRepository()->findByAdvanced($criteria, $repositoryOrderBy, $limit, $offset, $search);
+        $entities = $this->getRepository()->findByAdvanced($criteria, $this->normalizeOrderBy($orderBy), $limit, $offset, $search);
 
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
@@ -108,15 +101,8 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @var array<string, mixed> $repositoryCriteria */
-        $repositoryCriteria = [];
-
-        foreach ($criteria as $key => $value) {
-            $repositoryCriteria[(string)$key] = $value;
-        }
-
         /** @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy */
-        $entity = $this->getRepository()->findOneBy($repositoryCriteria, $orderBy);
+        $entity = $this->getRepository()->findOneBy($this->normalizeCriteria($criteria), $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
@@ -398,5 +384,43 @@ trait RestResourceBaseMethods
         if ($throwExceptionIfNotFound && $entity === null) {
             throw new NotFoundHttpException('Not found');
         }
+    }
+
+    /**
+     * Normalizes an orderBy array so every key and value is a plain string,
+     * satisfying the strict array<string, string> type expected by the repository.
+     *
+     * @param array<array-key, mixed> $orderBy
+     *
+     * @return array<string, string>
+     */
+    private function normalizeOrderBy(array $orderBy): array
+    {
+        $normalized = [];
+
+        foreach ($orderBy as $key => $value) {
+            $normalized[(string)$key] = (string)$value;
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Normalizes a criteria array so every key is a plain string,
+     * satisfying the strict array<string, mixed> type expected by the repository.
+     *
+     * @param array<array-key, mixed> $criteria
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeCriteria(array $criteria): array
+    {
+        $normalized = [];
+
+        foreach ($criteria as $key => $value) {
+            $normalized[(string)$key] = $value;
+        }
+
+        return $normalized;
     }
 }
