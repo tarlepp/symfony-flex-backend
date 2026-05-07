@@ -426,8 +426,10 @@ trait RestResourceBaseMethods
         $normalized = [];
 
         foreach (array_keys($criteria) as $key) {
-            /** @psalm-suppress MixedAssignment */
-            $normalized[(string)$key] = $criteria[$key];
+            /** @var mixed $value */
+            $value = $criteria[$key];
+
+            $normalized[(string)$key] = $value;
         }
 
         return $normalized;
