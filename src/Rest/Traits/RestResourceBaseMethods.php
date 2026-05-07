@@ -45,6 +45,8 @@ trait RestResourceBaseMethods
 
         // Fetch data
         /** @var array<int, TEntity> $entities */
+        /** @psalm-var array<string, string> $orderBy */
+        /** @psalm-var array<string, array<int, string>|string> $search */
         $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
 
         // After callback method call
@@ -100,6 +102,8 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
+        /** @psalm-var array<string, mixed> $criteria */
+        /** @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -118,6 +122,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeCount($criteria, $search);
 
+        /** @psalm-var array<string, array<int, string>|string> $search */
         $count = $this->getRepository()->countAdvanced($criteria, $search);
 
         // After callback method call
@@ -262,6 +267,7 @@ trait RestResourceBaseMethods
         $this->beforeIds($criteria, $search);
 
         // Fetch data
+        /** @psalm-var array<string, array<int, string>|string> $search */
         $ids = $this->getRepository()->findIds($criteria, $search);
 
         // After callback method call

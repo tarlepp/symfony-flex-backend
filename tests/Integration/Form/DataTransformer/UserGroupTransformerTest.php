@@ -42,9 +42,12 @@ final class UserGroupTransformerTest extends KernelTestCase
 
         $transformer = new UserGroupTransformer($resource);
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
+        $transformResult = $transformer->transform($input?->getArrayCopy());
+
         self::assertSame(
             $expected->getArrayCopy(),
-            $transformer->transform($input?->getArrayCopy())
+            $transformResult
         );
     }
 
