@@ -43,11 +43,17 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
+        /** @var array<string, string> $repositoryOrderBy */
+        $repositoryOrderBy = [];
+
+        foreach ($orderBy as $key => $value) {
+            $repositoryOrderBy[(string)$key] = (string)$value;
+        }
+
         // Fetch data
         /** @var array<int, TEntity> $entities */
-        /** @psalm-var array<string, string> $orderBy */
         /** @psalm-var array<string, array<int, string>|string> $search */
-        $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
+        $entities = $this->getRepository()->findByAdvanced($criteria, $repositoryOrderBy, $limit, $offset, $search);
 
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
@@ -102,9 +108,15 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @psalm-var array<string, mixed> $criteria */
+        /** @var array<string, mixed> $repositoryCriteria */
+        $repositoryCriteria = [];
+
+        foreach ($criteria as $key => $value) {
+            $repositoryCriteria[(string)$key] = $value;
+        }
+
         /** @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy */
-        $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
+        $entity = $this->getRepository()->findOneBy($repositoryCriteria, $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
