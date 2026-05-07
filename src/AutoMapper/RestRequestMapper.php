@@ -39,7 +39,7 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @psalm-param array<array-key, mixed>|object $source
+     * @psalm-param Request $source
      * @psalm-param array<int, mixed> $context
      */
     #[Override]
@@ -54,7 +54,7 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @psalm-param array<array-key, mixed>|object $source
+     * @psalm-param Request $source
      * @psalm-param object $destination
      * @psalm-param array<int, mixed> $context
      */
