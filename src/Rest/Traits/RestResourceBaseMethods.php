@@ -402,10 +402,11 @@ trait RestResourceBaseMethods
      */
     private function normalizeOrderBy(array $orderBy): array
     {
+        /** @var array<string, string> $normalized */
         $normalized = [];
 
-        foreach ($orderBy as $key => $value) {
-            $normalized[(string)$key] = (string)$value;
+        foreach (array_keys($orderBy) as $key) {
+            $normalized[(string)$key] = (string)$orderBy[$key];
         }
 
         return $normalized;
@@ -421,10 +422,11 @@ trait RestResourceBaseMethods
      */
     private function normalizeCriteria(array $criteria): array
     {
+        /** @var array<string, mixed> $normalized */
         $normalized = [];
 
-        foreach ($criteria as $key => $value) {
-            $normalized[(string)$key] = $value;
+        foreach (array_keys($criteria) as $key) {
+            $normalized[(string)$key] = $criteria[$key];
         }
 
         return $normalized;
