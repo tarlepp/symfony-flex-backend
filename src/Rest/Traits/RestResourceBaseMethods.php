@@ -422,13 +422,18 @@ trait RestResourceBaseMethods
      */
     private function normalizeCriteria(array $criteria): array
     {
-        /** @var array<string, mixed> $normalized */
-        $normalized = [];
-
-        foreach ($criteria as $key => $value) {
-            $normalized[(string)$key] = $value;
+        if ($criteria === []) {
+            return [];
         }
 
-        return $normalized;
+        $keys = array_map(
+            static fn (int|string $key): string => (string)$key,
+            array_keys($criteria),
+        );
+
+        /** @var array<string, mixed>|false $normalized */
+        $normalized = array_combine($keys, array_values($criteria));
+
+        return $normalized ?: [];
     }
 }
