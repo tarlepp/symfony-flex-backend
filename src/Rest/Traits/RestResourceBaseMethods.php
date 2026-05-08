@@ -109,7 +109,13 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy */
+        /**
+         * Re-assert types after the by-reference lifecycle callback, which accepts mixed[] and causes Psalm
+         * to widen the types of both $criteria and $orderBy.
+         *
+         * @psalm-var array<string, CriteriaValue> $criteria
+         * @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy
+         */
         $entity = $this->getRepository()->findOneBy($this->normalizeCriteria($criteria), $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -418,9 +424,9 @@ trait RestResourceBaseMethods
      * Normalizes a criteria array so every key is a plain string,
      * satisfying the strict array<string, mixed> type expected by the repository.
      *
-     * @param array<array-key, mixed> $criteria
+     * @param array<array-key, CriteriaValue> $criteria
      *
-     * @return array<string, mixed>
+     * @return array<string, CriteriaValue>
      */
     private function normalizeCriteria(array $criteria): array
     {
@@ -428,7 +434,7 @@ trait RestResourceBaseMethods
             return [];
         }
 
-        /** @var array<string, mixed> $normalized */
+        /** @var array<string, CriteriaValue> $normalized */
         $normalized = [];
 
         foreach ($criteria as $key => $value) {
