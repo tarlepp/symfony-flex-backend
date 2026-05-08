@@ -21,6 +21,7 @@ use UnexpectedValueException;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @template-covariant TEntity of EntityInterface
+ * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
  */
 #[AutoconfigureTag('app.rest.resource')]
 #[AutoconfigureTag('app.stopwatch')]
@@ -146,7 +147,7 @@ interface RestResourceInterface
      *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
-     * @param array<string, mixed> $criteria
+     * @psalm-param array<string, CriteriaValue> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return (

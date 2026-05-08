@@ -11,6 +11,7 @@ namespace App\Rest\Traits;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Exception\ValidatorException;
+use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
@@ -19,7 +20,7 @@ use Throwable;
  * @package App\Rest\Traits
  *
  * @template TEntity of EntityInterface
- * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
+ * @psalm-import-type CriteriaValue from RestResourceInterface
  */
 trait RestResourceBaseMethods
 {
