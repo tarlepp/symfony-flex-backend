@@ -434,6 +434,6 @@ trait RestResourceBaseMethods
         /** @var array<string, mixed>|false $normalized */
         $normalized = array_combine($keys, array_values($criteria));
 
-        return $normalized ?: [];
+        return $normalized === false ? [] : $normalized;
     }
 }
