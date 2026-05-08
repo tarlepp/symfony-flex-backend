@@ -418,9 +418,9 @@ trait RestResourceBaseMethods
      * Normalizes a criteria array so every key is a plain string,
      * satisfying the strict array<string, mixed> type expected by the repository.
      *
-     * @param array<array-key, CriteriaValue> $criteria
+     * @param array<array-key, mixed> $criteria
      *
-     * @return array<string, CriteriaValue>
+     * @return array<string, mixed>
      */
     private function normalizeCriteria(array $criteria): array
     {
@@ -428,7 +428,7 @@ trait RestResourceBaseMethods
             return [];
         }
 
-        /** @var array<string, CriteriaValue> $normalized */
+        /** @var array<string, mixed> $normalized */
         $normalized = [];
 
         foreach ($criteria as $key => $value) {
