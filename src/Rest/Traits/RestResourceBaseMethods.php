@@ -46,8 +46,10 @@ trait RestResourceBaseMethods
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        /** @var array<int, TEntity> $entities */
-        /** @psalm-var array<string, array<int, string>|string> $search */
+        /**
+         * @var array<int, TEntity> $entities
+         * @psalm-var array<string, array<int, string>|string> $search
+         */
         $entities = $this->getRepository()->findByAdvanced(
             $criteria,
             $this->normalizeOrderBy($orderBy),
