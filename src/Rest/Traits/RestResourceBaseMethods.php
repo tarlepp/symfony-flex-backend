@@ -19,6 +19,7 @@ use Throwable;
  * @package App\Rest\Traits
  *
  * @template TEntity of EntityInterface
+ * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
  */
 trait RestResourceBaseMethods
 {
@@ -87,7 +88,7 @@ trait RestResourceBaseMethods
     }
 
     /**
-     * @psalm-param array<string, mixed> $criteria
+     * @psalm-param array<string, CriteriaValue> $criteria
      * @psalm-param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return (
@@ -416,9 +417,9 @@ trait RestResourceBaseMethods
      * Normalizes a criteria array so every key is a plain string,
      * satisfying the strict array<string, mixed> type expected by the repository.
      *
-     * @param array<array-key, mixed> $criteria
+     * @param array<array-key, CriteriaValue> $criteria
      *
-     * @return array<string, mixed>
+     * @return array<string, CriteriaValue>
      */
     private function normalizeCriteria(array $criteria): array
     {
@@ -426,7 +427,7 @@ trait RestResourceBaseMethods
             return [];
         }
 
-        /** @var array<string, mixed> $normalized */
+        /** @var array<string, CriteriaValue> $normalized */
         $normalized = [];
 
         foreach ($criteria as $key => $value) {
