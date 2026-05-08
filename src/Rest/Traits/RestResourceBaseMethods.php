@@ -425,15 +425,9 @@ trait RestResourceBaseMethods
         /** @var array<string, mixed> $normalized */
         $normalized = [];
 
-        array_walk(
-            $criteria,
-            /**
-             * @param array-key $key
-             */
-            static function (mixed $value, int|string $key) use (&$normalized): void {
-                $normalized[(string)$key] = $value;
-            },
-        );
+        foreach (array_keys($criteria) as $key) {
+            $normalized[(string)$key] = $criteria[$key];
+        }
 
         return $normalized;
     }
