@@ -426,12 +426,12 @@ trait RestResourceBaseMethods
             return [];
         }
 
-        $keys = array_map(
-            static fn (int|string $key): string => (string)$key,
-            array_keys($criteria),
-        );
+        /** @var array<string, mixed> $normalized */
+        $normalized = [];
 
-        $normalized = array_combine($keys, array_values($criteria));
+        foreach ($criteria as $key => $value) {
+            $normalized[(string)$key] = $value;
+        }
 
         return $normalized;
     }
