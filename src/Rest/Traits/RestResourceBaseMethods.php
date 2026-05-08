@@ -425,8 +425,8 @@ trait RestResourceBaseMethods
         /** @var array<string, mixed> $normalized */
         $normalized = [];
 
-        foreach (array_keys($criteria) as $key) {
-            $normalized[(string)$key] = $criteria[$key];
+        foreach ($criteria as $key => $value) {
+            $normalized[(string)$key] = $value;
         }
 
         return $normalized;
