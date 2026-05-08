@@ -433,6 +433,6 @@ trait RestResourceBaseMethods
 
         $normalized = array_combine($keys, array_values($criteria));
 
-        return $normalized === false ? [] : $normalized;
+        return $normalized;
     }
 }
