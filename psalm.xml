@@ -32,9 +32,12 @@
 
         <PossiblyInvalidArgument>
             <errorLevel type="suppress">
-                <directory name="tests/Integration/TestCase" />
-                <directory name="tests/Integration/Entity" />
                 <file name="tests/E2E/TestCase/RestTraitTestCase.php" />
+                <file name="tests/Integration/TestCase/EntityTestCase.php" />
+                <file name="tests/Integration/Entity/DateDimensionTest.php" />
+                <file name="tests/Integration/Entity/LogLoginFailureTest.php" />
+                <file name="tests/Integration/Entity/LogLoginTest.php" />
+                <file name="tests/Integration/Entity/LogRequestTest.php" />
                 <file name="tests/Integration/ValueResolver/RestDtoValueResolverTest.php" />
                 <file name="tests/Unit/IntegrityTest.php" />
             </errorLevel>
