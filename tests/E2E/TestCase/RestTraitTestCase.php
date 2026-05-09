@@ -161,6 +161,8 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
+     * @psalm-suppress PossiblyInvalidArgument
+     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods')]
@@ -177,6 +179,8 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
+     * @psalm-suppress PossiblyInvalidArgument
+     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods')]
@@ -199,6 +203,8 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
+     * @psalm-suppress PossiblyInvalidArgument
+     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser')]
