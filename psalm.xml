@@ -30,6 +30,12 @@
             </errorLevel>
         </ArgumentTypeCoercion>
 
+        <PossiblyInvalidArgument>
+            <errorLevel type="suppress">
+                <directory name="tests/" />
+            </errorLevel>
+        </PossiblyInvalidArgument>
+
         <ClassMustBeFinal>
             <errorLevel type="suppress">
                 <directory name="src" />
