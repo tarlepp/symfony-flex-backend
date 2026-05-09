@@ -32,8 +32,6 @@
 
         <PossiblyInvalidArgument>
             <errorLevel type="suppress">
-                <!-- Nullable UUID in provider payload, method parameter remains string for test intent -->
-                <file name="tests/E2E/TestCase/RestTraitTestCase.php" />
                 <!-- Entity provider payload contains nullable values for generic base assertions -->
                 <file name="tests/Integration/TestCase/EntityTestCase.php" />
                 <!-- Entity test provider can emit null values in shared payload structure -->
