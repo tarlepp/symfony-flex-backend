@@ -19,7 +19,7 @@ use function getenv;
  */
 final class AnonActionsTest extends RestTraitTestCase
 {
-    private const string SKIPPED_INVALID_USER_TEST_MESSAGE = 'There isn\'t invalid users, so cannot test this.';
+    private const string SKIPPED_INVALID_USER_TEST_MESSAGE = 'There are no invalid users, so this cannot be tested.';
 
     protected static string $route = '/test_anon_actions';
 
