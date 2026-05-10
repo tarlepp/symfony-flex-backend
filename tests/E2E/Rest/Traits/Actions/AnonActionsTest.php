@@ -19,9 +19,13 @@ use function getenv;
  */
 final class AnonActionsTest extends RestTraitTestCase
 {
+    private const string SKIPPED_INVALID_USER_TEST_MESSAGE = 'There isn\'t invalid users, so cannot test this.';
+
     protected static string $route = '/test_anon_actions';
 
     /**
+     * This endpoint is anonymous by design, so invalid-user assertions are not applicable.
+     *
      * @noinspection PhpMissingParentCallCommonInspection
      */
     #[Override]
@@ -30,7 +34,7 @@ final class AnonActionsTest extends RestTraitTestCase
         ?string $p = null,
         ?string $m = null
     ): void {
-        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+        self::skipInvalidUserTest();
     }
 
     /**
@@ -42,7 +46,7 @@ final class AnonActionsTest extends RestTraitTestCase
         ?string $p = null,
         ?string $m = null
     ): void {
-        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+        self::skipInvalidUserTest();
     }
 
     /**
@@ -50,12 +54,12 @@ final class AnonActionsTest extends RestTraitTestCase
      */
     #[Override]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        ?string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null
     ): void {
-        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+        self::skipInvalidUserTest();
     }
 
     /**
@@ -67,7 +71,7 @@ final class AnonActionsTest extends RestTraitTestCase
         ?string $p = null,
         ?string $m = null
     ): void {
-        static::markTestSkipped('There isn\'t invalid users, so cannot test this.');
+        self::skipInvalidUserTest();
     }
 
     #[Override]
@@ -98,5 +102,10 @@ final class AnonActionsTest extends RestTraitTestCase
     public static function getInvalidUsers(): Generator
     {
         yield from [];
+    }
+
+    private static function skipInvalidUserTest(): void
+    {
+        static::markTestSkipped(self::SKIPPED_INVALID_USER_TEST_MESSAGE);
     }
 }

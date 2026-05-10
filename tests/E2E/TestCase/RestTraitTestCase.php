@@ -169,14 +169,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
-        ?string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        if ($uuid === null) {
-            throw new RuntimeException('UUID cannot be null');
-        }
+        $uuid = $this->getUuid($uuid);
 
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
@@ -191,14 +189,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
-        ?string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        if ($uuid === null) {
-            throw new RuntimeException('UUID cannot be null');
-        }
+        $uuid = $this->getUuid($uuid);
 
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
@@ -219,14 +215,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser')]
     #[TestDox('Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        ?string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        if ($uuid === null) {
-            throw new RuntimeException('UUID cannot be null');
-        }
+        $uuid = $this->getUuid($uuid);
 
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
@@ -492,5 +486,14 @@ abstract class RestTraitTestCase extends WebTestCase
         $client->request($method, $route);
 
         return $client->getResponse();
+    }
+
+    private function getUuid(?string $uuid): string
+    {
+        if ($uuid === null) {
+            throw new RuntimeException('UUID cannot be null');
+        }
+
+        return $uuid;
     }
 }
