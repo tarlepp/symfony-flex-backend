@@ -101,7 +101,12 @@ class ListApiKeysCommand extends Command
             $apiToken->getId(),
             $apiToken->getToken(),
             $apiToken->getDescription(),
-            implode(",\n", $apiToken->getUserGroups()->map($userGroupFormatter)->toArray()),
+            (string) $apiToken->getUserGroups()->reduce(
+                static fn (string $formatted, UserGroup $userGroup): string => $formatted === ''
+                    ? $userGroupFormatter($userGroup)
+                    : $formatted . ",\n" . $userGroupFormatter($userGroup),
+                '',
+            ),
             implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
         ];
     }

@@ -100,7 +100,12 @@ class ListUserGroupsCommand extends Command
             $userGroup->getId(),
             $userGroup->getName(),
             $userGroup->getRole()->getId(),
-            implode(",\n", $userGroup->getUsers()->map($userFormatter)->toArray()),
+            (string) $userGroup->getUsers()->reduce(
+                static fn (string $formatted, User $user): string => $formatted === ''
+                    ? $userFormatter($user)
+                    : $formatted . ",\n" . $userFormatter($user),
+                '',
+            ),
         ];
     }
 }
