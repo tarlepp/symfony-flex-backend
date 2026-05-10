@@ -102,7 +102,7 @@ class ListUserGroupsCommand extends Command
             $userGroup->getId(),
             $userGroup->getName(),
             $userGroup->getRole()->getId(),
-            implode(",\n", array_map($userFormatter, $userGroup->getUsers()->toArray())),
+            implode(",\n", $userGroup->getUsers()->map($userFormatter)->toArray()),
         ];
     }
 }

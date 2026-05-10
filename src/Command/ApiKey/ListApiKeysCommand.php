@@ -103,7 +103,7 @@ class ListApiKeysCommand extends Command
             $apiToken->getId(),
             $apiToken->getToken(),
             $apiToken->getDescription(),
-            implode(",\n", array_map($userGroupFormatter, $apiToken->getUserGroups()->toArray())),
+            implode(",\n", $apiToken->getUserGroups()->map($userGroupFormatter)->toArray()),
             implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
         ];
     }
