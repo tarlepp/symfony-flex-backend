@@ -101,12 +101,14 @@ class ListApiKeysCommand extends Command
             $apiToken->getId(),
             $apiToken->getToken(),
             $apiToken->getDescription(),
-            (string) $apiToken->getUserGroups()->reduce(
-                static fn (string $formatted, UserGroup $userGroup): string => $formatted === ''
-                    ? $userGroupFormatter($userGroup)
-                    : $formatted . ",\n" . $userGroupFormatter($userGroup),
-                '',
-            ),
+            implode(",\n", $apiToken->getUserGroups()->reduce(
+                static function (array $formatted, UserGroup $userGroup) use ($userGroupFormatter): array {
+                    $formatted[] = $userGroupFormatter($userGroup);
+
+                    return $formatted;
+                },
+                [],
+            )),
             implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
         ];
     }

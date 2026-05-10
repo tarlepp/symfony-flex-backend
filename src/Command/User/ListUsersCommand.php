@@ -105,12 +105,14 @@ class ListUsersCommand extends Command
             $user->getEmail(),
             $user->getFirstName() . ' ' . $user->getLastName(),
             implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-            (string) $user->getUserGroups()->reduce(
-                static fn (string $formatted, UserGroup $userGroup): string => $formatted === ''
-                    ? $userGroupFormatter($userGroup)
-                    : $formatted . ",\n" . $userGroupFormatter($userGroup),
-                '',
-            ),
+            implode(",\n", $user->getUserGroups()->reduce(
+                static function (array $formatted, UserGroup $userGroup) use ($userGroupFormatter): array {
+                    $formatted[] = $userGroupFormatter($userGroup);
+
+                    return $formatted;
+                },
+                [],
+            )),
         ];
     }
 }

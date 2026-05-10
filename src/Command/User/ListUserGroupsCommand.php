@@ -100,12 +100,14 @@ class ListUserGroupsCommand extends Command
             $userGroup->getId(),
             $userGroup->getName(),
             $userGroup->getRole()->getId(),
-            (string) $userGroup->getUsers()->reduce(
-                static fn (string $formatted, User $user): string => $formatted === ''
-                    ? $userFormatter($user)
-                    : $formatted . ",\n" . $userFormatter($user),
-                '',
-            ),
+            implode(",\n", $userGroup->getUsers()->reduce(
+                static function (array $formatted, User $user) use ($userFormatter): array {
+                    $formatted[] = $userFormatter($user);
+
+                    return $formatted;
+                },
+                [],
+            )),
         ];
     }
 }
