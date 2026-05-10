@@ -13,7 +13,6 @@ use Generator;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -162,40 +161,32 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @psalm-suppress PossiblyInvalidArgument
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
-        ?string $uuid = null,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $uuid = $this->getUuid($uuid);
-
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
         self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
-     * @psalm-suppress PossiblyInvalidArgument
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
-        ?string $uuid = null,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $uuid = $this->getUuid($uuid);
-
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
         $m === Request::METHOD_PUT
@@ -208,20 +199,16 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @psalm-suppress PossiblyInvalidArgument
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser')]
     #[TestDox('Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        ?string $uuid = null,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $uuid = $this->getUuid($uuid);
-
         $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
 
         self::assertSame(
@@ -486,14 +473,5 @@ abstract class RestTraitTestCase extends WebTestCase
         $client->request($method, $route);
 
         return $client->getResponse();
-    }
-
-    private function getUuid(?string $uuid): string
-    {
-        if ($uuid === null) {
-            throw new RuntimeException('UUID cannot be null');
-        }
-
-        return $uuid;
     }
 }

@@ -54,7 +54,7 @@ final class AnonActionsTest extends RestTraitTestCase
      */
     #[Override]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        ?string $uuid = null,
+        string $uuid,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null
