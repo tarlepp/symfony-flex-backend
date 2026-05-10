@@ -20,7 +20,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-use function array_map;
 use function implode;
 use function sprintf;
 
@@ -73,18 +72,28 @@ class ListUsersCommand extends Command
     /**
      * Getter method for formatted user rows for console table.
      *
-     * @return array<int, string>
+     * @return array<int, array<int, string>>
      *
      * @throws Throwable
      */
     private function getRows(): array
     {
-        return array_map(
-            $this->getFormatterUser(),
-            $this->userResource->find(orderBy: [
-                'username' => 'ASC',
-            ])
-        );
+        /** @var Closure(User):array<int, string> $formatter */
+        $formatter = $this->getFormatterUser();
+
+        /** @var array<int, User> $users */
+        $users = $this->userResource->find(orderBy: [
+            'username' => 'ASC',
+        ]);
+
+        /** @var array<int, array<int, string>> $rows */
+        $rows = [];
+
+        foreach ($users as $user) {
+            $rows[] = $formatter($user);
+        }
+
+        return $rows;
     }
 
     /**
@@ -99,20 +108,21 @@ class ListUsersCommand extends Command
             $userGroup->getRole()->getId(),
         );
 
-        return fn (User $user): array => [
-            $user->getId(),
-            $user->getUsername(),
-            $user->getEmail(),
-            $user->getFirstName() . ' ' . $user->getLastName(),
-            implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-            implode(",\n", $user->getUserGroups()->reduce(
-                static function (array $formatted, UserGroup $userGroup) use ($userGroupFormatter): array {
-                    $formatted[] = $userGroupFormatter($userGroup);
+        return function (User $user) use ($userGroupFormatter): array {
+            $formattedUserGroups = [];
 
-                    return $formatted;
-                },
-                [],
-            )),
-        ];
+            foreach ($user->getUserGroups() as $userGroup) {
+                $formattedUserGroups[] = $userGroupFormatter($userGroup);
+            }
+
+            return [
+                $user->getId(),
+                $user->getUsername(),
+                $user->getEmail(),
+                $user->getFirstName() . ' ' . $user->getLastName(),
+                implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
+                implode(",\n", $formattedUserGroups),
+            ];
+        };
     }
 }

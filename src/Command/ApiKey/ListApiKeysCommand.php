@@ -20,7 +20,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-use function array_map;
 use function implode;
 use function sprintf;
 
@@ -71,18 +70,28 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for formatted API key rows for console table.
      *
-     * @return array<int, string>
+     * @return array<int, array<int, string>>
      *
      * @throws Throwable
      */
     private function getRows(): array
     {
-        return array_map(
-            $this->getFormatterApiKey(),
-            $this->apiKeyResource->find(orderBy: [
-                'token' => 'ASC',
-            ])
-        );
+        /** @var Closure(ApiKey):array<int, string> $formatter */
+        $formatter = $this->getFormatterApiKey();
+
+        /** @var array<int, ApiKey> $apiKeys */
+        $apiKeys = $this->apiKeyResource->find(orderBy: [
+            'token' => 'ASC',
+        ]);
+
+        /** @var array<int, array<int, string>> $rows */
+        $rows = [];
+
+        foreach ($apiKeys as $apiKey) {
+            $rows[] = $formatter($apiKey);
+        }
+
+        return $rows;
     }
 
     /**
@@ -97,19 +106,20 @@ class ListApiKeysCommand extends Command
             $userGroup->getRole()->getId(),
         );
 
-        return fn (ApiKey $apiToken): array => [
-            $apiToken->getId(),
-            $apiToken->getToken(),
-            $apiToken->getDescription(),
-            implode(",\n", $apiToken->getUserGroups()->reduce(
-                static function (array $formatted, UserGroup $userGroup) use ($userGroupFormatter): array {
-                    $formatted[] = $userGroupFormatter($userGroup);
+        return function (ApiKey $apiToken) use ($userGroupFormatter): array {
+            $formattedUserGroups = [];
 
-                    return $formatted;
-                },
-                [],
-            )),
-            implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
-        ];
+            foreach ($apiToken->getUserGroups() as $userGroup) {
+                $formattedUserGroups[] = $userGroupFormatter($userGroup);
+            }
+
+            return [
+                $apiToken->getId(),
+                $apiToken->getToken(),
+                $apiToken->getDescription(),
+                implode(",\n", $formattedUserGroups),
+                implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
+            ];
+        };
     }
 }

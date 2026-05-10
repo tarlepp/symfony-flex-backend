@@ -19,7 +19,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-use function array_map;
 use function implode;
 use function sprintf;
 
@@ -69,18 +68,28 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for formatted user group rows for console table.
      *
-     * @return array<int, string>
+     * @return array<int, array<int, string>>
      *
      * @throws Throwable
      */
     private function getRows(): array
     {
-        return array_map(
-            $this->getFormatterUserGroup(),
-            $this->userGroupResource->find(orderBy: [
-                'name' => 'ASC',
-            ])
-        );
+        /** @var Closure(UserGroup):array<int, string> $formatter */
+        $formatter = $this->getFormatterUserGroup();
+
+        /** @var array<int, UserGroup> $userGroups */
+        $userGroups = $this->userGroupResource->find(orderBy: [
+            'name' => 'ASC',
+        ]);
+
+        /** @var array<int, array<int, string>> $rows */
+        $rows = [];
+
+        foreach ($userGroups as $userGroup) {
+            $rows[] = $formatter($userGroup);
+        }
+
+        return $rows;
     }
 
     /**
@@ -96,18 +105,19 @@ class ListUserGroupsCommand extends Command
             $user->getEmail(),
         );
 
-        return static fn (UserGroup $userGroup): array => [
-            $userGroup->getId(),
-            $userGroup->getName(),
-            $userGroup->getRole()->getId(),
-            implode(",\n", $userGroup->getUsers()->reduce(
-                static function (array $formatted, User $user) use ($userFormatter): array {
-                    $formatted[] = $userFormatter($user);
+        return static function (UserGroup $userGroup) use ($userFormatter): array {
+            $formattedUsers = [];
 
-                    return $formatted;
-                },
-                [],
-            )),
-        ];
+            foreach ($userGroup->getUsers() as $user) {
+                $formattedUsers[] = $userFormatter($user);
+            }
+
+            return [
+                $userGroup->getId(),
+                $userGroup->getName(),
+                $userGroup->getRole()->getId(),
+                implode(",\n", $formattedUsers),
+            ];
+        };
     }
 }
