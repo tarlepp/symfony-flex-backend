@@ -166,12 +166,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
-        string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
+        $response = $this->getClientResponse(static::$route . '/' . (string)$uuid, $u, $p, $m);
 
         self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -182,12 +182,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
-        string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
+        $response = $this->getClientResponse(static::$route . '/' . (string)$uuid, $u, $p, $m);
 
         $m === Request::METHOD_PUT
             ? self::assertSame(400, $response->getStatusCode(), (string)$response->getContent())
@@ -204,12 +204,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser')]
     #[TestDox('Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
+        $response = $this->getClientResponse(static::$route . '/' . (string)$uuid, $u, $p, $m);
 
         self::assertSame(
             $u === null ? 401 : 403,
