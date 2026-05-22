@@ -52,16 +52,16 @@
 		"symfony/process": "7.4.11",
 		"symfony/property-access": "7.4.8",
 		"symfony/property-info": "7.4.8",
-		"symfony/routing": "7.4.9",
-		"symfony/runtime": "7.4.8",
-		"symfony/security-bundle": "7.4.11",
+		"symfony/routing": "7.4.12",
+		"symfony/runtime": "7.4.12",
+		"symfony/security-bundle": "7.4.12",
 		"symfony/serializer": "7.4.10",
 		"symfony/string": "7.4.11",
 		"symfony/translation": "7.4.10",
 		"symfony/twig-bundle": "7.4.8",
 		"symfony/validator": "7.4.10",
 		"symfony/var-exporter": "7.4.9",
-		"symfony/yaml": "7.4.11",
+		"symfony/yaml": "7.4.12",
 		"zircote/swagger-php": "6.1.2"
 	},
 	"conflict": {
@@ -84,7 +84,7 @@
 		"symfony/requirements-checker": "2.0.3",
 		"symfony/stopwatch": "7.4.8",
 		"symfony/var-dumper": "7.4.8",
-		"symfony/web-profiler-bundle": "7.4.11"
+		"symfony/web-profiler-bundle": "7.4.12"
 	},
 	"replace": {
 		"symfony/polyfill-ctype": "*",
