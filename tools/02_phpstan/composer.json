@@ -6,10 +6,10 @@
 		"php": "^8.5.0"
 	},
 	"require-dev": {
-		"phpstan/phpstan": "2.1.54",
+		"phpstan/phpstan": "2.1.55",
 		"phpstan/phpstan-deprecation-rules": "2.0.4",
 		"phpstan/phpstan-phpunit": "2.0.16",
-		"phpstan/phpstan-symfony": "2.0.17",
+		"phpstan/phpstan-symfony": "2.0.18",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
