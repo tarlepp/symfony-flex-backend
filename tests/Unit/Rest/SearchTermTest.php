@@ -24,40 +24,49 @@ final class SearchTermTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull')]
     #[TestDox('Test that `getCriteria` method returns null with `$column` + `$search` parameters')]
-    public function testThatWithoutColumnOrSearchTermCriteriaIsNull(mixed $column, mixed $search): void
-    {
-        self::assertNull(SearchTerm::getCriteria(
-            $column instanceof StringableArrayObject ? $column->getArrayCopy() : $column,
-            $search instanceof StringableArrayObject ? $search->getArrayCopy() : $search
-        ), 'Criteria was not NULL with given parameters');
+    public function testThatWithoutColumnOrSearchTermCriteriaIsNull(
+        string|StringableArrayObject|null $column,
+        string|StringableArrayObject|null $search,
+    ): void {
+        if ($column instanceof StringableArrayObject) {
+            /** @var array<int, string> $column */
+            $column = $column->getArrayCopy();
+        }
+
+        if ($search instanceof StringableArrayObject) {
+            /** @var array<int, string> $search */
+            $search = $search->getArrayCopy();
+        }
+
+        self::assertNull(SearchTerm::getCriteria($column, $search), 'Criteria was not NULL with given parameters');
     }
 
-    /**
-     * @phpstan-param StringableArrayObject<array> $inputArguments
-     * @phpstan-param StringableArrayObject<array> | null $expected
-     * @psalm-param StringableArrayObject $inputArguments
-     * @psalm-param StringableArrayObject | null $expected
-     */
     #[DataProvider('dataProviderTestThatReturnedCriteriaIsExpected')]
     #[TestDox('Test that `getCriteria` method returns `$expected` with given `$inputArguments` arguments')]
     public function testThatReturnedCriteriaIsExpected(
         StringableArrayObject $inputArguments,
         StringableArrayObject|null $expected
     ): void {
+        /**
+         * @var array{
+         *      column: array<int, string>|string|null,
+         *      search: array<int, string>|string|null,
+         *      operand: string|null,
+         *      mode: int|null,
+         *  } $input
+         */
+        $input = $inputArguments->getArrayCopy();
+
         self::assertSame(
             $expected?->getArrayCopy(),
-            call_user_func_array(SearchTerm::getCriteria(...), $inputArguments->getArrayCopy())
+            call_user_func_array(SearchTerm::getCriteria(...), $input),
         );
     }
 
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @psalm-return Generator<array{0: null|string|StringableArrayObject, 1: null|string|StringableArrayObject}>
-     * @phpstan-return Generator<array{
-     *      0: null|string|StringableArrayObject<mixed>,
-     *      1: null|string|StringableArrayObject<mixed>,
-     *  }>
+     * @return Generator<array{0: null|string|StringableArrayObject, 1: null|string|StringableArrayObject}>
      */
     public static function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): Generator
     {
@@ -89,14 +98,13 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject|null}>
-     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject|null}>
      */
     public static function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {
         // To cover array_filter on search term
         yield [
-            new StringableArrayObject(['c1', '0']),
+            new StringableArrayObject(['c1', '0', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -107,37 +115,37 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([null, null]),
+            new StringableArrayObject([null, null, null, null]),
             null,
         ];
 
         yield [
-            new StringableArrayObject(['c1', null]),
+            new StringableArrayObject(['c1', null, null, null]),
             null,
         ];
 
         yield [
-            new StringableArrayObject([null, 'word']),
+            new StringableArrayObject([null, 'word', null, null]),
             null,
         ];
 
         yield [
-            new StringableArrayObject(['', '']),
+            new StringableArrayObject(['', '', null, null]),
             null,
         ];
 
         yield [
-            new StringableArrayObject(['c1', '']),
+            new StringableArrayObject(['c1', '', null, null]),
             null,
         ];
 
         yield [
-            new StringableArrayObject(['', 'word']),
+            new StringableArrayObject(['', 'word', null, null]),
             null,
         ];
 
         yield [
-            new StringableArrayObject(['c1', 'word']),
+            new StringableArrayObject(['c1', 'word', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -148,7 +156,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', 'word     ']),
+            new StringableArrayObject(['c1', 'word     ', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -159,7 +167,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], ['search', 'word']]),
+            new StringableArrayObject([['c1', 'c2'], ['search', 'word'], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -173,7 +181,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], ['   search', '   word    ']]),
+            new StringableArrayObject([['c1', 'c2'], ['   search', '   word    '], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -187,7 +195,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], ['search word']]),
+            new StringableArrayObject([['c1', 'c2'], ['search word'], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -199,7 +207,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], ['    search     word    ']]),
+            new StringableArrayObject([['c1', 'c2'], ['    search     word    '], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -211,7 +219,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], 'search word']),
+            new StringableArrayObject([['c1', 'c2'], 'search word', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -225,7 +233,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], '   search   word   ']),
+            new StringableArrayObject([['c1', 'c2'], '   search   word   ', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -239,7 +247,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], '"search word"']),
+            new StringableArrayObject([['c1', 'c2'], '"search word"', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -251,7 +259,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'c2'], '  "  search  word  "  ']),
+            new StringableArrayObject([['c1', 'c2'], '  "  search  word  "  ', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -263,7 +271,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', 'search word']),
+            new StringableArrayObject(['someTable.c1', 'search word', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -275,7 +283,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', '    search     word    ']),
+            new StringableArrayObject(['someTable.c1', '    search     word    ', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -287,7 +295,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', '"search word"']),
+            new StringableArrayObject(['someTable.c1', '"search word"', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -298,7 +306,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', '"    search    word   "']),
+            new StringableArrayObject(['someTable.c1', '"    search    word   "', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -309,7 +317,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', ['search', 'word']]),
+            new StringableArrayObject(['someTable.c1', ['search', 'word'], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -321,7 +329,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', ['    search', 'word   ', '   foo    bar   ']]),
+            new StringableArrayObject(['someTable.c1', ['    search', 'word   ', '   foo    bar   '], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -334,7 +342,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', ['search word']]),
+            new StringableArrayObject(['someTable.c1', ['search word'], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -345,7 +353,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['someTable.c1', ['    search    word   ']]),
+            new StringableArrayObject(['someTable.c1', ['    search    word   '], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -356,7 +364,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], 'search word']),
+            new StringableArrayObject([['c1', 'someTable.c1'], 'search word', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -370,7 +378,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], '    search    word   ']),
+            new StringableArrayObject([['c1', 'someTable.c1'], '    search    word   ', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -384,7 +392,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], 'search word "word search"']),
+            new StringableArrayObject([['c1', 'someTable.c1'], 'search word "word search"', null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -400,7 +408,9 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], '   search    word     "    word      search   "']),
+            new StringableArrayObject([[
+                'c1', 'someTable.c1'], '   search    word     "    word      search   "', null, null,
+            ]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -416,7 +426,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], ['search', 'word']]),
+            new StringableArrayObject([['c1', 'someTable.c1'], ['search', 'word'], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -430,7 +440,9 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], ['   search', 'word   ', '   foo   bar   ']]),
+            new StringableArrayObject([
+                ['c1', 'someTable.c1'], ['   search', 'word   ', '   foo   bar   '], null, null,
+            ]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -446,7 +458,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], ['search word']]),
+            new StringableArrayObject([['c1', 'someTable.c1'], ['search word'], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -458,7 +470,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject([['c1', 'someTable.c1'], ['   search    word   ']]),
+            new StringableArrayObject([['c1', 'someTable.c1'], ['   search    word   '], null, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -470,7 +482,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_AND, null]),
             new StringableArrayObject([
                 'and' => [
                     'and' => [
@@ -482,7 +494,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '   search    word   ', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject(['c1', '   search    word   ', SearchTerm::OPERAND_AND, null]),
             new StringableArrayObject([
                 'and' => [
                     'and' => [
@@ -494,7 +506,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_AND, null]),
             new StringableArrayObject([
                 'and' => [
                     'and' => [
@@ -505,7 +517,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '"    search     word   "', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject(['c1', '"    search     word   "', SearchTerm::OPERAND_AND, null]),
             new StringableArrayObject([
                 'and' => [
                     'and' => [
@@ -516,7 +528,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_OR, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -528,7 +540,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '   search    word   ', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject(['c1', '   search    word   ', SearchTerm::OPERAND_OR, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -540,7 +552,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -551,7 +563,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '"    search     word   "', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject(['c1', '"    search     word   "', SearchTerm::OPERAND_OR, null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -562,7 +574,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', 'search word', 'notSupportedOperand']),
+            new StringableArrayObject(['c1', 'search word', 'notSupportedOperand', null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -574,7 +586,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '    search     word    ', 'notSupportedOperand']),
+            new StringableArrayObject(['c1', '    search     word    ', 'notSupportedOperand', null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -586,7 +598,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '"search word"', 'notSupportedOperand']),
+            new StringableArrayObject(['c1', '"search word"', 'notSupportedOperand', null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
@@ -597,7 +609,7 @@ final class SearchTermTest extends KernelTestCase
         ];
 
         yield [
-            new StringableArrayObject(['c1', '"    search    word   "', 'notSupportedOperand']),
+            new StringableArrayObject(['c1', '"    search    word   "', 'notSupportedOperand', null]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
