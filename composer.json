@@ -41,7 +41,7 @@
 		"ramsey/uuid-doctrine": "2.1.0",
 		"symfony/asset": "7.4.8",
 		"symfony/config": "7.4.10",
-		"symfony/console": "7.4.11",
+		"symfony/console": "7.4.13",
 		"symfony/doctrine-bridge": "7.4.9",
 		"symfony/dotenv": "7.4.11",
 		"symfony/expression-language": "7.4.8",
@@ -49,19 +49,19 @@
 		"symfony/form": "7.4.9",
 		"symfony/framework-bundle": "7.4.11",
 		"symfony/monolog-bundle": "4.0.2",
-		"symfony/process": "7.4.11",
+		"symfony/process": "7.4.13",
 		"symfony/property-access": "7.4.8",
 		"symfony/property-info": "7.4.8",
-		"symfony/routing": "7.4.12",
-		"symfony/runtime": "7.4.12",
-		"symfony/security-bundle": "7.4.12",
+		"symfony/routing": "7.4.13",
+		"symfony/runtime": "7.4.13",
+		"symfony/security-bundle": "7.4.13",
 		"symfony/serializer": "7.4.10",
-		"symfony/string": "7.4.11",
+		"symfony/string": "7.4.13",
 		"symfony/translation": "7.4.10",
 		"symfony/twig-bundle": "7.4.8",
 		"symfony/validator": "7.4.10",
 		"symfony/var-exporter": "7.4.9",
-		"symfony/yaml": "7.4.12",
+		"symfony/yaml": "7.4.13",
 		"zircote/swagger-php": "6.1.2"
 	},
 	"conflict": {
@@ -84,7 +84,7 @@
 		"symfony/requirements-checker": "2.0.3",
 		"symfony/stopwatch": "7.4.8",
 		"symfony/var-dumper": "7.4.8",
-		"symfony/web-profiler-bundle": "7.4.12"
+		"symfony/web-profiler-bundle": "7.4.13"
 	},
 	"replace": {
 		"symfony/polyfill-ctype": "*",
