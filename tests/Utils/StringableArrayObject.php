@@ -15,6 +15,10 @@ use Override;
 use Stringable;
 
 /**
+ * TODO: make these annotations to work as expected:
+ * template TValue
+ * extends ArrayObject<array-key, TValue>
+ *
  * @psalm-suppress MissingTemplateParam
  *
  * @package App\Tests\Utils
