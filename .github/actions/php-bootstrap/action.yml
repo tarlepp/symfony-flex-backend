@@ -1,0 +1,74 @@
+name: PHP bootstrap
+description: Setup PHP, restore Composer cache, optionally install dependencies and print tool versions
+inputs:
+  php-version:
+    description: PHP version for setup-php
+    required: false
+    default: '8.5'
+  setup-tools:
+    description: Tools argument for setup-php
+    required: false
+    default: composer:v2
+  setup-extensions:
+    description: Extensions argument for setup-php
+    required: false
+    default: ''
+  setup-coverage:
+    description: Coverage driver for setup-php
+    required: false
+    default: none
+  setup-ini-values:
+    description: ini-values for setup-php
+    required: false
+    default: ''
+  install-dependencies:
+    description: Whether to run composer install
+    required: false
+    default: 'true'
+  composer-install-args:
+    description: Arguments passed to composer install
+    required: false
+    default: --no-progress --optimize-autoloader
+  print-versions:
+    description: Whether to print mysql/php/composer tool versions
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+    - name: Setup PHP, with composer and extensions
+      uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
+      with:
+        php-version: ${{ inputs.php-version }}
+        tools: ${{ inputs.setup-tools }}
+        extensions: ${{ inputs.setup-extensions }}
+        coverage: ${{ inputs.setup-coverage }}
+        ini-values: ${{ inputs.setup-ini-values }}
+
+    - name: Get composer cache directory
+      id: composer-cache
+      shell: bash
+      run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+    - name: Cache composer dependencies
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      with:
+        path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    - name: Install Composer dependencies
+      if: ${{ inputs.install-dependencies == 'true' }}
+      shell: bash
+      run: composer install ${{ inputs.composer-install-args }}
+
+    - name: Check which versions we're using
+      if: ${{ inputs.print-versions == 'true' }}
+      shell: bash
+      run: |
+        mysql --version
+        php --version
+        php ./bin/console --version
+        php ./vendor/bin/phpunit --version
+        composer --version
+
