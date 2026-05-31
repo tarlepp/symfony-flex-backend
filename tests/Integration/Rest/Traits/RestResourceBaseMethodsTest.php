@@ -40,9 +40,13 @@ final class RestResourceBaseMethodsTest extends TestCase
             });
 
         $resource = new class($repository, $order) extends RestResource {
-            /** @param array<int, string> $order */
-            public function __construct(BaseRepositoryInterface $repository, public array &$order)
-            {
+            /**
+             * @param array<int, string> $order
+             */
+            public function __construct(
+                BaseRepositoryInterface $repository,
+                public array &$order
+            ) {
                 parent::__construct($repository);
             }
 
@@ -227,7 +231,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ): RestDtoInterface {
                 parent::getDtoForEntity($id, $dtoClass, $dto, $patch);
 
-                $this->capturedPatchFlag = (bool) $patch;
+                $this->capturedPatchFlag = (bool)$patch;
 
                 return $this->restDto;
             }
@@ -264,7 +268,13 @@ final class RestResourceBaseMethodsTest extends TestCase
         $repository
             ->expects($this->once())
             ->method('findByAdvanced')
-            ->with(['isActive' => true], ['username' => 'ASC'], 1, 2, ['or' => ['term']])
+            ->with([
+                'isActive' => true,
+            ], [
+                'username' => 'ASC',
+            ], 1, 2, [
+                'or' => ['term'],
+            ])
             ->willReturn([$firstEntity]);
 
         $resource = new class($repository, $secondEntity) extends RestResource {
@@ -285,18 +295,26 @@ final class RestResourceBaseMethodsTest extends TestCase
             ): void {
                 parent::beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
-                if ($criteria === ['keep-null' => true]) {
+                if ($criteria === [
+                    'keep-null' => true,
+                ]) {
                     $limit = null;
                     $offset = null;
 
                     return;
                 }
 
-                $criteria = ['isActive' => true];
-                $orderBy = ['username' => 'ASC'];
+                $criteria = [
+                    'isActive' => true,
+                ];
+                $orderBy = [
+                    'username' => 'ASC',
+                ];
                 $limit = 1;
                 $offset = 2;
-                $search = ['or' => ['term']];
+                $search = [
+                    'or' => ['term'],
+                ];
             }
 
             #[Override]
@@ -325,7 +343,11 @@ final class RestResourceBaseMethodsTest extends TestCase
         $repository
             ->expects($this->once())
             ->method('countAdvanced')
-            ->with(['status' => 'active'], ['or' => ['term']])
+            ->with([
+                'status' => 'active',
+            ], [
+                'or' => ['term'],
+            ])
             ->willReturn(10);
 
         $resource = new class($repository) extends RestResource {
@@ -334,8 +356,12 @@ final class RestResourceBaseMethodsTest extends TestCase
             {
                 parent::beforeCount($criteria, $search);
 
-                $criteria = ['status' => 'active'];
-                $search = ['or' => ['term']];
+                $criteria = [
+                    'status' => 'active',
+                ];
+                $search = [
+                    'or' => ['term'],
+                ];
             }
 
             #[Override]
@@ -397,11 +423,17 @@ final class RestResourceBaseMethodsTest extends TestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(['email' => 'user@example.com'], ['createdAt' => 'DESC'])
+            ->with([
+                'email' => 'user@example.com',
+            ], [
+                'createdAt' => 'DESC',
+            ])
             ->willReturn($expectedEntity);
 
         $resource = new class($repository) extends RestResource {
-            /** @var array<int, mixed> */
+            /**
+             * @var array<int, mixed>
+             */
             public array $afterFindOneByArguments = [];
 
             #[Override]
@@ -409,8 +441,12 @@ final class RestResourceBaseMethodsTest extends TestCase
             {
                 parent::beforeFindOneBy($criteria, $orderBy);
 
-                $criteria = ['email' => 'user@example.com'];
-                $orderBy = ['createdAt' => 'DESC'];
+                $criteria = [
+                    'email' => 'user@example.com',
+                ];
+                $orderBy = [
+                    'createdAt' => 'DESC',
+                ];
             }
 
             #[Override]
@@ -425,8 +461,12 @@ final class RestResourceBaseMethodsTest extends TestCase
         self::assertSame($expectedEntity, $resource->findOneBy([], []));
         self::assertSame(
             [
-                ['email' => 'user@example.com'],
-                ['createdAt' => 'DESC'],
+                [
+                    'email' => 'user@example.com',
+                ],
+                [
+                    'createdAt' => 'DESC',
+                ],
                 $expectedEntity,
             ],
             $resource->afterFindOneByArguments,
@@ -436,8 +476,12 @@ final class RestResourceBaseMethodsTest extends TestCase
     #[TestDox('Test that `getIds` passes lifecycle arguments to `afterIds` in expected order')]
     public function testThatGetIdsPassesLifecycleArgumentsToAfterIdsInExpectedOrder(): void
     {
-        $criteria = ['criteria' => 'value'];
-        $search = ['search' => 'value'];
+        $criteria = [
+            'criteria' => 'value',
+        ];
+        $search = [
+            'search' => 'value',
+        ];
         $expectedIds = ['id-1'];
 
         $repository = $this->createMock(BaseRepositoryInterface::class);
@@ -449,7 +493,9 @@ final class RestResourceBaseMethodsTest extends TestCase
             ->willReturn($expectedIds);
 
         $resource = new class($repository) extends RestResource {
-            /** @var array<int, array<mixed>> */
+            /**
+             * @var array<int, array<mixed>>
+             */
             public array $afterIdsArguments = [];
 
             /**
