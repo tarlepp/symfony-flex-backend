@@ -470,4 +470,3 @@ final class RestResourceBaseMethodsTest extends TestCase
         self::assertSame([$criteria, $search, $expectedIds], $resource->afterIdsArguments);
     }
 }
-
