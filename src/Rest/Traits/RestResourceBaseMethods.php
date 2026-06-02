@@ -235,7 +235,7 @@ trait RestResourceBaseMethods
         $ids = $this->getRepository()->findIds($criteria, $search);
 
         // After callback method call
-        $this->afterIds($ids, $criteria, $search);
+        $this->afterIds($criteria, $search, $ids);
 
         return $ids;
     }
