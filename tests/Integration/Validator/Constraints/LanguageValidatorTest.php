@@ -13,7 +13,7 @@ use App\Validator\Constraints\Language;
 use App\Validator\Constraints\LanguageValidator;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 /**
@@ -26,7 +26,7 @@ final class LanguageValidatorTest extends KernelTestCase
     public function testThatValidateCallsExpectedMethods(): void
     {
         $localizationMock = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         $localizationMock

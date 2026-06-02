@@ -14,7 +14,7 @@ use App\Validator\Constraints\UniqueUsername;
 use App\Validator\Constraints\UniqueUsernameValidator;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 use Throwable;
 
@@ -31,7 +31,7 @@ final class UniqueUsernameValidatorTest extends KernelTestCase
     public function testThatValidateCallsExpectedMethods(): void
     {
         $repositoryMock = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         // Create new user
