@@ -17,6 +17,13 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @extends RestResource<EntityInterface>
+ */
+abstract class EntityRestResource extends RestResource
+{
+}
+
+/**
  * @package App\Tests\Integration\Rest\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -39,8 +46,7 @@ final class RestResourceBaseMethodsTest extends TestCase
                 return $repository;
             });
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository, $order) extends RestResource {
+        $resource = new class($repository, $order) extends EntityRestResource {
             /**
              * @param array<int, string> $order
              */
@@ -91,8 +97,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ->with($entity, true)
             ->willReturnSelf();
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository) extends RestResource {
+        $resource = new class($repository) extends EntityRestResource {
             public string $capturedIdInAfterDelete = '';
 
             #[Override]
@@ -141,8 +146,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ->with($entity)
             ->willReturn($entity);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository, $dto) extends RestResource {
+        $resource = new class($repository, $dto) extends EntityRestResource {
             public string $capturedAfterUpdateId = '';
             public string $capturedGetDtoForEntityId = '';
 
@@ -214,8 +218,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ->with($entity)
             ->willReturn($entity);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository, $dto) extends RestResource {
+        $resource = new class($repository, $dto) extends EntityRestResource {
             public string $capturedAfterPatchId = '';
             public bool $capturedPatchFlag = false;
 
@@ -281,8 +284,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ])
             ->willReturn([$firstEntity]);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository, $secondEntity) extends RestResource {
+        $resource = new class($repository, $secondEntity) extends EntityRestResource {
             public function __construct(
                 BaseRepositoryInterface $repository,
                 private readonly EntityInterface $secondEntity,
@@ -355,8 +357,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ])
             ->willReturn(10);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository) extends RestResource {
+        $resource = new class($repository) extends EntityRestResource {
             #[Override]
             public function beforeCount(array &$criteria, array &$search): void
             {
@@ -394,8 +395,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ->with('normalized-id')
             ->willReturn($expectedEntity);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository) extends RestResource {
+        $resource = new class($repository) extends EntityRestResource {
             public string $capturedIdInAfterFindOne = '';
 
             #[Override]
@@ -437,8 +437,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ])
             ->willReturn($expectedEntity);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository) extends RestResource {
+        $resource = new class($repository) extends EntityRestResource {
             /**
              * @var array<int, mixed>
              */
@@ -500,8 +499,7 @@ final class RestResourceBaseMethodsTest extends TestCase
             ->with($criteria, $search)
             ->willReturn($expectedIds);
 
-        /** @var RestResource<EntityInterface> $resource */
-        $resource = new class($repository) extends RestResource {
+        $resource = new class($repository) extends EntityRestResource {
             /**
              * @var array<int, array<mixed>>
              */
