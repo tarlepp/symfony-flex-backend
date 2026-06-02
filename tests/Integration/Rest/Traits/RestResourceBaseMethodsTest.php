@@ -277,7 +277,8 @@ final class RestResourceBaseMethodsTest extends TestCase
             ])
             ->willReturn([$firstEntity]);
 
-        $resource = new /** @extends RestResource<EntityInterface> */ class($repository, $secondEntity) extends RestResource {
+        /** @extends RestResource<EntityInterface> */
+        $resource = new class($repository, $secondEntity) extends RestResource {
             public function __construct(
                 BaseRepositoryInterface $repository,
                 private readonly EntityInterface $secondEntity,
