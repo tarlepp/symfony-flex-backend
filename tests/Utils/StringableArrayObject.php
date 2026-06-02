@@ -15,7 +15,11 @@ use Override;
 use Stringable;
 
 /**
- * @extends ArrayObject<array-key, mixed>
+ * TODO: make these annotations to work as expected:
+ * template TValue
+ * extends ArrayObject<array-key, TValue>
+ *
+ * @psalm-suppress MissingTemplateParam
  *
  * @package App\Tests\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

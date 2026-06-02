@@ -95,13 +95,6 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @phpstan-param StringableArrayObject<mixed> $criteria
-     * @phpstan-param StringableArrayObject<mixed> $orderBy
-     * @phpstan-param StringableArrayObject<mixed> $search
-     * @psalm-param StringableArrayObject $criteria
-     * @psalm-param StringableArrayObject $orderBy
-     * @psalm-param StringableArrayObject $search
-     *
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
@@ -162,7 +155,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: string}>
+     * @return Generator<int, array{0: string}, null, void>
      */
     public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
@@ -176,7 +169,7 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: Throwable, 1: int}>
+     * @return Generator<int, array{0: Throwable, 1: int}, null, void>
      */
     public static function dataProviderTestThatTraitHandlesException(): Generator
     {
@@ -194,15 +187,14 @@ final class FindMethodTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<int, array{
+     * @return Generator<int, array{
      *      0: string,
      *      1: StringableArrayObject,
      *      2: StringableArrayObject,
      *      3: int|null,
      *      4: int|null,
      *      5: StringableArrayObject,
-     *  }>
-     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
+     *  }, null, void>
      */
     public static function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
