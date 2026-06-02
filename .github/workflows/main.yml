@@ -65,14 +65,32 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
-  static-phpcs:
-    name: Static analyzer - PHP CodeSniffer
+  static:
+    name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
     needs:
       - security-check
       - lint-configuration
     strategy:
       fail-fast: false
+      matrix:
+        analyzer:
+          - name: PHP CodeSniffer
+            command: make phpcs
+          - name: ECS
+            command: make ecs
+          - name: PHPLint
+            command: make phplint
+          - name: PHP Parallel Lint
+            command: make php-parallel-lint
+          - name: Psalm
+            command: make psalm-github
+          - name: PHPStan
+            command: make phpstan-github
+          - name: PHPLoc
+            command: make phploc
+          - name: PHP Insights
+            command: make phpinsights
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -84,355 +102,28 @@ jobs:
         with:
           setup-ini-values: opcache.jit=disable
 
-      - name: Run PHP CodeSniffer
-        run: make phpcs
-
-  static-ecs:
-    name: Static analyzer - ECS
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run The Easiest Way to Use Any Coding Standard
-        run: make ecs
-
-  static-phplint:
-    name: Static analyzer - PHPLint
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run PHPLint tool
-        run: make phplint
-
-  static-php-parallel-lint:
-    name: Static analyzer - PHP Parallel Lint
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run PHP Parallel Lint tool
-        run: make php-parallel-lint
-
-  static-psalm:
-    name: Static analyzer - Psalm
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
-        run: make psalm-github
+      - name: Run static analyzer (${{ matrix.analyzer.name }})
+        run: ${{ matrix.analyzer.command }}
 
       - name: Archive Psalm results (psalm.json)
+        if: matrix.analyzer.name == 'Psalm'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: psalm.json
           path: ./build/psalm.json
 
-  static-phpstan:
-    name: Static analyzer - PHPStan
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run PHPStan static analysis tool
-        run: make phpstan-github
-
-  static-phploc:
-    name: Static analyzer - PHPLoc
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run `phploc` to collect LOC stats
-        run: make phploc
-
       - name: Archive `phploc` results (phploc.json)
+        if: matrix.analyzer.name == 'PHPLoc'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: phploc.json
           path: ./build/phploc.json
 
-  static-phpinsights:
-    name: Static analyzer - PHP Insights
-    runs-on: ubuntu-24.04
-    needs:
-      - security-check
-      - lint-configuration
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
-        with:
-          php-version: '8.5'
-          tools: composer:v2
-          ini-values: opcache.jit=disable
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
-
-      - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
-
-      - name: Run `PHP Insights` static analysis tool
-        run: make phpinsights
-
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
     needs:
-      - static-phpcs
-      - static-ecs
-      - static-phplint
-      - static-php-parallel-lint
-      - static-psalm
-      - static-phpstan
-      - static-phploc
-      - static-phpinsights
+      - static
       - lint-documentation
     env:
       SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
