@@ -11,17 +11,9 @@ namespace App\Tests\Integration\Rest\Traits;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
-use App\Rest\RestResource;
 use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-
-/**
- * @extends RestResource<EntityInterface>
- */
-abstract class EntityRestResource extends RestResource
-{
-}
 
 /**
  * @package App\Tests\Integration\Rest\Traits
