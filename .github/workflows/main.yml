@@ -189,6 +189,14 @@ jobs:
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
 
+      - name: Show external reporting eligibility (safe debug)
+        run: |
+          echo "External reporting summary (no secrets shown):"
+          echo "- Event allows uploads: ${{ github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork }}"
+          echo "- Scrutinizer upload enabled: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}"
+          echo "- Coveralls upload enabled: ${{ env.COVERALLS_REPO_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}"
+          echo "- Sonar upload enabled: ${{ env.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}"
+
       #- name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
       #  run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --id ${{ secrets.CC_TEST_REPORTER_ID }} --coverage-input-type clover --exit-code $?
       #  env:
