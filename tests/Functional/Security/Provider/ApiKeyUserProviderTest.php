@@ -128,6 +128,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
      *
      * @psalm-return array<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return array<int, array{0: string, 1: StringableArrayObject<array<int, string>>}>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public static function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
@@ -144,7 +146,10 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<\Symfony\Component\Security\Core\User\UserInterface>}>
+     * @return Generator<int, array{
+     *      0: boolean,
+     *      1: class-string<\Symfony\Component\Security\Core\User\UserInterface>,
+     *  }>
      */
     public static function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {

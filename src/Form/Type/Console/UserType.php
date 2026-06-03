@@ -27,7 +27,7 @@ use Throwable;
 use function array_map;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @extends AbstractType<UserDto>
  *
  * @package App\Form\Type\Console
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
@@ -199,6 +199,7 @@ class UserType extends AbstractType
         $choices = [];
 
         $iterator = static function (array $timezone) use (&$choices): void {
+            /** @var array{timezone: string, identifier: non-empty-string, offset: string, value: string} $timezone */
             $choices[$timezone['value'] . ' (' . $timezone['offset'] . ')'] = $timezone['identifier'];
         };
 

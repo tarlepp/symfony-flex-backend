@@ -69,7 +69,7 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for formatted user group rows for console table.
      *
-     * @return array<int, string>
+     * @return array<array-key, array<int, string>>
      *
      * @throws Throwable
      */
@@ -86,6 +86,8 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for user group formatter closure. This closure will
      * format single UserGroup entity for console table.
+     *
+     * @return Closure(UserGroup): array<int, string>
      */
     private function getFormatterUserGroup(): Closure
     {
@@ -100,7 +102,7 @@ class ListUserGroupsCommand extends Command
             $userGroup->getId(),
             $userGroup->getName(),
             $userGroup->getRole()->getId(),
-            implode(",\n", $userGroup->getUsers()->map($userFormatter)->toArray()),
+            implode(",\n", array_map($userFormatter, $userGroup->getUsers()->toArray())),
         ];
     }
 }

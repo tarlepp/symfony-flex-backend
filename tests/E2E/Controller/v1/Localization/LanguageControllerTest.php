@@ -70,11 +70,13 @@ final class LanguageControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertJson($content);
-        self::assertCount(2, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount(2, $decoded);
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet(): Generator
     {

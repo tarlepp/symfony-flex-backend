@@ -19,6 +19,9 @@ use UnexpectedValueException;
 /**
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template-covariant TEntity of EntityInterface
+ * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
  */
 #[AutoconfigureTag('app.rest.resource')]
 #[AutoconfigureTag('app.stopwatch')]
@@ -27,12 +30,14 @@ interface RestResourceInterface
     /**
      * Getter method for serializer context.
      *
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      */
     public function getSerializerContext(): array;
 
     /**
      * Getter method for entity repository.
+     *
+     * @return BaseRepositoryInterface<TEntity>
      *
      * @throws Throwable
      */
@@ -107,9 +112,9 @@ interface RestResourceInterface
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
      * @param array<string, string>|null $orderBy
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, TEntity>
      *
      * @throws Throwable
      */
@@ -127,8 +132,8 @@ interface RestResourceInterface
      *
      * @psalm-return (
      *      $throwExceptionIfNotFound is true
-     *      ? EntityInterface
-     *      : EntityInterface|null
+     *      ? TEntity
+     *      : TEntity|null
      *  )
      *
      * @throws Throwable
@@ -142,13 +147,13 @@ interface RestResourceInterface
      *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
-     * @param array<int|string, string|array<mixed>> $criteria
-     * @param array<int, string>|null $orderBy
+     * @psalm-param array<string, CriteriaValue> $criteria
+     * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
      * @psalm-return (
      *      $throwExceptionIfNotFound is true
-     *      ? EntityInterface
-     *      : EntityInterface|null
+     *      ? TEntity
+     *      : TEntity|null
      *  )
      *
      * @throws Throwable
@@ -164,7 +169,7 @@ interface RestResourceInterface
      * search terms.
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @throws Throwable
      */
@@ -174,6 +179,8 @@ interface RestResourceInterface
      * Generic method to create new item (entity) to specified database
      * repository. Return value is created entity for specified repository.
      *
+     * @return TEntity
+     *
      * @throws Throwable
      */
     public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface;
@@ -182,6 +189,8 @@ interface RestResourceInterface
      * Generic method to update specified entity with new data.
      *
      * @codeCoverageIgnore This is needed because variables are multiline
+     *
+     * @return TEntity
      *
      * @throws Throwable
      */
@@ -197,6 +206,8 @@ interface RestResourceInterface
      *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
+     * @return TEntity
+     *
      * @throws Throwable
      */
     public function patch(
@@ -209,6 +220,8 @@ interface RestResourceInterface
     /**
      * Generic method to delete specified entity from database.
      *
+     * @return TEntity
+     *
      * @throws Throwable
      */
     public function delete(string $id, ?bool $flush = null): EntityInterface;
@@ -218,7 +231,7 @@ interface RestResourceInterface
      * value is an array of specified repository entity id values.
      *
      * @param array<int|string, string|array<mixed>>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, string>
      */
@@ -227,6 +240,8 @@ interface RestResourceInterface
     /**
      * Generic method to save given entity to specified repository. Return
      * value is created entity.
+     *
+     * @return TEntity
      *
      * @throws Throwable
      */

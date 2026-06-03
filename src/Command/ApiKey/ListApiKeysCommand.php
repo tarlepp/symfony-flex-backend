@@ -71,7 +71,7 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for formatted API key rows for console table.
      *
-     * @return array<int, string>
+     * @return array<array-key, array<int, string>>
      *
      * @throws Throwable
      */
@@ -88,6 +88,8 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for API key formatter closure. This closure will format
      * single ApiKey entity for console table.
+     *
+     * @return Closure(ApiKey): array<int, string>
      */
     private function getFormatterApiKey(): Closure
     {
@@ -101,7 +103,7 @@ class ListApiKeysCommand extends Command
             $apiToken->getId(),
             $apiToken->getToken(),
             $apiToken->getDescription(),
-            implode(",\n", $apiToken->getUserGroups()->map($userGroupFormatter)->toArray()),
+            implode(",\n", array_map($userGroupFormatter, $apiToken->getUserGroups()->toArray())),
             implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
         ];
     }

@@ -38,12 +38,14 @@ trait CountMethod
 
             $this->processCriteria($criteria, $request, __METHOD__);
 
+            $count = $resource->count($criteria, $search);
+
             return $this
                 ->getResponseHandler()
                 ->createResponse(
                     $request,
                     [
-                        'count' => $resource->count($criteria, $search),
+                        'count' => $count,
                     ],
                     $resource
                 );

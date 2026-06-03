@@ -58,7 +58,7 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      *
      * @throws Throwable
      */
@@ -105,6 +105,8 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
+     * @param array<string, mixed>|null $context
+     *
      * @throws Throwable
      */
     #[Override]
@@ -189,7 +191,7 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param array<mixed> $context
+     * @param array<string, mixed> $context
      */
     private function getResponse(mixed $data, int $httpStatus, string $format, array $context): Response
     {

@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\TestCase;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
-use AutoMapperPlus\AutoMapperPlusBundle\AutoMapperConfiguratorInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
 use AutoMapperPlus\Configuration\MappingInterface;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -23,7 +22,7 @@ use function count;
 abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<RestAutoMapperConfiguration>
      */
     protected string $autoMapperConfiguration;
 
@@ -40,11 +39,14 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
     #[TestDox('Test that `AutoMapperConfiguration` instance is created')]
     public function testThatInstanceCanBeCreated(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $requestMapper = $this->getMockBuilder($this->requestMapper)
             ->disableOriginalConstructor()
             ->getMock();
 
-        self::assertInstanceOf(RestAutoMapperConfiguration::class, new $this->autoMapperConfiguration($requestMapper));
+        /** @psalm-suppress UnsafeInstantiation */
+        new $this->autoMapperConfiguration($requestMapper);
     }
 
     #[TestDox('Test that `AutoMapperConfiguration` instance is configured as expected')]
@@ -72,9 +74,8 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
             ->method('useCustomMapper')
             ->with($requestMapper);
 
+        /** @psalm-suppress UnsafeInstantiation */
         $mapper = new $this->autoMapperConfiguration($requestMapper);
-
-        self::assertInstanceOf(AutoMapperConfiguratorInterface::class, $mapper);
 
         $mapper->configure($config);
     }

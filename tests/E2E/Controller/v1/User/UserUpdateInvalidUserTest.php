@@ -82,7 +82,7 @@ final class UserUpdateInvalidUserTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatPutActionReturns403ForInvalidUser(): Generator
     {
@@ -106,7 +106,7 @@ final class UserUpdateInvalidUserTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatPatchActionReturns403ForInvalidUser(): Generator
     {

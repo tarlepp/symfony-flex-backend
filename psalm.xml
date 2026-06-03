@@ -30,6 +30,25 @@
             </errorLevel>
         </ArgumentTypeCoercion>
 
+        <PossiblyInvalidArgument>
+            <errorLevel type="suppress">
+                <!-- Entity provider payload contains nullable values for generic base assertions -->
+                <file name="tests/Integration/TestCase/EntityTestCase.php" />
+                <!-- Entity test provider can emit null values in shared payload structure -->
+                <file name="tests/Integration/Entity/DateDimensionTest.php" />
+                <!-- Entity test provider can emit null values in shared payload structure -->
+                <file name="tests/Integration/Entity/LogLoginFailureTest.php" />
+                <!-- Entity test provider can emit null values in shared payload structure -->
+                <file name="tests/Integration/Entity/LogLoginTest.php" />
+                <!-- Entity test provider can emit null values in shared payload structure -->
+                <file name="tests/Integration/Entity/LogRequestTest.php" />
+                <!-- PHPUnit mock-builder typing causes nullable provider payload in resolver tests -->
+                <file name="tests/Integration/ValueResolver/RestDtoValueResolverTest.php" />
+                <!-- Reflection-driven data providers allow nullable payloads for integrity assertions -->
+                <file name="tests/Unit/IntegrityTest.php" />
+            </errorLevel>
+        </PossiblyInvalidArgument>
+
         <ClassMustBeFinal>
             <errorLevel type="suppress">
                 <directory name="src" />

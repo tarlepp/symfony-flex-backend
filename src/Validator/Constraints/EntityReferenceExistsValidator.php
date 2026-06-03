@@ -112,6 +112,8 @@ class EntityReferenceExistsValidator extends ConstraintValidator
 
     /**
      * Method to return used filter closure.
+     *
+     * @return Closure(EntityInterface): bool
      */
     private function getFilterClosure(): Closure
     {

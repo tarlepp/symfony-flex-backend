@@ -20,7 +20,7 @@ use function is_array;
 use function sprintf;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @implements DataTransformerInterface<array<array-key, UserGroup>|null, array<array-key, string>|null>
  *
  * @package App\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
@@ -37,9 +37,6 @@ class UserGroupTransformer implements DataTransformerInterface
      *
      * Transforms an array of objects (UserGroup) to an array of strings
      * (UserGroup id).
-     *
-     * @psalm-param array<int, string|UserGroup>|mixed $value
-     * @psalm-return array<array-key, string>
      */
     #[Override]
     public function transform(mixed $value): array
@@ -55,9 +52,6 @@ class UserGroupTransformer implements DataTransformerInterface
      *
      * Transforms an array of strings (UserGroup id) to an array of objects
      * (UserGroup).
-     *
-     * @psalm-param array<int, string>|mixed $value
-     * @psalm-return array<array-key, UserGroup>|null
      *
      * @throws Throwable
      */

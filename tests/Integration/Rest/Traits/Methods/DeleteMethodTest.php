@@ -131,7 +131,7 @@ final class DeleteMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
@@ -145,7 +145,7 @@ final class DeleteMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Throwable, 1: int}>
+     * @return Generator<int, array{0: Throwable, 1: int}>
      */
     public static function dataProviderTestThatTraitHandlesException(): Generator
     {

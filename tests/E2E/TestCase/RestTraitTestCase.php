@@ -51,12 +51,12 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     abstract public static function getValidUsers(): Generator;
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     abstract public static function getInvalidUsers(): Generator;
 
@@ -166,12 +166,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `405` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
-        string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
+        $response = $this->getClientResponse(static::$route . '/' . (string)$uuid, $u, $p, $m);
 
         self::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -182,12 +182,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods')]
     #[TestDox('Test that `$m /$uuid` request returns `200` or `400` when using valid user `$u` + `$p`')]
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
-        string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
+        $response = $this->getClientResponse(static::$route . '/' . (string)$uuid, $u, $p, $m);
 
         $m === Request::METHOD_PUT
             ? self::assertSame(400, $response->getStatusCode(), (string)$response->getContent())
@@ -204,12 +204,12 @@ abstract class RestTraitTestCase extends WebTestCase
     #[DataProvider('dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser')]
     #[TestDox('Test that `$m /$uuid` request returns `401` or `403` when using invalid user `$u` + `$p`')]
     public function testThatUuidRouteWithIdDoesNotAllowInvalidUser(
-        string $uuid,
+        ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
         ?string $m = null,
     ): void {
-        $response = $this->getClientResponse(static::$route . '/' . $uuid, $u, $p, $m);
+        $response = $this->getClientResponse(static::$route . '/' . (string)$uuid, $u, $p, $m);
 
         self::assertSame(
             $u === null ? 401 : 403,
@@ -268,7 +268,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
@@ -286,7 +286,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): Generator
     {
@@ -298,7 +298,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): Generator
     {
@@ -310,7 +310,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
@@ -326,7 +326,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): Generator
     {
@@ -339,7 +339,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): Generator
     {
@@ -352,7 +352,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): Generator
     {
@@ -367,7 +367,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): Generator
     {
@@ -382,7 +382,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): Generator
     {
@@ -397,7 +397,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
@@ -414,7 +414,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): Generator
     {
@@ -426,7 +426,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     public static function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): Generator
     {
@@ -438,10 +438,10 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @param Generator<array<int, string|null>> $users
+     * @param Generator<int, array<int, string|null>> $users
      * @param array<int, array<int, string>> $methods
      *
-     * @return Generator<array<int, string|null>>
+     * @return Generator<int, array<int, string|null>>
      */
     private static function createDataForTest(Generator $users, array $methods, ?bool $uuid = null): Generator
     {

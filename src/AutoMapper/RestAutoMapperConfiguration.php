@@ -34,8 +34,6 @@ abstract class RestAutoMapperConfiguration implements AutoMapperConfiguratorInte
 
     /**
      * Use this method to register your mappings.
-     *
-     * @psalm-suppress UndefinedThisPropertyFetch
      */
     #[Override]
     public function configure(AutoMapperConfigInterface $config): void

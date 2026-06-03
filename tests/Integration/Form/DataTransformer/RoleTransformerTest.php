@@ -99,7 +99,7 @@ final class RoleTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: Role|null}>
+     * @return Generator<int, array{0: string, 1: Role|null}>
      */
     public static function dataProviderTestThatTransformReturnsExpected(): Generator
     {

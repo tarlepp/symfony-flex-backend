@@ -23,21 +23,31 @@ use function assert;
 /**
  * @package App\Repository\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template TEntity of EntityInterface
  */
 trait RepositoryMethodsTrait
 {
+    /**
+     * @psalm-return TEntity|null
+     */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
-        return $output instanceof EntityInterface ? $output : null;
+        if (!$output instanceof EntityInterface) {
+            return null;
+        }
+
+        /** @var TEntity $output */
+        return $output;
     }
 
     /**
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      *
-     * @psalm-return array<int|string, mixed>|EntityInterface|null
+     * @psalm-return TEntity|array<int|string, mixed>|null
      */
     public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
@@ -60,26 +70,41 @@ trait RepositoryMethodsTrait
         return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
     }
 
+    /**
+     * @return EntityInterface|null
+     *
+     * @psalm-return TEntity|null
+     */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
-        return $repository->findOneBy($criteria, $orderBy);
+        /** @var TEntity|null $result */
+        $result = $repository->findOneBy($criteria, $orderBy);
+
+        return $result;
     }
 
     /**
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
-        return $this
+        /** @var list<TEntity> $result */
+        $result = $this
             ->getEntityManager()
             ->getRepository($this->getEntityName())
             ->findBy($criteria, $orderBy, $limit, $offset);
+
+        return $result;
     }
 
     /**
-     * @return array<int, EntityInterface>
+     * @param array<int|string, mixed> $criteria
+     * @param array<string, string>|null $orderBy
+     * @param array<string, array<int, string>|string>|null $search
+     *
+     * @psalm-return array<int, TEntity>
      */
     public function findByAdvanced(
         array $criteria,
@@ -105,21 +130,30 @@ trait RepositoryMethodsTrait
 
         assert($iterator instanceof ArrayIterator);
 
-        return $iterator->getArrayCopy();
+        /** @var array<int, TEntity> $result */
+        $result = $iterator->getArrayCopy();
+
+        return $result;
     }
 
     /**
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findAll(): array
     {
-        return $this
+        /** @var list<TEntity> $result */
+        $result = $this
             ->getEntityManager()
             ->getRepository($this->getEntityName())
             ->findAll();
+
+        return $result;
     }
 
     /**
+     * @param array<int|string, mixed>|null $criteria
+     * @param array<string, array<int, string>|string>|null $search
+     *
      * @return array<int, string>
      */
     public function findIds(?array $criteria = null, ?array $search = null): array
@@ -142,9 +176,16 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+        /** @var array<int, string> $ids */
+        $ids = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        return $ids;
     }
 
+    /**
+     * @param array<int|string, mixed>|null $criteria
+     * @param array<string, array<int, string>|string>|null $search
+     */
     public function countAdvanced(?array $criteria = null, ?array $search = null): int
     {
         // Get query builder
@@ -182,7 +223,7 @@ trait RepositoryMethodsTrait
      * Helper method to get QueryBuilder for current instance within specified default parameters.
      *
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      * @param array<string, string>|null $orderBy
      *
      * @throws InvalidArgumentException

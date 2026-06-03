@@ -63,7 +63,7 @@ final class UuidHelperTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string|null, 1: string}>
+     * @return Generator<int, array{0: string|null, 1: string}>
      */
     public static function dataProviderTestThatGetTypeReturnsExpected(): Generator
     {

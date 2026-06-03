@@ -46,9 +46,8 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 
@@ -77,9 +76,8 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 
@@ -112,23 +110,22 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var list<stdClass> $responseContent */
         $responseContent = JSON::decode($content);
 
-        self::assertIsArray($responseContent);
         self::assertSame(
             $e->getArrayCopy(),
             array_map(
                 static function (stdClass $userGroup): string {
                     self::assertTrue(property_exists($userGroup, 'role'));
 
+                    /** @var stdClass $role */
                     $role = $userGroup->role;
 
-                    self::assertIsObject($role);
                     self::assertTrue(property_exists($role, 'id'));
 
+                    /** @var string $id */
                     $id = $role->id;
-
-                    self::assertIsString($id);
 
                     return $id;
                 },
@@ -153,9 +150,8 @@ final class GroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 

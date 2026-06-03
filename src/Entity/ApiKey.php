@@ -223,9 +223,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                 array_unique(
                     [
                         RoleEnum::API->value,
-                        ...$this->userGroups
-                            ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
-                            ->toArray(),
+                        ...array_map(
+                            static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId(),
+                            $this->userGroups->toArray(),
+                        ),
                     ],
                 ),
             ),
@@ -233,7 +234,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     #[Override]
-    public function addUserGroup(UserGroup $userGroup): self
+    public function addUserGroup(UserGroup $userGroup): static
     {
         if ($this->userGroups->contains($userGroup) === false) {
             $this->userGroups->add($userGroup);
@@ -244,7 +245,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     #[Override]
-    public function removeUserGroup(UserGroup $userGroup): self
+    public function removeUserGroup(UserGroup $userGroup): static
     {
         if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
@@ -254,7 +255,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     #[Override]
-    public function clearUserGroups(): self
+    public function clearUserGroups(): static
     {
         $this->userGroups->clear();
 

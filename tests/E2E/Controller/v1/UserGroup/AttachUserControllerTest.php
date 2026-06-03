@@ -109,11 +109,13 @@ final class AttachUserControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertSame($e, $response->getStatusCode(), "Response:\n" . $response);
-        self::assertCount(2, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount(2, $decoded);
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
@@ -137,7 +139,7 @@ final class AttachUserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: int}>
+     * @return Generator<int, array{0: int}>
      */
     public static function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
     {

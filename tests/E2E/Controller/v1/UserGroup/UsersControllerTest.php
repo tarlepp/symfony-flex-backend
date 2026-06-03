@@ -37,11 +37,13 @@ final class UsersControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        self::assertCount($c, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount($c, $decoded);
     }
 
     /**
-     * @return Generator<array{0: int, 1: string}>
+     * @return Generator<int, array{0: int, 1: string}>
      */
     public static function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
     {

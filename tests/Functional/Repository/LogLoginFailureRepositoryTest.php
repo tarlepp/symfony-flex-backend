@@ -45,6 +45,10 @@ final class LogLoginFailureRepositoryTest extends KernelTestCase
 
         self::assertCount(1, $logLoginFailureRepository->findAll());
         self::assertSame(1, $logLoginFailureRepository->clear($user));
-        self::assertCount(0, $logLoginFailureRepository->findAll());
+
+        /** @var array<int, LogLoginFailure> $afterClear */
+        $afterClear = $logLoginFailureRepository->findAll();
+
+        self::assertEmpty($afterClear);
     }
 }

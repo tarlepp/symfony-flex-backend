@@ -55,13 +55,14 @@ final class RequestHandler
      *  App\Repository\Base::getExpression method supports - and that is
      *  basically 99% that you need on advanced search criteria.
      *
-     * @return array<string, mixed>
+     * @return array<string, string|array<mixed>>
      *
      * @throws HttpException
      */
     public static function getCriteria(HttpFoundationRequest $request): array
     {
         try {
+            /** @var array<string, string|array<mixed>> $where */
             $where = array_filter(
                 (array)JSON::decode(
                     (string)($request->query->get('where') ?? $request->request->get('where', '{}')),
@@ -105,13 +106,9 @@ final class RequestHandler
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
         $key = 'order';
-        $input = [];
 
-        if ($request->query->has($key)) {
-            $input = $request->query->all()[$key];
-        } elseif ($request->request->has($key)) {
-            $input = $request->request->all()[$key];
-        }
+        /** @psalm-suppress MixedAssignment – value can be scalar (e.g. ?order=col) or array; branched below */
+        $input = $request->query->all()[$key] ?? ($request->request->all()[$key] ?? []);
 
         if (!is_array($input)) {
             $input = (array)$input;
@@ -166,7 +163,7 @@ final class RequestHandler
      *  ?search={"or": ["term1", "term2"]}
      *  ?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}
      *
-     * @return array<mixed>
+     * @return array<string, array<int, string>>
      *
      * @throws HttpException
      */
@@ -180,7 +177,7 @@ final class RequestHandler
     /**
      * Method to return search term criteria as an array that repositories can easily use.
      *
-     * @return array<int|string, array<int, string>>
+     * @return array<string, array<int, string>>
      *
      * @throws HttpException
      */
@@ -204,16 +201,19 @@ final class RequestHandler
      * Method to determine used search terms. Note that this will first try to JSON decode given search term. This is
      * for cases that 'search' request parameter contains 'and' or 'or' terms.
      *
-     * @return array<int|string, array<int, string>>|null
+     * @return array<string, array<int, string>>|null
      *
      * @throws HttpException
      */
     private static function determineSearchTerms(string $search): ?array
     {
         try {
+            /** @var mixed $searchTerms */
             $searchTerms = JSON::decode($search, true);
 
             self::checkSearchTerms($searchTerms);
+
+            /** @var array<string, array<int, string>> $searchTerms */
         } catch (JsonException | LogicException) {
             $searchTerms = null;
         }
@@ -243,15 +243,16 @@ final class RequestHandler
      * Method to normalize specified search terms. Within this we will just filter out any "empty" values and return
      * unique terms after that.
      *
-     * @param array<int|string, array<int, string>> $searchTerms
+     * @param array<string, array<int, string>> $searchTerms
      *
-     * @return array<int|string, array<int, string>>
+     * @return array<string, array<int, string>>
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {
         // Normalize user input, note that this support array and string formats on value
         array_walk($searchTerms, static fn (array $terms): array => array_unique(array_values(array_filter($terms))));
 
+        /** @var array<string, array<int, string>> $searchTerms */
         return $searchTerms;
     }
 

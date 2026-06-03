@@ -12,6 +12,7 @@ use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\TestDox;
+use stdClass;
 use Throwable;
 
 /**
@@ -48,12 +49,16 @@ final class UserManagementFlowTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data['id'] = JSON::decode($content)->id;
+        /** @var stdClass $decoded */
+        $decoded = JSON::decode($content);
+        /** @psalm-suppress MixedAssignment */
+        $data['id'] = $decoded->id;
 
         unset($data['password']);
 
         self::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
+        /** @psalm-suppress MixedReturnStatement */
         return $data['id'];
     }
 

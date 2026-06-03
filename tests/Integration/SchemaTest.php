@@ -41,6 +41,7 @@ final class SchemaTest extends KernelTestCase
         $messages = [];
 
         $formatter = static function (array $errors, string $className) use (&$messages): void {
+            /** @var array<string> $errors */
             $messages[] = $className . ': ' . implode(', ', $errors);
         };
 
@@ -98,6 +99,7 @@ final class SchemaTest extends KernelTestCase
 
         $managerRegistry = $kernel->getContainer()->get('doctrine');
 
+        /** @psalm-suppress MixedMethodCall - $managerRegistry->getManager() is mixed from container */
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $managerRegistry->getManager();
 

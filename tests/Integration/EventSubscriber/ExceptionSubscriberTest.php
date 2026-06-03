@@ -24,6 +24,7 @@ use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -132,9 +133,9 @@ final class ExceptionSubscriberTest extends KernelTestCase
         self::assertNotFalse($content);
         self::assertJson($content);
 
+        /** @var stdClass $json */
         $json = JSON::decode($content);
 
-        self::assertIsObject($json);
         self::assertTrue(property_exists($json, 'message'));
         self::assertSame($message, $json->message);
     }
@@ -172,9 +173,9 @@ final class ExceptionSubscriberTest extends KernelTestCase
 
         self::assertNotFalse($content);
 
+        /** @var array<mixed> $result */
         $result = JSON::decode($content, true);
 
-        self::assertIsArray($result);
         self::assertSame($expectedKeys, array_keys($result));
     }
 
@@ -230,7 +231,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderEnvironment(): Generator
     {
@@ -242,7 +243,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: int, 1: Throwable, 2: string, 3: string}>
+     * @return Generator<int, array{0: int, 1: Throwable, 2: string, 3: string}>
      *
      * @throws JsonException
      */
@@ -385,7 +386,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: array<int, string>, 1: string}>
+     * @return Generator<int, array{0: array<int, string>, 1: string}>
      */
     public static function dataProviderTestThatResponseHasExpectedKeys(): Generator
     {
@@ -406,7 +407,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: int, 1: Throwable, 2: boolean, 3: string}>
+     * @return Generator<int, array{0: int, 1: Throwable, 2: boolean, 3: string}>
      *
      * @throws JsonException
      */
@@ -471,7 +472,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: Throwable, 2: string}>
+     * @return Generator<int, array{0: string, 1: Throwable, 2: string}>
      *
      * @throws JsonException
      */

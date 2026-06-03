@@ -82,9 +82,13 @@ final class UserGroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
+        /** @var list<array<string, mixed>> $data */
         $data = JSON::decode($content, true);
 
-        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => $group['id'], $data));
+        self::assertSame(
+            $e->getArrayCopy(),
+            array_map(static fn (array $group): string => (string)$group['id'], $data),
+        );
     }
 
     /**
@@ -106,13 +110,17 @@ final class UserGroupsControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
+        /** @var list<array<string, mixed>> $data */
         $data = JSON::decode($content, true);
 
-        self::assertSame($e->getArrayCopy(), array_map(static fn (array $group): string => $group['id'], $data));
+        self::assertSame(
+            $e->getArrayCopy(),
+            array_map(static fn (array $group): string => (string)$group['id'], $data),
+        );
     }
 
     /**
-     * @return Generator<array{0: string, 1: string, 2: string}>
+     * @return Generator<int, array{0: string, 1: string, 2: string}>
      */
     public static function dataProviderTestThatGetUserGroupsReturns403ForInvalidUser(): Generator
     {
@@ -132,7 +140,7 @@ final class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: string, 1: string, 2: string, 3: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: string, 2: string, 3: StringableArrayObject<int, string>}>
      */
     public static function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): Generator
@@ -225,7 +233,7 @@ final class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: string, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<int, string>}>
      */
     public static function dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser(): Generator

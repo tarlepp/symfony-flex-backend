@@ -139,9 +139,9 @@ final class UserControllerTest extends WebTestCase
         self::assertJson($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var array<mixed> $json */
         $json = JSON::decode($content);
 
-        self::assertIsArray($json);
         self::assertCount(6, $json, "Response:\n" . $response);
     }
 
@@ -184,9 +184,9 @@ final class UserControllerTest extends WebTestCase
         self::assertJson($content);
         self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var array<mixed> $json */
         $json = JSON::decode($content);
 
-        self::assertIsArray($json);
         self::assertCount(6, $json, "Response:\n" . $response);
     }
 
@@ -213,7 +213,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderValidUsers(): Generator
     {
@@ -231,7 +231,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderValidApiKeyUsers(): Generator
     {
@@ -243,7 +243,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderInvalidUsers(): Generator
     {
@@ -265,7 +265,7 @@ final class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string}>
+     * @return Generator<int, array{0: string}>
      */
     public static function dataProviderInvalidApiKeyUsers(): Generator
     {

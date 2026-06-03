@@ -54,7 +54,7 @@ use function ucfirst;
 abstract class EntityTestCase extends KernelTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<EntityInterface>
      */
     protected static string $entityName;
 
@@ -66,7 +66,10 @@ abstract class EntityTestCase extends KernelTestCase
             throw new RuntimeException('Kernel is not booting.');
         }
 
-        return self::$kernel;
+        /** @var KernelInterface $kernel */
+        $kernel = self::$kernel;
+
+        return $kernel;
     }
 
     #[TestDox(
@@ -80,6 +83,7 @@ abstract class EntityTestCase extends KernelTestCase
             self::markTestSkipped('Cannot test because `getUuid` method does not exist.');
         }
 
+        /** @psalm-suppress MixedMethodCall */
         self::assertSame($entity->getUuid()->toString(), $entity->getId());
     }
 
@@ -220,6 +224,7 @@ abstract class EntityTestCase extends KernelTestCase
         $callable = [$entity, $getter];
 
         if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
+            /** @psalm-suppress MixedAssignment */
             $value = PhpUnitUtil::getValidValueForType($type, $meta);
 
             $entity->{$setter}($value);
@@ -456,7 +461,7 @@ abstract class EntityTestCase extends KernelTestCase
      *  - testThatSetterReturnsInstanceOfEntity
      *  - testThatGetterReturnsExpectedValue
      *
-     * @return array<mixed>
+     * @return array<int, array<mixed>>
      */
     public static function dataProviderTestThatSetterAndGettersWorks(): array
     {
@@ -496,7 +501,9 @@ abstract class EntityTestCase extends KernelTestCase
                 continue;
             }
 
+            /** @var string $field */
             $field = $mapping['fieldName'];
+            /** @var class-string $type */
             $type = $mapping['targetEntity'];
 
             $assocFields[] = [$field, $type, (array)$mapping, $meta->isReadOnly];
@@ -511,10 +518,12 @@ abstract class EntityTestCase extends KernelTestCase
         ), ...$assocFields];
     }
 
+    /**
+     * @return Generator<int, array<mixed>>
+     */
     public static function dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag(): Generator
     {
         foreach (self::dataProviderTestThatSetterAndGettersWorks() as $data) {
-            self::assertIsArray($data);
             self::assertCount(4, $data);
 
             // Remove 'Read-only flag' from data
@@ -525,7 +534,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<mixed>
+     * @return array<int, array<mixed>>
      */
     public static function dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected(): array
     {
@@ -538,18 +547,19 @@ abstract class EntityTestCase extends KernelTestCase
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
         $iterator = static function (AssociationMapping $mapping): array {
+            /** @var class-string $class */
             $class = $mapping['targetEntity'];
 
-            self::assertIsString($class);
             self::assertTrue(class_exists($class));
 
+            /** @psalm-suppress MixedMethodCall */
             $targetEntity = new $class();
 
-            $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                : $mapping['fieldName'];
-
-            self::assertIsString($singular);
+            /** @var string $fieldName */
+            $fieldName = $mapping['fieldName'];
+            $singular = $fieldName[mb_strlen($fieldName) - 1] === 's'
+                ? mb_substr($fieldName, 0, -1)
+                : $fieldName;
 
             return [
                 [
@@ -585,7 +595,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<mixed>
+     * @return array<int, array<mixed>>
      */
     public static function dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected(): array
     {
@@ -604,7 +614,10 @@ abstract class EntityTestCase extends KernelTestCase
                 $params = ['Some Role'];
             }
 
-            $targetEntity = new $mapping['targetEntity'](...$params);
+            /** @var class-string $targetClass */
+            $targetClass = $mapping['targetEntity'];
+            /** @psalm-suppress MixedMethodCall */
+            $targetEntity = new $targetClass(...$params);
 
             return [
                 [
@@ -637,7 +650,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<mixed>
+     * @return array<int, array<mixed>>
      */
     public static function dataProviderTestThatAssociationMethodsExists(): array
     {
@@ -650,9 +663,9 @@ abstract class EntityTestCase extends KernelTestCase
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
         $iterator = static function (AssociationMapping $mapping) use ($meta): array {
+            /** @var class-string $target */
             $target = $mapping['targetEntity'];
 
-            self::assertIsString($target);
             self::assertTrue(class_exists($target));
 
             $arguments = match ($target) {
@@ -663,6 +676,7 @@ abstract class EntityTestCase extends KernelTestCase
                 default => [],
             };
 
+            /** @psalm-suppress MixedMethodCall */
             $input = new $target(...$arguments);
 
             $methods = [
@@ -684,11 +698,11 @@ abstract class EntityTestCase extends KernelTestCase
                     }
                     break;
                 case ClassMetadata::MANY_TO_MANY:
-                    $singular = $mapping['fieldName'][mb_strlen((string)$mapping['fieldName']) - 1] === 's'
-                        ? mb_substr((string)$mapping['fieldName'], 0, -1)
-                        : $mapping['fieldName'];
-
-                    self::assertIsString($singular);
+                    /** @var string $assocFieldName */
+                    $assocFieldName = $mapping['fieldName'];
+                    $singular = $assocFieldName[mb_strlen($assocFieldName) - 1] === 's'
+                        ? mb_substr($assocFieldName, 0, -1)
+                        : $assocFieldName;
 
                     $methods = [
                         [
@@ -746,7 +760,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<mixed>
+     * @return array<int, array<mixed>>
      */
     public static function dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected(): array
     {
@@ -792,13 +806,6 @@ abstract class EntityTestCase extends KernelTestCase
 
     protected function createEntity(): EntityInterface
     {
-        /** @psalm-suppress RedundantConditionGivenDocblockType */
-        self::assertTrue(class_exists(static::$entityName));
-
-        $entity = new static::$entityName();
-
-        self::assertInstanceOf(EntityInterface::class, $entity);
-
-        return $entity;
+        return new static::$entityName();
     }
 }

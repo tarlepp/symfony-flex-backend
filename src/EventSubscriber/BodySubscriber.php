@@ -69,9 +69,11 @@ class BodySubscriber implements EventSubscriberInterface
      */
     private function transformJsonBody(Request $request): void
     {
+        /** @var mixed $data */
         $data = JSON::decode($request->getContent(), true);
 
         if (is_array($data)) {
+            /** @var array<string, mixed> $data */
             $request->request->replace($data);
         }
     }

@@ -26,6 +26,7 @@ final class SearchTermTest extends KernelTestCase
     #[TestDox('Test that `getCriteria` method returns null with `$column` + `$search` parameters')]
     public function testThatWithoutColumnOrSearchTermCriteriaIsNull(mixed $column, mixed $search): void
     {
+        /** @psalm-suppress MixedArgument */
         self::assertNull(SearchTerm::getCriteria(
             $column instanceof StringableArrayObject ? $column->getArrayCopy() : $column,
             $search instanceof StringableArrayObject ? $search->getArrayCopy() : $search
@@ -44,16 +45,22 @@ final class SearchTermTest extends KernelTestCase
         StringableArrayObject $inputArguments,
         StringableArrayObject|null $expected
     ): void {
+        /** @psalm-suppress MixedArgument */
+        $result = call_user_func_array(SearchTerm::getCriteria(...), $inputArguments->getArrayCopy());
+
         self::assertSame(
             $expected?->getArrayCopy(),
-            call_user_func_array(SearchTerm::getCriteria(...), $inputArguments->getArrayCopy())
+            $result
         );
     }
 
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @psalm-return Generator<array{0: null|string|StringableArrayObject, 1: null|string|StringableArrayObject}>
+     * @psalm-return Generator<int, array{
+     *      0: null|string|StringableArrayObject,
+     *      1: null|string|StringableArrayObject,
+     *  }>
      * @phpstan-return Generator<array{
      *      0: null|string|StringableArrayObject<mixed>,
      *      1: null|string|StringableArrayObject<mixed>,
@@ -89,7 +96,7 @@ final class SearchTermTest extends KernelTestCase
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject|null}>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject|null}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatReturnedCriteriaIsExpected(): Generator

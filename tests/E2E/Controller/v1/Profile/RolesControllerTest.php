@@ -17,6 +17,7 @@ use Generator;
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use stdClass;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -45,11 +46,11 @@ final class RolesControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
-        self::assertIsObject($responseContent);
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
         self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
@@ -75,9 +76,8 @@ final class RolesControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 
@@ -125,9 +125,8 @@ final class RolesControllerTest extends WebTestCase
         self::assertNotFalse($content);
         self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
+        /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
-
-        self::assertIsObject($responseContent);
 
         $info = "\nResponse:\n" . $response;
 

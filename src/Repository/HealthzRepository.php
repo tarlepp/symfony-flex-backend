@@ -23,15 +23,15 @@ use Throwable;
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @psalm-suppress LessSpecificImplementedReturnType
+ * @extends BaseRepository<Entity>
  * @codingStandardsIgnoreStart
  *
  * @method Entity|null find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null)
  * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
- * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
- * @method Entity[] findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
- * @method Entity[] findAll()
+ * @method list<Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method list<Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method list<Entity> findAll()
  *
  * @codingStandardsIgnoreEnd
  */
@@ -61,7 +61,10 @@ class HealthzRepository extends BaseRepository
             ->setMaxResults(1)
             ->getQuery();
 
-        return $query->getOneOrNullResult();
+        /** @var Entity|null $result */
+        $result = $query->getOneOrNullResult();
+
+        return $result;
     }
 
     /**

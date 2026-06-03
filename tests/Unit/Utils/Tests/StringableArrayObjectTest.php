@@ -32,7 +32,7 @@ final class StringableArrayObjectTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: string}>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: string}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string}>
      */
     public static function dataProviderTestThatCastingToStringReturnsExpected(): Generator

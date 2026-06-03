@@ -160,7 +160,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: boolean|string|int}>
+     * @return Generator<int, array{0: boolean, 1: boolean|string|int}>
      */
     public static function dataProviderTestThatSupportClassReturnsExpected(): Generator
     {

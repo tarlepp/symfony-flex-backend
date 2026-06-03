@@ -18,7 +18,7 @@ use function is_string;
 use function sprintf;
 
 /**
- * @psalm-suppress MissingTemplateParam
+ * @implements DataTransformerInterface<Role|null, string>
  *
  * @package App\Form\Console\DataTransformer
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
@@ -34,8 +34,6 @@ class RoleTransformer implements DataTransformerInterface
      * {@inheritdoc}
      *
      * Transforms an object (Role) to a string (Role id).
-     *
-     * @psalm-param Role|mixed $value
      */
     #[Override]
     public function transform(mixed $value): string
@@ -47,8 +45,6 @@ class RoleTransformer implements DataTransformerInterface
      * {@inheritdoc}
      *
      * Transforms a string (Role id) to an object (Role).
-     *
-     * @phpstan-param mixed $value
      *
      * @throws Throwable
      */

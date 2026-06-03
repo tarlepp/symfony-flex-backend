@@ -113,6 +113,7 @@ class RepositoryHelper
      *
      * @param array<int, string> $columns
      * @phpstan-param array<mixed>|null $terms
+     * @psalm-param array<string, array<int, string>|string>|null $terms
      *
      * @throws InvalidArgumentException
      */
@@ -274,12 +275,15 @@ class RepositoryHelper
         } elseif ($expressionOr) {
             $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
         } else {
+            /** @psalm-suppress MixedArgumentTypeCoercion */
             [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
 
             /** @var callable $callable */
+            /** @var stdClass $comparison */
             $callable = [$queryBuilder->expr(), $comparison->operator];
 
             // And finally add new expression to main one with specified parameters
+            /** @psalm-suppress MixedArgument */
             $expression->add(call_user_func_array($callable, $parameters));
         }
     }
@@ -305,7 +309,9 @@ class RepositoryHelper
     /**
      * @param array<int|string, string|array<mixed>> $comparison
      *
-     * @return array<int, mixed>
+     * @return array{0: stdClass, 1: array<int, mixed>}
+     *
+     * @throws InvalidArgumentException
      */
     private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
     {
@@ -321,6 +327,7 @@ class RepositoryHelper
         $lowercaseOperator = strtolower((string)$comparisonObject->operator);
 
         if ($lowercaseOperator !== 'isnull' && $lowercaseOperator !== 'isnotnull') {
+            /** @psalm-suppress MixedArgumentTypeCoercion */
             $parameters = self::getComparisonParameters(
                 $queryBuilder,
                 $comparisonObject,
@@ -384,6 +391,7 @@ class RepositoryHelper
                 $condition[$column] = $value;
             } else {
                 // Add condition
+                /** @psalm-suppress MixedArgumentTypeCoercion */
                 $condition[] = self::createCriteria($column, $value);
             }
         };
@@ -403,6 +411,7 @@ class RepositoryHelper
         if (is_array($comparison->value)) {
             $value = $comparison->value;
 
+            /** @psalm-suppress MixedArgumentTypeCoercion */
             $parameters = self::getParameters($queryBuilder, $lowercaseOperator, $parameters, $value);
         } else {
             $parameters[] = '?' . self::$parameterCount;

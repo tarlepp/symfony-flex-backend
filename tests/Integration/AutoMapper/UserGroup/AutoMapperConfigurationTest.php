@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\AutoMapper\UserGroup;
 
+use App\AutoMapper\RestAutoMapperConfiguration;
 use App\AutoMapper\UserGroup\AutoMapperConfiguration;
 use App\AutoMapper\UserGroup\RequestMapper;
 use App\DTO\UserGroup\UserGroupCreate;
@@ -22,7 +23,7 @@ use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 final class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<RestAutoMapperConfiguration>
      */
     protected string $autoMapperConfiguration = AutoMapperConfiguration::class;
 

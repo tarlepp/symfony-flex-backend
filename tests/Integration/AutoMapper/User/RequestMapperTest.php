@@ -65,6 +65,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
 
         self::assertTrue(class_exists($dtoClass));
 
+        /** @psalm-suppress MixedMethodCall */
         $dto = $requestMapper->mapToObject($request, new $dtoClass());
 
         self::assertInstanceOf(DTO\User::class, $dto);
@@ -86,6 +87,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
             'language' => $input,
         ]);
 
+        /** @psalm-suppress MixedMethodCall */
         $dto = new $dtoClass();
         $output = $requestMapper->mapToObject($request, $dto);
 
@@ -94,7 +96,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string}>
+     * @return Generator<int, array{0: class-string}>
      */
     public static function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
@@ -104,7 +106,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     }
 
     /**
-     * @return Generator<array{0: Language, 1: class-string, 2: string}>
+     * @return Generator<int, array{0: Language, 1: class-string, 2: string}>
      */
     public static function dataProviderTestThatTransformLanguageWorksAsExpected(): Generator
     {

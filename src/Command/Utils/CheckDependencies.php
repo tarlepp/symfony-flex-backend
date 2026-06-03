@@ -196,7 +196,7 @@ class CheckDependencies extends Command
 
                 if (isset($data->warning)) {
                     $rows[] = [''];
-                    $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
+                    $rows[] = ['', '', '<fg=red>' . (string)$data->warning . '</>'];
                 }
 
                 if (!property_exists($data, 'latest')) {
@@ -309,14 +309,14 @@ class CheckDependencies extends Command
     /**
      * @return array{0: string, 1: string, 2: string, 3: string, 4: string}
      */
-    private function getPackageRow(string $relativePath, mixed $data): array
+    private function getPackageRow(string $relativePath, stdClass $data): array
     {
         return [
             dirname($relativePath),
             (string)$data->name,
             (string)$data->description,
             (string)$data->version,
-            (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . $data->version . '</>'),
+            (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . (string)$data->version . '</>'),
         ];
     }
 

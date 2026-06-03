@@ -318,7 +318,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: AbstractToken|null}>
+     * @return Generator<int, array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -326,7 +326,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: AbstractToken|null}>
+     * @return Generator<int, array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -334,7 +334,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: AbstractToken|null}>
+     * @return Generator<int, array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -342,7 +342,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: AbstractToken|null}>
+     * @return Generator<int, array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -350,7 +350,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: AbstractToken|null}>
+     * @return Generator<int, array{0: AbstractToken|null}>
      */
     public static function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
@@ -358,7 +358,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: AbstractToken|null}>
+     * @return Generator<int, array{0: AbstractToken|null}>
      */
     private static function getInvalidTokens(): Generator
     {

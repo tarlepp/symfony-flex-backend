@@ -26,6 +26,8 @@ use Throwable;
 /**
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template-covariant TEntity of EntityInterface
  */
 interface BaseRepositoryInterface
 {
@@ -76,6 +78,8 @@ interface BaseRepositoryInterface
      *
      * @psalm-param LockMode::*|null $lockMode
      *
+     * @psalm-return TEntity|null
+     *
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
@@ -88,7 +92,7 @@ interface BaseRepositoryInterface
      *
      * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      *
-     * @psalm-return array<int|string, mixed>|EntityInterface|null
+     * @psalm-return TEntity|array<int|string, mixed>|null
      *
      * @throws NonUniqueResultException
      */
@@ -100,7 +104,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return EntityInterface|object|null
+     * @psalm-return TEntity|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
 
@@ -110,7 +114,7 @@ interface BaseRepositoryInterface
      * @psalm-param array<string, mixed> $criteria
      * @param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
      *
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
@@ -122,9 +126,9 @@ interface BaseRepositoryInterface
      *
      * @param array<int|string, mixed> $criteria
      * @param array<string, string>|null $orderBy
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, TEntity>
      *
      * @throws Throwable
      */
@@ -139,7 +143,7 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findAll method.
      *
-     * @psalm-return list<object|EntityInterface>
+     * @psalm-return list<TEntity>
      */
     public function findAll(): array;
 
@@ -148,7 +152,7 @@ interface BaseRepositoryInterface
      * return those as an array.
      *
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @return array<int, string>
      *
@@ -161,7 +165,7 @@ interface BaseRepositoryInterface
      * criteria and search term(s).
      *
      * @param array<int|string, mixed>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, array<int, string>|string>|null $search
      *
      * @throws InvalidArgumentException
      * @throws NonUniqueResultException

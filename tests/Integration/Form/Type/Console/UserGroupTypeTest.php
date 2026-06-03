@@ -61,27 +61,29 @@ final class UserGroupTypeTest extends TypeTestCase
             ->setRole($roleEntity);
 
         // Specify used form data
-        $formData = [
+        $submitData = [
             'name' => 'ROLE_ADMIN',
             'role' => 'ROLE_ADMIN',
         ];
 
         // submit the data to the form directly
-        $form->submit($formData);
+        $form->submit($submitData);
 
         // Test that data transformers have not been failed
         self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        self::assertSame($dto->getId(), $form->getData()->getId());
-        self::assertSame($dto->getName(), $form->getData()->getName());
-        self::assertSame($dto->getRole(), $form->getData()->getRole());
+        /** @var UserGroupDto $formData */
+        $formData = $form->getData();
+        self::assertSame($dto->getId(), $formData->getId());
+        self::assertSame($dto->getName(), $formData->getName());
+        self::assertSame($dto->getRole(), $formData->getRole());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (array_keys($formData) as $key) {
+        foreach (array_keys($submitData) as $key) {
             self::assertArrayHasKey($key, $children);
         }
     }
@@ -107,11 +109,13 @@ final class UserGroupTypeTest extends TypeTestCase
     }
 
     /**
+     * @psalm-return MockObject&RolesService
      * @phpstan-return MockObject&RolesService
      */
     private function getRolesService(): MockObject
     {
-        static $cache;
+        /** @psalm-var MockObject&RolesService|null $cache */
+        static $cache = null;
 
         if ($cache === null) {
             $cache = $this->createMock(RolesService::class);
@@ -121,11 +125,13 @@ final class UserGroupTypeTest extends TypeTestCase
     }
 
     /**
+     * @psalm-return MockObject&RoleResource
      * @phpstan-return MockObject&RoleResource
      */
     private function getRoleResource(): MockObject
     {
-        static $cache;
+        /** @psalm-var MockObject&RoleResource|null $cache */
+        static $cache = null;
 
         if ($cache === null) {
             $cache = $this->createMock(RoleResource::class);

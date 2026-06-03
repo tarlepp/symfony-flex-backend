@@ -20,12 +20,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * @package App\Tests\E2E\Rest\src\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @psalm-suppress LessSpecificImplementedReturnType
+ * @extends RestResource<Entity>
  * @codingStandardsIgnoreStart
  *
  * @method Entity getReference(string $id)
  * @method Repository getRepository()
- * @method Entity[] find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method array<int, Entity> find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
  * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null)
  * @method Entity create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)

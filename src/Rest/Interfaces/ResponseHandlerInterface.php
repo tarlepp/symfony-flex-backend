@@ -38,7 +38,7 @@ interface ResponseHandlerInterface
     /**
      * Helper method to get serialization context for request.
      *
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array;
 
@@ -47,7 +47,7 @@ interface ResponseHandlerInterface
      *
      * @codeCoverageIgnore This is needed because variables are multiline
      *
-     * @param array<int|string, bool|array<int, string>>|null $context
+     * @param array<string, mixed>|null $context
      *
      * @throws HttpException
      */

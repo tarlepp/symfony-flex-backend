@@ -26,6 +26,8 @@ trait CollectionTrait
      * Method to filter current collection.
      *
      * @psalm-var class-string $className
+     *
+     * @return Closure(mixed, mixed, \Iterator<mixed, mixed>): bool
      */
     abstract public function filter(string $className): Closure;
 

@@ -104,11 +104,13 @@ final class AttachUserGroupControllerTest extends WebTestCase
 
         self::assertNotFalse($content);
         self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-        self::assertCount(1, JSON::decode($content));
+        /** @var array<mixed> $decoded */
+        $decoded = JSON::decode($content);
+        self::assertCount(1, $decoded);
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
@@ -132,7 +134,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: int}>
+     * @return Generator<int, array{0: int}>
      */
     public static function dataProviderTestThatAttachUserGroupWorksAsExpected(): Generator
     {

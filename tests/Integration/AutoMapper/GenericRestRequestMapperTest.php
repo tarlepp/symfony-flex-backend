@@ -83,9 +83,11 @@ final class GenericRestRequestMapperTest extends KernelTestCase
             '::$properties" contains properties to convert'
         );
 
-        $mockRestDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-
-        new TestRestRequestMapperWithoutProperties()->mapToObject(new Request(), $mockRestDtoInterface);
+        /** @psalm-suppress MixedArgument */
+        new TestRestRequestMapperWithoutProperties()->mapToObject(
+            new Request(),
+            $this->getMockBuilder(RestDtoInterface::class)->getMock()
+        );
     }
 
     /**

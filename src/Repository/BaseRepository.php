@@ -28,11 +28,15 @@ use function spl_object_hash;
 /**
  * @package App\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template TEntity of EntityInterface
+ * @implements BaseRepositoryInterface<TEntity>
  */
 #[AutoconfigureTag('app.rest.repository')]
 #[AutoconfigureTag('app.stopwatch')]
 abstract class BaseRepository implements BaseRepositoryInterface
 {
+    /** @use RepositoryMethodsTrait<TEntity> */
     use RepositoryMethodsTrait;
     use RepositoryWrappersTrait;
 
@@ -180,7 +184,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         foreach (self::$joins as $joinType => $joins) {
             array_map(
-                static fn (array $joinParameters): QueryBuilder => $queryBuilder->{$joinType}(...$joinParameters),
+                static function (array $joinParameters) use ($queryBuilder, $joinType): QueryBuilder {
+                    /** @var QueryBuilder $result */
+                    $result = $queryBuilder->{$joinType}(...$joinParameters);
+
+                    return $result;
+                },
                 $joins,
             );
 

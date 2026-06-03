@@ -11,14 +11,16 @@ namespace App\Rest\Traits;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Exception\ValidatorException;
+use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
-use UnexpectedValueException;
-use function assert;
 
 /**
  * @package App\Rest\Traits
+ *
+ * @template TEntity of EntityInterface
+ * @psalm-import-type CriteriaValue from RestResourceInterface
  */
 trait RestResourceBaseMethods
 {
@@ -27,7 +29,7 @@ trait RestResourceBaseMethods
     /**
      * {@inheritdoc}
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, TEntity>
      */
     public function find(
         ?array $criteria = null,
@@ -44,14 +46,33 @@ trait RestResourceBaseMethods
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
+        /**
+         * @var array<int, TEntity> $entities
+         *
+         * @psalm-var array<string, array<int, string>|string> $search
+         */
+        $entities = $this->getRepository()->findByAdvanced(
+            $criteria,
+            $this->normalizeOrderBy($orderBy),
+            $limit,
+            $offset,
+            $search,
+        );
 
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
 
+        /** @var array<int, TEntity> $entities */
         return $entities;
     }
 
+    /**
+     * @psalm-return (
+     *      $throwExceptionIfNotFound is true
+     *      ? TEntity
+     *      : TEntity|null
+     *  )
+     */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
     {
         $throwExceptionIfNotFound ??= false;
@@ -59,7 +80,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOne($id);
 
-        /** @var EntityInterface|null $entity */
+        /** @var TEntity|null $entity */
         $entity = $this->getRepository()->findAdvanced($id);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
@@ -70,6 +91,16 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @psalm-param array<string, CriteriaValue> $criteria
+     * @psalm-param array<string, 'ASC'|'asc'|'DESC'|'desc'>|null $orderBy
+     *
+     * @psalm-return (
+     *      $throwExceptionIfNotFound is true
+     *      ? TEntity
+     *      : TEntity|null
+     *  )
+     */
     public function findOneBy(
         array $criteria,
         ?array $orderBy = null,
@@ -81,8 +112,14 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @var EntityInterface|null $entity */
-        $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
+        /**
+         * Re-assert types after the by-reference lifecycle callback, which accepts mixed[] and causes Psalm
+         * to widen the types of both $criteria and $orderBy.
+         *
+         * @psalm-var array<string, CriteriaValue> $criteria
+         * @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy
+         */
+        $entity = $this->getRepository()->findOneBy($this->normalizeCriteria($criteria), $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
@@ -100,6 +137,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeCount($criteria, $search);
 
+        /** @psalm-var array<string, array<int, string>|string> $search */
         $count = $this->getRepository()->countAdvanced($criteria, $search);
 
         // After callback method call
@@ -108,6 +146,9 @@ trait RestResourceBaseMethods
         return $count;
     }
 
+    /**
+     * @return TEntity
+     */
     public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
         $flush ??= true;
@@ -131,6 +172,9 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @return TEntity
+     */
     public function update(
         string $id,
         RestDtoInterface $dto,
@@ -165,6 +209,9 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @return TEntity
+     */
     public function patch(
         string $id,
         RestDtoInterface $dto,
@@ -199,6 +246,9 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * @return TEntity
+     */
     public function delete(string $id, ?bool $flush = null): EntityInterface
     {
         $flush ??= true;
@@ -232,14 +282,19 @@ trait RestResourceBaseMethods
         $this->beforeIds($criteria, $search);
 
         // Fetch data
+        /** @psalm-var array<string, array<int, string>|string> $search */
         $ids = $this->getRepository()->findIds($criteria, $search);
 
         // After callback method call
         $this->afterIds($criteria, $search, $ids);
 
+        /** @var array<int, string> $ids */
         return $ids;
     }
 
+    /**
+     * @return TEntity
+     */
     public function save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
         $flush ??= true;
@@ -257,6 +312,7 @@ trait RestResourceBaseMethods
         // After callback method call
         $this->afterSave($entity);
 
+        /** @var TEntity $entity */
         return $entity;
     }
 
@@ -279,6 +335,8 @@ trait RestResourceBaseMethods
     }
 
     /**
+     * @return TEntity
+     *
      * @throws NotFoundHttpException
      */
     protected function getEntity(string $id): EntityInterface
@@ -323,18 +381,15 @@ trait RestResourceBaseMethods
         }
     }
 
+    /**
+     * @return TEntity
+     */
     private function createEntity(): EntityInterface
     {
-        /** @var class-string $entityClass */
+        /** @var class-string<TEntity> $entityClass */
         $entityClass = $this->getRepository()->getEntityName();
 
-        $entity = new $entityClass();
-
-        $exception = new UnexpectedValueException(
-            sprintf('Given `%s` class does not implement `EntityInterface`', $entityClass),
-        );
-
-        return assert($entity instanceof EntityInterface) ? $entity : throw $exception;
+        return new $entityClass();
     }
 
     /**
@@ -346,5 +401,49 @@ trait RestResourceBaseMethods
         if ($throwExceptionIfNotFound && $entity === null) {
             throw new NotFoundHttpException('Not found');
         }
+    }
+
+    /**
+     * Normalizes an orderBy array so every key and value is a plain string,
+     * satisfying the strict array<string, string> type expected by the repository.
+     *
+     * @param array<array-key, mixed> $orderBy
+     *
+     * @return array<string, string>
+     */
+    private function normalizeOrderBy(array $orderBy): array
+    {
+        /** @var array<string, string> $normalized */
+        $normalized = [];
+
+        foreach (array_keys($orderBy) as $key) {
+            $normalized[(string)$key] = (string)$orderBy[$key];
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Normalizes a criteria array so every key is a plain string,
+     * satisfying the strict array<string, mixed> type expected by the repository.
+     *
+     * @param array<array-key, CriteriaValue> $criteria
+     *
+     * @return array<string, CriteriaValue>
+     */
+    private function normalizeCriteria(array $criteria): array
+    {
+        if ($criteria === []) {
+            return [];
+        }
+
+        /** @var array<string, CriteriaValue> $normalized */
+        $normalized = [];
+
+        foreach ($criteria as $key => $value) {
+            $normalized[(string)$key] = $value;
+        }
+
+        return $normalized;
     }
 }

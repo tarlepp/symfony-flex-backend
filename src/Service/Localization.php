@@ -112,9 +112,17 @@ readonly class Localization
         return $output;
     }
 
+    /**
+     * @return Closure(ItemInterface, bool): array<int, array{
+     *     timezone: string,
+     *     identifier: non-empty-string,
+     *     offset: string,
+     *     value: string,
+     * }>
+     */
     private function getClosure(): Closure
     {
-        return function (ItemInterface $item): array {
+        return function (ItemInterface $item, bool $isHit): array {
             // One year
             $item->expiresAfter(31_536_000);
 

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use Override;
@@ -21,14 +22,21 @@ use function sprintf;
 /**
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @template TEntity of EntityInterface
+ * @implements RestResourceInterface<TEntity>
  */
 abstract class RestResource implements RestResourceInterface
 {
+    /** @use Traits\RestResourceBaseMethods<TEntity> */
     use Traits\RestResourceBaseMethods;
 
     private ValidatorInterface $validator;
     private string $dtoClass = '';
 
+    /**
+     * @param BaseRepositoryInterface<TEntity> $repository
+     */
     public function __construct(
         protected readonly BaseRepositoryInterface $repository,
     ) {
@@ -40,6 +48,9 @@ abstract class RestResource implements RestResourceInterface
         return [];
     }
 
+    /**
+     * @return BaseRepositoryInterface<TEntity>
+     */
     #[Override]
     public function getRepository(): BaseRepositoryInterface
     {

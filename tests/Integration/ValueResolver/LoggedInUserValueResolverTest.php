@@ -251,6 +251,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
+    /**
+     * @return Generator<string, array{0: Closure}>
+     */
     public static function dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(): Generator
     {
         yield 'closure with nullable user' => [static function (?User $loggedInUser = null): void {

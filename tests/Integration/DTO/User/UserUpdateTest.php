@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 final class UserUpdateTest extends DtoTestCase
 {
     /**
-     * @psalm-var class-string
+     * @psalm-var class-string<\App\DTO\RestDtoInterface>
      * @phpstan-var class-string<UserUpdate>
      */
     protected static string $dtoClass = UserUpdate::class;

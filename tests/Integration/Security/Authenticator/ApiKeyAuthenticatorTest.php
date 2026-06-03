@@ -136,15 +136,15 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
         self::assertIsString($content);
         self::assertJson($content);
 
+        /** @var stdClass $decoded */
         $decoded = JSON::decode($content);
 
-        self::assertIsObject($decoded);
         self::assertTrue(property_exists($decoded, 'message'));
         self::assertSame('Invalid API key', $decoded->message);
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: Request}>
+     * @return Generator<int, array{0: boolean, 1: Request}>
      */
     public static function dataProviderTestThatSupportReturnsExpected(): Generator
     {
@@ -166,7 +166,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: null|StringableArrayObject, 1: Request}>
+     * @psalm-return Generator<int, array{0: null|StringableArrayObject, 1: Request}>
      * @phpstan-return Generator<array{0: null|StringableArrayObject<mixed>, 1: Request}>
      */
     public static function dataProviderTestThatGetCredentialsReturnsExpected(): Generator
@@ -205,7 +205,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string|int|stdClass|StringableArrayObject|null}>
+     * @psalm-return Generator<int, array{0: string|int|stdClass|StringableArrayObject|null}>
      * @phpstan-return Generator<array{0: string|int|stdClass|StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatGetUserReturnsExpected(): Generator
@@ -229,7 +229,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @psalm-return Generator<array{0: string|int|stdClass|StringableArrayObject|null}>
+     * @psalm-return Generator<int, array{0: string|int|stdClass|StringableArrayObject|null}>
      * @phpstan-return Generator<array{0: string|int|stdClass|StringableArrayObject<mixed>|null}>
      */
     public static function dataProviderTestThatCheckCredentialsThrowsAnException(): Generator

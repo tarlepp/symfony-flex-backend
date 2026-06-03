@@ -18,7 +18,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 final class UserGroupUpdateTest extends DtoTestCase
 {
     /**
-     * @psalm-var class-string
+     * @psalm-var class-string<\App\DTO\RestDtoInterface>
      * @phpstan-var class-string<UserGroupUpdate>
      */
     protected static string $dtoClass = UserGroupUpdate::class;

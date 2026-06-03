@@ -109,7 +109,7 @@ final class InheritedRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetInheritedRoles403(): Generator
     {
@@ -131,7 +131,7 @@ final class InheritedRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetInheritedRoles200(): Generator
     {
@@ -149,7 +149,7 @@ final class InheritedRolesControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: string}>
+     * @return Generator<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
     {

@@ -74,7 +74,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @return array<int, UserGroupEntity>
+     * @return array<array-key, UserGroupEntity>
      */
     public function getUserGroups(): array
     {

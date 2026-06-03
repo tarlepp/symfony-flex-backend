@@ -28,7 +28,7 @@ use function ucfirst;
 final class DateDimensionTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = DateDimension::class;
 

@@ -18,7 +18,7 @@ use App\Tests\Integration\TestCase\DtoTestCase;
 final class UserGroupCreateTest extends DtoTestCase
 {
     /**
-     * @psalm-var class-string
+     * @psalm-var class-string<\App\DTO\RestDtoInterface>
      * @phpstan-var class-string<UserGroupCreate>
      */
     protected static string $dtoClass = UserGroupCreate::class;

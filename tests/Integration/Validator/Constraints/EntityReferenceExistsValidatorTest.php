@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
@@ -93,9 +93,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $contextMock
             ->expects(self::never())
@@ -121,9 +119,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     public function testThatContextAndLoggerMethodsAreCalledIfEntityReferenceIsNotValidEntity(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         $violation
@@ -162,7 +158,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string|stdClass|array<mixed>, 1: string, 2: string}>
+     * @return Generator<int, array{0: string|stdClass|array<mixed>, 1: string, 2: string}>
      */
     public static function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
     {

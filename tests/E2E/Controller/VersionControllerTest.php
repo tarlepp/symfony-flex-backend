@@ -12,6 +12,7 @@ use App\Resource\LogRequestResource;
 use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\TestDox;
+use stdClass;
 use Throwable;
 use function file_get_contents;
 
@@ -63,9 +64,8 @@ final class VersionControllerTest extends WebTestCase
         $version = $response->headers->get('X-API-VERSION');
 
         self::assertNotNull($version);
-        self::assertSame(
-            JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'))->version,
-            $version,
-        );
+        /** @var stdClass $composerJson */
+        $composerJson = JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'));
+        self::assertSame($composerJson->version, $version);
     }
 }

@@ -39,8 +39,7 @@ use function ucfirst;
 abstract class DtoTestCase extends KernelTestCase
 {
     /**
-     * @psalm-var class-string
-     * @phpstan-var class-string<RestDtoInterface>
+     * @var class-string<RestDtoInterface>
      */
     protected static string $dtoClass;
 
@@ -110,6 +109,7 @@ abstract class DtoTestCase extends KernelTestCase
 
         foreach ($properties as $reflectionProperty) {
             // Get "valid" value for current property
+            /** @psalm-suppress MixedAssignment */
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
             // Determine setter method for current property
@@ -135,6 +135,7 @@ abstract class DtoTestCase extends KernelTestCase
 
         foreach (self::getDtoProperties() as $reflectionProperty) {
             // Get "valid" value for current property
+            /** @psalm-suppress MixedAssignment */
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
             // Determine setter and getter methods for current property
@@ -142,8 +143,10 @@ abstract class DtoTestCase extends KernelTestCase
             $getter = 'get' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
+            /** @psalm-suppress MixedMethodCall */
             $dto->{$setter}($value);
 
+            /** @psalm-suppress MixedMethodCall */
             self::assertSame($value, $dto->{$getter}());
         }
     }
@@ -163,6 +166,7 @@ abstract class DtoTestCase extends KernelTestCase
         $setter = 'set' . ucfirst($field);
 
         $dto = new static::$dtoClass();
+        /** @psalm-suppress MixedMethodCall */
         $dto->{$setter}($value);
 
         $message = sprintf(

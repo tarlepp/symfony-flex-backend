@@ -29,7 +29,7 @@ use function array_unique;
 final class ApiKeyTest extends EntityTestCase
 {
     /**
-     * @var class-string
+     * @var class-string<\App\Entity\Interfaces\EntityInterface>
      */
     protected static string $entityName = ApiKey::class;
 
@@ -59,7 +59,7 @@ final class ApiKeyTest extends EntityTestCase
     /**
      * @throws Throwable
      *
-     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<int, array{0: StringableArrayObject, 1: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatApiKeyHasExpectedRoles(): Generator

@@ -45,7 +45,7 @@ final class ResourceLifeCycleTest extends WebTestCase
     }
 
     /**
-     * @return Generator<array<int, string>>
+     * @return Generator<int, array<int, string>>
      */
     public static function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {

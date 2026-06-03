@@ -56,6 +56,7 @@ final class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         new ResourceCollection($this->getEmptyIteratorAggregate(), $logger)
             ->get('FooBar');
     }
@@ -72,6 +73,7 @@ final class ResourceCollectionTest extends KernelTestCase
             ->expects($this->once())
             ->method('error');
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger)
             ->get('FooBar');
     }
@@ -84,6 +86,7 @@ final class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         new ResourceCollection($this->getEmptyIteratorAggregate(), $logger)
             ->getEntityResource('FooBar');
     }
@@ -100,6 +103,7 @@ final class ResourceCollectionTest extends KernelTestCase
             ->expects($this->once())
             ->method('error');
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger)
             ->getEntityResource('FooBar');
     }
@@ -165,7 +169,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string<RestResource>}>
+     * @return Generator<int, array{0: class-string<RestResource>}>
      */
     public static function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
@@ -181,7 +185,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{
+     * @return Generator<int, array{
      *      0: class-string<RestResource>,
      *      1: class-string<EntityInterface>
      *  }>
@@ -200,7 +204,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<RestResource>|string|null}>
+     * @return Generator<int, array{0: boolean, 1: class-string<RestResource>|string|null}>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {
@@ -219,7 +223,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<EntityInterface>|string|null}>
+     * @return Generator<int, array{0: boolean, 1: class-string<EntityInterface>|string|null}>
      */
     public static function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {
@@ -246,7 +250,10 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
+     * @psalm-return IteratorAggregate<int, mixed>
      * @return IteratorAggregate<mixed>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getEmptyIteratorAggregate(): IteratorAggregate
     {
@@ -277,7 +284,10 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
+     * @psalm-return IteratorAggregate<int, mixed>
      * @return IteratorAggregate<mixed>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {

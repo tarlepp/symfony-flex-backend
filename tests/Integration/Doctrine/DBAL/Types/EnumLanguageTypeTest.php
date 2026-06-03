@@ -114,7 +114,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: 'en'|'fi', 1: Language}>
+     * @return Generator<int, array{0: 'en'|'fi', 1: Language}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
@@ -123,7 +123,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: mixed}>
+     * @return Generator<int, array{0: mixed}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
@@ -138,7 +138,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Language, 1: 'en'|'fi'}>
+     * @return Generator<int, array{0: Language, 1: 'en'|'fi'}>
      */
     public static function dataProviderTestThatConvertToDatabaseValueReturnsExpectedWithStringInput(): Generator
     {
@@ -147,7 +147,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: Language, 1: 'en'|'fi'}>
+     * @return Generator<int, array{0: Language, 1: 'en'|'fi'}>
      */
     public static function dataProviderTestThatConvertToPHPValueWorksWithValidInput(): Generator
     {
@@ -156,7 +156,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: mixed}>
+     * @return Generator<int, array{0: mixed}>
      */
     public static function dataProviderTestThatConvertToPHPValueThrowsAnException(): Generator
     {

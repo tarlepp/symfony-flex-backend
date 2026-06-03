@@ -73,7 +73,7 @@ class ListUsersCommand extends Command
     /**
      * Getter method for formatted user rows for console table.
      *
-     * @return array<int, string>
+     * @return array<array-key, array<int, string>>
      *
      * @throws Throwable
      */
@@ -90,6 +90,8 @@ class ListUsersCommand extends Command
     /**
      * Getter method for user formatter closure. This closure will format
      * single User entity for console table.
+     *
+     * @return Closure(User): array<int, string>
      */
     private function getFormatterUser(): Closure
     {
@@ -105,7 +107,7 @@ class ListUsersCommand extends Command
             $user->getEmail(),
             $user->getFirstName() . ' ' . $user->getLastName(),
             implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-            implode(",\n", $user->getUserGroups()->map($userGroupFormatter)->toArray()),
+            implode(",\n", array_map($userGroupFormatter, $user->getUserGroups()->toArray())),
         ];
     }
 }
