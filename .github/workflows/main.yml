@@ -128,6 +128,10 @@ jobs:
     runs-on: ubuntu-24.04
     needs:
       - static
+    env:
+      SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     services:
       mariadb:
         image: mariadb:10.7.1
@@ -191,25 +195,25 @@ jobs:
       #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
       - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
-        if: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
+        if: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
         run: |
           composer global require scrutinizer/ocular
-          ~/.composer/vendor/bin/ocular code-coverage:upload --access-token ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
+          ~/.composer/vendor/bin/ocular code-coverage:upload --access-token ${{ env.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
-        if: ${{ secrets.COVERALLS_REPO_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
+        if: ${{ env.COVERALLS_REPO_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
         run: php ./vendor/bin/php-coveralls -v
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ env.COVERALLS_REPO_TOKEN }}
           COVERALLS_RUN_LOCALLY: 1
 
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
-        if: ${{ secrets.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
+        if: ${{ env.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
         uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarqube-scan-action?tab=readme-ov-file#environment-variables
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }} # https://github.com/SonarSource/sonarqube-scan-action?tab=readme-ov-file#environment-variables
 
       - name: Create PhpMetrics report
         run: make phpmetrics
