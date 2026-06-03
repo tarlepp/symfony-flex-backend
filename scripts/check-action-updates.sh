@@ -10,6 +10,16 @@
 #   ./scripts/check-action-updates.sh
 #   ./scripts/check-action-updates.sh --current-pins-md
 #
+# Optional environment overrides:
+#   WORKFLOW_DIR=.github/workflows
+#   ACTIONS_DIR=.github/actions
+#   GIT_BIN=git
+#   TIMEOUT_BIN=timeout
+#
+# Example:
+#   WORKFLOW_DIR=.github/workflows ACTIONS_DIR=.github/actions \
+#     ./scripts/check-action-updates.sh --current-pins-md
+#
 # Requirements:
 #   - git (for git ls-remote)
 #
@@ -26,6 +36,7 @@ set +e
 GIT_BIN="${GIT_BIN:-git}"
 TIMEOUT_BIN="${TIMEOUT_BIN:-timeout}"
 WORKFLOW_DIR="${WORKFLOW_DIR:-.github/workflows}"
+ACTIONS_DIR="${ACTIONS_DIR:-.github/actions}"
 
 MODE="check"
 case "${1:-}" in
@@ -81,18 +92,20 @@ print_centered_banner() {
 discover_actions() {
     local workflow line uses_ref version repo existing_version ref comment_version existing_ref
     local line_number discovered_version
+    local scan_path
 
-    if [ ! -d "$WORKFLOW_DIR" ]; then
-        printf '%s⚠️  Workflow directory not found: %s%s\n' "$YELLOW" "$WORKFLOW_DIR" "$NC" >&2
-        return
-    fi
+    for scan_path in "$WORKFLOW_DIR" "$ACTIONS_DIR"; do
+        if [ ! -d "$scan_path" ]; then
+            printf '%s⚠️  Action discovery directory not found: %s%s\n' "$YELLOW" "$scan_path" "$NC" >&2
+            continue
+        fi
 
-    for workflow in "$WORKFLOW_DIR"/*.yml; do
-        [ -f "$workflow" ] || continue
+        while IFS= read -r workflow; do
+            [ -f "$workflow" ] || continue
 
-        line_number=0
-        while IFS= read -r line; do
-            line_number=$((line_number + 1))
+            line_number=0
+            while IFS= read -r line; do
+                line_number=$((line_number + 1))
 
             case "$line" in
                 *uses:*) ;;
@@ -155,8 +168,9 @@ discover_actions() {
             else
                 ACTION_SOURCES["$action_key"]="$workflow:$line_number"
             fi
-            ACTION_REFS["$action_key"]="$ref"
-        done < "$workflow"
+                ACTION_REFS["$action_key"]="$ref"
+            done < "$workflow"
+        done < <(find "$scan_path" -type f \( -name '*.yml' -o -name '*.yaml' \) | sort)
     done
 }
 
@@ -220,7 +234,7 @@ if [ "$DISCOVERY_WARNINGS" -gt 0 ] && [ "$MODE" = "check" ]; then
 fi
 
 if [ ${#ACTIONS[@]} -eq 0 ]; then
-    printf '%s⚠️  No pinned GitHub Actions discovered from %s%s\n' "$YELLOW" "$WORKFLOW_DIR" "$NC"
+    printf '%s⚠️  No pinned GitHub Actions discovered from %s and %s%s\n' "$YELLOW" "$WORKFLOW_DIR" "$ACTIONS_DIR" "$NC"
     if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
         exit 2
     fi
