@@ -21,6 +21,7 @@ jobs:
   security-check:
     name: PHP Security Checker
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
     steps:
@@ -41,6 +42,7 @@ jobs:
   lint-configuration:
     name: Lint configuration
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
     steps:
@@ -68,6 +70,7 @@ jobs:
   static:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     needs:
       - security-check
       - lint-configuration
@@ -122,6 +125,7 @@ jobs:
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs:
       - static
       - lint-documentation
@@ -250,9 +254,10 @@ jobs:
   lint-documentation:
     name: Lint documentation files
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
 
     steps:
-      - name: Make checkout
+      - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Lint all markdown documentation files
@@ -268,15 +273,17 @@ jobs:
   build:
     name: Build application Docker image
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     needs:
       - test
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set tag var
         id: vars
-        run: echo "DOCKER_TAG=$(echo ${GITHUB_REF} | sed -r 's/[\/()\.]+/_/g')-${GITHUB_SHA}" >> $GITHUB_OUTPUT
+        run: echo "DOCKER_TAG=$(echo '${{ github.ref_name }}' | sed -E 's#[/().]+#_#g')-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
