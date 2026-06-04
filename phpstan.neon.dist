@@ -12,11 +12,6 @@ parameters:
             identifier: missingType.generics
         -
             messages:
-                - '#Access to constant on internal class Symfony\\Component\\Validator\\Context\\ExecutionContext\.#'
-            paths:
-                - tests/Integration/*
-        -
-            messages:
                 - '#has PHPDoc tag \@method for method (.*)\(\) parameter \#(\d+) \$(.*) with no value type specified in iterable type array#'
             paths:
                 - tests/*
