@@ -68,7 +68,7 @@ jobs:
         run: make lint-yaml
 
   static:
-    name: Static analyzers
+    name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     needs:
@@ -122,12 +122,25 @@ jobs:
           name: phploc.json
           path: ./build/phploc.json
 
+  static-summary:
+    name: Static analyzers
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    needs:
+      - static
+    if: ${{ always() }}
+    steps:
+      - name: Validate static analyzer matrix result
+        run: |
+          echo "Static matrix result: ${{ needs.static.result }}"
+          test "${{ needs.static.result }}" = "success"
+
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     needs:
-      - static
+      - static-summary
       - lint-documentation
     env:
       SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
@@ -275,7 +288,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     needs:
-      - test
+      - static-summary
+      - lint-documentation
 
     steps:
       - name: Checkout
