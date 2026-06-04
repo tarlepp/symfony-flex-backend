@@ -21,6 +21,7 @@ jobs:
   security-check:
     name: PHP Security Checker
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
     steps:
@@ -41,6 +42,7 @@ jobs:
   lint-configuration:
     name: Lint configuration
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
     steps:
@@ -66,13 +68,32 @@ jobs:
         run: make lint-yaml
 
   static:
-    name: Static analyzers
+    name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     needs:
       - security-check
       - lint-configuration
     strategy:
       fail-fast: false
+      matrix:
+        analyzer:
+          - name: PHP CodeSniffer
+            command: make phpcs
+          - name: ECS
+            command: make ecs
+          - name: PHPLint
+            command: make phplint
+          - name: PHP Parallel Lint
+            command: make php-parallel-lint
+          - name: Psalm
+            command: make psalm-github
+          - name: PHPStan
+            command: make phpstan-github
+          - name: PHPLoc
+            command: make phploc
+          - name: PHP Insights
+            command: make phpinsights
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -84,50 +105,43 @@ jobs:
         with:
           setup-ini-values: opcache.jit=disable
 
-      - name: Run PHP CodeSniffer
-        run: make phpcs
-
-      - name: Run The Easiest Way to Use Any Coding Standard
-        run: make ecs
-
-      - name: Run PHPLint tool
-        run: make phplint
-
-      - name: Run PHP Parallel Lint tool
-        run: make php-parallel-lint
-
-      - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
-        run: make psalm-github
-
-      #- name: Run Psalm static analysis tool
-      #  run: make psalm
-
-      - name: Run PHPStan static analysis tool
-        run: make phpstan-github
-
-      - name: Run `phploc` to collect LOC stats
-        run: make phploc
-
-      - name: Run `PHP Insights` static analysis tool
-        run: make phpinsights
+      - name: Run static analyzer (${{ matrix.analyzer.name }})
+        run: ${{ matrix.analyzer.command }}
 
       - name: Archive Psalm results (psalm.json)
+        if: matrix.analyzer.name == 'Psalm'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: psalm.json
           path: ./build/psalm.json
 
       - name: Archive `phploc` results (phploc.json)
+        if: matrix.analyzer.name == 'PHPLoc'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: phploc.json
           path: ./build/phploc.json
 
+  static-summary:
+    name: Static analyzers
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    needs:
+      - static
+    if: ${{ always() }}
+    steps:
+      - name: Validate static analyzer matrix result
+        run: |
+          echo "Static matrix result: ${{ needs.static.result }}"
+          test "${{ needs.static.result }}" = "success"
+
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs:
-      - static
+      - static-summary
+      - lint-documentation
     env:
       SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -206,7 +220,7 @@ jobs:
         if: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
         run: |
           composer global require scrutinizer/ocular
-          ~/.composer/vendor/bin/ocular code-coverage:upload --access-token ${{ env.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
+          "$(composer global config bin-dir --absolute)/ocular" code-coverage:upload --access-token ${{ env.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         if: ${{ env.COVERALLS_REPO_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
@@ -253,9 +267,10 @@ jobs:
   lint-documentation:
     name: Lint documentation files
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
 
     steps:
-      - name: Make checkout
+      - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Lint all markdown documentation files
@@ -271,15 +286,18 @@ jobs:
   build:
     name: Build application Docker image
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     needs:
-      - test
+      - static-summary
+      - lint-documentation
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set tag var
         id: vars
-        run: echo "DOCKER_TAG=$(echo ${GITHUB_REF} | sed -r 's/[\/()\.]+/_/g')-${GITHUB_SHA}" >> $GITHUB_OUTPUT
+        run: echo "DOCKER_TAG=$(echo '${{ github.ref_name }}' | sed -E 's#[/().]+#_#g')-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
