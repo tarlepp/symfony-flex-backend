@@ -68,7 +68,7 @@ jobs:
         run: make lint-yaml
 
   static:
-    name: Static analyzers (${{ matrix.analyzer.name }})
+    name: Static analyzers
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     needs:
