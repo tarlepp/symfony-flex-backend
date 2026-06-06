@@ -122,6 +122,16 @@ jobs:
           name: phploc.json
           path: ./build/phploc.json
 
+  gitleaks:
+    name: Gitleaks scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: '0'
+
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
         env:
@@ -133,12 +143,15 @@ jobs:
     timeout-minutes: 10
     needs:
       - static
+      - gitleaks
     if: ${{ always() }}
     steps:
       - name: Validate static analyzer matrix result
         run: |
           echo "Static matrix result: ${{ needs.static.result }}"
+          echo "Gitleaks result: ${{ needs.gitleaks.result }}"
           test "${{ needs.static.result }}" = "success"
+          test "${{ needs.gitleaks.result }}" = "success"
 
   test:
     name: PHPUnit tests
