@@ -1,0 +1,20 @@
+name: Checkout repository
+description: Checkout the repository
+inputs:
+  fetch-depth:
+    description: Number of commits to fetch (0 for full history)
+    required: false
+    default: '0'
+  persist-credentials:
+    description: Whether to persist the OAuth token in git config
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        persist-credentials: ${{ inputs.persist-credentials }}
+
