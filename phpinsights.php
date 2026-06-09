@@ -145,6 +145,13 @@ return [
                 'src/Validator/Constraints/UniqueUsernameValidator.php',
             ],
         ],
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenDefineFunctions::class => [
+            'exclude' => [
+                'src/Enum/Language.php',
+                'src/Enum/Locale.php',
+                'src/Enum/Role.php',
+            ],
+        ],
         SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class => [
             'searchAnnotations' => true,
         ],
