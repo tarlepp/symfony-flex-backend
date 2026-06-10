@@ -34,8 +34,7 @@ jobs:
       actions: read
 
     steps:
-      - name: "Checkout code"
-        uses: ./.github/actions/checkout
+      - uses: ./.github/actions/checkout
         with:
           persist-credentials: false
 

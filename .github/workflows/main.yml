@@ -25,11 +25,9 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout
-        uses: ./.github/actions/checkout
+      - uses: ./.github/actions/checkout
 
-      - name: Bootstrap PHP project
-        uses: ./.github/actions/php-bootstrap
+      - uses: ./.github/actions/php-bootstrap
 
       - name: PHP Security Checker
         uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
@@ -44,8 +42,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout
-        uses: ./.github/actions/checkout
+      - uses: ./.github/actions/checkout
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -278,8 +275,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout
-        uses: ./.github/actions/checkout
+      - uses: ./.github/actions/checkout
         with:
           fetch-depth: '1'
 
@@ -302,8 +298,7 @@ jobs:
       - lint-documentation
 
     steps:
-      - name: Checkout
-        uses: ./.github/actions/checkout
+      - uses: ./.github/actions/checkout
 
       - name: Set tag var
         id: vars
