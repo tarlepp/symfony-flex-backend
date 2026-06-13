@@ -25,7 +25,8 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout
+      - &checkout_step
+        name: Make checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: '0'
@@ -46,10 +47,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
+      - *checkout_step
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -95,10 +93,7 @@ jobs:
           - name: PHP Insights
             command: make phpinsights
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
+      - *checkout_step
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -127,10 +122,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
+      - *checkout_step
 
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
@@ -177,10 +169,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: '0'
+      - *checkout_step
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -288,8 +277,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - *checkout_step
 
       - name: Lint all markdown documentation files
         uses: DavidAnson/markdownlint-cli2-action@fa0cd0f1a052f54da593c83860f2292982f5d142 # v23.2.0
@@ -310,8 +298,7 @@ jobs:
       - lint-documentation
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - *checkout_step
 
       - name: Set tag var
         id: vars
