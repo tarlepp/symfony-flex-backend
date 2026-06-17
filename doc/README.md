@@ -18,6 +18,9 @@ application.
 
 <a id="resources"></a>
 
+* [AI-assisted change policy](AI_RULES.md) - repository-level guidance for
+  AI-assisted changes and how those rules align with CI, contributor workflow,
+  and project conventions.
 * [Application commands](COMMANDS.md)
 * [GitHub Actions update guide](ACTIONS_UPDATE.md)
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)
@@ -30,6 +33,13 @@ application.
 * [Testing guide](TESTING.md)
 * [Usage checklist](USAGE_CHECKLIST.md)
 * [Using Xdebug](XDEBUG.md)
+
+For the most common starting points:
+
+* New contributor setup: [`../README.md`](../README.md)
+* AI-assisted change policy: [`AI_RULES.md`](AI_RULES.md)
+* Day-to-day commands: [`COMMANDS.md`](COMMANDS.md)
+* GitHub Actions pin maintenance: [`ACTIONS_UPDATE.md`](ACTIONS_UPDATE.md)
 
 ---
 

@@ -1,14 +1,39 @@
 # General Guidelines for Interacting with Claude
 
-- This is a Symfony JSON REST API backend template with Docker setup for local
-  development.
-- Check the README.md for detailed installation and usage instructions.
-- Use `make` commands to manage Docker containers and application tasks.
-- For frontend integration, refer to the "Frontend?" section in the README.md.
-- For additional resources and links, see the "Resources" and "External links
-  / resources" sections.
+This repository is a production-ready Symfony JSON REST API backend template
+with Docker setup for local development. It is designed to be consumed by
+frontend applications or other backend services.
 
-# Project Architecture
+## AI documentation map
+
+Use the repository AI guidance in this order:
+
+1. `.github/copilot-instructions.md` - short repository-level operational rules
+2. `CLAUDE.md` - long-form project context, architecture, and workflow notes
+3. `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
+4. `.github/pull_request_template.md` - human review checklist for pull requests
+
+If one of these documents drifts from the implementation, prefer the actual
+repository code, scripts, and CI configuration as the source of truth.
+
+## Version sources of truth
+
+To avoid documentation drift, this file intentionally avoids mirroring most
+exact dependency and tooling versions.
+
+For current versions, use these files as the source of truth:
+
+- `composer.json` for PHP, Symfony, Doctrine, and all package versions
+- `Dockerfile` and `Dockerfile_dev` for container PHP and base image versions
+- `phpstan.neon.dist` for PHPStan level and configuration
+- `psalm.xml` for Psalm configuration
+- `ecs.php` for ECS (Easy Coding Standard) rules
+- `phpunit.xml.dist` for PHPUnit configuration
+
+If a version matters for implementation, read it from those files instead of
+copying it into long-form documentation.
+
+## Project Architecture
 
 - **Type:** JSON REST API Backend
 - **Pattern:** Resource-based REST architecture with service layer
@@ -31,17 +56,9 @@
   - Value Resolvers: `src/ValueResolver/`
   - Decorators: `src/Decorator/`
 
-# Version Requirements
+## Development Tools
 
-- **PHP:** 8.4+ (8.4.11 platform requirement)
-- **Symfony:** 7.4.*
-- **Database:** MariaDB 10.7+
-- **Docker Engine:** Required for local development
-- **Composer:** 2.x
-
-# Development Tools
-
-## Static Analysis
+### Static Analysis
 
 - **PHPStan** (Level: max) - Static analysis
 - **Psalm** - Static analysis with type checking
@@ -50,30 +67,38 @@
 - **PHPInsights** - Code quality and architecture analysis
 - **Rector** - Automated code refactoring and upgrades
 
-## Testing
+### Test runners
 
 - **PHPUnit** - Unit and integration testing
 - **Fastest** - Parallel test execution (this will be removed in future)
 - **Infection** - Mutation testing (not used heavily, optional)
 
-## Code Quality & Analysis
+### Code Quality & Analysis
 
 - **PHPMetrics** - Code metrics and quality reports
 - **PHPLint** / **PHP-Parallel-Lint** - Syntax checking
 - **PHPLOC** - Project size and statistics
 - **Composer Tools** - Dependency analysis
 
-# Common Development Commands
+## Common Development Commands
 
-## Container Management
+### Container Management
 
 - `make start` - Start all containers (foreground, preferred way)
 - `make daemon` - Start all containers (background)
 - `make stop` - Stop all containers
 - `make logs` - View container logs
 - `make bash` or `make fish` - Get shell inside PHP container
+- The primary container for project commands is the `php` service container
+  (`symfony-backend-php-fpm`).
+- If containers are not running, start them from project root with `make start`
+  or `make daemon`.
+- Use the running `php` container or IDE Dev Container as the default execution
+  environment for project commands.
+- Node.js tooling is available in the containerized environment via `nvm`, so
+  `npx`-based markdown/documentation checks can run there too.
 
-## Code Quality
+### Code Quality
 
 - `make phpstan` - Run PHPStan static analysis
 - `make psalm` - Run Psalm static analysis
@@ -81,19 +106,19 @@
 - `make ecs-fix` - Fix code style issues automatically
 - `make phpinsights` - Run comprehensive code quality checks
 
-## Testing
+### Testing commands
 
 - `make run-tests` - Run all tests (single thread)
-- `make run-tests-fastest` - Run tests in parallel (removed in future)
+- `make run-tests-fastest` - Run tests in parallel (this will be removed in future)
 - `make infection` - Run mutation testing (not heavily used)
 
-## Database
+### Database
 
 - `bin/console doctrine:migrations:migrate` - Run migrations
 - `bin/console doctrine:migrations:diff` - Generate migration from entity changes
 - `bin/console doctrine:schema:validate` - Validate database schema
 
-## Dependencies
+### Dependencies
 
 - `make update` - Update composer dependencies
 - `make check-dependencies-patch` - Check for patch updates
@@ -101,9 +126,9 @@
 - `make check-dependencies-latest` - Check for latest versions
 - `make check-security` - Check for security vulnerabilities
 
-# Development Workflow
+## Development Workflow
 
-## Adding New REST Endpoints
+### Adding New REST Endpoints
 
 This project uses a resource-based approach:
 
@@ -120,7 +145,7 @@ This project uses a resource-based approach:
 11. Check code quality: `make ecs && make phpstan && make psalm`
 12. Fix issues: `make ecs-fix`
 
-## Before Committing
+### Before Committing
 
 Always run these commands:
 
@@ -131,9 +156,9 @@ make psalm             # Type checking
 make run-tests-fastest # Run all tests in parallel
 ```
 
-# Testing
+## Testing
 
-## Test Structure
+### Test Structure
 
 - `tests/E2E/` - End-to-end API tests
 - `tests/Functional/` - Functional tests with database
@@ -142,7 +167,7 @@ make run-tests-fastest # Run all tests in parallel
 - `tests/Utils/` - Testing utilities and helpers
 - `tests/DataFixtures/` - Test data fixtures
 
-## Running Tests
+### Running Tests
 
 ```bash
 # All tests (single thread)
@@ -155,28 +180,28 @@ make run-tests-fastest
 make infection
 ```
 
-## Test Environment
+### Test Environment
 
 - Uses separate test database
 - Environment: `APP_ENV=test`
 - Configuration: `phpunit.xml.dist` and `phpunit.fastest.xml`
 - Fixtures loaded via `tests/DataFixtures/`
 
-# Security
+## Security
 
-## Authentication
+### Authentication
 
 - **JWT Tokens:** Using Lexik JWT Authentication Bundle
 - **API Keys:** Managed via `api-key:management` console command
 - **User Management:** Available via `user:management` console command
 
-## Key Security Files
+### Key Security Files
 
 - `config/packages/security.yaml` - Security configuration
 - `config/jwt/` - JWT key storage (generated via `make generate-jwt-keys`)
 - `secrets/` - Application secrets storage
 
-## Security Best Practices
+### Security Best Practices
 
 - Never commit `.env.local` or JWT keys to version control
 - Use proper user roles and permissions
@@ -184,36 +209,33 @@ make infection
 - Use DTOs to control data exposure
 - Run security checks: `make check-security`
 
-# Configuration
+## Configuration
 
-## Environment Files
+### Environment Files
 
 - `.env` - Default configuration (committed)
 - `.env.local` - Local overrides (ignored by git)
 - `APPLICATION_CONFIG` - Path to JSON config file (default:
   `secrets/application.json`)
 
-## Key Configuration Files
+### Key Configuration Files
 
 - `config/services.yaml` - Service configuration
 - `config/packages/` - Bundle configurations
 - `config/routes/` - Route definitions
 - `secrets/application.json` - Application-specific configuration
 
-## View Current Configuration
+### View Current Configuration
 
 Use `make configuration` to view current application configuration.
 
-# Documentation Structure
-
-## Quick Reference
+## Documentation Structure
 
 - `README.md` - Project overview and installation
-- `CLAUDE.md` - This file - AI assistant guidelines
+- `CLAUDE.md` - This file - long-form AI assistant context
+- `.github/copilot-instructions.md` - Short operational rules for AI assistants
+- `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
 - `doc/README.md` - Documentation index
-
-## Detailed Documentation
-
 - `doc/COMMANDS.md` - Complete command reference (Makefile + Console)
 - `doc/DEVELOPMENT.md` - Development best practices and workflow
 - `doc/TESTING.md` - Testing strategies and guidelines
@@ -225,49 +247,43 @@ Use `make configuration` to view current application configuration.
 - `doc/SPEED_UP_DOCKER_COMPOSE.md` - Performance optimization
 - `doc/USAGE_CHECKLIST.md` - Pre-deployment checklist
 
-# Guidelines for AI Code Assistants
+## Practical Guidance for AI Assistants
 
-## When Modifying Code
+When making changes in this repository:
 
-1. **Always check existing patterns** in similar files before creating new code
-2. **Follow the resource-based architecture** for new endpoints
-3. **Use strict types** - All PHP files should declare `declare(strict_types=1);`
-4. **Write tests** for any new functionality
-5. **Run code quality tools** after changes
-  - and fix any issues found before continuing
-6. **Document new features** in relevant documentation files if needed
+1. Use the resource-based REST architecture; keep controllers thin.
+2. Follow existing Doctrine entity, repository, and migration patterns.
+3. Use DTOs for API input and output; do not expose entities directly.
+4. Use the AutoMapper for entity-to-DTO and DTO-to-entity mapping.
+5. Keep classes in `src/Controller/` as thin as possible and delegate business
+   logic to resources/services.
+6. For custom controllers in `src/Controller/`, prefer the `__invoke` pattern
+   (one controller class per endpoint).
+7. Treat trait-based controllers in `src/Rest/` as an exception to the
+   `__invoke` rule.
+8. Declare `declare(strict_types=1);` in every PHP file.
+9. Keep changes compatible with PHPStan (max level) and Psalm.
+10. Write tests for new functionality and run the test suite before committing.
+11. Prefer the smallest change that fully solves the task.
+12. Avoid unrelated refactors unless explicitly required.
+13. Run the smallest relevant validation commands inside the running `php`
+    container or IDE Dev Container.
+14. Use the `php` container (`symfony-backend-php-fpm`) as the default command
+    target and start it with `make start`/`make daemon` when needed.
+15. For markdown/documentation checks that require Node.js tooling, use
+    containerized `nvm` + `npx` instead of host-level installs.
 
-## Common Patterns to Follow
+### Documentation drift
 
-- **Entities:** Use Doctrine attributes, implement proper getters/setters
-- **DTOs:** Immutable where possible, use validation constraints
-- **Repositories:** Extend `BaseRepository`, use QueryBuilder
-- **Resources:** Handle business logic, coordinate between repositories
-- **Controllers:** Thin controllers, delegate to resources/services
-- **Tests:** Use fixtures, test happy path and edge cases
-- **Decorators:** Used for cross-cutting concerns (e.g., `StopwatchDecorator` for performance monitoring)
+This file is long-form context, not the only rules source. Keep it aligned with:
 
-## Code Generation Rules
+- `.github/copilot-instructions.md`
+- `doc/AI_RULES.md`
+- `.github/pull_request_template.md`
+- actual repository scripts and CI workflows
 
-- **Never remove security checks** or authentication
-- **Always validate input** using Symfony validation
-- **Use type hints** for all parameters and return types
-- **Document complex logic** with PHPDoc blocks
-- **Follow PSR-12** coding standard
-- **Respect existing code organization** and patterns
-- **Use readonly properties** where appropriate (PHP 8.1+ feature)
+---
 
-## Before Suggesting Code Changes
-
-1. Check if similar functionality exists
-2. Review related tests
-3. Consider security implications
-4. Ensure backward compatibility
-5. Verify against static analysis rules (PHPStan, Psalm, ECS, PHPInsights)
-
-## When Unsure
-
-- Reference `doc/CONCEPTS_AND_FEATURES.md` for architecture
-- Check `doc/DEVELOPMENT.md` for best practices
-- Look at existing similar implementations
-- Ask for clarification rather than making assumptions
+*This document is maintained for AI assistants and contributors who need a
+high-level map of the project's architecture, workflow, and repository
+conventions.*

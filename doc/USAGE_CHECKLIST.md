@@ -69,6 +69,9 @@ started to use this template.
         Actions pinning/update process and adapt it for your project.
   * [ ] Run `make check-action-updates` after workflow changes to verify pins,
         version consistency, and available updates.
+* [ ] Review the AI-assisted change policy files: `.github/copilot-instructions.md`,
+      `CLAUDE.md`, and [AI_RULES.md](AI_RULES.md). Update or replace them so
+      they match your own architecture, workflow, and review expectations.
 * [ ] Last step when all above is done - just delete this file.
 
 ---
