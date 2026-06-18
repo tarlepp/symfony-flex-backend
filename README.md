@@ -51,6 +51,7 @@ Then open `https://localhost:8000` in your browser. For more details, see
     * [Building containers](#building-containers)
     * [Health check](#health-check)
   * [Dev Containers](#dev-containers)
+  * [AI-assisted development](#ai-assisted-development)
   * [Frontend?](#frontend)
 * [Resources](#resources)
   * [External links / resources](#external-links--resources)
@@ -274,6 +275,36 @@ For application URLs, shell access, and rebuild commands, see
 For detailed usage, UID/GID notes, and port mappings, see
 [`.devcontainer/README.md`](.devcontainer/README.md).
 
+## AI-assisted development [ᐞ](#table-of-contents)
+
+<a id="ai-assisted-development"></a>
+
+If you use AI assistance in this repository, keep it aligned with the project
+conventions already documented in this order:
+
+* `.github/copilot-instructions.md` for short repository rules,
+* `CLAUDE.md` for broader architecture and workflow context,
+* `doc/AI_RULES.md` for how AI guidance is maintained over time, and
+* `.github/pull_request_template.md` for the human review checklist used in
+  pull requests.
+
+As a simple rule of thumb, update the AI guidance when the same review comment,
+architectural correction, or project convention appears repeatedly and should
+become a repository default.
+
+When possible, validate AI-assisted changes with the smallest relevant command
+set from project root inside the running development container:
+
+```bash
+make ecs
+make phpstan
+make psalm
+make run-tests
+```
+
+In the documented local development workflow, run those commands inside the
+running `php` development container where the pinned PHP toolchain is available.
+
 ## Frontend? [ᐞ](#table-of-contents)
 
 <a id="frontend"></a>
@@ -295,6 +326,7 @@ application with the frontend technology of your choice.
 <a id="resources"></a>
 
 * [Resource index](doc/README.md)
+* [AI-assisted change policy](doc/AI_RULES.md)
 * [Application commands](doc/COMMANDS.md)
 * [GitHub Actions update guide](doc/ACTIONS_UPDATE.md)
 * [Concepts and features](doc/CONCEPTS_AND_FEATURES.md)

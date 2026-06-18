@@ -284,10 +284,12 @@ jobs:
         with:
           globs: |
             README.md
+            CLAUDE.md
             .devcontainer/*.md
             doc/*.md
             docker/*.md
             secrets/*.md
+            .github/*.md
 
   build:
     name: Build application Docker image
