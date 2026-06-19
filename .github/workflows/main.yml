@@ -27,7 +27,7 @@ jobs:
     steps:
       - &checkout_step
         name: Make checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9f698171ed81b15d1823a05fc7211befd50c8ae0 # v6.0.3
         with:
           fetch-depth: '0'
 
@@ -125,7 +125,7 @@ jobs:
       - *checkout_step
 
       - name: Gitleaks scan
-        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -239,7 +239,7 @@ jobs:
 
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
         if: ${{ env.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
-        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
+        uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }} # https://github.com/SonarSource/sonarqube-scan-action?tab=readme-ov-file#environment-variables
@@ -284,10 +284,12 @@ jobs:
         with:
           globs: |
             README.md
+            CLAUDE.md
             .devcontainer/*.md
             doc/*.md
             docker/*.md
             secrets/*.md
+            .github/*.md
 
   build:
     name: Build application Docker image
