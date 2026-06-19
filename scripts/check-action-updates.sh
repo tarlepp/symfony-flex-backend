@@ -6,19 +6,13 @@
 # This script checks all pinned GitHub Actions in this repository for available
 # updates and displays the new SHA for each outdated action.
 #
+# It discovers actions from:
+#   - .github/workflows/*.yml files
+#   - .github/actions/*/action.yml files
+#
 # Usage:
 #   ./scripts/check-action-updates.sh
 #   ./scripts/check-action-updates.sh --current-pins-md
-#
-# Optional environment overrides:
-#   WORKFLOW_DIR=.github/workflows
-#   ACTIONS_DIR=.github/actions
-#   GIT_BIN=git
-#   TIMEOUT_BIN=timeout
-#
-# Example:
-#   WORKFLOW_DIR=.github/workflows ACTIONS_DIR=.github/actions \
-#     ./scripts/check-action-updates.sh --current-pins-md
 #
 # Requirements:
 #   - git (for git ls-remote)
@@ -92,20 +86,18 @@ print_centered_banner() {
 discover_actions() {
     local workflow line uses_ref version repo existing_version ref comment_version existing_ref
     local line_number discovered_version
-    local scan_path
 
-    for scan_path in "$WORKFLOW_DIR" "$ACTIONS_DIR"; do
-        if [ ! -d "$scan_path" ]; then
-            printf '%s⚠️  Action discovery directory not found: %s%s\n' "$YELLOW" "$scan_path" "$NC" >&2
-            continue
-        fi
+    if [ ! -d "$WORKFLOW_DIR" ]; then
+        printf '%s⚠️  Workflow directory not found: %s%s\n' "$YELLOW" "$WORKFLOW_DIR" "$NC" >&2
+        return
+    fi
 
-        while IFS= read -r workflow; do
-            [ -f "$workflow" ] || continue
+    for workflow in "$WORKFLOW_DIR"/*.yml; do
+        [ -f "$workflow" ] || continue
 
-            line_number=0
-            while IFS= read -r line; do
-                line_number=$((line_number + 1))
+        line_number=0
+        while IFS= read -r line; do
+            line_number=$((line_number + 1))
 
             case "$line" in
                 *uses:*) ;;
@@ -168,9 +160,86 @@ discover_actions() {
             else
                 ACTION_SOURCES["$action_key"]="$workflow:$line_number"
             fi
-                ACTION_REFS["$action_key"]="$ref"
-            done < "$workflow"
-        done < <(find "$scan_path" -type f \( -name '*.yml' -o -name '*.yaml' \) | sort)
+            ACTION_REFS["$action_key"]="$ref"
+        done < "$workflow"
+    done
+
+    # Discover actions from .github/actions/*/action.yml files
+    if [ ! -d "$ACTIONS_DIR" ]; then
+        printf '%s⚠️  Actions directory not found: %s%s\n' "$YELLOW" "$ACTIONS_DIR" "$NC" >&2
+        return
+    fi
+
+    for action_file in "$ACTIONS_DIR"/*/action.yml; do
+        [ -f "$action_file" ] || continue
+
+        line_number=0
+        while IFS= read -r line; do
+            line_number=$((line_number + 1))
+
+            case "$line" in
+                *uses:*) ;;
+                *) continue ;;
+            esac
+
+            uses_ref=$(printf '%s\n' "$line" | sed -n 's/.*uses:[[:space:]]*\([^[:space:]#][^[:space:]#]*\).*/\1/p')
+            comment_version=$(printf '%s\n' "$line" | sed -n 's/.*#[[:space:]]*\([^[:space:]]\+\).*/\1/p')
+
+            [ -n "$uses_ref" ] || continue
+
+            case "$uses_ref" in
+                ./*|../*|*/.github/workflows/* )
+                    continue
+                    ;;
+            esac
+
+            repo="${uses_ref%@*}"
+            ref="${uses_ref#*@}"
+
+            case "$repo" in
+                */*) ;;
+                *) continue ;;
+            esac
+
+            discovered_version=''
+            if [ -n "$comment_version" ]; then
+                discovered_version="$comment_version"
+            elif printf '%s\n' "$ref" | grep -Eq '^v?[0-9]+(\.|$)'; then
+                discovered_version="$ref"
+            fi
+
+            if ! printf '%s\n' "$ref" | grep -Eq '^[0-9a-f]{40}$'; then
+                printf '%s⚠️  Unpinned action reference at %s:%s -> %s%s\n' "$YELLOW" "$action_file" "$line_number" "$uses_ref" "$NC" >&2
+                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            fi
+
+            if [ -z "$discovered_version" ]; then
+                printf '%s⚠️  Cannot determine version for %s at %s:%s (add '\''# vX.Y.Z'\'' comment)%s\n' "$YELLOW" "$repo" "$action_file" "$line_number" "$NC" >&2
+                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+                continue
+            fi
+
+            version="$discovered_version"
+
+            # Use composite key to support multiple versions of the same action
+            local action_key="${repo}@${version}"
+            local existing_ref="${ACTION_REFS[$action_key]}"
+
+            if [ -n "$existing_ref" ] && [ "$existing_ref" != "$ref" ]; then
+                printf '%s⚠️  Conflicting pinned refs detected for %s: %s (%s) vs %s (%s:%s)%s\n' "$YELLOW" "$action_key" "$existing_ref" "${ACTION_SOURCES[$action_key]}" "$ref" "$action_file" "$line_number" "$NC" >&2
+                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+                continue
+            fi
+
+            ACTIONS["$action_key"]="$version"
+            # Append source, separating multiple occurrences with newlines
+            if [ -n "${ACTION_SOURCES[$action_key]}" ]; then
+                ACTION_SOURCES["$action_key"]="${ACTION_SOURCES[$action_key]}"$'\n'"$action_file:$line_number"
+            else
+                ACTION_SOURCES["$action_key"]="$action_file:$line_number"
+            fi
+            ACTION_REFS["$action_key"]="$ref"
+        done < "$action_file"
     done
 }
 
@@ -234,10 +303,12 @@ if [ "$DISCOVERY_WARNINGS" -gt 0 ] && [ "$MODE" = "check" ]; then
 fi
 
 if [ ${#ACTIONS[@]} -eq 0 ]; then
-    printf '%s⚠️  No pinned GitHub Actions discovered from %s and %s%s\n' "$YELLOW" "$WORKFLOW_DIR" "$ACTIONS_DIR" "$NC"
+    printf '%s⚠️  No pinned GitHub Actions discovered from %s or %s%s\n' "$YELLOW" "$WORKFLOW_DIR" "$ACTIONS_DIR" "$NC"
+
     if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
         exit 2
     fi
+
     exit 0
 fi
 
