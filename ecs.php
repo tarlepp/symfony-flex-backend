@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 /**
  * /ecs.php
  *
@@ -32,97 +32,74 @@ use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ECSConfig $ecsConfig): void {
-    $ecsConfig->paths([
+return ECSConfig::configure()
+    ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-    ]);
-
-    $ecsConfig->sets([SetList::PSR_12, SetList::CLEAN_CODE, SetList::COMMON]);
-
-    $ruleConfigurations = [
+    ])
+    ->withPreparedSets(psr12: true, common: true, cleanCode: true)
+    ->withConfiguredRule(
+        IncrementStyleFixer::class,
         [
-            IncrementStyleFixer::class,
-            [
-                'style' => 'post',
+            'style' => 'post',
+        ],
+    )
+    ->withConfiguredRule(
+        CastSpacesFixer::class,
+        [
+            'space' => 'none',
+        ],
+    )
+    ->withConfiguredRule(
+        YodaStyleFixer::class,
+        [
+            'equal' => false,
+            'identical' => false,
+            'less_and_greater' => false,
+        ],
+    )
+    ->withConfiguredRule(
+        ConcatSpaceFixer::class,
+        [
+            'spacing' => 'one',
+        ],
+    )
+    ->withConfiguredRule(
+        OrderedImportsFixer::class,
+        [
+            'imports_order' => ['class', 'function', 'const'],
+        ],
+    )
+    ->withConfiguredRule(
+        NoSuperfluousPhpdocTagsFixer::class,
+        [
+            'remove_inheritdoc' => false,
+            'allow_mixed' => true,
+            'allow_unused_params' => false,
+        ],
+    )
+    ->withConfiguredRule(
+        DeclareEqualNormalizeFixer::class,
+        [
+            'space' => 'single',
+        ],
+    )
+    ->withConfiguredRule(
+        BlankLineBeforeStatementFixer::class,
+        [
+            'statements' => ['continue', 'declare', 'return', 'throw', 'try'],
+        ],
+    )
+    ->withConfiguredRule(
+        BinaryOperatorSpacesFixer::class,
+        [
+            'operators' => [
+                '&' => 'align',
             ],
         ],
-        [
-            CastSpacesFixer::class,
-            [
-                'space' => 'none',
-            ],
-        ],
-        [
-            YodaStyleFixer::class,
-            [
-                'equal' => false,
-                'identical' => false,
-                'less_and_greater' => false,
-            ],
-        ],
-        [
-            ConcatSpaceFixer::class,
-            [
-                'spacing' => 'one',
-            ],
-        ],
-        [
-            CastSpacesFixer::class,
-            [
-                'space' => 'none',
-            ],
-        ],
-        [
-            OrderedImportsFixer::class,
-            [
-                'imports_order' => ['class', 'function', 'const'],
-            ],
-        ],
-        [
-            NoSuperfluousPhpdocTagsFixer::class,
-            [
-                'remove_inheritdoc' => false,
-                'allow_mixed' => true,
-                'allow_unused_params' => false,
-            ],
-        ],
-        [
-            DeclareEqualNormalizeFixer::class,
-            [
-                'space' => 'single',
-            ],
-        ],
-        [
-            BlankLineBeforeStatementFixer::class,
-            [
-                'statements' => ['continue', 'declare', 'return', 'throw', 'try'],
-            ],
-        ],
-        [
-            BinaryOperatorSpacesFixer::class,
-            [
-                'operators' => [
-                    '&' => 'align',
-                ],
-            ],
-        ],
-    ];
-
-    array_map(static fn ($parameters) => $ecsConfig->ruleWithConfiguration(...$parameters), $ruleConfigurations);
-
-    $ecsConfig->skip([
-        NoMultilineWhitespaceAroundDoubleArrowFixer::class => null,
-        PhpdocNoPackageFixer::class => null,
-        PhpdocSummaryFixer::class => null,
-        PhpdocSeparationFixer::class => null,
+    )
+    ->withSkip([
         BlankLineAfterOpeningTagFixer::class => null,
         ClassAttributesSeparationFixer::class => null,
         NotOperatorWithSuccessorSpaceFixer::class => null,
-        SingleLineThrowFixer::class => null,
-        PhpdocAlignFixer::class => null,
-        PhpdocToCommentFixer::class => null,
-        NativeFunctionInvocationFixer::class => null,
-        ExplicitStringVariableFixer::class => null,
     ]);
-};
