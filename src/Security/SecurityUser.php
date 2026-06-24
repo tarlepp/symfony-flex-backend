@@ -73,15 +73,6 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    #[Override]
-    #[Deprecated]
-    public function eraseCredentials(): void
-    {
-    }
-
     #[Override]
     public function getUserIdentifier(): string
     {

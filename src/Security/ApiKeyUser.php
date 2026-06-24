@@ -59,29 +59,4 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     {
         return $this->roles;
     }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getPassword(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    #[Override]
-    #[Deprecated]
-    public function eraseCredentials(): void
-    {
-    }
 }
