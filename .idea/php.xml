@@ -104,7 +104,6 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/lines-of-code" />
       <path value="$PROJECT_DIR$/vendor/sebastian/version" />
       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
-      <path value="$PROJECT_DIR$/vendor/masterminds/html5" />
       <path value="$PROJECT_DIR$/vendor/mark-gerarts/auto-mapper-plus" />
       <path value="$PROJECT_DIR$/vendor/mark-gerarts/automapper-plus-bundle" />
       <path value="$PROJECT_DIR$/vendor/mustangostang/spyc" />
@@ -160,7 +159,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/dotenv" />
       <path value="$PROJECT_DIR$/vendor/symfony/property-info" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-exporter" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
       <path value="$PROJECT_DIR$/vendor/symfony/routing" />
       <path value="$PROJECT_DIR$/vendor/symfony/security-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/dom-crawler" />
@@ -196,6 +194,7 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/git-state" />
       <path value="$PROJECT_DIR$/vendor/radebatz/type-info-extras" />
       <path value="$PROJECT_DIR$/tools/01_readalizer/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-deepclone" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
