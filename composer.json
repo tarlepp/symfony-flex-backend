@@ -32,7 +32,7 @@
 		"doctrine/orm": "3.6.7",
 		"gedmo/doctrine-extensions": "3.22.0",
 		"lexik/jwt-authentication-bundle": "3.2.0",
-		"mark-gerarts/automapper-plus-bundle": "1.5.0",
+		"mark-gerarts/automapper-plus-bundle": "1.6.0",
 		"matomo/device-detector": "6.5.1",
 		"matthiasnoback/symfony-console-form": "7.0.0",
 		"nelmio/api-doc-bundle": "5.10.3",
