@@ -285,6 +285,7 @@ for:
 * PHPStan static analysis,
 * Psalm type checking,
 * PHPUnit test suite, and
+* Markdown documentation linting, and
 * security vulnerability scanning.
 
 That means the most effective starting point for AI rules in this repository is

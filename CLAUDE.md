@@ -195,6 +195,12 @@ make psalm             # Type checking
 make run-tests-fastest # Run all tests in parallel
 ```
 
+For Markdown/documentation changes, also run:
+
+```bash
+make lint-markdown
+```
+
 ## Testing [ᐞ](#table-of-contents)
 
 <a id="testing"></a>
