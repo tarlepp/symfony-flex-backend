@@ -338,6 +338,9 @@ When making changes in this repository:
     or architecture decisions.
 21. Update relevant documentation when code changes affect behavior,
     architecture, workflow steps, commands, or review expectations.
+22. In the handoff summary, propose commit message(s) per logical change using
+    the repository pattern `Type(scope): short description` (for example
+    `Chore(ops): update AI documentation rules`).
 
 ### Documentation drift [ᐞ](#table-of-contents)
 

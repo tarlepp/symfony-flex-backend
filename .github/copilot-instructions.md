@@ -62,6 +62,9 @@ ORM, and project workflow conventions.
 - Keep work as uncommitted changes until commit instructions are provided.
 - After each completed task, provide a concise summary of what changed,
   including affected files and validation commands that were run (or skipped).
+- In that summary, include proposed commit message(s) for each logical change,
+  following the repository pattern `Type(scope): short description` (for
+  example `Chore(ops): update AI documentation rules`).
 
 ## Clarification and assumptions rules
 

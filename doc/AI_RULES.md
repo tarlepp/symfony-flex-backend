@@ -191,6 +191,9 @@ These rules apply to AI-assisted changes in the repository, including:
 * Keep changes uncommitted by default while iterating with the developer.
 * At task handoff, include a concise summary of what changed, which files were
   touched, and which validation commands were run or skipped.
+* Include proposed commit message(s) per logical change in that handoff,
+  following the repository subject pattern `Type(scope): short description`
+  (for example `Chore(ops): update AI documentation rules`).
 
 ### 10. Require clarification from the developer when context is missing
 
@@ -324,11 +327,13 @@ When using AI assistance in this repository, keep the workflow lightweight:
 6. Do not create commits unless the developer explicitly asks for a commit.
 7. Provide a concise change summary at handoff, including file paths and
    validation status.
-8. Update relevant documentation when the change alters behavior, architecture,
+8. Include proposed commit message(s) for the logical change set using the
+   repository pattern `Type(scope): short description`.
+9. Update relevant documentation when the change alters behavior, architecture,
    or workflow expectations.
-9. Use `.github/pull_request_template.md` as the review checklist when opening
+10. Use `.github/pull_request_template.md` as the review checklist when opening
    pull requests.
-10. If a reviewer repeats the same correction pattern, update the AI guidance so
+11. If a reviewer repeats the same correction pattern, update the AI guidance so
    future changes start from the improved rule.
 
 ## CI strategy for recurring AI mistakes [ᐞ](#table-of-contents)
