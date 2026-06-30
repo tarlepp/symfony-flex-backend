@@ -323,6 +323,12 @@ When making changes in this repository:
 16. Do not create commits unless the developer explicitly asks for a commit.
 17. After completing a task, provide a short change summary with touched files
     and validation steps that were run (or intentionally skipped).
+18. If requirements are ambiguous or incomplete, ask the developer for
+    clarification before implementation.
+19. Do not assume hidden requirements or acceptance criteria; confirm uncertain
+    behavior explicitly.
+20. Ask for explicit approval before making non-trivial API, database, security,
+    or architecture decisions.
 
 ### Documentation drift [ᐞ](#table-of-contents)
 
