@@ -140,6 +140,7 @@ copying it into long-form documentation.
 - `make psalm` - Run Psalm static analysis
 - `make ecs` - Check code style
 - `make ecs-fix` - Fix code style issues automatically
+- `make lint-markdown` - Lint Markdown documentation files
 - `make phpinsights` - Run comprehensive code quality checks
 
 ### Testing commands [ᐞ](#table-of-contents)

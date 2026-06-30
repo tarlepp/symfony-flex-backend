@@ -505,6 +505,21 @@ else
 	$(ALL_DONE)
 endif
 
+lint-markdown: ## Lint Markdown files
+lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
+lint-markdown: info
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@bash -lc '. "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**"'
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-markdown
+	$(ALL_DONE)
+endif
+
 clear: ## Clean vendor and tool dependencies
 clear: info_msg := @printf $(_TITLE) "OK" "Clearing vendor dependencies"
 clear: info

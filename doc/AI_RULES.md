@@ -261,6 +261,12 @@ make psalm
 make run-tests
 ```
 
+For Markdown/documentation changes, also run:
+
+```bash
+make lint-markdown
+```
+
 To auto-fix code style issues:
 
 ```bash
