@@ -103,6 +103,10 @@ project root inside the running development container:
 - `make psalm`
 - `make run-tests`
 
+For Markdown/documentation changes, also run:
+
+- `make lint-markdown`
+
 ## Reference documentation
 
 For deeper project context, architecture notes, and workflow details, use

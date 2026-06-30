@@ -92,6 +92,7 @@ infection                   # Runs Infection to codebase
 install-tools               # Install composer tools dependencies
 lint-configuration          # Lint current defined `application.json` that it
                             # contains valid JSON
+ lint-markdown              # Lint Markdown files
 lint-yaml                   # Lint config YAML files
 local-configuration         # Create local configuration files
 logs                        # Show logs from all containers
