@@ -61,6 +61,17 @@ ORM, and project workflow conventions.
 - After each completed task, provide a concise summary of what changed,
   including affected files and validation commands that were run (or skipped).
 
+## Clarification and assumptions rules
+
+- If requirements are ambiguous or incomplete, ask the developer before
+  implementing.
+- Do not assume hidden requirements, expected behavior, or acceptance criteria;
+  request confirmation when uncertain.
+- Ask for explicit decisions before making non-trivial choices that affect API
+  behavior, database schema, security, or architecture.
+- If you must proceed with a temporary assumption, state it clearly and ask for
+  confirmation in the response.
+
 ## Command execution rules
 
 - Treat the running `php` development container or IDE Dev Container as the

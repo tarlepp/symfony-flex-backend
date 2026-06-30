@@ -127,6 +127,17 @@ These rules apply to AI-assisted changes in the repository, including:
 - At task handoff, include a concise summary of what changed, which files were
   touched, and which validation commands were run or skipped.
 
+### 10. Require clarification from the developer when context is missing
+
+- If requirements are ambiguous, incomplete, or contradictory, ask the developer
+  before implementation.
+- Do not invent missing requirements, acceptance criteria, or runtime
+  assumptions.
+- Request explicit confirmation before non-trivial decisions that affect API
+  contracts, database schema, security behavior, or architecture.
+- If temporary assumptions are unavoidable, state them clearly and ask for
+  confirmation in the handoff.
+
 ## Enforcement model
 
 Not all AI rules can be enforced automatically. Use the following model:
@@ -205,16 +216,17 @@ When using AI assistance in this repository, keep the workflow lightweight:
 
 1. Start with `.github/copilot-instructions.md` for short operational rules.
 2. Use `CLAUDE.md` when you need broader project context or architecture notes.
-3. Make the smallest change that fits existing Symfony, Doctrine, and project
+3. Ask clarifying questions when requirements or constraints are unclear.
+4. Make the smallest change that fits existing Symfony, Doctrine, and project
    patterns.
-4. Run the smallest relevant validation commands for the files you changed
+5. Run the smallest relevant validation commands for the files you changed
    inside the running development container.
-5. Do not create commits unless the developer explicitly asks for a commit.
-6. Provide a concise change summary at handoff, including file paths and
+6. Do not create commits unless the developer explicitly asks for a commit.
+7. Provide a concise change summary at handoff, including file paths and
    validation status.
-7. Use `.github/pull_request_template.md` as the review checklist when opening
+8. Use `.github/pull_request_template.md` as the review checklist when opening
    pull requests.
-8. If a reviewer repeats the same correction pattern, update the AI guidance so
+9. If a reviewer repeats the same correction pattern, update the AI guidance so
    future changes start from the improved rule.
 
 ## CI strategy for recurring AI mistakes
