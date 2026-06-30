@@ -1,6 +1,33 @@
-# AI Rules for This Repository
+# What is this?
 
-## Why this document exists
+<a id="what-is-this"></a>
+
+`AI_RULES.md` defines repository-level policy for AI-assisted changes and how
+those expectations map to existing architecture, validation tooling, and CI.
+
+## Table of Contents
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+  * [Why this document exists](#why-this-document-exists)
+  * [Rule hierarchy](#rule-hierarchy)
+  * [Scope](#scope)
+  * [Core repository rules](#core-repository-rules)
+  * [Enforcement model](#enforcement-model)
+  * [Current validation commands](#current-validation-commands)
+  * [Current CI alignment](#current-ci-alignment)
+  * [Recommended maintenance workflow](#recommended-maintenance-workflow)
+  * [Contributor workflow for AI-assisted changes](#contributor-workflow-for-ai-assisted-changes)
+  * [CI strategy for recurring AI mistakes](#ci-strategy-for-recurring-ai-mistakes)
+  * [Good rule-writing patterns](#good-rule-writing-patterns)
+  * [Suggested next improvements](#suggested-next-improvements)
+  * [Related files](#related-files)
+
+## Why this document exists [ᐞ](#table-of-contents)
+
+<a id="why-this-document-exists"></a>
 
 This repository already has strong technical conventions, static analysis
 tooling (PHPStan at max level, Psalm, ECS), a comprehensive test suite, and CI
@@ -14,7 +41,9 @@ The goal is simple:
 - keep changes aligned with Symfony and Doctrine project patterns, and
 - back important rules with automated checks whenever possible.
 
-## Rule hierarchy
+## Rule hierarchy [ᐞ](#table-of-contents)
+
+<a id="rule-hierarchy"></a>
 
 Use the following order of precedence when maintaining AI guidance:
 
@@ -27,7 +56,9 @@ Use the following order of precedence when maintaining AI guidance:
 If a rule in a documentation file conflicts with the existing codebase or CI,
 update the documentation or the implementation so that they match.
 
-## Scope
+## Scope [ᐞ](#table-of-contents)
+
+<a id="scope"></a>
 
 These rules apply to AI-assisted changes in the repository, including:
 
@@ -37,7 +68,9 @@ These rules apply to AI-assisted changes in the repository, including:
 - tests, and
 - dependency changes.
 
-## Core repository rules
+## Core repository rules [ᐞ](#table-of-contents)
+
+<a id="core-repository-rules"></a>
 
 ### 1. Follow the current Symfony architecture
 
@@ -138,7 +171,9 @@ These rules apply to AI-assisted changes in the repository, including:
 - If temporary assumptions are unavoidable, state them clearly and ask for
   confirmation in the handoff.
 
-## Enforcement model
+## Enforcement model [ᐞ](#table-of-contents)
+
+<a id="enforcement-model"></a>
 
 Not all AI rules can be enforced automatically. Use the following model:
 
@@ -162,7 +197,9 @@ These should be validated through repository tooling and CI whenever possible:
 - database schema validation, and
 - build success.
 
-## Current validation commands
+## Current validation commands [ᐞ](#table-of-contents)
+
+<a id="current-validation-commands"></a>
 
 From repository root inside the running development container, the main
 validation commands are:
@@ -180,7 +217,9 @@ To auto-fix code style issues:
 make ecs-fix
 ```
 
-## Current CI alignment
+## Current CI alignment [ᐞ](#table-of-contents)
+
+<a id="current-ci-alignment"></a>
 
 At the time of writing, `.github/workflows/main.yml` already includes checks
 for:
@@ -196,7 +235,9 @@ That means the most effective starting point for AI rules in this repository is
 not more process, but clearer instruction files that map directly to these
 existing checks.
 
-## Recommended maintenance workflow
+## Recommended maintenance workflow [ᐞ](#table-of-contents)
+
+<a id="recommended-maintenance-workflow"></a>
 
 When a repeated AI mistake appears, follow this sequence:
 
@@ -210,7 +251,9 @@ As a practical default, update the AI rules when the same architectural or
 review comment appears multiple times, or when a new project convention is added
 that AI assistants should follow by default.
 
-## Contributor workflow for AI-assisted changes
+## Contributor workflow for AI-assisted changes [ᐞ](#table-of-contents)
+
+<a id="contributor-workflow-for-ai-assisted-changes"></a>
 
 When using AI assistance in this repository, keep the workflow lightweight:
 
@@ -229,7 +272,9 @@ When using AI assistance in this repository, keep the workflow lightweight:
 9. If a reviewer repeats the same correction pattern, update the AI guidance so
    future changes start from the improved rule.
 
-## CI strategy for recurring AI mistakes
+## CI strategy for recurring AI mistakes [ᐞ](#table-of-contents)
+
+<a id="ci-strategy-for-recurring-ai-mistakes"></a>
 
 When the same AI-generated mistake appears repeatedly, prefer converting that
 problem into an automated repository check instead of relying only on reviewer
@@ -289,7 +334,9 @@ justify automation:
 Not every example needs immediate automation. Use them as a backlog of likely
 enforcement candidates when the same class of AI-generated issue repeats.
 
-## Good rule-writing patterns
+## Good rule-writing patterns [ᐞ](#table-of-contents)
+
+<a id="good-rule-writing-patterns"></a>
 
 Prefer rules that are concrete and testable.
 
@@ -306,7 +353,9 @@ Avoid vague rules such as:
 - write clean code, or
 - keep things consistent.
 
-## Suggested next improvements
+## Suggested next improvements [ᐞ](#table-of-contents)
+
+<a id="suggested-next-improvements"></a>
 
 After this first implementation, consider the following enhancements:
 
@@ -316,10 +365,18 @@ After this first implementation, consider the following enhancements:
 - add review checklist items for architectural exceptions, and
 - periodically prune rules that duplicate lint or test enforcement.
 
-## Related files
+## Related files [ᐞ](#table-of-contents)
+
+<a id="related-files"></a>
 
 - `README.md`
 - `CLAUDE.md`
 - `.github/copilot-instructions.md`
 - `.github/pull_request_template.md`
 - `.github/workflows/main.yml`
+
+---
+
+[Back to resources index](README.md)
+
+[Back to main README.md](../README.md)
