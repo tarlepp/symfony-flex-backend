@@ -280,16 +280,7 @@ jobs:
       - *checkout_step
 
       - name: Lint all markdown documentation files
-        uses: DavidAnson/markdownlint-cli2-action@fa0cd0f1a052f54da593c83860f2292982f5d142 # v23.2.0
-        with:
-          globs: |
-            README.md
-            CLAUDE.md
-            .devcontainer/*.md
-            doc/*.md
-            docker/*.md
-            secrets/*.md
-            .github/*.md
+        run: make lint-markdown
 
   build:
     name: Build application Docker image
