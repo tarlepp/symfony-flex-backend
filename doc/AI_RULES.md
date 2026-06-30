@@ -163,8 +163,8 @@ These rules apply to AI-assisted changes in the repository, including:
   (foreground) or `make daemon` (background).
 * Use `make bash` (or `make fish`) when you need an interactive shell in the
   running `php` container.
-* Use containerized Node.js tooling (available via `nvm`) for documentation and
-  markdown checks that rely on `npx`.
+* Use containerized Node.js tooling (available via `nvm`) and run
+  `make lint-markdown` for documentation markdown checks.
 * When working from the host shell, prefer the existing `make` targets that
   call into the running container rather than executing project tooling on the
   host directly.
@@ -284,7 +284,7 @@ for:
 * ECS code style,
 * PHPStan static analysis,
 * Psalm type checking,
-* PHPUnit test suite, and
+* PHPUnit test suite,
 * Markdown documentation linting, and
 * security vulnerability scanning.
 

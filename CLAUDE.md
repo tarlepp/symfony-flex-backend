@@ -131,8 +131,8 @@ copying it into long-form documentation.
   or `make daemon`.
 * Use the running `php` container or IDE Dev Container as the default execution
   environment for project commands.
-* Node.js tooling is available in the containerized environment via `nvm`, so
-  `npx`-based markdown/documentation checks can run there too.
+* Node.js tooling is available in the containerized environment via `nvm`; use
+  `make lint-markdown` for markdown/documentation checks.
 
 ### Code Quality [ᐞ](#table-of-contents)
 
