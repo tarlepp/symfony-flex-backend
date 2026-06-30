@@ -107,6 +107,9 @@ For Markdown/documentation changes, also run:
 
 - `make lint-markdown`
 
+For documentation-only tasks, `make lint-markdown` is usually the smallest
+relevant validation command.
+
 ## Reference documentation
 
 For deeper project context, architecture notes, and workflow details, use
