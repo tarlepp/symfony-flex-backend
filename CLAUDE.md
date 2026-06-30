@@ -53,12 +53,12 @@ exact dependency and tooling versions.
 
 For current versions, use these files as the source of truth:
 
-- `composer.json` for PHP, Symfony, Doctrine, and all package versions
-- `Dockerfile` and `Dockerfile_dev` for container PHP and base image versions
-- `phpstan.neon.dist` for PHPStan level and configuration
-- `psalm.xml` for Psalm configuration
-- `ecs.php` for ECS (Easy Coding Standard) rules
-- `phpunit.xml.dist` for PHPUnit configuration
+* `composer.json` for PHP, Symfony, Doctrine, and all package versions
+* `Dockerfile` and `Dockerfile_dev` for container PHP and base image versions
+* `phpstan.neon.dist` for PHPStan level and configuration
+* `psalm.xml` for Psalm configuration
+* `ecs.php` for ECS (Easy Coding Standard) rules
+* `phpunit.xml.dist` for PHPUnit configuration
 
 If a version matters for implementation, read it from those files instead of
 copying it into long-form documentation.
@@ -67,26 +67,26 @@ copying it into long-form documentation.
 
 <a id="project-architecture"></a>
 
-- **Type:** JSON REST API Backend
-- **Pattern:** Resource-based REST architecture with service layer
-- **Authentication:**
-  - JWT (Lexik JWT Bundle)
-  - API key authentication
-- **ORM:** Doctrine ORM with migrations
-  - Migrations located in `migrations/`
-  - Entities in `src/Entity/`
-  - Repositories in `src/Repository/`
-  - MariaDB database
-- **Key Layers:**
-  - Controller Layer: `src/Controller/` and `src/Rest/`
-  - Service Layer: `src/Service/` and `src/Resource/`
-  - Repository Layer: `src/Repository/`
-  - Entity Layer: `src/Entity/`
-  - DTO Layer: `src/DTO/`
-  - Security Layer: `src/Security/`
-  - AutoMapper: `src/AutoMapper/`
-  - Value Resolvers: `src/ValueResolver/`
-  - Decorators: `src/Decorator/`
+* **Type:** JSON REST API Backend
+* **Pattern:** Resource-based REST architecture with service layer
+* **Authentication:**
+  * JWT (Lexik JWT Bundle)
+  * API key authentication
+* **ORM:** Doctrine ORM with migrations
+  * Migrations located in `migrations/`
+  * Entities in `src/Entity/`
+  * Repositories in `src/Repository/`
+  * MariaDB database
+* **Key Layers:**
+  * Controller Layer: `src/Controller/` and `src/Rest/`
+  * Service Layer: `src/Service/` and `src/Resource/`
+  * Repository Layer: `src/Repository/`
+  * Entity Layer: `src/Entity/`
+  * DTO Layer: `src/DTO/`
+  * Security Layer: `src/Security/`
+  * AutoMapper: `src/AutoMapper/`
+  * Value Resolvers: `src/ValueResolver/`
+  * Decorators: `src/Decorator/`
 
 ## Development Tools [ᐞ](#table-of-contents)
 
@@ -94,25 +94,25 @@ copying it into long-form documentation.
 
 ### Static Analysis [ᐞ](#table-of-contents)
 
-- **PHPStan** (Level: max) - Static analysis
-- **Psalm** - Static analysis with type checking
-- **PHP_CodeSniffer** - Code style checking
-- **ECS (Easy Coding Standard)** - Code style fixing (primary)
-- **PHPInsights** - Code quality and architecture analysis
-- **Rector** - Automated code refactoring and upgrades
+* **PHPStan** (Level: max) - Static analysis
+* **Psalm** - Static analysis with type checking
+* **PHP_CodeSniffer** - Code style checking
+* **ECS (Easy Coding Standard)** - Code style fixing (primary)
+* **PHPInsights** - Code quality and architecture analysis
+* **Rector** - Automated code refactoring and upgrades
 
 ### Test runners [ᐞ](#table-of-contents)
 
-- **PHPUnit** - Unit and integration testing
-- **Fastest** - Parallel test execution (this will be removed in future)
-- **Infection** - Mutation testing (not used heavily, optional)
+* **PHPUnit** - Unit and integration testing
+* **Fastest** - Parallel test execution (this will be removed in future)
+* **Infection** - Mutation testing (not used heavily, optional)
 
 ### Code Quality & Analysis [ᐞ](#table-of-contents)
 
-- **PHPMetrics** - Code metrics and quality reports
-- **PHPLint** / **PHP-Parallel-Lint** - Syntax checking
-- **PHPLOC** - Project size and statistics
-- **Composer Tools** - Dependency analysis
+* **PHPMetrics** - Code metrics and quality reports
+* **PHPLint** / **PHP-Parallel-Lint** - Syntax checking
+* **PHPLOC** - Project size and statistics
+* **Composer Tools** - Dependency analysis
 
 ## Common Development Commands [ᐞ](#table-of-contents)
 
@@ -120,48 +120,48 @@ copying it into long-form documentation.
 
 ### Container Management [ᐞ](#table-of-contents)
 
-- `make start` - Start all containers (foreground, preferred way)
-- `make daemon` - Start all containers (background)
-- `make stop` - Stop all containers
-- `make logs` - View container logs
-- `make bash` or `make fish` - Get shell inside PHP container
-- The primary container for project commands is the `php` service container
+* `make start` - Start all containers (foreground, preferred way)
+* `make daemon` - Start all containers (background)
+* `make stop` - Stop all containers
+* `make logs` - View container logs
+* `make bash` or `make fish` - Get shell inside PHP container
+* The primary container for project commands is the `php` service container
   (`symfony-backend-php-fpm`).
-- If containers are not running, start them from project root with `make start`
+* If containers are not running, start them from project root with `make start`
   or `make daemon`.
-- Use the running `php` container or IDE Dev Container as the default execution
+* Use the running `php` container or IDE Dev Container as the default execution
   environment for project commands.
-- Node.js tooling is available in the containerized environment via `nvm`, so
+* Node.js tooling is available in the containerized environment via `nvm`, so
   `npx`-based markdown/documentation checks can run there too.
 
 ### Code Quality [ᐞ](#table-of-contents)
 
-- `make phpstan` - Run PHPStan static analysis
-- `make psalm` - Run Psalm static analysis
-- `make ecs` - Check code style
-- `make ecs-fix` - Fix code style issues automatically
-- `make lint-markdown` - Lint Markdown documentation files
-- `make phpinsights` - Run comprehensive code quality checks
+* `make phpstan` - Run PHPStan static analysis
+* `make psalm` - Run Psalm static analysis
+* `make ecs` - Check code style
+* `make ecs-fix` - Fix code style issues automatically
+* `make lint-markdown` - Lint Markdown documentation files
+* `make phpinsights` - Run comprehensive code quality checks
 
 ### Testing commands [ᐞ](#table-of-contents)
 
-- `make run-tests` - Run all tests (single thread)
-- `make run-tests-fastest` - Run tests in parallel (this will be removed in future)
-- `make infection` - Run mutation testing (not heavily used)
+* `make run-tests` - Run all tests (single thread)
+* `make run-tests-fastest` - Run tests in parallel (this will be removed in future)
+* `make infection` - Run mutation testing (not heavily used)
 
 ### Database [ᐞ](#table-of-contents)
 
-- `bin/console doctrine:migrations:migrate` - Run migrations
-- `bin/console doctrine:migrations:diff` - Generate migration from entity changes
-- `bin/console doctrine:schema:validate` - Validate database schema
+* `bin/console doctrine:migrations:migrate` - Run migrations
+* `bin/console doctrine:migrations:diff` - Generate migration from entity changes
+* `bin/console doctrine:schema:validate` - Validate database schema
 
 ### Dependencies [ᐞ](#table-of-contents)
 
-- `make update` - Update composer dependencies
-- `make check-dependencies-patch` - Check for patch updates
-- `make check-dependencies-minor` - Check for minor updates
-- `make check-dependencies-latest` - Check for latest versions
-- `make check-security` - Check for security vulnerabilities
+* `make update` - Update composer dependencies
+* `make check-dependencies-patch` - Check for patch updates
+* `make check-dependencies-minor` - Check for minor updates
+* `make check-dependencies-latest` - Check for latest versions
+* `make check-security` - Check for security vulnerabilities
 
 ## Development Workflow [ᐞ](#table-of-contents)
 
@@ -201,12 +201,12 @@ make run-tests-fastest # Run all tests in parallel
 
 ### Test Structure [ᐞ](#table-of-contents)
 
-- `tests/E2E/` - End-to-end API tests
-- `tests/Functional/` - Functional tests with database
-- `tests/Integration/` - Integration tests for components
-- `tests/Unit/` - Unit tests for isolated components
-- `tests/Utils/` - Testing utilities and helpers
-- `tests/DataFixtures/` - Test data fixtures
+* `tests/E2E/` - End-to-end API tests
+* `tests/Functional/` - Functional tests with database
+* `tests/Integration/` - Integration tests for components
+* `tests/Unit/` - Unit tests for isolated components
+* `tests/Utils/` - Testing utilities and helpers
+* `tests/DataFixtures/` - Test data fixtures
 
 ### Running Tests [ᐞ](#table-of-contents)
 
@@ -223,10 +223,10 @@ make infection
 
 ### Test Environment [ᐞ](#table-of-contents)
 
-- Uses separate test database
-- Environment: `APP_ENV=test`
-- Configuration: `phpunit.xml.dist` and `phpunit.fastest.xml`
-- Fixtures loaded via `tests/DataFixtures/`
+* Uses separate test database
+* Environment: `APP_ENV=test`
+* Configuration: `phpunit.xml.dist` and `phpunit.fastest.xml`
+* Fixtures loaded via `tests/DataFixtures/`
 
 ## Security [ᐞ](#table-of-contents)
 
@@ -234,23 +234,23 @@ make infection
 
 ### Authentication [ᐞ](#table-of-contents)
 
-- **JWT Tokens:** Using Lexik JWT Authentication Bundle
-- **API Keys:** Managed via `api-key:management` console command
-- **User Management:** Available via `user:management` console command
+* **JWT Tokens:** Using Lexik JWT Authentication Bundle
+* **API Keys:** Managed via `api-key:management` console command
+* **User Management:** Available via `user:management` console command
 
 ### Key Security Files [ᐞ](#table-of-contents)
 
-- `config/packages/security.yaml` - Security configuration
-- `config/jwt/` - JWT key storage (generated via `make generate-jwt-keys`)
-- `secrets/` - Application secrets storage
+* `config/packages/security.yaml` - Security configuration
+* `config/jwt/` - JWT key storage (generated via `make generate-jwt-keys`)
+* `secrets/` - Application secrets storage
 
 ### Security Best Practices [ᐞ](#table-of-contents)
 
-- Never commit `.env.local` or JWT keys to version control
-- Use proper user roles and permissions
-- Validate all input data with Symfony validation
-- Use DTOs to control data exposure
-- Run security checks: `make check-security`
+* Never commit `.env.local` or JWT keys to version control
+* Use proper user roles and permissions
+* Validate all input data with Symfony validation
+* Use DTOs to control data exposure
+* Run security checks: `make check-security`
 
 ## Configuration [ᐞ](#table-of-contents)
 
@@ -258,17 +258,17 @@ make infection
 
 ### Environment Files [ᐞ](#table-of-contents)
 
-- `.env` - Default configuration (committed)
-- `.env.local` - Local overrides (ignored by git)
-- `APPLICATION_CONFIG` - Path to JSON config file (default:
+* `.env` - Default configuration (committed)
+* `.env.local` - Local overrides (ignored by git)
+* `APPLICATION_CONFIG` - Path to JSON config file (default:
   `secrets/application.json`)
 
 ### Key Configuration Files [ᐞ](#table-of-contents)
 
-- `config/services.yaml` - Service configuration
-- `config/packages/` - Bundle configurations
-- `config/routes/` - Route definitions
-- `secrets/application.json` - Application-specific configuration
+* `config/services.yaml` - Service configuration
+* `config/packages/` - Bundle configurations
+* `config/routes/` - Route definitions
+* `secrets/application.json` - Application-specific configuration
 
 ### View Current Configuration [ᐞ](#table-of-contents)
 
@@ -278,21 +278,21 @@ Use `make configuration` to view current application configuration.
 
 <a id="documentation-structure"></a>
 
-- `README.md` - Project overview and installation
-- `CLAUDE.md` - This file - long-form AI assistant context
-- `.github/copilot-instructions.md` - Short operational rules for AI assistants
-- `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
-- `doc/README.md` - Documentation index
-- `doc/COMMANDS.md` - Complete command reference (Makefile + Console)
-- `doc/DEVELOPMENT.md` - Development best practices and workflow
-- `doc/TESTING.md` - Testing strategies and guidelines
-- `doc/CONCEPTS_AND_FEATURES.md` - Architecture concepts and features
-- `doc/CUSTOM_CONFIGURATION.md` - Configuration management
-- `doc/PHPSTORM.md` - PhpStorm IDE setup
-- `doc/XDEBUG.md` - Debugging setup and usage
-- `doc/INSTALLATION_WITHOUT_DOCKER.md` - Non-Docker installation
-- `doc/SPEED_UP_DOCKER_COMPOSE.md` - Performance optimization
-- `doc/USAGE_CHECKLIST.md` - Pre-deployment checklist
+* `README.md` - Project overview and installation
+* `CLAUDE.md` - This file - long-form AI assistant context
+* `.github/copilot-instructions.md` - Short operational rules for AI assistants
+* `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
+* `doc/README.md` - Documentation index
+* `doc/COMMANDS.md` - Complete command reference (Makefile + Console)
+* `doc/DEVELOPMENT.md` - Development best practices and workflow
+* `doc/TESTING.md` - Testing strategies and guidelines
+* `doc/CONCEPTS_AND_FEATURES.md` - Architecture concepts and features
+* `doc/CUSTOM_CONFIGURATION.md` - Configuration management
+* `doc/PHPSTORM.md` - PhpStorm IDE setup
+* `doc/XDEBUG.md` - Debugging setup and usage
+* `doc/INSTALLATION_WITHOUT_DOCKER.md` - Non-Docker installation
+* `doc/SPEED_UP_DOCKER_COMPOSE.md` - Performance optimization
+* `doc/USAGE_CHECKLIST.md` - Pre-deployment checklist
 
 ## Practical Guidance for AI Assistants [ᐞ](#table-of-contents)
 
@@ -339,10 +339,10 @@ When making changes in this repository:
 
 This file is long-form context, not the only rules source. Keep it aligned with:
 
-- `.github/copilot-instructions.md`
-- `doc/AI_RULES.md`
-- `.github/pull_request_template.md`
-- actual repository scripts and CI workflows
+* `.github/copilot-instructions.md`
+* `doc/AI_RULES.md`
+* `.github/pull_request_template.md`
+* actual repository scripts and CI workflows
 
 ---
 
