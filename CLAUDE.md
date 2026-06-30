@@ -272,6 +272,9 @@ When making changes in this repository:
     target and start it with `make start`/`make daemon` when needed.
 15. For markdown/documentation checks that require Node.js tooling, use
     containerized `nvm` + `npx` instead of host-level installs.
+16. Do not create commits unless the developer explicitly asks for a commit.
+17. After completing a task, provide a short change summary with touched files
+    and validation steps that were run (or intentionally skipped).
 
 ### Documentation drift
 

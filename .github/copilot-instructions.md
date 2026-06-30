@@ -54,6 +54,13 @@ ORM, and project workflow conventions.
 - Preserve public APIs and existing architecture unless the task explicitly
   requires a change.
 
+## Collaboration and commit rules
+
+- Do not create commits unless the developer explicitly asks for a commit.
+- Keep work as uncommitted changes until commit instructions are provided.
+- After each completed task, provide a concise summary of what changed,
+  including affected files and validation commands that were run (or skipped).
+
 ## Command execution rules
 
 - Treat the running `php` development container or IDE Dev Container as the
