@@ -8,6 +8,7 @@
 ## Validation
 
 - [ ] Ran the smallest relevant checks for this change
+- [ ] For documentation changes, ran `make lint-markdown`
 - [ ] Updated tests when behavior changed
 - [ ] Added or updated database migration when entity changed
 - [ ] For AI-assisted work, included a concise handoff summary (changed files +

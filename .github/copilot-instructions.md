@@ -87,7 +87,8 @@ ORM, and project workflow conventions.
 - Run `composer`, `bin/console`, lint, test, and static analysis commands inside
   the running container, not on the host machine.
 - Node.js tooling is available in the containerized environment (via `nvm`), so
-  use in-container `npx` commands for documentation checks when needed.
+  use `make lint-markdown` for documentation checks by default (instead of
+  calling `npx` directly).
 - If starting from the host, prefer the existing `make` targets that delegate
   into the running container.
 - Only run project commands directly on the host when the task explicitly
