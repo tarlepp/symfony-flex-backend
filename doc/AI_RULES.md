@@ -377,6 +377,4 @@ After this first implementation, consider the following enhancements:
 
 ---
 
-[Back to resources index](README.md)
-
-[Back to main README.md](../README.md)
+[Back to resources index](README.md) - [Back to main README.md](../README.md)
