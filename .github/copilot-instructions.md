@@ -53,6 +53,8 @@ ORM, and project workflow conventions.
 - Do not introduce new dependencies unless they are necessary and justified.
 - Preserve public APIs and existing architecture unless the task explicitly
   requires a change.
+- Update relevant documentation when code changes affect behavior, architecture,
+  workflows, commands, or contributor expectations.
 
 ## Collaboration and commit rules
 
