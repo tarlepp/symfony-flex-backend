@@ -15,12 +15,26 @@ those expectations map to existing architecture, validation tooling, and CI.
   * [Rule hierarchy](#rule-hierarchy)
   * [Scope](#scope)
   * [Core repository rules](#core-repository-rules)
+    * [1. Follow the current Symfony architecture](#1-follow-the-current-symfony-architecture)
+    * [2. Keep business logic in the right layer](#2-keep-business-logic-in-the-right-layer)
+    * [3. Respect strict PHP and static analysis rules](#3-respect-strict-php-and-static-analysis-rules)
+    * [4. Keep security intact](#4-keep-security-intact)
+    * [5. Keep database changes consistent](#5-keep-database-changes-consistent)
+    * [6. Keep changes small and relevant](#6-keep-changes-small-and-relevant)
+    * [7. Use the running development container for project commands](#7-use-the-running-development-container-for-project-commands)
+    * [8. Keep versioned documentation lightweight](#8-keep-versioned-documentation-lightweight)
+    * [9. Require explicit commit authorization and clear handoff notes](#9-require-explicit-commit-authorization-and-clear-handoff-notes)
+    * [10. Require clarification from the developer when context is missing](#10-require-clarification-from-the-developer-when-context-is-missing)
+    * [11. Keep documentation aligned with code changes](#11-keep-documentation-aligned-with-code-changes)
   * [Enforcement model](#enforcement-model)
+    * [Documentation-only rules](#documentation-only-rules)
+    * [Automatically enforceable rules](#automatically-enforceable-rules)
   * [Current validation commands](#current-validation-commands)
   * [Current CI alignment](#current-ci-alignment)
   * [Recommended maintenance workflow](#recommended-maintenance-workflow)
   * [Contributor workflow for AI-assisted changes](#contributor-workflow-for-ai-assisted-changes)
   * [CI strategy for recurring AI mistakes](#ci-strategy-for-recurring-ai-mistakes)
+    * [Examples of enforceable AI rules for this repository](#examples-of-enforceable-ai-rules-for-this-repository)
   * [Good rule-writing patterns](#good-rule-writing-patterns)
   * [Suggested next improvements](#suggested-next-improvements)
   * [Related files](#related-files)
@@ -74,6 +88,8 @@ These rules apply to AI-assisted changes in the repository, including:
 
 ### 1. Follow the current Symfony architecture
 
+<a id="1-follow-the-current-symfony-architecture"></a>
+
 - Use the resource-based REST architecture with a clear service layer.
 - Place entities in `src/Entity/`, repositories in `src/Repository/`, resources
   in `src/Resource/`, and REST controllers in `src/Rest/`.
@@ -82,6 +98,8 @@ These rules apply to AI-assisted changes in the repository, including:
 - Prefer existing shared building blocks before adding new abstractions.
 
 ### 2. Keep business logic in the right layer
+
+<a id="2-keep-business-logic-in-the-right-layer"></a>
 
 - Controllers should be thin and delegate to resource or service classes.
 - Keep classes in `src/Controller/` as thin as possible.
@@ -97,6 +115,8 @@ These rules apply to AI-assisted changes in the repository, including:
 
 ### 3. Respect strict PHP and static analysis rules
 
+<a id="3-respect-strict-php-and-static-analysis-rules"></a>
+
 - Declare `declare(strict_types=1);` in every PHP file.
 - Keep types explicit; avoid implicit `any` equivalents and weak type
   assertions.
@@ -106,6 +126,8 @@ These rules apply to AI-assisted changes in the repository, including:
 
 ### 4. Keep security intact
 
+<a id="4-keep-security-intact"></a>
+
 - Never remove or weaken authentication guards or security checks.
 - Use Symfony Validator constraints for all input validation.
 - Use DTOs to control what data is exposed in API responses.
@@ -113,11 +135,15 @@ These rules apply to AI-assisted changes in the repository, including:
 
 ### 5. Keep database changes consistent
 
+<a id="5-keep-database-changes-consistent"></a>
+
 - Create Doctrine migrations when entity structure changes.
 - Review generated migration files before running them.
 - Validate the database schema with `bin/console doctrine:schema:validate`.
 
 ### 6. Keep changes small and relevant
+
+<a id="6-keep-changes-small-and-relevant"></a>
 
 - Prefer minimal, task-focused edits.
 - Avoid unrelated refactors.
@@ -125,6 +151,8 @@ These rules apply to AI-assisted changes in the repository, including:
 - Reuse existing dependencies before proposing new ones.
 
 ### 7. Use the running development container for project commands
+
+<a id="7-use-the-running-development-container-for-project-commands"></a>
 
 - Treat the running `php` container or IDE Dev Container as the default
   environment for day-to-day development work.
@@ -145,6 +173,8 @@ These rules apply to AI-assisted changes in the repository, including:
 
 ### 8. Keep versioned documentation lightweight
 
+<a id="8-keep-versioned-documentation-lightweight"></a>
+
 - Avoid duplicating fast-changing dependency or tooling versions in long-form AI
   guidance when the repository already has a clear source of truth.
 - Prefer referencing files such as `composer.json`, `Dockerfile`, and
@@ -155,12 +185,16 @@ These rules apply to AI-assisted changes in the repository, including:
 
 ### 9. Require explicit commit authorization and clear handoff notes
 
+<a id="9-require-explicit-commit-authorization-and-clear-handoff-notes"></a>
+
 - Do not create commits unless the developer explicitly requests a commit.
 - Keep changes uncommitted by default while iterating with the developer.
 - At task handoff, include a concise summary of what changed, which files were
   touched, and which validation commands were run or skipped.
 
 ### 10. Require clarification from the developer when context is missing
+
+<a id="10-require-clarification-from-the-developer-when-context-is-missing"></a>
 
 - If requirements are ambiguous, incomplete, or contradictory, ask the developer
   before implementation.
@@ -171,6 +205,18 @@ These rules apply to AI-assisted changes in the repository, including:
 - If temporary assumptions are unavoidable, state them clearly and ask for
   confirmation in the handoff.
 
+### 11. Keep documentation aligned with code changes
+
+<a id="11-keep-documentation-aligned-with-code-changes"></a>
+
+- Update relevant documentation when a change affects behavior, architecture,
+  setup, workflow commands, or reviewer expectations.
+- Prefer focused doc updates in existing files such as `README.md`, `doc/`,
+  `.github/copilot-instructions.md`, and `CLAUDE.md` over creating parallel
+  guidance.
+- If no documentation update is needed, state that explicitly in the handoff
+  summary.
+
 ## Enforcement model [ᐞ](#table-of-contents)
 
 <a id="enforcement-model"></a>
@@ -178,6 +224,8 @@ These rules apply to AI-assisted changes in the repository, including:
 Not all AI rules can be enforced automatically. Use the following model:
 
 ### Documentation-only rules
+
+<a id="documentation-only-rules"></a>
 
 These are guidance-heavy and should remain concise and stable:
 
@@ -187,6 +235,8 @@ These are guidance-heavy and should remain concise and stable:
 - reuse existing shared building blocks first.
 
 ### Automatically enforceable rules
+
+<a id="automatically-enforceable-rules"></a>
 
 These should be validated through repository tooling and CI whenever possible:
 
@@ -267,9 +317,11 @@ When using AI assistance in this repository, keep the workflow lightweight:
 6. Do not create commits unless the developer explicitly asks for a commit.
 7. Provide a concise change summary at handoff, including file paths and
    validation status.
-8. Use `.github/pull_request_template.md` as the review checklist when opening
+8. Update relevant documentation when the change alters behavior, architecture,
+   or workflow expectations.
+9. Use `.github/pull_request_template.md` as the review checklist when opening
    pull requests.
-9. If a reviewer repeats the same correction pattern, update the AI guidance so
+10. If a reviewer repeats the same correction pattern, update the AI guidance so
    future changes start from the improved rule.
 
 ## CI strategy for recurring AI mistakes [ᐞ](#table-of-contents)
@@ -321,6 +373,8 @@ new workflow unless the new check has a clearly different lifecycle or runtime
 need.
 
 ### Examples of enforceable AI rules for this repository
+
+<a id="examples-of-enforceable-ai-rules-for-this-repository"></a>
 
 These are good candidates when a recurring AI mistake becomes common enough to
 justify automation:

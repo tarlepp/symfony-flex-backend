@@ -329,6 +329,8 @@ When making changes in this repository:
     behavior explicitly.
 20. Ask for explicit approval before making non-trivial API, database, security,
     or architecture decisions.
+21. Update relevant documentation when code changes affect behavior,
+    architecture, workflow steps, commands, or review expectations.
 
 ### Documentation drift [ᐞ](#table-of-contents)
 
