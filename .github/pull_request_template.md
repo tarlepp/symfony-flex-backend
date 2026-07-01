@@ -8,8 +8,12 @@
 ## Validation
 
 - [ ] Ran the smallest relevant checks for this change
+- [ ] For documentation changes, ran `make lint-markdown`
 - [ ] Updated tests when behavior changed
 - [ ] Added or updated database migration when entity changed
+- [ ] For AI-assisted work, included a concise handoff summary (changed files +
+      validation status)
+- [ ] For AI-assisted work, no commit was created without explicit developer request
 
 ## Repository architecture checklist
 
