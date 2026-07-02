@@ -56,8 +56,6 @@ final class LocaleValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        $validator = new LocaleValidator($localizationMock);
-        $validator->initialize($contextMock);
-        $validator->validate('foo', new Locale());
+        new LocaleValidator($localizationMock)->validateInContext('foo', new Locale(), $contextMock);
     }
 }

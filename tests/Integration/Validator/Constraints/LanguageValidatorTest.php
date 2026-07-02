@@ -56,8 +56,6 @@ final class LanguageValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        $validator = new LanguageValidator($localizationMock);
-        $validator->initialize($contextMock);
-        $validator->validate('foo', new Language());
+        new LanguageValidator($localizationMock)->validateInContext('foo', new Language(), $contextMock);
     }
 }

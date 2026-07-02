@@ -265,6 +265,9 @@ abstract class DtoTestCase extends KernelTestCase
         return array_filter($dtoReflection->getProperties(), $filter);
     }
 
+    /**
+     * @param class-string $class
+     */
     private static function getType(string $class, string $property): string
     {
         $propertyInfo = self::initializePropertyExtractor();
