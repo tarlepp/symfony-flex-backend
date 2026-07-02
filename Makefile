@@ -461,8 +461,8 @@ phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bin/console cache:clear
 	@sleep 3
-	@./tools/02_phpstan/vendor/bin/phpstan --version
-	@./tools/02_phpstan/vendor/bin/phpstan -v --error-format=github
+	@./vendor/bin/phpstan --version
+	@./vendor/bin/phpstan -v --error-format=github
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
