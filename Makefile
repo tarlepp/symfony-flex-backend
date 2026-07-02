@@ -441,6 +441,7 @@ phpstan: ## Runs PHPStan static analysis tool
 phpstan: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analysis Tool"
 phpstan: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@@bin/console cache:clear
 	@bin/console cache:clear
 	@sleep 3
 	@./tools/02_phpstan/vendor/bin/phpstan --version
@@ -459,6 +460,7 @@ phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
 phpstan-github: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analysis Tool"
 phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@@bin/console cache:clear
 	@bin/console cache:clear
 	@sleep 3
 	@./vendor/bin/phpstan --version
