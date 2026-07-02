@@ -30,7 +30,6 @@
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/tools/09_rector" />
       <excludeFolder url="file://$MODULE_DIR$/tools/10_composer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/masterminds/html5" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/collection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/uuid-doctrine" />
@@ -134,7 +133,6 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/02_phpstan" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpdoc-parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/clock" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/tools/11_phplint" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/polyfill-php84" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine/collections" />
@@ -204,6 +202,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php85" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/radebatz/type-info-extras" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-deepclone" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

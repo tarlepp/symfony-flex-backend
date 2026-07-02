@@ -61,8 +61,6 @@ final class UniqueUsernameValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        $validator = new UniqueUsernameValidator($repositoryMock);
-        $validator->initialize($contextMock);
-        $validator->validate($user, new UniqueUsername());
+        new UniqueUsernameValidator($repositoryMock)->validateInContext($user, new UniqueUsername(), $contextMock);
     }
 }

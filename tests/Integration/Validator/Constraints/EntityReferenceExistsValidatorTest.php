@@ -38,15 +38,15 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     public function testThatValidateMethodThrowsUnexpectedTypeException(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $this->expectException(UnexpectedTypeException::class);
         $this->expectExceptionMessage(
             'Expected argument of type "' . EntityReferenceExists::class . '", "' . TestConstraint::class . '" given'
         );
 
-        $constraint = new TestConstraint();
-
-        new EntityReferenceExistsValidator($loggerMock)->validate('', $constraint);
+        new EntityReferenceExistsValidator($loggerMock)
+            ->validateInContext('', new TestConstraint(), $contextMock);
     }
 
     /**
@@ -60,6 +60,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         string $expectedMessage
     ): void {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage($expectedMessage);
@@ -67,13 +68,15 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = $entityClass;
 
-        new EntityReferenceExistsValidator($loggerMock)->validate($value, $constraint);
+        new EntityReferenceExistsValidator($loggerMock)
+            ->validateInContext($value, $constraint, $contextMock);
     }
 
     #[TestDox('Test that `validate` method throws an exception if value is `stdClass`')]
     public function testThatValidateMethodThrowsUnexpectedValueExceptionWhenValueIsNotEntityInterface(): void
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage(
@@ -83,7 +86,8 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = stdClass::class;
 
-        new EntityReferenceExistsValidator($loggerMock)->validate(new stdClass(), $constraint);
+        new EntityReferenceExistsValidator($loggerMock)
+            ->validateInContext(new stdClass(), $constraint, $contextMock);
     }
 
     /**
@@ -107,9 +111,8 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint->entityClass = TestEntityReference::class;
 
         // Run validator
-        $validator = new EntityReferenceExistsValidator($loggerMock);
-        $validator->initialize($contextMock);
-        $validator->validate(new TestEntityReference(), $constraint);
+        new EntityReferenceExistsValidator($loggerMock)
+            ->validateInContext(new TestEntityReference(), $constraint, $contextMock);
     }
 
     /**
@@ -152,9 +155,8 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint->entityClass = TestEntityReference::class;
 
         // Run validator
-        $validator = new EntityReferenceExistsValidator($loggerMock);
-        $validator->initialize($contextMock);
-        $validator->validate(new TestEntityReference(true), $constraint);
+        new EntityReferenceExistsValidator($loggerMock)
+            ->validateInContext(new TestEntityReference(true), $constraint, $contextMock);
     }
 
     /**
