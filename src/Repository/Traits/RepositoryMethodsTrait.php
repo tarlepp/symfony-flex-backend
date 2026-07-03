@@ -61,7 +61,7 @@ trait RepositoryMethodsTrait
             ->where('entity.id = :id')
             ->setParameter('id', $id, UuidHelper::getType($id));
 
-        /*
+        /**
          * This is just to help debug queries
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
@@ -130,10 +130,7 @@ trait RepositoryMethodsTrait
 
         assert($iterator instanceof ArrayIterator);
 
-        /** @var array<int, TEntity> $result */
-        $result = $iterator->getArrayCopy();
-
-        return $result;
+        return $iterator->getArrayCopy();
     }
 
     /**
@@ -169,17 +166,14 @@ trait RepositoryMethodsTrait
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
-        /*
+        /**
          * This is just to help debug queries
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
          */
         RepositoryHelper::resetParameterCount();
 
-        /** @var array<int, string> $ids */
-        $ids = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
-
-        return $ids;
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
     }
 
     /**

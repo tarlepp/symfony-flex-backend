@@ -31,6 +31,12 @@ use function trim;
  */
 final class SearchTerm implements SearchTermInterface
 {
+    /**
+     * @param array<int, string>|string|null $column
+     * @param array<int, string>|string|null $search
+     *
+     * @return array<string, array<string, array<string, array<int, string>>>>|null
+     */
     #[Override]
     public static function getCriteria(
         array | string | null $column,
@@ -49,10 +55,7 @@ final class SearchTerm implements SearchTermInterface
             $operand = self::OPERAND_OR;
         }
 
-        /** @var array<string, array<string, array<string, string>>>|null $criteria */
-        $criteria = self::createCriteria($columns, $searchTerms, $operand, $mode);
-
-        return $criteria;
+        return self::createCriteria($columns, $searchTerms, $operand, $mode);
     }
 
     /**
@@ -61,7 +64,7 @@ final class SearchTerm implements SearchTermInterface
      * @param array<int, string> $columns
      * @param array<int, string> $searchTerms
      *
-     * @return array<string, array<string, array<string, mixed>>>|null
+     * @return array<string, array<string, array<string, array<int, string>>>>|null
      */
     private static function createCriteria(array $columns, array $searchTerms, string $operand, int $mode): ?array
     {
