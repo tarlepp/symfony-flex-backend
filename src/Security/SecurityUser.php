@@ -11,7 +11,6 @@ namespace App\Security;
 use App\Entity\User;
 use App\Enum\Language;
 use App\Enum\Locale;
-use Deprecated;
 use Override;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -71,15 +70,6 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     public function getSalt(): ?string
     {
         return null;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    #[Override]
-    #[Deprecated]
-    public function eraseCredentials(): void
-    {
     }
 
     #[Override]

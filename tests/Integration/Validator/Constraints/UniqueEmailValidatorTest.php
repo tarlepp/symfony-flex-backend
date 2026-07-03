@@ -61,8 +61,6 @@ final class UniqueEmailValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        $validator = new UniqueEmailValidator($repositoryMock);
-        $validator->initialize($contextMock);
-        $validator->validate($user, new UniqueEmail());
+        new UniqueEmailValidator($repositoryMock)->validateInContext($user, new UniqueEmail(), $contextMock);
     }
 }

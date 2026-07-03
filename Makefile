@@ -442,6 +442,8 @@ phpstan: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analys
 phpstan: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
+	@bin/console cache:clear
+	@sleep 3
 	@./tools/02_phpstan/vendor/bin/phpstan --version
 	@./tools/02_phpstan/vendor/bin/phpstan -v
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -459,6 +461,8 @@ phpstan-github: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static
 phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
+	@bin/console cache:clear
+	@sleep 3
 	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan -v --error-format=github
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)

@@ -56,8 +56,6 @@ final class TimezoneValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        $validator = new TimezoneValidator($localizationMock);
-        $validator->initialize($contextMock);
-        $validator->validate('foo/bar', new Timezone());
+        new TimezoneValidator($localizationMock)->validateInContext('foo/bar', new Timezone(), $contextMock);
     }
 }
