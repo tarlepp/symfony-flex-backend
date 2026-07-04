@@ -1,6 +1,6 @@
-<a id="what-is-this"></a>
-
 # What is this?
+
+<a id="what-is-this"></a>
 
 This folder contains all docker configuration for local development
 environment.

@@ -53,6 +53,29 @@ ORM, and project workflow conventions.
 - Do not introduce new dependencies unless they are necessary and justified.
 - Preserve public APIs and existing architecture unless the task explicitly
   requires a change.
+- Update relevant documentation when code changes affect behavior, architecture,
+  workflows, commands, or contributor expectations.
+
+## Collaboration and commit rules
+
+- Do not create commits unless the developer explicitly asks for a commit.
+- Keep work as uncommitted changes until commit instructions are provided.
+- After each completed task, provide a concise summary of what changed,
+  including affected files and validation commands that were run (or skipped).
+- In that summary, include proposed commit message(s) for each logical change,
+  following the repository pattern `Type(scope): short description` (for
+  example `Chore(ops): update AI documentation rules`).
+
+## Clarification and assumptions rules
+
+- If requirements are ambiguous or incomplete, ask the developer before
+  implementing.
+- Do not assume hidden requirements, expected behavior, or acceptance criteria;
+  request confirmation when uncertain.
+- Ask for explicit decisions before making non-trivial choices that affect API
+  behavior, database schema, security, or architecture.
+- If you must proceed with a temporary assumption, state it clearly and ask for
+  confirmation in the response.
 
 ## Command execution rules
 
@@ -67,7 +90,8 @@ ORM, and project workflow conventions.
 - Run `composer`, `bin/console`, lint, test, and static analysis commands inside
   the running container, not on the host machine.
 - Node.js tooling is available in the containerized environment (via `nvm`), so
-  use in-container `npx` commands for documentation checks when needed.
+  use `make lint-markdown` for documentation checks by default (instead of
+  calling `npx` directly).
 - If starting from the host, prefer the existing `make` targets that delegate
   into the running container.
 - Only run project commands directly on the host when the task explicitly
@@ -82,6 +106,13 @@ project root inside the running development container:
 - `make phpstan`
 - `make psalm`
 - `make run-tests`
+
+For Markdown/documentation changes, also run:
+
+- `make lint-markdown`
+
+For documentation-only tasks, `make lint-markdown` is usually the smallest
+relevant validation command.
 
 ## Reference documentation
 
