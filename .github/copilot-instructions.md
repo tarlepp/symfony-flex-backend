@@ -17,6 +17,7 @@
     * [Clarification and assumptions rules](#clarification-and-assumptions-rules)
     * [Command execution rules](#command-execution-rules)
     * [Validation rules](#validation-rules)
+    * [Documentation format rules](#documentation-format-rules)
     * [Reference documentation](#reference-documentation)
 
 ## Purpose [ᐞ](#table-of-contents)
@@ -150,6 +151,24 @@ For Markdown/documentation changes, also run:
 
 For documentation-only tasks, `make lint-markdown` is usually the smallest
 relevant validation command.
+
+## Documentation format rules [ᐞ](#table-of-contents)
+
+<a id="documentation-format-rules"></a>
+
+For Markdown documentation files, keep structure aligned with `README.md` as the
+repository reference format:
+
+* Use `# What is this?` as the main title.
+* Add `<a id="what-is-this"></a>` directly below the main title.
+* Include a table of contents section with
+  `## Table of Contents [ᐞ](#table-of-contents)` and
+  `<a id="table-of-contents"></a>`.
+* Add `[ᐞ](#table-of-contents)` to section headings and keep TOC links aligned
+  with heading anchors.
+* End files with a `Back to previous` link (and `Back to main README.md` where
+  relevant to that directory context).
+* Use `*` as the bullet list marker for documentation lists.
 
 ## Reference documentation [ᐞ](#table-of-contents)
 

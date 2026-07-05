@@ -398,6 +398,9 @@ When making changes in this repository:
 22. In the handoff summary, propose commit message(s) per logical change using
     the repository pattern `Type(scope): short description` (for example
     `Chore(ops): update AI documentation rules`).
+23. For Markdown documentation changes, follow `README.md` as formatting
+    baseline (main title, anchors, table of contents, back-to-top links,
+    back-to-previous footer links, and `*` list markers).
 
 ### Documentation drift [ᐞ](#table-of-contents)
 

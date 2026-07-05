@@ -26,6 +26,7 @@ those expectations map to existing architecture, validation tooling, and CI.
       * [9. Require explicit commit authorization and clear handoff notes](#9-require-explicit-commit-authorization-and-clear-handoff-notes)
       * [10. Require clarification from the developer when context is missing](#10-require-clarification-from-the-developer-when-context-is-missing)
       * [11. Keep documentation aligned with code changes](#11-keep-documentation-aligned-with-code-changes)
+        * [12. Keep Markdown documentation structure consistent with repository format](#12-keep-markdown-documentation-structure-consistent-with-repository-format)
     * [Enforcement model](#enforcement-model)
       * [Documentation-only rules](#documentation-only-rules)
       * [Automatically enforceable rules](#automatically-enforceable-rules)
@@ -219,6 +220,23 @@ These rules apply to AI-assisted changes in the repository, including:
   guidance.
 * If no documentation update is needed, state that explicitly in the handoff
   summary.
+
+### 12. Keep Markdown documentation structure consistent with repository format [ᐞ](#table-of-contents)
+
+<a id="12-keep-markdown-documentation-structure-consistent-with-repository-format"></a>
+
+When adding or updating Markdown docs, follow `README.md` as the format
+baseline:
+
+* Use `# What is this?` as the main title.
+* Add `<a id="what-is-this"></a>` under the main title.
+* Include `## Table of Contents [ᐞ](#table-of-contents)` and
+  `<a id="table-of-contents"></a>`.
+* Keep TOC links aligned with heading anchors and include
+  `[ᐞ](#table-of-contents)` on section headings.
+* End the file with a `Back to previous` link (and `Back to main README.md`
+  where the directory context requires it).
+* Use `*` as the bullet list marker in Markdown lists.
 
 ## Enforcement model [ᐞ](#table-of-contents)
 
