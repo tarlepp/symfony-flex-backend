@@ -1,10 +1,18 @@
 version: 2
+_commit_message_template: &commit_message_template
+    prefix: "Chore(deps)"
+_schedule_weekly: &schedule_weekly
+    interval: weekly
+_labels_tools: &labels_tools
+    - dependencies
+    - composer
+    - tools
 updates:
     -   package-ecosystem: "github-actions"
         directory: "/"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 5
+        commit-message: *commit_message_template
         labels:
             - dependencies
             - github-actions
@@ -14,9 +22,9 @@ updates:
                     - "*"
     -   package-ecosystem: composer
         directory: "/"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 10
+        commit-message: *commit_message_template
         labels:
             - dependencies
             - composer
@@ -31,9 +39,9 @@ updates:
                     - "symfony/*"
     -   package-ecosystem: docker
         directory: "/"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 5
+        commit-message: *commit_message_template
         labels:
             - dependencies
             - docker
@@ -43,143 +51,110 @@ updates:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/02_phpstan"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_phpstan_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/03_psalm"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_psalm_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/04_symplify"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_symplify_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/05_infection"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_infection_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/06_php-coveralls"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_php-coveralls_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/07_phpinsights"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_phpinsights_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/08_phpmetrics"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_phpmetrics_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/09_rector"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_rector_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/10_composer"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_composer_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/11_phplint"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_phplint-dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
         directory: "/tools/12_php-parallel-lint"
-        schedule:
-            interval: weekly
+        schedule: *schedule_weekly
         open-pull-requests-limit: 3
-        labels:
-            - dependencies
-            - composer
-            - tools
+        commit-message: *commit_message_template
+        labels: *labels_tools
         groups:
             tools_php-parallel-lint_dependencies:
                 patterns:
