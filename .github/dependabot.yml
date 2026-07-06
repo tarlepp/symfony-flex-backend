@@ -30,14 +30,6 @@ updates:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
-        directory: "/tools/01_phpunit"
-        schedule:
-            interval: daily
-        groups:
-            tools_phpunit_dependencies:
-                patterns:
-                    - "*"
-    -   package-ecosystem: composer
         directory: "/tools/02_phpstan"
         schedule:
             interval: daily
@@ -54,11 +46,11 @@ updates:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
-        directory: "/tools/04_ecs"
+        directory: "/tools/04_symplify"
         schedule:
             interval: daily
         groups:
-            tools_ecs_dependencies:
+            tools_symplify_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
@@ -94,11 +86,11 @@ updates:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
-        directory: "/tools/09_changelog-linker"
+        directory: "/tools/09_rector"
         schedule:
             interval: daily
         groups:
-            tools_changelog-linker_dependencies:
+            tools_rector_dependencies:
                 patterns:
                     - "*"
     -   package-ecosystem: composer
