@@ -3,7 +3,7 @@ updates:
     -   package-ecosystem: "github-actions"
         directory: "/"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             github_actions_dependencies:
                 patterns:
@@ -11,7 +11,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             symfony_dependencies:
                 patterns:
@@ -24,7 +24,7 @@ updates:
     -   package-ecosystem: docker
         directory: "/"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             docker_dependencies:
                 patterns:
@@ -32,7 +32,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/02_phpstan"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_phpstan_dependencies:
                 patterns:
@@ -40,7 +40,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/03_psalm"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_psalm_dependencies:
                 patterns:
@@ -48,7 +48,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/04_symplify"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_symplify_dependencies:
                 patterns:
@@ -56,7 +56,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/05_infection"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_infection_dependencies:
                 patterns:
@@ -64,7 +64,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/06_php-coveralls"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_php-coveralls_dependencies:
                 patterns:
@@ -72,7 +72,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/07_phpinsights"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_phpinsights_dependencies:
                 patterns:
@@ -80,7 +80,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/08_phpmetrics"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_phpmetrics_dependencies:
                 patterns:
@@ -88,7 +88,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/09_rector"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_rector_dependencies:
                 patterns:
@@ -96,7 +96,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/10_composer"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_composer_dependencies:
                 patterns:
@@ -104,7 +104,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/11_phplint"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_phplint-dependencies:
                 patterns:
@@ -112,7 +112,7 @@ updates:
     -   package-ecosystem: composer
         directory: "/tools/12_php-parallel-lint"
         schedule:
-            interval: daily
+            interval: weekly
         groups:
             tools_php-parallel-lint_dependencies:
                 patterns:
