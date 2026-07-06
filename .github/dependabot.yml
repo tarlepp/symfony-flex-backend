@@ -15,12 +15,12 @@ updates:
         groups:
             symfony_dependencies:
                 patterns:
-                    - "symfony*"
+                    - "symfony/*"
             dependencies:
                 patterns:
                     - "*"
                 exclude-patterns:
-                    - "symfony*"
+                    - "symfony/*"
     -   package-ecosystem: docker
         directory: "/"
         schedule:
