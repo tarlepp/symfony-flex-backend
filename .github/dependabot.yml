@@ -7,11 +7,14 @@ _labels_tools: &labels_tools
     - dependencies
     - composer
     - tools
+_rebase_auto: &rebase_auto
+    rebase-strategy: auto
 updates:
     -   package-ecosystem: "github-actions"
         directory: "/"
         schedule: *schedule_weekly
         open-pull-requests-limit: 5
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels:
             - dependencies
@@ -24,6 +27,7 @@ updates:
         directory: "/"
         schedule: *schedule_weekly
         open-pull-requests-limit: 10
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels:
             - dependencies
@@ -41,6 +45,7 @@ updates:
         directory: "/"
         schedule: *schedule_weekly
         open-pull-requests-limit: 5
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels:
             - dependencies
@@ -53,6 +58,7 @@ updates:
         directory: "/tools/02_phpstan"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -63,6 +69,7 @@ updates:
         directory: "/tools/03_psalm"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -73,6 +80,7 @@ updates:
         directory: "/tools/04_symplify"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -83,6 +91,7 @@ updates:
         directory: "/tools/05_infection"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -93,6 +102,7 @@ updates:
         directory: "/tools/06_php-coveralls"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -103,6 +113,7 @@ updates:
         directory: "/tools/07_phpinsights"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -113,6 +124,7 @@ updates:
         directory: "/tools/08_phpmetrics"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -123,6 +135,7 @@ updates:
         directory: "/tools/09_rector"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -133,6 +146,7 @@ updates:
         directory: "/tools/10_composer"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -143,6 +157,7 @@ updates:
         directory: "/tools/11_phplint"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
@@ -153,6 +168,7 @@ updates:
         directory: "/tools/12_php-parallel-lint"
         schedule: *schedule_weekly
         open-pull-requests-limit: 3
+        <<: *rebase_auto
         commit-message: *commit_message_template
         labels: *labels_tools
         groups:
