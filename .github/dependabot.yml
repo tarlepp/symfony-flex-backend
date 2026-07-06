@@ -12,9 +12,6 @@ updates:
         directory: "/"
         schedule:
             interval: daily
-        ignore:
-            - dependency-name: "symfony/*"
-              versions: [ "8.x" ]
         groups:
             symfony_dependencies:
                 patterns:
