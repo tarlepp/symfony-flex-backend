@@ -5,6 +5,9 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 5
+        labels:
+            - dependencies
+            - github-actions
         groups:
             github_actions_dependencies:
                 patterns:
@@ -14,6 +17,9 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 10
+        labels:
+            - dependencies
+            - composer
         groups:
             symfony_dependencies:
                 patterns:
@@ -28,6 +34,9 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 5
+        labels:
+            - dependencies
+            - docker
         groups:
             docker_dependencies:
                 patterns:
@@ -37,6 +46,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_phpstan_dependencies:
                 patterns:
@@ -46,6 +59,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_psalm_dependencies:
                 patterns:
@@ -55,6 +72,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_symplify_dependencies:
                 patterns:
@@ -64,6 +85,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_infection_dependencies:
                 patterns:
@@ -73,6 +98,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_php-coveralls_dependencies:
                 patterns:
@@ -82,6 +111,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_phpinsights_dependencies:
                 patterns:
@@ -91,6 +124,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_phpmetrics_dependencies:
                 patterns:
@@ -100,6 +137,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_rector_dependencies:
                 patterns:
@@ -109,6 +150,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_composer_dependencies:
                 patterns:
@@ -118,6 +163,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_phplint-dependencies:
                 patterns:
@@ -127,6 +176,10 @@ updates:
         schedule:
             interval: weekly
         open-pull-requests-limit: 3
+        labels:
+            - dependencies
+            - composer
+            - tools
         groups:
             tools_php-parallel-lint_dependencies:
                 patterns:
