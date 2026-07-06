@@ -9,6 +9,10 @@ _labels_tools: &labels_tools
     - tools
 _rebase_auto: &rebase_auto
     rebase-strategy: auto
+_rebase_and_stable: &rebase_and_stable
+    <<: *rebase_auto
+    allow:
+        - dependency-type: production
 updates:
     -   package-ecosystem: "github-actions"
         directory: "/"
@@ -27,7 +31,7 @@ updates:
         directory: "/"
         schedule: *schedule_weekly
         open-pull-requests-limit: 10
-        <<: *rebase_auto
+        <<: *rebase_and_stable
         commit-message: *commit_message_template
         labels:
             - dependencies
@@ -45,7 +49,7 @@ updates:
         directory: "/"
         schedule: *schedule_weekly
         open-pull-requests-limit: 5
-        <<: *rebase_auto
+        <<: *rebase_and_stable
         commit-message: *commit_message_template
         labels:
             - dependencies
