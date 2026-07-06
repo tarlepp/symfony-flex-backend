@@ -109,3 +109,11 @@ updates:
             tools_phplint-dependencies:
                 patterns:
                     - "*"
+    -   package-ecosystem: composer
+        directory: "/tools/12_php-parallel-lint"
+        schedule:
+            interval: daily
+        groups:
+            tools_php-parallel-lint_dependencies:
+                patterns:
+                    - "*"
