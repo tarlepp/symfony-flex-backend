@@ -4,6 +4,7 @@ updates:
         directory: "/"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 5
         groups:
             github_actions_dependencies:
                 patterns:
@@ -12,6 +13,7 @@ updates:
         directory: "/"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 10
         groups:
             symfony_dependencies:
                 patterns:
@@ -25,6 +27,7 @@ updates:
         directory: "/"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 5
         groups:
             docker_dependencies:
                 patterns:
@@ -33,6 +36,7 @@ updates:
         directory: "/tools/02_phpstan"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_phpstan_dependencies:
                 patterns:
@@ -41,6 +45,7 @@ updates:
         directory: "/tools/03_psalm"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_psalm_dependencies:
                 patterns:
@@ -49,6 +54,7 @@ updates:
         directory: "/tools/04_symplify"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_symplify_dependencies:
                 patterns:
@@ -57,6 +63,7 @@ updates:
         directory: "/tools/05_infection"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_infection_dependencies:
                 patterns:
@@ -65,6 +72,7 @@ updates:
         directory: "/tools/06_php-coveralls"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_php-coveralls_dependencies:
                 patterns:
@@ -73,6 +81,7 @@ updates:
         directory: "/tools/07_phpinsights"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_phpinsights_dependencies:
                 patterns:
@@ -81,6 +90,7 @@ updates:
         directory: "/tools/08_phpmetrics"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_phpmetrics_dependencies:
                 patterns:
@@ -89,6 +99,7 @@ updates:
         directory: "/tools/09_rector"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_rector_dependencies:
                 patterns:
@@ -97,6 +108,7 @@ updates:
         directory: "/tools/10_composer"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_composer_dependencies:
                 patterns:
@@ -105,6 +117,7 @@ updates:
         directory: "/tools/11_phplint"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_phplint-dependencies:
                 patterns:
@@ -113,6 +126,7 @@ updates:
         directory: "/tools/12_php-parallel-lint"
         schedule:
             interval: weekly
+        open-pull-requests-limit: 3
         groups:
             tools_php-parallel-lint_dependencies:
                 patterns:
