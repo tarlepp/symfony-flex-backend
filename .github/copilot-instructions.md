@@ -137,17 +137,24 @@ ORM, and project workflow conventions.
 
 <a id="validation-rules"></a>
 
-After changing code, prefer running the smallest relevant validation set from
-project root inside the running development container:
+Before commit (or before asking for commit), run the full static-analysis and
+quality suite from project root inside the running development container,
+aligned with `.github/workflows/main.yml`:
 
+* `make phpcs`
 * `make ecs`
-* `make phpstan`
+* `make phplint`
+* `make php-parallel-lint`
 * `make psalm`
+* `make phpstan`
+* `make phploc`
+* `make phpinsights`
+* `make check-security`
+* `make lint-markdown`
 * `make run-tests`
 
-For Markdown/documentation changes, also run:
-
-* `make lint-markdown`
+If `make ecs` reports fixable style issues, run `make ecs-fix` and rerun
+`make ecs`.
 
 For documentation-only tasks, `make lint-markdown` is usually the smallest
 relevant validation command.

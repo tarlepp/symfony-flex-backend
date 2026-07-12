@@ -295,13 +295,21 @@ As a simple rule of thumb, update the AI guidance when the same review comment,
 architectural correction, or project convention appears repeatedly and should
 become a repository default.
 
-When possible, validate AI-assisted changes with the smallest relevant command
-set from project root inside the running development container:
+Before commit, validate AI-assisted changes with the CI-aligned static-analysis
+and quality command set from project root inside the running development
+container:
 
 ```bash
+make phpcs
 make ecs
+make phplint
+make php-parallel-lint
 make phpstan
 make psalm
+make phploc
+make phpinsights
+make check-security
+make lint-markdown
 make run-tests
 ```
 

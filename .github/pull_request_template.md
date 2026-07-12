@@ -24,7 +24,11 @@
 
 <a id="validation"></a>
 
-* [ ] Ran the smallest relevant checks for this change
+* [ ] Ran full pre-commit static-analysis suite (`make phpcs`, `make ecs`,
+      `make phplint`, `make php-parallel-lint`, `make psalm`, `make phpstan`,
+      `make phploc`, `make phpinsights`, `make check-security`,
+      `make lint-markdown`)
+* [ ] Ran tests (`make run-tests` or `make run-tests-fastest`)
 * [ ] For documentation changes, ran `make lint-markdown`
 * [ ] Updated tests when behavior changed
 * [ ] Added or updated database migration when entity changed
