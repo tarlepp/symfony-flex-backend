@@ -272,20 +272,22 @@ These should be validated through repository tooling and CI whenever possible:
 
 <a id="current-validation-commands"></a>
 
-From repository root inside the running development container, the main
-validation commands are:
+From repository root inside the running development container, run this
+pre-commit static-analysis and quality suite (aligned with
+`.github/workflows/main.yml` static matrix):
 
 ```bash
+make phpcs
 make ecs
+make phplint
+make php-parallel-lint
 make phpstan
 make psalm
-make run-tests
-```
-
-For Markdown/documentation changes, also run:
-
-```bash
+make phploc
+make phpinsights
+make check-security
 make lint-markdown
+make run-tests
 ```
 
 To auto-fix code style issues:
@@ -294,20 +296,25 @@ To auto-fix code style issues:
 make ecs-fix
 ```
 
+When CI uses GitHub-formatted analyzer targets (`make phpstan-github`,
+`make psalm-github`), use `make phpstan` and `make psalm` locally as equivalent
+pre-commit checks.
+
 ## Current CI alignment [ᐞ](#table-of-contents)
 
 <a id="current-ci-alignment"></a>
 
-At the time of writing, `.github/workflows/main.yml` already includes checks
-for:
+At the time of writing, `.github/workflows/main.yml` includes:
 
-* PHP linting,
-* ECS code style,
-* PHPStan static analysis,
-* Psalm type checking,
-* PHPUnit test suite,
-* Markdown documentation linting, and
-* security vulnerability scanning.
+* `security-check` job: `make check-security` and Symfony security checker,
+* `lint-configuration` job: Composer validation, requirements checker,
+  `make lint-yaml`,
+* `static` matrix job: `make phpcs`, `make ecs`, `make phplint`,
+  `make php-parallel-lint`, `make psalm-github`, `make phpstan-github`,
+  `make phploc`, `make phpinsights`,
+* `lint-documentation` job: `make lint-markdown`,
+* `test` job: `make run-tests-php`, and
+* security-focused jobs such as `gitleaks` and Trivy image scanning.
 
 That means the most effective starting point for AI rules in this repository is
 not more process, but clearer instruction files that map directly to these
@@ -340,7 +347,7 @@ When using AI assistance in this repository, keep the workflow lightweight:
 3. Ask clarifying questions when requirements or constraints are unclear.
 4. Make the smallest change that fits existing Symfony, Doctrine, and project
    patterns.
-5. Run the smallest relevant validation commands for the files you changed
+5. Before commit, run the full CI-aligned static-analysis suite and tests
    inside the running development container.
 6. Do not create commits unless the developer explicitly asks for a commit.
 7. Provide a concise change summary at handoff, including file paths and
