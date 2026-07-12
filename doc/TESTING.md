@@ -1,20 +1,26 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 This document contains basic information how you can run tests within this
 application.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Testing](#testing-table-of-contents)
-    * [Commands to run tests](#commands-to-run-tests-table-of-contents)
-    * [Parallel testing](#parallel-testing-table-of-contents)
-    * [Own environment for testing](#own-environment-for-testing-table-of-contents)
-  * [Metrics](#metrics-table-of-contents)
-  * [PhpStorm](#phpstorm-table-of-contents)
+    * [Testing](#testing)
+      * [Commands to run tests](#commands-to-run-tests)
+      * [Parallel testing](#parallel-testing)
+      * [Own environment for testing](#own-environment-for-testing)
+    * [Metrics](#metrics)
+    * [PhpStorm](#phpstorm)
 
 ## Testing [ᐞ](#table-of-contents)
+
+<a id="testing"></a>
 
 Project contains bunch of tests _(E2E, Functional, Integration, Unit)_ tests
 itself relies to PHPUnit library.
@@ -25,6 +31,8 @@ Note that this project does not use simple phpunit as does Symfony by default.
 So don't try to run `./bin/phpunit` command, because that does not exist.
 
 ### Commands to run tests [ᐞ](#table-of-contents)
+
+<a id="commands-to-run-tests"></a>
 
 You can run tests by simply by following command(s):
 
@@ -55,11 +63,15 @@ could use following command:
 
 ### Parallel testing [ᐞ](#table-of-contents)
 
+<a id="parallel-testing"></a>
+
 Note that all those `make` commands that contains `fastest` are actually run
 with eight (8) different process with [fastest](https://github.com/liuggio/fastest)
 library.
 
 ### Own environment for testing [ᐞ](#table-of-contents)
+
+<a id="own-environment-for-testing"></a>
 
 If you need to use your own environment for testing, eg. change database or
 another stuff you need to create `.env.local.test` file to define your testing
@@ -67,6 +79,8 @@ environment - if needed. This file has the same content as the main `.env.test`
 file, just change database and others to match your testing environment.
 
 ## Metrics [ᐞ](#table-of-contents)
+
+<a id="metrics"></a>
 
 Project also contains [PhpMetrics](https://github.com/phpmetrics/phpmetrics)
 to make some analyze of your code. Note that you need run tests before this
@@ -80,9 +94,11 @@ And after that open `build/phpmetrics/index.html` with your favorite browser.
 
 ## PhpStorm [ᐞ](#table-of-contents)
 
+<a id="phpstorm"></a>
+
 Also note that you can run tests directly from your IDE (PhpStorm) - if you're
 using that you should read [PhpStorm](PHPSTORM.md) documentation.
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)

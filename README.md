@@ -23,7 +23,34 @@ different backend applications can use as needed. One example frontend is
 [this Angular template](https://github.com/tarlepp/angular-ngrx-frontend),
 though you can use any frontend solution.
 
-## Quick Start
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Quick Start](#quick-start)
+    * [Requirements](#requirements)
+      * [Recommendations](#recommendations)
+    * [Installation](#installation)
+      * [1. Clone repository](#1-clone-repository)
+      * [2. Start containers](#2-start-containers)
+    * [Running the application](#running-the-application)
+      * [Using application](#using-application)
+      * [Getting shell to container](#getting-shell-to-container)
+      * [Building containers](#building-containers)
+      * [Health check](#health-check)
+    * [Dev Containers](#dev-containers)
+    * [AI-assisted development](#ai-assisted-development)
+    * [Frontend?](#frontend)
+    * [Resources](#resources)
+    * [External links / resources](#external-links-resources)
+    * [Authors](#authors)
+    * [License](#license)
+
+## Quick Start [ᐞ](#table-of-contents)
+
+<a id="quick-start"></a>
 
 ```bash
 git clone https://github.com/tarlepp/symfony-flex-backend.git
@@ -33,30 +60,6 @@ make start
 
 Then open `https://localhost:8000` in your browser. For more details, see
 [Installation](#installation).
-
-## Table of Contents
-
-<a id="table-of-contents"></a>
-
-* [What is this](#what-is-this)
-  * [Table of Contents](#table-of-contents)
-  * [Requirements](#requirements)
-    * [Recommendations](#recommendations)
-  * [Installation](#installation)
-    * [1. Clone repository](#step-1-clone-repository)
-    * [2. Start containers](#step-2-start-containers)
-  * [Running the application](#running-the-application)
-    * [Using application](#using-application)
-    * [Getting shell to container](#getting-shell-to-container)
-    * [Building containers](#building-containers)
-    * [Health check](#health-check)
-  * [Dev Containers](#dev-containers)
-  * [AI-assisted development](#ai-assisted-development)
-  * [Frontend?](#frontend)
-* [Resources](#resources)
-  * [External links / resources](#external-links--resources)
-  * [Authors](#authors)
-  * [License](#license)
 
 ## Requirements [ᐞ](#table-of-contents)
 
@@ -90,7 +93,7 @@ This installation guide expects that you're using Docker Engine.
 
 ### 1. Clone repository [ᐞ](#table-of-contents)
 
-<a id="step-1-clone-repository"></a>
+<a id="1-clone-repository"></a>
 
 Use your favorite IDE and check out the repository from GitHub, or use the
 following command:
@@ -101,7 +104,7 @@ git clone https://github.com/tarlepp/symfony-flex-backend.git
 
 ### 2. Start containers [ᐞ](#table-of-contents)
 
-<a id="step-2-start-containers"></a>
+<a id="2-start-containers"></a>
 
 You can run this project either with Dev Containers (for example in VS Code or
 JetBrains IDEs) or with Make commands.
@@ -342,7 +345,7 @@ application with the frontend technology of your choice.
 
 ## External links / resources [ᐞ](#table-of-contents)
 
-<a id="external-links--resources"></a>
+<a id="external-links-resources"></a>
 
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
 * [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
@@ -362,3 +365,7 @@ application with the frontend technology of your choice.
 [The MIT License (MIT)](LICENSE)
 
 Copyright © 2024 Tarmo Leppänen
+
+---
+
+[Back to previous](#table-of-contents)
