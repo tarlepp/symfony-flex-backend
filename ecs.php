@@ -20,6 +20,7 @@ use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
+use Symplify\CodingStandard\Fixer\Annotation\RemovePropertyVariableNameDescriptionFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
@@ -92,4 +93,5 @@ return ECSConfig::configure()
         BlankLineAfterOpeningTagFixer::class => null,
         ClassAttributesSeparationFixer::class => null,
         NotOperatorWithSuccessorSpaceFixer::class => null,
+        RemovePropertyVariableNameDescriptionFixer::class => null,
     ]);

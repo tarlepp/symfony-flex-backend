@@ -79,7 +79,7 @@ final class DateDimensionTest extends EntityTestCase
             self::$method($dateDimension->{$getter}());
         } catch (Throwable $error) {
             /**
-             * @var class-string
+             * @var class-string $type
              */
             self::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
         }

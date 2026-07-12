@@ -120,7 +120,7 @@ final class LogRequestTest extends EntityTestCase
             self::$method($value, $message);
         } catch (Throwable $error) {
             /**
-             * @var class-string
+             * @var class-string $type
              */
             self::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }

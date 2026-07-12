@@ -87,7 +87,7 @@ final class LogLoginFailureTest extends EntityTestCase
             self::$method($logRequest->{$getter}());
         } catch (Throwable $error) {
             /**
-             * @var class-string
+             * @var class-string $type
              */
             self::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
         }

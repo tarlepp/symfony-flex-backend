@@ -11,10 +11,15 @@ use App\Entity\Interfaces\EntityInterface;
 use Closure;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use ReflectionIntersectionType;
 use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionType;
+use ReflectionUnionType;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use function array_filter;
+use function array_map;
 use function implode;
 use function is_object;
 use function str_contains;
@@ -332,7 +337,7 @@ CODE;
 
     private function getParameterTypeHint(\ReflectionParameter $param): string
     {
-        return $param->hasType() ? (string)$param->getType() . ' ' : '';
+        return $param->hasType() ? $this->formatReflectionType($param->getType()) . ' ' : '';
     }
 
     private function getParameterModifiers(\ReflectionParameter $param): string
@@ -375,7 +380,7 @@ CODE;
 
         if ($method->hasReturnType()) {
             $type = $method->getReturnType();
-            $typeString = (string)$type;
+            $typeString = $this->formatReflectionType($type);
             $returnType = ': ' . $typeString;
             // `never` methods throw or exit and never return normally; treat as void so the
             // proxy body contains no `return` statement (which would be a PHP fatal error).
@@ -404,5 +409,39 @@ CODE;
             && !$method->isFinal()
             && !$method->isConstructor()
             && !$method->isDestructor();
+    }
+
+    private function formatReflectionType(ReflectionType $type): string
+    {
+        if ($type instanceof ReflectionNamedType) {
+            return $this->formatNamedType($type);
+        }
+
+        if ($type instanceof ReflectionUnionType) {
+            return implode('|', array_map(
+                fn (ReflectionType $nestedType): string => $this->formatReflectionType($nestedType),
+                $type->getTypes(),
+            ));
+        }
+
+        if ($type instanceof ReflectionIntersectionType) {
+            return implode('&', array_map(
+                fn (ReflectionType $nestedType): string => $this->formatReflectionType($nestedType),
+                $type->getTypes(),
+            ));
+        }
+
+        return '';
+    }
+
+    private function formatNamedType(ReflectionNamedType $type): string
+    {
+        $typeName = $type->getName();
+
+        if ($type->allowsNull() && $typeName !== 'mixed' && $typeName !== 'null') {
+            return '?' . $typeName;
+        }
+
+        return $typeName;
     }
 }
