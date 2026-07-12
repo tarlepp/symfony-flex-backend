@@ -411,27 +411,25 @@ CODE;
             && !$method->isDestructor();
     }
 
-    private function formatReflectionType(ReflectionType $type): string
+    private function formatReflectionType(ReflectionType|null $type): string
     {
+        $formattedType = '';
+
         if ($type instanceof ReflectionNamedType) {
-            return $this->formatNamedType($type);
-        }
-
-        if ($type instanceof ReflectionUnionType) {
-            return implode('|', array_map(
+            $formattedType = $this->formatNamedType($type);
+        } elseif ($type instanceof ReflectionUnionType) {
+            $formattedType = implode('|', array_map(
+                fn (ReflectionType $nestedType): string => $this->formatReflectionType($nestedType),
+                $type->getTypes(),
+            ));
+        } elseif ($type instanceof ReflectionIntersectionType) {
+            $formattedType = implode('&', array_map(
                 fn (ReflectionType $nestedType): string => $this->formatReflectionType($nestedType),
                 $type->getTypes(),
             ));
         }
 
-        if ($type instanceof ReflectionIntersectionType) {
-            return implode('&', array_map(
-                fn (ReflectionType $nestedType): string => $this->formatReflectionType($nestedType),
-                $type->getTypes(),
-            ));
-        }
-
-        return '';
+        return $formattedType;
     }
 
     private function formatNamedType(ReflectionNamedType $type): string
