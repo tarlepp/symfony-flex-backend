@@ -76,14 +76,12 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
         $payload['language'] = $user instanceof SecurityUser
-            ? $user->getLanguage()
-                ->value
-                            : Language::getDefault()->value;
+            ? $user->getLanguage()->value
+            : Language::getDefault()->value;
 
         $payload['locale'] = $user instanceof SecurityUser
-            ? $user->getLocale()
-                ->value
-                            : Locale::getDefault()->value;
+            ? $user->getLocale()->value
+            : Locale::getDefault()->value;
 
         $payload['timezone'] = $user instanceof SecurityUser
             ? $user->getTimezone()

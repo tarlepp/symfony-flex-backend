@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
+use PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer;
 use PhpCsFixer\Fixer\CastNotation\CastSpacesFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
@@ -19,8 +20,10 @@ use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
+use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
 use Symplify\CodingStandard\Fixer\Annotation\RemovePropertyVariableNameDescriptionFixer;
+use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
@@ -92,6 +95,9 @@ return ECSConfig::configure()
     ->withSkip([
         BlankLineAfterOpeningTagFixer::class => null,
         ClassAttributesSeparationFixer::class => null,
+        MethodChainingIndentationFixer::class => null,
+        MethodChainingNewlineFixer::class => null,
+        NoMultilineWhitespaceAroundDoubleArrowFixer::class => null,
         NotOperatorWithSuccessorSpaceFixer::class => null,
         RemovePropertyVariableNameDescriptionFixer::class => null,
     ]);

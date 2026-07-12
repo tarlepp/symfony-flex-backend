@@ -43,8 +43,7 @@ trait RestMethodHelper
     {
         $dtoClass = $method !== null && array_key_exists($method, static::$dtoClasses)
             ? static::$dtoClasses[$method]
-            : $this->getResource()
-                ->getDtoClass();
+            : $this->getResource()->getDtoClass();
 
         $interfaces = class_implements($dtoClass);
 
@@ -117,14 +116,13 @@ trait RestMethodHelper
             ->getEntityManager();
 
         // Fetch entity
-        $entity = $currentResource->getRepository()
+        $entity = $currentResource
+            ->getRepository()
             ->find($id);
 
         // Detach entity from manager if it's been managed by it
         if ($entity !== null
-            /* @scrutinizer ignore-call */
-            && $entityManager->getUnitOfWork()
-                ->getEntityState($entity) === UnitOfWork::STATE_MANAGED
+            && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
         ) {
             $entityManager->clear();
         }
