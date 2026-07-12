@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Helpers/LoggerAwareTraitTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Helpers;
@@ -15,10 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function property_exists;
 
-/**
- * @package App\Tests\Integration\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LoggerAwareTraitTest extends KernelTestCase
 {
     public function testThatLoggerAttributeExists(): void
@@ -37,7 +32,8 @@ final class LoggerAwareTraitTest extends KernelTestCase
 
         self::assertNotNull($kernel);
 
-        $service = $kernel->getContainer()->get(LoggerAwareService::class);
+        $service = $kernel->getContainer()
+            ->get(LoggerAwareService::class);
         $logger = PhpUnitUtil::getProperty('logger', $service);
 
         self::assertInstanceOf(LoggerInterface::class, $logger);

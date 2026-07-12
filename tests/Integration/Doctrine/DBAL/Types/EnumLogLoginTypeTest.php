@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Doctrine/DBAL/Types/EnumLogLoginTypeTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
@@ -20,10 +19,6 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class EnumLogLoginTypeTest extends KernelTestCase
 {
     /**

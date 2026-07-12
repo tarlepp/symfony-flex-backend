@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/ControllerCollection.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -19,9 +18,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use function sprintf;
 
 /**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method ControllerInterface get(string $className)
  * @method IteratorAggregate<int, ControllerInterface> getAll()
  *

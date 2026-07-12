@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/ValueResolver/LoggedInUserValueResolver.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\ValueResolver;
@@ -30,9 +29,6 @@ use Throwable;
  *
  * This will automatically convert your security user to actual User entity that
  * you can use within your controller as you like.
- *
- * @package App\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggedInUserValueResolver implements ValueResolverInterface
 {

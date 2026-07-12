@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Interfaces/RestResourceInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -17,9 +16,6 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template-covariant TEntity of EntityInterface
  * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
  */

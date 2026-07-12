@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/RestResource.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -20,9 +19,6 @@ use function array_keys;
 use function sprintf;
 
 /**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template TEntity of EntityInterface
  * @implements RestResourceInterface<TEntity>
  */
@@ -98,13 +94,15 @@ abstract class RestResource implements RestResourceInterface
     #[Override]
     public function getEntityName(): string
     {
-        return $this->getRepository()->getEntityName();
+        return $this->getRepository()
+            ->getEntityName();
     }
 
     #[Override]
     public function getReference(string $id): ?object
     {
-        return $this->getRepository()->getReference($id);
+        return $this->getRepository()
+            ->getReference($id);
     }
 
     #[Override]

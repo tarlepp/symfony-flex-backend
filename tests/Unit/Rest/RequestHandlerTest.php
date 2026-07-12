@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Rest/RequestHandlerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Rest;
@@ -19,10 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use function json_encode;
 
-/**
- * @package App\Tests\Unit\Rest;
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestHandlerTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter')]
@@ -194,7 +189,7 @@ final class RequestHandlerTest extends KernelTestCase
     public function testThatGetSearchTermsReturnsExpectedValue(
         string $method,
         StringableArrayObject $expected,
-        string | bool $search,
+        string|bool $search,
     ): void {
         $parameters = [
             'search' => (string)$search,
@@ -621,7 +616,7 @@ final class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
      *
-     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: boolean|string}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: bool|string}>
      */
     public static function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {

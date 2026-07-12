@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/DoctrineExtensionSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -17,10 +16,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class DoctrineExtensionSubscriberTest extends KernelTestCase
 {
     /**

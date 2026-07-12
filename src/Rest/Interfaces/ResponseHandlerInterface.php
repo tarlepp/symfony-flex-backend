@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Interfaces/ResponseHandlerInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -14,10 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 interface ResponseHandlerInterface
 {
     /**

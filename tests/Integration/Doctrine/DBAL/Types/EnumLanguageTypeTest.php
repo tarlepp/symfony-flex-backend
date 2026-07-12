@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Doctrine/DBAL/Types/EnumLanguageTypeTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
@@ -22,10 +21,6 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- */
 final class EnumLanguageTypeTest extends KernelTestCase
 {
     /**

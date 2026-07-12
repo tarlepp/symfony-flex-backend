@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/Role/InheritedRolesControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\Role;
@@ -14,10 +13,6 @@ use App\Security\RolesService;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @package App\Tests\Integration\Controller\v1\Role
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class InheritedRolesControllerTest extends KernelTestCase
 {
     #[TestDox('Test that `__invoke($role)` method calls expected service methods')]

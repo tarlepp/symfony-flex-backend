@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/User/DeleteUserControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\User;
@@ -19,9 +18,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
- * @package App\Tests\Integration\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method DeleteUserController getController()
  */
 final class DeleteUserControllerTest extends RestIntegrationControllerTestCase

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/UniqueEmailValidatorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -18,10 +17,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 use Throwable;
 
-/**
- * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UniqueEmailValidatorTest extends KernelTestCase
 {
     /**
@@ -61,6 +56,7 @@ final class UniqueEmailValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        new UniqueEmailValidator($repositoryMock)->validateInContext($user, new UniqueEmail(), $contextMock);
+        new UniqueEmailValidator($repositoryMock)
+            ->validateInContext($user, new UniqueEmail(), $contextMock);
     }
 }

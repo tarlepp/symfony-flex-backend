@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Security/Authenticator/ApiKeyAuthenticatorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security\Authenticator;
@@ -30,10 +29,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Throwable;
 use function property_exists;
 
-/**
- * @package App\Tests\Integration\Security\Authenticator
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ApiKeyAuthenticatorTest extends KernelTestCase
 {
     /**
@@ -72,7 +67,8 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
             'Authorization' => 'ApiKey SomeToken',
         ]);
 
-        $passport = new ApiKeyAuthenticator($apiKeyUserProvider)->authenticate($request);
+        $passport = new ApiKeyAuthenticator($apiKeyUserProvider)
+            ->authenticate($request);
 
         self::assertTrue($passport->hasBadge(UserBadge::class));
 
@@ -92,7 +88,8 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        new ApiKeyAuthenticator($apiKeyUserProvider)->authenticate(new Request());
+        new ApiKeyAuthenticator($apiKeyUserProvider)
+            ->authenticate(new Request());
     }
 
     /**
@@ -144,7 +141,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: Request}>
+     * @return Generator<int, array{0: bool, 1: Request}>
      */
     public static function dataProviderTestThatSupportReturnsExpected(): Generator
     {

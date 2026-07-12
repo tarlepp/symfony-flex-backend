@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/TestCase/RestTraitTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\TestCase;
@@ -20,9 +19,6 @@ use function array_merge;
 
 /**
  * @codeCoverageIgnore
- *
- * @package App\Tests\E2E\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestTraitTestCase extends WebTestCase
 {

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Service/Version.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Service;
@@ -20,10 +19,6 @@ use function assert;
 use function is_array;
 use function is_string;
 
-/**
- * @package App\Service
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class Version
 {
     public function __construct(

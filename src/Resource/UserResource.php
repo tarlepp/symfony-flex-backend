@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Resource/UserResource.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Resource;
@@ -21,9 +20,6 @@ use function array_values;
 use function in_array;
 
 /**
- * @package App\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
  * @extends RestResource<Entity>
  * @codingStandardsIgnoreStart
  *
@@ -67,7 +63,8 @@ class UserResource extends RestResource
          * @return bool
          */
         $filter = fn (Entity $user): bool => in_array(
-            $userGroup->getRole()->getId(),
+            $userGroup->getRole()
+                ->getId(),
             $this->rolesService->getInheritedRoles($user->getRoles()),
             true
         );

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Utils/RequestLoggerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Utils;
@@ -22,10 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @package App\Tests\Integration\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestLoggerTest extends KernelTestCase
 {
     #[TestDox('Test that log is not created if `Request` and `Response` object are not set')]

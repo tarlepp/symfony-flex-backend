@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/EntityReferenceExistsValidatorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -25,10 +24,6 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class EntityReferenceExistsValidatorTest extends KernelTestCase
 {
     /**

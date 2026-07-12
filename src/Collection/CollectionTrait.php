@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Collection/CollectionTrait.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Collection;
@@ -16,16 +15,12 @@ use IteratorIterator;
 use Throwable;
 use function iterator_count;
 
-/**
- * @package App\Collection
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait CollectionTrait
 {
     /**
      * Method to filter current collection.
      *
-     * @psalm-var class-string $className
+     * @psalm-var class-string
      *
      * @return Closure(mixed, mixed, \Iterator<mixed, mixed>): bool
      */
@@ -34,7 +29,7 @@ trait CollectionTrait
     /**
      * Method to process error message for current collection.
      *
-     * @psalm-var class-string $className
+     * @psalm-var class-string
      *
      * @throws InvalidArgumentException
      */

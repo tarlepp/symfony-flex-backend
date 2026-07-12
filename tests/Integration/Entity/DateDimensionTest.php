@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/DateDimensionTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -20,9 +19,6 @@ use function in_array;
 use function ucfirst;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method DateDimension getEntity()
  */
 final class DateDimensionTest extends EntityTestCase
@@ -83,7 +79,7 @@ final class DateDimensionTest extends EntityTestCase
             self::$method($dateDimension->{$getter}());
         } catch (Throwable $error) {
             /**
-             * @var class-string $type
+             * @var class-string
              */
             self::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
         }

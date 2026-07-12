@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/ApiKey/EditApiKeyCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -21,10 +20,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-/**
- * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: self::NAME,
     description: 'Command to edit existing API key',

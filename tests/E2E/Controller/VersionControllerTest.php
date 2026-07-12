@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/VersionControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller;
@@ -16,10 +15,6 @@ use stdClass;
 use Throwable;
 use function file_get_contents;
 
-/**
- * @package App\Tests\E2E\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class VersionControllerTest extends WebTestCase
 {
     /**

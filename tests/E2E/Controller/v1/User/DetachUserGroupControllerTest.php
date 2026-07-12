@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/User/DetachUserGroupControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\User;
@@ -19,10 +18,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class DetachUserGroupControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/user';

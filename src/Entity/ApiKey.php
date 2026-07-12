@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/ApiKey.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -31,10 +30,6 @@ use function array_map;
 use function array_unique;
 use function array_values;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity]
 #[ORM\Table(
     name: 'api_key',
@@ -114,7 +109,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     #[Groups([
         'ApiKey.userGroups',
     ])]
-    private Collection | ArrayCollection $userGroups;
+    private Collection|ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -126,7 +121,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     #[Groups([
         'ApiKey.logsRequest',
     ])]
-    private Collection | ArrayCollection $logsRequest;
+    private Collection|ArrayCollection $logsRequest;
 
     /**
      * @throws Throwable
@@ -134,7 +129,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     public function __construct()
     {
         $this->id = $this->createUuid();
-        $this->token = $this->generateToken()->getToken();
+        $this->token = $this->generateToken()
+            ->getToken();
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
     }
@@ -192,7 +188,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     #[Override]
-    public function getUserGroups(): Collection | ArrayCollection
+    public function getUserGroups(): Collection|ArrayCollection
     {
         return $this->userGroups;
     }
@@ -202,7 +198,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest(): Collection | ArrayCollection
+    public function getLogsRequest(): Collection|ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -224,7 +220,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                     [
                         RoleEnum::API->value,
                         ...array_map(
-                            static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId(),
+                            static fn (UserGroup $userGroup): string => $userGroup->getRole()
+                                ->getId(),
                             $this->userGroups->toArray(),
                         ),
                     ],

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/Traits/LogEntityTrait.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -17,9 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
- * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @property User|null $user
  */
 trait LogEntityTrait

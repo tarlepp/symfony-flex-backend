@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Controller/v1/Auth/GetTokenController.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\v1\Auth;
@@ -20,10 +19,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use function sprintf;
 
-/**
- * @package App\Controller\v1\Auth
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsController]
 class GetTokenController
 {

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Functional/Security/Provider/ApiKeyUserProviderTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Security\Provider;
@@ -26,10 +25,6 @@ use Throwable;
 use function array_map;
 use function str_pad;
 
-/**
- * @package App\Tests\Functional\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
@@ -41,7 +36,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     {
         $token = str_pad($shortRole, 40, '_');
 
-        $apiKey = $this->getApiKeyUserProvider()->getApiKeyForToken($token);
+        $apiKey = $this->getApiKeyUserProvider()
+            ->getApiKeyForToken($token);
 
         self::assertInstanceOf(ApiKey::class, $apiKey);
     }
@@ -55,7 +51,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     {
         $token = str_pad($shortRole, 40, '-');
 
-        $apiKey = $this->getApiKeyUserProvider()->getApiKeyForToken($token);
+        $apiKey = $this->getApiKeyUserProvider()
+            ->getApiKeyForToken($token);
 
         self::assertNull($apiKey);
     }
@@ -68,7 +65,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
-        $this->getApiKeyUserProvider()->loadUserByIdentifier((string)time());
+        $this->getApiKeyUserProvider()
+            ->loadUserByIdentifier((string)time());
     }
 
     /**
@@ -81,7 +79,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     #[TestDox('Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input')]
     public function testThatLoadUserByIdentifierWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
-        $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
+        $apiKeyUser = $this->getApiKeyUserProvider()
+            ->loadUserByIdentifier($token);
 
         self::assertSame($roles->getArrayCopy(), $apiKeyUser->getRoles());
     }
@@ -96,7 +95,8 @@ final class ApiKeyUserProviderTest extends KernelTestCase
 
         $user = new InMemoryUser('username', 'password');
 
-        $this->getApiKeyUserProvider()->refreshUser($user);
+        $this->getApiKeyUserProvider()
+            ->refreshUser($user);
     }
 
     /**
@@ -147,7 +147,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @return Generator<int, array{
-     *      0: boolean,
+     *      0: bool,
      *      1: class-string<\Symfony\Component\Security\Core\User\UserInterface>,
      *  }>
      */

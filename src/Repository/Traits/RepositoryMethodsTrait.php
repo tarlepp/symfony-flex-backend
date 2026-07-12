@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/Traits/RepositoryMethodsTrait.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Traits;
@@ -21,9 +20,6 @@ use function array_column;
 use function assert;
 
 /**
- * @package App\Repository\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template TEntity of EntityInterface
  */
 trait RepositoryMethodsTrait
@@ -34,7 +30,8 @@ trait RepositoryMethodsTrait
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
-        $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
+        $output = $this->getEntityManager()
+            ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
         if (!$output instanceof EntityInterface) {
             return null;
@@ -49,7 +46,7 @@ trait RepositoryMethodsTrait
      *
      * @psalm-return TEntity|array<int|string, mixed>|null
      */
-    public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
+    public function findAdvanced(string $id, string|int|null $hydrationMode = null): null|array|EntityInterface
     {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder();
@@ -67,7 +64,8 @@ trait RepositoryMethodsTrait
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
          */
 
-        return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
+        return $queryBuilder->getQuery()
+            ->getOneOrNullResult($hydrationMode);
     }
 
     /**
@@ -77,7 +75,8 @@ trait RepositoryMethodsTrait
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
-        $repository = $this->getEntityManager()->getRepository($this->getEntityName());
+        $repository = $this->getEntityManager()
+            ->getRepository($this->getEntityName());
 
         /** @var TEntity|null $result */
         $result = $repository->findOneBy($criteria, $orderBy);
@@ -126,7 +125,8 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        $iterator = new Paginator($queryBuilder, true)->getIterator();
+        $iterator = new Paginator($queryBuilder, true)
+            ->getIterator();
 
         assert($iterator instanceof ArrayIterator);
 
@@ -198,7 +198,8 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+        return (int)$queryBuilder->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function reset(): int
@@ -210,7 +211,8 @@ trait RepositoryMethodsTrait
         $queryBuilder->delete();
 
         // Return deleted row count
-        return (int)$queryBuilder->getQuery()->execute();
+        return (int)$queryBuilder->getQuery()
+            ->execute();
     }
 
     /**

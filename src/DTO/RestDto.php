@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/DTO/RestDto.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO;
@@ -20,10 +19,6 @@ use function method_exists;
 use function sprintf;
 use function ucfirst;
 
-/**
- * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class RestDto implements RestDtoInterface
 {
     /**

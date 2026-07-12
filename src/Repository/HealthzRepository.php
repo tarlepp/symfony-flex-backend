@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/HealthzRepository.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -20,9 +19,6 @@ use Exception;
 use Throwable;
 
 /**
- * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @extends BaseRepository<Entity>
  * @codingStandardsIgnoreStart
  *
@@ -102,6 +98,7 @@ class HealthzRepository extends BaseRepository
             ->setParameter('timestamp', $date, Types::DATETIME_IMMUTABLE);
 
         // Return deleted row count
-        return (int)$queryBuilder->getQuery()->execute();
+        return (int)$queryBuilder->getQuery()
+            ->execute();
     }
 }

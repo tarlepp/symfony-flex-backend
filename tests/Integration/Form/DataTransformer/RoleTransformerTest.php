@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Form/DataTransformer/RoleTransformerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Form\DataTransformer;
@@ -19,10 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Form\Console\DataTransformer
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RoleTransformerTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatTransformReturnsExpected')]

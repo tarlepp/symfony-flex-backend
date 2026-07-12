@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Utils/JSON.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -12,10 +11,6 @@ use JsonException;
 use function json_decode;
 use function json_encode;
 
-/**
- * @package App\Util
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class JSON
 {
     /**

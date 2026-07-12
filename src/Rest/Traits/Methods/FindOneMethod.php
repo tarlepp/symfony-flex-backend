@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/Methods/FindOneMethod.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Methods;
@@ -12,10 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-/**
- * @package App\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait FindOneMethod
 {
     /**

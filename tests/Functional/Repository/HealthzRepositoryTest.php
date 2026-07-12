@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Functional/Repository/HealthzRepositoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -17,10 +16,6 @@ use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class HealthzRepositoryTest extends KernelTestCase
 {
     /**
@@ -65,8 +60,12 @@ final class HealthzRepositoryTest extends KernelTestCase
     public function testThatCreateValueReturnsExpected(): void
     {
         self::assertEqualsWithDelta(
-            new DateTimeImmutable('now', new DateTimeZone('utc'))->getTimestamp(),
-            $this->getRepository()->create()->getCreatedAt()->getTimestamp(),
+            new DateTimeImmutable('now', new DateTimeZone('utc'))
+                ->getTimestamp(),
+            $this->getRepository()
+                ->create()
+                ->getCreatedAt()
+                ->getTimestamp(),
             1,
         );
     }

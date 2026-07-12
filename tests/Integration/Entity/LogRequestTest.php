@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/LogRequestTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -30,9 +29,6 @@ use function sprintf;
 use function ucfirst;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method LogRequest getEntity()
  */
 final class LogRequestTest extends EntityTestCase
@@ -124,7 +120,7 @@ final class LogRequestTest extends EntityTestCase
             self::$method($value, $message);
         } catch (Throwable $error) {
             /**
-             * @var class-string $type
+             * @var class-string
              */
             self::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }

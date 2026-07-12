@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Form/Type/Console/UserType.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Console;
@@ -28,9 +27,6 @@ use function array_map;
 
 /**
  * @extends AbstractType<UserDto>
- *
- * @package App\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserType extends AbstractType
 {
@@ -105,7 +101,7 @@ class UserType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws Throwable
      */
@@ -129,7 +125,8 @@ class UserType extends AbstractType
                 ]
             );
 
-        $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
+        $builder->get('userGroups')
+            ->addModelTransformer($this->userGroupTransformer);
     }
 
     /**

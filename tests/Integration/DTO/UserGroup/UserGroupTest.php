@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/DTO/UserGroup/UserGroupTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\UserGroup;
@@ -14,10 +13,6 @@ use App\Entity\UserGroup as UserGroupEntity;
 use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
-/**
- * @package App\Tests\Integration\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserGroupTest extends DtoTestCase
 {
     /**

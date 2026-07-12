@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Functional/Security/Provider/SecurityUserFactoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Security\Provider;
@@ -22,10 +21,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class SecurityUserFactoryTest extends KernelTestCase
 {
     /**
@@ -35,7 +30,8 @@ final class SecurityUserFactoryTest extends KernelTestCase
     {
         $this->expectException(UserNotFoundException::class);
 
-        $this->getSecurityUserFactory()->loadUserByIdentifier('foobar');
+        $this->getSecurityUserFactory()
+            ->loadUserByIdentifier('foobar');
     }
 
     /**
@@ -50,7 +46,8 @@ final class SecurityUserFactoryTest extends KernelTestCase
         string $username,
         StringableArrayObject $roles
     ): void {
-        $domainUser = $this->getSecurityUserFactory()->loadUserByIdentifier($username);
+        $domainUser = $this->getSecurityUserFactory()
+            ->loadUserByIdentifier($username);
 
         self::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
     }
@@ -62,7 +59,8 @@ final class SecurityUserFactoryTest extends KernelTestCase
     {
         $this->expectException(UserNotFoundException::class);
 
-        $this->getSecurityUserFactory()->refreshUser(new SecurityUser(new User()));
+        $this->getSecurityUserFactory()
+            ->refreshUser(new SecurityUser(new User()));
     }
 
     /**
@@ -70,9 +68,10 @@ final class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsCorrectUser(): void
     {
-        $user = $this->getUserRepository()->findOneBy([
-            'username' => 'john',
-        ]);
+        $user = $this->getUserRepository()
+            ->findOneBy([
+                'username' => 'john',
+            ]);
 
         self::assertNotNull($user);
 
@@ -80,7 +79,9 @@ final class SecurityUserFactoryTest extends KernelTestCase
 
         self::assertSame(
             $user->getId(),
-            $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier()
+            $this->getSecurityUserFactory()
+                ->refreshUser($securityUser)
+                ->getUserIdentifier()
         );
     }
 
@@ -89,9 +90,10 @@ final class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsANewInstanceOfSecurityUser(): void
     {
-        $user = $this->getUserRepository()->findOneBy([
-            'username' => 'john',
-        ]);
+        $user = $this->getUserRepository()
+            ->findOneBy([
+                'username' => 'john',
+            ]);
 
         self::assertNotNull($user);
 
@@ -110,7 +112,8 @@ final class SecurityUserFactoryTest extends KernelTestCase
 
         $user = new InMemoryUser('username', 'password');
 
-        $this->getSecurityUserFactory()->refreshUser($user);
+        $this->getSecurityUserFactory()
+            ->refreshUser($user);
     }
 
     /**

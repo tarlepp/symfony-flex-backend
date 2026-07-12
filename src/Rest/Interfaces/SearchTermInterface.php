@@ -1,17 +1,12 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Interfaces/SearchTermInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 interface SearchTermInterface
 {
     // @codeCoverageIgnoreStart
@@ -40,8 +35,8 @@ interface SearchTermInterface
      * @return array<string, array<string, array<string, array<int, string>>>>|null
      */
     public static function getCriteria(
-        array | string $column,
-        array | string $search,
+        array|string $column,
+        array|string $search,
         ?string $operand = null,
         ?int $mode = null,
     ): ?array;

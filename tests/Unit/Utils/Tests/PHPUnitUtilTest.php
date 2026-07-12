@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Utils/Tests/PHPUnitUtilTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Utils\Tests;
@@ -21,10 +20,6 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Unit\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class PHPUnitUtilTest extends KernelTestCase
 {
     #[TestDox('Test that `getType` method throws exception with not know type')]
@@ -92,7 +87,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     #[DataProvider('dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType')]
     #[TestDox('Test that `getValidValueForType` returns `$expected` when using `$type` as input type')]
     public function testThatGetValidValueForTypeWorksIfThereIsAPipeOnType(
-        int | string | array $expected,
+        int|string|array $expected,
         string $type,
     ): void {
         self::assertSame($expected, PhpUnitUtil::getValidValueForType($type));

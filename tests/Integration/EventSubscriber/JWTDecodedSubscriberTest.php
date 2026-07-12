@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/JWTDecodedSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -18,10 +17,6 @@ use function array_values;
 use function hash;
 use function implode;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class JWTDecodedSubscriberTest extends KernelTestCase
 {
     public function testThatJwtIsMarkedInvalidIfChecksumDiffers(): void

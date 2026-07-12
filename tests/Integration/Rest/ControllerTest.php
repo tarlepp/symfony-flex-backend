@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/ControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest;
@@ -23,10 +22,6 @@ use Symfony\Component\Serializer\Serializer;
 use Throwable;
 use UnexpectedValueException;
 
-/**
- * @package App\Tests\Integration\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ControllerTest extends KernelTestCase
 {
     /**

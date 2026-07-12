@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/Voter/IsUserHimselfVoter.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Voter;
@@ -16,9 +15,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template TAttribute of string
  * @template TSubject of mixed
  *
@@ -29,7 +25,7 @@ class IsUserHimselfVoter extends Voter
     private const string ATTRIBUTE = 'IS_USER_HIMSELF';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
@@ -38,7 +34,7 @@ class IsUserHimselfVoter extends Voter
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     protected function voteOnAttribute(

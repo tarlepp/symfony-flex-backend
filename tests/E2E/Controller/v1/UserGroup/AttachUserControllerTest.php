@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/UserGroup/AttachUserControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\UserGroup;
@@ -20,10 +19,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class AttachUserControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/user_group';

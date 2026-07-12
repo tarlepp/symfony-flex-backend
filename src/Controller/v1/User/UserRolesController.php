@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Controller/v1/User/UserRolesController.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\v1\User;
@@ -21,10 +20,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * @package App\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsController]
 class UserRolesController
 {

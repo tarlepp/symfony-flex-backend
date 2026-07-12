@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/Utils/CheckDependencies.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Utils;
@@ -45,10 +44,6 @@ use function str_replace;
 use function strlen;
 use const DIRECTORY_SEPARATOR;
 
-/**
- * @package App\Command\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: 'check-dependencies',
     description: 'Console command to check which vendor dependencies has updates',

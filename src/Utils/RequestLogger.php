@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Utils/RequestLogger.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -21,9 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
- * @package App\Services
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @property  array<int, string> $sensitiveProperties
  */
 class RequestLogger implements RequestLoggerInterface
@@ -114,7 +110,9 @@ class RequestLogger implements RequestLoggerInterface
          * flush this new `LogRequest` entity to database. This is to prevent
          * not wanted entity state changes to be flushed.
          */
-        $this->logRequestResource->getRepository()->getEntityManager()->clear();
+        $this->logRequestResource->getRepository()
+            ->getEntityManager()
+            ->clear();
 
         $user = null;
         $apiKey = null;

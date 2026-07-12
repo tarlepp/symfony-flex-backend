@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/Authenticator/ApiKeyAuthenticator.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Authenticator;
@@ -22,10 +21,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use function preg_match;
 
-/**
- * @package App\Security\Authenticator
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     public function __construct(

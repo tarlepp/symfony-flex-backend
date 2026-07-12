@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/UserGroup.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -23,10 +22,6 @@ use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity]
 #[ORM\Table(
     name: 'user_group',
@@ -113,7 +108,7 @@ class UserGroup implements EntityInterface, Stringable
     #[Groups([
         'UserGroup.users',
     ])]
-    private Collection | ArrayCollection $users;
+    private Collection|ArrayCollection $users;
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
@@ -125,7 +120,7 @@ class UserGroup implements EntityInterface, Stringable
     #[Groups([
         'UserGroup.apiKeys',
     ])]
-    private Collection | ArrayCollection $apiKeys;
+    private Collection|ArrayCollection $apiKeys;
 
     public function __construct()
     {
@@ -174,7 +169,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, User>|ArrayCollection<int, User>
      */
-    public function getUsers(): Collection | ArrayCollection
+    public function getUsers(): Collection|ArrayCollection
     {
         return $this->users;
     }
@@ -182,7 +177,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      */
-    public function getApiKeys(): Collection | ArrayCollection
+    public function getApiKeys(): Collection|ArrayCollection
     {
         return $this->apiKeys;
     }

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/DTO/ApiKey/ApiKeyTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\ApiKey;
@@ -17,10 +16,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function count;
 
-/**
- * @package App\Tests\Integration\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ApiKeyTest extends DtoTestCase
 {
     /**

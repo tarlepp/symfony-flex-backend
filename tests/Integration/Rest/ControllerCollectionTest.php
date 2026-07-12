@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/ControllerCollectionTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest;
@@ -28,10 +27,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ControllerCollectionTest extends KernelTestCase
 {
     /**
@@ -77,7 +72,8 @@ final class ControllerCollectionTest extends KernelTestCase
         };
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        new ControllerCollection($iteratorAggregate, $stubLogger)->get('FooBar');
+        new ControllerCollection($iteratorAggregate, $stubLogger)
+            ->get('FooBar');
     }
 
     #[TestDox('Test that `getAll` method returns expected count of `REST` controllers')]
@@ -126,7 +122,7 @@ final class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: class-string<Controller>|string|null}>
+     * @return Generator<int, array{0: bool, 1: class-string<Controller>|string|null}>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Compiler/StopwatchCompilerPassTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Compiler;
@@ -15,10 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-/**
- * @package App\Tests\Compiler\Service
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class StopwatchCompilerPassTest extends KernelTestCase
 {
     #[TestDox('Test that `findTaggedServiceIds` method is called expected times')]
@@ -31,7 +26,8 @@ final class StopwatchCompilerPassTest extends KernelTestCase
             ->method('findTaggedServiceIds')
             ->willReturn([]);
 
-        new StopwatchCompilerPass()->process($container);
+        new StopwatchCompilerPass()
+            ->process($container);
     }
 
     #[TestDox('Test that no other container methods are called when tagged service is not supported')]
@@ -54,7 +50,8 @@ final class StopwatchCompilerPassTest extends KernelTestCase
             ->expects(self::never())
             ->method('setDefinition');
 
-        new StopwatchCompilerPass()->process($container);
+        new StopwatchCompilerPass()
+            ->process($container);
     }
 
     public function testThatAllExpectedContainerMethodsAreCalled(): void
@@ -80,6 +77,7 @@ final class StopwatchCompilerPassTest extends KernelTestCase
             ->method('setDefinition')
             ->with('App\Foo.stopwatch');
 
-        new StopwatchCompilerPass()->process($container);
+        new StopwatchCompilerPass()
+            ->process($container);
     }
 }

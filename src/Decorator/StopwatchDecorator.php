@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Decorator/StopwatchDecorator.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Decorator;
@@ -23,10 +22,6 @@ use function str_replace;
 use function uniqid;
 use function var_export;
 
-/**
- * @package App\Decorator
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 readonly class StopwatchDecorator
 {
     public function __construct(

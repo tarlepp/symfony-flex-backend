@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/LockedUserSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -27,10 +26,6 @@ use function assert;
 use function count;
 use function is_string;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class LockedUserSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -41,7 +36,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     public static function getSubscribedEvents(): array
@@ -95,12 +90,11 @@ class LockedUserSubscriber implements EventSubscriberInterface
     /**
      * @throws Throwable
      */
-    private function getUser(string | object $user): ?User
+    private function getUser(string|object $user): ?User
     {
         return match (true) {
             is_string($user) => $this->userRepository->loadUserByIdentifier($user, false),
-            $user instanceof SecurityUser =>
-                $this->userRepository->loadUserByIdentifier($user->getUserIdentifier(), true),
+            $user instanceof SecurityUser => $this->userRepository->loadUserByIdentifier($user->getUserIdentifier(), true),
             default => null,
         };
     }

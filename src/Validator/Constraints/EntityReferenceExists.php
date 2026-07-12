@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/EntityReferenceExists.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -19,9 +18,6 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Annotation
  * @Target({"PROPERTY"})
- *
- * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class EntityReferenceExists extends Constraint
@@ -31,7 +27,7 @@ class EntityReferenceExists extends Constraint
     final public const string MESSAGE_MULTIPLE = 'Invalid id values "{{ id }}" given for entity "{{ entity }}".';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @psalm-var array<string, string>
      */

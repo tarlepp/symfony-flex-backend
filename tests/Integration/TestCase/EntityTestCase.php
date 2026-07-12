@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/EntityTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -47,10 +46,6 @@ use function method_exists;
 use function sprintf;
 use function ucfirst;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class EntityTestCase extends KernelTestCase
 {
     /**
@@ -468,7 +463,8 @@ abstract class EntityTestCase extends KernelTestCase
         $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()
+            ->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -541,7 +537,8 @@ abstract class EntityTestCase extends KernelTestCase
         $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()
+            ->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -602,7 +599,8 @@ abstract class EntityTestCase extends KernelTestCase
         $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()
+            ->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -657,7 +655,8 @@ abstract class EntityTestCase extends KernelTestCase
         $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()
+            ->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);
@@ -767,7 +766,8 @@ abstract class EntityTestCase extends KernelTestCase
         $kernel = self::getKernel();
 
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = $kernel->getContainer()
+            ->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata(static::$entityName);

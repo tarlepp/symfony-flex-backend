@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Resource/HealthzResource.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Resource;
@@ -15,9 +14,6 @@ use App\Repository\HealthzRepository as Repository;
 use App\Rest\RestResource;
 
 /**
- * @package App\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
  * @extends RestResource<Entity>
  * @codingStandardsIgnoreStart
  *

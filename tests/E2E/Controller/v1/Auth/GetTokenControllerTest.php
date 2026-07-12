@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Auth/GetTokenControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Auth;
@@ -19,10 +18,6 @@ use function getenv;
 use function json_encode;
 use function property_exists;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Auth
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class GetTokenControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/auth/get_token';

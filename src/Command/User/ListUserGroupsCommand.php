@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/User/ListUserGroupsCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -23,10 +22,6 @@ use function array_map;
 use function implode;
 use function sprintf;
 
-/**
- * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: self::NAME,
     description: 'Console command to list user groups',
@@ -101,7 +96,8 @@ class ListUserGroupsCommand extends Command
         return static fn (UserGroup $userGroup): array => [
             $userGroup->getId(),
             $userGroup->getName(),
-            $userGroup->getRole()->getId(),
+            $userGroup->getRole()
+                ->getId(),
             implode(",\n", array_map($userFormatter, $userGroup->getUsers()->toArray())),
         ];
     }

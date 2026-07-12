@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/JWTCreatedSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -24,10 +23,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use function hash;
 use function implode;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class JWTCreatedSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -37,7 +32,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return array<string, string>
      */
@@ -81,12 +76,14 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
         $payload['language'] = $user instanceof SecurityUser
-            ? $user->getLanguage()->value
-            : Language::getDefault()->value;
+            ? $user->getLanguage()
+                ->value
+                            : Language::getDefault()->value;
 
         $payload['locale'] = $user instanceof SecurityUser
-            ? $user->getLocale()->value
-            : Locale::getDefault()->value;
+            ? $user->getLocale()
+                ->value
+                            : Locale::getDefault()->value;
 
         $payload['timezone'] = $user instanceof SecurityUser
             ? $user->getTimezone()

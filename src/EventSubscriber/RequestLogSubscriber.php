@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/RequestLogSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -25,9 +24,6 @@ use function str_contains;
 use function substr;
 
 /**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @property array<int, string> $ignoredRoutes
  */
 class RequestLogSubscriber implements EventSubscriberInterface
@@ -44,7 +40,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     public static function getSubscribedEvents(): array
@@ -67,8 +63,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
-        $filter = static fn (string $route): bool =>
-            str_contains($route, '/*') && str_contains($path, substr($route, 0, -2));
+        $filter = static fn (string $route): bool => str_contains($route, '/*') && str_contains($path, substr($route, 0, -2));
 
         // We don't want to log OPTIONS requests, /_profiler* -path, ignored routes and wildcard ignored routes
         if ($request->getRealMethod() === Request::METHOD_OPTIONS

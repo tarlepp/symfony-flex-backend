@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/Auth/GetTokenControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\Auth;
@@ -14,9 +13,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
- * @package App\Tests\Integration\Controller\v1\Auth
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @property GetTokenController $controller
  */
 final class GetTokenControllerTest extends KernelTestCase

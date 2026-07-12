@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Rest/Traits/Actions/RootActionsTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\Traits\Actions;
@@ -13,10 +12,6 @@ use Generator;
 use Override;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Rest\Traits\Actions
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RootActionsTest extends RestTraitTestCase
 {
     protected static string $route = '/test_root_actions';

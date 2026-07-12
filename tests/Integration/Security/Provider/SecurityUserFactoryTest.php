@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Security/Provider/SecurityUserFactoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security\Provider;
@@ -26,10 +25,6 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class SecurityUserFactoryTest extends KernelTestCase
 {
     /**
@@ -96,7 +91,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
 
     #[DataProvider('dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType')]
     #[TestDox('Test that `supportsClass` method returns `false` when using `$input` as input')]
-    public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(bool | int | string $input): void
+    public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(bool|int|string $input): void
     {
         $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -217,7 +212,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean|string|int}>
+     * @return Generator<int, array{0: bool|string|int}>
      */
     public static function dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType(): Generator
     {

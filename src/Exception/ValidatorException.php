@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Exception/ValidatorException.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Exception;
@@ -19,10 +18,6 @@ use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorExc
 use function array_map;
 use function iterator_to_array;
 
-/**
- * @package App\Exception
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ValidatorException extends BaseValidatorException implements ClientErrorInterface
 {
     /**
@@ -33,8 +28,7 @@ class ValidatorException extends BaseValidatorException implements ClientErrorIn
         parent::__construct(
             JSON::encode(
                 array_map(
-                    static fn (ConstraintViolationInterface $error): ValidatorError =>
-                        new ValidatorError($error, $target),
+                    static fn (ConstraintViolationInterface $error): ValidatorError => new ValidatorError($error, $target),
                     iterator_to_array($errors),
                 ),
             ),

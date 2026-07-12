@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventListener/UserEntityEventListenerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventListener;
@@ -20,10 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserEntityEventListenerTest extends KernelTestCase
 {
     /**
@@ -50,7 +45,8 @@ final class UserEntityEventListenerTest extends KernelTestCase
         $event = new LifecycleEventArgs($entity, $entityManager);
 
         // Call listener method
-        new UserEntityEventListener($hasher)->prePersist($event);
+        new UserEntityEventListener($hasher)
+            ->prePersist($event);
     }
 
     /**
@@ -77,7 +73,8 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         $event = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        new UserEntityEventListener($hasher)->preUpdate($event);
+        new UserEntityEventListener($hasher)
+            ->preUpdate($event);
     }
 
     /**
@@ -104,7 +101,8 @@ final class UserEntityEventListenerTest extends KernelTestCase
         $event = new LifecycleEventArgs($entity, $entityManager);
 
         // Call listener method
-        new UserEntityEventListener($hasher)->prePersist($event);
+        new UserEntityEventListener($hasher)
+            ->prePersist($event);
 
         self::assertEmpty(
             $entity->getPlainPassword(),
@@ -139,8 +137,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         // Create encrypted password manually for user
         $entity->setPassword(
-            fn (string $password): string =>
-                $hasher->hashPassword(new SecurityUser($entity), $password),
+            fn (string $password): string => $hasher->hashPassword(new SecurityUser($entity), $password),
             'test_test'
         );
 
@@ -154,7 +151,8 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         $event = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        new UserEntityEventListener($hasher)->preUpdate($event);
+        new UserEntityEventListener($hasher)
+            ->preUpdate($event);
 
         self::assertEmpty(
             $entity->getPlainPassword(),

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/ApiKey/ApiKeyHelper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -18,10 +17,6 @@ use function array_map;
 use function implode;
 use function sprintf;
 
-/**
- * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ApiKeyHelper
 {
     public function __construct(

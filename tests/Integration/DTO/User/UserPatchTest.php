@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/DTO/User/UserPatchTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\User;
@@ -15,10 +14,6 @@ use App\Entity\UserGroup;
 use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
-/**
- * @package App\Tests\Integration\DTO\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserPatchTest extends DtoTestCase
 {
     /**
@@ -42,7 +37,8 @@ final class UserPatchTest extends DtoTestCase
             ->setUsername('username')
             ->addUserGroup($userGroup1);
 
-        $dto = new UserPatch()->load($user)
+        $dto = new UserPatch()
+            ->load($user)
             ->setUserGroups([$userGroup2]);
 
         /** @var User $updatedUser */

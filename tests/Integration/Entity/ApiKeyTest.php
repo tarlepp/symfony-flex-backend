@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/ApiKeyTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -21,9 +20,6 @@ use Throwable;
 use function array_unique;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method ApiKey getEntity()
  */
 final class ApiKeyTest extends EntityTestCase

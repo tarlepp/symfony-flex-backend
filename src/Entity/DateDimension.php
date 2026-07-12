@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/DateDimension.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -23,10 +22,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Throwable;
 use function floor;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity(
     readOnly: true,
 )]

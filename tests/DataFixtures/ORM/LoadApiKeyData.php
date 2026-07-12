@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/DataFixtures/ORM/LoadApiKeyData.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\DataFixtures\ORM;
@@ -22,9 +21,6 @@ use function array_map;
 use function str_pad;
 
 /**
- * @package App\Tests\DataFixtures\ORM
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Auth/LoginFailureTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Auth;
@@ -17,10 +16,6 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Auth
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LoginFailureTest extends WebTestCase
 {
     private string $baseUrl = '/v1/auth/get_token';

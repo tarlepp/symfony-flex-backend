@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/ResponseHandler.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -30,10 +29,6 @@ use function implode;
 use function sprintf;
 use function str_starts_with;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ResponseHandler implements ResponseHandlerInterface
 {
     /**
@@ -68,7 +63,7 @@ class ResponseHandler implements ResponseHandlerInterface
         /**
          * Specify used populate settings
          *
-         * @var array<int, string> $populate
+         * @var array<int, string>
          */
         $populate = (array)($request->query->get('populate') ?? $request->request->get('populate'));
 

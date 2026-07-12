@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Exception/interfaces/ClientErrorInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Exception\interfaces;
@@ -18,9 +17,6 @@ namespace App\Exception\interfaces;
  * If your exception is not returning `code` properly, note that you will get
  * that HTTP status 500 on those - so it's _your_ responsibility to get
  * "proper" status code in your exception class.
- *
- * @package App\Exception\interfaces
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface ClientErrorInterface
 {

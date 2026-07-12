@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/DTO/ApiKey/ApiKey.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\ApiKey;
@@ -19,9 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
 /**
- * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class ApiKey extends RestDto
@@ -94,7 +90,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param EntityInterface|Entity $entity
      */
@@ -107,7 +103,8 @@ class ApiKey extends RestDto
             $this->description = $entity->getDescription();
 
             /** @var array<int, UserGroupEntity> $groups */
-            $groups = $entity->getUserGroups()->toArray();
+            $groups = $entity->getUserGroups()
+                ->toArray();
 
             $this->userGroups = $groups;
         }

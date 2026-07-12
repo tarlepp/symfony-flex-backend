@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Doctrine/DBAL/Types/EnumType.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Doctrine\DBAL\Types;
@@ -21,10 +20,6 @@ use function implode;
 use function in_array;
 use function is_string;
 
-/**
- * @package App\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class EnumType extends Type
 {
     protected static string $name;

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/ValueResolver/EntityValueResolverTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\ValueResolver;
@@ -20,10 +19,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
 use function iterator_to_array;
 
-/**
- * @package App\Tests\Integration\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class EntityValueResolverTest extends KernelTestCase
 {
     public function testThatSupportsReturnFalseWithNotSupportedRequestParameterType(): void

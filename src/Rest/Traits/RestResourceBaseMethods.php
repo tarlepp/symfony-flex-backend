@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/RestResourceBaseMethods.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits;
@@ -17,8 +16,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
 
 /**
- * @package App\Rest\Traits
- *
  * @template TEntity of EntityInterface
  * @psalm-import-type CriteriaValue from RestResourceInterface
  */
@@ -27,7 +24,7 @@ trait RestResourceBaseMethods
     use RestResourceLifeCycles;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return array<int, TEntity>
      */
@@ -51,13 +48,14 @@ trait RestResourceBaseMethods
          *
          * @psalm-var array<string, array<int, string>|string> $search
          */
-        $entities = $this->getRepository()->findByAdvanced(
-            $criteria,
-            $this->normalizeOrderBy($orderBy),
-            $limit,
-            $offset,
-            $search,
-        );
+        $entities = $this->getRepository()
+            ->findByAdvanced(
+                $criteria,
+                $this->normalizeOrderBy($orderBy),
+                $limit,
+                $offset,
+                $search,
+            );
 
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
@@ -81,7 +79,8 @@ trait RestResourceBaseMethods
         $this->beforeFindOne($id);
 
         /** @var TEntity|null $entity */
-        $entity = $this->getRepository()->findAdvanced($id);
+        $entity = $this->getRepository()
+            ->findAdvanced($id);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
@@ -119,7 +118,8 @@ trait RestResourceBaseMethods
          * @psalm-var array<string, CriteriaValue> $criteria
          * @psalm-var array<string, 'ASC'|'asc'|'DESC'|'desc'> $orderBy
          */
-        $entity = $this->getRepository()->findOneBy($this->normalizeCriteria($criteria), $orderBy);
+        $entity = $this->getRepository()
+            ->findOneBy($this->normalizeCriteria($criteria), $orderBy);
 
         $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
@@ -138,7 +138,8 @@ trait RestResourceBaseMethods
         $this->beforeCount($criteria, $search);
 
         /** @psalm-var array<string, array<int, string>|string> $search */
-        $count = $this->getRepository()->countAdvanced($criteria, $search);
+        $count = $this->getRepository()
+            ->countAdvanced($criteria, $search);
 
         // After callback method call
         $this->afterCount($criteria, $search, $count);
@@ -260,7 +261,8 @@ trait RestResourceBaseMethods
         $this->beforeDelete($id, $entity);
 
         // And remove entity from repo
-        $this->getRepository()->remove($entity, $flush);
+        $this->getRepository()
+            ->remove($entity, $flush);
 
         // After callback method call
         $this->afterDelete($id, $entity);
@@ -269,7 +271,7 @@ trait RestResourceBaseMethods
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return array<int, string>
      */
@@ -283,7 +285,8 @@ trait RestResourceBaseMethods
 
         // Fetch data
         /** @psalm-var array<string, array<int, string>|string> $search */
-        $ids = $this->getRepository()->findIds($criteria, $search);
+        $ids = $this->getRepository()
+            ->findIds($criteria, $search);
 
         // After callback method call
         $this->afterIds($criteria, $search, $ids);
@@ -307,7 +310,8 @@ trait RestResourceBaseMethods
         $this->validateEntity($entity, $skipValidation);
 
         // Persist on database
-        $this->getRepository()->save($entity, $flush);
+        $this->getRepository()
+            ->save($entity, $flush);
 
         // After callback method call
         $this->afterSave($entity);
@@ -341,7 +345,8 @@ trait RestResourceBaseMethods
      */
     protected function getEntity(string $id): EntityInterface
     {
-        $entity = $this->getRepository()->find($id);
+        $entity = $this->getRepository()
+            ->find($id);
 
         if ($entity === null) {
             throw new NotFoundHttpException('Not found');
@@ -358,7 +363,8 @@ trait RestResourceBaseMethods
     private function validateDto(RestDtoInterface $dto, bool $skipValidation): void
     {
         /** @var ConstraintViolationListInterface|null $errors */
-        $errors = $skipValidation ? null : $this->getValidator()->validate($dto);
+        $errors = $skipValidation ? null : $this->getValidator()
+            ->validate($dto);
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
@@ -373,7 +379,8 @@ trait RestResourceBaseMethods
      */
     private function validateEntity(EntityInterface $entity, bool $skipValidation): void
     {
-        $errors = $skipValidation ? null : $this->getValidator()->validate($entity);
+        $errors = $skipValidation ? null : $this->getValidator()
+            ->validate($entity);
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
@@ -387,7 +394,8 @@ trait RestResourceBaseMethods
     private function createEntity(): EntityInterface
     {
         /** @var class-string<TEntity> $entityClass */
-        $entityClass = $this->getRepository()->getEntityName();
+        $entityClass = $this->getRepository()
+            ->getEntityName();
 
         return new $entityClass();
     }

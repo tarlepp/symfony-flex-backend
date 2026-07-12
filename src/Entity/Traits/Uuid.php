@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/Traits/Uuid.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -11,10 +10,6 @@ namespace App\Entity\Traits;
 use App\Rest\UuidHelper;
 use Ramsey\Uuid\UuidInterface;
 
-/**
- * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait Uuid
 {
     public function getUuid(): UuidInterface

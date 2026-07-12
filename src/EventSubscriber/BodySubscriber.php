@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/BodySubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -17,14 +16,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use function in_array;
 use function is_array;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class BodySubscriber implements EventSubscriberInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     public static function getSubscribedEvents(): array

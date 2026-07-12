@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/BaseRepository.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -26,9 +25,6 @@ use function sha1;
 use function spl_object_hash;
 
 /**
- * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template TEntity of EntityInterface
  * @implements BaseRepositoryInterface<TEntity>
  */
@@ -105,10 +101,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $flush ??= true;
 
         // Persist on database
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
 
         return $this;
@@ -120,10 +118,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $flush ??= true;
 
         // Remove from database
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
 
         return $this;

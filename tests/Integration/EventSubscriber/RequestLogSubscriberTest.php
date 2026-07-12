@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/RequestLogSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -25,10 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestLogSubscriberTest extends KernelTestCase
 {
     /**

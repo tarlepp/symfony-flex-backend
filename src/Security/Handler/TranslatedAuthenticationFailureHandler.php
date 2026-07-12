@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/Handler/TranslatedAuthenticationFailureHandler.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Handler;
@@ -18,10 +17,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @package App\Security\Handler
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandler
 {
     public function __construct(
@@ -32,7 +27,7 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @see https://github.com/lexik/LexikJWTAuthenticationBundle/issues/944
      *

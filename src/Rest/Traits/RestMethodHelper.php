@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/RestMethodHelper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits;
@@ -29,10 +28,6 @@ use function is_array;
 use function is_int;
 use function sprintf;
 
-/**
- * @package App\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait RestMethodHelper
 {
     use RestMethodProcessCriteria;
@@ -48,7 +43,8 @@ trait RestMethodHelper
     {
         $dtoClass = $method !== null && array_key_exists($method, static::$dtoClasses)
             ? static::$dtoClasses[$method]
-            : $this->getResource()->getDtoClass();
+            : $this->getResource()
+                ->getDtoClass();
 
         $interfaces = class_implements($dtoClass);
 
@@ -117,15 +113,18 @@ trait RestMethodHelper
     private function detachEntityFromManager(string $id): void
     {
         $currentResource = $this->getResource();
-        $entityManager = $currentResource->getRepository()->getEntityManager();
+        $entityManager = $currentResource->getRepository()
+            ->getEntityManager();
 
         // Fetch entity
-        $entity = $currentResource->getRepository()->find($id);
+        $entity = $currentResource->getRepository()
+            ->find($id);
 
         // Detach entity from manager if it's been managed by it
         if ($entity !== null
             /* @scrutinizer ignore-call */
-            && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
+            && $entityManager->getUnitOfWork()
+                ->getEntityState($entity) === UnitOfWork::STATE_MANAGED
         ) {
             $entityManager->clear();
         }

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Decorator/StopwatchDecoratorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Decorator;
@@ -24,10 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 
-/**
- * @package App\Tests\Decorator\Service
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class StopwatchDecoratorTest extends KernelTestCase
 {
     /**
@@ -156,7 +151,8 @@ final class StopwatchDecoratorTest extends KernelTestCase
 
         /** @var ApiKeyResource $decoratedService */
         $decoratedService = $decorator->decorate($resource);
-        $decoratedService->getRepository()->getEntityManager();
+        $decoratedService->getRepository()
+            ->getEntityManager();
     }
 
     /**

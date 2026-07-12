@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/Actions/Logged/PatchAction.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Logged;
@@ -22,9 +21,6 @@ use Throwable;
  * Trait to add 'patchAction' for REST controllers for 'ROLE_LOGGED' users.
  *
  * @see \App\Rest\Traits\Methods\PatchMethod for detailed documents.
- *
- * @package App\Rest\Traits\Actions\Root
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait PatchAction
 {

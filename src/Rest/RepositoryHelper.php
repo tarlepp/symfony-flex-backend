@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/RepositoryHelper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -27,10 +26,6 @@ use function strcmp;
 use function strtolower;
 use function syslog;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class RepositoryHelper
 {
     /**
@@ -248,7 +243,7 @@ class RepositoryHelper
      */
     private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
     {
-        $iterator = static function (array $comparison, string | int $key) use ($queryBuilder, $expression): void {
+        $iterator = static function (array $comparison, string|int $key) use ($queryBuilder, $expression): void {
             $expressionAnd = ($key === 'and' || array_key_exists('and', $comparison));
             $expressionOr = ($key === 'or' || array_key_exists('or', $comparison));
 
@@ -295,7 +290,7 @@ class RepositoryHelper
      *
      * @return array{0: string, 1: string, 2: string|array<int, string>}
      */
-    private static function createCriteria(string $column, string | array $value): array
+    private static function createCriteria(string $column, string|array $value): array
     {
         if (!str_contains($column, '.')) {
             $column = 'entity.' . $column;
@@ -370,9 +365,10 @@ class RepositoryHelper
             }
 
             $parameters[] = array_map(
-                static fn (string $value): Literal => $queryBuilder->expr()->literal(
-                    is_numeric($value) ? (int)$value : $value
-                ),
+                static fn (string $value): Literal => $queryBuilder->expr()
+                    ->literal(
+                        is_numeric($value) ? (int)$value : $value
+                    ),
                 $value
             );
         }
@@ -385,7 +381,7 @@ class RepositoryHelper
      */
     private static function getIterator(array &$condition): Closure
     {
-        return static function (string | array $value, string $column) use (&$condition): void {
+        return static function (string|array $value, string $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;

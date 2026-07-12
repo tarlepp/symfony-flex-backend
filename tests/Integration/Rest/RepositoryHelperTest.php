@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/RepositoryHelperTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest;
@@ -17,10 +16,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RepositoryHelperTest extends KernelTestCase
 {
     /**
@@ -33,7 +28,8 @@ final class RepositoryHelperTest extends KernelTestCase
     #[TestDox('Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input')]
     public function testThatProcessCriteriaWorksAsExpected(string $expected, StringableArrayObject $input): void
     {
-        $qb = $this->getRepository()->createQueryBuilder('entity');
+        $qb = $this->getRepository()
+            ->createQueryBuilder('entity');
 
         RepositoryHelper::processCriteria($qb, $input->getArrayCopy());
 
@@ -48,7 +44,8 @@ final class RepositoryHelperTest extends KernelTestCase
     #[TestDox("Test that `processCriteria` method call doesn't change DQL with empty `criteria` parameter")]
     public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
     {
-        $qb = $this->getRepository()->createQueryBuilder('entity');
+        $qb = $this->getRepository()
+            ->createQueryBuilder('entity');
 
         RepositoryHelper::processCriteria($qb, []);
 
@@ -66,7 +63,8 @@ DQL;
     #[TestDox("Test that `processSearchTerms` method call doesn't change DQL with empty `columns` parameter")]
     public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
     {
-        $qb = $this->getRepository()->createQueryBuilder('entity');
+        $qb = $this->getRepository()
+            ->createQueryBuilder('entity');
 
         RepositoryHelper::processSearchTerms(
             $qb,
@@ -98,7 +96,8 @@ DQL;
         string $expected,
         StringableArrayObject $terms
     ): void {
-        $qb = $this->getRepository()->createQueryBuilder('entity');
+        $qb = $this->getRepository()
+            ->createQueryBuilder('entity');
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
         RepositoryHelper::processSearchTerms($qb, $this->getRepository()->getSearchColumns(), $terms->getArrayCopy());
@@ -118,7 +117,8 @@ DQL;
     #[TestDox('Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input')]
     public function testThatProcessOrderByWorksLikeExpected(string $expected, StringableArrayObject $input): void
     {
-        $qb = $this->getRepository()->createQueryBuilder('entity');
+        $qb = $this->getRepository()
+            ->createQueryBuilder('entity');
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
         RepositoryHelper::processOrderBy($qb, $input->getArrayCopy());
@@ -134,8 +134,10 @@ DQL;
     #[TestDox("Test that `getExpression` method doesn't modify expression with empty `criteria` parameter")]
     public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
     {
-        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
-        $expression = $queryBuilder->expr()->andX();
+        $queryBuilder = $this->getRepository()
+            ->createQueryBuilder('entity');
+        $expression = $queryBuilder->expr()
+            ->andX();
 
         $output = RepositoryHelper::getExpression($queryBuilder, $expression, []);
 
@@ -159,8 +161,10 @@ DQL;
         string $dql,
         StringableArrayObject $params
     ): void {
-        $queryBuilder = $this->getRepository()->createQueryBuilder('u');
-        $expression = $queryBuilder->expr()->andX();
+        $queryBuilder = $this->getRepository()
+            ->createQueryBuilder('u');
+        $expression = $queryBuilder->expr()
+            ->andX();
 
         $queryBuilder->andWhere(
             RepositoryHelper::getExpression($queryBuilder, $expression, [$criteria->getArrayCopy()])
