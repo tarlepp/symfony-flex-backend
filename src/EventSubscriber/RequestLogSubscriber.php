@@ -63,7 +63,8 @@ class RequestLogSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
-        $filter = static fn (string $route): bool => str_contains($route, '/*') && str_contains($path, substr($route, 0, -2));
+        $filter = static fn (string $route): bool => str_contains($route, '/*')
+            && str_contains($path, substr($route, 0, -2));
 
         // We don't want to log OPTIONS requests, /_profiler* -path, ignored routes and wildcard ignored routes
         if ($request->getRealMethod() === Request::METHOD_OPTIONS

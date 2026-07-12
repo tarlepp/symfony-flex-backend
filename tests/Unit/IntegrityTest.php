@@ -396,7 +396,8 @@ FORMAT;
         $repositoryMethods = [];
 
         $filter = static function (ReflectionClass $reflectionClass) use (&$repositoryMethods): bool {
-            $filter = static fn (ReflectionMethod $method): bool => $method->class === $reflectionClass->getName() && !$method->isConstructor();
+            $filter = static fn (ReflectionMethod $method): bool
+                => $method->class === $reflectionClass->getName() && !$method->isConstructor();
             $formatter = static fn (ReflectionMethod $method): string => $method->getName();
 
             $methods = array_values(array_filter($reflectionClass->getMethods(), $filter));
@@ -634,7 +635,8 @@ FORMAT;
         $folder = self::getKernel()->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
-        $filter = static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
+        $filter = static fn (ReflectionClass $reflectionClass): bool
+            => !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
 
         return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }

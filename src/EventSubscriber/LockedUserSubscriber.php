@@ -94,7 +94,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
     {
         return match (true) {
             is_string($user) => $this->userRepository->loadUserByIdentifier($user, false),
-            $user instanceof SecurityUser => $this->userRepository->loadUserByIdentifier($user->getUserIdentifier(), true),
+            $user instanceof SecurityUser => $this->userRepository->loadUserByIdentifier(
+                $user->getUserIdentifier(),
+                true,
+            ),
             default => null,
         };
     }

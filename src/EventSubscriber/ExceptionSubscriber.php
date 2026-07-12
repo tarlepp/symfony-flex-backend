@@ -172,7 +172,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
             ? Response::HTTP_FORBIDDEN
             : Response::HTTP_UNAUTHORIZED;
 
-        $clientException = static fn (HttpExceptionInterface|ClientErrorInterface|Throwable $exception): int => $exception instanceof HttpExceptionInterface || $exception instanceof ClientErrorInterface
+        $clientException = static fn (HttpExceptionInterface|ClientErrorInterface|Throwable $exception): int
+            => $exception instanceof HttpExceptionInterface || $exception instanceof ClientErrorInterface
                 ? $exception->getStatusCode()
                 : (int)$exception->getCode();
 

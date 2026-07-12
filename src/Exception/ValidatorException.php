@@ -28,7 +28,10 @@ class ValidatorException extends BaseValidatorException implements ClientErrorIn
         parent::__construct(
             JSON::encode(
                 array_map(
-                    static fn (ConstraintViolationInterface $error): ValidatorError => new ValidatorError($error, $target),
+                    static fn (ConstraintViolationInterface $error): ValidatorError => new ValidatorError(
+                        $error,
+                        $target,
+                    ),
                     iterator_to_array($errors),
                 ),
             ),
