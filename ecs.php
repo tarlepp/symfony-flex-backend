@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /ecs.php
  *
@@ -20,8 +20,8 @@ use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
-use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
+use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use Symplify\CodingStandard\Fixer\Annotation\RemovePropertyVariableNameDescriptionFixer;
 use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
