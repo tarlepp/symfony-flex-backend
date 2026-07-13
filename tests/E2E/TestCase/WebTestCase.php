@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/TestCase/WebTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\TestCase;
@@ -17,10 +16,6 @@ use function gc_collect_cycles;
 use function gc_enable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class WebTestCase extends BaseWebTestCase
 {
     /**

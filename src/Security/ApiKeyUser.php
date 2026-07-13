@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/ApiKeyUser.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -15,10 +14,6 @@ use Override;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function array_unique;
 
-/**
- * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
     /**
@@ -33,7 +28,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     private readonly array $roles;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __construct(ApiKey $apiKey, array $roles)
     {

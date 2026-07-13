@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/UserTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -19,9 +18,6 @@ use function serialize;
 use function unserialize;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method User getEntity()
  */
 final class UserTest extends EntityTestCase
@@ -111,8 +107,10 @@ final class UserTest extends EntityTestCase
     #[TestDox('Test that `getRoles` method returns expected roles')]
     public function testThatGetRolesReturnsExpectedRoles(): void
     {
-        $group = new UserGroup()->setRole(new Role('ROLE_ROOT'));
-        $user = new User()->addUserGroup($group);
+        $group = new UserGroup()
+            ->setRole(new Role('ROLE_ROOT'));
+        $user = new User()
+            ->addUserGroup($group);
 
         self::assertSame(['ROLE_ROOT'], $user->getRoles());
     }

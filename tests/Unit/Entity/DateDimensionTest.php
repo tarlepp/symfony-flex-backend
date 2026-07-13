@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Entity/DateDimensionTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Entity;
@@ -16,10 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function floor;
 
-/**
- * @package App\Tests\Unit\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class DateDimensionTest extends KernelTestCase
 {
     /**
@@ -28,7 +23,8 @@ final class DateDimensionTest extends KernelTestCase
     public function testThatConstructorCallsExpectedMethods(): void
     {
         $dateTime = DateTimeImmutable::createFromMutable(
-            new DateTime('now', new DateTimeZone('UTC'))->setTime(10, 10, 10)
+            new DateTime('now', new DateTimeZone('UTC'))
+                ->setTime(10, 10, 10)
         );
 
         $entity = new DateDimension($dateTime);

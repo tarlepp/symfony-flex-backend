@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/DtoTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -32,10 +31,6 @@ use function sprintf;
 use function str_contains;
 use function ucfirst;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class DtoTestCase extends KernelTestCase
 {
     /**
@@ -254,12 +249,13 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($dtoClass);
         $dto = new $dtoClass();
 
-        $filter = static fn (ReflectionProperty $reflectionProperty): bool =>
-            !$reflectionProperty->isStatic()
+        $filter = static fn (ReflectionProperty $reflectionProperty): bool => !$reflectionProperty->isStatic()
             && !$reflectionProperty->isPrivate()
             && (
-                $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                || $reflectionProperty->getDeclaringClass()->isInstance($dto)
+                $dtoClass === $reflectionProperty->getDeclaringClass()
+                    ->getName()
+                || $reflectionProperty->getDeclaringClass()
+                    ->isInstance($dto)
             );
 
         return array_filter($dtoReflection->getProperties(), $filter);

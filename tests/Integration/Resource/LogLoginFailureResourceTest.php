@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Resource/LogLoginFailureResourceTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
@@ -19,10 +18,6 @@ use App\Tests\Integration\TestCase\ResourceTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LogLoginFailureResourceTest extends ResourceTestCase
 {
     /**
@@ -47,7 +42,8 @@ final class LogLoginFailureResourceTest extends ResourceTestCase
     {
         $repository = $this->getRepository();
 
-        $user = new User()->setUsername('username');
+        $user = new User()
+            ->setUsername('username');
 
         $repository
             ->expects($this->once())
@@ -55,7 +51,8 @@ final class LogLoginFailureResourceTest extends ResourceTestCase
             ->with($user)
             ->willReturn(0);
 
-        new LogLoginFailureResource($repository)->reset($user);
+        new LogLoginFailureResource($repository)
+            ->reset($user);
     }
 
     /**

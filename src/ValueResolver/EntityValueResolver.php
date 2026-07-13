@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/ValueResolver/EntityValueResolver.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\ValueResolver;
@@ -37,9 +36,6 @@ use function Symfony\Component\String\u;
  *
  * Only thing that you need check is that parameter in your `path` definition matches with
  * method argument name.
- *
- * @package App\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EntityValueResolver implements ValueResolverInterface
 {
@@ -69,7 +65,9 @@ class EntityValueResolver implements ValueResolverInterface
 
         return is_string($this->getUuid($argument, $request))
             && is_subclass_of((string)$argument->getType(), EntityInterface::class, true)
-            && $argument->getName() === u($entity)->camel()->toString()
+            && $argument->getName() === u($entity)
+                ->camel()
+                ->toString()
             && $this->resourceCollection->hasEntityResource($argument->getType());
     }
 

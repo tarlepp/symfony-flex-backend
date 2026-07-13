@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/Provider/SecurityUserFactory.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Provider;
@@ -21,9 +20,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Throwable;
 
 /**
- * @package App\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template-implements UserProviderInterface<SecurityUser>
  */
 class SecurityUserFactory implements UserProviderInterface

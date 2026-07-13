@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/AutoMapper/GenericRestRequestMapperTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\AutoMapper;
@@ -22,10 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class GenericRestRequestMapperTest extends KernelTestCase
 {
     /**
@@ -39,7 +34,8 @@ final class GenericRestRequestMapperTest extends KernelTestCase
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        new RequestMapper($resource)->mapToObject([], new stdClass());
+        new RequestMapper($resource)
+            ->mapToObject([], new stdClass());
     }
 
     /**
@@ -53,7 +49,8 @@ final class GenericRestRequestMapperTest extends KernelTestCase
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        new RequestMapper($resource)->mapToObject(new stdClass(), new stdClass());
+        new RequestMapper($resource)
+            ->mapToObject(new stdClass(), new stdClass());
     }
 
     /**
@@ -69,7 +66,8 @@ final class GenericRestRequestMapperTest extends KernelTestCase
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
-        new RequestMapper($resource)->mapToObject(new Request(), new stdClass());
+        new RequestMapper($resource)
+            ->mapToObject(new Request(), new stdClass());
     }
 
     /**
@@ -84,10 +82,11 @@ final class GenericRestRequestMapperTest extends KernelTestCase
         );
 
         /** @psalm-suppress MixedArgument */
-        new TestRestRequestMapperWithoutProperties()->mapToObject(
-            new Request(),
-            $this->getMockBuilder(RestDtoInterface::class)->getMock()
-        );
+        new TestRestRequestMapperWithoutProperties()
+            ->mapToObject(
+                new Request(),
+                $this->getMockBuilder(RestDtoInterface::class)->getMock()
+            );
     }
 
     /**
@@ -102,7 +101,8 @@ final class GenericRestRequestMapperTest extends KernelTestCase
         ]);
 
         /** @var TestRestRequestMapperDto $transformedObject */
-        $transformedObject = new TestRestRequestMapper()->mapToObject($request, new TestRestRequestMapperDto());
+        $transformedObject = new TestRestRequestMapper()
+            ->mapToObject($request, new TestRestRequestMapperDto());
 
         self::assertSame('someValue', $transformedObject->getSomeProperty());
         self::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());

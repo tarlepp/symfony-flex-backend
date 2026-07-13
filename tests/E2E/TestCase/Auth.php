@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/TestCase/Auth.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\TestCase;
@@ -27,10 +26,6 @@ use function str_pad;
 use function sys_get_temp_dir;
 use const DIRECTORY_SEPARATOR;
 
-/**
- * @package App\Tests\E2E\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class Auth
 {
     public function __construct(
@@ -121,7 +116,8 @@ final class Auth
         // User + password doesn't exist on cache - so we need to make real login
         if (!array_key_exists($hash, $cache)) {
             /** @var KernelBrowser $client */
-            $client = $this->kernel->getContainer()->get('test.client');
+            $client = $this->kernel->getContainer()
+                ->get('test.client');
 
             // Create request to make login using given credentials
             $client->request(

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/RequestHandler.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -29,10 +28,6 @@ use function mb_strtoupper;
 use function mb_substr;
 use function str_starts_with;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestHandler
 {
     /**
@@ -214,7 +209,7 @@ final class RequestHandler
             self::checkSearchTerms($searchTerms);
 
             /** @var array<string, array<int, string>> $searchTerms */
-        } catch (JsonException | LogicException) {
+        } catch (JsonException|LogicException) {
             $searchTerms = null;
         }
 
@@ -261,7 +256,7 @@ final class RequestHandler
      */
     private static function getIterator(array &$output): Closure
     {
-        return static function (string $value, string | int $key) use (&$output): void {
+        return static function (string $value, string|int $key) use (&$output): void {
             $order = in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
             $column = is_string($key) ? $key : $value;
 

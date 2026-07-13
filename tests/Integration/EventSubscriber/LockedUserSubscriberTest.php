@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/LockedUserSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -30,10 +29,6 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function range;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LockedUserSubscriberTest extends KernelTestCase
 {
     /**
@@ -49,7 +44,8 @@ final class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
@@ -127,7 +123,8 @@ final class LockedUserSubscriberTest extends KernelTestCase
     {
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());

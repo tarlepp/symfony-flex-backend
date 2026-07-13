@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Rest/src/Controller/ControllerForLifeCycleTests.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\src\Controller;
@@ -20,10 +19,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Throwable;
 
-/**
- * @package App\Tests\E2E\Rest\src\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[Route(
     path: '/test_lifecycle_behaviour',
 )]

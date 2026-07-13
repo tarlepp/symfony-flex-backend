@@ -1,19 +1,14 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/Interfaces/RolesServiceInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Interfaces;
 
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-/**
- * @package Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 interface RolesServiceInterface
 {
     public function __construct(RoleHierarchyInterface $roleHierarchy);

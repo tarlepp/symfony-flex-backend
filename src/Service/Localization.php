@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Service/Localization.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Service;
@@ -23,10 +22,6 @@ use function floor;
 use function in_array;
 use function str_replace;
 
-/**
- * @package App\Service
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 readonly class Localization
 {
     final public const string DEFAULT_TIMEZONE = 'Europe/Helsinki';

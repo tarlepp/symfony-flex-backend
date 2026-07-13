@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/ResponseHandlerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Tests\Integration\Rest;
@@ -24,10 +23,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- */
 final class ResponseHandlerTest extends KernelTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
@@ -53,7 +48,8 @@ final class ResponseHandlerTest extends KernelTestCase
         $serializer = self::getContainer()->get(SerializerInterface::class);
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
-        $httpResponse = new ResponseHandler($serializer)->createResponse($request, $data, $stubResourceService, 200);
+        $httpResponse = new ResponseHandler($serializer)
+            ->createResponse($request, $data, $stubResourceService, 200);
 
         self::assertSame($expectedContent, $httpResponse->getContent());
     }
@@ -154,7 +150,8 @@ final class ResponseHandlerTest extends KernelTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        new ResponseHandler($serializer)->handleFormError($formInterface);
+        new ResponseHandler($serializer)
+            ->handleFormError($formInterface);
     }
 
     /**
@@ -193,7 +190,8 @@ final class ResponseHandlerTest extends KernelTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        new ResponseHandler($serializer)->handleFormError($formInterface);
+        new ResponseHandler($serializer)
+            ->handleFormError($formInterface);
     }
 
     /**
@@ -214,7 +212,8 @@ final class ResponseHandlerTest extends KernelTestCase
             ],
         );
 
-        $output = new ResponseHandler($serializer)->getSerializeContext($request, $resource);
+        $output = new ResponseHandler($serializer)
+            ->getSerializeContext($request, $resource);
 
         $expectedContext = [
             'groups' => [
@@ -247,7 +246,8 @@ final class ResponseHandlerTest extends KernelTestCase
             ],
         );
 
-        $output = new ResponseHandler($serializer)->getSerializeContext($request, $resource);
+        $output = new ResponseHandler($serializer)
+            ->getSerializeContext($request, $resource);
 
         $expectedContext = [
             'groups' => [

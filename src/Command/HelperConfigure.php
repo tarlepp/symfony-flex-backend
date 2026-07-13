@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/HelperConfigure.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command;
@@ -27,9 +26,6 @@ use function array_map;
  *      suggestedValues?: array<array-key, mixed>
  *           |Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion>,
  *  }
- *
- * @package App\Command
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class HelperConfigure
 {

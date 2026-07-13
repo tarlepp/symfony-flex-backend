@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/User/DetachUserGroupControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\User;
@@ -19,10 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class DetachUserGroupControllerTest extends KernelTestCase
 {
     /**
@@ -35,8 +30,10 @@ final class DetachUserGroupControllerTest extends KernelTestCase
         $userGroupResource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
 
-        $userGroup = new UserGroup()->setRole(new Role('role'));
-        $user = new User()->addUserGroup($userGroup);
+        $userGroup = new UserGroup()
+            ->setRole(new Role('role'));
+        $user = new User()
+            ->addUserGroup($userGroup);
 
         $userResource
             ->expects($this->once())
@@ -58,12 +55,14 @@ final class DetachUserGroupControllerTest extends KernelTestCase
         new DetachUserGroupController($userResource, $userGroupResource, $serializer)($user, $userGroup);
 
         self::assertFalse(
-            $user->getUserGroups()->contains($userGroup),
+            $user->getUserGroups()
+                ->contains($userGroup),
             'Expected user group was not removed from user entity',
         );
 
         self::assertFalse(
-            $userGroup->getUsers()->contains($user),
+            $userGroup->getUsers()
+                ->contains($user),
             'Expected user was not removed from user group entity',
         );
     }

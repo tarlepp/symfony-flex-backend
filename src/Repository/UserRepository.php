@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/UserRepository.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -18,9 +17,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use function array_key_exists;
 
 /**
- * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @extends BaseRepository<Entity>
  * @codingStandardsIgnoreStart
  *
@@ -149,6 +145,7 @@ class UserRepository extends BaseRepository
                 ->setParameter('id', $id, UuidHelper::getType($id));
         }
 
-        return $query->getQuery()->getOneOrNullResult() === null;
+        return $query->getQuery()
+            ->getOneOrNullResult() === null;
     }
 }

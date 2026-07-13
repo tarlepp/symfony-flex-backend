@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/Actions/Authenticated/UpdateAction.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Authenticated;
@@ -22,9 +21,6 @@ use Throwable;
  * Trait to add 'updateAction' for REST controllers for authenticated users.
  *
  * @see \App\Rest\Traits\Methods\UpdateMethod for detailed documents.
- *
- * @package App\Rest\Traits\Actions\Authenticated
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait UpdateAction
 {

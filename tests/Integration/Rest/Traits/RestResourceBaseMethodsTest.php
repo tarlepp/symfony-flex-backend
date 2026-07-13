@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/Traits/RestResourceBaseMethodsTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits;
@@ -15,10 +14,6 @@ use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @package App\Tests\Integration\Rest\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RestResourceBaseMethodsTest extends TestCase
 {
     #[TestDox('Test that `save` calls lifecycle hooks around repository save in expected order')]

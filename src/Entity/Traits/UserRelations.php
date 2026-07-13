@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/Traits/UserRelations.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -18,10 +17,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-/**
- * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait UserRelations
 {
     /**
@@ -37,7 +32,7 @@ trait UserRelations
     #[Groups([
         'User.userGroups',
     ])]
-    protected Collection | ArrayCollection $userGroups;
+    protected Collection|ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -49,7 +44,7 @@ trait UserRelations
     #[Groups([
         'User.logsRequest',
     ])]
-    protected Collection | ArrayCollection $logsRequest;
+    protected Collection|ArrayCollection $logsRequest;
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
@@ -61,7 +56,7 @@ trait UserRelations
     #[Groups([
         'User.logsLogin',
     ])]
-    protected Collection | ArrayCollection $logsLogin;
+    protected Collection|ArrayCollection $logsLogin;
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
@@ -73,7 +68,7 @@ trait UserRelations
     #[Groups([
         'User.logsLoginFailure',
     ])]
-    protected Collection | ArrayCollection $logsLoginFailure;
+    protected Collection|ArrayCollection $logsLoginFailure;
 
     /**
      * Getter for roles.
@@ -94,7 +89,8 @@ trait UserRelations
     public function getRoles(): array
     {
         return array_map(
-            static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId(),
+            static fn (UserGroup $userGroup): string => $userGroup->getRole()
+                ->getId(),
             $this->userGroups->toArray(),
         );
     }
@@ -104,7 +100,7 @@ trait UserRelations
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection | ArrayCollection
+    public function getUserGroups(): Collection|ArrayCollection
     {
         return $this->userGroups;
     }
@@ -114,7 +110,7 @@ trait UserRelations
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest(): Collection | ArrayCollection
+    public function getLogsRequest(): Collection|ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -124,7 +120,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
-    public function getLogsLogin(): Collection | ArrayCollection
+    public function getLogsLogin(): Collection|ArrayCollection
     {
         return $this->logsLogin;
     }
@@ -134,7 +130,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
-    public function getLogsLoginFailure(): Collection | ArrayCollection
+    public function getLogsLoginFailure(): Collection|ArrayCollection
     {
         return $this->logsLoginFailure;
     }

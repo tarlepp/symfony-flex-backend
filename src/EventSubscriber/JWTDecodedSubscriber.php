@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/JWTDecodedSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -19,10 +18,6 @@ use function array_key_exists;
 use function hash;
 use function implode;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class JWTDecodedSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -32,7 +27,7 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return array<string, string>
      */

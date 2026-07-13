@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/Locale.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -19,9 +18,6 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Annotation
  * @Target({"PROPERTY"})
- *
- * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Locale extends Constraint
@@ -30,7 +26,7 @@ class Locale extends Constraint
     final public const string MESSAGE = 'This locale "{{ locale }}" is not valid.';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @psalm-var array<string, string>
      */

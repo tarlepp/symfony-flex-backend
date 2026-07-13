@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Enum/Role.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Enum;
@@ -13,9 +12,6 @@ use Override;
 
 /**
  * Enum Role
- *
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 enum Role: string implements LabeledEnumInterface
 {

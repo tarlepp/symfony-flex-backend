@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Utils/Tests/StringableArrayObjectTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Utils\Tests;
@@ -14,10 +13,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @package App\Tests\Unit\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class StringableArrayObjectTest extends KernelTestCase
 {
     /**

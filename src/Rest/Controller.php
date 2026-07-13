@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Controller.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -17,10 +16,6 @@ use Override;
 use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class Controller implements ControllerInterface
 {
     use RestActionBase;

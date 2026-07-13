@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/Actions/Logged/IdsAction.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Logged;
@@ -20,9 +19,6 @@ use Throwable;
  * Trait to add 'idsAction' for REST controllers for 'ROLE_LOGGED' users.
  *
  * @see \App\Rest\Traits\Methods\IdsMethod for detailed documents.
- *
- * @package App\Rest\Traits\Actions\Logged
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait IdsAction
 {

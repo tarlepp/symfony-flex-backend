@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/LanguageValidatorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -16,10 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-/**
- * @package App\Tests\Integration\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LanguageValidatorTest extends KernelTestCase
 {
     #[TestDox('Test that `LanguageValidator::validate` method calls expected service methods')]
@@ -56,6 +51,7 @@ final class LanguageValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        new LanguageValidator($localizationMock)->validateInContext('foo', new Language(), $contextMock);
+        new LanguageValidator($localizationMock)
+            ->validateInContext('foo', new Language(), $contextMock);
     }
 }

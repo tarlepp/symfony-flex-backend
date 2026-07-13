@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/AutoMapper/User/RequestMapper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper\User;
@@ -17,10 +16,6 @@ use InvalidArgumentException;
 use Throwable;
 use function array_map;
 
-/**
- * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class RequestMapper extends RestRequestMapper
 {
     /**

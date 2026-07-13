@@ -1,16 +1,13 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/RestResourceLifeCycles.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits;
 
 /**
- * @package App\Rest\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  * @codeCoverageIgnore Pure aggregation trait; all constituent traits are covered through RestResourceBaseMethods
  */
 trait RestResourceLifeCycles

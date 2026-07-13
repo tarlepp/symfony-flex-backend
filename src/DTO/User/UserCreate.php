@@ -1,19 +1,14 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/DTO/User/UserCreate.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @package App\DTO\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class UserCreate extends User
 {
     #[Assert\NotBlank]

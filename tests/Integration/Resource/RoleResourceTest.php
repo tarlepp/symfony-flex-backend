@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Resource/RoleResourceTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
@@ -16,10 +15,6 @@ use App\Resource\RoleResource;
 use App\Rest\RestResource;
 use App\Tests\Integration\TestCase\ResourceTestCase;
 
-/**
- * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RoleResourceTest extends ResourceTestCase
 {
     /**

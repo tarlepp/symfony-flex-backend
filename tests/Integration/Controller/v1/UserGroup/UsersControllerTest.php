@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/UserGroup/UsersControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\UserGroup;
@@ -19,10 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Controller\v1\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UsersControllerTest extends KernelTestCase
 {
     /**
@@ -35,8 +30,10 @@ final class UsersControllerTest extends KernelTestCase
         $responseHandler = $this->getMockBuilder(ResponseHandler::class)->disableOriginalConstructor()->getMock();
 
         $request = new Request();
-        $userGroup = new UserGroup()->setRole(new Role('Some Role'));
-        $user = new User()->addUserGroup($userGroup);
+        $userGroup = new UserGroup()
+            ->setRole(new Role('Some Role'));
+        $user = new User()
+            ->addUserGroup($userGroup);
 
         $userResource
             ->expects($this->once())

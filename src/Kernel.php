@@ -1,5 +1,6 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Kernel.php
  */
@@ -12,9 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
-/**
- * @package App
- */
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;

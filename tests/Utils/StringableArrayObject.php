@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Utils/StringableArrayObject.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Utils;
@@ -20,9 +19,6 @@ use Stringable;
  * extends ArrayObject<array-key, TValue>
  *
  * @psalm-suppress MissingTemplateParam
- *
- * @package App\Tests\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 final class StringableArrayObject extends ArrayObject implements Stringable
 {

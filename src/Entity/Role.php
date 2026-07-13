@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/Role.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -18,10 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Override;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity]
 #[ORM\Table(
     name: 'role',
@@ -60,7 +55,7 @@ class Role implements EntityInterface
     #[Groups([
         'Role.userGroups',
     ])]
-    private Collection | ArrayCollection $userGroups;
+    private Collection|ArrayCollection $userGroups;
 
     /**
      * @param non-empty-string $id
@@ -110,7 +105,7 @@ class Role implements EntityInterface
     /**
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection | ArrayCollection
+    public function getUserGroups(): Collection|ArrayCollection
     {
         return $this->userGroups;
     }

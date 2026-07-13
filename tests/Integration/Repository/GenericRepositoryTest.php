@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Integration/GenericRepositoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Tests\Integration\Repository;
@@ -27,10 +26,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use UnexpectedValueException;
 
-/**
- * @package App\Tests\Integration\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- */
 final class GenericRepositoryTest extends KernelTestCase
 {
     /**
@@ -74,7 +69,8 @@ final class GenericRepositoryTest extends KernelTestCase
     {
         $resource = self::getContainer()->get(ApiKeyResource::class);
 
-        $classMetaData = $resource->getRepository()->getClassMetaData();
+        $classMetaData = $resource->getRepository()
+            ->getClassMetaData();
 
         // @phpstan-ignore staticMethod.alreadyNarrowedType
         self::assertInstanceOf(ClassMetadata::class, $classMetaData);

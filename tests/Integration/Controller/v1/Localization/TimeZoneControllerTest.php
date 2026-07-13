@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/Localization/TimeZoneControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\Localization;
@@ -13,10 +12,6 @@ use App\Service\Localization;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @package App\Tests\Integration\Controller\v1\Localization
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class TimeZoneControllerTest extends KernelTestCase
 {
     #[TestDox('Test that controller calls expected service method(s) and returns expected response')]

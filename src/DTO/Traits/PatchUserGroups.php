@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/DTO/Traits/PatchUserGroups.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\Traits;
@@ -12,10 +11,6 @@ use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\UserGroup as UserGroupEntity;
 use function array_map;
 
-/**
- * @package App\DTO\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait PatchUserGroups
 {
     /**

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Resource/GenericResourceTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
@@ -29,10 +28,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
 
-/**
- * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class GenericResourceTest extends KernelTestCase
 {
     #[TestDox('Test without DTO class `getDtoClass` method call throws an exception')]
@@ -43,7 +38,8 @@ final class GenericResourceTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageMatches('/DTO class not specified for \'.*\' resource/');
 
-        $resource->setDtoClass('')->getDtoClass();
+        $resource->setDtoClass('')
+            ->getDtoClass();
     }
 
     #[TestDox('Test that `getDtoClass` returns expected value when custom DTO is set')]

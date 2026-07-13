@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/LogLoginRepository.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -13,9 +12,6 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @extends BaseRepository<Entity>
  * @codingStandardsIgnoreStart
  *

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Role/InheritedRolesControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Role;
@@ -18,10 +17,6 @@ use function array_search;
 use function array_slice;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Role
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class InheritedRolesControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/role';

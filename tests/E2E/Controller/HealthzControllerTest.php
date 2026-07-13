@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/HealthzControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller;
@@ -13,10 +12,6 @@ use App\Tests\E2E\TestCase\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
-/**
- * @package App\Tests\E2E\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class HealthzControllerTest extends WebTestCase
 {
     /**

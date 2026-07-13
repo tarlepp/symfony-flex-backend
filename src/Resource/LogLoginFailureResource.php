@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Resource/LogLoginFailureResource.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Resource;
@@ -17,9 +16,6 @@ use App\Rest\RestResource;
 use Throwable;
 
 /**
- * @package App\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
  * @extends RestResource<Entity>
  * @codingStandardsIgnoreStart
  *
@@ -51,6 +47,7 @@ class LogLoginFailureResource extends RestResource
      */
     public function reset(User $user): void
     {
-        $this->getRepository()->clear($user);
+        $this->getRepository()
+            ->clear($user);
     }
 }

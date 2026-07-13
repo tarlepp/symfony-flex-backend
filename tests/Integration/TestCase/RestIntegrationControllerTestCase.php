@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/RestIntegrationControllerTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -17,10 +16,6 @@ use function assert;
 use function mb_substr;
 use function sprintf;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class RestIntegrationControllerTestCase extends KernelTestCase
 {
     protected ?Controller $controller = null;

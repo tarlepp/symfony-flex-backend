@@ -1,5 +1,6 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/bootstrap.php
  *
@@ -11,9 +12,6 @@ declare(strict_types = 1);
  *  5) Run migrations to test database
  *  6) Load fixture date to database
  *  7) Write cache files about database initialization
- *
- * @package App\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 use App\Kernel;
@@ -36,7 +34,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
  */
 $InitializeFastestEnvironmentVariables = static function (string $readableChannel): void {
     /**
-     * @var array<string, string> $cache
+     * @var array<string, string>
      */
     static $cache = [];
 
@@ -44,9 +42,10 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
         /**
          * Parse current environment file
          *
-         * @var array<string, string> $variables
+         * @var array<string, string>
          */
-        $variables = new Dotenv()->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
+        $variables = new Dotenv()
+            ->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
 
         /** @var array<string, string> $configuration */
         $configuration = JSON::decode((string)file_get_contents($variables['APPLICATION_CONFIG']), true);
@@ -81,7 +80,7 @@ $InitializeEnvironment = static function (): void {
 
     /**
      * @psalm-suppress MissingFile
-     * @var array<string, string>|null $env
+     * @var array<string, string>|null
      */
     $env = is_readable($localPhpEnvFile) ? include $localPhpEnvFile : null;
 
@@ -96,7 +95,8 @@ $InitializeEnvironment = static function (): void {
     }
 
     // load all the .env files
-    new Dotenv()->loadEnv(dirname(__DIR__) . '/.env');
+    new Dotenv()
+        ->loadEnv(dirname(__DIR__) . '/.env');
 
     /** @noinspection AdditionOperationOnArraysInspection */
     $_SERVER += $_ENV;
@@ -184,7 +184,8 @@ $updateSchemaDoctrineCommand = static function () use ($application): void {
 // can leave the transactionNestingLevel counter in an inconsistent state after DDL
 // statements trigger implicit commits.
 $resetDoctrineState = static function () use ($application): void {
-    $container = $application->getKernel()->getContainer();
+    $container = $application->getKernel()
+        ->getContainer();
 
     /** @var \Doctrine\Persistence\ManagerRegistry $registry */
     $registry = $container->get('doctrine');

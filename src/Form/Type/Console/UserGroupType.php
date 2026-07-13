@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Form/Type/Console/UserGroupType.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Console;
@@ -24,9 +23,6 @@ use Throwable;
 
 /**
  * @extends AbstractType<UserGroup>
- *
- * @package App\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupType extends AbstractType
 {
@@ -57,7 +53,7 @@ class UserGroupType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws Throwable
      */
@@ -79,7 +75,8 @@ class UserGroupType extends AbstractType
                 ],
             );
 
-        $builder->get('role')->addModelTransformer($this->roleTransformer);
+        $builder->get('role')
+            ->addModelTransformer($this->roleTransformer);
     }
 
     #[Override]

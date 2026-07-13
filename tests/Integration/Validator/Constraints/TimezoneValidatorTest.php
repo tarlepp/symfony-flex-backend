@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/TimezoneValidatorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -16,10 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-/**
- * @package App\Tests\Integration\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class TimezoneValidatorTest extends KernelTestCase
 {
     #[TestDox('Test that `TimezoneValidator::validate` method calls expected service methods')]
@@ -56,6 +51,7 @@ final class TimezoneValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        new TimezoneValidator($localizationMock)->validateInContext('foo/bar', new Timezone(), $contextMock);
+        new TimezoneValidator($localizationMock)
+            ->validateInContext('foo/bar', new Timezone(), $contextMock);
     }
 }

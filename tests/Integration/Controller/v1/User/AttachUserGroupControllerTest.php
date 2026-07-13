@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/User/AttachUserGroupControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\User;
@@ -19,10 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class AttachUserGroupControllerTest extends KernelTestCase
 {
     /**
@@ -36,7 +31,8 @@ final class AttachUserGroupControllerTest extends KernelTestCase
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
 
         $user = new User();
-        $userGroup = new UserGroup()->setRole(new Role('role'));
+        $userGroup = new UserGroup()
+            ->setRole(new Role('role'));
 
         $userResource
             ->expects($this->once())
@@ -58,12 +54,14 @@ final class AttachUserGroupControllerTest extends KernelTestCase
         new AttachUserGroupController($userResource, $userGroupResource, $serializer)($user, $userGroup);
 
         self::assertTrue(
-            $user->getUserGroups()->contains($userGroup),
+            $user->getUserGroups()
+                ->contains($userGroup),
             'User entity does not have expected user group',
         );
 
         self::assertTrue(
-            $userGroup->getUsers()->contains($user),
+            $userGroup->getUsers()
+                ->contains($user),
             'UserGroup entity does not have expected user',
         );
     }

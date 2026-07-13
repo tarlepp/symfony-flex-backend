@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/ExceptionSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -31,10 +30,6 @@ use function class_implements;
 use function in_array;
 use function spl_object_hash;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ExceptionSubscriber implements EventSubscriberInterface
 {
     /**
@@ -59,7 +54,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     public static function getSubscribedEvents(): array
@@ -177,8 +172,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
             ? Response::HTTP_FORBIDDEN
             : Response::HTTP_UNAUTHORIZED;
 
-        $clientException = static fn (HttpExceptionInterface|ClientErrorInterface|Throwable $exception): int =>
-            $exception instanceof HttpExceptionInterface || $exception instanceof ClientErrorInterface
+        $clientException = static fn (HttpExceptionInterface|ClientErrorInterface|Throwable $exception): int
+            => $exception instanceof HttpExceptionInterface || $exception instanceof ClientErrorInterface
                 ? $exception->getStatusCode()
                 : (int)$exception->getCode();
 

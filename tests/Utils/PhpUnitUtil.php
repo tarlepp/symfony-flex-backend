@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Utils/PhpUnitUtil.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Utils;
@@ -38,10 +37,6 @@ use function sprintf;
 use function str_contains;
 use function substr_count;
 
-/**
- * @package App\Tests\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class PhpUnitUtil
 {
     final public const string TYPE_INT = 'int';
@@ -154,7 +149,7 @@ final class PhpUnitUtil
             ->getValue($object);
     }
 
-    public static function getType(Type | string | null $type): string
+    public static function getType(Type|string|null $type): string
     {
         $exception = new LogicException(
             sprintf(
@@ -186,7 +181,7 @@ final class PhpUnitUtil
      *
      * @throws ReflectionException
      */
-    public static function setProperty(string $property, UuidInterface | array | null $value, object $object): void
+    public static function setProperty(string $property, UuidInterface|array|null $value, object $object): void
     {
         new ReflectionClass($object::class)
             ->getProperty($property)
@@ -217,7 +212,7 @@ final class PhpUnitUtil
      *
      * @throws Throwable
      */
-    public static function getInvalidValueForType(string $type): DateTime | stdClass | string
+    public static function getInvalidValueForType(string $type): DateTime|stdClass|string
     {
         if ($type !== stdClass::class && substr_count($type, '\\') > 1) {
             $type = self::TYPE_CUSTOM_CLASS;
@@ -231,9 +226,17 @@ final class PhpUnitUtil
             } else {
                 $output = match ($type) {
                     stdClass::class, DateTimeImmutable::class => new DateTime(),
-                    self::TYPE_CUSTOM_CLASS, self::TYPE_INT, self::TYPE_INTEGER, self::TYPE_STRING, self::TYPE_ARRAY,
-                    self::TYPE_BOOL, self::TYPE_BOOLEAN, DateTime::class, 'enumLanguage', 'enumLocale', 'enumLogLogin'
-                        => new stdClass(),
+                    self::TYPE_CUSTOM_CLASS,
+                    self::TYPE_INT,
+                    self::TYPE_INTEGER,
+                    self::TYPE_STRING,
+                    self::TYPE_ARRAY,
+                    self::TYPE_BOOL,
+                    self::TYPE_BOOLEAN,
+                    DateTime::class,
+                    'enumLanguage',
+                    'enumLocale',
+                    'enumLogLogin' => new stdClass(),
                     default => throw new LogicException(
                         sprintf("Cannot create invalid value for type '%s'.", $type),
                     ),

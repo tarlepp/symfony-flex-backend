@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/ResponseSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -13,10 +12,6 @@ use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class ResponseSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -25,7 +20,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     public static function getSubscribedEvents(): array
@@ -44,8 +39,9 @@ class ResponseSubscriber implements EventSubscriberInterface
     public function onKernelResponse(ResponseEvent $event): void
     {
         // Attach new header
-        $event->getResponse()->headers->add([
-            'X-API-VERSION' => $this->version->get(),
-        ]);
+        $event->getResponse()
+            ->headers->add([
+                'X-API-VERSION' => $this->version->get(),
+            ]);
     }
 }

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/Traits/RepositoryWrappersTrait.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Traits;
@@ -17,10 +16,6 @@ use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use UnexpectedValueException;
 use function preg_replace;
 
-/**
- * @package App\Repository\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait RepositoryWrappersTrait
 {
     public function getReference(string $id): ?object
@@ -31,7 +26,8 @@ trait RepositoryWrappersTrait
             $referenceId = $id;
         }
 
-        return $this->getEntityManager()->getReference($this->getEntityName(), $referenceId);
+        return $this->getEntityManager()
+            ->getReference($this->getEntityName(), $referenceId);
     }
 
     /**
@@ -39,7 +35,8 @@ trait RepositoryWrappersTrait
      */
     public function getAssociations(): array
     {
-        return $this->getClassMetaData()->getAssociationMappings();
+        return $this->getClassMetaData()
+            ->getAssociationMappings();
     }
 
     /**
@@ -47,7 +44,8 @@ trait RepositoryWrappersTrait
      */
     public function getClassMetaData(): ClassMetadata
     {
-        return $this->getEntityManager()->getClassMetadata($this->getEntityName());
+        return $this->getEntityManager()
+            ->getClassMetadata($this->getEntityName());
     }
 
     public function getEntityManager(): EntityManager

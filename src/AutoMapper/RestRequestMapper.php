@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/AutoMapper/RestRequestMapper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper;
@@ -23,10 +22,6 @@ use function method_exists;
 use function sprintf;
 use function ucfirst;
 
-/**
- * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class RestRequestMapper implements MapperInterface
 {
     /**
@@ -37,7 +32,7 @@ abstract class RestRequestMapper implements MapperInterface
     protected static array $properties = [];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @psalm-param array<array-key, mixed>|object $source
      * @psalm-param array<int, mixed> $context
@@ -52,7 +47,7 @@ abstract class RestRequestMapper implements MapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @psalm-param array<array-key, mixed>|object $source
      * @psalm-param object $destination
@@ -107,7 +102,8 @@ abstract class RestRequestMapper implements MapperInterface
         foreach ($this->getValidProperties($request) as $property) {
             $setter = 'set' . ucfirst($property);
             $transformer = 'transform' . ucfirst($property);
-            $type = $reflectionClass->getProperty($property)->getType();
+            $type = $reflectionClass->getProperty($property)
+                ->getType();
 
             $value = $type instanceof ReflectionNamedType && $type->getName() === 'array'
                 ? $request->request->all($property)

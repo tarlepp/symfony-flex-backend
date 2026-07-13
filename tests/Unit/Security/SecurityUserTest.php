@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Security/SecurityUserTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Security;
@@ -14,10 +13,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function str_rot13;
 
-/**
- * @package App\Tests\Unit\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class SecurityUserTest extends KernelTestCase
 {
     #[TestDox('Test that `SecurityUser::getRoles` method returns expected roles')]

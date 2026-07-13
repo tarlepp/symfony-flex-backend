@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/User/UserHelper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -18,10 +17,6 @@ use Throwable;
 use function array_map;
 use function sprintf;
 
-/**
- * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class UserHelper
 {
     public function __construct(
@@ -186,7 +181,8 @@ class UserHelper
             'Is this the correct user group [%s - %s (%s)]?',
             $userGroupEntity->getId(),
             $userGroupEntity->getName(),
-            $userGroupEntity->getRole()->getId(),
+            $userGroupEntity->getRole()
+                ->getId(),
         );
 
         return $io->confirm($message, false);

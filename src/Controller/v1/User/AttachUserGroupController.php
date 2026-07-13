@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Controller/v1/User/AttachUserGroupController.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\v1\User;
@@ -27,10 +26,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/**
- * @package App\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsController]
 class AttachUserGroupController
 {
@@ -117,7 +112,8 @@ class AttachUserGroupController
     )]
     public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
-        $status = $user->getUserGroups()->contains($userGroup) ? Response::HTTP_OK : Response::HTTP_CREATED;
+        $status = $user->getUserGroups()
+            ->contains($userGroup) ? Response::HTTP_OK : Response::HTTP_CREATED;
 
         $this->userResource->save($user->addUserGroup($userGroup), false);
         $this->userGroupResource->save($userGroup, true, true);

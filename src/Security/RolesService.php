@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/RolesService.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -18,10 +17,6 @@ use function array_unique;
 use function array_values;
 use function mb_strtolower;
 
-/**
- * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 readonly class RolesService implements RolesServiceInterface
 {
     public function __construct(

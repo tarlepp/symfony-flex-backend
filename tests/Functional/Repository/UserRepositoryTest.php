@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Functional/Repository/UserRepositoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -19,10 +18,6 @@ use function array_fill;
 use function array_map;
 use function count;
 
-/**
- * @package App\Tests\Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserRepositoryTest extends KernelTestCase
 {
     /**
@@ -57,9 +52,10 @@ final class UserRepositoryTest extends KernelTestCase
      */
     public function testThatFindByAdvancedReturnsExpected(): void
     {
-        $users = $this->getRepository()->findByAdvanced([
-            'username' => 'john',
-        ]);
+        $users = $this->getRepository()
+            ->findByAdvanced([
+                'username' => 'john',
+            ]);
 
         self::assertCount(1, $users);
     }
@@ -68,12 +64,13 @@ final class UserRepositoryTest extends KernelTestCase
     {
         self::assertCount(
             5,
-            $this->getRepository()->findIds(
-                [],
-                [
-                    'or' => 'john-',
-                ]
-            )
+            $this->getRepository()
+                ->findIds(
+                    [],
+                    [
+                        'or' => 'john-',
+                    ]
+                )
         );
     }
 
@@ -88,7 +85,8 @@ final class UserRepositoryTest extends KernelTestCase
             $expected ? $user->getId() : null,
         ];
 
-        $users = $this->getRepository()->findAll();
+        $users = $this->getRepository()
+            ->findAll();
 
         $data = [
             ...array_map($iterator, $users, array_fill(0, count($users), true)),
@@ -113,7 +111,8 @@ final class UserRepositoryTest extends KernelTestCase
             $expected ? $user->getId() : null,
         ];
 
-        $users = $this->getRepository()->findAll();
+        $users = $this->getRepository()
+            ->findAll();
 
         $data = [
             ...array_map($iterator, $users, array_fill(0, count($users), true)),

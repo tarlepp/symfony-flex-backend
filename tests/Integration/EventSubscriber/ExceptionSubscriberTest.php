@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/ExceptionSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -43,10 +42,6 @@ use Throwable;
 use function array_keys;
 use function property_exists;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ExceptionSubscriberTest extends KernelTestCase
 {
     /**
@@ -407,7 +402,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: int, 1: Throwable, 2: boolean, 3: string}>
+     * @return Generator<int, array{0: int, 1: Throwable, 2: bool, 3: string}>
      *
      * @throws JsonException
      */

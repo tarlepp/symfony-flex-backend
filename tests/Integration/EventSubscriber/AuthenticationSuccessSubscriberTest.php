@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/AuthenticationSuccessSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -18,10 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class AuthenticationSuccessSubscriberTest extends KernelTestCase
 {
     /**
@@ -29,7 +24,8 @@ final class AuthenticationSuccessSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessMethodCallsExpectedLoggerMethods(): void
     {
-        $userEntity = new User()->setUsername('test_user');
+        $userEntity = new User()
+            ->setUsername('test_user');
         $securityUser = new SecurityUser($userEntity);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 

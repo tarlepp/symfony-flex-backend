@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/AutoMapper/User/RequestMapperTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\AutoMapper\User;
@@ -24,10 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 use function class_exists;
 
-/**
- * @package App\Tests\Integration\AutoMapper\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestMapperTest extends RestRequestMapperTestCase
 {
     /**

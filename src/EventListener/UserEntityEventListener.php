@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventListener/UserEntityEventListener.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventListener;
@@ -15,10 +14,6 @@ use LengthException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use function strlen;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class UserEntityEventListener
 {
     public function __construct(

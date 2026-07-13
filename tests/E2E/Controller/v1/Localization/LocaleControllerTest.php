@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Localization/LocaleControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Localization;
@@ -15,10 +14,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Localization
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LocaleControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/localization/locale';

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/RestRequestMapperTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -19,10 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 use function class_exists;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class RestRequestMapperTestCase extends KernelTestCase
 {
     protected ?RestRequestMapper $mapperObject = null;
@@ -43,7 +38,8 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     {
         self::assertInstanceOf(
             $expectedDto,
-            $this->getRequestMapper()->map(new Request(), $expectedDto),
+            $this->getRequestMapper()
+                ->map(new Request(), $expectedDto),
         );
     }
 
@@ -60,7 +56,8 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
 
         /** @var class-string $expectedDto */
         /** @psalm-suppress MixedMethodCall */
-        $mappedObject = $this->getRequestMapper()->mapToObject(new Request(), new $expectedDto());
+        $mappedObject = $this->getRequestMapper()
+            ->mapToObject(new Request(), new $expectedDto());
         self::assertInstanceOf(
             $expectedDto,
             $mappedObject,

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/User/CreateUserCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -28,9 +27,6 @@ use Throwable;
 
 /**
  * @psalm-import-type TInputOption from HelperConfigure
- *
- * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[AsCommand(
     name: self::NAME,

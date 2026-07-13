@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/ApiKey/ListApiKeysCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -24,10 +23,6 @@ use function array_map;
 use function implode;
 use function sprintf;
 
-/**
- * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: self::NAME,
     description: 'Console command to list API keys',
@@ -96,7 +91,8 @@ class ListApiKeysCommand extends Command
         $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
-            $userGroup->getRole()->getId(),
+            $userGroup->getRole()
+                ->getId(),
         );
 
         return fn (ApiKey $apiToken): array => [

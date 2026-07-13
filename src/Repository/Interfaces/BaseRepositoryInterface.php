@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/Interfaces/BaseRepositoryInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Interfaces;
@@ -24,9 +23,6 @@ use InvalidArgumentException;
 use Throwable;
 
 /**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template-covariant TEntity of EntityInterface
  */
 interface BaseRepositoryInterface
@@ -96,7 +92,7 @@ interface BaseRepositoryInterface
      *
      * @throws NonUniqueResultException
      */
-    public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface;
+    public function findAdvanced(string $id, string|int|null $hydrationMode = null): null|array|EntityInterface;
 
     /**
      * Wrapper for default Doctrine repository findOneBy method.

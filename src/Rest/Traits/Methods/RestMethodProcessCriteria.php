@@ -1,19 +1,14 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/RestMethodProcessCriteria.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Methods;
 
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @package App\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait RestMethodProcessCriteria
 {
     /**

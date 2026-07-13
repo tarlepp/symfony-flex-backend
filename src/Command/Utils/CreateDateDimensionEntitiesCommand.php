@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/Utils/CreateDateDimensionEntitiesCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Utils;
@@ -26,10 +25,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 use function sprintf;
 
-/**
- * @package App\Command\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: 'utils:create-date-dimension-entities',
     description: 'Console command to create `DateDimension` entities.',
@@ -106,7 +101,8 @@ class CreateDateDimensionEntitiesCommand extends Command
 
         $progress = $this->getProgressBar(
             $io,
-            (int)$dateEnd->diff($dateStart)->format('%a') + 1,
+            (int)$dateEnd->diff($dateStart)
+                ->format('%a') + 1,
             sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd),
         );
 

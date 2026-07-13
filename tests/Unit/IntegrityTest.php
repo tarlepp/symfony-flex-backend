@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/IntegrityTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit;
@@ -41,10 +40,6 @@ use function sprintf;
 use function str_replace;
 use const DIRECTORY_SEPARATOR;
 
-/**
- * @package App\Tests\Unit
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class IntegrityTest extends KernelTestCase
 {
     public static function getKernel(): KernelInterface
@@ -401,8 +396,8 @@ FORMAT;
         $repositoryMethods = [];
 
         $filter = static function (ReflectionClass $reflectionClass) use (&$repositoryMethods): bool {
-            $filter = static fn (ReflectionMethod $method): bool =>
-                $method->class === $reflectionClass->getName() && !$method->isConstructor();
+            $filter = static fn (ReflectionMethod $method): bool
+                => $method->class === $reflectionClass->getName() && !$method->isConstructor();
             $formatter = static fn (ReflectionMethod $method): string => $method->getName();
 
             $methods = array_values(array_filter($reflectionClass->getMethods(), $filter));
@@ -640,8 +635,8 @@ FORMAT;
         $folder = self::getKernel()->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
-        $filter = static fn (ReflectionClass $reflectionClass): bool =>
-            !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
+        $filter = static fn (ReflectionClass $reflectionClass): bool
+            => !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
 
         return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
