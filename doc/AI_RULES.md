@@ -5,39 +5,40 @@
 `AI_RULES.md` defines repository-level policy for AI-assisted changes and how
 those expectations map to existing architecture, validation tooling, and CI.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Why this document exists](#why-this-document-exists)
-  * [Rule hierarchy](#rule-hierarchy)
-  * [Scope](#scope)
-  * [Core repository rules](#core-repository-rules)
-    * [1. Follow the current Symfony architecture](#1-follow-the-current-symfony-architecture)
-    * [2. Keep business logic in the right layer](#2-keep-business-logic-in-the-right-layer)
-    * [3. Respect strict PHP and static analysis rules](#3-respect-strict-php-and-static-analysis-rules)
-    * [4. Keep security intact](#4-keep-security-intact)
-    * [5. Keep database changes consistent](#5-keep-database-changes-consistent)
-    * [6. Keep changes small and relevant](#6-keep-changes-small-and-relevant)
-    * [7. Use the running development container for project commands](#7-use-the-running-development-container-for-project-commands)
-    * [8. Keep versioned documentation lightweight](#8-keep-versioned-documentation-lightweight)
-    * [9. Require explicit commit authorization and clear handoff notes](#9-require-explicit-commit-authorization-and-clear-handoff-notes)
-    * [10. Require clarification from the developer when context is missing](#10-require-clarification-from-the-developer-when-context-is-missing)
-    * [11. Keep documentation aligned with code changes](#11-keep-documentation-aligned-with-code-changes)
-  * [Enforcement model](#enforcement-model)
-    * [Documentation-only rules](#documentation-only-rules)
-    * [Automatically enforceable rules](#automatically-enforceable-rules)
-  * [Current validation commands](#current-validation-commands)
-  * [Current CI alignment](#current-ci-alignment)
-  * [Recommended maintenance workflow](#recommended-maintenance-workflow)
-  * [Contributor workflow for AI-assisted changes](#contributor-workflow-for-ai-assisted-changes)
-  * [CI strategy for recurring AI mistakes](#ci-strategy-for-recurring-ai-mistakes)
-    * [Examples of enforceable AI rules for this repository](#examples-of-enforceable-ai-rules-for-this-repository)
-  * [Good rule-writing patterns](#good-rule-writing-patterns)
-  * [Suggested next improvements](#suggested-next-improvements)
-  * [Related files](#related-files)
+    * [Why this document exists](#why-this-document-exists)
+    * [Rule hierarchy](#rule-hierarchy)
+    * [Scope](#scope)
+    * [Core repository rules](#core-repository-rules)
+      * [1. Follow the current Symfony architecture](#1-follow-the-current-symfony-architecture)
+      * [2. Keep business logic in the right layer](#2-keep-business-logic-in-the-right-layer)
+      * [3. Respect strict PHP and static analysis rules](#3-respect-strict-php-and-static-analysis-rules)
+      * [4. Keep security intact](#4-keep-security-intact)
+      * [5. Keep database changes consistent](#5-keep-database-changes-consistent)
+      * [6. Keep changes small and relevant](#6-keep-changes-small-and-relevant)
+      * [7. Use the running development container for project commands](#7-use-the-running-development-container-for-project-commands)
+      * [8. Keep versioned documentation lightweight](#8-keep-versioned-documentation-lightweight)
+      * [9. Require explicit commit authorization and clear handoff notes](#9-require-explicit-commit-authorization-and-clear-handoff-notes)
+      * [10. Require clarification from the developer when context is missing](#10-require-clarification-from-the-developer-when-context-is-missing)
+      * [11. Keep documentation aligned with code changes](#11-keep-documentation-aligned-with-code-changes)
+        * [12. Keep Markdown documentation structure consistent with repository format](#12-keep-markdown-documentation-structure-consistent-with-repository-format)
+    * [Enforcement model](#enforcement-model)
+      * [Documentation-only rules](#documentation-only-rules)
+      * [Automatically enforceable rules](#automatically-enforceable-rules)
+    * [Current validation commands](#current-validation-commands)
+    * [Current CI alignment](#current-ci-alignment)
+    * [Recommended maintenance workflow](#recommended-maintenance-workflow)
+    * [Contributor workflow for AI-assisted changes](#contributor-workflow-for-ai-assisted-changes)
+    * [CI strategy for recurring AI mistakes](#ci-strategy-for-recurring-ai-mistakes)
+      * [Examples of enforceable AI rules for this repository](#examples-of-enforceable-ai-rules-for-this-repository)
+    * [Good rule-writing patterns](#good-rule-writing-patterns)
+    * [Suggested next improvements](#suggested-next-improvements)
+    * [Related files](#related-files)
 
 ## Why this document exists [ᐞ](#table-of-contents)
 
@@ -86,7 +87,7 @@ These rules apply to AI-assisted changes in the repository, including:
 
 <a id="core-repository-rules"></a>
 
-### 1. Follow the current Symfony architecture
+### 1. Follow the current Symfony architecture [ᐞ](#table-of-contents)
 
 <a id="1-follow-the-current-symfony-architecture"></a>
 
@@ -97,7 +98,7 @@ These rules apply to AI-assisted changes in the repository, including:
   directly in API responses.
 * Prefer existing shared building blocks before adding new abstractions.
 
-### 2. Keep business logic in the right layer
+### 2. Keep business logic in the right layer [ᐞ](#table-of-contents)
 
 <a id="2-keep-business-logic-in-the-right-layer"></a>
 
@@ -113,7 +114,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * Use the AutoMapper (`src/AutoMapper/`) for entity-to-DTO and DTO-to-entity
   mapping.
 
-### 3. Respect strict PHP and static analysis rules
+### 3. Respect strict PHP and static analysis rules [ᐞ](#table-of-contents)
 
 <a id="3-respect-strict-php-and-static-analysis-rules"></a>
 
@@ -124,7 +125,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * Keep changes compatible with PHPStan at max level and Psalm.
 * Follow PSR-12 and ECS coding standards.
 
-### 4. Keep security intact
+### 4. Keep security intact [ᐞ](#table-of-contents)
 
 <a id="4-keep-security-intact"></a>
 
@@ -133,7 +134,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * Use DTOs to control what data is exposed in API responses.
 * Never commit secrets, JWT keys, or environment overrides.
 
-### 5. Keep database changes consistent
+### 5. Keep database changes consistent [ᐞ](#table-of-contents)
 
 <a id="5-keep-database-changes-consistent"></a>
 
@@ -141,7 +142,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * Review generated migration files before running them.
 * Validate the database schema with `bin/console doctrine:schema:validate`.
 
-### 6. Keep changes small and relevant
+### 6. Keep changes small and relevant [ᐞ](#table-of-contents)
 
 <a id="6-keep-changes-small-and-relevant"></a>
 
@@ -150,7 +151,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * Preserve public APIs unless the task requires a change.
 * Reuse existing dependencies before proposing new ones.
 
-### 7. Use the running development container for project commands
+### 7. Use the running development container for project commands [ᐞ](#table-of-contents)
 
 <a id="7-use-the-running-development-container-for-project-commands"></a>
 
@@ -171,7 +172,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * Reserve host-level command execution for tasks that genuinely belong to the
   host environment, such as Docker lifecycle or Git operations.
 
-### 8. Keep versioned documentation lightweight
+### 8. Keep versioned documentation lightweight [ᐞ](#table-of-contents)
 
 <a id="8-keep-versioned-documentation-lightweight"></a>
 
@@ -183,7 +184,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * If an exact version matters for a change, read it from the source file rather
   than assuming that a documentation file is current.
 
-### 9. Require explicit commit authorization and clear handoff notes
+### 9. Require explicit commit authorization and clear handoff notes [ᐞ](#table-of-contents)
 
 <a id="9-require-explicit-commit-authorization-and-clear-handoff-notes"></a>
 
@@ -195,7 +196,7 @@ These rules apply to AI-assisted changes in the repository, including:
   following the repository subject pattern `Type(scope): short description`
   (for example `Chore(ops): update AI documentation rules`).
 
-### 10. Require clarification from the developer when context is missing
+### 10. Require clarification from the developer when context is missing [ᐞ](#table-of-contents)
 
 <a id="10-require-clarification-from-the-developer-when-context-is-missing"></a>
 
@@ -208,7 +209,7 @@ These rules apply to AI-assisted changes in the repository, including:
 * If temporary assumptions are unavoidable, state them clearly and ask for
   confirmation in the handoff.
 
-### 11. Keep documentation aligned with code changes
+### 11. Keep documentation aligned with code changes [ᐞ](#table-of-contents)
 
 <a id="11-keep-documentation-aligned-with-code-changes"></a>
 
@@ -220,13 +221,30 @@ These rules apply to AI-assisted changes in the repository, including:
 * If no documentation update is needed, state that explicitly in the handoff
   summary.
 
+### 12. Keep Markdown documentation structure consistent with repository format [ᐞ](#table-of-contents)
+
+<a id="12-keep-markdown-documentation-structure-consistent-with-repository-format"></a>
+
+When adding or updating Markdown docs, follow `README.md` as the format
+baseline:
+
+* Use `# What is this?` as the main title.
+* Add `<a id="what-is-this"></a>` under the main title.
+* Include `## Table of Contents [ᐞ](#table-of-contents)` and
+  `<a id="table-of-contents"></a>`.
+* Keep TOC links aligned with heading anchors and include
+  `[ᐞ](#table-of-contents)` on section headings.
+* End the file with a `Back to previous` link (and `Back to main README.md`
+  where the directory context requires it).
+* Use `*` as the bullet list marker in Markdown lists.
+
 ## Enforcement model [ᐞ](#table-of-contents)
 
 <a id="enforcement-model"></a>
 
 Not all AI rules can be enforced automatically. Use the following model:
 
-### Documentation-only rules
+### Documentation-only rules [ᐞ](#table-of-contents)
 
 <a id="documentation-only-rules"></a>
 
@@ -237,7 +255,7 @@ These are guidance-heavy and should remain concise and stable:
 * keep business logic out of controllers, and
 * reuse existing shared building blocks first.
 
-### Automatically enforceable rules
+### Automatically enforceable rules [ᐞ](#table-of-contents)
 
 <a id="automatically-enforceable-rules"></a>
 
@@ -254,20 +272,22 @@ These should be validated through repository tooling and CI whenever possible:
 
 <a id="current-validation-commands"></a>
 
-From repository root inside the running development container, the main
-validation commands are:
+From repository root inside the running development container, run this
+pre-commit static-analysis and quality suite (aligned with
+`.github/workflows/main.yml` static matrix):
 
 ```bash
+make phpcs
 make ecs
+make phplint
+make php-parallel-lint
 make phpstan
 make psalm
-make run-tests
-```
-
-For Markdown/documentation changes, also run:
-
-```bash
+make phploc
+make phpinsights
+make check-security
 make lint-markdown
+make run-tests
 ```
 
 To auto-fix code style issues:
@@ -276,20 +296,25 @@ To auto-fix code style issues:
 make ecs-fix
 ```
 
+When CI uses GitHub-formatted analyzer targets (`make phpstan-github`,
+`make psalm-github`), use `make phpstan` and `make psalm` locally as equivalent
+pre-commit checks.
+
 ## Current CI alignment [ᐞ](#table-of-contents)
 
 <a id="current-ci-alignment"></a>
 
-At the time of writing, `.github/workflows/main.yml` already includes checks
-for:
+At the time of writing, `.github/workflows/main.yml` includes:
 
-* PHP linting,
-* ECS code style,
-* PHPStan static analysis,
-* Psalm type checking,
-* PHPUnit test suite,
-* Markdown documentation linting, and
-* security vulnerability scanning.
+* `security-check` job: `make check-security` and Symfony security checker,
+* `lint-configuration` job: Composer validation, requirements checker,
+  `make lint-yaml`,
+* `static` matrix job: `make phpcs`, `make ecs`, `make phplint`,
+  `make php-parallel-lint`, `make psalm-github`, `make phpstan-github`,
+  `make phploc`, `make phpinsights`,
+* `lint-documentation` job: `make lint-markdown`,
+* `test` job: `make run-tests-php`, and
+* security-focused jobs such as `gitleaks` and Trivy image scanning.
 
 That means the most effective starting point for AI rules in this repository is
 not more process, but clearer instruction files that map directly to these
@@ -322,7 +347,7 @@ When using AI assistance in this repository, keep the workflow lightweight:
 3. Ask clarifying questions when requirements or constraints are unclear.
 4. Make the smallest change that fits existing Symfony, Doctrine, and project
    patterns.
-5. Run the smallest relevant validation commands for the files you changed
+5. Before commit, run the full CI-aligned static-analysis suite and tests
    inside the running development container.
 6. Do not create commits unless the developer explicitly asks for a commit.
 7. Provide a concise change summary at handoff, including file paths and
@@ -384,7 +409,7 @@ Prefer extending existing jobs in `.github/workflows/main.yml` over creating a
 new workflow unless the new check has a clearly different lifecycle or runtime
 need.
 
-### Examples of enforceable AI rules for this repository
+### Examples of enforceable AI rules for this repository [ᐞ](#table-of-contents)
 
 <a id="examples-of-enforceable-ai-rules-for-this-repository"></a>
 
@@ -443,4 +468,4 @@ After this first implementation, consider the following enhancements:
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)

@@ -1,15 +1,21 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 This document contains basic checklist what _you_ need to do if you're going to
 use this template as in base of your own application.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Checklist](#checklist-table-of-contents)
+    * [Checklist](#checklist)
 
 ## Checklist [ᐞ](#table-of-contents)
+
+<a id="checklist"></a>
 
 Below you have _basic_ checklist that **_you need to go through_** after you have
 started to use this template.
@@ -35,10 +41,10 @@ started to use this template.
         files.
   * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
         contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
-        - and made necessary changes.
+        * and made necessary changes.
   * [ ] [robots.txt](../public/robots.txt) - check that file contents -
         [information](https://developers.google.com/search/docs/advanced/robots/intro)
-        - and made necessary changes.
+        * and made necessary changes.
   * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
         to match your brand.
   * [ ] [compose.yaml](../compose.yaml) Change `container_name` to
@@ -76,4 +82,4 @@ started to use this template.
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)
