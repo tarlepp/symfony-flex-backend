@@ -17,7 +17,7 @@ use UnexpectedValueException;
 
 /**
  * @template-covariant TEntity of EntityInterface
- * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
+ * @psalm-type CriteriaValue = scalar|object|array<array-key, scalar|object|null>|null
  */
 #[AutoconfigureTag('app.rest.resource')]
 #[AutoconfigureTag('app.stopwatch')]
