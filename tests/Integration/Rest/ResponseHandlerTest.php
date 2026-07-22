@@ -307,7 +307,7 @@ final class ResponseHandlerTest extends KernelTestCase
 <response><foo>bar</foo></response>
 
 DATA
-,
+            ,
         ];
     }
 
