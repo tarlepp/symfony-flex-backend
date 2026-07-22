@@ -418,11 +418,14 @@ final class RestResourceBaseMethodsTest extends TestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with([
-                'email' => 'user@example.com',
-            ], [
-                'createdAt' => 'DESC',
-            ])
+            ->with(
+                [
+                    'email' => 'user@example.com',
+                ],
+                [
+                    'createdAt' => 'DESC',
+                ],
+            )
             ->willReturn($expectedEntity);
 
         $resource = new class($repository) extends EntityRestResource {
