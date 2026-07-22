@@ -27,7 +27,7 @@ jobs:
     steps:
       - &checkout_step
         name: Make checkout
-        uses: actions/checkout@9f698171ed81b15d1823a05fc7211befd50c8ae0 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: '0'
 
@@ -239,7 +239,7 @@ jobs:
 
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
         if: ${{ env.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
-        uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8.2.0
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }} # https://github.com/SonarSource/sonarqube-scan-action?tab=readme-ov-file#environment-variables
@@ -280,7 +280,14 @@ jobs:
       - *checkout_step
 
       - name: Lint all markdown documentation files
-        run: make lint-markdown
+        uses: DavidAnson/markdownlint-cli2-action@b847b0e2798e09594353ac3d92f6222621a4d870 # v24.0.0
+        with:
+          globs: |
+            README.md
+            .devcontainer/*.md
+            doc/*.md
+            docker/*.md
+            secrets/*.md
 
   build:
     name: Build application Docker image
