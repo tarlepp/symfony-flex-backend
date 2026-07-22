@@ -292,6 +292,9 @@ make infection
 
 <a id="security"></a>
 
+For the complete security policy, vulnerability reporting procedures, and
+authentication details, see [`doc/SECURITY.md`](doc/SECURITY.md).
+
 ### Authentication [⇩](#table-of-contents)
 
 <a id="authentication"></a>
