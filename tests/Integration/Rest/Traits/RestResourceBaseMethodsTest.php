@@ -407,7 +407,8 @@ final class RestResourceBaseMethodsTest extends TestCase
     }
 
     #[TestDox(
-        'Test that `findOneBy` lifecycle hooks can modify criteria/orderBy and pass expected values to `afterFindOneBy`',
+        'Test that `findOneBy` lifecycle hooks can modify criteria/orderBy and pass expected values to ' .
+        '`afterFindOneBy`',
     )]
     public function testThatFindOneByLifecycleHooksCanModifyArgumentsByReference(): void
     {
