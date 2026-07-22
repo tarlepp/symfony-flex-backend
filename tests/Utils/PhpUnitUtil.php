@@ -256,7 +256,7 @@ final class PhpUnitUtil
      */
     private static function getValidValue(
         ?array $meta,
-        string $type
+        string $type,
     ): mixed {
         $meta ??= [];
 

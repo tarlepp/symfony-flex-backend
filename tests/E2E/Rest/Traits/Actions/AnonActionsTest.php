@@ -27,7 +27,7 @@ final class AnonActionsTest extends RestTraitTestCase
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }
@@ -39,7 +39,7 @@ final class AnonActionsTest extends RestTraitTestCase
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }
@@ -52,7 +52,7 @@ final class AnonActionsTest extends RestTraitTestCase
         ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }
@@ -64,7 +64,7 @@ final class AnonActionsTest extends RestTraitTestCase
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }

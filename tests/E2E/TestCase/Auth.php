@@ -132,14 +132,14 @@ final class Auth
                         'HTTP_X-Requested-With' => 'XMLHttpRequest',
                     ],
                 ],
-                JSON::encode(compact('username', 'password'))
+                JSON::encode(compact('username', 'password')),
             );
 
             $response = $client->getResponse();
 
             if ($response->getStatusCode() !== 200) {
                 throw new UnexpectedValueException(
-                    'Invalid status code: ' . $response->getStatusCode() . " Response:\n" . $response
+                    'Invalid status code: ' . $response->getStatusCode() . " Response:\n" . $response,
                 );
             }
 

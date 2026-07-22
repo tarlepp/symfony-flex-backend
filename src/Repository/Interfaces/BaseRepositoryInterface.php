@@ -133,7 +133,7 @@ interface BaseRepositoryInterface
         ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
-        ?array $search = null
+        ?array $search = null,
     ): array;
 
     /**

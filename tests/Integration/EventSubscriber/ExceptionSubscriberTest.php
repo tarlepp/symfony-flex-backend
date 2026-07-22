@@ -94,13 +94,13 @@ final class ExceptionSubscriberTest extends KernelTestCase
      */
     #[DataProvider('dataProviderTestResponseHasExpectedStatusCode')]
     #[TestDox(
-        'Test that `Response` has status code `$status` and message `$message` with environment: `$environment`'
+        'Test that `Response` has status code `$status` and message `$message` with environment: `$environment`',
     )]
     public function testThatResponseHasExpectedStatusCode(
         int $status,
         Throwable $exception,
         string $environment,
-        string $message
+        string $message,
     ): void {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -112,7 +112,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
             $stubHttpKernel,
             $stubRequest,
             HttpKernelInterface::MAIN_REQUEST,
-            $exception
+            $exception,
         );
 
         new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment)
@@ -154,7 +154,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
             $stubHttpKernel,
             $stubRequest,
             HttpKernelInterface::MAIN_REQUEST,
-            new Exception('error')
+            new Exception('error'),
         );
 
         new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment)
@@ -183,7 +183,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
         int $expectedStatusCode,
         Throwable $exception,
         bool $user,
-        string $environment
+        string $environment,
     ): void {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -199,7 +199,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
 
         self::assertSame(
             $expectedStatusCode,
-            PhpUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception])
+            PhpUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception]),
         );
     }
 
@@ -211,7 +211,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
     public function testThatGetExceptionMessageReturnsExpected(
         string $expectedMessage,
         Throwable $exception,
-        string $environment
+        string $environment,
     ): void {
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -221,7 +221,7 @@ final class ExceptionSubscriberTest extends KernelTestCase
 
         self::assertSame(
             $expectedMessage,
-            PhpUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
+            PhpUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception]),
         );
     }
 

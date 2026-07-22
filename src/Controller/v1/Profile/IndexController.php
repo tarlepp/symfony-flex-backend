@@ -100,7 +100,7 @@ class IndexController
                 'json',
                 [
                     'groups' => User::SET_USER_PROFILE,
-                ]
+                ],
             ),
             true,
         );

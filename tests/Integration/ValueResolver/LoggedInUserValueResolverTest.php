@@ -103,7 +103,7 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`'
+        'Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`',
     )]
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
@@ -241,7 +241,7 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
 
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($userService), new DefaultValueResolver()]
+            [new LoggedInUserValueResolver($userService), new DefaultValueResolver()],
         );
 
         self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));

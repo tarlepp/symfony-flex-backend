@@ -161,7 +161,7 @@ class LogLogin implements EntityInterface
         name: 'os_version',
         type: Types::STRING,
         length: 255,
-        nullable: true
+        nullable: true,
     )]
     #[Groups([
         'LogLogin',
@@ -244,7 +244,7 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.user',
         ])]
-        private ?User $user = null
+        private ?User $user = null,
     ) {
         $this->id = $this->createUuid();
 

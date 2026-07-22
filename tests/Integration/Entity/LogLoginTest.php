@@ -42,7 +42,7 @@ final class LogLoginTest extends EntityTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -56,7 +56,7 @@ final class LogLoginTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }

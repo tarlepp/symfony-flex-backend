@@ -88,7 +88,7 @@ class UserHelper
             $iterator,
             $this->userResource->find(orderBy: [
                 'username' => 'asc',
-            ])
+            ]),
         );
 
         $choices['Exit'] = 'Exit command';
@@ -111,7 +111,7 @@ class UserHelper
             $iterator,
             $this->userGroupResource->find(orderBy: [
                 'name' => 'asc',
-            ])
+            ]),
         );
 
         $choices['Exit'] = 'Exit command';

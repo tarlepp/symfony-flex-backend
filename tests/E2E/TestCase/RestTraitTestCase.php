@@ -101,7 +101,7 @@ abstract class RestTraitTestCase extends WebTestCase
         self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
-            (string)$response->getContent()
+            (string)$response->getContent(),
         );
     }
 
@@ -152,7 +152,7 @@ abstract class RestTraitTestCase extends WebTestCase
         self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
-            (string)$response->getContent()
+            (string)$response->getContent(),
         );
     }
 
@@ -210,7 +210,7 @@ abstract class RestTraitTestCase extends WebTestCase
         self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
-            (string)$response->getContent()
+            (string)$response->getContent(),
         );
     }
 
@@ -259,7 +259,7 @@ abstract class RestTraitTestCase extends WebTestCase
         self::assertSame(
             $u === null ? 401 : 403,
             $response->getStatusCode(),
-            (string)$response->getContent()
+            (string)$response->getContent(),
         );
     }
 
@@ -448,7 +448,7 @@ abstract class RestTraitTestCase extends WebTestCase
                 yield array_merge(
                     $uuid ? ['20000000-0000-1000-8000-000000000001'] : [],
                     $userData,
-                    $method
+                    $method,
                 );
             }
         }
@@ -461,7 +461,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $route,
         ?string $username,
         ?string $password,
-        ?string $method
+        ?string $method,
     ): Response {
         $method ??= Request::METHOD_GET;
 

@@ -91,7 +91,7 @@ final class GenericResourceTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that calling `getAssociations` method calls expected repository methods and returns expected value'
+        'Test that calling `getAssociations` method calls expected repository methods and returns expected value',
     )]
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
@@ -112,7 +112,7 @@ final class GenericResourceTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that calling `getDtoForEntity` method calls expected repository methods and returns expected value'
+        'Test that calling `getDtoForEntity` method calls expected repository methods and returns expected value',
     )]
     public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
     {
@@ -163,7 +163,7 @@ final class GenericResourceTest extends KernelTestCase
      */
     #[DataProvider('dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters')]
     #[TestDox(
-        'Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments'
+        'Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments',
     )]
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
@@ -294,7 +294,7 @@ final class GenericResourceTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `findOneBy` method doesn\'t throw an exception if entity not found and exception bit is not set'
+        'Test that `findOneBy` method doesn\'t throw an exception if entity not found and exception bit is not set',
     )]
     public function testThatFindOneByDoesNotThrowAnExceptionIfEntityWasNotFound(): void
     {
@@ -339,7 +339,7 @@ final class GenericResourceTest extends KernelTestCase
      */
     #[DataProvider('dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters')]
     #[TestDox(
-        'Test that `countAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.'
+        'Test that `countAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.',
     )]
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,

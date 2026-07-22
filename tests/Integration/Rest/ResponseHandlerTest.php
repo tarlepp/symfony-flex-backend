@@ -43,7 +43,7 @@ final class ResponseHandlerTest extends KernelTestCase
     public function testThatCreateResponseReturnsExpected(
         Request $request,
         array $data,
-        string $expectedContent
+        string $expectedContent,
     ): void {
         $serializer = self::getContainer()->get(SerializerInterface::class);
         $stubResourceService = $this->createMock(RestResourceInterface::class);
@@ -96,7 +96,7 @@ final class ResponseHandlerTest extends KernelTestCase
             [],
             [
                 'CONTENT_TYPE' => $format,
-            ]
+            ],
         );
 
         $serializer = self::getContainer()->get(SerializerInterface::class);
@@ -111,7 +111,7 @@ final class ResponseHandlerTest extends KernelTestCase
                 ],
                 $stubResourceService,
                 200,
-                $format
+                $format,
             );
     }
 
@@ -280,7 +280,7 @@ final class ResponseHandlerTest extends KernelTestCase
                 [],
                 [
                     'CONTENT_TYPE' => 'Some weird content type',
-                ]
+                ],
             ),
             [
                 'foo' => 'bar',
@@ -297,7 +297,7 @@ final class ResponseHandlerTest extends KernelTestCase
                 [],
                 [
                     'CONTENT_TYPE' => 'application/xml',
-                ]
+                ],
             ),
             [
                 'foo' => 'bar',
@@ -307,6 +307,7 @@ final class ResponseHandlerTest extends KernelTestCase
 <response><foo>bar</foo></response>
 
 DATA
+,
         ];
     }
 

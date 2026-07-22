@@ -58,7 +58,7 @@ final class GenericRepositoryTest extends KernelTestCase
 
         self::assertSame(
             ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
-            array_keys($resource->getRepository()->getAssociations())
+            array_keys($resource->getRepository()->getAssociations()),
         );
     }
 
@@ -339,7 +339,7 @@ final class GenericRepositoryTest extends KernelTestCase
                 ApiKeyEntity::class,
                 'id',
                 null,
-                null
+                null,
             );
 
         $entityManager

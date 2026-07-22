@@ -134,7 +134,7 @@ class LogRequest implements EntityInterface
             'LogRequest.apiKey',
         ])]
         private ?ApiKey $apiKey = null,
-        ?bool $mainRequest = null
+        ?bool $mainRequest = null,
     ) {
         $this->id = $this->createUuid();
         $this->mainRequest = $mainRequest ?? true;

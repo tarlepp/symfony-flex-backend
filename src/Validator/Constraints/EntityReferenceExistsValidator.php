@@ -65,7 +65,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
 
                 return $value;
             },
-            is_array($input) ? $input : [$input]
+            is_array($input) ? $input : [$input],
         );
     }
 
@@ -101,7 +101,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     {
         return array_map(
             static fn (EntityInterface $entity): string => $entity->getId(),
-            array_filter($entities, $this->getFilterClosure())
+            array_filter($entities, $this->getFilterClosure()),
         );
     }
 

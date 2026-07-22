@@ -35,7 +35,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported'
+        'Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported',
     )]
     public function testThatOnAuthenticationSuccessThrowsUserNotFoundException(): void
     {
@@ -53,7 +53,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
         $event = new AuthenticationSuccessEvent(
             [],
             new InMemoryUser('username', 'password'),
-            new Response()
+            new Response(),
         );
 
         new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
@@ -117,7 +117,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked'
+        'Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked',
     )]
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {

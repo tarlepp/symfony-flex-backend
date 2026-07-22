@@ -61,8 +61,9 @@ abstract class RestResource implements RestResourceInterface
 
     #[Required]
     #[Override]
-    public function setValidator(ValidatorInterface $validator): self
-    {
+    public function setValidator(
+        ValidatorInterface $validator,
+    ): self {
         $this->validator = $validator;
 
         return $this;
@@ -74,7 +75,7 @@ abstract class RestResource implements RestResourceInterface
         if ($this->dtoClass === '') {
             $message = sprintf(
                 'DTO class not specified for \'%s\' resource',
-                static::class
+                static::class,
             );
 
             throw new UnexpectedValueException($message);
@@ -116,7 +117,7 @@ abstract class RestResource implements RestResourceInterface
         string $id,
         string $dtoClass,
         RestDtoInterface $dto,
-        ?bool $patch = null
+        ?bool $patch = null,
     ): RestDtoInterface {
         $patch ??= false;
 

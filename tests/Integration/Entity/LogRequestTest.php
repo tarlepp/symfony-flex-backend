@@ -47,7 +47,7 @@ final class LogRequestTest extends EntityTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -61,7 +61,7 @@ final class LogRequestTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -86,7 +86,7 @@ final class LogRequestTest extends EntityTestCase
             Request::create(''),
             new Response('abcdefgh'),
             new User(),
-            new ApiKey()
+            new ApiKey(),
         );
 
         $value = $logRequest->{$getter}();
@@ -111,7 +111,7 @@ final class LogRequestTest extends EntityTestCase
             $getter,
             $property,
             $type,
-            is_string($returnValue) ? $returnValue : (string)$returnValue
+            is_string($returnValue) ? $returnValue : (string)$returnValue,
         );
 
         try {
@@ -141,7 +141,7 @@ final class LogRequestTest extends EntityTestCase
     public function testThatSensitiveDataIsCleanedFromHeaders(
         StringableArrayObject $properties,
         StringableArrayObject $headers,
-        StringableArrayObject $expected
+        StringableArrayObject $expected,
     ): void {
         $request = Request::create('');
         $request->headers->replace($headers->getArrayCopy());
@@ -198,7 +198,7 @@ final class LogRequestTest extends EntityTestCase
 
         self::assertSame(
             $expected->getArrayCopy(),
-            PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request])
+            PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request]),
         );
     }
 

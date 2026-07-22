@@ -399,7 +399,7 @@ CODE;
     {
         return array_filter(
             $class->getMethods(ReflectionMethod::IS_PUBLIC),
-            fn (ReflectionMethod $method): bool => $this->isProxyableMethod($method)
+            fn (ReflectionMethod $method): bool => $this->isProxyableMethod($method),
         );
     }
 

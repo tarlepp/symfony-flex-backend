@@ -158,7 +158,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
             new UserTypeIdentification(
                 $tokenStorageMock,
                 $userRepositoryMock,
-                $apiKeyUserProviderMock
+                $apiKeyUserProviderMock,
             )->getIdentity(),
         );
     }
@@ -184,7 +184,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
         self::assertSame(
             $securityUser,
             new UserTypeIdentification($tokenStorageMock, $userRepositoryMock, $apiKeyUserProviderMock)
-                ->getIdentity()
+                ->getIdentity(),
         );
     }
 
@@ -209,7 +209,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
         self::assertSame(
             $apiKeyUser,
             new UserTypeIdentification($tokenStorageMock, $userRepositoryMock, $apiKeyUserProviderMock)
-                ->getIdentity()
+                ->getIdentity(),
         );
     }
 
@@ -233,7 +233,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
             new UserTypeIdentification(
                 $tokenStorageMock,
                 $userRepositoryMock,
-                $apiKeyUserProviderMock
+                $apiKeyUserProviderMock,
             )->getApiKeyUser(),
         );
     }
@@ -261,7 +261,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
             new UserTypeIdentification(
                 $tokenStorageMock,
                 $userRepositoryMock,
-                $apiKeyUserProviderMock
+                $apiKeyUserProviderMock,
             )->getApiKeyUser(),
         );
     }
@@ -369,7 +369,7 @@ final class UserTypeIdentificationTest extends KernelTestCase
         yield [new UsernamePasswordToken(
             new InMemoryUser('username', 'password'),
             'firewallName',
-            ['role']
+            ['role'],
         )];
 
         yield [new PreAuthenticatedToken(
