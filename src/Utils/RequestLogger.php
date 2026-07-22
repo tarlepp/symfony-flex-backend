@@ -132,7 +132,7 @@ class RequestLogger implements RequestLoggerInterface
             $this->response,
             $user,
             $apiKey,
-            $this->mainRequest
+            $this->mainRequest,
         );
 
         $this->logRequestResource->save($entity, true, true);

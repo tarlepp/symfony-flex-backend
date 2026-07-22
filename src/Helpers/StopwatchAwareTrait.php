@@ -20,8 +20,9 @@ trait StopwatchAwareTrait
     protected ?Stopwatch $stopwatch = null;
 
     #[Required]
-    public function setStopwatch(Stopwatch $stopwatch): self
-    {
+    public function setStopwatch(
+        Stopwatch $stopwatch,
+    ): self {
         $this->stopwatch = $stopwatch;
 
         return $this;

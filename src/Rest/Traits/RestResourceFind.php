@@ -42,7 +42,7 @@ trait RestResourceFind
         ?int &$limit,
         ?int &$offset,
         array &$search,
-        array &$entities
+        array &$entities,
     ): void {
     }
 }

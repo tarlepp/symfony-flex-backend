@@ -54,7 +54,7 @@ trait RepositoryWrappersTrait
 
         if (!($manager instanceof EntityManager)) {
             throw new UnexpectedValueException(
-                'Cannot get entity manager for entity \'' . $this->getEntityName() . '\''
+                'Cannot get entity manager for entity \'' . $this->getEntityName() . '\'',
             );
         }
 

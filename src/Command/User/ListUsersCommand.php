@@ -78,7 +78,7 @@ class ListUsersCommand extends Command
             $this->getFormatterUser(),
             $this->userResource->find(orderBy: [
                 'username' => 'ASC',
-            ])
+            ]),
         );
     }
 

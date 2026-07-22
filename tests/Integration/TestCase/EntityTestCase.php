@@ -68,7 +68,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     #[TestDox(
-        'Test that `getUuid` method returns UUID object which contains same UUID string value as `getId` method'
+        'Test that `getUuid` method returns UUID object which contains same UUID string value as `getId` method',
     )]
     public function testThatGetUuidMethodReturnsExpected(): void
     {
@@ -256,7 +256,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     #[DataProvider('dataProviderTestThatAssociationMethodsExists')]
     #[TestDox(
-        'Test that association method `$m` exists for `$p` property, and it returns `$o` when using `$i` as input'
+        'Test that association method `$m` exists for `$p` property, and it returns `$o` when using `$i` as input',
     )]
     public function testThatAssociationMethodsExistsAndThoseReturnsCorrectValue(
         ?string $m,
@@ -392,7 +392,7 @@ abstract class EntityTestCase extends KernelTestCase
         ?string $s,
         ?string $g,
         ?EntityInterface $te,
-        ?string $p
+        ?string $p,
     ): void {
         if ($s === null) {
             self::markTestSkipped('Entity does not contain many-to-one relationships.');
@@ -445,8 +445,8 @@ abstract class EntityTestCase extends KernelTestCase
             sprintf(
                 "Getter method '%s()' for property '%s' did not return expected 'ArrayCollection' object.",
                 $getter,
-                $property
-            )
+                $property,
+            ),
         );
     }
 
@@ -509,8 +509,8 @@ abstract class EntityTestCase extends KernelTestCase
             $iterator,
             array_filter(
                 $meta->getFieldNames(),
-                static fn (string $field): bool => !in_array($field, $fieldsToOmit, true)
-            )
+                static fn (string $field): bool => !in_array($field, $fieldsToOmit, true),
+            ),
         ), ...$assocFields];
     }
 
@@ -577,7 +577,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn ($mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_MANY
+            static fn ($mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_MANY,
         );
 
         if (empty($items)) {
@@ -633,7 +633,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $items = array_filter(
             $meta->getAssociationMappings(),
-            static fn (AssociationMapping $mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_ONE
+            static fn (AssociationMapping $mapping): bool => $mapping['type'] === ClassMetadata::MANY_TO_ONE,
         );
 
         if (empty($items)) {

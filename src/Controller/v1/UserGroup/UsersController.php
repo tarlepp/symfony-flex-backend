@@ -63,7 +63,7 @@ class UsersController
             items: new OA\Items(
                 ref: new Model(
                     type: User::class,
-                    groups: ['User', 'User.userGroups', 'User.roles', 'UserGroup', 'UserGroup.role']
+                    groups: ['User', 'User.userGroups', 'User.roles', 'UserGroup', 'UserGroup.role'],
                 ),
             ),
         ),

@@ -31,7 +31,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     #[TestDox('Test that `transform` method returns `$expected` when using `$input` as input')]
     public function testThatTransformReturnsExpected(
         StringableArrayObject $expected,
-        ?StringableArrayObject $input
+        ?StringableArrayObject $input,
     ): void {
         $resource = $this->getUserGroupResource();
 
@@ -42,7 +42,7 @@ final class UserGroupTransformerTest extends KernelTestCase
 
         self::assertSame(
             $expected->getArrayCopy(),
-            $transformResult
+            $transformResult,
         );
     }
 

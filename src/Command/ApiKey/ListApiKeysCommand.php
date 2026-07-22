@@ -76,7 +76,7 @@ class ListApiKeysCommand extends Command
             $this->getFormatterApiKey(),
             $this->apiKeyResource->find(orderBy: [
                 'token' => 'ASC',
-            ])
+            ]),
         );
     }
 

@@ -100,7 +100,7 @@ final class ControllerTest extends KernelTestCase
 
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage(
-            'Given DTO class \'stdClass\' is not implementing \'App\DTO\RestDtoInterface\' interface.'
+            'Given DTO class \'stdClass\' is not implementing \'App\DTO\RestDtoInterface\' interface.',
         );
 
         $resourceMock

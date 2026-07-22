@@ -66,7 +66,7 @@ final class UserGroupsControllerTest extends WebTestCase
         string $id,
         string $u,
         string $p,
-        StringableArrayObject $e
+        StringableArrayObject $e,
     ): void {
         $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl . '/' . $id . '/groups');

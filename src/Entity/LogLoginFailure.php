@@ -75,7 +75,7 @@ class LogLoginFailure implements EntityInterface
             'LogLoginFailure',
             'LogLoginFailure.user',
         ])]
-        private User $user
+        private User $user,
     ) {
         $this->id = $this->createUuid();
         $this->timestamp = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));

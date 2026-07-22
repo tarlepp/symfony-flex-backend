@@ -122,7 +122,7 @@ class UserType extends AbstractType
                     FormTypeLabelInterface::REQUIRED => true,
                     FormTypeLabelInterface::EMPTY_DATA => '',
                     'multiple' => true,
-                ]
+                ],
             );
 
         $builder->get('userGroups')

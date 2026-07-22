@@ -71,7 +71,7 @@ DQL;
             [],
             [
                 'and' => ['foo', 'bar'],
-            ]
+            ],
         );
 
         $message = 'processSearchTerms did not return expected DQL.';
@@ -94,7 +94,7 @@ DQL;
     #[TestDox('Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms')]
     public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(
         string $expected,
-        StringableArrayObject $terms
+        StringableArrayObject $terms,
     ): void {
         $qb = $this->getRepository()
             ->createQueryBuilder('entity');
@@ -159,7 +159,7 @@ DQL;
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         StringableArrayObject $criteria,
         string $dql,
-        StringableArrayObject $params
+        StringableArrayObject $params,
     ): void {
         $queryBuilder = $this->getRepository()
             ->createQueryBuilder('u');
@@ -167,7 +167,7 @@ DQL;
             ->andX();
 
         $queryBuilder->andWhere(
-            RepositoryHelper::getExpression($queryBuilder, $expression, [$criteria->getArrayCopy()])
+            RepositoryHelper::getExpression($queryBuilder, $expression, [$criteria->getArrayCopy()]),
         );
 
         self::assertSame($dql, $queryBuilder->getQuery()->getDQL());

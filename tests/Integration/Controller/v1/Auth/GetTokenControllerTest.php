@@ -25,7 +25,7 @@ final class GetTokenControllerTest extends KernelTestCase
             self::assertInstanceOf(HttpException::class, $exception);
             self::assertSame(
                 'You need to send JSON body to obtain token eg. {"username":"username","password":"password"}',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
 
             /** @noinspection PhpPossiblePolymorphicInvocationInspection */

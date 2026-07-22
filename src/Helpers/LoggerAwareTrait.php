@@ -20,8 +20,9 @@ trait LoggerAwareTrait
     protected ?LoggerInterface $logger = null;
 
     #[Required]
-    public function setLogger(LoggerInterface $logger): self
-    {
+    public function setLogger(
+        LoggerInterface $logger,
+    ): self {
         $this->logger = $logger;
 
         return $this;

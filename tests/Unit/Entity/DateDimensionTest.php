@@ -24,7 +24,7 @@ final class DateDimensionTest extends KernelTestCase
     {
         $dateTime = DateTimeImmutable::createFromMutable(
             new DateTime('now', new DateTimeZone('UTC'))
-                ->setTime(10, 10, 10)
+                ->setTime(10, 10, 10),
         );
 
         $entity = new DateDimension($dateTime);

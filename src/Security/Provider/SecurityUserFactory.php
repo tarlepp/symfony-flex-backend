@@ -46,7 +46,7 @@ class SecurityUserFactory implements UserProviderInterface
     {
         $user = $this->userRepository->loadUserByIdentifier(
             $identifier,
-            (bool)preg_match('#' . Requirement::UUID_V1 . '#', $identifier)
+            (bool)preg_match('#' . Requirement::UUID_V1 . '#', $identifier),
         );
 
         if (!($user instanceof User)) {

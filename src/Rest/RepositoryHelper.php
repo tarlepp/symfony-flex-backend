@@ -263,7 +263,7 @@ class RepositoryHelper
         Composite $expression,
         bool $expressionAnd,
         bool $expressionOr,
-        array $comparison
+        array $comparison,
     ): void {
         if ($expressionAnd) {
             $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
@@ -327,7 +327,7 @@ class RepositoryHelper
                 $queryBuilder,
                 $comparisonObject,
                 $lowercaseOperator,
-                $parameters
+                $parameters,
             );
         }
 
@@ -367,9 +367,9 @@ class RepositoryHelper
             $parameters[] = array_map(
                 static fn (string $value): Literal => $queryBuilder->expr()
                     ->literal(
-                        is_numeric($value) ? (int)$value : $value
+                        is_numeric($value) ? (int)$value : $value,
                     ),
-                $value
+                $value,
             );
         }
 
@@ -415,7 +415,7 @@ class RepositoryHelper
             $queryBuilder->setParameter(
                 self::$parameterCount,
                 $comparison->value,
-                UuidHelper::getType((string)$comparison->value)
+                UuidHelper::getType((string)$comparison->value),
             );
         }
 

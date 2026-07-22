@@ -47,7 +47,7 @@ final class JSONTest extends KernelTestCase
         /** @psalm-suppress InvalidArgument */
         self::assertSame(
             serialize($expected),
-            serialize(JSON::decode(...$parameters))
+            serialize(JSON::decode(...$parameters)),
         );
     }
 

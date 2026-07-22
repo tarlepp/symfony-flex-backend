@@ -106,7 +106,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         self::assertEmpty(
             $entity->getPlainPassword(),
-            'Listener did not reset plain password value.'
+            'Listener did not reset plain password value.',
         );
 
         self::assertNotSame(
@@ -117,7 +117,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         self::assertTrue(
             $hasher->isPasswordValid(new SecurityUser($entity), 'test_test'),
-            'Changed password is not valid.'
+            'Changed password is not valid.',
         );
     }
 
@@ -138,7 +138,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
         // Create encrypted password manually for user
         $entity->setPassword(
             fn (string $password): string => $hasher->hashPassword(new SecurityUser($entity), $password),
-            'test_test'
+            'test_test',
         );
 
         // Set plain password so that listener can make a real one
@@ -156,7 +156,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         self::assertEmpty(
             $entity->getPlainPassword(),
-            'Listener did not reset plain password value.'
+            'Listener did not reset plain password value.',
         );
 
         self::assertNotSame(
@@ -167,7 +167,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
 
         self::assertTrue(
             $hasher->isPasswordValid(new SecurityUser($entity), 'test_test_test'),
-            'Changed password is not valid.'
+            'Changed password is not valid.',
         );
     }
 

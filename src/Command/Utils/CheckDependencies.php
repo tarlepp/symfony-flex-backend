@@ -103,8 +103,8 @@ class CheckDependencies extends Command
         $packageNameLength = max(
             array_map(
                 static fn (array $row): int => isset($row[1]) ? strlen($row[1]) : 0,
-                array_filter($rows, static fn (mixed $row): bool => !$row instanceof TableSeparator)
-            ) + [0]
+                array_filter($rows, static fn (mixed $row): bool => !$row instanceof TableSeparator),
+            ) + [0],
         );
 
         $style = clone Table::getStyleDefinition('box');
@@ -247,7 +247,7 @@ class CheckDependencies extends Command
             $message = sprintf(
                 "Running command '%s' failed with error message:\n%s",
                 implode(' ', $command),
-                $process->getErrorOutput()
+                $process->getErrorOutput(),
             );
 
             throw new RuntimeException($message);

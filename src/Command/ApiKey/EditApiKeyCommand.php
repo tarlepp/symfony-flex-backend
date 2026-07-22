@@ -79,7 +79,7 @@ class EditApiKeyCommand extends Command
             $output,
             [
                 'data' => $dtoLoaded,
-            ]
+            ],
         );
 
         // Patch API key

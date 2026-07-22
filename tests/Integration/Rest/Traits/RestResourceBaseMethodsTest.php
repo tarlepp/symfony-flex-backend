@@ -39,7 +39,7 @@ final class RestResourceBaseMethodsTest extends TestCase
              */
             public function __construct(
                 BaseRepositoryInterface $repository,
-                public array &$order
+                public array &$order,
             ) {
                 parent::__construct($repository);
             }
@@ -149,7 +149,7 @@ final class RestResourceBaseMethodsTest extends TestCase
                 string $id,
                 string $dtoClass,
                 RestDtoInterface $dto,
-                ?bool $patch = null
+                ?bool $patch = null,
             ): RestDtoInterface {
                 parent::getDtoForEntity($id, $dtoClass, $dto, $patch);
 
@@ -221,7 +221,7 @@ final class RestResourceBaseMethodsTest extends TestCase
                 string $id,
                 string $dtoClass,
                 RestDtoInterface $dto,
-                ?bool $patch = null
+                ?bool $patch = null,
             ): RestDtoInterface {
                 parent::getDtoForEntity($id, $dtoClass, $dto, $patch);
 
@@ -285,7 +285,7 @@ final class RestResourceBaseMethodsTest extends TestCase
                 array &$orderBy,
                 ?int &$limit,
                 ?int &$offset,
-                array &$search
+                array &$search,
             ): void {
                 parent::beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
@@ -318,7 +318,7 @@ final class RestResourceBaseMethodsTest extends TestCase
                 ?int &$limit,
                 ?int &$offset,
                 array &$search,
-                array &$entities
+                array &$entities,
             ): void {
                 parent::afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
 
@@ -407,7 +407,8 @@ final class RestResourceBaseMethodsTest extends TestCase
     }
 
     #[TestDox(
-        'Test that `findOneBy` lifecycle hooks can modify criteria/orderBy and pass expected values to `afterFindOneBy`'
+        'Test that `findOneBy` lifecycle hooks can modify criteria/orderBy and pass expected values to ' .
+        '`afterFindOneBy`',
     )]
     public function testThatFindOneByLifecycleHooksCanModifyArgumentsByReference(): void
     {
@@ -417,11 +418,14 @@ final class RestResourceBaseMethodsTest extends TestCase
         $repository
             ->expects($this->once())
             ->method('findOneBy')
-            ->with([
-                'email' => 'user@example.com',
-            ], [
-                'createdAt' => 'DESC',
-            ])
+            ->with(
+                [
+                    'email' => 'user@example.com',
+                ],
+                [
+                    'createdAt' => 'DESC',
+                ],
+            )
             ->willReturn($expectedEntity);
 
         $resource = new class($repository) extends EntityRestResource {

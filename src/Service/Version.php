@@ -25,7 +25,7 @@ class Version
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
         private readonly CacheInterface $appCacheApcu,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 

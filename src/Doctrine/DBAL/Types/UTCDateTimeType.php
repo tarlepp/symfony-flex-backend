@@ -48,7 +48,7 @@ class UTCDateTimeType extends DateTimeType
             $converted = DateTime::createFromFormat(
                 $platform->getDateTimeFormatString(),
                 (string)$value,
-                $this->getUtcDateTimeZone()
+                $this->getUtcDateTimeZone(),
             );
 
             $value = $this->checkConvertedValue((string)$value, $platform, $converted !== false ? $converted : null);
@@ -80,7 +80,7 @@ class UTCDateTimeType extends DateTimeType
         throw InvalidFormat::new(
             $value,
             self::lookupName($this),
-            $platform->getDateTimeFormatString()
+            $platform->getDateTimeFormatString(),
         );
     }
 }

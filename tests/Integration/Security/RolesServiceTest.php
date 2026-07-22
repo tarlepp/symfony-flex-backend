@@ -46,7 +46,7 @@ final class RolesServiceTest extends KernelTestCase
             ],
             $this->getService()
                 ->getRoles(),
-            'Returned roles are not expected.'
+            'Returned roles are not expected.',
         );
     }
 
@@ -74,7 +74,7 @@ final class RolesServiceTest extends KernelTestCase
     #[TestDox('Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input')]
     public function testThatGetInheritedRolesReturnsExpected(
         StringableArrayObject $expected,
-        StringableArrayObject $roles
+        StringableArrayObject $roles,
     ): void {
         /** @var array<int, string> $rolesArray */
         $rolesArray = $roles->getArrayCopy();
@@ -82,7 +82,7 @@ final class RolesServiceTest extends KernelTestCase
             $expected->getArrayCopy(),
             $this->getService()
                 ->getInheritedRoles($rolesArray),
-            'Inherited roles was not expected'
+            'Inherited roles was not expected',
         );
     }
 

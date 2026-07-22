@@ -32,7 +32,7 @@ final class UserTest extends EntityTestCase
     public function testThatPasswordHashingIsWorkingAsExpected(
         callable $callable,
         string $password,
-        string $expected
+        string $expected,
     ): void {
         $entity = $this->getEntity();
 
@@ -85,7 +85,7 @@ final class UserTest extends EntityTestCase
             serialize($entity),
             [
                 'allowed_classes' => true,
-            ]
+            ],
         );
 
         // Assert that un-serialized object returns expected data

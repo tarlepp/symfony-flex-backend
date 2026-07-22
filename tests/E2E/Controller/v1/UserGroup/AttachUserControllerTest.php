@@ -82,7 +82,7 @@ final class AttachUserControllerTest extends WebTestCase
         self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
-            "Response:\n" . $response
+            "Response:\n" . $response,
         );
     }
 

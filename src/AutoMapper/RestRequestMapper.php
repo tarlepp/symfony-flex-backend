@@ -61,7 +61,7 @@ abstract class RestRequestMapper implements MapperInterface
                 sprintf(
                     'RestRequestMapper expects that $source is Request object, "%s" provided',
                     gettype($source),
-                )
+                ),
             );
         }
 
@@ -70,7 +70,7 @@ abstract class RestRequestMapper implements MapperInterface
                 sprintf(
                     'RestRequestMapper expects that $source is Request object, "%s" provided',
                     $source::class,
-                )
+                ),
             );
         }
 
@@ -79,7 +79,7 @@ abstract class RestRequestMapper implements MapperInterface
                 sprintf(
                     'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "%s" provided',
                     $destination::class,
-                )
+                ),
             );
         }
 
@@ -88,7 +88,7 @@ abstract class RestRequestMapper implements MapperInterface
                 sprintf(
                     'RestRequestMapper expects that mapper "%s::$properties" contains properties to convert',
                     static::class,
-                )
+                ),
             );
         }
 

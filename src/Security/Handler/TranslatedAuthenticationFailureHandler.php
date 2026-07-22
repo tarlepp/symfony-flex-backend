@@ -41,7 +41,7 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
          */
         $event = new AuthenticationFailureEvent(
             $exception,
-            new JWTAuthenticationFailureResponse($this->translator->trans('Invalid credentials.', [], 'security'))
+            new JWTAuthenticationFailureResponse($this->translator->trans('Invalid credentials.', [], 'security')),
         );
 
         $this->dispatcher->dispatch($event);

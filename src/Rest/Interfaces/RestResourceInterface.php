@@ -97,7 +97,7 @@ interface RestResourceInterface
         string $id,
         string $dtoClass,
         RestDtoInterface $dto,
-        ?bool $patch = null
+        ?bool $patch = null,
     ): RestDtoInterface;
 
     /**
@@ -119,7 +119,7 @@ interface RestResourceInterface
         ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
-        ?array $search = null
+        ?array $search = null,
     ): array;
 
     /**
@@ -157,7 +157,7 @@ interface RestResourceInterface
     public function findOneBy(
         array $criteria,
         ?array $orderBy = null,
-        ?bool $throwExceptionIfNotFound = null
+        ?bool $throwExceptionIfNotFound = null,
     ): ?EntityInterface;
 
     /**
@@ -194,7 +194,7 @@ interface RestResourceInterface
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,
-        ?bool $skipValidation = null
+        ?bool $skipValidation = null,
     ): EntityInterface;
 
     /**
@@ -210,7 +210,7 @@ interface RestResourceInterface
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,
-        ?bool $skipValidation = null
+        ?bool $skipValidation = null,
     ): EntityInterface;
 
     /**

@@ -91,7 +91,7 @@ class ApiKeyHelper
             $this->getApiKeyIterator($choices),
             $this->apiKeyResource->find(orderBy: [
                 'token' => 'ASC',
-            ])
+            ]),
         );
 
         $choices['Exit'] = 'Exit command';
