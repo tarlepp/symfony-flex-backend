@@ -16,6 +16,8 @@ including supported versions and how to report vulnerabilities responsibly.
     * [What to include in a report](#what-to-include-in-a-report)
     * [Disclosure process](#disclosure-process)
     * [Security maintenance in this repository](#security-maintenance-in-this-repository)
+    * [Authentication and authorization](#authentication-and-authorization)
+    * [Development best practices](#development-best-practices)
 
 ## Supported versions [ᐞ](#table-of-contents)
 
@@ -79,6 +81,12 @@ Containerized security checks are enabled in repository scripts by default:
 * Container image build includes Debian package security updates via
   `debsecan` (`Dockerfile`).
 * Container image build also runs `composer audit` (`Dockerfile`).
+* Docker image vulnerability scanning via Trivy (`debsecan` + `trivy` for
+  container image analysis).
+
+CI pipeline security checks:
+
+* Secret detection via Gitleaks Action to prevent accidental credential commits.
 
 Because these checks are defined in container build/startup scripts, CI jobs
 that build or start these containers inherit the same baseline checks.
@@ -88,6 +96,59 @@ At minimum, dependency vulnerability checks are also available manually with:
 ```bash
 make check-security
 ```
+
+## Authentication and authorization [ᐞ](#table-of-contents)
+
+<a id="authentication-and-authorization"></a>
+
+This project supports multiple authentication methods:
+
+* **JWT (JSON Web Tokens):** Stateless token-based authentication via Bearer tokens
+  in the `Authorization` header. Configured with public/private key pair.
+* **API Keys:** Application-level API key authentication for programmatic access.
+
+Authorization uses role-based access control (RBAC):
+
+* `ROLE_API` - API consumer role
+* `ROLE_LOGGED` - Authenticated user role (implied by ROLE_API or ROLE_USER)
+* `ROLE_USER` - Standard authenticated user role
+* `ROLE_ADMIN` - Administrative role (inherits ROLE_USER)
+* `ROLE_ROOT` - Root/superuser role (inherits ROLE_ADMIN)
+
+JWT and API key credentials should be stored securely and never committed to
+version control.
+
+## Development best practices [ᐞ](#table-of-contents)
+
+<a id="development-best-practices"></a>
+
+**Secrets Management:**
+
+* Never commit `.env.local`, JWT keys (`config/jwt/`), or credentials to
+  version control.
+* Store sensitive values in `secrets/` directory or environment variables only.
+* Use `make generate-jwt-keys` to create JWT key pairs (output: not committed).
+
+**Input Validation:**
+
+* Use Symfony Validator constraints for all API input validation.
+* Validate early in the request lifecycle (controller/DTO layer).
+* Reject invalid input with appropriate error responses.
+
+**Data Exposure Control:**
+
+* Use DTOs (Data Transfer Objects) in `src/DTO/` to control what data is
+  exposed in API responses.
+* Never expose raw entities in API responses.
+* Use the AutoMapper for safe entity-to-DTO mapping.
+
+**Production Security:**
+
+* Always use HTTPS/TLS in production.
+* Ensure CORS configuration (`config/packages/nelmio_cors.yaml`) is appropriate
+  for your use case.
+* Review and configure role-based access control in `config/packages/security.yaml`.
+* Regularly run `make check-security` to scan for known vulnerabilities.
 
 ---
 
