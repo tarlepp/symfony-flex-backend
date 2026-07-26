@@ -15,7 +15,7 @@ use Override;
 final class TestEntityReference implements EntityInterface
 {
     public function __construct(
-        private readonly bool $throwException = false
+        private readonly bool $throwException = false,
     ) {
     }
 

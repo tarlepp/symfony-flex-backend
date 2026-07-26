@@ -117,7 +117,7 @@ final class FindMethodTest extends KernelTestCase
                 $orderBy->getArrayCopy(),
                 $limit,
                 $offset,
-                $search->getArrayCopy()
+                $search->getArrayCopy(),
             )
             ->willReturn([]);
 

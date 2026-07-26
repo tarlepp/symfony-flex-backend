@@ -41,7 +41,7 @@ final class ApiKeyTest extends EntityTestCase
     #[TestDox('Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`')]
     public function testThatApiKeyHasExpectedRoles(
         StringableArrayObject $expectedRoles,
-        StringableArrayObject $criteria
+        StringableArrayObject $criteria,
     ): void {
         self::bootKernel();
 

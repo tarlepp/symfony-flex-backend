@@ -65,7 +65,7 @@ class TimeZoneController
                         example: 'Europe/Helsinki',
                     ),
                 ],
-                type: 'object'
+                type: 'object',
             ),
             example: [
                 'timezone' => 'Europe',

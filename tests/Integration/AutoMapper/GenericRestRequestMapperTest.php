@@ -61,7 +61,7 @@ final class GenericRestRequestMapperTest extends KernelTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "stdClass" provided'
+            'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "stdClass" provided',
         );
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
@@ -78,14 +78,14 @@ final class GenericRestRequestMapperTest extends KernelTestCase
         $this->expectException(LengthException::class);
         $this->expectExceptionMessage(
             'RestRequestMapper expects that mapper "' . TestRestRequestMapperWithoutProperties::class .
-            '::$properties" contains properties to convert'
+            '::$properties" contains properties to convert',
         );
 
         /** @psalm-suppress MixedArgument */
         new TestRestRequestMapperWithoutProperties()
             ->mapToObject(
                 new Request(),
-                $this->getMockBuilder(RestDtoInterface::class)->getMock()
+                $this->getMockBuilder(RestDtoInterface::class)->getMock(),
             );
     }
 

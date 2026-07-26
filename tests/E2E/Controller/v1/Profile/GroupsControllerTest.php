@@ -94,7 +94,7 @@ final class GroupsControllerTest extends WebTestCase
     public function testThatGroupsActionReturnExpected(
         string $u,
         string $p,
-        StringableArrayObject $e
+        StringableArrayObject $e,
     ): void {
         $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
@@ -124,7 +124,7 @@ final class GroupsControllerTest extends WebTestCase
 
                     return $id;
                 },
-                $responseContent
+                $responseContent,
             ),
         );
     }

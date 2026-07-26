@@ -125,7 +125,7 @@ abstract class RestDto implements RestDtoInterface
             $message = sprintf(
                 'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
                 $dto::class,
-                $property
+                $property,
             );
 
             throw new BadMethodCallException($message);
@@ -155,7 +155,7 @@ abstract class RestDto implements RestDtoInterface
         if (count($getterMethods) > 1) {
             $message = sprintf(
                 'Property \'%s\' has multiple getter methods - this is insane!',
-                $property
+                $property,
             );
 
             throw new LogicException($message);

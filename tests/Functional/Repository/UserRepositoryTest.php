@@ -69,8 +69,8 @@ final class UserRepositoryTest extends KernelTestCase
                     [],
                     [
                         'or' => 'john-',
-                    ]
-                )
+                    ],
+                ),
         );
     }
 

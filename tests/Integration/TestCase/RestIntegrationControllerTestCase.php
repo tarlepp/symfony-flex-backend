@@ -49,7 +49,7 @@ abstract class RestIntegrationControllerTestCase extends KernelTestCase
         $message = sprintf(
             'Your REST controller integration test \'%s\' uses likely wrong controller class \'%s\'',
             static::class,
-            $this->controllerClass
+            $this->controllerClass,
         );
 
         self::assertSame($expected, new ReflectionClass($this->getController())->getShortName(), $message);

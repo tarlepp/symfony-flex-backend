@@ -42,7 +42,7 @@ trait CountMethod
                     [
                         'count' => $count,
                     ],
-                    $resource
+                    $resource,
                 );
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);

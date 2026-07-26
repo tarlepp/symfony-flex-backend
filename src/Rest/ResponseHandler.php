@@ -78,7 +78,7 @@ class ResponseHandler implements ResponseHandlerInterface
                 array_key_exists('populateAll', $request->query->all()),
                 $populate,
                 $entityName,
-                $restResource
+                $restResource,
             );
 
             $groups = [$entityName, ...$populate];
@@ -136,7 +136,7 @@ class ResponseHandler implements ResponseHandlerInterface
             $errors[] = sprintf(
                 'Field \'%s\': %s',
                 $name,
-                $error->getMessage()
+                $error->getMessage(),
             );
 
             if ($name === '') {
