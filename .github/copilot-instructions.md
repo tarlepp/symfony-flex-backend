@@ -73,6 +73,8 @@ ORM, and project workflow conventions.
 * Always validate input with Symfony validation constraints.
 * Respect role-based access control; do not weaken security guards.
 * Use DTOs to control what data is exposed in API responses.
+* For the complete security policy, vulnerability reporting, and authentication
+  details, see `doc/SECURITY.md`.
 
 ## Change scope rules [ᐞ](#table-of-contents)
 
@@ -183,6 +185,9 @@ repository reference format:
 
 For deeper project context, architecture notes, and workflow details, use
 `CLAUDE.md` as the long-form reference document.
+
+For the complete security policy, vulnerability reporting, and authentication
+details, see `doc/SECURITY.md`.
 
 For guidance on maintaining AI policy files and turning recurring issues into
 validation or CI checks, use `doc/AI_RULES.md`.

@@ -132,6 +132,8 @@ These rules apply to AI-assisted changes in the repository, including:
 * Never remove or weaken authentication guards or security checks.
 * Use Symfony Validator constraints for all input validation.
 * Use DTOs to control what data is exposed in API responses.
+* For comprehensive security guidance, authentication details, and development
+  best practices, see [`SECURITY.md`](SECURITY.md).
 * Never commit secrets, JWT keys, or environment overrides.
 
 ### 5. Keep database changes consistent [ᐞ](#table-of-contents)
@@ -462,6 +464,7 @@ After this first implementation, consider the following enhancements:
 
 * `README.md`
 * `CLAUDE.md`
+* `SECURITY.md`
 * `.github/copilot-instructions.md`
 * `.github/pull_request_template.md`
 * `.github/workflows/main.yml`
