@@ -44,7 +44,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
     #[TestDox('Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles')]
     public function testThatLoadUserByIdentifierReturnsExpectedUserInstance(
         string $username,
-        StringableArrayObject $roles
+        StringableArrayObject $roles,
     ): void {
         $domainUser = $this->getSecurityUserFactory()
             ->loadUserByIdentifier($username);
@@ -81,7 +81,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
             $user->getId(),
             $this->getSecurityUserFactory()
                 ->refreshUser($securityUser)
-                ->getUserIdentifier()
+                ->getUserIdentifier(),
         );
     }
 

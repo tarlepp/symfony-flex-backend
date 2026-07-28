@@ -33,7 +33,7 @@ trait RestResourceBaseMethods
         ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
-        ?array $search = null
+        ?array $search = null,
     ): array {
         $criteria ??= [];
         $orderBy ??= [];
@@ -103,7 +103,7 @@ trait RestResourceBaseMethods
     public function findOneBy(
         array $criteria,
         ?array $orderBy = null,
-        ?bool $throwExceptionIfNotFound = null
+        ?bool $throwExceptionIfNotFound = null,
     ): ?EntityInterface {
         $orderBy ??= [];
         $throwExceptionIfNotFound ??= false;
@@ -180,7 +180,7 @@ trait RestResourceBaseMethods
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,
-        ?bool $skipValidation = null
+        ?bool $skipValidation = null,
     ): EntityInterface {
         $flush ??= true;
         $skipValidation ??= false;
@@ -217,7 +217,7 @@ trait RestResourceBaseMethods
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,
-        ?bool $skipValidation = null
+        ?bool $skipValidation = null,
     ): EntityInterface {
         $flush ??= true;
         $skipValidation ??= false;
@@ -329,7 +329,7 @@ trait RestResourceBaseMethods
         EntityInterface $entity,
         RestDtoInterface $dto,
         bool $flush,
-        bool $skipValidation
+        bool $skipValidation,
     ): void {
         // Update entity according to DTO current state
         $dto->update($entity);

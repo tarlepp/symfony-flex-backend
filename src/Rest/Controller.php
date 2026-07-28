@@ -42,7 +42,7 @@ abstract class Controller implements ControllerInterface
     protected ?ResponseHandlerInterface $responseHandler = null;
 
     public function __construct(
-        protected readonly RestResourceInterface $resource
+        protected readonly RestResourceInterface $resource,
     ) {
     }
 
@@ -60,8 +60,9 @@ abstract class Controller implements ControllerInterface
 
     #[Required]
     #[Override]
-    public function setResponseHandler(ResponseHandler $responseHandler): static
-    {
+    public function setResponseHandler(
+        ResponseHandler $responseHandler,
+    ): static {
         $this->responseHandler = $responseHandler;
 
         return $this;

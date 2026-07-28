@@ -80,7 +80,7 @@ class EditUserGroupCommand extends Command
             $output,
             [
                 'data' => $dtoLoaded,
-            ]
+            ],
         );
 
         // Patch user group

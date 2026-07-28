@@ -105,7 +105,7 @@ final class IdsMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,
-        StringableArrayObject $search
+        StringableArrayObject $search,
     ): void {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 

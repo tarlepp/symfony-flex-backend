@@ -74,7 +74,7 @@ class ListUserGroupsCommand extends Command
             $this->getFormatterUserGroup(),
             $this->userGroupResource->find(orderBy: [
                 'name' => 'ASC',
-            ])
+            ]),
         );
     }
 

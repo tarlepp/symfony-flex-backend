@@ -51,7 +51,7 @@ class RoleTransformer implements DataTransformerInterface
             ? $this->resource->findOne($value, false) ?? throw new TransformationFailedException(
                 sprintf(
                     'Role with name "%s" does not exist!',
-                    $value
+                    $value,
                 ),
             )
             : null;

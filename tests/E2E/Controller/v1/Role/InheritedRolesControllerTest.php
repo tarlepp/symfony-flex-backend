@@ -43,7 +43,7 @@ final class InheritedRolesControllerTest extends WebTestCase
      */
     #[DataProvider('dataProviderTestThatGetInheritedRoles403')]
     #[TestDox(
-        'Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`'
+        'Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`',
     )]
     public function testThatGetInheritedRoles403(string $u, string $p): void
     {

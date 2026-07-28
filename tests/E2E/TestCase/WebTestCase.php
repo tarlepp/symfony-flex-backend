@@ -52,7 +52,7 @@ abstract class WebTestCase extends BaseWebTestCase
         ?string $username = null,
         ?string $password = null,
         ?array $options = null,
-        ?array $server = null
+        ?array $server = null,
     ): KernelBrowser {
         $options ??= [];
         $server ??= [];
@@ -69,7 +69,7 @@ abstract class WebTestCase extends BaseWebTestCase
                 ...$this->getFastestHeaders(),
             ],
             $authService->getJwtHeaders(),
-            $server
+            $server,
         );
 
         self::ensureKernelShutdown();
@@ -81,7 +81,7 @@ abstract class WebTestCase extends BaseWebTestCase
                     'debug' => false,
                 ],
             ],
-            $server
+            $server,
         );
     }
 
@@ -110,7 +110,7 @@ abstract class WebTestCase extends BaseWebTestCase
                 ...$this->getFastestHeaders(),
             ],
             $authService->getJwtHeaders(),
-            $server
+            $server,
         );
 
         self::ensureKernelShutdown();
