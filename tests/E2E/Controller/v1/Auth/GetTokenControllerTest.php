@@ -64,7 +64,7 @@ final class GetTokenControllerTest extends WebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest',
             ],
-            $payload
+            $payload,
         );
 
         $response = $client->getResponse();
@@ -74,7 +74,7 @@ final class GetTokenControllerTest extends WebTestCase
         self::assertSame(
             200,
             $response->getStatusCode(),
-            "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
+            "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response,
         );
 
         /** @var stdClass $responseContent */
@@ -114,7 +114,7 @@ final class GetTokenControllerTest extends WebTestCase
             json_encode([
                 'username' => 'username',
                 'password' => 'password',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
 
         $response = $client->getResponse();

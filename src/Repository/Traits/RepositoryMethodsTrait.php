@@ -110,7 +110,7 @@ trait RepositoryMethodsTrait
         ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
-        ?array $search = null
+        ?array $search = null,
     ): array {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder($criteria, $search, $orderBy, $limit, $offset);
@@ -229,7 +229,7 @@ trait RepositoryMethodsTrait
         ?array $search = null,
         ?array $orderBy = null,
         ?int $limit = null,
-        ?int $offset = null
+        ?int $offset = null,
     ): QueryBuilder {
         // Create new QueryBuilder for this instance
         $queryBuilder = $this->createQueryBuilder();

@@ -61,7 +61,7 @@ final class RequestHandler
             $where = array_filter(
                 (array)JSON::decode(
                     (string)($request->query->get('where') ?? $request->request->get('where', '{}')),
-                    true
+                    true,
                 ),
                 static fn ($value): bool => $value !== null,
             );
@@ -229,7 +229,7 @@ final class RequestHandler
         if (!array_key_exists('and', $searchTerms) && !array_key_exists('or', $searchTerms)) {
             throw new HttpException(
                 HttpFoundationResponse::HTTP_BAD_REQUEST,
-                'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
+                'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.',
             );
         }
     }

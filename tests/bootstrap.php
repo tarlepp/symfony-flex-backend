@@ -62,7 +62,7 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
         $databaseUrl = str_replace(
             '/' . $databaseName . '?',
             '/' . $databaseName . '_' . $readableChannel . '?',
-            $originalDatabaseUrl
+            $originalDatabaseUrl,
         );
 
         $cache[$readableChannel] = $databaseUrl;
@@ -126,7 +126,7 @@ $databaseCacheFile = sprintf(
     '%s%stest_database_cache%s.json',
     sys_get_temp_dir(),
     DIRECTORY_SEPARATOR,
-    (string)getenv('ENV_TEST_CHANNEL_READABLE')
+    (string)getenv('ENV_TEST_CHANNEL_READABLE'),
 );
 
 // Oh yeah, database is already created we don't want to do any lifting anymore \o/
@@ -220,7 +220,7 @@ $createJwtAuthCache = static function (): void {
         '%s%stest_jwt_auth_cache%s.json',
         sys_get_temp_dir(),
         DIRECTORY_SEPARATOR,
-        (string)getenv('ENV_TEST_CHANNEL_READABLE')
+        (string)getenv('ENV_TEST_CHANNEL_READABLE'),
     );
 
     // Remove existing cache if exists
@@ -249,5 +249,5 @@ array_map(
         $loadFixturesDoctrineCommand,
         $createJwtAuthCache,
         $createDatabaseCreateCache,
-    ]
+    ],
 );

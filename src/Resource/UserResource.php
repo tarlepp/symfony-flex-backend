@@ -66,7 +66,7 @@ class UserResource extends RestResource
             $userGroup->getRole()
                 ->getId(),
             $this->rolesService->getInheritedRoles($user->getRoles()),
-            true
+            true,
         );
 
         $users = $this->find();

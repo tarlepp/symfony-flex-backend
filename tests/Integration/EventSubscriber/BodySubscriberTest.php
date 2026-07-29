@@ -86,7 +86,7 @@ final class BodySubscriberTest extends KernelTestCase
     public function testThatJsonContentReplaceParametersAsExpected(
         StringableArrayObject $expectedParameters,
         string $contentType,
-        string $content
+        string $content,
     ): void {
         self::bootKernel();
 
@@ -103,7 +103,7 @@ final class BodySubscriberTest extends KernelTestCase
             [],
             [],
             [],
-            $content
+            $content,
         );
         $request->headers->set('Content-Type', $contentType);
 

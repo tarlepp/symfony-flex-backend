@@ -36,7 +36,7 @@ final class DeleteUserControllerTest extends RestIntegrationControllerTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself'
+        'Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself',
     )]
     public function testThatInvokeMethodThrowsAnExceptionIfUserTriesToDeleteHimself(): void
     {

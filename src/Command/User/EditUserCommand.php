@@ -77,7 +77,7 @@ class EditUserCommand extends Command
             $output,
             [
                 'data' => $dtoLoaded,
-            ]
+            ],
         );
 
         // Patch user

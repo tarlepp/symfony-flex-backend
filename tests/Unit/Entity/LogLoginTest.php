@@ -30,7 +30,7 @@ final class LogLoginTest extends KernelTestCase
     public function testThatGetCreatedAtReturnsExpected(
         LogLoginEnum $type,
         Request $request,
-        DeviceDetector $deviceDetector
+        DeviceDetector $deviceDetector,
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
         $createdAt = $entity->getCreatedAt();
@@ -40,7 +40,7 @@ final class LogLoginTest extends KernelTestCase
             new DateTime('now', new DateTimeZone('utc'))
                 ->getTimestamp(),
             $createdAt->getTimestamp(),
-            1
+            1,
         );
     }
 
@@ -52,7 +52,7 @@ final class LogLoginTest extends KernelTestCase
     public function testThatGetUserReturnsNullIfUserNotGiven(
         LogLoginEnum $type,
         Request $request,
-        DeviceDetector $deviceDetector
+        DeviceDetector $deviceDetector,
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
 

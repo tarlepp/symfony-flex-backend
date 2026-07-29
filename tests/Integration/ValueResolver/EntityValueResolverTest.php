@@ -38,9 +38,9 @@ final class EntityValueResolverTest extends KernelTestCase
                 'GET',
                 [
                     'foo' => '',
-                ]
+                ],
             ),
-            $metadata
+            $metadata,
         ));
     }
 
@@ -103,9 +103,9 @@ final class EntityValueResolverTest extends KernelTestCase
                 'GET',
                 [
                     'user' => 'bar',
-                ]
+                ],
             ),
-            $metadata
+            $metadata,
         );
     }
 
@@ -128,9 +128,9 @@ final class EntityValueResolverTest extends KernelTestCase
                 'GET',
                 [
                     'user' => 'bar',
-                ]
+                ],
             ),
-            $metadata
+            $metadata,
         ));
     }
 
@@ -169,7 +169,7 @@ final class EntityValueResolverTest extends KernelTestCase
             'GET',
             [
                 'user' => $user->getId(),
-            ]
+            ],
         );
 
         self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));

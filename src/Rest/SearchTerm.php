@@ -181,8 +181,8 @@ final class SearchTerm implements SearchTermInterface
                                 : explode(' ', $search)),
                         ),
                     ),
-                    static fn (string $value): bool => trim($value) !== ''
-                )
+                    static fn (string $value): bool => trim($value) !== '',
+                ),
             );
     }
 }

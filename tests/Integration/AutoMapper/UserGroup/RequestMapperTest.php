@@ -57,7 +57,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
             [],
             [
                 'role' => $role->getId(),
-            ]
+            ],
         );
 
         self::assertTrue(class_exists($dtoClass));

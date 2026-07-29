@@ -327,7 +327,7 @@ ecs-fix: info_msg := @printf $(_TITLE) "OK" "Running EasyCodingStandard with --f
 ecs-fix: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/ecs --version
-	@php ./vendor/bin/ecs --clear-cache --fix check src tests
+	@php ./vendor/bin/ecs check src tests --clear-cache --fix
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -509,7 +509,7 @@ lint-markdown: ## Lint Markdown files
 lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
 lint-markdown: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
+	@bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)

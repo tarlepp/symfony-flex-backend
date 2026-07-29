@@ -79,7 +79,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
         assert($request instanceof Request);
 
         $user = $this->getUser(
-            (string)($request->query->get('username') ?? $request->request->get('username', ''))
+            (string)($request->query->get('username') ?? $request->request->get('username', '')),
         );
 
         if ($user !== null) {

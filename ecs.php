@@ -11,6 +11,7 @@ declare(strict_types = 1);
 use PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer;
 use PhpCsFixer\Fixer\CastNotation\CastSpacesFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
+use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer;
@@ -90,6 +91,13 @@ return ECSConfig::configure()
             'operators' => [
                 '&' => 'align',
             ],
+        ],
+    )
+    ->withConfiguredRule(
+        TrailingCommaInMultilineFixer::class,
+        [
+            'after_heredoc' => true,
+            'elements' => ['arguments', 'array_destructuring', 'arrays', 'match', 'parameters'],
         ],
     )
     ->withSkip([

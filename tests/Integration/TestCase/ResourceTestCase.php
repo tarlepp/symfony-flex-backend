@@ -39,7 +39,7 @@ abstract class ResourceTestCase extends KernelTestCase
     {
         $message = sprintf(
             'getRepository() method did not return expected repository \'%s\'.',
-            $this->repositoryClass
+            $this->repositoryClass,
         );
 
         /** @noinspection UnnecessaryAssertionInspection */
@@ -53,7 +53,7 @@ abstract class ResourceTestCase extends KernelTestCase
     {
         $message = sprintf(
             'getEntityName() method did not return expected entity \'%s\'.',
-            $this->entityClass
+            $this->entityClass,
         );
 
         self::assertSame($this->entityClass, $this->getResource()->getEntityName(), $message);

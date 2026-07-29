@@ -103,7 +103,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
 
         self::assertFalse(
             new SecurityUserFactory($userRepositoryMock, $rolesServiceMock)
-                ->supportsClass((string)$input)
+                ->supportsClass((string)$input),
         );
     }
 
@@ -123,7 +123,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
 
         self::assertTrue(
             new SecurityUserFactory($userRepositoryMock, $rolesServiceMock)
-                ->supportsClass(SecurityUser::class)
+                ->supportsClass(SecurityUser::class),
         );
     }
 
