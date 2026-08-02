@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Rest/SearchTermTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Rest;
@@ -16,10 +15,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function call_user_func_array;
 
-/**
- * @package App\Tests\Unit\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class SearchTermTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull')]
@@ -29,7 +24,7 @@ final class SearchTermTest extends KernelTestCase
         /** @psalm-suppress MixedArgument */
         self::assertNull(SearchTerm::getCriteria(
             $column instanceof StringableArrayObject ? $column->getArrayCopy() : $column,
-            $search instanceof StringableArrayObject ? $search->getArrayCopy() : $search
+            $search instanceof StringableArrayObject ? $search->getArrayCopy() : $search,
         ), 'Criteria was not NULL with given parameters');
     }
 
@@ -43,14 +38,14 @@ final class SearchTermTest extends KernelTestCase
     #[TestDox('Test that `getCriteria` method returns `$expected` with given `$inputArguments` arguments')]
     public function testThatReturnedCriteriaIsExpected(
         StringableArrayObject $inputArguments,
-        StringableArrayObject|null $expected
+        StringableArrayObject|null $expected,
     ): void {
         /** @psalm-suppress MixedArgument */
         $result = call_user_func_array(SearchTerm::getCriteria(...), $inputArguments->getArrayCopy());
 
         self::assertSame(
             $expected?->getArrayCopy(),
-            $result
+            $result,
         );
     }
 

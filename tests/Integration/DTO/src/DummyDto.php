@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/DTO/src/DummyDto.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\src;
@@ -13,10 +12,6 @@ use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use Override;
 
-/**
- * @package App\Tests\Integration\Dto\src
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class DummyDto extends RestDto
 {
     private string $foo = '';

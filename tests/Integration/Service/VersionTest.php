@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Service/VersionTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Service;
@@ -16,10 +15,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Cache\CacheInterface;
 
-/**
- * @package App\Tests\Integration\Service
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class VersionTest extends KernelTestCase
 {
     #[TestDox('Test that `LoggerInterface::error` method is called when `CacheInterface')]

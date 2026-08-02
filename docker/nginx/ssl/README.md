@@ -7,15 +7,17 @@ environment.
 
 <a id="table-of-contents"></a>
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Selfsigned SSL certificates](#selfsigned-ssl-certificates)
-
-<a id="selfsigned-ssl-certificates"></a>
+    * [Selfsigned SSL certificates](#selfsigned-ssl-certificates)
 
 ## Selfsigned SSL certificates [ᐞ](#table-of-contents)
+
+<a id="selfsigned-ssl-certificates"></a>
 
 Note that this directory contains following SSL certification files:
 
@@ -47,4 +49,4 @@ article should help you with that process.
 
 ---
 
-[Back to main README.md](../../../README.md)
+[Back to previous](../../README.md) - [Back to main README.md](../../../README.md)

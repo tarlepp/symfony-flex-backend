@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/ValueResolver/RestDtoValueResolverTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\ValueResolver;
@@ -23,10 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RestDtoValueResolverTest extends KernelTestCase
 {
     /**

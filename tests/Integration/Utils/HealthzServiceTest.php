@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Utils/HealthzServiceTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Utils;
@@ -15,10 +14,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class HealthzServiceTest extends KernelTestCase
 {
     /**

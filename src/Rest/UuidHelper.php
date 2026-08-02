@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/UuidHelper.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -18,10 +17,6 @@ use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
 use function syslog;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class UuidHelper
 {
     private static ?UuidFactory $cache = null;
@@ -44,7 +39,8 @@ class UuidHelper
         $output = null;
 
         try {
-            $fields = $factory->fromString($value)->getFields();
+            $fields = $factory->fromString($value)
+                ->getFields();
 
             if ($fields instanceof FieldsInterface) {
                 $output = $fields->getVersion() === 1 ? UuidBinaryOrderedTimeType::NAME : UuidBinaryType::NAME;

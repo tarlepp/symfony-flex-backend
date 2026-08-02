@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Role/InheritedRolesControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Role;
@@ -18,10 +17,6 @@ use function array_search;
 use function array_slice;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Role
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class InheritedRolesControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/role';
@@ -48,7 +43,7 @@ final class InheritedRolesControllerTest extends WebTestCase
      */
     #[DataProvider('dataProviderTestThatGetInheritedRoles403')]
     #[TestDox(
-        'Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`'
+        'Test that `GET /v1/role/ROLE_ADMIN/inherited` request returns `403` when using invalid user `$u` + `$p`',
     )]
     public function testThatGetInheritedRoles403(string $u, string $p): void
     {

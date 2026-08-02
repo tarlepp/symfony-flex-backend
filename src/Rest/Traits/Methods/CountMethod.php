@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/Methods/CountMethod.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Methods;
@@ -13,10 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-/**
- * @package App\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait CountMethod
 {
     /**
@@ -47,7 +42,7 @@ trait CountMethod
                     [
                         'count' => $count,
                     ],
-                    $resource
+                    $resource,
                 );
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);

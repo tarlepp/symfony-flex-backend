@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/DTO/UserGroup/UserGroup.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\UserGroup;
@@ -17,9 +16,6 @@ use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @package App\DTO\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class UserGroup extends RestDto
@@ -61,7 +57,7 @@ class UserGroup extends RestDto
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param EntityInterface|Entity $entity
      */

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/AutoMapper/User/AutoMapperConfiguration.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper\User;
@@ -13,10 +12,6 @@ use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
 
-/**
- * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class AutoMapperConfiguration extends RestAutoMapperConfiguration
 {
     /**

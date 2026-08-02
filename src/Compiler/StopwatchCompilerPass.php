@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Compiler/StopwatchCompilerPass.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Compiler;
@@ -16,10 +15,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use function str_starts_with;
 
-/**
- * @package App\Compiler
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class StopwatchCompilerPass implements CompilerPassInterface
 {
     private const array SERVICE_TAGS = [

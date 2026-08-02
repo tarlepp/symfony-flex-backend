@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Profile/GroupsControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Profile;
@@ -23,10 +22,6 @@ use function array_map;
 use function getenv;
 use function property_exists;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Profile
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class GroupsControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/profile/groups';
@@ -99,7 +94,7 @@ final class GroupsControllerTest extends WebTestCase
     public function testThatGroupsActionReturnExpected(
         string $u,
         string $p,
-        StringableArrayObject $e
+        StringableArrayObject $e,
     ): void {
         $client = $this->getTestClient($u, $p);
         $client->request('GET', $this->baseUrl);
@@ -129,7 +124,7 @@ final class GroupsControllerTest extends WebTestCase
 
                     return $id;
                 },
-                $responseContent
+                $responseContent,
             ),
         );
     }

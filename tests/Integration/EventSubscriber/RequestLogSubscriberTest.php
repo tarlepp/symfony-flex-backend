@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/RequestLogSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -25,10 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestLogSubscriberTest extends KernelTestCase
 {
     /**
@@ -51,7 +46,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
             [],
             [
                 'REQUEST_URI' => '/foobar',
-            ]
+            ],
         );
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
@@ -91,7 +86,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
         new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
-            []
+            [],
         )
             ->onTerminateEvent($event);
     }
@@ -116,7 +111,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
             [],
             [
                 'REQUEST_URI' => '/foobar',
-            ]
+            ],
         );
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
@@ -143,7 +138,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
         new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
-            []
+            [],
         )
             ->onTerminateEvent($event);
     }
@@ -168,7 +163,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
             [],
             [
                 'REQUEST_URI' => '/foobar',
-            ]
+            ],
         );
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
@@ -195,7 +190,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
         new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
-            []
+            [],
         )
             ->onTerminateEvent($event);
     }
@@ -230,7 +225,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
         new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
-            []
+            [],
         )
             ->onTerminateEvent($event);
     }
@@ -240,7 +235,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
      */
     #[DataProvider('dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard')]
     #[TestDox(
-        'Test that `RequestLogger` service isn\'t used when making request to `$url` with `$ignored` ignored route'
+        'Test that `RequestLogger` service isn\'t used when making request to `$url` with `$ignored` ignored route',
     )]
     public function testThatLoggerServiceIsNotCalledWhenUsingSpecifiedIgnoredRoute(string $url, string $ignored): void
     {
@@ -258,7 +253,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
             [],
             [
                 'REQUEST_URI' => $url,
-            ]
+            ],
         );
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
@@ -296,7 +291,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
         new RequestLogSubscriber(
             $requestLogger,
             $userTypeIdentification,
-            [$ignored]
+            [$ignored],
         )
             ->onTerminateEvent($event);
     }

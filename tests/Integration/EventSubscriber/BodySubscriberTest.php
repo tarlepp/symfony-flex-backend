@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/BodySubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -19,10 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class BodySubscriberTest extends KernelTestCase
 {
     /**
@@ -91,7 +86,7 @@ final class BodySubscriberTest extends KernelTestCase
     public function testThatJsonContentReplaceParametersAsExpected(
         StringableArrayObject $expectedParameters,
         string $contentType,
-        string $content
+        string $content,
     ): void {
         self::bootKernel();
 
@@ -108,7 +103,7 @@ final class BodySubscriberTest extends KernelTestCase
             [],
             [],
             [],
-            $content
+            $content,
         );
         $request->headers->set('Content-Type', $contentType);
 

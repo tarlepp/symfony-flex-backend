@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Utils/Interfaces/RequestLoggerInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils\Interfaces;
@@ -15,10 +14,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @package App\Services\Interfaces
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 interface RequestLoggerInterface
 {
     /**

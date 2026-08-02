@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/SchemaTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration;
@@ -27,16 +26,13 @@ use function str_contains;
 use function strtolower;
 use function trim;
 
-/**
- * @package App\Tests\Integration
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class SchemaTest extends KernelTestCase
 {
     #[TestDox('Test that entity mappings are valid')]
     public function testThatMappingsAreValid(): void
     {
-        $errors = $this->getValidator()->validateMapping();
+        $errors = $this->getValidator()
+            ->validateMapping();
 
         $messages = [];
 
@@ -97,7 +93,8 @@ final class SchemaTest extends KernelTestCase
             Type::addType('EnumLogLogin', EnumLogLoginType::class);
         }
 
-        $managerRegistry = $kernel->getContainer()->get('doctrine');
+        $managerRegistry = $kernel->getContainer()
+            ->get('doctrine');
 
         /** @psalm-suppress MixedMethodCall - $managerRegistry->getManager() is mixed from container */
         /** @var EntityManagerInterface $entityManager */

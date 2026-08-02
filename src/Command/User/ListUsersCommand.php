@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/User/ListUsersCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -24,10 +23,6 @@ use function array_map;
 use function implode;
 use function sprintf;
 
-/**
- * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: self::NAME,
     description: 'Console command to list users',
@@ -83,7 +78,7 @@ class ListUsersCommand extends Command
             $this->getFormatterUser(),
             $this->userResource->find(orderBy: [
                 'username' => 'ASC',
-            ])
+            ]),
         );
     }
 
@@ -98,7 +93,8 @@ class ListUsersCommand extends Command
         $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
-            $userGroup->getRole()->getId(),
+            $userGroup->getRole()
+                ->getId(),
         );
 
         return fn (User $user): array => [

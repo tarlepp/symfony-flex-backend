@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/ResponseSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -20,10 +19,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ResponseSubscriberTest extends KernelTestCase
 {
     /**
@@ -56,7 +51,8 @@ final class ResponseSubscriberTest extends KernelTestCase
         new ResponseSubscriber($version)
             ->onKernelResponse($event);
 
-        $version = $event->getResponse()->headers->get('X-API-VERSION');
+        $version = $event->getResponse()
+            ->headers->get('X-API-VERSION');
 
         self::assertNotNull($version);
         self::assertSame('1.2.3', $version);

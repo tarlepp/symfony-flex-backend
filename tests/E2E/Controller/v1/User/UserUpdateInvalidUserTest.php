@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/User/UserUpdateInvalidUserTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\User;
@@ -17,10 +16,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserUpdateInvalidUserTest extends WebTestCase
 {
     /**

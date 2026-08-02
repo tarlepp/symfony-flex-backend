@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/User/UserGroupsControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\User;
@@ -15,10 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserGroupsControllerTest extends KernelTestCase
 {
     /**
@@ -35,7 +30,8 @@ final class UserGroupsControllerTest extends KernelTestCase
             ->expects($this->once())
             ->method('serialize')
             ->with(
-                $user->getUserGroups()->getValues(),
+                $user->getUserGroups()
+                    ->getValues(),
                 'json',
                 [
                     'groups' => ['set.UserGroupBasic'],

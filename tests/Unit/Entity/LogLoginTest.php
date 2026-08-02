@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Entity/LogLoginTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Entity;
@@ -21,10 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
-/**
- * @package App\Tests\Unit\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LogLoginTest extends KernelTestCase
 {
     /**
@@ -35,16 +30,17 @@ final class LogLoginTest extends KernelTestCase
     public function testThatGetCreatedAtReturnsExpected(
         LogLoginEnum $type,
         Request $request,
-        DeviceDetector $deviceDetector
+        DeviceDetector $deviceDetector,
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
         $createdAt = $entity->getCreatedAt();
 
         self::assertNotNull($createdAt);
         self::assertEqualsWithDelta(
-            new DateTime('now', new DateTimeZone('utc'))->getTimestamp(),
+            new DateTime('now', new DateTimeZone('utc'))
+                ->getTimestamp(),
             $createdAt->getTimestamp(),
-            1
+            1,
         );
     }
 
@@ -56,7 +52,7 @@ final class LogLoginTest extends KernelTestCase
     public function testThatGetUserReturnsNullIfUserNotGiven(
         LogLoginEnum $type,
         Request $request,
-        DeviceDetector $deviceDetector
+        DeviceDetector $deviceDetector,
     ): void {
         $entity = new LogLogin($type, $request, $deviceDetector);
 

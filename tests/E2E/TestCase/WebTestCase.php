@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/TestCase/WebTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\TestCase;
@@ -17,10 +16,6 @@ use function gc_collect_cycles;
 use function gc_enable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class WebTestCase extends BaseWebTestCase
 {
     /**
@@ -57,7 +52,7 @@ abstract class WebTestCase extends BaseWebTestCase
         ?string $username = null,
         ?string $password = null,
         ?array $options = null,
-        ?array $server = null
+        ?array $server = null,
     ): KernelBrowser {
         $options ??= [];
         $server ??= [];
@@ -74,7 +69,7 @@ abstract class WebTestCase extends BaseWebTestCase
                 ...$this->getFastestHeaders(),
             ],
             $authService->getJwtHeaders(),
-            $server
+            $server,
         );
 
         self::ensureKernelShutdown();
@@ -86,7 +81,7 @@ abstract class WebTestCase extends BaseWebTestCase
                     'debug' => false,
                 ],
             ],
-            $server
+            $server,
         );
     }
 
@@ -115,7 +110,7 @@ abstract class WebTestCase extends BaseWebTestCase
                 ...$this->getFastestHeaders(),
             ],
             $authService->getJwtHeaders(),
-            $server
+            $server,
         );
 
         self::ensureKernelShutdown();

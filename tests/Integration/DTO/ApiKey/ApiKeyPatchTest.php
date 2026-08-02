@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/DTO/ApiKey/ApiKeyPatchTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\ApiKey;
@@ -15,10 +14,6 @@ use App\Entity\UserGroup;
 use App\Tests\Integration\TestCase\DtoTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
-/**
- * @package App\Tests\Integration\DTO\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ApiKeyPatchTest extends DtoTestCase
 {
     /**

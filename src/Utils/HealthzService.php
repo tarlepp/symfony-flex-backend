@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Utils/HealthzService.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -12,10 +11,6 @@ use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 use Throwable;
 
-/**
- * @package App\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 readonly class HealthzService
 {
     public function __construct(

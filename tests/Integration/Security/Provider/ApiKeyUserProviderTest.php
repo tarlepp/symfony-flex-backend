@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Security/Provider/ApiKeyUserProviderTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security\Provider;
@@ -25,10 +24,6 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ApiKeyUserProviderTest extends KernelTestCase
 {
     /**
@@ -160,7 +155,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: boolean|string|int}>
+     * @return Generator<int, array{0: bool, 1: bool|string|int}>
      */
     public static function dataProviderTestThatSupportClassReturnsExpected(): Generator
     {

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Controller/v1/Profile/GroupsController.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\v1\Profile;
@@ -22,10 +21,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @package App\Controller\v1\Profile
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsController]
 class GroupsController
 {
@@ -97,7 +92,8 @@ class GroupsController
     {
         return new JsonResponse(
             $this->serializer->serialize(
-                $loggedInUser->getUserGroups()->toArray(),
+                $loggedInUser->getUserGroups()
+                    ->toArray(),
                 'json',
                 [
                     'groups' => UserGroup::SET_USER_PROFILE_GROUPS,

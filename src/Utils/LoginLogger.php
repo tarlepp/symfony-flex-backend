@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Utils/LoginLogger.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -20,10 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
-/**
- * @package App\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class LoginLogger implements LoginLoggerInterface
 {
     private readonly DeviceDetector $deviceDetector;

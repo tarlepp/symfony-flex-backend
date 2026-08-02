@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Rest/ResourceLifeCycleTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest;
@@ -18,10 +17,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function sprintf;
 
-/**
- * @package App\Tests\E2E\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ResourceLifeCycleTest extends WebTestCase
 {
     /**
@@ -35,9 +30,10 @@ final class ResourceLifeCycleTest extends WebTestCase
         $client->request('GET', '/test_lifecycle_behaviour/' . $role);
 
         $response = $client->getResponse();
-        $entity = $this->getRepository()->findOneBy([
-            'id' => $role,
-        ]);
+        $entity = $this->getRepository()
+            ->findOneBy([
+                'id' => $role,
+            ]);
 
         self::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
         self::assertSame(418, $response->getStatusCode(), (string)$response->getContent());

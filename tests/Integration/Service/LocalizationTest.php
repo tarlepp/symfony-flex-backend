@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Service/LocalizationTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Service;
@@ -21,10 +20,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Cache\CacheInterface;
 use function count;
 
-/**
- * @package App\Tests\Integration\Service
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LocalizationTest extends KernelTestCase
 {
     #[TestDox('Test that `getLanguages` returns expected')]
@@ -38,7 +33,8 @@ final class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             $expected,
-            new Localization($cache, $logger, $requestStack)->getLanguages(),
+            new Localization($cache, $logger, $requestStack)
+                ->getLanguages(),
         );
     }
 
@@ -53,7 +49,8 @@ final class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             $expected,
-            new Localization($cache, $logger, $requestStack)->getLocales(),
+            new Localization($cache, $logger, $requestStack)
+                ->getLocales(),
         );
     }
 
@@ -110,7 +107,8 @@ final class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             Locale::getDefault()->value,
-            new Localization($cache, $logger, $requestStack)->getRequestLocale(),
+            new Localization($cache, $logger, $requestStack)
+                ->getRequestLocale(),
         );
     }
 
@@ -128,7 +126,8 @@ final class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             'en',
-            new Localization($cache, $logger, $requestStack)->getRequestLocale(),
+            new Localization($cache, $logger, $requestStack)
+                ->getRequestLocale(),
         );
     }
 }

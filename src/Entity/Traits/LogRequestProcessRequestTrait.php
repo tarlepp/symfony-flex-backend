@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/Traits/LogRequestProcessRequestTrait.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -27,9 +26,6 @@ use function preg_replace;
 use function str_contains;
 
 /**
- * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method array<int, string> getSensitiveProperties();
  */
 trait LogRequestProcessRequestTrait

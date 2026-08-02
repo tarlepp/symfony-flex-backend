@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/DocumentationTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E;
@@ -12,10 +11,6 @@ use App\Tests\E2E\TestCase\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
-/**
- * @package App\Tests\Functional
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class DocumentationTest extends WebTestCase
 {
     /**

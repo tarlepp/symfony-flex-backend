@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/EventSubscriber/LockedUserSubscriberTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -30,17 +29,13 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function range;
 
-/**
- * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LockedUserSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported'
+        'Test that `onAuthenticationSuccess` method throws `UnsupportedUserException` when user is not supported',
     )]
     public function testThatOnAuthenticationSuccessThrowsUserNotFoundException(): void
     {
@@ -49,7 +44,8 @@ final class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
@@ -57,7 +53,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
         $event = new AuthenticationSuccessEvent(
             [],
             new InMemoryUser('username', 'password'),
-            new Response()
+            new Response(),
         );
 
         new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
@@ -121,13 +117,14 @@ final class LockedUserSubscriberTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked'
+        'Test that `onAuthenticationSuccess` method calls resource service `reset` method when user is not locked',
     )]
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());

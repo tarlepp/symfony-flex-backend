@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Enum/Locale.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Enum;
@@ -15,9 +14,6 @@ use Override;
 
 /**
  * Locale enum
- *
- * @package App\Enum
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 enum Locale: string implements DatabaseEnumInterface, EnumWithDefaultInterface
 {

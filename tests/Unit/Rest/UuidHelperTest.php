@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Rest/UuidHelperTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Rest;
@@ -19,10 +18,6 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Unit\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UuidHelperTest extends KernelTestCase
 {
     #[TestDox('Test that `UuidHelper::getFactory` method returns always same instance of `UuidFactory`')]

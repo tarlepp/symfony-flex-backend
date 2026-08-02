@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Controller/v1/Role/InheritedRolesController.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\v1\Role;
@@ -21,10 +20,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * @package App\Controller\v1\Role
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsController]
 #[OA\Tag(name: 'Role Management')]
 class InheritedRolesController

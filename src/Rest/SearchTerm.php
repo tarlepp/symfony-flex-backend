@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/SearchTerm.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -25,16 +24,18 @@ use function str_contains;
 use function str_replace;
 use function trim;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class SearchTerm implements SearchTermInterface
 {
+    /**
+     * @param array<int, string>|string|null $column
+     * @param array<int, string>|string|null $search
+     *
+     * @return array<string, array<string, array<string, array<int, string>>>>|null
+     */
     #[Override]
     public static function getCriteria(
-        array | string | null $column,
-        array | string | null $search,
+        array|string|null $column,
+        array|string|null $search,
         ?string $operand = null,
         ?int $mode = null,
     ): ?array {
@@ -49,10 +50,7 @@ final class SearchTerm implements SearchTermInterface
             $operand = self::OPERAND_OR;
         }
 
-        /** @var array<string, array<string, array<string, string>>>|null $criteria */
-        $criteria = self::createCriteria($columns, $searchTerms, $operand, $mode);
-
-        return $criteria;
+        return self::createCriteria($columns, $searchTerms, $operand, $mode);
     }
 
     /**
@@ -61,7 +59,7 @@ final class SearchTerm implements SearchTermInterface
      * @param array<int, string> $columns
      * @param array<int, string> $searchTerms
      *
-     * @return array<string, array<string, array<string, mixed>>>|null
+     * @return array<string, array<string, array<string, array<int, string>>>>|null
      */
     private static function createCriteria(array $columns, array $searchTerms, string $operand, int $mode): ?array
     {
@@ -70,7 +68,7 @@ final class SearchTerm implements SearchTermInterface
         /**
          * Get criteria
          *
-         * @var array<string, array<string, array<int, string>>> $criteria
+         * @var array<string, array<string, array<int, string>>>
          */
         $criteria = array_filter(array_map($iteratorTerm, $searchTerms));
 
@@ -107,11 +105,9 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getColumnIterator(string $term, int $mode): Closure
     {
-        /*
+        /**
          * Lambda function to create actual criteria for specified column + term + mode combo.
-         *
          * @param string $column
-         *
          * @return array<int, string>
          */
         return static fn (string $column): array => [
@@ -136,7 +132,7 @@ final class SearchTerm implements SearchTermInterface
      *
      * @return array<int, string>
      */
-    private static function getColumns(array | string | null $column): array
+    private static function getColumns(array|string|null $column): array
     {
         // Normalize columns
         return $column === null
@@ -145,7 +141,7 @@ final class SearchTerm implements SearchTermInterface
                 array_map(
                     'trim',
                     (is_array($column)
-                        ? array_filter($column, static fn (string | null $column): bool => is_string($column))
+                        ? array_filter($column, static fn (string|null $column): bool => is_string($column))
                         : (array)$column),
                 ),
                 static fn (string $value): bool => trim($value) !== '',
@@ -159,7 +155,7 @@ final class SearchTerm implements SearchTermInterface
      *
      * @return array<int, string>
      */
-    private static function getSearchTerms(array | string | null $search): array
+    private static function getSearchTerms(array|string|null $search): array
     {
         if (is_string($search)) {
             preg_match_all('#([^\"]\S*|\".+?\")\s*#', trim($search), $matches);
@@ -181,12 +177,12 @@ final class SearchTerm implements SearchTermInterface
                         array_map(
                             'trim',
                             (is_array($search)
-                                ? array_filter($search, static fn (string | null $term): bool => is_string($term))
+                                ? array_filter($search, static fn (string|null $term): bool => is_string($term))
                                 : explode(' ', $search)),
                         ),
                     ),
-                    static fn (string $value): bool => trim($value) !== ''
-                )
+                    static fn (string $value): bool => trim($value) !== '',
+                ),
             );
     }
 }

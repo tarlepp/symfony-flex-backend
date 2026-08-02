@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/Traits/Methods/FindMethodTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
@@ -29,10 +28,6 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class FindMethodTest extends KernelTestCase
 {
     /**
@@ -122,7 +117,7 @@ final class FindMethodTest extends KernelTestCase
                 $orderBy->getArrayCopy(),
                 $limit,
                 $offset,
-                $search->getArrayCopy()
+                $search->getArrayCopy(),
             )
             ->willReturn([]);
 

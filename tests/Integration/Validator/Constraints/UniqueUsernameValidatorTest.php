@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Validator/Constraints/UniqueUsernameValidatorTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -18,10 +17,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UniqueUsernameValidatorTest extends KernelTestCase
 {
     /**
@@ -61,6 +56,7 @@ final class UniqueUsernameValidatorTest extends KernelTestCase
             ->method('addViolation');
 
         // Run validator
-        new UniqueUsernameValidator($repositoryMock)->validateInContext($user, new UniqueUsername(), $contextMock);
+        new UniqueUsernameValidator($repositoryMock)
+            ->validateInContext($user, new UniqueUsername(), $contextMock);
     }
 }

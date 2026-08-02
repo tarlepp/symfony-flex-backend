@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/AutoMapper/ApiKey/AutoMapperConfigurationTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\AutoMapper\UserGroup;
@@ -16,10 +15,6 @@ use App\DTO\UserGroup\UserGroupPatch;
 use App\DTO\UserGroup\UserGroupUpdate;
 use App\Tests\Integration\TestCase\RestRequestMapperConfigurationTestCase;
 
-/**
- * @package App\Tests\Integration\AutoMapper\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class AutoMapperConfigurationTest extends RestRequestMapperConfigurationTestCase
 {
     /**

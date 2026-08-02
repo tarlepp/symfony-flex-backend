@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Security/RolesServiceTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security;
@@ -17,10 +16,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-/**
- * @package App\Tests\Integration\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RolesServiceTest extends KernelTestCase
 {
     #[TestDox('Test that `getInheritedRoles(array $roles)` method calls expected service method')]
@@ -34,7 +29,8 @@ final class RolesServiceTest extends KernelTestCase
             ->with(['RoleA', 'RoleB'])
             ->willReturn(['RoleA', 'RoleB', 'RoleC']);
 
-        new RolesService($roleHierarchy)->getInheritedRoles(['RoleA', 'RoleB']);
+        new RolesService($roleHierarchy)
+            ->getInheritedRoles(['RoleA', 'RoleB']);
     }
 
     #[TestDox('Test that `RolesServiceInterface::getRoles` method returns expected')]
@@ -48,8 +44,9 @@ final class RolesServiceTest extends KernelTestCase
                 'ROLE_ROOT',
                 'ROLE_API',
             ],
-            $this->getService()->getRoles(),
-            'Returned roles are not expected.'
+            $this->getService()
+                ->getRoles(),
+            'Returned roles are not expected.',
         );
     }
 
@@ -77,14 +74,15 @@ final class RolesServiceTest extends KernelTestCase
     #[TestDox('Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input')]
     public function testThatGetInheritedRolesReturnsExpected(
         StringableArrayObject $expected,
-        StringableArrayObject $roles
+        StringableArrayObject $roles,
     ): void {
         /** @var array<int, string> $rolesArray */
         $rolesArray = $roles->getArrayCopy();
         self::assertSame(
             $expected->getArrayCopy(),
-            $this->getService()->getInheritedRoles($rolesArray),
-            'Inherited roles was not expected'
+            $this->getService()
+                ->getInheritedRoles($rolesArray),
+            'Inherited roles was not expected',
         );
     }
 

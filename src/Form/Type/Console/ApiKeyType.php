@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Form/Type/Console/ApiKeyType.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Console;
@@ -23,9 +22,6 @@ use Throwable;
 
 /**
  * @extends AbstractType<ApiKey>
- *
- * @package App\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyType extends AbstractType
 {
@@ -56,7 +52,7 @@ class ApiKeyType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws Throwable
      */
@@ -79,7 +75,8 @@ class ApiKeyType extends AbstractType
                 ],
             );
 
-        $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
+        $builder->get('userGroups')
+            ->addModelTransformer($this->userGroupTransformer);
     }
 
     #[Override]

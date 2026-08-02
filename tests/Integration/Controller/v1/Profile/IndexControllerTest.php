@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/Profile/IndexControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\Profile;
@@ -16,10 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Controller\v1\Profile
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class IndexControllerTest extends KernelTestCase
 {
     /**

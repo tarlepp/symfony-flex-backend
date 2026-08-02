@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/Rest/RequestHandlerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Rest;
@@ -19,15 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use function json_encode;
 
-/**
- * @package App\Tests\Unit\Rest;
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RequestHandlerTest extends KernelTestCase
 {
     #[DataProvider('dataProviderTestThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter')]
     #[TestDox(
-        'Test that `getCriteria` method throws an exception with `$method` invalid (non JSON) `?where` parameter'
+        'Test that `getCriteria` method throws an exception with `$method` invalid (non JSON) `?where` parameter',
     )]
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(string $method): void
     {
@@ -39,7 +34,7 @@ final class RequestHandlerTest extends KernelTestCase
             $method,
             [
                 'where' => '{foo bar',
-            ]
+            ],
         );
 
         RequestHandler::getCriteria($fakeRequest);
@@ -53,14 +48,14 @@ final class RequestHandlerTest extends KernelTestCase
     public function testThatGetCriteriaMethodsReturnsExpectedGenerator(
         string $method,
         StringableArrayObject $expected,
-        StringableArrayObject $where
+        StringableArrayObject $where,
     ): void {
         $fakeRequest = Request::create(
             '/',
             'GET',
             [
                 'where' => json_encode($where->getArrayCopy(), JSON_THROW_ON_ERROR),
-            ]
+            ],
         );
 
         self::assertSame($expected->getArrayCopy(), RequestHandler::getCriteria($fakeRequest));
@@ -71,14 +66,14 @@ final class RequestHandlerTest extends KernelTestCase
     public function testThatGetOrderByReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
-        StringableArrayObject $expected
+        StringableArrayObject $expected,
     ): void {
         $fakeRequest = Request::create('/', $method, $parameters->getArrayCopy());
 
         self::assertSame(
             $expected->getArrayCopy(),
             RequestHandler::getOrderBy($fakeRequest),
-            'getOrderBy method did not return expected value'
+            'getOrderBy method did not return expected value',
         );
     }
 
@@ -90,18 +85,18 @@ final class RequestHandlerTest extends KernelTestCase
 
         self::assertNull(
             RequestHandler::getLimit($fakeRequest),
-            'getLimit method did not return NULL as it should without any parameters'
+            'getLimit method did not return NULL as it should without any parameters',
         );
     }
 
     #[DataProvider('dataProviderTestThatGetLimitReturnsExpectedValue')]
     #[TestDox(
-        'Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter'
+        'Test that `getLimit` method returns `$expected` when using `$parameters` as `$method` request parameter',
     )]
     public function testThatGetLimitReturnsExpectedValue(
         string $method,
         StringableArrayObject $parameters,
-        int $expected
+        int $expected,
     ): void {
         $fakeRequest = Request::create('/', $method, $parameters->getArrayCopy());
 
@@ -109,13 +104,13 @@ final class RequestHandlerTest extends KernelTestCase
 
         self::assertNotNull(
             $actual,
-            'getLimit returned NULL and it should return an integer'
+            'getLimit returned NULL and it should return an integer',
         );
 
         self::assertSame(
             $expected,
             $actual,
-            'getLimit method did not return expected value'
+            'getLimit method did not return expected value',
         );
     }
 
@@ -127,13 +122,13 @@ final class RequestHandlerTest extends KernelTestCase
 
         self::assertNull(
             RequestHandler::getOffset($fakeRequest),
-            'getOffset method did not return NULL as it should without any parameters'
+            'getOffset method did not return NULL as it should without any parameters',
         );
     }
 
     #[DataProvider('dataProviderTestThatGetOffsetReturnsExpectedValue')]
     #[TestDox(
-        'Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter'
+        'Test that `getOffset` method returns `$expected` when using `$parameters` as `$method` request parameter',
     )]
     public function testThatGetOffsetReturnsExpectedValue(
         string $method,
@@ -146,19 +141,19 @@ final class RequestHandlerTest extends KernelTestCase
 
         self::assertNotNull(
             $actual,
-            'getOffset returned NULL and it should return an integer'
+            'getOffset returned NULL and it should return an integer',
         );
 
         self::assertSame(
             $expected,
             $actual,
-            'getOffset method did not return expected value'
+            'getOffset method did not return expected value',
         );
     }
 
     #[DataProvider('dataProviderTestThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters')]
     #[TestDox(
-        'Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request'
+        'Test that `getSearchTerms` returns empty array when there is no `search` parameter on `$method` request',
     )]
     public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(string $method): void
     {
@@ -167,7 +162,7 @@ final class RequestHandlerTest extends KernelTestCase
         self::assertSame(
             [],
             RequestHandler::getSearchTerms($fakeRequest),
-            'getSearchTerms method did not return empty array ([]) as it should without any parameters'
+            'getSearchTerms method did not return empty array ([]) as it should without any parameters',
         );
     }
 
@@ -177,7 +172,7 @@ final class RequestHandlerTest extends KernelTestCase
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage(
-            'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
+            'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.',
         );
 
         $parameters = [
@@ -194,7 +189,7 @@ final class RequestHandlerTest extends KernelTestCase
     public function testThatGetSearchTermsReturnsExpectedValue(
         string $method,
         StringableArrayObject $expected,
-        string | bool $search,
+        string|bool $search,
     ): void {
         $parameters = [
             'search' => (string)$search,
@@ -205,7 +200,7 @@ final class RequestHandlerTest extends KernelTestCase
         self::assertSame(
             $expected->getArrayCopy(),
             RequestHandler::getSearchTerms($fakeRequest),
-            'getSearchTerms method did not return expected value'
+            'getSearchTerms method did not return expected value',
         );
     }
 
@@ -621,7 +616,7 @@ final class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
      *
-     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: boolean|string}>
+     * @return Generator<int, array{0: string, 1: StringableArrayObject, 2: bool|string}>
      */
     public static function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {

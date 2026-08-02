@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/User/DeleteUserControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\User;
@@ -19,9 +18,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
- * @package App\Tests\Integration\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method DeleteUserController getController()
  */
 final class DeleteUserControllerTest extends RestIntegrationControllerTestCase
@@ -40,7 +36,7 @@ final class DeleteUserControllerTest extends RestIntegrationControllerTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself'
+        'Test that `__invoke($request, $user, $user)` method trows exception if user is trying to delete himself',
     )]
     public function testThatInvokeMethodThrowsAnExceptionIfUserTriesToDeleteHimself(): void
     {

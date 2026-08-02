@@ -1,45 +1,53 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 This document contains information about main concepts and features how this
 application is built and how you can use it.
 
 This template application has quite lot features that aren't so clear for
 new developers - so this document is trying to solve that issue.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [REST API wtf?](#rest-api-wtf-table-of-contents)
-    * [Explanation](#explanation-table-of-contents)
-    * [Base workflow](#base-workflow-table-of-contents)
-    * [REST traits](#rest-traits-table-of-contents)
-    * [How to make new REST API?](#how-to-make-new-rest-api-table-of-contents)
-    * [Alternatives](#alternatives-table-of-contents)
-  * [Authentication and authorization](#authentication-and-authorization-table-of-contents)
-    * [Authentication](#authentication-table-of-contents)
-      * [Normal users](#normal-users-table-of-contents)
-      * [ApiKey "users"](#apikey-users-table-of-contents)
-  * [Controllers](#controllers-table-of-contents)
-  * [Resources](#resources-table-of-contents)
-    * [Lifecycle callbacks](#lifecycle-callbacks-table-of-contents)
-  * [Repositories](#repositories-table-of-contents)
-    * [Parameter handling](#parameter-handling-table-of-contents)
-    * [Query builder callbacks and joins](#query-builder-callbacks-and-joins-table-of-contents)
-  * [Argument value resolvers](#argument-value-resolvers-table-of-contents)
-    * [Entity value resolver](#entity-value-resolver-table-of-contents)
-    * [Logged in user value resolver](#logged-in-user-value-resolver-table-of-contents)
-    * [REST DTO value resolver](#rest-dto-value-resolver-table-of-contents)
-  * [Common helpers](#common-helpers-table-of-contents)
-    * [LoggerAwareTrait](#loggerawaretrait-table-of-contents)
-    * [StopwatchAwareTrait](#stopwatchawaretrait-table-of-contents)
+    * [REST API wtf?](#rest-api-wtf)
+      * [Explanation](#explanation)
+      * [Base workflow](#base-workflow)
+      * [REST traits](#rest-traits)
+      * [How to make new REST API?](#how-to-make-new-rest-api)
+    * [Authentication and authorization](#authentication-and-authorization)
+      * [Authentication](#authentication)
+        * [Normal users](#normal-users)
+        * [ApiKey "users"](#apikey-users)
+    * [Controllers](#controllers)
+      * [Alternatives](#alternatives)
+    * [Resources](#resources)
+      * [Lifecycle callbacks](#lifecycle-callbacks)
+    * [Repositories](#repositories)
+      * [Parameter handling](#parameter-handling)
+      * [Query builder callbacks and joins](#query-builder-callbacks-and-joins)
+    * [Argument value resolvers](#argument-value-resolvers)
+      * [Entity value resolver](#entity-value-resolver)
+      * [Logged in user value resolver](#logged-in-user-value-resolver)
+      * [REST DTO value resolver](#rest-dto-value-resolver)
+    * [Common helpers](#common-helpers)
+      * [LoggerAwareTrait](#loggerawaretrait)
+      * [StopwatchAwareTrait](#stopwatchawaretrait)
 
 ## REST API wtf? [ᐞ](#table-of-contents)
+
+<a id="rest-api-wtf"></a>
 
 This application provides a REST API that you can easily use - and now you
 might be asking question - why, isn't there a ton of those already?
 
 ### Explanation [ᐞ](#table-of-contents)
+
+<a id="explanation"></a>
 
 When I started with this "project" I first tried `FOSRestBundle` and after that
 `API Platform` and neither of those wasn't "good" enough for my needs for REST
@@ -69,6 +77,8 @@ The main points to make this from scratch are following things;
 
 ### Base workflow [ᐞ](#table-of-contents)
 
+<a id="base-workflow"></a>
+
 Within this application the base workflow is following, when we're talking
 about "big" sections at time;
 
@@ -79,6 +89,8 @@ application workflow. This resource is just one more layer within your
 application where you can control your request / response handling as you like.
 
 ### REST traits [ᐞ](#table-of-contents)
+
+<a id="rest-traits"></a>
 
 Application relies traits within those basic CRUD actions. You can easily
 attach any of following generic trait to your application controller;
@@ -97,6 +109,8 @@ to access that action.
 
 ### How to make new REST API? [ᐞ](#table-of-contents)
 
+<a id="how-to-make-new-rest-api"></a>
+
 To create new REST API from scratch you need to add following parts to your
 application;
 
@@ -112,7 +126,11 @@ structure if you look how `ApiKey` endpoint has been built to this application.
 
 ## Authentication and authorization [ᐞ](#table-of-contents)
 
+<a id="authentication-and-authorization"></a>
+
 ### Authentication [ᐞ](#table-of-contents)
+
+<a id="authentication"></a>
 
 By default this application is providing a "normal" user and "apikey"
 authentication implementations. Another quite _big_ difference to traditional
@@ -121,6 +139,8 @@ Symfony  applications is that this application does not bind `Entities` to
 separated DTO's for that.
 
 #### Normal users [ᐞ](#table-of-contents)
+
+<a id="normal-users"></a>
 
 These users are authenticated via `Json Web Token (JWT)`, each JWT is created
 using private/public keys and those keys are always re-generated when
@@ -134,6 +154,8 @@ implementation and/or create your own one.
 
 #### ApiKey "users" [ᐞ](#table-of-contents)
 
+<a id="apikey-users"></a>
+
 This authentication is used within `server-to-server` communication between
 "trusted" parties. These "ApiKey" users are authenticated via special HTTP
 request header;
@@ -143,6 +165,8 @@ Authorization: ApiKey _APIKEY_TOKEN_HERE_
 ```
 
 ## Controllers [ᐞ](#table-of-contents)
+
+<a id="controllers"></a>
 
 If your application is providing just a basic REST API for CRUD actions, then
 like 99% your controllers would look like something below;
@@ -194,6 +218,8 @@ application will provide within that simple controller.
 
 ### Alternatives [ᐞ](#table-of-contents)
 
+<a id="alternatives"></a>
+
 You should know that there is also another solutions for REST API, that you
 really should look/try also.
 
@@ -206,6 +232,8 @@ the main aspects of Symfony based applications (security, controllers, dto,
 request/response handling, etc.).
 
 ## Resources [ᐞ](#table-of-contents)
+
+<a id="resources"></a>
 
 Resource services are layer between your controller/command and repository.
 Within this layer you can control how to `mutate` that repository data for
@@ -241,6 +269,8 @@ These resource services are the main backbone of your application.
 
 ### Lifecycle callbacks [ᐞ](#table-of-contents)
 
+<a id="lifecycle-callbacks"></a>
+
 Using resource services give you ability to use `lifecycle callbacks` that
 give you extra layer to control how your requests are handled within your
 application. These lifecycle callbacks are basically just middleware that are
@@ -263,10 +293,14 @@ about these see [this](https://github.com/tarlepp/symfony-flex-backend/blob/mast
 
 ## Repositories [ᐞ](#table-of-contents)
 
+<a id="repositories"></a>
+
 Repositories within this application are much like the same as Symfony
 itself provides by default, but there is couple of extra features within those;
 
 ### Parameter handling [ᐞ](#table-of-contents)
+
+<a id="parameter-handling"></a>
 
 This application has builtin generic parameter handling to help you with
 generic REST queries. Handling of following generic parameters has been
@@ -298,6 +332,8 @@ Note that within base REST CRUD actions these parameters have been passed
 through from `resource` service to repository level.
 
 ### Query builder callbacks and joins [ᐞ](#table-of-contents)
+
+<a id="query-builder-callbacks-and-joins"></a>
 
 Usually common use case for generic REST API is to add custom callbacks to
 specified query that is going to be executed and this application provides you
@@ -336,12 +372,16 @@ just make one query instead of `1+n` queries.
 
 ## Argument value resolvers [ᐞ](#table-of-contents)
 
+<a id="argument-value-resolvers"></a>
+
 Application has following builtin argument resolvers that you can use to build
 your own application.
 
 [Symfony documentation](https://symfony.com/doc/current/controller/argument_value_resolver.html)
 
 ### Entity value resolver [ᐞ](#table-of-contents)
+
+<a id="entity-value-resolver"></a>
 
 This is basically replacement for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
 `@ParamConverter` annotation, so that you can easily inject _any_ entity to
@@ -355,6 +395,8 @@ those [lifecycle callbacks](#lifecycle-callbacks) as you like.
 
 ### Logged in user value resolver [ᐞ](#table-of-contents)
 
+<a id="logged-in-user-value-resolver"></a>
+
 Because this application has separated user `entity` totally from actual
 firewall user - you can use this resolver to inject actual logged in user
 entity to your controller.
@@ -362,6 +404,8 @@ entity to your controller.
 [source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/LoggedInUserValueResolver.php)
 
 ### REST DTO value resolver [ᐞ](#table-of-contents)
+
+<a id="rest-dto-value-resolver"></a>
 
 This resolver is used within following generic REST CRUD routes;
 
@@ -379,6 +423,8 @@ to make actual mapping from request to corresponding DTO object.
 
 ## Common helpers [ᐞ](#table-of-contents)
 
+<a id="common-helpers"></a>
+
 This application has builtin common helper traits that you can easily to use
 everywhere in your application.
 
@@ -388,6 +434,8 @@ eg. if you need `LoggerInterface` in your service, just use DI to inject that
 to your service._
 
 ### LoggerAwareTrait [ᐞ](#table-of-contents)
+
+<a id="loggerawaretrait"></a>
 
 Within this trait you can easily inject _your_ `logger` to any service that
 you've in your application.
@@ -410,6 +458,8 @@ After that you can just use `$this->logger` in your service to log what you
 need.
 
 ### StopwatchAwareTrait [ᐞ](#table-of-contents)
+
+<a id="stopwatchawaretrait"></a>
 
 This is used to easy up your application debug process.
 
@@ -434,4 +484,4 @@ process and you can see this easily from your profiler.
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)

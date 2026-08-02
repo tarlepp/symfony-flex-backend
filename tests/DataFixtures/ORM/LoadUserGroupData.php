@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/DataFixtures/ORM/LoadUserGroupData.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\DataFixtures\ORM;
@@ -21,9 +20,6 @@ use Throwable;
 use function array_map;
 
 /**
- * @package App\Tests\DataFixtures\ORM
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface

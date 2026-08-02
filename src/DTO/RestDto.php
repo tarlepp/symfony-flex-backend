@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/DTO/RestDto.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO;
@@ -20,10 +19,6 @@ use function method_exists;
 use function sprintf;
 use function ucfirst;
 
-/**
- * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class RestDto implements RestDtoInterface
 {
     /**
@@ -130,7 +125,7 @@ abstract class RestDto implements RestDtoInterface
             $message = sprintf(
                 'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
                 $dto::class,
-                $property
+                $property,
             );
 
             throw new BadMethodCallException($message);
@@ -160,7 +155,7 @@ abstract class RestDto implements RestDtoInterface
         if (count($getterMethods) > 1) {
             $message = sprintf(
                 'Property \'%s\' has multiple getter methods - this is insane!',
-                $property
+                $property,
             );
 
             throw new LogicException($message);

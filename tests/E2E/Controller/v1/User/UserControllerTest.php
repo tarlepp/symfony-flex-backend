@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/User/UserControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\User;
@@ -16,10 +15,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/user';
@@ -66,7 +61,7 @@ final class UserControllerTest extends WebTestCase
 
     #[DataProvider('dataProviderValidApiKeyUsers')]
     #[TestDox(
-        'Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role'
+        'Test that `GET /v1/user/count` request returns expected response when using API key token for `$r` role',
     )]
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $r): void
     {

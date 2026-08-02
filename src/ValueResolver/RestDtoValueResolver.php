@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/ValueResolver/RestDtoValueResolver.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\ValueResolver;
@@ -22,10 +21,6 @@ use function count;
 use function explode;
 use function in_array;
 
-/**
- * @package App\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- */
 class RestDtoValueResolver implements ValueResolverInterface
 {
     private const string CONTROLLER_KEY = '_controller';

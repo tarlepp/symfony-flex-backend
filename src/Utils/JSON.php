@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Utils/JSON.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -12,10 +11,6 @@ use JsonException;
 use function json_decode;
 use function json_encode;
 
-/**
- * @package App\Util
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class JSON
 {
     /**
@@ -31,6 +26,9 @@ class JSON
      *                          The behaviour of these constants is described on the JSON constants page.
      * @param int<1, 2147483647>|null $depth Set the maximum depth. Must be greater than zero.
      *
+     * @psalm-suppress InvalidFalsableReturnType
+     * @return non-empty-string
+     *
      * @throws JsonException
      */
     public static function encode(mixed $input, ?int $options = null, ?int $depth = null): string
@@ -38,10 +36,8 @@ class JSON
         $options ??= 0;
         $depth ??= 512;
 
-        /** @var non-empty-string $encoded */
-        $encoded = json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
-
-        return $encoded;
+        /** @psalm-suppress FalsableReturnStatement */
+        return json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
     }
 
     /**

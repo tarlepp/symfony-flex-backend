@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/EventSubscriber/AuthenticationSuccessSubscriber.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -17,10 +16,6 @@ use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Throwable;
 
-/**
- * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class AuthenticationSuccessSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -30,7 +25,7 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @return array<string, string>
      */

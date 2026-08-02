@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/LogRequest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -24,10 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Throwable;
 use function mb_strlen;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity(
     readOnly: true,
 )]
@@ -139,7 +134,7 @@ class LogRequest implements EntityInterface
             'LogRequest.apiKey',
         ])]
         private ?ApiKey $apiKey = null,
-        ?bool $mainRequest = null
+        ?bool $mainRequest = null,
     ) {
         $this->id = $this->createUuid();
         $this->mainRequest = $mainRequest ?? true;

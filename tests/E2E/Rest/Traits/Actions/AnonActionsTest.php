@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Rest/Traits/Actions/AnonActionsTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\Traits\Actions;
@@ -13,10 +12,6 @@ use Generator;
 use Override;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Rest\Traits\Actions
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class AnonActionsTest extends RestTraitTestCase
 {
     private const string SKIPPED_INVALID_USER_TEST_MESSAGE = 'There are no invalid users, so this cannot be tested.';
@@ -32,7 +27,7 @@ final class AnonActionsTest extends RestTraitTestCase
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }
@@ -44,7 +39,7 @@ final class AnonActionsTest extends RestTraitTestCase
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }
@@ -57,7 +52,7 @@ final class AnonActionsTest extends RestTraitTestCase
         ?string $uuid = null,
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }
@@ -69,7 +64,7 @@ final class AnonActionsTest extends RestTraitTestCase
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $u = null,
         ?string $p = null,
-        ?string $m = null
+        ?string $m = null,
     ): void {
         self::skipInvalidUserTest();
     }

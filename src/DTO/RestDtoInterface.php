@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/DTO/RestDtoInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO;
@@ -11,10 +10,6 @@ namespace App\DTO;
 use App\Entity\Interfaces\EntityInterface;
 use Throwable;
 
-/**
- * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 interface RestDtoInterface
 {
     public function setId(string $id): self;

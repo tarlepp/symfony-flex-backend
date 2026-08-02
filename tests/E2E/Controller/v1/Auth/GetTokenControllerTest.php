@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Auth/GetTokenControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Auth;
@@ -19,10 +18,6 @@ use function getenv;
 use function json_encode;
 use function property_exists;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Auth
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class GetTokenControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/auth/get_token';
@@ -69,7 +64,7 @@ final class GetTokenControllerTest extends WebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest',
             ],
-            $payload
+            $payload,
         );
 
         $response = $client->getResponse();
@@ -79,7 +74,7 @@ final class GetTokenControllerTest extends WebTestCase
         self::assertSame(
             200,
             $response->getStatusCode(),
-            "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
+            "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response,
         );
 
         /** @var stdClass $responseContent */
@@ -119,7 +114,7 @@ final class GetTokenControllerTest extends WebTestCase
             json_encode([
                 'username' => 'username',
                 'password' => 'password',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
 
         $response = $client->getResponse();

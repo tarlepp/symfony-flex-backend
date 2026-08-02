@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Resource/ResourceCollectionTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
@@ -42,10 +41,6 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
@@ -204,7 +199,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: class-string<RestResource>|string|null}>
+     * @return Generator<int, array{0: bool, 1: class-string<RestResource>|string|null}>
      */
     public static function dataProviderTestThatHasReturnsExpected(): Generator
     {
@@ -223,7 +218,7 @@ final class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array{0: boolean, 1: class-string<EntityInterface>|string|null}>
+     * @return Generator<int, array{0: bool, 1: class-string<EntityInterface>|string|null}>
      */
     public static function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {

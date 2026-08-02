@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Unit/IntegrityTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit;
@@ -41,10 +40,6 @@ use function sprintf;
 use function str_replace;
 use const DIRECTORY_SEPARATOR;
 
-/**
- * @package App\Tests\Unit
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class IntegrityTest extends KernelTestCase
 {
     public static function getKernel(): KernelInterface
@@ -68,7 +63,7 @@ final class IntegrityTest extends KernelTestCase
         $message = sprintf(
             'Controller "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -81,7 +76,7 @@ final class IntegrityTest extends KernelTestCase
         $message = sprintf(
             'Controller "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -98,7 +93,7 @@ FORMAT;
         $message = sprintf(
             $format,
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -109,7 +104,7 @@ FORMAT;
     public function testThatRepositoryHaveFunctionalTests(
         string $testClass,
         string $class,
-        StringableArrayObject $methods
+        StringableArrayObject $methods,
     ): void {
         $format = <<<FORMAT
 Repository '%s' doesn't have required test class '%s', repository has following methods that needs to be tested: '%s'.
@@ -122,7 +117,7 @@ FORMAT;
             $format,
             $class,
             $testClass,
-            implode('", "', $methodsCopy)
+            implode('", "', $methodsCopy),
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -135,7 +130,7 @@ FORMAT;
         $message = sprintf(
             'Repository "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -148,7 +143,7 @@ FORMAT;
         $message = sprintf(
             'Entity "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -161,7 +156,7 @@ FORMAT;
         $message = sprintf(
             'EventSubscriber "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -174,7 +169,7 @@ FORMAT;
         $message = sprintf(
             'EventListener "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -187,7 +182,7 @@ FORMAT;
         $message = sprintf(
             'Resource "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -200,7 +195,7 @@ FORMAT;
         $message = sprintf(
             'Authenticator "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -213,7 +208,7 @@ FORMAT;
         $message = sprintf(
             'Security provider "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -226,7 +221,7 @@ FORMAT;
         $message = sprintf(
             'Security voter "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -239,7 +234,7 @@ FORMAT;
         $message = sprintf(
             'REST DTO "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -252,7 +247,7 @@ FORMAT;
         $message = sprintf(
             'Form type "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -265,7 +260,7 @@ FORMAT;
         $message = sprintf(
             'DataTransformer "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -278,7 +273,7 @@ FORMAT;
         $message = sprintf(
             'Constraint "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -288,12 +283,12 @@ FORMAT;
     #[TestDox('Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`')]
     public function testThatEventSubscriberHasUnitTest(
         string $eventSubscriberTestClass,
-        string $eventSubscriberClass
+        string $eventSubscriberClass,
     ): void {
         $message = sprintf(
             'EventSubscriber "%s" does not have required test class "%s".',
             $eventSubscriberClass,
-            $eventSubscriberTestClass
+            $eventSubscriberTestClass,
         );
 
         self::assertTrue(class_exists($eventSubscriberTestClass), $message);
@@ -306,7 +301,7 @@ FORMAT;
         $message = sprintf(
             'Validator "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -319,7 +314,7 @@ FORMAT;
         $message = sprintf(
             'DBAL type "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -332,7 +327,7 @@ FORMAT;
         $message = sprintf(
             'REST request mapper "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -345,7 +340,7 @@ FORMAT;
         $message = sprintf(
             'Service "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -358,7 +353,7 @@ FORMAT;
         $message = sprintf(
             'Argument value resolver service "%s" does not have required test class "%s".',
             $class,
-            $testClass
+            $testClass,
         );
 
         self::assertTrue(class_exists($testClass), $message);
@@ -401,8 +396,8 @@ FORMAT;
         $repositoryMethods = [];
 
         $filter = static function (ReflectionClass $reflectionClass) use (&$repositoryMethods): bool {
-            $filter = static fn (ReflectionMethod $method): bool =>
-                $method->class === $reflectionClass->getName() && !$method->isConstructor();
+            $filter = static fn (ReflectionMethod $method): bool
+                => $method->class === $reflectionClass->getName() && !$method->isConstructor();
             $formatter = static fn (ReflectionMethod $method): string => $method->getName();
 
             $methods = array_values(array_filter($reflectionClass->getMethods(), $filter));
@@ -640,8 +635,8 @@ FORMAT;
         $folder = self::getKernel()->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
-        $filter = static fn (ReflectionClass $reflectionClass): bool =>
-            !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
+        $filter = static fn (ReflectionClass $reflectionClass): bool
+            => !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
 
         return self::getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -696,7 +691,7 @@ FORMAT;
         string $namespace,
         string $namespaceTest,
         ?Closure $filter = null,
-        ?Closure $formatter = null
+        ?Closure $formatter = null,
     ): array {
         $pattern = '/^.+\.php$/i';
 
@@ -710,10 +705,10 @@ FORMAT;
             array_filter(
                 array_map(
                     $iterator,
-                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern),
                 ),
-                $filter
-            )
+                $filter,
+            ),
         );
 
         return $result;

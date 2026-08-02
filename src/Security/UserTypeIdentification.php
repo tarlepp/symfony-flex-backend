@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/UserTypeIdentification.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -16,10 +15,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class UserTypeIdentification
 {
     public function __construct(

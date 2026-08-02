@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/Methods/PatchMethod.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Methods;
@@ -13,10 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-/**
- * @package App\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait PatchMethod
 {
     /**
@@ -37,7 +32,8 @@ trait PatchMethod
         try {
             $data = $resource->patch($id, $restDto, true);
 
-            return $this->getResponseHandler()->createResponse($request, $data, $resource);
+            return $this->getResponseHandler()
+                ->createResponse($request, $data, $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }

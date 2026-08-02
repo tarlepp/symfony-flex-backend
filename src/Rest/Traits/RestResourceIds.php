@@ -1,18 +1,14 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Traits/RestResourceIds.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits;
 
 /**
  * @SuppressWarnings("unused")
- *
- * @package App\Rest\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait RestResourceIds
 {

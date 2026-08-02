@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Security/SecurityUser.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -15,10 +14,6 @@ use Override;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**

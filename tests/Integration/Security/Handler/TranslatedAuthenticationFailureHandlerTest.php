@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Security/Handler/TranslatedAuthenticationFailureHandlerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security\Handler;
@@ -16,10 +15,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @package App\Tests\Integration\Security\Handler
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class TranslatedAuthenticationFailureHandlerTest extends KernelTestCase
 {
     #[TestDox('Test that `onAuthenticationFailure` method calls expected service methods')]

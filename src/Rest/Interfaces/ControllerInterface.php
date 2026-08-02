@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Interfaces/ControllerInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -16,10 +15,6 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 use UnexpectedValueException;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AutoconfigureTag('app.rest.controller')]
 interface ControllerInterface
 {

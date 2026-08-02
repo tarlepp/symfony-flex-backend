@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/ResourceTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -16,10 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function sprintf;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class ResourceTestCase extends KernelTestCase
 {
     /**
@@ -44,7 +39,7 @@ abstract class ResourceTestCase extends KernelTestCase
     {
         $message = sprintf(
             'getRepository() method did not return expected repository \'%s\'.',
-            $this->repositoryClass
+            $this->repositoryClass,
         );
 
         /** @noinspection UnnecessaryAssertionInspection */
@@ -58,7 +53,7 @@ abstract class ResourceTestCase extends KernelTestCase
     {
         $message = sprintf(
             'getEntityName() method did not return expected entity \'%s\'.',
-            $this->entityClass
+            $this->entityClass,
         );
 
         self::assertSame($this->entityClass, $this->getResource()->getEntityName(), $message);

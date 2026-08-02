@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/LogLoginFailureTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -20,9 +19,6 @@ use function array_key_exists;
 use function ucfirst;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method LogLoginFailure getEntity()
  */
 final class LogLoginFailureTest extends EntityTestCase
@@ -41,7 +37,7 @@ final class LogLoginFailureTest extends EntityTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -55,7 +51,7 @@ final class LogLoginFailureTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -76,7 +72,7 @@ final class LogLoginFailureTest extends EntityTestCase
         }
 
         $logRequest = new LogLoginFailure(
-            new User()
+            new User(),
         );
 
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {

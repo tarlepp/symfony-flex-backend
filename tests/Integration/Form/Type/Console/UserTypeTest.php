@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Form/Type/Console/UserTypeTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Form\Type\Console;
@@ -24,10 +23,6 @@ use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
 
-/**
- * @package App\Tests\Integration\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserTypeTest extends TypeTestCase
 {
     #[TestDox('Test that form submit with valid input data works as expected')]

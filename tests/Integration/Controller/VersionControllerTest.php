@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/VersionControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller;
@@ -13,10 +12,6 @@ use App\Service\Version;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @package App\Tests\Integration\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class VersionControllerTest extends KernelTestCase
 {
     #[TestDox('Test that `__invoke` method calls expected service methods')]

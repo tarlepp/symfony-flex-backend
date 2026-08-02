@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/RepositoryTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -16,10 +15,6 @@ use Throwable;
 use function array_keys;
 use function sort;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- */
 abstract class RepositoryTestCase extends KernelTestCase
 {
     /**
@@ -76,7 +71,8 @@ abstract class RepositoryTestCase extends KernelTestCase
     public function testThatGetSearchColumnsReturnsExpected(): void
     {
         $expected = $this->searchColumns;
-        $actual = $this->getRepository()->getSearchColumns();
+        $actual = $this->getRepository()
+            ->getSearchColumns();
         $message = 'Repository did not return expected search columns.';
 
         sort($expected);

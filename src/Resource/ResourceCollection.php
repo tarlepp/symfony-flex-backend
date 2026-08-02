@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Resource/ResourceCollection.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Resource;
@@ -23,9 +22,6 @@ use Throwable;
 use function sprintf;
 
 /**
- * @package App\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method RestResourceInterface get(string $className)
  * @method IteratorAggregate<int, RestResourceInterface> getAll()
  */

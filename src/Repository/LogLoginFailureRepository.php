@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Repository/LogLoginFailureRepository.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -15,9 +14,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 
 /**
- * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @extends BaseRepository<Entity>
  * @codingStandardsIgnoreStart
  *
@@ -55,6 +51,7 @@ class LogLoginFailureRepository extends BaseRepository
             ->setParameter('user', $user->getId(), UuidBinaryOrderedTimeType::NAME);
 
         // Return deleted row count
-        return (int)$queryBuilder->getQuery()->execute();
+        return (int)$queryBuilder->getQuery()
+            ->execute();
     }
 }

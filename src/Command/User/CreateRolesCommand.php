@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/User/CreateRolesCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -23,10 +22,6 @@ use function array_map;
 use function array_sum;
 use function sprintf;
 
-/**
- * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[AsCommand(
     name: self::NAME,
     description: 'Console command to create roles to database',

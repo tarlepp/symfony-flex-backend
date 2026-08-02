@@ -1,24 +1,32 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 This document contains basic information how you _should_ development this
 application.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Development](#development-table-of-contents)
-    * [IDE](#ide-table-of-contents)
-    * [PHP Code Sniffer](#php-code-sniffer-table-of-contents)
-    * [Database changes](#database-changes-table-of-contents)
+    * [Development](#development)
+      * [IDE](#ide)
+      * [PHP Code Sniffer](#php-code-sniffer)
+      * [Database changes](#database-changes)
 
 ## Development [ᐞ](#table-of-contents)
+
+<a id="development"></a>
 
 * [PSR-1](https://www.php-fig.org/psr/psr-1/)
 * [PSR-2](https://www.php-fig.org/psr/psr-2/)
 * [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
 
 ### IDE [ᐞ](#table-of-contents)
+
+<a id="ide"></a>
 
 I highly recommend that you use "proper"
 [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
@@ -36,6 +44,8 @@ PHPStorm.
 
 ### PHP Code Sniffer [ᐞ](#table-of-contents)
 
+<a id="php-code-sniffer"></a>
+
 It's highly recommended that you use this tool while doing actual development
 to application. PHP Code Sniffer is added to project ```dev``` dependencies, so
 all you need to do is just configure it to your favorite IDE. So the `phpcs`
@@ -51,6 +61,8 @@ will help you to get things rolling.
 * [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html)
 
 ### Database changes [ᐞ](#table-of-contents)
+
+<a id="database-changes"></a>
 
 Migration files contain all necessary database changes
 to get application running with its database structure. You can migrate
@@ -78,4 +90,4 @@ you really don't want.
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)

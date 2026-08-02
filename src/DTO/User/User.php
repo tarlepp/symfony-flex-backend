@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/DTO/User/User.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\User;
@@ -22,9 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
 /**
- * @package App\DTO\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method Entity|EntityInterface update(EntityInterface $entity)
  *
  * @psalm-consistent-constructor
@@ -223,7 +219,7 @@ class User extends RestDto
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param EntityInterface|Entity $entity
      */
@@ -241,7 +237,8 @@ class User extends RestDto
             $this->timezone = $entity->getTimezone();
 
             /** @var array<int, UserGroupEntity> $groups */
-            $groups = $entity->getUserGroups()->toArray();
+            $groups = $entity->getUserGroups()
+                ->toArray();
 
             $this->userGroups = $groups;
         }

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/Profile/RolesControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\Profile;
@@ -15,10 +14,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Controller\v1\Profile
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RolesControllerTest extends KernelTestCase
 {
     /**
@@ -39,6 +34,7 @@ final class RolesControllerTest extends KernelTestCase
             ->with($user->getRoles())
             ->willReturn([]);
 
-        new RolesController($rolesService)->__invoke($user);
+        new RolesController($rolesService)
+            ->__invoke($user);
     }
 }

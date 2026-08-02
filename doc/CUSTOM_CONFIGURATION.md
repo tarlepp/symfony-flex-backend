@@ -1,18 +1,24 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 This document contains necessary information how you can use _your_ own custom
 configuration for this application.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Prologue](#prologue-table-of-contents)
-  * [Creating custom files](#creating-custom-files-table-of-contents)
-  * [Detailed configuration](#detailed-configuration-table-of-contents)
-  * [External links / resources](#external-links--resources-table-of-contents)
+    * [Prologue](#prologue)
+    * [Creating custom files](#creating-custom-files)
+    * [Detailed configuration](#detailed-configuration)
+    * [External links / resources](#external-links-resources)
 
 ## Prologue [ᐞ](#table-of-contents)
+
+<a id="prologue"></a>
 
 This application is using [Dotenv](https://symfony.com/doc/current/components/dotenv.html)
 component parses `.env` files to make environment variables stored in them
@@ -26,6 +32,8 @@ separate `application.json` file that we can easily use with Symfony
 configuration part.
 
 ## Creating custom files [ᐞ](#table-of-contents)
+
+<a id="creating-custom-files"></a>
 
 Starting to use custom configuration is quite easy, all you need to do is
 following:
@@ -52,6 +60,8 @@ to make changes to that `secrets/application.local.json` file.
 
 ## Detailed configuration [ᐞ](#table-of-contents)
 
+<a id="detailed-configuration"></a>
+
 Below you can see all the current configuration values that are defined in
 `application.json` and those are used on Symfony configuration files.
 
@@ -70,6 +80,8 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
 
 ## External links / resources [ᐞ](#table-of-contents)
 
+<a id="external-links-resources"></a>
+
 * [Nov 2018 Changes to .env & How to Update](https://symfony.com/doc/current/configuration/dot-env-changes.html)
 * [New in Symfony 4.2: Define env vars per environment](https://symfony.com/blog/new-in-symfony-4-2-define-env-vars-per-environment)
 * [How to Master and Create new Environments](https://symfony.com/doc/current/configuration/environments.html)
@@ -78,4 +90,4 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/Role/RoleControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\Role;
@@ -15,10 +14,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 use function getenv;
 
-/**
- * @package App\Tests\E2E\Controller\v1\Role
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RoleControllerTest extends WebTestCase
 {
     private string $baseUrl = '/v1/role';

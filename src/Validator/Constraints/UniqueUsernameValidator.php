@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/UniqueUsernameValidator.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -15,10 +14,6 @@ use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class UniqueUsernameValidator extends ConstraintValidator
 {
     public function __construct(
@@ -27,7 +22,7 @@ class UniqueUsernameValidator extends ConstraintValidator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @throws NonUniqueResultException
      */

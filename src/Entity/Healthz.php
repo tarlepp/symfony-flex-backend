@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/Healthz.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -21,10 +20,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Throwable;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity]
 #[ORM\Table(
     name: 'healthz',

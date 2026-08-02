@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/App/Validator/Constraints/EntityReferenceExistsValidator.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -25,10 +24,6 @@ use function implode;
 use function is_array;
 use function str_replace;
 
-/**
- * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 class EntityReferenceExistsValidator extends ConstraintValidator
 {
     public function __construct(
@@ -37,7 +32,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     #[Override]
     public function validate(mixed $value, BaseConstraint $constraint): void
@@ -70,7 +65,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
 
                 return $value;
             },
-            is_array($input) ? $input : [$input]
+            is_array($input) ? $input : [$input],
         );
     }
 
@@ -106,7 +101,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     {
         return array_map(
             static fn (EntityInterface $entity): string => $entity->getId(),
-            array_filter($entities, $this->getFilterClosure())
+            array_filter($entities, $this->getFilterClosure()),
         );
     }
 

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Interfaces/RestResourceInterface.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -17,11 +16,8 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template-covariant TEntity of EntityInterface
- * @psalm-type CriteriaValue = null|scalar|object|array<array-key, null|scalar|object>
+ * @psalm-type CriteriaValue = scalar|object|array<array-key, scalar|object|null>|null
  */
 #[AutoconfigureTag('app.rest.resource')]
 #[AutoconfigureTag('app.stopwatch')]
@@ -101,7 +97,7 @@ interface RestResourceInterface
         string $id,
         string $dtoClass,
         RestDtoInterface $dto,
-        ?bool $patch = null
+        ?bool $patch = null,
     ): RestDtoInterface;
 
     /**
@@ -123,7 +119,7 @@ interface RestResourceInterface
         ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
-        ?array $search = null
+        ?array $search = null,
     ): array;
 
     /**
@@ -161,7 +157,7 @@ interface RestResourceInterface
     public function findOneBy(
         array $criteria,
         ?array $orderBy = null,
-        ?bool $throwExceptionIfNotFound = null
+        ?bool $throwExceptionIfNotFound = null,
     ): ?EntityInterface;
 
     /**
@@ -198,7 +194,7 @@ interface RestResourceInterface
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,
-        ?bool $skipValidation = null
+        ?bool $skipValidation = null,
     ): EntityInterface;
 
     /**
@@ -214,7 +210,7 @@ interface RestResourceInterface
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,
-        ?bool $skipValidation = null
+        ?bool $skipValidation = null,
     ): EntityInterface;
 
     /**

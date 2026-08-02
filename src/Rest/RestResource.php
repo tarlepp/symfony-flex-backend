@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/RestResource.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -20,9 +19,6 @@ use function array_keys;
 use function sprintf;
 
 /**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @template TEntity of EntityInterface
  * @implements RestResourceInterface<TEntity>
  */
@@ -65,8 +61,9 @@ abstract class RestResource implements RestResourceInterface
 
     #[Required]
     #[Override]
-    public function setValidator(ValidatorInterface $validator): self
-    {
+    public function setValidator(
+        ValidatorInterface $validator,
+    ): self {
         $this->validator = $validator;
 
         return $this;
@@ -78,7 +75,7 @@ abstract class RestResource implements RestResourceInterface
         if ($this->dtoClass === '') {
             $message = sprintf(
                 'DTO class not specified for \'%s\' resource',
-                static::class
+                static::class,
             );
 
             throw new UnexpectedValueException($message);
@@ -98,13 +95,15 @@ abstract class RestResource implements RestResourceInterface
     #[Override]
     public function getEntityName(): string
     {
-        return $this->getRepository()->getEntityName();
+        return $this->getRepository()
+            ->getEntityName();
     }
 
     #[Override]
     public function getReference(string $id): ?object
     {
-        return $this->getRepository()->getReference($id);
+        return $this->getRepository()
+            ->getReference($id);
     }
 
     #[Override]
@@ -118,7 +117,7 @@ abstract class RestResource implements RestResourceInterface
         string $id,
         string $dtoClass,
         RestDtoInterface $dto,
-        ?bool $patch = null
+        ?bool $patch = null,
     ): RestDtoInterface {
         $patch ??= false;
 

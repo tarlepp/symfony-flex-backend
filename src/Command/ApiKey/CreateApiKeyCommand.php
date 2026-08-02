@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/ApiKey/CreateApiKeyCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -28,9 +27,6 @@ use Throwable;
 
 /**
  * @psalm-import-type TInputOption from HelperConfigure
- *
- * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[AsCommand(
     name: self::NAME,

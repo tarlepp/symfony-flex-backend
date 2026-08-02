@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/v1/Role/FindOneRoleControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller\v1\Role;
@@ -18,9 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 /**
- * @package App\Tests\Integration\Controller\v1\Role
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method FindOneRoleController getController()
  */
 final class FindOneRoleControllerTest extends RestIntegrationControllerTestCase

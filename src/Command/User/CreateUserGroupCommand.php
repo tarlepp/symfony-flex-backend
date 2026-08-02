@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/User/CreateUserGroupCommand.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -27,9 +26,6 @@ use Throwable;
 
 /**
  * @psalm-import-type TInputOption from HelperConfigure
- *
- * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[AsCommand(
     name: self::NAME,
@@ -117,7 +113,8 @@ class CreateUserGroupCommand extends Command
             $io->block('Roles are not yet created, creating those now...');
         }
 
-        $command = $this->getApplication()->find('user:create-roles');
+        $command = $this->getApplication()
+            ->find('user:create-roles');
 
         $arguments = [
             'command' => 'user:create-roles',

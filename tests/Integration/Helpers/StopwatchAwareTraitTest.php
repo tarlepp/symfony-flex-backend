@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Helpers/StopwatchAwareTraitTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Helpers;
@@ -15,10 +14,6 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use function property_exists;
 
-/**
- * @package App\Tests\Integration\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class StopwatchAwareTraitTest extends KernelTestCase
 {
     public function testThatStopwatchAttributeExists(): void
@@ -37,7 +32,8 @@ final class StopwatchAwareTraitTest extends KernelTestCase
 
         self::assertNotNull($kernel);
 
-        $service = $kernel->getContainer()->get(StopwatchAwareService::class);
+        $service = $kernel->getContainer()
+            ->get(StopwatchAwareService::class);
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);
 
         self::assertInstanceOf(Stopwatch::class, $stopwatch);

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Rest/Traits/Methods/CountMethodTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
@@ -29,10 +28,6 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class CountMethodTest extends KernelTestCase
 {
     /**
@@ -105,12 +100,12 @@ final class CountMethodTest extends KernelTestCase
      */
     #[DataProvider('dataProviderTestThatTraitCallsServiceMethods')]
     #[TestDox(
-        'Test that `countMethod` method calls expected service methods when using `$queryString` as query string'
+        'Test that `countMethod` method calls expected service methods when using `$queryString` as query string',
     )]
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,
-        StringableArrayObject $search
+        StringableArrayObject $search,
     ): void {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
@@ -133,7 +128,7 @@ final class CountMethodTest extends KernelTestCase
                 [
                     'count' => 0,
                 ],
-                $resourceMock
+                $resourceMock,
             );
 
         new CountMethodTestClass($resourceMock, $responseHandlerMock)

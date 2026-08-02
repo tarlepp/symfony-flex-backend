@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Enum/Language.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Enum;
@@ -15,9 +14,6 @@ use Override;
 
 /**
  * Language enum
- *
- * @package App\Enum
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 enum Language: string implements DatabaseEnumInterface, EnumWithDefaultInterface
 {

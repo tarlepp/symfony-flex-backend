@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Controller/v1/UserGroup/UserGroupController.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\v1\UserGroup;
@@ -21,8 +20,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * @package App\Controller\v1\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  * @method UserGroupResource getResource()
  */
 #[AsController]

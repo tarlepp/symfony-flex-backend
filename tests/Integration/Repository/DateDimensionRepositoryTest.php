@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Integration/DateDimensionRepositoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Tests\Integration\Repository;
@@ -17,9 +16,6 @@ use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\TestCase\RepositoryTestCase;
 
 /**
- * @package App\Tests\Integration\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
  * @method DateDimensionResource getResource()
  * @method DateDimensionRepository getRepository()
  */

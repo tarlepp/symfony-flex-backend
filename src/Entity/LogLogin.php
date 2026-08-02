@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Entity/LogLogin.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -25,10 +24,6 @@ use Throwable;
 use function implode;
 use function is_array;
 
-/**
- * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 #[ORM\Entity(
     readOnly: true,
 )]
@@ -166,7 +161,7 @@ class LogLogin implements EntityInterface
         name: 'os_version',
         type: Types::STRING,
         length: 255,
-        nullable: true
+        nullable: true,
     )]
     #[Groups([
         'LogLogin',
@@ -249,7 +244,7 @@ class LogLogin implements EntityInterface
             'LogLogin',
             'LogLogin.user',
         ])]
-        private ?User $user = null
+        private ?User $user = null,
     ) {
         $this->id = $this->createUuid();
 

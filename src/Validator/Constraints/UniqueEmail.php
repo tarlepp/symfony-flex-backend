@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Validator/Constraints/UniqueEmail.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -20,9 +19,6 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Annotation
  * @Target({"CLASS"})
- *
- * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class UniqueEmail extends Constraint
@@ -31,7 +27,7 @@ class UniqueEmail extends Constraint
     final public const string MESSAGE = 'This email is already taken.';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @psalm-var array<string, string>
      */

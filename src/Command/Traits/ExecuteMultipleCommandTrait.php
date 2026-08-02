@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Command/Traits/ExecuteMultipleCommandTrait.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Traits;
@@ -17,10 +16,6 @@ use function array_flip;
 use function array_search;
 use function array_values;
 
-/**
- * @package App\Command\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait ExecuteMultipleCommandTrait
 {
     use GetApplicationTrait;
@@ -56,7 +51,8 @@ trait ExecuteMultipleCommandTrait
 
             $input = new ArrayInput($arguments);
 
-            $cmd = $this->getApplication()->find($command);
+            $cmd = $this->getApplication()
+                ->find($command);
             $outputValue = $cmd->run($input, $output);
 
             $command = $this->ask($io);

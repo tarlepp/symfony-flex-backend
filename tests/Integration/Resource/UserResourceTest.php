@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Resource/UserResourceTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
@@ -21,10 +20,6 @@ use App\Tests\Integration\TestCase\ResourceTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserResourceTest extends ResourceTestCase
 {
     /**
@@ -51,8 +46,10 @@ final class UserResourceTest extends ResourceTestCase
         $repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
-        $userGroup = new UserGroup()->setRole(new Role('Some Role'));
-        $user = new User()->addUserGroup($userGroup);
+        $userGroup = new UserGroup()
+            ->setRole(new Role('Some Role'));
+        $user = new User()
+            ->addUserGroup($userGroup);
 
         $repository
             ->expects($this->once())

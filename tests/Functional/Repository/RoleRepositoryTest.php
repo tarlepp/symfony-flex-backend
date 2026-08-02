@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Functional/Repository/RoleRepositoryTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -14,10 +13,6 @@ use Override;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class RoleRepositoryTest extends KernelTestCase
 {
     /**

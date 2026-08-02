@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Rest/Controller.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -17,10 +16,6 @@ use Override;
 use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 
-/**
- * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class Controller implements ControllerInterface
 {
     use RestActionBase;
@@ -47,7 +42,7 @@ abstract class Controller implements ControllerInterface
     protected ?ResponseHandlerInterface $responseHandler = null;
 
     public function __construct(
-        protected readonly RestResourceInterface $resource
+        protected readonly RestResourceInterface $resource,
     ) {
     }
 
@@ -65,8 +60,9 @@ abstract class Controller implements ControllerInterface
 
     #[Required]
     #[Override]
-    public function setResponseHandler(ResponseHandler $responseHandler): static
-    {
+    public function setResponseHandler(
+        ResponseHandler $responseHandler,
+    ): static {
         $this->responseHandler = $responseHandler;
 
         return $this;

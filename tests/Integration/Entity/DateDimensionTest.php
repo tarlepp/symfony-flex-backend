@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/DateDimensionTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -20,9 +19,6 @@ use function in_array;
 use function ucfirst;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method DateDimension getEntity()
  */
 final class DateDimensionTest extends EntityTestCase
@@ -55,7 +51,7 @@ final class DateDimensionTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }

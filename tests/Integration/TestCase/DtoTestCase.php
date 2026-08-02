@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/TestCase/DtoTestCase.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\TestCase;
@@ -32,10 +31,6 @@ use function sprintf;
 use function str_contains;
 use function ucfirst;
 
-/**
- * @package App\Tests\Integration\TestCase
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 abstract class DtoTestCase extends KernelTestCase
 {
     /**
@@ -58,7 +53,7 @@ abstract class DtoTestCase extends KernelTestCase
                 "REST DTO class '%s' does not have required getter method '%s' for property '%s'.",
                 static::$dtoClass,
                 $method,
-                $reflectionProperty->getName()
+                $reflectionProperty->getName(),
             );
 
             self::assertTrue($dtoReflection->hasMethod($method), $message);
@@ -80,7 +75,7 @@ abstract class DtoTestCase extends KernelTestCase
                 "REST DTO class '%s' does not have required setter method '%s' for property '%s'.",
                 static::$dtoClass,
                 $method,
-                $reflectionProperty->getName()
+                $reflectionProperty->getName(),
             );
 
             self::assertTrue($dtoReflection->hasMethod($method), $message);
@@ -172,7 +167,7 @@ abstract class DtoTestCase extends KernelTestCase
         $message = sprintf(
             "Setter '%s' didn't fail with invalid value type '%s', maybe missing variable type?",
             $setter,
-            is_object($value) ? gettype($value) : '(' . gettype($value) . ')' . $value
+            is_object($value) ? gettype($value) : '(' . gettype($value) . ')' . $value,
         );
 
         self::fail($message);
@@ -222,7 +217,7 @@ abstract class DtoTestCase extends KernelTestCase
                 $typeExtractors,
                 $descriptionExtractors,
                 $accessExtractors,
-                $propertyInitializableExtractors
+                $propertyInitializableExtractors,
             );
         }
 
@@ -239,7 +234,7 @@ abstract class DtoTestCase extends KernelTestCase
     private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty): mixed
     {
         return PhpUnitUtil::getValidValueForType(
-            self::getType($dtoReflection->getName(), $reflectionProperty->getName())
+            self::getType($dtoReflection->getName(), $reflectionProperty->getName()),
         );
     }
 
@@ -254,12 +249,13 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($dtoClass);
         $dto = new $dtoClass();
 
-        $filter = static fn (ReflectionProperty $reflectionProperty): bool =>
-            !$reflectionProperty->isStatic()
+        $filter = static fn (ReflectionProperty $reflectionProperty): bool => !$reflectionProperty->isStatic()
             && !$reflectionProperty->isPrivate()
             && (
-                $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                || $reflectionProperty->getDeclaringClass()->isInstance($dto)
+                $dtoClass === $reflectionProperty->getDeclaringClass()
+                    ->getName()
+                || $reflectionProperty->getDeclaringClass()
+                    ->isInstance($dto)
             );
 
         return array_filter($dtoReflection->getProperties(), $filter);

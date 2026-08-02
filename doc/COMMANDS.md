@@ -1,21 +1,27 @@
 # What is this?
 
+<a id="what-is-this"></a>
+
 This document contains all custom commands that you can use within this
 application during development stage.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
-* [What is this?](#what-is-this)
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Commands](#commands-table-of-contents)
-    * [Makefile](#makefile-table-of-contents)
-    * [Symfony console](#symfony-console-table-of-contents)
-    * [Custom commands](#custom-commands-table-of-contents)
-      * [user:management](#usermanagement-table-of-contents)
-      * [api-key:management](#api-keymanagement-table-of-contents)
-      * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities-table-of-contents)
+    * [Commands](#commands)
+      * [Makefile](#makefile)
+      * [Symfony console](#symfony-console)
+      * [Custom commands](#custom-commands)
+        * [user:management](#usermanagement)
+        * [api-key:management](#api-keymanagement)
+        * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities)
 
 ## Commands [ᐞ](#table-of-contents)
+
+<a id="commands"></a>
 
 Note that all of these commands are intended to be executed either inside
 docker container or your local/dedicated server.
@@ -45,6 +51,8 @@ You need to create `compose.override.yaml` file and specify used user
 information there.
 
 ### Makefile [ᐞ](#table-of-contents)
+
+<a id="makefile"></a>
 
 Symfony Flex comes with `Makefile` configuration so that you can easily run
 some generic commands via `make` command. Below is a list of currently
@@ -148,6 +156,8 @@ make daemon-build
 
 ### Symfony console [ᐞ](#table-of-contents)
 
+<a id="symfony-console"></a>
+
 You can list all Symfony console commands via following command:
 
 ```bash
@@ -161,6 +171,8 @@ console
 ```
 
 ### Custom commands [ᐞ](#table-of-contents)
+
+<a id="custom-commands"></a>
 
 Project contains following custom console commands to help eg. user management:
 
@@ -176,6 +188,8 @@ Project contains following custom console commands to help eg. user management:
 ```
 
 #### user:management [ᐞ](#table-of-contents)
+
+<a id="usermanagement"></a>
 
 This command is just a wrapper for following commands:
 
@@ -193,6 +207,8 @@ This command is just a wrapper for following commands:
 
 #### api-key:management [ᐞ](#table-of-contents)
 
+<a id="api-keymanagement"></a>
+
 This command is just a wrapper for following commands:
 
 ```bash
@@ -205,9 +221,11 @@ This command is just a wrapper for following commands:
 
 #### utils:create-date-dimension-entities [ᐞ](#table-of-contents)
 
+<a id="utilscreate-date-dimension-entities"></a>
+
 Command to create `DateDimension` entities that can be used with date/time
 related report queries.
 
 ---
 
-[Back to resources index](README.md) - [Back to main README.md](../README.md)
+[Back to previous](README.md) - [Back to main README.md](../README.md)

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Functional/ValueResolver/LoggedInUserValueResolverTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\ValueResolver;
@@ -27,10 +26,6 @@ use Throwable;
 use function getenv;
 use function iterator_to_array;
 
-/**
- * @package App\Tests\Functional\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**

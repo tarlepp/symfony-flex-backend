@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Controller/v1/User/UserManagementFlowTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\v1\User;
@@ -15,10 +14,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Throwable;
 
-/**
- * @package App\Tests\E2E\Controller\v1\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UserManagementFlowTest extends WebTestCase
 {
     private string $baseUrl = '/v1/user';

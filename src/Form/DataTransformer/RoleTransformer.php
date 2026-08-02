@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Form/DataTransformer/RoleTransformer.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\DataTransformer;
@@ -19,9 +18,6 @@ use function sprintf;
 
 /**
  * @implements DataTransformerInterface<Role|null, string>
- *
- * @package App\Form\Console\DataTransformer
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RoleTransformer implements DataTransformerInterface
 {
@@ -31,7 +27,7 @@ class RoleTransformer implements DataTransformerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * Transforms an object (Role) to a string (Role id).
      */
@@ -42,7 +38,7 @@ class RoleTransformer implements DataTransformerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * Transforms a string (Role id) to an object (Role).
      *
@@ -55,7 +51,7 @@ class RoleTransformer implements DataTransformerInterface
             ? $this->resource->findOne($value, false) ?? throw new TransformationFailedException(
                 sprintf(
                     'Role with name "%s" does not exist!',
-                    $value
+                    $value,
                 ),
             )
             : null;

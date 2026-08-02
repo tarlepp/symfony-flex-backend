@@ -6,13 +6,13 @@ This directory contains different documentation resources about this
 application. Each of those docs are covering different topic about this
 application.
 
-## Table of Contents
+## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Resources](#resources)
+    * [Resources](#resources)
 
 ## Resources [ᐞ](#table-of-contents)
 
@@ -28,6 +28,7 @@ application.
 * [Development guide](DEVELOPMENT.md)
 * [Dev Container setup](../.devcontainer/README.md)
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
+* [Security policy](SECURITY.md)
 * [PhpStorm configuration](PHPSTORM.md)
 * [Speed problems with Docker Engige?](SPEED_UP_DOCKER_COMPOSE.md)
 * [Testing guide](TESTING.md)
@@ -43,4 +44,4 @@ For the most common starting points:
 
 ---
 
-[Back to main README.md](../README.md)
+[Back to previous](../README.md)

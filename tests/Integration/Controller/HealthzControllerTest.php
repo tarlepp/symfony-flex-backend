@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Controller/HealthzControllerTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Controller;
@@ -20,10 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 use function sprintf;
 
-/**
- * @package App\Tests\Integration\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class HealthzControllerTest extends KernelTestCase
 {
     /**
@@ -66,7 +61,8 @@ final class HealthzControllerTest extends KernelTestCase
             ->willReturn(
                 new JsonResponse(
                     [
-                        'timestamp' => $healthz->getTimestamp()->format('c'),
+                        'timestamp' => $healthz->getTimestamp()
+                            ->format('c'),
                     ],
                 ),
             );
@@ -80,7 +76,8 @@ final class HealthzControllerTest extends KernelTestCase
         self::assertJsonStringEqualsJsonString(
             sprintf(
                 '{"timestamp": "%s"}',
-                $healthz->getTimestamp()->format('c'),
+                $healthz->getTimestamp()
+                    ->format('c'),
             ),
             $content,
         );

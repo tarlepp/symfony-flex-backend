@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/E2E/Rest/src/Resource/ResourceForLifeCycleTests.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\src\Resource;
@@ -17,9 +16,6 @@ use Override;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * @package App\Tests\E2E\Rest\src\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @extends RestResource<Entity>
  * @codingStandardsIgnoreStart
  *

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Entity/LogLoginTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -25,9 +24,6 @@ use function in_array;
 use function ucfirst;
 
 /**
- * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  * @method LogLogin getEntity()
  */
 final class LogLoginTest extends EntityTestCase
@@ -46,7 +42,7 @@ final class LogLoginTest extends EntityTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }
@@ -60,7 +56,7 @@ final class LogLoginTest extends EntityTestCase
     public function testThatSetterReturnsInstanceOfEntity(
         ?string $property = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         self::markTestSkipped('There is not setter in read only entity...');
     }

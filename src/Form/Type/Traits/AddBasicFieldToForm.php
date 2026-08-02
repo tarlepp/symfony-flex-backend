@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Form/Type/Traits/AddBasicFieldToForm.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Traits;
@@ -11,10 +10,6 @@ namespace App\Form\Type\Traits;
 use Symfony\Component\Form\FormBuilderInterface;
 use function call_user_func_array;
 
-/**
- * @package App\Form\Type\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 trait AddBasicFieldToForm
 {
     /**

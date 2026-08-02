@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/Doctrine/DBAL/Types/UTCDateTimeTypeTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
@@ -22,10 +21,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
-/**
- * @package App\Tests\Integration\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class UTCDateTimeTypeTest extends KernelTestCase
 {
     /**
@@ -75,7 +70,7 @@ final class UTCDateTimeTypeTest extends KernelTestCase
      */
     #[DataProvider('dataProviderTestDateTimeConvertsToPHPValue')]
     #[TestDox('Test that `convertToPHPValue` method converts `$value` to `$expected`')]
-    public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
+    public function testDateTimeConvertsToPHPValue(string $expected, string|DateTime $value): void
     {
         $type = $this->getType();
         $platform = $this->getPlatform();

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /tests/Integration/ValueResolver/LoggedInUserValueResolverTest.php
- *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\ValueResolver;
@@ -25,10 +24,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Throwable;
 use function iterator_to_array;
 
-/**
- * @package App\Tests\Integration\ValueResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- */
 final class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
@@ -108,7 +103,7 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
      * @throws Throwable
      */
     #[TestDox(
-        'Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`'
+        'Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`',
     )]
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
@@ -173,7 +168,8 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         $request = Request::create('/');
 
         // Note that we need to actually get current value here
-        $resolver->resolve($request, $metadata)->current();
+        $resolver->resolve($request, $metadata)
+            ->current();
     }
 
     /**
@@ -245,7 +241,7 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
 
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($userService), new DefaultValueResolver()]
+            [new LoggedInUserValueResolver($userService), new DefaultValueResolver()],
         );
 
         self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
