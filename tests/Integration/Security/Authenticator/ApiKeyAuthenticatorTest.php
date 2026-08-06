@@ -62,10 +62,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
             ->with('SomeToken')
             ->willReturn($apiKey);
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey SomeToken',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'ApiKey SomeToken']);
 
         $passport = new ApiKeyAuthenticator($apiKeyUserProvider)
             ->authenticate($request);
@@ -147,17 +144,11 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         yield [false, new Request()];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'ApiKey']);
 
         yield [false, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey somekey',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'ApiKey somekey']);
 
         yield [true, $request];
     }
@@ -170,31 +161,19 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         yield [null, new Request()];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'FooBar',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'FooBar']);
 
         yield [null, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'ApiKey']);
 
         yield [null, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey    ',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'ApiKey    ']);
 
         yield [null, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey somekey',
-        ]);
+        $request = new Request(server: ['HTTP_Authorization' => 'ApiKey somekey']);
 
         yield [new StringableArrayObject([
             'token' => 'somekey',
