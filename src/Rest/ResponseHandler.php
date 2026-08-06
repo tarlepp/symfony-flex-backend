@@ -130,7 +130,7 @@ class ResponseHandler implements ResponseHandlerInterface
         $errors = [];
 
         /** @var FormError $error */
-        foreach ($form->getErrors(true) as $error) { // @phpstan-ignore-line
+        foreach ($form->getErrors(true) as $error) {
             $name = $error->getOrigin()?->getName() ?? '';
 
             $errors[] = sprintf(
