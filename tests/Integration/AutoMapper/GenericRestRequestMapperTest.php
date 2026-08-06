@@ -30,7 +30,9 @@ final class GenericRestRequestMapperTest extends KernelTestCase
     public function testThatMapToObjectThrowsAnExceptionIfSourceIsAnArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('RestRequestMapper expects that $source is Request object, "array" provided');
+        $this->expectExceptionMessageIsOrContains(
+            'RestRequestMapper expects that $source is Request object, "array" provided',
+        );
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
@@ -45,7 +47,9 @@ final class GenericRestRequestMapperTest extends KernelTestCase
     public function testThatMapToObjectThrowsAnExceptionIfSourceIsNotRequestObject(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('RestRequestMapper expects that $source is Request object, "stdClass" provided');
+        $this->expectExceptionMessageIsOrContains(
+            'RestRequestMapper expects that $source is Request object, "stdClass" provided',
+        );
 
         $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
 
