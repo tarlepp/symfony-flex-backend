@@ -127,6 +127,9 @@ ORM, and project workflow conventions.
   container before running commands manually.
 * Run `composer`, `bin/console`, lint, test, and static analysis commands inside
   the running container, not on the host machine.
+* Do not run project PHP tooling directly on the host by default. If a command
+  is normally a project command, route it via container-aware `make` targets or
+  the running `php` container.
 * Node.js tooling is available in the containerized environment (via `nvm`), so
   use `make lint-markdown` for documentation checks by default (instead of
   calling `npx` directly).
@@ -134,6 +137,8 @@ ORM, and project workflow conventions.
   into the running container.
 * Only run project commands directly on the host when the task explicitly
   requires host-level Docker or Git operations.
+* If container execution is unavailable (for example container down or missing),
+  state that blocker clearly before using a host fallback command.
 
 ## Validation rules [ᐞ](#table-of-contents)
 
