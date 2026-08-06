@@ -51,28 +51,25 @@ final class SchemaTest extends KernelTestCase
     {
         self::markTestSkipped('This needs to be checked.');
 
-        /*
-        $validator = $this->getValidator();
-        $schemaUpdateSql = $validator->getUpdateSchemaList();
-
-        $schemaUpdateSql = array_values(array_filter(
-            $schemaUpdateSql,
-            static function (string $sql): bool {
-                $normalized = strtolower(trim((string)preg_replace('/\s+/', ' ', $sql), " ;\t\n\r\0\x0B"));
-
-                return !str_contains($normalized, 'drop table migration_versions')
-                    && !str_contains($normalized, 'drop table `migration_versions`');
-            },
-        ));
-
-        self::assertEmpty(
-            $schemaUpdateSql,
-            sprintf(
-                "The database schema is not in sync with the current mapping file.\n%s",
-                implode("\n", $schemaUpdateSql),
-            ),
-        );
-        */
+        /**
+         * $validator = $this->getValidator();
+         * $schemaUpdateSql = $validator->getUpdateSchemaList();
+         * $schemaUpdateSql = array_values(array_filter(
+         * $schemaUpdateSql,
+         * static function (string $sql): bool {
+         * $normalized = strtolower(trim((string)preg_replace('/\s+/', ' ', $sql), " ;\t\n\r\0\x0B"));
+         * return !str_contains($normalized, 'drop table migration_versions')
+         * && !str_contains($normalized, 'drop table `migration_versions`');
+         * },
+         * ));
+         * self::assertEmpty(
+         * $schemaUpdateSql,
+         * sprintf(
+         * "The database schema is not in sync with the current mapping file.\n%s",
+         * implode("\n", $schemaUpdateSql),
+         * ),
+         * );
+         */
     }
 
     private function getValidator(): SchemaValidator
