@@ -158,8 +158,12 @@ copying it into long-form documentation.
   or `make daemon`.
 * Use the running `php` container or IDE Dev Container as the default execution
   environment for project commands.
+* Do not execute project PHP tooling directly on the host by default; use
+  container-aware `make` targets or run inside the `php` container.
 * Node.js tooling is available in the containerized environment via `nvm`; use
   `make lint-markdown` for markdown/documentation checks.
+* Host fallbacks for project tooling are allowed only when container execution is
+  unavailable, and that blocker must be stated explicitly in the handoff.
 
 ### Code Quality [ᐞ](#table-of-contents)
 
@@ -182,7 +186,7 @@ copying it into long-form documentation.
 <a id="testing-commands"></a>
 
 * `make run-tests` - Run all tests (single thread)
-* `make run-tests-fastest` - Run tests in parallel (this will be removed in future)
+* `make run-tests-phpdbg` - Run all tests via phpdbg
 * `make infection` - Run mutation testing (not heavily used)
 
 ### Database [ᐞ](#table-of-contents)
@@ -222,7 +226,7 @@ This project uses a resource-based approach:
 7. Create/update resource class in `src/Resource/`
 8. Create/update REST controller in `src/Rest/`
 9. Write tests in appropriate `tests/` subdirectory
-10. Run tests: `make run-tests-fastest`
+10. Run tests: `make run-tests`
 11. Check static analyzers: `make phpcs`, `make ecs`, `make phplint`,
     `make php-parallel-lint`, `make psalm`, `make phpstan`, `make phploc`,
     `make phpinsights`, `make lint-markdown`
@@ -246,7 +250,7 @@ make phploc            # Project metrics summary used by CI
 make phpinsights       # Quality thresholds check
 make check-security    # Dependency vulnerability check
 make lint-markdown     # Markdown/documentation linting
-make run-tests-fastest # Run all tests in parallel
+make run-tests         # Run all tests
 ```
 
 ## Testing [⇩](#table-of-contents)
@@ -272,9 +276,6 @@ make run-tests-fastest # Run all tests in parallel
 # All tests (single thread)
 make run-tests
 
-# All tests (parallel - FASTER, recommended)
-make run-tests-fastest
-
 # Mutation testing
 make infection
 ```
@@ -285,7 +286,7 @@ make infection
 
 * Uses separate test database
 * Environment: `APP_ENV=test`
-* Configuration: `phpunit.xml.dist` and `phpunit.fastest.xml`
+* Configuration: `phpunit.xml.dist`
 * Fixtures loaded via `tests/DataFixtures/`
 
 ## Security [⇩](#table-of-contents)

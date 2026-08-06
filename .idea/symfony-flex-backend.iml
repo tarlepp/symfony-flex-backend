@@ -134,7 +134,6 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/polyfill-php84" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine/collections" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine/deprecations" />
-      <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/masterminds/html5" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/myclabs/deep-copy" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/nikic/php-parser" />
@@ -168,7 +167,6 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/12_php-parallel-lint" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/liuggio/fastest" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/version" />

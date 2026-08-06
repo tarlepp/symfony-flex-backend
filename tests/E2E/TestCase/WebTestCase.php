@@ -14,7 +14,6 @@ use Throwable;
 use function array_merge;
 use function gc_collect_cycles;
 use function gc_enable;
-use function getenv;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -66,7 +65,6 @@ abstract class WebTestCase extends BaseWebTestCase
                 : $authService->getAuthorizationHeadersForUser($username, $password),
             [
                 ...$this->getJsonHeaders(),
-                ...$this->getFastestHeaders(),
             ],
             $authService->getJwtHeaders(),
             $server,
@@ -107,7 +105,6 @@ abstract class WebTestCase extends BaseWebTestCase
                 : $authService->getAuthorizationHeadersForApiKey($role),
             [
                 ...$this->getJsonHeaders(),
-                ...$this->getFastestHeaders(),
             ],
             $authService->getJwtHeaders(),
             $server,
@@ -127,26 +124,6 @@ abstract class WebTestCase extends BaseWebTestCase
             'CONTENT_TYPE' => 'application/json',
             'HTTP_X-Requested-With' => 'XMLHttpRequest',
         ];
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return array<string, string>
-     */
-    public function getFastestHeaders(): array
-    {
-        $output = [];
-
-        if (getenv('ENV_TEST_CHANNEL_READABLE') !== false) {
-            $testChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
-
-            $output = [
-                'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => $testChannel,
-            ];
-        }
-
-        return $output;
     }
 
     private function getAuthService(): Auth

@@ -13,7 +13,6 @@ application.
   * [Table of Contents](#table-of-contents)
     * [Testing](#testing)
       * [Commands to run tests](#commands-to-run-tests)
-      * [Parallel testing](#parallel-testing)
       * [Own environment for testing](#own-environment-for-testing)
     * [Metrics](#metrics)
     * [PhpStorm](#phpstorm)
@@ -41,10 +40,6 @@ make run-tests                # Runs all tests via phpunit (Uses phpdbg if that
                               # is installed)
 make run-tests-php            # Runs all tests via phpunit (pure PHP)
 make run-tests-phpdbg         # Runs all tests via phpunit (phpdbg)
-make run-tests-fastest        # Runs all test via fastest (Uses phpdbg if that
-                              # is installed)
-make run-tests-fastest-php    # Runs all test via fastest (pure PHP)
-make run-tests-fastest-phpdbg # Runs all test via fastest (phpdbg)
 ```
 
 All of those above commands will run whole test suite, so it might take some
@@ -60,14 +55,6 @@ could use following command:
 # All tests in this directory
 ./vendor/bin/phpunit ./tests/Integration/Controller/
 ```
-
-### Parallel testing [ᐞ](#table-of-contents)
-
-<a id="parallel-testing"></a>
-
-Note that all those `make` commands that contains `fastest` are actually run
-with eight (8) different process with [fastest](https://github.com/liuggio/fastest)
-library.
 
 ### Own environment for testing [ᐞ](#table-of-contents)
 

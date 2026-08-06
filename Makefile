@@ -149,13 +149,6 @@ else
 	@${MAKE} run-tests-phpdbg
 endif
 
-run-tests-fastest: ## Runs all test via fastest (Uses phpdbg if that is installed)
-ifndef PHPDBG
-	@${MAKE} run-tests-fastest-php
-else
-	@${MAKE} run-tests-fastest-phpdbg
-endif
-
 run-tests-php: ## Runs all tests via phpunit (pure PHP)
 run-tests-php: info_msg := @printf $(_TITLE) "OK" "Running tests via phpunit (pure PHP)"
 run-tests-php: info
@@ -193,62 +186,6 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-phpdbg
-	$(ALL_DONE)
-endif
-
-run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
-run-tests-fastest-php: info_msg := @printf $(_TITLE) "OK" "Running tests with liuggio/fastest + PhpUnit in multiple threads (pure PHP)"
-run-tests-fastest-php: info
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@rm -rf build/fastest
-	@mkdir -p build/fastest
-	@rm -rf ./var/cache/test*
-	@bin/console cache:warmup --env=test
-	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-fastest-php
-	$(ALL_DONE)
-endif
-
-run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
-run-tests-fastest-phpdbg: info_msg := @printf $(_TITLE) "OK" "Running tests with liuggio/fastest + PhpUnit in multiple threads (phpdbg)"
-run-tests-fastest-phpdbg: info
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@rm -rf build/fastest
-	@mkdir -p build/fastest
-	@rm -rf ./var/cache/test*
-	@bin/console cache:warmup --env=test
-	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-fastest-phpdbg
-	$(ALL_DONE)
-endif
-
-report-fastest: ## Creates clover and JUnit xml from fastest run
-report-fastest: info_msg := @printf $(_TITLE) "OK" "Creating clover and JUnit xml from fastest run"
-report-fastest: info
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@rm -rf build/logs
-	@mkdir -p build/logs
-	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml --html ./build/report/
-	@php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make report-fastest
 	$(ALL_DONE)
 endif
 
