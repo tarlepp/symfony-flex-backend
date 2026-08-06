@@ -27,7 +27,7 @@ final class RequestHandlerTest extends KernelTestCase
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(string $method): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
+        $this->expectExceptionMessageIsOrContains('Current \'where\' parameter is not valid JSON.');
 
         $fakeRequest = Request::create(
             '/',
@@ -171,7 +171,7 @@ final class RequestHandlerTest extends KernelTestCase
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(string $method): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIsOrContains(
             'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.',
         );
 

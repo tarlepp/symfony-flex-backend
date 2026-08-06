@@ -38,7 +38,7 @@ final class ControllerCollectionTest extends KernelTestCase
         $stubLogger = $this->createMock(LoggerInterface::class);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('REST controller \'FooBar\' does not exist');
+        $this->expectExceptionMessageIsOrContains('REST controller \'FooBar\' does not exist');
 
         /** @psalm-suppress MissingTemplateParam */
         $iteratorAggregate = new class([]) implements IteratorAggregate {

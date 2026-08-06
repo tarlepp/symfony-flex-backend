@@ -58,7 +58,7 @@ final class JSONTest extends KernelTestCase
     public function testThatEncodeThrowsAnExceptionOnMaximumDepth(): void
     {
         $this->expectException(JsonException::class);
-        $this->expectExceptionMessage('Maximum stack depth exceeded');
+        $this->expectExceptionMessageIsOrContains('Maximum stack depth exceeded');
 
         $arguments = [
             [
@@ -84,7 +84,7 @@ final class JSONTest extends KernelTestCase
     public function testThatDecodeThrowsAnExceptionOnMaximumDepth(): void
     {
         $this->expectException(JsonException::class);
-        $this->expectExceptionMessage('Maximum stack depth exceeded');
+        $this->expectExceptionMessageIsOrContains('Maximum stack depth exceeded');
 
         $arguments = [
             '{"bar":"foo","foo":{"a":"foobar","b":{"c":2}}}',
@@ -103,7 +103,7 @@ final class JSONTest extends KernelTestCase
     public function testThatDecodeThrowsAnExceptionOnMalformedJson(string $json): void
     {
         $this->expectException(JsonException::class);
-        $this->expectExceptionMessage('Syntax error');
+        $this->expectExceptionMessageIsOrContains('Syntax error');
 
         JSON::decode($json);
     }
@@ -116,7 +116,7 @@ final class JSONTest extends KernelTestCase
     public function testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(string $input): void
     {
         $this->expectException(JsonException::class);
-        $this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
+        $this->expectExceptionMessageIsOrContains('Malformed UTF-8 characters, possibly incorrectly encoded');
 
         JSON::encode($input);
     }

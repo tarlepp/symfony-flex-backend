@@ -61,7 +61,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('API key cannot refresh user');
+        $this->expectExceptionMessageIsOrContains('API key cannot refresh user');
 
         $user = new InMemoryUser('username', 'password');
 
@@ -92,7 +92,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
             ->willReturn(null);
 
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('API key is not valid');
+        $this->expectExceptionMessageIsOrContains('API key is not valid');
 
         new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock)
             ->loadUserByIdentifier('guid');

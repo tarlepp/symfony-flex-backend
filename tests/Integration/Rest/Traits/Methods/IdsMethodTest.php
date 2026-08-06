@@ -138,7 +138,7 @@ final class IdsMethodTest extends KernelTestCase
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
-        $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
+        $this->expectExceptionMessageIsOrContains('Current \'where\' parameter is not valid JSON.');
 
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 

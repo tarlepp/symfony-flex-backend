@@ -40,7 +40,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
     public function testThatOnAuthenticationSuccessThrowsUserNotFoundException(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('Unsupported user.');
+        $this->expectExceptionMessageIsOrContains('Unsupported user.');
 
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
@@ -67,7 +67,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
     public function testThatOnAuthenticationSuccessThrowsLockedException(): void
     {
         $this->expectException(LockedException::class);
-        $this->expectExceptionMessage('Locked account.');
+        $this->expectExceptionMessageIsOrContains('Locked account.');
 
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)

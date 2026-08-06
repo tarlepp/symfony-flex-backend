@@ -56,7 +56,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid \'EnumLanguage\' value');
+        $this->expectExceptionMessageIsOrContains('Invalid \'EnumLanguage\' value');
 
         $type = $this->getType();
         $platform = $this->getPlatform();
@@ -100,7 +100,7 @@ final class EnumLanguageTypeTest extends KernelTestCase
     public function testThatConvertToPHPValueThrowsAnException(mixed $value): void
     {
         $this->expectException(ConversionException::class);
-        $this->expectExceptionMessage('Could not convert database value');
+        $this->expectExceptionMessageIsOrContains('Could not convert database value');
 
         $type = $this->getType();
         $platform = $this->getPlatform();

@@ -42,7 +42,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
             ->getMock();
 
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('User not found for UUID:');
+        $this->expectExceptionMessageIsOrContains('User not found for UUID:');
 
         $userRepositoryMock
             ->expects($this->once())
@@ -163,7 +163,7 @@ final class SecurityUserFactoryTest extends KernelTestCase
             ->getMock();
 
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('User not found for UUID:');
+        $this->expectExceptionMessageIsOrContains('User not found for UUID:');
 
         $userRepositoryMock
             ->expects($this->once())

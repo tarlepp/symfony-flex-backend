@@ -73,7 +73,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->expectException(TransformationFailedException::class);
-        $this->expectExceptionMessage('User group with id "2" does not exist!');
+        $this->expectExceptionMessageIsOrContains('User group with id "2" does not exist!');
 
         $resource = $this->getUserGroupResource();
 

@@ -36,7 +36,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $this->expectException(UnexpectedTypeException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIsOrContains(
             'Expected argument of type "' . EntityReferenceExists::class . '", "' . TestConstraint::class . '" given',
         );
 
@@ -58,7 +58,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage($expectedMessage);
+        $this->expectExceptionMessageIsOrContains($expectedMessage);
 
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = $entityClass;
@@ -74,7 +74,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIsOrContains(
             'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given',
         );
 

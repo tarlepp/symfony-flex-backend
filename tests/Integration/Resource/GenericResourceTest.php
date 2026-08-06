@@ -139,7 +139,7 @@ final class GenericResourceTest extends KernelTestCase
     public function testThatGetDtoForEntityThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
-        $this->expectExceptionMessage('Not found');
+        $this->expectExceptionMessageIsOrContains('Not found');
 
         [$resource, $repository] = $this->getResourceAndRepository();
 
@@ -229,7 +229,7 @@ final class GenericResourceTest extends KernelTestCase
     public function testThatFindOneThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
-        $this->expectExceptionMessage('Not found');
+        $this->expectExceptionMessageIsOrContains('Not found');
 
         [$resource, $repository] = $this->getResourceAndRepository();
 
@@ -277,7 +277,7 @@ final class GenericResourceTest extends KernelTestCase
     public function testThatFindOneByThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
-        $this->expectExceptionMessage('Not found');
+        $this->expectExceptionMessageIsOrContains('Not found');
 
         [$resource, $repository] = $this->getResourceAndRepository();
 
@@ -458,7 +458,7 @@ final class GenericResourceTest extends KernelTestCase
     public function testThatUpdateMethodThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
-        $this->expectExceptionMessage('Not found');
+        $this->expectExceptionMessageIsOrContains('Not found');
 
         [$resource, $repository] = $this->getResourceAndRepository();
 
@@ -539,7 +539,7 @@ final class GenericResourceTest extends KernelTestCase
     public function testThatDeleteMethodThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
-        $this->expectExceptionMessage('Not found');
+        $this->expectExceptionMessageIsOrContains('Not found');
 
         [$resource, $repository] = $this->getResourceAndRepository();
 

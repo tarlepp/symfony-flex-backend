@@ -82,7 +82,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     public function testThatAuthenticateMethodThrowsAnExceptionWhenTokenNotFound(): void
     {
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('API key not found');
+        $this->expectExceptionMessageIsOrContains('API key not found');
 
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
             ->disableOriginalConstructor()

@@ -26,7 +26,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     public function testThatGetTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Currently type \'666\' is not supported within type normalizer');
+        $this->expectExceptionMessageIsOrContains('Currently type \'666\' is not supported within type normalizer');
 
         PhpUnitUtil::getType('666');
     }
@@ -45,7 +45,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     public function testThatGetValidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Cannot create valid value for type \'666\'.');
+        $this->expectExceptionMessageIsOrContains('Cannot create valid value for type \'666\'.');
 
         PhpUnitUtil::getValidValueForType('666');
     }
@@ -100,7 +100,7 @@ final class PHPUnitUtilTest extends KernelTestCase
     public function testThatGetInvalidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Cannot create invalid value for type \'666\'.');
+        $this->expectExceptionMessageIsOrContains('Cannot create invalid value for type \'666\'.');
 
         PhpUnitUtil::getInvalidValueForType('666');
     }

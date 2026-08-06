@@ -63,7 +63,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     public function testThatLoadUserByIdentifierThrowsAnExceptionWithInvalidGuid(): void
     {
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('API key is not valid');
+        $this->expectExceptionMessageIsOrContains('API key is not valid');
 
         $this->getApiKeyUserProvider()
             ->loadUserByIdentifier((string)time());
@@ -91,7 +91,7 @@ final class ApiKeyUserProviderTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnException(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('API key cannot refresh user');
+        $this->expectExceptionMessageIsOrContains('API key cannot refresh user');
 
         $user = new InMemoryUser('username', 'password');
 

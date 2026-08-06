@@ -27,7 +27,7 @@ final class LoginLoggerTest extends KernelTestCase
     public function testThatExceptionIsThrownIfRequestIsNotAvailable(): void
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessage('Could not get request from current request stack');
+        $this->expectExceptionMessageIsOrContains('Could not get request from current request stack');
 
         new LoginLogger($this->getResource(), new RequestStack())
             ->process(LogLogin::SUCCESS);
