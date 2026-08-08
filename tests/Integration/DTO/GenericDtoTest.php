@@ -63,7 +63,7 @@ final class GenericDtoTest extends KernelTestCase
     public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Property \'foo\' has multiple getter methods - this is insane!');
+        $this->expectExceptionMessageIsOrContains('Property \'foo\' has multiple getter methods - this is insane!');
 
         $dtoMock = new DummyDto()
             ->setFoo('foo');

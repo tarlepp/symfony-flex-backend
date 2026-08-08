@@ -19,7 +19,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -62,9 +61,8 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
             ->with('SomeToken')
             ->willReturn($apiKey);
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey SomeToken',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'ApiKey SomeToken',
         ]);
 
         $passport = new ApiKeyAuthenticator($apiKeyUserProvider)
@@ -82,7 +80,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     public function testThatAuthenticateMethodThrowsAnExceptionWhenTokenNotFound(): void
     {
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('API key not found');
+        $this->expectExceptionMessageIsOrContains('API key not found');
 
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
             ->disableOriginalConstructor()
@@ -147,16 +145,14 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         yield [false, new Request()];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'ApiKey',
         ]);
 
         yield [false, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey somekey',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'ApiKey somekey',
         ]);
 
         yield [true, $request];
@@ -170,30 +166,26 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         yield [null, new Request()];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'FooBar',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'FooBar',
         ]);
 
         yield [null, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'ApiKey',
         ]);
 
         yield [null, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey    ',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'ApiKey    ',
         ]);
 
         yield [null, $request];
 
-        $request = new Request();
-        $request->headers = new HeaderBag([
-            'Authorization' => 'ApiKey somekey',
+        $request = new Request(server: [
+            'HTTP_Authorization' => 'ApiKey somekey',
         ]);
 
         yield [new StringableArrayObject([

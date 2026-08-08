@@ -58,7 +58,7 @@ final class RoleTransformerTest extends KernelTestCase
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->expectException(TransformationFailedException::class);
-        $this->expectExceptionMessage('Role with name "role_name" does not exist!');
+        $this->expectExceptionMessageIsOrContains('Role with name "role_name" does not exist!');
 
         $resource = $this->getRoleResource();
 

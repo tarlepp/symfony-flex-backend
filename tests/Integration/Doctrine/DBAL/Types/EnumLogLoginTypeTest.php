@@ -54,7 +54,7 @@ final class EnumLogLoginTypeTest extends KernelTestCase
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid \'EnumLogLogin\' value');
+        $this->expectExceptionMessageIsOrContains('Invalid \'EnumLogLogin\' value');
 
         $type = $this->getType();
         $platform = $this->getPlatform();

@@ -53,7 +53,7 @@ class ApiKeyHelper
             $found = $io->confirm($message, false);
         }
 
-        return $apiKey ?? null;
+        return $apiKey;
     }
 
     /**

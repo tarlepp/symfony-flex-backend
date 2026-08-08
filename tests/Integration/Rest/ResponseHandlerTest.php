@@ -60,7 +60,7 @@ final class ResponseHandlerTest extends KernelTestCase
     public function testThatCreateResponseThrowsAnExceptionIfSerializationFails(): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('Some exception');
+        $this->expectExceptionMessageIsOrContains('Some exception');
 
         $stubSerializer = $this->createMock(SerializerInterface::class);
 
@@ -121,7 +121,7 @@ final class ResponseHandlerTest extends KernelTestCase
     public function testThatHandleFormErrorThrowsExpectedExceptionWithProperty(): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('Field \'foo\': test error');
+        $this->expectExceptionMessageIsOrContains('Field \'foo\': test error');
 
         $serializer = $this->createMock(SerializerInterface::class);
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
@@ -160,7 +160,7 @@ final class ResponseHandlerTest extends KernelTestCase
     public function testThatHandleFormErrorThrowsExpectedExceptionWithoutProperty(): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('test error');
+        $this->expectExceptionMessageIsOrContains('test error');
 
         $serializer = $this->createMock(SerializerInterface::class);
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();

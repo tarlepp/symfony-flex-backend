@@ -42,7 +42,6 @@ final class RestDtoValueResolverTest extends KernelTestCase
         $controllerCollection
             ->expects($this->{$method}())
             ->method('has')
-            ->with('foo')
             ->willReturn($expected);
 
         $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);

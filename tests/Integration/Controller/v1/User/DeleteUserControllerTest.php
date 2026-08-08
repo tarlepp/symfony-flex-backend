@@ -41,7 +41,7 @@ final class DeleteUserControllerTest extends RestIntegrationControllerTestCase
     public function testThatInvokeMethodThrowsAnExceptionIfUserTriesToDeleteHimself(): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('You cannot remove yourself...');
+        $this->expectExceptionMessageIsOrContains('You cannot remove yourself...');
 
         $resource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 

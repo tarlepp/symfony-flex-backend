@@ -89,7 +89,7 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     public function testThatSupportsReturnFalseWithNoToken(): void
     {
         $this->expectException(MissingTokenException::class);
-        $this->expectExceptionMessage('JWT Token not found');
+        $this->expectExceptionMessageIsOrContains('JWT Token not found');
 
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
@@ -108,7 +108,7 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
         $this->expectException(MissingTokenException::class);
-        $this->expectExceptionMessage('JWT Token not found');
+        $this->expectExceptionMessageIsOrContains('JWT Token not found');
 
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 

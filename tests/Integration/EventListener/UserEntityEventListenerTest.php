@@ -36,7 +36,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
             ->setLastName('Doe');
 
         $this->expectException(LengthException::class);
-        $this->expectExceptionMessage('Too short password');
+        $this->expectExceptionMessageIsOrContains('Too short password');
 
         // Set plain password so that listener can make a real one
         $entity->setPlainPassword('test');
@@ -64,7 +64,7 @@ final class UserEntityEventListenerTest extends KernelTestCase
             ->setLastName('Doe');
 
         $this->expectException(LengthException::class);
-        $this->expectExceptionMessage('Too short password');
+        $this->expectExceptionMessageIsOrContains('Too short password');
 
         // Set plain password so that listener can make a real one
         $entity->setPlainPassword('test');

@@ -55,7 +55,7 @@ final class EnumLocaleTypeTest extends KernelTestCase
     public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid \'EnumLocale\' value');
+        $this->expectExceptionMessageIsOrContains('Invalid \'EnumLocale\' value');
 
         $type = $this->getType();
         $platform = $this->getPlatform();

@@ -148,7 +148,7 @@ final class CountMethodTest extends KernelTestCase
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(400);
-        $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
+        $this->expectExceptionMessageIsOrContains('Current \'where\' parameter is not valid JSON.');
 
         new CountMethodTestClass($resourceMock, $responseHandlerMock)
             ->countMethod(Request::create('/?where=foo'));

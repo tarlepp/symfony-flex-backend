@@ -45,7 +45,7 @@ final class ControllerTest extends KernelTestCase
     public function testThatGetResponseHandlerThrowsAnExceptionIfNotSet(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('ResponseHandler service not set');
+        $this->expectExceptionMessageIsOrContains('ResponseHandler service not set');
 
         $class = new class($this->createMock(RestResourceInterface::class)) extends Controller {
         };
@@ -99,7 +99,7 @@ final class ControllerTest extends KernelTestCase
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIsOrContains(
             'Given DTO class \'stdClass\' is not implementing \'App\DTO\RestDtoInterface\' interface.',
         );
 

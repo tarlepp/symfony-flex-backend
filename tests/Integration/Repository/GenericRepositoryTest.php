@@ -82,7 +82,7 @@ final class GenericRepositoryTest extends KernelTestCase
     public function testThatGetEntityManagerThrowsAnExceptionIfManagerIsNotValid(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Cannot get entity manager for entity \'App\Entity\ApiKey\'');
+        $this->expectExceptionMessageIsOrContains('Cannot get entity manager for entity \'App\Entity\ApiKey\'');
 
         $managerObject = $this->getMockBuilder(ManagerRegistry::class)
             ->disableOriginalConstructor()
