@@ -17,8 +17,6 @@ use function array_key_exists;
 use function compact;
 use function file_get_contents;
 use function file_put_contents;
-use function getenv;
-use function is_string;
 use function property_exists;
 use function sha1;
 use function sprintf;
