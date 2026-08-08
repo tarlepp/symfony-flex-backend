@@ -171,8 +171,12 @@ These rules apply to AI-assisted changes in the repository, including:
 * When working from the host shell, prefer the existing `make` targets that
   call into the running container rather than executing project tooling on the
   host directly.
+* Treat host-level execution of project PHP tooling as an exception, not a
+  default workflow.
 * Reserve host-level command execution for tasks that genuinely belong to the
   host environment, such as Docker lifecycle or Git operations.
+* If a host fallback is necessary because container execution is unavailable,
+  call out that blocker explicitly in the handoff.
 
 ### 8. Keep versioned documentation lightweight [ᐞ](#table-of-contents)
 
