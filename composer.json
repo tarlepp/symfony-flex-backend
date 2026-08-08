@@ -72,7 +72,6 @@
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.9.1",
 		"doctrine/doctrine-fixtures-bundle": "4.3.1",
-		"liuggio/fastest": "1.14.2",
 		"phpunit/php-code-coverage": "14.2.4",
 		"phpunit/phpunit": "13.2.6",
 		"roave/security-advisories": "dev-latest",

@@ -15,7 +15,6 @@ declare(strict_types = 1);
  */
 
 use App\Kernel;
-use App\Utils\JSON;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -24,53 +23,6 @@ use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Filesystem\Filesystem;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
-
-/**
- * Function to make necessary initialization for `fastest` - This means that we
- * need to set `DATABASE_URL` environment variable, before we initialize `DotEnv`
- * component for testing environment.
- *
- * @throws Throwable
- */
-$InitializeFastestEnvironmentVariables = static function (string $readableChannel): void {
-    /**
-     * @var array<string, string>
-     */
-    static $cache = [];
-
-    if (!array_key_exists($readableChannel, $cache)) {
-        /**
-         * Parse current environment file
-         *
-         * @var array<string, string>
-         */
-        $variables = new Dotenv()
-            ->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
-
-        /** @var array<string, string> $configuration */
-        $configuration = JSON::decode((string)file_get_contents($variables['APPLICATION_CONFIG']), true);
-
-        if (!array_key_exists('DATABASE_URL', $configuration)) {
-            throw new RuntimeException('Cannot get `DATABASE_URL from specified env file.');
-        }
-
-        $originalDatabaseUrl = $configuration['DATABASE_URL'];
-
-        $databaseName = trim(((array)parse_url($originalDatabaseUrl))['path'] ?? '', '/');
-
-        // Replace DATABASE_URL variable with proper database name
-        $databaseUrl = str_replace(
-            '/' . $databaseName . '?',
-            '/' . $databaseName . '_' . $readableChannel . '?',
-            $originalDatabaseUrl,
-        );
-
-        $cache[$readableChannel] = $databaseUrl;
-    }
-
-    // And finally populate new variables to current environment
-    putenv('DATABASE_URL=' . $cache[$readableChannel]);
-};
 
 /**
  * Function to initialize test environment for use
@@ -113,26 +65,7 @@ $InitializeEnvironment = static function (): void {
 
 chdir(dirname(__DIR__));
 
-$readableChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
-
-// Application is started against 'fastest' library, so we need to override database name manually
-if (strlen($readableChannel) > 0) {
-    $InitializeFastestEnvironmentVariables($readableChannel);
-}
-
 $InitializeEnvironment();
-
-$databaseCacheFile = sprintf(
-    '%s%stest_database_cache%s.json',
-    sys_get_temp_dir(),
-    DIRECTORY_SEPARATOR,
-    (string)getenv('ENV_TEST_CHANNEL_READABLE'),
-);
-
-// Oh yeah, database is already created we don't want to do any lifting anymore \o/
-if (is_readable($databaseCacheFile) && (string)getenv('ENV_TEST_CHANNEL_READABLE') !== '') {
-    return;
-}
 
 // Create and boot 'test' kernel
 $kernel = new Kernel((string)getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
@@ -217,10 +150,9 @@ $loadFixturesDoctrineCommand = static function () use ($application): void {
 $createJwtAuthCache = static function (): void {
     // Specify used cache file
     $filename = sprintf(
-        '%s%stest_jwt_auth_cache%s.json',
+        '%s%stest_jwt_auth_cache.json',
         sys_get_temp_dir(),
         DIRECTORY_SEPARATOR,
-        (string)getenv('ENV_TEST_CHANNEL_READABLE'),
     );
 
     // Remove existing cache if exists
@@ -230,12 +162,6 @@ $createJwtAuthCache = static function (): void {
 
     // Create empty cache file
     file_put_contents($filename, '{}');
-};
-
-// Create database cache file
-$createDatabaseCreateCache = static function () use ($databaseCacheFile): void {
-    // Create database cache file
-    file_put_contents($databaseCacheFile, '{"init": ' . new DateTime()->format(DATE_RFC3339) . '}');
 };
 
 // And finally call each of initialize functions to make test environment ready
@@ -248,6 +174,5 @@ array_map(
         $resetDoctrineState,
         $loadFixturesDoctrineCommand,
         $createJwtAuthCache,
-        $createDatabaseCreateCache,
     ],
 );

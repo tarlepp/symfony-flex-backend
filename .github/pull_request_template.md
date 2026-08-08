@@ -28,7 +28,7 @@
       `make phplint`, `make php-parallel-lint`, `make psalm`, `make phpstan`,
       `make phploc`, `make phpinsights`, `make check-security`,
       `make lint-markdown`)
-* [ ] Ran tests (`make run-tests` or `make run-tests-fastest`)
+* [ ] Ran tests (`make run-tests`)
 * [ ] For documentation changes, ran `make lint-markdown`
 * [ ] Updated tests when behavior changed
 * [ ] Added or updated database migration when entity changed

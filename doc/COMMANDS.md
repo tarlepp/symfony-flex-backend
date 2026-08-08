@@ -117,11 +117,6 @@ psalm                       # Runs Psalm static analysis tool
 psalm-github                # Runs Psalm static analysis tool (GitHub)
 psalm-shepherd              # Runs Psalm static analysis tool + report results
                             # to shepherd
-report-fastest              # Creates clover and JUnit xml from fastest run
-run-tests-fastest-phpdbg    # Runs all test via fastest (phpdbg)
-run-tests-fastest-php       # Runs all test via fastest (pure PHP)
-run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is
-                            # installed)
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
