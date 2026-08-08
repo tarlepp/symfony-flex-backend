@@ -131,7 +131,6 @@
       <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
       <path value="$PROJECT_DIR$/vendor/staabm/side-effects-detector" />
       <path value="$PROJECT_DIR$/vendor/bamarni/composer-bin-plugin" />
-      <path value="$PROJECT_DIR$/vendor/liuggio/fastest" />
       <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/vendor/phar-io/manifest" />
@@ -196,6 +195,7 @@
       <path value="$PROJECT_DIR$/vendor/radebatz/type-info-extras" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-deepclone" />
       <path value="$PROJECT_DIR$/vendor/sebastian/file-filter" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/phpcov" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
