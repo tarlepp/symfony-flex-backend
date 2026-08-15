@@ -25,10 +25,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - &checkout_step
         name: Make checkout
@@ -52,10 +49,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - *checkout_step
 
@@ -103,10 +97,7 @@ jobs:
           - name: PHP Insights
             command: make phpinsights
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - *checkout_step
 
@@ -137,10 +128,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - *checkout_step
 
@@ -158,10 +146,7 @@ jobs:
       - gitleaks
     if: ${{ always() }}
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - name: Validate static analyzer matrix result
         run: |
@@ -194,10 +179,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - *checkout_step
 
@@ -307,10 +289,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - *checkout_step
 
@@ -333,10 +312,7 @@ jobs:
       - lint-documentation
 
     steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
-        with:
-          egress-policy: audit
+      - uses: ./.github/actions/harden-runner
 
       - *checkout_step
 
