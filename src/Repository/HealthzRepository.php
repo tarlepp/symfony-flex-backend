@@ -16,6 +16,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use SortDirection;
 use Throwable;
 
 /**
@@ -53,7 +54,7 @@ class HealthzRepository extends BaseRepository
         $query = $this
             ->createQueryBuilder('h')
             ->select('h')
-            ->orderBy('h.timestamp', 'DESC')
+            ->orderBy('h.timestamp', SortDirection::Descending)
             ->setMaxResults(1)
             ->getQuery();
 

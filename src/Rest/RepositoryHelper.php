@@ -13,6 +13,7 @@ use Doctrine\ORM\Query\Expr\Literal;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use SortDirection;
 use stdClass;
 use function array_combine;
 use function array_key_exists;
@@ -21,6 +22,7 @@ use function array_walk;
 use function call_user_func_array;
 use function is_array;
 use function is_numeric;
+use function sprintf;
 use function str_contains;
 use function strcmp;
 use function strtolower;
@@ -133,7 +135,7 @@ class RepositoryHelper
     /**
      * Simple process method for order by part of for current query builder.
      *
-     * @param array<string, string>|null $orderBy
+     * @param array<string, string|SortDirection::*>|null $orderBy
      */
     public static function processOrderBy(QueryBuilder $queryBuilder, ?array $orderBy = null): void
     {
@@ -144,7 +146,17 @@ class RepositoryHelper
                 $column = 'entity.' . $column;
             }
 
-            $queryBuilder->addOrderBy($column, $order);
+            if ($order instanceof SortDirection) {
+                $sortDirection = $order;
+            } else {
+                $sortDirection = match (strtolower($order)) {
+                    'asc' => SortDirection::Ascending,
+                    'desc' => SortDirection::Descending,
+                    default => throw new InvalidArgumentException(sprintf('Invalid sort direction "%s".', $order)),
+                };
+            }
+
+            $queryBuilder->addOrderBy($column, $sortDirection);
         }
     }
 

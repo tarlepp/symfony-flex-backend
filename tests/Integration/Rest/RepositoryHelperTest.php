@@ -11,8 +11,10 @@ use App\Repository\UserRepository;
 use App\Rest\RepositoryHelper;
 use App\Tests\Utils\StringableArrayObject;
 use Generator;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use SortDirection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -105,6 +107,40 @@ DQL;
         $message = 'processSearchTerms did not return expected DQL.';
 
         self::assertSame($expected, $qb->getDQL(), $message);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `processOrderBy` method throws an exception for an invalid sort direction')]
+    public function testThatProcessOrderByThrowsExceptionForInvalidSortDirection(): void
+    {
+        $qb = $this->getRepository()->createQueryBuilder('entity');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/^Invalid sort direction "asdf".$/');
+
+        RepositoryHelper::processOrderBy($qb, [
+            '.foo' => 'asdf',
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that `processOrderBy` accepts a `SortDirection` enum')]
+    public function testThatProcessOrderByAcceptsSortDirectionEnum(): void
+    {
+        $qb = $this->getRepository()->createQueryBuilder('entity');
+
+        RepositoryHelper::processOrderBy($qb, [
+            'foo' => SortDirection::Ascending,
+        ]);
+
+        self::assertSame(
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo ASC',
+            $qb->getDQL(),
+        );
     }
 
     /**
@@ -313,7 +349,7 @@ DQL;
     {
         yield [
             /* @lang text */
-            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo ASC',
             new StringableArrayObject([
                 'foo' => 'asc',
             ]),
@@ -329,7 +365,7 @@ DQL;
 
         yield [
             /* @lang text */
-            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo ASC',
             new StringableArrayObject([
                 'entity.foo' => 'asc',
             ]),
@@ -337,15 +373,7 @@ DQL;
 
         yield [
             /* @lang text */
-            'SELECT entity FROM App\Entity\User entity ORDER BY .foo asdf',
-            new StringableArrayObject([
-                '.foo' => 'asdf',
-            ]),
-        ];
-
-        yield [
-            /* @lang text */
-            'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar asc',
+            'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar ASC',
             new StringableArrayObject([
                 'foo.bar' => 'asc',
             ]),
@@ -353,7 +381,7 @@ DQL;
 
         yield [
             /* @lang text */
-            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc, foo.bar desc',
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo ASC, foo.bar DESC',
             new StringableArrayObject([
                 'foo' => 'asc',
                 'foo.bar' => 'desc',

@@ -10,14 +10,14 @@ namespace App\Repository\Traits;
 use App\Entity\Interfaces\EntityInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
-use ArrayIterator;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Tools\Pagination\OffsetPaginator;
+use Doctrine\ORM\Tools\Pagination\Window;
 use InvalidArgumentException;
+use SortDirection;
 use function array_column;
-use function assert;
 
 /**
  * @template TEntity of EntityInterface
@@ -29,6 +29,8 @@ trait RepositoryMethodsTrait
      */
     public function find(string $id, LockMode|int|null $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
+        $lockMode ??= LockMode::NONE;
+
         /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
         $output = $this->getEntityManager()
             ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
@@ -112,6 +114,10 @@ trait RepositoryMethodsTrait
         ?int $offset = null,
         ?array $search = null,
     ): array {
+        if ($limit !== null && $limit < 1) {
+            return [];
+        }
+
         // Get query builder
         $queryBuilder = $this->getQueryBuilder($criteria, $search, $orderBy, $limit, $offset);
 
@@ -125,12 +131,13 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        $iterator = new Paginator($queryBuilder, true)
-            ->getIterator();
+        if ($limit === null) {
+            return $queryBuilder->getQuery()->getResult();
+        }
 
-        assert($iterator instanceof ArrayIterator);
+        $paginator = new OffsetPaginator(fetchJoinCollection: true);
 
-        return $iterator->getArrayCopy();
+        return $paginator->paginate($queryBuilder, new Window($offset ?? 0, $limit))->getItems();
     }
 
     /**
@@ -220,7 +227,7 @@ trait RepositoryMethodsTrait
      *
      * @param array<int|string, mixed>|null $criteria
      * @param array<string, array<int, string>|string>|null $search
-     * @param array<string, string>|null $orderBy
+     * @param array<string, string|SortDirection::*>|null $orderBy
      *
      * @throws InvalidArgumentException
      */
