@@ -83,7 +83,7 @@ interface BaseRepositoryInterface
     public function find(
         string $id,
         LockMode|int|null $lockMode = null,
-        ?int $lockVersion = null
+        ?int $lockVersion = null,
     ): ?EntityInterface;
 
     /**
