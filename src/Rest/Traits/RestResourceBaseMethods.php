@@ -14,6 +14,7 @@ use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
+use function array_keys;
 
 /**
  * @template TEntity of EntityInterface

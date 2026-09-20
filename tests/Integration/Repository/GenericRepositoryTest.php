@@ -13,6 +13,7 @@ use App\Repository\ApiKeyRepository;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Tests\Utils\StringableArrayObject;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -338,7 +339,7 @@ final class GenericRepositoryTest extends KernelTestCase
             ->with(
                 ApiKeyEntity::class,
                 'id',
-                null,
+                LockMode::NONE,
                 null,
             );
 

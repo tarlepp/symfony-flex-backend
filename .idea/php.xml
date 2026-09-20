@@ -196,6 +196,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-deepclone" />
       <path value="$PROJECT_DIR$/vendor/sebastian/file-filter" />
       <path value="$PROJECT_DIR$/vendor/phpunit/phpcov" />
+      <path value="$PROJECT_DIR$/vendor/liuggio/fastest" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php86" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

@@ -60,6 +60,27 @@ final class UserRepositoryTest extends KernelTestCase
         self::assertCount(1, $users);
     }
 
+    /**
+     * @throws Throwable
+     */
+    public function testThatFindByAdvancedAppliesLimitAndOffset(): void
+    {
+        $users = $this->getRepository()
+            ->findByAdvanced([], limit: 2, offset: 1);
+
+        self::assertCount(2, $users);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatFindByAdvancedReturnsEmptyArrayForNonPositiveLimit(): void
+    {
+        foreach ([0, -1] as $limit) {
+            self::assertSame([], $this->getRepository()->findByAdvanced([], limit: $limit));
+        }
+    }
+
     public function testThatFindIdsReturnsExpected(): void
     {
         self::assertCount(
