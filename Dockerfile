@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.5.10-fpm-bookworm@sha256:f96e7316935fc38a4a3acb9aae77b647df261e82997af93128719005393f96b1
+FROM php:8.5.10-fpm-bookworm@sha256:cc45fc347dcdef585e907fa7dab27087039f2adf7bd911c22b79a3d80cc98d08
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
