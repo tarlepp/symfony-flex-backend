@@ -1,4 +1,4 @@
-FROM php:8.5.10-fpm-bookworm@sha256:f96e7316935fc38a4a3acb9aae77b647df261e82997af93128719005393f96b1
+FROM php:8.5.11-fpm-bookworm@sha256:c0dc98639fddeaad891a338e1e3fa2b2d724eb616bcd5a0bb1d8afd650e0fda3
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -9,8 +9,8 @@ ARG HOST_GID
 
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
-ENV NVM_VERSION v0.40.7
-ENV NODE_VERSION 26.8.1
+ENV NVM_VERSION v0.40.8
+ENV NODE_VERSION 26.10.0
 
 # Update package list and install necessary libraries
 RUN apt-get update \
@@ -57,7 +57,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.11.12 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.12.0 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Enable all necessary PHP packages
 RUN install-php-extensions \
