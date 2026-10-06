@@ -35,7 +35,7 @@
 		"mark-gerarts/automapper-plus-bundle": "1.6.0",
 		"matomo/device-detector": "6.5.2",
 		"matthiasnoback/symfony-console-form": "7.0.0",
-		"nelmio/api-doc-bundle": "5.12.2",
+		"nelmio/api-doc-bundle": "5.13.0",
 		"nelmio/cors-bundle": "2.6.1",
 		"phpdocumentor/reflection-docblock": "6.0.3",
 		"ramsey/uuid-doctrine": "2.1.0",
