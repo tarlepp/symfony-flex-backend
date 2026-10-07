@@ -35,7 +35,7 @@
 		"mark-gerarts/automapper-plus-bundle": "1.6.0",
 		"matomo/device-detector": "6.5.2",
 		"matthiasnoback/symfony-console-form": "7.0.0",
-		"nelmio/api-doc-bundle": "5.12.2",
+		"nelmio/api-doc-bundle": "5.13.0",
 		"nelmio/cors-bundle": "2.6.1",
 		"phpdocumentor/reflection-docblock": "6.0.3",
 		"ramsey/uuid-doctrine": "2.1.0",
@@ -72,7 +72,7 @@
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.9.1",
 		"doctrine/doctrine-fixtures-bundle": "4.3.1",
-		"phpunit/php-code-coverage": "14.4.0",
+		"phpunit/php-code-coverage": "14.4.1",
 		"phpunit/phpunit": "13.4.0",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "8.1.5",
