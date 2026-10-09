@@ -285,6 +285,7 @@ For detailed usage, UID/GID notes, and port mappings, see
 If you use AI assistance in this repository, keep it aligned with the project
 conventions already documented in this order:
 
+* [`AGENTS.md`](AGENTS.md) for instructions specific to AI coding agents,
 * `.github/copilot-instructions.md` for short repository rules,
 * `CLAUDE.md` for broader architecture and workflow context,
 * `doc/AI_RULES.md` for how AI guidance is maintained over time, and
