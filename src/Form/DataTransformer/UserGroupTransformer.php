@@ -19,7 +19,7 @@ use function is_array;
 use function sprintf;
 
 /**
- * @implements DataTransformerInterface<array<array-key, UserGroup>|null, array<array-key, string>|null>
+ * @implements DataTransformerInterface<array<array-key, UserGroup|Stringable>|null, array<array-key, string>|null>
  */
 class UserGroupTransformer implements DataTransformerInterface
 {

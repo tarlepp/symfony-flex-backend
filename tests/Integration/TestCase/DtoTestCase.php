@@ -221,8 +221,6 @@ abstract class DtoTestCase extends KernelTestCase
             );
         }
 
-        self::assertInstanceOf(PropertyInfoExtractor::class, $cache);
-
         return $cache;
     }
 
