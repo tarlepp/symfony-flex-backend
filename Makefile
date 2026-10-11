@@ -248,7 +248,7 @@ ecs: info_msg := @printf $(_TITLE) "OK" "Running EasyCodingStandard"
 ecs: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/ecs --version
-	@php ./vendor/bin/ecs --clear-cache check src tests
+	@php ./vendor/bin/ecs --clear-cache src tests
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -264,7 +264,7 @@ ecs-fix: info_msg := @printf $(_TITLE) "OK" "Running EasyCodingStandard with --f
 ecs-fix: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/ecs --version
-	@php ./vendor/bin/ecs check src tests --clear-cache --fix
+	@php ./vendor/bin/ecs src tests --clear-cache --fix
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
