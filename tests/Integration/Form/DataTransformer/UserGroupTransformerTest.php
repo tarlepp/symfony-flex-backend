@@ -120,6 +120,10 @@ final class UserGroupTransformerTest extends KernelTestCase
         $entity = new UserGroup();
 
         yield [new StringableArrayObject([$entity->getId()]), new StringableArrayObject([$entity])];
+
+        $stringable = new StringableArrayObject(['group-id']);
+
+        yield [new StringableArrayObject([(string)$stringable]), new StringableArrayObject([$stringable])];
     }
 
     /**
