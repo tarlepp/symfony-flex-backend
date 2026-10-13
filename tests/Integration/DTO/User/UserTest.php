@@ -59,16 +59,16 @@ final class UserTest extends DtoTestCase
     #[TestDox('Test that `update` method calls `setPlainPassword` entity method when `password` is set to DTO')]
     public function testThatUpdateMethodCallsExpectedEntityMethodIfPasswordIsVisited(): void
     {
-        $entity = $this->getMockBuilder(UserEntity::class)->getMock();
+        $entityMock = $this->getMockBuilder(UserEntity::class)->getMock();
 
-        $entity
+        $entityMock
             ->expects($this->once())
             ->method('setPlainPassword')
             ->with('password');
 
         new UserDto()
             ->setPassword('password')
-            ->update($entity);
+            ->update($entityMock);
     }
 
     /**
@@ -77,24 +77,24 @@ final class UserTest extends DtoTestCase
     #[TestDox('Test that `update` method calls expected entity methods when `setUserGroups` method is used')]
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
-        $userGroups = [
-            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
-            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
+        $userGroupStubs = [
+            $this->createStub(UserGroupEntity::class),
+            $this->createStub(UserGroupEntity::class),
         ];
 
-        $entity = $this->getMockBuilder(UserEntity::class)->getMock();
+        $entityMock = $this->getMockBuilder(UserEntity::class)->getMock();
 
-        $entity
+        $entityMock
             ->expects($this->once())
             ->method('clearUserGroups');
 
-        $entity
-            ->expects($this->exactly(count($userGroups)))
+        $entityMock
+            ->expects($this->exactly(count($userGroupStubs)))
             ->method('addUserGroup')
-            ->willReturn($entity);
+            ->willReturn($entityMock);
 
         new UserDto()
-            ->setUserGroups($userGroups)
-            ->update($entity);
+            ->setUserGroups($userGroupStubs)
+            ->update($entityMock);
     }
 }

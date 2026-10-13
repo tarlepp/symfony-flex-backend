@@ -16,16 +16,25 @@ use App\Resource\UserGroupResource;
 use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
 
 final class ApiKeyTypeTest extends TypeTestCase
 {
+    #[Override]
+    protected function setUp(): void
+    {
+        $this->dispatcher = self::createStub(EventDispatcherInterface::class);
+
+        parent::setUp();
+    }
+
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
-        $resource = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResource();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
@@ -35,12 +44,12 @@ final class ApiKeyTypeTest extends TypeTestCase
             ->setRole($roleEntity)
             ->setName('Some name');
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
@@ -90,10 +99,10 @@ final class ApiKeyTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
-        $resource = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResource();
 
         // create a type instance with the mocked dependencies
-        $type = new ApiKeyType($resource, new UserGroupTransformer($resource));
+        $type = new ApiKeyType($resourceMock, new UserGroupTransformer($resourceMock));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -107,13 +116,13 @@ final class ApiKeyTypeTest extends TypeTestCase
      */
     private function getUserGroupResource(): MockObject
     {
-        /** @psalm-var MockObject&UserGroupResource|null $cache */
-        static $cache = null;
+        /** @psalm-var MockObject&UserGroupResource|null $userGroupResourceMock */
+        static $userGroupResourceMock = null;
 
-        if ($cache === null) {
-            $cache = $this->createMock(UserGroupResource::class);
+        if ($userGroupResourceMock === null) {
+            $userGroupResourceMock = $this->createMock(UserGroupResource::class);
         }
 
-        return $cache;
+        return $userGroupResourceMock;
     }
 }

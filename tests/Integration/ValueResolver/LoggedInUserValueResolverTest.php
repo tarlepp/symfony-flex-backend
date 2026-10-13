@@ -32,9 +32,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox("Test that `supports` methods returns `false` if the parameter name isn't `loggedInUser`")]
     public function testThatSupportsReturnFalseWithWrongName(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceStub = self::createStub(UserTypeIdentification::class);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceStub);
         $metadata = new ArgumentMetadata('foobar', null, false, false, null);
 
         self::assertFalse($resolver->supports($metadata));
@@ -46,9 +46,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that `supports` methods returns `false` if the parameter name is `loggedInUser` but type is wrong')]
     public function testThatSupportsReturnFalseWithWrongType(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceStub = self::createStub(UserTypeIdentification::class);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceStub);
         $metadata = new ArgumentMetadata('loggedInUser', null, false, false, null);
 
         self::assertFalse($resolver->supports($metadata));
@@ -60,9 +60,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox("Test that `supports` returns `false` if the parameter name isn't `loggedInUser` but type is correct")]
     public function testThatSupportsReturnFalseWithWrongNameAndCorrectType(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceStub = self::createStub(UserTypeIdentification::class);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceStub);
         $metadata = new ArgumentMetadata('foobar', User::class, false, false, null);
 
         self::assertFalse($resolver->supports($metadata));
@@ -74,9 +74,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that `supports` method returns `true` if parameter is nullable')]
     public function testThatSupportsReturnFalseWithNullable(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceStub = self::createStub(UserTypeIdentification::class);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceStub);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null, true);
 
         self::assertTrue($resolver->supports($metadata));
@@ -91,9 +91,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         $this->expectException(MissingTokenException::class);
         $this->expectExceptionMessageIsOrContains('JWT Token not found');
 
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceStub = self::createStub(UserTypeIdentification::class);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceStub);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         $resolver->supports($metadata);
@@ -110,14 +110,14 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         $this->expectException(MissingTokenException::class);
         $this->expectExceptionMessageIsOrContains('JWT Token not found');
 
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn(null);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceMock);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         $resolver->supports($metadata);
@@ -129,16 +129,16 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that `supports` methods returns `true` with proper `SecurityUser`')]
     public function testThatSupportsReturnsTrueWithProperUser(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $securityUser = new SecurityUser(new User());
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceMock);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         self::assertTrue($resolver->supports($metadata));
@@ -152,18 +152,18 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     {
         $securityUser = new SecurityUser(new User());
 
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getUser');
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceMock);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
 
@@ -178,22 +178,22 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that `resolve` method returns expected user')]
     public function testThatResolveReturnsExpectedUser(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
         $securityUser = new SecurityUser($user);
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getUser')
             ->willReturn($user);
 
-        $resolver = new LoggedInUserValueResolver($userService);
+        $resolver = new LoggedInUserValueResolver($userServiceMock);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
 
@@ -206,22 +206,25 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that integration with `ArgumentResolver` returns expected user')]
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this
+            ->getMockBuilder(UserTypeIdentification::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $user = new User();
         $securityUser = new SecurityUser($user);
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
-        $userService
+        $userServiceMock
             ->expects($this->once())
             ->method('getUser')
             ->willReturn($user);
 
-        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($userService)]);
+        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($userServiceMock)]);
 
         $closure = static function (User $loggedInUser): void {
             // Do nothing
@@ -237,11 +240,11 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that integration with `ArgumentResolver` returns null when there is no user present')]
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceStub = self::createStub(UserTypeIdentification::class);
 
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($userService), new DefaultValueResolver()],
+            [new LoggedInUserValueResolver($userServiceStub), new DefaultValueResolver()],
         );
 
         self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));

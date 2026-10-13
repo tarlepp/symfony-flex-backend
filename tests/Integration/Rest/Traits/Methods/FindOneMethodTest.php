@@ -56,12 +56,10 @@ final class FindOneMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        new FindOneMethodTestClass($resourceMock, $responseHandlerMock)
+        new FindOneMethodTestClass($resourceStub, $responseHandlerStub)
             ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id')
             ->getContent();
     }
@@ -77,9 +75,7 @@ final class FindOneMethodTest extends KernelTestCase
         $this->expectExceptionCode($expectedCode);
 
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $uuid = Uuid::uuid4()->toString();
 
@@ -89,7 +85,7 @@ final class FindOneMethodTest extends KernelTestCase
             ->with($uuid)
             ->willThrowException($exception);
 
-        new FindOneMethodTestClass($resourceMock, $responseHandlerMock)
+        new FindOneMethodTestClass($resourceMock, $responseHandlerStub)
             ->findOneMethod(Request::create('/' . $uuid), $uuid);
     }
 
@@ -103,7 +99,7 @@ final class FindOneMethodTest extends KernelTestCase
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $entityStub = self::createStub(EntityInterface::class);
 
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid);
@@ -112,12 +108,12 @@ final class FindOneMethodTest extends KernelTestCase
             ->expects($this->once())
             ->method('findOne')
             ->with($uuid, true)
-            ->willReturn($entityMock);
+            ->willReturn($entityStub);
 
         $responseHandlerMock
             ->expects($this->once())
             ->method('createResponse')
-            ->with($request, $entityMock, $resourceMock);
+            ->with($request, $entityStub, $resourceMock);
 
         new FindOneMethodTestClass($resourceMock, $responseHandlerMock)
             ->findOneMethod($request, $uuid);

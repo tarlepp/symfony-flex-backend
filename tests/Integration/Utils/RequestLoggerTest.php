@@ -26,32 +26,32 @@ final class RequestLoggerTest extends KernelTestCase
     #[TestDox('Test that log is not created if `Request` and `Response` object are not set')]
     public function testThatLogIsNotCreatedIfRequestAndResponseObjectsAreNotSet(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceStub = self::createStub(UserResource::class);
+        $apiKeyResourceStub = self::createStub(ApiKeyResource::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
 
-        $logRequestResource
-            ->expects(self::never())
+        $logRequestResourceMock
+            ->expects($this->never())
             ->method('save');
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceStub, $apiKeyResourceStub, $loggerStub, [])
             ->handle();
     }
 
     #[TestDox('Test that log is not created if `Request` object is not set')]
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceStub = self::createStub(UserResource::class);
+        $apiKeyResourceStub = self::createStub(ApiKeyResource::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
 
-        $logRequestResource
-            ->expects(self::never())
+        $logRequestResourceMock
+            ->expects($this->never())
             ->method('save');
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceStub, $apiKeyResourceStub, $loggerStub, [])
             ->setResponse(new Response())
             ->handle();
     }
@@ -59,16 +59,16 @@ final class RequestLoggerTest extends KernelTestCase
     #[TestDox('Test that log is not created if `Response` object is not set')]
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceStub = self::createStub(UserResource::class);
+        $apiKeyResourceStub = self::createStub(ApiKeyResource::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
 
-        $logRequestResource
-            ->expects(self::never())
+        $logRequestResourceMock
+            ->expects($this->never())
             ->method('save');
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceStub, $apiKeyResourceStub, $loggerStub, [])
             ->setRequest(new Request())
             ->handle();
     }
@@ -76,17 +76,17 @@ final class RequestLoggerTest extends KernelTestCase
     #[TestDox('Test that log is created when `Request` and `Response` object are set')]
     public function testThatResourceSaveMethodIsCalled(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceStub = self::createStub(UserResource::class);
+        $apiKeyResourceStub = self::createStub(ApiKeyResource::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
 
-        $logRequestResource
+        $logRequestResourceMock
             ->expects($this->once())
             ->method('save')
             ->with();
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceStub, $apiKeyResourceStub, $loggerStub, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->handle();
@@ -95,22 +95,22 @@ final class RequestLoggerTest extends KernelTestCase
     #[TestDox('Test that `LoggerInterface::error` method is called when exception is thrown')]
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceStub = self::createStub(UserResource::class);
+        $apiKeyResourceStub = self::createStub(ApiKeyResource::class);
+        $loggerMock = $this->getLogger();
 
-        $logRequestResource
+        $logRequestResourceMock
             ->expects($this->once())
             ->method('save')
             ->willThrowException(new Exception('test exception'));
 
-        $logger
+        $loggerMock
             ->expects($this->once())
             ->method('error')
             ->with('test exception');
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceStub, $apiKeyResourceStub, $loggerMock, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->handle();
@@ -119,28 +119,28 @@ final class RequestLoggerTest extends KernelTestCase
     #[TestDox('Test that `UserResource::getReference` method is called when `userId` is set')]
     public function testThatUserResourceMethodIsCalledWhenUserIdIsSet(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceMock = $this->getUserResource();
+        $apiKeyResourceMock = $this->getApiKeyResource();
+        $loggerStub = self::createStub(LoggerInterface::class);
         $user = new User();
 
-        $userResource
+        $userResourceMock
             ->expects($this->once())
             ->method('getReference')
             ->with($user->getId())
             ->willReturn($user);
 
-        $apiKeyResource
+        $apiKeyResourceMock
             ->expects(self::never())
             ->method('getReference');
 
-        $logRequestResource
+        $logRequestResourceMock
             ->expects($this->once())
             ->method('save')
             ->with();
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceMock, $apiKeyResourceMock, $loggerStub, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->setUserId($user->getId())
@@ -150,28 +150,28 @@ final class RequestLoggerTest extends KernelTestCase
     #[TestDox('Test that `ApiKeyResource::getReference` method is called when `userId` is set')]
     public function testThatApiKeyResourceMethodIsCalledWhenUserIdIsSet(): void
     {
-        $logRequestResource = $this->getLogRequestResource();
-        $userResource = $this->getUserResource();
-        $apiKeyResource = $this->getApiKeyResource();
-        $logger = $this->getLogger();
+        $logRequestResourceMock = $this->getLogRequestResource();
+        $userResourceMock = $this->getUserResource();
+        $apiKeyResourceMock = $this->getApiKeyResource();
+        $loggerStub = self::createStub(LoggerInterface::class);
         $user = new ApiKey();
 
-        $apiKeyResource
+        $apiKeyResourceMock
             ->expects($this->once())
             ->method('getReference')
             ->with($user->getId())
             ->willReturn($user);
 
-        $userResource
+        $userResourceMock
             ->expects(self::never())
             ->method('getReference');
 
-        $logRequestResource
+        $logRequestResourceMock
             ->expects($this->once())
             ->method('save')
             ->with();
 
-        new RequestLogger($logRequestResource, $userResource, $apiKeyResource, $logger, [])
+        new RequestLogger($logRequestResourceMock, $userResourceMock, $apiKeyResourceMock, $loggerStub, [])
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->setApiKeyId($user->getId())

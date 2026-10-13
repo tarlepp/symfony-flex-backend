@@ -24,9 +24,9 @@ final class RoleTransformerTest extends KernelTestCase
     #[TestDox('Test that `transform` method returns `$expected` when using `$input` as input')]
     public function testThatTransformReturnsExpected(string $expected, ?Role $input): void
     {
-        $resource = $this->getRoleResource();
+        $resourceStub = self::createStub(RoleResource::class);
 
-        $transformer = new RoleTransformer($resource);
+        $transformer = new RoleTransformer($resourceStub);
 
         self::assertSame($expected, $transformer->transform($input));
     }
@@ -37,17 +37,17 @@ final class RoleTransformerTest extends KernelTestCase
     #[TestDox('Test that `reverseTransform` method calls expected resource methods')]
     public function testThatReverseTransformCallsExpectedResourceMethods(): void
     {
-        $resource = $this->getRoleResource();
+        $resourceMock = $this->getRoleResource();
 
         $entity = new Role('Some Role');
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('findOne')
             ->with($entity->getId())
             ->willReturn($entity);
 
-        new RoleTransformer($resource)
+        new RoleTransformer($resourceMock)
             ->reverseTransform($entity->getId());
     }
 
@@ -60,15 +60,15 @@ final class RoleTransformerTest extends KernelTestCase
         $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessageIsOrContains('Role with name "role_name" does not exist!');
 
-        $resource = $this->getRoleResource();
+        $resourceMock = $this->getRoleResource();
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('findOne')
             ->with('role_name')
             ->willReturn(null);
 
-        new RoleTransformer($resource)
+        new RoleTransformer($resourceMock)
             ->reverseTransform('role_name');
     }
 
@@ -78,17 +78,17 @@ final class RoleTransformerTest extends KernelTestCase
     #[TestDox('Test that `reverseTransform` method returns expected `role` entity')]
     public function testThatReverseTransformReturnsExpected(): void
     {
-        $resource = $this->getRoleResource();
+        $resourceMock = $this->getRoleResource();
 
         $entity = new Role('Some Role');
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('findOne')
             ->with('Some Role')
             ->willReturn($entity);
 
-        $transformer = new RoleTransformer($resource);
+        $transformer = new RoleTransformer($resourceMock);
 
         self::assertSame($entity, $transformer->reverseTransform('Some Role'));
     }

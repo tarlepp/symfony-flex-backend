@@ -50,42 +50,42 @@ final class RequestLogSubscriberTest extends KernelTestCase
         );
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
-        $requestLogger = $this->getRequestLogger();
-        $userTypeIdentification = $this->getUserTypeIdentification();
+        $requestLoggerMock = $this->getRequestLogger();
+        $userTypeIdentificationStub = self::createStub(UserTypeIdentification::class);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects($this->once())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects($this->once())
             ->method('setResponse')
             ->with($event->getResponse())
-            ->willReturn($requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects($this->once())
             ->method('setMainRequest')
             ->with($event->isMainRequest())
-            ->willReturn($requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects($this->once())
             ->method('handle');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setUserId');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setApiKeyId');
 
         new RequestLogSubscriber(
-            $requestLogger,
-            $userTypeIdentification,
+            $requestLoggerMock,
+            $userTypeIdentificationStub,
             [],
         )
             ->onTerminateEvent($event);
@@ -117,27 +117,27 @@ final class RequestLogSubscriberTest extends KernelTestCase
         $event = new TerminateEvent($kernel, $request, $response);
         $user = new User();
         $securityUser = new SecurityUser($user);
-        $requestLogger = $this->getRequestLogger();
-        $userTypeIdentification = $this->getUserTypeIdentification();
+        $requestLoggerMock = $this->getRequestLogger();
+        $userTypeIdentificationMock = $this->getUserTypeIdentification();
 
-        $userTypeIdentification
+        $userTypeIdentificationMock
             ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($securityUser);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects($this->once())
             ->method('setUserId')
             ->with($user->getId())
-            ->willReturn($requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setApiKeyId');
 
         new RequestLogSubscriber(
-            $requestLogger,
-            $userTypeIdentification,
+            $requestLoggerMock,
+            $userTypeIdentificationMock,
             [],
         )
             ->onTerminateEvent($event);
@@ -169,27 +169,27 @@ final class RequestLogSubscriberTest extends KernelTestCase
         $event = new TerminateEvent($kernel, $request, $response);
         $apiKey = new ApiKey();
         $apiKeyUser = new ApiKeyUser($apiKey, []);
-        $requestLogger = $this->getRequestLogger();
-        $userTypeIdentification = $this->getUserTypeIdentification();
+        $requestLoggerMock = $this->getRequestLogger();
+        $userTypeIdentificationMock = $this->getUserTypeIdentification();
 
-        $userTypeIdentification
+        $userTypeIdentificationMock
             ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($apiKeyUser);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects($this->once())
             ->method('setApiKeyId')
             ->with($apiKey->getId())
-            ->willReturn($requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setUserId');
 
         new RequestLogSubscriber(
-            $requestLogger,
-            $userTypeIdentification,
+            $requestLoggerMock,
+            $userTypeIdentificationMock,
             [],
         )
             ->onTerminateEvent($event);
@@ -213,18 +213,18 @@ final class RequestLogSubscriberTest extends KernelTestCase
         ]);
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
-        $requestLogger = $this->getRequestLogger();
-        $userTypeIdentification = $this->getUserTypeIdentification();
+        $requestLoggerMock = $this->getRequestLogger();
+        $userTypeIdentificationStub = $this->createStub(UserTypeIdentification::class);
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($requestLogger);
+            ->willReturn($requestLoggerMock);
 
         new RequestLogSubscriber(
-            $requestLogger,
-            $userTypeIdentification,
+            $requestLoggerMock,
+            $userTypeIdentificationStub,
             [],
         )
             ->onTerminateEvent($event);
@@ -257,40 +257,40 @@ final class RequestLogSubscriberTest extends KernelTestCase
         );
         $response = new Response();
         $event = new TerminateEvent($kernel, $request, $response);
-        $requestLogger = $this->getRequestLogger();
-        $userTypeIdentification = $this->getUserTypeIdentification();
+        $requestLoggerMock = $this->getRequestLogger();
+        $userTypeIdentificationMock = $this->getUserTypeIdentification();
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setRequest');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setResponse');
 
-        $userTypeIdentification
+        $userTypeIdentificationMock
             ->expects(self::never())
             ->method('getIdentity');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setMainRequest');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('handle');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setUserId');
 
-        $requestLogger
+        $requestLoggerMock
             ->expects(self::never())
             ->method('setApiKeyId');
 
         new RequestLogSubscriber(
-            $requestLogger,
-            $userTypeIdentification,
+            $requestLoggerMock,
+            $userTypeIdentificationMock,
             [$ignored],
         )
             ->onTerminateEvent($event);

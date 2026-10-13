@@ -55,12 +55,10 @@ final class CountMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        new CountMethodTestClass($resourceMock, $responseHandlerMock)
+        new CountMethodTestClass($resourceStub, $responseHandlerStub)
             ->countMethod(Request::create('/', $httpMethod))
             ->getContent();
     }
@@ -76,9 +74,7 @@ final class CountMethodTest extends KernelTestCase
         $this->expectExceptionCode($expectedCode);
 
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $resourceMock
             ->expects($this->once())
@@ -86,7 +82,7 @@ final class CountMethodTest extends KernelTestCase
             ->with([], [])
             ->willThrowException($exception);
 
-        new CountMethodTestClass($resourceMock, $responseHandlerMock)
+        new CountMethodTestClass($resourceMock, $responseHandlerStub)
             ->countMethod(Request::create('/'));
     }
 
@@ -141,16 +137,14 @@ final class CountMethodTest extends KernelTestCase
     #[TestDox('Test that `countMethod` throws an exception when `?where` parameter is not valid JSON')]
     public function testThatTraitThrowsAnExceptionWhenWhereParameterIsNotValidJson(): void
     {
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessageIsOrContains('Current \'where\' parameter is not valid JSON.');
 
-        new CountMethodTestClass($resourceMock, $responseHandlerMock)
+        new CountMethodTestClass($resourceStub, $responseHandlerStub)
             ->countMethod(Request::create('/?where=foo'));
     }
 

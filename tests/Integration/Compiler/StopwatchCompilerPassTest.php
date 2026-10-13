@@ -19,65 +19,65 @@ final class StopwatchCompilerPassTest extends KernelTestCase
     #[TestDox('Test that `findTaggedServiceIds` method is called expected times')]
     public function testThatFindTaggedServiceIdsMethodIsCalled(): void
     {
-        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
+        $containerMock = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
 
-        $container
+        $containerMock
             ->expects($this->exactly(5))
             ->method('findTaggedServiceIds')
             ->willReturn([]);
 
         new StopwatchCompilerPass()
-            ->process($container);
+            ->process($containerMock);
     }
 
     #[TestDox('Test that no other container methods are called when tagged service is not supported')]
     public function testThatIfServiceStartsWithAppNoOtherContainerMethodsAreCalled(): void
     {
-        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
+        $containerMock = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
 
-        $container
+        $containerMock
             ->expects($this->exactly(5))
             ->method('findTaggedServiceIds')
             ->willReturn([
                 stdClass::class => [],
             ]);
 
-        $container
+        $containerMock
             ->expects(self::never())
             ->method('getDefinition');
 
-        $container
+        $containerMock
             ->expects(self::never())
             ->method('setDefinition');
 
         new StopwatchCompilerPass()
-            ->process($container);
+            ->process($containerMock);
     }
 
     public function testThatAllExpectedContainerMethodsAreCalled(): void
     {
-        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
-        $definition = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
+        $containerMock = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
+        $definitionStub = self::createStub(Definition::class);
 
-        $container
+        $containerMock
             ->expects($this->exactly(5))
             ->method('findTaggedServiceIds')
             ->willReturn([
                 'App\Foo' => [],
             ]);
 
-        $container
+        $containerMock
             ->expects($this->exactly(5))
             ->method('getDefinition')
             ->with('App\Foo')
-            ->willReturn($definition);
+            ->willReturn($definitionStub);
 
-        $container
+        $containerMock
             ->expects($this->exactly(5))
             ->method('setDefinition')
             ->with('App\Foo.stopwatch');
 
         new StopwatchCompilerPass()
-            ->process($container);
+            ->process($containerMock);
     }
 }
