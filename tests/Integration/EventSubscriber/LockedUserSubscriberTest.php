@@ -163,7 +163,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
             ->willReturn(null);
 
         $logLoginFailureResourceMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method(self::anything());
 
         $requestStack = new RequestStack();

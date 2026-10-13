@@ -132,7 +132,7 @@ final class RequestLoggerTest extends KernelTestCase
             ->willReturn($user);
 
         $apiKeyResourceMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getReference');
 
         $logRequestResourceMock
@@ -163,7 +163,7 @@ final class RequestLoggerTest extends KernelTestCase
             ->willReturn($user);
 
         $userResourceMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getReference');
 
         $logRequestResourceMock

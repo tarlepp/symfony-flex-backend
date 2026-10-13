@@ -387,7 +387,7 @@ final class GenericResourceTest extends KernelTestCase
         $entity = new UserEntity();
 
         $repositoryMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('save');
 
         $resource->save($entity);
@@ -550,7 +550,7 @@ final class GenericResourceTest extends KernelTestCase
             ->willReturn(null);
 
         $repositoryMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('remove');
 
         $resource->delete('some id');

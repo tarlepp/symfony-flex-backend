@@ -76,11 +76,11 @@ final class RequestLogSubscriberTest extends KernelTestCase
             ->method('handle');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setUserId');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setApiKeyId');
 
         new RequestLogSubscriber(
@@ -132,7 +132,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
             ->willReturn($requestLoggerMock);
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setApiKeyId');
 
         new RequestLogSubscriber(
@@ -184,7 +184,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
             ->willReturn($requestLoggerMock);
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setUserId');
 
         new RequestLogSubscriber(
@@ -217,7 +217,7 @@ final class RequestLogSubscriberTest extends KernelTestCase
         $userTypeIdentificationStub = $this->createStub(UserTypeIdentification::class);
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setRequest')
             ->with($request)
             ->willReturn($requestLoggerMock);
@@ -261,31 +261,31 @@ final class RequestLogSubscriberTest extends KernelTestCase
         $userTypeIdentificationMock = $this->getUserTypeIdentificationMock();
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setRequest');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setResponse');
 
         $userTypeIdentificationMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getIdentity');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setMainRequest');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('handle');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setUserId');
 
         $requestLoggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setApiKeyId');
 
         new RequestLogSubscriber(

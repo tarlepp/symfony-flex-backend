@@ -43,11 +43,11 @@ final class StopwatchCompilerPassTest extends KernelTestCase
             ]);
 
         $containerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getDefinition');
 
         $containerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setDefinition');
 
         new StopwatchCompilerPass()
