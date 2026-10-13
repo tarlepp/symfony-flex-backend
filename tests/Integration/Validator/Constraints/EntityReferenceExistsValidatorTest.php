@@ -95,11 +95,11 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $contextMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method(self::anything());
 
         $loggerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method(self::anything());
 
         $constraint = new EntityReferenceExists();

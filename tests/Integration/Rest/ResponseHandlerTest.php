@@ -186,7 +186,7 @@ final class ResponseHandlerTest extends KernelTestCase
             ->willReturn($formInterfaceMock);
 
         $formErrorMock
-            ->expects(self::atLeast(1))
+            ->expects($this->atLeast(1))
             ->method('getMessage')
             ->willReturn('test error');
 

@@ -97,7 +97,7 @@ abstract class DtoTestCase extends KernelTestCase
             ->onlyMethods(['setVisited'])
             ->getMock();
 
-        $mock->expects(self::atLeast(count($properties)))
+        $mock->expects($this->atLeast(count($properties)))
             ->method('setVisited');
 
         $expectedVisited = [];
