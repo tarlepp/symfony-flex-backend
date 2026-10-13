@@ -35,7 +35,7 @@ final class ApiKeyTypeTest extends TypeTestCase
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
-        $resourceMock = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResourceMock();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
@@ -100,7 +100,7 @@ final class ApiKeyTypeTest extends TypeTestCase
     {
         parent::getExtensions($violationMapper);
 
-        $resourceMock = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResourceMock();
 
         // create a type instance with the mocked dependencies
         $type = new ApiKeyType($resourceMock, new UserGroupTransformer($resourceMock));
@@ -115,7 +115,7 @@ final class ApiKeyTypeTest extends TypeTestCase
      * @psalm-return MockObject&UserGroupResource
      * @phpstan-return MockObject&UserGroupResource
      */
-    private function getUserGroupResource(): MockObject
+    private function getUserGroupResourceMock(): MockObject
     {
         /** @psalm-var MockObject&UserGroupResource|null $userGroupResourceMock */
         static $userGroupResourceMock = null;

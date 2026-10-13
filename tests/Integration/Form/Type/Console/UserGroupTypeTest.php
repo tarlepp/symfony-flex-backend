@@ -35,8 +35,8 @@ final class UserGroupTypeTest extends TypeTestCase
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
-        $resourceMock = $this->getRoleResource();
-        $rolesServiceMock = $this->getRolesService();
+        $resourceMock = $this->getRoleResourceMock();
+        $rolesServiceMock = $this->getRolesServiceMock();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
@@ -101,8 +101,8 @@ final class UserGroupTypeTest extends TypeTestCase
     {
         parent::getExtensions($violationMapper);
 
-        $resourceMock = $this->getRoleResource();
-        $rolesServiceMock = $this->getRolesService();
+        $resourceMock = $this->getRoleResourceMock();
+        $rolesServiceMock = $this->getRolesServiceMock();
 
         // create a type instance with the mocked dependencies
         $type = new UserGroupType($rolesServiceMock, $resourceMock, new RoleTransformer($resourceMock));
@@ -117,7 +117,7 @@ final class UserGroupTypeTest extends TypeTestCase
      * @psalm-return MockObject&RolesService
      * @phpstan-return MockObject&RolesService
      */
-    private function getRolesService(): MockObject
+    private function getRolesServiceMock(): MockObject
     {
         /** @psalm-var MockObject&RolesService|null $rolesServiceMock */
         static $rolesServiceMock = null;
@@ -133,7 +133,7 @@ final class UserGroupTypeTest extends TypeTestCase
      * @psalm-return MockObject&RoleResource
      * @phpstan-return MockObject&RoleResource
      */
-    private function getRoleResource(): MockObject
+    private function getRoleResourceMock(): MockObject
     {
         /** @psalm-var MockObject&RoleResource|null $roleResourceMock */
         static $roleResourceMock = null;

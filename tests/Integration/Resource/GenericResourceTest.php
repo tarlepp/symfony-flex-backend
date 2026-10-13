@@ -58,7 +58,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `getEntityName` method calls expected repository methods and returns expected value')]
     public function testThatGetEntityNameCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -74,7 +74,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `getReference` method calls expected repository methods and returns expected value')]
     public function testThatGetReferenceCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -95,7 +95,7 @@ final class GenericResourceTest extends KernelTestCase
     )]
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -116,7 +116,7 @@ final class GenericResourceTest extends KernelTestCase
     )]
     public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -141,7 +141,7 @@ final class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessageIsOrContains('Not found');
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -169,7 +169,7 @@ final class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $results = [
             new UserEntity(),
@@ -192,7 +192,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `findOne` method calls expected repository methods and returns expected value')]
     public function testThatFindOneCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -211,7 +211,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `findOne` method returns null if entity is not found and exception bit is not set')]
     public function testThatFindOneReturnsNullIfEntityIsNotFound(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -231,7 +231,7 @@ final class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessageIsOrContains('Not found');
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -257,7 +257,7 @@ final class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -279,7 +279,7 @@ final class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessageIsOrContains('Not found');
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -298,7 +298,7 @@ final class GenericResourceTest extends KernelTestCase
     )]
     public function testThatFindOneByDoesNotThrowAnExceptionIfEntityWasNotFound(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -315,7 +315,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox("Test that `findOneBy` method doesn't throw an exception if entity is found and exception bit is set")]
     public function testThatFindOneByWontThrowAnExceptionIfEntityWasFound(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -345,7 +345,7 @@ final class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -362,7 +362,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `save` method calls expected repository methods and returns expected value')]
     public function testThatSaveMethodCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -382,7 +382,7 @@ final class GenericResourceTest extends KernelTestCase
     {
         $this->expectException(ValidatorException::class);
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -401,7 +401,7 @@ final class GenericResourceTest extends KernelTestCase
     {
         $this->expectException(ValidatorException::class);
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -417,7 +417,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `create` method calls expected repository and dto class methods')]
     public function testThatCreateMethodCallsExpectedMethods(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -460,7 +460,7 @@ final class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessageIsOrContains('Not found');
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -477,7 +477,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that `update` method calls expected repository methods')]
     public function testThatUpdateCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $dto = new UserDto();
         $entity = new UserEntity();
@@ -514,7 +514,7 @@ final class GenericResourceTest extends KernelTestCase
     #[TestDox('Test that calling `delete` method calls expected repository methods and returns expected value')]
     public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
     {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $entity = new UserEntity();
 
@@ -541,7 +541,7 @@ final class GenericResourceTest extends KernelTestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessageIsOrContains('Not found');
 
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -571,7 +571,7 @@ final class GenericResourceTest extends KernelTestCase
         StringableArrayObject $expectedArguments,
         StringableArrayObject $arguments,
     ): void {
-        [$resource, $repositoryMock] = $this->getResourceAndRepository();
+        [$resource, $repositoryMock] = $this->getResourceAndRepositoryMock();
 
         $repositoryMock
             ->expects($this->once())
@@ -689,7 +689,7 @@ final class GenericResourceTest extends KernelTestCase
      *
      * @phpstan-return array{0: UserResource, 1: MockObject&UserRepository}
      */
-    private function getResourceAndRepository(): array
+    private function getResourceAndRepositoryMock(): array
     {
         /** @var Registry $doctrine */
         $doctrine = self::getContainer()->get('doctrine');
