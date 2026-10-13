@@ -37,7 +37,7 @@ final class RoleTransformerTest extends KernelTestCase
     #[TestDox('Test that `reverseTransform` method calls expected resource methods')]
     public function testThatReverseTransformCallsExpectedResourceMethods(): void
     {
-        $resourceMock = $this->getRoleResource();
+        $resourceMock = $this->getRoleResourceMock();
 
         $entity = new Role('Some Role');
 
@@ -60,7 +60,7 @@ final class RoleTransformerTest extends KernelTestCase
         $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessageIsOrContains('Role with name "role_name" does not exist!');
 
-        $resourceMock = $this->getRoleResource();
+        $resourceMock = $this->getRoleResourceMock();
 
         $resourceMock
             ->expects($this->once())
@@ -78,7 +78,7 @@ final class RoleTransformerTest extends KernelTestCase
     #[TestDox('Test that `reverseTransform` method returns expected `role` entity')]
     public function testThatReverseTransformReturnsExpected(): void
     {
-        $resourceMock = $this->getRoleResource();
+        $resourceMock = $this->getRoleResourceMock();
 
         $entity = new Role('Some Role');
 
@@ -108,7 +108,7 @@ final class RoleTransformerTest extends KernelTestCase
     /**
      * @phpstan-return MockObject&RoleResource
      */
-    private function getRoleResource(): MockObject
+    private function getRoleResourceMock(): MockObject
     {
         return $this
             ->getMockBuilder(RoleResource::class)

@@ -52,7 +52,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     #[TestDox('Test that `reverseTransform` method calls expected resource methods')]
     public function testThatReverseTransformCallsExpectedResourceMethods(): void
     {
-        $resourceMock = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResourceMock();
 
         $entity1 = new UserGroup();
         $entity2 = new UserGroup();
@@ -75,7 +75,7 @@ final class UserGroupTransformerTest extends KernelTestCase
         $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessageIsOrContains('User group with id "2" does not exist!');
 
-        $resourceMock = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResourceMock();
 
         $entity = new UserGroup();
 
@@ -94,7 +94,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     #[TestDox('Test that `reverseTransform` method returns expected `UserGroup` entities')]
     public function testThatReverseTransformReturnsExpected(): void
     {
-        $resourceMock = $this->getUserGroupResource();
+        $resourceMock = $this->getUserGroupResourceMock();
 
         $entity1 = new UserGroup();
         $entity2 = new UserGroup();
@@ -129,7 +129,7 @@ final class UserGroupTransformerTest extends KernelTestCase
     /**
      * @phpstan-return  MockObject&UserGroupResource
      */
-    private function getUserGroupResource(): MockObject
+    private function getUserGroupResourceMock(): MockObject
     {
         return $this
             ->getMockBuilder(UserGroupResource::class)

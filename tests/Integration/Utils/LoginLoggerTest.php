@@ -39,7 +39,7 @@ final class LoginLoggerTest extends KernelTestCase
     #[TestDox('Test that `createEntry` method calls expected resource service method')]
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
-        $resourceMock = $this->getResource();
+        $resourceMock = $this->getResourceMock();
 
         $resourceMock
             ->expects($this->once())
@@ -55,7 +55,7 @@ final class LoginLoggerTest extends KernelTestCase
     /**
      * @phpstan-return MockObject&LogLoginResource
      */
-    private function getResource(): MockObject
+    private function getResourceMock(): MockObject
     {
         return $this->getMockBuilder(LogLoginResource::class)
             ->disableOriginalConstructor()

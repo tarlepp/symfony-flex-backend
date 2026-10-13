@@ -38,8 +38,8 @@ final class UserTypeTest extends TypeTestCase
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
-        $userGroupResourceMock = $this->getUserGroupResource();
-        $localizationMock = $this->getLocalization();
+        $userGroupResourceMock = $this->getUserGroupResourceMock();
+        $localizationMock = $this->getLocalizationMock();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
@@ -146,8 +146,8 @@ final class UserTypeTest extends TypeTestCase
     {
         parent::getExtensions($violationMapper);
 
-        $userGroupResourceMock = $this->getUserGroupResource();
-        $localizationMock = $this->getLocalization();
+        $userGroupResourceMock = $this->getUserGroupResourceMock();
+        $localizationMock = $this->getLocalizationMock();
 
         // create a type instance with the mocked dependencies
         $type = new UserType(
@@ -166,7 +166,7 @@ final class UserTypeTest extends TypeTestCase
      * @psalm-return MockObject&UserGroupResource
      * @phpstan-return MockObject&UserGroupResource
      */
-    private function getUserGroupResource(): MockObject
+    private function getUserGroupResourceMock(): MockObject
     {
         /** @psalm-var MockObject&UserGroupResource|null $userGroupResourceMock */
         static $userGroupResourceMock = null;
@@ -182,7 +182,7 @@ final class UserTypeTest extends TypeTestCase
      * @psalm-return MockObject&Localization
      * @phpstan-return MockObject&Localization
      */
-    private function getLocalization(): MockObject
+    private function getLocalizationMock(): MockObject
     {
         /** @psalm-var MockObject&Localization|null $localizationMock */
         static $localizationMock = null;

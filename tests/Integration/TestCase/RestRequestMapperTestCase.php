@@ -87,5 +87,5 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     /**
      * @phpstan-return  MockObject&RestResourceInterface
      */
-    abstract protected function getResource(): MockObject;
+    abstract protected function getResourceMock(): MockObject;
 }
