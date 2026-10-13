@@ -110,7 +110,10 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         $this->expectException(MissingTokenException::class);
         $this->expectExceptionMessageIsOrContains('JWT Token not found');
 
-        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this
+            ->getMockBuilder(UserTypeIdentification::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $userServiceMock
             ->expects($this->once())
@@ -129,7 +132,10 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that `supports` methods returns `true` with proper `SecurityUser`')]
     public function testThatSupportsReturnsTrueWithProperUser(): void
     {
-        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this
+            ->getMockBuilder(UserTypeIdentification::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $securityUser = new SecurityUser(new User());
 
@@ -152,7 +158,10 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     {
         $securityUser = new SecurityUser(new User());
 
-        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this
+            ->getMockBuilder(UserTypeIdentification::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $userServiceMock
             ->expects($this->once())
@@ -178,7 +187,10 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
     #[TestDox('Test that `resolve` method returns expected user')]
     public function testThatResolveReturnsExpectedUser(): void
     {
-        $userServiceMock = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+        $userServiceMock = $this
+            ->getMockBuilder(UserTypeIdentification::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $user = new User();
         $securityUser = new SecurityUser($user);
