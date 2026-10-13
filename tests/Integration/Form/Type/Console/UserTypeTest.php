@@ -20,6 +20,7 @@ use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Extension\Validator\ViolationMapper\ViolationMapperInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
@@ -141,9 +142,9 @@ final class UserTypeTest extends TypeTestCase
      * @return array<PreloadedExtension>
      */
     #[Override]
-    protected function getExtensions(): array
+    protected function getExtensions(?ViolationMapperInterface $violationMapper = null): array
     {
-        parent::getExtensions();
+        parent::getExtensions($violationMapper);
 
         $userGroupResourceMock = $this->getUserGroupResource();
         $localizationMock = $this->getLocalization();
