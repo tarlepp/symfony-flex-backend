@@ -19,17 +19,26 @@ use App\Service\Localization;
 use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
 
 final class UserTypeTest extends TypeTestCase
 {
+    #[Override]
+    protected function setUp(): void
+    {
+        $this->dispatcher = self::createStub(EventDispatcherInterface::class);
+
+        parent::setUp();
+    }
+
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
-        $resource = $this->getUserGroupResource();
-        $localization = $this->getLocalization();
+        $userGroupResourceMock = $this->getUserGroupResource();
+        $localizationMock = $this->getLocalization();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
@@ -38,18 +47,18 @@ final class UserTypeTest extends TypeTestCase
         $userGroupEntity = new UserGroup()
             ->setRole($roleEntity);
 
-        $resource
+        $userGroupResourceMock
             ->expects($this->once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $resource
+        $userGroupResourceMock
             ->expects($this->once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
-        $localization
+        $localizationMock
             ->expects($this->once())
             ->method('getFormattedTimezones')
             ->willReturn([
@@ -136,11 +145,15 @@ final class UserTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
-        $resource = $this->getUserGroupResource();
-        $localization = $this->getLocalization();
+        $userGroupResourceMock = $this->getUserGroupResource();
+        $localizationMock = $this->getLocalization();
 
         // create a type instance with the mocked dependencies
-        $type = new UserType($resource, new UserGroupTransformer($resource), $localization);
+        $type = new UserType(
+            $userGroupResourceMock,
+            new UserGroupTransformer($userGroupResourceMock),
+            $localizationMock,
+        );
 
         return [
             // register the type instances with the PreloadedExtension
@@ -154,14 +167,14 @@ final class UserTypeTest extends TypeTestCase
      */
     private function getUserGroupResource(): MockObject
     {
-        /** @psalm-var MockObject&UserGroupResource|null $cache */
-        static $cache = null;
+        /** @psalm-var MockObject&UserGroupResource|null $userGroupResourceMock */
+        static $userGroupResourceMock = null;
 
-        if ($cache === null) {
-            $cache = $this->createMock(UserGroupResource::class);
+        if ($userGroupResourceMock === null) {
+            $userGroupResourceMock = $this->createMock(UserGroupResource::class);
         }
 
-        return $cache;
+        return $userGroupResourceMock;
     }
 
     /**
@@ -170,13 +183,13 @@ final class UserTypeTest extends TypeTestCase
      */
     private function getLocalization(): MockObject
     {
-        /** @psalm-var MockObject&Localization|null $cache */
-        static $cache = null;
+        /** @psalm-var MockObject&Localization|null $localizationMock */
+        static $localizationMock = null;
 
-        if ($cache === null) {
-            $cache = $this->createMock(Localization::class);
+        if ($localizationMock === null) {
+            $localizationMock = $this->createMock(Localization::class);
         }
 
-        return $cache;
+        return $localizationMock;
     }
 }

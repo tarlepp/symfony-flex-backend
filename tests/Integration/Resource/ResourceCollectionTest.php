@@ -45,14 +45,13 @@ final class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIsOrContains('Resource \'FooBar\' does not exist');
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        new ResourceCollection($this->getEmptyIteratorAggregate(), $logger)
+        new ResourceCollection($this->getEmptyIteratorAggregate(), $loggerStub)
             ->get('FooBar');
     }
 
@@ -61,28 +60,27 @@ final class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIsOrContains('Resource \'FooBar\' does not exist');
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
-        $logger
+        $loggerMock
             ->expects($this->once())
             ->method('error');
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger)
+        new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $loggerMock)
             ->get('FooBar');
     }
 
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIsOrContains('Resource class does not exist for entity \'FooBar\'');
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        new ResourceCollection($this->getEmptyIteratorAggregate(), $logger)
+        new ResourceCollection($this->getEmptyIteratorAggregate(), $loggerStub)
             ->getEntityResource('FooBar');
     }
 
@@ -91,15 +89,15 @@ final class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIsOrContains('Resource class does not exist for entity \'FooBar\'');
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
-        $logger
+        $loggerMock
             ->expects($this->once())
             ->method('error');
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger)
+        new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $loggerMock)
             ->getEntityResource('FooBar');
     }
 

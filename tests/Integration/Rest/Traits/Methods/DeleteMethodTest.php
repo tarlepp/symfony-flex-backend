@@ -57,14 +57,12 @@ final class DeleteMethodTest extends KernelTestCase
     #[TestDox('Test that `deleteMethod` throws an exception when using `$httpMethod` HTTP method')]
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        new DeleteMethodTestClass($resourceMock, $responseHandlerMock)
+        new DeleteMethodTestClass($resourceStub, $responseHandlerStub)
             ->deleteMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id');
     }
 
@@ -76,9 +74,7 @@ final class DeleteMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $uuid = Uuid::uuid4()->toString();
 
@@ -91,7 +87,7 @@ final class DeleteMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        new DeleteMethodTestClass($resourceMock, $responseHandlerMock)
+        new DeleteMethodTestClass($resourceMock, $responseHandlerStub)
             ->deleteMethod(Request::create('/' . $uuid, Request::METHOD_DELETE), $uuid);
     }
 
@@ -101,7 +97,7 @@ final class DeleteMethodTest extends KernelTestCase
     #[TestDox('Test that `deleteMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
-        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $entityStub = self::createStub(EntityInterface::class);
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
@@ -114,12 +110,12 @@ final class DeleteMethodTest extends KernelTestCase
             ->expects($this->once())
             ->method('delete')
             ->with($uuid)
-            ->willReturn($entityMock);
+            ->willReturn($entityStub);
 
         $responseHandlerMock
             ->expects($this->once())
             ->method('createResponse')
-            ->with($request, $entityMock, $resourceMock);
+            ->with($request, $entityStub, $resourceMock);
 
         new DeleteMethodTestClass($resourceMock, $responseHandlerMock)
             ->deleteMethod($request, $uuid);

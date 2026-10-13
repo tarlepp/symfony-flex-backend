@@ -24,7 +24,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
 {
     public function testThatPayloadContainsExpectedDataWhenRequestIsPresent(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         // Create new user for JWT
         $user = new User()
@@ -39,7 +39,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        new JWTCreatedSubscriber($requestStack, $logger)
+        new JWTCreatedSubscriber($requestStack, $loggerStub)
             ->onJWTCreated($event);
 
         $keys = ['exp', 'checksum'];
@@ -51,7 +51,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
 
     public function testThatPayloadContainsExpectedDataWhenRequestIsNotPresent(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         // Create new user for JWT
         $user = new User()
@@ -62,7 +62,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        new JWTCreatedSubscriber(new RequestStack(), $logger)
+        new JWTCreatedSubscriber(new RequestStack(), $loggerStub)
             ->onJWTCreated($event);
 
         $keys = ['exp'];
@@ -76,9 +76,9 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
 
     public function testThatLoggerAlertIsCalledIfRequestDoesNotExist(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $logger
+        $loggerMock
             ->expects($this->once())
             ->method('alert')
             ->with('Request not available');
@@ -92,13 +92,13 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        new JWTCreatedSubscriber(new RequestStack(), $logger)
+        new JWTCreatedSubscriber(new RequestStack(), $loggerMock)
             ->onJWTCreated($event);
     }
 
     public function testThatExpectedLocalizationDataIsSetWhenUsingSecurityUser(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         // Create new user for JWT
         $user = new User()
@@ -116,7 +116,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        new JWTCreatedSubscriber($requestStack, $logger)
+        new JWTCreatedSubscriber($requestStack, $loggerStub)
             ->onJWTCreated($event);
 
         $keys = ['language', 'locale', 'timezone'];
@@ -132,7 +132,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
 
     public function testThatDefaultLocalizationDataIsSetWhenNotUsingSecurityUser(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         $user = new InMemoryUser('user', 'password');
 
@@ -143,7 +143,7 @@ final class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], $user);
 
-        new JWTCreatedSubscriber($requestStack, $logger)
+        new JWTCreatedSubscriber($requestStack, $loggerStub)
             ->onJWTCreated($event);
 
         $keys = ['language', 'locale', 'timezone'];

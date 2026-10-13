@@ -36,7 +36,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
         ArgumentMetadata $argumentMetadata,
         string $method,
     ): void {
-        $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
+        $autoMapperStub = self::createStub(AutoMapperInterface::class);
 
         /** @psalm-suppress MixedMethodCall, MixedArgument */
         $controllerCollection
@@ -44,7 +44,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             ->method('has')
             ->willReturn($expected);
 
-        $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);
+        $resolver = new RestDtoValueResolver($controllerCollection, $autoMapperStub);
 
         self::assertSame($expected, $resolver->supports($request, $argumentMetadata));
     }
@@ -55,14 +55,14 @@ final class RestDtoValueResolverTest extends KernelTestCase
     #[TestDox('Test that `resolve` method works as expected')]
     public function testThatResolveMethodWorksAsExpected(): void
     {
-        $controllerCollection = $this->getMockBuilder(ControllerCollection::class)
+        $controllerCollectionMock = $this->getMockBuilder(ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $autoMapper = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
-        $controller = $this->getMockBuilder(Controller::class)->disableOriginalConstructor()->getMock();
-        $restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $autoMapperMock = $this->getMockBuilder(AutoMapperInterface::class)->getMock();
+        $controllerMock = $this->getMockBuilder(Controller::class)->disableOriginalConstructor()->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
 
-        $resolver = new RestDtoValueResolver($controllerCollection, $autoMapper);
+        $resolver = new RestDtoValueResolver($controllerCollectionMock, $autoMapperMock);
         $metadata = new ArgumentMetadata('foo', RestDtoInterface::class, false, false, null);
         $request = new Request(attributes: [
             '_controller' => 'foo::createAction',
@@ -70,33 +70,33 @@ final class RestDtoValueResolverTest extends KernelTestCase
 
         $resolver->supports($request, $metadata);
 
-        $controllerCollection
+        $controllerCollectionMock
             ->expects($this->exactly(2))
             ->method('has')
             ->with('foo')
             ->willReturn(true);
 
-        $controllerCollection
+        $controllerCollectionMock
             ->expects($this->once())
             ->method('get')
             ->with('foo')
-            ->willReturn($controller);
+            ->willReturn($controllerMock);
 
-        $controller
+        $controllerMock
             ->expects($this->once())
             ->method('getDtoClass')
             ->with('createMethod')
             ->willReturn(RestDtoInterface::class);
 
-        $autoMapper
+        $autoMapperMock
             ->expects($this->once())
             ->method('map')
             ->with($request, RestDtoInterface::class)
-            ->willReturn($restDto);
+            ->willReturn($restDtoStub);
 
         $resolver->supports($request, $metadata);
 
-        self::assertSame($restDto, $resolver->resolve($request, $metadata)->current());
+        self::assertSame($restDtoStub, $resolver->resolve($request, $metadata)->current());
     }
 
     /**
@@ -105,7 +105,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
     public static function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
     {
         /** @psalm-suppress InternalMethod, MixedAssignment */
-        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
+        $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -113,7 +113,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
 
         yield [
             false,
-            $controllerCollection,
+            $controllerCollectionMock,
             Request::create('/'),
             $argumentMetaData,
             'never',
@@ -125,14 +125,14 @@ final class RestDtoValueResolverTest extends KernelTestCase
 
         yield [
             false,
-            $controllerCollection,
+            $controllerCollectionMock,
             $request,
             $argumentMetaData,
             'never',
         ];
 
         /** @psalm-suppress InternalMethod, MixedAssignment */
-        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
+        $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -144,14 +144,14 @@ final class RestDtoValueResolverTest extends KernelTestCase
 
         yield [
             false,
-            $controllerCollection,
+            $controllerCollectionMock,
             $request,
             $argumentMetaData,
             'once',
         ];
 
         /** @psalm-suppress InternalMethod, MixedAssignment */
-        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
+        $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -163,14 +163,14 @@ final class RestDtoValueResolverTest extends KernelTestCase
 
         yield [
             false,
-            $controllerCollection,
+            $controllerCollectionMock,
             $request,
             $argumentMetaData,
             'never',
         ];
 
         /** @psalm-suppress InternalMethod, MixedAssignment */
-        $controllerCollection = new MockBuilder(new self(self::class), ControllerCollection::class)
+        $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -182,7 +182,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
 
         yield [
             true,
-            $controllerCollection,
+            $controllerCollectionMock,
             $request,
             $argumentMetaData,
             'once',

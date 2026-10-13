@@ -36,42 +36,38 @@ abstract class RestRequestMapperConfigurationTestCase extends KernelTestCase
     {
         $this->expectNotToPerformAssertions();
 
-        $requestMapper = $this->getMockBuilder($this->requestMapper)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $requestMapperStub = $this->createStub($this->requestMapper);
 
         /** @psalm-suppress UnsafeInstantiation */
-        new $this->autoMapperConfiguration($requestMapper);
+        new $this->autoMapperConfiguration($requestMapperStub);
     }
 
     #[TestDox('Test that `AutoMapperConfiguration` instance is configured as expected')]
     public function testThatConfigureMethodIsCallingExpectedMethods(): void
     {
-        $requestMapper = $this->getMockBuilder($this->requestMapper)
+        $requestMapperStub = $this->createStub($this->requestMapper);
+
+        $configMock = $this->getMockBuilder(AutoMapperConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $config = $this->getMockBuilder(AutoMapperConfigInterface::class)
+        $mappingMock = $this->getMockBuilder(MappingInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mapping = $this->getMockBuilder(MappingInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $config
+        $configMock
             ->expects($this->exactly(count(static::$requestMapperClasses)))
             ->method('registerMapping')
-            ->willReturn($mapping);
+            ->willReturn($mappingMock);
 
-        $mapping
+        $mappingMock
             ->expects($this->exactly(count(static::$requestMapperClasses)))
             ->method('useCustomMapper')
-            ->with($requestMapper);
+            ->with($requestMapperStub);
 
         /** @psalm-suppress UnsafeInstantiation */
-        $mapper = new $this->autoMapperConfiguration($requestMapper);
+        $mapper = new $this->autoMapperConfiguration($requestMapperStub);
 
-        $mapper->configure($config);
+        $mapper->configure($configMock);
     }
 }

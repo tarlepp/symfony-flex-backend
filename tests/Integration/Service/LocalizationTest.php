@@ -25,15 +25,15 @@ final class LocalizationTest extends KernelTestCase
     #[TestDox('Test that `getLanguages` returns expected')]
     public function testThatGetLanguagesReturnsExpected(): void
     {
-        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $cacheStub = self::createStub(CacheInterface::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
         $requestStack = new RequestStack();
 
         $expected = Language::getValues();
 
         self::assertSame(
             $expected,
-            new Localization($cache, $logger, $requestStack)
+            new Localization($cacheStub, $loggerStub, $requestStack)
                 ->getLanguages(),
         );
     }
@@ -41,15 +41,15 @@ final class LocalizationTest extends KernelTestCase
     #[TestDox('Test that `getLocales` returns expected')]
     public function testThatGetLocalesReturnsExpected(): void
     {
-        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $cacheStub = self::createStub(CacheInterface::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
         $requestStack = new RequestStack();
 
         $expected = Locale::getValues();
 
         self::assertSame(
             $expected,
-            new Localization($cache, $logger, $requestStack)
+            new Localization($cacheStub, $loggerStub, $requestStack)
                 ->getLocales(),
         );
     }
@@ -59,32 +59,32 @@ final class LocalizationTest extends KernelTestCase
     {
         $exception = new Exception('test exception');
 
-        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $requestStack = new RequestStack();
 
-        $cache
+        $cacheMock
             ->expects($this->once())
             ->method('get')
             ->willThrowException($exception);
 
-        $logger
+        $loggerMock
             ->expects($this->once())
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 
-        new Localization($cache, $logger, $requestStack)
+        new Localization($cacheMock, $loggerMock, $requestStack)
             ->getTimezones();
     }
 
     #[TestDox('Test that `getFormattedTimezones` method returns expected amount of results')]
     public function testThatGetFormattedTimezonesMethodReturnsExpectedAmountOfResults(): void
     {
-        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $cacheStub = self::createStub(CacheInterface::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
         $requestStack = new RequestStack();
 
-        $output = new Localization($cache, $logger, $requestStack)
+        $output = new Localization($cacheStub, $loggerStub, $requestStack)
             ->getFormattedTimezones();
 
         self::assertCount(count(DateTimeZone::listIdentifiers()), $output);
@@ -93,21 +93,21 @@ final class LocalizationTest extends KernelTestCase
     #[TestDox('Test that `getRequestLocale` method returns expected locale when request is not set')]
     public function testThatGetRequestLocaleReturnsDefaultLocaleIfThereIsNoCurrentRequest(): void
     {
-        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $requestStack = new RequestStack();
 
-        $cache
+        $cacheMock
             ->expects($this->never())
             ->method('get');
 
-        $logger
+        $loggerMock
             ->expects($this->never())
             ->method('error');
 
         self::assertSame(
             Locale::getDefault()->value,
-            new Localization($cache, $logger, $requestStack)
+            new Localization($cacheMock, $loggerMock, $requestStack)
                 ->getRequestLocale(),
         );
     }
@@ -115,8 +115,8 @@ final class LocalizationTest extends KernelTestCase
     #[TestDox('Test that `getRequestLocale` method returns expected locale when request is set')]
     public function testThatGetRequestLocaleReturnsDefaultLocaleWhenThereIsRequest(): void
     {
-        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $cacheStub = self::createStub(CacheInterface::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         $request = new Request();
         $request->setLocale('en');
@@ -126,7 +126,7 @@ final class LocalizationTest extends KernelTestCase
 
         self::assertSame(
             'en',
-            new Localization($cache, $logger, $requestStack)
+            new Localization($cacheStub, $loggerStub, $requestStack)
                 ->getRequestLocale(),
         );
     }

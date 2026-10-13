@@ -16,33 +16,42 @@ use App\Security\RolesService;
 use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
 
 final class UserGroupTypeTest extends TypeTestCase
 {
+    #[Override]
+    protected function setUp(): void
+    {
+        $this->dispatcher = self::createStub(EventDispatcherInterface::class);
+
+        parent::setUp();
+    }
+
     #[TestDox('Test that form submit with valid input data works as expected')]
     public function testSubmitValidData(): void
     {
-        $resource = $this->getRoleResource();
-        $service = $this->getRolesService();
+        $resourceMock = $this->getRoleResource();
+        $rolesServiceMock = $this->getRolesService();
 
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('find')
             ->willReturn([$roleEntity]);
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('findOne')
             ->with($roleEntity->getId())
             ->willReturn($roleEntity);
 
-        $service
+        $rolesServiceMock
             ->expects($this->once())
             ->method('getRoleLabel')
             ->willReturn('role name');
@@ -91,11 +100,11 @@ final class UserGroupTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
-        $resource = $this->getRoleResource();
-        $service = $this->getRolesService();
+        $resourceMock = $this->getRoleResource();
+        $rolesServiceMock = $this->getRolesService();
 
         // create a type instance with the mocked dependencies
-        $type = new UserGroupType($service, $resource, new RoleTransformer($resource));
+        $type = new UserGroupType($rolesServiceMock, $resourceMock, new RoleTransformer($resourceMock));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -109,14 +118,14 @@ final class UserGroupTypeTest extends TypeTestCase
      */
     private function getRolesService(): MockObject
     {
-        /** @psalm-var MockObject&RolesService|null $cache */
-        static $cache = null;
+        /** @psalm-var MockObject&RolesService|null $rolesServiceMock */
+        static $rolesServiceMock = null;
 
-        if ($cache === null) {
-            $cache = $this->createMock(RolesService::class);
+        if ($rolesServiceMock === null) {
+            $rolesServiceMock = $this->createMock(RolesService::class);
         }
 
-        return $cache;
+        return $rolesServiceMock;
     }
 
     /**
@@ -125,13 +134,13 @@ final class UserGroupTypeTest extends TypeTestCase
      */
     private function getRoleResource(): MockObject
     {
-        /** @psalm-var MockObject&RoleResource|null $cache */
-        static $cache = null;
+        /** @psalm-var MockObject&RoleResource|null $roleResourceMock */
+        static $roleResourceMock = null;
 
-        if ($cache === null) {
-            $cache = $this->createMock(RoleResource::class);
+        if ($roleResourceMock === null) {
+            $roleResourceMock = $this->createMock(RoleResource::class);
         }
 
-        return $cache;
+        return $roleResourceMock;
     }
 }

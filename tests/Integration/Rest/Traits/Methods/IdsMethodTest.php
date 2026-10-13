@@ -55,13 +55,10 @@ final class IdsMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
+        new IdsMethodTestClass($resourceStub, $responseHandlerStub)
             ->idsMethod(Request::create('/', $httpMethod))
             ->getContent();
     }
@@ -70,7 +67,7 @@ final class IdsMethodTest extends KernelTestCase
      * @throws Throwable
      */
     #[DataProvider('dataProviderTestThatTraitHandlesException')]
-    #[TestDox('Test that `patchMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
+    #[TestDox('Test that `idsMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $this->expectException(HttpException::class);
@@ -78,9 +75,7 @@ final class IdsMethodTest extends KernelTestCase
 
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $resourceMock
             ->expects($this->once())
@@ -88,7 +83,7 @@ final class IdsMethodTest extends KernelTestCase
             ->with([], [])
             ->willThrowException($exception);
 
-        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
+        new IdsMethodTestClass($resourceMock, $responseHandlerStub)
             ->idsMethod(Request::create('/'));
     }
 
@@ -140,13 +135,10 @@ final class IdsMethodTest extends KernelTestCase
         $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
         $this->expectExceptionMessageIsOrContains('Current \'where\' parameter is not valid JSON.');
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        new IdsMethodTestClass($resourceMock, $responseHandlerMock)
+        new IdsMethodTestClass($resourceStub, $responseHandlerStub)
             ->idsMethod(Request::create('/?where=foo'));
     }
 

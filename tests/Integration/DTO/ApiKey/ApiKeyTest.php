@@ -53,32 +53,32 @@ final class ApiKeyTest extends DtoTestCase
     #[TestDox('Test that `update` method calls expected entity methods when `setUserGroups` method is used')]
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
-        $userGroups = [
-            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
-            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
+        $userGroupStubs = [
+            self::createStub(UserGroupEntity::class),
+            self::createStub(UserGroupEntity::class),
         ];
 
-        $entity = $this->getMockBuilder(ApiKeyEntity::class)
+        $entityMock = $this->getMockBuilder(ApiKeyEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $entity
+        $entityMock
             ->expects($this->once())
             ->method('setDescription')
-            ->willReturn($entity);
+            ->willReturn($entityMock);
 
-        $entity
+        $entityMock
             ->expects($this->once())
             ->method('clearUserGroups');
 
-        $entity
-            ->expects($this->exactly(count($userGroups)))
+        $entityMock
+            ->expects($this->exactly(count($userGroupStubs)))
             ->method('addUserGroup')
-            ->willReturn($entity);
+            ->willReturn($entityMock);
 
         new ApiKeyDto()
             ->setDescription('some description')
-            ->setUserGroups($userGroups)
-            ->update($entity);
+            ->setUserGroups($userGroupStubs)
+            ->update($entityMock);
     }
 }

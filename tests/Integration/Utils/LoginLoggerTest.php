@@ -29,7 +29,7 @@ final class LoginLoggerTest extends KernelTestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessageIsOrContains('Could not get request from current request stack');
 
-        new LoginLogger($this->getResource(), new RequestStack())
+        new LoginLogger(self::createStub(LogLoginResource::class), new RequestStack())
             ->process(LogLogin::SUCCESS);
     }
 
@@ -39,16 +39,16 @@ final class LoginLoggerTest extends KernelTestCase
     #[TestDox('Test that `createEntry` method calls expected resource service method')]
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
-        $resource = $this->getResource();
+        $resourceMock = $this->getResource();
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('save');
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
-        new LoginLogger($resource, $requestStack)
+        new LoginLogger($resourceMock, $requestStack)
             ->process(LogLogin::SUCCESS);
     }
 
