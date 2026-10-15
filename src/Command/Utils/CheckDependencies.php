@@ -81,7 +81,7 @@ class CheckDependencies extends Command
     {
         $level = $input->getOption('level');
 
-        $io = $this->getSymfonyStyle($input, $output);
+        $io = $this->getSymfonyStyle($input, $output, clearScreen: false);
 
         if (!in_array($level, ['latest', 'minor', 'patch'], true)) {
             $io->error('The --level option must be one of: latest, minor, patch.');
@@ -176,7 +176,7 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($io, $level, $progressBar, &$rows): void {
+        $iterator = function (string $directory) use ($level, $progressBar, &$rows): void {
             $groupPath = $this->getGroupPath($directory);
 
             $progressBar->setMessage(sprintf(
@@ -215,10 +215,6 @@ class CheckDependencies extends Command
                         '<fg=yellow>There is newer version, but it\'s not compatible with current setup</>',
                     ];
                 }
-            }
-
-            if (count($rows) === 1) {
-                $io->write("\033\143");
             }
 
             $progressBar->advance();
