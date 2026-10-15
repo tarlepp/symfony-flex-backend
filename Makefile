@@ -496,7 +496,7 @@ check-dependencies-minor: ## Checks if any vendor dependency can be updated (onl
 check-dependencies-minor: info_msg := @printf $(_TITLE) "OK" "Checking vendor dependencies (minor)"
 check-dependencies-minor: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bin/console check-dependencies --minor
+	@bin/console check-dependencies --level=minor
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -511,7 +511,7 @@ check-dependencies-patch: ## Checks if any vendor dependency can be updated (onl
 check-dependencies-patch: info_msg := @printf $(_TITLE) "OK" "Checking vendor dependencies (patch)"
 check-dependencies-patch: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bin/console check-dependencies --patch
+	@bin/console check-dependencies --level=patch
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
