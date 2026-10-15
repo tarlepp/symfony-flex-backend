@@ -14,15 +14,43 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use function json_decode;
+use function str_repeat;
+use function strlen;
 use function sys_get_temp_dir;
 use const PHP_BINARY;
 
 final class CheckDependenciesTest extends TestCase
 {
+    #[TestWith([0, 10, 85])]
+    #[TestWith([30, 30, 65])]
+    #[TestWith([84, 84, 11])]
+    #[TestWith([95, 84, 11])]
+    #[TestWith([200, 84, 11])]
+    public function testTableColumnWidthsAreBounded(int $length, int $packageWidth, int $descriptionWidth): void
+    {
+        $output = new BufferedOutput();
+        $table = new Table($output);
+        $command = new CheckDependencies('/project');
+
+        PhpUnitUtil::callMethod($command, 'setTableColumnWidths', [$length, $table]);
+
+        $expected = [23, $packageWidth, $descriptionWidth, 10, 11];
+        self::assertSame($expected, PhpUnitUtil::getProperty('configuredColumnWidths', $table));
+        self::assertSame($expected, PhpUnitUtil::getProperty('columnMaxWidths', $table));
+
+        $table->setHeaders(['Path', 'Dependency', 'Description', 'Version', 'New version']);
+        $table->setRows([['.', 'vendor/' . str_repeat('package', 30), 'Example description', '1.0.0', '1.1.0']]);
+        $table->render();
+
+        self::assertGreaterThan(0, strlen($output->fetch()));
+    }
+
     #[TestWith(['/project', '.'])]
     #[TestWith(['/project/tools/02_phpstan', 'tools/02_phpstan'])]
     public function testGroupPathsAreProjectRelative(string $directory, string $expected): void
