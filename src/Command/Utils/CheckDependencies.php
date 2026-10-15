@@ -302,9 +302,9 @@ class CheckDependencies extends Command
     }
 
     /**
-     * @return list<stdClass>
-     *
      * @throws JsonException
+     *
+     * @return list<mixed>
      */
     private function decodeComposerOutput(string $output, string $path): array
     {
@@ -343,33 +343,38 @@ class CheckDependencies extends Command
                 ));
             }
 
-            foreach (['name', 'version'] as $field) {
-                if (!isset($package->{$field}) || !is_string($package->{$field}) || $package->{$field} === '') {
-                    throw new RuntimeException(sprintf(
-                        "Invalid Composer response in '%s': package at index %d requires a non-empty string '%s'.",
-                        $path,
-                        $index,
-                        $field,
-                    ));
-                }
-            }
-
-            foreach (['description', 'latest', 'warning'] as $field) {
-                if (property_exists($package, $field)
-                    && !is_string($package->{$field})
-                    && !($field === 'description' && $package->{$field} === null)
-                ) {
-                    throw new RuntimeException(sprintf(
-                        "Invalid Composer response in '%s': package at index %d has an invalid '%s' field.",
-                        $path,
-                        $index,
-                        $field,
-                    ));
-                }
-            }
+            $this->validateComposerPackage($package, $index, $path);
         }
 
         return $installed;
+    }
+
+    private function validateComposerPackage(stdClass $package, int $index, string $path): void
+    {
+        foreach (['name', 'version'] as $field) {
+            if (!isset($package->{$field}) || !is_string($package->{$field}) || $package->{$field} === '') {
+                throw new RuntimeException(sprintf(
+                    "Invalid Composer response in '%s': package at index %d requires a non-empty string '%s'.",
+                    $path,
+                    $index,
+                    $field,
+                ));
+            }
+        }
+
+        foreach (['description', 'latest', 'warning'] as $field) {
+            if (property_exists($package, $field)
+                && !is_string($package->{$field})
+                && !($field === 'description' && $package->{$field} === null)
+            ) {
+                throw new RuntimeException(sprintf(
+                    "Invalid Composer response in '%s': package at index %d has an invalid '%s' field.",
+                    $path,
+                    $index,
+                    $field,
+                ));
+            }
+        }
     }
 
     private function ensureProcessSucceeded(Process $process): void
