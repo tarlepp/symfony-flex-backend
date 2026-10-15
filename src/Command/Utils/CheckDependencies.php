@@ -259,7 +259,7 @@ class CheckDependencies extends Command
     /**
      * Check dependencies in the root project or a tool dependency group.
      *
-     * @return array<int, stdClass>
+     * @return list<mixed>
      *
      * @throws JsonException
      */
