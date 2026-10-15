@@ -30,12 +30,14 @@ use Symfony\Component\Process\Process;
 use Throwable;
 use Traversable;
 use function array_filter;
+use function array_is_list;
 use function array_map;
 use function array_unshift;
 use function count;
 use function dirname;
 use function in_array;
 use function is_array;
+use function is_string;
 use function iterator_to_array;
 use function json_decode;
 use function max;
@@ -259,17 +261,78 @@ class CheckDependencies extends Command
 
         $this->ensureProcessSucceeded($process);
 
-        /** @var stdClass|array<mixed> $decoded */
-        $decoded = json_decode($process->getOutput(), flags: JSON_THROW_ON_ERROR);
+        return $this->decodeComposerOutput($process->getOutput(), $path);
+    }
 
-        if (is_array($decoded)) {
+    /**
+     * @return list<stdClass>
+     *
+     * @throws JsonException
+     */
+    private function decodeComposerOutput(string $output, string $path): array
+    {
+        try {
+            $decoded = json_decode($output, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new JsonException(
+                sprintf("Invalid Composer JSON in '%s': %s", $path, $exception->getMessage()),
+                previous: $exception,
+            );
+        }
+
+        if ($decoded === []) {
             return [];
         }
 
-        /** @var array<int, stdClass>|string|null $installed */
+        if (!$decoded instanceof stdClass
+            || !isset($decoded->installed)
+            || !is_array($decoded->installed)
+            || !array_is_list($decoded->installed)
+        ) {
+            throw new RuntimeException(sprintf(
+                "Invalid Composer response in '%s': expected an object with an 'installed' package list.",
+                $path,
+            ));
+        }
+
         $installed = $decoded->installed;
 
-        return is_array($installed) ? $installed : [];
+        foreach ($installed as $index => $package) {
+            if (!$package instanceof stdClass) {
+                throw new RuntimeException(sprintf(
+                    "Invalid Composer response in '%s': package at index %d must be an object.",
+                    $path,
+                    $index,
+                ));
+            }
+
+            foreach (['name', 'version'] as $field) {
+                if (!isset($package->{$field}) || !is_string($package->{$field}) || $package->{$field} === '') {
+                    throw new RuntimeException(sprintf(
+                        "Invalid Composer response in '%s': package at index %d requires a non-empty string '%s'.",
+                        $path,
+                        $index,
+                        $field,
+                    ));
+                }
+            }
+
+            foreach (['description', 'latest', 'warning'] as $field) {
+                if (property_exists($package, $field)
+                    && !is_string($package->{$field})
+                    && !($field === 'description' && $package->{$field} === null)
+                ) {
+                    throw new RuntimeException(sprintf(
+                        "Invalid Composer response in '%s': package at index %d has an invalid '%s' field.",
+                        $path,
+                        $index,
+                        $field,
+                    ));
+                }
+            }
+        }
+
+        return $installed;
     }
 
     private function ensureProcessSucceeded(Process $process): void
@@ -329,7 +392,7 @@ class CheckDependencies extends Command
         return [
             dirname($relativePath),
             (string)$data->name,
-            (string)$data->description,
+            (string)($data->description ?? ''),
             (string)$data->version,
             (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . (string)$data->version . '</>'),
         ];
