@@ -317,10 +317,20 @@ class CheckDependencies extends Command
             );
         }
 
-        if ($decoded === []) {
-            return [];
+        $installed = [];
+
+        if ($decoded !== []) {
+            $installed = $this->validateComposerResponse($decoded, $path);
         }
 
+        return $installed;
+    }
+
+    /**
+     * @return list<mixed>
+     */
+    private function validateComposerResponse(mixed $decoded, string $path): array
+    {
         if (!$decoded instanceof stdClass
             || !isset($decoded->installed)
             || !is_array($decoded->installed)
