@@ -44,6 +44,7 @@ use function is_string;
 use function iterator_to_array;
 use function json_decode;
 use function max;
+use function min;
 use function property_exists;
 use function sort;
 use function sprintf;
@@ -437,6 +438,9 @@ class CheckDependencies extends Command
 
     private function setTableColumnWidths(int $packageNameLength, Table $table): void
     {
+        $headers = $this->getHeaders();
+        $packageNameLength = max(strlen($headers[1]), min($packageNameLength, 95 - strlen($headers[2])));
+
         $widths = [
             23,
             $packageNameLength,
