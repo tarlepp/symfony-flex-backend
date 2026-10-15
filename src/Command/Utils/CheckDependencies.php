@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Command\Utils;
 
 use App\Command\Traits\SymfonyStyleTrait;
+use App\DTO\Command\OutdatedPackage;
 use InvalidArgumentException;
 use JsonException;
 use LogicException;
@@ -230,10 +231,10 @@ class CheckDependencies extends Command
 
                 if (isset($data->warning)) {
                     $rows[] = [''];
-                    $rows[] = ['', '', '<fg=red>' . (string)$data->warning . '</>'];
+                    $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
                 }
 
-                if (!property_exists($data, 'latest')) {
+                if ($data->latest === null) {
                     $rows[] = [''];
                     $rows[] = [
                         '',
@@ -259,9 +260,9 @@ class CheckDependencies extends Command
     /**
      * Check dependencies in the root project or a tool dependency group.
      *
-     * @return list<mixed>
-     *
      * @throws JsonException
+     *
+     * @return list<OutdatedPackage>
      */
     private function processNamespacePath(string $path, string $level, float $timeout): array
     {
@@ -304,7 +305,7 @@ class CheckDependencies extends Command
     /**
      * @throws JsonException
      *
-     * @return list<mixed>
+     * @return list<OutdatedPackage>
      */
     private function decodeComposerOutput(string $output, string $path): array
     {
@@ -327,7 +328,7 @@ class CheckDependencies extends Command
     }
 
     /**
-     * @return list<mixed>
+     * @return list<OutdatedPackage>
      */
     private function validateComposerResponse(mixed $decoded, string $path): array
     {
@@ -342,9 +343,9 @@ class CheckDependencies extends Command
             ));
         }
 
-        $installed = $decoded->installed;
+        $installed = [];
 
-        foreach ($installed as $index => $package) {
+        foreach ($decoded->installed as $index => $package) {
             if (!$package instanceof stdClass) {
                 throw new RuntimeException(sprintf(
                     "Invalid Composer response in '%s': package at index %d must be an object.",
@@ -353,38 +354,55 @@ class CheckDependencies extends Command
                 ));
             }
 
-            $this->validateComposerPackage($package, $index, $path);
+            $installed[] = $this->validateComposerPackage($package, $index, $path);
         }
 
         return $installed;
     }
 
-    private function validateComposerPackage(stdClass $package, int $index, string $path): void
+    private function validateComposerPackage(stdClass $package, int $index, string $path): OutdatedPackage
     {
-        foreach (['name', 'version'] as $field) {
-            if (!isset($package->{$field}) || !is_string($package->{$field}) || $package->{$field} === '') {
-                throw new RuntimeException(sprintf(
-                    "Invalid Composer response in '%s': package at index %d requires a non-empty string '%s'.",
-                    $path,
-                    $index,
-                    $field,
-                ));
-            }
+        return new OutdatedPackage(
+            name: $this->getRequiredPackageField($package, 'name', $index, $path),
+            version: $this->getRequiredPackageField($package, 'version', $index, $path),
+            description: $this->getOptionalPackageField($package, 'description', $index, $path),
+            latest: $this->getOptionalPackageField($package, 'latest', $index, $path),
+            warning: $this->getOptionalPackageField($package, 'warning', $index, $path),
+        );
+    }
+
+    private function getRequiredPackageField(stdClass $package, string $field, int $index, string $path): string
+    {
+        $value = $package->{$field} ?? null;
+
+        if (!is_string($value) || $value === '') {
+            throw new RuntimeException(sprintf(
+                "Invalid Composer response in '%s': package at index %d requires a non-empty string '%s'.",
+                $path,
+                $index,
+                $field,
+            ));
         }
 
-        foreach (['description', 'latest', 'warning'] as $field) {
-            if (property_exists($package, $field)
-                && !is_string($package->{$field})
-                && !($field === 'description' && $package->{$field} === null)
-            ) {
-                throw new RuntimeException(sprintf(
-                    "Invalid Composer response in '%s': package at index %d has an invalid '%s' field.",
-                    $path,
-                    $index,
-                    $field,
-                ));
-            }
+        return $value;
+    }
+
+    private function getOptionalPackageField(stdClass $package, string $field, int $index, string $path): ?string
+    {
+        $value = $package->{$field} ?? null;
+
+        if (($value !== null && !is_string($value))
+            || ($value === null && $field !== 'description' && property_exists($package, $field))
+        ) {
+            throw new RuntimeException(sprintf(
+                "Invalid Composer response in '%s': package at index %d has an invalid '%s' field.",
+                $path,
+                $index,
+                $field,
+            ));
         }
+
+        return $value;
     }
 
     private function ensureProcessSucceeded(Process $process): void
@@ -439,14 +457,14 @@ class CheckDependencies extends Command
     /**
      * @return array{0: string, 1: string, 2: string, 3: string, 4: string}
      */
-    private function getPackageRow(string $relativePath, stdClass $data): array
+    private function getPackageRow(string $relativePath, OutdatedPackage $data): array
     {
         return [
             $relativePath,
-            (string)$data->name,
-            (string)($data->description ?? ''),
-            (string)$data->version,
-            (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . (string)$data->version . '</>'),
+            $data->name,
+            $data->description ?? '',
+            $data->version,
+            $data->latest ?? '<fg=yellow>' . $data->version . '</>',
         ];
     }
 
