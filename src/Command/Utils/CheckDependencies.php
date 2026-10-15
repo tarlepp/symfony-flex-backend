@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -34,7 +35,6 @@ use function array_is_list;
 use function array_map;
 use function array_unshift;
 use function count;
-use function dirname;
 use function in_array;
 use function is_array;
 use function is_string;
@@ -44,7 +44,6 @@ use function max;
 use function property_exists;
 use function sort;
 use function sprintf;
-use function str_replace;
 use function strlen;
 use const DIRECTORY_SEPARATOR;
 
@@ -178,9 +177,11 @@ class CheckDependencies extends Command
         $rows = [];
 
         $iterator = function (string $directory) use ($io, $level, $progressBar, &$rows): void {
+            $groupPath = $this->getGroupPath($directory);
+
             $progressBar->setMessage(sprintf(
                 'Checking vendor dependencies: %s/composer.json',
-                $directory === $this->projectDir ? '.' : str_replace($this->projectDir . '/', '', $directory),
+                $groupPath,
             ));
             $progressBar->display();
 
@@ -194,7 +195,7 @@ class CheckDependencies extends Command
                         $rows[] = new TableSeparator();
                     }
 
-                    $relativePath = str_replace($this->projectDir, '', $directory) . '/composer.json';
+                    $relativePath = $groupPath;
                 } else {
                     $rows[] = [''];
                 }
@@ -390,12 +391,19 @@ class CheckDependencies extends Command
     private function getPackageRow(string $relativePath, stdClass $data): array
     {
         return [
-            dirname($relativePath),
+            $relativePath,
             (string)$data->name,
             (string)($data->description ?? ''),
             (string)$data->version,
             (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . (string)$data->version . '</>'),
         ];
+    }
+
+    private function getGroupPath(string $directory): string
+    {
+        $relativePath = Path::makeRelative($directory, $this->projectDir);
+
+        return $relativePath === '' ? '.' : $relativePath;
     }
 
     private function setTableColumnWidths(int $packageNameLength, Table $table): void
