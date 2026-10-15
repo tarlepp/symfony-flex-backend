@@ -22,6 +22,34 @@ use function sys_get_temp_dir;
 
 final class CheckDependenciesTest extends TestCase
 {
+    #[TestWith(['/project', '.'])]
+    #[TestWith(['/project/tools/02_phpstan', 'tools/02_phpstan'])]
+    public function testGroupPathsAreProjectRelative(string $directory, string $expected): void
+    {
+        self::assertSame(
+            $expected,
+            PhpUnitUtil::callMethod(new CheckDependencies('/project'), 'getGroupPath', [$directory]),
+        );
+    }
+
+    #[TestWith(['.'])]
+    #[TestWith(['tools/02_phpstan'])]
+    #[TestWith([''])]
+    public function testPackageRowsPreserveGroupLabels(string $groupPath): void
+    {
+        $package = (object)[
+            'name' => 'vendor/package',
+            'description' => 'Example package',
+            'version' => '1.0.0',
+            'latest' => '1.1.0',
+        ];
+
+        self::assertSame(
+            [$groupPath, 'vendor/package', 'Example package', '1.0.0', '1.1.0'],
+            PhpUnitUtil::callMethod(new CheckDependencies('/project'), 'getPackageRow', [$groupPath, $package]),
+        );
+    }
+
     #[TestWith(['invalid'])]
     #[TestWith([''])]
     #[TestWith(['PATCH'])]
