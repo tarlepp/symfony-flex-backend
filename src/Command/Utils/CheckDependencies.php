@@ -34,7 +34,6 @@ use function array_map;
 use function array_unshift;
 use function count;
 use function dirname;
-use function implode;
 use function in_array;
 use function is_array;
 use function iterator_to_array;
@@ -258,15 +257,7 @@ class CheckDependencies extends Command
         $process->enableOutput();
         $process->run();
 
-        if ($process->getErrorOutput() !== '' && !($process->getExitCode() === 0 || $process->getExitCode() === null)) {
-            $message = sprintf(
-                "Running command '%s' failed with error message:\n%s",
-                implode(' ', $command),
-                $process->getErrorOutput(),
-            );
-
-            throw new RuntimeException($message);
-        }
+        $this->ensureProcessSucceeded($process);
 
         /** @var stdClass|array<mixed> $decoded */
         $decoded = json_decode($process->getOutput(), flags: JSON_THROW_ON_ERROR);
@@ -279,6 +270,20 @@ class CheckDependencies extends Command
         $installed = $decoded->installed;
 
         return is_array($installed) ? $installed : [];
+    }
+
+    private function ensureProcessSucceeded(Process $process): void
+    {
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                "Running command '%s' in '%s' failed with exit code %s.\nStandard output:\n%s\nError output:\n%s",
+                $process->getCommandLine(),
+                $process->getWorkingDirectory() ?? $this->projectDir,
+                $process->getExitCode() === null ? 'unknown' : (string)$process->getExitCode(),
+                $process->getOutput(),
+                $process->getErrorOutput(),
+            ));
+        }
     }
 
     /**
