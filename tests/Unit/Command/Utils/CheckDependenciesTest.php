@@ -19,6 +19,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use function json_decode;
 use function sys_get_temp_dir;
+use const PHP_BINARY;
 
 final class CheckDependenciesTest extends TestCase
 {
@@ -77,6 +78,59 @@ final class CheckDependenciesTest extends TestCase
         self::assertTrue($definition->getOption('level')->isValueRequired());
         self::assertFalse($definition->hasOption('minor'));
         self::assertFalse($definition->hasOption('patch'));
+    }
+
+    public function testTimeoutDefaultsToSixtySeconds(): void
+    {
+        $option = new CheckDependencies(__DIR__)->getDefinition()->getOption('timeout');
+
+        self::assertSame('60', $option->getDefault());
+        self::assertTrue($option->isValueRequired());
+    }
+
+    #[TestWith(['invalid'])]
+    #[TestWith([''])]
+    #[TestWith(['0'])]
+    #[TestWith(['-1'])]
+    #[TestWith(['INF'])]
+    #[TestWith(['NaN'])]
+    #[TestWith(['1e999'])]
+    public function testInvalidTimeoutsAreRejected(string $timeout): void
+    {
+        $tester = new CommandTester(new CheckDependencies(__DIR__));
+        $status = $tester->execute([
+            '--timeout' => $timeout,
+        ]);
+
+        self::assertSame(Command::INVALID, $status);
+        self::assertStringContainsString(
+            'The --timeout option must be positive, finite seconds.',
+            $tester->getDisplay(),
+        );
+        self::assertStringNotContainsString('Starting to check dependencies', $tester->getDisplay());
+    }
+
+    public function testProcessTimeoutIdentifiesTheGroup(): void
+    {
+        $process = new Process([PHP_BINARY, '-r', 'sleep(10);'], __DIR__, timeout: 0.01);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageIs(
+            "Dependency check in '" . __DIR__
+            . "' timed out after 0.01 seconds. Increase --timeout to allow more time.",
+        );
+
+        PhpUnitUtil::callMethod(new CheckDependencies(__DIR__), 'runProcess', [$process]);
+    }
+
+    public function testProcessWithinTimeoutSucceeds(): void
+    {
+        $process = new Process([PHP_BINARY, '-r', 'echo "completed";'], __DIR__, timeout: 60);
+
+        PhpUnitUtil::callMethod(new CheckDependencies(__DIR__), 'runProcess', [$process]);
+
+        self::assertSame('completed', $process->getOutput());
+        self::assertSame(0, $process->getExitCode());
     }
 
     #[TestWith([false])]
