@@ -54,7 +54,7 @@ use const FILTER_VALIDATE_FLOAT;
 
 #[AsCommand(
     name: 'check-dependencies',
-    description: 'Console command to check which vendor dependencies has updates',
+    description: 'Check which vendor dependencies have updates',
 )]
 class CheckDependencies extends Command
 {
@@ -143,10 +143,10 @@ class CheckDependencies extends Command
         $this->setTableColumnWidths($packageNameLength, $table);
 
         $rows === []
-            ? $io->success('Good news, there is no any vendor dependency to update at this time!')
+            ? $io->success('Good news, no vendor dependency updates were found for the selected level!')
             : $table->render();
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
@@ -252,7 +252,7 @@ class CheckDependencies extends Command
     }
 
     /**
-     * Method to process namespace inside 'tools' directory.
+     * Check dependencies in the root project or a tool dependency group.
      *
      * @return array<int, stdClass>
      *
