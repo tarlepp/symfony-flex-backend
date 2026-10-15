@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Command\Utils;
 
 use App\Command\Utils\CheckDependencies;
+use App\DTO\Command\OutdatedPackage;
 use App\Tests\Utils\PhpUnitUtil;
 use JsonException;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
-use function json_decode;
+use function json_encode;
 use function str_repeat;
 use function strlen;
 use function sys_get_temp_dir;
@@ -66,12 +67,12 @@ final class CheckDependenciesTest extends TestCase
     #[TestWith([''])]
     public function testPackageRowsPreserveGroupLabels(string $groupPath): void
     {
-        $package = (object)[
-            'name' => 'vendor/package',
-            'description' => 'Example package',
-            'version' => '1.0.0',
-            'latest' => '1.1.0',
-        ];
+        $package = new OutdatedPackage(
+            name: 'vendor/package',
+            version: '1.0.0',
+            description: 'Example package',
+            latest: '1.1.0',
+        );
 
         self::assertSame(
             [$groupPath, 'vendor/package', 'Example package', '1.0.0', '1.1.0'],
@@ -252,13 +253,26 @@ final class CheckDependenciesTest extends TestCase
 
     #[TestWith([
         '{"name":"vendor/package","version":"1.0.0","description":"Example","latest":"1.1.0","warning":"Warning"}',
+        'Example',
+        '1.1.0',
+        'Warning',
     ])]
     #[TestWith(['{"name":"vendor/package","version":"1.0.0"}'])]
     #[TestWith(['{"name":"vendor/package","version":"1.0.0","description":null}'])]
-    public function testValidComposerPackagesArePreserved(string $package): void
-    {
+    #[TestWith([
+        '{"name":"vendor/package","version":"1.0.0","description":"","latest":"","warning":""}',
+        '',
+        '',
+        '',
+    ])]
+    public function testValidComposerPackagesArePreserved(
+        string $package,
+        ?string $description = null,
+        ?string $latest = null,
+        ?string $warning = null,
+    ): void {
         self::assertEquals(
-            [json_decode($package, flags: JSON_THROW_ON_ERROR)],
+            [new OutdatedPackage('vendor/package', '1.0.0', $description, $latest, $warning)],
             PhpUnitUtil::callMethod(
                 new CheckDependencies(__DIR__),
                 'decodeComposerOutput',
@@ -293,6 +307,74 @@ final class CheckDependenciesTest extends TestCase
             new CheckDependencies(__DIR__),
             'decodeComposerOutput',
             [$output, '/project/tools/example'],
+        );
+    }
+
+    #[TestWith(['name', null, true])]
+    #[TestWith(['name', null, false])]
+    #[TestWith(['name', ''])]
+    #[TestWith(['name', 42])]
+    #[TestWith(['version', null, true])]
+    #[TestWith(['version', null, false])]
+    #[TestWith(['version', ''])]
+    #[TestWith(['version', []])]
+    public function testRequiredPackageFieldErrorsIdentifyTheField(
+        string $field,
+        mixed $value,
+        bool $missing = false,
+    ): void {
+        $package = [
+            'name' => 'vendor/package',
+            'version' => '1.0.0',
+        ];
+
+        if ($missing) {
+            unset($package[$field]);
+        } else {
+            $package[$field] = $value;
+        }
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageIs(
+            "Invalid Composer response in '/project/tools/example': package at index 0"
+            . " requires a non-empty string '" . $field . "'.",
+        );
+
+        PhpUnitUtil::callMethod(
+            new CheckDependencies(__DIR__),
+            'decodeComposerOutput',
+            [json_encode([
+                'installed' => [$package],
+            ], JSON_THROW_ON_ERROR), '/project/tools/example'],
+        );
+    }
+
+    #[TestWith(['description', []])]
+    #[TestWith(['description', false])]
+    #[TestWith(['latest', null])]
+    #[TestWith(['latest', 42])]
+    #[TestWith(['warning', null])]
+    #[TestWith(['warning', []])]
+    public function testOptionalPackageFieldErrorsIdentifyTheField(string $field, mixed $value): void
+    {
+        $package = [
+            'name' => 'vendor/package',
+            'version' => '1.0.0',
+            $field => $value,
+        ];
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageIs(
+            "Invalid Composer response in '/project/tools/example': package at index 0"
+            . " has an invalid '" . $field . "' field.",
+        );
+
+        PhpUnitUtil::callMethod(
+            new CheckDependencies(__DIR__),
+            'decodeComposerOutput',
+            [json_encode([
+                'installed' => [$package],
+            ], JSON_THROW_ON_ERROR), '/project/tools/example'],
         );
     }
 
