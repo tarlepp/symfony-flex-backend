@@ -38,6 +38,8 @@ use function implode;
 use function is_array;
 use function iterator_to_array;
 use function json_decode;
+use function max;
+use function property_exists;
 use function sort;
 use function sprintf;
 use function str_replace;
@@ -172,6 +174,12 @@ class CheckDependencies extends Command
         $rows = [];
 
         $iterator = function (string $directory) use ($io, $onlyMinor, $onlyPatch, $progressBar, &$rows): void {
+            $progressBar->setMessage(sprintf(
+                'Checking vendor dependencies: %s/composer.json',
+                $directory === $this->projectDir ? '.' : str_replace($this->projectDir . '/', '', $directory),
+            ));
+            $progressBar->display();
+
             foreach ($this->processNamespacePath($directory, $onlyMinor, $onlyPatch) as $row => $data) {
                 $relativePath = '';
 
@@ -212,6 +220,10 @@ class CheckDependencies extends Command
         };
 
         array_map($iterator, $directories);
+
+        $progressBar->setMessage('Finished checking all vendor dependencies');
+        $progressBar->finish();
+        $progressBar->display();
 
         return $rows;
     }
