@@ -158,10 +158,10 @@ class CheckDependencies extends Command
     /**
      * Method to determine all namespace directories under 'tools' directory.
      *
-     * @return array<int, string>
-     *
      * @throws LogicException
      * @throws InvalidArgumentException
+     *
+     * @return array<int, string>
      */
     private function getNamespaceDirectories(): array
     {
@@ -191,9 +191,9 @@ class CheckDependencies extends Command
      *
      * @param array<int, string> $directories
      *
-     * @psalm-return array<int, array<int, string>|TableSeparator>
-     *
      * @throws JsonException
+     *
+     * @psalm-return array<int, array<int, string>|TableSeparator>
      */
     private function determineTableRows(SymfonyStyle $io, array $directories, string $level, float $timeout): array
     {
@@ -282,6 +282,7 @@ class CheckDependencies extends Command
 
         $process = new Process($command, $path, timeout: $timeout);
         $process->enableOutput();
+
         $this->runProcess($process);
 
         return $this->decodeComposerOutput($process->getOutput(), $path);
