@@ -37,4 +37,19 @@ final class OutdatedPackageTest extends TestCase
         self::assertNull($package->latest);
         self::assertNull($package->warning);
     }
+
+    public function testOptionalPropertiesAcceptExplicitNull(): void
+    {
+        $package = new OutdatedPackage(
+            name: 'vendor/package',
+            version: '1.0.0',
+            description: null,
+            latest: null,
+            warning: null,
+        );
+
+        self::assertNull($package->description);
+        self::assertNull($package->latest);
+        self::assertNull($package->warning);
+    }
 }
