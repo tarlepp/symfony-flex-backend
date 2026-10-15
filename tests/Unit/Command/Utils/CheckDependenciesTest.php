@@ -12,8 +12,10 @@ use App\Tests\Utils\PhpUnitUtil;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 use function sys_get_temp_dir;
 
 final class CheckDependenciesTest extends TestCase
@@ -76,5 +78,39 @@ final class CheckDependenciesTest extends TestCase
         } finally {
             $filesystem->remove($projectDir);
         }
+    }
+
+    #[TestWith(['', '{"installed":[]}'])]
+    #[TestWith(['Composer failed', ''])]
+    #[TestWith(['Composer failed', 'Partial output'])]
+    #[TestWith(['', ''])]
+    public function testFailedProcessesAreReported(string $errorOutput, string $output): void
+    {
+        $process = $this->createStub(Process::class);
+        $process->method('isSuccessful')->willReturn(false);
+        $process->method('getCommandLine')->willReturn('composer outdated -D -f json');
+        $process->method('getWorkingDirectory')->willReturn('/project/tools/example');
+        $process->method('getExitCode')->willReturn(1);
+        $process->method('getOutput')->willReturn($output);
+        $process->method('getErrorOutput')->willReturn($errorOutput);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageIs(
+            "Running command 'composer outdated -D -f json' in '/project/tools/example' failed with exit code 1."
+            . "\nStandard output:\n" . $output . "\nError output:\n" . $errorOutput,
+        );
+
+        PhpUnitUtil::callMethod(new CheckDependencies(__DIR__), 'ensureProcessSucceeded', [$process]);
+    }
+
+    public function testSuccessfulProcessesCanWriteToStandardError(): void
+    {
+        $process = $this->createMock(Process::class);
+        $process->method('isSuccessful')->willReturn(true);
+        $process->expects(self::never())->method('getErrorOutput');
+
+        self::assertNull(
+            PhpUnitUtil::callMethod(new CheckDependencies(__DIR__), 'ensureProcessSucceeded', [$process]),
+        );
     }
 }
