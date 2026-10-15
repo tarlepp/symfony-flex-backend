@@ -244,8 +244,9 @@ class CheckDependencies extends Command
         array_map($iterator, $directories);
 
         $progressBar->setMessage('Finished checking all vendor dependencies');
-        $progressBar->finish();
         $progressBar->display();
+        $progressBar->finish();
+        $io->newLine();
 
         return $rows;
     }
@@ -387,11 +388,11 @@ class CheckDependencies extends Command
     {
         $format = '
  %message%
- %current%/%max% [%bar%] %percent:3s%%
- Time elapsed:   %elapsed:-6s%
- Time remaining: %remaining:-6s%
- Time estimated: %estimated:-6s%
- Memory usage:   %memory:-6s%
+   %current%/%max% [%bar%] %percent:3s%%
+   Time elapsed:   %elapsed:-6s%
+   Time remaining: %remaining:-6s%
+   Time estimated: %estimated:-6s%
+   Memory usage:   %memory:-6s%
 ';
 
         $progress = $io->createProgressBar($steps);
