@@ -93,23 +93,30 @@ class CheckDependencies extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $level = $input->getOption('level');
+        $timeout = filter_var($input->getOption('timeout'), FILTER_VALIDATE_FLOAT);
+        $status = Command::INVALID;
 
         $io = $this->getSymfonyStyle($input, $output, clearScreen: false);
 
         if (!in_array($level, ['latest', 'minor', 'patch'], true)) {
             $io->error('The --level option must be one of: latest, minor, patch.');
-
-            return Command::INVALID;
-        }
-
-        $timeout = filter_var($input->getOption('timeout'), FILTER_VALIDATE_FLOAT);
-
-        if ($timeout === false || $timeout <= 0 || !is_finite($timeout)) {
+        } elseif ($timeout === false || $timeout <= 0 || !is_finite($timeout)) {
             $io->error('The --timeout option must be positive, finite seconds.');
+        } else {
+            $this->checkDependencies($io, $output, $level, $timeout);
 
-            return Command::INVALID;
+            $status = Command::SUCCESS;
         }
 
+        return $status;
+    }
+
+    private function checkDependencies(
+        SymfonyStyle $io,
+        OutputInterface $output,
+        string $level,
+        float $timeout,
+    ): void {
         $io->info([
             'Starting to check dependencies...',
             match ($level) {
@@ -145,8 +152,6 @@ class CheckDependencies extends Command
         $rows === []
             ? $io->success('Good news, no vendor dependency updates were found for the selected level!')
             : $table->render();
-
-        return Command::SUCCESS;
     }
 
     /**
