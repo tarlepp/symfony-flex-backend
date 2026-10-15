@@ -138,11 +138,12 @@ class CheckDependencies extends Command
      */
     private function getNamespaceDirectories(): array
     {
-        // Find all main namespace directories under 'tools' directory
+        // Find Composer manifests directly inside each tool group.
         $finder = new Finder()
             ->depth(1)
             ->ignoreDotFiles(true)
-            ->directories()
+            ->files()
+            ->name('composer.json')
             ->in($this->projectDir . DIRECTORY_SEPARATOR . 'tools/');
 
         $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
