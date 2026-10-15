@@ -15,6 +15,7 @@ application during development stage.
       * [Makefile](#makefile)
       * [Symfony console](#symfony-console)
       * [Custom commands](#custom-commands)
+        * [check-dependencies](#check-dependencies)
         * [user:management](#usermanagement)
         * [api-key:management](#api-keymanagement)
         * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities)
@@ -196,11 +197,8 @@ console
 
 Project contains following custom console commands to help eg. user management:
 
-Use `./bin/console check-dependencies` to check for latest dependency updates.
-Set `--level=minor` or `--level=patch` to limit the update level; `--level=latest`
-is the default.
-
 ```bash
+./bin/console check-dependencies                    # To check dependency updates
 ./bin/console user:management                       # To manage your users and
                                                     # user groups
 ./bin/console api-key:management                    # To manage your API keys
@@ -210,6 +208,32 @@ is the default.
 ./bin/console utils:create-date-dimension-entities  # Console command to create
                                                     # 'DateDimension' entities.
 ```
+
+#### check-dependencies [ᐞ](#table-of-contents)
+
+<a id="check-dependencies"></a>
+
+Checks for dependency updates in the root project and tool dependency groups.
+The progress bar shows the group currently being checked and a completion
+message when all groups have finished.
+
+Use `--level=latest`, `--level=minor`, or `--level=patch` to select the update
+level. The default is `latest`.
+
+Each dependency group has a 60-second timeout. Use `--timeout=120` to allow
+120 seconds per group. The timeout must be a positive, finite number of seconds;
+decimal values are supported.
+
+```bash
+./bin/console check-dependencies                             # Latest updates
+./bin/console check-dependencies --level=minor               # Minor updates
+./bin/console check-dependencies --level=patch               # Patch updates
+./bin/console check-dependencies --level=patch --timeout=120 # Custom timeout
+```
+
+The corresponding container-aware Makefile targets are
+`make check-dependencies-latest`, `make check-dependencies-minor`, and
+`make check-dependencies-patch`.
 
 #### user:management [ᐞ](#table-of-contents)
 
