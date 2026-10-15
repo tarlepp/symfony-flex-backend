@@ -196,6 +196,10 @@ console
 
 Project contains following custom console commands to help eg. user management:
 
+Use `./bin/console check-dependencies` to check for latest dependency updates.
+Set `--level=minor` or `--level=patch` to limit the update level; `--level=latest`
+is the default.
+
 ```bash
 ./bin/console user:management                       # To manage your users and
                                                     # user groups
