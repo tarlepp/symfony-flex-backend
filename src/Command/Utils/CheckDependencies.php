@@ -27,6 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 use Throwable;
 use Traversable;
@@ -35,8 +36,10 @@ use function array_is_list;
 use function array_map;
 use function array_unshift;
 use function count;
+use function filter_var;
 use function in_array;
 use function is_array;
+use function is_finite;
 use function is_string;
 use function iterator_to_array;
 use function json_decode;
@@ -46,6 +49,7 @@ use function sort;
 use function sprintf;
 use function strlen;
 use const DIRECTORY_SEPARATOR;
+use const FILTER_VALIDATE_FLOAT;
 
 #[AsCommand(
     name: 'check-dependencies',
@@ -69,6 +73,14 @@ class CheckDependencies extends Command
             'latest',
             ['latest', 'minor', 'patch'],
         );
+
+        $this->addOption(
+            'timeout',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Maximum time in seconds for each dependency group (must be greater than zero)',
+            '60',
+        );
     }
 
     /**
@@ -89,6 +101,14 @@ class CheckDependencies extends Command
             return Command::INVALID;
         }
 
+        $timeout = filter_var($input->getOption('timeout'), FILTER_VALIDATE_FLOAT);
+
+        if ($timeout === false || $timeout <= 0 || !is_finite($timeout)) {
+            $io->error('The --timeout option must be positive, finite seconds.');
+
+            return Command::INVALID;
+        }
+
         $io->info([
             'Starting to check dependencies...',
             match ($level) {
@@ -102,7 +122,7 @@ class CheckDependencies extends Command
 
         array_unshift($directories, $this->projectDir);
 
-        $rows = $this->determineTableRows($io, $directories, $level);
+        $rows = $this->determineTableRows($io, $directories, $level, $timeout);
 
         $packageNameLength = max(
             array_map(
@@ -168,7 +188,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function determineTableRows(SymfonyStyle $io, array $directories, string $level): array
+    private function determineTableRows(SymfonyStyle $io, array $directories, string $level, float $timeout): array
     {
         // Initialize progress bar for process
         $progressBar = $this->getProgressBar($io, count($directories), 'Checking all vendor dependencies');
@@ -176,7 +196,7 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($level, $progressBar, &$rows): void {
+        $iterator = function (string $directory) use ($level, $timeout, $progressBar, &$rows): void {
             $groupPath = $this->getGroupPath($directory);
 
             $progressBar->setMessage(sprintf(
@@ -185,7 +205,7 @@ class CheckDependencies extends Command
             ));
             $progressBar->display();
 
-            foreach ($this->processNamespacePath($directory, $level) as $row => $data) {
+            foreach ($this->processNamespacePath($directory, $level, $timeout) as $row => $data) {
                 $relativePath = '';
 
                 // First row of current library
@@ -236,7 +256,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function processNamespacePath(string $path, string $level): array
+    private function processNamespacePath(string $path, string $level, float $timeout): array
     {
         $command = [
             'composer',
@@ -252,13 +272,26 @@ class CheckDependencies extends Command
             $command[] = '-p';
         }
 
-        $process = new Process($command, $path);
+        $process = new Process($command, $path, timeout: $timeout);
         $process->enableOutput();
-        $process->run();
-
-        $this->ensureProcessSucceeded($process);
+        $this->runProcess($process);
 
         return $this->decodeComposerOutput($process->getOutput(), $path);
+    }
+
+    private function runProcess(Process $process): void
+    {
+        try {
+            $process->run();
+        } catch (ProcessTimedOutException $exception) {
+            throw new RuntimeException(sprintf(
+                "Dependency check in '%s' timed out after %s seconds. Increase --timeout to allow more time.",
+                $process->getWorkingDirectory() ?? $this->projectDir,
+                $exception->getExceededTimeout() ?? 60.0,
+            ), previous: $exception);
+        }
+
+        $this->ensureProcessSucceeded($process);
     }
 
     /**
