@@ -35,6 +35,7 @@ use function array_unshift;
 use function count;
 use function dirname;
 use function implode;
+use function in_array;
 use function is_array;
 use function iterator_to_array;
 use function json_decode;
@@ -61,17 +62,12 @@ class CheckDependencies extends Command
         parent::__construct();
 
         $this->addOption(
-            'minor',
-            'm',
-            InputOption::VALUE_NONE,
-            'Only check for minor updates',
-        );
-
-        $this->addOption(
-            'patch',
-            'p',
-            InputOption::VALUE_NONE,
-            'Only check for patch updates',
+            'level',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Update level to check: latest, minor, or patch',
+            'latest',
+            ['latest', 'minor', 'patch'],
         );
     }
 
@@ -83,15 +79,21 @@ class CheckDependencies extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $onlyMinor = $input->getOption('minor');
-        $onlyPatch = $input->getOption('patch');
+        $level = $input->getOption('level');
 
         $io = $this->getSymfonyStyle($input, $output);
+
+        if (!in_array($level, ['latest', 'minor', 'patch'], true)) {
+            $io->error('The --level option must be one of: latest, minor, patch.');
+
+            return Command::INVALID;
+        }
+
         $io->info([
             'Starting to check dependencies...',
-            match (true) {
-                $onlyPatch => 'Checking only patch version updates',
-                $onlyMinor => 'Checking only minor version updates',
+            match ($level) {
+                'patch' => 'Checking only patch version updates',
+                'minor' => 'Checking only minor version updates',
                 default => 'Checking for latest version updates',
             },
         ]);
@@ -100,7 +102,7 @@ class CheckDependencies extends Command
 
         array_unshift($directories, $this->projectDir);
 
-        $rows = $this->determineTableRows($io, $directories, $onlyMinor, $onlyPatch);
+        $rows = $this->determineTableRows($io, $directories, $level);
 
         $packageNameLength = max(
             array_map(
@@ -165,7 +167,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function determineTableRows(SymfonyStyle $io, array $directories, bool $onlyMinor, bool $onlyPatch): array
+    private function determineTableRows(SymfonyStyle $io, array $directories, string $level): array
     {
         // Initialize progress bar for process
         $progressBar = $this->getProgressBar($io, count($directories), 'Checking all vendor dependencies');
@@ -173,14 +175,14 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($io, $onlyMinor, $onlyPatch, $progressBar, &$rows): void {
+        $iterator = function (string $directory) use ($io, $level, $progressBar, &$rows): void {
             $progressBar->setMessage(sprintf(
                 'Checking vendor dependencies: %s/composer.json',
                 $directory === $this->projectDir ? '.' : str_replace($this->projectDir . '/', '', $directory),
             ));
             $progressBar->display();
 
-            foreach ($this->processNamespacePath($directory, $onlyMinor, $onlyPatch) as $row => $data) {
+            foreach ($this->processNamespacePath($directory, $level) as $row => $data) {
                 $relativePath = '';
 
                 // First row of current library
@@ -235,7 +237,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function processNamespacePath(string $path, bool $onlyMinor, bool $onlyPatch): array
+    private function processNamespacePath(string $path, string $level): array
     {
         $command = [
             'composer',
@@ -245,9 +247,9 @@ class CheckDependencies extends Command
             'json',
         ];
 
-        if ($onlyMinor) {
+        if ($level === 'minor') {
             $command[] = '-m';
-        } elseif ($onlyPatch) {
+        } elseif ($level === 'patch') {
             $command[] = '-p';
         }
 
