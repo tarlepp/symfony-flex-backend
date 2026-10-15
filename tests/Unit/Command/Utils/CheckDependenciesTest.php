@@ -79,6 +79,20 @@ final class CheckDependenciesTest extends TestCase
         self::assertFalse($definition->hasOption('patch'));
     }
 
+    #[TestWith([false])]
+    #[TestWith([true])]
+    public function testCommandDoesNotResetTheTerminal(bool $decorated): void
+    {
+        $tester = new CommandTester(new CheckDependencies(__DIR__));
+        $tester->execute([
+            '--level' => 'invalid',
+        ], [
+            'decorated' => $decorated,
+        ]);
+
+        self::assertStringNotContainsString("\033\143", $tester->getDisplay());
+    }
+
     public function testToolGroupsAreDiscoveredByTheirComposerManifests(): void
     {
         $filesystem = new Filesystem();
