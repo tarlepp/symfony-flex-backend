@@ -9,6 +9,7 @@ namespace App\Tests\Unit\Command\Utils;
 
 use App\Command\Utils\CheckDependencies;
 use App\Tests\Utils\PhpUnitUtil;
+use JsonException;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use function json_decode;
 use function sys_get_temp_dir;
 
 final class CheckDependenciesTest extends TestCase
@@ -86,7 +88,7 @@ final class CheckDependenciesTest extends TestCase
     #[TestWith(['', ''])]
     public function testFailedProcessesAreReported(string $errorOutput, string $output): void
     {
-        $process = $this->createStub(Process::class);
+        $process = self::createStub(Process::class);
         $process->method('isSuccessful')->willReturn(false);
         $process->method('getCommandLine')->willReturn('composer outdated -D -f json');
         $process->method('getWorkingDirectory')->willReturn('/project/tools/example');
@@ -107,10 +109,78 @@ final class CheckDependenciesTest extends TestCase
     {
         $process = $this->createMock(Process::class);
         $process->method('isSuccessful')->willReturn(true);
-        $process->expects(self::never())->method('getErrorOutput');
+        $process->expects($this->never())->method('getErrorOutput');
 
         self::assertNull(
             PhpUnitUtil::callMethod(new CheckDependencies(__DIR__), 'ensureProcessSucceeded', [$process]),
+        );
+    }
+
+    #[TestWith(['[]'])]
+    #[TestWith(['{"installed":[]}'])]
+    public function testEmptyComposerResultsAreAccepted(string $output): void
+    {
+        self::assertSame(
+            [],
+            PhpUnitUtil::callMethod(new CheckDependencies(__DIR__), 'decodeComposerOutput', [$output, __DIR__]),
+        );
+    }
+
+    #[TestWith([
+        '{"name":"vendor/package","version":"1.0.0","description":"Example","latest":"1.1.0","warning":"Warning"}',
+    ])]
+    #[TestWith(['{"name":"vendor/package","version":"1.0.0"}'])]
+    #[TestWith(['{"name":"vendor/package","version":"1.0.0","description":null}'])]
+    public function testValidComposerPackagesArePreserved(string $package): void
+    {
+        self::assertEquals(
+            [json_decode($package, flags: JSON_THROW_ON_ERROR)],
+            PhpUnitUtil::callMethod(
+                new CheckDependencies(__DIR__),
+                'decodeComposerOutput',
+                ['{"installed":[' . $package . ']}', __DIR__],
+            ),
+        );
+    }
+
+    #[TestWith(['null'])]
+    #[TestWith(['true'])]
+    #[TestWith(['42'])]
+    #[TestWith(['"unexpected"'])]
+    #[TestWith(['[{}]'])]
+    #[TestWith(['{}'])]
+    #[TestWith(['{"installed":null}'])]
+    #[TestWith(['{"installed":"unexpected"}'])]
+    #[TestWith(['{"installed":{}}'])]
+    #[TestWith(['{"installed":[null]}'])]
+    #[TestWith(['{"installed":[{}]}'])]
+    #[TestWith(['{"installed":[{"name":"","version":"1.0.0"}]}'])]
+    #[TestWith(['{"installed":[{"name":42,"version":"1.0.0"}]}'])]
+    #[TestWith(['{"installed":[{"name":"vendor/package","version":null}]}'])]
+    #[TestWith(['{"installed":[{"name":"vendor/package","version":"1.0.0","description":[]}]}'])]
+    #[TestWith(['{"installed":[{"name":"vendor/package","version":"1.0.0","latest":null}]}'])]
+    #[TestWith(['{"installed":[{"name":"vendor/package","version":"1.0.0","warning":false}]}'])]
+    public function testInvalidComposerResponsesAreRejected(string $output): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageIsOrContains("Invalid Composer response in '/project/tools/example':");
+
+        PhpUnitUtil::callMethod(
+            new CheckDependencies(__DIR__),
+            'decodeComposerOutput',
+            [$output, '/project/tools/example'],
+        );
+    }
+
+    public function testMalformedComposerJsonIdentifiesTheGroup(): void
+    {
+        $this->expectException(JsonException::class);
+        $this->expectExceptionMessageIsOrContains("Invalid Composer JSON in '/project/tools/example':");
+
+        PhpUnitUtil::callMethod(
+            new CheckDependencies(__DIR__),
+            'decodeComposerOutput',
+            ['{"installed":', '/project/tools/example'],
         );
     }
 }
