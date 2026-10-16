@@ -1,4 +1,4 @@
-FROM nginx:mainline-alpine-slim@sha256:45b82ed5f285b90d63df07ba70430fdd8f25624b416617d9e6dc93412b2006dc
+FROM nginx:1.30.6-alpine-slim@sha256:3028fc1419f99b95c1c69f844bbaf49dc1b881750c51b497fc721ac4f02a14e6
 
 ADD nginx.conf /etc/nginx/conf.d/default.conf
 ADD php-upstream.conf /etc/nginx/conf.d/upstream.conf
