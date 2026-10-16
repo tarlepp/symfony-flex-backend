@@ -62,7 +62,40 @@ VERIFY_DOCKERFILES=(
 PLATFORM_PATTERN='^linux/[a-z0-9]+(/v[0-9]+)?$'
 
 usage() {
-    sed -n '/^# Usage:/,/^# Requirements:/p' "$0" | sed -e 's/^# \{0,1\}//' -e '$d'
+    cat << EOF
+Docker multi-platform image helper, see doc/DOCKER_MULTI_PLATFORM.md
+
+Usage:
+  $0 <command>
+
+Commands:
+  digest      Show multi-platform index digest and pin reference for image
+  verify      Verify that PHP, nginx and MariaDB Dockerfile base images are
+              multi-platform and that production and development
+              Dockerfiles use the same base images
+  platforms   Show platforms that the current buildx builder supports
+  setup-qemu  Install QEMU emulators for cross-platform builds
+  build       Build image for a single platform and load it locally
+  push        Build multi-platform image and push it to a registry
+
+Inputs are read from environment variables. When a value is missing and the
+script is run in an interactive terminal, the value is asked from the user.
+
+  IMAGE       Image reference, e.g. php:8.5.11-fpm-bookworm (digest)
+  PLATFORM    Single target platform, e.g. linux/arm64 (build)
+  PLATFORMS   Comma separated platforms (setup-qemu, push)
+  DOCKERFILE  Dockerfile path, e.g. Dockerfile (build, push)
+  TAG         Image tag to create (build, push)
+  BUILDER     buildx builder name for multi-platform builds (push)
+
+Make targets:
+  make docker-image-digest
+  make docker-image-verify-pins
+  make docker-builder-platforms
+  make docker-setup-qemu
+  make docker-build-platform
+  make docker-build-multi-platform
+EOF
 }
 
 error() {
@@ -547,8 +580,10 @@ case "${1:-}" in
     setup-qemu ) require_docker; command_setup_qemu ;;
     build ) require_docker; command_build ;;
     push ) require_docker; command_push ;;
-    -h|--help ) usage ;;
+    ""|-h|--help|help ) usage ;;
     * )
+        error "Unknown command '${1}'"
+        printf '\n' >&2
         usage >&2
         exit 64
         ;;
