@@ -85,17 +85,17 @@ daemon                      # Start application in development mode in
                             # background
 daemon-build                # Build containers and start application in
                             # development mode in background
+daemon-prod                 # Build and start local production in background
 docker-build-multi-platform # Build and push multi-platform image (asks
-                            # PLATFORMS, DOCKERFILE, TAG, BUILDER)
+                            # PLATFORMS, DOCKERFILE, TARGET, TAG, BUILDER)
 docker-build-platform       # Build image for single platform (asks
-                            # PLATFORM, DOCKERFILE, TAG)
+                            # PLATFORM, DOCKERFILE, TARGET, TAG)
 docker-builder-platforms    # Show platforms supported by current buildx
                             # builder
 docker-image-digest         # Show multi-platform index digest for image
                             # (asks IMAGE)
 docker-image-verify-pins    # Verify that PHP, nginx and MariaDB base
-                            # images are multi-platform and that production
-                            # and development Dockerfiles use same pins
+                            # images are multi-platform
 docker-kill-containers      # Kill all running docker containers
 docker-prune                # Kill all running containers and prune all docker
                             # stuff
@@ -138,6 +138,7 @@ start                       # Start application in development mode + watch
                             # output
 start-build                 # Build containers and start application in
                             # development mode + watch output
+start-prod                  # Build and start local production + watch output
 stop                        # Stop application containers
 update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
