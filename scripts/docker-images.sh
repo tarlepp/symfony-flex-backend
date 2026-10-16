@@ -56,7 +56,6 @@ VERIFY_DOCKERFILES=(
     Dockerfile
     Dockerfile_dev
     docker/nginx/Dockerfile
-    docker/nginx/Dockerfile_dev
     docker/mariadb/Dockerfile
 )
 PLATFORM_PATTERN='^linux/[a-z0-9]+(/v[0-9]+)?$'
