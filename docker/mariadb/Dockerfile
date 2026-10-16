@@ -1,4 +1,4 @@
-FROM mariadb:10.7.1@sha256:5a8009369ee57c85b6f4a08406147bd9c505cde6b8250d16a27d2a5febfdead7
+FROM mariadb:13.0.2@sha256:f1bba652ba57bea3099ca2fe1af692af537c27d96e0bcde39dce29e2ba1ec4f3
 
 ADD mysql_custom.cnf /etc/mysql/conf.d/mysql_custom.cnf
 
