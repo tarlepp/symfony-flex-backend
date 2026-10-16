@@ -291,8 +291,19 @@ different base images in production and development Dockerfiles fails fast,
 before tests are run or the image is built.
 
 The job runs `make docker-image-verify-pins` directly on the runner, which
-already has Docker with `buildx` and `jq` installed. If the job fails with
-`429 Too Many Requests`, Docker Hub rate limited the runner; re-run the job.
+already has Docker with `buildx` and `jq` installed. It uses read-only
+permissions and a shallow checkout without persisted credentials.
+
+When running in GitHub Actions, the command also:
+
+* Adds error and warning annotations to the failing `FROM` lines, so problems
+  are shown directly in the pull request "Files changed" view.
+* Writes a result summary with per-file and per-image tables to the job
+  summary page.
+
+Transient registry errors (for example Docker Hub `429 Too Many Requests`,
+timeouts and server errors) are retried twice with a short delay, both in CI
+and locally. If the job still fails because of rate limiting, re-run the job.
 
 ## Building multi-platform images [ᐞ](#table-of-contents)
 
