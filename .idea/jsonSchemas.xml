@@ -8,7 +8,7 @@
             <SchemaInfo>
               <option name="name" value="Composer" />
               <option name="relativePathToSchema" value="https://getcomposer.org/schema.json" />
-              <option name="schemaVersion" value="JSON Schema version 7" />
+              <option name="schemaVersion" value="JSON Schema 7" />
               <option name="applicationDefined" value="true" />
               <option name="patterns">
                 <list>
@@ -41,6 +41,22 @@
                   </Item>
                   <Item>
                     <option name="path" value="tools/09_rector/composer.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="dependabot-v2.json">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="dependabot-v2.json" />
+              <option name="relativePathToSchema" value="https://www.schemastore.org/dependabot-2.0.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/dependabot.yml" />
                   </Item>
                 </list>
               </option>
