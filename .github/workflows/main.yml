@@ -73,6 +73,27 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
+  docker-image-verify-pins:
+    name: Verify Docker base image pins (multi-platform, prod/dev match)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+
+    steps:
+      - *harden_runner_step
+
+      # Only Dockerfiles are needed, so use shallow checkout without credentials
+      - name: Make checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: '1'
+          persist-credentials: false
+
+      # Failures are reported as pull request annotations and job summary
+      - name: Verify multi-platform base images and production/development pins
+        run: make docker-image-verify-pins
+
   static:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
@@ -166,6 +187,7 @@ jobs:
     needs:
       - static-summary
       - lint-documentation
+      - docker-image-verify-pins
     env:
       SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -314,6 +336,7 @@ jobs:
     needs:
       - static-summary
       - lint-documentation
+      - docker-image-verify-pins
 
     steps:
       - *harden_runner_step

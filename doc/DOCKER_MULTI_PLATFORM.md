@@ -26,6 +26,7 @@ images.
       * [Step 2: Get the multi-platform index digest](#step-2-get-the-multi-platform-index-digest)
       * [Step 3: Update the Dockerfiles](#step-3-update-the-dockerfiles)
       * [Step 4: Verify the pins](#step-4-verify-the-pins)
+      * [Continuous integration](#continuous-integration)
     * [Building multi-platform images](#building-multi-platform-images)
       * [Local development](#local-development)
       * [Building for another platform](#building-for-another-platform)
@@ -275,6 +276,34 @@ Dockerfile <-> Dockerfile_dev
 
 Warnings do not fail the command; it exits with code `1` if any check fails.
 Use `make docker-image-digest` to check any other image.
+
+### Continuous integration [ᐞ](#table-of-contents)
+
+<a id="continuous-integration"></a>
+
+The same check runs in GitHub Actions in the
+`Verify Docker base image pins (multi-platform, prod/dev match)` job
+(`docker-image-verify-pins` in `.github/workflows/main.yml`). The job has no
+dependencies, so it starts immediately in parallel with the first lint and
+security jobs. Both the test job and the `Build application Docker image` job
+depend on it, so a pull request that pins a single platform digest or uses
+different base images in production and development Dockerfiles fails fast,
+before tests are run or the image is built.
+
+The job runs `make docker-image-verify-pins` directly on the runner, which
+already has Docker with `buildx` and `jq` installed. It uses read-only
+permissions and a shallow checkout without persisted credentials.
+
+When running in GitHub Actions, the command also:
+
+* Adds error and warning annotations to the failing `FROM` lines, so problems
+  are shown directly in the pull request "Files changed" view.
+* Writes a result summary with per-file and per-image tables to the job
+  summary page.
+
+Transient registry errors (for example Docker Hub `429 Too Many Requests`,
+timeouts and server errors) are retried twice with a short delay, both in CI
+and locally. If the job still fails because of rate limiting, re-run the job.
 
 ## Building multi-platform images [ᐞ](#table-of-contents)
 

@@ -192,8 +192,69 @@ require_docker() {
 }
 
 # Fetch raw manifest (index or single manifest) with a single registry request.
+# Retries transient registry errors (rate limit, timeouts, server errors).
+# Prints manifest on success, or registry error on failure.
 raw_manifest() {
-    docker buildx imagetools inspect --raw "$1"
+    local attempt output delay
+
+    for attempt in 1 2 3; do
+        if output="$(docker buildx imagetools inspect --raw "$1" 2>&1)"; then
+            printf '%s' "$output"
+            return 0
+        fi
+
+        if [ "$attempt" -eq 3 ] || ! grep -qiE '429|toomanyrequests|timeout|EOF|50[0-9] ' <<< "$output"; then
+            break
+        fi
+
+        delay=$((attempt * 10))
+        printf '  %sRETRY%s Registry request failed, retrying in %ss\n' "$YELLOW" "$NC" "$delay" >&2
+        sleep "$delay"
+    done
+
+    printf '%s\n' "$output"
+    return 1
+}
+
+github_escape_data() {
+    local value="$1"
+
+    value="${value//%/%25}"
+    value="${value//$'\r'/%0D}"
+    value="${value//$'\n'/%0A}"
+
+    printf '%s' "$value"
+}
+
+github_escape_property() {
+    local value
+
+    value="$(github_escape_data "$1")"
+    value="${value//:/%3A}"
+    value="${value//,/%2C}"
+
+    printf '%s' "$value"
+}
+
+# Emit GitHub Actions annotation, shown inline in pull request diffs.
+# Usage: github_annotation <error|warning> <file> <line or empty> <title> <message>
+github_annotation() {
+    local properties
+
+    [ "${GITHUB_ACTIONS:-}" = "true" ] || return 0
+
+    properties="file=$(github_escape_property "$2")"
+    [ -n "$3" ] && properties+=",line=$3"
+    properties+=",title=$(github_escape_property "$4")"
+
+    printf '::%s %s::%s\n' "$1" "$properties" "$(github_escape_data "$5")"
+}
+
+# Append markdown to GitHub Actions job summary.
+github_summary() {
+    [ -n "${GITHUB_STEP_SUMMARY:-}" ] || return 0
+
+    printf '%s\n' "$@" >> "$GITHUB_STEP_SUMMARY"
 }
 
 media_type() {
@@ -221,7 +282,11 @@ command_digest() {
 
     info "OK" "Inspecting ${IMAGE}"
 
-    raw="$(raw_manifest "$IMAGE")"
+    if ! raw="$(raw_manifest "$IMAGE")"; then
+        error "Could not inspect ${IMAGE}: $(tail -n 1 <<< "$raw")"
+        exit 1
+    fi
+
     type="$(media_type "$raw")"
     platforms="$(image_platforms "$raw")"
     digest="$(docker buildx imagetools inspect "$IMAGE" --format '{{.Manifest.Digest}}')"
@@ -262,6 +327,8 @@ verify_dockerfile() {
 
     if [ ! -f "$file" ]; then
         printf '  %sFAIL%s  File not found\n\n' "$RED" "$NC"
+        github_annotation error "$file" "" "Dockerfile not found" "${file} is listed for base image verification but does not exist"
+        IMAGE_ROWS+=("| \`${file}\` | - | - | :x: File not found |")
         return 1
     fi
 
@@ -288,17 +355,22 @@ verify_dockerfile() {
 
         found=1
         FILE_REFS[$file]+="${ref}"$'\n'
+        [ -z "${FILE_LINES["$file|$ref"]:-}" ] && FILE_LINES["$file|$ref"]="$line_number"
         printf '  line %s: %s\n' "$line_number" "$ref"
 
         if ! [[ "$ref" =~ @sha256:[a-f0-9]{64}$ ]]; then
             printf '  %sWARN%s  Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$YELLOW" "$NC"
+            github_annotation warning "$file" "$line_number" "Base image not pinned" "${ref} is not pinned with a digest. Use: make docker-image-digest IMAGE=${ref}"
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :warning: Not pinned with digest |")
             warnings=$((warnings + 1))
             continue
         fi
 
         if [ -z "${MANIFEST_CACHE[$ref]+set}" ]; then
-            if ! raw="$(raw_manifest "$ref" 2>&1)"; then
+            if ! raw="$(raw_manifest "$ref")"; then
                 printf '  %sFAIL%s  Could not inspect image: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
+                github_annotation error "$file" "$line_number" "Base image could not be inspected" "${ref}: $(tail -n 1 <<< "$raw")"
+                IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Could not inspect image |")
                 status=1
                 continue
             fi
@@ -312,14 +384,18 @@ verify_dockerfile() {
 
         if is_index "$type"; then
             printf '  %sOK%s    Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms} |")
         else
             printf '  %sFAIL%s  Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
+            github_annotation error "$file" "$line_number" "Single platform base image digest" "${ref} points to a single platform manifest. Replace it with the multi-platform index digest from: make docker-image-digest IMAGE=${ref%@*}"
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest |")
             status=1
         fi
     done < <(grep -niE '^[[:space:]]*FROM[[:space:]]' "$file")
 
     if [ "$found" -eq 0 ]; then
         printf '  %sFAIL%s  No FROM instruction found\n' "$RED" "$NC"
+        github_annotation error "$file" "" "No FROM instruction" "${file} does not contain any FROM instruction"
         status=1
     fi
 
@@ -354,6 +430,7 @@ verify_pair() {
 
     if [ -z "$prod_refs" ] || [ -z "$dev_refs" ]; then
         printf '  %sFAIL%s  No base images found to compare\n\n' "$RED" "$NC"
+        github_annotation error "$dev" "" "Base images cannot be compared" "No base images found to compare between ${prod} and ${dev}"
         return 1
     fi
 
@@ -380,16 +457,71 @@ verify_pair() {
     printf '  %sFAIL%s  Base images differ, use the same pin reference in both files\n' "$RED" "$NC"
 
     while read -r ref; do
-        [ -n "$ref" ] && printf '        %-*s %s\n' "$label_width" "$prod:" "$ref"
+        [ -z "$ref" ] && continue
+        printf '        %-*s %s\n' "$label_width" "$prod:" "$ref"
+        github_annotation error "$prod" "${FILE_LINES["$prod|$ref"]:-}" "Production and development base images differ" "${ref} is not used in ${dev}. Use the same pin reference in both files."
     done <<< "$only_prod"
 
     while read -r ref; do
-        [ -n "$ref" ] && printf '        %-*s %s\n' "$label_width" "$dev:" "$ref"
+        [ -z "$ref" ] && continue
+        printf '        %-*s %s\n' "$label_width" "$dev:" "$ref"
+        github_annotation error "$dev" "${FILE_LINES["$dev|$ref"]:-}" "Production and development base images differ" "${ref} is not used in ${prod}. Use the same pin reference in both files."
     done <<< "$only_dev"
 
     printf '\n'
 
     return 1
+}
+
+doc_link() {
+    local path="doc/DOCKER_MULTI_PLATFORM.md"
+
+    if [ -n "${GITHUB_SERVER_URL:-}" ] && [ -n "${GITHUB_REPOSITORY:-}" ] && [ -n "${GITHUB_SHA:-}" ]; then
+        printf '[%s](%s/%s/blob/%s/%s)' "$path" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$path"
+    else
+        printf '`%s`' "$path"
+    fi
+}
+
+# Write verification result to GitHub Actions job summary.
+# Uses `plain` results of the caller (command_verify).
+# Usage: write_verify_summary <failures> <warnings> [production files of pairs...]
+write_verify_summary() {
+    local failures="$1"
+    local warnings="$2"
+    local file prod
+    shift 2
+
+    [ -n "${GITHUB_STEP_SUMMARY:-}" ] || return 0
+
+    github_summary "## Docker base image pins" ""
+
+    if [ "$failures" -gt 0 ]; then
+        github_summary ":x: **${failures} check(s) failed.** See $(doc_link) how to fix those." ""
+    elif [ "$warnings" -gt 0 ]; then
+        github_summary ":warning: All base images are multi-platform, ${warnings} Dockerfile(s) with unpinned tags." ""
+    else
+        github_summary ":white_check_mark: All base images are multi-platform and production/development pins match." ""
+    fi
+
+    github_summary "| Multi-platform base images | Result |" "|---|---|"
+
+    for file in "${VERIFY_DOCKERFILES[@]}"; do
+        github_summary "| \`${file}\` | ${plain[$file]} |"
+    done
+
+    if [ "$#" -gt 0 ]; then
+        github_summary "" "| Production and development use same base images | Result |" "|---|---|"
+
+        for prod in "$@"; do
+            file="${prod} <-> ${prod}_dev"
+            github_summary "| \`${prod}\` ↔ \`${prod}_dev\` | ${plain[$file]} |"
+        done
+    fi
+
+    github_summary "" "<details><summary>Base images</summary>" "" "| File | Line | Image | Result |" "|---|---|---|---|"
+    github_summary "${IMAGE_ROWS[@]}"
+    github_summary "" "</details>"
 }
 
 command_verify() {
@@ -398,6 +530,9 @@ command_verify() {
     local -a pairs=()
     declare -gA MANIFEST_CACHE=()
     declare -gA FILE_REFS=()
+    declare -gA FILE_LINES=()
+    declare -ga IMAGE_ROWS=()
+    local -A plain=()
 
     info "OK" "Verifying base images of ${#VERIFY_DOCKERFILES[@]} Dockerfiles"
     printf '\n'
@@ -409,13 +544,18 @@ command_verify() {
         verify_dockerfile "$file" || result=$?
 
         case "$result" in
-            0) results[$file]="${GREEN}OK${NC}" ;;
+            0)
+                results[$file]="${GREEN}OK${NC}"
+                plain[$file]=":white_check_mark: OK"
+                ;;
             2)
                 results[$file]="${YELLOW}OK (with warnings)${NC}"
+                plain[$file]=":warning: OK (with warnings)"
                 warnings=$((warnings + 1))
                 ;;
             *)
                 results[$file]="${RED}FAIL${NC}"
+                plain[$file]=":x: FAIL"
                 failures=$((failures + 1))
                 ;;
         esac
@@ -441,8 +581,10 @@ command_verify() {
 
         if verify_pair "$prod" "${prod}_dev"; then
             results[$file]="${GREEN}OK${NC}"
+            plain[$file]=":white_check_mark: OK"
         else
             results[$file]="${RED}FAIL${NC}"
+            plain[$file]=":x: FAIL"
             failures=$((failures + 1))
         fi
     done
@@ -464,6 +606,8 @@ command_verify() {
     done
 
     printf '\n'
+
+    write_verify_summary "$failures" "$warnings" "${pairs[@]}"
 
     if [ "$failures" -gt 0 ]; then
         error "${failures} check(s) failed, see doc/DOCKER_MULTI_PLATFORM.md"
