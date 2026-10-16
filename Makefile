@@ -822,6 +822,50 @@ else
 	$(ALL_DONE)
 endif
 
+# Multi-platform Docker image helpers, see `doc/DOCKER_MULTI_PLATFORM.md`.
+# Missing values are asked interactively, or those can be given as variables.
+docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh digest
+endif
+
+docker-image-verify-pins: ## Verify base images are multi-platform and prod/dev pins match
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@./scripts/docker-images.sh verify
+endif
+
+docker-builder-platforms: ## Show platforms supported by current buildx builder
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@./scripts/docker-images.sh platforms
+endif
+
+docker-setup-qemu: ## Install QEMU emulators for cross-platform builds (asks PLATFORMS)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@PLATFORMS="$(PLATFORMS)" ./scripts/docker-images.sh setup-qemu
+endif
+
+docker-build-platform: ## Build image for single platform (asks PLATFORM, DOCKERFILE, TAG)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TAG="$(TAG)" ./scripts/docker-images.sh build
+endif
+
+docker-build-multi-platform: ## Build and push multi-platform image (asks PLATFORMS, DOCKERFILE, TAG, BUILDER)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else
+	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker-images.sh push
+endif
+
 generate-ssl-cert: ## Generate self signed SSL certificates
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)

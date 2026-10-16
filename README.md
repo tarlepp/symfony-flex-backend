@@ -71,6 +71,10 @@ Then open `https://localhost:8000` in your browser. For more details, see
 
 If you are not using Docker Engine, follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md).
 
+Docker images are multi-platform, so the same setup works natively on
+x86-64 (`linux/amd64`) and ARM (`linux/arm64`, e.g. Apple Silicon) hosts. See
+[Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md) for details.
+
 ### Recommendations [ᐞ](#table-of-contents)
 
 <a id="recommendations"></a>
@@ -233,6 +237,11 @@ docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml 
 docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml up -d php mariadb nginx dozzle adminer
 ```
 
+Containers are built for your host platform automatically. For building images
+for another platform (for example `linux/arm64` on an x86-64 host) or updating
+pinned base image digests, see
+[Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md).
+
 ### Health check [ᐞ](#table-of-contents)
 
 <a id="health-check"></a>
@@ -345,6 +354,7 @@ application with the frontend technology of your choice.
 * [Concepts and features](doc/CONCEPTS_AND_FEATURES.md)
 * [Custom configuration](doc/CUSTOM_CONFIGURATION.md)
 * [Development guide](doc/DEVELOPMENT.md)
+* [Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md)
 * [Installation without docker](doc/INSTALLATION_WITHOUT_DOCKER.md)
 * [PhpStorm configuration](doc/PHPSTORM.md)
 * [Speed problems with Docker Engine?](doc/SPEED_UP_DOCKER_COMPOSE.md)

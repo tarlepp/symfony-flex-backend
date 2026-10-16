@@ -364,6 +364,7 @@ Use `make configuration` to view current application configuration.
 * `doc/TESTING.md` - Testing strategies and guidelines
 * `doc/CONCEPTS_AND_FEATURES.md` - Architecture concepts and features
 * `doc/CUSTOM_CONFIGURATION.md` - Configuration management
+* `doc/DOCKER_MULTI_PLATFORM.md` - Multi-platform Docker base image pinning
 * `doc/PHPSTORM.md` - PhpStorm IDE setup
 * `doc/XDEBUG.md` - Debugging setup and usage
 * `doc/INSTALLATION_WITHOUT_DOCKER.md` - Non-Docker installation

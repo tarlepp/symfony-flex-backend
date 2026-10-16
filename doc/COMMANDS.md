@@ -85,11 +85,24 @@ daemon                      # Start application in development mode in
                             # background
 daemon-build                # Build containers and start application in
                             # development mode in background
+docker-build-multi-platform # Build and push multi-platform image (asks
+                            # PLATFORMS, DOCKERFILE, TAG, BUILDER)
+docker-build-platform       # Build image for single platform (asks
+                            # PLATFORM, DOCKERFILE, TAG)
+docker-builder-platforms    # Show platforms supported by current buildx
+                            # builder
+docker-image-digest         # Show multi-platform index digest for image
+                            # (asks IMAGE)
+docker-image-verify-pins    # Verify that PHP, nginx and MariaDB base
+                            # images are multi-platform and that production
+                            # and development Dockerfiles use same pins
 docker-kill-containers      # Kill all running docker containers
 docker-prune                # Kill all running containers and prune all docker
                             # stuff
 docker-remove-containers    # Remove all docker containers
 docker-remove-images        # Remove all docker images
+docker-setup-qemu           # Install QEMU emulators for cross-platform
+                            # builds (asks PLATFORMS)
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
