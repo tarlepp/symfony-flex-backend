@@ -78,9 +78,9 @@ Containerized security checks are enabled in repository scripts by default:
 
 * Development container startup runs `composer audit --abandoned=report`
   (`docker-entrypoint-dev.sh`).
-* Container image build includes Debian package security updates via
-  `debsecan` (`Dockerfile`).
-* Container image build also runs `composer audit` (`Dockerfile`).
+* Both PHP image targets inherit Debian package security updates via
+  `debsecan` from the shared `base` stage (`Dockerfile`).
+* The `production` image build also runs `composer audit` (`Dockerfile`).
 * Docker image vulnerability scanning via Trivy (`debsecan` + `trivy` for
   container image analysis).
 

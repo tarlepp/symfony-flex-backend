@@ -130,6 +130,20 @@ If you want to start containers in the background, use the following command:
 make daemon
 ```
 
+To run the production PHP image locally instead, stop development first and
+start local production mode:
+
+```bash
+make stop
+make daemon-prod
+```
+
+Use `make start-prod` for foreground logs. Local production serves HTTP at
+<http://localhost:8001> and reuses the development database, including running
+migrations. It requires Docker Compose 2.24.4 or newer. See
+[Running production locally](doc/DOCKER_MULTI_PLATFORM.md#running-production-locally)
+for configuration, limitations and switching back to development.
+
 These commands will create following containers to run this backend
 application:
 
