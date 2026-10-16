@@ -39,6 +39,7 @@ if [[ "$1" = 'php-fpm' ]]; then
     # Step 6
     chown -R www-data:www-data /app/var
     mkdir -p /shared/app
+    find /shared/app -mindepth 1 -delete
     cp -a /app/. /shared/app/
 fi
 

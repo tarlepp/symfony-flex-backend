@@ -96,7 +96,8 @@ variables.
 
 The root `Dockerfile` defaults to the `production` target. Use
 `TARGET=development` to build the development image instead. Dockerfiles
-without named stages do not prompt for a target.
+with an unnamed final stage do not prompt for a target and use Docker's final
+stage by default. Use `TARGET` explicitly to select a named intermediate stage.
 
 See [Docker multi-platform images](../doc/DOCKER_MULTI_PLATFORM.md) for
 details.

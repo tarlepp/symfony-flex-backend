@@ -169,8 +169,9 @@ production entrypoint generates JWT keys and runs migrations against the
 Generated keys live in the container, not the host checkout, so recreating
 the container invalidates previously issued tokens.
 
-PHP copies its built application into a named volume for nginx. Database
-readiness gates PHP startup, and nginx waits until PHP-FPM is accepting
+PHP replaces the contents of its named application volume for nginx on each
+startup, including removing obsolete files and dotfiles from earlier builds.
+Database readiness gates PHP startup, and nginx waits until PHP-FPM is accepting
 connections after initialization. No host source tree or development PHP
 configuration is mounted. Code changes require another production build.
 The production PHP image uses a separate tag so switching modes cannot
@@ -436,8 +437,11 @@ make docker-build-platform PLATFORM=linux/arm64 DOCKERFILE=Dockerfile TARGET=pro
 ```
 
 Use `TARGET=development` to build the development image instead. For other
-multi-stage Dockerfiles the target defaults to the last named stage;
-single-stage Dockerfiles do not prompt for a target.
+multi-stage Dockerfiles the target defaults to the final stage. If that stage
+is unnamed, the helper does not prompt for a target and lets Docker select
+the final stage. Named intermediate stages can still be selected explicitly
+with `TARGET`. Single-stage Dockerfiles without a named stage do not prompt
+for a target.
 
 Note that emulated builds are considerably slower than native builds, because
 PHP extensions are compiled during the build.

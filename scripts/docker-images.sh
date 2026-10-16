@@ -543,11 +543,12 @@ ask_dockerfile() {
         exit 66
     fi
 
-    local stages
+    local stages final_stage
     stages="$(awk 'toupper($1) == "FROM" && toupper($(NF-1)) == "AS" {print $NF}' "$DOCKERFILE")"
+    final_stage="$(awk 'toupper($1) == "FROM" {stage = toupper($(NF-1)) == "AS" ? $NF : ""} END {print stage}' "$DOCKERFILE")"
 
-    if [ -n "$stages" ]; then
-        ask TARGET "Build target ($(echo "$stages" | paste -sd,))" "$(tail -n 1 <<< "$stages")"
+    if [ -n "$final_stage" ]; then
+        ask TARGET "Build target ($(echo "$stages" | paste -sd,))" "$final_stage"
     fi
 
     if [ -n "${TARGET:-}" ] && ! grep -Fxq -- "$TARGET" <<< "$stages"; then
