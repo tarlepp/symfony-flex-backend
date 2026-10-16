@@ -26,6 +26,7 @@ images.
       * [Step 2: Get the multi-platform index digest](#step-2-get-the-multi-platform-index-digest)
       * [Step 3: Update the Dockerfiles](#step-3-update-the-dockerfiles)
       * [Step 4: Verify the pins](#step-4-verify-the-pins)
+      * [Continuous integration](#continuous-integration)
     * [Building multi-platform images](#building-multi-platform-images)
       * [Local development](#local-development)
       * [Building for another platform](#building-for-another-platform)
@@ -275,6 +276,23 @@ Dockerfile <-> Dockerfile_dev
 
 Warnings do not fail the command; it exits with code `1` if any check fails.
 Use `make docker-image-digest` to check any other image.
+
+### Continuous integration [ᐞ](#table-of-contents)
+
+<a id="continuous-integration"></a>
+
+The same check runs in GitHub Actions in the
+`Verify Docker base image pins (multi-platform, prod/dev match)` job
+(`docker-image-verify-pins` in `.github/workflows/main.yml`). The job has no
+dependencies, so it starts immediately in parallel with the first lint and
+security jobs. Both the test job and the `Build application Docker image` job
+depend on it, so a pull request that pins a single platform digest or uses
+different base images in production and development Dockerfiles fails fast,
+before tests are run or the image is built.
+
+The job runs `make docker-image-verify-pins` directly on the runner, which
+already has Docker with `buildx` and `jq` installed. If the job fails with
+`429 Too Many Requests`, Docker Hub rate limited the runner; re-run the job.
 
 ## Building multi-platform images [ᐞ](#table-of-contents)
 

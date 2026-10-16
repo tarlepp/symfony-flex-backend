@@ -73,6 +73,19 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
+  docker-image-verify-pins:
+    name: Verify Docker base image pins (multi-platform, prod/dev match)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Verify multi-platform base images and production/development pins
+        run: make docker-image-verify-pins
+
   static:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
@@ -166,6 +179,7 @@ jobs:
     needs:
       - static-summary
       - lint-documentation
+      - docker-image-verify-pins
     env:
       SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -314,6 +328,7 @@ jobs:
     needs:
       - static-summary
       - lint-documentation
+      - docker-image-verify-pins
 
     steps:
       - *harden_runner_step
