@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7-labs
-FROM php:8.5.10-fpm-bookworm@sha256:f96e7316935fc38a4a3acb9aae77b647df261e82997af93128719005393f96b1
+FROM php:8.5.11-fpm-bookworm@sha256:c0dc98639fddeaad891a338e1e3fa2b2d724eb616bcd5a0bb1d8afd650e0fda3
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.11.12 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.12.0 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
