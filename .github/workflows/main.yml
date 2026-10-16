@@ -73,8 +73,13 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
+      - name: Validate development and local production Compose configurations
+        run: |
+          docker compose config --quiet
+          docker compose -f compose.yaml -f compose.prod.yaml config --quiet
+
   docker-image-verify-pins:
-    name: Verify Docker base image pins (multi-platform, prod/dev match)
+    name: Verify Docker base image pins (multi-platform)
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -91,7 +96,7 @@ jobs:
           persist-credentials: false
 
       # Failures are reported as pull request annotations and job summary
-      - name: Verify multi-platform base images and production/development pins
+      - name: Verify multi-platform base images
         run: make docker-image-verify-pins
 
   static:
@@ -330,9 +335,13 @@ jobs:
             secrets/*.md
 
   build:
-    name: Build application Docker image
+    name: Build application Docker image (${{ matrix.target }})
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [development, production]
     needs:
       - static-summary
       - lint-documentation
@@ -348,12 +357,12 @@ jobs:
         run: echo "DOCKER_TAG=$(echo '${{ github.ref_name }}' | sed -E 's#[/().]+#_#g')-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}
+        run: docker build . --file Dockerfile --target ${{ matrix.target }} --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}-${{ matrix.target }}
 
       - name: Scan Docker image with Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
         with:
-          image-ref: 'symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}'
+          image-ref: 'symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}-${{ matrix.target }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
