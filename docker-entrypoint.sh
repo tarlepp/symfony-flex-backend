@@ -9,7 +9,7 @@ set -e
 #   3) Create database if it not exists yet
 #   4) Run possible migrations, so that database is always up to date
 #   5) Install public assets
-#   6) Copy _all_ files to shared folder so that Nginx use those properly
+#   6) Set runtime ownership and copy application contents for Nginx
 #
 # Note that in production environment we cannot use `symfony` binary to wrap
 # these commands because for some reason current environment variables from
@@ -37,8 +37,9 @@ if [[ "$1" = 'php-fpm' ]]; then
     ./bin/console assets:install --symlink --relative --no-interaction --no-ansi --env prod
 
     # Step 6
-    chmod -R o+s+w /app
-    cp -bar /app /shared/app
+    chown -R www-data:www-data /app/var
+    mkdir -p /shared/app
+    cp -a /app/. /shared/app/
 fi
 
 exec "$@"
