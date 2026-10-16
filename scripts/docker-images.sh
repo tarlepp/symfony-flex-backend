@@ -12,8 +12,7 @@
 # Commands:
 #   digest      Show multi-platform index digest and pin reference for image
 #   verify      Verify that PHP, nginx and MariaDB Dockerfile base images are
-#               multi-platform and that production and development
-#               Dockerfiles use the same base images
+#               multi-platform
 #   platforms   Show platforms that the current buildx builder supports
 #   setup-qemu  Install QEMU emulators for cross-platform builds
 #   build       Build image for a single platform and load it locally
@@ -26,6 +25,7 @@
 #   PLATFORM    Single target platform, e.g. `linux/arm64` (build)
 #   PLATFORMS   Comma separated platforms (setup-qemu, push)
 #   DOCKERFILE  Dockerfile path, e.g. `Dockerfile` (build, push)
+#   TARGET      Build stage, defaults to the last stage (build, push)
 #   TAG         Image tag to create (build, push)
 #   BUILDER     buildx builder name for multi-platform builds (push)
 #
@@ -51,10 +51,9 @@ else
     NC=$'\033[0m'
 fi
 
-PINNED_DOCKERFILES=(Dockerfile Dockerfile_dev docker/*/Dockerfile*)
+PINNED_DOCKERFILES=(Dockerfile docker/*/Dockerfile*)
 VERIFY_DOCKERFILES=(
     Dockerfile
-    Dockerfile_dev
     docker/nginx/Dockerfile
     docker/mariadb/Dockerfile
 )
@@ -70,8 +69,7 @@ Usage:
 Commands:
   digest      Show multi-platform index digest and pin reference for image
   verify      Verify that PHP, nginx and MariaDB Dockerfile base images are
-              multi-platform and that production and development
-              Dockerfiles use the same base images
+              multi-platform
   platforms   Show platforms that the current buildx builder supports
   setup-qemu  Install QEMU emulators for cross-platform builds
   build       Build image for a single platform and load it locally
@@ -84,6 +82,7 @@ script is run in an interactive terminal, the value is asked from the user.
   PLATFORM    Single target platform, e.g. linux/arm64 (build)
   PLATFORMS   Comma separated platforms (setup-qemu, push)
   DOCKERFILE  Dockerfile path, e.g. Dockerfile (build, push)
+  TARGET      Build stage, defaults to the last stage (build, push)
   TAG         Image tag to create (build, push)
   BUILDER     buildx builder name for multi-platform builds (push)
 
@@ -353,8 +352,6 @@ verify_dockerfile() {
         [ "$is_stage" -eq 1 ] && continue
 
         found=1
-        FILE_REFS[$file]+="${ref}"$'\n'
-        [ -z "${FILE_LINES["$file|$ref"]:-}" ] && FILE_LINES["$file|$ref"]="$line_number"
         printf '  line %s: %s\n' "$line_number" "$ref"
 
         if ! [[ "$ref" =~ @sha256:[a-f0-9]{64}$ ]]; then
@@ -407,71 +404,6 @@ verify_dockerfile() {
     return "$status"
 }
 
-image_digest() {
-    if [[ "$1" =~ @(sha256:[a-f0-9]{64})$ ]]; then
-        printf '%s' "${BASH_REMATCH[1]}"
-    fi
-}
-
-# Compare base images of production Dockerfile and its `_dev` counterpart.
-# Usage: verify_pair <production file> <development file>
-# Returns: 0 = same base images, 1 = mismatch
-verify_pair() {
-    local prod="$1"
-    local dev="$2"
-    local label_width=$((${#dev} + 1))
-    local prod_refs dev_refs common only_prod only_dev ref digest
-
-    prod_refs="$(printf '%s' "${FILE_REFS[$prod]:-}" | sort -u)"
-    dev_refs="$(printf '%s' "${FILE_REFS[$dev]:-}" | sort -u)"
-
-    printf '%s%s <-> %s%s\n' "$BOLD" "$prod" "$dev" "$NC"
-
-    if [ -z "$prod_refs" ] || [ -z "$dev_refs" ]; then
-        printf '  %sFAIL%s  No base images found to compare\n\n' "$RED" "$NC"
-        github_annotation error "$dev" "" "Base images cannot be compared" "No base images found to compare between ${prod} and ${dev}"
-        return 1
-    fi
-
-    common="$(comm -12 <(printf '%s\n' "$prod_refs") <(printf '%s\n' "$dev_refs"))"
-    only_prod="$(comm -23 <(printf '%s\n' "$prod_refs") <(printf '%s\n' "$dev_refs"))"
-    only_dev="$(comm -13 <(printf '%s\n' "$prod_refs") <(printf '%s\n' "$dev_refs"))"
-
-    while read -r ref; do
-        [ -z "$ref" ] && continue
-        digest="$(image_digest "$ref")"
-
-        if [ -n "$digest" ]; then
-            printf '  %sOK%s    Same digest: %s (%s)\n' "$GREEN" "$NC" "$digest" "${ref%@*}"
-        else
-            printf '  %sOK%s    Same image: %s\n' "$GREEN" "$NC" "$ref"
-        fi
-    done <<< "$common"
-
-    if [ -z "$only_prod" ] && [ -z "$only_dev" ]; then
-        printf '\n'
-        return 0
-    fi
-
-    printf '  %sFAIL%s  Base images differ, use the same pin reference in both files\n' "$RED" "$NC"
-
-    while read -r ref; do
-        [ -z "$ref" ] && continue
-        printf '        %-*s %s\n' "$label_width" "$prod:" "$ref"
-        github_annotation error "$prod" "${FILE_LINES["$prod|$ref"]:-}" "Production and development base images differ" "${ref} is not used in ${dev}. Use the same pin reference in both files."
-    done <<< "$only_prod"
-
-    while read -r ref; do
-        [ -z "$ref" ] && continue
-        printf '        %-*s %s\n' "$label_width" "$dev:" "$ref"
-        github_annotation error "$dev" "${FILE_LINES["$dev|$ref"]:-}" "Production and development base images differ" "${ref} is not used in ${prod}. Use the same pin reference in both files."
-    done <<< "$only_dev"
-
-    printf '\n'
-
-    return 1
-}
-
 doc_link() {
     local path="doc/DOCKER_MULTI_PLATFORM.md"
 
@@ -484,12 +416,11 @@ doc_link() {
 
 # Write verification result to GitHub Actions job summary.
 # Uses `plain` results of the caller (command_verify).
-# Usage: write_verify_summary <failures> <warnings> [production files of pairs...]
+# Usage: write_verify_summary <failures> <warnings>
 write_verify_summary() {
     local failures="$1"
     local warnings="$2"
-    local file prod
-    shift 2
+    local file
 
     [ -n "${GITHUB_STEP_SUMMARY:-}" ] || return 0
 
@@ -500,7 +431,7 @@ write_verify_summary() {
     elif [ "$warnings" -gt 0 ]; then
         github_summary ":warning: All base images are multi-platform, ${warnings} Dockerfile(s) with unpinned tags." ""
     else
-        github_summary ":white_check_mark: All base images are multi-platform and production/development pins match." ""
+        github_summary ":white_check_mark: All base images are multi-platform." ""
     fi
 
     github_summary "| Multi-platform base images | Result |" "|---|---|"
@@ -509,27 +440,15 @@ write_verify_summary() {
         github_summary "| \`${file}\` | ${plain[$file]} |"
     done
 
-    if [ "$#" -gt 0 ]; then
-        github_summary "" "| Production and development use same base images | Result |" "|---|---|"
-
-        for prod in "$@"; do
-            file="${prod} <-> ${prod}_dev"
-            github_summary "| \`${prod}\` ↔ \`${prod}_dev\` | ${plain[$file]} |"
-        done
-    fi
-
     github_summary "" "<details><summary>Base images</summary>" "" "| File | Line | Image | Result |" "|---|---|---|---|"
     github_summary "${IMAGE_ROWS[@]}"
     github_summary "" "</details>"
 }
 
 command_verify() {
-    local file prod width=0 failures=0 warnings=0 result
+    local file width=0 failures=0 warnings=0 result
     local -A results=()
-    local -a pairs=()
     declare -gA MANIFEST_CACHE=()
-    declare -gA FILE_REFS=()
-    declare -gA FILE_LINES=()
     declare -ga IMAGE_ROWS=()
     local -A plain=()
 
@@ -560,34 +479,6 @@ command_verify() {
         esac
     done
 
-    # Production and development Dockerfiles must use the same base images
-    for file in "${VERIFY_DOCKERFILES[@]}"; do
-        [[ "$file" == *_dev ]] || continue
-
-        prod="${file%_dev}"
-
-        [[ " ${VERIFY_DOCKERFILES[*]} " == *" ${prod} "* ]] && pairs+=("$prod")
-    done
-
-    if [ "${#pairs[@]}" -gt 0 ]; then
-        info "OK" "Comparing base images of production and development Dockerfiles"
-        printf '\n'
-    fi
-
-    for prod in "${pairs[@]}"; do
-        file="${prod} <-> ${prod}_dev"
-        [ "${#file}" -gt "$width" ] && width="${#file}"
-
-        if verify_pair "$prod" "${prod}_dev"; then
-            results[$file]="${GREEN}OK${NC}"
-            plain[$file]=":white_check_mark: OK"
-        else
-            results[$file]="${RED}FAIL${NC}"
-            plain[$file]=":x: FAIL"
-            failures=$((failures + 1))
-        fi
-    done
-
     printf '%sSummary%s\n' "$BOLD" "$NC"
     printf '  Multi-platform base images:\n'
 
@@ -595,18 +486,9 @@ command_verify() {
         printf '    %-*s  %s\n' "$width" "$file" "${results[$file]}"
     done
 
-    if [ "${#pairs[@]}" -gt 0 ]; then
-        printf '  Production and development use same base images:\n'
-    fi
-
-    for prod in "${pairs[@]}"; do
-        file="${prod} <-> ${prod}_dev"
-        printf '    %-*s  %s\n' "$width" "$file" "${results[$file]}"
-    done
-
     printf '\n'
 
-    write_verify_summary "$failures" "$warnings" "${pairs[@]}"
+    write_verify_summary "$failures" "$warnings"
 
     if [ "$failures" -gt 0 ]; then
         error "${failures} check(s) failed, see doc/DOCKER_MULTI_PLATFORM.md"
@@ -618,7 +500,7 @@ command_verify() {
         return 0
     fi
 
-    info "OK" "All Dockerfiles use multi-platform base images and production/development pins match"
+    info "OK" "All Dockerfiles use multi-platform base images"
 }
 
 command_platforms() {
@@ -644,6 +526,10 @@ command_setup_qemu() {
 }
 
 build_args() {
+    if [ -n "${TARGET:-}" ]; then
+        printf -- '--target\n%s\n' "$TARGET"
+    fi
+
     if grep -qE '^ARG HOST_UID' "$1"; then
         printf -- '--build-arg\nHOST_UID=%s\n--build-arg\nHOST_GID=%s\n' "$(id -u)" "$(id -g)"
     fi
@@ -655,6 +541,18 @@ ask_dockerfile() {
     if [ ! -f "$DOCKERFILE" ]; then
         error "Dockerfile '${DOCKERFILE}' not found"
         exit 66
+    fi
+
+    local stages
+    stages="$(awk 'toupper($1) == "FROM" && toupper($(NF-1)) == "AS" {print $NF}' "$DOCKERFILE")"
+
+    if [ -n "$stages" ]; then
+        ask TARGET "Build target ($(echo "$stages" | paste -sd,))" "$(tail -n 1 <<< "$stages")"
+    fi
+
+    if [ -n "${TARGET:-}" ] && ! grep -Fxq -- "$TARGET" <<< "$stages"; then
+        error "Build target '${TARGET}' not found in '${DOCKERFILE}'"
+        exit 64
     fi
 }
 
@@ -674,7 +572,7 @@ command_build() {
 
     mapfile -t args < <(build_args "$DOCKERFILE")
 
-    info "OK" "Building ${TAG} from ${DOCKERFILE} for ${PLATFORM}"
+    info "OK" "Building ${TAG} from ${DOCKERFILE}${TARGET:+ (target ${TARGET})} for ${PLATFORM}"
 
     docker buildx build \
         --platform "$PLATFORM" \

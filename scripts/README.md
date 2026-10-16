@@ -84,8 +84,8 @@ make docker-image-digest          # asks IMAGE
 make docker-image-verify-pins
 make docker-builder-platforms
 make docker-setup-qemu            # asks PLATFORMS
-make docker-build-platform        # asks PLATFORM, DOCKERFILE, TAG
-make docker-build-multi-platform  # asks PLATFORMS, DOCKERFILE, TAG, BUILDER
+make docker-build-platform        # asks PLATFORM, DOCKERFILE, TARGET, TAG
+make docker-build-multi-platform  # asks PLATFORMS, DOCKERFILE, TARGET, TAG, BUILDER
 ```
 
 Missing values are asked interactively. Values can also be given as Make
@@ -93,6 +93,10 @@ variables, for example
 `make docker-image-digest IMAGE=php:8.5.11-fpm-bookworm`. In a
 non-interactive shell, required values without defaults must be given as
 variables.
+
+The root `Dockerfile` defaults to the `production` target. Use
+`TARGET=development` to build the development image instead. Dockerfiles
+without named stages do not prompt for a target.
 
 See [Docker multi-platform images](../doc/DOCKER_MULTI_PLATFORM.md) for
 details.
