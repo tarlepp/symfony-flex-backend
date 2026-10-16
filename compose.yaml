@@ -5,7 +5,8 @@ services:
         stop_signal: SIGKILL
         build:
             context: .
-            dockerfile: ./Dockerfile_dev
+            dockerfile: ./Dockerfile
+            target: development
             args:
                 HOST_UID: ${HOST_UID:-1000}
                 HOST_GID: ${HOST_GID:-1000}

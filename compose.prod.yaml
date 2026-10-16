@@ -1,0 +1,52 @@
+services:
+    php:
+        image: symfony-flex-backend-php:local-production
+        build:
+            target: production
+            args: !reset {}
+        user: "0:0"
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        volumes: !override
+            - type: bind
+              source: ./secrets/application.json
+              target: /app/secrets/application.json
+              read_only: true
+              bind:
+                  create_host_path: false
+            - production-app:/shared/app
+        tmpfs: !reset []
+        environment:
+            APP_ENV: prod
+            APP_DEBUG: "0"
+            APPLICATION_CONFIG: /app/secrets/application.json
+            PHP_IDE_CONFIG: !reset null
+        extra_hosts: !reset []
+        healthcheck:
+            test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 9000) ? 0 : 1);"]
+            interval: 5s
+            timeout: 3s
+            start_period: 60s
+            retries: 12
+
+    nginx:
+        depends_on:
+            php:
+                condition: service_healthy
+        ports: !override
+            - "8001:80"
+        volumes: !override
+            - production-app:/app:ro
+        tmpfs: !reset []
+
+    mariadb:
+        healthcheck:
+            test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+            interval: 5s
+            timeout: 5s
+            start_period: 30s
+            retries: 12
+
+volumes:
+    production-app:
