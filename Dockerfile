@@ -1,9 +1,5 @@
-# syntax=docker/dockerfile:1.7-labs
-FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
-
-ENV APP_ENV prod
-ENV APP_DEBUG 0
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# syntax=docker/dockerfile:1.19
+FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef AS base
 
 RUN apt-get update \
     && apt-get install -y \
@@ -47,6 +43,126 @@ RUN composer completion bash > /etc/bash_completion.d/composer
 
 WORKDIR /app
 
+EXPOSE 9000
+
+FROM base AS development
+
+# Let's use bash as a default shell with login each time
+SHELL ["/bin/bash", "--login", "-c"]
+
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+
+ENV PATH="$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
+ENV NVM_VERSION=v0.40.8
+ENV NODE_VERSION=26.10.0
+
+RUN apt-get update \
+    && apt-get install -y \
+        bash-completion \
+        build-essential \
+        gnupg \
+        iproute2 \
+        locales \
+        nano \
+        python3-dev \
+        python3-pip \
+        python3-setuptools \
+        sudo \
+        vim \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'deb http://download.opensuse.org/repositories/shells:/fish/Debian_12/ /' | \
+        tee /etc/apt/sources.list.d/shells:fish.list \
+    && curl -fsSL https://download.opensuse.org/repositories/shells:fish/Debian_12/Release.key | \
+        gpg --dearmor | \
+        tee /etc/apt/trusted.gpg.d/shells_fish.gpg > /dev/null \
+    && apt-get update \
+    && apt-get install -y \
+        fish \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+RUN install-php-extensions xdebug
+
+# These files are also mounted by compose.yaml for local configuration changes.
+COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
+COPY ./docker/php/www-dev.conf /usr/local/etc/php-fpm.d/www.conf
+
+RUN chmod -R o+s+w /usr/local/etc/php
+
+RUN groupadd --gid ${HOST_GID} dev \
+    && useradd \
+        -p $(perl -e 'print crypt($ARGV[0], "password")' 'dev') \
+        --uid ${HOST_UID} \
+        --gid ${HOST_GID} \
+        --shell /bin/bash \
+        --create-home dev \
+    && usermod -a -G www-data,sudo dev \
+    && echo 'dev ALL=(ALL) ALL' >> /etc/sudoers
+
+RUN mkdir -p /home/dev/.config/fish/completions \
+    && mkdir -p /home/dev/.config/fish/functions \
+    && mkdir -p /home/dev/.local/share \
+    && mkdir -p /home/dev/.npm \
+    && mkdir -p /home/dev/.nvm \
+    && chmod 777 -R /home/dev
+
+COPY --chown=dev:dev . .
+
+RUN chmod +x /app/bin/console \
+    && chmod +x /app/docker-entrypoint-dev.sh \
+    && chmod +x /usr/bin/composer
+
+USER dev
+
+RUN pip3 install thefuck --user --break-system-packages
+
+ENV PATH="$PATH:/home/dev/.local/bin"
+
+RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc
+
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
+
+USER root
+
+RUN chmod 777 -R /home/dev
+
+USER dev
+
+RUN source ~/.nvm/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && npm install -g composer-version
+
+RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
+    && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc
+
+COPY ./docker/fish /home/dev/.config/fish/
+
+USER root
+
+RUN chmod 777 -R /home/dev /tmp \
+    && rm -rf /tmp/fish.node \
+    && chgrp -hR dev /home/dev
+
+USER dev
+
+ENTRYPOINT ["/app/docker-entrypoint-dev.sh"]
+
+# Keep production last so builds without --target produce the production image.
+FROM base AS production
+
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 COPY --exclude=./docker/* . /app
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
@@ -60,7 +176,5 @@ RUN rm -rf /app/var \
     && rm -rf /app/public/check.php \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader \
     && php /usr/bin/composer audit --abandoned=ignore
-
-EXPOSE 9000
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
