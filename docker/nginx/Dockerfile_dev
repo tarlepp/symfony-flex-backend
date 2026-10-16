@@ -1,4 +1,4 @@
-FROM nginx:mainline-alpine-slim
+FROM nginx:mainline-alpine-slim@sha256:45b82ed5f285b90d63df07ba70430fdd8f25624b416617d9e6dc93412b2006dc
 
 # Note that this `nginx-dev.conf` is also mounted within `compose.yaml`
 # so you don't need to build containers if you change something there, restart
