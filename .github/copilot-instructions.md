@@ -28,6 +28,11 @@ Use these instructions as the repository-level default when proposing or making
 changes in this project. Keep changes aligned with the existing Symfony, Doctrine
 ORM, and project workflow conventions.
 
+Before starting a task, check `.github/skills/` for a skill that matches the
+requested work and follow it when applicable. When using a skill, also follow
+these general instructions and `doc/AI_RULES.md`; a skill supplements rather
+than overrides repository-wide rules.
+
 ## Architecture rules [ᐞ](#table-of-contents)
 
 <a id="architecture-rules"></a>
