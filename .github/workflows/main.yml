@@ -105,7 +105,6 @@ jobs:
     timeout-minutes: 25
     needs:
       - security-check
-      - lint-configuration
     strategy:
       fail-fast: false
       matrix:
@@ -174,6 +173,8 @@ jobs:
     needs:
       - static
       - gitleaks
+      - docker-image-verify-pins
+      - lint-configuration
     if: ${{ always() }}
     steps:
       - *harden_runner_step
@@ -182,8 +183,12 @@ jobs:
         run: |
           echo "Static matrix result: ${{ needs.static.result }}"
           echo "Gitleaks result: ${{ needs.gitleaks.result }}"
+          echo "Docker base image pin verification result: ${{ needs.docker-image-verify-pins.result }}"
+          echo "Lint configuration result: ${{ needs.lint-configuration.result }}"
           test "${{ needs.static.result }}" = "success"
           test "${{ needs.gitleaks.result }}" = "success"
+          test "${{ needs.docker-image-verify-pins.result }}" = "success"
+          test "${{ needs.lint-configuration.result }}" = "success"
 
   test:
     name: PHPUnit tests
@@ -192,7 +197,6 @@ jobs:
     needs:
       - static-summary
       - lint-documentation
-      - docker-image-verify-pins
     env:
       SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -345,7 +349,6 @@ jobs:
     needs:
       - static-summary
       - lint-documentation
-      - docker-image-verify-pins
 
     steps:
       - *harden_runner_step
