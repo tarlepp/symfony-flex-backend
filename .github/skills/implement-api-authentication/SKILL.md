@@ -38,7 +38,7 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    fixtures, or documentation. Follow the existing credential creation,
    rotation, and revocation workflows; do not invent a new token storage or
    lifecycle design without explicit requirements.
-6. Follow `.github/skills/write-api-tests/SKILL.md` for testing. Cover valid
+6. Follow `.github/skills/write-tests/SKILL.md` for testing. Cover valid
    and invalid or missing credentials, status codes, permitted and denied
    roles, and anonymous access where relevant. Exercise both JWT and API-key
    authentication when shared firewall or policy behavior changes.

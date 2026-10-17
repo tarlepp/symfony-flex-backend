@@ -46,7 +46,7 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    needed. Never use `doctrine:schema:update` or hand-write ad hoc SQL to
    change a live schema. Do not run migrations against production.
 7. Add tests for entity behavior, ORM mapping, persistence, and relationships
-   as applicable, following `.github/skills/write-api-tests/SKILL.md`.
+   as applicable, following `.github/skills/write-tests/SKILL.md`.
 8. Add a corresponding repository under `src/Repository/`, extending or
     following `BaseRepository` and its entity-specific typing conventions.
     Reuse the existing repository methods and traits; add custom queries only
