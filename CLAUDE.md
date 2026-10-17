@@ -73,7 +73,7 @@ exact dependency and tooling versions.
 For current versions, use these files as the source of truth:
 
 * `composer.json` for PHP, Symfony, Doctrine, and all package versions
-* `Dockerfile` and `Dockerfile_dev` for container PHP and base image versions
+* `Dockerfile` for shared PHP base image versions and development/production targets
 * `phpstan.neon.dist` for PHPStan level and configuration
 * `psalm.xml` for Psalm configuration
 * `ecs.php` for ECS (Easy Coding Standard) rules

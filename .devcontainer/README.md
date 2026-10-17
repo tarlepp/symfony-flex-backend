@@ -21,7 +21,7 @@ This project includes a Dev Container definition in `.devcontainer/`.
 <a id="what-it-uses"></a>
 
 * Existing root `compose.yaml`
-* Existing root `Dockerfile_dev`
+* The `development` target in the root `Dockerfile`, selected by `compose.yaml`
 * A small Compose override: `.devcontainer/docker-compose.devcontainer.yml`
 
 ## How to use [ᐞ](#table-of-contents)

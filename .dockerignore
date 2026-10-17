@@ -9,6 +9,7 @@
 
 /secrets/application.*.json
 compose.*.yaml
+/docker/nginx/ssl/
 
 # User-specific stuff:
 .idea/**/workspace.xml

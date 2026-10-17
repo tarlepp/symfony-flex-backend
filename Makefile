@@ -40,6 +40,7 @@ COMPOSER_BIN := $(shell which composer)
 DOCKER := $(shell which docker)
 CONTAINER_PREFIX := 'symfony-backend' # Check your `compose.yaml` file `container_name` property for this one
 CONTAINER_COUNT := 5 # Check your `compose.yaml` file service count for this one
+COMPOSE_PROD := docker compose -f compose.yaml -f compose.prod.yaml
 
 ifdef DOCKER
 	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
@@ -642,7 +643,31 @@ else
 	@printf $(_TITLE) "OK" "Containers are built and those are running background, check logs for detailed information!"
 endif
 
-stop: ## Stop application containers
+daemon-prod: ## Build and start application in local production mode in background
+daemon-prod: info_msg := @printf $(_TITLE) "OK" "Building and starting application in local production mode in background"
+daemon-prod: info
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER_RUNNING)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_PROD) up --build --detach --wait
+	@printf $(_TITLE) "OK" "Local production is available at http://localhost:8001"
+endif
+
+start-prod: ## Build and start application in local production mode + watch output
+start-prod: info_msg := @printf $(_TITLE) "OK" "Building and starting application in local production mode"
+start-prod: info
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(WARNING_HOST)
+else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER_RUNNING)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_PROD) up --build
+	$(ALL_DONE)
+endif
+
+stop: ## Stop application containers (development or local production)
 stop: info_msg := @printf $(_TITLE) "OK" "Stopping application containers"
 stop: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
@@ -839,7 +864,7 @@ else
 	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh digest
 endif
 
-docker-image-verify-pins: ## Verify base images are multi-platform and prod/dev pins match
+docker-image-verify-pins: ## Verify base images are multi-platform
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(WARNING_HOST)
 else
@@ -860,18 +885,18 @@ else
 	@PLATFORMS="$(PLATFORMS)" ./scripts/docker-images.sh setup-qemu
 endif
 
-docker-build-platform: ## Build image for single platform (asks PLATFORM, DOCKERFILE, TAG)
+docker-build-platform: ## Build image for single platform (asks PLATFORM, DOCKERFILE, TARGET, TAG)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(WARNING_HOST)
 else
-	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TAG="$(TAG)" ./scripts/docker-images.sh build
+	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" ./scripts/docker-images.sh build
 endif
 
-docker-build-multi-platform: ## Build and push multi-platform image (asks PLATFORMS, DOCKERFILE, TAG, BUILDER)
+docker-build-multi-platform: ## Build and push multi-platform image (asks PLATFORMS, DOCKERFILE, TARGET, TAG, BUILDER)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(WARNING_HOST)
 else
-	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker-images.sh push
+	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker-images.sh push
 endif
 
 generate-ssl-cert: ## Generate self signed SSL certificates

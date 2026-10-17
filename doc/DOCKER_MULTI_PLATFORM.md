@@ -20,6 +20,8 @@ images.
       * [Tags, image indexes and platform manifests](#tags-image-indexes-and-platform-manifests)
       * [Why the digest matters](#why-the-digest-matters)
     * [Pinned base images](#pinned-base-images)
+    * [PHP build targets](#php-build-targets)
+    * [Running production locally](#running-production-locally)
     * [Make commands](#make-commands)
     * [How to update a base image pin](#how-to-update-a-base-image-pin)
       * [Step 1: Choose the new tag](#step-1-choose-the-new-tag)
@@ -85,8 +87,8 @@ already pulled local image. Always use the index digest.
 
 These files contain pinned base images:
 
-* `Dockerfile` - production PHP image (`php:*-fpm-bookworm`)
-* `Dockerfile_dev` - development PHP image (`php:*-fpm-bookworm`)
+* `Dockerfile` - shared PHP base for development and production targets
+  (`php:*-fpm-bookworm`)
 * `docker/nginx/Dockerfile` - shared production and development nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
 
@@ -99,6 +101,99 @@ Other images (for example `mlocati/php-extension-installer` in
 `COPY --from=...` and the images in `compose.yaml`) use plain tags. Plain tags
 always resolve to the image index, so they are multi-platform as long as the
 upstream image publishes several platforms.
+
+## PHP build targets [ᐞ](#table-of-contents)
+
+<a id="php-build-targets"></a>
+
+The root `Dockerfile` has a shared `base` stage and two runnable targets:
+
+* `development` includes Xdebug, the host-mapped `dev` user, Bash/Fish
+  completions, editors, Python helpers and Node.js via nvm. It uses
+  `php-dev.ini`, `www-dev.conf` and `docker-entrypoint-dev.sh`, which installs
+  development dependencies when the container starts.
+* `production` uses `php.ini`, `www.conf` and `docker-entrypoint.sh`, sets
+  `APP_ENV=prod` / `APP_DEBUG=0`, installs optimized Composer dependencies
+  without dev packages and audits them during the build. Development-only
+  tools and Xdebug are not inherited.
+
+Production is the last stage and therefore the default for `docker build .`.
+Docker Compose selects `development` explicitly, including when used by Dev
+Containers. Both targets inherit the same PHP extensions, Composer version,
+security updates, working directory and PHP-FPM port from `base`.
+
+```bash
+docker build --target production -t symfony-flex-backend:prod .
+docker build --target development \
+  --build-arg HOST_UID="$(id -u)" --build-arg HOST_GID="$(id -g)" \
+  -t symfony-flex-backend:dev .
+```
+
+`HOST_UID` and `HOST_GID` default to `1000` and only configure the development
+user. Existing checkouts should rebuild the PHP image after switching to the
+unified Dockerfile (`make daemon-build` or `make start-build`).
+
+## Running production locally [ᐞ](#table-of-contents)
+
+<a id="running-production-locally"></a>
+
+Use Docker Compose **2.24.4 or newer** (the override uses `!override` to replace
+development mounts and ports):
+
+```bash
+make stop
+make daemon-prod
+```
+
+`make daemon-prod` builds the production image and starts the existing local
+stack in the background, waiting for it to become ready. `make start-prod`
+builds and starts the same stack in the foreground with logs attached.
+Stop the existing stack first; development and local production cannot run
+together because they share container names, ports and the MariaDB volume.
+
+Open **<http://localhost:8001>**. This mode uses the production nginx
+configuration: local HTTPS on port `8000` and the development nginx status
+route are not enabled. Adminer (`8200`), Dozzle (`8100`) and MariaDB (`33060`)
+remain available as local development conveniences. This is not a hardened
+deployment configuration.
+
+When Docker runs inside a VM using NAT, forward host TCP port `8001` to guest
+TCP port `8001`, then use <http://localhost:8001> on the host.
+
+The override `compose.prod.yaml` selects the `production` PHP target, forces
+`APP_ENV=prod` / `APP_DEBUG=0`, removes development source/configuration
+mounts, and mounts `secrets/application.json` read-only. Configure that file
+for the local MariaDB service (`mariadb:3306`) before starting. The existing
+production entrypoint generates JWT keys and runs migrations against the
+**same database used by development**; back up important data first.
+Generated keys live in the container, not the host checkout, so recreating
+the container invalidates previously issued tokens.
+
+PHP replaces the contents of its named application volume for nginx on each
+startup, including removing obsolete files and dotfiles from earlier builds.
+Database readiness gates PHP startup, and nginx waits until PHP-FPM is accepting
+connections after initialization. No host source tree or development PHP
+configuration is mounted. Code changes require another production build.
+The production PHP image uses a separate tag so switching modes cannot
+accidentally reuse it as the development image.
+
+The production entrypoint grants PHP-FPM ownership of `/app/var` rather
+than changing permissions on the entire application, preserving the
+read-only configuration mount.
+
+Use `make logs` and `make stop` in either mode. For direct Compose commands
+in production mode, include both files:
+
+```bash
+docker compose -f compose.yaml -f compose.prod.yaml exec php bin/console about
+```
+
+Switch back to development without deleting database volumes:
+
+```bash
+make stop
+make daemon
+```
 
 ## Make commands [ᐞ](#table-of-contents)
 
@@ -113,15 +208,14 @@ and `jq`.
 * `make docker-image-digest` - show multi-platform index digest for image
   (asks `IMAGE`)
 * `make docker-image-verify-pins` - verify that PHP, nginx and MariaDB
-  base images are multi-platform and that production and development
-  Dockerfiles use the same pins
+  base images are multi-platform
 * `make docker-builder-platforms` - show platforms supported by the buildx
   builder
 * `make docker-setup-qemu` - install QEMU emulators (asks `PLATFORMS`)
 * `make docker-build-platform` - build image for a single platform (asks
-  `PLATFORM`, `DOCKERFILE`, `TAG`)
+  `PLATFORM`, `DOCKERFILE`, `TARGET`, `TAG`)
 * `make docker-build-multi-platform` - build and push a multi-platform image
-  (asks `PLATFORMS`, `DOCKERFILE`, `TAG`, `BUILDER`)
+  (asks `PLATFORMS`, `DOCKERFILE`, `TARGET`, `TAG`, `BUILDER`)
 
 Missing values are asked interactively, and the suggested default is shown in
 brackets. Values can also be given as Make variables to skip the questions:
@@ -168,8 +262,7 @@ Pin reference:
 
     FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
 
-Dockerfile:2:FROM php:8.5.10-fpm-bookworm@sha256:...
-Dockerfile_dev:1:FROM php:8.5.10-fpm-bookworm@sha256:...
+Dockerfile:2:FROM php:8.5.10-fpm-bookworm@sha256:... AS base
 ```
 
 The media type **must** be an index (`...image.index...` or
@@ -188,12 +281,12 @@ docker buildx imagetools inspect php:8.5.11-fpm-bookworm \
 <a id="step-3-update-the-dockerfiles"></a>
 
 Replace the `FROM` lines listed by the previous command with the printed pin
-reference. The production and development PHP Dockerfiles (`Dockerfile` and
-`Dockerfile_dev`) must use the same reference. For nginx, update the shared
+reference. PHP has a single pin in the shared `base` stage of `Dockerfile`,
+so both targets automatically use the same reference. For nginx, update
 `docker/nginx/Dockerfile`:
 
 ```dockerfile
-FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
+FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef AS base
 ```
 
 ### Step 4: Verify the pins [ᐞ](#table-of-contents)
@@ -204,18 +297,18 @@ FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a
 make docker-image-verify-pins
 ```
 
-This runs two checks and shows the result per file and per `FROM` line,
+This checks registry base images and shows the result per file and per `FROM` line,
 followed by a summary.
 
-First, it checks that every `FROM` line in these files uses a multi-platform
+It checks that every external `FROM` line in these files uses a multi-platform
 base image:
 
-* `Dockerfile` and `Dockerfile_dev` - PHP images
+* `Dockerfile` - shared PHP base
 * `docker/nginx/Dockerfile` - shared nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
 
 ```text
-[OK] Verifying base images of 4 Dockerfiles
+[OK] Verifying base images of 3 Dockerfiles
 
 Dockerfile
   line 2: php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
@@ -231,21 +324,13 @@ docker/mariadb/Dockerfile
   line 1: mariadb:10.7.1@sha256:5a8009369ee57c85b6f4a08406147bd9c505cde6b8250d16a27d2a5febfdead7
   OK    Multi-platform: linux/amd64 linux/arm64/v8 linux/ppc64le linux/s390x
 
-[OK] Comparing base images of production and development Dockerfiles
-
-Dockerfile <-> Dockerfile_dev
-  OK    Same digest: sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef (php:8.5.11-fpm-bookworm)
-
 Summary
   Multi-platform base images:
     Dockerfile                                               OK
-    Dockerfile_dev                                           OK
     docker/nginx/Dockerfile                                  OK
     docker/mariadb/Dockerfile                                OK
-  Production and development use same base images:
-    Dockerfile <-> Dockerfile_dev                            OK
 
-[OK] All Dockerfiles use multi-platform base images and production/development pins match
+[OK] All Dockerfiles use multi-platform base images
 ```
 
 Statuses for each `FROM` line:
@@ -260,18 +345,8 @@ Statuses for each `FROM` line:
 
 References to earlier build stages (`FROM base AS final`) are skipped.
 
-Second, it compares each production Dockerfile that has a separate development
-counterpart (`<file>` and `<file>_dev`), currently only PHP. Both files must use
-exactly the same base image references, including tag and digest, so that
-development and production run on the same base image. If they differ, the
-command shows the references that exist only in one of the files:
-
-```text
-Dockerfile <-> Dockerfile_dev
-  FAIL  Base images differ, use the same pin reference in both files
-        Dockerfile:     php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
-        Dockerfile_dev: php:8.5.10-fpm-bookworm@sha256:f96e7316935fc38a4a3acb9aae77b647df261e82997af93128719005393f96b1
-```
+No production/development file comparison is needed: both PHP targets inherit
+the same `base` stage, and nginx also uses one shared Dockerfile.
 
 Warnings do not fail the command; it exits with code `1` if any check fails.
 Use `make docker-image-digest` to check any other image.
@@ -281,13 +356,15 @@ Use `make docker-image-digest` to check any other image.
 <a id="continuous-integration"></a>
 
 The same check runs in GitHub Actions in the
-`Verify Docker base image pins (multi-platform, prod/dev match)` job
+`Verify Docker base image pins (multi-platform)` job
 (`docker-image-verify-pins` in `.github/workflows/main.yml`). The job has no
 dependencies, so it starts immediately in parallel with the first lint and
 security jobs. Both the test job and the `Build application Docker image` job
-depend on it, so a pull request that pins a single platform digest or uses
-different base images in production and development Dockerfiles fails fast,
+depend on it, so a pull request that pins a single platform digest fails fast,
 before tests are run or the image is built.
+
+CI builds and scans both PHP targets. The scheduled vulnerability scan builds
+the `production` target explicitly.
 
 The job runs `make docker-image-verify-pins` directly on the runner, which
 already has Docker with `buildx` and `jq` installed. It uses read-only
@@ -313,8 +390,9 @@ and locally. If the job still fails because of rate limiting, re-run the job.
 <a id="local-development"></a>
 
 Nothing special is needed. `make start` / `make daemon` build the images with
-Docker Compose, which builds for the platform of the host machine. With index
-digests this means a native `linux/arm64` image on Apple Silicon and a native
+Docker Compose, which selects the `development` target and builds for the
+platform of the host machine. With index digests this means a native
+`linux/arm64` image on Apple Silicon and a native
 `linux/amd64` image on x86-64 machines.
 
 ### Building for another platform [ᐞ](#table-of-contents)
@@ -345,17 +423,25 @@ make docker-build-platform
 ```
 
 The command asks the target platform (default `linux/arm64`), the Dockerfile
-(default `Dockerfile`) and the image tag (default based on platform, for
-example `symfony-flex-backend:arm64`), builds the image and loads it into the
-local Docker image store. The build context is the directory of the selected
+(default `Dockerfile`), build target (default `production`) and image tag
+(default based on platform, for example `symfony-flex-backend:arm64`),
+builds the image and loads it into the local Docker image store. The build
+context is the directory of the selected
 Dockerfile, and `HOST_UID` / `HOST_GID` build arguments are passed
-automatically when the Dockerfile needs them (`Dockerfile_dev`).
+automatically when the Dockerfile declares them.
 
 Non-interactive example:
 
 ```bash
-make docker-build-platform PLATFORM=linux/arm64 DOCKERFILE=Dockerfile TAG=symfony-flex-backend:arm64
+make docker-build-platform PLATFORM=linux/arm64 DOCKERFILE=Dockerfile TARGET=production TAG=symfony-flex-backend:arm64
 ```
+
+Use `TARGET=development` to build the development image instead. For other
+multi-stage Dockerfiles the target defaults to the final stage. If that stage
+is unnamed, the helper does not prompt for a target and lets Docker select
+the final stage. Named intermediate stages can still be selected explicitly
+with `TARGET`. Single-stage Dockerfiles without a named stage do not prompt
+for a target.
 
 Note that emulated builds are considerably slower than native builds, because
 PHP extensions are compiled during the build.
@@ -372,7 +458,7 @@ make docker-build-multi-platform
 ```
 
 The command asks the target platforms (default `linux/amd64,linux/arm64`), the
-Dockerfile, the image tag including registry (for example
+Dockerfile, build target, image tag including registry (for example
 `registry.example.com/symfony-flex-backend:latest`) and the builder name
 (default `multi-platform`). After confirmation, it creates the builder if it
 does not exist yet and builds and pushes the image. Your default builder is not

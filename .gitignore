@@ -10,6 +10,7 @@
 
 /secrets/application.*.json
 compose.*.yaml
+!compose.prod.yaml
 
 ## File-based project format:
 *.iws
@@ -39,4 +40,3 @@ phpunit.xml
 ### PHPLint
 .phplint-cache
 .phplint.cache
-
