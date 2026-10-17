@@ -45,15 +45,30 @@ make run-tests-phpdbg         # Runs all tests via phpunit (phpdbg)
 All of those above commands will run whole test suite, so it might take some
 time to run those all.
 
-If you just want to run single test or all tests in specified directory you
-could use following command:
+If you just want to run a single test or all tests in a specified directory,
+run `phpunit` directly from a shell inside the PHP development container, not
+on the host machine:
+
+From the repository root on the host, open the container shell with:
+
+```bash
+make bash
+# Or, for a Fish shell:
+make fish
+```
+
+If the containers are stopped, run `make start` on the host first, then open the
+container shell from a second host terminal. An IDE Dev Container terminal is
+already inside the container.
+
+Then run the tests from the repository root inside the container:
 
 ```bash
 # Just this single test class
-./vendor/bin/phpunit ./tests/Integration/Controller/ProfileControllerTest.php
+phpunit tests/Integration/Controller/v1/User/UserControllerTest.php
 
 # All tests in this directory
-./vendor/bin/phpunit ./tests/Integration/Controller/
+phpunit tests/Integration/Controller/
 ```
 
 ### Own environment for testing [ᐞ](#table-of-contents)
