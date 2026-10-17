@@ -87,9 +87,13 @@ These files contain pinned base images:
 
 * `Dockerfile` - production PHP image (`php:*-fpm-bookworm`)
 * `Dockerfile_dev` - development PHP image (`php:*-fpm-bookworm`)
-* `docker/nginx/Dockerfile` - production nginx image
-* `docker/nginx/Dockerfile_dev` - development nginx image
+* `docker/nginx/Dockerfile` - shared production and development nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
+
+The shared nginx image includes the production `nginx.conf` by default.
+For development, `compose.yaml` mounts `nginx-dev.conf` over the image's default
+configuration and mounts the local TLS certificates. No separate nginx
+Dockerfile or build arguments are needed.
 
 Other images (for example `mlocati/php-extension-installer` in
 `COPY --from=...` and the images in `compose.yaml`) use plain tags. Plain tags
@@ -184,9 +188,9 @@ docker buildx imagetools inspect php:8.5.11-fpm-bookworm \
 <a id="step-3-update-the-dockerfiles"></a>
 
 Replace the `FROM` lines listed by the previous command with the printed pin
-reference. Production and development Dockerfiles of the same service must use
-the same reference (`Dockerfile` and `Dockerfile_dev` for PHP,
-`docker/nginx/Dockerfile` and `docker/nginx/Dockerfile_dev` for nginx):
+reference. The production and development PHP Dockerfiles (`Dockerfile` and
+`Dockerfile_dev`) must use the same reference. For nginx, update the shared
+`docker/nginx/Dockerfile`:
 
 ```dockerfile
 FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
@@ -207,11 +211,11 @@ First, it checks that every `FROM` line in these files uses a multi-platform
 base image:
 
 * `Dockerfile` and `Dockerfile_dev` - PHP images
-* `docker/nginx/Dockerfile` and `docker/nginx/Dockerfile_dev` - nginx images
+* `docker/nginx/Dockerfile` - shared nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
 
 ```text
-[OK] Verifying base images of 5 Dockerfiles
+[OK] Verifying base images of 4 Dockerfiles
 
 Dockerfile
   line 2: php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
@@ -219,7 +223,7 @@ Dockerfile
 
 ...
 
-docker/nginx/Dockerfile_dev
+docker/nginx/Dockerfile
   line 1: nginx:mainline-alpine-slim@sha256:45b82ed5f285b90d63df07ba70430fdd8f25624b416617d9e6dc93412b2006dc
   OK    Multi-platform: linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8 linux/386 linux/ppc64le linux/riscv64 linux/s390x
 
@@ -232,19 +236,14 @@ docker/mariadb/Dockerfile
 Dockerfile <-> Dockerfile_dev
   OK    Same digest: sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef (php:8.5.11-fpm-bookworm)
 
-docker/nginx/Dockerfile <-> docker/nginx/Dockerfile_dev
-  OK    Same digest: sha256:45b82ed5f285b90d63df07ba70430fdd8f25624b416617d9e6dc93412b2006dc (nginx:mainline-alpine-slim)
-
 Summary
   Multi-platform base images:
     Dockerfile                                               OK
     Dockerfile_dev                                           OK
     docker/nginx/Dockerfile                                  OK
-    docker/nginx/Dockerfile_dev                              OK
     docker/mariadb/Dockerfile                                OK
   Production and development use same base images:
     Dockerfile <-> Dockerfile_dev                            OK
-    docker/nginx/Dockerfile <-> docker/nginx/Dockerfile_dev  OK
 
 [OK] All Dockerfiles use multi-platform base images and production/development pins match
 ```
@@ -261,11 +260,11 @@ Statuses for each `FROM` line:
 
 References to earlier build stages (`FROM base AS final`) are skipped.
 
-Second, it compares each production Dockerfile with its development
-counterpart (`<file>` and `<file>_dev`). Both files must use exactly the same
-base image references, including tag and digest, so that development and
-production run on the same base image. If they differ, the command shows the
-references that exist only in one of the files:
+Second, it compares each production Dockerfile that has a separate development
+counterpart (`<file>` and `<file>_dev`), currently only PHP. Both files must use
+exactly the same base image references, including tag and digest, so that
+development and production run on the same base image. If they differ, the
+command shows the references that exist only in one of the files:
 
 ```text
 Dockerfile <-> Dockerfile_dev
