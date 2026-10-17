@@ -31,7 +31,7 @@ task-specific workflow in the skill.
 * Run project commands from the repository root inside the running PHP
   development container or IDE Dev Container. From the host, use `make bash` or
   `make fish`; if containers are stopped, start them with `make start`.
-* Use `.github/skills/write-api-tests/SKILL.md` as the single source for test
+* Use `.github/skills/write-tests/SKILL.md` as the single source for test
   selection and test-writing practice. Other skills should state only
   task-specific behaviors that tests must cover.
 * Run relevant quality checks for the changed code. For PHP changes, these

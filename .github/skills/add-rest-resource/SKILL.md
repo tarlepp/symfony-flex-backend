@@ -46,7 +46,7 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    classes, and apply explicit route and authorization attributes. Keep access
    checks at least as restrictive as the intended API policy. Use a custom
    `__invoke` controller only when that matches the endpoint's existing style.
-8. Follow `.github/skills/write-api-tests/SKILL.md` for testing. Cover
+8. Follow `.github/skills/write-tests/SKILL.md` for testing. Cover
    authorization and validation outcomes when relevant; update fixtures only
    when the tests need the new data.
 9. Update API documentation attributes or relevant project docs if the change
