@@ -46,7 +46,7 @@ final class CreateMethodTest extends KernelTestCase
         new CreateMethodInvalidTestClass()
             ->createMethod(
                 Request::create('/', Request::METHOD_POST),
-                $this->getMockBuilder(RestDtoInterface::class)->getMock(),
+                self::createStub(RestDtoInterface::class),
             );
     }
 
@@ -59,14 +59,12 @@ final class CreateMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        new CreateMethodTestClass($resourceMock, $responseHandlerMock)
-            ->createMethod(Request::create('/', $httpMethod), $restDtoMock)
+        new CreateMethodTestClass($resourceStub, $responseHandlerStub)
+            ->createMethod(Request::create('/', $httpMethod), $restDtoStub)
             ->getContent();
     }
 
@@ -77,23 +75,21 @@ final class CreateMethodTest extends KernelTestCase
     #[TestDox('Test that `createMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatHandleRestMethodExceptionIsCalled(Throwable $exception, int $expectedCode): void
     {
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $resourceMock
             ->expects($this->once())
             ->method('create')
-            ->with($restDtoMock, true)
+            ->with($restDtoStub, true)
             ->willThrowException($exception);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        new CreateMethodTestClass($resourceMock, $responseHandlerMock)
-            ->createMethod(Request::create('/', Request::METHOD_POST), $restDtoMock)
+        new CreateMethodTestClass($resourceMock, $responseHandlerStub)
+            ->createMethod(Request::create('/', Request::METHOD_POST), $restDtoStub)
             ->getContent();
     }
 
@@ -103,8 +99,8 @@ final class CreateMethodTest extends KernelTestCase
     #[TestDox('Test that `createMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
+        $entityStub = self::createStub(EntityInterface::class);
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
@@ -115,16 +111,16 @@ final class CreateMethodTest extends KernelTestCase
         $resourceMock
             ->expects($this->once())
             ->method('create')
-            ->with($restDtoMock, true)
-            ->willReturn($entityMock);
+            ->with($restDtoStub, true)
+            ->willReturn($entityStub);
 
         $responseHandlerMock
             ->expects($this->once())
             ->method('createResponse')
-            ->with($request, $entityMock, $resourceMock, Response::HTTP_CREATED);
+            ->with($request, $entityStub, $resourceMock, Response::HTTP_CREATED);
 
         new CreateMethodTestClass($resourceMock, $responseHandlerMock)
-            ->createMethod($request, $restDtoMock);
+            ->createMethod($request, $restDtoStub);
     }
 
     /**

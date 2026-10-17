@@ -37,11 +37,9 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     #[TestDox('Test that `supports` method returns `$expected` for request `$request`')]
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderStub = self::createStub(ApiKeyUserProvider::class);
 
-        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderStub);
 
         self::assertSame($expected, $authenticator->supports($request));
     }
@@ -51,11 +49,11 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         $apiKey = new ApiKey();
 
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $apiKeyUserProvider
+        $apiKeyUserProviderMock
             ->expects($this->once())
             ->method('getApiKeyForToken')
             ->with('SomeToken')
@@ -65,7 +63,7 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
             'HTTP_Authorization' => 'ApiKey SomeToken',
         ]);
 
-        $passport = new ApiKeyAuthenticator($apiKeyUserProvider)
+        $passport = new ApiKeyAuthenticator($apiKeyUserProviderMock)
             ->authenticate($request);
 
         self::assertTrue($passport->hasBadge(UserBadge::class));
@@ -82,11 +80,9 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessageIsOrContains('API key not found');
 
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderStub = self::createStub(ApiKeyUserProvider::class);
 
-        new ApiKeyAuthenticator($apiKeyUserProvider)
+        new ApiKeyAuthenticator($apiKeyUserProviderStub)
             ->authenticate(new Request());
     }
 
@@ -96,11 +92,9 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     #[TestDox('Test that `onAuthenticationSuccess` method return `null` when using anonymous token')]
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderStub = self::createStub(ApiKeyUserProvider::class);
 
-        $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderStub);
 
         self::assertNull($authenticator->onAuthenticationSuccess(
             new Request(),
@@ -115,11 +109,9 @@ final class ApiKeyAuthenticatorTest extends KernelTestCase
     #[TestDox('Test that `onAuthenticationFailure` method returns expected response')]
     public function testThatOnAuthenticationFailureMethodReturnsExpectedResponse(): void
     {
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderStub = self::createStub(ApiKeyUserProvider::class);
 
-        $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderStub);
 
         $response = $authenticator->onAuthenticationFailure(new Request(), new AuthenticationException());
 

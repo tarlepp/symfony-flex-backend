@@ -42,10 +42,8 @@ final class LockedUserSubscriberTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessageIsOrContains('Unsupported user.');
 
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
-        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $userRepositoryStub = self::createStub(UserRepository::class);
+        $logLoginFailureResourceStub = self::createStub(LogLoginFailureResource::class);
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
@@ -56,7 +54,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
             new Response(),
         );
 
-        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
+        new LockedUserSubscriber($userRepositoryStub, $logLoginFailureResourceStub, $requestStack)
             ->onAuthenticationSuccess($event);
     }
 
@@ -69,47 +67,45 @@ final class LockedUserSubscriberTest extends KernelTestCase
         $this->expectException(LockedException::class);
         $this->expectExceptionMessageIsOrContains('Locked account.');
 
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
-        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $user = $this->getMockBuilder(UserEntity::class)->getMock();
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResourceStub = self::createStub(LogLoginFailureResource::class);
+        $userMock = $this->getMockBuilder(UserEntity::class)->getMock();
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
         $uuid = UuidHelper::getFactory()->uuid1();
 
-        $user
+        $userMock
             ->expects($this->once())
             ->method('getLanguage')
             ->willReturn(Language::EN);
 
-        $user
+        $userMock
             ->expects($this->once())
             ->method('getLocale')
             ->willReturn(Locale::EN);
 
-        $user
+        $userMock
             ->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($uuid->toString());
 
-        $user
+        $userMock
             ->expects($this->once())
             ->method('getLogsLoginFailure')
             ->willReturn(new ArrayCollection(range(0, 11)));
 
-        $userRepository
+        $userRepositoryMock
             ->expects($this->once())
             ->method('loadUserByIdentifier')
-            ->with($user->getId())
-            ->willReturn($user);
+            ->with($userMock->getId())
+            ->willReturn($userMock);
 
-        $securityUser = new SecurityUser($user);
+        $securityUser = new SecurityUser($userMock);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
-        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
+        new LockedUserSubscriber($userRepositoryMock, $logLoginFailureResourceStub, $requestStack)
             ->onAuthenticationSuccess($event);
     }
 
@@ -121,8 +117,8 @@ final class LockedUserSubscriberTest extends KernelTestCase
     )]
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
-        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResourceMock = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -131,13 +127,13 @@ final class LockedUserSubscriberTest extends KernelTestCase
 
         $user = new UserEntity();
 
-        $userRepository
+        $userRepositoryMock
             ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
-        $logLoginFailureResource
+        $logLoginFailureResourceMock
             ->expects($this->once())
             ->method('reset')
             ->with($user);
@@ -145,7 +141,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
-        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
+        new LockedUserSubscriber($userRepositoryMock, $logLoginFailureResourceMock, $requestStack)
             ->onAuthenticationSuccess($event);
     }
 
@@ -155,19 +151,19 @@ final class LockedUserSubscriberTest extends KernelTestCase
     #[TestDox('Test that `LogLoginFailureResource::save` method is not called when user is not found')]
     public function testThatOnAuthenticationFailureTestThatResourceMethodsAreNotCalledWhenWrongUser(): void
     {
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
-        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResourceMock = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $userRepository
+        $userRepositoryMock
             ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(null);
 
-        $logLoginFailureResource
-            ->expects(self::never())
+        $logLoginFailureResourceMock
+            ->expects($this->never())
             ->method(self::anything());
 
         $requestStack = new RequestStack();
@@ -175,7 +171,7 @@ final class LockedUserSubscriberTest extends KernelTestCase
             'username' => 'test-user',
         ]));
 
-        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
+        new LockedUserSubscriber($userRepositoryMock, $logLoginFailureResourceMock, $requestStack)
             ->onAuthenticationFailure();
     }
 
@@ -187,21 +183,21 @@ final class LockedUserSubscriberTest extends KernelTestCase
     {
         $user = new User();
 
-        $userRepository = $this->getMockBuilder(UserRepository::class)
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+        $logLoginFailureResourceMock = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $userRepository
+        $userRepositoryMock
             ->expects($this->once())
             ->method('loadUserByIdentifier')
             ->with('john')
             ->willReturn($user);
 
-        $logLoginFailureResource
+        $logLoginFailureResourceMock
             ->expects($this->once())
             ->method('save');
 
@@ -213,11 +209,11 @@ final class LockedUserSubscriberTest extends KernelTestCase
         $requestStack = new RequestStack();
         $requestStack->push($request);
 
-        $logLoginFailureResource
+        $logLoginFailureResourceMock
             ->expects(static::once())
             ->method('save');
 
-        new LockedUserSubscriber($userRepository, $logLoginFailureResource, $requestStack)
+        new LockedUserSubscriber($userRepositoryMock, $logLoginFailureResourceMock, $requestStack)
             ->onAuthenticationFailure();
     }
 }

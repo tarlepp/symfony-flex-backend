@@ -47,7 +47,7 @@ final class UpdateMethodTest extends KernelTestCase
         new UpdateMethodInvalidTestClass()
             ->updateMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), Request::METHOD_PUT),
-                $this->getMockBuilder(RestDtoInterface::class)->getMock(),
+                self::createStub(RestDtoInterface::class),
                 'some-id',
             );
     }
@@ -61,16 +61,14 @@ final class UpdateMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
+        $resourceStub = self::createStub(RestResourceInterface::class);
 
-        new UpdateMethodTestClass($resourceMock, $responseHandlerMock)
+        new UpdateMethodTestClass($resourceStub, $responseHandlerStub)
             ->updateMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
-                $restDtoMock,
+                $restDtoStub,
                 'some-id',
             )
             ->getContent();
@@ -83,10 +81,8 @@ final class UpdateMethodTest extends KernelTestCase
     #[TestDox('Test that `updateMethod` uses `$expectedCode` HTTP status code with `$exception` exception')]
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $uuid = Uuid::uuid4()->toString();
@@ -94,14 +90,14 @@ final class UpdateMethodTest extends KernelTestCase
         $resourceMock
             ->expects($this->once())
             ->method('update')
-            ->with($uuid, $restDtoMock, true)
+            ->with($uuid, $restDtoStub, true)
             ->willThrowException($exception);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        new UpdateMethodTestClass($resourceMock, $responseHandlerMock)
-            ->updateMethod(Request::create('/' . $uuid, Request::METHOD_PUT), $restDtoMock, $uuid);
+        new UpdateMethodTestClass($resourceMock, $responseHandlerStub)
+            ->updateMethod(Request::create('/' . $uuid, Request::METHOD_PUT), $restDtoStub, $uuid);
     }
 
     /**
@@ -110,12 +106,12 @@ final class UpdateMethodTest extends KernelTestCase
     #[TestDox('Test that `updateMethod` method calls expected service methods')]
     public function testThatTraitCallsServiceMethods(): void
     {
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $entityStub = self::createStub(EntityInterface::class);
 
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, Request::METHOD_PUT);
@@ -123,16 +119,16 @@ final class UpdateMethodTest extends KernelTestCase
         $resourceMock
             ->expects($this->once())
             ->method('update')
-            ->with($uuid, $restDtoMock, true)
-            ->willReturn($entityMock);
+            ->with($uuid, $restDtoStub, true)
+            ->willReturn($entityStub);
 
         $responseHandlerMock
             ->expects($this->once())
             ->method('createResponse')
-            ->with($request, $entityMock, $resourceMock);
+            ->with($request, $entityStub, $resourceMock);
 
         new UpdateMethodTestClass($resourceMock, $responseHandlerMock)
-            ->updateMethod($request, $restDtoMock, $uuid);
+            ->updateMethod($request, $restDtoStub, $uuid);
     }
 
     /**

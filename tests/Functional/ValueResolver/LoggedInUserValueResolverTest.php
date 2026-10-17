@@ -47,9 +47,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $apiKeyUserProvider = $this->createMock(ApiKeyUserProvider::class);
+        $apiKeyUserProviderStub = self::createStub(ApiKeyUserProvider::class);
 
-        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository, $apiKeyUserProvider);
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository, $apiKeyUserProviderStub);
 
         $resolver = new LoggedInUserValueResolver($userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
@@ -77,9 +77,9 @@ final class LoggedInUserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $apiKeyUserProvider = $this->createMock(ApiKeyUserProvider::class);
+        $apiKeyUserProviderStub = self::createStub(ApiKeyUserProvider::class);
 
-        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository, $apiKeyUserProvider);
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository, $apiKeyUserProviderStub);
 
         $argumentResolver = new ArgumentResolver(
             null,

@@ -34,9 +34,9 @@ final class GenericRestRequestMapperTest extends KernelTestCase
             'RestRequestMapper expects that $source is Request object, "array" provided',
         );
 
-        $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
+        $resourceStub = self::createStub(UserGroupResource::class);
 
-        new RequestMapper($resource)
+        new RequestMapper($resourceStub)
             ->mapToObject([], new stdClass());
     }
 
@@ -51,9 +51,9 @@ final class GenericRestRequestMapperTest extends KernelTestCase
             'RestRequestMapper expects that $source is Request object, "stdClass" provided',
         );
 
-        $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
+        $resourceStub = self::createStub(UserGroupResource::class);
 
-        new RequestMapper($resource)
+        new RequestMapper($resourceStub)
             ->mapToObject(new stdClass(), new stdClass());
     }
 
@@ -68,9 +68,9 @@ final class GenericRestRequestMapperTest extends KernelTestCase
             'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "stdClass" provided',
         );
 
-        $resource = $this->getMockBuilder(UserGroupResource::class)->disableOriginalConstructor()->getMock();
+        $resourceStub = self::createStub(UserGroupResource::class);
 
-        new RequestMapper($resource)
+        new RequestMapper($resourceStub)
             ->mapToObject(new Request(), new stdClass());
     }
 
@@ -89,7 +89,7 @@ final class GenericRestRequestMapperTest extends KernelTestCase
         new TestRestRequestMapperWithoutProperties()
             ->mapToObject(
                 new Request(),
-                $this->getMockBuilder(RestDtoInterface::class)->getMock(),
+                self::createStub(RestDtoInterface::class),
             );
     }
 

@@ -32,16 +32,16 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     #[TestDox('Test that `validate` method throws exception if constraint is not `EntityReferenceExists`')]
     public function testThatValidateMethodThrowsUnexpectedTypeException(): void
     {
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
+        $contextStub = self::createStub(ExecutionContextInterface::class);
 
         $this->expectException(UnexpectedTypeException::class);
         $this->expectExceptionMessageIsOrContains(
             'Expected argument of type "' . EntityReferenceExists::class . '", "' . TestConstraint::class . '" given',
         );
 
-        new EntityReferenceExistsValidator($loggerMock)
-            ->validateInContext('', new TestConstraint(), $contextMock);
+        new EntityReferenceExistsValidator($loggerStub)
+            ->validateInContext('', new TestConstraint(), $contextStub);
     }
 
     /**
@@ -54,8 +54,8 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         string $entityClass,
         string $expectedMessage,
     ): void {
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
+        $contextStub = self::createStub(ExecutionContextInterface::class);
 
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageIsOrContains($expectedMessage);
@@ -63,15 +63,15 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = $entityClass;
 
-        new EntityReferenceExistsValidator($loggerMock)
-            ->validateInContext($value, $constraint, $contextMock);
+        new EntityReferenceExistsValidator($loggerStub)
+            ->validateInContext($value, $constraint, $contextStub);
     }
 
     #[TestDox('Test that `validate` method throws an exception if value is `stdClass`')]
     public function testThatValidateMethodThrowsUnexpectedValueExceptionWhenValueIsNotEntityInterface(): void
     {
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $loggerStub = self::createStub(LoggerInterface::class);
+        $contextStub = self::createStub(ExecutionContextInterface::class);
 
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageIsOrContains(
@@ -81,8 +81,8 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = stdClass::class;
 
-        new EntityReferenceExistsValidator($loggerMock)
-            ->validateInContext(new stdClass(), $constraint, $contextMock);
+        new EntityReferenceExistsValidator($loggerStub)
+            ->validateInContext(new stdClass(), $constraint, $contextStub);
     }
 
     /**
@@ -95,11 +95,11 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
         $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
 
         $contextMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method(self::anything());
 
-        $contextMock
-            ->expects(self::never())
+        $loggerMock
+            ->expects($this->never())
             ->method(self::anything());
 
         $constraint = new EntityReferenceExists();
@@ -118,20 +118,20 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
     {
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $contextMock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
-        $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+        $violationMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
-        $violation
+        $violationMock
             ->expects($this->exactly(2))
             ->method('setParameter')
-            ->willReturn($violation);
+            ->willReturn($violationMock);
 
-        $violation
+        $violationMock
             ->expects($this->once())
             ->method('setCode')
             ->with('64888b5e-bded-449b-82ed-0cc1f73df14d')
-            ->willReturn($violation);
+            ->willReturn($violationMock);
 
-        $violation
+        $violationMock
             ->expects($this->once())
             ->method('addViolation');
 
@@ -139,7 +139,7 @@ final class EntityReferenceExistsValidatorTest extends KernelTestCase
             ->expects($this->once())
             ->method('buildViolation')
             ->with('Invalid id value "{{ id }}" given for entity "{{ entity }}".')
-            ->willReturn($violation);
+            ->willReturn($violationMock);
 
         $loggerMock
             ->expects($this->once())

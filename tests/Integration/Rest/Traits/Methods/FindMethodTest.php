@@ -55,12 +55,10 @@ final class FindMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        new FindMethodTestClass($resourceMock, $responseHandlerMock)
+        new FindMethodTestClass($resourceStub, $responseHandlerStub)
             ->findMethod(Request::create('/', $httpMethod))->getContent();
     }
 
@@ -75,9 +73,7 @@ final class FindMethodTest extends KernelTestCase
         $this->expectExceptionCode($expectedCode);
 
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         $resourceMock
             ->expects($this->once())
@@ -85,7 +81,7 @@ final class FindMethodTest extends KernelTestCase
             ->with([], [], null, null, [])
             ->willThrowException($exception);
 
-        new FindMethodTestClass($resourceMock, $responseHandlerMock)
+        new FindMethodTestClass($resourceMock, $responseHandlerStub)
             ->findMethod(Request::create('/'));
     }
 
@@ -140,12 +136,10 @@ final class FindMethodTest extends KernelTestCase
         $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
         $this->expectExceptionMessageIsOrContains('Current \'where\' parameter is not valid JSON.');
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        new FindMethodTestClass($resourceMock, $responseHandlerMock)
+        new FindMethodTestClass($resourceStub, $responseHandlerStub)
             ->findMethod(Request::create('/?where=foo'));
     }
 

@@ -47,7 +47,7 @@ final class PatchMethodTest extends KernelTestCase
         new PatchMethodInvalidTestClass()
             ->patchMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), Request::METHOD_PATCH),
-                $this->getMockBuilder(RestDtoInterface::class)->getMock(),
+                self::createStub(RestDtoInterface::class),
                 'some-id',
             );
     }
@@ -61,15 +61,13 @@ final class PatchMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceStub = self::createStub(RestResourceInterface::class);
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
-        new PatchMethodTestClass($resourceMock, $responseHandlerMock)
+        new PatchMethodTestClass($resourceStub, $responseHandlerStub)
             ->patchMethod(
                 Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
-                $this->getMockBuilder(RestDtoInterface::class)->getMock(),
+                self::createStub(RestDtoInterface::class),
                 'some-id',
             )
             ->getContent();
@@ -83,26 +81,24 @@ final class PatchMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
+        $restDtoStub = self::createStub(RestDtoInterface::class);
 
         $uuid = Uuid::uuid4()->toString();
 
         $resourceMock
             ->expects($this->once())
             ->method('patch')
-            ->with($uuid, $restDtoMock, true)
+            ->with($uuid, $restDtoStub, true)
             ->willThrowException($exception);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        new PatchMethodTestClass($resourceMock, $responseHandlerMock)
+        new PatchMethodTestClass($resourceMock, $responseHandlerStub)
             ->patchMethod(
                 Request::create('/' . $uuid, Request::METHOD_PATCH),
-                $restDtoMock,
+                $restDtoStub,
                 $uuid,
             );
     }
@@ -114,8 +110,8 @@ final class PatchMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(): void
     {
         $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $restDtoStub = self::createStub(RestDtoInterface::class);
+        $entityStub = self::createStub(EntityInterface::class);
         $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -127,16 +123,16 @@ final class PatchMethodTest extends KernelTestCase
         $resourceMock
             ->expects($this->once())
             ->method('patch')
-            ->with($uuid, $restDtoMock, true)
-            ->willReturn($entityMock);
+            ->with($uuid, $restDtoStub, true)
+            ->willReturn($entityStub);
 
         $responseHandlerMock
             ->expects($this->once())
             ->method('createResponse')
-            ->with($request, $entityMock, $resourceMock);
+            ->with($request, $entityStub, $resourceMock);
 
         new PatchMethodTestClass($resourceMock, $responseHandlerMock)
-            ->patchMethod($request, $restDtoMock, $uuid);
+            ->patchMethod($request, $restDtoStub, $uuid);
     }
 
     /**

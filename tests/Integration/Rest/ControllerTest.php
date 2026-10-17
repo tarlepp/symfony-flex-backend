@@ -32,9 +32,9 @@ final class ControllerTest extends KernelTestCase
     {
         $this->expectNotToPerformAssertions();
 
-        $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
+        $resourceStub = self::createStub(ApiKeyResource::class);
 
-        $controller = new ApiKeyController($resourceMock);
+        $controller = new ApiKeyController($resourceStub);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
     }
 
@@ -47,7 +47,7 @@ final class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageIsOrContains('ResponseHandler service not set');
 
-        $class = new class($this->createMock(RestResourceInterface::class)) extends Controller {
+        $class = new class(self::createStub(RestResourceInterface::class)) extends Controller {
         };
 
         $class->getResponseHandler();
@@ -59,9 +59,9 @@ final class ControllerTest extends KernelTestCase
     #[TestDox("Test that `getResponseHandler` method doesn't throw an exception if `ResponseHandler` service is set")]
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
-        $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
+        $resourceStub = self::createStub(ApiKeyResource::class);
 
-        $controller = new ApiKeyController($resourceMock);
+        $controller = new ApiKeyController($resourceStub);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
         self::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
@@ -73,7 +73,7 @@ final class ControllerTest extends KernelTestCase
     #[TestDox('Test that `getDtoClass` method calls expected `Resource` service method')]
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
-        $dtoClassMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $dtoClassStub = self::createStub(RestDtoInterface::class);
         $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
 
         $controller = new ApiKeyController($resourceMock);
@@ -82,7 +82,7 @@ final class ControllerTest extends KernelTestCase
         $resourceMock
             ->expects($this->once())
             ->method('getDtoClass')
-            ->willReturn($dtoClassMock::class);
+            ->willReturn($dtoClassStub::class);
 
         $controller->getDtoClass();
     }
@@ -117,9 +117,9 @@ final class ControllerTest extends KernelTestCase
     #[TestDox('Test that `getDtoClass` returns expected when using custom DTO class mapping')]
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
-        $resourceMock = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
+        $resourceStub = self::createStub(ApiKeyResource::class);
 
-        $controller = new ApiKeyController($resourceMock);
+        $controller = new ApiKeyController($resourceStub);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
         $dtoClasses = [
