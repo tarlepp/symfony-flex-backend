@@ -184,24 +184,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  lint-summary:
-    name: Validate lint results
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    needs:
-      - lint-configuration
-      - lint-documentation
-    if: ${{ always() }}
-    steps:
-      - *harden_runner_step
-
-      - name: Validate lint job results
-        run: |
-          echo "Lint configuration result: ${{ needs.lint-configuration.result }}"
-          echo "Lint documentation result: ${{ needs.lint-documentation.result }}"
-          test "${{ needs.lint-configuration.result }}" = "success"
-          test "${{ needs.lint-documentation.result }}" = "success"
-
   ci-summary:
     name: Validate CI prerequisites
     runs-on: ubuntu-24.04
@@ -209,7 +191,8 @@ jobs:
     needs:
       - docker-image-verify-pins
       - gitleaks
-      - lint-summary
+      - lint-configuration
+      - lint-documentation
       - security-check
       - static-analyzers
     if: ${{ always() }}
@@ -219,12 +202,14 @@ jobs:
       - name: Validate prerequisite job results
         run: |
           echo "PHP Security Checker result: ${{ needs.security-check.result }}"
-          echo "Lint results summary: ${{ needs.lint-summary.result }}"
+          echo "Lint configuration result: ${{ needs.lint-configuration.result }}"
+          echo "Lint documentation result: ${{ needs.lint-documentation.result }}"
           echo "Static analyzer matrix result: ${{ needs.static-analyzers.result }}"
           echo "Gitleaks result: ${{ needs.gitleaks.result }}"
           echo "Docker base image pin verification result: ${{ needs.docker-image-verify-pins.result }}"
           test "${{ needs.security-check.result }}" = "success"
-          test "${{ needs.lint-summary.result }}" = "success"
+          test "${{ needs.lint-configuration.result }}" = "success"
+          test "${{ needs.lint-documentation.result }}" = "success"
           test "${{ needs.static-analyzers.result }}" = "success"
           test "${{ needs.gitleaks.result }}" = "success"
           test "${{ needs.docker-image-verify-pins.result }}" = "success"
