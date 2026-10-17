@@ -11,6 +11,10 @@ corresponding repository and resource. A CRUD REST endpoint, DTOs, and
 AutoMapper configuration are separate concerns and should be added when the
 requested behavior needs them.
 
+Before applying this skill, read `.github/copilot-instructions.md` and
+`doc/AI_RULES.md`. Follow those general repository rules alongside this
+task-specific workflow; they take precedence if guidance conflicts.
+
 ## Workflow
 
 1. Check `composer.json` for the current PHP, Doctrine ORM, and migrations

@@ -8,6 +8,10 @@ description: Add or extend a CRUD REST resource using this repository's Symfony,
 Use this skill when adding a CRUD API resource or extending an existing
 resource's input, output, or behavior.
 
+Before applying this skill, read `.github/copilot-instructions.md` and
+`doc/AI_RULES.md`. Follow those general repository rules alongside this
+task-specific workflow; they take precedence if guidance conflicts.
+
 ## Workflow
 
 1. Inspect `composer.json`, `symfony.lock`, the target endpoint's tests, and a
