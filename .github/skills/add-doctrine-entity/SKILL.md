@@ -56,17 +56,27 @@ requested behavior needs them.
     business behavior in the resource, and use the existing resource lifecycle
     patterns where relevant. An entity's repository and resource are required
     even when it has no CRUD controller.
+    Add corresponding repository and resource integration tests using the
+    existing test base classes.
 10. If the request needs DTOs, request mapping, or a CRUD REST endpoint, follow
      `.github/skills/add-rest-resource/SKILL.md` for those parts. Add these
      layers only when required by the requested behavior.
 
 ## Validation
 
-Run project commands from the repository root inside the running PHP
-development container:
+From the host machine, run `make bash` (or `make fish`) in the repository root
+to open a shell in the PHP Docker container. If the containers are stopped,
+start them first with `make start`, then open the container shell from a
+second host terminal. An IDE Dev Container terminal is already inside the
+container.
 
-* Run the focused entity tests, then the broader `make run-tests` suite when
-  warranted.
+Run project commands from the repository root inside the running PHP
+development container, not on the host machine. Invoke `phpunit` directly
+for targeted tests, without a `./vendor/bin/` prefix or host-side Docker
+wrapper. Follow `.github/skills/write-api-tests/SKILL.md` for test guidance.
+
+* Run focused entity, repository, and resource tests with `phpunit`, then the
+  broader `make run-tests` suite when warranted.
 * Run `bin/console doctrine:schema:validate` and relevant migration checks
   against the test/development database when available.
 * Run `make ecs`, `make phplint`, `make phpstan`, and `make psalm` for PHP

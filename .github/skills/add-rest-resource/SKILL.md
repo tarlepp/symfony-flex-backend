@@ -22,7 +22,9 @@ resource's input, output, or behavior.
    existing entity interfaces/traits. Add serialization groups and Symfony
    Validator constraints consistent with the field's API exposure and
    validation needs. Generate and review a Doctrine migration; do not use
-   `doctrine:schema:update` or hand-write schema changes.
+   `doctrine:schema:update` or hand-write schema changes. Follow
+   `.github/skills/add-doctrine-entity/SKILL.md` for entity changes; every
+   entity requires a corresponding repository and resource.
 4. Define API input/output through DTOs in `src/DTO/`. Follow the existing
    `RestDto` patterns, validation constraints, and patch/visited-field behavior.
    Update `src/AutoMapper/` request mapping and configuration when request
@@ -51,13 +53,22 @@ resource's input, output, or behavior.
 
 ## Validation
 
-Run relevant tests and checks through the PHP development container, using
-existing `make` targets:
+From the host machine, run `make bash` (or `make fish`) in the repository root
+to open a shell in the PHP Docker container. If the containers are stopped,
+start them first with `make start`, then open the container shell from a
+second host terminal. An IDE Dev Container terminal is already inside the
+container.
 
-* Run targeted PHPUnit tests for the changed layers; run `make run-tests` when
-  the change warrants broader coverage.
+Run project commands from the repository root inside the running PHP
+development container, not on the host machine. Invoke `phpunit` directly
+for targeted tests, without a `./vendor/bin/` prefix or host-side Docker
+wrapper. Follow `.github/skills/write-api-tests/SKILL.md` for test guidance.
+
+* Run targeted `phpunit` tests for the changed layers; run `make run-tests`
+  when the change warrants broader coverage.
 * For entity or migration changes, run the existing migration/schema checks,
-  including `doctrine:schema:validate` when the test database is available.
+  including `bin/console doctrine:schema:validate` when the test database is
+  available.
 * Run relevant quality checks, including `make ecs`, `make phpstan`,
   `make psalm`, and `make lint-markdown` if this skill or other Markdown files
   changed.
