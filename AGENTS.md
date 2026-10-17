@@ -101,6 +101,9 @@ and the actual code, dependency manifests, and CI workflows.
 * Add or update tests for behavior changes. Exercise new behavior through the
   relevant caller boundary, such as an HTTP request for a controller or a
   service/resource call for business logic.
+* For targeted tests, run `phpunit <test-file-or-directory>` from the repository
+  root inside the PHP development container; no explicit runner path is needed.
+  See `.github/skills/write-tests/SKILL.md` for test selection and conventions.
 * Run the smallest relevant existing test or quality command while iterating.
   Before commit, run the CI-aligned suite from the repository root in the
   development container:

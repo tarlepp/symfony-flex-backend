@@ -50,6 +50,17 @@ gid = 1000
 You need to create `compose.override.yaml` file and specify used user
 information there.
 
+For a targeted test, run `phpunit <test-file-or-directory>` from the repository
+root inside the PHP development container; no explicit runner path is needed.
+For example:
+
+```bash
+phpunit tests/Unit/Rest/SearchTermTest.php
+```
+
+Use `make run-tests` for the full suite. See [the testing guide](TESTING.md) for
+details.
+
 ### Makefile [ᐞ](#table-of-contents)
 
 <a id="makefile"></a>

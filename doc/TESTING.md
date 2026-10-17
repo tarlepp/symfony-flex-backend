@@ -26,8 +26,11 @@ itself relies to PHPUnit library.
 
 * [PHPUnit](https://phpunit.de/)
 
-Note that this project does not use simple phpunit as does Symfony by default.
-So don't try to run `./bin/phpunit` command, because that does not exist.
+Run the project's Composer-installed PHPUnit runner with `phpunit` inside the
+PHP development container.
+
+Do not use Symfony's `bin/phpunit` entry point, which does not exist in this
+project.
 
 ### Commands to run tests [ᐞ](#table-of-contents)
 
@@ -70,6 +73,11 @@ phpunit tests/Integration/Controller/v1/User/UserControllerTest.php
 # All tests in this directory
 phpunit tests/Integration/Controller/
 ```
+
+Use just `phpunit` inside the container; no explicit path is needed. The
+development `Dockerfile` adds `/app/vendor/bin` to `PATH`, so this command
+resolves to the project's Composer-installed runner, not a separate global
+installation.
 
 ### Own environment for testing [ᐞ](#table-of-contents)
 

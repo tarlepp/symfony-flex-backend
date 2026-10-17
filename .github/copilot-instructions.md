@@ -171,6 +171,10 @@ If `make ecs` reports fixable style issues, run `make ecs-fix` and rerun
 For documentation-only tasks, `make lint-markdown` is usually the smallest
 relevant validation command.
 
+For targeted tests, run `phpunit <test-file-or-directory>` from the repository
+root inside the PHP development container; no explicit runner path is needed.
+Follow `.github/skills/write-tests/SKILL.md` for test selection and conventions.
+
 ## Documentation format rules [ᐞ](#table-of-contents)
 
 <a id="documentation-format-rules"></a>
