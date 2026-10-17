@@ -46,7 +46,10 @@ updates:
                 exclude-patterns:
                     - "symfony/*"
     -   package-ecosystem: docker
-        directory: "/"
+        directories:
+            - "/"
+            - "/docker/mariadb"
+            - "/docker/nginx"
         schedule: *schedule_weekly
         open-pull-requests-limit: 5
         <<: *rebase_and_stable
@@ -179,13 +182,3 @@ updates:
             tools_php-parallel-lint_dependencies:
                 patterns:
                     - "*"
-
-               - package-ecosystem: docker
-                 directory: /docker/mariadb
-                 schedule:
-                   interval: daily
-
-               - package-ecosystem: docker
-                 directory: /docker/nginx
-                 schedule:
-                   interval: daily
