@@ -18,8 +18,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  security-check:
-    name: PHP Security Checker
+  lint-configuration:
+    name: Lint configuration
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
@@ -36,26 +36,6 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: '0'
-
-      - name: Bootstrap PHP project
-        uses: ./.github/actions/php-bootstrap
-
-      - name: PHP Security Checker
-        uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
-
-      - name: Check that application doesn't have installed dependencies with known security vulnerabilities
-        run: make check-security
-
-  lint-configuration:
-    name: Lint configuration
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-    steps:
-      - *harden_runner_step
-
-      - *checkout_step
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -97,6 +77,40 @@ jobs:
             doc/*.md
             docker/*.md
             secrets/*.md
+
+  security-check:
+    name: PHP Security Checker
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Bootstrap PHP project
+        uses: ./.github/actions/php-bootstrap
+
+      - name: PHP Security Checker
+        uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
+
+      - name: Check that application doesn't have installed dependencies with known security vulnerabilities
+        run: make check-security
+
+  gitleaks:
+    name: Gitleaks scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Gitleaks scan
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker-image-verify-pins:
     name: Verify Docker base image pins (multi-platform)
@@ -169,20 +183,6 @@ jobs:
         with:
           name: phploc.json
           path: ./build/phploc.json
-
-  gitleaks:
-    name: Gitleaks scan
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - *harden_runner_step
-
-      - *checkout_step
-
-      - name: Gitleaks scan
-        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ci-summary:
     name: Validate CI prerequisites
