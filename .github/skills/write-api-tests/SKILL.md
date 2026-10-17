@@ -9,9 +9,7 @@ Use this skill when adding or changing tests for an API endpoint, DTO, resource,
 repository, or request mapping. Prefer tests that exercise the behavior through
 the same boundary used by callers.
 
-Before applying this skill, read `.github/copilot-instructions.md` and
-`doc/AI_RULES.md`. Follow those general repository rules alongside this
-task-specific workflow; they take precedence if guidance conflicts.
+Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
 
 ## Choose the test layer
 
@@ -56,26 +54,15 @@ task-specific workflow; they take precedence if guidance conflicts.
 
 ## Running tests
 
-From the host machine, run `make bash` (or `make fish`) in the repository root
-to open a shell in the PHP Docker container. If the containers are stopped,
-start them first with `make start`, then open the container shell from a
-second host terminal. An IDE Dev Container terminal is already inside the
-container.
-
-Run commands from the repository root inside the running PHP development
-container, not on the host machine. Invoke `phpunit` directly; do not prefix it
+Invoke `phpunit` directly from the PHP development container; do not prefix it
 with `./vendor/bin/` or use a host-side Docker wrapper. The project does not
-use `bin/phpunit`. For example, from a shell inside the PHP container:
+use `bin/phpunit`. For example:
 
 ```bash
 phpunit tests/E2E/Controller/v1/User/UserControllerTest.php
 phpunit tests/Integration/Controller/v1/User/UserControllerTest.php
 ```
 
-Run the smallest relevant test class or directory first. Run `make run-tests`
+Run the smallest relevant test class or directory first, then `make run-tests`
 when broader regression coverage is warranted. Use `doc/TESTING.md` and the
 Makefile for current runner details; do not add a new test framework or runner.
-
-Before handoff, identify the tests added or changed and state which targeted
-tests ran or were blocked, including the reason. Do not commit unless explicitly
-requested.

@@ -11,9 +11,7 @@ corresponding repository and resource. A CRUD REST endpoint, DTOs, and
 AutoMapper configuration are separate concerns and should be added when the
 requested behavior needs them.
 
-Before applying this skill, read `.github/copilot-instructions.md` and
-`doc/AI_RULES.md`. Follow those general repository rules alongside this
-task-specific workflow; they take precedence if guidance conflicts.
+Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
 
 ## Workflow
 
@@ -47,10 +45,8 @@ task-specific workflow; they take precedence if guidance conflicts.
    defaults, and reversible behavior. Edit the generated migration when
    needed. Never use `doctrine:schema:update` or hand-write ad hoc SQL to
    change a live schema. Do not run migrations against production.
-7. Add focused tests under `tests/Unit/Entity/` for entity behavior that can be
-   verified without persistence, and under `tests/Integration/Entity/` for ORM
-   mapping, persistence, or relationship behavior. Follow the existing test
-   base classes and fixtures; add fixtures only when needed.
+7. Add tests for entity behavior, ORM mapping, persistence, and relationships
+   as applicable, following `.github/skills/write-api-tests/SKILL.md`.
 8. Add a corresponding repository under `src/Repository/`, extending or
     following `BaseRepository` and its entity-specific typing conventions.
     Reuse the existing repository methods and traits; add custom queries only
@@ -60,33 +56,11 @@ task-specific workflow; they take precedence if guidance conflicts.
     business behavior in the resource, and use the existing resource lifecycle
     patterns where relevant. An entity's repository and resource are required
     even when it has no CRUD controller.
-    Add corresponding repository and resource integration tests using the
-    existing test base classes.
 10. If the request needs DTOs, request mapping, or a CRUD REST endpoint, follow
      `.github/skills/add-rest-resource/SKILL.md` for those parts. Add these
      layers only when required by the requested behavior.
 
 ## Validation
 
-From the host machine, run `make bash` (or `make fish`) in the repository root
-to open a shell in the PHP Docker container. If the containers are stopped,
-start them first with `make start`, then open the container shell from a
-second host terminal. An IDE Dev Container terminal is already inside the
-container.
-
-Run project commands from the repository root inside the running PHP
-development container, not on the host machine. Invoke `phpunit` directly
-for targeted tests, without a `./vendor/bin/` prefix or host-side Docker
-wrapper. Follow `.github/skills/write-api-tests/SKILL.md` for test guidance.
-
-* Run focused entity, repository, and resource tests with `phpunit`, then the
-  broader `make run-tests` suite when warranted.
 * Run `bin/console doctrine:schema:validate` and relevant migration checks
   against the test/development database when available.
-* Run `make ecs`, `make phplint`, `make phpstan`, and `make psalm` for PHP
-  changes. Run `make lint-markdown` when this skill or other Markdown files
-  changed.
-
-Report the migration file and whether it has only been generated/reviewed or
-also applied to a non-production database. Mention any validation that could
-not run and why. Do not commit unless explicitly requested.
