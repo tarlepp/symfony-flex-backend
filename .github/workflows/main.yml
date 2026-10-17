@@ -184,6 +184,7 @@ jobs:
         with:
           name: phploc.json
           path: ./build/phploc.json
+          if-no-files-found: error
 
   ci-summary:
     name: Validate CI prerequisites

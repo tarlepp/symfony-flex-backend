@@ -783,6 +783,7 @@ phploc: ## Runs `phploc` and create json output
 phploc: info_msg := @printf $(_TITLE) "OK" "Running PHPLOC"
 phploc: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@mkdir -p build
 	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
