@@ -52,13 +52,20 @@ the same boundary used by callers.
 
 ## Running tests
 
+From the host machine, run `make bash` (or `make fish`) in the repository root
+to open a shell in the PHP Docker container. If the containers are stopped,
+start them first with `make start`, then open the container shell from a
+second host terminal. An IDE Dev Container terminal is already inside the
+container.
+
 Run commands from the repository root inside the running PHP development
-container. The project does not use `bin/phpunit`; invoke targeted tests with
-the installed runner, for example:
+container, not on the host machine. Invoke `phpunit` directly; do not prefix it
+with `./vendor/bin/` or use a host-side Docker wrapper. The project does not
+use `bin/phpunit`. For example, from a shell inside the PHP container:
 
 ```bash
-./vendor/bin/phpunit tests/E2E/Controller/v1/User/UserControllerTest.php
-./vendor/bin/phpunit tests/Integration/Controller/v1/User/UserControllerTest.php
+phpunit tests/E2E/Controller/v1/User/UserControllerTest.php
+phpunit tests/Integration/Controller/v1/User/UserControllerTest.php
 ```
 
 Run the smallest relevant test class or directory first. Run `make run-tests`
