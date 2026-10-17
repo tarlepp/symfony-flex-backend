@@ -8,9 +8,7 @@ description: Add or extend a CRUD REST resource using this repository's Symfony,
 Use this skill when adding a CRUD API resource or extending an existing
 resource's input, output, or behavior.
 
-Before applying this skill, read `.github/copilot-instructions.md` and
-`doc/AI_RULES.md`. Follow those general repository rules alongside this
-task-specific workflow; they take precedence if guidance conflicts.
+Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
 
 ## Workflow
 
@@ -48,35 +46,14 @@ task-specific workflow; they take precedence if guidance conflicts.
    classes, and apply explicit route and authorization attributes. Keep access
    checks at least as restrictive as the intended API policy. Use a custom
    `__invoke` controller only when that matches the endpoint's existing style.
-8. Add tests at the affected layers: DTO validation/mapping, resource and
-   repository integration where relevant, and HTTP behavior for controller
-   changes. Include authorization and validation outcomes when behavior depends
-   on them. Update fixtures only when the tests need the new data.
+8. Follow `.github/skills/write-tests/SKILL.md` for testing. Cover
+   authorization and validation outcomes when relevant; update fixtures only
+   when the tests need the new data.
 9. Update API documentation attributes or relevant project docs if the change
    affects the documented contract or usage.
 
 ## Validation
 
-From the host machine, run `make bash` (or `make fish`) in the repository root
-to open a shell in the PHP Docker container. If the containers are stopped,
-start them first with `make start`, then open the container shell from a
-second host terminal. An IDE Dev Container terminal is already inside the
-container.
-
-Run project commands from the repository root inside the running PHP
-development container, not on the host machine. Invoke `phpunit` directly
-for targeted tests, without a `./vendor/bin/` prefix or host-side Docker
-wrapper. Follow `.github/skills/write-api-tests/SKILL.md` for test guidance.
-
-* Run targeted `phpunit` tests for the changed layers; run `make run-tests`
-  when the change warrants broader coverage.
 * For entity or migration changes, run the existing migration/schema checks,
   including `bin/console doctrine:schema:validate` when the test database is
   available.
-* Run relevant quality checks, including `make ecs`, `make phpstan`,
-  `make psalm`, and `make lint-markdown` if this skill or other Markdown files
-  changed.
-
-Before handoff, state what changed, which validation ran or was blocked, and
-whether any migration needs to be applied. Do not commit unless explicitly
-requested.

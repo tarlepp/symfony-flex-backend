@@ -81,6 +81,9 @@ update the documentation or the implementation so that they match.
 * When following a skill, also follow `.github/copilot-instructions.md` and
   this document. Skills add task-specific workflow; they do not replace or
   override general repository rules.
+* Keep shared execution, validation, and handoff guidance in
+  `.github/skills/shared-guidance.md`; skills should link to it and contain
+  only task-specific workflows and checks.
 * Every repository skill must direct agents back to the general AI instructions
   so that starting from a skill does not bypass repository-wide requirements.
 
