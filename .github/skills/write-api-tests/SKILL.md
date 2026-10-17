@@ -9,6 +9,10 @@ Use this skill when adding or changing tests for an API endpoint, DTO, resource,
 repository, or request mapping. Prefer tests that exercise the behavior through
 the same boundary used by callers.
 
+Before applying this skill, read `.github/copilot-instructions.md` and
+`doc/AI_RULES.md`. Follow those general repository rules alongside this
+task-specific workflow; they take precedence if guidance conflicts.
+
 ## Choose the test layer
 
 * Use `tests/E2E/Controller/` for HTTP request/response behavior, including

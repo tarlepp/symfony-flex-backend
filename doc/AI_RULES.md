@@ -13,6 +13,7 @@ those expectations map to existing architecture, validation tooling, and CI.
   * [Table of Contents](#table-of-contents)
     * [Why this document exists](#why-this-document-exists)
     * [Rule hierarchy](#rule-hierarchy)
+    * [Using skills with general AI rules](#using-skills-with-general-ai-rules)
     * [Scope](#scope)
     * [Core repository rules](#core-repository-rules)
       * [1. Follow the current Symfony architecture](#1-follow-the-current-symfony-architecture)
@@ -70,6 +71,18 @@ Use the following order of precedence when maintaining AI guidance:
 
 If a rule in a documentation file conflicts with the existing codebase or CI,
 update the documentation or the implementation so that they match.
+
+## Using skills with general AI rules [ᐞ](#table-of-contents)
+
+<a id="using-skills-with-general-ai-rules"></a>
+
+* Before starting a task, inspect `.github/skills/` and use any skill that
+  directly matches the requested work.
+* When following a skill, also follow `.github/copilot-instructions.md` and
+  this document. Skills add task-specific workflow; they do not replace or
+  override general repository rules.
+* Every repository skill must direct agents back to the general AI instructions
+  so that starting from a skill does not bypass repository-wide requirements.
 
 ## Scope [ᐞ](#table-of-contents)
 
