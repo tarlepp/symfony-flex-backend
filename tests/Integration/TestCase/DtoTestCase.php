@@ -190,7 +190,7 @@ abstract class DtoTestCase extends KernelTestCase
 
     private static function initializePropertyExtractor(): PropertyInfoExtractor
     {
-        /** @var PropertyInfoExtractor|null $cache */
+        /** @var PropertyInfoExtractor|null */
         static $cache = null;
 
         if ($cache === null) {
