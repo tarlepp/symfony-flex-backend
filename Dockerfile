@@ -55,7 +55,7 @@ ARG HOST_GID=1000
 
 ENV PATH="$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION=v0.40.8
-ENV NODE_VERSION=26.10.0
+ENV NODE_VERSION=26.12.0
 
 RUN apt-get update \
     && apt-get install -y \
