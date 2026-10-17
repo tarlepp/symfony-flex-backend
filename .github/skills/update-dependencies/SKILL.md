@@ -39,8 +39,9 @@ available, state that and proceed without an empty commit.
    * Composer tool dependencies: inspect the relevant `tools/*/composer.json`
      and lockfile, and use `make update-tools` only when the requested scope
      includes those tools.
-   * Docker images: follow `doc/DOCKER_MULTI_PLATFORM.md`; verify image pins
-     with `make docker-image-verify-pins`.
+   * Docker images: follow
+     `.github/skills/update-docker-images/SKILL.md` for image selection,
+     multi-platform digest pinning, and validation.
    * GitHub Actions: follow `doc/ACTIONS_UPDATE.md` and use
      `make check-action-updates` or `bash scripts/check-action-updates.sh` as
      appropriate. Keep immutable SHA pins and update their version comments
