@@ -74,6 +74,7 @@ jobs:
           globs: |
             README.md
             .devcontainer/*.md
+            .github/skills/**/*.md
             doc/*.md
             docker/*.md
             secrets/*.md
