@@ -1,4 +1,4 @@
-FROM nginx:1.30.6-alpine-slim@sha256:3028fc1419f99b95c1c69f844bbaf49dc1b881750c51b497fc721ac4f02a14e6
+FROM nginx:1.31.0-alpine-slim@sha256:241b0d0fe06250e026e7a35a008d022c9a1d3bec19442d65cc33b84d0b5dd64d
 
 # Compose mounts nginx-dev.conf over this production configuration for development.
 ADD nginx.conf /etc/nginx/conf.d/default.conf
