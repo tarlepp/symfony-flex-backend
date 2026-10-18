@@ -272,7 +272,17 @@ make run-tests         # Run all tests
 
 <a id="running-tests"></a>
 
+For targeted tests, use just `phpunit` from the repository root inside the PHP
+development container; no explicit runner path is needed. Open a container
+shell with `make bash` or `make fish` from the host, or use the IDE Dev Container
+terminal. See [the testing guide](doc/TESTING.md) for details and
+[the test-writing skill](.github/skills/write-tests/SKILL.md) for test selection
+and conventions.
+
 ```bash
+# A targeted test class (inside the PHP development container)
+phpunit tests/Unit/Rest/SearchTermTest.php
+
 # All tests (single thread)
 make run-tests
 

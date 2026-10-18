@@ -69,9 +69,17 @@ dependencies with doubles.
 
 ## Running tests
 
-Use `phpunit` directly inside the PHP development container to run a targeted
-class or directory; do not use `./vendor/bin/phpunit`, `bin/phpunit`, or a
-host-side Docker wrapper. For example:
+Run targeted tests from the repository root inside the PHP development
+container. Use `make bash` or `make fish` from the host to open that shell; an
+IDE Dev Container terminal is already inside the container.
+
+Use just `phpunit`; no explicit path is needed inside the container. The
+development `Dockerfile` adds `/app/vendor/bin` to `PATH`, so this command uses
+the project's Composer-installed runner, not a separate global installation.
+Do not use `bin/phpunit`, which does not exist in this project, or run project
+tests on the host.
+
+For example, inside the container:
 
 ```bash
 phpunit tests/E2E/Controller/v1/User/UserControllerTest.php
