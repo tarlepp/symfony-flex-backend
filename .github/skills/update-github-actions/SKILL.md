@@ -10,6 +10,8 @@ description: Inspect and update SHA-pinned GitHub Actions in workflows and local
 Use this skill when reviewing or updating external GitHub Action versions and
 commit pins. It covers workflow references and dependencies inside local
 composite actions, not arbitrary CI redesign or Composer and Docker upgrades.
+For job, trigger, or shared bootstrap behavior changes, use
+[update-github-workflows](../update-github-workflows/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
