@@ -12,6 +12,10 @@ configuration, dependency-injection wiring, or environment-specific overrides.
 It covers configuration changes, not dependency upgrades or Docker image
 updates; use the corresponding repository skills for those tasks.
 
+For updates to installed Symfony Flex recipes, follow
+`.github/skills/update-symfony-recipes/SKILL.md` for the Composer update workflow,
+then use this skill to integrate generated configuration changes.
+
 Follow the [shared skill guidance](../shared-guidance.md), including
 `.github/copilot-instructions.md` and `doc/AI_RULES.md`. Read
 `doc/CUSTOM_CONFIGURATION.md` for the existing local-configuration workflow.

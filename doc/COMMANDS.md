@@ -13,6 +13,7 @@ application during development stage.
   * [Table of Contents](#table-of-contents)
     * [Commands](#commands)
       * [Makefile](#makefile)
+      * [Symfony Flex recipes](#symfony-flex-recipes)
       * [Symfony console](#symfony-console)
       * [Custom commands](#custom-commands)
         * [user:management](#usermanagement)
@@ -173,6 +174,37 @@ Rebuild and restart the development container:
 ```bash
 make daemon-build
 ```
+
+### Symfony Flex recipes [ᐞ](#table-of-contents)
+
+<a id="symfony-flex-recipes"></a>
+
+Run these Composer commands from the repository root inside the PHP development
+container (`make bash` from the host):
+
+```bash
+composer recipes --help
+composer recipes                         # List recipes and update availability
+composer recipes --outdated              # List outdated recipes only
+composer recipes vendor/package          # Inspect files, history, and update instructions
+composer recipes:update --help
+composer recipes:update vendor/package   # Apply one recipe update
+```
+
+Recipe updates change application scaffolding and `symfony.lock`, separately
+from Composer package upgrades. The updater requires a clean tracked working
+tree and index, applies patches, and automatically stages changes without
+committing them. Inspect untracked files for collisions as well. Do not discard
+or stash existing work merely to satisfy the clean-tree requirement.
+
+Review `git status`, `git diff --cached`, and `git diff` after updating. A
+successful command can still report conflicts or skipped files; resolve and
+validate these before considering the update complete. Do not substitute a
+forced `recipes:install` for an update without reviewing its overwrite risk.
+
+Follow the [Symfony Flex recipe skill](../.github/skills/update-symfony-recipes/SKILL.md)
+for the detailed workflow, preservation of project customizations, and
+change-specific validation.
 
 ### Symfony console [ᐞ](#table-of-contents)
 
