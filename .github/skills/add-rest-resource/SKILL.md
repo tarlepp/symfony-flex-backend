@@ -37,7 +37,8 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
 5. Add or update the repository in `src/Repository/`, following
    `BaseRepository` conventions and entity generics. Keep query/data-access
    behavior there; put orchestration and business rules in a resource or
-   service.
+   service. Follow `.github/skills/add-doctrine-query/SKILL.md` for custom
+   queries, filtering, search, sorting, pagination, and database tests.
 6. Add or update the resource in `src/Resource/`, extending `RestResource` and
    preserving its entity/repository types. Reuse lifecycle callbacks and
    repository helpers where they fit instead of duplicating generic CRUD
