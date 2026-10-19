@@ -27,6 +27,7 @@ new developers - so this document is trying to solve that issue.
       * [Alternatives](#alternatives)
     * [Resources](#resources)
       * [Lifecycle callbacks](#lifecycle-callbacks)
+    * [Event listeners and subscribers](#event-listeners-and-subscribers)
     * [Repositories](#repositories)
       * [Parameter handling](#parameter-handling)
       * [Query builder callbacks and joins](#query-builder-callbacks-and-joins)
@@ -290,6 +291,18 @@ attached to following resource methods;
 Each of these you can use `before` and `after` methods within your resource
 service to control your request and response as you like. For more information
 about these see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
+
+## Event listeners and subscribers [ᐞ](#table-of-contents)
+
+<a id="event-listeners-and-subscribers"></a>
+
+Use Symfony subscribers for cohesive event-handling concerns that declare their
+own subscriptions, and listeners when event bindings belong in configuration or
+attributes. Doctrine lifecycle events use separate registration. Event count
+alone does not decide which to use.
+
+See [the event-handling guide](EVENT_HANDLING.md) for repository examples,
+registration requirements, ordering, and testing guidance.
 
 ## Repositories [ᐞ](#table-of-contents)
 

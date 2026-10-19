@@ -28,6 +28,8 @@ application.
 * [Development guide](DEVELOPMENT.md)
 * [Dev Container setup](../.devcontainer/README.md)
 * [Docker multi-platform images](DOCKER_MULTI_PLATFORM.md)
+* [Event listeners and subscribers](EVENT_HANDLING.md) - choosing, registering,
+  and testing Symfony and Doctrine event handlers.
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
 * [Security policy](SECURITY.md)
 * [PhpStorm configuration](PHPSTORM.md)
