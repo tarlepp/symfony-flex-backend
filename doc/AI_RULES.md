@@ -86,6 +86,11 @@ update the documentation or the implementation so that they match.
   only task-specific workflows and checks.
 * Every repository skill must direct agents back to the general AI instructions
   so that starting from a skill does not bypass repository-wide requirements.
+* For event-handler changes, use the
+  [listener skill](../.github/skills/add-event-listener/SKILL.md) or
+  [subscriber skill](../.github/skills/add-event-subscriber/SKILL.md).
+  Follow [the event-handling guide](EVENT_HANDLING.md) to choose the appropriate
+  pattern and distinguish Symfony events from Doctrine lifecycle events.
 
 ## Scope [ᐞ](#table-of-contents)
 
