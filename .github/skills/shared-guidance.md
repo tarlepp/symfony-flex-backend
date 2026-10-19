@@ -36,9 +36,11 @@ the task-specific workflow in the skill.
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.
 * Before framework-dependent work, check `composer.json` for supported PHP
-  and package constraints, `composer.lock` for installed versions, and
+  and package constraints, `composer.lock` for locked versions, and
   `symfony.lock` for Flex recipe metadata. Do not treat recipe versions as
   installed package versions or assume an uninstalled component is available.
+  If a command's behavior depends on the installed tooling, inspect its help
+  or installed implementation; the vendor directory can differ from the lock.
 * Read the affected implementation, configuration, callers, and nearby tests.
   Trace the actual behavior boundary before editing; use existing code and
   supported package contracts over remembered defaults or outdated docs.
@@ -64,6 +66,9 @@ safeguards; do not replace them with generic assumptions.
 * Run project commands from the repository root inside the running PHP
   development container or IDE Dev Container. From the host, use `make bash` or
   `make fish`; if containers are stopped, start them with `make start`.
+  Non-interactive commands can use `docker compose exec -T php <command>`.
+  Docker inspection, Compose validation, and image builds run from the host,
+  as described by the relevant skill.
 * Add or update tests for behavior changes. Use
   [write-tests](write-tests/SKILL.md) as the single source for test
   selection, fixtures, test doubles, runner commands, and test-writing
@@ -80,6 +85,9 @@ safeguards; do not replace them with generic assumptions.
 * Run relevant quality checks for the changed code. For PHP changes, these
   include `make ecs`, `make phplint`, `make phpstan`, and `make psalm`. Run
   `make lint-markdown` when Markdown files change.
+  While iterating on documentation-only changes, Markdown lint and checks of
+  affected links and structure are sufficient; do not run application tests
+  merely because a skill documents test commands.
 * Before a commit, follow the full validation suite in
   [repository instructions](../copilot-instructions.md).
 * If a required check cannot run, identify the blocker in the handoff.
@@ -99,9 +107,15 @@ guidance or duplicating fast-changing versions from manifests.
 
 <a id="handoff"></a>
 
-State what changed and which relevant tests and checks ran or were blocked. For
-database changes, also state whether a migration was generated, reviewed, or
-applied to a non-production database. Do not commit unless explicitly asked.
+State what changed, which files were affected, and each validation command with
+its result or reason it was skipped or blocked. Distinguish checks of skill
+documentation from execution of the workflow it describes; writing a recipe
+skill, for example, does not imply that recipes were updated.
+
+For database changes, state whether a migration was generated, reviewed, or
+applied to a non-production database. Include proposed commit messages per
+logical change using `Type(scope): short description`. Do not commit unless
+explicitly asked.
 
 ---
 

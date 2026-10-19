@@ -28,6 +28,27 @@ Before starting a task, select the matching skill below and follow the
 multiple concerns. Keep common execution, validation, and handoff rules in the
 shared guidance rather than duplicating them in every skill.
 
+Start with the skill matching the requested outcome, and follow additional
+skills only for layers the task actually changes:
+
+* For a complete CRUD feature, start with
+  [add-rest-resource](add-rest-resource/SKILL.md); use the entity, DTO, query,
+  and testing skills for the affected parts. A DTO-only or query-only change
+  does not require scaffolding a new resource.
+* For authentication flows or broad access policy, use
+  [implement-api-authentication](implement-api-authentication/SKILL.md).
+  For subject-based permissions, start with
+  [add-security-voter](add-security-voter/SKILL.md).
+* For package versions, start with
+  [update-dependencies](update-dependencies/SKILL.md); for installed recipe
+  scaffolding, use [update-symfony-recipes](update-symfony-recipes/SKILL.md);
+  for settings and service wiring, use
+  [update-application-configuration](update-application-configuration/SKILL.md).
+  Docker image changes use [update-docker-images](update-docker-images/SKILL.md).
+* Use [write-tests](write-tests/SKILL.md) whenever tests change. For event
+  handlers, use the [event-handling guide](../../doc/EVENT_HANDLING.md) to
+  choose the listener or subscriber skill.
+
 ## Available skills [ᐞ](#table-of-contents)
 
 <a id="available-skills"></a>
@@ -70,6 +91,12 @@ shared guidance rather than duplicating them in every skill.
   domain decisions, safety checks, and verification details in each skill.
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
+* Check that front-matter names match directory names, every skill is listed
+  exactly once, and relative links, anchors, and table-of-contents entries
+  resolve. Markdown lint alone does not verify those relationships.
+* Verify referenced classes, commands, flags, and example files against the
+  current repository. Distinguish required policy from illustrative examples;
+  do not turn one implementation detail into an unconditional rule.
 * Run `make lint-markdown` after documentation changes.
 
 ---

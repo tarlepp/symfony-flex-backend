@@ -64,8 +64,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    classes, and apply explicit route and authorization attributes. Keep access
    checks at least as restrictive as the intended API policy. Use a custom
    `__invoke` controller only when that matches the endpoint's existing style.
-8. Cover authorization and validation outcomes when relevant; update fixtures only
-   when the tests need the new data.
+8. Exercise the changed actions through HTTP. Assert successful response status,
+   shape, and field exposure, plus validation failures and permitted/denied
+   callers where affected. For writes, verify persisted state and
+   create/update/patch differences rather than only a successful status.
+   Update fixtures only when the tests need the new data.
 
 ## Validation [ᐞ](#table-of-contents)
 
@@ -74,6 +77,10 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 * For entity or migration changes, run the existing migration/schema checks,
   including `bin/console doctrine:schema:validate` when the test database is
   available.
+* Verify registered routes, allowed HTTP methods, action-to-DTO selection, and
+  response serializer groups through the affected endpoint tests. Inspect
+  `ResponseHandler` and the resource's serializer context rather than assuming
+  a request DTO's fields define the response.
 
 ---
 
