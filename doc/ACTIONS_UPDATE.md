@@ -8,6 +8,9 @@ project.
 All actions are pinned to commit SHAs (not version tags) to reduce
 supply-chain risk.
 
+For AI-assisted updates, follow the
+[GitHub Actions update skill](../.github/skills/update-github-actions/SKILL.md).
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
@@ -74,8 +77,8 @@ That gives:
 
 <a id="current-action-pins"></a>
 
-The current pin list is generated from `.github/workflows/*.yml` so it does not
-become stale.
+The current pin list is generated from `.github/workflows/*.yml` and
+`.github/actions/*/action.yml` so it does not become stale.
 
 Run this command to print current pins as markdown:
 
@@ -117,8 +120,11 @@ Use one of these methods to find the SHA for a new version.
 ```bash
 # Get SHA for a specific version tag.
 git ls-remote --tags https://github.com/actions/checkout.git \
-  refs/tags/v6.0.3 | awk '{print $1}'
+  'refs/tags/v6.0.3' 'refs/tags/v6.0.3^{}'
 ```
+
+Use the peeled `^{}` commit for an annotated tag; the unpeeled value identifies
+the tag object. For a lightweight tag, verify that its target is a commit.
 
 #### Method B: GitHub CLI [ᐞ](#table-of-contents)
 
@@ -129,6 +135,9 @@ git ls-remote --tags https://github.com/actions/checkout.git \
 gh api repos/actions/checkout/git/refs/tags/v6.0.3 --jq '.object.sha'
 ```
 
+Inspect `.object.type` as well: a `tag` object must be dereferenced through the
+Git tags API until its commit is resolved.
+
 #### Method C: `curl` + `jq` [ᐞ](#table-of-contents)
 
 <a id="method-c-curl-jq"></a>
@@ -136,14 +145,18 @@ gh api repos/actions/checkout/git/refs/tags/v6.0.3 --jq '.object.sha'
 ```bash
 # Get latest release metadata.
 curl -s https://api.github.com/repos/actions/checkout/releases/latest \
-  | jq '.target_commitish'
+  | jq -r '.tag_name'
 ```
+
+Resolve that exact tag to its commit using Method A or B. The release's
+`target_commitish` may be a branch name; it is not a verified release SHA.
 
 ### Step 3: Update workflow files [ᐞ](#table-of-contents)
 
 <a id="step-3-update-workflow-files"></a>
 
-Update every occurrence of that action across workflows.
+Update every in-scope occurrence of that action across workflows and local
+composite actions. Preserve intentionally different major-version lines.
 Example: update `actions/checkout` from `v6.0.2` to `v6.0.3`.
 
 Before:
@@ -232,9 +245,11 @@ bash scripts/check-action-updates.sh
 
 What it does:
 
-* Discovers pinned actions dynamically from `.github/workflows/*.yml`.
-* Compares each pin against the latest compatible release tag.
-* Resolves the full commit SHA for discovered updates.
+* Discovers pinned actions dynamically from `.github/workflows/*.yml` and
+  `.github/actions/*/action.yml`.
+* Compares version comments against the latest version-like tag it discovers.
+* Reports a SHA candidate for discovered updates; verify annotated tag targets
+  separately before pinning them.
 * Shows summary output and source lines for each finding.
 * Reports discovery warnings such as unpinned refs.
 
@@ -263,7 +278,8 @@ Updates available:       2
 
 Exit codes:
 
-* `0`: no discovery warnings and no updates.
+* `0`: no discovery warnings and no recorded updates; remote lookup failures
+  are not guaranteed to produce a failing exit code.
 * `1`: updates are available.
 * `2`: discovery warnings found.
 
@@ -293,10 +309,15 @@ Requirements:
 
 Important behavior:
 
-* The script tracks updates in the same major version line by default.
-* This avoids false positives from alternate tag streams in some repositories.
+* The script sorts version-like tags across major versions; it does not
+  enforce compatibility or reliably exclude prereleases.
 * The script continues checks even when discovery warnings are present.
-* Move to a new major version manually after reviewing release notes.
+* Review release notes and obtain agreement on major upgrades before applying
+  a suggestion.
+* Discovery is line-based and limited to the paths above; inspect alternate
+  YAML filenames and unusual reference forms separately when present.
+* The script does not verify current tag/SHA parity, including moved tags.
+  Review individual lookup results rather than trusting the final summary.
 
 Note: the script reports updates but does not apply them.
 

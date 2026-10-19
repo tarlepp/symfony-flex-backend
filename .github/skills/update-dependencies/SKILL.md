@@ -81,11 +81,10 @@ upgrading packages.
    * Docker images: follow
      [update-docker-images](../update-docker-images/SKILL.md) for image selection,
      multi-platform digest pinning, and validation.
-   * GitHub Actions: follow [ACTIONS_UPDATE.md](../../../doc/ACTIONS_UPDATE.md)
-     and use
-     `make check-action-updates` or `bash scripts/check-action-updates.sh` as
-     appropriate. Keep immutable SHA pins and update their version comments
-     consistently.
+   * GitHub Actions: follow
+     [update-github-actions](../update-github-actions/SKILL.md) for the existing
+     update-check script, verified SHA pins, composite-action coverage, and
+     workflow-specific validation.
 3. Review the proposed version changes against the current constraints and
    supported PHP/Symfony versions in `composer.json`, package compatibility,
    security advisories, and relevant upstream changelogs. Do not widen

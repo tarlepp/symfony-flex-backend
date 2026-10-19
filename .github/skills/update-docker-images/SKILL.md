@@ -8,9 +8,9 @@ description: Update Docker image tags and multi-platform digest pins in Dockerfi
 <a id="what-is-this"></a>
 
 Use this skill when updating Docker base images, images copied from external
-build stages, Compose service images, or CI container images. For Composer or
-GitHub Actions dependency updates, use
-[update-dependencies](../update-dependencies/SKILL.md) instead.
+build stages, Compose service images, or CI container images. For Composer
+updates, use [update-dependencies](../update-dependencies/SKILL.md); for action
+pins, use [update-github-actions](../update-github-actions/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
