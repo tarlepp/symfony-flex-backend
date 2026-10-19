@@ -64,6 +64,10 @@ shared guidance rather than duplicating them in every skill.
   rather than formatting their paths only as inline code.
 * End each skill with `Back to previous` linking to this index and
   `Back to main README.md` linking to the repository README.
+* Put common preparation, contract clarification, test-selection rules,
+  configuration linting, and documentation/handoff requirements in
+  [shared guidance](shared-guidance.md). Keep concrete inspection targets,
+  domain decisions, safety checks, and verification details in each skill.
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
 * Run `make lint-markdown` after documentation changes.

@@ -30,12 +30,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Check `composer.json` for the current PHP, Doctrine ORM, and migrations
-   versions, and `symfony.lock` for installed recipes. Inspect a similar entity
-   and its tests under `src/Entity/` and `tests/` before choosing a pattern.
-   Use [AGENTS.md](../../../AGENTS.md) and the existing implementation as the
-   architectural source
-   of truth.
+1. Inspect a similar entity and its tests under `src/Entity/` and `tests/`
+   before choosing a mapping and persistence pattern.
 2. Confirm what the entity needs to support: REST input/output, relations,
    audit fields, and soft/hard deletion. Reuse an existing entity trait or
    shared pattern only when its behavior fits; do not add unrelated fields.
@@ -62,7 +58,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    needed. Never use `doctrine:schema:update` or hand-write ad hoc SQL to
    change a live schema. Do not run migrations against production.
 7. Add tests for entity behavior, ORM mapping, persistence, and relationships
-   as applicable, following [write-tests](../write-tests/SKILL.md).
+   as applicable.
 8. Add a corresponding repository under `src/Repository/`, extending or
     following `BaseRepository` and its entity-specific typing conventions.
     Reuse the existing repository methods and traits; add custom queries only

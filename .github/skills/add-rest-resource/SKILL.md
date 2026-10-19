@@ -27,8 +27,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Inspect `composer.json`, `symfony.lock`, the target endpoint's tests, and a
-   complete nearby feature. `ApiKey` is one reference implementation; confirm
+1. Inspect the target endpoint's tests and a complete nearby feature.
+   `ApiKey` is one reference implementation; confirm
    its patterns against current code before reusing them. Check existing routes,
    role requirements, DTO conventions, and migrations before editing.
 2. Keep the change within the existing vertical-slice architecture:
@@ -47,8 +47,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    Update `src/AutoMapper/` request mapping and configuration when request
    values need conversion (for example, resolving related entity IDs to entity
    references). Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
-   for the
-   detailed DTO, validation, mapping, and argument-resolution workflow.
+   for the detailed DTO, validation, mapping, and argument-resolution workflow.
    Do not expose entities directly in responses.
 5. Add or update the repository in `src/Repository/`, following
    `BaseRepository` conventions and entity generics. Keep query/data-access
@@ -65,11 +64,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    classes, and apply explicit route and authorization attributes. Keep access
    checks at least as restrictive as the intended API policy. Use a custom
    `__invoke` controller only when that matches the endpoint's existing style.
-8. Follow [write-tests](../write-tests/SKILL.md) for testing. Cover
-   authorization and validation outcomes when relevant; update fixtures only
+8. Cover authorization and validation outcomes when relevant; update fixtures only
    when the tests need the new data.
-9. Update API documentation attributes or relevant project docs if the change
-   affects the documented contract or usage.
 
 ## Validation [ᐞ](#table-of-contents)
 

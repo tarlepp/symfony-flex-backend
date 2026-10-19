@@ -86,22 +86,17 @@ upgrading packages.
    configuration, and retain only changes required by the requested updates.
    Do not hand-edit lockfiles or replace dependency management with manual
    version pinning.
-5. Summarize the dependency scopes and versions changed, notable compatibility
-   or recipe changes, and validation results. Do not commit unless explicitly
-   asked.
+5. Include dependency scopes and versions changed, plus notable compatibility
+   or recipe changes, in the handoff.
 
 ## Validation [ᐞ](#table-of-contents)
 
 <a id="validation"></a>
 
 * For Composer changes, run `make composer-validate`, `make check-security`,
-  and `make run-tests`; run the applicable quality checks from
-  [repository instructions](../../copilot-instructions.md) when the update
-  could affect application
-  code or build tooling.
+  and `make run-tests`.
 * For Docker and GitHub Actions updates, run their documented pin/update
-  checks and relevant CI checks. Follow the shared guidance for execution
-  environment and report any checks that could not run.
+  checks and relevant CI checks.
 
 ---
 

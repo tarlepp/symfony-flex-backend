@@ -28,8 +28,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Read `composer.json`, `symfony.lock`, the dispatch site or framework event
-   contract, and nearby handlers and tests. Identify the event system, exact
+1. Read the dispatch site or framework event contract, and nearby handlers and
+   tests. Identify the event system, exact
    event name, payload type, dispatch timing, and any dispatcher-specific
    registration. Do not infer these from a class name alone.
 2. Read [the event-handling guide](../../../doc/EVENT_HANDLING.md) before
@@ -67,8 +67,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    authorization, and sensitive-data handling. Do not swallow exceptions,
    perform unrelated side effects, or treat synchronous events as background
    jobs.
-8. Follow [write-tests](../write-tests/SKILL.md). Cover the handler's effect,
-   relevant no-op paths, invalid inputs, and failures. Add registration
+8. Cover the handler's effect, relevant no-op paths, invalid inputs, and failures.
+   Add registration
    coverage through the actual caller boundary: dispatch a Symfony event
    through the container's dispatcher, or persist/update and flush an entity
    through Doctrine as appropriate. Direct method calls alone do not prove
@@ -81,14 +81,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="validation"></a>
 
-* Run the targeted listener and caller-boundary tests inside the PHP development
-  container, plus relevant checks from the shared guidance.
 * For Symfony listeners, inspect
   `bin/console debug:event-dispatcher '<event-name>'` for the intended event,
   callback, and priority. Use `--dispatcher` when the event uses a dedicated
   dispatcher; this command does not verify Doctrine lifecycle registration.
-* For service registration changes, run `bin/console lint:container`. For
-  Doctrine listeners, verify registration and persisted results through the
+* For Doctrine listeners, verify registration and persisted results through the
   ORM test rather than relying on Symfony dispatcher output.
 
 ---

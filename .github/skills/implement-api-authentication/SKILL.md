@@ -27,11 +27,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Check `composer.json` and `symfony.lock` for the installed Symfony Security
-   and authentication bundles. Inspect `config/packages/security.yaml`, the
-   relevant routes and controllers, and nearby security classes and tests
-   before changing behavior. Treat the current implementation as the source of
-   truth rather than assuming framework or bundle defaults.
+1. Inspect `config/packages/security.yaml`, the relevant routes and controllers,
+   and nearby security classes and tests
+   before changing behavior.
 2. Clarify the intended caller, credentials, public/protected endpoints, and
    required roles when they are not specified. Ask before making non-trivial
    changes to authentication methods, role policy, token lifecycle, or access
@@ -55,9 +53,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    fixtures, or documentation. Follow the existing credential creation,
    rotation, and revocation workflows; do not invent a new token storage or
    lifecycle design without explicit requirements.
-6. Follow [write-tests](../write-tests/SKILL.md) for testing. Cover valid
-   and invalid or missing credentials, status codes, permitted and denied
-   roles, and anonymous access where relevant. Exercise both JWT and API-key
+6. Cover valid and invalid or missing credentials, status codes, permitted and
+   denied roles, and anonymous access where relevant. Exercise both JWT and API-key
    authentication when shared firewall or policy behavior changes.
 7. Update OpenAPI security metadata or relevant documentation when the
    documented authentication requirements or endpoint access contract changes.
@@ -68,11 +65,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="validation"></a>
 
-* Run the targeted authentication and authorization tests inside the PHP
-  development container, plus relevant checks from shared guidance.
-* For firewall, access-control, or service wiring changes, run
-  `bin/console lint:container` and verify allowed and denied requests through
-  the affected authentication paths.
+* For firewall, access-control, or service wiring changes, verify allowed and
+  denied requests through the affected authentication paths.
 
 ---
 

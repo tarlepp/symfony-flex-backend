@@ -30,9 +30,8 @@ for the repository security policy.
 
 <a id="workflow"></a>
 
-1. Read `composer.json` for supported PHP and Symfony Security versions and
-   `symfony.lock` for recipes. Inspect `config/packages/security.yaml`,
-   `config/services.yaml`, `src/Security/Voter/IsUserHimselfVoter.php`, its tests,
+1. Inspect `config/packages/security.yaml`, `config/services.yaml`,
+   `src/Security/Voter/IsUserHimselfVoter.php`, its tests,
    and every affected authorization call site before choosing a pattern.
    Trace how the subject is resolved and which authenticated identity reaches
    the voter; do not infer either from the route or entity class alone.
@@ -86,8 +85,7 @@ for the repository security policy.
    manually instantiate a voter at application call sites. If service
    configuration is exceptional, inspect its registration before changing it.
    Keep request-specific identities and subjects out of shared service state.
-9. Follow [write-tests](../write-tests/SKILL.md). Use
-   `tests/Integration/Security/Voter/IsUserHimselfVoterTest.php` as a reference
+9. Use `tests/Integration/Security/Voter/IsUserHimselfVoterTest.php` as a reference
    for exercising the public `vote()` boundary and asserting grant, deny, and
    abstain results, not protected methods. Cover unsupported attributes and
    subjects, anonymous or inappropriate identities, matching and different
@@ -107,9 +105,7 @@ for the repository security policy.
 
 <a id="validation"></a>
 
-* Run targeted voter, decision-manager, and affected endpoint tests inside the
-  PHP development container, plus relevant checks from shared guidance.
-* For service wiring changes, run `bin/console lint:container` and inspect
+* For service wiring changes, inspect
   `bin/console debug:container --tag=security.voter`. A registered service alone
   does not prove that the intended permission is enforced; verify the actual
   decision and caller boundary.

@@ -134,15 +134,9 @@ particular, do not invent a dry-run option for `recipes:update`.
 * Run `git diff --check` and `git diff --cached --check`, check for unmerged
   paths, and review both staged and unstaged changes. Do not treat a zero
   updater exit status as proof of a conflict-free update.
-* Run the checks appropriate to the actual changes: `make lint-yaml` and
-  `bin/console lint:container` for Symfony configuration, affected environment
-  and caller-boundary tests for behavior, and relevant PHP quality checks from
-  shared guidance for generated PHP. Use `make composer-validate` if Composer
-  metadata changes and `make lint-markdown` for Markdown changes. Validate
+* Use `make composer-validate` if Composer metadata changes. Validate
   affected Docker configuration from the host without recreating services.
-* Follow the full repository pre-commit suite before an authorized commit.
-  Report blockers explicitly; do not disable safeguards or overwrite local
-  secrets to make validation pass.
+* Do not disable safeguards or overwrite local secrets to make validation pass.
 
 ---
 

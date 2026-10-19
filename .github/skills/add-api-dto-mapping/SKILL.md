@@ -30,9 +30,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Read `composer.json` for installed packages and supported versions, and
-   `symfony.lock` for recipes. Trace the affected endpoint through its
-   controller DTO selection, `RestDtoValueResolver`, AutoMapper configuration,
+1. Trace the affected endpoint through its controller DTO selection,
+   `RestDtoValueResolver`, AutoMapper configuration,
    request mapper, DTO, and resource validation/persistence. Inspect nearby
    tests and `BodySubscriber` when request-body handling matters. Use
    `src/DTO/User/` and `src/AutoMapper/User/` as references, not as templates
@@ -90,8 +89,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    privileged fields incidentally. Preserve the endpoint's established output
    contract rather than adding a new response-mapping architecture as part of
    an input-only change.
-9. Follow [write-tests](../write-tests/SKILL.md). Inspect
-   `tests/Integration/DTO/`, `tests/Integration/AutoMapper/`, and
+9. Inspect `tests/Integration/DTO/`, `tests/Integration/AutoMapper/`, and
    `tests/Integration/ValueResolver/RestDtoValueResolverTest.php` for existing
    helpers. Cover setters and visited fields, transformations, registered DTO
    mappings, validation, and entity updates as relevant. Exercise omitted

@@ -27,8 +27,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Read `composer.json`, `symfony.lock`, the event dispatch sites or framework
-   contracts, and nearby subscribers and tests. Confirm exact event names,
+1. Read the event dispatch sites or framework contracts, and nearby subscribers
+   and tests. Confirm exact event names,
    argument types, timing, and the dispatcher used. Read
    [the event-handling guide](../../../doc/EVENT_HANDLING.md) for the
    listener/subscriber decision.
@@ -68,8 +68,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    [add-event-listener](../add-event-listener/SKILL.md) and the installed
    DoctrineBundle's supported listener registration instead of introducing
    legacy Doctrine subscribers.
-8. Follow [write-tests](../write-tests/SKILL.md). Cover the exact subscription
-   map, including priorities, as in
+8. Cover the exact subscription map, including priorities, as in
    `tests/Unit/EventSubscriber/AcceptLanguageSubscriberTest.php`, and observable
    handler behavior as in its integration tests. Also exercise the actual
    caller boundary for registration changes: dispatch through the container's
@@ -78,21 +77,16 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    detect missing registration, wrong dispatcher, or duplicate execution.
    Cover relevant subrequests, no-op paths, invalid inputs, errors, ordering,
    and security outcomes.
-9. Update relevant event or API documentation when the change affects
-   observable behavior or establishes a new subscription convention.
 
 ## Validation [ᐞ](#table-of-contents)
 
 <a id="validation"></a>
 
-* Run targeted subscriber and caller-boundary tests inside the PHP development
-  container, plus the relevant checks from shared guidance.
 * Inspect `bin/console debug:event-dispatcher '<event-name>'` to confirm each
   affected callback and priority. For a dedicated dispatcher, select it with
   `--dispatcher`.
-* For service wiring changes, run `bin/console lint:container`. Confirm the
-  handler is invoked only as often as intended through the real dispatcher,
-  not merely that `getSubscribedEvents()` returns the expected array.
+* Confirm the handler is invoked only as often as intended through the real
+  dispatcher, not merely that `getSubscribedEvents()` returns the expected array.
 
 ---
 

@@ -36,11 +36,9 @@ local-configuration workflow.
 
 <a id="workflow"></a>
 
-1. Read `composer.json` for available packages and supported versions, and
-   `symfony.lock` for recipes. Inspect the affected configuration, its service
-   consumers, and nearby tests. Trace the setting from its source through env
-   processors, parameters, and dependency injection to its actual use. Prefer
-   the implementation over outdated documentation or assumed Symfony defaults.
+1. Inspect the affected configuration, its service consumers, and nearby tests.
+   Trace the setting from its source through env
+   processors, parameters, and dependency injection to its actual use.
 2. Establish the setting's name, type, requiredness, default, intended
    environments, and effect. Ask before changing unspecified defaults,
    authentication, CORS, trusted proxies, persistence, or other access and
@@ -96,10 +94,9 @@ local-configuration workflow.
    registration or assuming the component exists. Preserve existing security
    guards and logging redaction; do not disable validation, logging, or a
    protection mechanism to make container compilation succeed.
-10. Follow [write-tests](../write-tests/SKILL.md) for behavior changes. Exercise
-    the real configured consumer, not just a manually constructed service with
-    hard-coded arguments. Cover the intended default and override behavior,
-    relevant missing or malformed values, and affected environments. For
+10. Exercise the real configured consumer, not just a manually constructed
+    service with hard-coded arguments. Cover the intended default and override
+    behavior, relevant missing or malformed values, and affected environments. For
     wiring changes, verify the selected implementation and actual caller
     behavior so a valid but unused service definition cannot pass unnoticed.
     Reuse existing consumer tests such as
@@ -117,19 +114,15 @@ local-configuration workflow.
 
 <a id="validation"></a>
 
-* Run `make lint-yaml` for YAML changes and `make lint-configuration` for the
-  active application JSON file, inside the development container or through
-  container-aware Make targets. JSON syntax validation does not verify required
+* Run `make lint-configuration` for the active application JSON file.
+  JSON syntax validation does not verify required
   keys, types, env precedence, or consumer behavior; validate those separately.
   If editing a different configuration file, verify that file too rather than
   assuming the active-file check covers it.
-* For service or package configuration changes, run
-  `bin/console lint:container` and boot or test the affected environments.
-  Env values may resolve lazily: inspect the installed command's support for
+* Env values may resolve lazily: inspect `bin/console lint:container` support for
   `--resolve-env-vars` when required, and exercise the consumer to verify
   runtime resolution. Do not print resolved secret values.
-* Run targeted consumer and caller-boundary tests plus relevant checks from
-  shared guidance. For Compose changes, validate with
+* For Compose changes, validate with
   `docker compose config --quiet` from the host, including the relevant
   production overrides when affected. Do not recreate services to validate
   configuration without approval.

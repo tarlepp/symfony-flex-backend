@@ -30,9 +30,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Read `composer.json` for supported PHP, Doctrine ORM, and DBAL versions,
-   `symfony.lock` for recipes, and `config/packages/doctrine.yaml` for mappings
-   and database types. Inspect the target entity, repository, resource, callers,
+1. Read `config/packages/doctrine.yaml` for mappings and database types.
+   Inspect the target entity, repository, resource, callers,
    and nearby tests. Trace request criteria through `RequestHandler`, controller
    processing, and resource normalization when API query parameters are
    affected. Do not assume that raw HTTP input and repository arguments have
@@ -99,8 +98,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    matters. Add an index only when justified, through entity mapping and a
    reviewed migration using the entity skill; never change a live schema with
    ad hoc SQL or `doctrine:schema:update`.
-10. Follow [write-tests](../write-tests/SKILL.md). Use real-database Functional
-    tests such as `tests/Functional/Repository/UserRepositoryTest.php` to prove
+10. Use real-database Functional tests such as
+    `tests/Functional/Repository/UserRepositoryTest.php` to prove
     query results; mock QueryBuilder expectations alone cannot verify SQL
     semantics. Inspect existing repository test helpers before adding setup.
     Cover matching and excluded entities, no matches, relevant null/empty
