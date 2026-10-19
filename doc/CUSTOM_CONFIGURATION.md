@@ -5,6 +5,9 @@
 This document contains necessary information how you can use _your_ own custom
 configuration for this application.
 
+For AI-assisted changes to settings or Symfony service wiring, follow the
+[application configuration skill](../.github/skills/update-application-configuration/SKILL.md).
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
