@@ -3,14 +3,29 @@ name: add-console-command
 description: Add or change a Symfony console command using this repository's command, dependency-injection, input/output, and testing conventions.
 ---
 
-# Add or update a console command
+# What is this?
+
+<a id="what-is-this"></a>
 
 Use this skill when adding a command under `src/Command/` or changing a
 command's arguments, options, execution, or output.
 
-Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
-## Workflow
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Workflow](#workflow)
+    * [Validation](#validation)
+
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
 
 1. Check `composer.json` and `symfony.lock` for the installed PHP and Symfony
    Console versions and recipes. Inspect the closest command under
@@ -49,7 +64,7 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    pass arguments as an array rather than constructing a shell command string.
    Check failure status and surface actionable error information without
    leaking secrets.
-8. Follow `.github/skills/write-tests/SKILL.md` for test selection and
+8. Follow [write-tests](../write-tests/SKILL.md) for test selection and
    conventions. Use Symfony Console test tools such as `CommandTester` when
    testing command input, output, exit status, and interactive/non-interactive
    behavior. Cover success and relevant invalid-input or failure paths; test
@@ -58,10 +73,18 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
 9. Update command documentation, help text, or related usage docs when the
    command's public CLI contract or expected operations change.
 
-## Validation
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
 
 * Run the relevant command tests and PHP quality checks following the shared
   skill guidance.
 * Inspect the generated command help or invoke the command with safe test
   inputs when that verifies its CLI contract. Do not run destructive commands
   against production or alter persistent data without explicit approval.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)

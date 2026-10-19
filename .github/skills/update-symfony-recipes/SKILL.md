@@ -13,7 +13,8 @@ Symfony Flex recipes. Recipe updates change application scaffolding and
 Do not perform dependency upgrades unless separately requested.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -22,7 +23,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Inspecting recipes](#inspecting-recipes)
-    * [Updating recipes](#updating-recipes)
+    * [Workflow](#workflow)
     * [Validation](#validation)
 
 ## Inspecting recipes [ᐞ](#table-of-contents)
@@ -52,9 +53,9 @@ installed package version.
 Check the installed command help rather than assuming flags exist. In
 particular, do not invent a dry-run option for `recipes:update`.
 
-## Updating recipes [ᐞ](#table-of-contents)
+## Workflow [ᐞ](#table-of-contents)
 
-<a id="updating-recipes"></a>
+<a id="workflow"></a>
 
 1. Confirm the requested packages and scope. Listing outdated recipes does not
    authorize updating all of them. Prefer one explicitly named recipe at a
@@ -70,7 +71,8 @@ particular, do not invent a dry-run option for `recipes:update`.
 3. Read the recipe's affected files and the current application customizations
    before applying it. Recipe-managed files can include `.env`, package
    configuration, service wiring, routes, entry points, test configuration,
-   Docker files, and AI instruction files such as `AGENTS.md` and `CLAUDE.md`.
+   Docker files, and AI instruction files such as [AGENTS.md](../../../AGENTS.md)
+   and [CLAUDE.md](../../../CLAUDE.md).
    Upstream template changes are proposed scaffolding, not permission to
    overwrite project architecture, security policy, or repository instructions.
 4. Run `composer recipes:update vendor/package` inside the PHP development
@@ -105,7 +107,8 @@ particular, do not invent a dry-run option for `recipes:update`.
    `symfony.lock`, or hand-edit recipe references to manufacture an update.
 8. Preserve `APPLICATION_CONFIG` JSON-backed settings, environment overrides,
    dependency-injection conventions, and security guards. Follow
-   `.github/skills/update-application-configuration/SKILL.md` for configuration
+   [update-application-configuration](../update-application-configuration/SKILL.md)
+   for configuration
    integration and other task-specific skills when generated code changes.
    Recipe application alone does not prove the upstream defaults suit this
    application. Inspect any manifest, script, or dependency-lock changes and
@@ -143,6 +146,6 @@ particular, do not invent a dry-run option for `recipes:update`.
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

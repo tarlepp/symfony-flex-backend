@@ -3,14 +3,29 @@ name: add-rest-resource
 description: Add or extend a CRUD REST resource using this repository's Symfony, Doctrine, DTO, AutoMapper, and test patterns.
 ---
 
-# Add a REST resource
+# What is this?
+
+<a id="what-is-this"></a>
 
 Use this skill when adding a CRUD API resource or extending an existing
 resource's input, output, or behavior.
 
-Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
-## Workflow
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Workflow](#workflow)
+    * [Validation](#validation)
+
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
 
 1. Inspect `composer.json`, `symfony.lock`, the target endpoint's tests, and a
    complete nearby feature. `ApiKey` is one reference implementation; confirm
@@ -25,19 +40,20 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    Validator constraints consistent with the field's API exposure and
    validation needs. Generate and review a Doctrine migration; do not use
    `doctrine:schema:update` or hand-write schema changes. Follow
-   `.github/skills/add-doctrine-entity/SKILL.md` for entity changes; every
+   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for entity changes; every
    entity requires a corresponding repository and resource.
 4. Define API input/output through DTOs in `src/DTO/`. Follow the existing
    `RestDto` patterns, validation constraints, and patch/visited-field behavior.
    Update `src/AutoMapper/` request mapping and configuration when request
    values need conversion (for example, resolving related entity IDs to entity
-   references). Follow `.github/skills/add-api-dto-mapping/SKILL.md` for the
+   references). Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
+   for the
    detailed DTO, validation, mapping, and argument-resolution workflow.
    Do not expose entities directly in responses.
 5. Add or update the repository in `src/Repository/`, following
    `BaseRepository` conventions and entity generics. Keep query/data-access
    behavior there; put orchestration and business rules in a resource or
-   service. Follow `.github/skills/add-doctrine-query/SKILL.md` for custom
+   service. Follow [add-doctrine-query](../add-doctrine-query/SKILL.md) for custom
    queries, filtering, search, sorting, pagination, and database tests.
 6. Add or update the resource in `src/Resource/`, extending `RestResource` and
    preserving its entity/repository types. Reuse lifecycle callbacks and
@@ -49,14 +65,22 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    classes, and apply explicit route and authorization attributes. Keep access
    checks at least as restrictive as the intended API policy. Use a custom
    `__invoke` controller only when that matches the endpoint's existing style.
-8. Follow `.github/skills/write-tests/SKILL.md` for testing. Cover
+8. Follow [write-tests](../write-tests/SKILL.md) for testing. Cover
    authorization and validation outcomes when relevant; update fixtures only
    when the tests need the new data.
 9. Update API documentation attributes or relevant project docs if the change
    affects the documented contract or usage.
 
-## Validation
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
 
 * For entity or migration changes, run the existing migration/schema checks,
   including `bin/console doctrine:schema:validate` when the test database is
   available.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)

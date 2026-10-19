@@ -20,8 +20,10 @@ task-specific workflow and checks.
 
 <a id="using-repository-instructions"></a>
 
-Before applying a skill, read `.github/copilot-instructions.md` and
-`doc/AI_RULES.md`. Follow those repository-wide rules alongside the
+Before applying a skill, read the
+[repository instructions](../copilot-instructions.md) and
+[AI rules](../../doc/AI_RULES.md). Follow those repository-wide rules alongside
+the
 task-specific workflow in the skill.
 
 ## Running and validating changes [ᐞ](#table-of-contents)
@@ -31,14 +33,14 @@ task-specific workflow in the skill.
 * Run project commands from the repository root inside the running PHP
   development container or IDE Dev Container. From the host, use `make bash` or
   `make fish`; if containers are stopped, start them with `make start`.
-* Use `.github/skills/write-tests/SKILL.md` as the single source for test
+* Use [write-tests](write-tests/SKILL.md) as the single source for test
   selection and test-writing practice. Other skills should state only
   task-specific behaviors that tests must cover.
 * Run relevant quality checks for the changed code. For PHP changes, these
   include `make ecs`, `make phplint`, `make phpstan`, and `make psalm`. Run
   `make lint-markdown` when Markdown files change.
 * Before a commit, follow the full validation suite in
-  `.github/copilot-instructions.md`.
+  [repository instructions](../copilot-instructions.md).
 * If a required check cannot run, identify the blocker in the handoff.
 
 ## Handoff [ᐞ](#table-of-contents)
@@ -51,6 +53,6 @@ applied to a non-production database. Do not commit unless explicitly asked.
 
 ---
 
-[Back to previous](../copilot-instructions.md)
+[Back to previous](README.md)
 
 [Back to main README.md](../../README.md)

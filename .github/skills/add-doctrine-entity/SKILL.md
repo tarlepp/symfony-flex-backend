@@ -3,7 +3,9 @@ name: add-doctrine-entity
 description: Add or change a Doctrine ORM entity and its migration, tests, and related persistence mapping following this repository's conventions.
 ---
 
-# Add a Doctrine entity
+# What is this?
+
+<a id="what-is-this"></a>
 
 Use this skill when adding a persisted domain entity or changing an existing
 entity's Doctrine mapping. In this repository, every entity must have a
@@ -11,14 +13,28 @@ corresponding repository and resource. A CRUD REST endpoint, DTOs, and
 AutoMapper configuration are separate concerns and should be added when the
 requested behavior needs them.
 
-Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
-## Workflow
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Workflow](#workflow)
+    * [Validation](#validation)
+
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
 
 1. Check `composer.json` for the current PHP, Doctrine ORM, and migrations
    versions, and `symfony.lock` for installed recipes. Inspect a similar entity
    and its tests under `src/Entity/` and `tests/` before choosing a pattern.
-   Use `AGENTS.md` and the existing implementation as the architectural source
+   Use [AGENTS.md](../../../AGENTS.md) and the existing implementation as the
+   architectural source
    of truth.
 2. Confirm what the entity needs to support: REST input/output, relations,
    audit fields, and soft/hard deletion. Reuse an existing entity trait or
@@ -46,12 +62,12 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    needed. Never use `doctrine:schema:update` or hand-write ad hoc SQL to
    change a live schema. Do not run migrations against production.
 7. Add tests for entity behavior, ORM mapping, persistence, and relationships
-   as applicable, following `.github/skills/write-tests/SKILL.md`.
+   as applicable, following [write-tests](../write-tests/SKILL.md).
 8. Add a corresponding repository under `src/Repository/`, extending or
     following `BaseRepository` and its entity-specific typing conventions.
     Reuse the existing repository methods and traits; add custom queries only
     when the entity requires them. Follow
-    `.github/skills/add-doctrine-query/SKILL.md` for query-specific behavior
+    [add-doctrine-query](../add-doctrine-query/SKILL.md) for query-specific behavior
     and validation.
 9. Add a corresponding resource under `src/Resource/`, extending
     `RestResource` with the entity and repository types. Keep orchestration and
@@ -59,10 +75,18 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
     patterns where relevant. An entity's repository and resource are required
     even when it has no CRUD controller.
 10. If the request needs DTOs, request mapping, or a CRUD REST endpoint, follow
-     `.github/skills/add-rest-resource/SKILL.md` for those parts. Add these
+     [add-rest-resource](../add-rest-resource/SKILL.md) for those parts. Add these
      layers only when required by the requested behavior.
 
-## Validation
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
 
 * Run `bin/console doctrine:schema:validate` and relevant migration checks
   against the test/development database when available.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)

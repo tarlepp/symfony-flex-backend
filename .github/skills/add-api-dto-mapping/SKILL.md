@@ -10,11 +10,12 @@ description: Add or update API DTOs, validation constraints, AutoMapper request 
 Use this skill when adding or changing an API DTO, its validation, request
 mapping, or argument resolution without necessarily adding a complete CRUD
 resource. For a full resource or persistence change, also follow
-`.github/skills/add-rest-resource/SKILL.md` or
-`.github/skills/add-doctrine-entity/SKILL.md` as appropriate.
+[add-rest-resource](../add-rest-resource/SKILL.md) or
+[add-doctrine-entity](../add-doctrine-entity/SKILL.md) as appropriate.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -89,7 +90,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    privileged fields incidentally. Preserve the endpoint's established output
    contract rather than adding a new response-mapping architecture as part of
    an input-only change.
-9. Follow `.github/skills/write-tests/SKILL.md`. Inspect
+9. Follow [write-tests](../write-tests/SKILL.md). Inspect
    `tests/Integration/DTO/`, `tests/Integration/AutoMapper/`, and
    `tests/Integration/ValueResolver/RestDtoValueResolverTest.php` for existing
    helpers. Cover setters and visited fields, transformations, registered DTO
@@ -117,6 +118,6 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

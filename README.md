@@ -315,6 +315,9 @@ conventions already documented in this order:
 * `.github/pull_request_template.md` for the human review checklist used in
   pull requests.
 
+See the [AI skills index](.github/skills/README.md) for task-specific workflows
+covering API development, persistence, security, testing, and maintenance.
+
 As a simple rule of thumb, update the AI guidance when the same review comment,
 architectural correction, or project convention appears repeatedly and should
 become a repository default.

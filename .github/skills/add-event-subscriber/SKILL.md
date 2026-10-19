@@ -11,7 +11,8 @@ Use this skill when creating or updating a Symfony event subscriber, its
 subscriptions, or its behavior.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -64,10 +65,10 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 7. Do not confuse Symfony subscribers with Doctrine lifecycle subscriptions.
    `DoctrineExtensionSubscriber` reacts to a Symfony request event; its name
    does not make it a Doctrine subscriber. For ORM events, use
-   `.github/skills/add-event-listener/SKILL.md` and the installed
+   [add-event-listener](../add-event-listener/SKILL.md) and the installed
    DoctrineBundle's supported listener registration instead of introducing
    legacy Doctrine subscribers.
-8. Follow `.github/skills/write-tests/SKILL.md`. Cover the exact subscription
+8. Follow [write-tests](../write-tests/SKILL.md). Cover the exact subscription
    map, including priorities, as in
    `tests/Unit/EventSubscriber/AcceptLanguageSubscriberTest.php`, and observable
    handler behavior as in its integration tests. Also exercise the actual
@@ -95,6 +96,6 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

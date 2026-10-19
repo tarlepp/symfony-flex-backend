@@ -10,11 +10,12 @@ description: Add or update Doctrine repository queries, filtering, search, sorti
 Use this skill when adding or changing repository queries, query criteria,
 searchable fields, joins, sorting, pagination, counts, or ID lookups. For entity
 mapping or index changes, also follow
-`.github/skills/add-doctrine-entity/SKILL.md`. For a full endpoint change, also
-follow `.github/skills/add-rest-resource/SKILL.md`.
+[add-doctrine-entity](../add-doctrine-entity/SKILL.md). For a full endpoint change,
+also follow [add-rest-resource](../add-rest-resource/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -98,7 +99,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    matters. Add an index only when justified, through entity mapping and a
    reviewed migration using the entity skill; never change a live schema with
    ad hoc SQL or `doctrine:schema:update`.
-10. Follow `.github/skills/write-tests/SKILL.md`. Use real-database Functional
+10. Follow [write-tests](../write-tests/SKILL.md). Use real-database Functional
     tests such as `tests/Functional/Repository/UserRepositoryTest.php` to prove
     query results; mock QueryBuilder expectations alone cannot verify SQL
     semantics. Inspect existing repository test helpers before adding setup.
@@ -130,6 +131,6 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

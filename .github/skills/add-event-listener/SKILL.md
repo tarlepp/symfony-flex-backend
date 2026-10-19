@@ -12,7 +12,8 @@ or its behavior. It covers Symfony EventDispatcher listeners and Doctrine
 lifecycle listeners; these are separate event systems.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -35,7 +36,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    choosing a listener over a subscriber. Extend an existing handler when the
    responsibility matches; preserve its registration style unless a conversion
    is part of the task. For a Symfony subscriber, follow
-   `.github/skills/add-event-subscriber/SKILL.md`.
+   [add-event-subscriber](../add-event-subscriber/SKILL.md).
 3. Put listener classes in `src/EventListener/`. Keep handlers focused on event
    adaptation and delegate business logic to an existing resource or service.
    Use constructor injection, explicit parameter and return types, and the
@@ -66,7 +67,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    authorization, and sensitive-data handling. Do not swallow exceptions,
    perform unrelated side effects, or treat synchronous events as background
    jobs.
-8. Follow `.github/skills/write-tests/SKILL.md`. Cover the handler's effect,
+8. Follow [write-tests](../write-tests/SKILL.md). Cover the handler's effect,
    relevant no-op paths, invalid inputs, and failures. Add registration
    coverage through the actual caller boundary: dispatch a Symfony event
    through the container's dispatcher, or persist/update and flush an entity
@@ -92,6 +93,6 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

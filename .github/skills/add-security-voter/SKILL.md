@@ -10,10 +10,11 @@ description: Add or update Symfony security voters, subject-based authorization,
 Use this skill when adding or changing a Symfony security voter, its supported
 attributes or subjects, or the authorization checks that invoke it. For changes
 to credentials, authentication flows, firewalls, or broader role policy, also
-follow `.github/skills/implement-api-authentication/SKILL.md`.
+follow [implement-api-authentication](../implement-api-authentication/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`. Read `doc/SECURITY.md`
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md). Read [SECURITY.md](../../../doc/SECURITY.md)
 for the repository security policy.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -85,7 +86,7 @@ for the repository security policy.
    manually instantiate a voter at application call sites. If service
    configuration is exceptional, inspect its registration before changing it.
    Keep request-specific identities and subjects out of shared service state.
-9. Follow `.github/skills/write-tests/SKILL.md`. Use
+9. Follow [write-tests](../write-tests/SKILL.md). Use
    `tests/Integration/Security/Voter/IsUserHimselfVoterTest.php` as a reference
    for exercising the public `vote()` boundary and asserting grant, deny, and
    abstain results, not protected methods. Cover unsupported attributes and
@@ -117,6 +118,6 @@ for the repository security policy.
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

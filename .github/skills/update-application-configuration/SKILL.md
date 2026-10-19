@@ -13,12 +13,15 @@ It covers configuration changes, not dependency upgrades or Docker image
 updates; use the corresponding repository skills for those tasks.
 
 For updates to installed Symfony Flex recipes, follow
-`.github/skills/update-symfony-recipes/SKILL.md` for the Composer update workflow,
+[update-symfony-recipes](../update-symfony-recipes/SKILL.md) for the Composer
+update workflow,
 then use this skill to integrate generated configuration changes.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`. Read
-`doc/CUSTOM_CONFIGURATION.md` for the existing local-configuration workflow.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md). Read
+[CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) for the existing
+local-configuration workflow.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -93,7 +96,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    registration or assuming the component exists. Preserve existing security
    guards and logging redaction; do not disable validation, logging, or a
    protection mechanism to make container compilation succeed.
-10. Follow `.github/skills/write-tests/SKILL.md` for behavior changes. Exercise
+10. Follow [write-tests](../write-tests/SKILL.md) for behavior changes. Exercise
     the real configured consumer, not just a manually constructed service with
     hard-coded arguments. Cover the intended default and override behavior,
     relevant missing or malformed values, and affected environments. For
@@ -103,7 +106,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
     `tests/Integration/Utils/RequestLoggerTest.php` and
     `tests/Integration/EventSubscriber/RequestLogSubscriberTest.php` where
     relevant; do not weaken redaction or authorization coverage.
-11. Update `doc/CUSTOM_CONFIGURATION.md` and other affected setup or command
+11. Update [CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md)
+    and other affected setup or command
     documentation when keys, types, defaults, file locations, or deployment
     steps change. State any required operator action without applying
     production changes, restarting services, or overwriting local files
@@ -132,6 +136,6 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)
