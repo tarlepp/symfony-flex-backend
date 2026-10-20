@@ -50,7 +50,9 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
 8. Add a corresponding repository under `src/Repository/`, extending or
     following `BaseRepository` and its entity-specific typing conventions.
     Reuse the existing repository methods and traits; add custom queries only
-    when the entity requires them.
+    when the entity requires them. Follow
+    `.github/skills/add-doctrine-query/SKILL.md` for query-specific behavior
+    and validation.
 9. Add a corresponding resource under `src/Resource/`, extending
     `RestResource` with the entity and repository types. Keep orchestration and
     business behavior in the resource, and use the existing resource lifecycle
