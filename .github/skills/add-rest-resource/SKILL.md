@@ -31,7 +31,9 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    `RestDto` patterns, validation constraints, and patch/visited-field behavior.
    Update `src/AutoMapper/` request mapping and configuration when request
    values need conversion (for example, resolving related entity IDs to entity
-   references). Do not expose entities directly in responses.
+   references). Follow `.github/skills/add-api-dto-mapping/SKILL.md` for the
+   detailed DTO, validation, mapping, and argument-resolution workflow.
+   Do not expose entities directly in responses.
 5. Add or update the repository in `src/Repository/`, following
    `BaseRepository` conventions and entity generics. Keep query/data-access
    behavior there; put orchestration and business rules in a resource or
