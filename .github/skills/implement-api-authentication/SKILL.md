@@ -32,7 +32,9 @@ Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
    voters. Use the project's established route/controller authorization
    patterns, including `#[IsGranted]` where appropriate. Keep authorization
    decisions scoped to the right endpoint or voter rather than embedding them
-   in unrelated controller logic.
+   in unrelated controller logic. Follow
+   `.github/skills/add-security-voter/SKILL.md` for voter implementation,
+   subject binding, decision-strategy interactions, and authorization tests.
 5. Handle credentials as secrets. Do not expose tokens, passwords, private JWT
    keys, or sensitive authentication details in API responses, DTOs, logs,
    fixtures, or documentation. Follow the existing credential creation,
