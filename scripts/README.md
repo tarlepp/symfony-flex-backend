@@ -94,6 +94,16 @@ variables, for example
 non-interactive shell, required values without defaults must be given as
 variables.
 
+Digest lookup and pin verification require at least two distinct runnable
+platforms in an image index. Empty and single-platform indexes fail with an
+explicit diagnostic instead of being accepted as multi-platform.
+
+Run the helper's regression tests on the host without registry access:
+
+```bash
+bash scripts/tests/docker-images-test.sh
+```
+
 The root `Dockerfile` defaults to the `production` target. Use
 `TARGET=development` to build the development image instead. Dockerfiles
 with an unnamed final stage do not prompt for a target and use Docker's final
