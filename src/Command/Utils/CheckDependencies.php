@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Command\Utils;
 
 use App\Command\Traits\SymfonyStyleTrait;
+use App\DTO\Command\OutdatedPackage;
 use InvalidArgumentException;
 use JsonException;
 use LogicException;
@@ -25,28 +26,36 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 use Throwable;
 use Traversable;
 use function array_filter;
+use function array_is_list;
 use function array_map;
 use function array_unshift;
 use function count;
-use function dirname;
-use function implode;
+use function filter_var;
+use function in_array;
 use function is_array;
+use function is_finite;
+use function is_string;
 use function iterator_to_array;
 use function json_decode;
+use function max;
+use function min;
+use function property_exists;
 use function sort;
 use function sprintf;
-use function str_replace;
 use function strlen;
 use const DIRECTORY_SEPARATOR;
+use const FILTER_VALIDATE_FLOAT;
 
 #[AsCommand(
     name: 'check-dependencies',
-    description: 'Console command to check which vendor dependencies has updates',
+    description: 'Check which vendor dependencies have updates',
 )]
 class CheckDependencies extends Command
 {
@@ -59,17 +68,20 @@ class CheckDependencies extends Command
         parent::__construct();
 
         $this->addOption(
-            'minor',
-            'm',
-            InputOption::VALUE_NONE,
-            'Only check for minor updates',
+            'level',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Update level to check: latest, minor, or patch',
+            'latest',
+            ['latest', 'minor', 'patch'],
         );
 
         $this->addOption(
-            'patch',
-            'p',
-            InputOption::VALUE_NONE,
-            'Only check for patch updates',
+            'timeout',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Maximum time in seconds for each dependency group (must be greater than zero)',
+            '60',
         );
     }
 
@@ -81,15 +93,36 @@ class CheckDependencies extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $onlyMinor = $input->getOption('minor');
-        $onlyPatch = $input->getOption('patch');
+        $level = $input->getOption('level');
+        $timeout = filter_var($input->getOption('timeout'), FILTER_VALIDATE_FLOAT);
+        $status = Command::INVALID;
 
-        $io = $this->getSymfonyStyle($input, $output);
+        $io = $this->getSymfonyStyle($input, $output, clearScreen: false);
+
+        if (!in_array($level, ['latest', 'minor', 'patch'], true)) {
+            $io->error('The --level option must be one of: latest, minor, patch.');
+        } elseif ($timeout === false || $timeout <= 0 || !is_finite($timeout)) {
+            $io->error('The --timeout option must be positive, finite seconds.');
+        } else {
+            $this->checkDependencies($io, $output, $level, $timeout);
+
+            $status = Command::SUCCESS;
+        }
+
+        return $status;
+    }
+
+    private function checkDependencies(
+        SymfonyStyle $io,
+        OutputInterface $output,
+        string $level,
+        float $timeout,
+    ): void {
         $io->info([
             'Starting to check dependencies...',
-            match (true) {
-                $onlyPatch => 'Checking only patch version updates',
-                $onlyMinor => 'Checking only minor version updates',
+            match ($level) {
+                'patch' => 'Checking only patch version updates',
+                'minor' => 'Checking only minor version updates',
                 default => 'Checking for latest version updates',
             },
         ]);
@@ -98,7 +131,7 @@ class CheckDependencies extends Command
 
         array_unshift($directories, $this->projectDir);
 
-        $rows = $this->determineTableRows($io, $directories, $onlyMinor, $onlyPatch);
+        $rows = $this->determineTableRows($io, $directories, $level, $timeout);
 
         $packageNameLength = max(
             array_map(
@@ -118,27 +151,26 @@ class CheckDependencies extends Command
         $this->setTableColumnWidths($packageNameLength, $table);
 
         $rows === []
-            ? $io->success('Good news, there is no any vendor dependency to update at this time!')
+            ? $io->success('Good news, no vendor dependency updates were found for the selected level!')
             : $table->render();
-
-        return 0;
     }
 
     /**
      * Method to determine all namespace directories under 'tools' directory.
      *
-     * @return array<int, string>
-     *
      * @throws LogicException
      * @throws InvalidArgumentException
+     *
+     * @return array<int, string>
      */
     private function getNamespaceDirectories(): array
     {
-        // Find all main namespace directories under 'tools' directory
+        // Find Composer manifests directly inside each tool group.
         $finder = new Finder()
             ->depth(1)
             ->ignoreDotFiles(true)
-            ->directories()
+            ->files()
+            ->name('composer.json')
             ->in($this->projectDir . DIRECTORY_SEPARATOR . 'tools/');
 
         $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
@@ -159,11 +191,11 @@ class CheckDependencies extends Command
      *
      * @param array<int, string> $directories
      *
-     * @psalm-return array<int, array<int, string>|TableSeparator>
-     *
      * @throws JsonException
+     *
+     * @psalm-return array<int, array<int, string>|TableSeparator>
      */
-    private function determineTableRows(SymfonyStyle $io, array $directories, bool $onlyMinor, bool $onlyPatch): array
+    private function determineTableRows(SymfonyStyle $io, array $directories, string $level, float $timeout): array
     {
         // Initialize progress bar for process
         $progressBar = $this->getProgressBar($io, count($directories), 'Checking all vendor dependencies');
@@ -171,8 +203,16 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($io, $onlyMinor, $onlyPatch, $progressBar, &$rows): void {
-            foreach ($this->processNamespacePath($directory, $onlyMinor, $onlyPatch) as $row => $data) {
+        $iterator = function (string $directory) use ($level, $timeout, $progressBar, &$rows): void {
+            $groupPath = $this->getGroupPath($directory);
+
+            $progressBar->setMessage(sprintf(
+                'Checking vendor dependencies: %s/composer.json',
+                $groupPath,
+            ));
+            $progressBar->display();
+
+            foreach ($this->processNamespacePath($directory, $level, $timeout) as $row => $data) {
                 $relativePath = '';
 
                 // First row of current library
@@ -182,7 +222,7 @@ class CheckDependencies extends Command
                         $rows[] = new TableSeparator();
                     }
 
-                    $relativePath = str_replace($this->projectDir, '', $directory) . '/composer.json';
+                    $relativePath = $groupPath;
                 } else {
                     $rows[] = [''];
                 }
@@ -191,10 +231,10 @@ class CheckDependencies extends Command
 
                 if (isset($data->warning)) {
                     $rows[] = [''];
-                    $rows[] = ['', '', '<fg=red>' . (string)$data->warning . '</>'];
+                    $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
                 }
 
-                if (!property_exists($data, 'latest')) {
+                if ($data->latest === null) {
                     $rows[] = [''];
                     $rows[] = [
                         '',
@@ -204,26 +244,27 @@ class CheckDependencies extends Command
                 }
             }
 
-            if (count($rows) === 1) {
-                $io->write("\033\143");
-            }
-
             $progressBar->advance();
         };
 
         array_map($iterator, $directories);
 
+        $progressBar->setMessage('Finished checking all vendor dependencies');
+        $progressBar->display();
+        $progressBar->finish();
+        $io->newLine();
+
         return $rows;
     }
 
     /**
-     * Method to process namespace inside 'tools' directory.
-     *
-     * @return array<int, stdClass>
+     * Check dependencies in the root project or a tool dependency group.
      *
      * @throws JsonException
+     *
+     * @return list<OutdatedPackage>
      */
-    private function processNamespacePath(string $path, bool $onlyMinor, bool $onlyPatch): array
+    private function processNamespacePath(string $path, string $level, float $timeout): array
     {
         $command = [
             'composer',
@@ -233,37 +274,150 @@ class CheckDependencies extends Command
             'json',
         ];
 
-        if ($onlyMinor) {
+        if ($level === 'minor') {
             $command[] = '-m';
-        } elseif ($onlyPatch) {
+        } elseif ($level === 'patch') {
             $command[] = '-p';
         }
 
-        $process = new Process($command, $path);
+        $process = new Process($command, $path, timeout: $timeout);
         $process->enableOutput();
-        $process->run();
 
-        if ($process->getErrorOutput() !== '' && !($process->getExitCode() === 0 || $process->getExitCode() === null)) {
-            $message = sprintf(
-                "Running command '%s' failed with error message:\n%s",
-                implode(' ', $command),
-                $process->getErrorOutput(),
+        $this->runProcess($process);
+
+        return $this->decodeComposerOutput($process->getOutput(), $path);
+    }
+
+    private function runProcess(Process $process): void
+    {
+        try {
+            $process->run();
+        } catch (ProcessTimedOutException $exception) {
+            throw new RuntimeException(sprintf(
+                "Dependency check in '%s' timed out after %s seconds. Increase --timeout to allow more time.",
+                $process->getWorkingDirectory() ?? $this->projectDir,
+                $exception->getExceededTimeout() ?? 60.0,
+            ), previous: $exception);
+        }
+
+        $this->ensureProcessSucceeded($process);
+    }
+
+    /**
+     * @throws JsonException
+     *
+     * @return list<OutdatedPackage>
+     */
+    private function decodeComposerOutput(string $output, string $path): array
+    {
+        try {
+            $decoded = json_decode($output, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new JsonException(
+                sprintf("Invalid Composer JSON in '%s': %s", $path, $exception->getMessage()),
+                previous: $exception,
             );
-
-            throw new RuntimeException($message);
         }
 
-        /** @var stdClass|array<mixed> $decoded */
-        $decoded = json_decode($process->getOutput(), flags: JSON_THROW_ON_ERROR);
+        $installed = [];
 
-        if (is_array($decoded)) {
-            return [];
+        if ($decoded !== []) {
+            $installed = $this->validateComposerResponse($decoded, $path);
         }
 
-        /** @var array<int, stdClass>|string|null $installed */
-        $installed = $decoded->installed;
+        return $installed;
+    }
 
-        return is_array($installed) ? $installed : [];
+    /**
+     * @return list<OutdatedPackage>
+     */
+    private function validateComposerResponse(mixed $decoded, string $path): array
+    {
+        if (!$decoded instanceof stdClass
+            || !isset($decoded->installed)
+            || !is_array($decoded->installed)
+            || !array_is_list($decoded->installed)
+        ) {
+            throw new RuntimeException(sprintf(
+                "Invalid Composer response in '%s': expected an object with an 'installed' package list.",
+                $path,
+            ));
+        }
+
+        $installed = [];
+
+        foreach ($decoded->installed as $index => $package) {
+            if (!$package instanceof stdClass) {
+                throw new RuntimeException(sprintf(
+                    "Invalid Composer response in '%s': package at index %d must be an object.",
+                    $path,
+                    $index,
+                ));
+            }
+
+            $installed[] = $this->validateComposerPackage($package, $index, $path);
+        }
+
+        return $installed;
+    }
+
+    private function validateComposerPackage(stdClass $package, int $index, string $path): OutdatedPackage
+    {
+        return new OutdatedPackage(
+            name: $this->getRequiredPackageField($package, 'name', $index, $path),
+            version: $this->getRequiredPackageField($package, 'version', $index, $path),
+            description: $this->getOptionalPackageField($package, 'description', $index, $path),
+            latest: $this->getOptionalPackageField($package, 'latest', $index, $path),
+            warning: $this->getOptionalPackageField($package, 'warning', $index, $path),
+        );
+    }
+
+    private function getRequiredPackageField(stdClass $package, string $field, int $index, string $path): string
+    {
+        $value = $package->{$field} ?? null;
+
+        if (!is_string($value) || $value === '') {
+            throw new RuntimeException(sprintf(
+                "Invalid Composer response in '%s': package at index %d requires a non-empty string '%s'.",
+                $path,
+                $index,
+                $field,
+            ));
+        }
+
+        return $value;
+    }
+
+    private function getOptionalPackageField(stdClass $package, string $field, int $index, string $path): ?string
+    {
+        $value = $package->{$field} ?? null;
+
+        if (($value !== null && !is_string($value))
+            || ($value === null && $field !== 'description' && property_exists($package, $field))
+        ) {
+            throw new RuntimeException(sprintf(
+                "Invalid Composer response in '%s': package at index %d has an invalid '%s' field.",
+                $path,
+                $index,
+                $field,
+            ));
+        }
+
+        return $value;
+    }
+
+    private function ensureProcessSucceeded(Process $process): void
+    {
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                "Running command '%s' in '%s' failed with exit code %s.\nStandard output:\n%s\nError output:\n%s",
+                $process->getCommandLine(),
+                $process->getWorkingDirectory() ?? $this->projectDir,
+                $process->getExitCode() === null ? 'unknown' : (string)$process->getExitCode(),
+                $process->getOutput(),
+                $process->getErrorOutput(),
+            ));
+        }
     }
 
     /**
@@ -273,11 +427,11 @@ class CheckDependencies extends Command
     {
         $format = '
  %message%
- %current%/%max% [%bar%] %percent:3s%%
- Time elapsed:   %elapsed:-6s%
- Time remaining: %remaining:-6s%
- Time estimated: %estimated:-6s%
- Memory usage:   %memory:-6s%
+   %current%/%max% [%bar%] %percent:3s%%
+   Time elapsed:   %elapsed:-6s%
+   Time remaining: %remaining:-6s%
+   Time estimated: %estimated:-6s%
+   Memory usage:   %memory:-6s%
 ';
 
         $progress = $io->createProgressBar($steps);
@@ -304,19 +458,29 @@ class CheckDependencies extends Command
     /**
      * @return array{0: string, 1: string, 2: string, 3: string, 4: string}
      */
-    private function getPackageRow(string $relativePath, stdClass $data): array
+    private function getPackageRow(string $relativePath, OutdatedPackage $data): array
     {
         return [
-            dirname($relativePath),
-            (string)$data->name,
-            (string)$data->description,
-            (string)$data->version,
-            (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . (string)$data->version . '</>'),
+            $relativePath,
+            $data->name,
+            $data->description ?? '',
+            $data->version,
+            $data->latest ?? '<fg=yellow>' . $data->version . '</>',
         ];
+    }
+
+    private function getGroupPath(string $directory): string
+    {
+        $relativePath = Path::makeRelative($directory, $this->projectDir);
+
+        return $relativePath === '' ? '.' : $relativePath;
     }
 
     private function setTableColumnWidths(int $packageNameLength, Table $table): void
     {
+        $headers = $this->getHeaders();
+        $packageNameLength = max(strlen($headers[1]), min($packageNameLength, 95 - strlen($headers[2])));
+
         $widths = [
             23,
             $packageNameLength,
