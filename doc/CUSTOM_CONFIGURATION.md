@@ -62,7 +62,7 @@ just take a look what those files contains. And most likely you only need
 to make changes to that `secrets/application.local.json` file.
 
 ## Detailed configuration [ᐞ](#table-of-contents)
-
+test
 <a id="detailed-configuration"></a>
 
 Below you can see all the current configuration values that are defined in
