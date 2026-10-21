@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.19
-FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef AS base
+FROM php:8.5.12-fpm-bookworm@sha256:740a5adab5af19504d8aa0754e903e20b40b0153cfd4013c11e4df2029a7b73c AS base
 
 RUN apt-get update \
     && apt-get install -y \
@@ -15,7 +15,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the install-php-extensions (Easily install PHP extension in official PHP Docker containers)
-COPY --from=mlocati/php-extension-installer:2.12.0 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.12.3 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable all necessary PHP extensions
 RUN install-php-extensions \
@@ -55,7 +55,7 @@ ARG HOST_GID=1000
 
 ENV PATH="$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION=v0.40.8
-ENV NODE_VERSION=26.12.0
+ENV NODE_VERSION=26.12.1
 
 RUN apt-get update \
     && apt-get install -y \
