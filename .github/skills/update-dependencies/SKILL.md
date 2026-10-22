@@ -22,6 +22,10 @@ If commit authorization has not been given, ask for it and wait before
 committing or starting the main dependency update. If no tool updates are
 available, state that and proceed without an empty commit.
 
+Standalone Symfony Flex recipe updates are configuration/scaffolding updates,
+not Composer package upgrades; this tool-first ordering does not apply to them.
+Follow `.github/skills/update-symfony-recipes/SKILL.md` without upgrading packages.
+
 ## Workflow
 
 1. Identify the dependency scope and requested update range. Check
@@ -39,6 +43,10 @@ available, state that and proceed without an empty commit.
    * Composer tool dependencies: inspect the relevant `tools/*/composer.json`
      and lockfile, and use `make update-tools` only when the requested scope
      includes those tools.
+   * Symfony Flex recipes: follow
+     `.github/skills/update-symfony-recipes/SKILL.md` for inspection with
+     `composer recipes`, targeted updates, conflict handling, and validation.
+     Do not assume a package upgrade also updates its installed recipe.
    * Docker images: follow
      `.github/skills/update-docker-images/SKILL.md` for image selection,
      multi-platform digest pinning, and validation.
