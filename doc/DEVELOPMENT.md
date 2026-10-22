@@ -12,6 +12,7 @@ application.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Development](#development)
+      * [Composer PHP platform](#composer-php-platform)
       * [IDE](#ide)
       * [PHP Code Sniffer](#php-code-sniffer)
       * [Database changes](#database-changes)
@@ -23,6 +24,19 @@ application.
 * [PSR-1](https://www.php-fig.org/psr/psr-1/)
 * [PSR-2](https://www.php-fig.org/psr/psr-2/)
 * [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
+
+### Composer PHP platform [ᐞ](#table-of-contents)
+
+<a id="composer-php-platform"></a>
+
+Composer resolves dependencies against `config.platform.php`, not necessarily
+the installed PHP version. Keep this value and the minimum PHP requirement in
+the root and `tools/*/composer.json` files aligned with the supported, patched
+PHP runtime, and refresh their lockfiles after changing these settings.
+
+If `roave/security-advisories` rejects the configured PHP version, upgrade the
+runtime and Composer platform baseline rather than disabling security checks.
+Rebuilding the PHP container alone does not change Composer's platform override.
 
 ### IDE [ᐞ](#table-of-contents)
 
