@@ -3,14 +3,31 @@ name: write-tests
 description: Add or update PHPUnit tests using this repository's E2E, functional, integration, and unit test conventions.
 ---
 
-# Write tests
+# What is this?
+
+<a id="what-is-this"></a>
 
 Use this skill whenever adding or changing tests. Select the test category that
 matches the behavior boundary and dependencies under test.
 
-Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
-## Test categories
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Test categories](#test-categories)
+    * [Using stubs and mocks](#using-stubs-and-mocks)
+    * [Workflow](#workflow)
+    * [Validation](#validation)
+
+## Test categories [ᐞ](#table-of-contents)
+
+<a id="test-categories"></a>
 
 Choose the category by the behavior boundary and dependencies under test:
 complete request-to-response behavior belongs in E2E; application behavior
@@ -32,7 +49,9 @@ and isolated logic belongs in Unit.
 * **Unit** (`tests/Unit/`): test a single unit in isolation, using no mocks or
   only the minimum needed. Do not use a database or application-wide behavior.
 
-## Using stubs and mocks
+## Using stubs and mocks [ᐞ](#table-of-contents)
+
+<a id="using-stubs-and-mocks"></a>
 
 Use a **stub** when a dependency needs to return controlled values or throw a
 controlled exception so the test can focus on the unit's observable result.
@@ -52,7 +71,9 @@ fewest test doubles needed. For behavior that depends on the real database or
 full request flow, follow the test-category guidance instead of replacing those
 dependencies with doubles.
 
-## Workflow
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
 
 1. Inspect nearby tests in the matching category, including their test case,
    fixture setup, and database lifecycle. Follow existing helpers and
@@ -67,7 +88,9 @@ dependencies with doubles.
    update assertions for the old contract without weakening unrelated security
    or regression coverage.
 
-## Running tests
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
 
 Run targeted tests from the repository root inside the PHP development
 container. Use `make bash` or `make fish` from the host to open that shell; an
@@ -89,5 +112,12 @@ phpunit tests/Unit/Rest/SearchTermTest.php
 ```
 
 Run the smallest relevant class or directory first, then `make run-tests` when
-broader regression coverage is warranted. Use `doc/TESTING.md` and the Makefile
+broader regression coverage is warranted. Use
+[TESTING.md](../../../doc/TESTING.md) and the Makefile
 for current runner details; do not add a new test framework or runner.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)

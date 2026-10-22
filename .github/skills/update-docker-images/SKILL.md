@@ -3,17 +3,32 @@ name: update-docker-images
 description: Update Docker image tags and multi-platform digest pins in Dockerfiles, Compose files, and CI using this repository's image inspection and validation workflow.
 ---
 
-# Update Docker images
+# What is this?
+
+<a id="what-is-this"></a>
 
 Use this skill when updating Docker base images, images copied from external
 build stages, Compose service images, or CI container images. For Composer or
 GitHub Actions dependency updates, use
-`.github/skills/update-dependencies/SKILL.md` instead.
+[update-dependencies](../update-dependencies/SKILL.md) instead.
 
-Follow the shared skill guidance in `.github/skills/shared-guidance.md` and
-the image-pinning procedure in `doc/DOCKER_MULTI_PLATFORM.md`.
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md), and the image-pinning
+procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKER_MULTI_PLATFORM.md).
 
-## Workflow
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Workflow](#workflow)
+    * [Validation](#validation)
+
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
 
 1. Identify the requested images and acceptable update range. Inspect
    `Dockerfile`, `docker/*/Dockerfile*`, `compose*.yaml`, Dev Container
@@ -66,3 +81,19 @@ the image-pinning procedure in `doc/DOCKER_MULTI_PLATFORM.md`.
    related documentation only when the update changes supported platforms,
    configuration, or contributor commands; avoid duplicating changing
    versions in long-form guidance.
+
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
+
+* Complete the pin verification, tag/digest parity checks, Compose validation,
+  and affected image builds described in the workflow.
+* Run relevant application checks inside the PHP development container when
+  runtime behavior could change, following shared guidance. Report any
+  unavailable platform builds or other validation blockers explicitly.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)

@@ -13,12 +13,15 @@ It covers configuration changes, not dependency upgrades or Docker image
 updates; use the corresponding repository skills for those tasks.
 
 For updates to installed Symfony Flex recipes, follow
-`.github/skills/update-symfony-recipes/SKILL.md` for the Composer update workflow,
+[update-symfony-recipes](../update-symfony-recipes/SKILL.md) for the Composer
+update workflow,
 then use this skill to integrate generated configuration changes.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-`.github/copilot-instructions.md` and `doc/AI_RULES.md`. Read
-`doc/CUSTOM_CONFIGURATION.md` for the existing local-configuration workflow.
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md). Read
+[CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) for the existing
+local-configuration workflow.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -33,11 +36,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Read `composer.json` for available packages and supported versions, and
-   `symfony.lock` for recipes. Inspect the affected configuration, its service
-   consumers, and nearby tests. Trace the setting from its source through env
-   processors, parameters, and dependency injection to its actual use. Prefer
-   the implementation over outdated documentation or assumed Symfony defaults.
+1. Inspect the affected configuration, its service consumers, and nearby tests.
+   Trace the setting from its source through env
+   processors, parameters, and dependency injection to its actual use.
 2. Establish the setting's name, type, requiredness, default, intended
    environments, and effect. Ask before changing unspecified defaults,
    authentication, CORS, trusted proxies, persistence, or other access and
@@ -93,17 +94,17 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    registration or assuming the component exists. Preserve existing security
    guards and logging redaction; do not disable validation, logging, or a
    protection mechanism to make container compilation succeed.
-10. Follow `.github/skills/write-tests/SKILL.md` for behavior changes. Exercise
-    the real configured consumer, not just a manually constructed service with
-    hard-coded arguments. Cover the intended default and override behavior,
-    relevant missing or malformed values, and affected environments. For
+10. Exercise the real configured consumer, not just a manually constructed
+    service with hard-coded arguments. Cover the intended default and override
+    behavior, relevant missing or malformed values, and affected environments. For
     wiring changes, verify the selected implementation and actual caller
     behavior so a valid but unused service definition cannot pass unnoticed.
     Reuse existing consumer tests such as
     `tests/Integration/Utils/RequestLoggerTest.php` and
     `tests/Integration/EventSubscriber/RequestLogSubscriberTest.php` where
     relevant; do not weaken redaction or authorization coverage.
-11. Update `doc/CUSTOM_CONFIGURATION.md` and other affected setup or command
+11. Update [CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md)
+    and other affected setup or command
     documentation when keys, types, defaults, file locations, or deployment
     steps change. State any required operator action without applying
     production changes, restarting services, or overwriting local files
@@ -113,25 +114,21 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="validation"></a>
 
-* Run `make lint-yaml` for YAML changes and `make lint-configuration` for the
-  active application JSON file, inside the development container or through
-  container-aware Make targets. JSON syntax validation does not verify required
+* Run `make lint-configuration` for the active application JSON file.
+  JSON syntax validation does not verify required
   keys, types, env precedence, or consumer behavior; validate those separately.
   If editing a different configuration file, verify that file too rather than
   assuming the active-file check covers it.
-* For service or package configuration changes, run
-  `bin/console lint:container` and boot or test the affected environments.
-  Env values may resolve lazily: inspect the installed command's support for
+* Env values may resolve lazily: inspect `bin/console lint:container` support for
   `--resolve-env-vars` when required, and exercise the consumer to verify
   runtime resolution. Do not print resolved secret values.
-* Run targeted consumer and caller-boundary tests plus relevant checks from
-  shared guidance. For Compose changes, validate with
+* For Compose changes, validate with
   `docker compose config --quiet` from the host, including the relevant
   production overrides when affected. Do not recreate services to validate
   configuration without approval.
 
 ---
 
-[Back to previous](../shared-guidance.md)
+[Back to previous](../README.md)
 
 [Back to main README.md](../../../README.md)

@@ -3,16 +3,32 @@ name: update-dependencies
 description: Update Composer, Composer tool, Docker image, or GitHub Actions dependencies safely using this repository's update and validation workflows.
 ---
 
-# Update dependencies
+# What is this?
+
+<a id="what-is-this"></a>
 
 Use this skill when updating or reviewing dependency versions, lockfiles, base
 images, or pinned GitHub Actions. Do not use it to add unrelated dependencies;
 follow the feature-specific skill and repository rules when a feature requires
 a new package.
 
-Follow the shared skill guidance in `.github/skills/shared-guidance.md`.
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and
+[AI rules](../../../doc/AI_RULES.md).
 
-## Update order
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Update order](#update-order)
+    * [Workflow](#workflow)
+    * [Validation](#validation)
+
+## Update order [ᐞ](#table-of-contents)
+
+<a id="update-order"></a>
 
 For Composer dependency updates, update the tool dependencies under `tools/`
 first. Validate and commit those changes separately before updating the main
@@ -24,9 +40,12 @@ available, state that and proceed without an empty commit.
 
 Standalone Symfony Flex recipe updates are configuration/scaffolding updates,
 not Composer package upgrades; this tool-first ordering does not apply to them.
-Follow `.github/skills/update-symfony-recipes/SKILL.md` without upgrading packages.
+Follow [update-symfony-recipes](../update-symfony-recipes/SKILL.md) without
+upgrading packages.
 
-## Workflow
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
 
 1. Identify the dependency scope and requested update range. Check
    `composer.json` and `composer.lock` for application dependencies,
@@ -44,13 +63,15 @@ Follow `.github/skills/update-symfony-recipes/SKILL.md` without upgrading packag
      and lockfile, and use `make update-tools` only when the requested scope
      includes those tools.
    * Symfony Flex recipes: follow
-     `.github/skills/update-symfony-recipes/SKILL.md` for inspection with
+     [update-symfony-recipes](../update-symfony-recipes/SKILL.md) for inspection
+     with
      `composer recipes`, targeted updates, conflict handling, and validation.
      Do not assume a package upgrade also updates its installed recipe.
    * Docker images: follow
-     `.github/skills/update-docker-images/SKILL.md` for image selection,
+     [update-docker-images](../update-docker-images/SKILL.md) for image selection,
      multi-platform digest pinning, and validation.
-   * GitHub Actions: follow `doc/ACTIONS_UPDATE.md` and use
+   * GitHub Actions: follow [ACTIONS_UPDATE.md](../../../doc/ACTIONS_UPDATE.md)
+     and use
      `make check-action-updates` or `bash scripts/check-action-updates.sh` as
      appropriate. Keep immutable SHA pins and update their version comments
      consistently.
@@ -65,13 +86,20 @@ Follow `.github/skills/update-symfony-recipes/SKILL.md` without upgrading packag
    configuration, and retain only changes required by the requested updates.
    Do not hand-edit lockfiles or replace dependency management with manual
    version pinning.
-5. Run the relevant validation for the changed scope. For Composer changes,
-   run `make composer-validate`, `make check-security`, and `make run-tests`;
-   run the applicable quality checks from `.github/copilot-instructions.md`
-   when the update could affect application code or build tooling. For Docker
-   and GitHub Actions updates, run their documented pin/update checks and
-   relevant CI checks. Follow the shared guidance for execution environment
-   and report any checks that could not run.
-6. Summarize the dependency scopes and versions changed, notable compatibility
-   or recipe changes, and validation results. Do not commit unless explicitly
-   asked.
+5. Include dependency scopes and versions changed, plus notable compatibility
+   or recipe changes, in the handoff.
+
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
+
+* For Composer changes, run `make composer-validate`, `make check-security`,
+  and `make run-tests`.
+* For Docker and GitHub Actions updates, run their documented pin/update
+  checks and relevant CI checks.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)
