@@ -54,6 +54,17 @@ upgrading packages.
    Read `symfony.lock` when Symfony recipes may be affected. If the scope or
    acceptable version range is unclear, ask before making a broad update.
 2. Check the existing update procedures before changing versions:
+   Inspect root Composer scripts and plugin forwarding before choosing a
+   command. This project's `post-update-cmd` runs `make update-tools` and
+   auto-scripts, and `extra.bamarni-bin.forward-command` is enabled. A targeted
+   package argument alone does not guarantee that only that package's files
+   change. Plan for these side effects and review tool lockfiles as well as
+   the root lockfile. If a scoped update requires suppressing scripts or
+   forwarding, check the installed tooling's supported controls, state what
+   will be skipped, and perform the necessary autoload/cache/validation steps
+   explicitly. Do not silently disable plugins or security checks, or rerun
+   the broad update hook merely to finish a focused update.
+
    * Application Composer dependencies: use `make check-dependencies-patch`,
      `make check-dependencies-minor`, or `make check-dependencies-latest` to
      inspect available updates. Use `make update` only for an explicitly

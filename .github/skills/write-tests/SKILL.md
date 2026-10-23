@@ -83,7 +83,10 @@ dependencies with doubles.
    validation, authentication, and authorization as relevant.
 3. For writes, assert the resulting state or response, not only that the
    operation did not throw. Keep data isolated and follow established fixture
-   and data-provider patterns.
+   and data-provider patterns. When persistence is the contract, verify the
+   stored result rather than only the mutated in-memory entity. Reload or
+   refresh through the existing test setup when needed to detect missing
+   flushes, mapping problems, or relationship ownership mistakes.
 4. Avoid asserting incidental implementation details. When behavior changes,
    update assertions for the old contract without weakening unrelated security
    or regression coverage.
