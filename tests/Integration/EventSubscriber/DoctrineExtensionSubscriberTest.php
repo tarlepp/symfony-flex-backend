@@ -33,7 +33,7 @@ final class DoctrineExtensionSubscriberTest extends KernelTestCase
             ->willReturn(null);
 
         $blameableListener
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('setUserValue');
 
         new DoctrineExtensionSubscriber($blameableListener, $userTypeIdentification)

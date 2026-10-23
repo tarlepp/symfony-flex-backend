@@ -35,7 +35,7 @@ final class ControllerCollectionTest extends KernelTestCase
     #[TestDox('Test that `get` method throws an exception when specified `REST` controller is not found')]
     public function testThatGetMethodThrowsAnException(): void
     {
-        $stubLogger = $this->createMock(LoggerInterface::class);
+        $loggerStub = self::createStub(LoggerInterface::class);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIsOrContains('REST controller \'FooBar\' does not exist');
@@ -72,7 +72,7 @@ final class ControllerCollectionTest extends KernelTestCase
         };
 
         /** @psalm-suppress MixedArgumentTypeCoercion */
-        new ControllerCollection($iteratorAggregate, $stubLogger)
+        new ControllerCollection($iteratorAggregate, $loggerStub)
             ->get('FooBar');
     }
 

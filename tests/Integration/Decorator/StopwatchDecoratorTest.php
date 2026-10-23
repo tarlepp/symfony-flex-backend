@@ -40,19 +40,19 @@ final class StopwatchDecoratorTest extends KernelTestCase
     #[TestDox('Test that decorator calls expected methods from `StopWatch` service')]
     public function testThatDecoratorCallsStopWatchStartAndStopMethods(): void
     {
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $stopWatchMock = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('start')
             ->with('EntityReferenceExists->getTargets', EntityReferenceExists::class);
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('stop')
             ->with('EntityReferenceExists->getTargets');
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+        $decorator = new StopwatchDecorator($stopWatchMock, new NullLogger());
 
         $decoratedService = $decorator->decorate(new EntityReferenceExists());
 
@@ -69,9 +69,9 @@ final class StopwatchDecoratorTest extends KernelTestCase
             }
         };
 
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $stopWatchStub = self::createStub(Stopwatch::class);
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+        $decorator = new StopwatchDecorator($stopWatchStub, new NullLogger());
 
         $result = $decorator->decorate($service);
 
@@ -84,9 +84,9 @@ final class StopwatchDecoratorTest extends KernelTestCase
     {
         $service = new FinalTestService();
 
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $stopWatchStub = self::createStub(Stopwatch::class);
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+        $decorator = new StopwatchDecorator($stopWatchStub, new NullLogger());
 
         $result = $decorator->decorate($service);
 
@@ -100,17 +100,17 @@ final class StopwatchDecoratorTest extends KernelTestCase
     {
         $service = new ServiceWithInternalDefaults();
 
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $stopWatchMock = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('start');
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('stop');
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+        $decorator = new StopwatchDecorator($stopWatchMock, new NullLogger());
 
         $result = $decorator->decorate($service);
 
@@ -124,29 +124,29 @@ final class StopwatchDecoratorTest extends KernelTestCase
     #[TestDox('Test that `decorate` method decorates possible inner objects / services')]
     public function testThatDecoratorAlsoDecoratesInnerObjects(): void
     {
-        $managerRegistry = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
-        $entityManager = $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $managerRegistryMock = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
+        $entityManagerStub = self::createStub(EntityManager::class);
+        $stopWatchMock = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $managerRegistry
+        $managerRegistryMock
             ->expects($this->once())
             ->method('getManagerForClass')
-            ->willReturn($entityManager);
+            ->willReturn($entityManagerStub);
 
-        $entityManager
+        $entityManagerStub
             ->method('isOpen')
             ->willReturn(true);
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->exactly(2))
             ->method('start');
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->exactly(2))
             ->method('stop');
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
-        $repository = new ApiKeyRepository($managerRegistry);
+        $decorator = new StopwatchDecorator($stopWatchMock, new NullLogger());
+        $repository = new ApiKeyRepository($managerRegistryMock);
         $resource = new ApiKeyResource($repository);
 
         /** @var ApiKeyResource $decoratedService */
@@ -163,34 +163,34 @@ final class StopwatchDecoratorTest extends KernelTestCase
     {
         $apiKey = new ApiKey();
 
-        $managerRegistry = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
-        $entityManager = $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $managerRegistryMock = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
+        $entityManagerMock = $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
+        $stopWatchMock = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $managerRegistry
+        $managerRegistryMock
             ->expects($this->once())
             ->method('getManagerForClass')
-            ->willReturn($entityManager);
+            ->willReturn($entityManagerMock);
 
-        $entityManager
+        $entityManagerMock
             ->method('isOpen')
             ->willReturn(true);
 
-        $entityManager
+        $entityManagerMock
             ->expects($this->once())
             ->method('find')
             ->willReturn($apiKey);
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('start');
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('stop');
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
-        $repository = new ApiKeyRepository($managerRegistry);
+        $decorator = new StopwatchDecorator($stopWatchMock, new NullLogger());
+        $repository = new ApiKeyRepository($managerRegistryMock);
 
         /** @var ApiKeyRepository $decoratedService */
         $decoratedService = $decorator->decorate($repository);
@@ -203,17 +203,17 @@ final class StopwatchDecoratorTest extends KernelTestCase
     {
         $service = new FluentService();
 
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $stopWatchMock = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->atLeastOnce())
             ->method('start');
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->atLeastOnce())
             ->method('stop');
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+        $decorator = new StopwatchDecorator($stopWatchMock, new NullLogger());
 
         /** @var FluentService $decoratedService */
         $decoratedService = $decorator->decorate($service);
@@ -230,18 +230,18 @@ final class StopwatchDecoratorTest extends KernelTestCase
     {
         $service = new ServiceWithNeverReturnType();
 
-        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+        $stopWatchMock = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
-        $stopWatch
+        $stopWatchMock
             ->expects($this->once())
             ->method('start');
 
         // `never`-returning methods throw before returning, so `stop` is never called
-        $stopWatch
+        $stopWatchMock
             ->expects($this->never())
             ->method('stop');
 
-        $decorator = new StopwatchDecorator($stopWatch, new NullLogger());
+        $decorator = new StopwatchDecorator($stopWatchMock, new NullLogger());
 
         $result = $decorator->decorate($service);
 

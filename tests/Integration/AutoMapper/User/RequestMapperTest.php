@@ -44,11 +44,11 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     #[TestDox('Test that `transformUserGroups` calls expected resource method when processing `$dtoClass` DTO object')]
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
-        $resource = $this->getResource();
-        $requestMapper = new RequestMapper($resource);
+        $resourceMock = $this->getResourceMock();
+        $requestMapper = new RequestMapper($resourceMock);
         $userGroup = new UserGroup();
 
-        $resource
+        $resourceMock
             ->expects($this->once())
             ->method('getReference')
             ->with($userGroup->getId())
@@ -76,7 +76,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     #[TestDox('Test that `transformLanguage` returns `$expected` when using `$dtoClass` DTO and `$input` as an input')]
     public function testThatTransformLanguageWorksAsExpected(Language $expected, string $dtoClass, string $input): void
     {
-        $requestMapper = new RequestMapper($this->getResource());
+        $requestMapper = $this->getRequestMapper();
 
         $request = new Request([], [
             'language' => $input,
@@ -115,7 +115,7 @@ final class RequestMapperTest extends RestRequestMapperTestCase
      * @phpstan-return MockObject&UserGroupResource
      */
     #[Override]
-    protected function getResource(): MockObject
+    protected function getResourceMock(): MockObject
     {
         return $this->getMockBuilder(UserGroupResource::class)
             ->disableOriginalConstructor()
@@ -125,6 +125,6 @@ final class RequestMapperTest extends RestRequestMapperTestCase
     #[Override]
     protected function getRequestMapper(): RestRequestMapper
     {
-        return new RequestMapper($this->getResource());
+        return new RequestMapper(self::createStub(UserGroupResource::class));
     }
 }

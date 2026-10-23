@@ -46,10 +46,10 @@ final class ResponseHandlerTest extends KernelTestCase
         string $expectedContent,
     ): void {
         $serializer = self::getContainer()->get(SerializerInterface::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        $resourceServiceStub = self::createStub(RestResourceInterface::class);
 
         $httpResponse = new ResponseHandler($serializer)
-            ->createResponse($request, $data, $stubResourceService, 200);
+            ->createResponse($request, $data, $resourceServiceStub, 200);
 
         self::assertSame($expectedContent, $httpResponse->getContent());
     }
@@ -62,18 +62,18 @@ final class ResponseHandlerTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionMessageIsOrContains('Some exception');
 
-        $stubSerializer = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
 
         $request = Request::create('');
         $exception = new Exception('Some exception');
 
-        $stubSerializer
+        $serializerMock
             ->expects($this->once())
             ->method('serialize')
             ->withAnyParameters()
             ->willThrowException($exception);
 
-        new ResponseHandler($stubSerializer)
+        new ResponseHandler($serializerMock)
             ->createResponse($request, []);
     }
 
@@ -101,7 +101,7 @@ final class ResponseHandlerTest extends KernelTestCase
 
         $serializer = self::getContainer()->get(SerializerInterface::class);
 
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        $resourceServiceStub = self::createStub(RestResourceInterface::class);
 
         new ResponseHandler($serializer)
             ->createResponse(
@@ -109,7 +109,7 @@ final class ResponseHandlerTest extends KernelTestCase
                 [
                     'foo' => 'bar',
                 ],
-                $stubResourceService,
+                $resourceServiceStub,
                 200,
                 $format,
             );
@@ -123,35 +123,35 @@ final class ResponseHandlerTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionMessageIsOrContains('Field \'foo\': test error');
 
-        $serializer = $this->createMock(SerializerInterface::class);
-        $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
-        $formError = $this->createMock(FormError::class);
+        $serializerStub = self::createStub(SerializerInterface::class);
+        $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formErrorMock = $this->createMock(FormError::class);
 
-        $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
+        $formErrorIterator = new FormErrorIterator($formInterfaceMock, [$formErrorMock]);
 
-        $formInterface
+        $formInterfaceMock
             ->expects($this->once())
             ->method('getErrors')
             ->withAnyParameters()
             ->willReturn($formErrorIterator);
 
-        $formInterface
+        $formInterfaceMock
             ->expects($this->once())
             ->method('getName')
             ->willReturn('foo');
 
-        $formError
+        $formErrorMock
             ->expects($this->once())
             ->method('getOrigin')
-            ->willReturn($formInterface);
+            ->willReturn($formInterfaceMock);
 
-        $formError
-            ->expects(self::atLeast(1))
+        $formErrorMock
+            ->expects($this->atLeast(1))
             ->method('getMessage')
             ->willReturn('test error');
 
-        new ResponseHandler($serializer)
-            ->handleFormError($formInterface);
+        new ResponseHandler($serializerStub)
+            ->handleFormError($formInterfaceMock);
     }
 
     /**
@@ -162,36 +162,36 @@ final class ResponseHandlerTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionMessageIsOrContains('test error');
 
-        $serializer = $this->createMock(SerializerInterface::class);
-        $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
-        $formError = $this->createMock(FormError::class);
+        $serializerStub = self::createStub(SerializerInterface::class);
+        $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formErrorMock = $this->createMock(FormError::class);
 
         // Create FormErrorIterator
-        $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
+        $formErrorIterator = new FormErrorIterator($formInterfaceMock, [$formErrorMock]);
 
-        $formInterface
+        $formInterfaceMock
             ->expects($this->once())
             ->method('getErrors')
             ->withAnyParameters()
             ->willReturn($formErrorIterator);
 
-        $formInterface
+        $formInterfaceMock
             ->expects($this->once())
             ->method('getName')
             ->willReturn('');
 
-        $formError
+        $formErrorMock
             ->expects($this->once())
             ->method('getOrigin')
-            ->willReturn($formInterface);
+            ->willReturn($formInterfaceMock);
 
-        $formError
-            ->expects(self::atLeast(1))
+        $formErrorMock
+            ->expects($this->atLeast(1))
             ->method('getMessage')
             ->willReturn('test error');
 
-        new ResponseHandler($serializer)
-            ->handleFormError($formInterface);
+        new ResponseHandler($serializerStub)
+            ->handleFormError($formInterfaceMock);
     }
 
     /**
@@ -202,7 +202,7 @@ final class ResponseHandlerTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $serializer = $this->createMock(SerializerInterface::class);
+        $serializerStub = self::createStub(SerializerInterface::class);
         $resource = static::getContainer()->get(ApiKeyResource::class);
 
         $request = Request::create(
@@ -212,7 +212,7 @@ final class ResponseHandlerTest extends KernelTestCase
             ],
         );
 
-        $output = new ResponseHandler($serializer)
+        $output = new ResponseHandler($serializerStub)
             ->getSerializeContext($request, $resource);
 
         $expectedContext = [
@@ -236,7 +236,7 @@ final class ResponseHandlerTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $serializer = $this->createMock(SerializerInterface::class);
+        $serializerStub = self::createStub(SerializerInterface::class);
         $resource = static::getContainer()->get(ApiKeyResource::class);
 
         $request = Request::create(
@@ -246,7 +246,7 @@ final class ResponseHandlerTest extends KernelTestCase
             ],
         );
 
-        $output = new ResponseHandler($serializer)
+        $output = new ResponseHandler($serializerStub)
             ->getSerializeContext($request, $resource);
 
         $expectedContext = [
