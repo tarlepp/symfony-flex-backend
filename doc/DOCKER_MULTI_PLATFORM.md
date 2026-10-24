@@ -203,10 +203,13 @@ The commands in this document are wrapped as Make targets backed by
 `scripts/docker-images.sh`. They use Docker on the host machine, so run them
 from the host, not inside the `php` container. They require Docker with the
 `buildx` plugin (included in Docker Desktop and current Docker Engine packages)
-and `jq`.
+and `jq`. The read-only update checker additionally requires `curl`.
 
 * `make docker-image-digest` - show multi-platform index digest for image
   (asks `IMAGE`)
+* `make docker-image-check-updates` - report newer stable Docker Hub versions
+  for external Dockerfile images, including `COPY --from` tools; optionally
+  set `IMAGE` to check a single image
 * `make docker-image-verify-pins` - verify that PHP, nginx and MariaDB
   base images are multi-platform
 * `make docker-builder-platforms` - show platforms supported by the buildx
@@ -236,7 +239,32 @@ containers always ask for confirmation.
 
 <a id="step-1-choose-the-new-tag"></a>
 
-Pick the new tag from Docker Hub, for example `php:8.5.11-fpm-bookworm`.
+Check available versions from Docker Hub:
+
+```bash
+make docker-image-check-updates
+make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm
+```
+
+The checker requires `curl`, `jq` and Docker with buildx. It checks full stable
+semantic-version tags, including major upgrades, preserving the current
+variant (for example `-fpm-bookworm`). It follows all tag pages and compares
+versions numerically, not by publication date. Floating and prerelease tags
+are skipped with a diagnostic; registries other than Docker Hub are unsupported.
+Results are grouped by source Dockerfile. Shared images appear in each relevant
+group but are checked only once. Each update includes a copyable
+`tag@sha256:digest` reference and its supported platforms, verified by inspecting
+the resolved digest as an index with at least two distinct runnable platforms.
+Failed digest lookups or single-platform updates fail explicitly.
+It reports updates without modifying files or checking current-tag digest
+changes or upgrade compatibility. It exits `0` only when there are no updates
+or errors (explicit skips are allowed). Available updates or lookup errors exit
+`1`; missing tools exit `69`. All images are checked before reporting failure,
+so the command can be used as a CI gate. Make also fails, but does not preserve
+the script's exact non-zero exit code.
+
+Review compatibility before choosing the new tag, especially for major upgrades.
+Use the following steps to inspect and update its digest.
 
 ### Step 2: Get the multi-platform index digest [ᐞ](#table-of-contents)
 
@@ -363,7 +391,22 @@ Use `make docker-image-digest` to check any other image.
 
 <a id="continuous-integration"></a>
 
-The same check runs in GitHub Actions in the
+The `Check Docker image versions` job (`docker-image-check-updates` in
+`.github/workflows/main.yml`) starts alongside linting on the workflow's push,
+pull request, scheduled and manual runs. It runs the helper's regression tests
+and `make docker-image-check-updates`. The `ci-summary` prerequisite gate
+requires this job to succeed, so available updates or lookup errors block both
+tests and Docker builds. Explicitly skipped tags remain non-failing.
+
+For authenticated registry requests, configure both `DOCKERHUB_USERNAME` and
+`DOCKERHUB_TOKEN` repository secrets; use a read-only Docker Hub access token.
+Without either secret (including fork pull requests), the job reports that it
+is using anonymous requests. Configuring only one secret fails explicitly.
+Credentials are passed through environment variables and `--password-stdin`;
+the job logs out even if the check fails. No secrets are required for the core
+check to run, but anonymous rate limits can still fail it.
+
+Pin verification also runs in GitHub Actions in the
 `Verify Docker base image pins (multi-platform)` job
 (`docker-image-verify-pins` in `.github/workflows/main.yml`). The job has no
 dependencies, so it starts immediately in parallel with the first lint and
@@ -387,7 +430,13 @@ When running in GitHub Actions, the command also:
 
 Transient registry errors (for example Docker Hub `429 Too Many Requests`,
 timeouts and server errors) are retried twice with a short delay, both in CI
-and locally. If the job still fails because of rate limiting, re-run the job.
+and locally. This includes update digest lookups and raw manifest inspection,
+with delays of 10 and 20 seconds. Persistent throttling still fails the check;
+retries do not bypass Docker Hub quotas. Authenticate with `docker login docker.io`
+or wait for the limit to reset before retrying.
+Retry progress streams to stderr every five seconds, showing the next attempt
+number and remaining delay. For rate limits, each countdown includes a reminder
+to stop with `Ctrl+C` and authenticate before rerunning the command.
 
 ## Building multi-platform images [ᐞ](#table-of-contents)
 
@@ -515,6 +564,10 @@ platform (linux/arm64/v8)` or `exec format error`:
 
 * Docker Hub limits anonymous registry requests. Log in with `docker login`
   or wait for the limit to reset.
+* For CI, authenticate to Docker Hub before running the checker, using credentials
+  stored in CI secrets. The script uses Docker's existing credentials; it never
+  logs in automatically. Authentication can help with anonymous quotas but does
+  not guarantee protection from all rate limits.
 
 Build works on x86-64 but fails on ARM in a `RUN` step:
 

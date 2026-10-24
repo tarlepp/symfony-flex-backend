@@ -134,6 +134,46 @@ jobs:
       - name: Verify multi-platform base images
         run: make docker-image-verify-pins
 
+  docker-image-check-updates:
+    name: Check Docker image versions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - *harden_runner_step
+
+      - name: Make checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: '1'
+          persist-credentials: false
+
+      - name: Run Docker image helper regression tests
+        run: bash scripts/tests/docker-images-test.sh
+
+      - name: Authenticate to Docker Hub when credentials are available
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
+            printf '%s' "$DOCKERHUB_TOKEN" | docker login docker.io --username "$DOCKERHUB_USERNAME" --password-stdin
+          elif [ -n "$DOCKERHUB_USERNAME" ] || [ -n "$DOCKERHUB_TOKEN" ]; then
+            echo "::error::Configure both DOCKERHUB_USERNAME and DOCKERHUB_TOKEN, or neither."
+            exit 1
+          else
+            echo "::notice::Docker Hub credentials unavailable; using anonymous registry requests (rate limits apply)."
+          fi
+
+      - name: Check for newer stable Docker image versions
+        run: make docker-image-check-updates
+
+      - name: Log out of Docker Hub
+        if: ${{ always() }}
+        run: docker logout docker.io
+
   static-analyzers:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
@@ -191,6 +231,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     needs:
+      - docker-image-check-updates
       - docker-image-verify-pins
       - gitleaks
       - lint-configuration
@@ -209,12 +250,14 @@ jobs:
           echo "Static analyzer matrix result: ${{ needs.static-analyzers.result }}"
           echo "Gitleaks result: ${{ needs.gitleaks.result }}"
           echo "Docker base image pin verification result: ${{ needs.docker-image-verify-pins.result }}"
+          echo "Docker image version check result: ${{ needs.docker-image-check-updates.result }}"
           test "${{ needs.security-check.result }}" = "success"
           test "${{ needs.lint-configuration.result }}" = "success"
           test "${{ needs.lint-documentation.result }}" = "success"
           test "${{ needs.static-analyzers.result }}" = "success"
           test "${{ needs.gitleaks.result }}" = "success"
           test "${{ needs.docker-image-verify-pins.result }}" = "success"
+          test "${{ needs.docker-image-check-updates.result }}" = "success"
 
   test:
     name: PHPUnit tests
