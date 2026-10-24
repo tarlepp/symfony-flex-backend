@@ -107,10 +107,16 @@ contains:
 * application tests, and
 * a summary gate that validates prerequisite job results.
 
-The CI configuration defines the exact commands, conditions, matrices,
-artifacts, and failure behavior. Update this summary when the workflow's
-structure changes; do not duplicate the complete command list from
-[`AGENTS.md`](../AGENTS.md).
+For application tests, the workflow runs `make run-tests-php`. The local
+`make run-tests` target may instead select phpdbg when it is installed. Use
+`make run-tests-php` locally when reproducing the CI test runner.
+
+This CI coverage map is distinct from the broader local pre-commit suite in
+[`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a
+command-for-command description of CI. The workflow defines the exact
+commands, conditions, matrices, artifacts, and failure behavior. Update this
+summary when the workflow's structure changes, without duplicating the full
+local checklist.
 
 ## Maintenance workflow [ᐞ](#table-of-contents)
 
