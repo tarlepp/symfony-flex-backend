@@ -85,7 +85,7 @@ check-updates defaults to external FROM and COPY --from images in Dockerfile
 and docker/*/Dockerfile*. It reports stable versions, including major upgrades,
 preserving the tag variant. It groups results by Dockerfile with verified multi-platform
 pin references for updates. It requires curl, jq and Docker with buildx, and
-changes no files. Exit status: 0 = checked (updates allowed), 1 = lookup errors,
+changes no files. Exit status: 0 = no updates or errors, 1 = updates or errors,
 69 = missing tools. Floating and prerelease tags are skipped explicitly.
 
   IMAGE       Image reference (digest), or optional single image (check-updates)
@@ -181,8 +181,8 @@ hub_tags() {
 update_pin_reference() {
     local image="$1" digest raw type platforms
 
-    if ! digest="$(docker buildx imagetools inspect "$image" --format '{{.Manifest.Digest}}')"; then
-        error "Could not resolve index digest for ${image}"
+    if ! digest="$(inspect_image "$image" --format '{{.Manifest.Digest}}')"; then
+        error "Could not resolve index digest for ${image}: $(tail -n 1 <<< "$digest")"
         return 1
     fi
     if ! [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
@@ -268,13 +268,14 @@ check_image_update() {
         '($latest | split(".") | map(tonumber)) > ($current | split(".") | map(tonumber))' > /dev/null; then
         warning "UPDATE" "${image} -> ${image%:*}:${prefix}${latest}${suffix}"
         update_pin_reference "${image%:*}:${prefix}${latest}${suffix}" || return 1
+        return 1
     else
         info "OK" "${image}: no newer stable version"
     fi
 }
 
 command_check_updates() {
-    local file image references tool heading="" failures=0
+    local file image references tool heading="" issues=0
     local -A seen=() results=()
 
     require_docker
@@ -316,15 +317,15 @@ command_check_updates() {
             heading="$file"
         fi
         if [ -z "${results[$image]+set}" ]; then
-            if ! results[$image]="$(check_image_update "$image" 2>&1)"; then
-                failures=$((failures + 1))
+            if ! results[$image]="$(check_image_update "$image")"; then
+                issues=$((issues + 1))
             fi
         fi
         printf '%s\n' "${results[$image]}" | sed 's/^/  /'
     done <<< "$references"
 
-    if [ "$failures" -gt 0 ]; then
-        error "${failures} image update check(s) failed"
+    if [ "$issues" -gt 0 ]; then
+        warning "CHECK" "${issues} image(s) require attention: updates available or checks failed"
         return 1
     fi
 }
@@ -422,16 +423,20 @@ require_docker() {
     fi
 }
 
-# Fetch raw manifest (index or single manifest) with a single registry request.
 # Retries transient registry errors (rate limit, timeouts, server errors).
-# Prints manifest on success, or registry error on failure.
-raw_manifest() {
-    local attempt output delay
+# Prints inspection output on success, or registry error on failure.
+inspect_image() {
+    local attempt output delay remaining hint rate_limit_notified=0
 
     for attempt in 1 2 3; do
-        if output="$(docker buildx imagetools inspect --raw "$1" 2>&1)"; then
+        if output="$(docker buildx imagetools inspect "$@" 2>&1)"; then
             printf '%s' "$output"
             return 0
+        fi
+
+        if [ "$rate_limit_notified" -eq 0 ] && grep -qiE '429|toomanyrequests' <<< "$output"; then
+            warning "RATE LIMIT" "Docker Hub returned 429 Too Many Requests. Run 'docker login docker.io' or wait for the limit to reset; CI should authenticate before running this check." >&2
+            rate_limit_notified=1
         fi
 
         if [ "$attempt" -eq 3 ] || ! grep -qiE '429|toomanyrequests|timeout|EOF|50[0-9] ' <<< "$output"; then
@@ -439,12 +444,25 @@ raw_manifest() {
         fi
 
         delay=$((attempt * 10))
-        printf '  %sRETRY%s Registry request failed, retrying in %ss\n' "$YELLOW" "$NC" "$delay" >&2
-        sleep "$delay"
+        hint=""
+        if [ "$rate_limit_notified" -eq 1 ]; then
+            hint=" Press Ctrl+C to stop, then run 'docker login docker.io'."
+        fi
+        for ((remaining = delay; remaining > 0; remaining -= 5)); do
+            printf '  %sRETRY%s Registry request failed; attempt %s/3 in %ss.%s\n' \
+                "$YELLOW" "$NC" "$((attempt + 1))" "$remaining" "$hint" >&2
+            sleep 5 || return $?
+        done
+        printf '  %sRETRY%s Starting registry request attempt %s/3\n' \
+            "$YELLOW" "$NC" "$((attempt + 1))" >&2
     done
 
     printf '%s\n' "$output"
     return 1
+}
+
+raw_manifest() {
+    inspect_image --raw "$1"
 }
 
 github_escape_data() {
@@ -524,7 +542,10 @@ command_digest() {
 
     type="$(media_type "$raw")"
     platforms="$(image_platforms "$raw")"
-    digest="$(docker buildx imagetools inspect "$IMAGE" --format '{{.Manifest.Digest}}')"
+    if ! digest="$(inspect_image "$IMAGE" --format '{{.Manifest.Digest}}')"; then
+        error "Could not resolve index digest for ${IMAGE}: $(tail -n 1 <<< "$digest")"
+        exit 1
+    fi
     name="${IMAGE%@*}"
 
     printf '\n'
