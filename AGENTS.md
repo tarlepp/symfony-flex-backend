@@ -144,21 +144,11 @@ and the actual code, dependency manifests, and CI workflows.
 
 <a id="reference-guidance"></a>
 
-Use the canonical AI documentation inventory and reading order in
-[the README](README.md#ai-assisted-development):
-
-1. `AGENTS.md` - instructions specific to AI coding agents
-2. `.github/copilot-instructions.md` - short repository rules
-3. `CLAUDE.md` - broader architecture and workflow context
-4. `doc/AI_RULES.md` - AI guidance maintenance and CI strategy
-5. `.github/skills/README.md` - task-specific workflows
-6. `.github/pull_request_template.md` - human review checklist when preparing
-   pull requests
-
-This is a reading order, not precedence. Platform instructions apply first;
-the implementation, tests, configuration, and CI are the source of truth for
-current behavior. Keep these documents aligned when the canonical inventory
-changes.
+Use the [README's canonical AI documentation inventory](README.md#ai-assisted-development)
+to find project context, AI-guidance maintenance policy, task-specific skills,
+and the pull request review checklist. The reading order is not precedence:
+platform instructions apply first, and the implementation, tests,
+configuration, and CI are the source of truth for current behavior.
 
 ---
 
