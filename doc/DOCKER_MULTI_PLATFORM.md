@@ -203,10 +203,13 @@ The commands in this document are wrapped as Make targets backed by
 `scripts/docker-images.sh`. They use Docker on the host machine, so run them
 from the host, not inside the `php` container. They require Docker with the
 `buildx` plugin (included in Docker Desktop and current Docker Engine packages)
-and `jq`.
+and `jq`. The read-only update checker additionally requires `curl`.
 
 * `make docker-image-digest` - show multi-platform index digest for image
   (asks `IMAGE`)
+* `make docker-image-check-updates` - report newer stable Docker Hub versions
+  for external Dockerfile images, including `COPY --from` tools; optionally
+  set `IMAGE` to check a single image
 * `make docker-image-verify-pins` - verify that PHP, nginx and MariaDB
   base images are multi-platform
 * `make docker-builder-platforms` - show platforms supported by the buildx
@@ -236,7 +239,29 @@ containers always ask for confirmation.
 
 <a id="step-1-choose-the-new-tag"></a>
 
-Pick the new tag from Docker Hub, for example `php:8.5.11-fpm-bookworm`.
+Check available versions from Docker Hub:
+
+```bash
+make docker-image-check-updates
+make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm
+```
+
+The checker requires `curl`, `jq` and Docker with buildx. It checks full stable
+semantic-version tags, including major upgrades, preserving the current
+variant (for example `-fpm-bookworm`). It follows all tag pages and compares
+versions numerically, not by publication date. Floating and prerelease tags
+are skipped with a diagnostic; registries other than Docker Hub are unsupported.
+Results are grouped by source Dockerfile. Shared images appear in each relevant
+group but are checked only once. Each update includes a copyable
+`tag@sha256:digest` reference and its supported platforms, verified by inspecting
+the resolved digest as an index with at least two distinct runnable platforms.
+Failed digest lookups or single-platform updates fail explicitly.
+It reports updates without modifying files or checking current-tag digest
+changes or upgrade compatibility. A successful check exits `0` even when
+updates are available; lookup errors exit `1` and missing tools exit `69`.
+
+Review compatibility before choosing the new tag, especially for major upgrades.
+Use the following steps to inspect and update its digest.
 
 ### Step 2: Get the multi-platform index digest [ᐞ](#table-of-contents)
 

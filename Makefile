@@ -858,6 +858,13 @@ endif
 # Missing values are asked interactively, or those can be given as variables.
 # These need host Docker, so only a real container is blocked (CI runners are
 # allowed, unlike `INSIDE_DOCKER_CONTAINER` which is also set in CI).
+docker-image-check-updates: ## Report newer stable Docker Hub image versions
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(WARNING_HOST)
+else
+	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh check-updates
+endif
+
 docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(WARNING_HOST)
