@@ -107,6 +107,9 @@ skills only for layers the task actually changes:
   domain decisions, safety checks, and verification details in each skill.
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
+* Before adding a skill or shared policy, follow the recurrence and
+  non-overlap criteria in [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills);
+  prefer extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
   exactly once, and relative links and anchors resolve. Run
   `python3 scripts/check-skills.py` from the repository root; Markdown lint
