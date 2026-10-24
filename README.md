@@ -305,18 +305,21 @@ For detailed usage, UID/GID notes, and port mappings, see
 
 <a id="ai-assisted-development"></a>
 
-If you use AI assistance in this repository, keep it aligned with the project
-conventions already documented in this order:
+If you use AI assistance in this repository, use this canonical inventory and
+reading order for its guidance:
 
-* [`AGENTS.md`](AGENTS.md) for instructions specific to AI coding agents,
-* `.github/copilot-instructions.md` for short repository rules,
-* `CLAUDE.md` for broader architecture and workflow context,
-* `doc/AI_RULES.md` for how AI guidance is maintained over time, and
-* `.github/pull_request_template.md` for the human review checklist used in
-  pull requests.
+* [`AGENTS.md`](AGENTS.md) for agent-specific instructions
+* [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for
+  concise repository rules
+* [`CLAUDE.md`](CLAUDE.md) for architecture and workflow context
+* [`doc/AI_RULES.md`](doc/AI_RULES.md) for AI guidance maintenance
+* [`.github/skills/README.md`](.github/skills/README.md) for task workflows
+* [`.github/pull_request_template.md`](.github/pull_request_template.md) for
+  the human review checklist when preparing pull requests
 
-See the [AI skills index](.github/skills/README.md) for task-specific workflows
-covering API development, persistence, security, testing, and maintenance.
+This is a reading order, not a precedence rule: platform instructions apply
+first, and the implementation, tests, configuration, and CI remain the source
+of truth for current behavior.
 
 As a simple rule of thumb, update the AI guidance when the same review comment,
 architectural correction, or project convention appears repeatedly and should

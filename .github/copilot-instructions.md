@@ -197,14 +197,21 @@ repository reference format:
 
 <a id="reference-documentation"></a>
 
-For deeper project context, architecture notes, and workflow details, use
-`CLAUDE.md` as the long-form reference document.
+Use the canonical AI documentation inventory and reading order in
+[`README.md`](../README.md#ai-assisted-development):
 
-For the complete security policy, vulnerability reporting, and authentication
-details, see `doc/SECURITY.md`.
+1. [`AGENTS.md`](../AGENTS.md) - agent instructions
+2. [`.github/copilot-instructions.md`](copilot-instructions.md) -
+   concise repository rules
+3. [`CLAUDE.md`](../CLAUDE.md) - architecture and workflow context
+4. [`doc/AI_RULES.md`](../doc/AI_RULES.md) - AI guidance maintenance
+5. [`skills/README.md`](skills/README.md) - task workflows
+6. [`pull_request_template.md`](pull_request_template.md) - PR review checklist
 
-For guidance on maintaining AI policy files and turning recurring issues into
-validation or CI checks, use `doc/AI_RULES.md`.
+This is a reading order, not precedence: platform instructions apply first,
+and the implementation, tests, configuration, and CI are the source of truth
+for current behavior. For security policy and authentication details, see
+[`doc/SECURITY.md`](../doc/SECURITY.md).
 
 ---
 

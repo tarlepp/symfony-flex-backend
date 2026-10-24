@@ -53,15 +53,21 @@ frontend applications or other backend services.
 
 <a id="ai-documentation-map"></a>
 
-Use the repository AI guidance in this order:
+Use the canonical AI guidance inventory and reading order from
+[README.md](README.md#ai-assisted-development):
 
-1. `.github/copilot-instructions.md` - short repository-level operational rules
-2. `CLAUDE.md` - long-form project context, architecture, and workflow notes
-3. `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
-4. `.github/pull_request_template.md` - human review checklist for pull requests
+1. [`AGENTS.md`](AGENTS.md) - agent instructions
+2. [`.github/copilot-instructions.md`](.github/copilot-instructions.md) -
+   concise repository rules
+3. [`CLAUDE.md`](CLAUDE.md) - architecture and workflow context
+4. [`doc/AI_RULES.md`](doc/AI_RULES.md) - AI guidance maintenance
+5. [`.github/skills/README.md`](.github/skills/README.md) - task workflows
+6. [`.github/pull_request_template.md`](.github/pull_request_template.md) -
+   PR review checklist
 
-If one of these documents drifts from the implementation, prefer the actual
-repository code, scripts, and CI configuration as the source of truth.
+This order is for navigation, not precedence. Platform instructions apply
+first, and the actual code, scripts, tests, configuration, and CI are the
+source of truth for implementation details.
 
 ## Version sources of truth [ᐞ](#table-of-contents)
 
@@ -365,9 +371,11 @@ Use `make configuration` to view current application configuration.
 <a id="documentation-structure"></a>
 
 * `README.md` - Project overview and installation
+* `AGENTS.md` - Repository instructions for AI coding agents
 * `CLAUDE.md` - This file - long-form AI assistant context
 * `.github/copilot-instructions.md` - Short operational rules for AI assistants
 * `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
+* `.github/skills/README.md` - Task-specific AI skills index
 * `doc/README.md` - Documentation index
 * `doc/COMMANDS.md` - Complete command reference (Makefile + Console)
 * `doc/DEVELOPMENT.md` - Development best practices and workflow
