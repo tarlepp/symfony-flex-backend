@@ -8,6 +8,7 @@ WORK="$(mktemp -d)"
 cleanup() {
     rm -f "$WORK/bin/docker" "$WORK/manifest.json" "$WORK/output" "$WORK/summary" \
         "$WORK/bin/curl" "$WORK/tags.json" "$WORK/requests" \
+        "$WORK/bin/sleep" "$WORK/docker-attempts" "$WORK/retry-delays" \
         "$WORK/Dockerfile" "$WORK/docker/nginx/Dockerfile" "$WORK/docker/mariadb/Dockerfile"
     rmdir "$WORK/docker/nginx" "$WORK/docker/mariadb" "$WORK/docker" "$WORK/bin" "$WORK"
 }
@@ -18,6 +19,20 @@ mkdir -p "$WORK/bin" "$WORK/docker/nginx" "$WORK/docker/mariadb"
 cat > "$WORK/bin/docker" << 'EOF'
 #!/bin/bash
 set -euo pipefail
+if [[ "$*" == "buildx imagetools inspect "* ]] && [ -n "${TEST_RETRY_TARGET:-}" ]; then
+    target=digest
+    [[ "$*" == *"inspect --raw "* ]] && target=manifest
+    if [ "$target" = "$TEST_RETRY_TARGET" ]; then
+        attempt=0
+        [ ! -f "$TEST_ATTEMPTS" ] || read -r attempt < "$TEST_ATTEMPTS"
+        attempt=$((attempt + 1))
+        printf '%s\n' "$attempt" > "$TEST_ATTEMPTS"
+        if [ "$attempt" -le "${TEST_RETRY_FAILURES:-1}" ]; then
+            printf '%s\n' "${TEST_RETRY_MESSAGE:-unexpected status from HEAD request: 429 Too Many Requests}" >&2
+            exit 1
+        fi
+    fi
+fi
 case "$*" in
     "buildx version") printf 'test buildx\n' ;;
     "buildx imagetools inspect --raw "*)
@@ -42,9 +57,30 @@ case "$*" in
 esac
 EOF
 chmod +x "$WORK/bin/docker"
+cat > "$WORK/bin/sleep" << 'EOF'
+#!/bin/bash
+set -euo pipefail
+if [ -n "${TEST_RETRY_TARGET:-}" ]; then
+    if ! grep -Fq "Press Ctrl+C to stop, then run 'docker login docker.io'." "$TEST_OUTPUT"; then
+        printf 'FAIL: login and cancellation guidance was not visible before waiting\n' >&2
+        exit 1
+    fi
+    attempt="$(cat "$TEST_ATTEMPTS")"
+    remaining=$((attempt * 10 - $(wc -l < "$TEST_RETRY_DELAYS") * 5))
+    if [ "$attempt" -eq 2 ]; then
+        remaining=$((remaining + 10))
+    fi
+    grep -Fq "attempt $((attempt + 1))/3 in ${remaining}s." "$TEST_OUTPUT"
+fi
+printf '%s\n' "$*" >> "$TEST_RETRY_DELAYS"
+EOF
+chmod +x "$WORK/bin/sleep"
 
 export PATH="$WORK/bin:$PATH"
 export TEST_MANIFEST="$WORK/manifest.json"
+export TEST_ATTEMPTS="$WORK/docker-attempts"
+export TEST_RETRY_DELAYS="$WORK/retry-delays"
+export TEST_OUTPUT="$WORK/output"
 export NO_COLOR=1
 export IMAGE=test:fixture
 export GITHUB_ACTIONS=true
@@ -168,7 +204,7 @@ check_updates() {
     printf 'PASS: %s\n' "$name"
 }
 
-check_updates 'stable major upgrade, excluding variants and prereleases' 'test:1.9.9@sha256:aaaa' 0 \
+check_updates 'stable major upgrade, excluding variants and prereleases' 'test:1.9.9@sha256:aaaa' 1 \
     '[UPDATE] test:1.9.9 -> test:2.0.0'
 grep -Fxq 'IMAGE input (no matching Dockerfile)' "$WORK/output"
 grep -Fq 'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
@@ -177,7 +213,7 @@ if grep -q $'\033' "$WORK/output"; then
     printf 'FAIL: NO_COLOR output contains ANSI escapes\n'
     exit 1
 fi
-NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 0 $'\033[1;33m[UPDATE]\033[0m'
+NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[1;33m[UPDATE]\033[0m'
 NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[0;32m[OK]\033[0m'
 check_updates 'up-to-date image' 'test:2.0.0' 0 '[OK] test:2.0.0: no newer stable version'
 if grep -q 'Multi-platform pin:' "$WORK/output"; then
@@ -185,10 +221,10 @@ if grep -q 'Multi-platform pin:' "$WORK/output"; then
     exit 1
 fi
 check_updates 'local version newer than registry' 'test:9.0.0' 0 'no newer stable version'
-check_updates 'Docker Hub prefix and v prefix' 'docker.io/test:v1.0.0' 0 \
+check_updates 'Docker Hub prefix and v prefix' 'docker.io/test:v1.0.0' 1 \
     'docker.io/test:v1.0.0 -> docker.io/test:v5.0.0'
 grep -Fq '/repositories/library/test/tags/' "$TEST_REQUESTS"
-check_updates 'namespaced repository' 'mlocati/test:1.0.0' 0 'mlocati/test:1.0.0 -> mlocati/test:2.0.0'
+check_updates 'namespaced repository' 'mlocati/test:1.0.0' 1 'mlocati/test:1.0.0 -> mlocati/test:2.0.0'
 grep -Fq '/repositories/mlocati/test/tags/' "$TEST_REQUESTS"
 check_updates 'unversioned image' 'test' 0 '[SKIP]'
 check_updates 'floating version' 'test:1.9' 0 '[SKIP]'
@@ -199,7 +235,7 @@ check_updates 'registry with port' 'localhost:5000/test:1.0.0' 1 'supports Docke
 check_updates 'no matching variant' 'test:1.0.0-fpm-bookworm' 1 'no matching stable version tags found'
 
 export TEST_TAG_MODE=pagination
-check_updates 'all pages, numeric sorting and exact variant' 'test:1.9.9-fpm-bookworm' 0 \
+check_updates 'all pages, numeric sorting and exact variant' 'test:1.9.9-fpm-bookworm' 1 \
     'test:1.9.9-fpm-bookworm -> test:10.0.0-fpm-bookworm'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
 export TEST_TAG_MODE=cycle
@@ -227,9 +263,10 @@ FROM scratch AS production
 EOF
 printf 'FROM test:1.0.0\n' > "$WORK/docker/nginx/Dockerfile"
 printf 'FROM test:1.0.0\n' > "$WORK/docker/mariadb/Dockerfile"
-check_updates 'default Dockerfile discovery, COPY tools and deduplication' '' 0 \
+check_updates 'default Dockerfile discovery, COPY tools and deduplication' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
+grep -Fq '[CHECK] 2 image(s) require attention' "$WORK/output"
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
 awk '
     /^Dockerfile$/ { group = "root"; root++; next }
@@ -270,7 +307,7 @@ COPY \
 RUN printf "not an instruction" \
     COPY --from=ignored/tool:1.0.0
 EOF
-check_updates 'multiline FROM and COPY with comments and blank lines' '' 0 \
+check_updates 'multiline FROM and COPY with comments and blank lines' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
@@ -279,7 +316,7 @@ if grep -q 'ignored/\|SKIP\|ERROR' "$WORK/output"; then
     exit 1
 fi
 
-check_updates 'single image retains matching Dockerfiles' 'test:1.0.0' 0 \
+check_updates 'single image retains matching Dockerfiles' 'test:1.0.0' 1 \
     'docker/mariadb/Dockerfile'
 grep -Fxq 'Dockerfile' "$WORK/output"
 grep -Fxq 'docker/nginx/Dockerfile' "$WORK/output"
@@ -297,6 +334,47 @@ for failure in digest manifest; do
     fi
 done
 export TEST_DOCKER_FAILURE=''
+for target in digest manifest; do
+    export TEST_RETRY_TARGET="$target"
+    export TEST_RETRY_FAILURES=2
+    printf '0\n' > "$TEST_ATTEMPTS"
+    : > "$TEST_RETRY_DELAYS"
+    check_updates "${target} transient rate limit recovers" 'test:1.0.0' 1 \
+        'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    [ "$(cat "$TEST_ATTEMPTS")" -eq 3 ]
+    grep -Fq 'RETRY Registry request failed' "$WORK/output"
+    grep -Fq "Run 'docker login docker.io'" "$WORK/output"
+    awk '
+        /RATE LIMIT/ { notified = 1 }
+        /RETRY/ { if (!notified) exit 1; retried = 1 }
+        END { if (!retried) exit 1 }
+    ' "$WORK/output"
+    [ "$(cat "$TEST_RETRY_DELAYS")" = $'5\n5\n5\n5\n5\n5' ]
+    grep -Fq 'Starting registry request attempt 3/3' "$WORK/output"
+
+    export TEST_RETRY_FAILURES=3
+    printf '0\n' > "$TEST_ATTEMPTS"
+    : > "$TEST_RETRY_DELAYS"
+    check_updates "${target} persistent rate limit fails" 'test:1.0.0' 1 \
+        "docker login docker.io"
+    [ "$(cat "$TEST_ATTEMPTS")" -eq 3 ]
+    [ "$(wc -l < "$TEST_RETRY_DELAYS")" -eq 6 ]
+    grep -Fq '429 Too Many Requests' "$WORK/output"
+    if grep -q 'Multi-platform pin:' "$WORK/output"; then
+        printf 'FAIL: rate-limited lookup printed a pin\n'
+        exit 1
+    fi
+
+    export TEST_RETRY_MESSAGE='manifest unknown: 404 Not Found'
+    printf '0\n' > "$TEST_ATTEMPTS"
+    : > "$TEST_RETRY_DELAYS"
+    check_updates "${target} permanent error is not retried" 'test:1.0.0' 1 \
+        '404 Not Found'
+    [ "$(cat "$TEST_ATTEMPTS")" -eq 1 ]
+    [ ! -s "$TEST_RETRY_DELAYS" ]
+    unset TEST_RETRY_MESSAGE
+done
+unset TEST_RETRY_TARGET TEST_RETRY_FAILURES
 export TEST_DIGEST=invalid
 check_updates 'invalid update digest' 'test:1.0.0' 1 'Invalid index digest'
 unset TEST_DIGEST
@@ -313,13 +391,17 @@ for manifest in \
     fi
 done
 printf '{"mediaType":"application/vnd.docker.distribution.manifest.list.v2+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}}]}\n' > "$TEST_MANIFEST"
-check_updates 'Docker manifest list update pin' 'test:1.0.0' 0 \
+check_updates 'Docker manifest list update pin' 'test:1.0.0' 1 \
     'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 
 printf 'FROM ghcr.io/owner/test:1.0.0\nCOPY --from=tools/installer:1.0.0 /bin/tool /bin/tool\n' > "$WORK/Dockerfile"
 check_updates 'lookup errors do not prevent remaining checks' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
 grep -Fq 'supports Docker Hub only' "$WORK/output"
+printf '{"next":null,"results":[{"name":"1.0.0"}]}\n' > "$TEST_TAGS"
+printf 'FROM test:1.0.0\n' > "$WORK/Dockerfile"
+check_updates 'all Dockerfiles up to date exit successfully' '' 0 'no newer stable version'
+[ "$(wc -l < "$TEST_REQUESTS")" -eq 1 ]
 for file in Dockerfile docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
     printf 'FROM scratch\n' > "$WORK/$file"
 done

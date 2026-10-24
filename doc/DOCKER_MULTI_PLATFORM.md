@@ -257,8 +257,11 @@ group but are checked only once. Each update includes a copyable
 the resolved digest as an index with at least two distinct runnable platforms.
 Failed digest lookups or single-platform updates fail explicitly.
 It reports updates without modifying files or checking current-tag digest
-changes or upgrade compatibility. A successful check exits `0` even when
-updates are available; lookup errors exit `1` and missing tools exit `69`.
+changes or upgrade compatibility. It exits `0` only when there are no updates
+or errors (explicit skips are allowed). Available updates or lookup errors exit
+`1`; missing tools exit `69`. All images are checked before reporting failure,
+so the command can be used as a CI gate. Make also fails, but does not preserve
+the script's exact non-zero exit code.
 
 Review compatibility before choosing the new tag, especially for major upgrades.
 Use the following steps to inspect and update its digest.
@@ -412,7 +415,13 @@ When running in GitHub Actions, the command also:
 
 Transient registry errors (for example Docker Hub `429 Too Many Requests`,
 timeouts and server errors) are retried twice with a short delay, both in CI
-and locally. If the job still fails because of rate limiting, re-run the job.
+and locally. This includes update digest lookups and raw manifest inspection,
+with delays of 10 and 20 seconds. Persistent throttling still fails the check;
+retries do not bypass Docker Hub quotas. Authenticate with `docker login docker.io`
+or wait for the limit to reset before retrying.
+Retry progress streams to stderr every five seconds, showing the next attempt
+number and remaining delay. For rate limits, each countdown includes a reminder
+to stop with `Ctrl+C` and authenticate before rerunning the command.
 
 ## Building multi-platform images [ᐞ](#table-of-contents)
 
@@ -540,6 +549,10 @@ platform (linux/arm64/v8)` or `exec format error`:
 
 * Docker Hub limits anonymous registry requests. Log in with `docker login`
   or wait for the limit to reset.
+* For CI, authenticate to Docker Hub before running the checker, using credentials
+  stored in CI secrets. The script uses Docker's existing credentials; it never
+  logs in automatically. Authentication can help with anonymous quotas but does
+  not guarantee protection from all rate limits.
 
 Build works on x86-64 but fails on ARM in a `RUN` step:
 

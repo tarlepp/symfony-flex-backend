@@ -108,12 +108,13 @@ buildx to resolve update digests. It reports the latest stable full semantic
 version, including major upgrades, while preserving the exact variant suffix
 and optional `v` prefix.
 Floating, unversioned and prerelease tags are explicitly skipped. Other
-registries are not supported. Exit status is `0` for a successful check
-(including available updates or skips), `1` for lookup errors, or `69` for
-missing tools. Results are grouped under Dockerfile headings, with shared images
-shown in each matching group but checked only once. An `IMAGE` input with no
-matching file has its own labeled group. Each update includes a copyable
-`tag@sha256:digest` pin and supported platforms. The digest is inspected directly
+registries are not supported. Exit status is `0` when there are no updates or
+errors (explicit skips are allowed), `1` for available updates or errors, or
+`69` for missing tools. Results are grouped under Dockerfile headings, with
+shared images shown in each matching group but checked only once. An `IMAGE`
+input with no matching file has its own labeled group. Each update includes a
+copyable `tag@sha256:digest` pin and supported platforms.
+The digest is inspected directly
 and must identify an index with at least two distinct runnable platforms;
 single-platform images and failed digest lookups fail the check explicitly.
 No files, images or running services are changed. Review compatibility and
@@ -123,6 +124,20 @@ intervening comments and blank lines. Repeated pagination URLs fail explicitly,
 including cycles spanning multiple pages.
 Update labels are yellow and up-to-date labels are green; set `NO_COLOR=1`
 to disable colors.
+
+Use `./scripts/docker-images.sh check-updates` in CI to fail the step when an
+update is available or a check fails. All image results are reported before
+exiting. `make docker-image-check-updates` also fails in these cases, but Make
+uses its own non-zero exit status rather than preserving the script's code.
+Registry inspection retries transient errors up to three attempts, with 10 and
+20 second delays. The first `429` error prints a notification to authenticate
+with `docker login docker.io` or wait for the quota to reset, before retrying.
+Persistent errors still fail. In CI,
+authenticate with credentials from CI secrets before running this command.
+Retry diagnostics stream immediately to stderr rather than waiting for the
+grouped result. During the wait, progress is printed every five seconds with
+the next attempt number and remaining delay. Rate-limited waits also remind
+users to press `Ctrl+C` and run `docker login docker.io`.
 
 Run the helper's regression tests on the host without registry access:
 
