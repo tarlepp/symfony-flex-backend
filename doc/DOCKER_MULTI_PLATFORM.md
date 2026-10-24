@@ -266,8 +266,16 @@ Dockerfile:2:FROM php:8.5.10-fpm-bookworm@sha256:... AS base
 ```
 
 The media type **must** be an index (`...image.index...` or
-`...manifest.list...`). If the image is published for one platform only, the
-command prints a warning and exits with code `1`.
+`...manifest.list...`) containing at least two distinct runnable platforms.
+Attestation manifests, unknown or missing platforms, and duplicate platform
+entries do not count. A single-platform manifest, empty index, or index with
+only one runnable platform prints a warning and exits with code `1`, without
+printing a pin reference.
+
+An upstream tag can temporarily resolve to an empty index while images are
+being published. Wait for the platform images or choose another available tag.
+Resolve the tag again before pinning: an empty index digest stays empty even
+after the tag points to a populated index.
 
 Manual equivalent:
 
@@ -339,9 +347,9 @@ Statuses for each `FROM` line:
   listed.
 * `WARN` - not pinned with a digest. Tags resolve to the index, so this is
   multi-platform if the upstream image is, but it is not reproducible.
-* `FAIL` - pinned to a single platform manifest digest, or the image could not
-  be inspected. Replace the digest with the one from
-  `make docker-image-digest`.
+* `FAIL` - pinned to a single platform manifest, an index with fewer than two
+  distinct runnable platforms, or the image could not be inspected. Choose
+  an available multi-platform image using `make docker-image-digest`.
 
 References to earlier build stages (`FROM base AS final`) are skipped.
 

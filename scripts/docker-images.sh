@@ -260,9 +260,13 @@ media_type() {
 }
 
 image_platforms() {
-    jq -r '[.manifests[]?.platform
-        | select(. != null and .os != "unknown")
+    jq -r '[.manifests[]?
+        | select(.annotations["vnd.docker.reference.type"] != "attestation-manifest")
+        | .platform
+        | select((.os | type) == "string" and (.architecture | type) == "string")
+        | select(.os != "" and .os != "unknown" and .architecture != "" and .architecture != "unknown")
         | .os + "/" + .architecture + (if .variant then "/" + .variant else "" end)]
+        | unique
         | join(" ")' <<< "$1"
 }
 
@@ -293,12 +297,18 @@ command_digest() {
     printf '\n'
     printf 'Media type: %s\n' "$type"
     printf 'Digest:     %s\n' "$digest"
-    printf 'Platforms:  %s\n' "${platforms:-single platform image}"
+    printf 'Platforms:  %s\n' "${platforms:-none listed}"
     printf '\n'
 
     if ! is_index "$type"; then
         warning "WARNING" "This is a single platform manifest, not a multi-platform index."
         warning "WARNING" "Do not use this digest if the image must work on multiple platforms."
+        exit 1
+    fi
+
+    if [[ "$platforms" != *" "* ]]; then
+        warning "WARNING" "This image index contains fewer than two distinct runnable platforms (${platforms:-none})."
+        warning "WARNING" "Do not pin this digest for multi-platform builds; wait for upstream to publish the platform images or choose another tag."
         exit 1
     fi
 
@@ -378,14 +388,19 @@ verify_dockerfile() {
         type="$(media_type "$raw")"
         platforms="$(image_platforms "$raw")"
 
-        if is_index "$type"; then
-            printf '  %sOK%s    Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
-            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms} |")
-        else
+        if ! is_index "$type"; then
             printf '  %sFAIL%s  Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
             github_annotation error "$file" "$line_number" "Single platform base image digest" "${ref} points to a single platform manifest. Replace it with the multi-platform index digest from: make docker-image-digest IMAGE=${ref%@*}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest |")
             status=1
+        elif [[ "$platforms" != *" "* ]]; then
+            printf '  %sFAIL%s  Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
+            github_annotation error "$file" "$line_number" "Insufficient base image platforms" "${ref} contains fewer than two distinct runnable platforms (${platforms:-none}). Wait for upstream platform images or choose another tag and digest."
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}) |")
+            status=1
+        else
+            printf '  %sOK%s    Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms} |")
         fi
     done < <(grep -niE '^[[:space:]]*FROM[[:space:]]' "$file")
 
