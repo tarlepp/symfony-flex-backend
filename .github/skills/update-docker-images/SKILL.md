@@ -33,10 +33,15 @@ procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKER_MULTI_PLATFORM.md).
 1. Identify the requested images and acceptable update range. Inspect
    `Dockerfile`, `docker/*/Dockerfile*`, `compose*.yaml`, Dev Container
    configuration, and workflow files for relevant references, including
-   external `COPY --from` images and the Dockerfile syntax frontend.
-   Distinguish registry images from local build-stage names and locally built
-   application images. Ask before a broad update if scope or version range is
-   unclear; do not update unrelated images.
+   external `COPY --from` images, the Dockerfile syntax frontend, Dev Container
+   `image` references and features, and GitHub Actions job `container:` and
+   `services:` images. For parameterized Dockerfile `FROM` references, trace
+   the relevant `ARG` defaults and build arguments to identify the resolved
+   image. Action references such as `uses: owner/action@...` are handled by
+   [update-github-actions](../update-github-actions/SKILL.md), not as container
+   images. Distinguish registry images from local build-stage names and locally
+   built application images. Ask before a broad update if scope or version
+   range is unclear; do not update unrelated images.
 2. Inspect the current tags and pins and review candidate tags, upstream
    release notes, supported platforms, and upgrade instructions. Preserve the
    existing runtime variant and distribution unless a change is explicitly
