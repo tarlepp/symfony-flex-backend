@@ -61,8 +61,9 @@ than overrides repository-wide rules.
 <a id="php-and-symfony-rules"></a>
 
 * Declare `declare(strict_types=1);` at the top of every PHP file.
-* Use PHP 8.4+ features including constructor promotion, readonly properties, and
-  named arguments where appropriate.
+* Use PHP features supported by the version constraint in `composer.json`,
+  including constructor promotion, readonly properties, and named arguments
+  where appropriate.
 * Respect strict PHPStan (max level) and Psalm rules; avoid suppression comments
   unless there is no other option.
 * Use type hints for all parameters and return types.
