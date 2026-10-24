@@ -139,6 +139,14 @@ grouped result. During the wait, progress is printed every five seconds with
 the next attempt number and remaining delay. Rate-limited waits also remind
 users to press `Ctrl+C` and run `docker login docker.io`.
 
+The `Check Docker image versions` CI job runs alongside linting and is required
+by `ci-summary`, so updates or errors block tests and Docker builds. It runs the
+helper regression tests first. Configure optional `DOCKERHUB_USERNAME` and
+`DOCKERHUB_TOKEN` repository secrets (a read-only Docker Hub access token) to
+authenticate registry inspection. Both secrets must be present or both absent.
+Fork pull requests and repositories without these secrets use anonymous requests
+with an explicit notice. The job logs out even if the check fails.
+
 Run the helper's regression tests on the host without registry access:
 
 ```bash
