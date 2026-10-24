@@ -14,6 +14,7 @@ This directory contains different scripts that are used during development.
   * [Table of Contents](#table-of-contents)
     * [Resources](#resources)
       * [Project stats script](#project-stats-script)
+      * [Skill documentation checker](#skill-documentation-checker)
       * [GitHub Actions update checker](#github-actions-update-checker)
       * [Docker multi-platform image helper](#docker-multi-platform-image-helper)
 
@@ -24,6 +25,9 @@ This directory contains different scripts that are used during development.
 * [Project stats script](project-stats.sh)
   * This script is used to generate simple project stats. It will generate
     output with some basic stats about project.
+* [Skill documentation checker](check-skills.py)
+  * Validates repository skill front matter, exact skills-index coverage, and
+    relative Markdown links and anchors.
 * [GitHub Actions update checker](check-action-updates.sh)
   * Checks pinned GitHub Actions from `.github/workflows/*.yml`, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
@@ -44,6 +48,18 @@ make project-stats
 
 If you are already inside the container, you can still run
 `bash scripts/project-stats.sh` directly.
+
+### Skill documentation checker [ᐞ](#table-of-contents)
+
+<a id="skill-documentation-checker"></a>
+
+File: `scripts/check-skills.py`
+
+```bash
+python3 scripts/check-skills.py
+```
+
+This standard-library Python check is also run in the documentation CI job.
 
 ### GitHub Actions update checker [ᐞ](#table-of-contents)
 

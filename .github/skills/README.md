@@ -108,8 +108,9 @@ skills only for layers the task actually changes:
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
 * Check that front-matter names match directory names, every skill is listed
-  exactly once, and relative links, anchors, and table-of-contents entries
-  resolve. Markdown lint alone does not verify those relationships.
+  exactly once, and relative links and anchors resolve. Run
+  `python3 scripts/check-skills.py` from the repository root; Markdown lint
+  alone does not verify those relationships.
 * Verify referenced classes, commands, flags, and example files against the
   current repository. Distinguish required policy from illustrative examples;
   do not turn one implementation detail into an unconditional rule.
