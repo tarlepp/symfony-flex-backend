@@ -35,6 +35,9 @@ skills only for layers the task actually changes:
   [add-rest-resource](add-rest-resource/SKILL.md); use the entity, DTO, query,
   and testing skills for the affected parts. A DTO-only or query-only change
   does not require scaffolding a new resource.
+* For a custom non-CRUD API operation, use
+  [add-custom-api-endpoint](add-custom-api-endpoint/SKILL.md). Do not apply the
+  generic CRUD workflow unless the endpoint actually needs those layers.
 * For authentication flows or broad access policy, use
   [implement-api-authentication](implement-api-authentication/SKILL.md).
   For subject-based permissions, start with
@@ -60,6 +63,7 @@ skills only for layers the task actually changes:
 | --- | --- |
 | [add-api-dto-mapping](add-api-dto-mapping/SKILL.md) | Changing DTOs, validation, request mapping, or argument resolution. |
 | [add-console-command](add-console-command/SKILL.md) | Adding or changing Symfony console commands and their CLI contracts. |
+| [add-custom-api-endpoint](add-custom-api-endpoint/SKILL.md) | Adding or changing a custom API operation that does not fit the generic CRUD controller lifecycle. |
 | [add-doctrine-entity](add-doctrine-entity/SKILL.md) | Changing persisted entities, ORM mappings, or migrations. |
 | [add-doctrine-query](add-doctrine-query/SKILL.md) | Changing repository queries, filtering, search, sorting, or pagination. |
 | [add-event-listener](add-event-listener/SKILL.md) | Changing Symfony event listeners or Doctrine lifecycle listeners. |
