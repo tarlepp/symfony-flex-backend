@@ -61,13 +61,20 @@ The goal is simple:
 
 <a id="rule-hierarchy"></a>
 
-Use the following order of precedence when maintaining AI guidance:
+Use the canonical AI documentation inventory and reading order in
+[`README.md`](../README.md#ai-assisted-development). That order is for
+navigation, not precedence; the pull request template is a review checklist,
+and skills provide task-specific workflows.
+
+When guidance conflicts, use this precedence:
 
 1. System or tool-level safety and platform rules
-2. Repository instruction files such as `.github/copilot-instructions.md`
-3. Project context and architecture guidance in `CLAUDE.md`
-4. Existing code, lint rules, tests, and CI workflows as the final source of
-   truth for implementation details
+2. Repository instructions in [`AGENTS.md`](../AGENTS.md) and
+   [`.github/copilot-instructions.md`](../.github/copilot-instructions.md)
+3. Project context and architecture guidance in [`CLAUDE.md`](../CLAUDE.md),
+   this policy, and any applicable task-specific skill
+4. Existing code, configuration, lint rules, tests, and CI workflows as the
+   final source of truth for implementation details
 
 If a rule in a documentation file conflicts with the existing codebase or CI,
 update the documentation or the implementation so that they match.
@@ -78,9 +85,10 @@ update the documentation or the implementation so that they match.
 
 * Before starting a task, inspect `.github/skills/` and use any skill that
   directly matches the requested work.
-* When following a skill, also follow `.github/copilot-instructions.md` and
-  this document. Skills add task-specific workflow; they do not replace or
-  override general repository rules.
+* When following a skill, also follow [`AGENTS.md`](../AGENTS.md),
+  [`.github/copilot-instructions.md`](../.github/copilot-instructions.md), and
+  this document. Skills add task-specific workflow; they do not replace
+  repository-wide rules.
 * Keep shared execution, validation, and handoff guidance in
   `.github/skills/shared-guidance.md`; skills should link to it and contain
   only task-specific workflows and checks.
@@ -488,9 +496,11 @@ After this first implementation, consider the following enhancements:
 <a id="related-files"></a>
 
 * `README.md`
+* `AGENTS.md`
 * `CLAUDE.md`
 * `SECURITY.md`
 * `.github/copilot-instructions.md`
+* `.github/skills/README.md`
 * `.github/pull_request_template.md`
 * `.github/workflows/main.yml`
 
