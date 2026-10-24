@@ -124,8 +124,7 @@ copying it into long-form documentation.
 <a id="test-runners"></a>
 
 * **PHPUnit** - Unit and integration testing
-* **Fastest** - Parallel test execution (this will be removed in future)
-* **Infection** - Mutation testing (not used heavily, optional)
+* **Infection** - Optional mutation testing; run `make infection`
 
 ### Code Quality & Analysis [ᐞ](#table-of-contents)
 
