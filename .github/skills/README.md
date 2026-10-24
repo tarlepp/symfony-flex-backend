@@ -38,6 +38,9 @@ skills only for layers the task actually changes:
 * For a custom non-CRUD API operation, use
   [add-custom-api-endpoint](add-custom-api-endpoint/SKILL.md). Do not apply the
   generic CRUD workflow unless the endpoint actually needs those layers.
+* For a project-specific Symfony validation rule, use
+  [add-validation-constraint](add-validation-constraint/SKILL.md). When the
+  constraint is used for API input, also follow the DTO mapping skill.
 * For authentication flows or broad access policy, use
   [implement-api-authentication](implement-api-authentication/SKILL.md).
   For subject-based permissions, start with
@@ -70,6 +73,7 @@ skills only for layers the task actually changes:
 | [add-event-subscriber](add-event-subscriber/SKILL.md) | Changing Symfony event subscriptions, priorities, or subscriber behavior. |
 | [add-rest-resource](add-rest-resource/SKILL.md) | Adding or extending a complete CRUD REST resource. |
 | [add-security-voter](add-security-voter/SKILL.md) | Changing voters, subject-based permissions, or authorization call sites. |
+| [add-validation-constraint](add-validation-constraint/SKILL.md) | Adding or changing a project-specific Symfony Validator constraint and validator. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [update-application-configuration](update-application-configuration/SKILL.md) | Changing JSON settings, environment overrides, or Symfony service wiring. |
 | [update-dependencies](update-dependencies/SKILL.md) | Updating Composer packages, Composer tools, or pinned GitHub Actions. |
