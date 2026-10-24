@@ -142,7 +142,7 @@ RUN source ~/.nvm/nvm.sh \
     && npm install -g composer-version \
     && npm install --prefix /tmp/npm-fixes --no-save --no-package-lock --ignore-scripts --no-audit --no-fund \
         brace-expansion@5.0.11 \
-        undici@6.28.1 \
+        undici@6.29.1 \
     && cp -a /tmp/npm-fixes/node_modules/brace-expansion/. "$(npm root -g)/npm/node_modules/brace-expansion/" \
     && cp -a /tmp/npm-fixes/node_modules/undici/. "$(npm root -g)/npm/node_modules/undici/" \
     && rm -rf /tmp/npm-fixes
