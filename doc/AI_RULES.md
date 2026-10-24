@@ -71,12 +71,6 @@ Keep common execution and handoff instructions in
 [shared guidance](../.github/skills/shared-guidance.md); write domain workflows
 and safeguards in their specific skills.
 
-Add a skill or expand shared policy only when a recurring need justifies it.
-Before creating a new document, check whether the workflow belongs in an
-existing skill or the shared guidance. New skills should cover a distinct
-workflow rather than repeat repository-wide instructions or overlap an
-existing skill.
-
 ## Enforcement model [ᐞ](#table-of-contents)
 
 <a id="enforcement-model"></a>
@@ -126,10 +120,8 @@ When AI-assisted work produces recurring review feedback:
 
 1. Confirm that the correction reflects current project behavior and is not a
    one-off.
-2. Decide where it belongs: repository-wide instructions, an existing or
-   focused skill, shared guidance, a human review checklist, or an automated
-   check. Prefer extending the closest existing source over creating
-   overlapping guidance.
+2. Decide where it belongs: repository-wide instructions, a focused skill, a
+   human review checklist, or an automated check.
 3. Add the rule at the narrowest appropriate location and link to an existing
    source instead of copying policy into several files.
 4. If the rule is machine-detectable, prefer extending existing tooling or CI.
