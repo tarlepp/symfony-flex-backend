@@ -53,17 +53,8 @@ frontend applications or other backend services.
 
 <a id="ai-documentation-map"></a>
 
-Use the canonical AI guidance inventory and reading order from
-[README.md](README.md#ai-assisted-development):
-
-1. [`AGENTS.md`](AGENTS.md) - agent instructions
-2. [`.github/copilot-instructions.md`](.github/copilot-instructions.md) -
-   concise repository rules
-3. [`CLAUDE.md`](CLAUDE.md) - architecture and workflow context
-4. [`doc/AI_RULES.md`](doc/AI_RULES.md) - AI guidance maintenance
-5. [`.github/skills/README.md`](.github/skills/README.md) - task workflows
-6. [`.github/pull_request_template.md`](.github/pull_request_template.md) -
-   PR review checklist
+Use the [README AI guidance inventory](README.md#ai-assisted-development) for
+the canonical document list and reading order.
 
 This order is for navigation, not precedence. Platform instructions apply
 first, and the actual code, scripts, tests, configuration, and CI are the
@@ -221,43 +212,21 @@ copying it into long-form documentation.
 
 <a id="adding-new-rest-endpoints"></a>
 
-This project uses a resource-based approach:
-
-1. Create/modify entity in `src/Entity/`
-2. Generate migration: `bin/console doctrine:migrations:diff`
-3. Review and edit migration file if needed
-4. Run migration: `bin/console doctrine:migrations:migrate`
-5. Create/update DTO(s) in `src/DTO/`
-6. Create/update repository in `src/Repository/`
-7. Create/update resource class in `src/Resource/`
-8. Create/update REST controller in `src/Rest/`
-9. Write tests in appropriate `tests/` subdirectory
-10. Run tests: `make run-tests`
-11. Check static analyzers: `make phpcs`, `make ecs`, `make phplint`,
-    `make php-parallel-lint`, `make psalm`, `make phpstan`, `make phploc`,
-    `make phpinsights`, `make lint-markdown`
-12. Fix issues: `make ecs-fix`
+For CRUD resources, follow the
+[add-rest-resource skill](.github/skills/add-rest-resource/SKILL.md), which
+covers this repository's entity, migration, DTO, resource, controller, and
+test conventions. For non-CRUD endpoints, use the
+[custom API endpoint skill](.github/skills/add-custom-api-endpoint/SKILL.md).
+The [skills index](.github/skills/README.md) routes other task types to their
+specific workflows.
 
 ### Before Committing [⇩](#table-of-contents)
 
 <a id="before-committing"></a>
 
-Always run these commands before committing:
-
-```bash
-make ecs-fix           # Auto-fix code style
-make phpcs             # PHP CodeSniffer
-make ecs               # EasyCodingStandard check
-make phplint           # PHPLint
-make php-parallel-lint # Parallel lint
-make phpstan           # Static analysis
-make psalm             # Type checking
-make phploc            # Project metrics summary used by CI
-make phpinsights       # Quality thresholds check
-make check-security    # Dependency vulnerability check
-make lint-markdown     # Markdown/documentation linting
-make run-tests         # Run all tests
-```
+Before committing, follow the validation checklist in
+[`AGENTS.md`](AGENTS.md#testing-and-validation). This file's command sections
+are a reference; the agent instructions own the required validation workflow.
 
 ## Testing [⇩](#table-of-contents)
 
@@ -332,11 +301,9 @@ authentication details, see [`doc/SECURITY.md`](doc/SECURITY.md).
 
 <a id="security-best-practices"></a>
 
-* Never commit `.env.local` or JWT keys to version control
-* Use proper user roles and permissions
-* Validate all input data with Symfony validation
-* Use DTOs to control data exposure
-* Run security checks: `make check-security`
+Follow [`doc/SECURITY.md`](doc/SECURITY.md) for security policy and
+[`AGENTS.md`](AGENTS.md) for the actionable repository-wide security and
+validation requirements.
 
 ## Configuration [⇩](#table-of-contents)
 
@@ -373,7 +340,7 @@ Use `make configuration` to view current application configuration.
 * `README.md` - Project overview and installation
 * `AGENTS.md` - Repository instructions for AI coding agents
 * `CLAUDE.md` - This file - long-form AI assistant context
-* `.github/copilot-instructions.md` - Short operational rules for AI assistants
+* `.github/copilot-instructions.md` - Copilot entry point for repository guidance
 * `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
 * `.github/skills/README.md` - Task-specific AI skills index
 * `doc/README.md` - Documentation index
@@ -393,60 +360,20 @@ Use `make configuration` to view current application configuration.
 
 <a id="practical-guidance-for-ai-assistants"></a>
 
-When making changes in this repository:
-
-1. Use the resource-based REST architecture; keep controllers thin.
-2. Follow existing Doctrine entity, repository, and migration patterns.
-3. Use DTOs for API input and output; do not expose entities directly.
-4. Use the AutoMapper for entity-to-DTO and DTO-to-entity mapping.
-5. Keep classes in `src/Controller/` as thin as possible and delegate business
-   logic to resources/services.
-6. For custom controllers in `src/Controller/`, prefer the `__invoke` pattern
-   (one controller class per endpoint).
-7. Treat trait-based controllers in `src/Rest/` as an exception to the
-   `__invoke` rule.
-8. Declare `declare(strict_types=1);` in every PHP file.
-9. Keep changes compatible with PHPStan (max level) and Psalm.
-10. Write tests for new functionality and run the test suite before committing.
-11. Prefer the smallest change that fully solves the task.
-12. Avoid unrelated refactors unless explicitly required.
-13. Before commit, run the full static-analyzer suite used by CI
-    (`make phpcs`, `make ecs`, `make phplint`, `make php-parallel-lint`,
-    `make psalm`, `make phpstan`, `make phploc`, `make phpinsights`,
-    `make lint-markdown`) inside the running `php` container or IDE Dev
-    Container, then run tests.
-14. Use the `php` container (`symfony-backend-php-fpm`) as the default command
-    target and start it with `make start`/`make daemon` when needed.
-15. For markdown/documentation checks that require Node.js tooling, use
-    containerized `nvm` + `npx` instead of host-level installs.
-16. Do not create commits unless the developer explicitly asks for a commit.
-17. After completing a task, provide a short change summary with touched files
-    and validation steps that were run (or intentionally skipped).
-18. If requirements are ambiguous or incomplete, ask the developer for
-    clarification before implementation.
-19. Do not assume hidden requirements or acceptance criteria; confirm uncertain
-    behavior explicitly.
-20. Ask for explicit approval before making non-trivial API, database, security,
-    or architecture decisions.
-21. Update relevant documentation when code changes affect behavior,
-    architecture, workflow steps, commands, or review expectations.
-22. In the handoff summary, propose commit message(s) per logical change using
-    the repository pattern `Type(scope): short description` (for example
-    `Chore(ops): update AI documentation rules`).
-23. For Markdown documentation changes, follow `README.md` as formatting
-    baseline (main title, anchors, table of contents, back-to-top links,
-    back-to-previous footer links, and `*` list markers).
+For actionable repository-wide instructions, including architecture, change
+scope, validation, and handoff expectations, follow
+[`AGENTS.md`](AGENTS.md). This guide focuses on project context and command
+references; task-specific workflows live in the
+[skills index](.github/skills/README.md).
 
 ### Documentation drift [⇩](#table-of-contents)
 
 <a id="documentation-drift"></a>
 
-This file is long-form context, not the only rules source. Keep it aligned with:
-
-* `.github/copilot-instructions.md`
-* `doc/AI_RULES.md`
-* `.github/pull_request_template.md`
-* actual repository scripts and CI workflows
+Keep project architecture, command, and setup descriptions aligned with the
+implementation and workflows. The canonical AI-document inventory is in
+[`README.md`](README.md#ai-assisted-development); AI-specific policy and CI
+maintenance guidance belongs in [`doc/AI_RULES.md`](doc/AI_RULES.md).
 
 ---
 
