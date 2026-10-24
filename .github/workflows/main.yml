@@ -84,7 +84,7 @@ jobs:
             docker/*.md
             secrets/*.md
 
-      - name: Validate skill metadata, index coverage, and links
+      - name: Validate skill metadata, index coverage, and AI documentation links
         run: python3 scripts/check-skills.py
 
   security-check:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate repository skill metadata, index coverage, and local Markdown links."""
+"""Validate skill metadata, index coverage, and canonical AI documentation links."""
 
 from __future__ import annotations
 
@@ -21,6 +21,14 @@ HEADING_PATTERN = re.compile(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$")
 ANCHOR_PATTERN = re.compile(r"""<a\b[^>]*\sid=["']([^"']+)["'][^>]*>""", re.IGNORECASE)
 FRONT_MATTER_FIELD_PATTERN = re.compile(r"^([A-Za-z0-9_-]+):\s*(.*)$")
 FENCE_PATTERN = re.compile(r"^\s{0,3}(`{3,}|~{3,})")
+CANONICAL_AI_DOCS = (
+    "README.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".github/copilot-instructions.md",
+    "doc/AI_RULES.md",
+    ".github/pull_request_template.md",
+)
 
 
 def relative_path(path: Path, root: Path) -> str:
@@ -252,7 +260,7 @@ def check_index_coverage(root: Path, skill_files: list[Path], errors: list[str])
             )
 
 
-def check_skills(root: Path) -> list[str]:
+def check_documentation(root: Path) -> list[str]:
     errors: list[str] = []
     skills_dir = root / ".github/skills"
     if not skills_dir.is_dir():
@@ -273,8 +281,15 @@ def check_skills(root: Path) -> list[str]:
         return errors
 
     check_index_coverage(root, skill_files, errors)
-    markdown_files = sorted(skills_dir.rglob("*.md"))
-    check_markdown_links(markdown_files, root, errors)
+    markdown_files = set(skills_dir.rglob("*.md"))
+    for relative_doc in CANONICAL_AI_DOCS:
+        markdown_file = root / relative_doc
+        if markdown_file.is_file():
+            markdown_files.add(markdown_file)
+        else:
+            errors.append(f"{relative_doc}: missing canonical AI documentation file")
+
+    check_markdown_links(sorted(markdown_files), root, errors)
     return errors
 
 
@@ -289,14 +304,14 @@ def main() -> int:
     args = parser.parse_args()
     root = args.root.resolve()
 
-    errors = check_skills(root)
+    errors = check_documentation(root)
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
-        print(f"Skill documentation check failed with {len(errors)} issue(s).", file=sys.stderr)
+        print(f"AI documentation check failed with {len(errors)} issue(s).", file=sys.stderr)
         return 1
 
-    print("Skill documentation check passed.")
+    print("AI documentation check passed.")
     return 0
 
 

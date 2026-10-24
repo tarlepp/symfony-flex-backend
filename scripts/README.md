@@ -26,8 +26,8 @@ This directory contains different scripts that are used during development.
   * This script is used to generate simple project stats. It will generate
     output with some basic stats about project.
 * [Skill documentation checker](check-skills.py)
-  * Validates repository skill front matter, exact skills-index coverage, and
-    relative Markdown links and anchors.
+  * Validates skill front matter, exact skills-index coverage, and relative
+    Markdown links and anchors across the skills and canonical AI documents.
 * [GitHub Actions update checker](check-action-updates.sh)
   * Checks pinned GitHub Actions from `.github/workflows/*.yml`, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
