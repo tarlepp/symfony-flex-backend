@@ -340,6 +340,9 @@ At the time of writing, `.github/workflows/main.yml` includes:
   `make php-parallel-lint`, `make psalm-github`, `make phpstan-github`,
   `make phploc`, `make phpinsights`,
 * `lint-documentation` job: `make lint-markdown`,
+* `docker-image-check-updates` job: helper regression tests and
+  `make docker-image-check-updates`, blocking tests and Docker builds through
+  `ci-summary` when updates are available or checks fail,
 * `test` job: `make run-tests-php`, and
 * security-focused jobs such as `gitleaks` and Trivy image scanning.
 

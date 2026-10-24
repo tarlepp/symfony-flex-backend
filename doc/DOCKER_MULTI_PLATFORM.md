@@ -391,7 +391,22 @@ Use `make docker-image-digest` to check any other image.
 
 <a id="continuous-integration"></a>
 
-The same check runs in GitHub Actions in the
+The `Check Docker image versions` job (`docker-image-check-updates` in
+`.github/workflows/main.yml`) starts alongside linting on the workflow's push,
+pull request, scheduled and manual runs. It runs the helper's regression tests
+and `make docker-image-check-updates`. The `ci-summary` prerequisite gate
+requires this job to succeed, so available updates or lookup errors block both
+tests and Docker builds. Explicitly skipped tags remain non-failing.
+
+For authenticated registry requests, configure both `DOCKERHUB_USERNAME` and
+`DOCKERHUB_TOKEN` repository secrets; use a read-only Docker Hub access token.
+Without either secret (including fork pull requests), the job reports that it
+is using anonymous requests. Configuring only one secret fails explicitly.
+Credentials are passed through environment variables and `--password-stdin`;
+the job logs out even if the check fails. No secrets are required for the core
+check to run, but anonymous rate limits can still fail it.
+
+Pin verification also runs in GitHub Actions in the
 `Verify Docker base image pins (multi-platform)` job
 (`docker-image-verify-pins` in `.github/workflows/main.yml`). The job has no
 dependencies, so it starts immediately in parallel with the first lint and
