@@ -105,8 +105,9 @@ and the actual code, dependency manifests, and CI workflows.
   root inside the PHP development container; no explicit runner path is needed.
   See `.github/skills/write-tests/SKILL.md` for test selection and conventions.
 * Run the smallest relevant existing test or quality command while iterating.
-  Before commit, run the CI-aligned suite from the repository root in the
-  development container:
+  Before commit, run the broader local pre-commit suite below from the
+  repository root in the development container. It is not a command-for-command
+  mirror of CI; see `doc/AI_RULES.md` for CI job coverage.
 
   ```bash
   make phpcs
@@ -121,6 +122,10 @@ and the actual code, dependency manifests, and CI workflows.
   make lint-markdown
   make run-tests
   ```
+
+  CI's application test job runs `make run-tests-php`. Locally, `make
+  run-tests` selects phpdbg when it is installed and otherwise uses pure PHP;
+  run `make run-tests-php` to match the CI test runner.
 
 * If `make ecs` reports fixable style issues, run `make ecs-fix` and rerun
   `make ecs`.
