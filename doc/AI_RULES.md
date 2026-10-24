@@ -100,7 +100,8 @@ Use `.github/workflows/main.yml` as the source of truth; this map is an
 orientation and should be reviewed when that workflow changes. It currently
 contains:
 
-* configuration and documentation lint jobs,
+* configuration lint and documentation checks, including skill metadata,
+  index-coverage, and link validation,
 * dependency and secret checks,
 * Docker image pin verification and image builds/scanning,
 * a static-analysis matrix,
