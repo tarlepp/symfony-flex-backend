@@ -10,6 +10,8 @@ supply-chain risk.
 
 For AI-assisted updates, follow the
 [GitHub Actions update skill](../.github/skills/update-github-actions/SKILL.md).
+For CI jobs, triggers, and shared bootstrap behavior, use the
+[workflow maintenance skill](../.github/skills/update-github-workflows/SKILL.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 

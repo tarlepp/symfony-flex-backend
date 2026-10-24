@@ -46,6 +46,8 @@ skills only for layers the task actually changes:
   [update-application-configuration](update-application-configuration/SKILL.md).
   Docker image changes use [update-docker-images](update-docker-images/SKILL.md).
   GitHub Action pins use [update-github-actions](update-github-actions/SKILL.md).
+  CI behavior and shared jobs use
+  [update-github-workflows](update-github-workflows/SKILL.md).
 * Use [write-tests](write-tests/SKILL.md) whenever tests change. For event
   handlers, use the [event-handling guide](../../doc/EVENT_HANDLING.md) to
   choose the listener or subscriber skill.
@@ -69,6 +71,7 @@ skills only for layers the task actually changes:
 | [update-dependencies](update-dependencies/SKILL.md) | Updating Composer packages, Composer tools, or pinned GitHub Actions. |
 | [update-docker-images](update-docker-images/SKILL.md) | Updating Docker image tags and multi-platform digest pins. |
 | [update-github-actions](update-github-actions/SKILL.md) | Updating verified action SHA pins in workflows and local composite actions. |
+| [update-github-workflows](update-github-workflows/SKILL.md) | Changing CI triggers, jobs, prerequisite gates, matrices, or shared bootstrap behavior. |
 | [update-symfony-recipes](update-symfony-recipes/SKILL.md) | Inspecting or updating installed Symfony Flex recipes with Composer. |
 | [write-tests](write-tests/SKILL.md) | Adding or changing PHPUnit tests and choosing the appropriate test boundary. |
 
