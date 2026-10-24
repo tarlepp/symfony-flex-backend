@@ -105,6 +105,8 @@ docker-build-platform       # Build image for single platform (asks
                             # PLATFORM, DOCKERFILE, TARGET, TAG)
 docker-builder-platforms    # Show platforms supported by current buildx
                             # builder
+docker-image-check-updates  # Report newer stable Docker Hub image versions
+                            # (optional IMAGE; otherwise external Dockerfile images)
 docker-image-digest         # Show multi-platform index digest for image
                             # (asks IMAGE)
 docker-image-verify-pins    # Verify that PHP, nginx and MariaDB base

@@ -29,8 +29,8 @@ This directory contains different scripts that are used during development.
     discovery issues (unpinned refs/conflicting versions), and checks for
     available updates in the current major version line.
 * [Docker multi-platform image helper](docker-images.sh)
-  * Resolves multi-platform image digests, verifies pinned base images and
-    builds images for other platforms.
+  * Checks image version updates, resolves multi-platform image digests,
+    verifies pinned base images and builds images for other platforms.
 
 ### Project stats script [ᐞ](#table-of-contents)
 
@@ -80,6 +80,7 @@ This script uses Docker on the host machine, so run it from the host (not
 inside the `php` container). Use these Make targets:
 
 ```bash
+make docker-image-check-updates   # all external Dockerfile images
 make docker-image-digest          # asks IMAGE
 make docker-image-verify-pins
 make docker-builder-platforms
@@ -97,6 +98,54 @@ variables.
 Digest lookup and pin verification require at least two distinct runnable
 platforms in an image index. Empty and single-platform indexes fail with an
 explicit diagnostic instead of being accepted as multi-platform.
+
+Check a single image with
+`make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm`, or run
+`./scripts/docker-images.sh check-updates` to check external `FROM` and
+`COPY --from` images in the root and `docker/*/Dockerfile*` Dockerfiles.
+The checker uses public Docker Hub tags via `curl` and `jq`, and Docker with
+buildx to resolve update digests. It reports the latest stable full semantic
+version, including major upgrades, while preserving the exact variant suffix
+and optional `v` prefix.
+Floating, unversioned and prerelease tags are explicitly skipped. Other
+registries are not supported. Exit status is `0` when there are no updates or
+errors (explicit skips are allowed), `1` for available updates or errors, or
+`69` for missing tools. Results are grouped under Dockerfile headings, with
+shared images shown in each matching group but checked only once. An `IMAGE`
+input with no matching file has its own labeled group. Each update includes a
+copyable `tag@sha256:digest` pin and supported platforms.
+The digest is inspected directly
+and must identify an index with at least two distinct runnable platforms;
+single-platform images and failed digest lookups fail the check explicitly.
+No files, images or running services are changed. Review compatibility and
+required platform support separately before updating pins.
+Dockerfile discovery supports backslash-continued instructions, including
+intervening comments and blank lines. Repeated pagination URLs fail explicitly,
+including cycles spanning multiple pages.
+Update labels are yellow and up-to-date labels are green; set `NO_COLOR=1`
+to disable colors.
+
+Use `./scripts/docker-images.sh check-updates` in CI to fail the step when an
+update is available or a check fails. All image results are reported before
+exiting. `make docker-image-check-updates` also fails in these cases, but Make
+uses its own non-zero exit status rather than preserving the script's code.
+Registry inspection retries transient errors up to three attempts, with 10 and
+20 second delays. The first `429` error prints a notification to authenticate
+with `docker login docker.io` or wait for the quota to reset, before retrying.
+Persistent errors still fail. In CI,
+authenticate with credentials from CI secrets before running this command.
+Retry diagnostics stream immediately to stderr rather than waiting for the
+grouped result. During the wait, progress is printed every five seconds with
+the next attempt number and remaining delay. Rate-limited waits also remind
+users to press `Ctrl+C` and run `docker login docker.io`.
+
+The `Check Docker image versions` CI job runs alongside linting and is required
+by `ci-summary`, so updates or errors block tests and Docker builds. It runs the
+helper regression tests first. Configure optional `DOCKERHUB_USERNAME` and
+`DOCKERHUB_TOKEN` repository secrets (a read-only Docker Hub access token) to
+authenticate registry inspection. Both secrets must be present or both absent.
+Fork pull requests and repositories without these secrets use anonymous requests
+with an explicit notice. The job logs out even if the check fails.
 
 Run the helper's regression tests on the host without registry access:
 

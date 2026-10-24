@@ -10,6 +10,7 @@
 #   ./scripts/docker-images.sh <command>
 #
 # Commands:
+#   check-updates  Report newer stable image versions (Docker Hub)
 #   digest      Show multi-platform index digest and pin reference for image
 #   verify      Verify that PHP, nginx and MariaDB Dockerfile base images are
 #               multi-platform
@@ -20,8 +21,9 @@
 #
 # Inputs are read from environment variables. When a value is missing and the
 # script is run in an interactive terminal, the value is asked from the user.
+# check-updates defaults to external images in project Dockerfiles.
 #
-#   IMAGE       Image reference, e.g. `php:8.5.11-fpm-bookworm` (digest)
+#   IMAGE       Image reference (digest), or optional single image (check-updates)
 #   PLATFORM    Single target platform, e.g. `linux/arm64` (build)
 #   PLATFORMS   Comma separated platforms (setup-qemu, push)
 #   DOCKERFILE  Dockerfile path, e.g. `Dockerfile` (build, push)
@@ -32,6 +34,7 @@
 # Requirements:
 #   - docker with buildx plugin (host machine)
 #   - jq
+#   - curl (check-updates only)
 #
 ################################################################################
 
@@ -67,18 +70,25 @@ Usage:
   $0 <command>
 
 Commands:
-  digest      Show multi-platform index digest and pin reference for image
-  verify      Verify that PHP, nginx and MariaDB Dockerfile base images are
-              multi-platform
-  platforms   Show platforms that the current buildx builder supports
-  setup-qemu  Install QEMU emulators for cross-platform builds
-  build       Build image for a single platform and load it locally
-  push        Build multi-platform image and push it to a registry
+  check-updates  Report newer stable image versions (Docker Hub)
+  digest         Show multi-platform index digest and pin reference for image
+  verify         Verify that PHP, nginx and MariaDB Dockerfile base images are
+                 multi-platform
+  platforms      Show platforms that the current buildx builder supports
+  setup-qemu     Install QEMU emulators for cross-platform builds
+  build          Build image for a single platform and load it locally
+  push           Build multi-platform image and push it to a registry
 
 Inputs are read from environment variables. When a value is missing and the
 script is run in an interactive terminal, the value is asked from the user.
+check-updates defaults to external FROM and COPY --from images in Dockerfile
+and docker/*/Dockerfile*. It reports stable versions, including major upgrades,
+preserving the tag variant. It groups results by Dockerfile with verified multi-platform
+pin references for updates. It requires curl, jq and Docker with buildx, and
+changes no files. Exit status: 0 = no updates or errors, 1 = updates or errors,
+69 = missing tools. Floating and prerelease tags are skipped explicitly.
 
-  IMAGE       Image reference, e.g. php:8.5.11-fpm-bookworm (digest)
+  IMAGE       Image reference (digest), or optional single image (check-updates)
   PLATFORM    Single target platform, e.g. linux/arm64 (build)
   PLATFORMS   Comma separated platforms (setup-qemu, push)
   DOCKERFILE  Dockerfile path, e.g. Dockerfile (build, push)
@@ -87,6 +97,7 @@ script is run in an interactive terminal, the value is asked from the user.
   BUILDER     buildx builder name for multi-platform builds (push)
 
 Make targets:
+  make docker-image-check-updates
   make docker-image-digest
   make docker-image-verify-pins
   make docker-builder-platforms
@@ -94,6 +105,229 @@ Make targets:
   make docker-build-platform
   make docker-build-multi-platform
 EOF
+}
+
+# List registry references, excluding earlier stages, numeric stages and scratch.
+dockerfile_images() {
+    awk '
+        {
+            sub(/\r$/, "")
+            if ($0 ~ /^[[:space:]]*(#|$)/) next
+            if (sub(/\\[[:space:]]*$/, "")) {
+                instruction = instruction $0
+                next
+            }
+            $0 = instruction $0
+            instruction = ""
+        }
+        toupper($1) == "FROM" {
+            i = 2
+            while ($i ~ /^--/) i++
+            ref = $i
+            if (tolower($(i + 1)) == "as") stages[tolower($(i + 2))] = 1
+            if (!(tolower(ref) in stages) && tolower(ref) != "scratch") print ref
+        }
+        toupper($1) == "COPY" {
+            for (i = 2; i <= NF; i++) {
+                if ($i ~ /^--from=/) {
+                    ref = substr($i, 8)
+                    if (!(tolower(ref) in stages) && ref !~ /^[0-9]+$/) print ref
+                    break
+                }
+            }
+        }
+    ' "$1"
+}
+
+# Fetch every page: Docker Hub orders tags by publication date, not version.
+hub_tags() {
+    local repository="$1" suffix="$2" page next
+    local -A visited=()
+    local endpoint="https://hub.docker.com/v2/repositories/${1}/tags/"
+    local url="${endpoint}?page_size=100"
+
+    if [ -n "$suffix" ]; then
+        url+="&name=$(jq -rn --arg value "$suffix" '$value | @uri')"
+    fi
+
+    while [ -n "$url" ]; do
+        if [ -n "${visited[$url]+set}" ]; then
+            error "Repeated Docker Hub pagination URL for ${repository}"
+            return 1
+        fi
+        visited[$url]=1
+        if ! page="$(curl --fail --silent --show-error --retry 3 --connect-timeout 10 --max-time 60 "$url")"; then
+            error "Could not fetch Docker Hub tags for ${repository}"
+            return 1
+        fi
+
+        if ! jq -e '(.results | type == "array") and
+            (all(.results[]; .name | type == "string")) and
+            (.next == null or (.next | type == "string"))' > /dev/null <<< "$page"; then
+            error "Invalid Docker Hub tag response for ${repository}"
+            return 1
+        fi
+
+        jq -r '.results[].name' <<< "$page"
+        next="$(jq -r '.next // empty' <<< "$page")"
+        if [ -n "$next" ] && [[ "$next" != "$endpoint"?* ]]; then
+            error "Unexpected Docker Hub pagination URL for ${repository}"
+            return 1
+        fi
+        url="$next"
+    done
+}
+
+update_pin_reference() {
+    local image="$1" digest raw type platforms
+
+    if ! digest="$(inspect_image "$image" --format '{{.Manifest.Digest}}')"; then
+        error "Could not resolve index digest for ${image}: $(tail -n 1 <<< "$digest")"
+        return 1
+    fi
+    if ! [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
+        error "Invalid index digest for ${image}: ${digest}"
+        return 1
+    fi
+    # Inspect the resolved digest so a moving tag cannot mismatch the printed pin.
+    if ! raw="$(raw_manifest "${image}@${digest}")"; then
+        error "Could not inspect ${image}@${digest}: $(tail -n 1 <<< "$raw")"
+        return 1
+    fi
+    if ! type="$(media_type "$raw")" || ! platforms="$(image_platforms "$raw")"; then
+        error "Invalid image manifest for ${image}@${digest}"
+        return 1
+    fi
+    if ! is_index "$type"; then
+        error "${image}: single platform manifest, no multi-platform pin available"
+        return 1
+    fi
+    if [[ "$platforms" != *" "* ]]; then
+        error "${image}: index contains fewer than two distinct runnable platforms (${platforms:-none})"
+        return 1
+    fi
+
+    printf '  Multi-platform pin: %s@%s\n' "$image" "$digest"
+    printf '  Platforms: %s\n' "$platforms"
+}
+
+check_image_update() {
+    local image="${1%@*}" repository tag suffix prefix current tags latest first
+    local pattern='^(v?)((0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))(-[a-zA-Z0-9_.-]+)?$'
+
+    if [[ "${image##*/}" != *:* ]]; then
+        warning "SKIP" "${image}: no explicit version tag"
+        return 0
+    fi
+
+    repository="${image%:*}"
+    tag="${image##*:}"
+    if ! [[ "$tag" =~ $pattern ]]; then
+        warning "SKIP" "${image}: tag is not a full stable semantic version with an optional variant"
+        return 0
+    fi
+    prefix="${BASH_REMATCH[1]}"
+    current="${BASH_REMATCH[2]}"
+    suffix="${BASH_REMATCH[6]}"
+    if [[ "$suffix" =~ ^-(alpha|beta|rc|RC|preview|dev)([0-9.-]|$) ]]; then
+        warning "SKIP" "${image}: prerelease tag"
+        return 0
+    fi
+
+    case "$repository" in
+        docker.io/*) repository="${repository#docker.io/}" ;;
+        index.docker.io/*) repository="${repository#index.docker.io/}" ;;
+    esac
+    first="${repository%%/*}"
+    if [[ "$repository" == */* ]] && [[ "$first" == *.* || "$first" == *:* || "$first" = localhost ]]; then
+        error "${image}: version lookup currently supports Docker Hub only"
+        return 1
+    fi
+    [[ "$repository" == */* ]] || repository="library/${repository}"
+    if ! [[ "$repository" =~ ^[a-z0-9_-]+/[a-z0-9_.-]+$ ]]; then
+        error "${image}: invalid Docker Hub repository"
+        return 1
+    fi
+
+    if ! tags="$(hub_tags "$repository" "$suffix")"; then
+        return 1
+    fi
+
+    latest="$(jq -Rrs --arg suffix "$suffix" --arg prefix "$prefix" '
+        [split("\n")[] |
+            capture("^(?<prefix>v?)(?<version>(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*))(?<suffix>-[a-zA-Z0-9_.-]+)?$") |
+            select(.prefix == $prefix and (.suffix // "") == $suffix) |
+            {version: .version, parts: (.version | split(".") | map(tonumber))}]
+        | sort_by(.parts) | last | .version // empty' <<< "$tags")"
+    if [ -z "$latest" ]; then
+        error "${image}: no matching stable version tags found"
+        return 1
+    fi
+
+    if jq -en --arg current "$current" --arg latest "$latest" \
+        '($latest | split(".") | map(tonumber)) > ($current | split(".") | map(tonumber))' > /dev/null; then
+        warning "UPDATE" "${image} -> ${image%:*}:${prefix}${latest}${suffix}"
+        update_pin_reference "${image%:*}:${prefix}${latest}${suffix}" || return 1
+        return 1
+    else
+        info "OK" "${image}: no newer stable version"
+    fi
+}
+
+command_check_updates() {
+    local file image references tool heading="" issues=0
+    local -A seen=() results=()
+
+    require_docker
+
+    for tool in curl jq; do
+        if ! command -v "$tool" > /dev/null 2>&1; then
+            error "${tool} command not found, install it first"
+            return 69
+        fi
+    done
+
+    references=""
+    for file in "${PINNED_DOCKERFILES[@]}"; do
+        [ -f "$file" ] || continue
+        while IFS= read -r image; do
+            image="${image%@*}"
+            if [ -n "${IMAGE:-}" ] && [ "$image" != "${IMAGE%@*}" ]; then
+                continue
+            fi
+            references+="${file}"$'\t'"${image}"$'\n'
+        done < <(dockerfile_images "$file")
+    done
+
+    if [ -n "${IMAGE:-}" ] && [ -z "$references" ]; then
+        references="IMAGE input (no matching Dockerfile)"$'\t'"${IMAGE%@*}"
+    fi
+    references="${references%$'\n'}"
+    if [ -z "$references" ]; then
+        error "No external Dockerfile images found; run from the project root or set IMAGE"
+        return 1
+    fi
+
+    while IFS=$'\t' read -r file image; do
+        [ -z "${seen[$file|$image]+set}" ] || continue
+        seen[$file|$image]=1
+        if [ "$heading" != "$file" ]; then
+            [ -z "$heading" ] || printf '\n'
+            printf '%s%s%s\n' "$BOLD" "$file" "$NC"
+            heading="$file"
+        fi
+        if [ -z "${results[$image]+set}" ]; then
+            if ! results[$image]="$(check_image_update "$image")"; then
+                issues=$((issues + 1))
+            fi
+        fi
+        printf '%s\n' "${results[$image]}" | sed 's/^/  /'
+    done <<< "$references"
+
+    if [ "$issues" -gt 0 ]; then
+        printf '\n%s[CHECK]%s %s image(s) require attention: updates available or checks failed\n' "$RED" "$NC" "$issues" >&2
+        return 1
+    fi
 }
 
 error() {
@@ -189,16 +423,20 @@ require_docker() {
     fi
 }
 
-# Fetch raw manifest (index or single manifest) with a single registry request.
 # Retries transient registry errors (rate limit, timeouts, server errors).
-# Prints manifest on success, or registry error on failure.
-raw_manifest() {
-    local attempt output delay
+# Prints inspection output on success, or registry error on failure.
+inspect_image() {
+    local attempt output delay remaining hint rate_limit_notified=0
 
     for attempt in 1 2 3; do
-        if output="$(docker buildx imagetools inspect --raw "$1" 2>&1)"; then
+        if output="$(docker buildx imagetools inspect "$@" 2>&1)"; then
             printf '%s' "$output"
             return 0
+        fi
+
+        if [ "$rate_limit_notified" -eq 0 ] && grep -qiE '429|toomanyrequests' <<< "$output"; then
+            warning "RATE LIMIT" "Docker Hub returned 429 Too Many Requests. Run 'docker login docker.io' or wait for the limit to reset; CI should authenticate before running this check." >&2
+            rate_limit_notified=1
         fi
 
         if [ "$attempt" -eq 3 ] || ! grep -qiE '429|toomanyrequests|timeout|EOF|50[0-9] ' <<< "$output"; then
@@ -206,12 +444,25 @@ raw_manifest() {
         fi
 
         delay=$((attempt * 10))
-        printf '  %sRETRY%s Registry request failed, retrying in %ss\n' "$YELLOW" "$NC" "$delay" >&2
-        sleep "$delay"
+        hint=""
+        if [ "$rate_limit_notified" -eq 1 ]; then
+            hint=" Press Ctrl+C to stop, then run 'docker login docker.io'."
+        fi
+        for ((remaining = delay; remaining > 0; remaining -= 5)); do
+            printf '  %sRETRY%s Registry request failed; attempt %s/3 in %ss.%s\n' \
+                "$YELLOW" "$NC" "$((attempt + 1))" "$remaining" "$hint" >&2
+            sleep 5 || return $?
+        done
+        printf '  %sRETRY%s Starting registry request attempt %s/3\n' \
+            "$YELLOW" "$NC" "$((attempt + 1))" >&2
     done
 
     printf '%s\n' "$output"
     return 1
+}
+
+raw_manifest() {
+    inspect_image --raw "$1"
 }
 
 github_escape_data() {
@@ -291,7 +542,10 @@ command_digest() {
 
     type="$(media_type "$raw")"
     platforms="$(image_platforms "$raw")"
-    digest="$(docker buildx imagetools inspect "$IMAGE" --format '{{.Manifest.Digest}}')"
+    if ! digest="$(inspect_image "$IMAGE" --format '{{.Manifest.Digest}}')"; then
+        error "Could not resolve index digest for ${IMAGE}: $(tail -n 1 <<< "$digest")"
+        exit 1
+    fi
     name="${IMAGE%@*}"
 
     printf '\n'
@@ -631,6 +885,7 @@ command_push() {
 }
 
 case "${1:-}" in
+    check-updates ) command_check_updates ;;
     digest ) require_docker; command_digest ;;
     verify ) require_docker; command_verify ;;
     platforms ) require_docker; command_platforms ;;
