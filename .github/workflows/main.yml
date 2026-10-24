@@ -73,7 +73,11 @@ jobs:
         with:
           globs: |
             README.md
+            AGENTS.md
+            CLAUDE.md
             .devcontainer/*.md
+            .github/copilot-instructions.md
+            .github/pull_request_template.md
             .github/skills/**/*.md
             scripts/*.md
             doc/*.md
