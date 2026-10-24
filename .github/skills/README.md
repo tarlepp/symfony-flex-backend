@@ -24,9 +24,12 @@ replace them.
 Before starting a task, select the matching skill below and follow the
 [shared guidance](shared-guidance.md), including
 [repository instructions](../copilot-instructions.md) and
-[AI rules](../../doc/AI_RULES.md). Use related skills together when a task spans
-multiple concerns. Keep common execution, validation, and handoff rules in the
-shared guidance rather than duplicating them in every skill.
+[AI rules](../../doc/AI_RULES.md). For the canonical AI documentation inventory
+and reading order, see the [README's AI-assisted development
+section](../../README.md#ai-assisted-development). Use related skills together
+when a task spans multiple concerns. Keep common execution, validation, and
+handoff rules in the shared guidance rather than duplicating them in every
+skill.
 
 Start with the skill matching the requested outcome, and follow additional
 skills only for layers the task actually changes:
