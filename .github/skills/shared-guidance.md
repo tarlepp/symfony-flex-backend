@@ -90,7 +90,7 @@ safeguards; do not replace them with generic assumptions.
   affected links and structure are sufficient; do not run application tests
   merely because a skill documents test commands.
 * Before a commit, follow the full validation suite in
-  [repository instructions](../copilot-instructions.md).
+  [`AGENTS.md`](../../AGENTS.md#testing-and-validation).
 * If a required check cannot run, identify the blocker in the handoff.
 
 ## Updating documentation [ᐞ](#table-of-contents)
