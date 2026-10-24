@@ -214,6 +214,7 @@ if grep -q $'\033' "$WORK/output"; then
     exit 1
 fi
 NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[1;33m[UPDATE]\033[0m'
+grep -Fq $'\033[0;31m[CHECK]\033[0m' "$WORK/output"
 NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[0;32m[OK]\033[0m'
 check_updates 'up-to-date image' 'test:2.0.0' 0 '[OK] test:2.0.0: no newer stable version'
 if grep -q 'Multi-platform pin:' "$WORK/output"; then
@@ -267,6 +268,7 @@ check_updates 'default Dockerfile discovery, COPY tools and deduplication' '' 1 
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
 grep -Fq '[CHECK] 2 image(s) require attention' "$WORK/output"
+awk '/^\[CHECK\]/ { if (previous != "") exit 1; found = 1 } { previous = $0 } END { if (!found) exit 1 }' "$WORK/output"
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
 awk '
     /^Dockerfile$/ { group = "root"; root++; next }

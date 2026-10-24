@@ -325,7 +325,7 @@ command_check_updates() {
     done <<< "$references"
 
     if [ "$issues" -gt 0 ]; then
-        warning "CHECK" "${issues} image(s) require attention: updates available or checks failed"
+        printf '\n%s[CHECK]%s %s image(s) require attention: updates available or checks failed\n' "$RED" "$NC" "$issues" >&2
         return 1
     fi
 }
