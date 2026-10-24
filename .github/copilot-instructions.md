@@ -2,217 +2,44 @@
 
 <a id="what-is-this"></a>
 
+Copilot entry point for repository guidance. The actionable repository-wide
+instructions live in [`AGENTS.md`](../AGENTS.md); this file points to those rules
+instead of duplicating them.
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-    * [Purpose](#purpose)
-    * [Architecture rules](#architecture-rules)
-    * [PHP and Symfony rules](#php-and-symfony-rules)
-    * [Security rules](#security-rules)
-    * [Change scope rules](#change-scope-rules)
-    * [Collaboration and commit rules](#collaboration-and-commit-rules)
-    * [Clarification and assumptions rules](#clarification-and-assumptions-rules)
-    * [Command execution rules](#command-execution-rules)
-    * [Validation rules](#validation-rules)
-    * [Documentation format rules](#documentation-format-rules)
-    * [Reference documentation](#reference-documentation)
+    * [Start here](#start-here)
+    * [Task guidance](#task-guidance)
+    * [References](#references)
 
-## Purpose [ᐞ](#table-of-contents)
+## Start here [ᐞ](#table-of-contents)
 
-<a id="purpose"></a>
+<a id="start-here"></a>
 
-Use these instructions as the repository-level default when proposing or making
-changes in this project. Keep changes aligned with the existing Symfony, Doctrine
-ORM, and project workflow conventions.
+Follow [`AGENTS.md`](../AGENTS.md) for architecture, implementation, validation,
+and handoff requirements. Follow a matching task-specific skill from the
+[skills index](skills/README.md) as a supplement to those instructions.
 
-Before starting a task, check `.github/skills/` for a skill that matches the
-requested work and follow it when applicable. When using a skill, also follow
-these general instructions and `doc/AI_RULES.md`; a skill supplements rather
-than overrides repository-wide rules.
+## Task guidance [ᐞ](#table-of-contents)
 
-## Architecture rules [ᐞ](#table-of-contents)
+<a id="task-guidance"></a>
 
-<a id="architecture-rules"></a>
+The [README AI guidance inventory](../README.md#ai-assisted-development) is the
+canonical reading order. See [`CLAUDE.md`](../CLAUDE.md) for project architecture
+and workflow context, and [`doc/AI_RULES.md`](../doc/AI_RULES.md) for AI-guidance
+maintenance and CI enforcement.
 
-* Follow the existing resource-based REST architecture with a clear service layer.
-* Keep entities in `src/Entity/`, repositories in `src/Repository/`, resources in
-  `src/Resource/`, and REST controllers in `src/Rest/`.
-* Keep classes in `src/Controller/` as thin as possible and delegate business
-  logic to resources/services.
-* For custom controllers in `src/Controller/`, prefer the `__invoke` pattern
-  (one controller class per endpoint).
-* REST controllers in `src/Rest/` are an exception to the `__invoke` rule,
-  because they use existing trait-based controller patterns.
-* Use DTOs in `src/DTO/` to control input/output data; do not expose entities
-  directly in controller responses.
-* Keep business logic in resource classes or services, not in controllers.
-* Use the AutoMapper (`src/AutoMapper/`) for entity-to-DTO and DTO-to-entity
-  mapping instead of doing manual mapping in controllers or services.
-* Respect existing repository patterns; extend `BaseRepository` when creating new
-  repositories.
-* Prefer extending an existing resource or service before creating a new parallel
-  pattern.
+## References [ᐞ](#table-of-contents)
 
-## PHP and Symfony rules [ᐞ](#table-of-contents)
+<a id="references"></a>
 
-<a id="php-and-symfony-rules"></a>
-
-* Declare `declare(strict_types=1);` at the top of every PHP file.
-* Use PHP features supported by the version constraint in `composer.json`,
-  including constructor promotion, readonly properties, and named arguments
-  where appropriate.
-* Respect strict PHPStan (max level) and Psalm rules; avoid suppression comments
-  unless there is no other option.
-* Use type hints for all parameters and return types.
-* Follow PSR-12 coding style and ECS (Easy Coding Standard) conventions.
-* Use Symfony Validator constraints for all input validation.
-* Never remove security checks or authentication guards.
-
-## Security rules [ᐞ](#table-of-contents)
-
-<a id="security-rules"></a>
-
-* Never commit secrets, JWT keys, or `.env.local` files.
-* Always validate input with Symfony validation constraints.
-* Respect role-based access control; do not weaken security guards.
-* Use DTOs to control what data is exposed in API responses.
-* For the complete security policy, vulnerability reporting, and authentication
-  details, see `doc/SECURITY.md`.
-
-## Change scope rules [ᐞ](#table-of-contents)
-
-<a id="change-scope-rules"></a>
-
-* Prefer the smallest change that fully solves the task.
-* Do not refactor unrelated code unless the task requires it.
-* Do not introduce new dependencies unless they are necessary and justified.
-* Preserve public APIs and existing architecture unless the task explicitly
-  requires a change.
-* Update relevant documentation when code changes affect behavior, architecture,
-  workflows, commands, or contributor expectations.
-
-## Collaboration and commit rules [ᐞ](#table-of-contents)
-
-<a id="collaboration-and-commit-rules"></a>
-
-* Do not create commits unless the developer explicitly asks for a commit.
-* Keep work as uncommitted changes until commit instructions are provided.
-* After each completed task, provide a concise summary of what changed,
-  including affected files and validation commands that were run (or skipped).
-* In that summary, include proposed commit message(s) for each logical change,
-  following the repository pattern `Type(scope): short description` (for
-  example `Chore(ops): update AI documentation rules`).
-
-## Clarification and assumptions rules [ᐞ](#table-of-contents)
-
-<a id="clarification-and-assumptions-rules"></a>
-
-* If requirements are ambiguous or incomplete, ask the developer before
-  implementing.
-* Do not assume hidden requirements, expected behavior, or acceptance criteria;
-  request confirmation when uncertain.
-* Ask for explicit decisions before making non-trivial choices that affect API
-  behavior, database schema, security, or architecture.
-* If you must proceed with a temporary assumption, state it clearly and ask for
-  confirmation in the response.
-
-## Command execution rules [ᐞ](#table-of-contents)
-
-<a id="command-execution-rules"></a>
-
-* Treat the running `php` development container or IDE Dev Container as the
-  default environment for development commands.
-* Use the `php` service container (`symfony-backend-php-fpm`) as the primary
-  execution target for project commands.
-* If containers are not running, start them from project root with `make start`
-  (foreground) or `make daemon` (background).
-* Use `make bash` (or `make fish`) to open an interactive shell in the `php`
-  container before running commands manually.
-* Run `composer`, `bin/console`, lint, test, and static analysis commands inside
-  the running container, not on the host machine.
-* Do not run project PHP tooling directly on the host by default. If a command
-  is normally a project command, route it via container-aware `make` targets or
-  the running `php` container.
-* Node.js tooling is available in the containerized environment (via `nvm`), so
-  use `make lint-markdown` for documentation checks by default (instead of
-  calling `npx` directly).
-* If starting from the host, prefer the existing `make` targets that delegate
-  into the running container.
-* Only run project commands directly on the host when the task explicitly
-  requires host-level Docker or Git operations.
-* If container execution is unavailable (for example container down or missing),
-  state that blocker clearly before using a host fallback command.
-
-## Validation rules [ᐞ](#table-of-contents)
-
-<a id="validation-rules"></a>
-
-Before commit (or before asking for commit), run the full static-analysis and
-quality suite from project root inside the running development container,
-aligned with `.github/workflows/main.yml`:
-
-* `make phpcs`
-* `make ecs`
-* `make phplint`
-* `make php-parallel-lint`
-* `make psalm`
-* `make phpstan`
-* `make phploc`
-* `make phpinsights`
-* `make check-security`
-* `make lint-markdown`
-* `make run-tests`
-
-If `make ecs` reports fixable style issues, run `make ecs-fix` and rerun
-`make ecs`.
-
-For documentation-only tasks, `make lint-markdown` is usually the smallest
-relevant validation command.
-
-For targeted tests, run `phpunit <test-file-or-directory>` from the repository
-root inside the PHP development container; no explicit runner path is needed.
-Follow `.github/skills/write-tests/SKILL.md` for test selection and conventions.
-
-## Documentation format rules [ᐞ](#table-of-contents)
-
-<a id="documentation-format-rules"></a>
-
-For Markdown documentation files, keep structure aligned with `README.md` as the
-repository reference format:
-
-* Use `# What is this?` as the main title.
-* Add `<a id="what-is-this"></a>` directly below the main title.
-* Include a table of contents section with
-  `## Table of Contents [ᐞ](#table-of-contents)` and
-  `<a id="table-of-contents"></a>`.
-* Add `[ᐞ](#table-of-contents)` to section headings and keep TOC links aligned
-  with heading anchors.
-* End files with a `Back to previous` link (and `Back to main README.md` where
-  relevant to that directory context).
-* Use `*` as the bullet list marker for documentation lists.
-
-## Reference documentation [ᐞ](#table-of-contents)
-
-<a id="reference-documentation"></a>
-
-Use the canonical AI documentation inventory and reading order in
-[`README.md`](../README.md#ai-assisted-development):
-
-1. [`AGENTS.md`](../AGENTS.md) - agent instructions
-2. [`.github/copilot-instructions.md`](copilot-instructions.md) -
-   concise repository rules
-3. [`CLAUDE.md`](../CLAUDE.md) - architecture and workflow context
-4. [`doc/AI_RULES.md`](../doc/AI_RULES.md) - AI guidance maintenance
-5. [`skills/README.md`](skills/README.md) - task workflows
-6. [`pull_request_template.md`](pull_request_template.md) - PR review checklist
-
-This is a reading order, not precedence: platform instructions apply first,
-and the implementation, tests, configuration, and CI are the source of truth
-for current behavior. For security policy and authentication details, see
-[`doc/SECURITY.md`](../doc/SECURITY.md).
+See [`doc/SECURITY.md`](../doc/SECURITY.md) for the security policy. For
+pull-request reviews, use the
+[pull request template](pull_request_template.md).
 
 ---
 
