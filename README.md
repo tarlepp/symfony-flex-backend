@@ -309,8 +309,8 @@ If you use AI assistance in this repository, use this canonical inventory and
 reading order for its guidance:
 
 * [`AGENTS.md`](AGENTS.md) for agent-specific instructions
-* [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for
-  concise repository rules
+* [`.github/copilot-instructions.md`](.github/copilot-instructions.md) as the
+  Copilot entry point to actionable repository instructions
 * [`CLAUDE.md`](CLAUDE.md) for architecture and workflow context
 * [`doc/AI_RULES.md`](doc/AI_RULES.md) for AI guidance maintenance
 * [`.github/skills/README.md`](.github/skills/README.md) for task workflows
