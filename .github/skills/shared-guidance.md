@@ -25,8 +25,9 @@ task-specific workflow and checks.
 
 Before applying a skill, read the
 [repository instructions](../copilot-instructions.md) and
-[AI rules](../../doc/AI_RULES.md). Follow those repository-wide rules alongside
-the task-specific workflow in the skill.
+[AI rules](../../doc/AI_RULES.md), following the canonical inventory and
+reading order in the [README](../../README.md#ai-assisted-development). Follow
+those repository-wide rules alongside the task-specific workflow in the skill.
 
 ## Preparing a change [ᐞ](#table-of-contents)
 
