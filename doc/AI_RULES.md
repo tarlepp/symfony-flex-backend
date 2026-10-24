@@ -71,6 +71,12 @@ Keep common execution and handoff instructions in
 [shared guidance](../.github/skills/shared-guidance.md); write domain workflows
 and safeguards in their specific skills.
 
+Add a skill or expand shared policy only when a recurring need justifies it.
+Before creating a new document, check whether the workflow belongs in an
+existing skill or the shared guidance. New skills should cover a distinct
+workflow rather than repeat repository-wide instructions or overlap an
+existing skill.
+
 ## Enforcement model [ᐞ](#table-of-contents)
 
 <a id="enforcement-model"></a>
@@ -100,17 +106,24 @@ Use `.github/workflows/main.yml` as the source of truth; this map is an
 orientation and should be reviewed when that workflow changes. It currently
 contains:
 
-* configuration and documentation lint jobs,
+* configuration lint and documentation checks, including skill metadata,
+  index coverage, and links across skills and canonical AI documents,
 * dependency and secret checks,
 * Docker image pin verification and image builds/scanning,
 * a static-analysis matrix,
 * application tests, and
 * a summary gate that validates prerequisite job results.
 
-The CI configuration defines the exact commands, conditions, matrices,
-artifacts, and failure behavior. Update this summary when the workflow's
-structure changes; do not duplicate the complete command list from
-[`AGENTS.md`](../AGENTS.md).
+For application tests, the workflow runs `make run-tests-php`. The local
+`make run-tests` target may instead select phpdbg when it is installed. Use
+`make run-tests-php` locally when reproducing the CI test runner.
+
+This CI coverage map is distinct from the broader local pre-commit suite in
+[`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a
+command-for-command description of CI. The workflow defines the exact
+commands, conditions, matrices, artifacts, and failure behavior. Update this
+summary when the workflow's structure changes, without duplicating the full
+local checklist.
 
 ## Maintenance workflow [ᐞ](#table-of-contents)
 
@@ -120,8 +133,10 @@ When AI-assisted work produces recurring review feedback:
 
 1. Confirm that the correction reflects current project behavior and is not a
    one-off.
-2. Decide where it belongs: repository-wide instructions, a focused skill, a
-   human review checklist, or an automated check.
+2. Decide where it belongs: repository-wide instructions, an existing or
+   focused skill, shared guidance, a human review checklist, or an automated
+   check. Prefer extending the closest existing source over creating
+   overlapping guidance.
 3. Add the rule at the narrowest appropriate location and link to an existing
    source instead of copying policy into several files.
 4. If the rule is machine-detectable, prefer extending existing tooling or CI.
