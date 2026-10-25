@@ -21,9 +21,20 @@ application.
 
 <a id="development"></a>
 
-* [PSR-1](https://www.php-fig.org/psr/psr-1/)
-* [PSR-2](https://www.php-fig.org/psr/psr-2/)
-* [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
+The repository uses PSR-12 as its coding-style baseline, with additional
+project-specific rules configured in [`ecs.php`](../ecs.php). Run `make ecs` to
+check the code style or `make ecs-fix` to apply fixes. PHP-FIG's newer
+[PER Coding Style Guide](https://www.php-fig.org/per/coding-style/) extends and
+replaces PSR-12, but has not been adopted as this repository's baseline. Follow
+the repository configuration where external guidance differs.
+
+The repository does not use Yoda-style conditions: put the variable or
+expression before the compared value (for example, `$status === 'active'`).
+
+* [PSR-1: Basic Coding Standard](https://www.php-fig.org/psr/psr-1/)
+* [PSR-12: Extended Coding Style Guide](https://www.php-fig.org/psr/psr-12/)
+* [Symfony Coding
+  Standards](https://symfony.com/doc/current/contributing/code/standards.html)
 
 ### Composer PHP platform [ᐞ](#table-of-contents)
 
