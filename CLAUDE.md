@@ -182,7 +182,10 @@ copying it into long-form documentation.
 
 <a id="testing-commands"></a>
 
-* `make run-tests` - Run all tests (single thread)
+* `make run-tests` - Run all tests; selects phpdbg when available, otherwise
+  pure PHP
+* `make run-tests-php` - Run all tests via pure PHP (the CI application-test
+  command)
 * `make run-tests-phpdbg` - Run all tests via phpdbg
 * `make infection` - Run mutation testing (not heavily used)
 
@@ -260,6 +263,9 @@ phpunit tests/Unit/Rest/SearchTermTest.php
 
 # All tests (single thread)
 make run-tests
+
+# Use the same pure-PHP runner as the CI application-test job
+make run-tests-php
 
 # Mutation testing
 make infection
