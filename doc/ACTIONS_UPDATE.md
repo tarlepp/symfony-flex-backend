@@ -50,7 +50,6 @@ For CI jobs, triggers, and shared bootstrap behavior, use the
       * [SHA not found in repository](#sha-not-found-in-repository)
     * [Useful Resources](#useful-resources)
     * [FAQ](#faq)
-    * [Last Updated](#last-updated)
 
 ## Overview [ᐞ](#table-of-contents)
 
@@ -69,7 +68,8 @@ That gives:
 <a id="workflows-with-pinned-actions"></a>
 
 * `.github/workflows/main.yml` for linting, tests, and builds.
-* `.github/workflows/codeql-analysis.yml` for CodeQL scanning.
+* `.github/workflows/dependency-review.yml` for dependency vulnerability
+  review on pull requests.
 * `.github/workflows/scorecard.yml` for supply-chain scoring.
 * `.github/workflows/vulnerability-scan.yml` for vulnerability scanning.
 
@@ -519,15 +519,9 @@ A: GitHub supports short SHAs, but full SHAs are recommended.
 
 ---
 
-## Last Updated [ᐞ](#table-of-contents)
-
-<a id="last-updated"></a>
-
-* **Date**: 2026-04-09
-* **Updated By**: GitHub Copilot
-* **Next Review**: 2026-05-09
-
-See also: `doc/README.md` and `.github/workflows/`.
+Review this workflow inventory against `.github/workflows/` whenever workflows
+are added, removed, or renamed. See also [`doc/README.md`](README.md) and the
+workflow files themselves.
 
 ---
 
