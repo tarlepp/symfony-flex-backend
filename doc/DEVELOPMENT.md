@@ -12,6 +12,7 @@ application.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Development](#development)
+      * [Branch names and pull request titles](#branch-names-and-pull-request-titles)
       * [Composer PHP platform](#composer-php-platform)
       * [IDE](#ide)
       * [PHP Code Sniffer](#php-code-sniffer)
@@ -35,6 +36,34 @@ expression before the compared value (for example, `$status === 'active'`).
 * [PSR-12: Extended Coding Style Guide](https://www.php-fig.org/psr/psr-12/)
 * [Symfony Coding
   Standards](https://symfony.com/doc/current/contributing/code/standards.html)
+
+### Branch names and pull request titles [ᐞ](#table-of-contents)
+
+<a id="branch-names-and-pull-request-titles"></a>
+
+Recent merged pull requests commonly use a type and scope to make the change
+easy to scan. Use the following conventions for new human-authored changes:
+
+* Name a branch `<type>(<scope>)/<short-kebab-case-description>`, for example
+  `feat(console)/check-dependencies-improvements` or
+  `chore(ai)/link-shared-validation-to-agents`,
+  `chore(env)/nginx-update`, `chore(ci)/dependabot-configuration`, or
+  `fix(api)/correct-security-annotation`. For documentation-only maintenance,
+  use `chore(docs)/branch-and-pr-naming`.
+* Name a pull request `<Type>(<scope>) - <concise change summary>`, for example
+  `Feat(console) - Improve the check-dependencies command` or
+  `Fix(api) - Correct the security annotation` or
+  `Chore(docs) - Document branch and pull request naming`.
+* Use a short, lowercase type and scope in branch names. In pull request
+  titles, capitalize the type and keep the scope lowercase. Common types in
+  this repository include `feat`, `fix`, `chore`, and `docs`; choose a scope
+  that identifies the affected area, such as `console`, `ci`, `env`, `ai`, or
+  `docs`. Use `chore(docs)` for documentation-only maintenance; use a type
+  such as `feat` or `fix` when documentation accompanies that functional
+  change.
+* Keep the description specific to the change. Use the same type and scope in
+  the branch and title, and target `master` unless the work has a specific
+  reason to target another branch.
 
 ### Composer PHP platform [ᐞ](#table-of-contents)
 
