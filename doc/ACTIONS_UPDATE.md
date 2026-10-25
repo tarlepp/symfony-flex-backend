@@ -311,11 +311,13 @@ Requirements:
 
 Important behavior:
 
-* The script sorts version-like tags across major versions; it does not
-  enforce compatibility or reliably exclude prereleases.
+* The script sorts version-like tags across major versions and may suggest a
+  major upgrade. It does not enforce compatibility or reliably exclude
+  prereleases, so treat every result as a candidate rather than approval to
+  update.
 * The script continues checks even when discovery warnings are present.
-* Review release notes and obtain agreement on major upgrades before applying
-  a suggestion.
+* Review release notes and compatibility, and obtain explicit agreement before
+  applying a major upgrade suggestion.
 * Discovery is line-based and limited to the paths above; inspect alternate
   YAML filenames and unusual reference forms separately when present.
 * The script does not verify current tag/SHA parity, including moved tags.

@@ -52,8 +52,9 @@ Read warnings and individual lookup results, not only the exit code:
   remote lookup or current tag/SHA pair was verified.
 * `1` means updates were found; `2` means discovery warnings, which take
   precedence over available updates. Unsupported arguments return `64`.
-* Candidate selection sorts version-like tags across major versions. It does
-  not enforce same-major compatibility or reliably exclude prerelease tags.
+* Candidate selection sorts version-like tags across major versions and may
+  suggest a major upgrade. It does not enforce compatibility or reliably
+  exclude prerelease tags; treat the result as a candidate, not approval.
 * Discovery is line-based, not a complete YAML parser. Local action references
   and reusable-workflow references are skipped. Alternate `.yaml` names,
   deeper action directories, unusual quoting, and other reference forms need
@@ -65,12 +66,14 @@ Read warnings and individual lookup results, not only the exit code:
 
 1. Confirm the requested actions and acceptable version range. Run inventory
    and check modes, inspect the script's current behavior, and search affected
-   workflows and composite actions for every reference in scope. Do not
-   interpret the checker's latest candidate as approval for a major upgrade.
+   workflows and composite actions for every reference in scope. The checker
+   can suggest a version from a later major line; do not treat that suggestion
+   as approval to upgrade.
 2. Review upstream release notes, migration instructions, and the candidate's
    `action.yml` or `action.yaml`. Verify input/output changes, Node or container
    runtime requirements, minimum runner versions, and self-hosted runner
-   compatibility where relevant. Ask before crossing an unspecified major
+   compatibility where relevant. A major-version upgrade requires explicit
+   approval and compatibility review; ask before crossing an unspecified major
    version or changing workflow behavior or permissions.
 3. Verify the full commit SHA against the intended upstream repository and
    exact release tag. For a subpath action such as `github/codeql-action/init`,

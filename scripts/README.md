@@ -31,7 +31,8 @@ This directory contains different scripts that are used during development.
 * [GitHub Actions update checker](check-action-updates.sh)
   * Checks pinned GitHub Actions from `.github/workflows/*.yml`, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
-    available updates in the current major version line.
+    available version updates across major lines. Review compatibility and get
+    approval before applying a major-version upgrade suggestion.
 * [Docker multi-platform image helper](docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
