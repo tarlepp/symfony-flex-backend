@@ -69,7 +69,9 @@ Then open `https://localhost:8000` in your browser. For more details, see
 * [Docker Compose v2](https://docs.docker.com/compose/install/)
   (included with Docker Desktop)
 
-If you are not using Docker Engine, follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md).
+Standalone installation is not currently maintained; see the
+[standalone installation status](doc/INSTALLATION_WITHOUT_DOCKER.md) before
+attempting to run without Docker.
 
 Docker images are multi-platform, so the same setup works natively on
 x86-64 (`linux/amd64`) and ARM (`linux/arm64`, e.g. Apple Silicon) hosts. See
@@ -149,7 +151,7 @@ application:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
-* [mariadb](https://mariadb.org/) (MariaDB 10.7 which will store all the data
+* [mariadb](https://mariadb.org/) (MariaDB 13.0.2 which will store all the data
   of application)
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
 * [adminer](https://www.adminer.org/) (to manage your database via browser)
