@@ -396,43 +396,56 @@ your own application.
 
 <a id="entity-value-resolver"></a>
 
-This is basically replacement for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
-`@ParamConverter` annotation, so that you can easily inject _any_ entity to
-your controller action method which will use specified `resource` method to
-resolve that entity value.
+This repository-specific resolver provides entity argument resolution for
+controller actions. It supports entity types implementing
+`EntityInterface` that have a resource in `ResourceCollection`. The argument
+name must be the entity class name in camel case (for example, `UserGroup
+$userGroup`), and the matching request value must be a string. The value is
+read from request attributes, request parameters, or query parameters, in that
+order, then resolved through the entity's resource.
 
-And because this is using specified `resource` service you can easily use
-those [lifecycle callbacks](#lifecycle-callbacks) as you like.
+Because resolution uses the resource service, its
+[lifecycle callbacks](#lifecycle-callbacks) also apply. This resolver does
+not make an endpoint authorized; apply the appropriate access-control checks
+separately. If no matching entity is found, a required argument raises the
+Symfony `NotFoundHttpException`; a nullable argument resolves to `null`.
 
-[source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/EntityValueResolver.php)
+See [`EntityValueResolver`](../src/ValueResolver/EntityValueResolver.php).
 
 ### Logged in user value resolver [ᐞ](#table-of-contents)
 
 <a id="logged-in-user-value-resolver"></a>
 
-Because this application has separated user `entity` totally from actual
-firewall user - you can use this resolver to inject actual logged in user
-entity to your controller.
+For an action parameter named `loggedInUser` and typed as the Doctrine `User`
+entity, this resolver uses the current `SecurityUser` identifier to load the
+corresponding `User` from the repository. A required parameter raises
+`MissingTokenException` when there is no `SecurityUser`; API-key identities
+are not resolved as human `User` entities (nullable parameters resolve to
+`null` when no `SecurityUser` is present). Apply endpoint authorization checks
+separately.
 
-[source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/LoggedInUserValueResolver.php)
+See [`LoggedInUserValueResolver`](../src/ValueResolver/LoggedInUserValueResolver.php).
 
 ### REST DTO value resolver [ᐞ](#table-of-contents)
 
 <a id="rest-dto-value-resolver"></a>
 
-This resolver is used within following generic REST CRUD routes;
+This resolver supplies the `RestDtoInterface` argument to registered generic
+REST controller actions for create, update, and patch operations:
 
 * POST /some-endpoint, creating a new entity
 * PUT /some-endpoint/some-id, updating existing entity
 * PATCH /some-endpoint/some-id, patching existing entity
 
-The purpose of this resolver is to convert user `request` to corresponding DTO
-object so that resource service can process those requests correctly.
+The resolver selects the DTO configured for the controller action and maps the
+current request into it. It only supports the create, update, and patch actions
+of controllers registered in the REST controller collection; it does not bind
+DTOs for arbitrary custom `__invoke` controllers.
 
-This resolver is using [AutoMapperPlusBundle](https://github.com/mark-gerarts/automapper-plus-bundle)
-to make actual mapping from request to corresponding DTO object.
+The registered AutoMapper request mapper performs the conversion from the
+request to the DTO.
 
-[source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/RestDtoValueResolver.php)
+See [`RestDtoValueResolver`](../src/ValueResolver/RestDtoValueResolver.php).
 
 ## Common helpers [ᐞ](#table-of-contents)
 
