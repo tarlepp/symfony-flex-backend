@@ -28,7 +28,7 @@ fixes.
 
 | Version | Supported |
 | --- | --- |
-| default branch (`main`) | Yes |
+| default branch (`master`) | Yes |
 | older branches/releases | No |
 
 ## Reporting a vulnerability [ᐞ](#table-of-contents)

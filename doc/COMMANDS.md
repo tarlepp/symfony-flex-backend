@@ -236,9 +236,6 @@ Project contains following custom console commands to help eg. user management:
 ./bin/console user:management                       # To manage your users and
                                                     # user groups
 ./bin/console api-key:management                    # To manage your API keys
-./bin/console make:rest-api                         # To create skeleton
-                                                    # classes for new REST
-                                                    # resource
 ./bin/console utils:create-date-dimension-entities  # Console command to create
                                                     # 'DateDimension' entities.
 ```
