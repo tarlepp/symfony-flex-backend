@@ -49,14 +49,15 @@ started to use this template.
         to match your brand.
   * [ ] [compose.yaml](../compose.yaml) Change `container_name` to
         match your application.
-  * [ ] [mysql_custom.cnf](../docker/mysql/mysql_custom.cnf) Check that MySQL
-        has custom configuration that your application needs. Also check that
-        [Dockerfile](../docker/mysql/Dockerfile) is matching your production
-        setup.
+  * [ ] [mysql_custom.cnf](../docker/mariadb/mysql_custom.cnf) Check that
+        MariaDB has custom configuration that your application needs. Also
+        check that [Dockerfile](../docker/mariadb/Dockerfile) matches your
+        production setup.
   * [ ] [nginx.conf](../docker/nginx/nginx.conf) Check that Nginx has proper
-        configuration for your application needs. Also check that
-        [Dockerfile](../docker/mysql/Dockerfile) is matching your production
-        setup.
+        configuration for your application needs. Also check that its
+        [Dockerfile](../docker/nginx/Dockerfile) matches your production setup.
+  * [ ] [Dockerfile](../Dockerfile) Check that the PHP image matches your
+        production setup.
   * [ ] [php.ini](../docker/php/php.ini) Check that PHP has proper production
         configuration. Also check [php-dev.ini](../docker/php/php-dev.ini) for
         development environment setup.
