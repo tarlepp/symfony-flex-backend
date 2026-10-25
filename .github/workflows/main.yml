@@ -75,9 +75,13 @@ jobs:
             README.md
             .devcontainer/*.md
             .github/skills/**/*.md
+            scripts/*.md
             doc/*.md
             docker/*.md
             secrets/*.md
+
+      - name: Validate skill metadata, index coverage, and links
+        run: python3 scripts/check-skills.py
 
   security-check:
     name: PHP Security Checker
