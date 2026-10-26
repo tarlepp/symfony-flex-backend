@@ -107,7 +107,7 @@ orientation and should be reviewed when that workflow changes. It currently
 contains:
 
 * configuration lint and documentation checks, including skill metadata,
-  index coverage, and links across skills and canonical AI documents,
+  index coverage, and local Markdown links and anchors across the repository,
 * dependency and secret checks,
 * Docker image pin verification and image builds/scanning,
 * a static-analysis matrix,

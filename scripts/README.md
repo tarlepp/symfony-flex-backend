@@ -27,7 +27,8 @@ This directory contains different scripts that are used during development.
     output with some basic stats about project.
 * [Skill documentation checker](check-skills.py)
   * Validates skill front matter, exact skills-index coverage, and relative
-    Markdown links and anchors across the skills and canonical AI documents.
+    Markdown links and anchors across repository Markdown files. Dependency
+    and generated directories are excluded.
 * [GitHub Actions update checker](check-action-updates.sh)
   * Checks pinned GitHub Actions from `.github/workflows/*.yml`, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
@@ -60,7 +61,9 @@ File: `scripts/check-skills.py`
 python3 scripts/check-skills.py
 ```
 
-This standard-library Python check is also run in the documentation CI job.
+This standard-library Python check is also run in the documentation CI job. It
+validates local file links and Markdown anchors across repository Markdown
+files, in addition to checking skill metadata and index coverage.
 
 ### GitHub Actions update checker [ᐞ](#table-of-contents)
 

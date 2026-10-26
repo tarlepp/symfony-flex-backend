@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Validate skill metadata, index coverage, and canonical AI documentation links."""
+"""Validate skill metadata, index coverage, and repository Markdown links."""
 
 from __future__ import annotations
 
 import argparse
 import html
+import os
 import re
 import sys
 import unicodedata
@@ -29,6 +30,14 @@ CANONICAL_AI_DOCS = (
     "doc/AI_RULES.md",
     ".github/pull_request_template.md",
 )
+IGNORED_MARKDOWN_DIRECTORIES = {
+    ".git",
+    ".idea",
+    "node_modules",
+    "tools",
+    "var",
+    "vendor",
+}
 
 
 def relative_path(path: Path, root: Path) -> str:
@@ -200,6 +209,23 @@ def check_markdown_links(markdown_files: list[Path], root: Path, errors: list[st
                         )
 
 
+def repository_markdown_files(root: Path) -> list[Path]:
+    markdown_files = []
+    for directory, subdirectories, filenames in os.walk(root):
+        subdirectories[:] = sorted(
+            subdirectory
+            for subdirectory in subdirectories
+            if subdirectory not in IGNORED_MARKDOWN_DIRECTORIES
+        )
+        markdown_files.extend(
+            Path(directory) / filename
+            for filename in filenames
+            if filename.endswith(".md")
+        )
+
+    return sorted(markdown_files)
+
+
 def available_skills_section(index_file: Path) -> tuple[str | None, int]:
     lines = index_file.read_text(encoding="utf-8").splitlines()
     start = None
@@ -281,15 +307,12 @@ def check_documentation(root: Path) -> list[str]:
         return errors
 
     check_index_coverage(root, skill_files, errors)
-    markdown_files = set(skills_dir.rglob("*.md"))
     for relative_doc in CANONICAL_AI_DOCS:
         markdown_file = root / relative_doc
-        if markdown_file.is_file():
-            markdown_files.add(markdown_file)
-        else:
+        if not markdown_file.is_file():
             errors.append(f"{relative_doc}: missing canonical AI documentation file")
 
-    check_markdown_links(sorted(markdown_files), root, errors)
+    check_markdown_links(repository_markdown_files(root), root, errors)
     return errors
 
 
@@ -308,10 +331,10 @@ def main() -> int:
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
-        print(f"AI documentation check failed with {len(errors)} issue(s).", file=sys.stderr)
+        print(f"Documentation check failed with {len(errors)} issue(s).", file=sys.stderr)
         return 1
 
-    print("AI documentation check passed.")
+    print("Documentation check passed.")
     return 0
 
 
