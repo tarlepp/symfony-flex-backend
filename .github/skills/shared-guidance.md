@@ -99,10 +99,22 @@ safeguards; do not replace them with generic assumptions.
 
 Update existing documentation when behavior, architecture, configuration, or
 contributor/deployment commands change. Keep public API metadata and CLI help
-aligned with the implemented contract where affected. Follow the repository
-Markdown format and use relative links to existing Markdown files. Individual
-skills identify domain-specific documents or metadata; avoid creating parallel
-guidance or duplicating fast-changing versions from manifests.
+aligned with the implemented contract where affected. Before editing:
+
+* Identify the intended audience and the canonical document for the information.
+  Prefer updating that document over creating duplicate guidance, and update
+  repository indexes when their inventories are affected.
+* Verify commands against the Makefile, scripts, or current tool help, and
+  verify referenced paths and examples against files that exist in the
+  repository.
+* Use relative links to existing Markdown files and valid heading or explicit
+  anchors. Run `python3 scripts/check-skills.py` to check local links and
+  anchors across repository Markdown files, as well as
+  `make lint-markdown` for Markdown style.
+
+Individual skills identify domain-specific documents or metadata; avoid
+creating parallel guidance or duplicating fast-changing versions from
+manifests.
 
 ## Handoff [ᐞ](#table-of-contents)
 
