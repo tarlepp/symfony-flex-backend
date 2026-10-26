@@ -26,7 +26,7 @@ started to use this template.
       application.
 * [ ] Update [composer.json](../composer.json) to match with your application.
       Below you see the parts that you should check/update;
-  * [ ] Common properties; `name`, `description`, `keywords`, `homapage`,
+  * [ ] Common properties; `name`, `description`, `keywords`, `homepage`,
         `version`, `license`, `authors`, `support.issues` and
         `extra.projectTitle`
 * [ ] Application configuration / setup
