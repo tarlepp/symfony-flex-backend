@@ -380,6 +380,7 @@ application with the frontend technology of your choice.
 * [Custom configuration](doc/CUSTOM_CONFIGURATION.md)
 * [Development guide](doc/DEVELOPMENT.md)
 * [Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md)
+* [Event listeners and subscribers](doc/EVENT_HANDLING.md)
 * [Installation without docker](doc/INSTALLATION_WITHOUT_DOCKER.md)
 * [PhpStorm configuration](doc/PHPSTORM.md)
 * [Speed problems with Docker Engine?](doc/SPEED_UP_DOCKER_COMPOSE.md)
