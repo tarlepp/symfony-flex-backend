@@ -396,56 +396,48 @@ your own application.
 
 <a id="entity-value-resolver"></a>
 
-This repository-specific resolver provides entity argument resolution for
-controller actions. It supports entity types implementing
-`EntityInterface` that have a resource in `ResourceCollection`. The argument
-name must be the entity class name in camel case (for example, `UserGroup
-$userGroup`), and the matching request value must be a string. The value is
-read from request attributes, request parameters, or query parameters, in that
-order, then resolved through the entity's resource.
+This provides automatic entity resolution for controller arguments, similar to
+the use case covered by SensioFrameworkExtraBundle's
+[`@ParamConverter`](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle).
+The argument must be an entity with a registered resource, and its name must
+match the entity's camel-case name (for example, `UserGroup $userGroup`) and
+the corresponding request parameter. The resolver uses the entity resource's
+`findOne` method to load it.
 
-Because resolution uses the resource service, its
-[lifecycle callbacks](#lifecycle-callbacks) also apply. This resolver does
-not make an endpoint authorized; apply the appropriate access-control checks
-separately. If no matching entity is found, a required argument raises the
-Symfony `NotFoundHttpException`; a nullable argument resolves to `null`.
+And because this is using specified `resource` service you can easily use
+those [lifecycle callbacks](#lifecycle-callbacks) as you like.
 
-See [`EntityValueResolver`](../src/ValueResolver/EntityValueResolver.php).
+[source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ValueResolver/EntityValueResolver.php)
 
 ### Logged in user value resolver [ᐞ](#table-of-contents)
 
 <a id="logged-in-user-value-resolver"></a>
 
-For an action parameter named `loggedInUser` and typed as the Doctrine `User`
-entity, this resolver uses the current `SecurityUser` identifier to load the
-corresponding `User` from the repository. A required parameter raises
-`MissingTokenException` when there is no `SecurityUser`; API-key identities
-are not resolved as human `User` entities (nullable parameters resolve to
-`null` when no `SecurityUser` is present). Apply endpoint authorization checks
-separately.
+Because this application keeps the `User` entity separate from the firewall's
+security user, this resolver can inject the corresponding logged-in `User`
+entity into a controller argument named `$loggedInUser` (for example,
+`User $loggedInUser`).
 
-See [`LoggedInUserValueResolver`](../src/ValueResolver/LoggedInUserValueResolver.php).
+[source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ValueResolver/LoggedInUserValueResolver.php)
 
 ### REST DTO value resolver [ᐞ](#table-of-contents)
 
 <a id="rest-dto-value-resolver"></a>
 
-This resolver supplies the `RestDtoInterface` argument to registered generic
-REST controller actions for create, update, and patch operations:
+This resolver maps request data to a DTO for registered generic REST
+create/update/patch controller actions:
 
 * POST /some-endpoint, creating a new entity
 * PUT /some-endpoint/some-id, updating existing entity
 * PATCH /some-endpoint/some-id, patching existing entity
 
-The resolver selects the DTO configured for the controller action and maps the
-current request into it. It only supports the create, update, and patch actions
-of controllers registered in the REST controller collection; it does not bind
-DTOs for arbitrary custom `__invoke` controllers.
+The purpose of this resolver is to convert user `request` to corresponding DTO
+object so that resource service can process those requests correctly.
 
-The registered AutoMapper request mapper performs the conversion from the
-request to the DTO.
+It uses [AutoMapperPlusBundle](https://github.com/mark-gerarts/automapper-plus-bundle)
+to map the request to the DTO configured for the corresponding controller action.
 
-See [`RestDtoValueResolver`](../src/ValueResolver/RestDtoValueResolver.php).
+[source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ValueResolver/RestDtoValueResolver.php)
 
 ## Common helpers [ᐞ](#table-of-contents)
 
