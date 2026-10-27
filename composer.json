@@ -62,7 +62,7 @@
 		"symfony/validator": "8.1.9",
 		"symfony/var-exporter": "8.1.9",
 		"symfony/yaml": "8.1.9",
-		"zircote/swagger-php": "6.14.0"
+		"zircote/swagger-php": "6.18.0"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
