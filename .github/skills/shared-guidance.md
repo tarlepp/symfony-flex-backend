@@ -1,4 +1,4 @@
-Chore(ci): separate external reporting and clarify stacked PR branching# What is this?
+# What is this?
 
 <a id="what-is-this"></a>
 
@@ -102,6 +102,11 @@ safeguards; do not replace them with generic assumptions.
   While iterating on documentation-only changes, Markdown lint and checks of
   affected links and structure are sufficient; do not run application tests
   merely because a skill documents test commands.
+* Run checks against the final file contents, after the last edit. For
+  Markdown changes, rerun `make lint-markdown` and
+  `python3 scripts/check-skills.py`; an earlier passing run does not validate
+  later edits. Inspect staged and unstaged diffs before handoff or commit,
+  including first-line headings and the 80-character Markdown line limit.
 * Before a commit, follow the full validation suite in
   [`AGENTS.md`](../../AGENTS.md#testing-and-validation).
 * If a required check cannot run, identify the blocker in the handoff.
@@ -145,8 +150,9 @@ applied to a non-production database.
 
 After each AI task that changes files, end the response with proposed commit
 messages using `Type(scope): short description`. These are proposals only:
-do not commit unless explicitly asked. Place this section after any copyable
-Markdown version and follow these rules:
+do not commit unless explicitly asked, and never insert proposed commit
+messages into source or documentation files. Place this section after any
+copyable Markdown version and follow these rules:
 
 * Provide an individual proposal for each logical change and explicitly list
   the changed file paths it covers.
