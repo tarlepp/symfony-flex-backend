@@ -99,16 +99,19 @@ safeguards; do not replace them with generic assumptions.
 * Run relevant quality checks for the changed code. For PHP changes, these
   include `make ecs`, `make phplint`, `make phpstan`, and `make psalm`. Run
   `make lint-markdown` when Markdown files change.
-  While iterating on documentation-only changes, Markdown lint and checks of
-  affected links and structure are sufficient; do not run application tests
-  merely because a skill documents test commands.
+  For documentation-only changes, including AI instructions and skill text,
+  Markdown lint and documentation checks are sufficient through handoff and
+  commit; do not run PHPUnit or PHP static analysis merely because a skill
+  documents test commands. Select other checks using
+  [the validation selection guide](../../doc/TESTING.md#selecting-validation).
 * Run checks against the final file contents, after the last edit. For
   Markdown changes, rerun `make lint-markdown` and
   `python3 scripts/check-skills.py`; an earlier passing run does not validate
   later edits. Inspect staged and unstaged diffs before handoff or commit,
   including first-line headings and the 80-character Markdown line limit.
-* Before a commit, follow the full validation suite in
-  [`AGENTS.md`](../../AGENTS.md#testing-and-validation).
+* Before a commit, follow the change-scoped validation requirements in
+  [`AGENTS.md`](../../AGENTS.md#testing-and-validation). The broader application
+  suite is not mandatory for changes that do not affect application behavior.
 * If a required check cannot run, identify the blocker in the handoff.
 
 ## Updating documentation [ᐞ](#table-of-contents)

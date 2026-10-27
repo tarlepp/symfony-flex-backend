@@ -107,9 +107,17 @@ and the actual code, dependency manifests, and CI workflows.
   root inside the PHP development container; no explicit runner path is needed.
   See `.github/skills/write-tests/SKILL.md` for test selection and conventions.
 * Run the smallest relevant existing test or quality command while iterating.
-  Before commit, run the broader local pre-commit suite below from the
-  repository root in the development container. It is not a command-for-command
-  mirror of CI; see `doc/AI_RULES.md` for CI job coverage.
+  Select validation by the behavior changed, not merely the file extension,
+  using [the validation selection guide](doc/TESTING.md#selecting-validation).
+  Documentation-only changes, including AI instructions and skill text, require
+  Markdown lint and documentation checks, not PHPUnit or PHP static analysis.
+  Apply the same scope before commit; a documentation example mentioning a
+  test command does not require executing that command.
+* For application changes requiring broad regression coverage, run the local
+  pre-commit suite below from the repository root in the development container.
+  Use the selection guide for targeted changes and non-application tooling.
+  This suite is not a command-for-command mirror of CI; see `doc/AI_RULES.md`
+  for CI job coverage.
 
   ```bash
   make phpcs
