@@ -113,8 +113,10 @@ contains:
 * dependency and secret checks,
 * Docker image pin verification and image builds/scanning,
 * a static-analysis matrix,
-* application tests, and
-* a summary gate that validates prerequisite job results.
+* application tests,
+* a summary gate that validates prerequisite job results, and
+* optional coverage and Sonar reporting after successful pushes to `master`,
+  outside the core CI gate.
 
 For application tests, the workflow runs `make run-tests-php`. The local
 `make run-tests` target may instead select phpdbg when it is installed. Use

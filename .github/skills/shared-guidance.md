@@ -1,4 +1,4 @@
-# What is this?
+Chore(ci): separate external reporting and clarify stacked PR branching# What is this?
 
 <a id="what-is-this"></a>
 
@@ -41,6 +41,9 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
   The branch and title use the same type, scope, and change summary in their
   respective formats. Do not stage pre-existing work.
+* For a sequence of stacked PRs, treat each PR as a separate task: create a
+  fresh branch for each step, based on its intended parent branch. Do not
+  continue a later step on a branch already used for an earlier PR.
 * If the worktree already contains uncommitted changes, or the current branch
   already has commits for this task that are present on its remote, stop before
   switching branches or changing files and ask the user how to continue. State

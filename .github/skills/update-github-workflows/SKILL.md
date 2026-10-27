@@ -93,12 +93,13 @@ replacement for their actual event filters and conditions:
    to make a job work. Pass untrusted values through quoted environment
    variables instead of interpolating them into shell source.
 7. Preserve reporting and artifact contracts. External coverage/Sonar uploads
-   currently require a nonempty token and exclude fork PRs. Keep core tests
-   independent of those optional uploads. Verify producer paths match upload
-   paths for coverage, analyzer reports, metrics, and SARIF; keep names unique
-   across matrix jobs where required. Do not upload JWT keys, environment
-   secrets, or unrelated workspace contents. Keep vulnerability thresholds
-   and scan failure behavior unless a policy change is explicitly requested.
+   run only after successful pushes to `master`, outside the core CI gate, and
+   require their optional token. Keep core tests independent of those uploads.
+   Verify producer paths match upload paths for coverage, analyzer reports,
+   metrics, and SARIF; keep names unique across matrix jobs where required. Do
+   not upload JWT keys, environment secrets, or unrelated workspace contents.
+   Keep vulnerability thresholds and scan failure behavior unless a policy
+   change is explicitly requested.
 8. Update directly related contributor or AI guidance when CI commands or
    required checks change, including
    [AI rules](../../../doc/AI_RULES.md) where applicable. Delegate pin
