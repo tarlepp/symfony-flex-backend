@@ -73,7 +73,7 @@
 		"bamarni/composer-bin-plugin": "1.9.1",
 		"doctrine/doctrine-fixtures-bundle": "4.3.1",
 		"phpunit/php-code-coverage": "14.4.1",
-		"phpunit/phpunit": "13.4.2",
+		"phpunit/phpunit": "13.4.5",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "8.1.9",
 		"symfony/debug-bundle": "8.1.0",
