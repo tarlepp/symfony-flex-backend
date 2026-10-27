@@ -118,8 +118,10 @@ aligned with the implemented contract where affected. Before editing:
   verify referenced paths and examples against files that exist in the
   repository.
 * Use relative links to existing Markdown files and valid heading or explicit
-  anchors. Run `python3 scripts/check-skills.py` to check local links and
-  anchors across repository Markdown files, as well as
+  anchors. Run `python3 scripts/check-skills.py` from the repository root
+  inside the PHP development container (`make bash`, `make fish`, or an IDE
+  Dev Container terminal), never directly on the host, to check local links
+  and anchors across repository Markdown files, as well as
   `make lint-markdown` for Markdown style.
 
 Individual skills identify domain-specific documents or metadata; avoid

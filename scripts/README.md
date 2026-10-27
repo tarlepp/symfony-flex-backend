@@ -57,11 +57,21 @@ If you are already inside the container, you can still run
 
 File: `scripts/check-skills.py`
 
+Run from the repository root **inside the PHP development container**, not on
+the host. Open it with `make bash` or `make fish`, or use an IDE Dev Container
+terminal. Python automatically uses `/home/dev/.venv`.
+See [Python tooling](../.devcontainer/README.md#python-tooling) for details.
+
 ```bash
 python3 scripts/check-skills.py
 ```
 
-This standard-library Python check is also run in the documentation CI job. It
+Alternatively, use `make check-skills` from either the host or the container;
+the target always runs the checker inside Docker.
+
+This standard-library Python check also runs via `make check-skills` in the
+documentation CI job, using the existing Compose `php` development service
+rather than running Python directly on the runner. It
 validates local file links and Markdown anchors across repository Markdown
 files, in addition to checking skill metadata and index coverage.
 

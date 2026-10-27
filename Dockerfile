@@ -65,9 +65,8 @@ RUN apt-get update \
         iproute2 \
         locales \
         nano \
-        python3-dev \
-        python3-pip \
-        python3-setuptools \
+        python3 \
+        python3-venv \
         sudo \
         vim \
     && apt-get upgrade -y \
@@ -123,11 +122,17 @@ RUN chmod +x /app/bin/console \
 
 USER dev
 
-RUN pip3 install thefuck --user --break-system-packages
+RUN python3 -m venv /home/dev/.venv \
+    && python3 -m venv /home/dev/.local/share/thefuck \
+    && /home/dev/.local/share/thefuck/bin/python -m pip install --no-cache-dir thefuck \
+    && mkdir -p /home/dev/.local/bin \
+    && ln -s /home/dev/.local/share/thefuck/bin/thefuck /home/dev/.local/bin/thefuck
 
-ENV PATH="$PATH:/home/dev/.local/bin"
+ENV VIRTUAL_ENV=/home/dev/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH:/home/dev/.local/bin"
 
-RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc
+RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc \
+    && echo 'export PATH="/home/dev/.venv/bin:$PATH"' >> /home/dev/.profile
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
 
