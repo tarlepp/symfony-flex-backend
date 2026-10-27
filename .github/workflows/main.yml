@@ -9,11 +9,16 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+permissions:
+  contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -36,6 +41,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: '0'
+          persist-credentials: false
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -162,6 +168,7 @@ jobs:
         run: bash scripts/tests/docker-images-test.sh
 
       - name: Authenticate to Docker Hub when credentials are available
+        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
