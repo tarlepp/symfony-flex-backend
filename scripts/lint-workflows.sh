@@ -3,6 +3,10 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+ACTIONLINT_TAG=v1.7.12 # tool-pin: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca
+SHELLCHECK_TAG=v0.11.0 # tool-pin: koalaman/shellcheck@aac0823e6b58f8a499e856e93738082691cbf212
+VALIDATOR_TAG=v0.9.0 # tool-pin: mpalmer/action-validator@c994f427b7c42cd5ecb1bc9315cb91c3d7d72e3d
+
 if [[ "$(uname -s)" != Linux ]]; then
     echo "Workflow validation requires Linux; use the PHP development container." >&2
     exit 1
@@ -38,13 +42,13 @@ download() {
     printf '%s  %s\n' "$checksum" "$file" | sha256sum --check
 }
 
-download "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_${arch}.tar.gz" \
+download "https://github.com/rhysd/actionlint/releases/download/${ACTIONLINT_TAG}/actionlint_${ACTIONLINT_TAG#v}_linux_${arch}.tar.gz" \
     "$actionlint_sha" "$tools/actionlint.tar.gz"
 tar -xzf "$tools/actionlint.tar.gz" -C "$tools" actionlint
-download "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.${shellcheck_arch}.tar.gz" \
+download "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_TAG}/shellcheck-${SHELLCHECK_TAG}.linux.${shellcheck_arch}.tar.gz" \
     "$shellcheck_sha" "$tools/shellcheck.tar.gz"
-tar -xzf "$tools/shellcheck.tar.gz" -C "$tools" --strip-components=1 "shellcheck-v0.11.0/shellcheck"
-download "https://github.com/mpalmer/action-validator/releases/download/v0.9.0/action-validator_linux_${arch}" \
+tar -xzf "$tools/shellcheck.tar.gz" -C "$tools" --strip-components=1 "shellcheck-${SHELLCHECK_TAG}/shellcheck"
+download "https://github.com/mpalmer/action-validator/releases/download/${VALIDATOR_TAG}/action-validator_linux_${arch}" \
     "$validator_sha" "$tools/action-validator"
 chmod +x "$tools/action-validator"
 

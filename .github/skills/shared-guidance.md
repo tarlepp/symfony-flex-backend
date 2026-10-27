@@ -44,6 +44,12 @@ those repository-wide rules alongside the task-specific workflow in the skill.
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
   fresh branch for each step, based on its intended parent branch. Do not
   continue a later step on a branch already used for an earlier PR.
+* Apply the new-branch rule to separate follow-up enhancements too, even when
+  they concern the same files or topic as the previous task. Reserve branch
+  reuse for corrections to the same PR or an explicit user request to reuse
+  it for the new task. Prior approval to reuse a branch does not carry over.
+  When asking about existing work, propose a fresh branch for a new task
+  rather than recommending continued work on an already published PR branch.
 * If the worktree already contains uncommitted changes, or the current branch
   already has commits for this task that are present on its remote, stop before
   switching branches or changing files and ask the user how to continue. State

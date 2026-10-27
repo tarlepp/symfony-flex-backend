@@ -31,7 +31,7 @@ This directory contains different scripts that are used during development.
     Markdown links and anchors across repository Markdown files. Dependency
     and generated directories are excluded.
 * [GitHub Actions update checker](check-action-updates.sh)
-  * Checks pinned GitHub Actions from `.github/workflows/*.yml`, reports
+  * Checks pinned GitHub Actions and workflow-tool release declarations, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
     available version updates across major lines. Review compatibility and get
     approval before applying a major-version upgrade suggestion.
@@ -120,6 +120,25 @@ action-validator 0.9.0 into a temporary directory, verifies their pinned SHA-256
 checksums before execution, and removes them on exit. Linux AMD64 and ARM64
 are supported; downloads require network access, `curl`, `tar`, and
 `sha256sum`. Download or checksum failures fail the check.
+
+Release tags are declared once with a `tool-pin: owner/repo@COMMIT_SHA`
+comment recording the verified release commit. Binary SHA-256 checksums remain
+the execution integrity pins; a source commit SHA is not a binary checksum.
+The existing update checker inventories these declarations and checks for
+newer stable tags, verifying current tag/commit parity (including annotated
+tags). Run all action/tool checks with `make check-action-updates`, or only
+these tools inside the development container:
+
+```bash
+bash scripts/check-action-updates.sh --tools-only
+python3 scripts/tests/check-workflow-tool-updates-test.py
+```
+
+Tool-only check exit codes are `0` for verified current pins, `1` for updates,
+and `2` for missing/malformed pins, tag mismatches, or upstream lookup errors.
+Candidates may cross major versions; review compatibility and verify every
+platform's release-asset checksum before updating. Validation never updates
+tools automatically. Tool update lookups are separate from `lint-workflows`.
 
 Actionlint validates every `.yml` and `.yaml` workflow, including YAML anchors,
 aliases, expressions, and job dependencies, with ShellCheck enabled for

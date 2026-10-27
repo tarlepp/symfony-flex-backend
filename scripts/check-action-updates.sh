@@ -6,13 +6,15 @@
 # This script checks all pinned GitHub Actions in this repository for available
 # updates and displays the new SHA for each outdated action.
 #
-# It discovers actions from:
+# It discovers actions and workflow tool pins from:
 #   - .github/workflows/*.yml files
 #   - .github/actions/*/action.yml files
+#   - scripts/lint-workflows.sh tool-pin declarations
 #
 # Usage:
 #   ./scripts/check-action-updates.sh
 #   ./scripts/check-action-updates.sh --current-pins-md
+#   ./scripts/check-action-updates.sh --tools-only
 #
 # Requirements:
 #   - git (for git ls-remote)
@@ -31,13 +33,15 @@ GIT_BIN="${GIT_BIN:-git}"
 TIMEOUT_BIN="${TIMEOUT_BIN:-timeout}"
 WORKFLOW_DIR="${WORKFLOW_DIR:-.github/workflows}"
 ACTIONS_DIR="${ACTIONS_DIR:-.github/actions}"
+TOOL_PINS_FILE="${TOOL_PINS_FILE:-scripts/lint-workflows.sh}"
 
 MODE="check"
 case "${1:-}" in
     "" ) ;;
     --current-pins-md ) MODE="current-pins-md" ;;
+    --tools-only ) MODE="tools-only" ;;
     * )
-        printf 'Usage: %s [--current-pins-md]\n' "$0" >&2
+        printf 'Usage: %s [--current-pins-md|--tools-only]\n' "$0" >&2
         exit 64
         ;;
 esac
@@ -61,6 +65,7 @@ fi
 declare -A ACTIONS=()
 declare -A ACTION_SOURCES=()
 declare -A ACTION_REFS=()
+declare -A TOOL_KEYS=()
 
 # Track statistics
 TOTAL=0
@@ -255,7 +260,9 @@ print_current_pins_markdown() {
         ref="${ACTION_REFS[$action]}"
         source="${ACTION_SOURCES[$action]}"
 
-        if printf '%s\n' "$ref" | grep -Eq '^[0-9a-f]{40}$'; then
+        if [ -n "${TOOL_KEYS[$action]}" ]; then
+            ref_display="\`$ref\`"
+        elif printf '%s\n' "$ref" | grep -Eq '^[0-9a-f]{40}$'; then
             ref_display="\`${ref:0:8}\`"
         else
             ref_display="\`$ref\`"
@@ -263,6 +270,71 @@ print_current_pins_markdown() {
 
         printf '| %s | %s | %s | `%s` |\n' "$action" "$version" "$ref_display" "$source"
     done < <(printf '%s\n' "${!ACTIONS[@]}" | sort)
+}
+
+discover_tools() {
+    local line number=0 version repo ref key
+    if [ ! -f "$TOOL_PINS_FILE" ]; then
+        printf 'Tool pin file not found: %s\n' "$TOOL_PINS_FILE" >&2
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        return
+    fi
+    while IFS= read -r line; do
+        number=$((number + 1))
+        [[ "$line" == *"# tool-pin:"* ]] || continue
+        if [[ ! "$line" =~ ^[A-Z_]+_TAG=(v[0-9]+\.[0-9]+\.[0-9]+)[[:space:]]+#\ tool-pin:\ ([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)@([0-9a-f]{40})$ ]]; then
+            printf 'Invalid tool pin at %s:%s\n' "$TOOL_PINS_FILE" "$number" >&2
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            continue
+        fi
+        version="${BASH_REMATCH[1]}"
+        repo="${BASH_REMATCH[2]}"
+        ref="${BASH_REMATCH[3]}"
+        key="$repo@$version"
+        if [ -n "${ACTION_REFS[$key]}" ] && [ "${ACTION_REFS[$key]}" != "$ref" ]; then
+            printf 'Conflicting tool pins for %s\n' "$key" >&2
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            continue
+        fi
+        ACTIONS["$key"]="$version"
+        ACTION_REFS["$key"]="$ref"
+        ACTION_SOURCES["$key"]="$TOOL_PINS_FILE:$number"
+        TOOL_KEYS["$key"]=1
+    done < "$TOOL_PINS_FILE"
+    if [ "${#TOOL_KEYS[@]}" -eq 0 ]; then
+        printf 'No workflow tool pins discovered in %s\n' "$TOOL_PINS_FILE" >&2
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+    fi
+}
+
+check_tool() {
+    local key=$1 repo=$2 current=$3 refs latest sha
+    TOTAL=$((TOTAL + 1))
+    if ! refs=$("$TIMEOUT_BIN" 20 "$GIT_BIN" ls-remote --tags "https://github.com/$repo.git"); then
+        printf 'Unable to fetch tool tags: %s\n' "$repo" >&2
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        return
+    fi
+    sha=$(printf '%s\n' "$refs" | awk -v ref="refs/tags/$current" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
+    if [ "$sha" != "${ACTION_REFS[$key]}" ]; then
+        printf 'Tool tag/SHA mismatch: %s (%s); expected %s, resolved %s\n' "$key" "${ACTION_SOURCES[$key]}" "${ACTION_REFS[$key]}" "${sha:-missing}" >&2
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        return
+    fi
+    latest=$(printf '%s\n' "$refs" | awk '{sub(/^refs\/tags\//, "", $2); print $2}' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+    if [ -z "$latest" ]; then
+        printf 'No stable tool tags found: %s\n' "$repo" >&2
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        return
+    fi
+    if [ "$latest" != "$current" ]; then
+        sha=$(printf '%s\n' "$refs" | awk -v ref="refs/tags/$latest" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
+        printf 'UPDATE AVAILABLE (tool): %s %s -> %s\n  Commit SHA: %s\n  Source: %s\n  Verify release asset SHA-256 checksums before updating.\n' "$repo" "$current" "$latest" "$sha" "${ACTION_SOURCES[$key]}"
+        OUTDATED=$((OUTDATED + 1))
+    else
+        printf 'Tool up-to-date: %s %s @ %s (tag verified)\n' "$repo" "$current" "$sha"
+        CURRENT=$((CURRENT + 1))
+    fi
 }
 
 get_latest_compatible_release() {
@@ -293,7 +365,10 @@ if [ "$MODE" = "check" ]; then
     print_centered_banner "GitHub Actions Update Checker"
 fi
 
-discover_actions
+if [ "$MODE" != "tools-only" ]; then
+    discover_actions
+fi
+discover_tools
 
 if [ "$DISCOVERY_WARNINGS" -gt 0 ] && [ "$MODE" = "check" ]; then
     printf '%s⚠️  Discovery warnings found: %s%s\n' "$YELLOW" "$DISCOVERY_WARNINGS" "$NC"
@@ -320,7 +395,7 @@ if [ "$MODE" = "current-pins-md" ]; then
     exit 0
 fi
 
-printf 'Checking %s GitHub Actions for updates...\n' "${#ACTIONS[@]}"
+printf 'Checking %s GitHub Actions and workflow tools for updates...\n' "${#ACTIONS[@]}"
 printf '\n'
 
 # Group actions by repo name
@@ -345,6 +420,10 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
 
     for action_key in $action_keys; do
         current_version="${ACTIONS[$action_key]}"
+        if [ -n "${TOOL_KEYS[$action_key]}" ]; then
+            check_tool "$action_key" "$repo_name" "$current_version"
+            continue
+        fi
         ((TOTAL++))
 
         latest=$(get_latest_compatible_release "$repo_name" "$current_version")
@@ -375,6 +454,8 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
             versions_info+=("${current_version}	current	")
         fi
     done
+
+    [ "${#versions_info[@]}" -gt 0 ] || continue
 
     # Display repo with all versions
     if [ $repo_has_update -eq 1 ]; then
@@ -439,7 +520,7 @@ done
 
 # Summary
 print_centered_banner "Summary"
-printf 'Total actions checked:   %s\n' "$TOTAL"
+printf 'Actions/tools checked:   %s\n' "$TOTAL"
 printf 'Discovery warnings:      %s%s%s\n' "$YELLOW" "$DISCOVERY_WARNINGS" "$NC"
 printf 'Up-to-date:              %s%s%s\n' "$GREEN" "$CURRENT" "$NC"
 printf 'Updates available:       %s%s%s\n' "$RED" "$OUTDATED" "$NC"
@@ -464,6 +545,6 @@ if [ $OUTDATED -gt 0 ]; then
     exit 1
 fi
 
-printf '%sAll actions are up-to-date!%s\n' "$GREEN" "$NC"
+printf '%sAll checked actions and tools are up-to-date!%s\n' "$GREEN" "$NC"
 printf '\n'
 exit 0

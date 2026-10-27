@@ -80,7 +80,8 @@ That gives:
 <a id="current-action-pins"></a>
 
 The current pin list is generated from `.github/workflows/*.yml` and
-`.github/actions/*/action.yml` so it does not become stale.
+`.github/actions/*/action.yml`, plus the `tool-pin` declarations in
+`scripts/lint-workflows.sh`, so it does not become stale.
 
 Run this command to print current pins as markdown:
 
@@ -90,6 +91,24 @@ bash scripts/check-action-updates.sh --current-pins-md
 
 If you are on the host machine, run it in the dev container (`make bash`) or in
 your Dev Container terminal.
+
+The standalone workflow validators are release binaries, not Actions.
+Their declarations pair an exact release tag with its verified source commit
+SHA; platform-specific SHA-256 checksums separately pin the downloaded bytes.
+The normal update check includes these tools. To check only workflow tools:
+
+```bash
+bash scripts/check-action-updates.sh --tools-only
+```
+
+Tool checks verify tag/commit parity, prefer peeled commits for annotated tags,
+and report the newest full stable version tag and commit, excluding prerelease
+and floating tags. Missing pins, lookup failures, and moved/missing tags fail
+with exit code `2`; updates return `1`. This stricter parity/error behavior is
+specific to tool pins; the existing Action lookup limitations still apply.
+Review compatibility and update the release tag, commit comment, and both
+platforms' binary checksums together. Do not substitute a commit SHA for a
+binary checksum or automatically install the suggested version.
 
 ---
 
