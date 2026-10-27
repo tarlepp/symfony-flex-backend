@@ -36,6 +36,16 @@ those repository-wide rules alongside the task-specific workflow in the skill.
 * Inspect staged, unstaged, and untracked changes before editing. Preserve
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.
+* Before making task changes, propose the pull request title and create a new
+  task branch following the
+  [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
+  The branch and title use the same type, scope, and change summary in their
+  respective formats. Do not stage pre-existing work.
+* If the worktree already contains uncommitted changes, or the current branch
+  already has commits for this task that are present on its remote, stop before
+  switching branches or changing files and ask the user how to continue. State
+  what you found and offer safe choices appropriate to the situation; do not
+  stash, commit, reset, or move existing work without approval.
 * Before framework-dependent work, check `composer.json` for supported PHP
   and package constraints, `composer.lock` for locked versions, and
   `symfony.lock` for Flex recipe metadata. Do not treat recipe versions as
@@ -126,9 +136,16 @@ documentation from execution of the workflow it describes; writing a recipe
 skill, for example, does not imply that recipes were updated.
 
 For database changes, state whether a migration was generated, reviewed, or
-applied to a non-production database. Include proposed commit messages per
-logical change using `Type(scope): short description`. Do not commit unless
-explicitly asked.
+applied to a non-production database. After each completed task step, provide
+its proposed commit message using `Type(scope): short description`; include
+the messages again in the final handoff when useful. These are proposals only:
+do not commit unless explicitly asked.
+
+When no commits have yet been created for the task, make each proposed commit
+message describe all of the task's current uncommitted changes, including
+earlier completed steps, rather than only the latest step. Update the proposal
+as the changeset grows. Present the complete message in a fenced Markdown code
+block so it can be copied and pasted without reformatting.
 
 ---
 
