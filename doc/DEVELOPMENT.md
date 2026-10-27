@@ -42,7 +42,8 @@ expression before the compared value (for example, `$status === 'active'`).
 <a id="branch-names-and-pull-request-titles"></a>
 
 Recent merged pull requests commonly use a type and scope to make the change
-easy to scan. Use the following conventions for new human-authored changes:
+easy to scan. Use the following conventions for new changes, including AI
+assisted work:
 
 * Name a branch `<type>(<scope>)/<short-kebab-case-description>`, for example
   `feat(console)/check-dependencies-improvements` or
@@ -62,8 +63,10 @@ easy to scan. Use the following conventions for new human-authored changes:
   such as `feat` or `fix` when documentation accompanies that functional
   change.
 * Keep the description specific to the change. Use the same type and scope in
-  the branch and title, and target `master` unless the work has a specific
-  reason to target another branch.
+  the branch and title, and keep their change summaries aligned. The formats
+  are intentionally different; for AI-assisted work, decide the proposed PR
+  title first and derive the task branch from it. Target `master` unless the
+  work has a specific reason to target another branch.
 
 ### Composer PHP platform [ᐞ](#table-of-contents)
 

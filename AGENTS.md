@@ -87,8 +87,8 @@ and the actual code, dependency manifests, and CI workflows.
   Dev Container for Composer, Symfony console, lint, test, and static-analysis
   commands. Start containers with `make start` or `make daemon`; use `make bash`
   or `make fish` for an interactive container shell.
-* Follow the [branch and pull request naming conventions](doc/DEVELOPMENT.md#branch-names-and-pull-request-titles)
-  for new human-authored changes.
+* Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
+  task branch setup, handling pre-existing work, and commit-message proposals.
 * Prefer existing `make` targets over running project tooling on the host. If
   container execution is unavailable and a host fallback is necessary, state
   that blocker in the handoff.
@@ -143,9 +143,9 @@ and the actual code, dependency manifests, and CI workflows.
 * Update relevant documentation when behavior, architecture, workflows, or
   commands change. For Markdown, follow `README.md` structure and list-format
   conventions.
-* Do not create commits unless explicitly requested. At handoff, summarize
-  changes, touched files, and validation run or skipped; include a proposed
-  commit message for each logical change using `Type(scope): short description`.
+* At handoff, summarize changes, touched files, and validation run or skipped.
+  Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
+  commit and commit-message expectations.
 
 ## Reference guidance [ᐞ](#table-of-contents)
 
