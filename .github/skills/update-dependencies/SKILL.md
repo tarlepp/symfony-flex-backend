@@ -10,7 +10,8 @@ description: Update Composer, Composer tool, Docker image, or GitHub Actions dep
 Use this skill when updating or reviewing dependency versions, lockfiles, base
 images, or pinned GitHub Actions. Do not use it to add unrelated dependencies;
 follow the feature-specific skill and repository rules when a feature requires
-a new package.
+a new package. For coordinated changes to the supported PHP runtime baseline,
+use [update-php-runtime](../update-php-runtime/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and

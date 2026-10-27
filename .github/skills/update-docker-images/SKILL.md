@@ -11,6 +11,8 @@ Use this skill when updating Docker base images, images copied from external
 build stages, Compose service images, or CI container images. For Composer
 updates, use [update-dependencies](../update-dependencies/SKILL.md); for action
 pins, use [update-github-actions](../update-github-actions/SKILL.md).
+For changes to the supported PHP runtime baseline, use
+[update-php-runtime](../update-php-runtime/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
