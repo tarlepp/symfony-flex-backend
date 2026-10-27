@@ -136,16 +136,23 @@ documentation from execution of the workflow it describes; writing a recipe
 skill, for example, does not imply that recipes were updated.
 
 For database changes, state whether a migration was generated, reviewed, or
-applied to a non-production database. After each completed task step, provide
-its proposed commit message using `Type(scope): short description`; include
-the messages again in the final handoff when useful. These are proposals only:
-do not commit unless explicitly asked.
+applied to a non-production database.
 
-When no commits have yet been created for the task, make each proposed commit
-message describe all of the task's current uncommitted changes, including
-earlier completed steps, rather than only the latest step. Update the proposal
-as the changeset grows. Present the complete message in a fenced Markdown code
-block so it can be copied and pasted without reformatting.
+After each AI task that changes files, end the response with proposed commit
+messages using `Type(scope): short description`. These are proposals only:
+do not commit unless explicitly asked. Place this section after any copyable
+Markdown version and follow these rules:
+
+* Provide an individual proposal for each logical change and explicitly list
+  the changed file paths it covers.
+* Combine related files changed for the same task into one logical proposal;
+  do not split a cohesive change into separate proposals merely by file.
+* After the individual proposals, provide one combined commit message covering
+  all current uncommitted changes for the task, including earlier steps.
+  Exclude unrelated pre-existing changes and update proposals as the changeset
+  grows.
+* Put every complete message in its own fenced code block for copying and
+  pasting. Keep the final combined message last, with no content following it.
 
 ---
 

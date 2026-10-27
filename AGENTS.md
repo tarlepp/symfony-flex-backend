@@ -143,6 +143,10 @@ and the actual code, dependency manifests, and CI workflows.
 * Update relevant documentation when behavior, architecture, workflows, or
   commands change. For Markdown, follow `README.md` structure and list-format
   conventions.
+* For every response containing Markdown, present the readable, rendered
+  version first, followed by the same content in a fenced `markdown` code
+  block for copying and pasting. Use a longer outer fence when the content
+  includes code fences, and do not recursively duplicate the copyable version.
 * At handoff, summarize changes, touched files, and validation run or skipped.
   Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
   commit and commit-message expectations.
