@@ -5,7 +5,7 @@
 This document contains information how you can setup your [PhpStorm](https://www.jetbrains.com/phpstorm/)
 for this application _"correct"_ way.
 
-For recommend plugins see [External links / resources](#external-links--resources)
+For recommend plugins see [External links / resources](#external-links-resources)
 section of this documentation.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -36,7 +36,7 @@ section.
 
 Just choose the `Docker-PHP` from dropdown, if that does not exist there you
 need to click that `...` and follow the instructions found in
-[External links / resources](#external-links--resources-table-of-contents)
+[External links / resources](#external-links-resources)
 section - Configuring Remote PHP Interpreters.
 
 ![Path mappings](images/phpstorm_01.png)

@@ -111,9 +111,9 @@ skills only for layers the task actually changes:
   non-overlap criteria in [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills);
   prefer extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
-  exactly once, and relative links and anchors resolve across the skills and
-  canonical AI documents. Run `python3 scripts/check-skills.py` from the
-  repository root; Markdown lint alone does not verify those relationships.
+  exactly once, and local links and anchors resolve across repository Markdown
+  files. Run `python3 scripts/check-skills.py` from the repository root;
+  Markdown lint alone does not verify those relationships.
 * Verify referenced classes, commands, flags, and example files against the
   current repository. Distinguish required policy from illustrative examples;
   do not turn one implementation detail into an unconditional rule.

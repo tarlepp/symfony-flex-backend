@@ -87,7 +87,7 @@ By default this application assumes that you're using `app.localhost` as your
 PHP server that you've configured to your IDE. If you need to change that, just
 override that in your local `compose.override.yaml` file.
 
-See those [External links / resources](#external-links--resources-table-of-contents)
+See those [External links / resources](#external-links-resources)
 on this documentation to get more information.
 
 ## Debug Postman requests [ᐞ](#table-of-contents)
