@@ -93,6 +93,18 @@ jobs:
       - name: Validate skill metadata, index coverage, and repository Markdown links
         run: make check-skills
 
+  lint-workflows:
+    name: Validate GitHub workflows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Validate workflows, embedded shell, and local action metadata
+        run: make lint-workflows
+
   security-check:
     name: PHP Security Checker
     runs-on: ubuntu-24.04
@@ -254,6 +266,7 @@ jobs:
       - gitleaks
       - lint-configuration
       - lint-documentation
+      - lint-workflows
       - security-check
       - static-analyzers
     if: ${{ always() }}
@@ -265,6 +278,7 @@ jobs:
           echo "PHP Security Checker result: ${{ needs.security-check.result }}"
           echo "Lint configuration result: ${{ needs.lint-configuration.result }}"
           echo "Lint documentation result: ${{ needs.lint-documentation.result }}"
+          echo "Workflow validation result: ${{ needs.lint-workflows.result }}"
           echo "Static analyzer matrix result: ${{ needs.static-analyzers.result }}"
           echo "Gitleaks result: ${{ needs.gitleaks.result }}"
           echo "Docker base image pin verification result: ${{ needs.docker-image-verify-pins.result }}"
@@ -272,6 +286,7 @@ jobs:
           test "${{ needs.security-check.result }}" = "success"
           test "${{ needs.lint-configuration.result }}" = "success"
           test "${{ needs.lint-documentation.result }}" = "success"
+          test "${{ needs.lint-workflows.result }}" = "success"
           test "${{ needs.static-analyzers.result }}" = "success"
           test "${{ needs.gitleaks.result }}" = "success"
           test "${{ needs.docker-image-verify-pins.result }}" = "success"
@@ -344,6 +359,8 @@ jobs:
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml') != '' }}
         run: |
           test -s build/logs/junit.xml
+          # Keep PHP variables literal for the PHP interpreter.
+          # shellcheck disable=SC2016
           php -r '
             $report = simplexml_load_file("build/logs/junit.xml");
             if ($report === false || $report->getName() !== "testsuites" || !isset($report->testsuite)) {
