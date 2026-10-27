@@ -327,9 +327,9 @@ As a simple rule of thumb, update the AI guidance when the same review comment,
 architectural correction, or project convention appears repeatedly and should
 become a repository default.
 
-Before commit, validate AI-assisted changes with the CI-aligned static-analysis
-and quality command set from project root inside the running development
-container:
+Before committing, run the broader local pre-commit validation suite from the
+project root inside the running development container. This suite is not a
+command-for-command mirror of CI:
 
 ```bash
 make phpcs
@@ -347,6 +347,9 @@ make run-tests
 
 In the documented local development workflow, run those commands inside the
 running `php` development container where the pinned PHP toolchain is available.
+`make run-tests` selects phpdbg when it is installed and otherwise uses pure
+PHP. CI's application test job uses `make run-tests-php`; run that command
+locally when reproducing CI's test runner.
 
 ## Frontend? [ᐞ](#table-of-contents)
 
