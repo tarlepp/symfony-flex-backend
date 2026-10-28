@@ -48,22 +48,22 @@ in the GitHub settings.
 The check names below are the exact check-run contexts reported on a real pull
 request run, not workflow display labels.
 
-* `Validate CI prerequisites` (`main.yml`): gate for every lint, analyzer,
-  and secret job.
-* `PHPUnit tests` (`main.yml`): not a gate prerequisite; it runs after the
-  gate.
-* `Build application Docker image (development)` (`main.yml`): matrix job,
-  not a gate prerequisite.
-* `Build application Docker image (production)` (`main.yml`): matrix job,
-  not a gate prerequisite.
+* `Validate CI result` (`main.yml`): final aggregate gate. It needs the
+  prerequisite gate, the analyzer matrix, `PHPUnit tests` and both Docker
+  builds, and fails unless all of them succeeded (skipped only on
+  scheduled runs).
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the
-  gate cannot cover it.
+  aggregate gate cannot cover it.
+
+Require only these two. Jobs behind the aggregate gate, including
+`Validate CI prerequisites`, `PHPUnit tests` and the Docker builds, do not
+need their own entries, and adding a job or matrix target only means adding
+it to the `needs` of `ci-result`.
 
 Rules for this set:
 
-* Never require `Validate CI prerequisites` alone. It only reports on the
-  jobs listed in its `needs`, so tests and Docker builds must be required
-  separately.
+* Every new job in `main.yml` must be added to the `needs` of `ci-result`
+  (directly or through a job that is), or it is not part of the merge gate.
 * A job skipped because the gate failed counts as passing for GitHub. This is
   safe only while the gate itself is required and fails first.
 * Matrix jobs need one required entry per expanded name. Adding a matrix
@@ -73,10 +73,9 @@ Rules for this set:
 * `External reporting` runs only on `master` pushes and must not be required.
 * The scheduled runs of `main.yml` and `vulnerability-scan.yml` are not pull
   request checks and must not be required.
-* The current per-job entries (lint, security, gitleaks, pin verification)
-  are redundant with the gate. Keep them only if direct, named failure
-  reporting on the pull request is wanted; otherwise remove them to keep
-  renames cheap.
+* The current per-job entries (lint, security, gitleaks, pin verification,
+  PHPUnit, Docker builds) are redundant with `Validate CI result`. Remove
+  them once the aggregate gate has run successfully on a pull request.
 
 ## Protected branches [ᐞ](#table-of-contents)
 
@@ -85,6 +84,9 @@ Rules for this set:
 * Protect `master` first, with the required checks above, no force pushes,
   and no deletion. Prefer a repository ruleset over classic protection, and
   keep bypass actors to the minimum, such as the repository administrators.
+  To migrate, create the ruleset for `master` in `Settings > Rules`, set
+  it to `Evaluate` first, check the insights for unexpected blocks, switch
+  it to `Active`, and only then delete the classic rule.
 * Do not protect feature branches. Pull request CI runs for any base branch
   (`pull_request` has no branch filter), so stacked pull requests are tested
   without protecting their bases. Protecting them would also block the force
