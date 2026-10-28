@@ -130,6 +130,7 @@ install-tools               # Install composer tools dependencies
 lint-configuration          # Lint current defined `application.json` that it
                             # contains valid JSON
  lint-markdown              # Lint Markdown files
+lint-workflows              # Validate GitHub workflows, shell, and action metadata
 lint-yaml                   # Lint config YAML files
 local-configuration         # Create local configuration files
 logs                        # Show logs from all containers

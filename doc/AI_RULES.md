@@ -110,6 +110,8 @@ contains:
   index coverage, and local Markdown links and anchors across the repository
   (the Python checker uses `make check-skills` inside the Compose `php`
   development service),
+* workflow-aware validation and embedded shell checks for all workflows, plus
+  separate schema validation for local action metadata,
 * dependency and secret checks,
 * Docker image pin verification and image builds/scanning,
 * a static-analysis matrix,

@@ -16,6 +16,7 @@ This directory contains different scripts that are used during development.
       * [Project stats script](#project-stats-script)
       * [Skill documentation checker](#skill-documentation-checker)
       * [GitHub Actions update checker](#github-actions-update-checker)
+      * [GitHub workflow validator](#github-workflow-validator)
       * [Docker multi-platform image helper](#docker-multi-platform-image-helper)
 
 ## Resources [ᐞ](#table-of-contents)
@@ -34,6 +35,9 @@ This directory contains different scripts that are used during development.
     discovery issues (unpinned refs/conflicting versions), and checks for
     available version updates across major lines. Review compatibility and get
     approval before applying a major-version upgrade suggestion.
+* [GitHub workflow validator](lint-workflows.sh)
+  * Validates all workflows and their supported shell steps, and separately
+    validates local action metadata.
 * [Docker multi-platform image helper](docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
@@ -99,6 +103,35 @@ Exit codes:
 * `0` = no discovery issues and no updates found
 * `1` = updates available
 * `2` = discovery issues found (for example unpinned refs or conflicting versions)
+
+### GitHub workflow validator [ᐞ](#table-of-contents)
+
+<a id="github-workflow-validator"></a>
+
+File: `scripts/lint-workflows.sh`
+
+```bash
+make lint-workflows
+```
+
+The target runs in the PHP development container locally and directly on the
+GitHub runner in CI. It downloads actionlint 1.7.12, ShellCheck 0.11.0, and
+action-validator 0.9.0 into a temporary directory, verifies their pinned SHA-256
+checksums before execution, and removes them on exit. Linux AMD64 and ARM64
+are supported; downloads require network access, `curl`, `tar`, and
+`sha256sum`. Download or checksum failures fail the check.
+
+Actionlint validates every `.yml` and `.yaml` workflow, including YAML anchors,
+aliases, expressions, and job dependencies, with ShellCheck enabled for
+supported workflow shell steps. Action-validator separately checks every
+local `action.yml` and `action.yaml` against its bundled metadata schema.
+Composite-action shell bodies are not checked by these metadata checks.
+ShellCheck also checks the validator script itself.
+
+The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
+cancellations, or skipped validation block tests and Docker builds.
+`make lint-yaml` remains the separate Symfony configuration check. Static
+validation does not replace testing actual GitHub workflow execution.
 
 ### Docker multi-platform image helper [ᐞ](#table-of-contents)
 

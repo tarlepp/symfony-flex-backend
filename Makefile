@@ -458,6 +458,21 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec -T php make check-skills
 endif
 
+lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
+lint-workflows: info_msg := @printf $(_TITLE) "OK" "Validating GitHub workflows"
+lint-workflows: info
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	@bash scripts/lint-workflows.sh
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
+	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-workflows
+	$(ALL_DONE)
+endif
+
 lint-markdown: ## Lint Markdown files
 lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
 lint-markdown: info

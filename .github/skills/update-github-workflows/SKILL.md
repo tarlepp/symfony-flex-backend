@@ -36,7 +36,8 @@ replacement for their actual event filters and conditions:
 * `.github/workflows/main.yml`: configuration/documentation lint, dependency
   and secret checks, Docker pin verification, static-analysis matrix, tests,
   and development/production image builds with vulnerability scanning.
-  It handles pushes and PRs targeting `master`, a schedule, and manual runs.
+  It handles pushes to `master`, PRs targeting any branch, a schedule, and
+  manual runs.
 * `.github/workflows/dependency-review.yml`: dependency review on PRs.
 * `.github/workflows/scorecard.yml`: supply-chain analysis, artifact and SARIF
   uploads, with push, schedule, branch-protection, and manual triggers.
@@ -127,9 +128,11 @@ replacement for their actual event filters and conditions:
 
 * `make lint-yaml` validates Symfony `config/`, not GitHub workflows. The
   action-update checker inventories pins, not job graphs or expression
-  semantics. Use existing workflow validation tooling if available, checking
-  support for the repository's YAML anchors; do not report a generic YAML
-  parse or pin inventory as a successful workflow execution.
+  semantics. Run `make lint-workflows` for actionlint (including YAML anchors
+  and aliases), ShellCheck on supported workflow shell steps, and separate
+  action-validator schema checks of local action metadata. These checks do
+  not execute jobs or validate shell bodies inside composite actions; do not
+  report static validation as a successful workflow execution.
 * When an authorized push or PR produces a run, inspect affected job logs,
   matrix results, prerequisite gating, and expected artifacts. Separate
   runtime evidence from static review and local command results. Scheduled
