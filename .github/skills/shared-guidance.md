@@ -45,9 +45,13 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   guidance text, with no code, workflow, configuration, or script changes),
   the branch must be named `chore(docs)/<short-kebab-case-description>` and
   the pull request title must be `Chore(docs) - <concise change summary>`.
-  Do not use `docs/...` or another type or scope for such a change. Changes
-  that mix documentation with other areas use the type and scope of the
-  functional change instead.
+  When that documentation is only AI guidance (`AGENTS.md`, `CLAUDE.md`,
+  `.github/copilot-instructions.md`, `.github/skills/`, `doc/AI_RULES.md`),
+  use `chore(ai)/<short-kebab-case-description>` and
+  `Chore(ai) - <concise change summary>` instead. Do not use `docs/...` or
+  another type or scope for such changes. Changes that mix documentation
+  with other areas, or AI guidance with other documentation, use the scope
+  of the broader area (`docs` for the latter) or the functional change.
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
   fresh branch for each step, based on its intended parent branch. Do not
   continue a later step on a branch already used for an earlier PR.

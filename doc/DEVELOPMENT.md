@@ -61,7 +61,9 @@ assisted work:
   that identifies the affected area, such as `console`, `ci`, `env`, `ai`, or
   `docs`. Always use `chore(docs)` for documentation-only changes, in both
   the branch (`chore(docs)/...`) and the pull request title
-  (`Chore(docs) - ...`); never use `docs/...` as a branch prefix. Use a type
+  (`Chore(docs) - ...`); never use `docs/...` as a branch prefix. When only
+  AI guidance changes (`AGENTS.md`, `CLAUDE.md`, `.github/skills/`,
+  `doc/AI_RULES.md`), use `chore(ai)/...` and `Chore(ai) - ...`. Use a type
   such as `feat` or `fix` when documentation accompanies that functional
   change.
 * Keep the description specific to the change. Use the same type and scope in

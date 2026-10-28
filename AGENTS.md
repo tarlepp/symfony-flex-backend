@@ -90,7 +90,8 @@ and the actual code, dependency manifests, and CI workflows.
 * Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
   task branch setup, handling pre-existing work, and commit-message proposals.
   Documentation-only changes use a `chore(docs)/...` branch and a
-  `Chore(docs) - ...` pull request title.
+  `Chore(docs) - ...` pull request title; AI-guidance-only changes use
+  `chore(ai)/...` and `Chore(ai) - ...`.
 * Run repository application tooling inside the Compose PHP development
   container in both local development and CI. Prefer existing `make` targets:
   host invocations forward project targets into the container. Docker
