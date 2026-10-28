@@ -421,6 +421,8 @@ before tests are run or the image is built.
 CI builds and scans both PHP targets on pull requests and `master` pushes.
 The daily vulnerability scan (`vulnerability-scan.yml`) builds and scans both
 the `development` and `production` targets with the same Trivy threshold.
+Before enforcing the threshold it also uploads a SARIF report for each target
+to code scanning, so findings stay visible in the Security tab.
 
 The job runs `make docker-image-verify-pins` directly on the runner, which
 already has Docker with `buildx` and `jq` installed. It uses read-only

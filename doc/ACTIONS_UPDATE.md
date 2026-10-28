@@ -71,7 +71,9 @@ That gives:
 * `.github/workflows/dependency-review.yml` for dependency vulnerability
   review on pull requests.
 * `.github/workflows/scorecard.yml` for supply-chain scoring.
-* `.github/workflows/vulnerability-scan.yml` for vulnerability scanning.
+* `.github/workflows/vulnerability-scan.yml` for vulnerability scanning, with
+  Trivy results also uploaded as SARIF to code scanning.
+* `.github/workflows/codeql.yml` for CodeQL analysis of the workflow files.
 
 ---
 
