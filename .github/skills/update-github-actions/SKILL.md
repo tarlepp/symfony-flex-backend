@@ -10,6 +10,8 @@ description: Inspect and update SHA-pinned GitHub Actions in workflows and local
 Use this skill when reviewing or updating external GitHub Action versions and
 commit pins. It covers workflow references and dependencies inside local
 composite actions, not arbitrary CI redesign or Composer and Docker upgrades.
+It also covers release tag/commit declarations for standalone workflow tools
+in `scripts/lint-workflows.sh`; preserve their separate binary checksum pins.
 For job, trigger, or shared bootstrap behavior changes, use
 [update-github-workflows](../update-github-workflows/SKILL.md).
 
@@ -39,12 +41,17 @@ the PHP development container. Inside that container, run:
 ```bash
 bash scripts/check-action-updates.sh --current-pins-md
 bash scripts/check-action-updates.sh
+bash scripts/check-action-updates.sh --tools-only
 ```
 
 The inventory mode needs no upstream lookup. The check mode needs network
 access to GitHub through `git ls-remote` and uses `timeout`. It scans
 `.github/workflows/*.yml` and `.github/actions/*/action.yml`, groups action
 references by path and version comment, and reports source locations.
+It also inventories workflow-tool `tool-pin` declarations. Tool-only mode
+verifies exact tag/commit parity, excludes prerelease tags, and fails upstream
+lookup errors; the Action-specific limitations below do not describe that
+stricter mode. Verify release-asset checksums separately for every platform.
 
 Read warnings and individual lookup results, not only the exit code:
 
