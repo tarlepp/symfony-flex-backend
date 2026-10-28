@@ -71,11 +71,15 @@ replacement for their actual event filters and conditions:
    pushes); tests and Docker builds depend on that gate. The final
    `ci-result` job needs the gate, analyzers, tests and Docker builds and
    is the required merge gate, so add every new job to its `needs` and
-   result checks. When adding, removing, or renaming a prerequisite, update
-   its `needs` entry and result checks/messages together. Check failure,
-   cancellation, and skipped-job paths, not only success. Do not use
-   `continue-on-error` or permissive result checks to make a required
-   failure appear green.
+   result checks. The `changes` job skips tests and Docker builds for
+   Markdown-only pull requests, and `ci-result` accepts that only when
+   it reports `code=false` on `pull_request`. When adding, removing, or
+   renaming a prerequisite, update its `needs` entry and result
+   checks/messages together. Check failure, cancellation, and skipped-job
+   paths, not only success. Do not use `continue-on-error` or permissive
+   result checks to make a required failure appear green; only the
+   third-party reporting steps in `report` and the informational job
+   summary may be non-blocking.
 4. Preserve shared setup contracts. Inspect all callers before changing
    `php-bootstrap` defaults or input names. Its boolean-like inputs are
    strings compared with `'true'`; preserve compatible caller values.
