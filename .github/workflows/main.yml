@@ -280,10 +280,6 @@ jobs:
     timeout-minutes: 45
     needs:
       - ci-summary
-    env:
-      SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
-      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     services:
       mariadb:
         image: mariadb:10.7.1
@@ -340,40 +336,6 @@ jobs:
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
 
-      - name: Show external reporting eligibility (safe debug)
-        run: |
-          echo "External reporting summary (no secrets shown):"
-          echo "- Event allows uploads: ${{ github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork }}"
-          echo "- Scrutinizer upload enabled: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}"
-          echo "- Coveralls upload enabled: ${{ env.COVERALLS_REPO_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}"
-          echo "- Sonar upload enabled: ${{ env.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}"
-
-      #- name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
-      #  run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --id ${{ secrets.CC_TEST_REPORTER_ID }} --coverage-input-type clover --exit-code $?
-      #  env:
-      #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
-
-      - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
-        if: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
-        run: |
-          composer global require scrutinizer/ocular
-          "$(composer global config bin-dir --absolute)/ocular" code-coverage:upload --access-token ${{ env.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
-
-      - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
-        if: ${{ env.COVERALLS_REPO_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
-        run: php ./vendor/bin/php-coveralls -v
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_REPO_TOKEN: ${{ env.COVERALLS_REPO_TOKEN }}
-          COVERALLS_RUN_LOCALLY: 1
-
-      - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
-        if: ${{ env.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
-        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ env.SONAR_TOKEN }} # https://github.com/SonarSource/sonarqube-scan-action?tab=readme-ov-file#environment-variables
-
       - name: Create PhpMetrics report
         run: make phpmetrics
 
@@ -400,6 +362,69 @@ jobs:
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
+
+  report:
+    name: External reporting
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    needs:
+      - test
+    if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    permissions:
+      contents: read
+    steps:
+      - *harden_runner_step
+
+      - name: Checkout tested source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: '0'
+          persist-credentials: false
+
+      - name: Download Clover coverage report
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: clover.xml
+          path: ./build/logs
+
+      - name: Download JUnit test report
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: junit.xml
+          path: ./build/logs
+
+      - name: Bootstrap PHP tools
+        uses: ./.github/actions/php-bootstrap
+        with:
+          install-dependencies: 'false'
+          print-versions: 'false'
+
+      - name: Install Coveralls reporter
+        run: composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
+
+      - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
+        if: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' }}
+        run: |
+          composer global require --no-interaction --no-progress scrutinizer/ocular
+          "$(composer global config bin-dir --absolute)/ocular" code-coverage:upload --access-token "$SCRUTINIZER_ACCESS_TOKEN" --format=php-clover ./build/logs/clover.xml
+        env:
+          SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
+
+      - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
+        if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
+        run: ./tools/06_php-coveralls/vendor/bin/php-coveralls -v
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_RUN_LOCALLY: 1
+
+      - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+        if: ${{ env.SONAR_TOKEN != '' }}
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   docker-build:
     name: Build application Docker image (${{ matrix.target }})
