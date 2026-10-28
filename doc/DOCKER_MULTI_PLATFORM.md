@@ -394,12 +394,17 @@ Use `make docker-image-digest` to check any other image.
 The `Check Docker image versions` job (`docker-image-check-updates` in
 `.github/workflows/main.yml`) starts alongside linting on the workflow's push,
 pull request, scheduled and manual runs. It is one of the two periodic jobs
-that run on the daily schedule, together with `security-check`. It runs `make test-docker-images`
-inside the PHP development container and `make docker-image-check-updates`
-on the Docker host. The `ci-summary` prerequisite gate
-requires this job to succeed, so available updates or lookup errors block both
-tests and Docker builds. On scheduled runs the gate additionally requires all
-other prerequisites to be skipped; on every other event they must succeed.
+that run on the daily schedule, together with `security-check`. It runs
+`make test-docker-images` inside the PHP development container and
+`make docker-image-check-updates` on the Docker host.
+
+The `ci-summary` prerequisite gate requires this job to succeed, so available
+updates or lookup errors block both tests and Docker builds, which depend on
+that gate. On scheduled runs the gate additionally requires all other
+prerequisites to be skipped; on every other event they must succeed. The
+final `ci-result` gate then requires `ci-summary`, the static-analysis
+matrix, tests and both Docker builds to succeed, and is the check that
+branch protection requires (see [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)).
 Explicitly skipped tags remain non-failing.
 
 For authenticated registry requests, configure both `DOCKERHUB_USERNAME` and
@@ -414,9 +419,10 @@ Pin verification also runs in GitHub Actions in the
 `Verify Docker base image pins (multi-platform)` job
 (`docker-image-verify-pins` in `.github/workflows/main.yml`). The job has no
 dependencies, so it starts immediately in parallel with the first lint and
-security jobs. Both the test job and the `Build application Docker image` job
-depend on it, so a pull request that pins a single platform digest fails fast,
-before tests are run or the image is built.
+security jobs. It is a prerequisite of the `ci-summary` gate, which the test
+job and the `Build application Docker image` job depend on, so a pull request
+that pins a single platform digest fails fast, before tests are run or the
+image is built.
 
 CI builds and scans both PHP targets on pull requests and `master` pushes.
 The daily vulnerability scan (`vulnerability-scan.yml`) builds and scans both
