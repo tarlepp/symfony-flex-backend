@@ -43,8 +43,9 @@ replacement for their actual event filters and conditions:
   uploads, with push, schedule, branch-protection, and manual triggers.
 * `.github/workflows/vulnerability-scan.yml`: scheduled/manual production
   image build and vulnerability scan; it does not run on ordinary PRs.
-* `.github/actions/php-bootstrap/action.yml`: shared PHP setup, Composer
-  cache and optional installation, and optional version reporting.
+* `.github/actions/php-bootstrap/action.yml`: shared Compose development
+  container setup, Composer download cache, optional installation, and version
+  reporting.
 
 ## Workflow [ᐞ](#table-of-contents)
 
@@ -74,15 +75,20 @@ replacement for their actual event filters and conditions:
    strings compared with `'true'`; preserve compatible caller values.
    The test job deliberately defers dependency installation and version
    reporting until after copying `.env.gh-actions` and generating JWT keys.
-   Keep required database extensions, coverage support, service health checks,
-   and the dynamically assigned MariaDB host port wired into test execution.
+   The PHP runtime, extensions, and coverage driver come from the development
+   Dockerfile, not runner PHP setup. Keep service health checks and the
+   dynamically assigned MariaDB host port reachable via `host.docker.internal`
+   and forwarded into the PHP container.
    Do not copy CI environment files over a developer's local configuration
    merely to validate a workflow edit.
 5. Keep runner and command assumptions explicit. Check PHP requirements in
    `composer.json` and actual tools/extensions in the bootstrap. Inspect
-   Makefile environment detection: hosted jobs execute project tools on the
-   runner, while local project checks normally use the development container.
-   Docker/Compose checks run on the host. Preserve YAML anchors and aliases
+   Makefile environment detection: local and hosted project commands execute
+   inside the Compose PHP development service through Make targets.
+   `make ci-start` starts that service without the application entrypoint or
+   dependencies, and `make ci-stop` must run with `always()` after consumers.
+   Docker/Compose checks and GitHub platform actions run on the host.
+   Preserve YAML anchors and aliases
    in `main.yml`; changing an anchored checkout or hardening step affects
    every alias. Retain suitable timeouts and intentional matrix `fail-fast`
    behavior; inspect all matrix variants affected by a shared change.

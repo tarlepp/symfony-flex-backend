@@ -51,14 +51,14 @@ Follow the [shared skill guidance](../shared-guidance.md), including
      unless required and approved.
    * Preserve the different purposes of version fields: `require.php` defines
      the supported constraint, `config.platform.php` simulates the Composer
-     platform, the PHP image uses a concrete patch tag, and CI setup commonly
-     selects a major/minor runtime.
+     platform, and the PHP image uses a concrete patch tag shared by local
+     development and CI.
    * Update the PHP base image tag and digest in `Dockerfile`, following
      [update-docker-images](../update-docker-images/SKILL.md) for multi-platform
      digest resolution and pin verification.
-   * Review `.github/actions/php-bootstrap/action.yml`. Its `php-version`
-     default selects a major/minor version; change it when that CI runtime
-     selection no longer matches the approved baseline.
+   * Review `.github/actions/php-bootstrap/action.yml` and
+     `docker/ci-compose.yaml`. CI uses the Compose development image rather
+     than selecting a separate runner PHP version; keep that shared runtime.
    * Search documentation and automation for explicit PHP-version statements,
      including `doc/DEVELOPMENT.md` and
      `doc/INSTALLATION_WITHOUT_DOCKER.md`; update statements that describe the

@@ -158,8 +158,10 @@ copying it into long-form documentation.
   container-aware `make` targets or run inside the `php` container.
 * Node.js tooling is available in the containerized environment via `nvm`; use
   `make lint-markdown` for markdown/documentation checks.
-* Host fallbacks for project tooling are allowed only when container execution is
-  unavailable, and that blocker must be stated explicitly in the handoff.
+* Project Make targets forward host invocations into the PHP development
+  container in local development and CI. Do not fall back to host project
+  tooling if Docker is unavailable; report the blocker. Docker orchestration
+  and GitHub platform actions remain host-side.
 
 ### Code Quality [ᐞ](#table-of-contents)
 

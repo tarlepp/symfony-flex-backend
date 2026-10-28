@@ -229,10 +229,12 @@ authenticate registry inspection. Both secrets must be present or both absent.
 Fork pull requests and repositories without these secrets use anonymous requests
 with an explicit notice. The job logs out even if the check fails.
 
-Run the helper's regression tests on the host without registry access:
+Run the helper's regression tests without registry access from the repository
+root, either on the host or inside the development container. Make runs the
+tests inside the PHP container with mocked Docker and registry commands:
 
 ```bash
-bash scripts/tests/docker-images-test.sh
+make test-docker-images
 ```
 
 The root `Dockerfile` defaults to the `production` target. Use

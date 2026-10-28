@@ -78,10 +78,12 @@ is installed in its own virtual environment at
 `/home/dev/.local/share/thefuck`, with its command linked into
 `/home/dev/.local/bin` for Bash and Fish.
 
-The documentation CI job also uses `make check-skills`. On the CI runner this
-builds and runs the existing Compose `php` development service as a temporary
-container, without starting dependencies or running the application entrypoint.
-No separate documentation image or Compose configuration is needed.
+CI also uses the existing Compose `php` development service for project tools.
+The shared bootstrap calls `make ci-start`, then commands such as
+`make check-skills` execute in that container. The
+[CI Compose override](../docker/ci-compose.yaml) skips the application
+entrypoint, keeps PHP available for commands, and mounts the Composer cache.
+`make ci-stop` cleans up after the job; no separate documentation image is used.
 
 Rebuild the development image after pulling this change. Use your IDE's
 Dev Container rebuild action, or follow the root
@@ -126,7 +128,9 @@ code /home/wnd/PhpstormProjects/symfony-flex-backend
 | Dozzle | `8100` | `http://localhost:8100` |
 | Adminer | `8200` | `http://localhost:8200` |
 
-You can still use existing Make targets from inside the container terminal.
+Project Make targets run inside the container terminal. Docker lifecycle and
+image-management targets, including `make ci-start` and `make ci-stop`, require
+a separate host terminal. See [command execution contexts](../doc/COMMANDS.md#commands).
 
 ---
 

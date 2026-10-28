@@ -89,9 +89,13 @@ and the actual code, dependency manifests, and CI workflows.
   or `make fish` for an interactive container shell.
 * Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
   task branch setup, handling pre-existing work, and commit-message proposals.
-* Prefer existing `make` targets over running project tooling on the host. If
-  container execution is unavailable and a host fallback is necessary, state
-  that blocker in the handoff.
+* Run repository application tooling inside the Compose PHP development
+  container in both local development and CI. Prefer existing `make` targets:
+  host invocations forward project targets into the container. Docker
+  orchestration and GitHub platform actions remain host-side. Do not treat
+  `GITHUB_WORKFLOW` as proof that a command is inside a container, or fall back
+  to host PHP, Composer, Python, or Node tooling when containers are unavailable;
+  report the blocker instead.
 * Use `make lint-markdown` for Markdown checks. Do not install additional
   testing or linting tools when the repository already provides the relevant
   command.
@@ -155,6 +159,13 @@ and the actual code, dependency manifests, and CI workflows.
   version first, followed by the same content in a fenced `markdown` code
   block for copying and pasting. Use a longer outer fence when the content
   includes code fences, and do not recursively duplicate the copyable version.
+* Provide copy-pasteable instructions in every use case: setup, implementation,
+  validation, troubleshooting, CI reproduction, and handoff. Put complete
+  commands in fenced code blocks, identify whether they run on the Docker host
+  or inside the container, include required setup and working directories, and
+  avoid prompt prefixes or ambiguous alternatives in runnable blocks. Prefer
+  host-safe Make targets; for direct project commands show how to enter the
+  container first. Never include secret values in examples.
 * At handoff, summarize changes, touched files, and validation run or skipped.
   Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
   commit and commit-message expectations.

@@ -393,8 +393,9 @@ Use `make docker-image-digest` to check any other image.
 
 The `Check Docker image versions` job (`docker-image-check-updates` in
 `.github/workflows/main.yml`) starts alongside linting on the workflow's push,
-pull request, scheduled and manual runs. It runs the helper's regression tests
-and `make docker-image-check-updates`. The `ci-summary` prerequisite gate
+pull request, scheduled and manual runs. It runs `make test-docker-images`
+inside the PHP development container and `make docker-image-check-updates`
+on the Docker host. The `ci-summary` prerequisite gate
 requires this job to succeed, so available updates or lookup errors block both
 tests and Docker builds. Explicitly skipped tags remain non-failing.
 

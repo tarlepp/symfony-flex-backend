@@ -47,22 +47,30 @@ jobs:
         uses: ./.github/actions/php-bootstrap
 
       - name: Display Symfony application information
-        run: |
-          php ./bin/console about
+        run: make application-info
 
       - name: Validate main `composer.json` and `composer.lock` files
-        run: composer validate --no-check-version
+        run: make composer-validate
 
       - name: Check that environment is configured correctly
-        run: php ./vendor/bin/requirements-checker
+        run: make check-requirements
 
       - name: Lint YAML configurations
         run: make lint-yaml
+
+      - name: Test container command routing
+        run: make test-make-routing
 
       - name: Validate development and local production Compose configurations
         run: |
           docker compose config --quiet
           docker compose -f compose.yaml -f compose.prod.yaml config --quiet
+          docker compose -f compose.yaml -f docker/ci-compose.yaml config --quiet
+
+      - &stop_php_step
+        name: Stop PHP development container
+        if: ${{ always() }}
+        run: make ci-stop
 
   lint-documentation:
     name: Lint documentation files
@@ -74,24 +82,19 @@ jobs:
 
       - *checkout_step
 
-      - name: Lint all markdown documentation files
-        uses: DavidAnson/markdownlint-cli2-action@b847b0e2798e09594353ac3d92f6222621a4d870 # v24.0.0
+      - name: Bootstrap development container
+        uses: ./.github/actions/php-bootstrap
         with:
-          globs: |
-            README.md
-            AGENTS.md
-            CLAUDE.md
-            .devcontainer/*.md
-            .github/copilot-instructions.md
-            .github/pull_request_template.md
-            .github/skills/**/*.md
-            scripts/*.md
-            doc/*.md
-            docker/*.md
-            secrets/*.md
+          install-dependencies: 'false'
+          print-versions: 'false'
+
+      - name: Lint all markdown documentation files
+        run: make lint-markdown
 
       - name: Validate skill metadata, index coverage, and repository Markdown links
         run: make check-skills
+
+      - *stop_php_step
 
   lint-workflows:
     name: Validate GitHub workflows
@@ -102,8 +105,16 @@ jobs:
 
       - *checkout_step
 
+      - name: Bootstrap development container
+        uses: ./.github/actions/php-bootstrap
+        with:
+          install-dependencies: 'false'
+          print-versions: 'false'
+
       - name: Validate workflows, embedded shell, and local action metadata
         run: make lint-workflows
+
+      - *stop_php_step
 
   security-check:
     name: PHP Security Checker
@@ -124,6 +135,8 @@ jobs:
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: make check-security
+
+      - *stop_php_step
 
   gitleaks:
     name: Gitleaks scan
@@ -163,7 +176,7 @@ jobs:
   docker-image-check-updates:
     name: Check Docker image versions
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     permissions:
       contents: read
 
@@ -176,8 +189,14 @@ jobs:
           fetch-depth: '1'
           persist-credentials: false
 
+      - name: Bootstrap development container
+        uses: ./.github/actions/php-bootstrap
+        with:
+          install-dependencies: 'false'
+          print-versions: 'false'
+
       - name: Run Docker image helper regression tests
-        run: bash scripts/tests/docker-images-test.sh
+        run: make test-docker-images
 
       - name: Authenticate to Docker Hub when credentials are available
         if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}
@@ -200,6 +219,8 @@ jobs:
       - name: Log out of Docker Hub
         if: ${{ always() }}
         run: docker logout docker.io
+
+      - *stop_php_step
 
   static-analyzers:
     name: Static analyzers (${{ matrix.analyzer.name }})
@@ -232,8 +253,6 @@ jobs:
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
-        with:
-          setup-ini-values: opcache.jit=disable
 
       - name: Run static analyzer (${{ matrix.analyzer.name }})
         run: ${{ matrix.analyzer.command }}
@@ -255,6 +274,8 @@ jobs:
           path: ./build/phploc.json
           if-no-files-found: error
           retention-days: 14
+
+      - *stop_php_step
 
   ci-summary:
     name: Validate CI prerequisites
@@ -318,28 +339,17 @@ jobs:
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
         with:
-          setup-extensions: pdo_mysql, mysql
-          setup-coverage: xdebug
           install-dependencies: 'false'
           print-versions: 'false'
 
       - name: Configure application for CI run
-        run: |
-          cp .env.gh-actions .env
-          cp .env.gh-actions .env.test
-          make generate-jwt-keys
-          chmod 644 ./config/jwt/private.pem
+        run: make configure-ci
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --optimize-autoloader
+        run: make install
 
       - name: Check which versions we're using
-        run: |
-          mysql --version
-          php --version
-          php ./bin/console --version
-          php ./vendor/bin/phpunit --version
-          composer --version
+        run: make tool-versions
 
       #- name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
       #  run: |
@@ -353,7 +363,7 @@ jobs:
         id: phpunit
         run: make run-tests-php
         env:
-          DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
+          DATABASE_URL: mysql://root:symfony@host.docker.internal:${{ job.services.mariadb.ports['3306'] }}/symfony
 
       - name: Create PhpMetrics report
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml') != '' }}
@@ -474,12 +484,24 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           COVERALLS_RUN_LOCALLY: 1
 
+      - name: Prepare reports for host-side SonarQube scan
+        if: ${{ env.SONAR_TOKEN != '' }}
+        run: make prepare-sonar-reports
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
         if: ${{ env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
+        with:
+          args: >-
+            -Dsonar.php.coverage.reportPaths=build/sonar/clover.xml
+            -Dsonar.php.tests.reportPath=build/sonar/junit.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - *stop_php_step
 
   docker-build:
     name: Build application Docker image (${{ matrix.target }})

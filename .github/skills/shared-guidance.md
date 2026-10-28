@@ -84,9 +84,12 @@ safeguards; do not replace them with generic assumptions.
 <a id="running-and-validating-changes"></a>
 
 * Run project commands from the repository root inside the running PHP
-  development container or IDE Dev Container. From the host, use `make bash` or
-  `make fish`; if containers are stopped, start them with `make start`.
-  Non-interactive commands can use `docker compose exec -T php <command>`.
+  development container or IDE Dev Container. Host Make targets forward
+  application tooling into the container, including in CI. From the host, use
+  `make bash` or `make fish` for direct commands; if containers are stopped,
+  start them with `make start`. Non-interactive commands can use
+  `docker compose exec -T php <command>`. Never silently run project tooling
+  on the host when Docker is unavailable.
   Docker inspection, Compose validation, and image builds run from the host,
   as described by the relevant skill.
 * Add or update tests for behavior changes. Use
@@ -140,6 +143,10 @@ aligned with the implemented contract where affected. Before editing:
   Dev Container terminal), never directly on the host, to check local links
   and anchors across repository Markdown files, as well as
   `make lint-markdown` for Markdown style.
+* Follow [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
+  for every use case, including troubleshooting and CI reproduction. Label the
+  execution environment, show setup separately from subsequent commands, and
+  keep fenced command blocks directly runnable without shell prompt prefixes.
 
 Individual skills identify domain-specific documents or metadata; avoid
 creating parallel guidance or duplicating fast-changing versions from
