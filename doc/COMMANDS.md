@@ -86,6 +86,7 @@ check-licenses              # Check vendor licenses
 check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
 check-action-updates        # Check pinned GitHub Actions and available updates
+check-skills                # Validate skills and Markdown links inside Docker
 clear                       # Clear _all_ vendor and tool dependencies
 clear-tools                 # Clears all tools dependencies
 composer-normalize          # Normalizes `composer.json` file content

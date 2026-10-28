@@ -449,6 +449,15 @@ else
 	$(ALL_DONE)
 endif
 
+check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	@python3 scripts/check-skills.py
+else ifdef GITHUB_WORKFLOW
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose run --build --rm --no-deps -T --entrypoint make php check-skills
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec -T php make check-skills
+endif
+
 lint-markdown: ## Lint Markdown files
 lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
 lint-markdown: info

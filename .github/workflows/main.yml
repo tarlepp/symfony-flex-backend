@@ -61,7 +61,7 @@ jobs:
   lint-documentation:
     name: Lint documentation files
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
 
     steps:
       - *harden_runner_step
@@ -85,7 +85,7 @@ jobs:
             secrets/*.md
 
       - name: Validate skill metadata, index coverage, and repository Markdown links
-        run: python3 scripts/check-skills.py
+        run: make check-skills
 
   security-check:
     name: PHP Security Checker
