@@ -1,0 +1,149 @@
+# What is this?
+
+<a id="what-is-this"></a>
+
+This document describes which GitHub checks should block merging into
+`master`, how stacked pull requests are merged, and how to configure and
+verify the repository settings. The settings live in GitHub, not in the
+repository, so this document is the source for what they should be.
+
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Current state](#current-state)
+    * [Required checks](#required-checks)
+    * [Protected branches](#protected-branches)
+    * [Stacked pull requests](#stacked-pull-requests)
+    * [Merge queue](#merge-queue)
+    * [Changing required checks](#changing-required-checks)
+
+## Current state [ᐞ](#table-of-contents)
+
+<a id="current-state"></a>
+
+Inspected through the public GitHub API on 2026-10-28; bypass actors and
+organization rulesets are not visible without admin access, so verify those
+in the GitHub settings.
+
+* No repository rulesets exist; `master` uses classic branch protection with
+  enforcement for non-admins.
+* The required checks are all from the GitHub Actions app (`app_id` 15368):
+  `Lint documentation files`, `Lint configuration`, `PHP Security Checker`,
+  `PHPUnit tests`, `Build application Docker image (development)`,
+  `Build application Docker image (production)`, `Gitleaks scan`,
+  `Verify Docker base image pins (multi-platform)` and
+  `Validate CI prerequisites`.
+* `Validate GitHub workflows`, the `Static analyzers (...)` matrix,
+  `Check Docker image versions` and `dependency-review` are not required
+  directly. All but `dependency-review` are covered through the prerequisite
+  gate.
+
+## Required checks [ᐞ](#table-of-contents)
+
+<a id="required-checks"></a>
+
+The check names below are the exact check-run contexts reported on a real pull
+request run, not workflow display labels.
+
+* `Validate CI prerequisites` (`main.yml`): gate for every lint, analyzer,
+  and secret job.
+* `PHPUnit tests` (`main.yml`): not a gate prerequisite; it runs after the
+  gate.
+* `Build application Docker image (development)` (`main.yml`): matrix job,
+  not a gate prerequisite.
+* `Build application Docker image (production)` (`main.yml`): matrix job,
+  not a gate prerequisite.
+* `dependency-review` (`dependency-review.yml`): separate workflow, so the
+  gate cannot cover it.
+
+Rules for this set:
+
+* Never require `Validate CI prerequisites` alone. It only reports on the
+  jobs listed in its `needs`, so tests and Docker builds must be required
+  separately.
+* A job skipped because the gate failed counts as passing for GitHub. This is
+  safe only while the gate itself is required and fails first.
+* Matrix jobs need one required entry per expanded name. Adding a matrix
+  target means adding its context here and in the branch protection.
+* Select the GitHub Actions app as the source of each check, so a third-party
+  app cannot satisfy it by reporting the same name.
+* `External reporting` runs only on `master` pushes and must not be required.
+* The scheduled runs of `main.yml` and `vulnerability-scan.yml` are not pull
+  request checks and must not be required.
+* The current per-job entries (lint, security, gitleaks, pin verification)
+  are redundant with the gate. Keep them only if direct, named failure
+  reporting on the pull request is wanted; otherwise remove them to keep
+  renames cheap.
+
+## Protected branches [ᐞ](#table-of-contents)
+
+<a id="protected-branches"></a>
+
+* Protect `master` first, with the required checks above, no force pushes,
+  and no deletion. Prefer a repository ruleset over classic protection, and
+  keep bypass actors to the minimum, such as the repository administrators.
+* Do not protect feature branches. Pull request CI runs for any base branch
+  (`pull_request` has no branch filter), so stacked pull requests are tested
+  without protecting their bases. Protecting them would also block the force
+  pushes needed to rebase a stack.
+* Do not use broad patterns such as `chore/*` or `chore(ci)/*` for stack
+  bases. If one is ever needed, allow force pushes and deletion for it, and
+  verify that ordinary pushes, rebases, and Dependabot or other automation
+  still work on a throwaway branch before relying on it.
+* Do not require branches to be up to date before merging. Pull request CI
+  already runs against the merge result, and strict mode would force a rebase
+  and a full CI run for each child after every parent merge. Revisit this if
+  the merge queue is enabled.
+
+## Stacked pull requests [ᐞ](#table-of-contents)
+
+<a id="stacked-pull-requests"></a>
+
+1. Merge the parent pull request first, into `master`.
+2. Retarget each child pull request to `master`. GitHub does this
+   automatically when the parent branch is deleted on merge.
+3. Rebase the child onto the updated `master` and force push with
+   `--force-with-lease`. With a squash or rebase merge of the parent, use
+   `git rebase --onto master <old-parent-tip>` so the parent commits are not
+   replayed.
+4. Wait for the full CI run on the rebased child before merging it.
+
+Never merge a child into its parent's branch as a substitute for retargeting.
+
+## Merge queue [ᐞ](#table-of-contents)
+
+<a id="merge-queue"></a>
+
+The merge queue is not used. Before enabling it:
+
+* Add a `merge_group` trigger to `main.yml` and `dependency-review.yml`.
+  GitHub only waits for required checks that report for the queue's merge
+  commit, otherwise queued pull requests never merge.
+* Confirm that `dependency-review-action` supports the `merge_group` event,
+  or exclude that check from the queue's required checks.
+* Run a test pull request through the queue and verify that every required
+  context reports.
+
+## Changing required checks [ᐞ](#table-of-contents)
+
+<a id="changing-required-checks"></a>
+
+1. Change the workflow first and let it run on a pull request, so the new
+   check context exists and is selectable in GitHub.
+2. Read the exact contexts from the run, for example with
+   `gh api repos/tarlepp/symfony-flex-backend/commits/<sha>/check-runs`
+   and look at the `name` and `app.id` fields.
+3. Add the new required check, merge the workflow change, and only then remove
+   the old context. Renaming a job without this order leaves the pull request
+   waiting forever for a check that no longer reports.
+4. Compare the result with the live settings:
+   `gh api repos/tarlepp/symfony-flex-backend/branches/master/protection`
+   and `gh api repos/tarlepp/symfony-flex-backend/rulesets`.
+5. Update this document in the same change.
+
+---
+
+[Back to previous](README.md)
