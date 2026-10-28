@@ -27,7 +27,7 @@
 		"ext-pdo": "*",
 		"ext-random": "*",
 		"doctrine/dbal": "4.5.0",
-		"doctrine/doctrine-bundle": "3.3.2",
+		"doctrine/doctrine-bundle": "3.3.3",
 		"doctrine/doctrine-migrations-bundle": "4.0.1",
 		"doctrine/orm": "3.7.5",
 		"gedmo/doctrine-extensions": "3.22.2",
@@ -62,7 +62,7 @@
 		"symfony/validator": "8.1.9",
 		"symfony/var-exporter": "8.1.9",
 		"symfony/yaml": "8.1.9",
-		"zircote/swagger-php": "6.14.0"
+		"zircote/swagger-php": "6.18.0"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
