@@ -227,19 +227,22 @@ jobs:
         run: ${{ matrix.analyzer.command }}
 
       - name: Archive Psalm results (psalm.json)
-        if: matrix.analyzer.name == 'Psalm'
+        if: ${{ !cancelled() && matrix.analyzer.name == 'Psalm' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: psalm.json
           path: ./build/psalm.json
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Archive `phploc` results (phploc.json)
-        if: matrix.analyzer.name == 'PHPLoc'
+        if: ${{ !cancelled() && matrix.analyzer.name == 'PHPLoc' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: phploc.json
           path: ./build/phploc.json
           if-no-files-found: error
+          retention-days: 14
 
   ci-summary:
     name: Validate CI prerequisites
@@ -332,36 +335,71 @@ jobs:
       #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
       - name: Run application test suites with PHPUnit
+        id: phpunit
         run: make run-tests-php
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mariadb.ports['3306'] }}/symfony
 
       - name: Create PhpMetrics report
-        run: make phpmetrics
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml') != '' }}
+        run: |
+          test -s build/logs/junit.xml
+          php -r '
+            $report = simplexml_load_file("build/logs/junit.xml");
+            if ($report === false || $report->getName() !== "testsuites" || !isset($report->testsuite)) {
+                fwrite(STDERR, "JUnit report is not usable for PhpMetrics.\n");
+                exit(1);
+            }
+          '
+          make phpmetrics
+
+      - name: Verify required report files
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
+        run: |
+          missing=0
+          for report in build/logs/clover.xml build/logs/junit.xml build/report/index.html build/phpmetrics/index.html; do
+            if [ ! -s "$report" ]; then
+              echo "::error file=$report::Required report is missing or empty: $report"
+              missing=1
+            fi
+          done
+          exit "$missing"
 
       - name: Archive code coverage results (clover.xml)
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: clover.xml
           path: ./build/logs/clover.xml
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Archive code coverage results (junit.xml)
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: junit.xml
           path: ./build/logs/junit.xml
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Archive Code Coverage
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: CodeCoverage
           path: ./build/report
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Archive PhpMetrics results
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: PhpMetrics
           path: ./build/phpmetrics
+          if-no-files-found: error
+          retention-days: 14
 
   report:
     name: External reporting

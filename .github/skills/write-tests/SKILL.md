@@ -10,6 +10,11 @@ description: Add or update PHPUnit tests using this repository's E2E, functional
 Use this skill whenever adding or changing tests. Select the test category that
 matches the behavior boundary and dependencies under test.
 
+Editing documentation about PHPUnit, AI instructions, or skill text does not
+itself require running PHPUnit. Use
+[the validation selection guide](../../../doc/TESTING.md#selecting-validation)
+to decide whether tests, report producers, or non-PHP checks are relevant.
+
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
 [AI rules](../../../doc/AI_RULES.md).

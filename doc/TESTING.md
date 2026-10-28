@@ -12,6 +12,7 @@ application.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Testing](#testing)
+      * [Selecting validation](#selecting-validation)
       * [Commands to run tests](#commands-to-run-tests)
       * [Own environment for testing](#own-environment-for-testing)
     * [Metrics](#metrics)
@@ -31,6 +32,70 @@ PHP development container.
 
 Do not use Symfony's `bin/phpunit` entry point, which does not exist in this
 project.
+
+### Selecting validation [ᐞ](#table-of-contents)
+
+<a id="selecting-validation"></a>
+
+Choose checks by the behavior affected, including callers and generated
+outputs, rather than running PHPUnit for every AI task. These rules apply
+during iteration, at handoff, and before commit. They govern local validation;
+they do not disable or change required GitHub CI checks.
+
+* **Documentation only:** for Markdown, AI instructions, skill text, comments,
+  or non-executable examples, run `make lint-markdown` and
+  `python3 scripts/check-skills.py` when Markdown changes. Review example
+  commands, links, and claims against the implementation. Do not run PHPUnit,
+  PHP static analysis, report producers, or commands described by a skill just
+  because their documentation changed. For comments in code, use relevant
+  syntax/style checks; annotations or metadata that tools execute are not
+  comments-only changes.
+* **Application behavior:** for PHP logic, API contracts, validation,
+  authentication, serialization, or persistence changes, add or update tests
+  at the affected boundary and run the smallest relevant class or directory.
+  Run relevant PHP quality checks and expand to the broader application suite
+  in [AGENTS.md](../AGENTS.md#testing-and-validation) for cross-cutting changes,
+  shared infrastructure, or uncertain regression impact.
+* **Tests only:** run changed tests and affected consumers of shared fixtures,
+  test helpers, or bootstrap code, plus relevant PHP quality checks. Changes
+  to PHPUnit configuration, suite discovery, coverage configuration, or test
+  runners require exercising those contracts, not only one passing test.
+* **Workflows and artifacts:** use workflow-aware, composite-action, and shell
+  validation as applicable. Trigger, permission, runner, action-pin, or
+  documentation changes alone do not require local PHPUnit. Changes to test
+  execution, coverage, report generation, or report paths require exercising
+  the affected producer and checking its actual outputs. A targeted test
+  cannot prove full-suite discovery or complete coverage artifact generation.
+  Preserve failed-run diagnostics and distinguish local checks from hosted
+  workflow execution.
+* **Configuration and database:** run the relevant configuration/container
+  lint and tests that exercise affected wiring or environment resolution.
+  Entity or migration changes also require schema/migration validation and
+  relevant database tests. Executable configuration is not documentation-only,
+  even when no PHP source changes.
+* **Dependencies, runtime, and containers:** follow the matching dependency,
+  PHP-runtime, or Docker skill. Application package or runtime changes need
+  affected application tests and broader coverage where compatibility is
+  cross-cutting. Tool-only dependencies or image-pin helper changes need the
+  affected tool checks; do not run PHPUnit unless application or test-runtime
+  behavior is affected. Validate Compose and image builds when relevant.
+* **Scripts and other tooling:** run the affected tool's syntax, lint, and
+  regression checks. A documentation checker or shell helper change does not
+  require PHPUnit unless it changes application/test execution. Skill-bundled
+  executable scripts follow this rule, not the skill-text exemption.
+
+For mixed changes, combine the relevant checks for the entire changeset;
+documentation edits do not exempt accompanying behavioral changes. Inspect
+the diff before deciding that a change is non-behavioral. When impact is
+unclear, trace callers and expand validation rather than assuming no tests
+are needed. Rerun affected checks after the final edit; earlier passing
+results only cover the content tested then.
+
+At handoff, state which checks ran, their results, and why PHPUnit was not
+applicable or could not run. Missing containers, dependencies, credentials,
+or services are blockers, not exemptions: do not claim blocked checks passed.
+Use the development container for PHP tooling and the documented command for
+each other check; do not replace a required runtime check with a YAML parse.
 
 ### Commands to run tests [ᐞ](#table-of-contents)
 
@@ -101,6 +166,14 @@ make phpmetrics
 ```
 
 And after that open `build/phpmetrics/index.html` with your favorite browser.
+
+CI requires nonempty Clover (`build/logs/clover.xml`), JUnit
+(`build/logs/junit.xml`), HTML coverage (`build/report/index.html`), and
+PhpMetrics (`build/phpmetrics/index.html`) reports. It retains these artifacts,
+plus Psalm and PHPLoc reports, for 14 days under their existing artifact names.
+After a test failure, CI still uploads available reports without changing the
+test result. PhpMetrics runs only when JUnit is present, nonempty, and contains
+test suites, preventing its Make target from rerunning tests for missing input.
 
 ## PhpStorm [ᐞ](#table-of-contents)
 
