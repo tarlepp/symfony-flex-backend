@@ -393,11 +393,14 @@ Use `make docker-image-digest` to check any other image.
 
 The `Check Docker image versions` job (`docker-image-check-updates` in
 `.github/workflows/main.yml`) starts alongside linting on the workflow's push,
-pull request, scheduled and manual runs. It runs `make test-docker-images`
+pull request, scheduled and manual runs. It is one of the two periodic jobs
+that run on the daily schedule, together with `security-check`. It runs `make test-docker-images`
 inside the PHP development container and `make docker-image-check-updates`
 on the Docker host. The `ci-summary` prerequisite gate
 requires this job to succeed, so available updates or lookup errors block both
-tests and Docker builds. Explicitly skipped tags remain non-failing.
+tests and Docker builds. On scheduled runs the gate additionally requires all
+other prerequisites to be skipped; on every other event they must succeed.
+Explicitly skipped tags remain non-failing.
 
 For authenticated registry requests, configure both `DOCKERHUB_USERNAME` and
 `DOCKERHUB_TOKEN` repository secrets; use a read-only Docker Hub access token.
@@ -415,8 +418,9 @@ security jobs. Both the test job and the `Build application Docker image` job
 depend on it, so a pull request that pins a single platform digest fails fast,
 before tests are run or the image is built.
 
-CI builds and scans both PHP targets. The scheduled vulnerability scan builds
-the `production` target explicitly.
+CI builds and scans both PHP targets on pull requests and `master` pushes.
+The daily vulnerability scan (`vulnerability-scan.yml`) builds and scans both
+the `development` and `production` targets with the same Trivy threshold.
 
 The job runs `make docker-image-verify-pins` directly on the runner, which
 already has Docker with `buildx` and `jq` installed. It uses read-only
