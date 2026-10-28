@@ -16,9 +16,7 @@ JWT_PUBLIC_KEY=$$(echo | jq -r .JWT_PUBLIC_KEY ${APPLICATION_CONFIG})
 JWT_SECRET_KEY=$$(echo | jq -r .JWT_SECRET_KEY ${APPLICATION_CONFIG})
 JWT_PASSPHRASE=$$(echo | jq -r .JWT_PASSPHRASE ${APPLICATION_CONFIG})
 
-ifdef GITHUB_WORKFLOW
-	INSIDE_DOCKER_CONTAINER = 1
-else ifneq ("$(wildcard /.dockerenv)", "")
+ifneq ("$(wildcard /.dockerenv)", "")
 	INSIDE_DOCKER_CONTAINER = 1
 else
 	INSIDE_DOCKER_CONTAINER = 0
@@ -33,14 +31,43 @@ endif
 # Global variables that we're using
 HOST_UID := $(shell id -u)
 HOST_GID := $(shell id -g)
-CONSOLE := $(shell which bin/console)
-OPENSSL_BIN := $(shell which openssl)
-PHPDBG := $(shell which phpdbg)
-COMPOSER_BIN := $(shell which composer)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+CONSOLE := $(shell command -v bin/console)
+OPENSSL_BIN := $(shell command -v openssl)
+PHPDBG := $(shell command -v phpdbg)
+COMPOSER_BIN := $(shell command -v composer)
+endif
 DOCKER := $(shell which docker)
 CONTAINER_PREFIX := 'symfony-backend' # Check your `compose.yaml` file `container_name` property for this one
 CONTAINER_COUNT := 5 # Check your `compose.yaml` file service count for this one
 COMPOSE_PROD := docker compose -f compose.yaml -f compose.prod.yaml
+COMPOSE_CI := docker compose -f compose.yaml -f docker/ci-compose.yaml
+ifdef GITHUB_WORKFLOW
+COMPOSE_EXEC := $(COMPOSE_CI)
+else
+COMPOSE_EXEC := docker compose
+endif
+CONTAINER_ENV := $(foreach name,CI DATABASE_URL XDEBUG_MODE SCRUTINIZER_ACCESS_TOKEN COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
+
+HOST_TARGETS := help info bash fish logs daemon daemon-build daemon-prod start-prod stop start start-build \
+	docker-prune docker-kill-containers docker-remove-containers docker-remove-images \
+	docker-image-check-updates docker-image-digest docker-image-verify-pins docker-builder-platforms \
+	docker-setup-qemu docker-build-platform docker-build-multi-platform ci-start ci-stop
+.DEFAULT_GOAL := help
+
+ifeq ($(INSIDE_DOCKER_CONTAINER),0)
+FORWARD_TARGETS := $(filter-out $(HOST_TARGETS),$(MAKECMDGOALS))
+endif
+
+ifneq ($(strip $(FORWARD_TARGETS)),)
+.PHONY: $(MAKECMDGOALS)
+$(FORWARD_TARGETS):
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php make $@
+ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
+$(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
+	@$(MAKE) $@
+endif
+else
 
 ifdef DOCKER
 	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
@@ -84,8 +111,6 @@ endef
 info_msg := Message
 info:
 	$(info_msg)
-
-.DEFAULT_GOAL := help
 
 help:
 	@echo "\033[34mList of available commands:\033[39m"
@@ -450,28 +475,10 @@ else
 endif
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
-ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	@python3 scripts/check-skills.py
-else ifdef GITHUB_WORKFLOW
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose run --build --rm --no-deps -T --entrypoint make php check-skills
-else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec -T php make check-skills
-endif
 
 lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
-lint-workflows: info_msg := @printf $(_TITLE) "OK" "Validating GitHub workflows"
-lint-workflows: info
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash scripts/lint-workflows.sh
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-workflows
-	$(ALL_DONE)
-endif
 
 lint-markdown: ## Lint Markdown files
 lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
@@ -880,8 +887,7 @@ endif
 
 # Multi-platform Docker image helpers, see `doc/DOCKER_MULTI_PLATFORM.md`.
 # Missing values are asked interactively, or those can be given as variables.
-# These need host Docker, so only a real container is blocked (CI runners are
-# allowed, unlike `INSIDE_DOCKER_CONTAINER` which is also set in CI).
+# These need host Docker, including on CI runners.
 docker-image-check-updates: ## Report newer stable Docker Hub image versions
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(WARNING_HOST)
@@ -931,13 +937,9 @@ else
 	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker-images.sh push
 endif
 
-generate-ssl-cert: ## Generate self signed SSL certificates
-ifeq ($(INSIDE_DOCKER), 1)
-	$(WARNING_HOST)
-else
+generate-ssl-cert: ## Generate self signed SSL certificates inside the PHP container
 	@echo "\033[32mGenerating self signed SSL certificates\033[39m"
 	@cd docker/nginx/ssl && ./create-keys.sh
-endif
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
@@ -964,4 +966,59 @@ else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make project-stats
 	$(ALL_DONE)
+endif
+
+ci-start: ## Build and start the Compose PHP development service for CI (host only)
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	@echo "Run make ci-start on the Docker host." >&2; exit 1
+else
+	@mkdir -p "$${COMPOSER_CACHE_DIR:-/tmp/symfony-backend-composer-cache}"
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_CI) up --build --detach --no-deps php
+endif
+
+ci-stop: ## Stop CI containers (host only)
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	@echo "Run make ci-stop on the Docker host." >&2; exit 1
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_CI) down
+endif
+
+install: ## Install project Composer dependencies
+	@composer install --no-progress --optimize-autoloader
+
+application-info: ## Display Symfony application information
+	@bin/console about
+
+check-requirements: ## Check application runtime requirements
+	@php ./vendor/bin/requirements-checker
+
+tool-versions: ## Display PHP, Composer, Symfony, and PHPUnit versions
+	@php --version
+	@bin/console --version
+	@php ./vendor/bin/phpunit --version
+	@composer --version
+
+configure-ci: ## Configure the application and JWT keys for CI only
+	@test "$$GITHUB_ACTIONS" = true || { echo "configure-ci is restricted to GitHub Actions." >&2; exit 1; }
+	@cp .env.gh-actions .env
+	@cp .env.gh-actions .env.test
+	@$(MAKE) generate-jwt-keys
+
+report-scrutinizer: ## Upload coverage to Scrutinizer
+	@composer global require scrutinizer/ocular
+	@"$$(composer global config bin-dir --absolute)/ocular" code-coverage:upload --access-token "$$SCRUTINIZER_ACCESS_TOKEN" --format=php-clover ./build/logs/clover.xml
+
+report-coveralls: ## Upload coverage to Coveralls
+	@php ./vendor/bin/php-coveralls -v
+
+prepare-sonar-reports: ## Copy test reports with relative paths for the host-side Sonar action
+	@mkdir -p build/sonar
+	@sed 's|name="/app/|name="|g' build/logs/clover.xml > build/sonar/clover.xml
+	@sed 's|file="/app/|file="|g' build/logs/junit.xml > build/sonar/junit.xml
+
+test-make-routing: ## Test host and CI container command routing
+	@bash scripts/tests/make-container-test.sh
+
+test-docker-images: ## Test Docker image helpers with mocked registry and Docker commands
+	@bash scripts/tests/docker-images-test.sh
 endif

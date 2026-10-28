@@ -25,32 +25,83 @@ application during development stage.
 
 <a id="commands"></a>
 
-Note that all of these commands are intended to be executed either inside
-docker container or your local/dedicated server.
+From the repository root on the Docker host, start development in the
+foreground to see live container logs:
 
-There is also exception for this;
+```bash
+make start
+```
+
+Alternatively, start in the background without streaming container logs:
+
+```bash
+make daemon
+```
+
+After `make daemon`, use this host command to follow the logs:
+
+```bash
+make logs
+```
+
+Run project commands inside the PHP development container, or use Make targets
+from the host to forward them automatically. Docker lifecycle and
+image-management commands run on the host.
+
+For direct commands, open a Bash shell inside the PHP container from the host:
 
 ```bash
 make bash
-OR
+```
+
+Or open a Fish shell instead:
+
+```bash
 make fish
 ```
 
-That command is shortcut for `docker compose exec php bash/fish` command and
-you can use that command within your host machine. Note that default user
-inside that `php` container is `dev` and it has been bind to your host machine
-user and group (uid = 1000, gid = 1000) - so that you don't have issues within
-file permissions.
+Both shells run inside the `php` service as the `dev` user. Compose maps this
+user's UID and GID to your host user to avoid file-permission conflicts.
 
-Note that if you host machine user _isn't_ bind to those mentioned values:
+Before running any host-only command, leave the container shell:
 
 ```bash
-uid = 1000
-gid = 1000
+exit
 ```
 
-You need to create `compose.override.yaml` file and specify used user
-information there.
+Host-only Make targets are `bash`, `fish`, `logs`, `start`, `start-build`,
+`start-prod`, `daemon`, `daemon-build`, `daemon-prod`, `stop`, `ci-start`,
+`ci-stop`, and all `docker-*` targets. Do not run these from an IDE Dev
+Container terminal either; use a separate host terminal.
+
+CI uses the same development image via `make ci-start`, project Make commands,
+and `make ci-stop`. The CI override bypasses application startup and keeps a
+command container running. It shares `/app` with the checkout so reports remain
+available to host-side artifact actions. The test job passes its database URL
+into the container using `host.docker.internal` and the runner's assigned port.
+Do not run `make configure-ci` locally: it is restricted to GitHub Actions and
+replaces CI environment files and JWT keys.
+
+The following block runs entirely on the **GitHub Actions runner host**, from
+the checkout root, not in a container shell. The reusable bootstrap starts
+the PHP container; subsequent project targets forward into it, while
+`make ci-stop` runs on the host:
+
+```bash
+make ci-start
+make install
+make tool-versions
+make composer-validate
+make check-skills
+make ci-stop
+```
+
+In workflows, put `make ci-stop` in an `always()` cleanup step so failed checks
+do not skip cleanup. Keep CI setup separate from a running local development
+stack; both use the same Compose PHP service.
+
+The host Make targets pass your UID and GID to Compose. For IDE Dev Container
+UID/GID configuration, see [UID/GID mapping](../.devcontainer/README.md#uidgid-mapping).
 
 For a targeted test, run `phpunit <test-file-or-directory>` from the repository
 root inside the PHP development container; no explicit runner path is needed.
@@ -70,10 +121,13 @@ details.
 Symfony Flex comes with `Makefile` configuration so that you can easily run
 some generic commands via `make` command. Below is a list of currently
 supported (main commands) make commands, note that you can get this same list
-with just running `make` command:
+with just running `make` command. This is a command inventory, not a runnable
+shell block. Use the host-only classification above; other project targets
+run inside PHP, either directly or through automatic host forwarding:
 
-```bash
+```text
 bash                        # Get bash inside PHP container
+application-info            # Display Symfony application information
 cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
 check-dependencies-latest   # Checks if any vendor dependency can be updated
@@ -87,6 +141,9 @@ check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
 check-action-updates        # Check pinned GitHub Actions and available updates
 check-skills                # Validate skills and Markdown links inside Docker
+check-requirements          # Check application runtime requirements
+ci-start                    # Start development command container (CI host)
+ci-stop                     # Stop CI containers (CI host)
 clear                       # Clear _all_ vendor and tool dependencies
 clear-tools                 # Clears all tools dependencies
 composer-normalize          # Normalizes `composer.json` file content
@@ -95,6 +152,7 @@ composer-unused             # Show unused packages by scanning and comparing
                             # package namespaces against your source
 composer-validate           # Validate `composer.json` file content
 configuration               # Prints out application current configuration
+configure-ci                # Configure environment files and JWT keys (CI only)
 daemon                      # Start application in development mode in
                             # background
 daemon-build                # Build containers and start application in
@@ -127,6 +185,7 @@ generate-jwt-keys           # Generates JWT auth keys
 generate-ssl-cert           # Generate self signed SSL certificates
 infection                   # Runs Infection to codebase
 install-tools               # Install composer tools dependencies
+install                     # Install project Composer dependencies
 lint-configuration          # Lint current defined `application.json` that it
                             # contains valid JSON
  lint-markdown              # Lint Markdown files
@@ -142,11 +201,14 @@ phpmetrics                  # Generates PhpMetrics static analysis
 php-parallel-lint           # Lint PHP files with `php-parallel-lint`
 phpstan-github              # Runs PHPStan static analysis tool (GitHub)
 phpstan                     # Runs PHPStan static analysis tool
+prepare-sonar-reports       # Prepare relative report paths for host-side Sonar
 project-stats               # Create simple project stats
 psalm                       # Runs Psalm static analysis tool
 psalm-github                # Runs Psalm static analysis tool (GitHub)
 psalm-shepherd              # Runs Psalm static analysis tool + report results
                             # to shepherd
+report-coveralls            # Upload coverage to Coveralls
+report-scrutinizer          # Upload coverage to Scrutinizer
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
@@ -157,26 +219,38 @@ start-build                 # Build containers and start application in
                             # development mode + watch output
 start-prod                  # Build and start local production + watch output
 stop                        # Stop application containers
+test-make-routing           # Test local and CI Make command forwarding
+test-docker-images          # Test Docker helpers inside the development container
+tool-versions               # Display PHP project tool versions
 update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
 ```
 
-Check pinned GitHub Actions and available updates:
+Check pinned GitHub Actions and available updates from the repository root
+on the host or inside the PHP container:
 
 ```bash
 make check-action-updates
 ```
 
-Print current GitHub Action pins as markdown:
+To print current GitHub Action pins as Markdown, first open a container shell
+from the host:
 
 ```bash
 make bash
+```
+
+Then run inside the container, from `/app`:
+
+```bash
 bash scripts/check-action-updates.sh --current-pins-md
 ```
 
-Rebuild and restart the development container:
+To rebuild and start development, use a **host terminal**, not the container
+shell above. Stop the running stack first (`make daemon-build` requires it):
 
 ```bash
+make stop
 make daemon-build
 ```
 
@@ -215,7 +289,11 @@ change-specific validation.
 
 <a id="symfony-console"></a>
 
-You can list all Symfony console commands via following command:
+Run the examples in this section and all custom-command sections below
+**inside the PHP development container**, from `/app`. Open a shell using
+`make bash` or `make fish` from the host, or use an IDE Dev Container terminal.
+
+List all Symfony console commands:
 
 ```bash
 ./bin/console

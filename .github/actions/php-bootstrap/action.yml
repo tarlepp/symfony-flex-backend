@@ -1,74 +1,38 @@
 name: PHP bootstrap
-description: Setup PHP, restore Composer cache, optionally install dependencies and print tool versions
+description: Start the Compose development container, restore Composer cache, and optionally install dependencies and print versions
 inputs:
-  php-version:
-    description: PHP version for setup-php
-    required: false
-    default: '8.5'
-  setup-tools:
-    description: Tools argument for setup-php
-    required: false
-    default: composer:v2
-  setup-extensions:
-    description: Extensions argument for setup-php
-    required: false
-    default: ''
-  setup-coverage:
-    description: Coverage driver for setup-php
-    required: false
-    default: none
-  setup-ini-values:
-    description: ini-values for setup-php
-    required: false
-    default: ''
   install-dependencies:
-    description: Whether to run composer install
+    description: Whether to run make install
     required: false
     default: 'true'
-  composer-install-args:
-    description: Arguments passed to composer install
-    required: false
-    default: --no-progress --optimize-autoloader
   print-versions:
-    description: Whether to print mysql/php/composer tool versions
+    description: Whether to print PHP project tool versions
     required: false
     default: 'true'
 runs:
   using: composite
   steps:
-    - name: Setup PHP, with composer and extensions
-      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-      with:
-        php-version: ${{ inputs.php-version }}
-        tools: ${{ inputs.setup-tools }}
-        extensions: ${{ inputs.setup-extensions }}
-        coverage: ${{ inputs.setup-coverage }}
-        ini-values: ${{ inputs.setup-ini-values }}
-
-    - name: Get composer cache directory
-      id: composer-cache
+    - name: Set Composer cache location
       shell: bash
-      run: echo "CACHE_DIR=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+      run: echo "COMPOSER_CACHE_DIR=$RUNNER_TEMP/composer-cache" >> "$GITHUB_ENV"
 
-    - name: Cache composer dependencies
+    - name: Cache Composer downloads
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
-        path: ${{ steps.composer-cache.outputs.CACHE_DIR }}
+        path: ${{ runner.temp }}/composer-cache
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-composer-
+
+    - name: Start PHP development container
+      shell: bash
+      run: make ci-start
 
     - name: Install Composer dependencies
       if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
-      run: composer install ${{ inputs.composer-install-args }}
+      run: make install
 
-    - name: Check which versions we're using
+    - name: Check which versions we are using
       if: ${{ inputs.print-versions == 'true' }}
       shell: bash
-      run: |
-        mysql --version
-        php --version
-        php ./bin/console --version
-        php ./vendor/bin/phpunit --version
-        composer --version
-
+      run: make tool-versions

@@ -108,8 +108,8 @@ contains:
 
 * configuration lint and documentation checks, including skill metadata,
   index coverage, and local Markdown links and anchors across the repository
-  (the Python checker uses `make check-skills` inside the Compose `php`
-  development service),
+  (project tooling uses Make targets inside the Compose `php` development
+  service, including Python and Markdown checks),
 * workflow-aware validation and embedded shell checks for all workflows, plus
   separate schema validation for local action metadata,
 * dependency and secret checks,
@@ -123,6 +123,13 @@ contains:
 For application tests, the workflow runs `make run-tests-php`. The local
 `make run-tests` target may instead select phpdbg when it is installed. Use
 `make run-tests-php` locally when reproducing the CI test runner.
+
+The shared bootstrap starts the existing development image using
+`make ci-start`; project Make targets execute in that container, and an
+`always()` step calls `make ci-stop`. Docker orchestration, hosted scanners,
+cache actions, and artifact uploads remain on the runner. Sonar receives
+separate report copies with relative source paths, while container-based
+uploaders and archived reports retain their original paths.
 
 This CI coverage map is distinct from the broader local pre-commit suite in
 [`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a
