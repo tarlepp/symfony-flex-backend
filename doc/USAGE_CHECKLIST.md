@@ -72,6 +72,8 @@ started to use this template.
         modify it for your needs.
   * [ ] [vulnerability-scan.yml](../.github/workflows/vulnerability-scan.yml) -
         Check file contents and modify it for your needs.
+  * [ ] [codeql.yml](../.github/workflows/codeql.yml) - Disable it if you
+        use CodeQL default setup, because the two conflict.
   * [ ] [ACTIONS_UPDATE.md](ACTIONS_UPDATE.md) - Review the GitHub
         Actions pinning/update process and adapt it for your project.
   * [ ] Run `make check-action-updates` after workflow changes to verify pins,

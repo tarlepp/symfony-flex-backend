@@ -1,0 +1,4 @@
+rules:
+  # The `$/` self-repository syntax is not used; local actions use `./`.
+  self-repository:
+    disable: true

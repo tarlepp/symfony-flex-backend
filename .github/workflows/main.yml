@@ -621,10 +621,15 @@ jobs:
 
       - name: Set tag var
         id: vars
-        run: echo "DOCKER_TAG=$(echo '${{ github.ref_name }}' | sed -E 's#[/().]+#_#g')-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: echo "DOCKER_TAG=$(echo "$REF_NAME" | sed -E 's#[/().]+#_#g')-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --target ${{ matrix.target }} --tag symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}-${{ matrix.target }}
+        env:
+          TARGET: ${{ matrix.target }}
+          DOCKER_TAG: ${{ steps.vars.outputs.DOCKER_TAG }}
+        run: docker build . --file Dockerfile --target "$TARGET" --tag "symfony-flex-backend:${DOCKER_TAG}-${TARGET}"
 
       - name: Scan Docker image with Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0

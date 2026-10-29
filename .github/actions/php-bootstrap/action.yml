@@ -14,7 +14,8 @@ runs:
   steps:
     - name: Set Composer cache location
       shell: bash
-      run: echo "COMPOSER_CACHE_DIR=$RUNNER_TEMP/composer-cache" >> "$GITHUB_ENV"
+      # The value is a runner-controlled path, not attacker input.
+      run: echo "COMPOSER_CACHE_DIR=$RUNNER_TEMP/composer-cache" >> "$GITHUB_ENV" # zizmor: ignore[github-env]
 
     - name: Cache Composer downloads
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0

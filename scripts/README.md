@@ -115,11 +115,12 @@ make lint-workflows
 ```
 
 The target runs in the PHP development container locally and directly on the
-GitHub runner in CI. It downloads actionlint 1.7.12, ShellCheck 0.11.0, and
-action-validator 0.9.0 into a temporary directory, verifies their pinned SHA-256
-checksums before execution, and removes them on exit. Linux AMD64 and ARM64
-are supported; downloads require network access, `curl`, `tar`, and
-`sha256sum`. Download or checksum failures fail the check.
+GitHub runner in CI. It downloads actionlint 1.7.12, ShellCheck 0.11.0,
+action-validator 0.9.0, and zizmor 1.31.1 into a temporary directory,
+verifies their pinned SHA-256 checksums before execution, and removes them
+on exit. Linux AMD64 and ARM64 are supported; downloads require network
+access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail
+the check.
 
 Release tags are declared once with a `tool-pin: owner/repo@COMMIT_SHA`
 comment recording the verified release commit. Binary SHA-256 checksums remain
@@ -145,6 +146,11 @@ aliases, expressions, and job dependencies, with ShellCheck enabled for
 supported workflow shell steps. Action-validator separately checks every
 local `action.yml` and `action.yaml` against its bundled metadata schema.
 Composite-action shell bodies are not checked by these metadata checks.
+Zizmor runs offline with `--min-severity low` and the `.github/zizmor.yml`
+configuration. It audits workflows and local actions for template injection,
+credential persistence, dangerous environment-file writes, and excessive
+permissions. A deliberate exception needs an inline
+`# zizmor: ignore[rule]` comment with the reason.
 ShellCheck also checks the validator script itself.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,

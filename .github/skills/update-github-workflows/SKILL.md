@@ -45,6 +45,8 @@ replacement for their actual event filters and conditions:
   uploads, with push, schedule, branch-protection, and manual triggers.
 * `.github/workflows/vulnerability-scan.yml`: scheduled/manual development and
   production image builds and vulnerability scans; it does not run on ordinary PRs.
+* `.github/workflows/codeql.yml`: CodeQL analysis of the workflow files
+  (CodeQL does not support PHP).
 * `.github/actions/php-bootstrap/action.yml`: shared Compose development
   container setup, Composer download cache, optional installation, and version
   reporting.
