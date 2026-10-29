@@ -52,9 +52,18 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   another type or scope for such changes. Changes that mix documentation
   with other areas, or AI guidance with other documentation, use the scope
   of the broader area (`docs` for the latter) or the functional change.
+* Decide the base branch before creating the task branch and state it in the
+  proposal. The default base is `master`. If the user names another base
+  branch, or the current branch is not `master` and has unmerged work for
+  another task, treat the change as a stacked PR: confirm the intended parent
+  branch with the user instead of guessing, and report it at handoff with the
+  PR base to use (the parent branch, retargeted to `master` once the parent
+  merges). Never base a task on a branch just because it is checked out.
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
   fresh branch for each step, based on its intended parent branch. Do not
-  continue a later step on a branch already used for an earlier PR.
+  continue a later step on a branch already used for an earlier PR. When the
+  parent is rebased or amended, rebase the children with
+  `git rebase --onto <new-parent> <old-parent-tip>`.
 * Apply the new-branch rule to separate follow-up enhancements too, even when
   they concern the same files or topic as the previous task. Reserve branch
   reuse for corrections to the same PR or an explicit user request to reuse

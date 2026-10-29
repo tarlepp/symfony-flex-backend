@@ -91,7 +91,9 @@ and the actual code, dependency manifests, and CI workflows.
   task branch setup, handling pre-existing work, and commit-message proposals.
   Documentation-only changes use a `chore(docs)/...` branch and a
   `Chore(docs) - ...` pull request title; AI-guidance-only changes use
-  `chore(ai)/...` and `Chore(ai) - ...`.
+  `chore(ai)/...` and `Chore(ai) - ...`. State the base branch for every
+  task; anything other than `master` is a stacked PR, so confirm the parent
+  branch with the user.
 * Run repository application tooling inside the Compose PHP development
   container in both local development and CI. Prefer existing `make` targets:
   host invocations forward project targets into the container. Docker
