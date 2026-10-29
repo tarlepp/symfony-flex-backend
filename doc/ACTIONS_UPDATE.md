@@ -94,7 +94,10 @@ bash scripts/check-action-updates.sh --current-pins-md
 If you are on the host machine, run it in the dev container (`make bash`) or in
 your Dev Container terminal.
 
-The standalone workflow validators are release binaries, not Actions.
+The standalone workflow validators (actionlint, ShellCheck, action-validator
+and zizmor) are release binaries, not Actions. They are pinned with
+`tool-pin` declarations in `scripts/lint-workflows.sh`, which
+`check-action-updates.sh` reads to track each tool.
 Their declarations pair an exact release tag with its verified source commit
 SHA; platform-specific SHA-256 checksums separately pin the downloaded bytes.
 The normal update check includes these tools. To check only workflow tools:

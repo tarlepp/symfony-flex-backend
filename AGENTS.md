@@ -126,7 +126,9 @@ and the actual code, dependency manifests, and CI workflows.
   pre-commit suite below from the repository root in the development container.
   Use the selection guide for targeted changes and non-application tooling.
   This suite is not a command-for-command mirror of CI; see `doc/AI_RULES.md`
-  for CI job coverage.
+  for CI job coverage. Merge gates and branch protection are described in
+  `doc/REQUIRED_CHECKS.md`; every new `main.yml` job must be added to the
+  `needs` of `ci-result`.
 
   ```bash
   make phpcs

@@ -349,6 +349,8 @@ Use `make configuration` to view current application configuration.
 * `CLAUDE.md` - This file - long-form AI assistant context
 * `.github/copilot-instructions.md` - Copilot entry point for repository guidance
 * `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
+* `doc/REQUIRED_CHECKS.md` - Required checks and branch protection; new
+  `main.yml` jobs must be added to the `needs` of `ci-result`
 * `.github/skills/README.md` - Task-specific AI skills index
 * `doc/README.md` - Documentation index
 * `doc/COMMANDS.md` - Complete command reference (Makefile + Console)
