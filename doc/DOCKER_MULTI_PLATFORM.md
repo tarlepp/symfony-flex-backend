@@ -398,13 +398,13 @@ that run on the daily schedule, together with `security-check`. It runs
 `make test-docker-images` inside the PHP development container and
 `make docker-image-check-updates` on the Docker host.
 
-The `ci-summary` prerequisite gate requires this job to succeed, so available
-updates or lookup errors block both tests and Docker builds, which depend on
-that gate. On scheduled runs the gate additionally requires all other
-prerequisites to be skipped; on every other event they must succeed. The
-final `ci-result` gate then requires `ci-summary`, the static-analysis
-matrix, tests and both Docker builds to succeed, and is the check that
-branch protection requires (see [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)).
+The `ci-summary` prerequisite gate requires this job to succeed, so
+available updates or lookup errors block both tests and Docker builds, which
+depend on that gate. On scheduled runs the gate additionally requires all
+other prerequisites to be skipped; on every other event they must succeed.
+The final `ci-result` gate then requires `ci-summary`, the static-analysis
+matrix, tests and both Docker builds to succeed. It is the check that branch
+protection requires (see [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)).
 Explicitly skipped tags remain non-failing.
 
 For authenticated registry requests, configure both `DOCKERHUB_USERNAME` and

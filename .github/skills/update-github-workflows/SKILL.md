@@ -110,7 +110,12 @@ replacement for their actual event filters and conditions:
    handling of untrusted event values. Do not switch to `pull_request_target`,
    execute untrusted PR code with privileged credentials, or expose secrets
    to make a job work. Pass untrusted values through quoted environment
-   variables instead of interpolating them into shell source.
+   variables instead of interpolating them into shell source; never inline
+   `${{ github.* }}` or `${{ matrix.* }}` values in `run:`. Set
+   `persist-credentials: false` on every checkout that does not push. A
+   deliberate zizmor exception needs an inline
+   `# zizmor: ignore[rule]` comment with the reason; rule-wide changes go in
+   `.github/zizmor.yml`.
 7. Preserve reporting and artifact contracts. External coverage/Sonar uploads
    run only after successful pushes to `master`, outside the core CI gate, and
    require their optional token. Keep core tests independent of those uploads.

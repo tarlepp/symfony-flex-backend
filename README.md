@@ -42,6 +42,7 @@ though you can use any frontend solution.
       * [Health check](#health-check)
     * [Dev Containers](#dev-containers)
     * [AI-assisted development](#ai-assisted-development)
+    * [Continuous integration](#continuous-integration)
     * [Frontend?](#frontend)
     * [Resources](#resources)
     * [External links / resources](#external-links-resources)
@@ -350,6 +351,21 @@ running `php` development container where the pinned PHP toolchain is available.
 `make run-tests` selects phpdbg when it is installed and otherwise uses pure
 PHP. CI's application test job uses `make run-tests-php`; run that command
 locally when reproducing CI's test runner.
+
+## Continuous integration [ᐞ](#table-of-contents)
+
+<a id="continuous-integration"></a>
+
+GitHub Actions runs linting, static analysis, PHPUnit and Docker builds on
+every pull request; `Validate CI result` and `dependency-review` are the
+required checks. See [required checks and branch
+protection](doc/REQUIRED_CHECKS.md) and the
+[contributor CI guide](doc/DEVELOPMENT.md#continuous-integration).
+
+The Coveralls, Scrutinizer, CodeClimate and SonarCloud badges come from
+external services. Their uploads run only after pushes to `master` and never
+block merging; the CI and OpenSSF Scorecard badges reflect GitHub-hosted
+checks.
 
 ## Frontend? [ᐞ](#table-of-contents)
 
