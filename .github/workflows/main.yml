@@ -15,6 +15,8 @@ on:
       - reopened
       - edited
   schedule:
+    # Periodic checks only: dependency advisories and Docker image updates.
+    # Production and development image scans run in vulnerability-scan.yml.
     - cron: '0 0 * * *'
   workflow_dispatch:
 permissions:
@@ -26,6 +28,7 @@ jobs:
   lint-configuration:
     name: Lint configuration
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -75,6 +78,7 @@ jobs:
   lint-documentation:
     name: Lint documentation files
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 20
 
     steps:
@@ -99,6 +103,7 @@ jobs:
   lint-workflows:
     name: Validate GitHub workflows
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 10
     steps:
       - *harden_runner_step
@@ -141,6 +146,7 @@ jobs:
   gitleaks:
     name: Gitleaks scan
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 10
     steps:
       - *harden_runner_step
@@ -155,6 +161,7 @@ jobs:
   docker-image-verify-pins:
     name: Verify Docker base image pins (multi-platform)
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     permissions:
       contents: read
@@ -225,6 +232,7 @@ jobs:
   static-analyzers:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -295,27 +303,48 @@ jobs:
       - *harden_runner_step
 
       - name: Validate prerequisite job results
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SECURITY_CHECK: ${{ needs.security-check.result }}
+          LINT_CONFIGURATION: ${{ needs.lint-configuration.result }}
+          LINT_DOCUMENTATION: ${{ needs.lint-documentation.result }}
+          LINT_WORKFLOWS: ${{ needs.lint-workflows.result }}
+          STATIC_ANALYZERS: ${{ needs.static-analyzers.result }}
+          GITLEAKS: ${{ needs.gitleaks.result }}
+          DOCKER_PINS: ${{ needs.docker-image-verify-pins.result }}
+          DOCKER_UPDATES: ${{ needs.docker-image-check-updates.result }}
         run: |
-          echo "PHP Security Checker result: ${{ needs.security-check.result }}"
-          echo "Lint configuration result: ${{ needs.lint-configuration.result }}"
-          echo "Lint documentation result: ${{ needs.lint-documentation.result }}"
-          echo "Workflow validation result: ${{ needs.lint-workflows.result }}"
-          echo "Static analyzer matrix result: ${{ needs.static-analyzers.result }}"
-          echo "Gitleaks result: ${{ needs.gitleaks.result }}"
-          echo "Docker base image pin verification result: ${{ needs.docker-image-verify-pins.result }}"
-          echo "Docker image version check result: ${{ needs.docker-image-check-updates.result }}"
-          test "${{ needs.security-check.result }}" = "success"
-          test "${{ needs.lint-configuration.result }}" = "success"
-          test "${{ needs.lint-documentation.result }}" = "success"
-          test "${{ needs.lint-workflows.result }}" = "success"
-          test "${{ needs.static-analyzers.result }}" = "success"
-          test "${{ needs.gitleaks.result }}" = "success"
-          test "${{ needs.docker-image-verify-pins.result }}" = "success"
-          test "${{ needs.docker-image-check-updates.result }}" = "success"
+          echo "Event: $EVENT_NAME"
+          echo "PHP Security Checker result: $SECURITY_CHECK"
+          echo "Lint configuration result: $LINT_CONFIGURATION"
+          echo "Lint documentation result: $LINT_DOCUMENTATION"
+          echo "Workflow validation result: $LINT_WORKFLOWS"
+          echo "Static analyzer matrix result: $STATIC_ANALYZERS"
+          echo "Gitleaks result: $GITLEAKS"
+          echo "Docker base image pin verification result: $DOCKER_PINS"
+          echo "Docker image version check result: $DOCKER_UPDATES"
+
+          # Scheduled runs execute only the periodic jobs; every other
+          # prerequisite must be skipped there. Elsewhere all must succeed.
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            periodic_skipped=skipped
+          else
+            periodic_skipped=success
+          fi
+
+          test "$SECURITY_CHECK" = "success"
+          test "$DOCKER_UPDATES" = "success"
+          test "$LINT_CONFIGURATION" = "$periodic_skipped"
+          test "$LINT_DOCUMENTATION" = "$periodic_skipped"
+          test "$LINT_WORKFLOWS" = "$periodic_skipped"
+          test "$STATIC_ANALYZERS" = "$periodic_skipped"
+          test "$GITLEAKS" = "$periodic_skipped"
+          test "$DOCKER_PINS" = "$periodic_skipped"
 
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 45
     needs:
       - ci-summary
@@ -506,6 +535,7 @@ jobs:
   docker-build:
     name: Build application Docker image (${{ matrix.target }})
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 25
     strategy:
       fail-fast: false

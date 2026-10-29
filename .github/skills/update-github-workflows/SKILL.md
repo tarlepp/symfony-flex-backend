@@ -38,11 +38,13 @@ replacement for their actual event filters and conditions:
   and development/production image builds with vulnerability scanning.
   It handles pushes to `master`, PRs targeting any branch, a schedule, and
   manual runs.
+  Scheduled runs execute only the periodic `security-check` and
+  `docker-image-check-updates` jobs; all other jobs are skipped.
 * `.github/workflows/dependency-review.yml`: dependency review on PRs.
 * `.github/workflows/scorecard.yml`: supply-chain analysis, artifact and SARIF
   uploads, with push, schedule, branch-protection, and manual triggers.
-* `.github/workflows/vulnerability-scan.yml`: scheduled/manual production
-  image build and vulnerability scan; it does not run on ordinary PRs.
+* `.github/workflows/vulnerability-scan.yml`: scheduled/manual development and
+  production image builds and vulnerability scans; it does not run on ordinary PRs.
 * `.github/actions/php-bootstrap/action.yml`: shared Compose development
   container setup, Composer download cache, optional installation, and version
   reporting.
@@ -64,7 +66,8 @@ replacement for their actual event filters and conditions:
    Path filters or job renames can affect required checks; confirm repository
    rules when relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
-   `always()` and explicitly requires successful prerequisite results; tests
+   `always()` and explicitly requires successful prerequisite results (skipped only
+   for non-periodic jobs on `schedule`, never on PRs or pushes); tests
    and Docker builds depend on that gate. When adding, removing, or renaming
    a prerequisite, update its `needs` entry and result checks/messages
    together. Check failure, cancellation, and skipped-job paths, not only
