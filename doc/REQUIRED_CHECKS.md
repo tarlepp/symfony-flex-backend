@@ -13,12 +13,54 @@ repository, so this document is the source for what they should be.
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
+    * [Workflow overview](#workflow-overview)
     * [Current state](#current-state)
     * [Required checks](#required-checks)
     * [Protected branches](#protected-branches)
     * [Stacked pull requests](#stacked-pull-requests)
     * [Merge queue](#merge-queue)
     * [Changing required checks](#changing-required-checks)
+
+## Workflow overview [ᐞ](#table-of-contents)
+
+<a id="workflow-overview"></a>
+
+Workflows live in `.github/workflows/`; `main.yml` is the core pipeline.
+
+* `main.yml` (`CI`): pull requests, `master` pushes, `merge_group`, manual
+  runs and a daily schedule. It is the only pull request pipeline that runs
+  the application checks. Scheduled runs execute only `security-check` and
+  `docker-image-check-updates`. Required through `Validate CI result`.
+* `dependency-review.yml` (`Dependency Review`): pull requests. Reviews
+  dependency changes for known vulnerabilities. Required as
+  `dependency-review`.
+* `vulnerability-scan.yml` (`Vulnerability Scan`): daily and manual. Builds
+  and scans the development and production images with Trivy, enforcing
+  `CRITICAL,HIGH` fixable findings, and uploads SARIF to code scanning. Not
+  a pull request check, so never required.
+* `scorecard.yml` (`Scorecard supply-chain security`): `master` pushes,
+  weekly schedule and branch protection rule changes. Publishes OpenSSF
+  Scorecard results. Never required.
+* `codeql.yml` (`CodeQL`): pull requests, `master` pushes, weekly schedule
+  and manual runs. Analyzes the workflow files only. Not required unless
+  you decide that code scanning findings should block merging.
+
+Jobs in `main.yml`, in dependency order:
+
+* No dependencies: `Detect changed files`, the lint jobs
+  (`Lint configuration`, `Lint documentation files`,
+  `Validate GitHub workflows`), `PHP Security Checker`, `Gitleaks scan`,
+  `Verify Docker base image pins (multi-platform)`,
+  `Check Docker image versions` and the `Static analyzers (...)` matrix.
+* `Validate CI prerequisites` (`ci-summary`): needs all of the above except
+  change detection.
+* `PHPUnit tests` and `Build application Docker image (...)`: need
+  `ci-summary` and change detection; skipped for Markdown-only pull
+  requests.
+* `External reporting`: needs `PHPUnit tests`; runs only on `master` pushes.
+* `Validate CI result` (`ci-result`): needs change detection, the
+  prerequisite gate, the analyzer matrix, tests and Docker builds. This is
+  the merge gate.
 
 ## Current state [ᐞ](#table-of-contents)
 
