@@ -29,7 +29,7 @@ jobs:
     name: Lint configuration
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 20
+    timeout-minutes: 10
     strategy:
       fail-fast: false
     steps:
@@ -79,7 +79,7 @@ jobs:
     name: Lint documentation files
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 20
+    timeout-minutes: 10
 
     steps:
       - *harden_runner_step
@@ -124,7 +124,7 @@ jobs:
   security-check:
     name: PHP Security Checker
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 10
     strategy:
       fail-fast: false
     steps:
@@ -147,7 +147,7 @@ jobs:
     name: Gitleaks scan
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - *harden_runner_step
 
@@ -183,7 +183,7 @@ jobs:
   docker-image-check-updates:
     name: Check Docker image versions
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 10
     permissions:
       contents: read
 
@@ -233,7 +233,7 @@ jobs:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 25
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -288,7 +288,7 @@ jobs:
   ci-summary:
     name: Validate CI prerequisites
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     needs:
       - docker-image-check-updates
       - docker-image-verify-pins
@@ -345,7 +345,7 @@ jobs:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 45
+    timeout-minutes: 20
     needs:
       - ci-summary
     services:
@@ -460,7 +460,7 @@ jobs:
   report:
     name: External reporting
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 10
     needs:
       - test
     if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
@@ -536,7 +536,7 @@ jobs:
     name: Build application Docker image (${{ matrix.target }})
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 25
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -565,3 +565,43 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+
+  ci-result:
+    name: Validate CI result
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    needs:
+      - ci-summary
+      - static-analyzers
+      - test
+      - docker-build
+    if: ${{ always() }}
+    steps:
+      - *harden_runner_step
+
+      - name: Validate final job results
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          CI_SUMMARY: ${{ needs.ci-summary.result }}
+          STATIC_ANALYZERS: ${{ needs.static-analyzers.result }}
+          TEST: ${{ needs.test.result }}
+          DOCKER_BUILD: ${{ needs.docker-build.result }}
+        run: |
+          echo "Event: $EVENT_NAME"
+          echo "Prerequisite gate result: $CI_SUMMARY"
+          echo "Static analyzer matrix result: $STATIC_ANALYZERS"
+          echo "PHPUnit result: $TEST"
+          echo "Docker build matrix result: $DOCKER_BUILD"
+
+          # Scheduled runs skip tests and image builds; elsewhere every
+          # result must be a success so skipped jobs never pass a PR.
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            expected_skipped=skipped
+          else
+            expected_skipped=success
+          fi
+
+          test "$CI_SUMMARY" = "success"
+          test "$STATIC_ANALYZERS" = "$expected_skipped"
+          test "$TEST" = "$expected_skipped"
+          test "$DOCKER_BUILD" = "$expected_skipped"

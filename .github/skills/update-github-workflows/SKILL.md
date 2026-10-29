@@ -66,13 +66,16 @@ replacement for their actual event filters and conditions:
    Path filters or job renames can affect required checks; confirm repository
    rules when relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
-   `always()` and explicitly requires successful prerequisite results (skipped only
-   for non-periodic jobs on `schedule`, never on PRs or pushes); tests
-   and Docker builds depend on that gate. When adding, removing, or renaming
-   a prerequisite, update its `needs` entry and result checks/messages
-   together. Check failure, cancellation, and skipped-job paths, not only
-   success. Do not use `continue-on-error` or permissive result checks to make
-   a required failure appear green.
+   `always()` and explicitly requires successful prerequisite results
+   (skipped only for non-periodic jobs on `schedule`, never on PRs or
+   pushes); tests and Docker builds depend on that gate. The final
+   `ci-result` job needs the gate, analyzers, tests and Docker builds and
+   is the required merge gate, so add every new job to its `needs` and
+   result checks. When adding, removing, or renaming a prerequisite, update
+   its `needs` entry and result checks/messages together. Check failure,
+   cancellation, and skipped-job paths, not only success. Do not use
+   `continue-on-error` or permissive result checks to make a required
+   failure appear green.
 4. Preserve shared setup contracts. Inspect all callers before changing
    `php-bootstrap` defaults or input names. Its boolean-like inputs are
    strings compared with `'true'`; preserve compatible caller values.
