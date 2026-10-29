@@ -66,22 +66,23 @@ Jobs in `main.yml`, in dependency order:
 
 <a id="current-state"></a>
 
-Inspected through the public GitHub API on 2026-10-28; bypass actors and
+Inspected through the public GitHub API on 2026-10-29; bypass actors and
 organization rulesets are not visible without admin access, so verify those
 in the GitHub settings.
 
 * No repository rulesets exist; `master` uses classic branch protection with
   enforcement for non-admins.
-* The required checks are all from the GitHub Actions app (`app_id` 15368):
-  `Lint documentation files`, `Lint configuration`, `PHP Security Checker`,
-  `PHPUnit tests`, `Build application Docker image (development)`,
-  `Build application Docker image (production)`, `Gitleaks scan`,
-  `Verify Docker base image pins (multi-platform)` and
-  `Validate CI prerequisites`.
-* `Validate GitHub workflows`, the `Static analyzers (...)` matrix,
-  `Check Docker image versions` and `dependency-review` are not required
-  directly. All but `dependency-review` are covered through the prerequisite
-  gate.
+* The required checks match the recommended set below and are both from the
+  GitHub Actions app (`app_id` 15368): `Validate CI result` and
+  `dependency-review`. The earlier per-job contexts were removed.
+* Everything else is covered through `Validate CI result` or intentionally
+  not required: `Detect changed files`, `Validate CI prerequisites`, the
+  lint and security jobs, `Validate GitHub workflows`, the
+  `Static analyzers (...)` matrix, `Check Docker image versions`,
+  `PHPUnit tests` and the Docker builds. `CodeQL`, `External reporting` and
+  the scheduled workflows are not required.
+
+Re-inspect and update this date whenever the settings change.
 
 ## Required checks [ᐞ](#table-of-contents)
 
@@ -172,11 +173,11 @@ trigger, and change detection treats queue runs as code changes, so
 `Validate CI result` reports for the queue's merge commit. Before enabling
 it:
 
-* Add a `merge_group` trigger to `dependency-review.yml` as well. GitHub
-  only waits for required checks that report for the queue's merge commit,
-  otherwise queued pull requests never merge.
-* Confirm that `dependency-review-action` supports the `merge_group` event,
-  or exclude that check from the queue's required checks.
+* Follow-up: `dependency-review.yml` still runs only on `pull_request`.
+  GitHub only waits for required checks that report for the queue's merge
+  commit, otherwise queued pull requests never merge. Verify that
+  `dependency-review-action` supports the `merge_group` event and add the
+  trigger, or remove `dependency-review` from the queue's required checks.
 * Run a test pull request through the queue and verify that every required
   context reports.
 
