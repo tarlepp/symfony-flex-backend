@@ -20,6 +20,7 @@ repository, so this document is the source for what they should be.
     * [Stacked pull requests](#stacked-pull-requests)
     * [Merge queue](#merge-queue)
     * [Changing required checks](#changing-required-checks)
+    * [Troubleshooting](#troubleshooting)
 
 ## Workflow overview [ᐞ](#table-of-contents)
 
@@ -197,6 +198,21 @@ it:
    `gh api repos/tarlepp/symfony-flex-backend/branches/master/protection`
    and `gh api repos/tarlepp/symfony-flex-backend/rulesets`.
 5. Update this document in the same change.
+
+## Troubleshooting [ᐞ](#table-of-contents)
+
+<a id="troubleshooting"></a>
+
+* `Validate CI result` fails after a skipped job: a skip is accepted only
+  when `Detect changed files` succeeded and found a Markdown-only pull
+  request. Otherwise a skipped `test` or `docker-build` means an upstream
+  job failed or was cancelled; open the first failed job in the run.
+* A required check stays pending forever: the context no longer reports,
+  usually after renaming a job or workflow. Follow the order in
+  [Changing required checks](#changing-required-checks) and remove the old
+  context from branch protection.
+* `CodeQL` fails with a default-setup conflict: `codeql.yml` and GitHub's
+  CodeQL default setup cannot both be enabled. Disable one of them.
 
 ---
 

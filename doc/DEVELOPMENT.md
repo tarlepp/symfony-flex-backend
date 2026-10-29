@@ -17,6 +17,11 @@ application.
       * [IDE](#ide)
       * [PHP Code Sniffer](#php-code-sniffer)
       * [Database changes](#database-changes)
+      * [Continuous integration](#continuous-integration)
+        * [Reproducing CI jobs locally](#reproducing-ci-jobs-locally)
+        * [Job timeouts](#job-timeouts)
+        * [Runner hardening plan](#runner-hardening-plan)
+        * [Image signing and SBOM](#image-signing-and-sbom)
 
 ## Development [ᐞ](#table-of-contents)
 
@@ -154,6 +159,70 @@ application. And you don't need to make any migrations files by hand (just let
 Doctrine handle those). Although remember to really take a closer look of those
 generated migration files to make sure that those doesn't contain anything that
 you really don't want.
+
+### Continuous integration [ᐞ](#table-of-contents)
+
+<a id="continuous-integration"></a>
+
+Every pull request runs the full `main.yml` workflow: linting, security
+checks, static analyzers, PHPUnit and both Docker image builds. `Validate CI
+result` is the single required gate, together with `dependency-review`. The
+[workflow overview](REQUIRED_CHECKS.md#workflow-overview) lists every
+workflow, and [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch
+protection and troubleshooting.
+
+Pull requests that change only Markdown files skip PHPUnit and the Docker
+builds; the gate accepts those skips only for such pull requests. Scheduled
+runs execute only the dependency-advisory and Docker-image-update checks.
+
+#### Reproducing CI jobs locally [ᐞ](#table-of-contents)
+
+<a id="reproducing-ci-jobs-locally"></a>
+
+| CI job | Local command |
+| --- | --- |
+| Validate GitHub workflows | `make lint-workflows` |
+| Lint documentation files | `make lint-markdown` |
+| PHPUnit tests | `make run-tests-php` |
+| Static analyzers | `make phpstan`, `make psalm`, `make phpcs` |
+| Code style | `make ecs` |
+| PHP Security Checker | `make check-security` |
+
+Run PHP tooling inside the development container; see
+[COMMANDS.md](COMMANDS.md#makefile) for all targets.
+
+#### Job timeouts [ᐞ](#table-of-contents)
+
+<a id="job-timeouts"></a>
+
+Each job sets `timeout-minutes` to about twice the slowest recent successful
+run, so a hung job fails fast without cutting off normal slow runs. To retune,
+list recent successful runs of `main.yml`, take the longest duration per job,
+double it, round up, and update the value in the workflow in the same change.
+
+#### Runner hardening plan [ᐞ](#table-of-contents)
+
+<a id="runner-hardening-plan"></a>
+
+`step-security/harden-runner` runs in `audit` mode. Moving to `block` mode
+with an egress allow-list is deliberately deferred until there is enough
+data:
+
+1. Open a recent run and follow the StepSecurity insights link in the
+   harden-runner step summary to see the outbound endpoints per job.
+2. Collect endpoints across several runs, including a `master` push and a
+   scheduled run, as they differ.
+3. Add them as `allowed-endpoints` per job and switch `egress-policy` to
+   `block` one workflow at a time, watching for failures.
+
+#### Image signing and SBOM [ᐞ](#table-of-contents)
+
+<a id="image-signing-and-sbom"></a>
+
+Image signing, provenance attestations and SBOM generation (cosign, SLSA) are
+deferred because CI builds images only for verification and does not publish
+them. Add them to the production image build if you start pushing images to a
+registry.
 
 ---
 

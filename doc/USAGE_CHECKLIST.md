@@ -74,6 +74,14 @@ started to use this template.
         Check file contents and modify it for your needs.
   * [ ] [codeql.yml](../.github/workflows/codeql.yml) - Disable it if you
         use CodeQL default setup, because the two conflict.
+  * [ ] [dependency-review.yml](../.github/workflows/dependency-review.yml) -
+        Reviews dependency changes in pull requests; it needs the
+        dependency graph enabled in the repository settings.
+  * [ ] [scorecard.yml](../.github/workflows/scorecard.yml) - Check file
+        contents and modify or delete it for your needs.
+  * [ ] Configure branch protection as described in
+        [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) so that only
+        `Validate CI result` and `dependency-review` are required.
   * [ ] [ACTIONS_UPDATE.md](ACTIONS_UPDATE.md) - Review the GitHub
         Actions pinning/update process and adapt it for your project.
   * [ ] Run `make check-action-updates` after workflow changes to verify pins,
