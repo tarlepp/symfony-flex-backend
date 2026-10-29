@@ -106,19 +106,39 @@ Use `.github/workflows/main.yml` as the source of truth; this map is an
 orientation and should be reviewed when that workflow changes. It currently
 contains:
 
+* change detection, which skips application tests and Docker builds for
+  pull requests that change only Markdown files,
 * configuration lint and documentation checks, including skill metadata,
   index coverage, and local Markdown links and anchors across the repository
   (project tooling uses Make targets inside the Compose `php` development
   service, including Python and Markdown checks),
-* workflow-aware validation and embedded shell checks for all workflows, plus
-  separate schema validation for local action metadata,
+* workflow-aware validation and embedded shell checks for all workflows,
+  security audits of workflows and local actions with zizmor, plus separate
+  schema validation for local action metadata,
 * dependency and secret checks,
 * Docker image pin verification and image builds/scanning,
 * a static-analysis matrix,
 * application tests,
-* a summary gate that validates prerequisite job results, and
+* a prerequisite gate (`ci-summary`) that validates the lint, security and
+  static-analysis job results,
+* a final aggregate gate (`ci-result`) that validates the prerequisite gate,
+  the static-analysis matrix, tests and Docker builds, and is the required
+  merge check together with `dependency-review`, and
 * optional coverage and Sonar reporting after successful pushes to `master`,
-  outside the core CI gate.
+  outside the core CI gate; failures of those third-party steps do not fail
+  the run.
+
+The workflow also runs on `merge_group` events. Scheduled runs execute only
+the periodic `security-check` and `docker-image-check-updates` jobs; every
+other job is skipped. Skipped
+results are accepted on a pull request only for tests and Docker builds of a
+Markdown-only change. See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) for the
+merge-gate rules.
+
+Separate workflows cover the rest of the pipeline: `dependency-review.yml`
+(pull request dependency review), `vulnerability-scan.yml` (daily Trivy scan
+of the development and production images, with SARIF upload), `scorecard.yml`
+(OpenSSF Scorecard) and `codeql.yml` (CodeQL analysis of the workflow files).
 
 For application tests, the workflow runs `make run-tests-php`. The local
 `make run-tests` target may instead select phpdbg when it is installed. Use
