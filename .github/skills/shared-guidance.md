@@ -41,6 +41,17 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
   The branch and title use the same type, scope, and change summary in their
   respective formats. Do not stage pre-existing work.
+* When a change touches only documentation (Markdown files and docs-only
+  guidance text, with no code, workflow, configuration, or script changes),
+  the branch must be named `chore(docs)/<short-kebab-case-description>` and
+  the pull request title must be `Chore(docs) - <concise change summary>`.
+  When that documentation is only AI guidance (`AGENTS.md`, `CLAUDE.md`,
+  `.github/copilot-instructions.md`, `.github/skills/`, `doc/AI_RULES.md`),
+  use `chore(ai)/<short-kebab-case-description>` and
+  `Chore(ai) - <concise change summary>` instead. Do not use `docs/...` or
+  another type or scope for such changes. Changes that mix documentation
+  with other areas, or AI guidance with other documentation, use the scope
+  of the broader area (`docs` for the latter) or the functional change.
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
   fresh branch for each step, based on its intended parent branch. Do not
   continue a later step on a branch already used for an earlier PR.
