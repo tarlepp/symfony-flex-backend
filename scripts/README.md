@@ -151,6 +151,9 @@ configuration. It audits workflows and local actions for template injection,
 credential persistence, dangerous environment-file writes, and excessive
 permissions. A deliberate exception needs an inline
 `# zizmor: ignore[rule]` comment with the reason.
+`.github/zizmor.yml` holds rule-wide settings; it currently disables only the
+`self-repository` rule, because local actions use `./` rather than `$/`.
+Disable or configure a rule there only with a comment explaining why.
 ShellCheck also checks the validator script itself.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,

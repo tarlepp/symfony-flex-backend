@@ -233,6 +233,20 @@ on the host or inside the PHP container:
 make check-action-updates
 ```
 
+`make lint-workflows` runs actionlint (with ShellCheck), action-validator and
+zizmor. Zizmor audits workflows for template injection, credential
+persistence and excessive permissions using
+[`.github/zizmor.yml`](../.github/zizmor.yml). Fix findings where possible.
+For a deliberate exception, add an inline comment on the reported line with
+the reason:
+
+```yaml
+run: echo "$VALUE" >> "$GITHUB_ENV" # zizmor: ignore[github-env] reason
+```
+
+Rule-wide changes belong in `.github/zizmor.yml`; see
+[`scripts/README.md`](../scripts/README.md) for the full validator behavior.
+
 To print current GitHub Action pins as Markdown, first open a container shell
 from the host:
 
