@@ -31,6 +31,8 @@ application.
 * [Event listeners and subscribers](EVENT_HANDLING.md) - choosing, registering,
   and testing Symfony and Doctrine event handlers.
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
+* [Required checks and branch protection](REQUIRED_CHECKS.md) - merge gates
+  for `master` and stacked pull request handling.
 * [Security policy](SECURITY.md)
 * [PhpStorm configuration](PHPSTORM.md)
 * [Speed problems with Docker Engine?](SPEED_UP_DOCKER_COMPOSE.md)

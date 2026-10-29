@@ -112,9 +112,11 @@ replacement for their actual event filters and conditions:
    change is explicitly requested.
 8. Update directly related contributor or AI guidance when CI commands or
    required checks change, including
-   [AI rules](../../../doc/AI_RULES.md) where applicable. Delegate pin
-   verification to the action-update skill rather than duplicating that
-   procedure. Do not push, dispatch workflows, or open a PR unless requested.
+   [AI rules](../../../doc/AI_RULES.md) and
+   [required checks](../../../doc/REQUIRED_CHECKS.md) where applicable.
+   Delegate pin verification to the action-update skill rather than
+   duplicating that procedure. Do not push, dispatch workflows, or open a PR
+   unless requested.
 
 ## Validation [ᐞ](#table-of-contents)
 
