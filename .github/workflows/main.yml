@@ -14,6 +14,9 @@ on:
       - synchronize
       - reopened
       - edited
+  merge_group:
+    types:
+      - checks_requested
   schedule:
     # Periodic checks only: dependency advisories and Docker image updates.
     # Production and development image scans run in vulnerability-scan.yml.
@@ -25,13 +28,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  lint-configuration:
-    name: Lint configuration
+  changes:
+    name: Detect changed files
     runs-on: ubuntu-24.04
     if: ${{ github.event_name != 'schedule' }}
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.detect.outputs.code }}
     steps:
       - &harden_runner_step
         name: Harden the runner (Audit all outbound calls)
@@ -45,6 +48,39 @@ jobs:
         with:
           fetch-depth: '0'
           persist-credentials: false
+
+      - name: Detect documentation-only pull requests
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # Fail safe: anything unclear counts as a code change.
+          code=true
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            if files=$(git diff --name-only "$BASE_SHA...$HEAD_SHA") && [ -n "$files" ]; then
+              echo "Changed files:"
+              echo "$files"
+              if ! echo "$files" | grep -qvE '\.md$'; then
+                code=false
+              fi
+            fi
+          fi
+          echo "Code changes: $code"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+
+  lint-configuration:
+    name: Lint configuration
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
@@ -344,10 +380,11 @@ jobs:
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.code == 'true' }}
     timeout-minutes: 20
     needs:
       - ci-summary
+      - changes
     services:
       mariadb:
         image: mariadb:10.7.1
@@ -420,6 +457,35 @@ jobs:
             fi
           done
           exit "$missing"
+
+      - name: Publish test and coverage summary
+        if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml', 'build/logs/clover.xml') != '' }}
+        continue-on-error: true
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import xml.etree.ElementTree as ET
+
+          suite = ET.parse("build/logs/junit.xml").getroot()
+          while suite.tag == "testsuites" and len(suite) == 1:
+              suite = suite[0]
+          totals = {k: 0 for k in ("tests", "assertions", "failures", "errors", "skipped")}
+          for node in ([suite] if suite.tag == "testsuite" else list(suite)):
+              for key in totals:
+                  totals[key] += int(node.get(key, 0))
+
+          metrics = ET.parse("build/logs/clover.xml").getroot().find("./project/metrics")
+          print("### PHPUnit results")
+          print()
+          print("| Tests | Assertions | Failures | Errors | Skipped |")
+          print("|---|---|---|---|---|")
+          print("| " + " | ".join(str(totals[k]) for k in totals) + " |")
+          if metrics is not None:
+              statements = int(metrics.get("statements", 0))
+              covered = int(metrics.get("coveredstatements", 0))
+              if statements:
+                  print()
+                  print(f"Line coverage: **{covered / statements:.2%}** ({covered}/{statements} statements)")
+          PY
 
       - name: Archive code coverage results (clover.xml)
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
@@ -498,6 +564,7 @@ jobs:
         run: composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
 
       - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
+        continue-on-error: true
         if: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' }}
         run: |
           composer global require --no-interaction --no-progress scrutinizer/ocular
@@ -506,6 +573,7 @@ jobs:
           SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
+        continue-on-error: true
         if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
         run: ./tools/06_php-coveralls/vendor/bin/php-coveralls -v
         env:
@@ -520,6 +588,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+        continue-on-error: true
         if: ${{ env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
         with:
@@ -535,7 +604,7 @@ jobs:
   docker-build:
     name: Build application Docker image (${{ matrix.target }})
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.code == 'true' }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -543,6 +612,7 @@ jobs:
         target: [development, production]
     needs:
       - ci-summary
+      - changes
 
     steps:
       - *harden_runner_step
@@ -571,6 +641,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     needs:
+      - changes
       - ci-summary
       - static-analyzers
       - test
@@ -582,26 +653,40 @@ jobs:
       - name: Validate final job results
         env:
           EVENT_NAME: ${{ github.event_name }}
+          CHANGES: ${{ needs.changes.result }}
+          CODE_CHANGED: ${{ needs.changes.outputs.code }}
           CI_SUMMARY: ${{ needs.ci-summary.result }}
           STATIC_ANALYZERS: ${{ needs.static-analyzers.result }}
           TEST: ${{ needs.test.result }}
           DOCKER_BUILD: ${{ needs.docker-build.result }}
         run: |
           echo "Event: $EVENT_NAME"
+          echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
           echo "Prerequisite gate result: $CI_SUMMARY"
           echo "Static analyzer matrix result: $STATIC_ANALYZERS"
           echo "PHPUnit result: $TEST"
           echo "Docker build matrix result: $DOCKER_BUILD"
 
-          # Scheduled runs skip tests and image builds; elsewhere every
-          # result must be a success so skipped jobs never pass a PR.
+          # Scheduled runs skip change detection, tests and image builds.
+          # Tests and image builds may also be skipped, but only when change
+          # detection succeeded and found a documentation-only pull request.
+          # Elsewhere every result must be a success.
           if [ "$EVENT_NAME" = "schedule" ]; then
+            changes_expected=skipped
+            analyzers_expected=skipped
             expected_skipped=skipped
           else
-            expected_skipped=success
+            changes_expected=success
+            analyzers_expected=success
+            if [ "$CODE_CHANGED" = "false" ] && [ "$EVENT_NAME" = "pull_request" ]; then
+              expected_skipped=skipped
+            else
+              expected_skipped=success
+            fi
           fi
 
+          test "$CHANGES" = "$changes_expected"
           test "$CI_SUMMARY" = "success"
-          test "$STATIC_ANALYZERS" = "$expected_skipped"
+          test "$STATIC_ANALYZERS" = "$analyzers_expected"
           test "$TEST" = "$expected_skipped"
           test "$DOCKER_BUILD" = "$expected_skipped"

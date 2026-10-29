@@ -62,6 +62,12 @@ it to the `needs` of `ci-result`.
 
 Rules for this set:
 
+* Documentation-only pull requests (every changed file is `*.md`) skip
+  `PHPUnit tests` and the Docker builds. `Validate CI result` accepts those
+  skips only when `Detect changed files` succeeded and reported no code
+  changes on a `pull_request` event. Detection fails safe: any unclear case
+  counts as a code change.
+
 * Every new job in `main.yml` must be added to the `needs` of `ci-result`
   (directly or through a job that is), or it is not part of the merge gate.
 * A job skipped because the gate failed counts as passing for GitHub. This is
@@ -119,11 +125,14 @@ Never merge a child into its parent's branch as a substitute for retargeting.
 
 <a id="merge-queue"></a>
 
-The merge queue is not used. Before enabling it:
+The merge queue is not used. `main.yml` already has a `merge_group`
+trigger, and change detection treats queue runs as code changes, so
+`Validate CI result` reports for the queue's merge commit. Before enabling
+it:
 
-* Add a `merge_group` trigger to `main.yml` and `dependency-review.yml`.
-  GitHub only waits for required checks that report for the queue's merge
-  commit, otherwise queued pull requests never merge.
+* Add a `merge_group` trigger to `dependency-review.yml` as well. GitHub
+  only waits for required checks that report for the queue's merge commit,
+  otherwise queued pull requests never merge.
 * Confirm that `dependency-review-action` supports the `merge_group` event,
   or exclude that check from the queue's required checks.
 * Run a test pull request through the queue and verify that every required
