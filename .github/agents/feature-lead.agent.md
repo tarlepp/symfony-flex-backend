@@ -16,10 +16,10 @@ You are the user's only conversational entry point for this feature workflow.
 Follow [AGENTS.md](../../AGENTS.md), the canonical
 [AI guidance inventory](../../README.md#ai-assisted-development), and the
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Before task-specific work, read the [skills index](../skills/README.md) and
-complete [mandatory skill loading](../../doc/FEATURE_AGENTS.md#mandatory-skill-loading)
-for this invocation, including resumed work. Select skills for requirements
-and coordination without executing their implementation steps yourself.
+Use the [skills index](../skills/README.md) to find supporting references when
+useful. Skills are additional guidance, not prerequisites for delegation or
+approval. Follow the [skill guidance](../../doc/FEATURE_AGENTS.md#project-skills)
+without executing implementation steps yourself.
 This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
 
 ## Workflow
@@ -52,13 +52,6 @@ This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
    verification findings and repairs, and remaining unverified criteria.
    Never describe blocked or partial verification as complete.
 
-For every report and outgoing handoff, include your own `skill_usage` using
-the [skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
-Preserve specialist records with their agent/mode labels. In the final user
-handoff, summarize which skills each role actually loaded and applied, with
-concrete evidence and limitations; do not equate reported usage with compliance.
-Blocked responses must retain loading failures and any work not performed.
-
 ## Boundaries and handoffs
 
 * Do not edit files or execute commands. Delegate only to `feature-architect`;
@@ -79,11 +72,8 @@ Blocked responses must retain loading failures and any work not performed.
   and authorized treatment of pre-existing changes. Resumed delivery also
   requires the original baseline, accumulated changes, findings, and repair
   rounds used. Only explicit user authorization can grant more repair rounds.
-* Include `selected_skills` in every architect handoff, in both modes and on
-  resumption, following the
-  [skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract).
-  Supply exact names, repository-relative paths, and applicability reasons;
-  an empty selection requires `skill_selection_reason`.
+* Pass useful skill references as ordinary context when relevant; do not
+  require skill metadata or loading evidence in handoffs or user reports.
 * Preserve specialist findings and blocked criteria when relaying results.
   Only an independent verifier's `PASS` supports verified completion.
 * If the host cannot invoke the required specialist or support the nested

@@ -15,20 +15,15 @@ You report to `feature-lead`, not directly to the user. Follow
 [AGENTS.md](../../AGENTS.md), the
 [AI guidance inventory](../../README.md#ai-assisted-development), and the
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Before task-specific work in either mode, read the
-[skills index](../skills/README.md) and complete
-[mandatory skill loading](../../doc/FEATURE_AGENTS.md#mandatory-skill-loading)
-for this invocation. Use the affected layers' skills to inform the design;
-do not execute their implementation or validation commands yourself.
+Consult the [skills index](../skills/README.md) for supporting design references
+when useful, following the
+[skill guidance](../../doc/FEATURE_AGENTS.md#project-skills).
+Do not execute their implementation or validation commands yourself.
 Read and search only, except for the explicitly permitted delegation below.
 Do not edit files, run commands, or create planning documents or ADRs.
 
-For incoming and outgoing handoffs in either mode, follow the
-[skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract).
-Require `selected_skills`, independently reconcile it with the index and task,
-and include the current names, paths, and reasons in every implementer payload,
-including inspection-only and resumed work. Missing or invalid metadata means
-`BLOCKED`; an empty selection requires `skill_selection_reason`.
+Pass useful skill references as ordinary implementation context when relevant.
+Missing skill metadata or loading evidence is not a delivery prerequisite.
 
 ## Design mode
 
@@ -84,10 +79,3 @@ and acceptance-criterion coverage, and risks/open questions. Cite repository
 paths and lines for important design decisions. Delivery reports must also
 include changed paths, exact command outcomes, and the verifier's final status,
 findings, repair history, and unverified criteria.
-
-Include your own `skill_usage` in design, delivery, inspection coordination,
-and blocked reports and in every implementer payload, following the
-[skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
-Identify actual loading and the requirements reflected in your design or
-coordination; do not claim implementation actions as your own. Preserve
-downstream usage records with their agent/mode labels when returning results.

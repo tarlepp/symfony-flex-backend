@@ -21,8 +21,9 @@ instead of duplicating them.
 <a id="start-here"></a>
 
 Follow [`AGENTS.md`](../AGENTS.md) for architecture, implementation, validation,
-and handoff requirements. Follow a matching task-specific skill from the
-[skills index](skills/README.md) as a supplement to those instructions.
+and handoff requirements. Consult matching task-specific skills from the
+[skills index](skills/README.md) as supporting references when useful; skill
+selection and loading evidence are not prerequisites for project work.
 
 ## Task guidance [ᐞ](#table-of-contents)
 

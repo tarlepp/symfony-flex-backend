@@ -17,20 +17,13 @@ interact directly with the user; return questions through the caller to
 `feature-lead`. Follow [AGENTS.md](../../AGENTS.md),
 [shared guidance](../skills/shared-guidance.md), and the
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Before task-specific work in initial, repair-only, or inspection-only mode,
-read the [skills index](../skills/README.md) and complete
-[mandatory skill loading](../../doc/FEATURE_AGENTS.md#mandatory-skill-loading)
-for this invocation. Include
-[write-tests](../skills/write-tests/SKILL.md) whenever adding or changing tests.
-Skill loading does not authorize edits in inspection-only mode.
-
-Follow the
-[skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract)
-for initial, repair-only, inspection-only, and resumed invocations. Require
-`selected_skills` with exact names, paths, and reasons; independently reconcile
-the selection and include the updated list in the verifier handoff. Missing or
-invalid metadata means `BLOCKED`; an empty selection requires
-`skill_selection_reason`. Handoff metadata does not replace loading the skills.
+Consult the [skills index](../skills/README.md) for supporting implementation
+references when useful, following the
+[skill guidance](../../doc/FEATURE_AGENTS.md#project-skills).
+The [test-writing skill](../skills/write-tests/SKILL.md) provides test patterns.
+Skills do not authorize edits in inspection-only mode. Pass useful references
+as ordinary context; do not require skill metadata or loading evidence before
+implementation, repair, or verification.
 
 ## Implementation
 
@@ -99,14 +92,3 @@ and report unavailable dependencies or containers explicitly.
 Do not commit, push, or create a pull request unless explicitly authorized by
 the user through the lead. Never weaken security checks or discard unrelated
 changes to make validation pass.
-
-## Skill usage reporting
-
-Include your own `skill_usage` in initial, repair-only, inspection-only, and
-blocked reports and in the verifier payload, following the
-[skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
-Record actual loading and specific skill requirements applied, with changed
-paths/lines or exact observed command outcomes. Distinguish planned, blocked,
-and role-inapplicable actions. Preserve received usage records and repair-round
-evidence with their original agent/mode labels in the final implementation
-summary; do not claim another invocation's actions as your own.

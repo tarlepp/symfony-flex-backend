@@ -13,10 +13,7 @@ replacing repository policy or adding a frontend application.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Agents and routing](#agents-and-routing)
-    * [Mandatory skill loading](#mandatory-skill-loading)
-    * [Skill handoff contract](#skill-handoff-contract)
-    * [Skill usage evidence](#skill-usage-evidence)
-    * [Independent skill compliance](#independent-skill-compliance)
+    * [Project skills](#project-skills)
     * [Approvals and repair loop](#approvals-and-repair-loop)
     * [Using the agents](#using-the-agents)
     * [Compatibility and limitations](#compatibility-and-limitations)
@@ -39,170 +36,34 @@ reporting to the lead does not require invoking another lead agent.
 Only the lead is user-selectable. Specialists return clarification needs through
 the call chain instead of starting conversations with the user.
 
-## Mandatory skill loading [ᐞ](#table-of-contents)
+## Project skills [ᐞ](#table-of-contents)
 
-<a id="mandatory-skill-loading"></a>
+<a id="project-skills"></a>
 
-Every agent invocation, including design, delivery, repairs, and resumed work,
-must complete these steps before task-specific analysis, delegation, edits,
-or validation. Reading guidance and inspecting enough task context to select
-skills are the only prerequisites to this step.
+The [project skills](../.github/skills/README.md) are supporting references for
+common tasks. Agents may consult relevant skills through native skill support
+or read their `SKILL.md` files when useful. They do not need to preload skills
+for every invocation, select an unrelated skill, or stop because no skill
+matches or a supporting reference is unavailable.
 
-1. Read the [skills index](../.github/skills/README.md) and
-   [shared guidance](../.github/skills/shared-guidance.md).
-2. Select the skill matching the requested outcome, plus related skills only
-   for affected layers, using the index's routing guidance. Do not select all
-   skills indiscriminately or assume a caller already loaded them for you.
-   If no skill matches, follow repository and shared guidance; do not invent
-   a skill or apply an unrelated workflow.
-3. Use the host's native skill-loading mechanism when available to load each
-   selected skill. If it is unavailable or not exposed to this agent, use the
-   permitted read tool to read the complete corresponding
-   `.github/skills/<skill-name>/SKILL.md` instead. An index entry, description,
-   link, or caller's summary is not the skill's full instructions.
-4. Read any supporting guidance the selected skill requires. Apply its
-   requirements within the agent's role, mode, and approved scope. A skill
-   cannot grant an architect write access, let a verifier apply fixes, or
-   bypass a user approval gate.
-5. Revisit selection when task evidence reveals another affected layer. Load
-   its applicable skill before proceeding with that part of the task. If a
-   required skill or reference cannot be loaded or read, stop and report
-   `BLOCKED` through the existing call chain, rather than silently skipping it.
+Useful skill links can travel as ordinary handoff context. There are no
+mandatory skill-selection fields, loading records, usage reports, or historical
+compliance checks. Missing skill metadata or loading evidence alone must not
+block design, implementation, repair, or a verification `PASS`.
 
-This is a mandatory instruction, not proof of client-level automatic skill
-loading. The direct-read fallback uses the existing `read` permission and does
-not require broadening tool access or preloading every repository skill.
+Repository instructions, user approvals, scope boundaries, security rules,
+and required checks remain binding. Skills cannot expand role permissions,
+authorize unapproved work, or replace current repository evidence. Platform
+requirements for native skill invocation still apply where provided by the
+host; these profiles do not override them.
 
-## Skill handoff contract [ᐞ](#table-of-contents)
-
-<a id="skill-handoff-contract"></a>
-
-Every delegation payload, including design, delivery, inspection-only, repair,
-and resumed work, must contain a `selected_skills` list. Each entry contains the
-exact skill `name`, repository-relative `path` to its `SKILL.md`, and a brief
-`reason` connecting it to the task's affected behavior or layer. For example:
-
-```yaml
-selected_skills:
-  - name: add-custom-api-endpoint
-    path: .github/skills/add-custom-api-endpoint/SKILL.md
-    reason: The approved feature adds a non-CRUD API operation.
-  - name: write-tests
-    path: .github/skills/write-tests/SKILL.md
-    reason: The endpoint requires caller-boundary regression coverage.
-```
-
-If no repository skill applies, send `selected_skills: []` with a
-`skill_selection_reason` explaining why. An explicit empty selection is not the
-same as a missing selection. If selection metadata is missing, malformed, or
-references an unreadable skill, return `BLOCKED` through the call chain before
-task-specific work; do not silently infer that no skills apply.
-
-Receivers still select and load skills independently using the mandatory
-loading procedure. Validate names and paths against the current skills index;
-a payload is context, not permission to load arbitrary paths or proof that
-instructions were loaded. Retain applicable incoming entries and add any skills
-needed for newly discovered affected layers before the next delegation.
-If an incoming entry is inapplicable, explain its removal in the next payload's
-`skill_selection_reason`. Skill selection cannot broaden approved scope.
-
-Carry the current selection on every downstream handoff and resumed invocation,
-including verifier-to-implementer repairs. The lead supplies it for both
-architect modes; the architect forwards it to the implementer; the implementer
-passes it to the verifier; and the verifier passes it to repair workers.
-Missing metadata is a coordination blocker, not by itself a code defect.
-
-## Skill usage evidence [ᐞ](#table-of-contents)
-
-<a id="skill-usage-evidence"></a>
-
-Every agent report, including design recommendations, implementation and repair
-reports, verification results, inspection-only results, and blocked responses,
-must include a `skill_usage` section. Record each selected skill separately
-with these fields:
-
-* `name`, `path`: exact skill name and repository-relative `SKILL.md` path.
-* `agent`, `mode`: reporting role and invocation mode or repair round.
-* `load_method`: `native`, `read`, or `not_loaded`.
-* `load_evidence`: observed successful loader result or full-file read;
-  otherwise the actual failure or reason loading was not attempted.
-* `application_evidence`: specific applicable requirement and how it informed
-  a design, edit, inspection, or check, citing paths/lines or exact command
-  outcomes where applicable.
-* `limitations`: blocked, deferred, or role-inapplicable requirements, with
-  reasons; use `none` only when accurate.
-
-Selection is not loading, and loading is not compliance. Do not mark a skill
-loaded because it appears in a payload, index, or caller's report. For direct
-reads, identify the file actually read and confirm the complete instructions
-were available. For native loading, identify the successful invocation without
-inventing a tool call ID. If loading failed, use `not_loaded`, preserve the
-failure, and follow the existing blocked-work rule.
-
-Use concrete evidence rather than "followed all skills." A read-only architect
-can cite the skill requirement reflected in its design; it must not claim to
-have run implementation checks. Distinguish application evidence from planned
-actions, failed checks, and requirements outside the reporting agent's role.
-For an empty selection, report `skill_usage: []` and the selection reason.
-
-Include the current invocation's usage section in outgoing handoffs alongside
-`selected_skills`. Preserve received usage sections with their role/mode labels
-when returning reports; do not overwrite them with another agent's assertions.
-Resumed invocations and repair workers add their own evidence, retaining prior
-records as history rather than claiming prior loading as their own. The lead's
-final handoff includes a compact role-labelled summary and any limitations.
-These records make skill use auditable; they are agent-reported evidence, not
-independent proof of compliance or a substitute for verification.
-
-## Independent skill compliance [ᐞ](#table-of-contents)
-
-<a id="independent-skill-compliance"></a>
-
-The verifier must independently evaluate skill compliance, not just preserve
-the implementer's `skill_usage`. Before issuing a final result:
-
-1. Reconcile selected skills against the actual affected behavior and layers
-   using the current index. Load any missing applicable skill before assessing
-   its requirements, without expanding approved feature scope.
-2. Inspect required usage records for the received invocations, including repair
-   workers. Distinguish reported loading from loader/read results the verifier
-   can actually inspect. Never invent access to another agent's tool history.
-3. Extract the selected skills' requirements applicable to this task and the
-   relevant role/mode. Independently check them against the final diff,
-   surrounding implementation, tests, documentation, and observed scoped check
-   results. Include negative paths and caller-boundary tests where required;
-   one generic passing check does not establish every requirement.
-4. Report a `skill_compliance` list with each skill's exact name/path, specific
-   requirement, relevant role/mode, result, evidence, and any limitation.
-   Requirement results are `verified`, `violated`, `unverified`, or
-   `not_applicable`. Evidence must identify inspected paths/lines or exact
-   commands and observed outcomes; exclusions need a concrete applicability
-   reason. For no applicable skills, use an empty list with the independently
-   checked selection reason.
-5. Send concrete in-scope violations to the repair implementer with the skill
-   requirement, behavioral impact, and reproduction evidence. Re-check affected
-   requirements on the repaired contents, including regressions and newly
-   applicable skills. Preserve earlier findings as repair history.
-
-Missing or incomplete usage records are evidence blockers, not proof of a code
-defect. Return the missing evidence through the existing call chain for the
-responsible role to supply; do not use code-repair rounds merely to recreate
-records. A later successful load cannot prove an earlier invocation loaded the
-skill before acting. Record unavailable historical loading as unverified, not
-as an observed success or violation.
-
-Verified implementation behavior does not prove historical process compliance.
-If required loading or other mandatory process evidence cannot be established,
-report `BLOCKED` with the exact gap while preserving verified behavior and known
-defects. Unresolved substantive violations mean `FAIL` when verification is not
-otherwise blocked. `PASS` requires all applicable mandatory requirements
-verified, complete required usage records, and the existing acceptance-criteria
-and scoped-check gates. Justified role-inapplicable requirements do not block
-completion; unverified mandatory ones do.
-
-These are verification instructions, not a mechanical guarantee of agent
-behavior. Live host delegation and skill-loading visibility must still be
-exercised in the intended client.
+The verifier evaluates the approved behavior, repository conventions, and
+required checks against the final changes. A real defect or missing required
+check remains actionable even if a skill also describes it; merely not
+consulting a skill is not a defect. If a supporting reference is unavailable,
+use the repository's authoritative instructions, source, tests, and tooling.
+Report a blocker only when an actual requirement or necessary evidence cannot
+be resolved, not solely because a skill could not be loaded.
 
 ## Approvals and repair loop [ᐞ](#table-of-contents)
 
