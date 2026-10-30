@@ -208,7 +208,6 @@ psalm-github                # Runs Psalm static analysis tool (GitHub)
 psalm-shepherd              # Runs Psalm static analysis tool + report results
                             # to shepherd
 report-coveralls            # Upload coverage to Coveralls
-report-scrutinizer          # Upload coverage to Scrutinizer
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that

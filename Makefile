@@ -47,7 +47,7 @@ COMPOSE_EXEC := $(COMPOSE_CI)
 else
 COMPOSE_EXEC := docker compose
 endif
-CONTAINER_ENV := $(foreach name,CI DATABASE_URL XDEBUG_MODE SCRUTINIZER_ACCESS_TOKEN COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
+CONTAINER_ENV := $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
 
 HOST_TARGETS := help info bash fish logs daemon daemon-build daemon-prod start-prod stop start start-build \
 	docker-prune docker-kill-containers docker-remove-containers docker-remove-images \
@@ -1003,10 +1003,6 @@ configure-ci: ## Configure the application and JWT keys for CI only
 	@cp .env.gh-actions .env
 	@cp .env.gh-actions .env.test
 	@$(MAKE) generate-jwt-keys
-
-report-scrutinizer: ## Upload coverage to Scrutinizer
-	@composer global require scrutinizer/ocular
-	@"$$(composer global config bin-dir --absolute)/ocular" code-coverage:upload --access-token "$$SCRUTINIZER_ACCESS_TOKEN" --format=php-clover ./build/logs/clover.xml
 
 report-coveralls: ## Upload coverage to Coveralls
 	@php ./vendor/bin/php-coveralls -v

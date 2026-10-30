@@ -563,15 +563,6 @@ jobs:
       - name: Install Coveralls reporter
         run: composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
 
-      - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
-        continue-on-error: true
-        if: ${{ env.SCRUTINIZER_ACCESS_TOKEN != '' }}
-        run: |
-          composer global require --no-interaction --no-progress scrutinizer/ocular
-          "$(composer global config bin-dir --absolute)/ocular" code-coverage:upload --access-token "$SCRUTINIZER_ACCESS_TOKEN" --format=php-clover ./build/logs/clover.xml
-        env:
-          SCRUTINIZER_ACCESS_TOKEN: ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }}
-
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         continue-on-error: true
         if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
