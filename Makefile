@@ -47,7 +47,9 @@ COMPOSE_EXEC := $(COMPOSE_CI)
 else
 COMPOSE_EXEC := docker compose
 endif
-CONTAINER_ENV := $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
+export COLOR ?= auto
+export NO_COLOR
+CONTAINER_ENV := --env COLOR --env NO_COLOR $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
 
 HOST_TARGETS := help info bash fish logs daemon daemon-build daemon-prod start-prod stop start start-build \
 	docker-prune docker-kill-containers docker-remove-containers docker-remove-images \
@@ -62,7 +64,11 @@ endif
 ifneq ($(strip $(FORWARD_TARGETS)),)
 .PHONY: $(MAKECMDGOALS)
 $(FORWARD_TARGETS):
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php make $@
+	@if [ "$$COLOR" = auto ]; then \
+		if [ -t 2 ] && [ "$${TERM:-}" != dumb ]; then COLOR=always; else COLOR=never; fi; \
+		export COLOR; \
+	fi; \
+	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php make $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
@@ -1015,6 +1021,6 @@ prepare-sonar-reports: ## Copy test reports with relative paths for the host-sid
 test-make-routing: ## Test host and CI container command routing
 	@bash scripts/tests/make-container-test.sh
 
-test-docker-images: ## Test Docker image helpers with mocked registry and Docker commands
+test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
 	@bash scripts/tests/docker-images-test.sh
 endif
