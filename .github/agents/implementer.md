@@ -99,3 +99,14 @@ and report unavailable dependencies or containers explicitly.
 Do not commit, push, or create a pull request unless explicitly authorized by
 the user through the lead. Never weaken security checks or discard unrelated
 changes to make validation pass.
+
+## Skill usage reporting
+
+Include your own `skill_usage` in initial, repair-only, inspection-only, and
+blocked reports and in the verifier payload, following the
+[skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
+Record actual loading and specific skill requirements applied, with changed
+paths/lines or exact observed command outcomes. Distinguish planned, blocked,
+and role-inapplicable actions. Preserve received usage records and repair-round
+evidence with their original agent/mode labels in the final implementation
+summary; do not claim another invocation's actions as your own.

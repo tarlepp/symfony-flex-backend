@@ -15,6 +15,7 @@ replacing repository policy or adding a frontend application.
     * [Agents and routing](#agents-and-routing)
     * [Mandatory skill loading](#mandatory-skill-loading)
     * [Skill handoff contract](#skill-handoff-contract)
+    * [Skill usage evidence](#skill-usage-evidence)
     * [Approvals and repair loop](#approvals-and-repair-loop)
     * [Using the agents](#using-the-agents)
     * [Compatibility and limitations](#compatibility-and-limitations)
@@ -109,6 +110,48 @@ including verifier-to-implementer repairs. The lead supplies it for both
 architect modes; the architect forwards it to the implementer; the implementer
 passes it to the verifier; and the verifier passes it to repair workers.
 Missing metadata is a coordination blocker, not by itself a code defect.
+
+## Skill usage evidence [ᐞ](#table-of-contents)
+
+<a id="skill-usage-evidence"></a>
+
+Every agent report, including design recommendations, implementation and repair
+reports, verification results, inspection-only results, and blocked responses,
+must include a `skill_usage` section. Record each selected skill separately
+with these fields:
+
+* `name`, `path`: exact skill name and repository-relative `SKILL.md` path.
+* `agent`, `mode`: reporting role and invocation mode or repair round.
+* `load_method`: `native`, `read`, or `not_loaded`.
+* `load_evidence`: observed successful loader result or full-file read;
+  otherwise the actual failure or reason loading was not attempted.
+* `application_evidence`: specific applicable requirement and how it informed
+  a design, edit, inspection, or check, citing paths/lines or exact command
+  outcomes where applicable.
+* `limitations`: blocked, deferred, or role-inapplicable requirements, with
+  reasons; use `none` only when accurate.
+
+Selection is not loading, and loading is not compliance. Do not mark a skill
+loaded because it appears in a payload, index, or caller's report. For direct
+reads, identify the file actually read and confirm the complete instructions
+were available. For native loading, identify the successful invocation without
+inventing a tool call ID. If loading failed, use `not_loaded`, preserve the
+failure, and follow the existing blocked-work rule.
+
+Use concrete evidence rather than "followed all skills." A read-only architect
+can cite the skill requirement reflected in its design; it must not claim to
+have run implementation checks. Distinguish application evidence from planned
+actions, failed checks, and requirements outside the reporting agent's role.
+For an empty selection, report `skill_usage: []` and the selection reason.
+
+Include the current invocation's usage section in outgoing handoffs alongside
+`selected_skills`. Preserve received usage sections with their role/mode labels
+when returning reports; do not overwrite them with another agent's assertions.
+Resumed invocations and repair workers add their own evidence, retaining prior
+records as history rather than claiming prior loading as their own. The lead's
+final handoff includes a compact role-labelled summary and any limitations.
+These records make skill use auditable; they are agent-reported evidence, not
+independent proof of compliance or a substitute for verification.
 
 ## Approvals and repair loop [ᐞ](#table-of-contents)
 

@@ -92,3 +92,11 @@ Include changed paths, exact commands and observed outcomes, criterion-by-
 criterion verification, repair rounds and results, remaining gaps, and risks.
 Return this report through the existing call chain unchanged. A report with
 unverified acceptance criteria must not claim `PASS` or feature completion.
+
+Include your own `skill_usage` in verification and blocked reports and every
+repair payload, following the
+[skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
+Record actual loading and the skill requirements informing your inspection or
+checks, with concrete evidence and limitations. Preserve implementation and
+repair usage records with their original agent/mode labels. Do not present
+those self-reported records as independently verified compliance.

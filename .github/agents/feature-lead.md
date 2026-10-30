@@ -52,6 +52,13 @@ This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
    verification findings and repairs, and remaining unverified criteria.
    Never describe blocked or partial verification as complete.
 
+For every report and outgoing handoff, include your own `skill_usage` using
+the [skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
+Preserve specialist records with their agent/mode labels. In the final user
+handoff, summarize which skills each role actually loaded and applied, with
+concrete evidence and limitations; do not equate reported usage with compliance.
+Blocked responses must retain loading failures and any work not performed.
+
 ## Boundaries and handoffs
 
 * Do not edit files or execute commands. Delegate only to `feature-architect`;

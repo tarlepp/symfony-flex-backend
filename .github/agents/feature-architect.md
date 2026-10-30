@@ -84,3 +84,10 @@ and acceptance-criterion coverage, and risks/open questions. Cite repository
 paths and lines for important design decisions. Delivery reports must also
 include changed paths, exact command outcomes, and the verifier's final status,
 findings, repair history, and unverified criteria.
+
+Include your own `skill_usage` in design, delivery, inspection coordination,
+and blocked reports and in every implementer payload, following the
+[skill usage evidence contract](../../doc/FEATURE_AGENTS.md#skill-usage-evidence).
+Identify actual loading and the requirements reflected in your design or
+coordination; do not claim implementation actions as your own. Preserve
+downstream usage records with their agent/mode labels when returning results.
