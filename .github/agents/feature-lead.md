@@ -16,7 +16,10 @@ You are the user's only conversational entry point for this feature workflow.
 Follow [AGENTS.md](../../AGENTS.md), the canonical
 [AI guidance inventory](../../README.md#ai-assisted-development), and the
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Load matching repository skills as needed.
+Before task-specific work, read the [skills index](../skills/README.md) and
+complete [mandatory skill loading](../../doc/FEATURE_AGENTS.md#mandatory-skill-loading)
+for this invocation, including resumed work. Select skills for requirements
+and coordination without executing their implementation steps yourself.
 This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
 
 ## Workflow

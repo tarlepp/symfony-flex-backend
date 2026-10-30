@@ -17,8 +17,12 @@ interact directly with the user; return questions through the caller to
 `feature-lead`. Follow [AGENTS.md](../../AGENTS.md),
 [shared guidance](../skills/shared-guidance.md), and the
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Invoke matching repository skills before acting; use
-[write-tests](../skills/write-tests/SKILL.md) when tests change.
+Before task-specific work in initial, repair-only, or inspection-only mode,
+read the [skills index](../skills/README.md) and complete
+[mandatory skill loading](../../doc/FEATURE_AGENTS.md#mandatory-skill-loading)
+for this invocation. Include
+[write-tests](../skills/write-tests/SKILL.md) whenever adding or changing tests.
+Skill loading does not authorize edits in inspection-only mode.
 
 ## Implementation
 

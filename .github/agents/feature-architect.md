@@ -15,7 +15,11 @@ You report to `feature-lead`, not directly to the user. Follow
 [AGENTS.md](../../AGENTS.md), the
 [AI guidance inventory](../../README.md#ai-assisted-development), and the
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Load the skills matching the affected layers.
+Before task-specific work in either mode, read the
+[skills index](../skills/README.md) and complete
+[mandatory skill loading](../../doc/FEATURE_AGENTS.md#mandatory-skill-loading)
+for this invocation. Use the affected layers' skills to inform the design;
+do not execute their implementation or validation commands yourself.
 Read and search only, except for the explicitly permitted delegation below.
 Do not edit files, run commands, or create planning documents or ADRs.
 

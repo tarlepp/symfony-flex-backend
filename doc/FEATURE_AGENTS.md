@@ -13,6 +13,7 @@ replacing repository policy or adding a frontend application.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Agents and routing](#agents-and-routing)
+    * [Mandatory skill loading](#mandatory-skill-loading)
     * [Approvals and repair loop](#approvals-and-repair-loop)
     * [Using the agents](#using-the-agents)
     * [Compatibility and limitations](#compatibility-and-limitations)
@@ -34,6 +35,40 @@ verifier`. Results return through the existing callers to the feature lead;
 reporting to the lead does not require invoking another lead agent.
 Only the lead is user-selectable. Specialists return clarification needs through
 the call chain instead of starting conversations with the user.
+
+## Mandatory skill loading [ᐞ](#table-of-contents)
+
+<a id="mandatory-skill-loading"></a>
+
+Every agent invocation, including design, delivery, repairs, and resumed work,
+must complete these steps before task-specific analysis, delegation, edits,
+or validation. Reading guidance and inspecting enough task context to select
+skills are the only prerequisites to this step.
+
+1. Read the [skills index](../.github/skills/README.md) and
+   [shared guidance](../.github/skills/shared-guidance.md).
+2. Select the skill matching the requested outcome, plus related skills only
+   for affected layers, using the index's routing guidance. Do not select all
+   skills indiscriminately or assume a caller already loaded them for you.
+   If no skill matches, follow repository and shared guidance; do not invent
+   a skill or apply an unrelated workflow.
+3. Use the host's native skill-loading mechanism when available to load each
+   selected skill. If it is unavailable or not exposed to this agent, use the
+   permitted read tool to read the complete corresponding
+   `.github/skills/<skill-name>/SKILL.md` instead. An index entry, description,
+   link, or caller's summary is not the skill's full instructions.
+4. Read any supporting guidance the selected skill requires. Apply its
+   requirements within the agent's role, mode, and approved scope. A skill
+   cannot grant an architect write access, let a verifier apply fixes, or
+   bypass a user approval gate.
+5. Revisit selection when task evidence reveals another affected layer. Load
+   its applicable skill before proceeding with that part of the task. If a
+   required skill or reference cannot be loaded or read, stop and report
+   `BLOCKED` through the existing call chain, rather than silently skipping it.
+
+This is a mandatory instruction, not proof of client-level automatic skill
+loading. The direct-read fallback uses the existing `read` permission and does
+not require broadening tool access or preloading every repository skill.
 
 ## Approvals and repair loop [ᐞ](#table-of-contents)
 
