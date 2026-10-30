@@ -6,8 +6,6 @@
 [![CI](https://github.com/tarlepp/symfony-flex-backend/workflows/CI/badge.svg)](https://github.com/tarlepp/symfony-flex-backend/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/tarlepp/symfony-flex-backend/badge.svg?branch=master)](https://coveralls.io/github/tarlepp/symfony-flex-backend?branch=master)
 [![Psalm coverage](https://shepherd.dev/github/tarlepp/symfony-flex-backend/coverage.svg)](https://shepherd.dev/github/tarlepp/symfony-flex-backend)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/?branch=master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 [![Maintainability](https://api.codeclimate.com/v1/badges/69d6dc6b9fb4791e6b92/maintainability)](https://codeclimate.com/github/tarlepp/symfony-flex-backend/maintainability)
 [![Sonarcloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=security_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
@@ -362,10 +360,10 @@ required checks. See [required checks and branch
 protection](doc/REQUIRED_CHECKS.md) and the
 [contributor CI guide](doc/DEVELOPMENT.md#continuous-integration).
 
-The Coveralls, Scrutinizer, CodeClimate and SonarCloud badges come from
-external services. Their uploads run only after pushes to `master` and never
-block merging; the CI and OpenSSF Scorecard badges reflect GitHub-hosted
-checks.
+The Coveralls, CodeClimate and SonarCloud badges come from
+external services. GitHub Actions uploads reports only to Coveralls and
+SonarCloud after pushes to `master`; these uploads never block merging.
+The CI and OpenSSF Scorecard badges reflect GitHub-hosted checks.
 
 ## Frontend? [ᐞ](#table-of-contents)
 
