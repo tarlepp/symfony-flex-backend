@@ -28,10 +28,10 @@ replacing repository policy or adding a frontend application.
 
 | Agent | Responsibility | Delegates to |
 | --- | --- | --- |
-| [feature-lead](../.github/agents/feature-lead.md) | Only user-facing entry; requirements, approvals, final report. | feature-architect |
-| [feature-architect](../.github/agents/feature-architect.md) | Evidence-based design; approved implementation handoff. | implementer |
-| [implementer](../.github/agents/implementer.md) | Sole writer; backend implementation, tests, documentation. | verifier, initial mode only |
-| [verifier](../.github/agents/verifier.md) | Independent checks; defect handoff; report addressed to lead. | implementer, repair-only mode |
+| [feature-lead](../.github/agents/feature-lead.agent.md) | Only user-facing entry; requirements, approvals, final report. | feature-architect |
+| [feature-architect](../.github/agents/feature-architect.agent.md) | Evidence-based design; approved implementation handoff. | implementer |
+| [implementer](../.github/agents/implementer.agent.md) | Sole writer; backend implementation, tests, documentation. | verifier, initial mode only |
+| [verifier](../.github/agents/verifier.agent.md) | Independent checks; defect handoff; report addressed to lead. | implementer, repair-only mode |
 
 The delivery chain is `feature-lead → feature-architect → implementer →
 verifier`. Results return through the existing callers to the feature lead;
@@ -274,7 +274,7 @@ No model is pinned; the host selects models using its current configuration.
 
 <a id="compatibility-and-limitations"></a>
 
-Profiles use `.github/agents/*.md`, tool aliases, and `user-invocable`.
+Profiles use `.github/agents/*.agent.md`, tool aliases, and `user-invocable`.
 The `agents` allowlists and `argument-hint` are Local/VS Code configuration;
 other Copilot hosts may ignore them. Routing instructions still apply, but are
 not an access-control boundary. `user-invocable: false` controls specialist
