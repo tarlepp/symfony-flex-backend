@@ -80,6 +80,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    applicable: operation or tag, inputs, request body, success response shape,
    and relevant validation or authorization errors. Keep the documented
    contract aligned with the actual route and response serialization context.
+   For shared serialization, formats, headers, or error envelopes, also use
+   [update-api-response-contract](../update-api-response-contract/SKILL.md).
 8. Add or update an E2E HTTP test under `tests/E2E/Controller/` that exercises
    the real route and relevant collaborators. Cover successful status and
    response shape, unauthenticated or forbidden callers as applicable, invalid
