@@ -1,9 +1,38 @@
 #!/bin/bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 SCRIPT="$(cd "$(dirname "$0")/.." && pwd)/docker-images.sh"
+source "$(dirname "$SCRIPT")/command-output.sh"
 WORK="$(mktemp -d)"
+passed=0
+current_case='fixture setup'
+case_active=false
+failed_command=''
+failed_line=''
+
+finish_case() {
+    if [ "$case_active" = true ]; then
+        output_status OK "$current_case"
+        passed=$((passed + 1))
+        case_active=false
+    fi
+}
+
+start_case() {
+    finish_case
+    current_case=$1
+    case_active=true
+    failed_command=''
+    failed_line=''
+}
+
+start_group() {
+    finish_case
+    current_case="$1 setup"
+    printf '\n' >&2
+    output_status RUN "$1"
+}
 
 cleanup() {
     rm -f "$WORK/bin/docker" "$WORK/manifest.json" "$WORK/output" "$WORK/summary" \
@@ -13,7 +42,40 @@ cleanup() {
     rmdir "$WORK/docker/nginx" "$WORK/docker/mariadb" "$WORK/docker" "$WORK/bin" "$WORK"
 }
 
-trap cleanup EXIT
+finish() {
+    local status=$?
+    trap - EXIT
+    if [ "$status" -eq 0 ]; then
+        finish_case
+        printf '\n' >&2
+        output_status OK "Docker image tests: $passed scenarios passed"
+    elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then
+        output_status WARN "Docker image tests: interrupted during $current_case (exit $status)"
+    else
+        output_status FAIL "$current_case (exit $status)"
+        if [ -n "$failed_command" ]; then
+            printf 'Assertion at line %s failed: %s\n' "$failed_line" "$failed_command" >&2
+            printf 'Expected the assertion to succeed; actual exit: %s\n' "$status" >&2
+        fi
+        if [ -f "$WORK/output" ]; then
+            printf '%s\n' 'Captured helper output:' >&2
+            cat "$WORK/output" >&2
+        fi
+        output_status FAIL "Docker image tests: $passed scenarios passed before failure"
+    fi
+    cleanup
+    exit "$status"
+}
+
+trap 'failed_command=$BASH_COMMAND; failed_line=$LINENO' ERR
+trap finish EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+output_status RUN 'Docker image tests'
+printf '%s\n' \
+    'Offline regression tests using temporary Dockerfiles and mocked Docker/registry responses.' \
+    'Actual repository Dockerfile pins are NOT checked. To validate them, run: make docker-image-verify-pins' >&2
 
 mkdir -p "$WORK/bin" "$WORK/docker/nginx" "$WORK/docker/mariadb"
 cat > "$WORK/bin/docker" << 'EOF'
@@ -96,6 +158,7 @@ check() {
     local name="$1" expected="$2" manifest="$3" message="$4"
     local command status
 
+    start_case "$name (digest and verify)"
     printf '%s\n' "$manifest" > "$TEST_MANIFEST"
 
     for command in digest verify; do
@@ -128,9 +191,9 @@ check() {
         fi
     done
 
-    printf 'PASS: %s (digest and verify)\n' "$name"
 }
 
+start_group 'Manifest validation'
 check 'OCI multi-platform index' 0 \
     '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}},{"platform":{"os":"unknown","architecture":"unknown"}}]}' ''
 check 'Docker multi-platform list' 0 \
@@ -154,6 +217,7 @@ check 'single-platform manifest' 1 \
     '{"mediaType":"application/vnd.oci.image.manifest.v1+json","config":{},"layers":[]}' \
     '[Ss]ingle platform'
 
+start_group 'Version discovery and output formatting'
 printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}}]}\n' > "$TEST_MANIFEST"
 export TEST_REQUIRE_PIN=1
 
@@ -194,6 +258,7 @@ printf '{"next":null,"results":[{"name":"1.9.9"},{"name":"1.10.0"},{"name":"2.0.
 check_updates() {
     local name="$1" image="$2" expected="$3" message="$4" status=0
 
+    start_case "$name"
     : > "$TEST_REQUESTS"
     IMAGE="$image" bash "$SCRIPT" check-updates > "$WORK/output" 2>&1 || status=$?
     if [ "$status" -ne "$expected" ] || ! grep -Fq -- "$message" "$WORK/output"; then
@@ -201,7 +266,6 @@ check_updates() {
         cat "$WORK/output"
         exit 1
     fi
-    printf 'PASS: %s\n' "$name"
 }
 
 check_updates 'stable major upgrade, excluding variants and prereleases' 'test:1.9.9@sha256:aaaa' 1 \
@@ -235,6 +299,7 @@ check_updates 'unsupported registry' 'ghcr.io/owner/test:1.0.0' 1 'supports Dock
 check_updates 'registry with port' 'localhost:5000/test:1.0.0' 1 'supports Docker Hub only'
 check_updates 'no matching variant' 'test:1.0.0-fpm-bookworm' 1 'no matching stable version tags found'
 
+start_group 'Registry responses and pagination'
 export TEST_TAG_MODE=pagination
 check_updates 'all pages, numeric sorting and exact variant' 'test:1.9.9-fpm-bookworm' 1 \
     'test:1.9.9-fpm-bookworm -> test:10.0.0-fpm-bookworm'
@@ -252,6 +317,7 @@ check_updates 'unexpected pagination host' 'test:1.0.0' 1 'Unexpected Docker Hub
 printf '{"next":"https://hub.docker.com/v2/repositories/library/test/tags/?page_size=100","results":[]}\n' > "$TEST_TAGS"
 check_updates 'repeated pagination page' 'test:1.0.0' 1 'Repeated Docker Hub pagination URL'
 
+start_group 'Dockerfile discovery'
 printf '{"next":null,"results":[{"name":"2.0.0"}]}\n' > "$TEST_TAGS"
 cat > "$WORK/Dockerfile" << 'EOF'
 FROM --platform=linux/amd64 test:1.0.0@sha256:aaaa AS base
@@ -327,6 +393,7 @@ if grep -q 'tools/installer' "$WORK/output"; then
     printf 'FAIL: single image filter included another image\n'
     exit 1
 fi
+start_group 'Registry lookup failures and retries'
 for failure in digest manifest; do
     export TEST_DOCKER_FAILURE="$failure"
     check_updates "update ${failure} lookup failure" 'test:1.0.0' 1 'ERROR:'
@@ -376,17 +443,27 @@ for target in digest manifest; do
     [ ! -s "$TEST_RETRY_DELAYS" ]
     unset TEST_RETRY_MESSAGE
 done
+start_group 'Update-pin validation'
 unset TEST_RETRY_TARGET TEST_RETRY_FAILURES
 export TEST_DIGEST=invalid
 check_updates 'invalid update digest' 'test:1.0.0' 1 'Invalid index digest'
 unset TEST_DIGEST
-for manifest in \
-    '{"mediaType":"application/vnd.oci.image.manifest.v1+json","config":{},"layers":[]}' \
-    '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"unknown","architecture":"unknown"}}]}' \
-    '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[]}' \
-    'invalid-json'; do
+rejected_update_names=(
+    'single-platform image manifest'
+    'index with only one supported platform'
+    'empty image index'
+    'malformed manifest JSON'
+)
+rejected_update_manifests=(
+    '{"mediaType":"application/vnd.oci.image.manifest.v1+json","config":{},"layers":[]}'
+    '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"unknown","architecture":"unknown"}}]}'
+    '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[]}'
+    'invalid-json'
+)
+for index in "${!rejected_update_manifests[@]}"; do
+    manifest=${rejected_update_manifests[$index]}
     printf '%s\n' "$manifest" > "$TEST_MANIFEST"
-    check_updates 'reject invalid or non-multi-platform update' 'test:1.0.0' 1 'ERROR:'
+    check_updates "reject update: ${rejected_update_names[$index]}" 'test:1.0.0' 1 'ERROR:'
     if grep -q 'Multi-platform pin:' "$WORK/output"; then
         printf 'FAIL: rejected update printed a pin reference\n'
         exit 1
@@ -396,6 +473,7 @@ printf '{"mediaType":"application/vnd.docker.distribution.manifest.list.v2+json"
 check_updates 'Docker manifest list update pin' 'test:1.0.0' 1 \
     'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 
+start_group 'Aggregate results and empty discovery'
 printf 'FROM ghcr.io/owner/test:1.0.0\nCOPY --from=tools/installer:1.0.0 /bin/tool /bin/tool\n' > "$WORK/Dockerfile"
 check_updates 'lookup errors do not prevent remaining checks' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'

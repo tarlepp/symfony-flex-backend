@@ -9,6 +9,7 @@ export DOCKER_CALLS="$temporary/docker-calls"
 cat > "$temporary/docker" <<'MOCK'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >> "$DOCKER_CALLS"
+printf 'COLOR=%s NO_COLOR=%s\n' "${COLOR:-}" "${NO_COLOR:-}" >> "$DOCKER_CALLS"
 if [ "${1:-}" = ps ]; then
     printf 'symfony-backend\n%.0s' {1..5}
 fi
@@ -30,8 +31,13 @@ for target in cache-clear cache-warmup clear clear-tools run-tests check-skills 
     tool-versions report-coveralls generate-ssl-cert; do
     : > "$DOCKER_CALLS"
     host_make "$target"
-    grep -Eq "compose exec -T +php make $target$" "$DOCKER_CALLS"
+    grep -Eq "compose exec -T --env COLOR --env NO_COLOR +php make $target$" "$DOCKER_CALLS"
 done
+
+: > "$DOCKER_CALLS"
+host_make test-docker-images COLOR=always NO_COLOR=1
+grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
+grep -Eq 'php make test-docker-images$' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
 host_make -n cache-clear clear run-tests
