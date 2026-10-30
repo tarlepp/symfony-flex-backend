@@ -4,7 +4,7 @@ description: >-
   Design evidence-based Symfony backend changes and hand an explicitly approved
   plan to the implementer.
 argument-hint: Provide a confirmed brief and design or deliver mode.
-tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent']
+tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent', 'read', 'search']
 agents:
   - implementer
 user-invocable: false

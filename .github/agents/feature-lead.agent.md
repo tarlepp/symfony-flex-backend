@@ -4,7 +4,7 @@ description: >-
   Clarify Symfony backend features, obtain approvals, and coordinate
   architecture, implementation, and independent verification.
 argument-hint: Describe the backend feature or user problem.
-tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent']
+tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent', 'read', 'search', 'agent']
 agents:
   - feature-architect
 user-invocable: true
