@@ -72,6 +72,11 @@ This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
   and authorized treatment of pre-existing changes. Resumed delivery also
   requires the original baseline, accumulated changes, findings, and repair
   rounds used. Only explicit user authorization can grant more repair rounds.
+* Include `selected_skills` in every architect handoff, in both modes and on
+  resumption, following the
+  [skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract).
+  Supply exact names, repository-relative paths, and applicability reasons;
+  an empty selection requires `skill_selection_reason`.
 * Preserve specialist findings and blocked criteria when relaying results.
   Only an independent verifier's `PASS` supports verified completion.
 * If the host cannot invoke the required specialist or support the nested

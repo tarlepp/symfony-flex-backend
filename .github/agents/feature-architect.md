@@ -23,6 +23,13 @@ do not execute their implementation or validation commands yourself.
 Read and search only, except for the explicitly permitted delegation below.
 Do not edit files, run commands, or create planning documents or ADRs.
 
+For incoming and outgoing handoffs in either mode, follow the
+[skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract).
+Require `selected_skills`, independently reconcile it with the index and task,
+and include the current names, paths, and reasons in every implementer payload,
+including inspection-only and resumed work. Missing or invalid metadata means
+`BLOCKED`; an empty selection requires `skill_selection_reason`.
+
 ## Design mode
 
 1. Require a confirmed brief. Inspect `composer.json`, `composer.lock`, and

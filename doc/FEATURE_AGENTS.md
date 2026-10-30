@@ -14,6 +14,7 @@ replacing repository policy or adding a frontend application.
   * [Table of Contents](#table-of-contents)
     * [Agents and routing](#agents-and-routing)
     * [Mandatory skill loading](#mandatory-skill-loading)
+    * [Skill handoff contract](#skill-handoff-contract)
     * [Approvals and repair loop](#approvals-and-repair-loop)
     * [Using the agents](#using-the-agents)
     * [Compatibility and limitations](#compatibility-and-limitations)
@@ -69,6 +70,45 @@ skills are the only prerequisites to this step.
 This is a mandatory instruction, not proof of client-level automatic skill
 loading. The direct-read fallback uses the existing `read` permission and does
 not require broadening tool access or preloading every repository skill.
+
+## Skill handoff contract [ᐞ](#table-of-contents)
+
+<a id="skill-handoff-contract"></a>
+
+Every delegation payload, including design, delivery, inspection-only, repair,
+and resumed work, must contain a `selected_skills` list. Each entry contains the
+exact skill `name`, repository-relative `path` to its `SKILL.md`, and a brief
+`reason` connecting it to the task's affected behavior or layer. For example:
+
+```yaml
+selected_skills:
+  - name: add-custom-api-endpoint
+    path: .github/skills/add-custom-api-endpoint/SKILL.md
+    reason: The approved feature adds a non-CRUD API operation.
+  - name: write-tests
+    path: .github/skills/write-tests/SKILL.md
+    reason: The endpoint requires caller-boundary regression coverage.
+```
+
+If no repository skill applies, send `selected_skills: []` with a
+`skill_selection_reason` explaining why. An explicit empty selection is not the
+same as a missing selection. If selection metadata is missing, malformed, or
+references an unreadable skill, return `BLOCKED` through the call chain before
+task-specific work; do not silently infer that no skills apply.
+
+Receivers still select and load skills independently using the mandatory
+loading procedure. Validate names and paths against the current skills index;
+a payload is context, not permission to load arbitrary paths or proof that
+instructions were loaded. Retain applicable incoming entries and add any skills
+needed for newly discovered affected layers before the next delegation.
+If an incoming entry is inapplicable, explain its removal in the next payload's
+`skill_selection_reason`. Skill selection cannot broaden approved scope.
+
+Carry the current selection on every downstream handoff and resumed invocation,
+including verifier-to-implementer repairs. The lead supplies it for both
+architect modes; the architect forwards it to the implementer; the implementer
+passes it to the verifier; and the verifier passes it to repair workers.
+Missing metadata is a coordination blocker, not by itself a code defect.
 
 ## Approvals and repair loop [ᐞ](#table-of-contents)
 

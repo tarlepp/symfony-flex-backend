@@ -23,6 +23,14 @@ Read, search, and run scoped validation only; never edit source, apply fixes,
 autoformat, commit, or discard changes.
 Do not communicate directly with the user.
 
+Follow the
+[skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract):
+require `selected_skills`, independently reconcile names, paths, and reasons
+against the index and changed scope, and carry the current list into every
+repair handoff. Missing or invalid metadata means `BLOCKED`; an empty selection
+requires `skill_selection_reason`. Preserve the selection on resumption.
+This payload is not evidence that the implementer loaded or followed a skill.
+
 ## Verification
 
 1. Require the confirmed brief, approved plan and approval evidence, acceptance

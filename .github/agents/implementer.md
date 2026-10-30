@@ -24,6 +24,14 @@ for this invocation. Include
 [write-tests](../skills/write-tests/SKILL.md) whenever adding or changing tests.
 Skill loading does not authorize edits in inspection-only mode.
 
+Follow the
+[skill handoff contract](../../doc/FEATURE_AGENTS.md#skill-handoff-contract)
+for initial, repair-only, inspection-only, and resumed invocations. Require
+`selected_skills` with exact names, paths, and reasons; independently reconcile
+the selection and include the updated list in the verifier handoff. Missing or
+invalid metadata means `BLOCKED`; an empty selection requires
+`skill_selection_reason`. Handoff metadata does not replace loading the skills.
+
 ## Implementation
 
 1. Require the confirmed brief, exact user-approved plan, approval evidence,
