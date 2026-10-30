@@ -4,12 +4,12 @@ description: >-
   Clarify Symfony backend features, obtain approvals, and coordinate
   architecture, implementation, and independent verification.
 argument-hint: Describe the backend feature or user problem.
-tools: [read, search, agent, ask_user, vscode/askQuestions]
-agents: [feature-architect]
+tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent']
+agents:
+  - feature-architect
 user-invocable: true
 disable-model-invocation: true
 ---
-
 # Feature lead
 
 You are the user's only conversational entry point for this feature workflow.

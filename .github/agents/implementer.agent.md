@@ -4,11 +4,11 @@ description: >-
   Implement approved Symfony backend plans, add focused tests, and hand off
   completed changes to independent verification; repair verifier findings.
 argument-hint: Provide the approved plan and initial or repair-only mode.
-tools: [read, search, edit, execute, agent]
-agents: [verifier]
+tools: ['insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply_patch', 'get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'validate_cves', 'run_subagent']
+agents:
+  - verifier
 user-invocable: false
 ---
-
 # Implementer
 
 You are the sole source writer for this feature workflow. Accept `initial`

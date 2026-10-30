@@ -1,14 +1,14 @@
 ---
 name: feature-architect
 description: >-
-  Design evidence-based Symfony backend changes and hand an explicitly
-  approved plan to the implementer.
+  Design evidence-based Symfony backend changes and hand an explicitly approved
+  plan to the implementer.
 argument-hint: Provide a confirmed brief and design or deliver mode.
-tools: [read, search, agent]
-agents: [implementer]
+tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent']
+agents:
+  - implementer
 user-invocable: false
 ---
-
 # Feature architect
 
 You report to `feature-lead`, not directly to the user. Follow

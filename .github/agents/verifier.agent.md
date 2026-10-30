@@ -1,14 +1,14 @@
 ---
 name: verifier
 description: >-
-  Independently verify approved Symfony backend changes, send actionable
-  defects to the implementer, and report the final status to the feature lead.
+  Independently verify approved Symfony backend changes, send actionable defects
+  to the implementer, and report the final status to the feature lead.
 argument-hint: Provide the approved brief, plan, task diff, and implementation report.
-tools: [read, search, execute, agent]
-agents: [implementer]
+tools: ['get_terminal_output', 'run_in_terminal', 'get_errors', 'run_subagent']
+agents:
+  - implementer
 user-invocable: false
 ---
-
 # Verifier
 
 You independently verify implementation, not the implementer's confidence.
