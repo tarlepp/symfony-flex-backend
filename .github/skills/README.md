@@ -75,6 +75,10 @@ references only for layers the task actually changes:
   interaction with Monolog, use
   [update-request-logging](update-request-logging/SKILL.md). Database audit
   capture and diagnostic logs are separate sinks.
+* For supported languages/locales, request locale selection, translation
+  catalogs, or timezone behavior, use
+  [update-localization](update-localization/SKILL.md). User preferences,
+  translator fallback, and storage timezone are distinct contracts.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -100,6 +104,7 @@ references only for layers the task actually changes:
 | [update-docker-images](update-docker-images/SKILL.md) | Updating Docker image tags and multi-platform digest pins. |
 | [update-github-actions](update-github-actions/SKILL.md) | Updating verified action SHA pins in workflows and local composite actions. |
 | [update-github-workflows](update-github-workflows/SKILL.md) | Changing CI triggers, jobs, prerequisite gates, matrices, or shared bootstrap behavior. |
+| [update-localization](update-localization/SKILL.md) | Changing supported languages/locales, locale selection, translations, localization preferences, or timezone behavior. |
 | [update-php-runtime](update-php-runtime/SKILL.md) | Changing the supported PHP version or coordinated PHP runtime baseline. |
 | [update-request-logging](update-request-logging/SKILL.md) | Changing request/login logging, redaction, stored metadata, ignored paths, or diagnostic sink interactions. |
 | [update-symfony-recipes](update-symfony-recipes/SKILL.md) | Inspecting or updating installed Symfony Flex recipes with Composer. |
