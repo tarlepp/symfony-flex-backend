@@ -18,9 +18,7 @@ application.
 
 <a id="resources"></a>
 
-* [AI-assisted change policy](AI_RULES.md) - repository-level guidance for
-  AI-assisted changes and how those rules align with CI, contributor workflow,
-  and project conventions.
+* [AI-assisted change policy](AI_RULES.md)
 * [Application commands](COMMANDS.md)
 * [GitHub Actions update guide](ACTIONS_UPDATE.md)
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)
@@ -28,11 +26,10 @@ application.
 * [Development guide](DEVELOPMENT.md)
 * [Dev Container setup](../.devcontainer/README.md)
 * [Docker multi-platform images](DOCKER_MULTI_PLATFORM.md)
-* [Event listeners and subscribers](EVENT_HANDLING.md) - choosing, registering,
-  and testing Symfony and Doctrine event handlers.
+* [Event listeners and subscribers](EVENT_HANDLING.md)
+* [Feature delivery agents](FEATURE_AGENTS.md)
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
-* [Required checks and branch protection](REQUIRED_CHECKS.md) - merge gates
-  for `master` and stacked pull request handling.
+* [Required checks and branch protection](REQUIRED_CHECKS.md)
 * [Security policy](SECURITY.md)
 * [PhpStorm configuration](PHPSTORM.md)
 * [Speed problems with Docker Engine?](SPEED_UP_DOCKER_COMPOSE.md)
