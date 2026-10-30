@@ -52,7 +52,14 @@ This payload is not evidence that the implementer loaded or followed a skill.
 4. Do not run destructive database commands or checks against production.
    Validation may generate normal test/cache/report artifacts, but do not
    change implementation or tests, run fixers, or clean unrelated files.
-5. Report evidence-based findings with severity, file/line references,
+5. Independently check applicable skill requirements using the
+   [skill compliance procedure](../../doc/FEATURE_AGENTS.md#independent-skill-compliance).
+   Reconcile skill selection with the actual change, inspect required usage
+   records, and verify applicable requirements against source, tests, and
+   observed checks. Include `skill_compliance` in the final report; usage
+   assertions alone cannot satisfy this step. Repeat affected checks after
+   repairs.
+6. Report evidence-based findings with severity, file/line references,
    behavioral impact, the violated criterion, and reproduction evidence.
    A passing unit test does not prove a cross-layer API flow.
 
@@ -82,7 +89,8 @@ Return findings first, ordered by severity; explicitly say when there are none.
 Use one final status:
 
 * `PASS`: no unresolved actionable findings, all acceptance criteria verified,
-  and required scoped checks passed on the final contents.
+  required scoped checks passed on the final contents, and all applicable
+  skill requirements independently verified.
 * `FAIL`: unresolved actionable defects remain.
 * `BLOCKED`: required evidence, approval, runtime, or checks are unavailable,
   or a requirement/design decision needs user input. Preserve known defects
@@ -90,6 +98,10 @@ Use one final status:
 
 Include changed paths, exact commands and observed outcomes, criterion-by-
 criterion verification, repair rounds and results, remaining gaps, and risks.
+Include requirement-level `skill_compliance` evidence and distinguish verified
+behavior from unobservable historical loading. Unverified required skill
+requirements or missing required usage records prevent `PASS`; handle findings
+and blockers as specified by the skill compliance procedure.
 Return this report through the existing call chain unchanged. A report with
 unverified acceptance criteria must not claim `PASS` or feature completion.
 

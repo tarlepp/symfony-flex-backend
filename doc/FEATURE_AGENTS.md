@@ -16,6 +16,7 @@ replacing repository policy or adding a frontend application.
     * [Mandatory skill loading](#mandatory-skill-loading)
     * [Skill handoff contract](#skill-handoff-contract)
     * [Skill usage evidence](#skill-usage-evidence)
+    * [Independent skill compliance](#independent-skill-compliance)
     * [Approvals and repair loop](#approvals-and-repair-loop)
     * [Using the agents](#using-the-agents)
     * [Compatibility and limitations](#compatibility-and-limitations)
@@ -152,6 +153,56 @@ records as history rather than claiming prior loading as their own. The lead's
 final handoff includes a compact role-labelled summary and any limitations.
 These records make skill use auditable; they are agent-reported evidence, not
 independent proof of compliance or a substitute for verification.
+
+## Independent skill compliance [ᐞ](#table-of-contents)
+
+<a id="independent-skill-compliance"></a>
+
+The verifier must independently evaluate skill compliance, not just preserve
+the implementer's `skill_usage`. Before issuing a final result:
+
+1. Reconcile selected skills against the actual affected behavior and layers
+   using the current index. Load any missing applicable skill before assessing
+   its requirements, without expanding approved feature scope.
+2. Inspect required usage records for the received invocations, including repair
+   workers. Distinguish reported loading from loader/read results the verifier
+   can actually inspect. Never invent access to another agent's tool history.
+3. Extract the selected skills' requirements applicable to this task and the
+   relevant role/mode. Independently check them against the final diff,
+   surrounding implementation, tests, documentation, and observed scoped check
+   results. Include negative paths and caller-boundary tests where required;
+   one generic passing check does not establish every requirement.
+4. Report a `skill_compliance` list with each skill's exact name/path, specific
+   requirement, relevant role/mode, result, evidence, and any limitation.
+   Requirement results are `verified`, `violated`, `unverified`, or
+   `not_applicable`. Evidence must identify inspected paths/lines or exact
+   commands and observed outcomes; exclusions need a concrete applicability
+   reason. For no applicable skills, use an empty list with the independently
+   checked selection reason.
+5. Send concrete in-scope violations to the repair implementer with the skill
+   requirement, behavioral impact, and reproduction evidence. Re-check affected
+   requirements on the repaired contents, including regressions and newly
+   applicable skills. Preserve earlier findings as repair history.
+
+Missing or incomplete usage records are evidence blockers, not proof of a code
+defect. Return the missing evidence through the existing call chain for the
+responsible role to supply; do not use code-repair rounds merely to recreate
+records. A later successful load cannot prove an earlier invocation loaded the
+skill before acting. Record unavailable historical loading as unverified, not
+as an observed success or violation.
+
+Verified implementation behavior does not prove historical process compliance.
+If required loading or other mandatory process evidence cannot be established,
+report `BLOCKED` with the exact gap while preserving verified behavior and known
+defects. Unresolved substantive violations mean `FAIL` when verification is not
+otherwise blocked. `PASS` requires all applicable mandatory requirements
+verified, complete required usage records, and the existing acceptance-criteria
+and scoped-check gates. Justified role-inapplicable requirements do not block
+completion; unverified mandatory ones do.
+
+These are verification instructions, not a mechanical guarantee of agent
+behavior. Live host delegation and skill-loading visibility must still be
+exercised in the intended client.
 
 ## Approvals and repair loop [ᐞ](#table-of-contents)
 
