@@ -102,6 +102,25 @@ make fish
 Both shells run inside the `php` service as the `dev` user. Compose maps this
 user's UID and GID to your host user to avoid file-permission conflicts.
 
+Both entry points enable filtered Make output after normal user configuration.
+For an existing Bash terminal on the host or inside the PHP development
+container, enable filtering from the repository root:
+
+```bash
+source scripts/make-shell.sh
+```
+
+For an existing Fish terminal in either context, use:
+
+```fish
+source scripts/make-shell.fish
+```
+
+Alternatively, invoke `bash scripts/make.sh <target>` without modifying the
+current shell. These entry points suppress redundant GNU Make recipe-error
+lines, not native diagnostics or useful Make setup errors, and retain failure
+exit statuses. Raw `command make` can still print its own outer error line.
+
 Before running any host-only command, leave the container shell:
 
 ```bash
@@ -145,15 +164,17 @@ the PHP container; subsequent project targets forward into it, while
 `make ci-stop` runs on the host:
 
 ```bash
-make ci-start
-make install
-make tool-versions
-make composer-validate
-make check-skills
-make ci-stop
+bash scripts/make.sh ci-start
+bash scripts/make.sh install
+bash scripts/make.sh tool-versions
+bash scripts/make.sh composer-validate
+bash scripts/make.sh check-skills
+bash scripts/make.sh ci-stop
 ```
 
-In workflows, put `make ci-stop` in an `always()` cleanup step so failed checks
+CI uses the launcher explicitly to filter both host and nested container Make
+errors. In workflows, put `bash scripts/make.sh ci-stop` in an `always()` step
+so failed checks
 do not skip cleanup. Keep CI setup separate from a running local development
 stack; both use the same Compose PHP service.
 
