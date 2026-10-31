@@ -3,8 +3,18 @@ set -euo pipefail
 
 source "$(dirname "$0")/command-output.sh"
 
+group=${1:-all}
+if [ "$#" -gt 1 ] || [[ ! "$group" =~ ^(all|information|tests|quality|checks|reports|setup|lifecycle|docker)$ ]]; then
+    output_status FAIL "Unknown help group: $group"
+    output_status INFO 'Use GROUP=all|information|tests|quality|checks|reports|setup|lifecycle|docker'
+    exit 64
+fi
+
 printf '%sAvailable commands%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
 printf 'Run from the repository root. Application tooling forwards to the PHP container.\n'
+printf 'Filter: make help GROUP=<group> (default: all)\n'
+printf 'Groups: information, tests, quality, checks, reports, setup, lifecycle, docker\n'
+printf 'Routine commands first; overwrite and destructive commands last in each group.\n'
 printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
 
 awk '
@@ -43,9 +53,9 @@ awk '
         for (name in descriptions)
             print name "\t" descriptions[name] "\t" groups[name] "\t" risks[name]
     }
-' Makefile | sort | awk -F '\t' \
+' Makefile | LC_ALL=C sort -t $'\t' -k1,1 | awk -F '\t' \
     -v blue="$OUTPUT_BLUE" -v green="$OUTPUT_GREEN" \
-    -v yellow="$OUTPUT_YELLOW" -v reset="$OUTPUT_RESET" '
+    -v yellow="$OUTPUT_YELLOW" -v reset="$OUTPUT_RESET" -v selected="$group" '
     BEGIN {
         groups["lifecycle"] = 1
         groups["docker"] = 2
@@ -55,6 +65,14 @@ awk '
         groups["quality"] = 6
         groups["information"] = 7
         groups["reports"] = 8
+        order[1] = 7
+        order[2] = 4
+        order[3] = 6
+        order[4] = 5
+        order[5] = 8
+        order[6] = 3
+        order[7] = 1
+        order[8] = 2
     }
     {
         if (!($3 in groups) || ($4 != "" && $4 != "DESTRUCTIVE" && $4 != "OVERWRITE")) {
@@ -63,8 +81,11 @@ awk '
             next
         }
         group = groups[$3]
+        if (selected != "all" && selected != $3) next
+        risk = $4 == "DESTRUCTIVE" ? 2 : ($4 == "OVERWRITE" ? 1 : 0)
         marker = $4 == "" ? "" : "[" $4 "] "
-        entries[group] = entries[group] sprintf("  %s%-29s%s %s%s%s%s\n", green, $1, reset, yellow, marker, reset, $2)
+        entries[group, risk] = entries[group, risk] sprintf("  %s%-29s%s %s%s%s%s\n", green, $1, reset, yellow, marker, reset, $2)
+        populated[group] = 1
     }
     END {
         if (invalid) exit 1
@@ -76,7 +97,13 @@ awk '
         titles[6] = "Linting and static analysis"
         titles[7] = "Configuration and information"
         titles[8] = "Reports and uploads"
-        for (i = 1; i <= 8; i++)
-            if (entries[i] != "") printf "%s%s%s\n%s\n", blue, titles[i], reset, entries[i]
+        for (i = 1; i <= 8; i++) {
+            group = order[i]
+            if (populated[group]) {
+                printf "%s%s%s\n", blue, titles[group], reset
+                for (risk = 0; risk <= 2; risk++) printf "%s", entries[group, risk]
+                printf "\n"
+            }
+        }
     }
 '
