@@ -95,6 +95,7 @@ exit 0
         return result
 
     def test_help_lists_every_documented_target_once_with_purpose_and_risk(self):
+        (self.root / "help").touch()
         result = self.make("help")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stderr, "")
@@ -226,6 +227,7 @@ exit 0
     def test_information_stdout_has_no_status_or_ansi_pollution(self):
         for target in ("configuration", "project-stats", "application-info", "tool-versions", "check-licenses"):
             with self.subTest(target=target):
+                (self.root / target).touch()
                 result = self.make(target, COLOR="always")
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertNotRegex(result.stdout, r"\[(RUN|OK|INFO|FAIL)\]|\x1b")

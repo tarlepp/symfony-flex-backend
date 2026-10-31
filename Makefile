@@ -142,6 +142,8 @@ $(call REGISTER_TARGET,phploc,reports,wrapped,,Generate PHPLOC report)
 $(call REGISTER_TARGET,report-coveralls,reports,wrapped,,Submit coverage to Coveralls)
 $(call REGISTER_TARGET,prepare-sonar-reports,reports,wrapped,OVERWRITE,Prepare local Sonar reports; no upload is performed)
 
+.PHONY: $(COMMAND_TARGETS)
+
 ifeq ($(INSIDE_DOCKER_CONTAINER),0)
 FORWARD_TARGETS := $(filter-out $(HOST_TARGETS),$(MAKECMDGOALS))
 endif
@@ -167,7 +169,6 @@ WRAPPED_GOALS :=
 endif
 
 ifneq ($(strip $(WRAPPED_GOALS)),)
-.PHONY: $(MAKECMDGOALS)
 ifeq ($(strip $(CONSOLE)),)
 cache-warmup: export OUTPUT_SUCCESS_STATUS := SKIP
 endif
