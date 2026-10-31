@@ -74,8 +74,13 @@ make test-command-output COLOR=always NO_COLOR=1
 
 This offline target covers colors, stream preservation, failures, cancellation,
 expected-negative cases, multi-target invocations, and host/CI forwarding.
-`COLOR=auto|always|never` controls shared status colors; nonempty `NO_COLOR`
-overrides color, including `COLOR=always`. Blocking failures stay nonzero.
+`COLOR=auto|always|never` controls shared statuses and native tool color flags;
+nonempty `NO_COLOR` overrides color, including `COLOR=always`. GitHub analyzer
+formats stay plain regardless of status colors. ECS, PhpMetrics, and the JSON
+configuration check use a streaming SGR-only filter in plain mode where native
+disable flags are unavailable or unreliable. Tools without force-color support
+retain their native detection. Blocking failures stay nonzero.
+Compose receives the resolved color choice via `COMPOSE_ANSI`.
 See [the regression guide](../scripts/README.md#output-contract-regressions)
 for individual suites and the informational action-update exception.
 

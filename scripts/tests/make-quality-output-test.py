@@ -28,6 +28,7 @@ class QualityOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         shutil.copyfile(ROOT / "scripts/command-output.sh", self.root / "scripts/command-output.sh")
+        shutil.copyfile(ROOT / "scripts/native-output.sh", self.root / "scripts/native-output.sh")
         shutil.copyfile(ROOT / "scripts/make.sh", self.root / "scripts/make.sh")
         shutil.copyfile(ROOT / "scripts/markdown-output.sh", self.root / "scripts/markdown-output.sh")
         fixture = """#!/usr/bin/env bash
@@ -37,7 +38,11 @@ if [ "$(basename "$0")" = "${FAIL_COMMAND:-}" ]; then
     exit 7
 fi
 if [ "$(basename "$0")" = sleep ]; then exit 0; fi
-printf 'native progress\\n'
+color=false
+for argument in "$@"; do
+    case "$argument" in --ansi|--colors|--colors=always) color=true ;; esac
+done
+if [ "$color" = true ]; then printf '\\033[32mnative progress\\033[0m\\n'; else printf 'native progress\\n'; fi
 printf '::notice file=src/Example.php,line=1::native annotation\\n' >&2
 for argument in "$@"; do
     case "$argument" in
@@ -145,6 +150,55 @@ done
         self.assertEqual(result.returncode, 0)
         self.assertNotIn("\033", result.stderr)
 
+    def test_native_color_flags_follow_shared_policy_and_ci_annotations_stay_plain(self):
+        targets = {
+            "phpcs": ("--colors", "--no-colors"),
+            "php-parallel-lint": ("--colors", "--no-colors"),
+            "run-tests-php": ("--colors=always", "--colors=never"),
+            "run-tests-phpdbg": ("--colors=always", "--colors=never"),
+            "ecs": ("--ansi", "--no-ansi"),
+            "ecs-fix": ("--ansi", "--no-ansi"),
+            "phpstan": ("--ansi", "--no-ansi"),
+            "phplint": ("--ansi", "--no-ansi"),
+            "phpinsights": ("--ansi", "--no-ansi"),
+            "composer-validate": ("--ansi", "--no-ansi"),
+            "infection": ("--ansi", "--no-ansi"),
+        }
+        for color, no_color, enabled in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            for target, (on, off) in targets.items():
+                with self.subTest(target=target, color=color, no_color=no_color):
+                    result, calls = self.run_target(target, COLOR=color, NO_COLOR=no_color)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertIn(on if enabled else off, calls)
+                    self.assertNotIn(off if enabled else on, calls)
+                    self.assertEqual("\033" in result.stdout, enabled)
+                    self.assertIn("::notice file=src/Example.php,line=1::native annotation", result.stderr)
+            for target in ("psalm", "psalm-shepherd"):
+                result, calls = self.run_target(target, COLOR=color, NO_COLOR=no_color)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("--monochrome" in calls, not enabled)
+            for target, plain in (("psalm-github", "--monochrome"),
+                                  ("phpstan-github", "--no-ansi")):
+                result, calls = self.run_target(target, COLOR=color, NO_COLOR=no_color, CI="true")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(plain, calls)
+                analysis = [line for line in calls.splitlines() if "--format=github" in line
+                            or "--output-format=github" in line or "--error-format=github" in line]
+                self.assertEqual(len(analysis), 1)
+                self.assertNotIn("--ansi", analysis[0])
+                self.assertIn("::notice file=src/Example.php,line=1::native annotation", result.stderr)
+        for arguments, environment, expected in (
+            (("COLOR=always",), {"COLOR": "never"}, "--colors"),
+            (("COLOR=never",), {"COLOR": "always"}, "--no-colors"),
+            (("COLOR=always", "NO_COLOR=1"), {"COLOR": "always"}, "--no-colors"),
+        ):
+            result, calls = self.run_target("phpcs", *arguments, **environment)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn(expected, calls)
+
     def test_multiple_goals_stop_on_failure_and_keep_going_has_no_false_success(self):
         result, calls = self.run_target("composer-validate", "ecs", FAIL_COMMAND="composer")
         self.assertNotEqual(result.returncode, 0)
@@ -204,7 +258,14 @@ done
         fixture = (self.root / "bin/php").read_text()
         for name in ("cp", "sed", "chmod", "openssl", "rm"):
             file = self.root / "bin" / name
-            file.write_text(fixture)
+            content = fixture
+            if name == "sed":
+                content = content.replace(
+                    "#!/usr/bin/env bash\n",
+                    '#!/usr/bin/env bash\nif [ "$1" = -u ]; then exec /usr/bin/sed "$@"; fi\n',
+                    1,
+                )
+            file.write_text(content)
             file.chmod(0o755)
         jq = self.root / "bin/jq"
         jq.write_text("#!/bin/sh\nprintf '%s\\n' fixture-value\n")
