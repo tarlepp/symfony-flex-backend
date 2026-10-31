@@ -39,7 +39,7 @@ output_run() {
     trap - INT TERM
     printf '\n' >&2
     if [ "$status" -eq 0 ]; then
-        output_status "${OUTPUT_SUCCESS_STATUS:-OK}" "$label"
+        output_status "${OUTPUT_SUCCESS_STATUS:-OK}" "${OUTPUT_SUCCESS_MESSAGE:-$label}"
     elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then
         output_status WARN "$label: cancelled (exit $status)"
     else

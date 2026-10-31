@@ -39,6 +39,7 @@
 ################################################################################
 
 set -euo pipefail
+source "$(dirname "$0")/command-output.sh"
 
 if [ -n "${NO_COLOR:-}" ] || [ "${COLOR:-auto}" = never ] ||
     { [ "${COLOR:-auto}" = auto ] && { [ ! -t 2 ] || [ "${TERM:-}" = dumb ]; }; }; then
@@ -791,7 +792,8 @@ command_verify() {
 }
 
 command_platforms() {
-    docker buildx inspect --bootstrap | awk '/^(Name|Driver|Platforms):/ && !seen[$1]++'
+    output_run 'Inspect buildx builder platforms' bash -o pipefail -c \
+        'docker buildx inspect --bootstrap | awk '"'"'/^(Name|Driver|Platforms):/ && !seen[$1]++'"'"
 }
 
 command_setup_qemu() {
@@ -805,11 +807,12 @@ command_setup_qemu() {
     warning "CAUTION" "This runs a privileged container (tonistiigi/binfmt) that registers QEMU emulators on the host."
 
     if ! confirm "Install QEMU emulators '${PLATFORMS}'?"; then
-        info "SKIP" "Nothing installed"
+        output_status SKIP 'QEMU installation cancelled; nothing installed'
         return 0
     fi
 
-    docker run --privileged --rm tonistiigi/binfmt --install "$PLATFORMS"
+    OUTPUT_SUCCESS_MESSAGE='QEMU emulator registration completed' \
+        output_run 'Register QEMU emulators' docker run --privileged --rm tonistiigi/binfmt --install "$PLATFORMS"
 }
 
 build_args() {
@@ -860,9 +863,10 @@ command_build() {
 
     mapfile -t args < <(build_args "$DOCKERFILE")
 
-    info "OK" "Building ${TAG} from ${DOCKERFILE}${TARGET:+ (target ${TARGET})} for ${PLATFORM}"
+    output_status WARN "Building and loading ${TAG}; an existing local tag may be replaced"
 
-    docker buildx build \
+    OUTPUT_SUCCESS_MESSAGE="Built and loaded ${TAG} for ${PLATFORM}; runtime was not verified" \
+        output_run "Build and load ${TAG} for ${PLATFORM}" docker buildx build \
         --platform "$PLATFORM" \
         --file "$DOCKERFILE" \
         --tag "$TAG" \
@@ -881,18 +885,21 @@ command_push() {
     ask BUILDER "buildx builder name" "multi-platform"
 
     if ! confirm "Build ${DOCKERFILE} for ${PLATFORMS} and push it as ${TAG}?"; then
-        info "SKIP" "Nothing built"
+        output_status SKIP 'Build and push cancelled; nothing built'
         return 0
     fi
 
     if ! docker buildx inspect "$BUILDER" > /dev/null 2>&1; then
-        info "OK" "Creating buildx builder '${BUILDER}' (docker-container driver)"
-        docker buildx create --name "$BUILDER" --driver docker-container > /dev/null
+        output_status WARN "Creating buildx builder '${BUILDER}' (docker-container driver)"
+        OUTPUT_SUCCESS_MESSAGE="Created buildx builder '${BUILDER}'" \
+            output_run "Create buildx builder '${BUILDER}'" docker buildx create --name "$BUILDER" --driver docker-container
     fi
 
     mapfile -t args < <(build_args "$DOCKERFILE")
 
-    docker buildx build \
+    output_status WARN "Building and pushing ${TAG}; the registry tag may be replaced"
+    OUTPUT_SUCCESS_MESSAGE="Built and pushed ${TAG} for ${PLATFORMS}; runtime was not verified" \
+        output_run "Build and push ${TAG} for ${PLATFORMS}" docker buildx build \
         --builder "$BUILDER" \
         --platform "$PLATFORMS" \
         --file "$DOCKERFILE" \
