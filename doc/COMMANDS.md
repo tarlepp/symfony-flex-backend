@@ -54,6 +54,20 @@ List commands grouped by purpose from the repository root on the Docker host:
 make help
 ```
 
+Everyday application groups appear before setup and Docker maintenance.
+Within each group, routine commands precede overwrite and destructive commands,
+with alphabetical target names at each risk level. Filter from the same host
+working directory without requiring running containers:
+
+```bash
+bash scripts/make.sh help GROUP=quality
+bash scripts/make.sh help GROUP=docker COLOR=never
+```
+
+`GROUP=all` is the default; other groups are `information`, `tests`, `quality`,
+`checks`, `reports`, `setup`, `lifecycle`, and `docker`. Invalid groups fail
+explicitly and list supported choices.
+
 Help marks destructive and overwrite targets. Information commands keep native
 stdout, with status messages on stderr. For example, from the repository root
 on the Docker host with development services running, redirect the license
