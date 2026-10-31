@@ -64,6 +64,9 @@ references only for layers the task actually changes:
 * Use [write-tests](write-tests/SKILL.md) whenever tests change. For event
   handlers, use the [event-handling guide](../../doc/EVENT_HANDLING.md) to
   choose the listener or subscriber skill.
+* For AI instructions, custom agent profiles, skill contracts, and their
+  indexes, use [maintain-ai-guidance](maintain-ai-guidance/SKILL.md).
+  Documentation checks do not prove live-client discovery or delegation.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -82,6 +85,7 @@ references only for layers the task actually changes:
 | [add-security-voter](add-security-voter/SKILL.md) | Changing voters, subject-based permissions, or authorization call sites. |
 | [add-validation-constraint](add-validation-constraint/SKILL.md) | Adding or changing a project-specific Symfony Validator constraint and validator. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
+| [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
 | [update-application-configuration](update-application-configuration/SKILL.md) | Changing JSON settings, environment overrides, or Symfony service wiring. |
 | [update-dependencies](update-dependencies/SKILL.md) | Updating Composer packages, Composer tools, or pinned GitHub Actions. |
 | [update-docker-images](update-docker-images/SKILL.md) | Updating Docker image tags and multi-platform digest pins. |
