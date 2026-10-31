@@ -48,12 +48,30 @@ output_run() {
     return "$status"
 }
 
+output_stream() {
+    local label=$1
+    shift
+    output_status RUN "$label"
+    exec "$@"
+}
+
 output_init
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    mode=run
+    case "${1:-}" in
+        --run|--stream)
+            mode=${1#--}
+            shift
+            ;;
+    esac
     if [ "$#" -lt 2 ]; then
-        output_status FAIL 'Usage: command-output.sh <label> <command> [arguments...]'
+        output_status FAIL 'Usage: command-output.sh [--run|--stream] <label> <command> [arguments...]'
         exit 64
     fi
-    output_run "$@"
+    if [ "$mode" = stream ]; then
+        output_stream "$@"
+    else
+        output_run "$@"
+    fi
 fi

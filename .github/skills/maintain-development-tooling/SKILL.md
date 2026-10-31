@@ -109,6 +109,10 @@ Inspect the implementation and its actual callers:
    preserve bounded retries, timeouts, pagination termination, explicit
    failures, and required checksum verification; a failed lookup is not
    an empty successful result.
+   Reuse `command-output.sh --run` for finite commands, complete fail-fast
+   recipes, and information output; use `--stream` for directly attached shells
+   and logs without completion banners. Do not duplicate these execution modes
+   in inline shell wrappers or buffer native output.
 7. Keep checks read-only unless mutation is explicitly part of the approved
    command. Use isolated temporary fixtures and cleanup limited to their
    resolved paths. Mock Docker, registry, Git, and other external commands

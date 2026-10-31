@@ -117,7 +117,7 @@ $(QUALITY_GOALS):
 ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
 	@$(MAKE) QUALITY_OUTPUT_RUN=1 $@
 else
-	+@bash scripts/command-output.sh "$(or $(QUALITY_LABEL),$@)" bash scripts/make.sh QUALITY_OUTPUT_RUN=1 $@
+	+@bash scripts/command-output.sh --run "$(or $(QUALITY_LABEL),$@)" bash scripts/make.sh QUALITY_OUTPUT_RUN=1 $@
 endif
 $(filter-out $(QUALITY_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
@@ -140,7 +140,7 @@ define MUTATION_WARNING
 endef
 
 define STREAM_COMMAND
-	@bash -c 'source scripts/command-output.sh; output_status RUN "$$1"; shift; exec "$$@"' stream "$(1)" $(2)
+	@bash scripts/command-output.sh --stream "$(1)" $(2)
 endef
 
 define REPORT_PATHS

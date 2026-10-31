@@ -53,6 +53,58 @@ class CommandOutputTest(unittest.TestCase):
                 self.assertIn(f"exit {status}", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
 
+    def test_explicit_run_mode_preserves_structured_output_and_fail_fast_steps(self):
+        for status in (0, 7):
+            result = self.run_command([
+                "bash", str(HELPER), "--run", "report", "bash", "-e", "-c",
+                f'printf \'{{"report":true}}\\n\'; (exit {status}); printf completed >&2',
+            ])
+            self.assertEqual(result.returncode, status, result.stderr)
+            self.assertEqual(result.stdout, '{"report":true}\n')
+            self.assertEqual("[OK]" in result.stderr, status == 0)
+            self.assertEqual("completed" in result.stderr, status == 0)
+            if status:
+                self.assertIn("[FAIL] report (exit 7)", result.stderr)
+
+    def test_stream_mode_preserves_streams_and_has_no_completion_banner(self):
+        for status in (0, 7, 130, 143):
+            result = self.run_command([
+                "bash", str(HELPER), "--stream", "session", "bash", "-c",
+                f"printf payload; printf diagnostic >&2; exit {status}",
+            ], COLOR="always")
+            self.assertEqual(result.returncode, status)
+            self.assertEqual(result.stdout, "payload")
+            self.assertEqual(result.stderr, "\033[34m[RUN]\033[0m session\ndiagnostic")
+        for mode in ("--run", "--stream"):
+            result = self.run_command(["bash", str(HELPER), mode, "missing command"])
+            self.assertEqual(result.returncode, 64)
+            self.assertIn("[FAIL] Usage:", result.stderr)
+        result = self.run_command([
+            "bash", str(HELPER), "--stream", "missing tool",
+            "copilot-output-contract-missing-executable",
+        ])
+        self.assertEqual(result.returncode, 127)
+        self.assertIn("[RUN] missing tool", result.stderr)
+        self.assertIn("not found", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_stream_mode_executes_in_place_with_terminal_descriptors(self):
+        master, slave = pty.openpty()
+        try:
+            process = subprocess.Popen(
+                ["bash", str(HELPER), "--stream", "terminal", "bash", "-c",
+                 'test -t 0 && test -t 1 && test -t 2 && printf "%s" "$$"'],
+                env=self.environment(COLOR="never"), stdin=slave,
+                stdout=slave, stderr=slave,
+            )
+            self.assertEqual(process.wait(timeout=5), 0)
+            output = os.read(master, 4096)
+            self.assertIn(str(process.pid).encode(), output)
+            self.assertNotIn(b"[OK]", output)
+        finally:
+            os.close(slave)
+            os.close(master)
+
     def test_missing_executable_fails_without_success(self):
         result = self.run_command(
             ["bash", str(HELPER), "missing tool", "copilot-output-contract-missing-executable"],

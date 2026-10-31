@@ -140,7 +140,13 @@ ended; interruption is reported as cancellation. Startup warnings describe
 entrypoint dependency installation, key generation, and migrations.
 
 Shells and streaming logs remain attached directly, with a `[RUN]` message and
-no premature or final success banner. Invalid host/container contexts and
+no premature or final success banner. The shared command helper's `--stream`
+mode executes these sessions in place, preserving terminal descriptors and
+native exit/signal behavior. Its `--run` mode handles finite commands, complete
+multi-step recipes, and information commands; statuses stay on stderr so
+structured stdout remains usable. Foreground `start*` uses `--run` to retain
+session-ended and cancellation reporting.
+Invalid host/container contexts and
 rejected startup attempts return failure. `stop` and `ci-stop` remove containers
 and networks while retaining named volumes.
 
