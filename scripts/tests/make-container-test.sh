@@ -28,7 +28,13 @@ host_make() {
 
 for target in cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
     lint-markdown composer-validate install application-info check-requirements \
-    tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output; do
+    tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output \
+    configuration generate-jwt-keys run-tests-php run-tests-phpdbg infection phpmetrics phpcs \
+    ecs ecs-fix phpinsights phplint php-parallel-lint psalm psalm-shepherd psalm-github \
+    phpstan phpstan-github lint-configuration lint-yaml check-dependencies-latest \
+    check-dependencies-minor check-dependencies-patch check-licenses update update-tools \
+    install-tools local-configuration composer-normalize composer-require-checker composer-unused \
+    phploc check-security check-action-updates project-stats configure-ci; do
     : > "$DOCKER_CALLS"
     host_make "$target"
     grep -Eq "compose exec -T --env COLOR --env NO_COLOR +php bash scripts/make.sh $target$" "$DOCKER_CALLS"

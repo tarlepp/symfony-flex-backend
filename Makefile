@@ -139,13 +139,9 @@ else
 	RUNNING_ALL_CONTAINERS = 0;
 endif
 
-ERROR_DOCKER = @printf "\033[31mSeems like that all necessary Docker containers are not running atm.\nCheck logs for detailed information about the reason of this\033[39m\n"
-NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker compose exec' command\033[39m\n"
-WARNING_DOCKER = @printf "\033[31mThis command must be run inside specified docker container and it's not\nrunning atm. Use \`make start\` and/or \`make daemon\` command to get\nnecessary container(s) running and after that run this command again.\033[39m\n"
 HOST_CONTEXT_FAILURE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Run this target on the Docker host, not inside a container"; exit 1'
 CONTAINERS_UNAVAILABLE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Required application containers are unavailable; inspect docker compose ps and logs"; exit 1'
 CONTAINERS_ALREADY_RUNNING = @bash -c 'source scripts/command-output.sh; output_status FAIL "Application containers are already running; stop them before starting again"; exit 1'
-ALL_DONE = @printf $(_TITLE) "All done" "Have a nice day"
 
 _WARNING := "\033[33m[%s]\033[0m %s\n" # Yellow text for "printf"
 _TITLE := "\033[32m[%s]\033[0m %s\n" # Green text for "printf"
@@ -177,17 +173,7 @@ help:
 	@bash scripts/make-help.sh
 
 configuration: ## Prints out application current configuration
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo | jq -r . ${APPLICATION_CONFIG}
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make configuration
-	$(ALL_DONE)
-endif
 
 cache-clear: ## Clears the cache
 	$(call MUTATION_WARNING,Removing application cache; it will be regenerated as needed)
@@ -205,7 +191,6 @@ else
 endif
 
 generate-jwt-keys: ## Generates JWT auth keys
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Replacing configured JWT keys; existing tokens may become invalid)
 	@mkdir -p config/jwt
 	@rm -f ${JWT_SECRET_KEY}
@@ -214,15 +199,6 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_SECRET_KEY} -out ${JWT_PUBLIC_KEY}
 	@chmod 644 ${JWT_SECRET_KEY}
 	@chmod 644 ${JWT_PUBLIC_KEY}
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make generate-jwt-keys
-	$(ALL_DONE)
-endif
 
 run-tests: ## Runs all tests via phpunit (Uses phpdbg if that is installed)
 ifndef PHPDBG
@@ -232,7 +208,6 @@ else
 endif
 
 run-tests-php: ## Runs all tests via phpunit (pure PHP)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpunit --version
 	@rm -rf build/logs
 	@mkdir -p build/logs
@@ -240,18 +215,8 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bin/console cache:warmup --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-php
-	$(ALL_DONE)
-endif
 
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpunit --version
 	@rm -rf build/logs
 	@mkdir -p build/logs
@@ -259,34 +224,14 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bin/console cache:warmup --env=test
 	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make run-tests-phpdbg
-	$(ALL_DONE)
-endif
 
 infection: ## Runs Infection to codebase
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test
 	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit"
 	$(call REPORT_PATHS,Mutation reports: build/infection (see native output for generated files))
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make infection
-	$(ALL_DONE)
-endif
 
 phpmetrics: ## Generates PhpMetrics static analysis
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build/phpmetrics
 	$(call MUTATION_WARNING,Writing the HTML report to build/phpmetrics; existing report files may be replaced)
 	@if [ ! -f build/logs/junit.xml ] ; then \
@@ -297,207 +242,69 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpmetrics --version
 	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 	$(call REPORT_PATHS,HTML report: build/phpmetrics)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpmetrics
-endif
 
 phpcs: ## Runs PHP CodeSniffer
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpcs --version
 	@php ./vendor/bin/phpcs --standard=PSR2 --colors -p src tests
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpcs
-	$(ALL_DONE)
-endif
 
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs --clear-cache src tests
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make ecs
-	$(ALL_DONE)
-endif
 
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Applying coding-standard fixes to files under src and tests)
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs src tests --clear-cache --fix
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make ecs-fix
-	$(ALL_DONE)
-endif
 
 phpinsights: ## Runs PHP Insights
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction --min-quality=95 --min-complexity=85 --min-architecture=100 --min-style=100
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpinsights
-	$(ALL_DONE)
-endif
 
 phplint: ## Runs PHPLint
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phplint --no-cache
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phplint
-	$(ALL_DONE)
-endif
 
 php-parallel-lint: ## Lint PHP files with `php-parallel-lint`
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@./vendor/bin/parallel-lint --exclude .git --exclude app --exclude tools --exclude var --exclude vendor --colors --show-deprecated --blame .
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make php-parallel-lint
-	$(ALL_DONE)
-endif
 
 psalm: ## Runs Psalm static analysis tool
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
 	$(call REPORT_PATHS,JSON report: build/psalm.json)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make psalm
-	$(ALL_DONE)
-endif
 
 psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json
 	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make psalm-shepherd
-	$(ALL_DONE)
-endif
 
 psalm-github: ## Runs Psalm static analysis tool (GitHub)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json --output-format=github
 	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make psalm-github
-	$(ALL_DONE)
-endif
 
 phpstan: ## Runs PHPStan static analysis tool
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@bin/console cache:clear
 	@sleep 3
 	@./tools/02_phpstan/vendor/phpstan/phpstan/phpstan --version
 	@./tools/02_phpstan/vendor/phpstan/phpstan/phpstan -v
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpstan
-	$(ALL_DONE)
-endif
 
 phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@bin/console cache:clear
 	@sleep 3
 	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan -v --error-format=github
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phpstan
-	$(ALL_DONE)
-endif
 
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-configuration
-	$(ALL_DONE)
-endif
 
 lint-yaml: ## Lint config YAML files
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console lint:yaml config --parse-tags
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-yaml
-	$(ALL_DONE)
-endif
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
 	@bash scripts/command-output.sh "Skill metadata and documentation links" python3 scripts/check-skills.py
@@ -506,17 +313,7 @@ lint-workflows: ## Validate GitHub workflows, embedded shell, and local action m
 	@bash scripts/command-output.sh "GitHub workflows and local action metadata" bash scripts/lint-workflows.sh
 
 lint-markdown: ## Lint Markdown files
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash scripts/markdown-output.sh bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make lint-markdown
-	$(ALL_DONE)
-endif
 
 clear: ## Clean vendor and tool dependencies
 	$(call MUTATION_WARNING,Deleting vendor and tool vendor directories; dependencies must be reinstalled)
@@ -529,98 +326,28 @@ clear-tools: ## Clears all tools dependencies
 	@printf 'Restart development containers after reinstalling dependencies.\n'
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-dependencies-latest
-	$(ALL_DONE)
-endif
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash scripts/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-dependencies-minor
-	$(ALL_DONE)
-endif
 
 check-dependencies-patch: ## Checks if any vendor dependency can be updated (only patch versions)
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash scripts/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-dependencies-patch
-	$(ALL_DONE)
-endif
 
 check-licenses: ## Check vendor licenses
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash -o pipefail -c 'composer license --format=json | jq -r '"'"'.dependencies[] | .license | join(" OR ") | if length == 0 then "UNSPECIFIED" else . end'"'"' | sort | uniq -c | sort -rn'
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-licenses
-	$(ALL_DONE)
-endif
 
 update: ## Update composer dependencies
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Updating application dependencies and lockfiles; Composer hooks may update tools and application cache)
 	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make update
-	$(ALL_DONE)
-endif
 
 update-tools: ## Update composer tools dependencies
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Updating dependency versions and lockfiles in tool groups)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make update-tools
-	$(ALL_DONE)
-endif
 
 install-tools: ## Install composer tools dependencies
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Installing tool dependencies and rebuilding their autoloaders)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make install-tools
-	$(ALL_DONE)
-endif
 
 bash: ## Get bash inside PHP container
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
@@ -720,102 +447,32 @@ else
 endif
 
 local-configuration: ## Create local configuration files
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Overwriting .env.local and secrets/application.local.json with template configuration)
 	@cp /app/.env /app/.env.local
 	@cp /app/secrets/application.json /app/secrets/application.local.json
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
 	@printf 'Edit secrets/application.local.json for your local requirements.\n'
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make local-configuration
-	$(ALL_DONE)
-endif
 
 composer-normalize: ## Normalizes `composer.json` file content
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call MUTATION_WARNING,Rewriting composer.json into normalized formatting)
 	@composer normalize
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-normalize
-	$(ALL_DONE)
-endif
 
 composer-validate: ## Validate `composer.json` file content
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@composer validate --no-check-version
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-validate
-	$(ALL_DONE)
-endif
 
 composer-require-checker: ## Check the defined dependencies against your code
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-require-checker
-	$(ALL_DONE)
-endif
 
 composer-unused: ## Show unused packages by scanning and comparing package namespaces against your source
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@XDEBUG_MODE=off php /app/vendor/bin/composer-unused
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make composer-unused
-	$(ALL_DONE)
-endif
 
 phploc: ## Runs `phploc` and create json output
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
 	$(call REPORT_PATHS,JSON report: build/phploc.json)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make phploc
-	$(ALL_DONE)
-endif
 
 check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@bash scripts/check-security.sh
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-security
-	$(ALL_DONE)
-endif
 
 docker-prune: ## Kill all running containers and prune all docker stuff
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
@@ -902,28 +559,11 @@ generate-ssl-cert: ## Generate self signed SSL certificates inside the PHP conta
 	@cd docker/nginx/ssl && ./create-keys.sh
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(call RUN_WITH_DECORATED_EXIT_OUTPUT,./scripts/check-action-updates.sh,check-action-updates)
-else ifeq ($(strip $(RUNNING_SOME_CONTAINERS)),)
-	$(WARNING_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make check-action-updates
-endif
 
 
 project-stats: ## Create simple project stats
-ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@./scripts/project-stats.sh
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
-else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php make project-stats
-	$(ALL_DONE)
-endif
 
 ci-start: ## Build and start the Compose PHP development service for CI (host only)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)

@@ -168,6 +168,12 @@ explicitly on the runner host. This preserves native diagnostics, annotations,
 stdout, exit policies, and existing job gates without installing a global
 replacement for Make.
 
+Application recipes rely exclusively on that central forwarding layer rather
+than repeating host/container branches. Native commands, preparation, reports,
+and informational exit policies remain in their owning recipes. Docker lifecycle
+and interactive commands retain host-side guards and are not forwarded.
+Container counts and service readiness are separate from this routing contract.
+
 `make test-docker-images` runs offline regression tests of the helper itself,
 using temporary Dockerfiles and mocked registry/Docker commands. It does **not**
 validate the actual repository Dockerfile pins; its startup notice makes this
