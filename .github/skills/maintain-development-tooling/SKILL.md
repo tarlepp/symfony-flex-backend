@@ -96,7 +96,7 @@ Inspect the implementation and its actual callers:
    updates, and success using the owning tool's existing contract.
    `check-action-updates.sh` distinguishes updates from discovery failures,
    while its Make target deliberately decorates handled statuses 1 and 2
-   through `RUN_WITH_DECORATED_EXIT_OUTPUT`. A Make success is therefore not
+   through `scripts/action-update-output.sh`. A Make success is therefore not
    proof that direct checker output reported no issues. Do not copy that
    informational behavior into blocking checks or silently change its callers.
    Verify script and wrapper outcomes separately; Make may translate a failing

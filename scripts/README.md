@@ -133,6 +133,9 @@ not manufacture decorations or bypass tool-specific agent safeguards.
 * `[INFO]` is uncolored context, such as a report path, not a success claim.
 * Labels remain readable without color. Status messages use stderr, leaving
   child stdout and stderr unbuffered and otherwise unchanged.
+* Status colors are owned by `command-output.sh`, not legacy Make printf
+  constants. The action-update target calls `action-update-output.sh` directly;
+  that script owns its intentional informational exit policy.
 * `COLOR=auto` uses the status terminal, excluding `TERM=dumb`. Host Make
   forwarding resolves this before `exec -T` and passes it into the container.
   `COLOR=always` forces ANSI colors; `COLOR=never` disables them. A nonempty
