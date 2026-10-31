@@ -72,7 +72,7 @@ done
         )
         environment.update(overrides)
         result = subprocess.run(
-            ["make", "--no-print-directory", "APPLICATION_CONFIG=fixture.json",
+            ["bash", "scripts/make.sh", "--no-print-directory", "APPLICATION_CONFIG=fixture.json",
              "INSIDE_DOCKER_CONTAINER=1", target, *arguments],
             cwd=self.root, env=environment, text=True, capture_output=True, check=False,
         )
@@ -144,6 +144,24 @@ done
         result, _ = self.run_target("ecs", COLOR="always", NO_COLOR="1")
         self.assertEqual(result.returncode, 0)
         self.assertNotIn("\033", result.stderr)
+
+    def test_multiple_goals_stop_on_failure_and_keep_going_has_no_false_success(self):
+        result, calls = self.run_target("composer-validate", "ecs", FAIL_COMMAND="composer")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("[FAIL] composer-validate", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+        self.assertNotIn("vendor/bin/ecs", calls)
+        result, calls = self.run_target("composer-validate", "ecs", "--keep-going", FAIL_COMMAND="composer")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("[FAIL] composer-validate", result.stderr)
+        self.assertNotIn("[OK] composer-validate", result.stderr)
+        self.assertIn("[OK] ecs", result.stderr)
+        self.assertIn("vendor/bin/ecs", calls)
+        self.assertLess(result.stderr.index("[FAIL] composer-validate"), result.stderr.index("[RUN] ecs"))
+        result, _ = self.run_target("ecs", "composer-validate", FAIL_COMMAND="composer")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("[OK] ecs", result.stderr)
+        self.assertNotIn("[OK]", result.stderr.split("[FAIL] composer-validate", 1)[1])
 
     def test_dry_run_executes_no_fixture_commands(self):
         result, calls = self.run_target("run-tests-php", "-n")

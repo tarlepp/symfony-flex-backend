@@ -64,6 +64,21 @@ mkdir -p build
 make check-licenses > build/licenses.txt
 ```
 
+Verify command output contracts from the repository root on the Docker host
+with development services already running:
+
+```bash
+make test-command-output
+make test-command-output COLOR=always NO_COLOR=1
+```
+
+This offline target covers colors, stream preservation, failures, cancellation,
+expected-negative cases, multi-target invocations, and host/CI forwarding.
+`COLOR=auto|always|never` controls shared status colors; nonempty `NO_COLOR`
+overrides color, including `COLOR=always`. Blocking failures stay nonzero.
+See [the regression guide](../scripts/README.md#output-contract-regressions)
+for individual suites and the informational action-update exception.
+
 Report generators identify their output paths after successful execution.
 `prepare-sonar-reports` creates relative-path copies at
 `build/sonar/clover.xml` and `build/sonar/junit.xml`; it requires existing

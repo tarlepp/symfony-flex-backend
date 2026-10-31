@@ -3,6 +3,7 @@
 
 import os
 from pathlib import Path
+import re
 import select
 import shutil
 import signal
@@ -96,7 +97,10 @@ class MakeLauncherTest(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 2)
                 self.assertIn("[FAIL] fixture", result.stderr)
-                self.assertEqual("make: ***" not in result.stderr, filtered)
+                self.assertEqual(
+                    re.search(r"make(?:\[\d+\])?: \*\*\*", result.stderr) is None,
+                    filtered,
+                )
 
     def test_interactive_startup_loads_user_config_and_filter(self):
         scripts = self.root / "scripts"
