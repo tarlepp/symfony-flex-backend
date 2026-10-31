@@ -121,12 +121,24 @@ exit "${DOCKER_EXIT:-0}"
             "ci-start": "compose -f compose.yaml -f docker/ci-compose.yaml up --build --detach --no-deps php",
             "ci-stop": "compose -f compose.yaml -f docker/ci-compose.yaml down",
         }
+        completions = {
+            "daemon": "Development containers started; readiness was not verified",
+            "daemon-build": "Development containers built and started; readiness was not verified",
+            "daemon-prod": "Local production services passed Compose running/health checks; HTTP was not verified",
+            "start": "Development foreground session ended; readiness was not verified",
+            "start-build": "Development build and foreground session ended; readiness was not verified",
+            "start-prod": "Local production foreground session ended",
+            "stop": "Application containers stopped and removed; named volumes retained",
+            "ci-start": "CI PHP service started; application initialization and readiness were not verified",
+            "ci-stop": "CI containers stopped and removed; named volumes retained",
+        }
         for target, invocation in targets.items():
             with self.subTest(target=target):
                 result, calls = self.make(target)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(invocation + "\n", calls)
                 self.assertEqual(result.stderr.count("[OK]"), 1)
+                self.assertTrue(result.stderr.endswith(f"[OK] {completions[target]}\n"), result.stderr)
                 self.assertLess(result.stderr.index("native Docker diagnostic"), result.stderr.index("[OK]"))
                 self.assertLess(result.stderr.index("[WARN]"), result.stderr.index("native Docker diagnostic"))
                 self.assertIn("native progress", result.stdout)

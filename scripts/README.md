@@ -71,12 +71,27 @@ its contract includes a final session-ended/cancellation status.
 Existing `<label> <command> ...` invocations and sourced `output_run` callers
 remain compatible.
 
+`--status <status> <message>` prints a single shared status to stderr without
+executing a command. It validates its arguments (usage errors exit 64), but
+a valid notification always exits zero, even when displaying `[FAIL]`.
+Callers must explicitly return failure when the underlying operation failed:
+Make's host-context guard prints the message and then exits 1.
+Warnings and report-path macros use this entrypoint rather than repeated
+`bash -c` source/printf snippets.
+
+`COMPOSE_RUN` shares the UID/GID environment and completion-message wrapper for
+finite Docker lifecycle commands. Each target still owns its context guard,
+mutation warning, Compose arguments, and precise completion text; shells/logs
+continue using `STREAM_COMMAND`. Neither helper changes the command's exit
+policy or introduces success before completion.
+
 Read-only examples, from the repository root inside the PHP container (enter
 with `make bash` from the Docker host first):
 
 ```bash
 bash scripts/command-output.sh --run "Read JSON" printf '{"ready":true}\n'
 bash scripts/command-output.sh --stream "Native output" printf 'payload\n'
+bash scripts/command-output.sh --status INFO "Report path: build/phploc.json"
 ```
 
 Shared output is used by `test-docker-images`, `check-skills`,
