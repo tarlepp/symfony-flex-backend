@@ -13,6 +13,7 @@ application.
   * [Table of Contents](#table-of-contents)
     * [Testing](#testing)
       * [Selecting validation](#selecting-validation)
+      * [Command output contracts](#command-output-contracts)
       * [Commands to run tests](#commands-to-run-tests)
       * [Own environment for testing](#own-environment-for-testing)
     * [Metrics](#metrics)
@@ -96,6 +97,28 @@ applicable or could not run. Missing containers, dependencies, credentials,
 or services are blockers, not exemptions: do not claim blocked checks passed.
 Use the development container for PHP tooling and the documented command for
 each other check; do not replace a required runtime check with a YAML parse.
+
+### Command output contracts [ᐞ](#table-of-contents)
+
+<a id="command-output-contracts"></a>
+
+For changes spanning shared Make/script output, run the consolidated offline
+regression target from the repository root on the Docker host, with the PHP
+development service already running:
+
+```bash
+make test-command-output
+```
+
+It covers shared colors and streams, filtered Make errors, blocking and
+informational check policies, quality/setup mutations, lifecycle cancellation,
+information/report output, expected-negative scenarios, and host/CI forwarding.
+The suites use temporary fixtures and mocked Docker/registry/upload operations.
+They do not replace PHPUnit or verify live service health or real uploads.
+Use focused suites while iterating; run the consolidated target when changing
+the shared output contract. See
+[output contract regressions](../scripts/README.md#output-contract-regressions)
+for color controls, multiple-goal behavior, troubleshooting, and coverage limits.
 
 ### Commands to run tests [ᐞ](#table-of-contents)
 

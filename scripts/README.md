@@ -14,6 +14,7 @@ This directory contains different scripts that are used during development.
   * [Table of Contents](#table-of-contents)
     * [Resources](#resources)
       * [Command status output](#command-status-output)
+      * [Output contract regressions](#output-contract-regressions)
       * [Project stats script](#project-stats-script)
       * [Skill documentation checker](#skill-documentation-checker)
       * [GitHub Actions update checker](#github-actions-update-checker)
@@ -81,6 +82,7 @@ color controls apply to the new status messages.
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
 * `[WARN]` and `[SKIP]` are yellow; `[FAIL]` is red.
+* `[INFO]` is uncolored context, such as a report path, not a success claim.
 * Labels remain readable without color. Status messages use stderr, leaving
   child stdout and stderr unbuffered and otherwise unchanged.
 * `COLOR=auto` uses the status terminal, excluding `TERM=dumb`. Host Make
@@ -366,6 +368,70 @@ Update and security checks distinguish findings from execution failures:
   or installed-package audit failures. If the optional local checker is absent,
   a yellow `[SKIP]` replaces its previous silent omission; exit success is
   preserved, but it does not claim that all security checks ran.
+
+### Output contract regressions [ᐞ](#table-of-contents)
+
+<a id="output-contract-regressions"></a>
+
+Run the consolidated offline suite from the repository root on the Docker
+host, with the PHP development service already running:
+
+```bash
+make test-command-output
+make test-command-output COLOR=always
+make test-command-output COLOR=never
+make test-command-output COLOR=always NO_COLOR=1
+```
+
+Host invocations forward into the PHP development container, including when
+`GITHUB_WORKFLOW` selects the CI Compose override. Inside that container,
+the same `make test-command-output` command runs directly. Container availability
+is required; this target never falls back to host Python or other project tools.
+
+The runner executes nine suites: shared statuses and expected-negative Docker
+scenarios, Make filtering/shell integration, blocking checks, quality/mutation
+recipes, lifecycle commands, information/reports, check outcome policies,
+workflow output, and host/CI forwarding. It stops on the first failed suite
+and prints the aggregate `[OK]` only after all suites succeed.
+The Docker scenario suite is exercised by the shared-status tests.
+All Docker, registry, configuration, dependency, key, and upload mutations use
+isolated fixtures or mocks. This does not prove live service health, registry
+availability, successful uploads, or real application-test report generation.
+
+Coverage includes forced/plain/auto color, `NO_COLOR`, stdout/stderr preservation,
+missing executables, blocking failures, explicit skips, interruptions,
+expected-negative assertions, CI environment forwarding, dry runs, and multiple
+Make goals. Missing tools and blocking checks remain nonzero. An expected-negative
+scenario reports `[OK]` only after verifying the intended failure and diagnostics.
+Successful earlier stages may remain visible before a later failure; no failed
+stage or aggregate reports success.
+
+Without `--keep-going`, Make stops before later goals after a blocking failure.
+With `--keep-going`, an independent later target may succeed and print its own
+`[OK]`; the invocation still exits nonzero. The informational action-update
+wrapper is the established exception: direct checker exits 1/2 produce
+`[WARN]`/`[FAIL]` while its Make target deliberately returns success.
+
+Color controls apply to shared statuses, not every native tool's formatting.
+`COLOR=auto` enables color only on a suitable stderr terminal; host forwarding
+resolves this before `exec -T`. `COLOR=always` forces color, `COLOR=never`
+disables it, and any nonempty `NO_COLOR` takes precedence. `TERM=dumb`
+disables automatic color. Labels remain meaningful without ANSI escapes.
+
+If a suite fails, retain its native diagnostics and run that focused script
+inside the PHP development container. For example, from the repository root
+on the Docker host with the development service running:
+
+```bash
+docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+```
+
+For filtered GNU Make recipe error lines, use the existing launcher from the
+same host directory:
+
+```bash
+bash scripts/make.sh test-command-output
+```
 
 ### Project stats script [ᐞ](#table-of-contents)
 

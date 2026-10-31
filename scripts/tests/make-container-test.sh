@@ -28,7 +28,7 @@ host_make() {
 
 for target in cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
     lint-markdown composer-validate install application-info check-requirements \
-    tool-versions report-coveralls generate-ssl-cert; do
+    tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output; do
     : > "$DOCKER_CALLS"
     host_make "$target"
     grep -Eq "compose exec -T --env COLOR --env NO_COLOR +php make $target$" "$DOCKER_CALLS"
@@ -63,5 +63,43 @@ if DOCKER_EXIT_CODE=7 host_make check-skills > "$temporary/failed-command" 2>&1;
     exit 1
 fi
 grep -q 'Error 7' "$temporary/failed-command"
+
+: > "$DOCKER_CALLS"
+host_make check-skills lint-markdown COLOR=never
+grep -Eq 'php make check-skills$' "$DOCKER_CALLS"
+grep -Eq 'php make lint-markdown$' "$DOCKER_CALLS"
+[ "$(grep -c 'compose exec -T' "$DOCKER_CALLS")" -eq 2 ]
+grep -q 'COLOR=never NO_COLOR=' "$DOCKER_CALLS"
+
+: > "$DOCKER_CALLS"
+host_make bash check-skills COLOR=always
+grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
+grep -Eq 'php make check-skills$' "$DOCKER_CALLS"
+
+: > "$DOCKER_CALLS"
+GITHUB_WORKFLOW=CI CI=true XDEBUG_MODE=coverage host_make check-skills lint-markdown COLOR=always NO_COLOR=1
+[ "$(grep -c 'compose -f compose.yaml -f docker/ci-compose.yaml exec -T' "$DOCKER_CALLS")" -eq 2 ]
+grep -q -- '--env CI' "$DOCKER_CALLS"
+grep -q -- '--env XDEBUG_MODE' "$DOCKER_CALLS"
+grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
+if grep -q -- '--env CI=true\|--env XDEBUG_MODE=coverage' "$DOCKER_CALLS"; then
+    echo "CI environment values must not be interpolated into Docker arguments." >&2
+    exit 1
+fi
+
+: > "$DOCKER_CALLS"
+if DOCKER_EXIT_CODE=7 host_make check-skills lint-markdown > "$temporary/failed-multiple" 2>&1; then
+    echo "Multiple goals must retain a blocking container failure." >&2
+    exit 1
+fi
+grep -Eq 'php make check-skills$' "$DOCKER_CALLS"
+if grep -Eq 'php make lint-markdown$' "$DOCKER_CALLS"; then
+    echo "Make unexpectedly continued after a blocking forwarded failure." >&2
+    exit 1
+fi
+if grep -q '\[OK\]' "$temporary/failed-multiple"; then
+    echo "Failed forwarded targets must not report success." >&2
+    exit 1
+fi
 
 echo "Make container routing tests passed."
