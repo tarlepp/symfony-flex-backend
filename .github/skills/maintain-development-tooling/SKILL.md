@@ -113,6 +113,10 @@ Inspect the implementation and its actual callers:
    recipes, and information output; use `--stream` for directly attached shells
    and logs without completion banners. Do not duplicate these execution modes
    in inline shell wrappers or buffer native output.
+   Derive native tool flags from the shared color policy, with nonempty
+   `NO_COLOR` taking precedence. Keep GitHub analyzer formats plain. Use the
+   existing SGR-only native-output filter only when native disable controls
+   are unavailable or unreliable; never filter generated report files.
 7. Keep checks read-only unless mutation is explicitly part of the approved
    command. Use isolated temporary fixtures and cleanup limited to their
    resolved paths. Mock Docker, registry, Git, and other external commands
