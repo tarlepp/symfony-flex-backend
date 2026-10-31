@@ -13,6 +13,9 @@ updates, use [update-dependencies](../update-dependencies/SKILL.md); for action
 pins, use [update-github-actions](../update-github-actions/SKILL.md).
 For changes to the supported PHP runtime baseline, use
 [update-php-runtime](../update-php-runtime/SKILL.md).
+For build behavior, Compose services, entrypoints, runtime configuration, or
+Dev Container setup, also use
+[update-docker-environment](../update-docker-environment/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
