@@ -74,6 +74,24 @@ Host-only Make targets are `bash`, `fish`, `logs`, `start`, `start-build`,
 `ci-stop`, and all `docker-*` targets. Do not run these from an IDE Dev
 Container terminal either; use a separate host terminal.
 
+Lifecycle commands report completion only after Compose succeeds. Development
+`daemon` and `daemon-build` mean containers were started, not that the
+application is ready. `daemon-prod` waits for Compose running/health checks but
+does not verify HTTP. Foreground `start*` completion means the attached session
+ended; interruption is reported as cancellation. Startup warnings describe
+entrypoint dependency installation, key generation, and migrations.
+
+Shells and streaming logs remain attached directly, with a `[RUN]` message and
+no premature or final success banner. Invalid host/container contexts and
+rejected startup attempts return failure. `stop` and `ci-stop` remove containers
+and networks while retaining named volumes.
+
+Docker maintenance helpers affect all host resources, not just this project.
+Warnings precede destructive operations; the existing prune confirmation is
+unchanged. Empty kill/remove selections and declined confirmations report
+`[SKIP]`. Build/QEMU helpers preserve their existing inputs and confirmations,
+with success reported only after Docker completes.
+
 CI uses the same development image via `make ci-start`, project Make commands,
 and `make ci-stop`. The CI override bypasses application startup and keeps a
 command container running. It shares `/app` with the checkout so reports remain

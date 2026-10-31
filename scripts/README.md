@@ -257,6 +257,47 @@ key/certificate generation, and failure handling. They do not update your
 dependencies or replace your keys. Cleanup checks delete only temporary fixture
 directories, not repository dependencies.
 
+Docker lifecycle commands use blue `[RUN]` messages and report completion only
+after Compose exits successfully. Development `daemon*` startup does not wait
+for readiness. `daemon-prod` retains `--wait` and reports only Compose's
+running/health checks, not HTTP verification. `ci-start` still starts only PHP
+with initialization disabled; it does not prove application readiness.
+Foreground `start*` completion means the attached session ended, not that the
+application is healthy. Exit 130/143 is a yellow cancellation with a nonzero
+status, not green success or a red execution failure.
+
+`bash`, `fish`, and `logs` print `[RUN]` before directly executing Compose,
+without wrapping or redirecting their interactive session or streaming output,
+and without a final success banner. Host-only targets fail explicitly when
+called inside a container. Existing running-container guards remain in place,
+but rejected starts and unavailable shell/log contexts now fail instead of
+returning success.
+
+Docker builds and QEMU registration warn before mutation and report completion
+only after Docker succeeds. Existing confirmations remain mandatory for QEMU
+and registry pushes; declining prints yellow `[SKIP]` and retains exit 0.
+Build success does not prove runtime behavior.
+
+Host-wide cleanup helpers warn that they affect unrelated projects too. Prune
+retains its existing `y` confirmation; declining or reaching end-of-input skips
+without changes. Empty resource lists skip kill/remove operations rather than
+invoking Docker without IDs. Listing and mutation errors remain visible and
+stop further operations; prune never follows a failed container kill.
+No maintenance command is restricted to this Compose project.
+
+Run offline lifecycle regression tests from the repository root on the Docker
+host, with the PHP development service already running:
+
+```bash
+docker compose exec -T php python3 scripts/tests/make-lifecycle-output-test.py
+make test-make-routing
+make test-docker-images
+```
+
+The lifecycle fixtures mock Docker, including confirmations and failures.
+They do not build images, start/stop services, register emulators, publish
+registry tags, or prune real Docker resources.
+
 Update and security checks distinguish findings from execution failures:
 
 * `check-action-updates` shows yellow updates and red discovery/lookup failures.
