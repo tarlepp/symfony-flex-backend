@@ -77,6 +77,8 @@ Inspect the implementation and its actual callers:
    `HOST_TARGETS` excludes host-only commands from forwarding; other explicit
    goals forward through `COMPOSE_EXEC` with `exec -T` to
    `php bash scripts/make.sh`, filtering container-side Make recipe errors.
+   Application recipes must not add a second host-forwarding path; keep native
+   commands in the recipe and routing in the central dispatch.
    Preserve mixed goals, default/help behavior, recursive Make, and dry runs
    without creating routing loops or running a host tool inside the container.
 4. Preserve container detection and CI selection as separate concerns.

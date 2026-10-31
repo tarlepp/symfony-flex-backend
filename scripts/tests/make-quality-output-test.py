@@ -169,6 +169,18 @@ done
         self.assertEqual(calls, "")
         self.assertNotIn("[OK]", result.stderr)
 
+    def test_application_recipes_do_not_own_container_forwarding(self):
+        makefile = (ROOT / "Makefile").read_text()
+        self.assertNotIn("docker compose exec php make", makefile)
+        self.assertNotIn("$(WARNING_DOCKER)", makefile)
+        self.assertNotIn("$(NOTICE_HOST)", makefile)
+        self.assertNotIn("$(ALL_DONE)", makefile)
+        for target in TARGETS + ("configuration", "check-action-updates", "check-security",
+                                 "project-stats", "generate-jwt-keys"):
+            body = makefile.split(f"\n{target}: ## ", 1)[1].split("\n\n", 1)[0]
+            self.assertNotIn("INSIDE_DOCKER_CONTAINER", body, target)
+            self.assertNotIn("RUNNING_ALL_CONTAINERS", body, target)
+
     def test_markdown_diagnostic_prefix_preserves_streams_and_status(self):
         diagnostic = "CLAUDE.md:254:81 error MD013/line-length Line length [Expected: 80; Actual: 154]"
         for color, no_color, prefix in (
