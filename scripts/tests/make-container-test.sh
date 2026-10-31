@@ -13,6 +13,11 @@ printf 'COLOR=%s NO_COLOR=%s\n' "${COLOR:-}" "${NO_COLOR:-}" >> "$DOCKER_CALLS"
 if [ "${1:-}" = ps ]; then
     printf 'symfony-backend\n%.0s' {1..5}
 fi
+if [[ "$*" == *" ps --all --format "* ]]; then
+    printf 'php|running|\nnginx|running|\nmariadb|running|\n'
+    exit 0
+fi
+if [ "${1:-}" = info ] || [[ "$*" == *" version" ]]; then exit 0; fi
 exit "${DOCKER_EXIT_CODE:-0}"
 MOCK
 chmod +x "$temporary/docker"

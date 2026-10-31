@@ -144,6 +144,14 @@ no premature or final success banner. Invalid host/container contexts and
 rejected startup attempts return failure. `stop` and `ci-stop` remove containers
 and networks while retaining named volumes.
 
+Shells and forwarded commands check only the PHP service, without requiring
+optional development services. A running but unhealthy/starting PHP service
+produces a warning and remains accessible for troubleshooting; a stopped or
+absent service blocks execution. Logs can be followed for existing stopped
+PHP/nginx/MariaDB containers. Startup checks only this Compose project's running
+services, not globally matching container names. Help and dry runs do not query
+Docker service state.
+
 Docker maintenance helpers affect all host resources, not just this project.
 Warnings precede destructive operations; the existing prune confirmation is
 unchanged. Empty kill/remove selections and declined confirmations report

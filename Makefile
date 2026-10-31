@@ -37,9 +37,6 @@ OPENSSL_BIN := $(shell command -v openssl)
 PHPDBG := $(shell command -v phpdbg)
 COMPOSER_BIN := $(shell command -v composer)
 endif
-DOCKER := $(shell which docker)
-CONTAINER_PREFIX := 'symfony-backend' # Check your `compose.yaml` file `container_name` property for this one
-CONTAINER_COUNT := 5 # Check your `compose.yaml` file service count for this one
 COMPOSE_PROD := docker compose -f compose.yaml -f compose.prod.yaml
 COMPOSE_CI := docker compose -f compose.yaml -f docker/ci-compose.yaml
 ifdef GITHUB_WORKFLOW
@@ -64,6 +61,7 @@ endif
 ifneq ($(strip $(FORWARD_TARGETS)),)
 .PHONY: $(MAKECMDGOALS)
 $(FORWARD_TARGETS):
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh php $(COMPOSE_EXEC)
 	@if [ "$$COLOR" = auto ]; then \
 		if [ -t 2 ] && [ "$${TERM:-}" != dumb ]; then COLOR=always; else COLOR=never; fi; \
 		export COLOR; \
@@ -125,23 +123,7 @@ $(filter-out $(QUALITY_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
 else
 
-ifdef DOCKER
-	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
-	TEMP := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX) | grep $(CONTAINER_COUNT))
-else
-	RUNNING_SOME_CONTAINERS := 0;
-	TEMP := 0
-endif
-
-ifeq ($(INSIDE_DOCKER_CONTAINER)$(TEMP), $(addprefix 0, $(CONTAINER_COUNT)))
-	RUNNING_ALL_CONTAINERS = 1
-else
-	RUNNING_ALL_CONTAINERS = 0;
-endif
-
 HOST_CONTEXT_FAILURE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Run this target on the Docker host, not inside a container"; exit 1'
-CONTAINERS_UNAVAILABLE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Required application containers are unavailable; inspect docker compose ps and logs"; exit 1'
-CONTAINERS_ALREADY_RUNNING = @bash -c 'source scripts/command-output.sh; output_status FAIL "Application containers are already running; stop them before starting again"; exit 1'
 
 _WARNING := "\033[33m[%s]\033[0m %s\n" # Yellow text for "printf"
 _TITLE := "\033[32m[%s]\033[0m %s\n" # Green text for "printf"
@@ -163,6 +145,10 @@ endef
 
 define REPORT_PATHS
 	@bash -c 'source scripts/command-output.sh; output_status INFO "$$1"' reports "$(1)"
+endef
+
+define COMPOSE_CONTEXT
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh $(1) $(2)
 endef
 
 info_msg := Message
@@ -352,38 +338,32 @@ install-tools: ## Install composer tools dependencies
 bash: ## Get bash inside PHP container
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(CONTAINERS_UNAVAILABLE)
 else
-	$(call STREAM_COMMAND,Opening Bash in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php bash --rcfile /app/scripts/bashrc.sh -i)
+	$(call COMPOSE_CONTEXT,php,$(COMPOSE_EXEC))
+	$(call STREAM_COMMAND,Opening Bash in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec php bash --rcfile /app/scripts/bashrc.sh -i)
 endif
 
 fish: ## Get fish inside PHP container
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(CONTAINERS_UNAVAILABLE)
 else
-	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php fish --init-command 'source /app/scripts/make-shell.fish')
+	$(call COMPOSE_CONTEXT,php,$(COMPOSE_EXEC))
+	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec php fish --init-command 'source /app/scripts/make-shell.fish')
 endif
 
 logs: ## Show logs from all containers
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_UNAVAILABLE)
-else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(CONTAINERS_UNAVAILABLE)
 else
+	$(call COMPOSE_CONTEXT,logs,docker compose)
 	$(call STREAM_COMMAND,Following PHP nginx and MariaDB logs; Ctrl-C stops following,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose logs --follow php nginx mariadb)
 endif
 
 daemon: ## Start application in development mode in background
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_ALREADY_RUNNING)
 else
+	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Starting development services; entrypoints may install dependencies generate keys and run migrations)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development containers started; readiness was not verified" bash scripts/command-output.sh "Start development services in background" docker compose up --detach
 endif
@@ -391,9 +371,8 @@ endif
 daemon-build: ## Build containers and start application in development mode in background
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_ALREADY_RUNNING)
 else
+	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Building and starting development services; entrypoints may install dependencies generate keys and run migrations)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development containers built and started; readiness was not verified" bash scripts/command-output.sh "Build and start development services in background" docker compose up --build --detach
 endif
@@ -401,9 +380,8 @@ endif
 daemon-prod: ## Build and start application in local production mode in background
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_ALREADY_RUNNING)
 else
+	$(call COMPOSE_CONTEXT,idle,$(COMPOSE_PROD))
 	$(call MUTATION_WARNING,Building and starting local production; initialization may generate keys and run migrations; waiting for Compose health checks)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Local production services passed Compose running/health checks; HTTP was not verified" bash scripts/command-output.sh "Build and start local production; wait for Compose health checks" $(COMPOSE_PROD) up --build --detach --wait
 endif
@@ -411,9 +389,8 @@ endif
 start-prod: ## Build and start application in local production mode + watch output
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_ALREADY_RUNNING)
 else
+	$(call COMPOSE_CONTEXT,idle,$(COMPOSE_PROD))
 	$(call MUTATION_WARNING,Building and attaching to local production; initialization may generate keys and run migrations; Ctrl-C requests shutdown)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Local production foreground session ended" bash scripts/command-output.sh "Build and attach to local production services" $(COMPOSE_PROD) up --build
 endif
@@ -429,9 +406,8 @@ endif
 start: ## Start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_ALREADY_RUNNING)
 else
+	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Starting and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development foreground session ended; readiness was not verified" bash scripts/command-output.sh "Start and attach to development services" docker compose up
 endif
@@ -439,9 +415,8 @@ endif
 start-build: ## Build containers and start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
-else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(CONTAINERS_ALREADY_RUNNING)
 else
+	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Building and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development build and foreground session ended; readiness was not verified" bash scripts/command-output.sh "Build and attach to development services" docker compose up --build
 endif
