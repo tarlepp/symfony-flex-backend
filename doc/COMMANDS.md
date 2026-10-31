@@ -48,6 +48,30 @@ Run project commands inside the PHP development container, or use Make targets
 from the host to forward them automatically. Docker lifecycle and
 image-management commands run on the host.
 
+List commands grouped by purpose from the repository root on the Docker host:
+
+```bash
+make help
+```
+
+Help marks destructive and overwrite targets. Information commands keep native
+stdout, with status messages on stderr. For example, from the repository root
+on the Docker host with development services running, redirect the license
+summary without including status banners:
+
+```bash
+mkdir -p build
+make check-licenses > build/licenses.txt
+```
+
+Report generators identify their output paths after successful execution.
+`prepare-sonar-reports` creates relative-path copies at
+`build/sonar/clover.xml` and `build/sonar/junit.xml`; it requires existing
+nonempty test reports and does not upload anything. `report-coveralls` runs
+the uploader separately: its verbose output distinguishes JSON payload
+creation from the HTTP submission result. Local Psalm JSON generation likewise
+does not imply Shepherd upload success.
+
 For direct commands, open a Bash shell inside the PHP container from the host:
 
 ```bash

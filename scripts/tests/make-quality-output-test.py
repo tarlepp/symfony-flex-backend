@@ -116,6 +116,8 @@ done
             self.assertIn("--coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml", calls)
             self.assertTrue((self.root / "build/logs/clover.xml").is_file())
             self.assertTrue((self.root / "build/logs/junit.xml").is_file())
+            self.assertIn("[INFO] Test reports: build/logs/clover.xml and build/logs/junit.xml", result.stderr)
+            self.assertNotIn("[INFO]", result.stdout)
         _, calls = self.run_target("run-tests", "PHPDBG=")
         self.assertNotIn("phpdbg -qrr", calls)
         _, calls = self.run_target("run-tests")
@@ -126,6 +128,13 @@ done
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn(flag, calls)
         self.assertTrue((self.root / "build/psalm.json").is_file())
+        for target in ("psalm", "psalm-shepherd", "psalm-github"):
+            result, _ = self.run_target(target)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("JSON report: build/psalm.json", result.stderr)
+            self.assertNotIn("[INFO]", result.stdout)
+            if target != "psalm":
+                self.assertIn("Shepherd submission status is reported by Psalm", result.stderr)
 
     def test_mixed_goals_and_color_preferences(self):
         result, _ = self.run_target("ecs", "check-skills", COLOR="always")

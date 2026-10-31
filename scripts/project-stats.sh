@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 printf "%-15s %10s %14s\n" "Extension" "File count" "Line count"
 
