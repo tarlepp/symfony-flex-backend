@@ -229,6 +229,11 @@ update-tools                # Update composer tools dependencies
 and `docker-image-verify-pins` show blue `[RUN]` status messages followed by
 green `[OK]` on success or red `[FAIL]` with the command's exit code on failure.
 Native diagnostics remain visible and failures still fail Make.
+The same conventions apply to application tests, mutation tests, lint and
+static-analysis targets, and Composer validation/checkers. Their summaries
+cover the entire recipe, including preparation, and retain native progress,
+GitHub annotations, and report paths. `run-tests` still selects PHP/phpdbg
+automatically and prints only one final status.
 See [command status output](../scripts/README.md#command-status-output) for
 color controls, regression checks, and offline versus live-check behavior.
 
