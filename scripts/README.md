@@ -257,8 +257,11 @@ The old `QUALITY_TARGETS` name is replaced because wrapped recipes also cover
 setup, information, and reports. `COMMAND_LABEL` and `COMMAND_OUTPUT_RUN`
 replace the quality-specific internal names; callers should not override them.
 
-Help reads the same records for categories and markers, retaining alphabetical
-entries and the existing group order. Missing/invalid help metadata or
+Help reads the same records for categories and markers. Everyday information,
+tests, quality checks, dependencies, and reports precede setup and host Docker
+groups. Each group lists routine commands first, then overwrite commands, then
+destructive commands, with target names sorted alphabetically at each risk
+level. Missing/invalid help metadata or
 descriptions fail explicitly; Make rejects duplicate registrations and invalid
 execution modes. Register every new public target and add its recipe description
 instead of updating parallel routing lists or help regular expressions.
@@ -409,6 +412,21 @@ source-fixing, report-copying, and image-tag replacement commands. The list is
 read from Makefile descriptions and shared target metadata, not a separate
 help-only inventory.
 Help respects `COLOR` and `NO_COLOR` and remains usable without Docker.
+Use `GROUP` to show only one purpose; omitted or `GROUP=all` shows the full
+inventory. Unknown groups fail with the supported choices instead of an empty
+successful listing. Filtering changes only help output, not command routing.
+
+From the repository root on the Docker host (no running services required):
+
+```bash
+bash scripts/make.sh help
+bash scripts/make.sh help GROUP=quality
+bash scripts/make.sh help GROUP=docker COLOR=never
+```
+
+Available groups, in display order, are `information`, `tests`, `quality`,
+`checks`, `reports`, `setup`, `lifecycle`, and `docker`. Direct script callers
+can use `bash scripts/make-help.sh quality` from the same working directory.
 
 Information commands keep their native stdout: configuration JSON, statistics
 tables, license counts, application/version information, and digest/platform

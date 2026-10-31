@@ -152,6 +152,57 @@ exit 0
         self.assertEqual(json.loads(result.stdout), {"fixture": True})
         self.assertNotIn("compose-context", result.stderr)
 
+    def test_help_orders_groups_and_risk_levels_for_routine_use(self):
+        result = self.make("help")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        titles = (
+            "Configuration and information", "Application tests and tooling regressions",
+            "Linting and static analysis", "Dependency, security and license checks",
+            "Reports and uploads", "Setup, dependencies and application maintenance",
+            "Docker lifecycle and interactive sessions (host)",
+            "Docker images and host maintenance (host)",
+        )
+        positions = [result.stdout.index(title + "\n") for title in titles]
+        self.assertEqual(positions, sorted(positions))
+        for index, title in enumerate(titles):
+            section = result.stdout.split(title + "\n", 1)[1]
+            if index + 1 < len(titles):
+                section = section.split(titles[index + 1] + "\n", 1)[0]
+            entries = re.findall(r"^  ([a-zA-Z0-9-]+) +(.*)$", section, re.M)
+            keys = [(2 if description.startswith("[DESTRUCTIVE]") else
+                     1 if description.startswith("[OVERWRITE]") else 0, name)
+                    for name, description in entries]
+            self.assertEqual(keys, sorted(keys), title)
+        self.assertIn("make help GROUP=<group>", result.stdout)
+
+    def test_help_filters_each_group_and_rejects_invalid_selection(self):
+        registrations = re.findall(
+            r"^\$\(call REGISTER_TARGET,([^,]+),([^,]+),",
+            (ROOT / "Makefile").read_text(), re.M,
+        )
+        for group in ("information", "tests", "quality", "checks", "reports",
+                      "setup", "lifecycle", "docker"):
+            with self.subTest(group=group):
+                result = self.make("help", f"GROUP={group}", "INSIDE_DOCKER_CONTAINER=0")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                actual = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
+                self.assertCountEqual(actual, [name for name, category in registrations
+                                              if category == group])
+                self.assertEqual(self.calls.read_text(), "")
+        default = self.make("help")
+        explicit = self.make("help", "GROUP=all")
+        self.assertEqual(default.stdout, explicit.stdout)
+        result = self.make("help", "GROUP=invalid")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("[FAIL] Unknown help group: invalid", result.stderr)
+        self.assertIn("GROUP=all|information", result.stderr)
+        self.assertNotIn("Available commands", result.stdout)
+        self.assertNotIn("[OK]", result.stderr)
+        result = self.make("help", "GROUP=quality", "-n")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("Available commands", result.stdout)
+        self.assertEqual(self.calls.read_text(), "")
+
     def test_incomplete_or_invalid_metadata_fails_explicitly(self):
         makefile = self.root / "Makefile"
         original = makefile.read_text()

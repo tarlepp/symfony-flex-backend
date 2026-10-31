@@ -212,7 +212,7 @@ info:
 	$(info_msg)
 
 help:
-	@bash scripts/make-help.sh
+	@bash scripts/make-help.sh "$(GROUP)"
 
 configuration: ## Prints out application current configuration
 	@echo | jq -r . ${APPLICATION_CONFIG}
