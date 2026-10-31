@@ -13,6 +13,7 @@ This directory contains different scripts that are used during development.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Resources](#resources)
+      * [Command status output](#command-status-output)
       * [Project stats script](#project-stats-script)
       * [Skill documentation checker](#skill-documentation-checker)
       * [GitHub Actions update checker](#github-actions-update-checker)
@@ -41,6 +42,64 @@ This directory contains different scripts that are used during development.
 * [Docker multi-platform image helper](docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
+
+### Command status output [ᐞ](#table-of-contents)
+
+<a id="command-status-output"></a>
+
+`scripts/command-output.sh` provides reusable status messages and a streaming
+command wrapper. The first migrated Make target is `test-docker-images`;
+other targets retain their existing output until migrated separately.
+
+* `[RUN]` is blue and means execution started, not success.
+* `[OK]` is green and appears only after successful execution/assertions.
+* `[WARN]` and `[SKIP]` are yellow; `[FAIL]` is red.
+* Labels remain readable without color. Status messages use stderr, leaving
+  child stdout and stderr unbuffered and otherwise unchanged.
+* `COLOR=auto` uses the status terminal, excluding `TERM=dumb`. Host Make
+  forwarding resolves this before `exec -T` and passes it into the container.
+  `COLOR=always` forces ANSI colors; `COLOR=never` disables them. A nonempty
+  `NO_COLOR` overrides color settings. Existing unmigrated tools may have
+  their own color rules.
+* The wrapper preserves command exit status, including failures and
+  interruptions; Make itself may translate a failed recipe into exit 2.
+  Existing informational update-check policies are unchanged.
+
+With development services running, from the repository root on the Docker host:
+
+```bash
+make test-docker-images
+make test-docker-images COLOR=always
+make test-docker-images NO_COLOR=1
+```
+
+`make test-docker-images` runs offline regression tests of the helper itself,
+using temporary Dockerfiles and mocked registry/Docker commands. It does **not**
+validate the actual repository Dockerfile pins; its startup notice makes this
+distinction explicit. To validate the real pins against the registry, run from
+the repository root on the Docker host:
+
+```bash
+make docker-image-verify-pins
+```
+
+Blue `[RUN]`
+headings group manifest validation, version discovery/output formatting,
+registry responses/pagination, Dockerfile discovery, lookup failures/retries,
+update-pin validation, and aggregate results/empty discovery. Individual
+`[OK]` results remain visible beneath each heading. Expected negative
+cases are passing tests when their rejection assertions succeed. Case success
+is printed after its follow-up assertions, and failures include the scenario,
+failed assertion where available, captured helper output, and a final summary.
+Fixture-specific color controls do not change the test runner's palette.
+
+Run the output-contract and forwarding regression checks from the same host
+directory with development services running:
+
+```bash
+docker compose exec -T php python3 scripts/tests/command-output-test.py
+make test-make-routing
+```
 
 ### Project stats script [ᐞ](#table-of-contents)
 
