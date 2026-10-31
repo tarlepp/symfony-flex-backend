@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 openssl genrsa -passout pass: -des3 -out rootCA.key 2048
 openssl req -x509 -new -nodes -passin pass: -key rootCA.key -sha256 -days 10000 -out rootCA.pem
