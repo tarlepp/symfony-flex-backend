@@ -23,7 +23,7 @@ class InformationOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         for name in ("command-output.sh", "make.sh", "make-help.sh", "prepare-sonar-reports.sh",
-                     "project-stats.sh", "docker-images.sh", "native-output.sh"):
+                     "project-stats.sh", "docker-images.sh", "native-output.sh", "report-output.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
             (self.root / "scripts" / name).chmod(0o755)
         fixture = """#!/usr/bin/env bash
@@ -53,7 +53,7 @@ if [[ "$*" == *php-coveralls* ]]; then
     fi
     echo 'Finish submitting. status: 200 OK'
 fi
-if [[ "$*" == *--log-json=* ]]; then printf '{}\\n' > build/phploc.json; fi
+if [[ "$*" == *--log-json=* ]] && [ "${OMIT_REPORTS:-0}" != 1 ]; then printf '{}\\n' > build/phploc.json; fi
 """
         for name in ("bin/php", "bin/console", "bin/composer", "bin/jq"):
             file = self.root / name
@@ -323,7 +323,7 @@ esac
         result = self.make("report-coveralls")
         self.assertEqual(result.returncode, 0)
         self.assertIn("Finish submitting. status: 200 OK", result.stdout)
-        self.assertIn("[OK] Submit coverage to Coveralls", result.stderr)
+        self.assertIn("[OK] Coveralls client completed; consult native HTTP status for upload confirmation", result.stderr)
         result = self.make("report-coveralls", UPLOAD_FAIL="1")
         self.assertNotEqual(result.returncode, 0)
         self.assertTrue((self.root / "build/logs/coveralls-upload.json").is_file())
@@ -341,6 +341,17 @@ esac
         self.assertNotEqual(result.returncode, 0)
         self.assertNotIn("[INFO] JSON report:", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
+        report = self.root / "build/phploc.json"
+        for empty in (False, True):
+            if report.exists():
+                report.unlink()
+            if empty:
+                report.touch()
+            result = self.make("phploc", OMIT_REPORTS="1")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Required generated report is missing or empty: build/phploc.json", result.stderr)
+            self.assertNotIn("[INFO] JSON report:", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
 
     def test_report_preparation_dry_run_changes_nothing(self):
         result = self.make("--dry-run", "prepare-sonar-reports")

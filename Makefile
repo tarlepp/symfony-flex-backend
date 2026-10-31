@@ -142,6 +142,9 @@ $(call REGISTER_TARGET,phploc,reports,wrapped,,Generate PHPLOC report)
 $(call REGISTER_TARGET,report-coveralls,reports,wrapped,,Submit coverage to Coveralls)
 $(call REGISTER_TARGET,prepare-sonar-reports,reports,wrapped,OVERWRITE,Prepare local Sonar reports; no upload is performed)
 
+psalm-shepherd psalm-github: export OUTPUT_SUCCESS_MESSAGE := Psalm analysis completed; local report: build/psalm.json; Shepherd upload success is not verified
+report-coveralls: export OUTPUT_SUCCESS_MESSAGE := Coveralls client completed; consult native HTTP status for upload confirmation
+
 .PHONY: $(COMMAND_TARGETS)
 
 ifeq ($(INSIDE_DOCKER_CONTAINER),0)
@@ -197,7 +200,7 @@ define STREAM_COMMAND
 endef
 
 define REPORT_PATHS
-	@bash scripts/command-output.sh --status INFO "$(1)"
+	@bash scripts/report-output.sh "$(1)" $(2)
 endef
 
 define COMPOSE_CONTEXT
@@ -257,7 +260,7 @@ run-tests-php: ## Runs all tests via phpunit (pure PHP)
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test $(ANSI_FLAG)
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml --colors=$(NATIVE_COLOR)
-	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
+	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml,build/logs/clover.xml build/logs/junit.xml)
 
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
 	@php ./vendor/bin/phpunit --version
@@ -266,13 +269,13 @@ run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test $(ANSI_FLAG)
 	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml --colors=$(NATIVE_COLOR)
-	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
+	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml,build/logs/clover.xml build/logs/junit.xml)
 
 infection: ## Runs Infection to codebase
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test $(ANSI_FLAG)
 	@./vendor/bin/infection $(ANSI_FLAG) --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit --colors=$(NATIVE_COLOR)"
-	$(call REPORT_PATHS,Mutation reports: build/infection (see native output for generated files))
+	@bash scripts/command-output.sh --status INFO "Mutation report directory: build/infection; see native output for generated files"
 
 phpmetrics: ## Generates PhpMetrics static analysis
 	@mkdir -p build/phpmetrics
@@ -284,7 +287,7 @@ phpmetrics: ## Generates PhpMetrics static analysis
 	@test -f build/logs/junit.xml || { printf 'ERROR: Required report build/logs/junit.xml was not generated.\n' >&2; exit 1; }
 	@php ./vendor/bin/phpmetrics --version
 	@bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
-	$(call REPORT_PATHS,HTML report: build/phpmetrics)
+	$(call REPORT_PATHS,HTML report: build/phpmetrics,build/phpmetrics/index.html)
 
 phpcs: ## Runs PHP CodeSniffer
 	@php ./vendor/bin/phpcs --version
@@ -313,21 +316,21 @@ psalm: ## Runs Psalm static analysis tool
 	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json $(PSALM_COLOR_FLAG)
-	$(call REPORT_PATHS,JSON report: build/psalm.json)
+	$(call REPORT_PATHS,JSON report: build/psalm.json,build/psalm.json)
 
 psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 	@mkdir -p build
 	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json $(PSALM_COLOR_FLAG)
-	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
+	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm; upload success is not verified,build/psalm.json)
 
 psalm-github: ## Runs Psalm static analysis tool (GitHub)
 	@mkdir -p build
 	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json --output-format=github --monochrome
-	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
+	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm; upload success is not verified,build/psalm.json)
 
 phpstan: ## Runs PHPStan static analysis tool
 	@@bin/console cache:clear $(ANSI_FLAG)
@@ -501,7 +504,7 @@ composer-unused: ## Show unused packages by scanning and comparing package names
 phploc: ## Runs `phploc` and create json output
 	@mkdir -p build
 	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
-	$(call REPORT_PATHS,JSON report: build/phploc.json)
+	$(call REPORT_PATHS,JSON report: build/phploc.json,build/phploc.json)
 
 check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
 	@bash scripts/check-security.sh

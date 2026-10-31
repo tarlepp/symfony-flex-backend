@@ -18,4 +18,6 @@ sed 's|name="/app/|name="|g' build/logs/clover.xml > "$temporary/clover.xml"
 sed 's|file="/app/|file="|g' build/logs/junit.xml > "$temporary/junit.xml"
 mv -- "$temporary/clover.xml" build/sonar/clover.xml
 mv -- "$temporary/junit.xml" build/sonar/junit.xml
-output_status INFO 'Local reports: build/sonar/clover.xml and build/sonar/junit.xml; no upload was performed'
+bash scripts/report-output.sh \
+    'Local reports: build/sonar/clover.xml and build/sonar/junit.xml; no upload was performed' \
+    build/sonar/clover.xml build/sonar/junit.xml
