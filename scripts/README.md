@@ -106,8 +106,9 @@ For cleaner failure output, use `bash scripts/make.sh` instead of `make`.
 The launcher removes only GNU Make's redundant recipe error-location lines
 (including recursive Make lines). It preserves `[FAIL]`, native diagnostics,
 stdout, and Make's original exit status. Missing targets, Makefile syntax
-errors, and other Make diagnostics remain visible. Direct `make` invocations
-are unchanged. Run from the repository root, either inside the PHP development
+errors, and other Make diagnostics remain visible. Raw outer `make` invocations
+still print their own recipe-error lines; use this launcher or shell integration
+to filter them too. Run from the repository root, inside the PHP development
 container or on the Docker host with development services running:
 
 ```bash
@@ -118,8 +119,10 @@ bash scripts/make.sh lint-workflows COLOR=always
 The launcher does not add result messages to unmigrated targets or change
 their failure policies. Color auto-detection happens before stderr filtering.
 
-Shells opened through `make bash` automatically enable filtered Make output,
-after loading the user's normal `~/.bashrc`. No image rebuild is needed.
+Shells opened through `make bash` or `make fish` automatically enable filtered
+Make output after loading normal user configuration. Bash loads `~/.bashrc`;
+Fish uses `--init-command` after its regular startup files. No image rebuild or
+user configuration rewrite is needed.
 Existing shells and shells opened directly through Docker or the IDE are
 unchanged.
 
@@ -134,13 +137,36 @@ make check-skills
 
 This defines a shell function only for the current session. It uses the
 launcher when the working directory is this repository's root and delegates
-to ordinary Make elsewhere. It does not modify user startup files or CI.
+to ordinary Make elsewhere. It does not modify user startup files.
 To disable it or bypass it for one command:
 
 ```bash
 unset -f make
 command make check-skills
 ```
+
+For Fish sessions opened directly on the host, through Docker, or in the IDE,
+opt in from the repository root with development services running:
+
+```fish
+source scripts/make-shell.fish
+make check-skills
+```
+
+Disable the Fish function, or bypass it for one command:
+
+```fish
+functions --erase make
+command make check-skills
+```
+
+Central host forwarding invokes `php bash scripts/make.sh`, so container-side
+Make recipe-error lines are filtered even when the host uses raw Make.
+Filtering the host's outer line still requires the launcher or a shell function.
+CI Make commands in `main.yml` and the shared PHP bootstrap use the launcher
+explicitly on the runner host. This preserves native diagnostics, annotations,
+stdout, exit policies, and existing job gates without installing a global
+replacement for Make.
 
 `make test-docker-images` runs offline regression tests of the helper itself,
 using temporary Dockerfiles and mocked registry/Docker commands. It does **not**

@@ -152,7 +152,7 @@ exit "${DOCKER_EXIT:-0}"
     def test_sessions_and_logs_use_direct_tty_commands_without_final_success(self):
         for target, invocation in (
             ("bash", "compose exec php bash --rcfile /app/scripts/bashrc.sh -i"),
-            ("fish", "compose exec php fish"),
+            ("fish", "compose exec php fish --init-command source /app/scripts/make-shell.fish"),
             ("logs", "compose logs --follow php nginx mariadb"),
         ):
             result, calls = self.make(target, RUNNING="5")

@@ -75,7 +75,8 @@ Inspect the implementation and its actual callers:
    host-safe Make targets. Docker orchestration, registry inspection, and
    GitHub platform operations remain host-side. In the Makefile,
    `HOST_TARGETS` excludes host-only commands from forwarding; other explicit
-   goals forward through `COMPOSE_EXEC` with `exec -T` to `php make`.
+   goals forward through `COMPOSE_EXEC` with `exec -T` to
+   `php bash scripts/make.sh`, filtering container-side Make recipe errors.
    Preserve mixed goals, default/help behavior, recursive Make, and dry runs
    without creating routing loops or running a host tool inside the container.
 4. Preserve container detection and CI selection as separate concerns.

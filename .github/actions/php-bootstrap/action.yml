@@ -26,14 +26,14 @@ runs:
 
     - name: Start PHP development container
       shell: bash
-      run: make ci-start
+      run: bash scripts/make.sh ci-start
 
     - name: Install Composer dependencies
       if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
-      run: make install
+      run: bash scripts/make.sh install
 
     - name: Check which versions we are using
       if: ${{ inputs.print-versions == 'true' }}
       shell: bash
-      run: make tool-versions
+      run: bash scripts/make.sh tool-versions
