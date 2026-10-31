@@ -589,6 +589,22 @@ scenario reports `[OK]` only after verifying the intended failure and diagnostic
 Successful earlier stages may remain visible before a later failure; no failed
 stage or aggregate reports success.
 
+The launcher suite also exercises the combined boundary: the real Makefile and
+launcher forward through a Docker mock into nested container recipes. Its matrix
+covers local/CI Compose selection, colored/plain/`NO_COLOR` output, same-named
+command files, missing generated reports, filtered report help, and multiple
+goals with and without `--keep-going`. It verifies structured native stdout,
+both levels of Make-error filtering, report failure propagation, and isolation
+of upload-client completion messages. Independent later targets may succeed
+under `--keep-going`, but the overall invocation remains nonzero.
+
+To run only this integration suite from the repository root on the Docker host,
+with the PHP development service running:
+
+```bash
+docker compose exec -T php python3 scripts/tests/make-launcher-test.py
+```
+
 Without `--keep-going`, Make stops before later goals after a blocking failure.
 With `--keep-going`, an independent later target may succeed and print its own
 `[OK]`; the invocation still exits nonzero. The informational action-update
