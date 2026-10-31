@@ -231,6 +231,97 @@ class MakeLauncherTest(unittest.TestCase):
                 self.assertNotIn(" exec -T ", calls.read_text())
                 self.assertNotIn("[OK]", result.stderr)
 
+    def test_forwarded_report_contracts_with_collisions_colors_and_multiple_goals(self):
+        scripts = self.root / "scripts"
+        scripts.mkdir()
+        bin_path = self.root / "bin"
+        bin_path.mkdir()
+        shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
+        for name in ("make.sh", "command-output.sh", "compose-context.sh",
+                     "report-output.sh", "make-help.sh"):
+            shutil.copyfile(ROOT / "scripts" / name, scripts / name)
+        docker = bin_path / "docker"
+        docker.write_text(
+            '#!/bin/bash\nprintf "%s\\n" "$*" >> "$DOCKER_CALLS"\n'
+            'if [[ "$*" == *" ps --all --format "* ]]; then printf "php|running|\\n"; exit 0; fi\n'
+            'if [[ "$*" == *" exec -T "* ]]; then\n'
+            '  while [ "$1" != php ]; do shift; done\n'
+            '  shift\n'
+            '  exec "$@" INSIDE_DOCKER_CONTAINER=1\n'
+            'fi\n'
+        )
+        docker.chmod(0o755)
+        php = bin_path / "php"
+        php.write_text(
+            '#!/bin/bash\n'
+            'if [[ "$*" == *--log-json=* ]]; then\n'
+            '  if [ "${OMIT_REPORT:-0}" != 1 ]; then printf "{}\\n" > build/phploc.json; fi\n'
+            '  printf \'{"native":"report"}\\n\'\n'
+            'elif [[ "$*" == *php-coveralls* ]]; then\n'
+            '  printf "native client: no upload in fixture\\n"\n'
+            'fi\n'
+        )
+        php.chmod(0o755)
+        # These command-name files must never suppress routing or raw recipes.
+        for name in ("phploc", "report-coveralls", "help"):
+            (self.root / name).touch()
+        calls = self.root / "docker-calls"
+        for workflow in ("", "CI"):
+            for color, no_color, colored in (
+                ("always", "", True), ("never", "", False), ("always", "1", False),
+            ):
+                for omitted, keep_going in ((False, False), (True, False), (True, True)):
+                    with self.subTest(workflow=workflow, color=color, no_color=no_color,
+                                      omitted=omitted, keep_going=keep_going):
+                        calls.write_text("")
+                        report = self.root / "build/phploc.json"
+                        if report.exists():
+                            report.unlink()
+                        environment = dict(
+                            self.environment, PATH=f"{bin_path}:{os.environ['PATH']}",
+                            DOCKER_CALLS=str(calls), COLOR=color, NO_COLOR=no_color,
+                            OMIT_REPORT="1" if omitted else "0",
+                        )
+                        if workflow:
+                            environment["GITHUB_WORKFLOW"] = workflow
+                        else:
+                            environment.pop("GITHUB_WORKFLOW", None)
+                        command = [
+                            "bash", str(scripts / "make.sh"), "--no-print-directory",
+                            "APPLICATION_CONFIG=fixture", "INSIDE_DOCKER_CONTAINER=0",
+                            "phploc", "report-coveralls", "help", "GROUP=reports",
+                        ]
+                        if keep_going:
+                            command.append("--keep-going")
+                        result = subprocess.run(
+                            command, cwd=self.root, env=environment, capture_output=True,
+                            text=True, check=False,
+                        )
+                        self.assertEqual(result.returncode, 2 if omitted else 0, result.stderr)
+                        self.assertIn('{"native":"report"}\n', result.stdout)
+                        self.assertNotIn("\033", result.stdout.splitlines()[0])
+                        self.assertEqual("\033" in result.stderr, colored)
+                        self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")
+                        if omitted:
+                            self.assertIn("Required generated report is missing or empty:", result.stderr)
+                            self.assertNotIn("[INFO] JSON report:", result.stderr)
+                            self.assertNotIn("[OK] Generate PHPLOC report", result.stderr)
+                            self.assertNotIn("[OK]\033[0m Generate PHPLOC report", result.stderr)
+                        else:
+                            self.assertEqual(report.read_text(), "{}\n")
+                            self.assertIn("[INFO]", result.stderr)
+                        continued = not omitted or keep_going
+                        self.assertEqual("native client:" in result.stdout, continued)
+                        self.assertEqual("Reports and uploads" in result.stdout, continued)
+                        if continued:
+                            self.assertIn("Coveralls client completed", result.stderr)
+                            self.assertEqual(result.stderr.count("Coveralls client completed"), 1)
+                            self.assertNotIn("Linting and static analysis", result.stdout)
+                        invocations = calls.read_text()
+                        self.assertEqual(invocations.count(" exec -T "), 2 if continued else 1)
+                        self.assertNotIn("php bash scripts/make.sh help", invocations)
+                        self.assertEqual("-f docker/ci-compose.yaml" in invocations, bool(workflow))
+
     def test_stderr_is_streamed_before_completion(self):
         self.makefile.write_text('all:\n\t@printf "ready\\n" >&2; sleep 30\n')
         process = subprocess.Popen(
