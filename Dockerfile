@@ -36,7 +36,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.11.0 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.11.1 /usr/bin/composer /usr/bin/composer
 
 # Enable Composer autocompletion
 RUN composer completion bash > /etc/bash_completion.d/composer
