@@ -179,6 +179,28 @@ bash scripts/make.sh phpcs COLOR=always NO_COLOR=1
 ```
 
 For cleaner failure output, use `bash scripts/make.sh` instead of `make`.
+Development-image Bash and Fish startup automatically load the repository's
+Make function, including ordinary Docker and IDE terminal sessions. The function
+filters every target at the repository root and uses normal Make elsewhere.
+Bash sources `docker/bash/make.sh`; Fish sources the integration from its
+development configuration. Production shell setup is unchanged.
+
+Existing container images need a rebuild to acquire these startup changes;
+already-open shells need reopening or the explicit sourcing commands below.
+No shared services are rebuilt or restarted automatically. From the repository
+root on the Docker host, when it is safe to recreate your development services:
+
+```bash
+bash scripts/make.sh stop
+bash scripts/make.sh daemon-build
+```
+
+For immediate use without recreating services, enter with `make bash`/`make fish`
+or source the appropriate integration in your current terminal. Host startup
+files are never modified by this repository. Raw `command make` and absolute
+GNU Make paths deliberately bypass the function and may still emit recipe-error
+lines; suppressing those inside a Makefile would require hiding failures.
+
 The launcher removes only GNU Make's redundant recipe error-location lines
 (including recursive Make lines). It preserves `[FAIL]`, native diagnostics,
 stdout, and Make's original exit status. Missing targets, Makefile syntax
@@ -597,6 +619,11 @@ goals with and without `--keep-going`. It verifies structured native stdout,
 both levels of Make-error filtering, report failure propagation, and isolation
 of upload-client completion messages. Independent later targets may succeed
 under `--keep-going`, but the overall invocation remains nonzero.
+It additionally checks default development shell hooks and injects an exit-64
+recipe for every registered command name, individually and with `--keep-going`.
+Native `[FAIL]` diagnostics remain visible while GNU Make recipe-location errors
+are removed and the invocation remains nonzero. These injected failures cover
+the filter contract, not live execution of every target.
 
 To run only this integration suite from the repository root on the Docker host,
 with the PHP development service running:

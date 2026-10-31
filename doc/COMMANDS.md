@@ -137,6 +137,12 @@ Both shells run inside the `php` service as the `dev` user. Compose maps this
 user's UID and GID to your host user to avoid file-permission conflicts.
 
 Both entry points enable filtered Make output after normal user configuration.
+New development images also load this integration in ordinary Bash/Fish
+sessions, including IDE terminals. Rebuild the development image to install the
+startup changes; existing images/shells can use the explicit sourcing below
+without a restart. Host personal startup files and production images are not
+changed. The function applies only at the repository root, for every target;
+raw `command make` intentionally bypasses it.
 For an existing Bash terminal on the host or inside the PHP development
 container, enable filtering from the repository root:
 
