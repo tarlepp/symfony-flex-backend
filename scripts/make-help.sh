@@ -8,36 +8,66 @@ printf 'Run from the repository root. Application tooling forwards to the PHP co
 printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
 
 awk '
+    /^\$\(call REGISTER_TARGET,/ {
+        record = $0
+        sub(/^\$\(call REGISTER_TARGET,/, "", record)
+        sub(/\)$/, "", record)
+        split(record, fields, ",")
+        name = fields[1]
+        if (name in groups) {
+            print "ERROR: Duplicate target metadata: " name > "/dev/stderr"
+            invalid = 1
+        }
+        groups[name] = fields[2]
+        risks[name] = fields[4]
+    }
     /^[a-zA-Z0-9-]+:.*## / {
         name = $0; sub(/:.*/, "", name)
         description = $0; sub(/^.*## /, "", description)
-        print name "\t" description
+        descriptions[name] = description
+    }
+    END {
+        for (name in descriptions) {
+            if (!(name in groups) || groups[name] == "hidden") {
+                print "ERROR: Missing help metadata: " name > "/dev/stderr"
+                invalid = 1
+            }
+        }
+        for (name in groups) {
+            if (groups[name] != "hidden" && !(name in descriptions)) {
+                print "ERROR: Missing target description: " name > "/dev/stderr"
+                invalid = 1
+            }
+        }
+        if (invalid) exit 1
+        for (name in descriptions)
+            print name "\t" descriptions[name] "\t" groups[name] "\t" risks[name]
     }
 ' Makefile | sort | awk -F '\t' \
     -v blue="$OUTPUT_BLUE" -v green="$OUTPUT_GREEN" \
     -v yellow="$OUTPUT_YELLOW" -v reset="$OUTPUT_RESET" '
-    function category(name) {
-        if (name ~ /^(bash|fish|logs|start.*|daemon.*|stop|ci-start|ci-stop)$/) return 1
-        if (name ~ /^docker-/) return 2
-        if (name ~ /^(install.*|update.*|clear.*|cache-.*|local-configuration|configure-ci|generate-.*)$/) return 3
-        if (name ~ /^(run-tests.*|infection|test-.*)$/) return 4
-        if (name ~ /^(check-dependencies-.*|check-action-updates|check-security|check-licenses)$/) return 5
-        if (name ~ /^(configuration|project-stats|application-info|tool-versions)$/) return 7
-        if (name ~ /^(report-.*|prepare-.*|phpmetrics|phploc)$/) return 8
-        return 6
-    }
-    function marker(name) {
-        if (name ~ /^(clear.*|cache-clear|cache-warmup|stop|ci-stop|docker-prune|docker-kill-containers|docker-remove-.*)$/)
-            return "[DESTRUCTIVE] "
-        if (name ~ /^(local-configuration|configure-ci|generate-.*|ecs-fix|composer-normalize|docker-build-.*|prepare-sonar-reports)$/)
-            return "[OVERWRITE] "
-        return ""
+    BEGIN {
+        groups["lifecycle"] = 1
+        groups["docker"] = 2
+        groups["setup"] = 3
+        groups["tests"] = 4
+        groups["checks"] = 5
+        groups["quality"] = 6
+        groups["information"] = 7
+        groups["reports"] = 8
     }
     {
-        group = category($1)
-        entries[group] = entries[group] sprintf("  %s%-29s%s %s%s%s%s\n", green, $1, reset, yellow, marker($1), reset, $2)
+        if (!($3 in groups) || ($4 != "" && $4 != "DESTRUCTIVE" && $4 != "OVERWRITE")) {
+            print "ERROR: Invalid help metadata: " $1 > "/dev/stderr"
+            invalid = 1
+            next
+        }
+        group = groups[$3]
+        marker = $4 == "" ? "" : "[" $4 "] "
+        entries[group] = entries[group] sprintf("  %s%-29s%s %s%s%s%s\n", green, $1, reset, yellow, marker, reset, $2)
     }
     END {
+        if (invalid) exit 1
         titles[1] = "Docker lifecycle and interactive sessions (host)"
         titles[2] = "Docker images and host maintenance (host)"
         titles[3] = "Setup, dependencies and application maintenance"

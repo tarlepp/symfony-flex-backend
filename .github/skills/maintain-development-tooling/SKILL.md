@@ -79,6 +79,10 @@ Inspect the implementation and its actual callers:
    `php bash scripts/make.sh`, filtering container-side Make recipe errors.
    Application recipes must not add a second host-forwarding path; keep native
    commands in the recipe and routing in the central dispatch.
+   Add target metadata through `REGISTER_TARGET` (name, group, execution, risk,
+   label) and keep its `##` description beside the recipe. The registry derives
+   `HOST_TARGETS`, `WRAPPED_TARGETS`, and labels; help uses the same groups and
+   markers. Do not maintain parallel target lists or name-based help rules.
    `scripts/compose-context.sh` performs on-demand project/service checks:
    running PHP is required for forwarding/shells; unhealthy PHP warns but
    remains accessible, and stopped containers remain eligible for logs.
