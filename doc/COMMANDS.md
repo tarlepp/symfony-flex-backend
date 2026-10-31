@@ -234,6 +234,10 @@ static-analysis targets, and Composer validation/checkers. Their summaries
 cover the entire recipe, including preparation, and retain native progress,
 GitHub annotations, and report paths. `run-tests` still selects PHP/phpdbg
 automatically and prints only one final status.
+Update-check colors distinguish available updates (yellow) from failed checks
+(red). Existing exit policies are preserved, including the informational
+action-update Make wrapper. See the scripts guide for each target's outcome
+policy and explicitly skipped optional security checks.
 See [command status output](../scripts/README.md#command-status-output) for
 color controls, regression checks, and offline versus live-check behavior.
 
