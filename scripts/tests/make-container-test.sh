@@ -35,6 +35,10 @@ for target in cache-clear cache-warmup clear clear-tools run-tests check-skills 
 done
 
 : > "$DOCKER_CALLS"
+host_make bash
+grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
+
+: > "$DOCKER_CALLS"
 host_make test-docker-images COLOR=always NO_COLOR=1
 grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
 grep -Eq 'php make test-docker-images$' "$DOCKER_CALLS"

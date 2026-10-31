@@ -2,6 +2,7 @@
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
+source scripts/command-output.sh
 
 ACTIONLINT_TAG=v1.7.12 # tool-pin: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca
 SHELLCHECK_TAG=v0.11.0 # tool-pin: koalaman/shellcheck@aac0823e6b58f8a499e856e93738082691cbf212
@@ -43,20 +44,26 @@ trap 'rm -rf "$tools"' EXIT
 
 download() {
     local url=$1 checksum=$2 file=$3
-    curl --fail --silent --show-error --location --retry 3 "$url" --output "$file"
-    printf '%s  %s\n' "$checksum" "$file" | sha256sum --check
+    curl --fail --silent --show-error --location --retry 3 "$url" --output "$file" || return "$?"
+    printf '%s  %s\n' "$checksum" "$file" | sha256sum --check --quiet
 }
 
-download "https://github.com/rhysd/actionlint/releases/download/${ACTIONLINT_TAG}/actionlint_${ACTIONLINT_TAG#v}_linux_${arch}.tar.gz" \
+printf '\n' >&2
+output_status RUN '1/4 - Prepare pinned workflow validators'
+output_run "Download and verify actionlint $ACTIONLINT_TAG" download \
+    "https://github.com/rhysd/actionlint/releases/download/${ACTIONLINT_TAG}/actionlint_${ACTIONLINT_TAG#v}_linux_${arch}.tar.gz" \
     "$actionlint_sha" "$tools/actionlint.tar.gz"
 tar -xzf "$tools/actionlint.tar.gz" -C "$tools" actionlint
-download "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_TAG}/shellcheck-${SHELLCHECK_TAG}.linux.${shellcheck_arch}.tar.gz" \
+output_run "Download and verify ShellCheck $SHELLCHECK_TAG" download \
+    "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_TAG}/shellcheck-${SHELLCHECK_TAG}.linux.${shellcheck_arch}.tar.gz" \
     "$shellcheck_sha" "$tools/shellcheck.tar.gz"
 tar -xzf "$tools/shellcheck.tar.gz" -C "$tools" --strip-components=1 "shellcheck-${SHELLCHECK_TAG}/shellcheck"
-download "https://github.com/mpalmer/action-validator/releases/download/${VALIDATOR_TAG}/action-validator_linux_${arch}" \
+output_run "Download and verify action-validator $VALIDATOR_TAG" download \
+    "https://github.com/mpalmer/action-validator/releases/download/${VALIDATOR_TAG}/action-validator_linux_${arch}" \
     "$validator_sha" "$tools/action-validator"
 chmod +x "$tools/action-validator"
-download "https://github.com/zizmorcore/zizmor/releases/download/${ZIZMOR_TAG}/zizmor-${zizmor_target}.tar.gz" \
+output_run "Download and verify zizmor $ZIZMOR_TAG" download \
+    "https://github.com/zizmorcore/zizmor/releases/download/${ZIZMOR_TAG}/zizmor-${zizmor_target}.tar.gz" \
     "$zizmor_sha" "$tools/zizmor.tar.gz"
 tar -xzf "$tools/zizmor.tar.gz" -C "$tools" zizmor
 
@@ -67,11 +74,21 @@ if (( ${#workflows[@]} == 0 || ${#actions[@]} == 0 )); then
     exit 1
 fi
 
-"$tools/actionlint" -shellcheck "$tools/shellcheck" "${workflows[@]}"
+printf '\n' >&2
+output_status RUN '2/4 - Validate workflows'
+output_run "Workflow syntax and embedded shell (${#workflows[@]} files)" \
+    "$tools/actionlint" -shellcheck "$tools/shellcheck" "${workflows[@]}"
 # Offline mode skips audits that need the GitHub API, so no token is needed.
-"$tools/zizmor" --offline --min-severity low "${workflows[@]}" "${actions[@]}"
+output_run 'Workflow and action security audit (zizmor)' \
+    env RUST_LOG="${RUST_LOG:-warn}" "$tools/zizmor" --no-progress \
+    --offline --min-severity low "${workflows[@]}" "${actions[@]}"
+printf '\n' >&2
+output_status RUN '3/4 - Validate local actions'
 for action in "${actions[@]}"; do
-    echo "Validating local action metadata: $action"
-    "$tools/action-validator" "$action"
+    output_run "Local action metadata: $action" "$tools/action-validator" "$action"
 done
-"$tools/shellcheck" scripts/lint-workflows.sh
+printf '\n' >&2
+output_status RUN '4/4 - Validate tooling scripts'
+output_run 'Workflow validator script (ShellCheck)' "$tools/shellcheck" \
+    scripts/lint-workflows.sh scripts/command-output.sh
+printf '\n' >&2
