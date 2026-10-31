@@ -31,7 +31,7 @@ for target in cache-clear cache-warmup clear clear-tools run-tests check-skills 
     tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output; do
     : > "$DOCKER_CALLS"
     host_make "$target"
-    grep -Eq "compose exec -T --env COLOR --env NO_COLOR +php make $target$" "$DOCKER_CALLS"
+    grep -Eq "compose exec -T --env COLOR --env NO_COLOR +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
 done
 
 : > "$DOCKER_CALLS"
@@ -41,7 +41,7 @@ grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CAL
 : > "$DOCKER_CALLS"
 host_make test-docker-images COLOR=always NO_COLOR=1
 grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
-grep -Eq 'php make test-docker-images$' "$DOCKER_CALLS"
+grep -Eq 'php bash scripts/make.sh test-docker-images$' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
 host_make -n cache-clear clear run-tests
@@ -52,7 +52,7 @@ fi
 
 : > "$DOCKER_CALLS"
 GITHUB_WORKFLOW=CI DATABASE_URL=example host_make run-tests-php
-grep -Eq 'compose -f compose.yaml -f docker/ci-compose.yaml exec -T .*--env DATABASE_URL .*php make run-tests-php$' "$DOCKER_CALLS"
+grep -Eq 'compose -f compose.yaml -f docker/ci-compose.yaml exec -T .*--env DATABASE_URL .*php bash scripts/make.sh run-tests-php$' "$DOCKER_CALLS"
 if grep -q example "$DOCKER_CALLS"; then
     echo "Environment values must not be interpolated into Docker arguments." >&2
     exit 1
@@ -66,15 +66,15 @@ grep -q 'Error 7' "$temporary/failed-command"
 
 : > "$DOCKER_CALLS"
 host_make check-skills lint-markdown COLOR=never
-grep -Eq 'php make check-skills$' "$DOCKER_CALLS"
-grep -Eq 'php make lint-markdown$' "$DOCKER_CALLS"
+grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
+grep -Eq 'php bash scripts/make.sh lint-markdown$' "$DOCKER_CALLS"
 [ "$(grep -c 'compose exec -T' "$DOCKER_CALLS")" -eq 2 ]
 grep -q 'COLOR=never NO_COLOR=' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
 host_make bash check-skills COLOR=always
 grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
-grep -Eq 'php make check-skills$' "$DOCKER_CALLS"
+grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
 GITHUB_WORKFLOW=CI CI=true XDEBUG_MODE=coverage host_make check-skills lint-markdown COLOR=always NO_COLOR=1
@@ -92,8 +92,8 @@ if DOCKER_EXIT_CODE=7 host_make check-skills lint-markdown > "$temporary/failed-
     echo "Multiple goals must retain a blocking container failure." >&2
     exit 1
 fi
-grep -Eq 'php make check-skills$' "$DOCKER_CALLS"
-if grep -Eq 'php make lint-markdown$' "$DOCKER_CALLS"; then
+grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
+if grep -Eq 'php bash scripts/make.sh lint-markdown$' "$DOCKER_CALLS"; then
     echo "Make unexpectedly continued after a blocking forwarded failure." >&2
     exit 1
 fi

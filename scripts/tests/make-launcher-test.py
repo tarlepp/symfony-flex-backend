@@ -125,6 +125,99 @@ class MakeLauncherTest(unittest.TestCase):
         self.assertIn("[FAIL] fixture", result.stderr)
         self.assertNotIn("make: ***", result.stderr)
 
+    def test_fish_function_filters_root_and_preserves_arguments_and_status(self):
+        scripts = self.root / "scripts"
+        scripts.mkdir()
+        for name in ("make.sh", "make-shell.fish"):
+            shutil.copyfile(ROOT / "scripts" / name, scripts / name)
+        self.makefile.write_text(
+            'all:\n\t@printf "%s\\n" "$(MESSAGE)"\n'
+            '\t@printf "[FAIL] fixture\\n" >&2; exit 7\n'
+        )
+        for directory, filtered in ((self.root, True), (scripts, False)):
+            with self.subTest(directory=directory):
+                result = subprocess.run(
+                    ["fish", "--no-config", "-c",
+                     'source $argv[1]; cd $argv[2]; make --no-print-directory -f $argv[3] "MESSAGE=two words"',
+                     str(scripts / "make-shell.fish"), str(directory), str(self.makefile)],
+                    cwd=self.root, env=self.environment, capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertEqual(result.stdout, "two words\n")
+                self.assertIn("[FAIL] fixture", result.stderr)
+                self.assertEqual(
+                    re.search(r"make(?:\[\d+\])?: \*\*\*", result.stderr) is None, filtered,
+                )
+
+    def test_fish_init_command_preserves_user_config_and_filter(self):
+        home = self.root / "home"
+        config = home / ".config/fish"
+        config.mkdir(parents=True)
+        (config / "config.fish").write_text("set -gx USER_CONFIG_LOADED yes\n")
+        scripts = self.root / "scripts"
+        scripts.mkdir()
+        for name in ("make.sh", "make-shell.fish"):
+            shutil.copyfile(ROOT / "scripts" / name, scripts / name)
+        self.makefile.write_text(
+            'all:\n\t@printf "user config: %s\\n" "$$USER_CONFIG_LOADED" >&2; '
+            'printf "[FAIL] fixture\\n" >&2; exit 7\n'
+        )
+        result = subprocess.run(
+            ["fish", "--init-command", f"source {scripts / 'make-shell.fish'}",
+             "-c", "make --no-print-directory -f fixture.mk"],
+            cwd=self.root, env=dict(self.environment, HOME=str(home), XDG_CONFIG_HOME=str(home / ".config")),
+            capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("user config: yes", result.stderr)
+        self.assertIn("[FAIL] fixture", result.stderr)
+        self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")
+
+    def test_host_and_ci_launchers_filter_both_sides_of_forwarding(self):
+        scripts = self.root / "scripts"
+        scripts.mkdir()
+        bin_path = self.root / "bin"
+        bin_path.mkdir()
+        shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
+        for name in ("make.sh", "command-output.sh"):
+            shutil.copyfile(ROOT / "scripts" / name, scripts / name)
+        docker = bin_path / "docker"
+        docker.write_text(
+            '#!/bin/bash\nprintf "%s\\n" "$*" >> "$DOCKER_CALLS"\n'
+            'if [[ "$*" == *" exec -T "* ]]; then\n'
+            '  while [ "$1" != php ]; do shift; done\n'
+            '  shift\n'
+            '  exec "$@" INSIDE_DOCKER_CONTAINER=1\n'
+            'fi\n'
+        )
+        docker.chmod(0o755)
+        php = bin_path / "php"
+        php.write_text('#!/bin/bash\nprintf "payload\\n"; printf "native failure\\n" >&2; exit 7\n')
+        php.chmod(0o755)
+        for workflow in ("", "CI"):
+            calls = self.root / "docker-calls"
+            calls.write_text("")
+            environment = dict(
+                self.environment, PATH=f"{bin_path}:{os.environ['PATH']}",
+                DOCKER_CALLS=str(calls), GITHUB_WORKFLOW=workflow,
+            )
+            if not workflow:
+                environment.pop("GITHUB_WORKFLOW")
+            result = subprocess.run(
+                ["bash", str(scripts / "make.sh"), "--no-print-directory", "APPLICATION_CONFIG=fixture",
+                 "INSIDE_DOCKER_CONTAINER=0", "check-requirements"],
+                cwd=self.root, env=environment, capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(result.stdout, "payload\n")
+            self.assertIn("native failure", result.stderr)
+            self.assertIn("[FAIL] Application runtime requirements (exit 7)", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
+            self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")
+            self.assertIn("php bash scripts/make.sh check-requirements", calls.read_text())
+            if workflow:
+                self.assertIn("-f docker/ci-compose.yaml", calls.read_text())
+
     def test_stderr_is_streamed_before_completion(self):
         self.makefile.write_text('all:\n\t@printf "ready\\n" >&2; sleep 30\n')
         process = subprocess.Popen(

@@ -68,7 +68,7 @@ $(FORWARD_TARGETS):
 		if [ -t 2 ] && [ "$${TERM:-}" != dumb ]; then COLOR=always; else COLOR=never; fi; \
 		export COLOR; \
 	fi; \
-	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php make $@
+	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
@@ -637,7 +637,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(CONTAINERS_UNAVAILABLE)
 else
-	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php fish)
+	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php fish --init-command 'source /app/scripts/make-shell.fish')
 endif
 
 logs: ## Show logs from all containers

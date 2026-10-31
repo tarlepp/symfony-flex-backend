@@ -86,19 +86,19 @@ jobs:
         uses: ./.github/actions/php-bootstrap
 
       - name: Display Symfony application information
-        run: make application-info
+        run: bash scripts/make.sh application-info
 
       - name: Validate main `composer.json` and `composer.lock` files
-        run: make composer-validate
+        run: bash scripts/make.sh composer-validate
 
       - name: Check that environment is configured correctly
-        run: make check-requirements
+        run: bash scripts/make.sh check-requirements
 
       - name: Lint YAML configurations
-        run: make lint-yaml
+        run: bash scripts/make.sh lint-yaml
 
       - name: Test container command routing
-        run: make test-make-routing
+        run: bash scripts/make.sh test-make-routing
 
       - name: Validate development and local production Compose configurations
         run: |
@@ -109,7 +109,7 @@ jobs:
       - &stop_php_step
         name: Stop PHP development container
         if: ${{ always() }}
-        run: make ci-stop
+        run: bash scripts/make.sh ci-stop
 
   lint-documentation:
     name: Lint documentation files
@@ -129,10 +129,10 @@ jobs:
           print-versions: 'false'
 
       - name: Lint all markdown documentation files
-        run: make lint-markdown
+        run: bash scripts/make.sh lint-markdown
 
       - name: Validate skill metadata, index coverage, and repository Markdown links
-        run: make check-skills
+        run: bash scripts/make.sh check-skills
 
       - *stop_php_step
 
@@ -153,7 +153,7 @@ jobs:
           print-versions: 'false'
 
       - name: Validate workflows, embedded shell, and local action metadata
-        run: make lint-workflows
+        run: bash scripts/make.sh lint-workflows
 
       - *stop_php_step
 
@@ -175,7 +175,7 @@ jobs:
         uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
 
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
-        run: make check-security
+        run: bash scripts/make.sh check-security
 
       - *stop_php_step
 
@@ -214,7 +214,7 @@ jobs:
 
       # Failures are reported as pull request annotations and job summary
       - name: Verify multi-platform base images
-        run: make docker-image-verify-pins
+        run: bash scripts/make.sh docker-image-verify-pins
 
   docker-image-check-updates:
     name: Check Docker image versions
@@ -239,7 +239,7 @@ jobs:
           print-versions: 'false'
 
       - name: Run Docker image helper regression tests
-        run: make test-docker-images
+        run: bash scripts/make.sh test-docker-images
 
       - name: Authenticate to Docker Hub when credentials are available
         if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}
@@ -257,7 +257,7 @@ jobs:
           fi
 
       - name: Check for newer stable Docker image versions
-        run: make docker-image-check-updates
+        run: bash scripts/make.sh docker-image-check-updates
 
       - name: Log out of Docker Hub
         if: ${{ always() }}
@@ -275,21 +275,21 @@ jobs:
       matrix:
         analyzer:
           - name: PHP CodeSniffer
-            command: make phpcs
+            command: bash scripts/make.sh phpcs
           - name: ECS
-            command: make ecs
+            command: bash scripts/make.sh ecs
           - name: PHPLint
-            command: make phplint
+            command: bash scripts/make.sh phplint
           - name: PHP Parallel Lint
-            command: make php-parallel-lint
+            command: bash scripts/make.sh php-parallel-lint
           - name: Psalm
-            command: make psalm-github
+            command: bash scripts/make.sh psalm-github
           - name: PHPStan
-            command: make phpstan-github
+            command: bash scripts/make.sh phpstan-github
           - name: PHPLoc
-            command: make phploc
+            command: bash scripts/make.sh phploc
           - name: PHP Insights
-            command: make phpinsights
+            command: bash scripts/make.sh phpinsights
     steps:
       - *harden_runner_step
 
@@ -409,13 +409,13 @@ jobs:
           print-versions: 'false'
 
       - name: Configure application for CI run
-        run: make configure-ci
+        run: bash scripts/make.sh configure-ci
 
       - name: Install Composer dependencies
-        run: make install
+        run: bash scripts/make.sh install
 
       - name: Check which versions we're using
-        run: make tool-versions
+        run: bash scripts/make.sh tool-versions
 
       #- name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
       #  run: |
@@ -427,7 +427,7 @@ jobs:
 
       - name: Run application test suites with PHPUnit
         id: phpunit
-        run: make run-tests-php
+        run: bash scripts/make.sh run-tests-php
         env:
           DATABASE_URL: mysql://root:symfony@host.docker.internal:${{ job.services.mariadb.ports['3306'] }}/symfony
 
@@ -444,7 +444,7 @@ jobs:
                 exit(1);
             }
           '
-          make phpmetrics
+          bash scripts/make.sh phpmetrics
 
       - name: Verify required report files
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
@@ -574,7 +574,7 @@ jobs:
 
       - name: Prepare reports for host-side SonarQube scan
         if: ${{ env.SONAR_TOKEN != '' }}
-        run: make prepare-sonar-reports
+        run: bash scripts/make.sh prepare-sonar-reports
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
