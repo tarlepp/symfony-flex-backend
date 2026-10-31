@@ -123,6 +123,8 @@ Inspect the affected producers and consumers before editing:
    types, headers, and examples alongside the implementation. Inspect the
    configured documentation area so the affected routes are actually included.
    Reuse existing metadata rather than creating a parallel specification.
+   Use [update-api-documentation](../update-api-documentation/SKILL.md) for
+   schema, security-description, and generated-area verification.
    Follow [write-tests](../write-tests/SKILL.md) for all test changes and
    [add-event-subscriber](../add-event-subscriber/SKILL.md) when event
    registration or ordering changes.
