@@ -481,10 +481,10 @@ else
 endif
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
-	@python3 scripts/check-skills.py
+	@bash scripts/command-output.sh "Skill metadata and documentation links" python3 scripts/check-skills.py
 
 lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
-	@bash scripts/lint-workflows.sh
+	@bash scripts/command-output.sh "GitHub workflows and local action metadata" bash scripts/lint-workflows.sh
 
 lint-markdown: ## Lint Markdown files
 lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
@@ -628,7 +628,7 @@ else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
 	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php bash
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php bash --rcfile /app/scripts/bashrc.sh -i
 endif
 
 fish: ## Get fish inside PHP container
@@ -912,7 +912,7 @@ docker-image-verify-pins: ## Verify base images are multi-platform
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(WARNING_HOST)
 else
-	@./scripts/docker-images.sh verify
+	@bash scripts/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker-images.sh verify
 endif
 
 docker-builder-platforms: ## Show platforms supported by current buildx builder
@@ -996,7 +996,7 @@ application-info: ## Display Symfony application information
 	@bin/console about
 
 check-requirements: ## Check application runtime requirements
-	@php ./vendor/bin/requirements-checker
+	@bash scripts/command-output.sh "Application runtime requirements" php ./vendor/bin/requirements-checker
 
 tool-versions: ## Display PHP, Composer, Symfony, and PHPUnit versions
 	@php --version
@@ -1019,7 +1019,7 @@ prepare-sonar-reports: ## Copy test reports with relative paths for the host-sid
 	@sed 's|file="/app/|file="|g' build/logs/junit.xml > build/sonar/junit.xml
 
 test-make-routing: ## Test host and CI container command routing
-	@bash scripts/tests/make-container-test.sh
+	@bash scripts/command-output.sh "Make container routing (offline mocked tests)" bash scripts/tests/make-container-test.sh
 
 test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
 	@bash scripts/tests/docker-images-test.sh
