@@ -248,6 +248,12 @@ help groups, risk markers, execution routing, and wrapped-command labels.
 Each record has `name,group,execution,risk,label` fields; the last two are
 optional, and the label defaults to the target name. Descriptions stay beside
 the owning recipes as `##` comments.
+Every registered command is declared `.PHONY` from `COMMAND_TARGETS`, including
+help, direct scripts, wrapped recipes, and host lifecycle commands. Same-named
+files never make these commands appear up to date. Register commands rather
+than adding separate phony lists; actual file-producing build rules should not
+be registered as commands. Host forwarding still declares explicit forwarded
+goals phony to retain its existing dispatch behavior.
 
 `host` excludes a target from container forwarding; `wrapped` forwards from
 the host and decorates the complete container-side recipe; `direct` forwards

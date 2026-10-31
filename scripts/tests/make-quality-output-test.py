@@ -3,6 +3,7 @@
 
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -222,6 +223,30 @@ done
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(calls, "")
         self.assertNotIn("[OK]", result.stderr)
+
+    def test_registered_commands_ignore_same_named_files_in_raw_recipe_dry_runs(self):
+        targets = re.findall(r"^\$\(call REGISTER_TARGET,([^,]+),", (ROOT / "Makefile").read_text(), re.M)
+        for target in targets:
+            (self.root / target).touch()
+        for target in targets:
+            with self.subTest(target=target):
+                result, calls = self.run_target(target, "-n", "COMMAND_OUTPUT_RUN=1")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue(result.stdout.strip())
+                self.assertNotIn("up to date", result.stdout)
+                self.assertNotIn("Nothing to be done", result.stdout)
+                self.assertEqual(calls, "")
+
+    def test_file_collisions_do_not_suppress_wrapped_or_direct_failures(self):
+        for target in ("ecs", "check-skills"):
+            (self.root / target).touch()
+            command = "php" if target == "ecs" else "python3"
+            result, calls = self.run_target(target, FAIL_COMMAND=command)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("native failure diagnostic", result.stderr)
+            self.assertIn("[FAIL]", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
+            self.assertTrue(calls)
 
     def test_application_recipes_do_not_own_container_forwarding(self):
         makefile = (ROOT / "Makefile").read_text()
