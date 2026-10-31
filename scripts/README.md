@@ -76,8 +76,9 @@ executing a command. It validates its arguments (usage errors exit 64), but
 a valid notification always exits zero, even when displaying `[FAIL]`.
 Callers must explicitly return failure when the underlying operation failed:
 Make's host-context guard prints the message and then exits 1.
-Warnings and report-path macros use this entrypoint rather than repeated
-`bash -c` source/printf snippets.
+Warnings use this entrypoint rather than repeated `bash -c` source/printf
+snippets. Report-path macros use `report-output.sh` to validate their files
+before printing a shared `[INFO]` message.
 
 `COMPOSE_RUN` shares the UID/GID environment and completion-message wrapper for
 finite Docker lifecycle commands. Each target still owns its context guard,
@@ -449,10 +450,26 @@ Successful report generators identify `build/logs/clover.xml`,
 `build/logs/junit.xml`, `build/phpmetrics`, `build/phploc.json`, and
 `build/psalm.json` as applicable. Infection identifies `build/infection`;
 its native output owns the exact generated file inventory.
+`scripts/report-output.sh` verifies every declared local report is a nonempty
+file before printing its `[INFO]` path message. Test XML, Psalm/PHPLOC JSON,
+PhpMetrics `index.html`, and prepared Sonar copies use this shared check.
+Missing or empty outputs fail the target even if the generator returned zero.
+This checks file availability, not schema validity or freshness of existing
+reports. Infection names its report directory only; native output owns which
+files its configured reporters actually generated.
+
 Psalm's local JSON report message does not claim Shepherd upload success.
+The installed Shepherd plugin can skip submission or print HTTP/cURL errors
+without failing analysis. `psalm-shepherd` and `psalm-github` therefore finish
+with analysis/local-report completion and explicit unverified upload status.
+Native upload diagnostics remain visible and the existing exit policy is
+unchanged; a successful analysis does not imply a successful submission.
 `report-coveralls` retains verbose client output, including its configured
 JSON payload path and HTTP submission status. A generated payload alone does
-not produce `[OK]` if the client returns an upload failure.
+not produce `[OK]` if the client returns an upload failure. Its completion
+message confirms the client finished and directs the reader to native HTTP
+status for upload confirmation, rather than inferring success from JSON creation
+or dry-run completion. No payload is dumped by the shared output helpers.
 
 `prepare-sonar-reports` checks both nonempty source reports first, prepares
 relative-path copies in temporary files, then replaces the local copies.

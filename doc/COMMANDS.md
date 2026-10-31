@@ -105,13 +105,21 @@ Compose receives the resolved color choice via `COMPOSE_ANSI`.
 See [the regression guide](../scripts/README.md#output-contract-regressions)
 for individual suites and the informational action-update exception.
 
-Report generators identify their output paths after successful execution.
+Report generators identify their output paths after successful execution and
+nonempty-file checks for declared local reports. These checks do not validate
+schemas or establish freshness; Infection names its directory and leaves the
+generated inventory to native output.
 `prepare-sonar-reports` creates relative-path copies at
 `build/sonar/clover.xml` and `build/sonar/junit.xml`; it requires existing
 nonempty test reports and does not upload anything. `report-coveralls` runs
 the uploader separately: its verbose output distinguishes JSON payload
 creation from the HTTP submission result. Local Psalm JSON generation likewise
-does not imply Shepherd upload success.
+does not imply Shepherd upload success. Psalm's final status explicitly confirms
+analysis/local report completion, with Shepherd upload success unverified:
+its plugin may skip submission or log upload errors without changing the
+analysis exit status. Coveralls completion confirms the client finished;
+consult its native HTTP status for submission confirmation. Existing analyzer
+and uploader exit policies remain unchanged.
 
 For direct commands, open a Bash shell inside the PHP container from the host:
 

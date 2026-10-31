@@ -251,6 +251,30 @@ class CommandOutputTest(unittest.TestCase):
             self.assertIn("[FAIL] Usage:", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
 
+    def test_report_notifications_require_every_nonempty_file(self):
+        helper = ROOT / "scripts/report-output.sh"
+        with tempfile.TemporaryDirectory(prefix="report-output-") as directory:
+            first = Path(directory) / "first report.json"
+            second = Path(directory) / "second.xml"
+            first.write_text("{}")
+            for content in (None, "", "<report/>"):
+                if content is not None:
+                    second.write_text(content)
+                result = self.run_command(
+                    ["bash", str(helper), "Local files; no upload", str(first), str(second)],
+                )
+                self.assertEqual(result.stdout, "")
+                if content:
+                    self.assertEqual(result.returncode, 0)
+                    self.assertEqual(result.stderr, "[INFO] Local files; no upload\n")
+                else:
+                    self.assertEqual(result.returncode, 1)
+                    self.assertIn(str(second), result.stderr)
+                    self.assertNotIn("[INFO]", result.stderr)
+        result = self.run_command(["bash", str(helper), "no files"])
+        self.assertEqual(result.returncode, 64)
+        self.assertIn("[FAIL] Usage:", result.stderr)
+
     def test_auto_color_uses_status_terminal(self):
         master, slave = pty.openpty()
         try:

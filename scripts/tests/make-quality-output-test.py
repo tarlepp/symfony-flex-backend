@@ -30,6 +30,7 @@ class QualityOutputTest(unittest.TestCase):
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         shutil.copyfile(ROOT / "scripts/command-output.sh", self.root / "scripts/command-output.sh")
         shutil.copyfile(ROOT / "scripts/native-output.sh", self.root / "scripts/native-output.sh")
+        shutil.copyfile(ROOT / "scripts/report-output.sh", self.root / "scripts/report-output.sh")
         shutil.copyfile(ROOT / "scripts/make.sh", self.root / "scripts/make.sh")
         shutil.copyfile(ROOT / "scripts/markdown-output.sh", self.root / "scripts/markdown-output.sh")
         fixture = """#!/usr/bin/env bash
@@ -45,9 +46,14 @@ for argument in "$@"; do
 done
 if [ "$color" = true ]; then printf '\\033[32mnative progress\\033[0m\\n'; else printf 'native progress\\n'; fi
 printf '::notice file=src/Example.php,line=1::native annotation\\n' >&2
+if [[ "$*" == *--shepherd* ]] && [ -n "${SHEPHERD_DIAGNOSTIC:-}" ]; then
+    printf '%s\\n' "$SHEPHERD_DIAGNOSTIC" >&2
+fi
 for argument in "$@"; do
+    if [ "${OMIT_REPORTS:-0}" = 1 ]; then continue; fi
     case "$argument" in
         --report=*) printf '{}\\n' > "${argument#--report=}" ;;
+        --report-html=*) mkdir -p "${argument#--report-html=}"; printf '<html/>\\n' > "${argument#--report-html=}/index.html" ;;
         build/logs/clover.xml) printf '<coverage/>\\n' > "$argument" ;;
         build/logs/junit.xml) printf '<testsuites/>\\n' > "$argument" ;;
     esac
@@ -91,8 +97,10 @@ done
                 result, calls = self.run_target(target)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stderr.count(f"[RUN] {label}\n"), 1)
-                self.assertEqual(result.stderr.count(f"[OK] {label}\n"), 1)
-                self.assertTrue(result.stderr.endswith(f"\n\n[OK] {label}\n"))
+                completion = ("Psalm analysis completed; local report: build/psalm.json; Shepherd upload success is not verified"
+                              if target in ("psalm-shepherd", "psalm-github") else label)
+                self.assertEqual(result.stderr.count(f"[OK] {completion}\n"), 1)
+                self.assertTrue(result.stderr.endswith(f"\n\n[OK] {completion}\n"))
                 self.assertIn("native progress", result.stdout)
                 self.assertIn("::notice file=src/Example.php", result.stderr)
                 self.assertNotIn("\033", result.stderr)
@@ -141,6 +149,38 @@ done
             self.assertNotIn("[INFO]", result.stdout)
             if target != "psalm":
                 self.assertIn("Shepherd submission status is reported by Psalm", result.stderr)
+
+    def test_missing_or_empty_generated_reports_prevent_success(self):
+        for target in ("run-tests-php", "run-tests-phpdbg", "psalm", "psalm-shepherd", "psalm-github"):
+            for empty in (False, True):
+                with self.subTest(target=target, empty=empty):
+                    reports = self.root / "build"
+                    if reports.exists():
+                        shutil.rmtree(reports)
+                    if empty:
+                        (reports / "logs").mkdir(parents=True)
+                        for path in ("psalm.json", "logs/clover.xml", "logs/junit.xml"):
+                            (reports / path).touch()
+                    result, _ = self.run_target(target, OMIT_REPORTS="1")
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn("Required generated report is missing or empty:", result.stderr)
+                    self.assertNotIn("[OK]", result.stderr)
+                    self.assertNotIn("[INFO]", result.stderr)
+
+    def test_shepherd_diagnostics_do_not_turn_analysis_success_into_upload_claim(self):
+        for diagnostic in ("Shepherd error: server returned 500",
+                           "No curl found, cannot send data to shepherd server.",
+                           "results sent to shepherd.dev", ""):
+            for target in ("psalm-shepherd", "psalm-github"):
+                result, _ = self.run_target(target, SHEPHERD_DIAGNOSTIC=diagnostic)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("[OK] Psalm analysis completed", result.stderr)
+                self.assertIn("Shepherd upload success is not verified", result.stderr)
+                if diagnostic:
+                    self.assertIn(diagnostic, result.stderr)
+        result, _ = self.run_target("psalm-shepherd", "ecs")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(result.stderr.endswith("[OK] ecs\n"), result.stderr)
 
     def test_mixed_goals_and_color_preferences(self):
         result, _ = self.run_target("ecs", "check-skills", COLOR="always")
@@ -363,7 +403,7 @@ done
             (self.root / "bin" / name).write_text("#!/bin/sh\nexit 0\n")
         result, calls = self.run_target("phpmetrics")
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("Required report build/logs/junit.xml was not generated", result.stderr)
+        self.assertIn("Required generated report is missing or empty: build/logs/junit.xml", result.stderr)
         self.assertNotIn("vendor/bin/phpmetrics", calls)
         self.assertNotIn("[OK]", result.stderr)
 
