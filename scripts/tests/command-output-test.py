@@ -213,11 +213,12 @@ class CommandOutputTest(unittest.TestCase):
     def test_status_palette_and_plain_overrides(self):
         command = [
             "bash", "-c",
-            'source "$1"; for status in RUN OK WARN SKIP FAIL; do '
+            'source "$1"; for status in RUN INFO OK WARN SKIP FAIL; do '
             'output_status "$status" example; done', "test", str(HELPER),
         ]
         result = self.run_command(command, COLOR="always")
-        for label, color in (("RUN", 34), ("OK", 32), ("WARN", 33), ("SKIP", 33), ("FAIL", 31)):
+        for label, color in (("RUN", 34), ("INFO", 34), ("OK", 32), ("WARN", 33),
+                             ("SKIP", 33), ("FAIL", 31)):
             self.assertIn(f"\033[{color}m[{label}]\033[0m", result.stderr)
         self.assertTrue(result.stderr.startswith("\033[34m[RUN]\033[0m"))
         for environment in ({"COLOR": "never"}, {"COLOR": "always", "NO_COLOR": "1"}):
@@ -245,6 +246,7 @@ class CommandOutputTest(unittest.TestCase):
         for arguments in (
             ("--status",), ("--status", "WARN"), ("--status", "invalid", "message"),
             ("--status", "WARN", "message", "extra"),
+            ("--status", "PASS", "message"), ("--status", "ERROR", "message"),
         ):
             result = self.run_command(["bash", str(HELPER), *arguments])
             self.assertEqual(result.returncode, 64)

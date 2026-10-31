@@ -119,7 +119,7 @@ paths remain unchanged. Quality summaries report the nested Make exit status
 exit code. Nested Make recipe error lines are filtered before the final status;
 the shell integration filters the outer Make error lines. Markdown linting
 uses the readable status label `Markdown documentation`.
-Markdown rule diagnostics gain a red `[ERROR]` prefix, retaining their
+Markdown rule diagnostics gain a red `[FAIL]` prefix, retaining their
 original file/line, rule, and message. The prefix respects the shared color
 controls and remains readable without ANSI colors.
 Make derives native color flags from the same shared policy: Symfony/Composer
@@ -134,8 +134,9 @@ colors, preserving annotations and JSON report formats.
 
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
 hardcodes colors without a disable option. `scripts/native-output.sh` removes
-only SGR decoration from their plain-mode output, and from the configuration
-check's existing colored messages. It streams stdout/stderr separately and
+only SGR decoration from their plain-mode output. Configuration lint uses the
+shared blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors.
+The filter streams stdout/stderr separately and
 preserves command failures; filtering failures also fail the target. It never
 rewrites report files, annotations, or other terminal controls. Enabled color
 executes the native command unchanged. Tools with no force-color support
@@ -145,9 +146,9 @@ not manufacture decorations or bypass tool-specific agent safeguards.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
-* `[WARN]` and `[SKIP]` are yellow; `[FAIL]` is red.
-* `[INFO]` is uncolored context, such as a report path, not a success claim.
-* Labels remain readable without color. Status messages use stderr, leaving
+* `[WARN]` and `[SKIP]` are yellow; `[FAIL]` is red for diagnostics and outcomes.
+* `[INFO]` is blue context, such as a report path, not a success claim.
+* Labels remain readable without color. Shared status messages use stderr, leaving
   child stdout and stderr unbuffered and otherwise unchanged.
 * Status colors are owned by `command-output.sh`, not legacy Make printf
   constants. The action-update target calls `action-update-output.sh` directly;
@@ -160,6 +161,14 @@ not manufacture decorations or bypass tool-specific agent safeguards.
 * The wrapper preserves command exit status, including failures and
   interruptions; Make itself may translate a failed recipe into exit 2.
   Existing informational update-check policies are unchanged.
+* Finite commands separate the final outcome from details with a blank line.
+  Sourced helpers use `output_result <status> <message>` for this separation.
+  Docker verification groups details by Dockerfile; action/tool checks group
+  findings by repository and show aggregate counts. Warning outcomes never
+  imply that updates were installed or that an upload succeeded.
+* `make help` keeps its listing on stdout and reports its outcome on stderr.
+  `make info info_msg="..."` displays a blue information message instead of
+  executing the value as a shell command.
 
 With development services running, from the repository root on the Docker host:
 

@@ -303,9 +303,9 @@ done
     def test_markdown_diagnostic_prefix_preserves_streams_and_status(self):
         diagnostic = "CLAUDE.md:254:81 error MD013/line-length Line length [Expected: 80; Actual: 154]"
         for color, no_color, prefix in (
-            ("always", "", "\033[31m[ERROR]\033[0m "),
-            ("never", "", "[ERROR] "),
-            ("always", "1", "[ERROR] "),
+            ("always", "", "\033[31m[FAIL]\033[0m "),
+            ("never", "", "[FAIL] "),
+            ("always", "1", "[FAIL] "),
         ):
             with self.subTest(color=color, no_color=no_color):
                 result = subprocess.run(
@@ -378,7 +378,7 @@ done
     def test_cache_warmup_without_console_is_an_explicit_skip(self):
         result, _ = self.run_target("cache-warmup", "CONSOLE=")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Cache warmup skipped", result.stdout)
+        self.assertIn("[SKIP] Cache warmup skipped", result.stderr)
         self.assertIn("[SKIP] Rebuild application cache", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
         result, _ = self.run_target("cache-warmup", "install", "CONSOLE=")

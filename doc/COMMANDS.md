@@ -68,6 +68,17 @@ bash scripts/make.sh help GROUP=docker COLOR=never
 `checks`, `reports`, `setup`, `lifecycle`, and `docker`. Invalid groups fail
 explicitly and list supported choices.
 
+Help reports a separated final outcome on stderr. Shared `[RUN]` and `[INFO]`
+labels are blue, `[OK]` is green, `[WARN]`/`[SKIP]` are yellow, and
+`[FAIL]` is red for diagnostics and outcomes; plain and `NO_COLOR` output retains
+the same labels.
+The legacy `info` target now displays `info_msg` rather than executing it.
+From the repository root on the Docker host:
+
+```bash
+bash scripts/make.sh info info_msg="Local command information"
+```
+
 Help marks destructive and overwrite targets. Information commands keep native
 stdout, with status messages on stderr. For example, from the repository root
 on the Docker host with development services running, redirect the license
@@ -97,9 +108,10 @@ This offline target covers colors, stream preservation, failures, cancellation,
 expected-negative cases, multi-target invocations, and host/CI forwarding.
 `COLOR=auto|always|never` controls shared statuses and native tool color flags;
 nonempty `NO_COLOR` overrides color, including `COLOR=always`. GitHub analyzer
-formats stay plain regardless of status colors. ECS, PhpMetrics, and the JSON
-configuration check use a streaming SGR-only filter in plain mode where native
-disable flags are unavailable or unreliable. Tools without force-color support
+formats stay plain regardless of status colors. ECS and PhpMetrics use a
+streaming SGR-only filter in plain mode where native disable flags are unavailable
+or unreliable. Configuration lint uses the shared status helper directly.
+Tools without force-color support
 retain their native detection. Blocking failures stay nonzero.
 Compose receives the resolved color choice via `COMPOSE_ANSI`.
 See [the regression guide](../scripts/README.md#output-contract-regressions)

@@ -21,7 +21,7 @@ output_init() {
 output_status() {
     local status=$1 message=$2 color=''
     case "$status" in
-        RUN) color=$OUTPUT_BLUE ;;
+        RUN|INFO) color=$OUTPUT_BLUE ;;
         OK) color=$OUTPUT_GREEN ;;
         WARN|SKIP) color=$OUTPUT_YELLOW ;;
         FAIL) color=$OUTPUT_RED ;;
@@ -29,21 +29,25 @@ output_status() {
     printf '%s[%s]%s %s\n' "$color" "$status" "$OUTPUT_RESET" "$message" >&2
 }
 
+output_result() {
+    printf '\n' >&2
+    output_status "$@"
+}
+
 output_run() {
     local label=$1 status=0
     shift
     output_status RUN "$label"
-    trap 'output_status WARN "$label: interrupted"; exit 130' INT
-    trap 'output_status WARN "$label: terminated"; exit 143' TERM
+    trap 'output_result WARN "$label: interrupted"; exit 130' INT
+    trap 'output_result WARN "$label: terminated"; exit 143' TERM
     "$@" || status=$?
     trap - INT TERM
-    printf '\n' >&2
     if [ "$status" -eq 0 ]; then
-        output_status "${OUTPUT_SUCCESS_STATUS:-OK}" "${OUTPUT_SUCCESS_MESSAGE:-$label}"
+        output_result "${OUTPUT_SUCCESS_STATUS:-OK}" "${OUTPUT_SUCCESS_MESSAGE:-$label}"
     elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then
-        output_status WARN "$label: cancelled (exit $status)"
+        output_result WARN "$label: cancelled (exit $status)"
     else
-        output_status FAIL "$label (exit $status)"
+        output_result FAIL "$label (exit $status)"
     fi
     return "$status"
 }

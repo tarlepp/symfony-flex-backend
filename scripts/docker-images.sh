@@ -41,20 +41,12 @@
 set -euo pipefail
 source "$(dirname "$0")/command-output.sh"
 
-if [ -n "${NO_COLOR:-}" ] || [ "${COLOR:-auto}" = never ] ||
-    { [ "${COLOR:-auto}" = auto ] && { [ ! -t 2 ] || [ "${TERM:-}" = dumb ]; }; }; then
-    RED=''
-    GREEN=''
-    YELLOW=''
-    BOLD=''
-    NC=''
-else
-    RED=$'\033[0;31m'
-    GREEN=$'\033[0;32m'
-    YELLOW=$'\033[1;33m'
-    BOLD=$'\033[1m'
-    NC=$'\033[0m'
-fi
+RED=$OUTPUT_RED
+GREEN=$OUTPUT_GREEN
+YELLOW=$OUTPUT_YELLOW
+NC=$OUTPUT_RESET
+BOLD=''
+if [ -n "$NC" ]; then BOLD=$'\033[1m'; fi
 
 PINNED_DOCKERFILES=(Dockerfile docker/*/Dockerfile*)
 VERIFY_DOCKERFILES=(
@@ -269,7 +261,7 @@ check_image_update() {
 
     if jq -en --arg current "$current" --arg latest "$latest" \
         '($latest | split(".") | map(tonumber)) > ($current | split(".") | map(tonumber))' > /dev/null; then
-        warning "UPDATE" "${image} -> ${image%:*}:${prefix}${latest}${suffix}"
+        warning "WARN" "${image} -> ${image%:*}:${prefix}${latest}${suffix}"
         update_pin_reference "${image%:*}:${prefix}${latest}${suffix}" || return 4
         return 2
     else
@@ -280,6 +272,7 @@ check_image_update() {
 command_check_updates() {
     local file image references tool heading="" issues=0 updates=0 skipped=0 status=0
     local -A seen=() results=()
+    output_status RUN 'Docker image version checks'
 
     require_docker
 
@@ -337,20 +330,20 @@ command_check_updates() {
     done <<< "$references"
 
     if [ "$issues" -gt 0 ]; then
-        printf '\n%s[CHECK]%s %s image check(s) failed; %s image update(s) available\n' "$RED" "$NC" "$issues" "$updates" >&2
+        output_result FAIL "$issues image check(s) failed; $updates image update(s) available"
         return 1
     elif [ "$updates" -gt 0 ]; then
-        printf '\n%s[CHECK]%s %s image(s) require attention: updates available\n' "$YELLOW" "$NC" "$updates" >&2
+        output_result WARN "$updates image(s) require attention: updates available"
         return 1
     elif [ "$skipped" -gt 0 ]; then
-        printf '\n%s[SKIP]%s %s image version check(s) skipped; no updates found among completed checks\n' "$YELLOW" "$NC" "$skipped" >&2
+        output_result SKIP "$skipped image version check(s) skipped; no updates found among completed checks"
     else
-        printf '\n%s[OK]%s Image version checks completed; no updates available\n' "$GREEN" "$NC" >&2
+        output_result OK 'Image version checks completed; no updates available'
     fi
 }
 
 error() {
-    printf '%sERROR:%s %s\n' "$RED" "$NC" "$1" >&2
+    output_status FAIL "$1"
 }
 
 info() {
@@ -358,7 +351,9 @@ info() {
 }
 
 warning() {
-    printf '%s[%s]%s %s\n' "$YELLOW" "$1" "$NC" "$2"
+    local status=$1
+    case "$status" in SKIP) ;; *) status=WARN ;; esac
+    printf '%s[%s]%s %s\n' "$YELLOW" "$status" "$NC" "$2"
 }
 
 # Read value from environment variable or ask it from the user.
@@ -593,7 +588,7 @@ command_digest() {
         printf '\n'
         output_status INFO "Lines above use the same image; update those to the new pin reference"
     fi
-    output_status OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
+    output_result OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
 }
 
 # Verify base images of a single Dockerfile and print result per `FROM` line.
@@ -608,7 +603,7 @@ verify_dockerfile() {
     printf '%s%s%s\n' "$BOLD" "$file" "$NC"
 
     if [ ! -f "$file" ]; then
-        printf '  %sFAIL%s  File not found\n\n' "$RED" "$NC"
+        printf '  %s[FAIL]%s File not found\n\n' "$RED" "$NC"
         github_annotation error "$file" "" "Dockerfile not found" "${file} is listed for base image verification but does not exist"
         IMAGE_ROWS+=("| \`${file}\` | - | - | :x: File not found |")
         return 1
@@ -639,7 +634,7 @@ verify_dockerfile() {
         printf '  line %s: %s\n' "$line_number" "$ref"
 
         if ! [[ "$ref" =~ @sha256:[a-f0-9]{64}$ ]]; then
-            printf '  %sWARN%s  Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$YELLOW" "$NC"
+            printf '  %s[WARN]%s Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$YELLOW" "$NC"
             github_annotation warning "$file" "$line_number" "Base image not pinned" "${ref} is not pinned with a digest. Use: make docker-image-digest IMAGE=${ref}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :warning: Not pinned with digest |")
             warnings=$((warnings + 1))
@@ -648,7 +643,7 @@ verify_dockerfile() {
 
         if [ -z "${MANIFEST_CACHE[$ref]+set}" ]; then
             if ! raw="$(raw_manifest "$ref")"; then
-                printf '  %sFAIL%s  Could not inspect image: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
+                printf '  %s[FAIL]%s Could not inspect image: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
                 github_annotation error "$file" "$line_number" "Base image could not be inspected" "${ref}: $(tail -n 1 <<< "$raw")"
                 IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Could not inspect image |")
                 status=1
@@ -663,23 +658,23 @@ verify_dockerfile() {
         platforms="$(image_platforms "$raw")"
 
         if ! is_index "$type"; then
-            printf '  %sFAIL%s  Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
+            printf '  %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
             github_annotation error "$file" "$line_number" "Single platform base image digest" "${ref} points to a single platform manifest. Replace it with the multi-platform index digest from: make docker-image-digest IMAGE=${ref%@*}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest |")
             status=1
         elif [[ "$platforms" != *" "* ]]; then
-            printf '  %sFAIL%s  Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
+            printf '  %s[FAIL]%s Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
             github_annotation error "$file" "$line_number" "Insufficient base image platforms" "${ref} contains fewer than two distinct runnable platforms (${platforms:-none}). Wait for upstream platform images or choose another tag and digest."
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}) |")
             status=1
         else
-            printf '  %sOK%s    Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms} |")
         fi
     done < <(grep -niE '^[[:space:]]*FROM[[:space:]]' "$file")
 
     if [ "$found" -eq 0 ]; then
-        printf '  %sFAIL%s  No FROM instruction found\n' "$RED" "$NC"
+        printf '  %s[FAIL]%s No FROM instruction found\n' "$RED" "$NC"
         github_annotation error "$file" "" "No FROM instruction" "${file} does not contain any FROM instruction"
         status=1
     fi
@@ -741,7 +736,7 @@ command_verify() {
     declare -ga IMAGE_ROWS=()
     local -A plain=()
 
-    info "OK" "Verifying base images of ${#VERIFY_DOCKERFILES[@]} Dockerfiles"
+    output_status RUN "Verifying base images of ${#VERIFY_DOCKERFILES[@]} Dockerfiles"
     printf '\n'
 
     for file in "${VERIFY_DOCKERFILES[@]}"; do
@@ -780,16 +775,16 @@ command_verify() {
     write_verify_summary "$failures" "$warnings"
 
     if [ "$failures" -gt 0 ]; then
-        error "${failures} check(s) failed, see doc/DOCKER_MULTI_PLATFORM.md"
+        output_result FAIL "${failures} check(s) failed, see doc/DOCKER_MULTI_PLATFORM.md"
         exit 1
     fi
 
     if [ "$warnings" -gt 0 ]; then
-        warning "OK" "All Dockerfiles use multi-platform base images, ${warnings} with unpinned tags"
+        output_result WARN "All Dockerfiles use multi-platform base images, ${warnings} with unpinned tags"
         return 0
     fi
 
-    info "OK" "All Dockerfiles use multi-platform base images"
+    output_result OK 'All Dockerfiles use multi-platform base images'
 }
 
 command_platforms() {
@@ -808,7 +803,7 @@ command_setup_qemu() {
     warning "CAUTION" "This runs a privileged container (tonistiigi/binfmt) that registers QEMU emulators on the host."
 
     if ! confirm "Install QEMU emulators '${PLATFORMS}'?"; then
-        output_status SKIP 'QEMU installation cancelled; nothing installed'
+        output_result SKIP 'QEMU installation cancelled; nothing installed'
         return 0
     fi
 
@@ -886,7 +881,7 @@ command_push() {
     ask BUILDER "buildx builder name" "multi-platform"
 
     if ! confirm "Build ${DOCKERFILE} for ${PLATFORMS} and push it as ${TAG}?"; then
-        output_status SKIP 'Build and push cancelled; nothing built'
+        output_result SKIP 'Build and push cancelled; nothing built'
         return 0
     fi
 

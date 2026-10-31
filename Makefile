@@ -213,10 +213,10 @@ endef
 
 info_msg := Message
 info:
-	$(info_msg)
+	@bash scripts/command-output.sh --run "Command information" bash scripts/command-output.sh --status INFO '$(subst ','"'"',$(info_msg))'
 
 help:
-	@bash scripts/make-help.sh "$(GROUP)"
+	@bash scripts/command-output.sh --run "Command help" bash scripts/make-help.sh "$(GROUP)"
 
 configuration: ## Prints out application current configuration
 	@echo | jq -r . ${APPLICATION_CONFIG}
@@ -233,7 +233,7 @@ cache-warmup: cache-clear ## Warms up an empty cache
 ifdef CONSOLE
 	@bin/console cache:warmup $(ANSI_FLAG)
 else
-	@printf "Cache warmup skipped: bin/console is unavailable; cache cleanup completed.\n"
+	@bash scripts/command-output.sh --status SKIP "Cache warmup skipped: bin/console is unavailable; cache cleanup completed"
 endif
 
 generate-jwt-keys: ## Generates JWT auth keys
@@ -284,7 +284,7 @@ phpmetrics: ## Generates PhpMetrics static analysis
 		bash scripts/command-output.sh --status WARN "build/logs/junit.xml not found; running application tests to generate it" ; \
 		$(MAKE) -s run-tests || exit $$?; \
 	fi;
-	@test -f build/logs/junit.xml || { printf 'ERROR: Required report build/logs/junit.xml was not generated.\n' >&2; exit 1; }
+	@test -f build/logs/junit.xml || { bash scripts/command-output.sh --status FAIL "Required report build/logs/junit.xml was not generated"; exit 1; }
 	@php ./vendor/bin/phpmetrics --version
 	@bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 	$(call REPORT_PATHS,HTML report: build/phpmetrics,build/phpmetrics/index.html)
@@ -347,7 +347,11 @@ phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
 	@./vendor/bin/phpstan -v --error-format=github --no-ansi
 
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
-	@bash scripts/native-output.sh php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
+	@if php -r 'exit(json_decode(file_get_contents($$argv[1])) ? 0 : 1);' "$(APPLICATION_CONFIG)"; then \
+		bash scripts/command-output.sh --status INFO "No errors in configuration file '$(APPLICATION_CONFIG)'"; \
+	else \
+		status=$$?; bash scripts/command-output.sh --status FAIL "Could not validate JSON in configuration file '$(APPLICATION_CONFIG)'"; exit $$status; \
+	fi
 
 lint-yaml: ## Lint config YAML files
 	@@bin/console lint:yaml config --parse-tags $(ANSI_FLAG)
@@ -369,7 +373,7 @@ clear: ## Clean vendor and tool dependencies
 clear-tools: ## Clears all tools dependencies
 	$(call MUTATION_WARNING,Deleting vendor directories under tools; tool dependencies must be reinstalled)
 	@find tools -type d -name vendor -prune -exec rm -rf -- {} +
-	@printf 'Restart development containers after reinstalling dependencies.\n'
+	@bash scripts/command-output.sh --status INFO "Restart development containers after reinstalling dependencies"
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
 	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies $(ANSI_FLAG)
@@ -486,7 +490,7 @@ local-configuration: ## Create local configuration files
 	@cp /app/.env /app/.env.local
 	@cp /app/secrets/application.json /app/secrets/application.local.json
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
-	@printf 'Edit secrets/application.local.json for your local requirements.\n'
+	@bash scripts/command-output.sh --status INFO "Edit secrets/application.local.json for your local requirements"
 
 composer-normalize: ## Normalizes `composer.json` file content
 	$(call MUTATION_WARNING,Rewriting composer.json into normalized formatting)
@@ -634,7 +638,7 @@ tool-versions: ## Display PHP, Composer, Symfony, and PHPUnit versions
 	@composer --version $(ANSI_FLAG)
 
 configure-ci: ## Configure the application and JWT keys for CI only
-	@test "$$GITHUB_ACTIONS" = true || { echo "configure-ci is restricted to GitHub Actions." >&2; exit 1; }
+	@test "$$GITHUB_ACTIONS" = true || { bash scripts/command-output.sh --status FAIL "configure-ci is restricted to GitHub Actions."; exit 1; }
 	$(call MUTATION_WARNING,Overwriting .env and .env.test from CI templates and replacing configured JWT keys)
 	@cp .env.gh-actions .env
 	@cp .env.gh-actions .env.test

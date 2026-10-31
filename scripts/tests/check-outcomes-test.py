@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class CheckOutcomesTest(unittest.TestCase):
     def test_action_wrapper_preserves_informational_policy(self):
-        for status, label in ((0, "OK"), (1, "WARN"), (2, "FAIL"), (7, "FAIL"), (64, "FAIL")):
+        for status, label in ((0, "OK"), (1, "WARN"), (2, "FAIL"), (7, "FAIL"),
+                              (64, "FAIL"), (130, "WARN"), (143, "WARN")):
             with self.subTest(status=status):
                 result = subprocess.run(
                     ["bash", str(ROOT / "scripts/action-update-output.sh"), "bash", "-c",
@@ -26,6 +27,9 @@ class CheckOutcomesTest(unittest.TestCase):
                 self.assertEqual(result.stdout, "native findings\n")
                 color = 32 if label == "OK" else 33 if label == "WARN" else 31
                 self.assertIn(f"\033[{color}m[{label}]\033[0m", result.stderr)
+                self.assertRegex(result.stderr, r"\n\n\x1b\[[0-9]+m\[" + label + r"\]")
+                if status in (130, 143):
+                    self.assertIn(f"cancelled (exit {status})", result.stderr)
                 if status in (1, 2):
                     self.assertIn("informational Make target remains successful", result.stderr)
                 if status:

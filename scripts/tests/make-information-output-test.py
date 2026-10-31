@@ -98,7 +98,7 @@ exit 0
         (self.root / "help").touch()
         result = self.make("help")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stderr, "")
+        self.assertEqual(result.stderr, "[RUN] Command help\n\n[OK] Command help\n")
         expected = re.findall(r"^([a-zA-Z0-9-]+):.*## ", (ROOT / "Makefile").read_text(), re.M)
         actual = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
         self.assertCountEqual(actual, expected)
@@ -120,6 +120,52 @@ exit 0
         result = self.make("help", "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertCountEqual(re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M), expected)
+
+    def test_info_displays_message_without_executing_it(self):
+        for color, no_color, prefix in (
+            ("always", "", "\033[34m[INFO]\033[0m"),
+            ("never", "", "[INFO]"),
+            ("always", "1", "[INFO]"),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result = self.make("info", "info_msg=exit 7", COLOR=color, NO_COLOR=no_color)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout, "")
+                self.assertIn(f"{prefix} exit 7\n", result.stderr)
+                self.assertRegex(result.stderr, r"\n\n(?:\x1b\[32m)?\[OK\]")
+                self.assertEqual(self.calls.read_text(), "")
+        message = """Say "hello"; `exit 7`; 'single quotes' *"""
+        result = self.make("info", f"info_msg={message}")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(f"[INFO] {message}\n", result.stderr)
+
+    def test_configuration_lint_uses_shared_statuses_and_real_php(self):
+        php = self.root / "bin/php"
+        php.unlink()
+        php.symlink_to(shutil.which("php"))
+        configuration = self.root / "fixture.json"
+        for content, status in (('{"valid":true}', 0), ("{broken", 1), (None, 1)):
+            for color, no_color, enabled in (
+                ("always", "", True), ("never", "", False), ("always", "1", False),
+            ):
+                with self.subTest(content=content, color=color, no_color=no_color):
+                    if content is None:
+                        configuration.unlink(missing_ok=True)
+                    else:
+                        configuration.write_text(content)
+                    result = self.make("lint-configuration", COLOR=color, NO_COLOR=no_color)
+                    self.assertEqual(result.returncode, 0 if status == 0 else 2, result.stderr)
+                    label = "INFO" if status == 0 else "FAIL"
+                    code = 34 if status == 0 else 31
+                    prefix = f"\033[{code}m[{label}]\033[0m" if enabled else f"[{label}]"
+                    self.assertIn(prefix, result.stderr)
+                    if status:
+                        self.assertIn("[FAIL]", result.stderr)
+                        self.assertNotIn("[OK]", result.stderr)
+                        self.assertNotIn("[INFO]", result.stderr)
+                    else:
+                        self.assertIn("[OK]", result.stderr)
+                    self.assertNotRegex(result.stderr, r"make(?:\[[0-9]+\])?: \*\*\*")
 
     def test_metadata_drives_help_routing_and_completion_labels(self):
         makefile = self.root / "Makefile"
