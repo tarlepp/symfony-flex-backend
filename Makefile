@@ -974,6 +974,9 @@ prepare-sonar-reports: ## Copy test reports with relative paths for the host-sid
 test-make-routing: ## Test host and CI container command routing
 	@bash scripts/command-output.sh "Make container routing (offline mocked tests)" bash scripts/tests/make-container-test.sh
 
+test-command-output: ## Run offline command-output contract regression suites
+	@bash scripts/tests/command-output-contract-test.sh
+
 test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
 	@bash scripts/tests/docker-images-test.sh
 endif
