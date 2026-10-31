@@ -166,6 +166,7 @@ docker compose exec -T php python3 scripts/tests/make-check-output-test.py
 docker compose exec -T php python3 scripts/tests/lint-workflows-output-test.py
 docker compose exec -T php python3 scripts/tests/make-launcher-test.py
 docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+docker compose exec -T php python3 scripts/tests/check-outcomes-test.py
 make test-make-routing
 ```
 
@@ -215,6 +216,24 @@ make run-tests-php
 
 The application-test recipe retains its existing test-cache cleanup and
 regenerates `build/logs/clover.xml` and `build/logs/junit.xml`.
+
+Update and security checks distinguish findings from execution failures:
+
+* `check-action-updates` shows yellow updates and red discovery/lookup failures.
+  Its direct checker returns 0 for current pins, 1 for updates, and 2 for failed
+  discovery or lookups. The informational Make target still accepts 1 and 2,
+  explicitly reporting that policy rather than claiming a clean result.
+* `check-dependencies-*` keeps its existing informational success status for
+  available updates, with yellow new-version values and a warning summary.
+  A failed Composer invocation still fails the command and Make.
+* `docker-image-check-updates` keeps exit 1 for updates **or** failed checks.
+  Its yellow summary means updates only; its red summary separately counts
+  failed checks and updates. Skipped versions remain yellow and return success.
+  `docker-image-verify-pins` remains blocking for invalid/unresolvable pins.
+* `check-security` remains blocking for advisory-constraint, cache-refresh,
+  or installed-package audit failures. If the optional local checker is absent,
+  a yellow `[SKIP]` replaces its previous silent omission; exit success is
+  preserved, but it does not claim that all security checks ran.
 
 ### Project stats script [ᐞ](#table-of-contents)
 

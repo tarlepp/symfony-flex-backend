@@ -110,7 +110,7 @@ Tool checks verify tag/commit parity, prefer peeled commits for annotated tags,
 and report the newest full stable version tag and commit, excluding prerelease
 and floating tags. Missing pins, lookup failures, and moved/missing tags fail
 with exit code `2`; updates return `1`. This stricter parity/error behavior is
-specific to tool pins; the existing Action lookup limitations still apply.
+specific to tool pins. Action version/SHA lookup failures also return exit 2.
 Review compatibility and update the release tag, commit comment, and both
 platforms' binary checksums together. Do not substitute a commit SHA for a
 binary checksum or automatically install the suggested version.
@@ -304,10 +304,14 @@ Updates available:       2
 
 Exit codes:
 
-* `0`: no discovery warnings and no recorded updates; remote lookup failures
-  are not guaranteed to produce a failing exit code.
+* `0`: no discovery warnings or lookup failures and no recorded updates.
 * `1`: updates are available.
-* `2`: discovery warnings found.
+* `2`: discovery warnings or version/SHA lookup failures found.
+
+Available updates are yellow; failed checks/lookups are red. The informational
+`make check-action-updates` target still returns success for handled checker
+exits 1 and 2, with an explicit warning/failure summary describing that policy.
+Other exit codes still fail Make.
 
 Use in CI:
 
