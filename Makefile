@@ -46,6 +46,8 @@ COMPOSE_EXEC := docker compose
 endif
 export COLOR ?= auto
 export NO_COLOR
+NATIVE_COLOR := $(shell bash -c 'source scripts/command-output.sh; if [ -n "$$OUTPUT_RESET" ]; then printf always; else printf never; fi')
+export COMPOSE_ANSI := $(NATIVE_COLOR)
 CONTAINER_ENV := --env COLOR --env NO_COLOR $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
 
 HOST_TARGETS := help info bash fish logs daemon daemon-build daemon-prod start-prod stop start start-build \
@@ -123,6 +125,10 @@ $(filter-out $(QUALITY_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
 else
 
+ANSI_FLAG := $(if $(filter always,$(NATIVE_COLOR)),--ansi,--no-ansi)
+COLORS_FLAG := $(if $(filter always,$(NATIVE_COLOR)),--colors,--no-colors)
+PSALM_COLOR_FLAG := $(if $(filter never,$(NATIVE_COLOR)),--monochrome)
+
 HOST_CONTEXT_FAILURE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Run this target on the Docker host, not inside a container"; exit 1'
 
 _WARNING := "\033[33m[%s]\033[0m %s\n" # Yellow text for "printf"
@@ -164,14 +170,14 @@ configuration: ## Prints out application current configuration
 cache-clear: ## Clears the cache
 	$(call MUTATION_WARNING,Removing application cache; it will be regenerated as needed)
 ifdef CONSOLE
-	@bin/console cache:clear --no-warmup
+	@bin/console cache:clear --no-warmup $(ANSI_FLAG)
 else
 	@rm -rf var/cache/*
 endif
 
 cache-warmup: cache-clear ## Warms up an empty cache
 ifdef CONSOLE
-	@bin/console cache:warmup
+	@bin/console cache:warmup $(ANSI_FLAG)
 else
 	@printf "Cache warmup skipped: bin/console is unavailable; cache cleanup completed.\n"
 endif
@@ -198,8 +204,8 @@ run-tests-php: ## Runs all tests via phpunit (pure PHP)
 	@rm -rf build/logs
 	@mkdir -p build/logs
 	@rm -rf ./var/cache/test*
-	@bin/console cache:warmup --env=test
-	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+	@bin/console cache:warmup --env=test $(ANSI_FLAG)
+	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml --colors=$(NATIVE_COLOR)
 	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
 
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
@@ -207,14 +213,14 @@ run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
 	@rm -rf build/logs
 	@mkdir -p build/logs
 	@rm -rf ./var/cache/test*
-	@bin/console cache:warmup --env=test
-	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+	@bin/console cache:warmup --env=test $(ANSI_FLAG)
+	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml --colors=$(NATIVE_COLOR)
 	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
 
 infection: ## Runs Infection to codebase
 	@mkdir -p build/infection
-	@bin/console cache:clear --env=test
-	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit"
+	@bin/console cache:clear --env=test $(ANSI_FLAG)
+	@./vendor/bin/infection $(ANSI_FLAG) --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit --colors=$(NATIVE_COLOR)"
 	$(call REPORT_PATHS,Mutation reports: build/infection (see native output for generated files))
 
 phpmetrics: ## Generates PhpMetrics static analysis
@@ -226,71 +232,71 @@ phpmetrics: ## Generates PhpMetrics static analysis
 	fi;
 	@test -f build/logs/junit.xml || { printf 'ERROR: Required report build/logs/junit.xml was not generated.\n' >&2; exit 1; }
 	@php ./vendor/bin/phpmetrics --version
-	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
+	@bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 	$(call REPORT_PATHS,HTML report: build/phpmetrics)
 
 phpcs: ## Runs PHP CodeSniffer
 	@php ./vendor/bin/phpcs --version
-	@php ./vendor/bin/phpcs --standard=PSR2 --colors -p src tests
+	@php ./vendor/bin/phpcs --standard=PSR2 $(COLORS_FLAG) -p src tests
 
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 	@php ./vendor/bin/ecs --version
-	@php ./vendor/bin/ecs --clear-cache src tests
+	@bash scripts/native-output.sh php ./vendor/bin/ecs $(ANSI_FLAG) --clear-cache src tests
 
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 	$(call MUTATION_WARNING,Applying coding-standard fixes to files under src and tests)
 	@php ./vendor/bin/ecs --version
-	@php ./vendor/bin/ecs src tests --clear-cache --fix
+	@bash scripts/native-output.sh php ./vendor/bin/ecs $(ANSI_FLAG) src tests --clear-cache --fix
 
 phpinsights: ## Runs PHP Insights
-	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction --min-quality=95 --min-complexity=85 --min-architecture=100 --min-style=100
+	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse $(ANSI_FLAG) --no-interaction --min-quality=95 --min-complexity=85 --min-architecture=100 --min-style=100
 
 phplint: ## Runs PHPLint
-	@php ./vendor/bin/phplint --no-cache
+	@php ./vendor/bin/phplint --no-cache $(ANSI_FLAG)
 
 php-parallel-lint: ## Lint PHP files with `php-parallel-lint`
-	@./vendor/bin/parallel-lint --exclude .git --exclude app --exclude tools --exclude var --exclude vendor --colors --show-deprecated --blame .
+	@./vendor/bin/parallel-lint --exclude .git --exclude app --exclude tools --exclude var --exclude vendor $(COLORS_FLAG) --show-deprecated --blame .
 
 psalm: ## Runs Psalm static analysis tool
 	@mkdir -p build
-	@@bin/console cache:clear
+	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json $(PSALM_COLOR_FLAG)
 	$(call REPORT_PATHS,JSON report: build/psalm.json)
 
 psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 	@mkdir -p build
-	@@bin/console cache:clear
+	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json $(PSALM_COLOR_FLAG)
 	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
 
 psalm-github: ## Runs Psalm static analysis tool (GitHub)
 	@mkdir -p build
-	@@bin/console cache:clear
+	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json --output-format=github
+	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json --output-format=github --monochrome
 	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
 
 phpstan: ## Runs PHPStan static analysis tool
-	@@bin/console cache:clear
-	@bin/console cache:clear
+	@@bin/console cache:clear $(ANSI_FLAG)
+	@bin/console cache:clear $(ANSI_FLAG)
 	@sleep 3
 	@./tools/02_phpstan/vendor/phpstan/phpstan/phpstan --version
-	@./tools/02_phpstan/vendor/phpstan/phpstan/phpstan -v
+	@./tools/02_phpstan/vendor/phpstan/phpstan/phpstan -v $(ANSI_FLAG)
 
 phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
-	@@bin/console cache:clear
-	@bin/console cache:clear
+	@@bin/console cache:clear $(ANSI_FLAG)
+	@bin/console cache:clear $(ANSI_FLAG)
 	@sleep 3
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan -v --error-format=github
+	@./vendor/bin/phpstan -v --error-format=github --no-ansi
 
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
-	@php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
+	@bash scripts/native-output.sh php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
 
 lint-yaml: ## Lint config YAML files
-	@@bin/console lint:yaml config --parse-tags
+	@@bin/console lint:yaml config --parse-tags $(ANSI_FLAG)
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
 	@bash scripts/command-output.sh "Skill metadata and documentation links" python3 scripts/check-skills.py
@@ -312,28 +318,28 @@ clear-tools: ## Clears all tools dependencies
 	@printf 'Restart development containers after reinstalling dependencies.\n'
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
-	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies
+	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies $(ANSI_FLAG)
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
-	@bash scripts/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor
+	@bash scripts/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor $(ANSI_FLAG)
 
 check-dependencies-patch: ## Checks if any vendor dependency can be updated (only patch versions)
-	@bash scripts/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch
+	@bash scripts/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch $(ANSI_FLAG)
 
 check-licenses: ## Check vendor licenses
 	@bash -o pipefail -c 'composer license --format=json | jq -r '"'"'.dependencies[] | .license | join(" OR ") | if length == 0 then "UNSPECIFIED" else . end'"'"' | sort | uniq -c | sort -rn'
 
 update: ## Update composer dependencies
 	$(call MUTATION_WARNING,Updating application dependencies and lockfiles; Composer hooks may update tools and application cache)
-	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader
+	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader $(ANSI_FLAG)
 
 update-tools: ## Update composer tools dependencies
 	$(call MUTATION_WARNING,Updating dependency versions and lockfiles in tool groups)
-	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader $(ANSI_FLAG)
 
 install-tools: ## Install composer tools dependencies
 	$(call MUTATION_WARNING,Installing tool dependencies and rebuilding their autoloaders)
-	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader $(ANSI_FLAG)
 
 bash: ## Get bash inside PHP container
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
@@ -430,16 +436,16 @@ local-configuration: ## Create local configuration files
 
 composer-normalize: ## Normalizes `composer.json` file content
 	$(call MUTATION_WARNING,Rewriting composer.json into normalized formatting)
-	@composer normalize
+	@composer normalize $(ANSI_FLAG)
 
 composer-validate: ## Validate `composer.json` file content
-	@composer validate --no-check-version
+	@composer validate --no-check-version $(ANSI_FLAG)
 
 composer-require-checker: ## Check the defined dependencies against your code
-	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker
+	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker $(ANSI_FLAG)
 
 composer-unused: ## Show unused packages by scanning and comparing package namespaces against your source
-	@XDEBUG_MODE=off php /app/vendor/bin/composer-unused
+	@XDEBUG_MODE=off php /app/vendor/bin/composer-unused $(ANSI_FLAG)
 
 phploc: ## Runs `phploc` and create json output
 	@mkdir -p build
@@ -559,19 +565,19 @@ endif
 
 install: ## Install project Composer dependencies
 	$(call MUTATION_WARNING,Installing application dependencies and rebuilding autoloaders; Composer hooks may modify cache)
-	@composer install --no-progress --optimize-autoloader
+	@composer install --no-progress --optimize-autoloader $(ANSI_FLAG)
 
 application-info: ## Display Symfony application information
-	@bin/console about
+	@bin/console about $(ANSI_FLAG)
 
 check-requirements: ## Check application runtime requirements
 	@bash scripts/command-output.sh "Application runtime requirements" php ./vendor/bin/requirements-checker
 
 tool-versions: ## Display PHP, Composer, Symfony, and PHPUnit versions
 	@php --version
-	@bin/console --version
+	@bin/console --version $(ANSI_FLAG)
 	@php ./vendor/bin/phpunit --version
-	@composer --version
+	@composer --version $(ANSI_FLAG)
 
 configure-ci: ## Configure the application and JWT keys for CI only
 	@test "$$GITHUB_ACTIONS" = true || { echo "configure-ci is restricted to GitHub Actions." >&2; exit 1; }
@@ -581,7 +587,7 @@ configure-ci: ## Configure the application and JWT keys for CI only
 	@$(MAKE) generate-jwt-keys
 
 report-coveralls: ## Upload coverage to Coveralls
-	@php ./vendor/bin/php-coveralls -v
+	@php ./vendor/bin/php-coveralls -v $(ANSI_FLAG)
 
 prepare-sonar-reports: ## Copy test reports with relative paths for the host-side Sonar action
 	@bash scripts/prepare-sonar-reports.sh

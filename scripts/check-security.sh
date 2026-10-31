@@ -2,8 +2,12 @@
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
+ansi_flag=--no-ansi
+if [ -n "$OUTPUT_RESET" ]; then
+    ansi_flag=--ansi
+fi
 output_run 'Security advisory dependency constraints' \
-    composer update --dry-run --no-plugins roave/security-advisories
+    composer update --dry-run --no-plugins roave/security-advisories "$ansi_flag"
 
 if command -v local-php-security-checker > /dev/null 2>&1; then
     output_run 'Refresh security advisory cache' local-php-security-checker --update-cache

@@ -15,6 +15,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 HELPER = ROOT / "scripts/command-output.sh"
 SUITE = ROOT / "scripts/tests/docker-images-test.sh"
+NATIVE = ROOT / "scripts/native-output.sh"
 
 
 class CommandOutputTest(unittest.TestCase):
@@ -65,6 +66,81 @@ class CommandOutputTest(unittest.TestCase):
             self.assertEqual("completed" in result.stderr, status == 0)
             if status:
                 self.assertIn("[FAIL] report (exit 7)", result.stderr)
+
+    def test_native_decoration_filter_preserves_streams_and_exit_status(self):
+        for color, no_color, enabled in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            for status in (0, 7, 130, 143):
+                result = subprocess.run([
+                    "bash", str(NATIVE), "bash", "-c",
+                    "printf '\\033[32m{\"report\":true}\\033[0m'; "
+                    "printf '\\033[31m::error file=src/Test.php::diagnostic\\033[0m\\r\\033[2K' >&2; "
+                    f"exit {status}",
+                ], env=self.environment(COLOR=color, NO_COLOR=no_color), cwd=ROOT,
+                    capture_output=True, check=False)
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stdout, b'\033[32m{"report":true}\033[0m' if enabled
+                                 else b'{"report":true}')
+                self.assertEqual(result.stderr,
+                                 (b"\033[31m::error file=src/Test.php::diagnostic\033[0m"
+                                  if enabled else b"::error file=src/Test.php::diagnostic") + b"\r\033[2K")
+                self.assertNotIn(b"[OK]", result.stderr)
+        result = self.run_command(["bash", str(NATIVE)])
+        self.assertEqual(result.returncode, 64)
+        self.assertIn("[FAIL] Usage:", result.stderr)
+        result = self.run_command(["bash", str(NATIVE), "copilot-output-missing-tool"], COLOR="never")
+        self.assertEqual(result.returncode, 127)
+        self.assertIn("command not found", result.stderr)
+
+    def test_native_decoration_filter_streams_before_command_completion(self):
+        process = subprocess.Popen(
+            ["bash", str(NATIVE), "bash", "-c", "printf '\\033[32mready\\033[0m\\n'; sleep 30"],
+            env=self.environment(COLOR="never"), stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, start_new_session=True,
+        )
+        try:
+            self.assertTrue(select.select([process.stdout], [], [], 5)[0])
+            self.assertEqual(process.stdout.readline(), b"ready\n")
+            self.assertIsNone(process.poll())
+        finally:
+            os.killpg(process.pid, signal.SIGTERM)
+            process.communicate(timeout=5)
+
+    def test_native_auto_color_uses_terminal_and_respects_dumb_and_no_color(self):
+        for environment, enabled in (
+            ({}, True), ({"TERM": "dumb"}, False),
+            ({"COLOR": "always", "NO_COLOR": "1"}, False),
+        ):
+            master, slave = pty.openpty()
+            try:
+                process = subprocess.Popen(
+                    ["bash", str(NATIVE), "bash", "-c",
+                     "printf '\\033[32mpayload\\033[0m'"],
+                    env=self.environment(**environment), stdout=slave, stderr=slave,
+                )
+                self.assertEqual(process.wait(timeout=5), 0)
+                output = os.read(master, 4096)
+                self.assertEqual(output, b"\033[32mpayload\033[0m" if enabled else b"payload")
+            finally:
+                os.close(slave)
+                os.close(master)
+
+    def test_native_filter_failure_is_explicit_and_nonzero(self):
+        with tempfile.TemporaryDirectory(prefix="native-filter-test-") as directory:
+            root = Path(directory)
+            (root / "dirname").symlink_to(shutil.which("dirname"))
+            sed = root / "sed"
+            sed.write_text('#!/bin/bash\n/bin/cat >/dev/null\nexit 9\n')
+            sed.chmod(0o755)
+            result = self.run_command(
+                ["/bin/bash", str(NATIVE), "/bin/bash", "-c", "printf payload"],
+                PATH=str(root), COLOR="never",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("[FAIL] Unable to filter native color output", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
 
     def test_stream_mode_preserves_streams_and_has_no_completion_banner(self):
         for status in (0, 7, 130, 143):

@@ -29,6 +29,7 @@ class LifecycleOutputTest(unittest.TestCase):
         docker = self.root / "bin/docker"
         docker.write_text("""#!/usr/bin/env bash
 printf '%s\\n' "$*" >> "$CALLS"
+if [ -n "${COLOR_CALLS:-}" ]; then printf '%s\\n' "$COMPOSE_ANSI" >> "$COLOR_CALLS"; fi
 if [ "$1" = info ]; then exit "${DAEMON_EXIT:-0}"; fi
 if [[ "$*" == *" version" && "$1" = compose ]]; then exit "${COMPOSE_EXIT:-0}"; fi
 if [[ "$*" == *" ps --all --format "* ]]; then
@@ -93,6 +94,20 @@ exit "${DOCKER_EXIT:-0}"
             "bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
             "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", target, *arguments,
         ], **overrides)
+
+    def test_compose_color_environment_follows_shared_controls(self):
+        color_calls = self.root / "color-calls"
+        for color, no_color, expected in (
+            ("always", "", "always"), ("never", "", "never"),
+            ("always", "1", "never"), ("auto", "", "never"),
+        ):
+            color_calls.write_text("")
+            result, _ = self.make("daemon", COLOR=color, NO_COLOR=no_color,
+                                  COLOR_CALLS=str(color_calls))
+            self.assertEqual(result.returncode, 0, result.stderr)
+            values = color_calls.read_text().splitlines()
+            self.assertTrue(values)
+            self.assertEqual(set(values), {expected})
 
     def test_lifecycle_success_and_failure_preserve_compose_arguments(self):
         targets = {
