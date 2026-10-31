@@ -222,6 +222,25 @@ exit 0
             self.assertEqual(keys, sorted(keys), title)
         self.assertIn("make help GROUP=<group>", result.stdout)
 
+    def test_makefile_registrations_and_recipes_follow_help_order(self):
+        result = self.make("help")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        listed = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
+        makefile = (ROOT / "Makefile").read_text()
+        registered = re.findall(r"^\$\(call REGISTER_TARGET,([^,]+),", makefile, re.M)
+        recipes = re.findall(r"^([a-zA-Z0-9-]+):(?:.*## .*|)\n", makefile, re.M)
+        self.assertEqual(registered, ["help", "info", *listed])
+        self.assertEqual(recipes, registered)
+        titles = (
+            "Configuration and information", "Application tests and tooling regressions",
+            "Linting and static analysis", "Dependency, security and license checks",
+            "Reports and uploads", "Setup, dependencies and application maintenance",
+            "Docker lifecycle and interactive sessions (host)",
+            "Docker images and host maintenance (host)",
+        )
+        for title in titles:
+            self.assertEqual(makefile.count(f"# {title}\n"), 2, title)
+
     def test_help_filters_each_group_and_rejects_invalid_selection(self):
         registrations = re.findall(
             r"^\$\(call REGISTER_TARGET,([^,]+),([^,]+),",
