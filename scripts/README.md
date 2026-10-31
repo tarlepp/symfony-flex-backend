@@ -48,8 +48,38 @@ This directory contains different scripts that are used during development.
 
 <a id="command-status-output"></a>
 
-`scripts/command-output.sh` provides reusable status messages and a streaming
-command wrapper. Shared output is used by `test-docker-images`, `check-skills`,
+`scripts/command-output.sh` owns two command execution modes, both preserving
+native stdout/stderr and the command's exit status:
+
+| Mode | Use | Status |
+| --- | --- | --- |
+| `--run` (default) | Finite recipes and information | Start and completion |
+| `--stream` | Shells and followed logs | Start only; execute in place |
+
+`--run` streams output without buffering and reports success only after the
+command exits successfully. Information commands use this same mode: status
+messages stay on stderr, leaving structured stdout intact. Multi-step commands
+must pass a fail-fast executable or the complete nested Make recipe, not a
+shell function whose intermediate failures could be hidden by Bash conditional
+execution. Make's recipe dispatcher uses explicit `--run` for this boundary.
+
+`--stream` replaces the helper process using `exec`, retaining terminal
+descriptors, signals, arguments, and native failures without completion
+decoration. Make's `STREAM_COMMAND` uses this shared mode rather than a separate
+inline shell implementation. Foreground `start*` remains in `--run` mode because
+its contract includes a final session-ended/cancellation status.
+Existing `<label> <command> ...` invocations and sourced `output_run` callers
+remain compatible.
+
+Read-only examples, from the repository root inside the PHP container (enter
+with `make bash` from the Docker host first):
+
+```bash
+bash scripts/command-output.sh --run "Read JSON" printf '{"ready":true}\n'
+bash scripts/command-output.sh --stream "Native output" printf 'payload\n'
+```
+
+Shared output is used by `test-docker-images`, `check-skills`,
 `lint-workflows`, `check-requirements`, `test-make-routing`, and
 `docker-image-verify-pins`, and the quality targets below. Other targets retain
 their existing output until migrated separately.
