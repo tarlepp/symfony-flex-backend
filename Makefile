@@ -79,6 +79,8 @@ QUALITY_TARGETS := run-tests run-tests-php run-tests-phpdbg infection phpcs ecs 
 	phpinsights phplint php-parallel-lint psalm psalm-shepherd psalm-github phpstan phpstan-github \
 	lint-configuration lint-yaml lint-markdown composer-normalize composer-validate \
 	composer-require-checker composer-unused
+QUALITY_TARGETS += install install-tools update update-tools cache-clear cache-warmup \
+	local-configuration configure-ci generate-jwt-keys generate-ssl-cert clear clear-tools phpmetrics
 QUALITY_GOALS := $(filter $(QUALITY_TARGETS),$(MAKECMDGOALS))
 ifeq ($(QUALITY_OUTPUT_RUN),1)
 QUALITY_GOALS :=
@@ -87,6 +89,22 @@ endif
 ifneq ($(strip $(QUALITY_GOALS)),)
 .PHONY: $(MAKECMDGOALS)
 lint-markdown: QUALITY_LABEL := Markdown documentation
+install: QUALITY_LABEL := Install application dependencies
+install-tools: QUALITY_LABEL := Install tool dependencies
+update: QUALITY_LABEL := Update application dependencies
+update-tools: QUALITY_LABEL := Update tool dependencies
+cache-clear: QUALITY_LABEL := Clear application cache
+cache-warmup: QUALITY_LABEL := Rebuild application cache
+local-configuration: QUALITY_LABEL := Create local configuration
+configure-ci: QUALITY_LABEL := Configure CI environment and JWT keys
+generate-jwt-keys: QUALITY_LABEL := Generate JWT key pair
+generate-ssl-cert: QUALITY_LABEL := Generate local TLS certificates
+clear: QUALITY_LABEL := Remove application and tool dependencies
+clear-tools: QUALITY_LABEL := Remove tool dependencies
+phpmetrics: QUALITY_LABEL := Generate PhpMetrics report
+ifeq ($(strip $(CONSOLE)),)
+cache-warmup: export OUTPUT_SUCCESS_STATUS := SKIP
+endif
 $(QUALITY_GOALS):
 ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
 	@$(MAKE) QUALITY_OUTPUT_RUN=1 $@
@@ -128,6 +146,10 @@ define RUN_WITH_DECORATED_EXIT_OUTPUT
 	@bash scripts/action-update-output.sh $(1)
 endef
 
+define MUTATION_WARNING
+	@bash -c 'source scripts/command-output.sh; output_status WARN "$$1"' warning "$(1)"
+endef
+
 info_msg := Message
 info:
 	$(info_msg)
@@ -152,30 +174,23 @@ else
 endif
 
 cache-clear: ## Clears the cache
-cache-clear: info_msg := @printf $(_TITLE) "OK" "Clearing application cache"
-cache-clear: info
+	$(call MUTATION_WARNING,Removing application cache; it will be regenerated as needed)
 ifdef CONSOLE
 	@bin/console cache:clear --no-warmup
-	$(ALL_DONE)
 else
 	@rm -rf var/cache/*
 endif
 
 cache-warmup: cache-clear ## Warms up an empty cache
-cache-warmup: info_msg := @printf $(_TITLE) "OK" "Warming up cache"
-cache-warmup: info
 ifdef CONSOLE
 	@bin/console cache:warmup
-	$(ALL_DONE)
 else
-	@printf "Cannot warm up the cache (needs symfony/console).\n"
+	@printf "Cache warmup skipped: bin/console is unavailable; cache cleanup completed.\n"
 endif
 
 generate-jwt-keys: ## Generates JWT auth keys
-generate-jwt-keys: info_msg := @printf $(_TITLE) "OK" "Generating JWT authentication keys"
-generate-jwt-keys: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@echo "\033[32mGenerating RSA keys for JWT\033[39m"
+	$(call MUTATION_WARNING,Replacing configured JWT keys; existing tokens may become invalid)
 	@mkdir -p config/jwt
 	@rm -f ${JWT_SECRET_KEY}
 	@rm -f ${JWT_PUBLIC_KEY}
@@ -183,7 +198,6 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_SECRET_KEY} -out ${JWT_PUBLIC_KEY}
 	@chmod 644 ${JWT_SECRET_KEY}
 	@chmod 644 ${JWT_PUBLIC_KEY}
-	@echo "\033[32mRSA key pair successfully generated\033[39m"
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -253,15 +267,14 @@ else
 endif
 
 phpmetrics: ## Generates PhpMetrics static analysis
-phpmetrics: info_msg := @printf $(_TITLE) "OK" "Generating PhpMetrics static analysis"
-phpmetrics: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build/phpmetrics
+	$(call MUTATION_WARNING,Writing the HTML report to build/phpmetrics; existing report files may be replaced)
 	@if [ ! -f build/logs/junit.xml ] ; then \
-		printf $(_WARNING) "Warning" "clover.xml not found, need to run tests before this..." ; \
-		make -s run-tests; \
-		printf $(_TITLE) "OK" "Generating PhpMetrics static analysis" ; \
+		bash -c 'source scripts/command-output.sh; output_status WARN "build/logs/junit.xml not found; running application tests to generate it"' ; \
+		$(MAKE) -s run-tests || exit $$?; \
 	fi;
+	@test -f build/logs/junit.xml || { printf 'ERROR: Required report build/logs/junit.xml was not generated.\n' >&2; exit 1; }
 	@php ./vendor/bin/phpmetrics --version
 	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -303,6 +316,7 @@ endif
 
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(call MUTATION_WARNING,Applying coding-standard fixes to files under src and tests)
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs src tests --clear-cache --fix
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -482,17 +496,14 @@ else
 endif
 
 clear: ## Clean vendor and tool dependencies
-clear: info_msg := @printf $(_TITLE) "OK" "Clearing vendor dependencies"
-clear: info
+	$(call MUTATION_WARNING,Deleting vendor and tool vendor directories; dependencies must be reinstalled)
 	@rm -rf vendor
 	@${MAKE} clear-tools
 
 clear-tools: ## Clears all tools dependencies
-clear-tools: info_msg := @printf $(_TITLE) "OK" "Clearing tools dependencies"
-clear-tools: info
-	@find -type d -name vendor | grep tools | xargs rm -rf
-	@printf $(_TITLE) "OK" "remember to restart your containers after this"
-	$(ALL_DONE)
+	$(call MUTATION_WARNING,Deleting vendor directories under tools; tool dependencies must be reinstalled)
+	@find tools -type d -name vendor -prune -exec rm -rf -- {} +
+	@printf 'Restart development containers after reinstalling dependencies.\n'
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
@@ -549,9 +560,8 @@ else
 endif
 
 update: ## Update composer dependencies
-update: info_msg := @printf $(_TITLE) "OK" "Updating composer dependencies"
-update: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(call MUTATION_WARNING,Updating application dependencies and lockfiles; Composer hooks may update tools and application cache)
 	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
@@ -564,9 +574,8 @@ else
 endif
 
 update-tools: ## Update composer tools dependencies
-update-tools: info_msg := @printf $(_TITLE) "OK" "Updating composer tools dependencies"
-update-tools: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(call MUTATION_WARNING,Updating dependency versions and lockfiles in tool groups)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
@@ -579,9 +588,8 @@ else
 endif
 
 install-tools: ## Install composer tools dependencies
-install-tools: info_msg := @printf $(_TITLE) "OK" "Installing composer tools dependencies"
-install-tools: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(call MUTATION_WARNING,Installing tool dependencies and rebuilding their autoloaders)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
@@ -713,13 +721,12 @@ else
 endif
 
 local-configuration: ## Create local configuration files
-local-configuration: info_msg := @printf $(_TITLE) "OK" "Creating local configuration"
-local-configuration: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(call MUTATION_WARNING,Overwriting .env.local and secrets/application.local.json with template configuration)
 	@cp /app/.env /app/.env.local
 	@cp /app/secrets/application.json /app/secrets/application.local.json
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
-	@printf $(_TITLE) "OK"  "Local configuration created, just edit your new \`secrets/application.local.json\` file for your needs"
+	@printf 'Edit secrets/application.local.json for your local requirements.\n'
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -732,6 +739,7 @@ endif
 
 composer-normalize: ## Normalizes `composer.json` file content
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
+	$(call MUTATION_WARNING,Rewriting composer.json into normalized formatting)
 	@composer normalize
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
@@ -907,7 +915,7 @@ else
 endif
 
 generate-ssl-cert: ## Generate self signed SSL certificates inside the PHP container
-	@echo "\033[32mGenerating self signed SSL certificates\033[39m"
+	$(call MUTATION_WARNING,Replacing local CA and TLS keys and certificates in docker/nginx/ssl; OpenSSL may prompt for input)
 	@cd docker/nginx/ssl && ./create-keys.sh
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
@@ -952,6 +960,7 @@ else
 endif
 
 install: ## Install project Composer dependencies
+	$(call MUTATION_WARNING,Installing application dependencies and rebuilding autoloaders; Composer hooks may modify cache)
 	@composer install --no-progress --optimize-autoloader
 
 application-info: ## Display Symfony application information
@@ -968,6 +977,7 @@ tool-versions: ## Display PHP, Composer, Symfony, and PHPUnit versions
 
 configure-ci: ## Configure the application and JWT keys for CI only
 	@test "$$GITHUB_ACTIONS" = true || { echo "configure-ci is restricted to GitHub Actions." >&2; exit 1; }
+	$(call MUTATION_WARNING,Overwriting .env and .env.test from CI templates and replacing configured JWT keys)
 	@cp .env.gh-actions .env
 	@cp .env.gh-actions .env.test
 	@$(MAKE) generate-jwt-keys

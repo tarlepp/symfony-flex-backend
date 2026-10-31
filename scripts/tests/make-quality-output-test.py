@@ -161,6 +161,128 @@ done
                 self.assertEqual(result.stdout, "\n" + prefix + diagnostic + "\n")
                 self.assertEqual(result.stderr, "\n" + prefix + diagnostic + "\n")
 
+    def prepare_mutation_fixtures(self):
+        fixture = (self.root / "bin/php").read_text()
+        for name in ("cp", "sed", "chmod", "openssl", "rm"):
+            file = self.root / "bin" / name
+            file.write_text(fixture)
+            file.chmod(0o755)
+        jq = self.root / "bin/jq"
+        jq.write_text("#!/bin/sh\nprintf '%s\\n' fixture-value\n")
+        jq.chmod(0o755)
+        ssl = self.root / "docker/nginx/ssl"
+        ssl.mkdir(parents=True)
+        shutil.copyfile(ROOT / "docker/nginx/ssl/create-keys.sh", ssl / "create-keys.sh")
+        (ssl / "create-keys.sh").chmod(0o755)
+        metrics = self.root / "vendor/bin/phpmetrics"
+        metrics.write_text(fixture)
+        metrics.chmod(0o755)
+        logs = self.root / "build/logs"
+        logs.mkdir(parents=True)
+        (logs / "junit.xml").write_text("<testsuites/>")
+
+    def test_mutation_warnings_precede_completion_only_success(self):
+        self.prepare_mutation_fixtures()
+        targets = (
+            ("install", "Install application dependencies", "composer"),
+            ("install-tools", "Install tool dependencies", "php"),
+            ("update", "Update application dependencies", "php"),
+            ("update-tools", "Update tool dependencies", "php"),
+            ("cache-clear", "Clear application cache", "console"),
+            ("cache-warmup", "Rebuild application cache", "console"),
+            ("local-configuration", "Create local configuration", "cp"),
+            ("generate-jwt-keys", "Generate JWT key pair", "openssl"),
+            ("generate-ssl-cert", "Generate local TLS certificates", "openssl"),
+            ("clear", "Remove application and tool dependencies", "rm"),
+            ("phpmetrics", "Generate PhpMetrics report", "phpmetrics"),
+        )
+        for target, label, command in targets:
+            with self.subTest(target=target):
+                result, calls = self.run_target(target)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("[WARN]", result.stderr)
+                self.assertTrue(result.stderr.endswith(f"\n\n[OK] {label}\n"), result.stderr)
+                self.assertLess(result.stderr.index("[WARN]"), result.stderr.index("native annotation"))
+                result, calls = self.run_target(target, FAIL_COMMAND=command)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(f"[FAIL] {label}", result.stderr)
+                self.assertNotIn("[OK]", result.stderr)
+                if target == "generate-ssl-cert":
+                    self.assertEqual(calls.count("openssl "), 1)
+
+    def test_cache_warmup_without_console_is_an_explicit_skip(self):
+        result, _ = self.run_target("cache-warmup", "CONSOLE=")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Cache warmup skipped", result.stdout)
+        self.assertIn("[SKIP] Rebuild application cache", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+        result, _ = self.run_target("cache-warmup", "install", "CONSOLE=")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[SKIP] Rebuild application cache", result.stderr)
+        self.assertIn("[OK] Install application dependencies", result.stderr)
+
+    def test_phpmetrics_missing_junit_runs_tests_and_stops_on_failure(self):
+        self.prepare_mutation_fixtures()
+        (self.root / "build/logs/junit.xml").unlink()
+        result, calls = self.run_target("phpmetrics", FAIL_COMMAND="console")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("build/logs/junit.xml not found", result.stderr)
+        self.assertNotIn("clover.xml not found", result.stderr)
+        self.assertNotIn("vendor/bin/phpmetrics", calls)
+        self.assertNotIn("[OK]", result.stderr)
+        result, calls = self.run_target("phpmetrics")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--junit=build/logs/junit.xml --report-html=build/phpmetrics", calls)
+        (self.root / "build/logs/junit.xml").unlink()
+        for name in ("phpdbg", "php"):
+            (self.root / "bin" / name).write_text("#!/bin/sh\nexit 0\n")
+        result, calls = self.run_target("phpmetrics")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Required report build/logs/junit.xml was not generated", result.stderr)
+        self.assertNotIn("vendor/bin/phpmetrics", calls)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_mutation_dry_run_and_overwrite_failure(self):
+        self.prepare_mutation_fixtures()
+        result, calls = self.run_target("--dry-run", "local-configuration")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(calls, "")
+        self.assertNotIn("[OK]", result.stderr)
+        result, calls = self.run_target("local-configuration", FAIL_COMMAND="cp", COLOR="always")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("\033[33m[WARN]\033[0m", result.stderr)
+        self.assertIn("\033[31m[FAIL]\033[0m", result.stderr)
+        self.assertEqual(calls.count("cp "), 1)
+        self.assertNotIn("sed ", calls)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_clear_tools_is_limited_to_tool_vendor_directories(self):
+        tool = self.root / "tools/group with spaces/vendor"
+        nested = tool / "package/vendor"
+        unrelated = self.root / "not-tools/vendor"
+        nested.mkdir(parents=True)
+        unrelated.mkdir(parents=True)
+        result, _ = self.run_target("clear-tools")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(tool.exists())
+        self.assertTrue(unrelated.exists())
+        self.assertTrue((self.root / "vendor").exists())
+        self.assertIn("[WARN]", result.stderr)
+        self.assertTrue(result.stderr.endswith("\n\n[OK] Remove tool dependencies\n"))
+
+    def test_ci_configuration_guard_precedes_mutation(self):
+        self.prepare_mutation_fixtures()
+        result, calls = self.run_target("configure-ci", GITHUB_ACTIONS="false")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("restricted to GitHub Actions", result.stderr)
+        self.assertNotIn("cp ", calls)
+        self.assertNotIn("[OK]", result.stderr)
+        result, calls = self.run_target("configure-ci", GITHUB_ACTIONS="true")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Overwriting .env and .env.test", result.stderr)
+        self.assertIn("cp .env.gh-actions .env", calls)
+        self.assertIn("[OK] Configure CI environment and JWT keys", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
