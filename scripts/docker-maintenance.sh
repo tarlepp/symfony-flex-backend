@@ -16,7 +16,7 @@ if [ "$action" = prune ]; then
     output_status WARN 'Killing running containers and pruning unused images, networks, build cache and eligible volumes; data may be lost'
     printf 'Kill ALL running containers and prune Docker data? [y/N] ' >&2
     if ! read -r answer || [ "$answer" != y ]; then
-        output_status SKIP 'Docker system prune cancelled; nothing changed'
+        output_result SKIP 'Docker system prune cancelled; nothing changed'
         exit 0
     fi
 fi
@@ -28,7 +28,7 @@ if ids=$(docker "${query[@]}"); then
     done <<< "$ids"
 else
     status=$?
-    output_status FAIL "Could not list Docker resources (exit $status)"
+    output_result FAIL "Could not list Docker resources (exit $status)"
     exit "$status"
 fi
 
@@ -38,14 +38,14 @@ if [ "$action" = prune ]; then
             :
         else
             status=$?
-            output_status FAIL "Could not kill containers; prune was not run (exit $status)"
+            output_result FAIL "Could not kill containers; prune was not run (exit $status)"
             exit "$status"
         fi
     fi
     OUTPUT_SUCCESS_MESSAGE='Docker system prune completed' \
         output_run 'Prune Docker system resources' docker system prune --all --volumes --force
 elif [ "${#resources[@]}" -eq 0 ]; then
-    output_status SKIP 'No matching Docker resources; nothing changed'
+    output_result SKIP 'No matching Docker resources; nothing changed'
 else
     output_run "$label" docker "${command[@]}" "${resources[@]}"
 fi

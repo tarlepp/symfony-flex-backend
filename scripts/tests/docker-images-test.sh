@@ -269,7 +269,7 @@ check_updates() {
 }
 
 check_updates 'stable major upgrade, excluding variants and prereleases' 'test:1.9.9@sha256:aaaa' 1 \
-    '[UPDATE] test:1.9.9 -> test:2.0.0'
+    '[WARN] test:1.9.9 -> test:2.0.0'
 grep -Fxq 'IMAGE input (no matching Dockerfile)' "$WORK/output"
 grep -Fq 'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
 grep -Fq 'Platforms: linux/amd64 linux/arm64/v8' "$WORK/output"
@@ -277,9 +277,9 @@ if grep -q $'\033' "$WORK/output"; then
     printf 'FAIL: NO_COLOR output contains ANSI escapes\n'
     exit 1
 fi
-COLOR=always NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[1;33m[UPDATE]\033[0m'
-grep -Fq $'\033[1;33m[CHECK]\033[0m' "$WORK/output"
-COLOR=always NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[0;32m[OK]\033[0m'
+COLOR=always NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[33m[WARN]\033[0m'
+grep -Fq $'\033[33m[WARN]\033[0m 1 image(s)' "$WORK/output"
+COLOR=always NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[32m[OK]\033[0m'
 check_updates 'up-to-date image' 'test:2.0.0' 0 '[OK] test:2.0.0: no newer stable version'
 if grep -q 'Multi-platform pin:' "$WORK/output"; then
     printf 'FAIL: up-to-date image printed an update pin\n'
@@ -334,8 +334,8 @@ printf 'FROM test:1.0.0\n' > "$WORK/docker/mariadb/Dockerfile"
 check_updates 'default Dockerfile discovery, COPY tools and deduplication' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
-grep -Fq '[CHECK] 2 image(s) require attention' "$WORK/output"
-awk '/^\[CHECK\]/ { if (previous != "") exit 1; found = 1 } { previous = $0 } END { if (!found) exit 1 }' "$WORK/output"
+grep -Fq '[WARN] 2 image(s) require attention' "$WORK/output"
+awk '/^\[WARN\] [0-9]+ image\(s\)/ { if (previous != "") exit 1; found = 1 } { previous = $0 } END { if (!found) exit 1 }' "$WORK/output"
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
 awk '
     /^Dockerfile$/ { group = "root"; root++; next }
@@ -352,7 +352,7 @@ awk '
     }
 ' "$WORK/output"
 grep -Fq 'Multi-platform pin: tools/installer:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
-if grep -q 'SKIP\|ERROR' "$WORK/output"; then
+if grep -q 'SKIP\|FAIL' "$WORK/output"; then
     cat "$WORK/output"
     exit 1
 fi
@@ -380,7 +380,7 @@ check_updates 'multiline FROM and COPY with comments and blank lines' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
-if grep -q 'ignored/\|SKIP\|ERROR' "$WORK/output"; then
+if grep -q 'ignored/\|SKIP\|FAIL' "$WORK/output"; then
     cat "$WORK/output"
     exit 1
 fi
@@ -397,8 +397,8 @@ fi
 start_group 'Registry lookup failures and retries'
 for failure in digest manifest; do
     export TEST_DOCKER_FAILURE="$failure"
-    COLOR=always NO_COLOR='' check_updates "update ${failure} lookup failure" 'test:1.0.0' 1 'ERROR:'
-    grep -Fq $'\033[0;31m[CHECK]\033[0m' "$WORK/output"
+    COLOR=always NO_COLOR='' check_updates "update ${failure} lookup failure" 'test:1.0.0' 1 '[FAIL]'
+    grep -Fq $'\033[31m[FAIL]\033[0m' "$WORK/output"
     grep -Fq '1 image check(s) failed; 1 image update(s) available' "$WORK/output"
     if grep -q 'Multi-platform pin:' "$WORK/output"; then
         printf 'FAIL: failed update printed a pin reference\n'
@@ -417,7 +417,7 @@ for target in digest manifest; do
     grep -Fq 'RETRY Registry request failed' "$WORK/output"
     grep -Fq "Run 'docker login docker.io'" "$WORK/output"
     awk '
-        /RATE LIMIT/ { notified = 1 }
+        /Docker Hub returned 429/ { notified = 1 }
         /RETRY/ { if (!notified) exit 1; retried = 1 }
         END { if (!retried) exit 1 }
     ' "$WORK/output"
@@ -466,7 +466,7 @@ rejected_update_manifests=(
 for index in "${!rejected_update_manifests[@]}"; do
     manifest=${rejected_update_manifests[$index]}
     printf '%s\n' "$manifest" > "$TEST_MANIFEST"
-    check_updates "reject update: ${rejected_update_names[$index]}" 'test:1.0.0' 1 'ERROR:'
+    check_updates "reject update: ${rejected_update_names[$index]}" 'test:1.0.0' 1 '[FAIL]'
     if grep -q 'Multi-platform pin:' "$WORK/output"; then
         printf 'FAIL: rejected update printed a pin reference\n'
         exit 1
