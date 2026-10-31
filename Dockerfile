@@ -155,7 +155,8 @@ RUN source ~/.nvm/nvm.sh \
     && rm -rf /tmp/npm-fixes
 
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
-    && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc
+    && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc \
+    && echo 'source /app/docker/bash/make.sh' >> /home/dev/.bashrc
 
 COPY ./docker/fish /home/dev/.config/fish/
 

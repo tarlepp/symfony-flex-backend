@@ -322,6 +322,60 @@ class MakeLauncherTest(unittest.TestCase):
                         self.assertNotIn("php bash scripts/make.sh help", invocations)
                         self.assertEqual("-f docker/ci-compose.yaml" in invocations, bool(workflow))
 
+    def test_every_registered_target_filters_recipe_errors_and_remains_nonzero(self):
+        targets = re.findall(r"^\$\(call REGISTER_TARGET,([^,]+),",
+                             (ROOT / "Makefile").read_text(), re.M)
+        self.assertTrue(targets)
+        recipe = ".PHONY: " + " ".join(targets) + "\n" + "".join(
+            f'{target}:\n\t@printf "[FAIL] {target}: native diagnostic\\\\n" >&2; exit 64\n'
+            for target in targets
+        )
+        for target in targets:
+            with self.subTest(target=target):
+                result = self.run_make(recipe, target)
+                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.stdout, "")
+                self.assertEqual(result.stderr, f"[FAIL] {target}: native diagnostic\n")
+        result = self.run_make(recipe, "--keep-going", *targets)
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.stderr.count("[FAIL]"), len(targets))
+        self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\* \[")
+
+    def test_default_development_shell_configs_load_repository_filter(self):
+        scripts = self.root / "scripts"
+        scripts.mkdir()
+        for name in ("make.sh", "make-shell.sh", "make-shell.fish"):
+            shutil.copyfile(ROOT / "scripts" / name, scripts / name)
+        self.makefile.write_text('all:\n\t@printf "[FAIL] native diagnostic\\n" >&2; exit 64\n')
+        home = self.root / "home"
+        fish_config = home / ".config/fish"
+        fish_config.mkdir(parents=True)
+        bash_hook = self.root / "make-hook.sh"
+        bash_hook.write_text((ROOT / "docker/bash/make.sh").read_text().replace("/app/", str(self.root) + "/"))
+        dockerfile = (ROOT / "Dockerfile").read_text()
+        self.assertIn("echo 'source /app/docker/bash/make.sh' >> /home/dev/.bashrc", dockerfile)
+        (home / ".bashrc").write_text(f'export USER_CONFIG_LOADED=yes\nsource "{bash_hook}"\n')
+        fish_content = (ROOT / "docker/fish/config.fish").read_text()
+        # Existing completions/thefuck are unrelated external startup dependencies.
+        (fish_config / "config.fish").write_text(
+            "set -gx USER_CONFIG_LOADED yes\n" +
+            ("if test -f" + fish_content.split("if test -f", 1)[1])
+            .replace("/app/", str(self.root) + "/")
+        )
+        for command in (
+            ["bash", "-ic", 'printf "%s\\n" "$USER_CONFIG_LOADED"; make --no-print-directory -f fixture.mk'],
+            ["fish", "-c", 'printf "%s\\n" "$USER_CONFIG_LOADED"; make --no-print-directory -f fixture.mk'],
+        ):
+            result = subprocess.run(
+                command, cwd=self.root,
+                env=dict(self.environment, HOME=str(home), XDG_CONFIG_HOME=str(home / ".config")),
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(result.stdout, "yes\n")
+            self.assertIn("[FAIL] native diagnostic", result.stderr)
+            self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")
+
     def test_stderr_is_streamed_before_completion(self):
         self.makefile.write_text('all:\n\t@printf "ready\\n" >&2; sleep 30\n')
         process = subprocess.Popen(
