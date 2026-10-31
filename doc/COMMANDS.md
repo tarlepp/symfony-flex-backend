@@ -64,6 +64,10 @@ mkdir -p build
 make check-licenses > build/licenses.txt
 ```
 
+Target groups, risk markers, execution routing, and wrapped labels share the
+Makefile's `REGISTER_TARGET` metadata. Recipe descriptions remain beside their
+commands; help no longer guesses categories or risk from target names.
+
 Verify command output contracts from the repository root on the Docker host
 with development services already running:
 
