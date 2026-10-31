@@ -81,6 +81,8 @@ QUALITY_TARGETS := run-tests run-tests-php run-tests-phpdbg infection phpcs ecs 
 	composer-require-checker composer-unused
 QUALITY_TARGETS += install install-tools update update-tools cache-clear cache-warmup \
 	local-configuration configure-ci generate-jwt-keys generate-ssl-cert clear clear-tools phpmetrics
+QUALITY_TARGETS += configuration project-stats application-info tool-versions check-licenses phploc \
+	report-coveralls prepare-sonar-reports
 QUALITY_GOALS := $(filter $(QUALITY_TARGETS),$(MAKECMDGOALS))
 ifeq ($(QUALITY_OUTPUT_RUN),1)
 QUALITY_GOALS :=
@@ -102,6 +104,14 @@ generate-ssl-cert: QUALITY_LABEL := Generate local TLS certificates
 clear: QUALITY_LABEL := Remove application and tool dependencies
 clear-tools: QUALITY_LABEL := Remove tool dependencies
 phpmetrics: QUALITY_LABEL := Generate PhpMetrics report
+configuration: QUALITY_LABEL := Read application configuration
+project-stats: QUALITY_LABEL := Read project statistics
+application-info: QUALITY_LABEL := Read application information
+tool-versions: QUALITY_LABEL := Read tool versions
+check-licenses: QUALITY_LABEL := Read dependency license summary
+phploc: QUALITY_LABEL := Generate PHPLOC report
+report-coveralls: QUALITY_LABEL := Submit coverage to Coveralls
+prepare-sonar-reports: QUALITY_LABEL := Prepare local Sonar reports; no upload is performed
 ifeq ($(strip $(CONSOLE)),)
 cache-warmup: export OUTPUT_SUCCESS_STATUS := SKIP
 endif
@@ -155,17 +165,18 @@ define STREAM_COMMAND
 	@bash -c 'source scripts/command-output.sh; output_status RUN "$$1"; shift; exec "$$@"' stream "$(1)" $(2)
 endef
 
+define REPORT_PATHS
+	@bash -c 'source scripts/command-output.sh; output_status INFO "$$1"' reports "$(1)"
+endef
+
 info_msg := Message
 info:
 	$(info_msg)
 
 help:
-	@echo "\033[34mList of available commands:\033[39m"
-	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-27s[0m %s\n", $$1, $$2}'
+	@bash scripts/make-help.sh
 
 configuration: ## Prints out application current configuration
-configuration: info_msg := @printf $(_TITLE) "OK" "Application configuration:"
-configuration: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo | jq -r . ${APPLICATION_CONFIG}
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -228,6 +239,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -246,6 +258,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -261,6 +274,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test
 	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit"
+	$(call REPORT_PATHS,Mutation reports: build/infection (see native output for generated files))
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -282,6 +296,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@test -f build/logs/junit.xml || { printf 'ERROR: Required report build/logs/junit.xml was not generated.\n' >&2; exit 1; }
 	@php ./vendor/bin/phpmetrics --version
 	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
+	$(call REPORT_PATHS,HTML report: build/phpmetrics)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -379,6 +394,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
+	$(call REPORT_PATHS,JSON report: build/psalm.json)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -395,6 +411,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json
+	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -411,6 +428,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json --output-format=github
+	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -550,10 +568,8 @@ else
 endif
 
 check-licenses: ## Check vendor licenses
-check-licenses: info_msg := @printf $(_TITLE) "OK" "Checking vendor licenses"
-check-licenses: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@composer license | awk '{ print $$3 }' | sort | uniq -c | sort -rn
+	@bash -o pipefail -c 'composer license --format=json | jq -r '"'"'.dependencies[] | .license | join(" OR ") | if length == 0 then "UNSPECIFIED" else . end'"'"' | sort | uniq -c | sort -rn'
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -774,11 +790,10 @@ else
 endif
 
 phploc: ## Runs `phploc` and create json output
-phploc: info_msg := @printf $(_TITLE) "OK" "Running PHPLOC"
-phploc: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
+	$(call REPORT_PATHS,JSON report: build/phploc.json)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -898,8 +913,6 @@ endif
 
 
 project-stats: ## Create simple project stats
-project-stats: info_msg := @printf $(_TITLE) "OK" "Creating simple project stats"
-project-stats: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@./scripts/project-stats.sh
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -956,9 +969,7 @@ report-coveralls: ## Upload coverage to Coveralls
 	@php ./vendor/bin/php-coveralls -v
 
 prepare-sonar-reports: ## Copy test reports with relative paths for the host-side Sonar action
-	@mkdir -p build/sonar
-	@sed 's|name="/app/|name="|g' build/logs/clover.xml > build/sonar/clover.xml
-	@sed 's|file="/app/|file="|g' build/logs/junit.xml > build/sonar/junit.xml
+	@bash scripts/prepare-sonar-reports.sh
 
 test-make-routing: ## Test host and CI container command routing
 	@bash scripts/command-output.sh "Make container routing (offline mocked tests)" bash scripts/tests/make-container-test.sh

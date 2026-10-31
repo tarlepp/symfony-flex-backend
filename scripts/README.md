@@ -57,6 +57,9 @@ Quality targets include `run-tests*`, `infection`, `phpcs`, `ecs*`,
 `phpinsights`, `phplint`, `php-parallel-lint`, `psalm*`, `phpstan*`,
 `lint-configuration`, `lint-yaml`, `lint-markdown`, `composer-normalize`,
 `composer-validate`, `composer-require-checker`, and `composer-unused`.
+Information and reporting targets also use the same wrapper: `configuration`,
+`project-stats`, `application-info`, `tool-versions`, `check-licenses`, `phploc`,
+`report-coveralls`, and `prepare-sonar-reports`.
 Each complete recipe, including preparation, prints one `[RUN]` and a
 separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
 selection without duplicate summaries. A failed preparation step cannot
@@ -256,6 +259,54 @@ These tests use isolated fixtures for installs, updates, configuration copying,
 key/certificate generation, and failure handling. They do not update your
 dependencies or replace your keys. Cleanup checks delete only temporary fixture
 directories, not repository dependencies.
+
+`make help` groups the documented target inventory by purpose, with host-only
+Docker groups identified explicitly. `[DESTRUCTIVE]` marks resource deletion
+or shutdown (including cache cleanup); `[OVERWRITE]` marks configuration, key,
+source-fixing, report-copying, and image-tag replacement commands. The list is
+read from Makefile descriptions, not a separately maintained target inventory.
+Help respects `COLOR` and `NO_COLOR` and remains usable without Docker.
+
+Information commands keep their native stdout: configuration JSON, statistics
+tables, license counts, application/version information, and digest/platform
+details. Shared status and report-path messages go to stderr, so redirects do
+not acquire success banners. License and statistics pipelines propagate failed
+commands instead of reporting success based only on their final pipeline stage.
+The existing configuration command still intentionally displays configuration;
+added messages never repeat its values.
+License counts are extracted from Composer JSON rather than its human-readable
+table, excluding headers and version columns. Alternative licenses are joined
+with `OR`; empty license lists are labeled `UNSPECIFIED`.
+
+Successful report generators identify `build/logs/clover.xml`,
+`build/logs/junit.xml`, `build/phpmetrics`, `build/phploc.json`, and
+`build/psalm.json` as applicable. Infection identifies `build/infection`;
+its native output owns the exact generated file inventory.
+Psalm's local JSON report message does not claim Shepherd upload success.
+`report-coveralls` retains verbose client output, including its configured
+JSON payload path and HTTP submission status. A generated payload alone does
+not produce `[OK]` if the client returns an upload failure.
+
+`prepare-sonar-reports` checks both nonempty source reports first, prepares
+relative-path copies in temporary files, then replaces the local copies.
+It names `build/sonar/clover.xml` and `build/sonar/junit.xml` and explicitly
+states that no upload occurred. It does not alter the source reports.
+The host-side Sonar action performs upload separately.
+
+Run the information/reporting regression checks from the repository root on
+the Docker host with the PHP development service already running:
+
+```bash
+docker compose exec -T php python3 scripts/tests/make-information-output-test.py
+docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+```
+
+These checks use temporary report fixtures and mocked generators/uploaders;
+they never contact Coveralls or Sonar. Read-only help needs no running services:
+
+```bash
+make help COLOR=never
+```
 
 Docker lifecycle commands use blue `[RUN]` messages and report completion only
 after Compose exits successfully. Development `daemon*` startup does not wait
