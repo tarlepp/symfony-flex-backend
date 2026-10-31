@@ -21,8 +21,11 @@ replace them.
 
 <a id="using-skills"></a>
 
-Before starting a task, select the matching skill below and follow the
-[shared guidance](shared-guidance.md), including
+Skills are additional references agents can consult when useful, not required
+workflow gates. No matching skill, unavailable supporting references, or missing
+skill-selection/loading records alone should block work. Repository instructions
+and required checks still apply, including the
+[shared guidance](shared-guidance.md),
 [repository instructions](../copilot-instructions.md) and
 [AI rules](../../doc/AI_RULES.md). For the canonical AI documentation inventory
 and reading order, see the [README's AI-assisted development
@@ -31,8 +34,8 @@ when a task spans multiple concerns. Keep common execution, validation, and
 handoff rules in the shared guidance rather than duplicating them in every
 skill.
 
-Start with the skill matching the requested outcome, and follow additional
-skills only for layers the task actually changes:
+When consulting skills, start with the requested outcome and use additional
+references only for layers the task actually changes:
 
 * For a complete CRUD feature, start with
   [add-rest-resource](add-rest-resource/SKILL.md); use the entity, DTO, query,
