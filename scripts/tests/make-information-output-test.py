@@ -120,6 +120,58 @@ exit 0
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertCountEqual(re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M), expected)
 
+    def test_metadata_drives_help_routing_and_completion_labels(self):
+        makefile = self.root / "Makefile"
+        original = makefile.read_text()
+        makefile.write_text(original.replace(
+            "$(call REGISTER_TARGET,phpcs,quality,wrapped)",
+            "$(call REGISTER_TARGET,phpcs,reports,wrapped,OVERWRITE)",
+        ))
+        result = self.make("help")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertRegex(result.stdout.split("Reports and uploads\n", 1)[1],
+                         r"phpcs +\[OVERWRITE\]")
+        registration = "$(call REGISTER_TARGET,configuration,information,wrapped,,Read application configuration)"
+        makefile.write_text(original.replace(registration,
+                                            "$(call REGISTER_TARGET,configuration,information,wrapped,,Custom label)"))
+        result = self.make("configuration")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[RUN] Custom label", result.stderr)
+        self.assertIn("[OK] Custom label", result.stderr)
+        self.assertNotIn("Read application configuration", result.stderr)
+        makefile.write_text(original.replace(registration,
+                                            "$(call REGISTER_TARGET,configuration,information,direct)"))
+        result = self.make("configuration")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("[RUN]", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+        makefile.write_text(original.replace(registration,
+                                            "$(call REGISTER_TARGET,configuration,information,host)"))
+        result = self.make("configuration", "INSIDE_DOCKER_CONTAINER=0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), {"fixture": True})
+        self.assertNotIn("compose-context", result.stderr)
+
+    def test_incomplete_or_invalid_metadata_fails_explicitly(self):
+        makefile = self.root / "Makefile"
+        original = makefile.read_text()
+        registration = "$(call REGISTER_TARGET,phpcs,quality,wrapped)"
+        for replacement, error in (
+            ("", "Missing help metadata: phpcs"),
+            ("$(call REGISTER_TARGET,phpcs,unknown,wrapped)", "Invalid help metadata: phpcs"),
+            ("$(call REGISTER_TARGET,phpcs,quality,wrapped,unknown)", "Invalid help metadata: phpcs"),
+            ("$(call REGISTER_TARGET,phpcs,quality,unknown)", "Invalid execution metadata: phpcs"),
+            (registration + "\n" + registration, "Duplicate target metadata: phpcs"),
+            ("$(call REGISTER_TARGET,missing,quality,wrapped)\n" + registration,
+             "Missing target description: missing"),
+        ):
+            with self.subTest(replacement=replacement):
+                makefile.write_text(original.replace(registration, replacement))
+                result = self.make("help")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(error, result.stderr)
+                self.assertNotIn("[OK]", result.stderr)
+
     def test_information_stdout_has_no_status_or_ansi_pollution(self):
         for target in ("configuration", "project-stats", "application-info", "tool-versions", "check-licenses"):
             with self.subTest(target=target):

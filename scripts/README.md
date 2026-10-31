@@ -109,7 +109,7 @@ Information and reporting targets also use the same wrapper: `configuration`,
 Each complete recipe, including preparation, prints one `[RUN]` and a
 separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
 selection without duplicate summaries. A failed preparation step cannot
-produce a success summary. The internal `QUALITY_OUTPUT_RUN` Make variable
+produce a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable
 prevents recursive decoration; callers should not set it.
 
 Native progress, diagnostics, GitHub annotations, analyzer options and report
@@ -242,6 +242,26 @@ CI Make commands in `main.yml` and the shared PHP bootstrap use the launcher
 explicitly on the runner host. This preserves native diagnostics, annotations,
 stdout, exit policies, and existing job gates without installing a global
 replacement for Make.
+
+The Makefile's `REGISTER_TARGET` records are the single source for target
+help groups, risk markers, execution routing, and wrapped-command labels.
+Each record has `name,group,execution,risk,label` fields; the last two are
+optional, and the label defaults to the target name. Descriptions stay beside
+the owning recipes as `##` comments.
+
+`host` excludes a target from container forwarding; `wrapped` forwards from
+the host and decorates the complete container-side recipe; `direct` forwards
+but leaves decoration to the owning script. Make derives `HOST_TARGETS` and
+`WRAPPED_TARGETS` from those records rather than separate inventories.
+The old `QUALITY_TARGETS` name is replaced because wrapped recipes also cover
+setup, information, and reports. `COMMAND_LABEL` and `COMMAND_OUTPUT_RUN`
+replace the quality-specific internal names; callers should not override them.
+
+Help reads the same records for categories and markers, retaining alphabetical
+entries and the existing group order. Missing/invalid help metadata or
+descriptions fail explicitly; Make rejects duplicate registrations and invalid
+execution modes. Register every new public target and add its recipe description
+instead of updating parallel routing lists or help regular expressions.
 
 Application recipes rely exclusively on that central forwarding layer rather
 than repeating host/container branches. Native commands, preparation, reports,
@@ -386,7 +406,8 @@ directories, not repository dependencies.
 Docker groups identified explicitly. `[DESTRUCTIVE]` marks resource deletion
 or shutdown (including cache cleanup); `[OVERWRITE]` marks configuration, key,
 source-fixing, report-copying, and image-tag replacement commands. The list is
-read from Makefile descriptions, not a separately maintained target inventory.
+read from Makefile descriptions and shared target metadata, not a separate
+help-only inventory.
 Help respects `COLOR` and `NO_COLOR` and remains usable without Docker.
 
 Information commands keep their native stdout: configuration JSON, statistics

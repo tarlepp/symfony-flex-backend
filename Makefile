@@ -50,11 +50,97 @@ NATIVE_COLOR := $(shell bash -c 'source scripts/command-output.sh; if [ -n "$$OU
 export COMPOSE_ANSI := $(NATIVE_COLOR)
 CONTAINER_ENV := --env COLOR --env NO_COLOR $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
 
-HOST_TARGETS := help info bash fish logs daemon daemon-build daemon-prod start-prod stop start start-build \
-	docker-prune docker-kill-containers docker-remove-containers docker-remove-images \
-	docker-image-check-updates docker-image-digest docker-image-verify-pins docker-builder-platforms \
-	docker-setup-qemu docker-build-platform docker-build-multi-platform ci-start ci-stop
 .DEFAULT_GOAL := help
+
+# Target metadata: name, help group, execution (host/wrapped/direct), risk, label.
+define REGISTER_TARGET
+$(if $(filter $(1),$(COMMAND_TARGETS)),$(error Duplicate target metadata: $(1)))
+$(if $(filter host wrapped direct,$(3)),,$(error Invalid execution metadata: $(1)))
+$(eval COMMAND_TARGETS += $(1))
+$(if $(filter host,$(3)),$(eval HOST_TARGETS += $(1)))
+$(if $(filter wrapped,$(3)),$(eval WRAPPED_TARGETS += $(1)))
+$(eval $(1): COMMAND_LABEL := $(or $(5),$(1)))
+endef
+
+$(call REGISTER_TARGET,help,hidden,host)
+$(call REGISTER_TARGET,info,hidden,host)
+$(call REGISTER_TARGET,bash,lifecycle,host)
+$(call REGISTER_TARGET,fish,lifecycle,host)
+$(call REGISTER_TARGET,logs,lifecycle,host)
+$(call REGISTER_TARGET,start,lifecycle,host)
+$(call REGISTER_TARGET,start-build,lifecycle,host)
+$(call REGISTER_TARGET,start-prod,lifecycle,host)
+$(call REGISTER_TARGET,daemon,lifecycle,host)
+$(call REGISTER_TARGET,daemon-build,lifecycle,host)
+$(call REGISTER_TARGET,daemon-prod,lifecycle,host)
+$(call REGISTER_TARGET,stop,lifecycle,host,DESTRUCTIVE)
+$(call REGISTER_TARGET,ci-start,lifecycle,host)
+$(call REGISTER_TARGET,ci-stop,lifecycle,host,DESTRUCTIVE)
+$(call REGISTER_TARGET,docker-prune,docker,host,DESTRUCTIVE)
+$(call REGISTER_TARGET,docker-kill-containers,docker,host,DESTRUCTIVE)
+$(call REGISTER_TARGET,docker-remove-containers,docker,host,DESTRUCTIVE)
+$(call REGISTER_TARGET,docker-remove-images,docker,host,DESTRUCTIVE)
+$(call REGISTER_TARGET,docker-image-check-updates,docker,host)
+$(call REGISTER_TARGET,docker-image-digest,docker,host)
+$(call REGISTER_TARGET,docker-image-verify-pins,docker,host)
+$(call REGISTER_TARGET,docker-builder-platforms,docker,host)
+$(call REGISTER_TARGET,docker-setup-qemu,docker,host)
+$(call REGISTER_TARGET,docker-build-platform,docker,host,OVERWRITE)
+$(call REGISTER_TARGET,docker-build-multi-platform,docker,host,OVERWRITE)
+$(call REGISTER_TARGET,install,setup,wrapped,,Install application dependencies)
+$(call REGISTER_TARGET,install-tools,setup,wrapped,,Install tool dependencies)
+$(call REGISTER_TARGET,update,setup,wrapped,,Update application dependencies)
+$(call REGISTER_TARGET,update-tools,setup,wrapped,,Update tool dependencies)
+$(call REGISTER_TARGET,cache-clear,setup,wrapped,DESTRUCTIVE,Clear application cache)
+$(call REGISTER_TARGET,cache-warmup,setup,wrapped,DESTRUCTIVE,Rebuild application cache)
+$(call REGISTER_TARGET,local-configuration,setup,wrapped,OVERWRITE,Create local configuration)
+$(call REGISTER_TARGET,configure-ci,setup,wrapped,OVERWRITE,Configure CI environment and JWT keys)
+$(call REGISTER_TARGET,generate-jwt-keys,setup,wrapped,OVERWRITE,Generate JWT key pair)
+$(call REGISTER_TARGET,generate-ssl-cert,setup,wrapped,OVERWRITE,Generate local TLS certificates)
+$(call REGISTER_TARGET,clear,setup,wrapped,DESTRUCTIVE,Remove application and tool dependencies)
+$(call REGISTER_TARGET,clear-tools,setup,wrapped,DESTRUCTIVE,Remove tool dependencies)
+$(call REGISTER_TARGET,run-tests,tests,wrapped)
+$(call REGISTER_TARGET,run-tests-php,tests,wrapped)
+$(call REGISTER_TARGET,run-tests-phpdbg,tests,wrapped)
+$(call REGISTER_TARGET,infection,tests,wrapped)
+$(call REGISTER_TARGET,test-make-routing,tests,direct)
+$(call REGISTER_TARGET,test-command-output,tests,direct)
+$(call REGISTER_TARGET,test-docker-images,tests,direct)
+$(call REGISTER_TARGET,check-dependencies-latest,checks,direct)
+$(call REGISTER_TARGET,check-dependencies-minor,checks,direct)
+$(call REGISTER_TARGET,check-dependencies-patch,checks,direct)
+$(call REGISTER_TARGET,check-action-updates,checks,direct)
+$(call REGISTER_TARGET,check-security,checks,direct)
+$(call REGISTER_TARGET,check-licenses,checks,wrapped,,Read dependency license summary)
+$(call REGISTER_TARGET,phpcs,quality,wrapped)
+$(call REGISTER_TARGET,ecs,quality,wrapped)
+$(call REGISTER_TARGET,ecs-fix,quality,wrapped,OVERWRITE)
+$(call REGISTER_TARGET,phpinsights,quality,wrapped)
+$(call REGISTER_TARGET,phplint,quality,wrapped)
+$(call REGISTER_TARGET,php-parallel-lint,quality,wrapped)
+$(call REGISTER_TARGET,psalm,quality,wrapped)
+$(call REGISTER_TARGET,psalm-shepherd,quality,wrapped)
+$(call REGISTER_TARGET,psalm-github,quality,wrapped)
+$(call REGISTER_TARGET,phpstan,quality,wrapped)
+$(call REGISTER_TARGET,phpstan-github,quality,wrapped)
+$(call REGISTER_TARGET,lint-configuration,quality,wrapped)
+$(call REGISTER_TARGET,lint-yaml,quality,wrapped)
+$(call REGISTER_TARGET,lint-markdown,quality,wrapped,,Markdown documentation)
+$(call REGISTER_TARGET,composer-normalize,quality,wrapped,OVERWRITE)
+$(call REGISTER_TARGET,composer-validate,quality,wrapped)
+$(call REGISTER_TARGET,composer-require-checker,quality,wrapped)
+$(call REGISTER_TARGET,composer-unused,quality,wrapped)
+$(call REGISTER_TARGET,check-skills,quality,direct)
+$(call REGISTER_TARGET,lint-workflows,quality,direct)
+$(call REGISTER_TARGET,check-requirements,quality,direct)
+$(call REGISTER_TARGET,configuration,information,wrapped,,Read application configuration)
+$(call REGISTER_TARGET,project-stats,information,wrapped,,Read project statistics)
+$(call REGISTER_TARGET,application-info,information,wrapped,,Read application information)
+$(call REGISTER_TARGET,tool-versions,information,wrapped,,Read tool versions)
+$(call REGISTER_TARGET,phpmetrics,reports,wrapped,,Generate PhpMetrics report)
+$(call REGISTER_TARGET,phploc,reports,wrapped,,Generate PHPLOC report)
+$(call REGISTER_TARGET,report-coveralls,reports,wrapped,,Submit coverage to Coveralls)
+$(call REGISTER_TARGET,prepare-sonar-reports,reports,wrapped,OVERWRITE,Prepare local Sonar reports; no upload is performed)
 
 ifeq ($(INSIDE_DOCKER_CONTAINER),0)
 FORWARD_TARGETS := $(filter-out $(HOST_TARGETS),$(MAKECMDGOALS))
@@ -75,53 +161,23 @@ $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 endif
 else
 
-QUALITY_TARGETS := run-tests run-tests-php run-tests-phpdbg infection phpcs ecs ecs-fix \
-	phpinsights phplint php-parallel-lint psalm psalm-shepherd psalm-github phpstan phpstan-github \
-	lint-configuration lint-yaml lint-markdown composer-normalize composer-validate \
-	composer-require-checker composer-unused
-QUALITY_TARGETS += install install-tools update update-tools cache-clear cache-warmup \
-	local-configuration configure-ci generate-jwt-keys generate-ssl-cert clear clear-tools phpmetrics
-QUALITY_TARGETS += configuration project-stats application-info tool-versions check-licenses phploc \
-	report-coveralls prepare-sonar-reports
-QUALITY_GOALS := $(filter $(QUALITY_TARGETS),$(MAKECMDGOALS))
-ifeq ($(QUALITY_OUTPUT_RUN),1)
-QUALITY_GOALS :=
+WRAPPED_GOALS := $(filter $(WRAPPED_TARGETS),$(MAKECMDGOALS))
+ifeq ($(COMMAND_OUTPUT_RUN),1)
+WRAPPED_GOALS :=
 endif
 
-ifneq ($(strip $(QUALITY_GOALS)),)
+ifneq ($(strip $(WRAPPED_GOALS)),)
 .PHONY: $(MAKECMDGOALS)
-lint-markdown: QUALITY_LABEL := Markdown documentation
-install: QUALITY_LABEL := Install application dependencies
-install-tools: QUALITY_LABEL := Install tool dependencies
-update: QUALITY_LABEL := Update application dependencies
-update-tools: QUALITY_LABEL := Update tool dependencies
-cache-clear: QUALITY_LABEL := Clear application cache
-cache-warmup: QUALITY_LABEL := Rebuild application cache
-local-configuration: QUALITY_LABEL := Create local configuration
-configure-ci: QUALITY_LABEL := Configure CI environment and JWT keys
-generate-jwt-keys: QUALITY_LABEL := Generate JWT key pair
-generate-ssl-cert: QUALITY_LABEL := Generate local TLS certificates
-clear: QUALITY_LABEL := Remove application and tool dependencies
-clear-tools: QUALITY_LABEL := Remove tool dependencies
-phpmetrics: QUALITY_LABEL := Generate PhpMetrics report
-configuration: QUALITY_LABEL := Read application configuration
-project-stats: QUALITY_LABEL := Read project statistics
-application-info: QUALITY_LABEL := Read application information
-tool-versions: QUALITY_LABEL := Read tool versions
-check-licenses: QUALITY_LABEL := Read dependency license summary
-phploc: QUALITY_LABEL := Generate PHPLOC report
-report-coveralls: QUALITY_LABEL := Submit coverage to Coveralls
-prepare-sonar-reports: QUALITY_LABEL := Prepare local Sonar reports; no upload is performed
 ifeq ($(strip $(CONSOLE)),)
 cache-warmup: export OUTPUT_SUCCESS_STATUS := SKIP
 endif
-$(QUALITY_GOALS):
+$(WRAPPED_GOALS):
 ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
-	@$(MAKE) QUALITY_OUTPUT_RUN=1 $@
+	@$(MAKE) COMMAND_OUTPUT_RUN=1 $@
 else
-	+@bash scripts/command-output.sh --run "$(or $(QUALITY_LABEL),$@)" bash scripts/make.sh QUALITY_OUTPUT_RUN=1 $@
+	+@bash scripts/command-output.sh --run "$(COMMAND_LABEL)" bash scripts/make.sh COMMAND_OUTPUT_RUN=1 $@
 endif
-$(filter-out $(QUALITY_TARGETS),$(MAKECMDGOALS)):
+$(filter-out $(WRAPPED_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
 else
 
