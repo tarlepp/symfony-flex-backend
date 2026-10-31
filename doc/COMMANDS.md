@@ -225,6 +225,37 @@ update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
 ```
 
+`check-skills`, `lint-workflows`, `check-requirements`, `test-make-routing`,
+and `docker-image-verify-pins` show blue `[RUN]` status messages followed by
+green `[OK]` on success or red `[FAIL]` with the command's exit code on failure.
+Native diagnostics remain visible and failures still fail Make.
+See [command status output](../scripts/README.md#command-status-output) for
+color controls, regression checks, and offline versus live-check behavior.
+
+To hide GNU Make's redundant recipe error-location lines without hiding
+command diagnostics or changing the failure exit status, use the optional
+launcher from the repository root on the Docker host with services running
+or inside the PHP development container:
+
+```bash
+bash scripts/make.sh check-skills
+```
+
+Direct `make` continues to print its own recipe error lines unless the shell
+integration is active. Shells opened with `make bash` load that integration
+automatically, preserving the user's normal `~/.bashrc`.
+
+For an opt-in Bash session integration, run from the repository root on the
+Docker host with services running or inside the PHP development container:
+
+```bash
+source scripts/make-shell.sh
+make check-skills
+```
+
+The function filters Make output only in this repository's root. Disable it
+with `unset -f make`, or bypass it with `command make check-skills`.
+
 Check pinned GitHub Actions and available updates from the repository root
 on the host or inside the PHP container:
 

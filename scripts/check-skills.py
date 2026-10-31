@@ -329,8 +329,14 @@ def main() -> int:
 
     errors = check_documentation(root)
     if errors:
+        color = os.environ.get("COLOR", "auto")
+        use_color = not os.environ.get("NO_COLOR") and (
+            color == "always"
+            or (color == "auto" and sys.stderr.isatty() and os.environ.get("TERM") != "dumb")
+        )
+        error_label = "\033[31mERROR:\033[0m" if use_color else "ERROR:"
         for error in errors:
-            print(f"ERROR: {error}", file=sys.stderr)
+            print(f"{error_label} {error}", file=sys.stderr)
         print(f"Documentation check failed with {len(errors)} issue(s).", file=sys.stderr)
         return 1
 
