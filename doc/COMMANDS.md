@@ -234,6 +234,11 @@ static-analysis targets, and Composer validation/checkers. Their summaries
 cover the entire recipe, including preparation, and retain native progress,
 GitHub annotations, and report paths. `run-tests` still selects PHP/phpdbg
 automatically and prints only one final status.
+Setup, dependency mutation, cache, configuration, key/certificate generation,
+cleanup, and PhpMetrics targets likewise report success only after completion.
+Yellow warnings describe overwrites and deletions before they happen, without
+adding new confirmation prompts. PhpMetrics requires `build/logs/junit.xml`,
+automatically runs tests if it is missing, and stops if that prerequisite fails.
 Update-check colors distinguish available updates (yellow) from failed checks
 (red). Existing exit policies are preserved, including the informational
 action-update Make wrapper. See the scripts guide for each target's outcome
