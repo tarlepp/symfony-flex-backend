@@ -90,7 +90,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    not automatically change response exposure. Never expose credentials or
    privileged fields incidentally. Preserve the endpoint's established output
    contract rather than adding a new response-mapping architecture as part of
-   an input-only change.
+   an input-only change. For shared serialization, population, or error output
+   changes, use
+   [update-api-response-contract](../update-api-response-contract/SKILL.md).
 9. Inspect `tests/Integration/DTO/`, `tests/Integration/AutoMapper/`, and
    `tests/Integration/ValueResolver/RestDtoValueResolverTest.php` for existing
    helpers. Cover setters and visited fields, transformations, registered DTO
