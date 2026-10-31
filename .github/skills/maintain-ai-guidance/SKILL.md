@@ -18,6 +18,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 [AI rules](../../../doc/AI_RULES.md). Use
 [update-github-workflows](../update-github-workflows/SKILL.md) when CI behavior
 also changes.
+For executable checker or Make changes, also use
+[maintain-development-tooling](../maintain-development-tooling/SKILL.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
