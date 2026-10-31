@@ -226,6 +226,31 @@ class CommandOutputTest(unittest.TestCase):
             self.assertNotIn("\033", result.stderr)
             self.assertIn("[FAIL] example", result.stderr)
 
+    def test_status_entrypoint_preserves_literal_message_and_color_policy(self):
+        message = 'Two words; $(printf injected) "quoted" *'
+        for status in ("RUN", "OK", "WARN", "SKIP", "FAIL", "INFO"):
+            for color, no_color, enabled in (
+                ("always", "", True), ("never", "", False), ("always", "1", False),
+            ):
+                result = self.run_command(
+                    ["bash", str(HELPER), "--status", status, message],
+                    COLOR=color, NO_COLOR=no_color,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout, "")
+                self.assertIn(message, result.stderr)
+                self.assertEqual("\033" in result.stderr, enabled)
+                if not enabled:
+                    self.assertEqual(result.stderr, f"[{status}] {message}\n")
+        for arguments in (
+            ("--status",), ("--status", "WARN"), ("--status", "invalid", "message"),
+            ("--status", "WARN", "message", "extra"),
+        ):
+            result = self.run_command(["bash", str(HELPER), *arguments])
+            self.assertEqual(result.returncode, 64)
+            self.assertIn("[FAIL] Usage:", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
+
     def test_auto_color_uses_status_terminal(self):
         master, slave = pty.openpty()
         try:

@@ -58,6 +58,14 @@ output_stream() {
 output_init
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    if [ "${1:-}" = --status ]; then
+        if [ "$#" -ne 3 ] || [[ ! "$2" =~ ^(RUN|OK|WARN|SKIP|FAIL|INFO)$ ]]; then
+            output_status FAIL 'Usage: command-output.sh --status <RUN|OK|WARN|SKIP|FAIL|INFO> <message>'
+            exit 64
+        fi
+        output_status "$2" "$3"
+        exit 0
+    fi
     mode=run
     case "${1:-}" in
         --run|--stream)

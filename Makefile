@@ -129,10 +129,10 @@ ANSI_FLAG := $(if $(filter always,$(NATIVE_COLOR)),--ansi,--no-ansi)
 COLORS_FLAG := $(if $(filter always,$(NATIVE_COLOR)),--colors,--no-colors)
 PSALM_COLOR_FLAG := $(if $(filter never,$(NATIVE_COLOR)),--monochrome)
 
-HOST_CONTEXT_FAILURE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Run this target on the Docker host, not inside a container"; exit 1'
+HOST_CONTEXT_FAILURE = @bash scripts/command-output.sh --status FAIL "Run this target on the Docker host, not inside a container"; exit 1
 
 define MUTATION_WARNING
-	@bash -c 'source scripts/command-output.sh; output_status WARN "$$1"' warning "$(1)"
+	@bash scripts/command-output.sh --status WARN "$(1)"
 endef
 
 define STREAM_COMMAND
@@ -140,11 +140,15 @@ define STREAM_COMMAND
 endef
 
 define REPORT_PATHS
-	@bash -c 'source scripts/command-output.sh; output_status INFO "$$1"' reports "$(1)"
+	@bash scripts/command-output.sh --status INFO "$(1)"
 endef
 
 define COMPOSE_CONTEXT
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh $(1) $(2)
+endef
+
+define COMPOSE_RUN
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="$(3)" bash scripts/command-output.sh --run "$(1)" $(2)
 endef
 
 info_msg := Message
@@ -217,7 +221,7 @@ phpmetrics: ## Generates PhpMetrics static analysis
 	@mkdir -p build/phpmetrics
 	$(call MUTATION_WARNING,Writing the HTML report to build/phpmetrics; existing report files may be replaced)
 	@if [ ! -f build/logs/junit.xml ] ; then \
-		bash -c 'source scripts/command-output.sh; output_status WARN "build/logs/junit.xml not found; running application tests to generate it"' ; \
+		bash scripts/command-output.sh --status WARN "build/logs/junit.xml not found; running application tests to generate it" ; \
 		$(MAKE) -s run-tests || exit $$?; \
 	fi;
 	@test -f build/logs/junit.xml || { printf 'ERROR: Required report build/logs/junit.xml was not generated.\n' >&2; exit 1; }
@@ -361,7 +365,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Starting development services; entrypoints may install dependencies generate keys and run migrations)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development containers started; readiness was not verified" bash scripts/command-output.sh "Start development services in background" docker compose up --detach
+	$(call COMPOSE_RUN,Start development services in background,docker compose up --detach,Development containers started; readiness was not verified)
 endif
 
 daemon-build: ## Build containers and start application in development mode in background
@@ -370,7 +374,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Building and starting development services; entrypoints may install dependencies generate keys and run migrations)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development containers built and started; readiness was not verified" bash scripts/command-output.sh "Build and start development services in background" docker compose up --build --detach
+	$(call COMPOSE_RUN,Build and start development services in background,docker compose up --build --detach,Development containers built and started; readiness was not verified)
 endif
 
 daemon-prod: ## Build and start application in local production mode in background
@@ -379,7 +383,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,$(COMPOSE_PROD))
 	$(call MUTATION_WARNING,Building and starting local production; initialization may generate keys and run migrations; waiting for Compose health checks)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Local production services passed Compose running/health checks; HTTP was not verified" bash scripts/command-output.sh "Build and start local production; wait for Compose health checks" $(COMPOSE_PROD) up --build --detach --wait
+	$(call COMPOSE_RUN,Build and start local production; wait for Compose health checks,$(COMPOSE_PROD) up --build --detach --wait,Local production services passed Compose running/health checks; HTTP was not verified)
 endif
 
 start-prod: ## Build and start application in local production mode + watch output
@@ -388,7 +392,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,$(COMPOSE_PROD))
 	$(call MUTATION_WARNING,Building and attaching to local production; initialization may generate keys and run migrations; Ctrl-C requests shutdown)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Local production foreground session ended" bash scripts/command-output.sh "Build and attach to local production services" $(COMPOSE_PROD) up --build
+	$(call COMPOSE_RUN,Build and attach to local production services,$(COMPOSE_PROD) up --build,Local production foreground session ended)
 endif
 
 stop: ## Stop application containers (development or local production)
@@ -396,7 +400,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	$(call MUTATION_WARNING,Stopping and removing application containers and networks; named volumes are retained)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Application containers stopped and removed; named volumes retained" bash scripts/command-output.sh "Stop application containers" docker compose down
+	$(call COMPOSE_RUN,Stop application containers,docker compose down,Application containers stopped and removed; named volumes retained)
 endif
 
 start: ## Start application in development mode + watch output
@@ -405,7 +409,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Starting and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development foreground session ended; readiness was not verified" bash scripts/command-output.sh "Start and attach to development services" docker compose up
+	$(call COMPOSE_RUN,Start and attach to development services,docker compose up,Development foreground session ended; readiness was not verified)
 endif
 
 start-build: ## Build containers and start application in development mode + watch output
@@ -414,7 +418,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Building and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development build and foreground session ended; readiness was not verified" bash scripts/command-output.sh "Build and attach to development services" docker compose up --build
+	$(call COMPOSE_RUN,Build and attach to development services,docker compose up --build,Development build and foreground session ended; readiness was not verified)
 endif
 
 local-configuration: ## Create local configuration files
@@ -542,7 +546,7 @@ ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 else
 	$(call MUTATION_WARNING,Building and starting only the CI PHP service; application initialization is disabled)
 	@mkdir -p "$${COMPOSER_CACHE_DIR:-/tmp/symfony-backend-composer-cache}"
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="CI PHP service started; application initialization and readiness were not verified" bash scripts/command-output.sh "Build and start the CI PHP service" $(COMPOSE_CI) up --build --detach --no-deps php
+	$(call COMPOSE_RUN,Build and start the CI PHP service,$(COMPOSE_CI) up --build --detach --no-deps php,CI PHP service started; application initialization and readiness were not verified)
 endif
 
 ci-stop: ## Stop CI containers (host only)
@@ -550,7 +554,7 @@ ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	$(call MUTATION_WARNING,Stopping and removing CI containers and networks; named volumes are retained)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="CI containers stopped and removed; named volumes retained" bash scripts/command-output.sh "Stop CI containers" $(COMPOSE_CI) down
+	$(call COMPOSE_RUN,Stop CI containers,$(COMPOSE_CI) down,CI containers stopped and removed; named volumes retained)
 endif
 
 install: ## Install project Composer dependencies
