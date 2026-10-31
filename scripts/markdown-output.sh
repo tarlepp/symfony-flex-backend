@@ -13,7 +13,7 @@ decorate_diagnostics() {
                 printf '\n'
                 errors_started=true
             fi
-            printf '%s[ERROR]%s ' "$OUTPUT_RED" "$OUTPUT_RESET"
+            printf '%s[FAIL]%s ' "$OUTPUT_RED" "$OUTPUT_RESET"
         fi
         printf '%s' "$line"
         if [ "$complete" = true ]; then
