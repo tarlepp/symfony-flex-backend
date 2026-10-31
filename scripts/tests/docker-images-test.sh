@@ -277,9 +277,9 @@ if grep -q $'\033' "$WORK/output"; then
     printf 'FAIL: NO_COLOR output contains ANSI escapes\n'
     exit 1
 fi
-NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[1;33m[UPDATE]\033[0m'
-grep -Fq $'\033[0;31m[CHECK]\033[0m' "$WORK/output"
-NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[0;32m[OK]\033[0m'
+COLOR=always NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[1;33m[UPDATE]\033[0m'
+grep -Fq $'\033[1;33m[CHECK]\033[0m' "$WORK/output"
+COLOR=always NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[0;32m[OK]\033[0m'
 check_updates 'up-to-date image' 'test:2.0.0' 0 '[OK] test:2.0.0: no newer stable version'
 if grep -q 'Multi-platform pin:' "$WORK/output"; then
     printf 'FAIL: up-to-date image printed an update pin\n'
@@ -294,6 +294,7 @@ grep -Fq '/repositories/mlocati/test/tags/' "$TEST_REQUESTS"
 check_updates 'unversioned image' 'test' 0 '[SKIP]'
 check_updates 'floating version' 'test:1.9' 0 '[SKIP]'
 check_updates 'prerelease version' 'test:1.9.9-rc1' 0 '[SKIP]'
+grep -Fq '1 image version check(s) skipped' "$WORK/output"
 [ ! -s "$TEST_REQUESTS" ]
 check_updates 'unsupported registry' 'ghcr.io/owner/test:1.0.0' 1 'supports Docker Hub only'
 check_updates 'registry with port' 'localhost:5000/test:1.0.0' 1 'supports Docker Hub only'
@@ -396,7 +397,9 @@ fi
 start_group 'Registry lookup failures and retries'
 for failure in digest manifest; do
     export TEST_DOCKER_FAILURE="$failure"
-    check_updates "update ${failure} lookup failure" 'test:1.0.0' 1 'ERROR:'
+    COLOR=always NO_COLOR='' check_updates "update ${failure} lookup failure" 'test:1.0.0' 1 'ERROR:'
+    grep -Fq $'\033[0;31m[CHECK]\033[0m' "$WORK/output"
+    grep -Fq '1 image check(s) failed; 1 image update(s) available' "$WORK/output"
     if grep -q 'Multi-platform pin:' "$WORK/output"; then
         printf 'FAIL: failed update printed a pin reference\n'
         exit 1

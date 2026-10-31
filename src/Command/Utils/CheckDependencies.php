@@ -150,9 +150,12 @@ class CheckDependencies extends Command
 
         $this->setTableColumnWidths($packageNameLength, $table);
 
-        $rows === []
-            ? $io->success('Good news, no vendor dependency updates were found for the selected level!')
-            : $table->render();
+        if ($rows === []) {
+            $io->success('Good news, no vendor dependency updates were found for the selected level!');
+        } else {
+            $table->render();
+            $io->warning('Vendor dependency updates are available for the selected level. This check is informational.');
+        }
     }
 
     /**
@@ -465,7 +468,7 @@ class CheckDependencies extends Command
             $data->name,
             $data->description ?? '',
             $data->version,
-            $data->latest ?? '<fg=yellow>' . $data->version . '</>',
+            '<fg=yellow>' . ($data->latest ?? $data->version) . '</>',
         ];
     }
 
