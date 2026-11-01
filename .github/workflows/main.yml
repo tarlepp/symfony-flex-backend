@@ -439,14 +439,13 @@ jobs:
       - changes
     services:
       mariadb:
-        image: mariadb:10.7.1
+        image: mariadb:13.0.2@sha256:0e4bb0f339feba125d1154fbacd36c16ec8518f52e44e1f82ecec7d6771caf39
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: symfony
           MYSQL_DATABASE: symfony
         ports:
           - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-start-period=30s --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       fail-fast: false
     steps:

@@ -196,6 +196,14 @@ External reporting requires both successful tests and the prerequisite gate,
 so early test success cannot publish reports after failed prerequisite checks.
 Documentation-only and scheduled skips are unchanged.
 
+The PHPUnit MariaDB service uses the same version and multi-platform digest as
+`docker/mariadb/Dockerfile`. Update both references together when changing the
+database baseline. CI uses the upstream image's
+`healthcheck.sh --connect --innodb_initialized` readiness check, with a startup
+grace period; its dynamically assigned port remains available to the PHP
+container through `host.docker.internal`. CI does not mount the development
+database volume or load its custom server configuration.
+
 `Lightweight static analyzers` shares one bootstrap across CodeSniffer, ECS,
 PHPLint, PHP Parallel Lint and PHPLoc. Each tool has its own step and runs
 after earlier tool failures, provided bootstrap succeeded and the job has

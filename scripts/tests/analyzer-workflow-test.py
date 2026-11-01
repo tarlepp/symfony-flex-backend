@@ -25,6 +25,22 @@ def job(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_ci_database_matches_pinned_development_baseline(self):
+        dockerfile = WORKFLOW.parents[2] / "docker/mariadb/Dockerfile"
+        image = re.search(r"^FROM (mariadb:\S+)$", dockerfile.read_text(), re.MULTILINE)
+        self.assertIsNotNone(image)
+        self.assertRegex(image.group(1), r"^mariadb:\d+\.\d+\.\d+@sha256:[a-f0-9]{64}$")
+        section = job("test")
+        self.assertIn(f"        image: {image.group(1)}\n", section)
+        self.assertIn(
+            '        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" '
+            "--health-start-period=30s --health-interval=10s --health-timeout=5s "
+            "--health-retries=3\n", section,
+        )
+        self.assertNotIn("MYSQL_ALLOW_EMPTY_PASSWORD", section)
+        self.assertIn("          - 3306/tcp\n", section)
+        self.assertIn("${{ job.services.mariadb.ports['3306'] }}", section)
+
     def test_tests_and_builds_start_after_change_detection_only(self):
         for name in ("test", "docker-build"):
             section = job(name)
