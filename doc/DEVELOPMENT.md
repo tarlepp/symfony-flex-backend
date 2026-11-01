@@ -175,6 +175,28 @@ Pull requests that change only Markdown files skip PHPUnit and the Docker
 builds; the gate accepts those skips only for such pull requests. Scheduled
 runs execute only the dependency-advisory and Docker-image-update checks.
 
+The shared PHP bootstrap caches Composer downloads only for dependency
+installers. Jobs that defer installation (tests and external reporting) opt in
+with `cache-dependencies: 'true'`; documentation and workflow checks do not
+save empty caches. CI explicitly sets the container's `COMPOSER_CACHE_DIR`
+to the mounted `/home/dev/.cache/composer` directory and checks the effective
+Composer path and write access before installation. The `composer-downloads-v2`
+key namespace excludes the old empty caches.
+
+To check the cache boundary without application initialization, run from the
+repository root on the Docker host. This starts the idle CI PHP service without
+generating keys or running migrations:
+
+```bash
+make ci-start
+docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
+    bash scripts/check-composer-cache.sh
+```
+
+The check verifies configuration and write access, not GitHub cache restoration
+or warm-cache downloads. Inspect cache size and Composer download logs in a
+hosted run to verify reuse.
+
 #### Reproducing CI jobs locally [ᐞ](#table-of-contents)
 
 <a id="reproducing-ci-jobs-locally"></a>

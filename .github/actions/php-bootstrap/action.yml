@@ -9,6 +9,10 @@ inputs:
     description: Whether to print PHP project tool versions
     required: false
     default: 'true'
+  cache-dependencies:
+    description: Restore and save Composer downloads when dependencies are installed after bootstrap
+    required: false
+    default: 'false'
 runs:
   using: composite
   steps:
@@ -18,15 +22,21 @@ runs:
       run: echo "COMPOSER_CACHE_DIR=$RUNNER_TEMP/composer-cache" >> "$GITHUB_ENV" # zizmor: ignore[github-env]
 
     - name: Cache Composer downloads
+      if: ${{ inputs.install-dependencies == 'true' || inputs.cache-dependencies == 'true' }}
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ runner.temp }}/composer-cache
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-composer-
+        key: ${{ runner.os }}-composer-downloads-v2-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-downloads-v2-
 
     - name: Start PHP development container
       shell: bash
       run: bash scripts/make.sh ci-start
+
+    - name: Verify Composer cache mount
+      if: ${{ inputs.install-dependencies == 'true' || inputs.cache-dependencies == 'true' }}
+      shell: bash
+      run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php bash scripts/check-composer-cache.sh
 
     - name: Install Composer dependencies
       if: ${{ inputs.install-dependencies == 'true' }}
