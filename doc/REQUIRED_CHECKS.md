@@ -40,8 +40,8 @@ validation remains authoritative; a metadata edit does not repair failed CI.
   runs and a daily schedule. It is the only pull request pipeline that runs
   the application checks. Scheduled runs execute only `security-check` and
   `docker-image-check-updates`. Required through `Validate CI result`.
-* `dependency-review.yml` (`Dependency Review`): pull requests. Reviews
-  dependency changes for known vulnerabilities. Required as
+* `dependency-review.yml` (`Dependency Review`): pull requests and merge groups.
+  Reviews dependency changes for known vulnerabilities. Required as
   `dependency-review`.
 * `vulnerability-scan.yml` (`Vulnerability Scan`): daily and manual. Builds
   and scans the development and production images with Trivy, enforcing
@@ -202,18 +202,33 @@ Never merge a child into its parent's branch as a substitute for retargeting.
 
 <a id="merge-queue"></a>
 
-The merge queue is not used. `main.yml` already has a `merge_group`
-trigger, and change detection treats queue runs as code changes, so
-`Validate CI result` reports for the queue's merge commit. Before enabling
-it:
+The merge queue is not enabled by these workflow changes. Both `main.yml` and
+`dependency-review.yml` handle `merge_group: checks_requested`, retaining
+`Validate CI result` and `dependency-review` as the required contexts.
+Change detection treats queue runs as code changes, so all core checks run.
+The pinned Dependency Review v5 action natively compares the payload's
+`merge_group.base_sha` and `merge_group.head_sha`; it does not require a PR
+payload or custom ref overrides. Its vulnerability policy and read-only
+permissions remain unchanged.
 
-* Follow-up: `dependency-review.yml` still runs only on `pull_request`.
-  GitHub only waits for required checks that report for the queue's merge
-  commit, otherwise queued pull requests never merge. Verify that
-  `dependency-review-action` supports the `merge_group` event and add the
-  trigger, or remove `dependency-review` from the queue's required checks.
-* Run a test pull request through the queue and verify that every required
-  context reports.
+Native merge-group support was verified in the
+[pinned action's ref selection](https://github.com/actions/dependency-review-action/blob/a1d282b36b6f3519aa1f3fc636f609c47dddb294/src/git-refs.ts).
+Offline workflow regressions protect both triggers and the required-check
+contracts; they do not verify GitHub's dependency-graph comparison API.
+
+Before relying on a merge queue:
+
+* Merge the workflow changes into the target branch first.
+* Obtain approval to enable the queue in GitHub settings; retain both required
+  contexts from the GitHub Actions app.
+* Run a test pull request through the queue and verify both required contexts
+  report for the queue's merge commit, not just the PR head.
+* Inspect Dependency Review logs for a successful base/head comparison and
+  core CI for successful tests and both image builds. Test failure handling
+  before relying on automatic merges; missing or failed checks must block.
+
+Queue configuration and hosted merge-group execution remain unverified until
+that live test is completed.
 
 ## Changing required checks [ᐞ](#table-of-contents)
 

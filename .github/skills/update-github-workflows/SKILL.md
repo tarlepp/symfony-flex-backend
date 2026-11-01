@@ -40,7 +40,9 @@ replacement for their actual event filters and conditions:
   manual runs.
   Scheduled runs execute only the periodic `security-check` and
   `docker-image-check-updates` jobs; all other jobs are skipped.
-* `.github/workflows/dependency-review.yml`: dependency review on PRs.
+* `.github/workflows/dependency-review.yml`: dependency review on PRs and
+  `merge_group: checks_requested`, using the action's native base/head SHA
+  selection while preserving the required `dependency-review` context.
 * `.github/workflows/scorecard.yml`: supply-chain analysis, artifact and SARIF
   uploads, with push, schedule, branch-protection, and manual triggers.
 * `.github/workflows/vulnerability-scan.yml`: scheduled/manual development and
