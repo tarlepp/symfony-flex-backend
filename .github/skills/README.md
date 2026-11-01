@@ -87,6 +87,10 @@ references only for layers the task actually changes:
   or Dev Container setup, use
   [update-docker-environment](update-docker-environment/SKILL.md).
   Image tag/digest-only changes remain in the image-update skill.
+* For OpenAPI metadata, model schemas, reusable responses, security descriptions,
+  or generated documentation areas, use
+  [update-api-documentation](update-api-documentation/SKILL.md).
+  Documentation availability alone does not establish contract accuracy.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -107,6 +111,7 @@ references only for layers the task actually changes:
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
 | [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
+| [update-api-documentation](update-api-documentation/SKILL.md) | Changing OpenAPI metadata, schemas, reusable responses, security descriptions, or documentation areas. |
 | [update-api-response-contract](update-api-response-contract/SKILL.md) | Changing shared response serialization, population groups, formats, headers, or error envelopes. |
 | [update-application-configuration](update-application-configuration/SKILL.md) | Changing JSON settings, environment overrides, or Symfony service wiring. |
 | [update-dependencies](update-dependencies/SKILL.md) | Updating Composer packages, Composer tools, or pinned GitHub Actions. |
