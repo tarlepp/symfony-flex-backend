@@ -84,8 +84,13 @@ summary instead of failing. Base-pin and vulnerability policies are unchanged.
 Both aggregate gates use `!cancelled()`: failed or skipped dependencies still
 reach their result checks, while workflow cancellation stops the gates and
 releases the concurrency slot for the next run. Container cleanup steps remain
-unconditional with `always()`. `make lint-workflows` includes offline checks of
-these guards and the actual result scripts, not hosted workflow execution.
+unconditional with `always()`. `make lint-workflows` includes offline
+regressions that execute both gates' actual Bash checks. They verify every
+dependency's failure, cancellation and skip outcomes across validation events,
+exact scheduled and Markdown-only exceptions, result bindings, and transitive
+coverage of every core job. External reporting is the only intentionally
+excluded job. These tests do not execute GitHub jobs or verify branch-protection
+settings.
 
 ## Current state [ᐞ](#table-of-contents)
 
