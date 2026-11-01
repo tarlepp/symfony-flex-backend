@@ -16,7 +16,7 @@ TAG_SHA = "3" * 40
 
 class ToolUpdatesTest(unittest.TestCase):
     def run_checker(self, refs, mode="--tools-only", pin=None, git_status=0,
-                    action=False, color=False, sha_failure=False):
+                    action=False, color=False, sha_failure=False, wrapped=False):
         with tempfile.TemporaryDirectory(prefix="tool-update-test-") as directory:
             root = Path(directory)
             (root / "workflows").mkdir()
@@ -48,8 +48,11 @@ class ToolUpdatesTest(unittest.TestCase):
                 NO_COLOR="" if color else "1",
                 COLOR="always" if color else "never",
             )
+            command = ["bash", str(CHECKER), mode]
+            if wrapped:
+                command = ["bash", str(CHECKER.parent / "action-update-output.sh"), *command]
             return subprocess.run(
-                ["bash", str(CHECKER), mode],
+                command,
                 env=environment, text=True, capture_output=True, check=False,
             )
 
@@ -109,6 +112,29 @@ class ToolUpdatesTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("\033[33m[WARN]\033[0m UPDATE AVAILABLE (tool):", result.stdout)
         self.assertIn("Updates available:       \033[33m1", result.stdout)
+
+    def test_wrapped_checker_prints_only_one_final_outcome(self):
+        for refs, git_status, label, direct_status in (
+            (f"{SHA}\trefs/tags/v1.0.0", 0, "OK", 0),
+            (f"{SHA}\trefs/tags/v1.0.0\n{NEW_SHA}\trefs/tags/v2.0.0", 0, "WARN", 1),
+            ("", 1, "FAIL", 2),
+        ):
+            with self.subTest(label=label):
+                direct = self.run_checker(refs, git_status=git_status)
+                wrapped = self.run_checker(refs, git_status=git_status, wrapped=True)
+                self.assertEqual(direct.returncode, direct_status, direct.stderr)
+                self.assertEqual(wrapped.returncode, 0, wrapped.stderr)
+                self.assertEqual(direct.stderr.count(f"\n\n[{label}]"), 1)
+                self.assertEqual(wrapped.stderr.count(f"\n\n[{label}]"), 1)
+                self.assertIn("Action/tool update summary", wrapped.stderr)
+                self.assertIn("Actions/tools checked:", wrapped.stdout)
+                self.assertNotIn("All checked actions and tools are up-to-date", wrapped.stderr)
+                self.assertNotIn("action/tool update(s) available", wrapped.stderr)
+                if label == "FAIL":
+                    self.assertIn("review the failed entries above", wrapped.stderr)
+                    self.assertIn("retry failed GitHub lookups", wrapped.stderr)
+                    self.assertIn("informational Make target remains successful", wrapped.stderr)
+                    self.assertIn("[FAIL] Unable to fetch tool tags:", wrapped.stderr)
 
     def test_action_sha_lookup_failure_is_a_red_discovery_error(self):
         result = self.run_checker(
