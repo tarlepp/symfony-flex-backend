@@ -25,6 +25,36 @@ def job(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_tests_and_builds_start_after_change_detection_only(self):
+        for name in ("test", "docker-build"):
+            section = job(name)
+            needs = re.search(r"^    needs:\n((?:      - .+\n)+)", section, re.MULTILINE)
+            self.assertIsNotNone(needs)
+            self.assertEqual(needs.group(1), "      - changes\n")
+            self.assertIn(
+                "    if: ${{ github.event_name != 'schedule' && "
+                "needs.changes.outputs.code == 'true' }}\n", section,
+            )
+
+    def test_reporting_still_requires_prerequisites_and_tests(self):
+        section = job("report")
+        self.assertIn("    needs:\n      - ci-summary\n      - test\n", section)
+        self.assertIn(
+            "    if: ${{ success() && github.event_name == 'push' && "
+            "github.ref == 'refs/heads/master' }}\n", section,
+        )
+
+    def test_early_test_or_build_success_cannot_bypass_failed_gate(self):
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
+            for variable in ("CI_SUMMARY", "TEST", "DOCKER_BUILD"):
+                for result in ("failure", "cancelled", "skipped", ""):
+                    with self.subTest(event=event, variable=variable, result=result):
+                        outcome = self.run_gate("ci-result", event, **{variable: result})
+                        self.assertNotEqual(outcome.returncode, 0, outcome.stdout)
+        section = job("ci-result")
+        for name in ("ci-summary", "test", "docker-build"):
+            self.assertIn(f"      - {name}\n", section)
+
     def test_scheduled_concurrency_is_isolated_without_changing_other_events(self):
         concurrency = CONTENT.split("concurrency:\n", 1)[1].split("jobs:\n", 1)[0]
         self.assertEqual(

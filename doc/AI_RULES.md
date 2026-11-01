@@ -132,15 +132,16 @@ contains:
 * a lightweight static-analysis job (CodeSniffer, ECS, syntax checks and
   PHPLoc) with independent failure-preserving steps, plus a matrix for
   Psalm, PHPStan and PHP Insights,
-* application tests,
+* application tests and image builds starting after change detection,
+  independently of the lint/security/analyzer prerequisite gate,
 * a prerequisite gate (`ci-summary`) that validates the lint, security and
   static-analysis job results,
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
   both static-analysis jobs, tests and Docker builds, and is the required
   merge check together with `dependency-review`, and
-* optional coverage and Sonar reporting after successful pushes to `master`,
-  outside the core CI gate; failures of those third-party steps do not fail
-  the run.
+* optional coverage and Sonar reporting on `master` pushes after both tests
+  and the prerequisite gate succeed, outside the core CI gate; failures of
+  those third-party steps do not fail the run.
 
 Both aggregate gates use `!cancelled()` at job level. They still run after
 failed or skipped prerequisites, but stop when the workflow is cancelled so

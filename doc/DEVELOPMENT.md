@@ -187,6 +187,15 @@ cancel daily checks, nor can daily checks cancel them. New runs still cancel
 older runs in their own group, including superseded PR runs and overlapping
 schedules. Non-scheduled events keep their existing shared groups.
 
+PHPUnit and Docker builds start after successful change detection, in parallel
+with lint, security and analyzer jobs. They no longer wait for
+`Validate CI prerequisites`; this improves feedback latency but spends compute
+on tests/builds even when another check later fails. The final merge gate still
+requires the prerequisite gate, all analyzers, tests and both image builds.
+External reporting requires both successful tests and the prerequisite gate,
+so early test success cannot publish reports after failed prerequisite checks.
+Documentation-only and scheduled skips are unchanged.
+
 `Lightweight static analyzers` shares one bootstrap across CodeSniffer, ECS,
 PHPLint, PHP Parallel Lint and PHPLoc. Each tool has its own step and runs
 after earlier tool failures, provided bootstrap succeeded and the job has

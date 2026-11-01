@@ -70,8 +70,10 @@ replacement for their actual event filters and conditions:
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
    `!cancelled()` and explicitly requires successful prerequisite results
    (skipped only for non-periodic jobs on `schedule` or application-related
-   jobs of confirmed Markdown-only PRs); tests and Docker builds depend
-   on that gate. The final
+   jobs of confirmed Markdown-only PRs). Tests and Docker builds depend only
+   on successful change detection and run in parallel with prerequisite
+   checks; external reporting needs both tests and the prerequisite gate.
+   The final
    `ci-result` job needs the gate, analyzers, tests and Docker builds and
    uses `!cancelled()` so superseded workflows release their concurrency
    slot, while failed prerequisites still reach the result checks. It
