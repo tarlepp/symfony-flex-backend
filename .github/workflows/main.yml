@@ -265,6 +265,52 @@ jobs:
 
       - *stop_php_step
 
+  lightweight-analyzers:
+    name: Lightweight static analyzers
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
+    timeout-minutes: 10
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Bootstrap PHP project
+        id: bootstrap
+        uses: ./.github/actions/php-bootstrap
+
+      - name: Run PHP CodeSniffer
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        run: bash scripts/make.sh phpcs
+
+      - name: Run ECS
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        run: bash scripts/make.sh ecs
+
+      - name: Run PHPLint
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        run: bash scripts/make.sh phplint
+
+      - name: Run PHP Parallel Lint
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        run: bash scripts/make.sh php-parallel-lint
+
+      - name: Run PHPLoc
+        id: phploc
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        run: bash scripts/make.sh phploc
+
+      - name: Archive `phploc` results (phploc.json)
+        if: ${{ !cancelled() && (steps.phploc.outcome == 'success' || steps.phploc.outcome == 'failure') }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phploc.json
+          path: ./build/phploc.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - *stop_php_step
+
   static-analyzers:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
@@ -274,20 +320,10 @@ jobs:
       fail-fast: false
       matrix:
         analyzer:
-          - name: PHP CodeSniffer
-            command: bash scripts/make.sh phpcs
-          - name: ECS
-            command: bash scripts/make.sh ecs
-          - name: PHPLint
-            command: bash scripts/make.sh phplint
-          - name: PHP Parallel Lint
-            command: bash scripts/make.sh php-parallel-lint
           - name: Psalm
             command: bash scripts/make.sh psalm-github
           - name: PHPStan
             command: bash scripts/make.sh phpstan-github
-          - name: PHPLoc
-            command: bash scripts/make.sh phploc
           - name: PHP Insights
             command: bash scripts/make.sh phpinsights
     steps:
@@ -310,15 +346,6 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Archive `phploc` results (phploc.json)
-        if: ${{ !cancelled() && matrix.analyzer.name == 'PHPLoc' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: phploc.json
-          path: ./build/phploc.json
-          if-no-files-found: error
-          retention-days: 14
-
       - *stop_php_step
 
   ci-summary:
@@ -333,6 +360,7 @@ jobs:
       - lint-documentation
       - lint-workflows
       - security-check
+      - lightweight-analyzers
       - static-analyzers
     if: ${{ !cancelled() }}
     steps:
@@ -346,6 +374,7 @@ jobs:
           LINT_DOCUMENTATION: ${{ needs.lint-documentation.result }}
           LINT_WORKFLOWS: ${{ needs.lint-workflows.result }}
           STATIC_ANALYZERS: ${{ needs.static-analyzers.result }}
+          LIGHTWEIGHT_ANALYZERS: ${{ needs.lightweight-analyzers.result }}
           GITLEAKS: ${{ needs.gitleaks.result }}
           DOCKER_PINS: ${{ needs.docker-image-verify-pins.result }}
           DOCKER_UPDATES: ${{ needs.docker-image-check-updates.result }}
@@ -356,6 +385,7 @@ jobs:
           echo "Lint documentation result: $LINT_DOCUMENTATION"
           echo "Workflow validation result: $LINT_WORKFLOWS"
           echo "Static analyzer matrix result: $STATIC_ANALYZERS"
+          echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"
           echo "Gitleaks result: $GITLEAKS"
           echo "Docker base image pin verification result: $DOCKER_PINS"
           echo "Docker image version check result: $DOCKER_UPDATES"
@@ -374,6 +404,7 @@ jobs:
           test "$LINT_DOCUMENTATION" = "$periodic_skipped"
           test "$LINT_WORKFLOWS" = "$periodic_skipped"
           test "$STATIC_ANALYZERS" = "$periodic_skipped"
+          test "$LIGHTWEIGHT_ANALYZERS" = "$periodic_skipped"
           test "$GITLEAKS" = "$periodic_skipped"
           test "$DOCKER_PINS" = "$periodic_skipped"
 
@@ -656,6 +687,7 @@ jobs:
     needs:
       - changes
       - ci-summary
+      - lightweight-analyzers
       - static-analyzers
       - test
       - docker-build
@@ -670,6 +702,7 @@ jobs:
           CODE_CHANGED: ${{ needs.changes.outputs.code }}
           CI_SUMMARY: ${{ needs.ci-summary.result }}
           STATIC_ANALYZERS: ${{ needs.static-analyzers.result }}
+          LIGHTWEIGHT_ANALYZERS: ${{ needs.lightweight-analyzers.result }}
           TEST: ${{ needs.test.result }}
           DOCKER_BUILD: ${{ needs.docker-build.result }}
         run: |
@@ -677,6 +710,7 @@ jobs:
           echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
           echo "Prerequisite gate result: $CI_SUMMARY"
           echo "Static analyzer matrix result: $STATIC_ANALYZERS"
+          echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"
           echo "PHPUnit result: $TEST"
           echo "Docker build matrix result: $DOCKER_BUILD"
 
@@ -701,5 +735,6 @@ jobs:
           test "$CHANGES" = "$changes_expected"
           test "$CI_SUMMARY" = "success"
           test "$STATIC_ANALYZERS" = "$analyzers_expected"
+          test "$LIGHTWEIGHT_ANALYZERS" = "$analyzers_expected"
           test "$TEST" = "$expected_skipped"
           test "$DOCKER_BUILD" = "$expected_skipped"

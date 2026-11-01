@@ -40,7 +40,8 @@ This directory contains different scripts that are used during development.
     approval before applying a major-version upgrade suggestion.
 * [GitHub workflow validator](lint-workflows.sh)
   * Validates all workflows and their supported shell steps, and separately
-    validates local action metadata.
+    validates local action metadata. Offline analyzer regressions exercise
+    the actual prerequisite/final gate shell predicates and grouped steps.
 * [Composer cache mount check](check-composer-cache.sh)
   * Runs inside the CI PHP container to check Composer's effective cache path
     and write access. Offline regressions run through `make lint-workflows`.
