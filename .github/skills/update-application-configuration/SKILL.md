@@ -25,6 +25,8 @@ local-configuration workflow.
 
 For request/login capture, redaction, ignored paths, or logging sink behavior,
 also use [update-request-logging](../update-request-logging/SKILL.md).
+For locale defaults, translator fallback, or timezone behavior, also use
+[update-localization](../update-localization/SKILL.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
