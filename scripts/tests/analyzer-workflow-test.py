@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Exercise analyzer gate shell predicates from the actual workflow."""
+"""Exercise change detection and analyzer gates from the actual workflow."""
 
 import os
 from pathlib import Path
 import re
 import subprocess
+import tempfile
 import textwrap
 import unittest
 
@@ -84,14 +85,163 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     outcome = self.run_gate(name, "schedule", result)
                     self.assertEqual(outcome.returncode == 0, result == "skipped", outcome.stdout)
 
-    def test_documentation_skip_does_not_bypass_analyzers(self):
-        for result in ("success", "failure", "cancelled", "skipped"):
-            with self.subTest(result=result):
-                outcome = self.run_gate(
-                    "ci-result", lightweight=result,
-                    CODE_CHANGED="false", TEST="skipped", DOCKER_BUILD="skipped",
+    def documentation_gate(self, name, **overrides):
+        variables = (
+            "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
+            "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
+        )
+        environment = dict.fromkeys(variables, "skipped")
+        environment.update(CODE_CHANGED="false")
+        environment.update(overrides)
+        return self.run_gate(name, **environment)
+
+    def test_documentation_pr_accepts_only_expected_skips(self):
+        for name in ("ci-summary", "ci-result"):
+            self.assertEqual(self.documentation_gate(name).returncode, 0)
+            variables = re.findall(r"^          ([A-Z_]+):", job(name), re.MULTILINE)
+            for variable in variables:
+                if variable in ("EVENT_NAME", "CODE_CHANGED"):
+                    continue
+                expected = "skipped" if variable in (
+                    "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
+                    "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
+                ) else "success"
+                for result in ("success", "failure", "cancelled", "skipped", ""):
+                    if result == expected:
+                        continue
+                    with self.subTest(gate=name, variable=variable, result=result):
+                        outcome = self.documentation_gate(name, **{variable: result})
+                        self.assertNotEqual(outcome.returncode, 0, outcome.stdout)
+            self.assertNotEqual(self.documentation_gate(name, CHANGES="skipped").returncode, 0)
+
+    def test_skip_requires_explicit_documentation_pr(self):
+        for name in ("ci-summary", "ci-result"):
+            for event in ("push", "merge_group", "workflow_dispatch"):
+                with self.subTest(gate=name, event=event):
+                    self.assertNotEqual(self.documentation_gate(name, event=event).returncode, 0)
+            for code in ("true", "", "unknown"):
+                with self.subTest(gate=name, code=code):
+                    self.assertNotEqual(self.documentation_gate(name, CODE_CHANGED=code).returncode, 0)
+
+    def test_retained_checks_cannot_be_skipped(self):
+        for variable in ("LINT_DOCUMENTATION", "LINT_WORKFLOWS", "GITLEAKS"):
+            with self.subTest(variable=variable):
+                self.assertNotEqual(
+                    self.documentation_gate("ci-summary", **{variable: "skipped"}).returncode, 0,
                 )
-                self.assertEqual(outcome.returncode == 0, result == "success", outcome.stdout)
+
+    def test_job_conditions_keep_periodic_and_documentation_coverage(self):
+        condition = (
+            "    if: ${{ github.event_name != 'schedule' && "
+            "!(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}"
+        )
+        for name in (
+            "lint-configuration", "docker-image-verify-pins",
+            "lightweight-analyzers", "static-analyzers",
+        ):
+            self.assertIn("    needs: changes\n", job(name))
+            self.assertIn(condition, job(name))
+        for name in ("security-check", "docker-image-check-updates"):
+            self.assertIn("    needs: changes\n", job(name))
+            self.assertIn(
+                "    if: ${{ !cancelled() && (github.event_name == 'schedule' || "
+                "(needs.changes.result == 'success' && !(github.event_name == 'pull_request' "
+                "&& needs.changes.outputs.code == 'false'))) }}", job(name),
+            )
+        for name in ("lint-documentation", "lint-workflows", "gitleaks"):
+            self.assertIn("    if: ${{ github.event_name != 'schedule' }}\n", job(name))
+            self.assertNotIn("needs.changes", job(name))
+        for name in ("ci-summary", "ci-result"):
+            self.assertIn("      - changes\n", job(name))
+            self.assertIn("    if: ${{ always() }}\n", job(name))
+
+
+class ChangeDetectionTest(unittest.TestCase):
+    def git(self, *arguments):
+        return subprocess.run(
+            ["git", *arguments], cwd=self.root, text=True, capture_output=True,
+            check=True, timeout=10,
+        ).stdout.strip()
+
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="ci-changes-")
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.git("init", "--quiet")
+        self.git("config", "user.name", "CI fixture")
+        self.git("config", "user.email", "fixture@example.invalid")
+        (self.root / "README.md").write_text("Original documentation\n")
+        (self.root / "source.php").write_text("<?php\n")
+        self.commit()
+        self.base = self.git("rev-parse", "HEAD")
+
+    def commit(self):
+        self.git("add", "--all")
+        self.git("commit", "--quiet", "-m", "Fixture")
+
+    def detect(self, event="pull_request", base=None, head=None):
+        output = self.root / ".git/detection-output"
+        script = textwrap.dedent(job("changes").split("        run: |\n")[-1])
+        result = subprocess.run(
+            ["bash", "-e", "-c", script], cwd=self.root, capture_output=True,
+            text=True, check=False, timeout=10,
+            env=dict(
+                os.environ, EVENT_NAME=event, BASE_SHA=base or self.base,
+                HEAD_SHA=head or self.git("rev-parse", "HEAD"), GITHUB_OUTPUT=str(output),
+            ),
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return output.read_text().splitlines()[-1], result
+
+    def test_markdown_only_edit_skips_code(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=false")
+
+    def test_markdown_add_delete_and_rename_skip_code(self):
+        (self.root / "README.md").rename(self.root / "GUIDE.md")
+        (self.root / "NEW.md").write_text("New documentation\n")
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=false")
+        (self.root / "GUIDE.md").unlink()
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=false")
+
+    def test_code_renamed_to_markdown_still_runs_code(self):
+        (self.root / "source.php").rename(self.root / "source.md")
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=true")
+
+    def test_mixed_changes_run_code(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=true")
+
+    def test_empty_diff_runs_code(self):
+        self.assertEqual(self.detect()[0], "code=true")
+
+    def test_code_deletion_runs_code(self):
+        (self.root / "source.php").unlink()
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=true")
+
+    def test_quoted_filename_fails_safe(self):
+        (self.root / "unusual\nname.md").write_text("Documentation\n")
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=true")
+
+    def test_failed_diff_runs_code_and_reports_error(self):
+        code, result = self.detect(base="missing-commit")
+        self.assertEqual(code, "code=true")
+        self.assertIn("fatal:", result.stderr)
+
+    def test_non_pr_events_run_code_even_for_markdown_changes(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        for event in ("push", "merge_group", "workflow_dispatch"):
+            with self.subTest(event=event):
+                self.assertEqual(self.detect(event)[0], "code=true")
 
 
 if __name__ == "__main__":

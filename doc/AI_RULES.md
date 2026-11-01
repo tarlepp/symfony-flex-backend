@@ -117,8 +117,9 @@ Use `.github/workflows/main.yml` as the source of truth; this map is an
 orientation and should be reviewed when that workflow changes. It currently
 contains:
 
-* change detection, which skips application tests and Docker builds for
-  pull requests that change only Markdown files,
+* fail-safe change detection, which skips application configuration,
+  PHP dependency security, Docker pin/update checks, PHP analyzers, tests
+  and Docker builds for confirmed Markdown-only pull requests,
 * configuration lint and documentation checks, including skill metadata,
   index coverage, and local Markdown links and anchors across the repository
   (project tooling uses Make targets inside the Compose `php` development
@@ -149,10 +150,11 @@ regressions of the actual gate result scripts; it does not execute GitHub jobs.
 
 The workflow also runs on `merge_group` events. Scheduled runs execute only
 the periodic `security-check` and `docker-image-check-updates` jobs; every
-other job is skipped. Skipped
-results are accepted on a pull request only for tests and Docker builds of a
-Markdown-only change. See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) for the
-merge-gate rules.
+other check job is skipped. Markdown-only PRs retain documentation checks,
+workflow validation and Gitleaks (plus separate Dependency Review and CodeQL).
+Both gates accept skips of application-related jobs only when change detection
+succeeded and reported `code=false` on a pull request.
+See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) for the merge-gate rules.
 
 Separate workflows cover the rest of the pipeline: `dependency-review.yml`
 (pull request dependency review), `vulnerability-scan.yml` (daily Trivy scan
