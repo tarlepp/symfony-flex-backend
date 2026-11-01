@@ -68,10 +68,12 @@ replacement for their actual event filters and conditions:
    Path filters or job renames can affect required checks; confirm repository
    rules when relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
-   `always()` and explicitly requires successful prerequisite results
+   `!cancelled()` and explicitly requires successful prerequisite results
    (skipped only for non-periodic jobs on `schedule`, never on PRs or
    pushes); tests and Docker builds depend on that gate. The final
    `ci-result` job needs the gate, analyzers, tests and Docker builds and
+   uses `!cancelled()` so superseded workflows release their concurrency
+   slot, while failed prerequisites still reach the result checks. It
    is the required merge gate, so add every new job to its `needs` and
    result checks. The `changes` job skips tests and Docker builds for
    Markdown-only pull requests, and `ci-result` accepts that only when

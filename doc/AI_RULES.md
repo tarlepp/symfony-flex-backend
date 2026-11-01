@@ -139,6 +139,12 @@ contains:
   outside the core CI gate; failures of those third-party steps do not fail
   the run.
 
+Both aggregate gates use `!cancelled()` at job level. They still run after
+failed or skipped prerequisites, but stop when the workflow is cancelled so
+superseded runs release their concurrency slot. Container cleanup steps retain
+`always()`. `make lint-workflows` checks these guards and runs offline
+regressions of the actual gate result scripts; it does not execute GitHub jobs.
+
 The workflow also runs on `merge_group` events. Scheduled runs execute only
 the periodic `security-check` and `docker-image-check-updates` jobs; every
 other job is skipped. Skipped

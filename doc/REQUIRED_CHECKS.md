@@ -63,6 +63,12 @@ Jobs in `main.yml`, in dependency order:
   prerequisite gate, the analyzer matrix, tests and Docker builds. This is
   the merge gate.
 
+Both aggregate gates use `!cancelled()`: failed or skipped dependencies still
+reach their result checks, while workflow cancellation stops the gates and
+releases the concurrency slot for the next run. Container cleanup steps remain
+unconditional with `always()`. `make lint-workflows` includes offline checks of
+these guards and the actual result scripts, not hosted workflow execution.
+
 ## Current state [ᐞ](#table-of-contents)
 
 <a id="current-state"></a>

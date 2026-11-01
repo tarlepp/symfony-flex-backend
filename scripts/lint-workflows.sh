@@ -3,6 +3,8 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+python3 scripts/tests/ci-gates-test.py
+
 ACTIONLINT_TAG=v1.7.12 # tool-pin: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca
 SHELLCHECK_TAG=v0.11.0 # tool-pin: koalaman/shellcheck@aac0823e6b58f8a499e856e93738082691cbf212
 ZIZMOR_TAG=v1.31.1 # tool-pin: zizmorcore/zizmor@effdb35fa7868863f11655db256d9008922fa427
