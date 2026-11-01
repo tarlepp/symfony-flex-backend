@@ -97,12 +97,13 @@ output_run() {
 
 # Run a command with the idle spinner; nested commands receive PROGRESS=never.
 output_relay() {
-    local label=$1 style=plain
+    local label=$1 style=plain coerce
     shift
     if [ "$(type -t "$1")" = file ] && command -v python3 >/dev/null 2>&1; then
         [ -z "$OUTPUT_BLUE" ] || style=color
         # Disable Python locale coercion so the command inherits the caller's locale unchanged.
-        OUTPUT_PROGRESS_COERCE=${PYTHONCOERCECLOCALE+set:$PYTHONCOERCECLOCALE} PYTHONCOERCECLOCALE=0 \
+        coerce=${PYTHONCOERCECLOCALE+set:$PYTHONCOERCECLOCALE}
+        OUTPUT_PROGRESS_COERCE=$coerce PYTHONCOERCECLOCALE=0 \
             python3 "$OUTPUT_DIR/command-progress.py" "$label" "$style" "$@"
     else
         PROGRESS=never "$@"
