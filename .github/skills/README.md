@@ -83,6 +83,10 @@ references only for layers the task actually changes:
   or script regression tests, use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md).
   Use the workflow and dependency skills for those separate contracts.
+* For Docker build behavior, Compose services, entrypoints, runtime mounts,
+  or Dev Container setup, use
+  [update-docker-environment](update-docker-environment/SKILL.md).
+  Image tag/digest-only changes remain in the image-update skill.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -106,6 +110,7 @@ references only for layers the task actually changes:
 | [update-api-response-contract](update-api-response-contract/SKILL.md) | Changing shared response serialization, population groups, formats, headers, or error envelopes. |
 | [update-application-configuration](update-application-configuration/SKILL.md) | Changing JSON settings, environment overrides, or Symfony service wiring. |
 | [update-dependencies](update-dependencies/SKILL.md) | Updating Composer packages, Composer tools, or pinned GitHub Actions. |
+| [update-docker-environment](update-docker-environment/SKILL.md) | Changing Docker build behavior, Compose services, entrypoints, runtime configuration, or Dev Container setup. |
 | [update-docker-images](update-docker-images/SKILL.md) | Updating Docker image tags and multi-platform digest pins. |
 | [update-github-actions](update-github-actions/SKILL.md) | Updating verified action SHA pins in workflows and local composite actions. |
 | [update-github-workflows](update-github-workflows/SKILL.md) | Changing CI triggers, jobs, prerequisite gates, matrices, or shared bootstrap behavior. |
