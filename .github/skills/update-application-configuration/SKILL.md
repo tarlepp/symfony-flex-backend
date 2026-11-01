@@ -23,6 +23,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 [CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) for the existing
 local-configuration workflow.
 
+For request/login capture, redaction, ignored paths, or logging sink behavior,
+also use [update-request-logging](../update-request-logging/SKILL.md).
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>

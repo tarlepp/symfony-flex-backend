@@ -71,6 +71,10 @@ references only for layers the task actually changes:
   headers, or error envelopes, use
   [update-api-response-contract](update-api-response-contract/SKILL.md).
   Request DTO mapping alone does not establish the response contract.
+* For request/login audit records, redaction, ignored paths, or their
+  interaction with Monolog, use
+  [update-request-logging](update-request-logging/SKILL.md). Database audit
+  capture and diagnostic logs are separate sinks.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -97,6 +101,7 @@ references only for layers the task actually changes:
 | [update-github-actions](update-github-actions/SKILL.md) | Updating verified action SHA pins in workflows and local composite actions. |
 | [update-github-workflows](update-github-workflows/SKILL.md) | Changing CI triggers, jobs, prerequisite gates, matrices, or shared bootstrap behavior. |
 | [update-php-runtime](update-php-runtime/SKILL.md) | Changing the supported PHP version or coordinated PHP runtime baseline. |
+| [update-request-logging](update-request-logging/SKILL.md) | Changing request/login logging, redaction, stored metadata, ignored paths, or diagnostic sink interactions. |
 | [update-symfony-recipes](update-symfony-recipes/SKILL.md) | Inspecting or updating installed Symfony Flex recipes with Composer. |
 | [write-tests](write-tests/SKILL.md) | Adding or changing PHPUnit tests and choosing the appropriate test boundary. |
 
