@@ -181,6 +181,12 @@ deletions/additions, so renaming code to `.md` still runs full CI; an empty or
 failed diff counts as code. Other events keep full coverage, except schedules,
 which run only the dependency-advisory and Docker-image-update checks.
 
+CI concurrency is scoped to the workflow and Git ref, with a `-schedule`
+suffix only for scheduled runs. Pushes and manual runs on `master` cannot
+cancel daily checks, nor can daily checks cancel them. New runs still cancel
+older runs in their own group, including superseded PR runs and overlapping
+schedules. Non-scheduled events keep their existing shared groups.
+
 `Lightweight static analyzers` shares one bootstrap across CodeSniffer, ECS,
 PHPLint, PHP Parallel Lint and PHPLoc. Each tool has its own step and runs
 after earlier tool failures, provided bootstrap succeeded and the job has

@@ -25,6 +25,15 @@ def job(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_scheduled_concurrency_is_isolated_without_changing_other_events(self):
+        concurrency = CONTENT.split("concurrency:\n", 1)[1].split("jobs:\n", 1)[0]
+        self.assertEqual(
+            concurrency,
+            "  group: ${{ github.workflow }}-${{ github.ref }}"
+            "${{ github.event_name == 'schedule' && '-schedule' || '' }}\n"
+            "  cancel-in-progress: true\n",
+        )
+
     def run_gate(self, name, event="pull_request", lightweight="success", **overrides):
         section = job(name)
         script = textwrap.dedent(section.split("        run: |\n")[-1])
