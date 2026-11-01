@@ -28,6 +28,14 @@ repository, so this document is the source for what they should be.
 
 Workflows live in `.github/workflows/`; `main.yml` is the core pipeline.
 
+Confirmed title/body-only PR edits skip all core CI jobs, without changing the
+required contexts for validation runs. Base changes and unclear edit payloads
+still validate. Metadata-only runs have isolated concurrency and a distinct
+skipped final context, `Metadata-only PR edit (no validation)`. Never require
+that context or rename it to `Validate CI result`: a skipped metadata check must
+not mask an earlier failed validation of the same commit. Existing required
+validation remains authoritative; a metadata edit does not repair failed CI.
+
 * `main.yml` (`CI`): pull requests, `master` pushes, `merge_group`, manual
   runs and a daily schedule. It is the only pull request pipeline that runs
   the application checks. Scheduled runs execute only `security-check` and
