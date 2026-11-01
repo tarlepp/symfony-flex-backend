@@ -334,7 +334,7 @@ jobs:
       - lint-workflows
       - security-check
       - static-analyzers
-    if: ${{ always() }}
+    if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
 
@@ -642,7 +642,7 @@ jobs:
       - static-analyzers
       - test
       - docker-build
-    if: ${{ always() }}
+    if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
 

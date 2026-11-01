@@ -169,6 +169,12 @@ Exit codes:
 
 File: `scripts/lint-workflows.sh`
 
+The validator first runs `scripts/tests/ci-gates-test.py` offline. It checks
+that both aggregate CI gates stop on workflow cancellation, container cleanup
+remains unconditional, and the actual Bash result checks still reject failed,
+cancelled and unexpected skipped prerequisites. These regressions do not
+execute GitHub jobs or simulate its scheduler.
+
 ```bash
 make lint-workflows
 ```
