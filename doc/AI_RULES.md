@@ -77,6 +77,11 @@ Keep common execution and handoff instructions in
 [shared guidance](../.github/skills/shared-guidance.md); write domain workflows
 and safeguards in their specific skills.
 
+For changes to instructions, agent profiles, or skill contracts, use
+[maintain-ai-guidance](../.github/skills/maintain-ai-guidance/SKILL.md) for
+inspection targets, routing safeguards, and static versus live-client
+validation boundaries.
+
 Add a skill or expand shared policy only when a recurring need justifies it.
 Before creating a new document, check whether the workflow belongs in an
 existing skill or the shared guidance. New skills should cover a distinct
