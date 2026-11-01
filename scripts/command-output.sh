@@ -37,6 +37,7 @@ output_run() {
     trap 'output_status WARN "$label: terminated"; exit 143' TERM
     "$@" || status=$?
     trap - INT TERM
+    printf '\n' >&2
     if [ "$status" -eq 0 ]; then
         output_status OK "$label"
     elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then

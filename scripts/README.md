@@ -48,8 +48,10 @@ This directory contains different scripts that are used during development.
 <a id="command-status-output"></a>
 
 `scripts/command-output.sh` provides reusable status messages and a streaming
-command wrapper. The first migrated Make target is `test-docker-images`;
-other targets retain their existing output until migrated separately.
+command wrapper. Shared output is used by `test-docker-images`, `check-skills`,
+`lint-workflows`, `check-requirements`, `test-make-routing`, and
+`docker-image-verify-pins`. Other targets retain their existing output until
+migrated separately.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
@@ -71,6 +73,46 @@ With development services running, from the repository root on the Docker host:
 make test-docker-images
 make test-docker-images COLOR=always
 make test-docker-images NO_COLOR=1
+```
+
+For cleaner failure output, use `bash scripts/make.sh` instead of `make`.
+The launcher removes only GNU Make's redundant recipe error-location lines
+(including recursive Make lines). It preserves `[FAIL]`, native diagnostics,
+stdout, and Make's original exit status. Missing targets, Makefile syntax
+errors, and other Make diagnostics remain visible. Direct `make` invocations
+are unchanged. Run from the repository root, either inside the PHP development
+container or on the Docker host with development services running:
+
+```bash
+bash scripts/make.sh check-skills
+bash scripts/make.sh lint-workflows COLOR=always
+```
+
+The launcher does not add result messages to unmigrated targets or change
+their failure policies. Color auto-detection happens before stderr filtering.
+
+Shells opened through `make bash` automatically enable filtered Make output,
+after loading the user's normal `~/.bashrc`. No image rebuild is needed.
+Existing shells and shells opened directly through Docker or the IDE are
+unchanged.
+
+To keep typing `make` with filtered output in those shells, opt in per session.
+From the repository root, inside the PHP development container or on the
+Docker host with development services running:
+
+```bash
+source scripts/make-shell.sh
+make check-skills
+```
+
+This defines a shell function only for the current session. It uses the
+launcher when the working directory is this repository's root and delegates
+to ordinary Make elsewhere. It does not modify user startup files or CI.
+To disable it or bypass it for one command:
+
+```bash
+unset -f make
+command make check-skills
 ```
 
 `make test-docker-images` runs offline regression tests of the helper itself,
@@ -98,8 +140,43 @@ directory with development services running:
 
 ```bash
 docker compose exec -T php python3 scripts/tests/command-output-test.py
+docker compose exec -T php python3 scripts/tests/make-check-output-test.py
+docker compose exec -T php python3 scripts/tests/lint-workflows-output-test.py
+docker compose exec -T php python3 scripts/tests/make-launcher-test.py
 make test-make-routing
 ```
+
+The blocking check targets print `[RUN]` before their native diagnostics and
+`[OK]` only after successful completion. Failures print `[FAIL]` with the
+original command exit code and still fail Make; statuses 1 and 2 are not
+silently accepted. The existing informational `check-action-updates` policy
+is unchanged. Wrapper messages use stderr, preserving native stdout.
+
+The Make recipe regression suite above uses offline command fixtures to
+exercise success, failures, color controls, and command arguments. It does not
+perform live registry validation or run the workflow validators themselves.
+To run the real read-only checks, use these commands from the repository root
+on the Docker host with development services running:
+
+```bash
+make check-skills
+make lint-workflows
+make check-requirements
+make docker-image-verify-pins
+```
+
+`lint-workflows` downloads pinned validator releases, and
+`docker-image-verify-pins` needs host Docker/buildx and registry access.
+The routing target uses offline Docker mocks, not real service health checks.
+
+Workflow validation shows named download/checksum and validation stages instead
+of temporary checksum paths, grouped into four numbered sections separated by
+blank lines: validator preparation, workflows, local actions, and tooling
+scripts. Zizmor's per-file informational progress is quiet
+by default, while warnings, findings, and ignored/suppressed counts remain
+visible. Set `RUST_LOG=debug` inside the PHP container when troubleshooting
+zizmor logging. The offline workflow-output suite covers these stages and
+failure propagation without downloading or executing the actual validators.
 
 ### Project stats script [ᐞ](#table-of-contents)
 
