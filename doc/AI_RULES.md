@@ -155,6 +155,12 @@ other check job is skipped. Markdown-only PRs retain documentation checks,
 workflow validation and Gitleaks (plus separate Dependency Review and CodeQL).
 Both gates accept skips of application-related jobs only when change detection
 succeeded and reported `code=false` on a pull request.
+
+Docker update availability uses the checker's explicit advisory mode on every
+event: confirmed newer stable multi-platform images produce warnings rather
+than gate failures. Lookup, pin-validation and helper regression errors still
+fail the required image-update job; base-pin and vulnerability checks remain
+blocking. The default local image-update command keeps its strict exit policy.
 See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) for the merge-gate rules.
 
 Scheduled CI runs use a separate concurrency group from non-scheduled runs

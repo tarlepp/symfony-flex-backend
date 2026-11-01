@@ -48,6 +48,11 @@ Workflows live in `.github/workflows/`; `main.yml` is the core pipeline.
 
 Jobs in `main.yml`, in dependency order:
 
+Docker update availability is advisory on every event. The image-update job
+still must succeed: registry/checker errors, invalid update pins and regression
+failures remain blocking. Confirmed updates emit warnings and a maintenance
+summary instead of failing. Base-pin and vulnerability policies are unchanged.
+
 * No dependencies: `Detect changed files`, `Lint documentation files`,
   `Validate GitHub workflows` and `Gitleaks scan`.
 * After change detection: `Lint configuration`, `PHP Security Checker`,

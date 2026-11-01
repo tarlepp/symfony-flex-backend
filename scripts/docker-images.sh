@@ -61,7 +61,7 @@ usage() {
 Docker multi-platform image helper, see doc/DOCKER_MULTI_PLATFORM.md
 
 Usage:
-  $0 <command>
+  $0 <command> [--advisory]
 
 Commands:
   check-updates  Report newer stable image versions (Docker Hub)
@@ -81,6 +81,8 @@ preserving the tag variant. It groups results by Dockerfile with verified multi-
 pin references for updates. It requires curl, jq and Docker with buildx, and
 changes no files. Exit status: 0 = no updates or errors, 1 = updates or errors,
 69 = missing tools. Floating and prerelease tags are skipped explicitly.
+With check-updates --advisory, confirmed updates produce warnings and exit 0;
+lookup or pin-validation errors still fail. Other commands do not use this flag.
 
   IMAGE       Image reference (digest), or optional single image (check-updates)
   PLATFORM    Single target platform, e.g. linux/arm64 (build)
@@ -271,7 +273,23 @@ check_image_update() {
 
 command_check_updates() {
     local file image references tool heading="" issues=0 updates=0 skipped=0 status=0
+    local advisory=false
     local -A seen=() results=()
+
+    case "$#" in
+        0) ;;
+        1)
+            if [ "$1" != "--advisory" ]; then
+                error "Unknown check-updates option '$1'"
+                return 64
+            fi
+            advisory=true
+            ;;
+        *)
+            error "check-updates accepts only the optional --advisory flag"
+            return 64
+            ;;
+    esac
     output_status RUN 'Docker image version checks'
 
     require_docker
@@ -317,6 +335,10 @@ command_check_updates() {
             results[$image]="$(check_image_update "$image")" || status=$?
             if [ "$status" -eq 2 ]; then
                 updates=$((updates + 1))
+                if [ "$advisory" = true ]; then
+                    github_annotation warning "$file" "" "Docker image update available" \
+                        "${image}: a newer stable multi-platform image is available; see the check output for its verified pin."
+                fi
             elif [ "$status" -eq 4 ]; then
                 updates=$((updates + 1))
                 issues=$((issues + 1))
@@ -334,6 +356,11 @@ command_check_updates() {
         return 1
     elif [ "$updates" -gt 0 ]; then
         output_outcome WARN "$updates image(s) require attention: updates available"
+        if [ "$advisory" = true ]; then
+            github_summary "## Docker image maintenance" "" \
+                ":warning: ${updates} image update(s) available. Updates are advisory; see the check logs for verified pins. No files were changed."
+            return 0
+        fi
         return 1
     elif [ "$skipped" -gt 0 ]; then
         output_outcome SKIP "$skipped image version check(s) skipped; no updates found among completed checks"
@@ -906,7 +933,7 @@ command_push() {
 }
 
 case "${1:-}" in
-    check-updates ) command_check_updates ;;
+    check-updates ) shift; command_check_updates "$@" ;;
     digest ) require_docker; command_digest ;;
     verify ) require_docker; command_verify ;;
     platforms ) require_docker; command_platforms ;;

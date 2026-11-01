@@ -181,6 +181,19 @@ deletions/additions, so renaming code to `.md` still runs full CI; an empty or
 failed diff counts as code. Other events keep full coverage, except schedules,
 which run only the dependency-advisory and Docker-image-update checks.
 
+Docker image update availability is advisory on every event: confirmed updates
+produce warnings and a maintenance summary, without failing the merge gate.
+Registry lookup, update-pin validation and helper regression failures still
+fail the job. Existing base-pin and vulnerability checks remain blocking.
+To reproduce this policy from the repository root on the Docker host:
+
+```bash
+bash scripts/docker-images.sh check-updates --advisory
+```
+
+The local `make docker-image-check-updates` command retains its strict policy,
+returning nonzero for either updates or failed checks.
+
 CI concurrency is scoped to the workflow and Git ref, with a `-schedule`
 suffix only for scheduled runs. Pushes and manual runs on `master` cannot
 cancel daily checks, nor can daily checks cancel them. New runs still cancel

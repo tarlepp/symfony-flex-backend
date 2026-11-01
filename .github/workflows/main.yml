@@ -263,7 +263,7 @@ jobs:
           fi
 
       - name: Check for newer stable Docker image versions
-        run: bash scripts/make.sh docker-image-check-updates
+        run: bash scripts/docker-images.sh check-updates --advisory
 
       - name: Log out of Docker Hub
         if: ${{ always() }}

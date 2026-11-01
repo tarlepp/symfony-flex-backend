@@ -36,6 +36,7 @@ start_group() {
 
 cleanup() {
     rm -f "$WORK/bin/docker" "$WORK/manifest.json" "$WORK/output" "$WORK/summary" \
+        "$WORK/advisory-summary" \
         "$WORK/bin/curl" "$WORK/tags.json" "$WORK/requests" \
         "$WORK/bin/sleep" "$WORK/docker-attempts" "$WORK/retry-delays" \
         "$WORK/Dockerfile" "$WORK/docker/nginx/Dockerfile" "$WORK/docker/mariadb/Dockerfile"
@@ -260,7 +261,7 @@ check_updates() {
 
     start_case "$name"
     : > "$TEST_REQUESTS"
-    IMAGE="$image" bash "$SCRIPT" check-updates > "$WORK/output" 2>&1 || status=$?
+    IMAGE="$image" bash "$SCRIPT" check-updates "${@:5}" > "$WORK/output" 2>&1 || status=$?
     if [ "$status" -ne "$expected" ] || ! grep -Fq -- "$message" "$WORK/output"; then
         printf 'FAIL: %s: expected exit %s and message "%s", got exit %s\n' "$name" "$expected" "$message" "$status"
         cat "$WORK/output"
@@ -277,6 +278,16 @@ if grep -q $'\033' "$WORK/output"; then
     printf 'FAIL: NO_COLOR output contains ANSI escapes\n'
     exit 1
 fi
+check_updates 'advisory updates succeed with warning annotation and summary' 'test:1.9.9' 0 \
+    '[WARN] 1 image(s)' --advisory
+GITHUB_ACTIONS=true GITHUB_STEP_SUMMARY="$WORK/advisory-summary" \
+    check_updates 'hosted advisory warning is visible' 'test:1.9.9' 0 \
+    '::warning file=' --advisory
+grep -Fq 'Updates are advisory' "$WORK/advisory-summary"
+check_updates 'invalid advisory option fails' 'test:1.9.9' 64 \
+    'Unknown check-updates option' --unknown
+check_updates 'duplicate advisory option fails' 'test:1.9.9' 64 \
+    'accepts only the optional --advisory flag' --advisory --advisory
 COLOR=always NO_COLOR='' check_updates 'updates use yellow' 'test:1.9.9' 1 $'\033[33m[WARN]\033[0m'
 grep -Fq $'\033[33m[WARN]\033[0m 1 image(s)' "$WORK/output"
 COLOR=always NO_COLOR='' check_updates 'up-to-date images use green' 'test:2.0.0' 0 $'\033[32m[OK]\033[0m'
@@ -285,6 +296,8 @@ if grep -q 'Multi-platform pin:' "$WORK/output"; then
     printf 'FAIL: up-to-date image printed an update pin\n'
     exit 1
 fi
+check_updates 'advisory current image succeeds' 'test:2.0.0' 0 \
+    'no newer stable version' --advisory
 check_updates 'local version newer than registry' 'test:9.0.0' 0 'no newer stable version'
 check_updates 'Docker Hub prefix and v prefix' 'docker.io/test:v1.0.0' 1 \
     'docker.io/test:v1.0.0 -> docker.io/test:v5.0.0'
@@ -310,6 +323,8 @@ check_updates 'multi-page pagination cycle' 'test:1.0.0' 1 'Repeated Docker Hub 
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 3 ]
 export TEST_TAG_MODE=failure
 check_updates 'registry failure' 'test:1.0.0' 1 'Could not fetch Docker Hub tags'
+check_updates 'advisory registry failure still fails' 'test:1.0.0' 1 \
+    'Could not fetch Docker Hub tags' --advisory
 export TEST_TAG_MODE=invalid
 check_updates 'malformed registry response' 'test:1.0.0' 1 'Invalid Docker Hub tag response'
 export TEST_TAG_MODE=''
@@ -467,6 +482,8 @@ for index in "${!rejected_update_manifests[@]}"; do
     manifest=${rejected_update_manifests[$index]}
     printf '%s\n' "$manifest" > "$TEST_MANIFEST"
     check_updates "reject update: ${rejected_update_names[$index]}" 'test:1.0.0' 1 '[FAIL]'
+    check_updates "advisory rejects update: ${rejected_update_names[$index]}" \
+        'test:1.0.0' 1 '[FAIL]' --advisory
     if grep -q 'Multi-platform pin:' "$WORK/output"; then
         printf 'FAIL: rejected update printed a pin reference\n'
         exit 1
@@ -480,6 +497,8 @@ start_group 'Aggregate results and empty discovery'
 printf 'FROM ghcr.io/owner/test:1.0.0\nCOPY --from=tools/installer:1.0.0 /bin/tool /bin/tool\n' > "$WORK/Dockerfile"
 check_updates 'lookup errors do not prevent remaining checks' '' 1 \
     'tools/installer:1.0.0 -> tools/installer:2.0.0'
+check_updates 'advisory mixed updates and errors still fail' '' 1 \
+    'image check(s) failed' --advisory
 grep -Fq 'supports Docker Hub only' "$WORK/output"
 printf '{"next":null,"results":[{"name":"1.0.0"}]}\n' > "$TEST_TAGS"
 printf 'FROM test:1.0.0\n' > "$WORK/Dockerfile"
