@@ -62,7 +62,9 @@ NATIVE_COLOR := $(native_color)
 endif
 export NATIVE_COLOR
 export COMPOSE_ANSI := $(NATIVE_COLOR)
-CONTAINER_ENV := --env COLOR --env NO_COLOR --env NATIVE_COLOR $(foreach name,\
+# Progress indicator policy: auto (interactive terminal outside CI), always or never
+export PROGRESS ?= auto
+CONTAINER_ENV := --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED $(foreach name,\
 	CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY \
 	GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB \
 	GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME \
@@ -194,7 +196,19 @@ ifneq ($(strip $(FORWARD_TARGETS)),)
 .PHONY: $(MAKECMDGOALS)
 $(FORWARD_TARGETS):
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh php $(COMPOSE_EXEC)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
+	@if [ "$$COLOR" = auto ]; then \
+		if [ -t 2 ] && [ "$${TERM:-}" != dumb ]; then COLOR=always; else COLOR=never; fi; \
+		export COLOR; \
+	fi; \
+	if [ "$$PROGRESS" = auto ]; then \
+		if [ -t 2 ] && [ "$${TERM:-}" != dumb ] && [ -z "$${CI:-}" ] && [ -z "$${NO_COLOR:-}" ]; then PROGRESS=always; else PROGRESS=never; fi; \
+		export PROGRESS; \
+	fi; \
+	if [ -z "$${OUTPUT_PROGRESS_SHARED:-}" ]; then \
+		if [ -t 1 ] && [ -t 2 ]; then OUTPUT_PROGRESS_SHARED=1; else OUTPUT_PROGRESS_SHARED=0; fi; \
+		export OUTPUT_PROGRESS_SHARED; \
+	fi; \
+	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
@@ -244,18 +258,19 @@ define COMPOSE_CONTEXT
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh $(1) $(2)
 endef
 
+# COMPOSE_RUN label, command, success message[, extra environment]
 define COMPOSE_RUN
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="$(3)" bash scripts/command-output.sh --run "$(1)" $(2)
+	@$(4) HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="$(3)" bash scripts/command-output.sh --run "$(1)" $(2)
 endef
 
 # Help entrypoints (not listed in help).
 info_msg := Message
 
 help:
-	@bash scripts/command-output.sh --run "Command help" bash scripts/make-help.sh "$(GROUP)"
+	@PROGRESS=never bash scripts/command-output.sh --run "Command help" bash scripts/make-help.sh "$(GROUP)"
 
 info:
-	@bash scripts/command-output.sh --run "Command information" bash scripts/command-output.sh --status INFO '$(subst ','"'"',$(info_msg))'
+	@PROGRESS=never bash scripts/command-output.sh --run "Command information" bash scripts/command-output.sh --status INFO '$(subst ','"'"',$(info_msg))'
 
 # Configuration and information
 
@@ -413,7 +428,7 @@ ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 # Dependency, security and license checks
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
-	@bash scripts/action-update-output.sh ./scripts/check-action-updates.sh
+	@bash scripts/command-output.sh --progress "GitHub Action pins and available updates" bash scripts/action-update-output.sh ./scripts/check-action-updates.sh
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
 	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies $(ANSI_FLAG)
@@ -594,7 +609,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Starting and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
-	$(call COMPOSE_RUN,Start and attach to development services,docker compose up,Development foreground session ended; readiness was not verified)
+	$(call COMPOSE_RUN,Start and attach to development services,docker compose up,Development foreground session ended; readiness was not verified,PROGRESS=never)
 endif
 
 start-build: ## Build containers and start application in development mode + watch output
@@ -603,7 +618,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,docker compose)
 	$(call MUTATION_WARNING,Building and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
-	$(call COMPOSE_RUN,Build and attach to development services,docker compose up --build,Development build and foreground session ended; readiness was not verified)
+	$(call COMPOSE_RUN,Build and attach to development services,docker compose up --build,Development build and foreground session ended; readiness was not verified,PROGRESS=never)
 endif
 
 start-prod: ## Build and start application in local production mode + watch output
@@ -612,7 +627,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else
 	$(call COMPOSE_CONTEXT,idle,$(COMPOSE_PROD))
 	$(call MUTATION_WARNING,Building and attaching to local production; initialization may generate keys and run migrations; Ctrl-C requests shutdown)
-	$(call COMPOSE_RUN,Build and attach to local production services,$(COMPOSE_PROD) up --build,Local production foreground session ended)
+	$(call COMPOSE_RUN,Build and attach to local production services,$(COMPOSE_PROD) up --build,Local production foreground session ended,PROGRESS=never)
 endif
 
 ci-stop: ## Stop CI containers (host only)
@@ -646,14 +661,14 @@ docker-image-check-updates: ## Report newer stable Docker Hub image versions
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh check-updates
+	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image version checks" ./scripts/docker-images.sh check-updates
 endif
 
 docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh digest
+	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image digest inspection" ./scripts/docker-images.sh digest
 endif
 
 docker-image-verify-pins: ## Verify base images are multi-platform

@@ -31,11 +31,33 @@ DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
 
 class CommandOutputTest(unittest.TestCase):
     def environment(self, **overrides):
-        environment = dict(os.environ, COLOR="auto", TERM="xterm")
-        environment.pop("NO_COLOR", None)
-        environment.pop("NATIVE_COLOR", None)
+        environment = dict(os.environ, COLOR="auto", TERM="xterm", PROGRESS="never", LANG="C")
+        for name in ("NO_COLOR", "NATIVE_COLOR", "CI", "LC_ALL", "LC_CTYPE", "OUTPUT_PROGRESS_DELAY", "OUTPUT_PROGRESS_STARTED",
+                     "OUTPUT_PROGRESS_SHARED"):
+            environment.pop(name, None)
         environment.update(overrides)
         return environment
+
+    def run_terminal(self, command, stdout_terminal=True, **environment):
+        """Run with stderr (and optionally stdout) on a pseudo-terminal; return status, terminal and stdout bytes."""
+        master, slave = pty.openpty()
+        process = subprocess.Popen(
+            command, env=self.environment(**environment), cwd=ROOT,
+            stdout=slave if stdout_terminal else subprocess.PIPE, stderr=slave,
+        )
+        os.close(slave)
+        output = b""
+        while True:
+            try:
+                chunk = os.read(master, 4096)
+            except OSError:
+                break
+            if not chunk:
+                break
+            output += chunk
+        os.close(master)
+        stdout = b"" if stdout_terminal else process.stdout.read()
+        return process.wait(timeout=10), output, stdout
 
     def run_command(self, command, **environment):
         return subprocess.run(
@@ -396,6 +418,157 @@ class CommandOutputTest(unittest.TestCase):
                     if process.poll() is None:
                         os.killpg(process.pid, signal.SIGKILL)
                         process.communicate()
+
+    def test_progress_indicator_draws_while_silent_and_clears_before_output(self):
+        status, output, _ = self.run_terminal(
+            ["bash", str(HELPER), "slow step", "bash", "-c",
+             "echo first; sleep 0.8; echo second; [ -t 1 ] && echo stdout-terminal; "
+             "echo nested=$PROGRESS ctype=${LC_CTYPE-unset} coerce=${PYTHONCOERCECLOCALE-unset}; exit 3"],
+            PROGRESS="auto", OUTPUT_PROGRESS_DELAY="0.2", COLOR="never",
+        )
+        self.assertEqual(status, 3)
+        self.assertIn(b"first\r\n\r\033[K| slow step (", output)
+        self.assertIn(b"\r\033[Ksecond\r\n", output)
+        self.assertIn(b"stdout-terminal\r\n", output)
+        self.assertIn(b"nested=never ctype=unset coerce=unset\r\n", output)
+        self.assertNotIn(b"\r\r\n", output)
+        self.assertRegex(output, rb"\r\n\[FAIL\] slow step \(exit 3, took [0-9]+\.[0-9]s\)\r\n$")
+
+    def test_progress_indicator_waits_for_line_start_and_uses_status_color(self):
+        status, output, _ = self.run_terminal(
+            ["bash", str(HELPER), "prompt", "bash", "-c", "printf 'Continue? '; sleep 0.6"],
+            PROGRESS="auto", OUTPUT_PROGRESS_DELAY="0.1", LANG="C.UTF-8",
+        )
+        self.assertEqual(status, 0)
+        self.assertNotIn(b"\033[K", output)
+        self.assertRegex(output, rb"\033\[32m\[OK\]\033\[0m prompt \(took [0-9]+\.[0-9]s\)")
+        status, output, _ = self.run_terminal(
+            ["bash", str(HELPER), "unicode", "sleep", "0.4"],
+            PROGRESS="auto", OUTPUT_PROGRESS_DELAY="0.1", LANG="C.UTF-8",
+        )
+        self.assertEqual(status, 0)
+        self.assertIn("\r\033[K\033[34m⠋\033[0m unicode (".encode(), output)
+
+    def test_progress_policy_disables_indicator_and_durations(self):
+        command = ["bash", str(HELPER), "quiet", "sleep", "0.4"]
+        for environment in (
+            {"PROGRESS": "never"},
+            {"PROGRESS": "auto", "CI": "true"},
+            {"PROGRESS": "auto", "NO_COLOR": "1"},
+            {"PROGRESS": "auto", "TERM": "dumb"},
+            {"PROGRESS": "invalid"},
+        ):
+            with self.subTest(environment=environment):
+                status, output, _ = self.run_terminal(
+                    command, OUTPUT_PROGRESS_DELAY="0.1", **environment,
+                )
+                self.assertEqual(status, 0)
+                self.assertNotIn(b"\033[K", output)
+                self.assertNotIn(b"took", output)
+        result = self.run_command(command, PROGRESS="auto", OUTPUT_PROGRESS_DELAY="0.1")
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stderr, "[RUN] quiet\n\n[OK] quiet\n")
+
+    def test_forced_progress_keeps_piped_streams_separate(self):
+        result = self.run_command([
+            "bash", str(HELPER), "piped", "bash", "-c",
+            "printf '{\"ok\":true}\\n'; sleep 0.5; [ -t 1 ] || printf 'not-terminal\\n'; printf diagnostic >&2",
+        ], PROGRESS="always", OUTPUT_PROGRESS_DELAY="0.1", COLOR="never")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, '{"ok":true}\nnot-terminal\n')
+        self.assertIn("\033[K| piped (", result.stderr)
+        self.assertIn("diagnostic", result.stderr)
+        self.assertRegex(result.stderr, r"\n\[OK\] piped \(took [0-9]+\.[0-9]s\)\n$")
+
+    def test_shared_terminal_progress_orders_stdout_with_spinner_clears(self):
+        result = self.run_command([
+            "bash", str(HELPER), "--progress", "shared", "bash", "-c",
+            "sleep 0.5; printf 'result\\n'; sleep 0.5; printf 'note\\n' >&2; "
+            "echo shared=${OUTPUT_PROGRESS_SHARED-unset}",
+        ], PROGRESS="always", OUTPUT_PROGRESS_DELAY="0.1", COLOR="never", OUTPUT_PROGRESS_SHARED="1")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, "")
+        # Every spinner frame is cleared in the same stream before the next output.
+        self.assertRegex(result.stderr, r"\[K[|/\\-] shared \([0-9.]+s\)\n\033\[Kresult\n")
+        self.assertRegex(result.stderr, r"\n\033\[Knote\n")
+        self.assertTrue(result.stderr.endswith("shared=unset\n"))
+        self.assertNotRegex(result.stderr, r"s\)(result|note|shared=)")
+
+    def test_progress_preserves_shell_functions_and_success_overrides(self):
+        result = subprocess.run(
+            ["bash", "-c", f"source {HELPER}; step() {{ echo \"function:$PROGRESS\"; }}; output_run step step"],
+            env=self.environment(PROGRESS="always", COLOR="never", OUTPUT_SUCCESS_MESSAGE="custom"),
+            cwd=ROOT, text=True, capture_output=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, "function:never\n")
+        self.assertRegex(result.stderr, r"\[OK\] custom \(took [0-9]+\.[0-9]s\)\n$")
+
+    def test_progress_interruption_keeps_cancellation_status(self):
+        for interruption in (signal.SIGINT, signal.SIGTERM):
+            with self.subTest(signal=interruption):
+                process = subprocess.Popen(
+                    ["bash", str(HELPER), "stream", "bash", "-c", "printf ready; sleep 30"],
+                    env=self.environment(PROGRESS="always", COLOR="never"),
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
+                )
+                try:
+                    self.assertTrue(select.select([process.stdout], [], [], 5)[0])
+                    self.assertEqual(process.stdout.read(5), b"ready")
+                    os.killpg(process.pid, interruption)
+                    _, stderr = process.communicate(timeout=5)
+                    self.assertEqual(process.returncode, 128 + interruption)
+                    self.assertRegex(stderr, rb"\[WARN\] stream: [a-z]+ \(took [0-9]+\.[0-9]s\)\n$")
+                finally:
+                    if process.poll() is None:
+                        os.killpg(process.pid, signal.SIGKILL)
+                        process.communicate()
+
+    def test_duration_format(self):
+        cases = {0: "0.0s", 49999: "0.0s", 1250000: "1.3s", 59940000: "59.9s",
+                 59960000: "1m 00s", 65000000: "1m 05s", 3723000000: "1h 02m 03s"}
+        for microseconds, expected in cases.items():
+            with self.subTest(microseconds=microseconds):
+                result = subprocess.run(
+                    ["bash", "-c", f"source {HELPER}; output_duration {microseconds}"],
+                    env=self.environment(), text=True, capture_output=True, check=True,
+                )
+                self.assertEqual(result.stdout, expected)
+
+    def test_progress_mode_relays_self_reporting_commands(self):
+        script = (
+            f"source {HELPER}; output_status RUN own; sleep 0.5; echo detail; "
+            "output_outcome WARN 'own outcome'; exit 1"
+        )
+        status, output, _ = self.run_terminal(
+            ["bash", str(HELPER), "--progress", "checking", "bash", "-c", script],
+            PROGRESS="auto", OUTPUT_PROGRESS_DELAY="0.1", COLOR="never",
+        )
+        self.assertEqual(status, 1)
+        self.assertTrue(output.startswith(b"[RUN] own\r\n"), output)
+        self.assertIn(b"\r\033[K| checking (", output)
+        self.assertRegex(output, rb"\r\033\[Kdetail\r\n\r\n\[WARN\] own outcome \(took [0-9]+\.[0-9]s\)\r\n$")
+        self.assertEqual(output.count(b"[RUN]"), 1)
+        for environment in ({"PROGRESS": "never"}, {"PROGRESS": "auto", "CI": "true"}):
+            with self.subTest(environment=environment):
+                result = self.run_command(
+                    ["bash", str(HELPER), "--progress", "checking", "bash", "-c", script],
+                    OUTPUT_PROGRESS_STARTED="1", **environment,
+                )
+                self.assertEqual(result.returncode, 1)
+                self.assertEqual(result.stdout, "detail\n")
+                self.assertEqual(result.stderr, "[RUN] own\n\n[WARN] own outcome\n")
+
+    def test_run_mode_does_not_leak_progress_start_to_commands(self):
+        result = subprocess.run(
+            ["bash", str(HELPER), "outer", "bash", "-c",
+             f"source {HELPER}; output_outcome OK inner"],
+            env=self.environment(PROGRESS="always", COLOR="never", OUTPUT_PROGRESS_STARTED="1"),
+            cwd=ROOT, text=True, capture_output=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("\n[OK] inner\n", result.stderr)
+        self.assertRegex(result.stderr, r"\[OK\] outer \(took [0-9]+\.[0-9]s\)\n$")
 
     def test_suite_colors_are_independent_of_helper_fixture(self):
         result = self.run_command(["bash", str(SUITE)], COLOR="always")

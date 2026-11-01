@@ -330,15 +330,15 @@ command_check_updates() {
     done <<< "$references"
 
     if [ "$issues" -gt 0 ]; then
-        output_result FAIL "$issues image check(s) failed; $updates image update(s) available"
+        output_outcome FAIL "$issues image check(s) failed; $updates image update(s) available"
         return 1
     elif [ "$updates" -gt 0 ]; then
-        output_result WARN "$updates image(s) require attention: updates available"
+        output_outcome WARN "$updates image(s) require attention: updates available"
         return 1
     elif [ "$skipped" -gt 0 ]; then
-        output_result SKIP "$skipped image version check(s) skipped; no updates found among completed checks"
+        output_outcome SKIP "$skipped image version check(s) skipped; no updates found among completed checks"
     else
-        output_result OK 'Image version checks completed; no updates available'
+        output_outcome OK 'Image version checks completed; no updates available'
     fi
 }
 
@@ -588,7 +588,7 @@ command_digest() {
         printf '\n'
         output_status INFO "Lines above use the same image; update those to the new pin reference"
     fi
-    output_result OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
+    output_outcome OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
 }
 
 # Verify base images of a single Dockerfile and print result per `FROM` line.

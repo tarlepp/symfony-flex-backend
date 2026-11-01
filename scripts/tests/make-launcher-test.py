@@ -3,6 +3,7 @@
 
 import os
 from pathlib import Path
+import pty
 import re
 import select
 import shutil
@@ -78,6 +79,72 @@ class MakeLauncherTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout, "two words")
         self.assertEqual(result.stderr, "COLOR=always NO_COLOR=1\n")
+
+    def test_progress_policy_is_resolved_before_stderr_filtering(self):
+        recipe = 'all:\n\t@printf "PROGRESS=%s\\n" "$$PROGRESS" >&2\n'
+        self.environment.pop("PROGRESS", None)
+        self.environment.pop("CI", None)
+        for overrides, expected in (
+            ({}, "always"), ({"CI": "true"}, "never"), ({"NO_COLOR": "1"}, "never"),
+            ({"TERM": "dumb"}, "never"), ({"PROGRESS": "never"}, "never"),
+        ):
+            with self.subTest(overrides=overrides):
+                self.makefile.write_text(recipe)
+                master, slave = pty.openpty()
+                process = subprocess.Popen(
+                    ["bash", str(LAUNCHER), "--no-print-directory", "-f", str(self.makefile)],
+                    cwd=self.root, env={**self.environment, "TERM": "xterm", **overrides},
+                    stdout=subprocess.PIPE, stderr=slave,
+                )
+                os.close(slave)
+                output = b""
+                while True:
+                    try:
+                        chunk = os.read(master, 4096)
+                    except OSError:
+                        break
+                    if not chunk:
+                        break
+                    output += chunk
+                os.close(master)
+                process.communicate(timeout=10)
+                self.assertEqual(process.returncode, 0)
+                self.assertEqual(output, f"PROGRESS={expected}\r\n".encode())
+        result = self.run_make(recipe)
+        self.assertEqual(result.stderr, "PROGRESS=never\n")
+        result = self.run_make(recipe, "PROGRESS=always")
+        self.assertEqual(result.stderr, "PROGRESS=always\n")
+
+    def test_shared_terminal_flag_is_recorded_before_stderr_filtering(self):
+        self.makefile.write_text('all:\n\t@printf "shared=%s\\n" "$$OUTPUT_PROGRESS_SHARED" >&2\n')
+        self.environment.pop("OUTPUT_PROGRESS_SHARED", None)
+        for stdout_terminal, inherited, expected in (
+            (True, None, "1"), (False, None, "0"), (False, "1", "1"), (True, "0", "0"),
+        ):
+            with self.subTest(stdout_terminal=stdout_terminal, inherited=inherited):
+                environment = dict(self.environment, TERM="xterm")
+                if inherited is not None:
+                    environment["OUTPUT_PROGRESS_SHARED"] = inherited
+                master, slave = pty.openpty()
+                process = subprocess.Popen(
+                    ["bash", str(LAUNCHER), "--no-print-directory", "-f", str(self.makefile)],
+                    cwd=self.root, env=environment, stderr=slave,
+                    stdout=slave if stdout_terminal else subprocess.PIPE,
+                )
+                os.close(slave)
+                output = b""
+                while True:
+                    try:
+                        chunk = os.read(master, 4096)
+                    except OSError:
+                        break
+                    if not chunk:
+                        break
+                    output += chunk
+                os.close(master)
+                process.communicate(timeout=10)
+                self.assertEqual(process.returncode, 0)
+                self.assertEqual(output, f"shared={expected}\r\n".encode())
 
     def test_opt_in_shell_function_filters_only_in_repository_root(self):
         scripts = self.root / "scripts"
@@ -375,6 +442,29 @@ class MakeLauncherTest(unittest.TestCase):
             self.assertEqual(result.stdout, "yes\n")
             self.assertIn("[FAIL] native diagnostic", result.stderr)
             self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")
+
+    def test_partial_stderr_lines_are_streamed_before_completion(self):
+        self.makefile.write_text('all:\n\t@printf "Answer: " >&2; sleep 30\n')
+        process = subprocess.Popen(
+            ["bash", str(LAUNCHER), "--no-print-directory", "-f", str(self.makefile)],
+            cwd=self.root, env=self.environment, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, start_new_session=True,
+        )
+        try:
+            self.assertTrue(select.select([process.stderr], [], [], 5)[0])
+            self.assertEqual(os.read(process.stderr.fileno(), 64), b"Answer: ")
+        finally:
+            os.killpg(process.pid, signal.SIGKILL)
+            process.communicate()
+
+    def test_error_lines_split_by_pauses_are_still_filtered(self):
+        result = self.run_make(
+            'all:\n\t@{ printf "ma" >&2; sleep 0.2; printf "ke[1]: *** [x] Er" >&2; sleep 0.2; '
+            'printf "ror 2\\nmake sure\\n" >&2; printf "Prompt: " >&2; sleep 0.2; '
+            'printf "make: *** [y] Error 1\\nrest" >&2; }\n'
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stderr, "make sure\nPrompt: make: *** [y] Error 1\nrest")
 
     def test_stderr_is_streamed_before_completion(self):
         self.makefile.write_text('all:\n\t@printf "ready\\n" >&2; sleep 30\n')
