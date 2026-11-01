@@ -114,12 +114,6 @@ RUN mkdir -p /home/dev/.config/fish/completions \
     && mkdir -p /home/dev/.nvm \
     && chmod 777 -R /home/dev
 
-COPY --chown=dev:dev . .
-
-RUN chmod +x /app/bin/console \
-    && chmod +x /app/docker-entrypoint-dev.sh \
-    && chmod +x /usr/bin/composer
-
 USER dev
 
 RUN python3 -m venv /home/dev/.venv \
@@ -153,6 +147,16 @@ RUN source ~/.nvm/nvm.sh \
     && cp -a /tmp/npm-fixes/node_modules/brace-expansion/. "$(npm root -g)/npm/node_modules/brace-expansion/" \
     && cp -a /tmp/npm-fixes/node_modules/undici/. "$(npm root -g)/npm/node_modules/undici/" \
     && rm -rf /tmp/npm-fixes
+
+USER root
+
+COPY --chown=dev:dev . .
+
+RUN chmod +x /app/bin/console \
+    && chmod +x /app/docker-entrypoint-dev.sh \
+    && chmod +x /usr/bin/composer
+
+USER dev
 
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
     && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc \

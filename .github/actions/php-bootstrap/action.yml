@@ -29,9 +29,40 @@ runs:
         key: ${{ runner.os }}-composer-downloads-v2-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-composer-downloads-v2-
 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      with:
+        buildkitd-flags: ''
+
+    - name: Read container user identity
+      id: identity
+      shell: bash
+      run: |
+        echo "uid=$(id -u)" >> "$GITHUB_OUTPUT"
+        echo "gid=$(id -g)" >> "$GITHUB_OUTPUT"
+
+    - name: Build PHP development image
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      env:
+        DOCKER_BUILD_RECORD_UPLOAD: 'false'
+      with:
+        context: .
+        file: Dockerfile
+        target: development
+        load: true
+        push: false
+        tags: symfony-flex-backend-php:ci
+        build-args: |
+          HOST_UID=${{ steps.identity.outputs.uid }}
+          HOST_GID=${{ steps.identity.outputs.gid }}
+        cache-from: ${{ github.event_name != 'schedule' && 'type=gha,version=2,scope=ci-bootstrap-development' || '' }}
+        cache-to: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'type=gha,version=2,scope=ci-bootstrap-development,mode=max' || '' }}
+        no-cache: ${{ github.event_name == 'schedule' }}
+        pull: true
+
     - name: Start PHP development container
       shell: bash
-      run: bash scripts/make.sh ci-start
+      run: bash scripts/make.sh ci-start CI_PREBUILT=true
 
     - name: Verify Composer cache mount
       if: ${{ inputs.install-dependencies == 'true' || inputs.cache-dependencies == 'true' }}

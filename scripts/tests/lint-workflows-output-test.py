@@ -29,6 +29,11 @@ class WorkflowOutputTest(unittest.TestCase):
             ROOT / ".github/workflows/main.yml",
             self.root / ".github/workflows/main.yml",
         )
+        (self.root / "scripts/tests/composer-cache-test.py").write_text(
+            "import os\n"
+            "import sys\n"
+            "sys.exit(int(os.environ.get('CACHE_TEST_EXIT', '0')))\n"
+        )
         (self.root / ".github/actions/example/action.yml").write_text("name: fixture\n")
         fixture = """#!/usr/bin/env bash
 name=$(basename "$0")
@@ -93,6 +98,7 @@ esac
             "Workflow and action security audit (zizmor)",
             "Local action metadata: .github/actions/example/action.yml",
             "Workflow validator script (ShellCheck)",
+            "Composer cache mount regressions (offline)",
         ):
             self.assertIn("[RUN] " + label, result.stderr)
             self.assertIn("[OK] " + label, result.stderr)
@@ -132,6 +138,12 @@ esac
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("RUST_LOG=debug", calls)
         self.assertNotIn("\033", result.stderr)
+
+    def test_cache_regression_failure_blocks_validation(self):
+        result, _ = self.run_script(CACHE_TEST_EXIT="7")
+        self.assertEqual(result.returncode, 7, result.stderr)
+        self.assertIn("[FAIL] Composer cache mount regressions (offline)", result.stderr)
+        self.assertNotIn("[OK] Composer cache mount regressions (offline)", result.stderr)
 
 
 if __name__ == "__main__":

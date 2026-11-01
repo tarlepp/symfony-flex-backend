@@ -168,6 +168,13 @@ cache actions, and artifact uploads remain on the runner. Sonar receives
 separate report copies with relative source paths, while container-based
 uploaders and archived reports retain their original paths.
 
+BuildKit layer caches are imported for ordinary builds and exported only by
+`master` pushes. Bootstrap loads an explicitly tagged development image before
+`make ci-start CI_PREBUILT=true`; the ordinary local target still builds.
+Scheduled builds bypass layer caches, and the production stage always reruns
+dependency installation and auditing. See the
+[CI guide](DEVELOPMENT.md#continuous-integration) for scopes and reproduction.
+
 This CI coverage map is distinct from the broader local pre-commit suite in
 [`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a
 command-for-command description of CI. The workflow defines the exact

@@ -1,5 +1,6 @@
 services:
     php:
+        image: symfony-flex-backend-php:ci
         entrypoint: []
         command: ["sleep", "infinity"]
         environment:
