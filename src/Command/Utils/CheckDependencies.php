@@ -154,7 +154,9 @@ class CheckDependencies extends Command
             $io->success('Good news, no vendor dependency updates were found for the selected level!');
         } else {
             $table->render();
-            $io->warning('Vendor dependency updates are available for the selected level. This check is informational.');
+            $io->warning(
+                'Vendor dependency updates are available for the selected level. This check is informational.',
+            );
         }
     }
 
