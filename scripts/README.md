@@ -54,7 +54,7 @@ native stdout/stderr and the command's exit status:
 | Mode | Use | Status |
 | --- | --- | --- |
 | `run` (default) | Finite recipes and information | Start and completion |
-| `COMMAND_OUTPUT_MODE=stream` | Shells and followed logs | Start only; execute in place |
+| `COMMAND_OUTPUT_MODE=stream` | Shells and followed logs | Start only |
 
 Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
