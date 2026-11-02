@@ -157,13 +157,13 @@ class CommandOutputTest(unittest.TestCase):
                 COMMAND_OUTPUT_MODE=mode,
             )
             self.assertEqual(result.returncode, 64)
-            self.assertIn("[FAIL] Invalid COMMAND_OUTPUT_MODE", result.stderr)
+            self.assertIn("[FAIL] Usage:", result.stderr)
         result = self.run_command(
             ["bash", str(HELPER), "example", "true"],
             COMMAND_OUTPUT_MODE="invalid",
         )
         self.assertEqual(result.returncode, 64)
-        self.assertIn("[FAIL] Usage:", result.stderr)
+        self.assertIn("[FAIL] Invalid COMMAND_OUTPUT_MODE", result.stderr)
         for label in ("--run", "--stream"):
             result = self.run_command(["bash", str(HELPER), label, "true"])
             self.assertEqual(result.returncode, 0, result.stderr)
