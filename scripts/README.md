@@ -50,8 +50,30 @@ This directory contains different scripts that are used during development.
 `scripts/command-output.sh` provides reusable status messages and a streaming
 command wrapper. Shared output is used by `test-docker-images`, `check-skills`,
 `lint-workflows`, `check-requirements`, `test-make-routing`, and
-`docker-image-verify-pins`. Other targets retain their existing output until
-migrated separately.
+`docker-image-verify-pins`, and the quality targets below. Other targets retain
+their existing output until migrated separately.
+
+Quality targets include `run-tests*`, `infection`, `phpcs`, `ecs*`,
+`phpinsights`, `phplint`, `php-parallel-lint`, `psalm*`, `phpstan*`,
+`lint-configuration`, `lint-yaml`, `lint-markdown`, `composer-normalize`,
+`composer-validate`, `composer-require-checker`, and `composer-unused`.
+Each complete recipe, including preparation, prints one `[RUN]` and a
+separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
+selection without duplicate summaries. A failed preparation step cannot
+produce a success summary. The internal `QUALITY_OUTPUT_RUN` Make variable
+prevents recursive decoration; callers should not set it.
+
+Native progress, diagnostics, GitHub annotations, analyzer options and report
+paths remain unchanged. Quality summaries report the nested Make exit status
+(normally 2 on recipe failure), while its native diagnostics retain the tool's
+exit code. Nested Make recipe error lines are filtered before the final status;
+the shell integration filters the outer Make error lines. Markdown linting
+uses the readable status label `Markdown documentation`.
+Markdown rule diagnostics gain a red `[ERROR]` prefix, retaining their
+original file/line, rule, and message. The prefix respects the shared color
+controls and remains readable without ANSI colors.
+Existing tool-specific color options remain unchanged; the shared
+color controls apply to the new status messages.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
@@ -143,6 +165,7 @@ docker compose exec -T php python3 scripts/tests/command-output-test.py
 docker compose exec -T php python3 scripts/tests/make-check-output-test.py
 docker compose exec -T php python3 scripts/tests/lint-workflows-output-test.py
 docker compose exec -T php python3 scripts/tests/make-launcher-test.py
+docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
 make test-make-routing
 ```
 
@@ -177,6 +200,21 @@ by default, while warnings, findings, and ignored/suppressed counts remain
 visible. Set `RUST_LOG=debug` inside the PHP container when troubleshooting
 zizmor logging. The offline workflow-output suite covers these stages and
 failure propagation without downloading or executing the actual validators.
+
+The quality-output regression suite uses temporary fixtures to check every
+migrated recipe, runner selection, report arguments, annotations, preparation
+failures, and mixed goals without running real analyzers or application tests.
+To exercise real quality recipes from the repository root on the Docker host
+with development services running:
+
+```bash
+make lint-yaml
+make composer-validate
+make run-tests-php
+```
+
+The application-test recipe retains its existing test-cache cleanup and
+regenerates `build/logs/clover.xml` and `build/logs/junit.xml`.
 
 ### Project stats script [ᐞ](#table-of-contents)
 

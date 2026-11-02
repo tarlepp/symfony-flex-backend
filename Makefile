@@ -75,6 +75,28 @@ $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 endif
 else
 
+QUALITY_TARGETS := run-tests run-tests-php run-tests-phpdbg infection phpcs ecs ecs-fix \
+	phpinsights phplint php-parallel-lint psalm psalm-shepherd psalm-github phpstan phpstan-github \
+	lint-configuration lint-yaml lint-markdown composer-normalize composer-validate \
+	composer-require-checker composer-unused
+QUALITY_GOALS := $(filter $(QUALITY_TARGETS),$(MAKECMDGOALS))
+ifeq ($(QUALITY_OUTPUT_RUN),1)
+QUALITY_GOALS :=
+endif
+
+ifneq ($(strip $(QUALITY_GOALS)),)
+.PHONY: $(MAKECMDGOALS)
+lint-markdown: QUALITY_LABEL := Markdown documentation
+$(QUALITY_GOALS):
+ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
+	@$(MAKE) QUALITY_OUTPUT_RUN=1 $@
+else
+	+@bash scripts/command-output.sh "$(or $(QUALITY_LABEL),$@)" bash scripts/make.sh QUALITY_OUTPUT_RUN=1 $@
+endif
+$(filter-out $(QUALITY_TARGETS),$(MAKECMDGOALS)):
+	@$(MAKE) $@
+else
+
 ifdef DOCKER
 	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
 	TEMP := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX) | grep $(CONTAINER_COUNT))
@@ -188,8 +210,6 @@ else
 endif
 
 run-tests-php: ## Runs all tests via phpunit (pure PHP)
-run-tests-php: info_msg := @printf $(_TITLE) "OK" "Running tests via phpunit (pure PHP)"
-run-tests-php: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpunit --version
 	@rm -rf build/logs
@@ -208,8 +228,6 @@ else
 endif
 
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
-run-tests-phpdbg: info_msg := @printf $(_TITLE) "OK" "Running test with PhpUnit in single thread (phpdbg)"
-run-tests-phpdbg: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpunit --version
 	@rm -rf build/logs
@@ -228,8 +246,6 @@ else
 endif
 
 infection: ## Runs Infection to codebase
-infection: info_msg := @printf $(_TITLE) "OK" "Running Infection to codebase (pure PHP)"
-infection: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test
@@ -266,8 +282,6 @@ else
 endif
 
 phpcs: ## Runs PHP CodeSniffer
-phpcs: info_msg := @printf $(_TITLE) "OK" "Running PHP CodeSniffer"
-phpcs: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phpcs --version
 	@php ./vendor/bin/phpcs --standard=PSR2 --colors -p src tests
@@ -282,8 +296,6 @@ else
 endif
 
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
-ecs: info_msg := @printf $(_TITLE) "OK" "Running EasyCodingStandard"
-ecs: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs --clear-cache src tests
@@ -298,8 +310,6 @@ else
 endif
 
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
-ecs-fix: info_msg := @printf $(_TITLE) "OK" "Running EasyCodingStandard with --fix option"
-ecs-fix: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs src tests --clear-cache --fix
@@ -314,8 +324,6 @@ else
 endif
 
 phpinsights: ## Runs PHP Insights
-phpinsights: info_msg := @printf $(_TITLE) "OK" "Running PHP Insights"
-phpinsights: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction --min-quality=95 --min-complexity=85 --min-architecture=100 --min-style=100
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -329,8 +337,6 @@ else
 endif
 
 phplint: ## Runs PHPLint
-phplint: info_msg := @printf $(_TITLE) "OK" "Running PHPLint"
-phplint: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phplint --no-cache
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -344,8 +350,6 @@ else
 endif
 
 php-parallel-lint: ## Lint PHP files with `php-parallel-lint`
-php-parallel-lint: info_msg := @printf $(_TITLE) "OK" "php-parallel-lint"
-php-parallel-lint: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@./vendor/bin/parallel-lint --exclude .git --exclude app --exclude tools --exclude var --exclude vendor --colors --show-deprecated --blame .
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -359,8 +363,6 @@ else
 endif
 
 psalm: ## Runs Psalm static analysis tool
-psalm: info_msg := @printf $(_TITLE) "OK" "Running Psalm - A static analysis tool for PHP"
-psalm: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
@@ -377,8 +379,6 @@ else
 endif
 
 psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
-psalm-shepherd: info_msg := @printf $(_TITLE) "OK" "Running Psalm - A static analysis tool for PHP"
-psalm-shepherd: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
@@ -395,8 +395,6 @@ else
 endif
 
 psalm-github: ## Runs Psalm static analysis tool (GitHub)
-psalm-github: info_msg := @printf $(_TITLE) "OK" "Running Psalm - A static analysis tool for PHP"
-psalm-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear
@@ -413,8 +411,6 @@ else
 endif
 
 phpstan: ## Runs PHPStan static analysis tool
-phpstan: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analysis Tool"
-phpstan: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@bin/console cache:clear
@@ -432,8 +428,6 @@ else
 endif
 
 phpstan-github: ## Runs PHPStan static analysis tool (GitHub)
-phpstan-github: info_msg := @printf $(_TITLE) "OK" "Running PHPStan - PHP Static Analysis Tool"
-phpstan-github: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console cache:clear
 	@bin/console cache:clear
@@ -451,8 +445,6 @@ else
 endif
 
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
-lint-configuration: info_msg := @printf $(_TITLE) "OK" "Linting application current configuration"
-lint-configuration: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -466,8 +458,6 @@ else
 endif
 
 lint-yaml: ## Lint config YAML files
-lint-yaml: info_msg := @printf $(_TITLE) "OK" "Linting YAML config files"
-lint-yaml: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@@bin/console lint:yaml config --parse-tags
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -487,10 +477,8 @@ lint-workflows: ## Validate GitHub workflows, embedded shell, and local action m
 	@bash scripts/command-output.sh "GitHub workflows and local action metadata" bash scripts/lint-workflows.sh
 
 lint-markdown: ## Lint Markdown files
-lint-markdown: info_msg := @printf $(_TITLE) "OK" "Linting Markdown files"
-lint-markdown: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
+	@bash scripts/markdown-output.sh bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -757,8 +745,6 @@ else
 endif
 
 composer-normalize: ## Normalizes `composer.json` file content
-composer-normalize: info_msg := @printf $(_TITLE) "OK" "Normalizing `composer.json` file contents"
-composer-normalize: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@composer normalize
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -772,10 +758,8 @@ else
 endif
 
 composer-validate: ## Validate `composer.json` file content
-composer-validate: info_msg := @printf $(_TITLE) "OK" "Validating `composer.json` file contents"
-composer-validate: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@composer validate --no-check-version && ([ $$? -eq 0 ] && echo "\033[32mGood news, your \`composer.json\` file is valid\033[39m")
+	@composer validate --no-check-version
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -787,8 +771,6 @@ else
 endif
 
 composer-require-checker: ## Check the defined dependencies against your code
-composer-require-checker: info_msg := @printf $(_TITLE) "OK" "Checking defined dependecies against project code"
-composer-require-checker: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -802,8 +784,6 @@ else
 endif
 
 composer-unused: ## Show unused packages by scanning and comparing package namespaces against your source
-composer-unused: info_msg := @printf $(_TITLE) "OK" "Checking unused packages"
-composer-unused: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@XDEBUG_MODE=off php /app/vendor/bin/composer-unused
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
@@ -1023,4 +1003,5 @@ test-make-routing: ## Test host and CI container command routing
 
 test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
 	@bash scripts/tests/docker-images-test.sh
+endif
 endif
