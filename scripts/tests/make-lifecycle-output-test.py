@@ -89,6 +89,29 @@ exit "${DOCKER_EXIT:-0}"
                 os.close(slave)
         return result, self.calls.read_text()
 
+    def run_with_stdout_terminal(self, command, **overrides):
+        self.calls.write_text("")
+        environment = dict(
+            os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+            CALLS=str(self.calls), COLOR="auto", NO_COLOR="", RUNNING="0",
+            DOCKER_EXIT="0", FAIL_QUERY="0", RESOURCES="",
+            COMPOSER_CACHE_DIR=str(self.root / "composer-cache"),
+        )
+        environment.update(overrides)
+        master, slave = pty.openpty()
+        try:
+            process = subprocess.Popen(
+                command, cwd=self.root, env=environment, stdin=subprocess.DEVNULL,
+                stdout=slave, stderr=subprocess.PIPE, text=True,
+            )
+            os.close(slave)
+            _, stderr = process.communicate(timeout=15)
+            stdout = os.read(master, 4096).decode()
+        finally:
+            os.close(master)
+        result = subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+        return result, self.calls.read_text()
+
     def make(self, target, *arguments, **overrides):
         return self.run_command([
             "bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
@@ -108,6 +131,55 @@ exit "${DOCKER_EXIT:-0}"
             values = color_calls.read_text().splitlines()
             self.assertTrue(values)
             self.assertEqual(set(values), {expected})
+
+    def test_make_color_overrides_reach_native_policy(self):
+        color_calls = self.root / "color-calls"
+        for arguments, environment, expected in (
+            (("NO_COLOR=1",), {"COLOR": "always", "NO_COLOR": ""}, "never"),
+            (("COLOR=never",), {"COLOR": "always", "NO_COLOR": ""}, "never"),
+            (("COLOR=always", "NO_COLOR="), {"COLOR": "never", "NO_COLOR": "1"}, "always"),
+        ):
+            color_calls.write_text("")
+            result, _ = self.make(
+                "daemon", *arguments, COLOR_CALLS=str(color_calls), **environment,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(set(color_calls.read_text().splitlines()), {expected})
+
+    def test_auto_native_color_uses_make_stdout_terminal(self):
+        color_calls = self.root / "color-calls"
+        color_calls.write_text("")
+        result, _ = self.run_with_stdout_terminal(
+            ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
+             "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "daemon"],
+            COLOR_CALLS=str(color_calls), TERM="xterm",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(set(color_calls.read_text().splitlines()), {"always"})
+
+        color_calls.write_text("")
+        master, slave = pty.openpty()
+        try:
+            result = subprocess.run(
+                ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
+                 "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "daemon"],
+                cwd=self.root,
+                env=dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                    CALLS=str(self.calls), COLOR_CALLS=str(color_calls), COLOR="auto",
+                    NO_COLOR="", RUNNING="0", DOCKER_EXIT="0", FAIL_QUERY="0",
+                    RESOURCES="", COMPOSER_CACHE_DIR=str(self.root / "composer-cache"),
+                    TERM="xterm",
+                ),
+                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=slave,
+                text=True, capture_output=False, check=False, timeout=15,
+            )
+            os.close(slave)
+            os.read(master, 4096)
+        finally:
+            os.close(master)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(set(color_calls.read_text().splitlines()), {"never"})
 
     def test_lifecycle_success_and_failure_preserve_compose_arguments(self):
         targets = {

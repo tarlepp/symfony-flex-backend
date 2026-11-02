@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -29,9 +30,13 @@ class QualityOutputTest(unittest.TestCase):
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         shutil.copyfile(ROOT / "scripts/command-output.sh", self.root / "scripts/command-output.sh")
         shutil.copyfile(ROOT / "scripts/native-output.sh", self.root / "scripts/native-output.sh")
+        shutil.copyfile(ROOT / "scripts/native-output.py", self.root / "scripts/native-output.py")
         shutil.copyfile(ROOT / "scripts/make.sh", self.root / "scripts/make.sh")
         shutil.copyfile(ROOT / "scripts/markdown-output.sh", self.root / "scripts/markdown-output.sh")
         fixture = """#!/usr/bin/env bash
+if [ "$(basename "$0")" = python3 ] && [ "${1:-}" = scripts/native-output.py ]; then
+    exec "$REAL_PYTHON" "$@"
+fi
 printf '%s %s\\n' "$0" "$*" >> "$CALLS"
 if [ "$(basename "$0")" = "${FAIL_COMMAND:-}" ]; then
     printf 'native failure diagnostic\\n' >&2
@@ -74,6 +79,7 @@ done
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(calls), COLOR="never", NO_COLOR="", FAIL_COMMAND="",
+            REAL_PYTHON=sys.executable,
         )
         environment.update(overrides)
         result = subprocess.run(

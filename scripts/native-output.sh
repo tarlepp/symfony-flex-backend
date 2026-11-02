@@ -1,37 +1,21 @@
 #!/usr/bin/env bash
 
-source "$(dirname "$0")/command-output.sh"
+script_dir=${BASH_SOURCE[0]%/*}
+source "$script_dir/command-output.sh"
 
 if [ "$#" -eq 0 ]; then
     output_status FAIL 'Usage: native-output.sh <command> [arguments...]'
     exit 64
 fi
 
-if [ -n "$OUTPUT_RESET" ]; then
+if [ -z "${NO_COLOR:-}" ] && {
+    [ "${NATIVE_COLOR:-}" = always ] ||
+    { [ -z "${NATIVE_COLOR:-}" ] && {
+        [ "${COLOR:-auto}" = always ] ||
+        { [ "${COLOR:-auto}" = auto ] && [ -t 1 ] && [ "${TERM:-}" != dumb ]; }
+    }; }
+}; then
     exec "$@"
 fi
 
-# Only SGR decoration is removed; progress controls and native streams remain.
-strip_sgr() {
-    sed -u $'s/\033\\[[0-9;]*m//g'
-}
-
-exec {stdout}> >(strip_sgr)
-stdout_pid=$!
-exec {stderr}> >(strip_sgr >&2)
-stderr_pid=$!
-"$@" >&"$stdout" 2>&"$stderr"
-status=$?
-exec {stdout}>&-
-exec {stderr}>&-
-wait "$stdout_pid"
-stdout_status=$?
-wait "$stderr_pid"
-stderr_status=$?
-if [ "$status" -ne 0 ]; then
-    exit "$status"
-fi
-if [ "$stdout_status" -ne 0 ] || [ "$stderr_status" -ne 0 ]; then
-    output_status FAIL 'Unable to filter native color output'
-    exit 1
-fi
+exec python3 "$script_dir/native-output.py" "$@"

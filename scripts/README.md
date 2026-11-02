@@ -111,22 +111,23 @@ Make derives native color flags from the same shared policy: Symfony/Composer
 commands use `--ansi` or `--no-ansi`, CodeSniffer and parallel-lint use
 `--colors` or `--no-colors`, PHPUnit uses `--colors=always|never`, and plain
 Psalm uses `--monochrome`. Infection passes the color choice to its test runner.
-Compose receives the same resolved choice through `COMPOSE_ANSI`, without
+Compose receives the resolved native choice through `COMPOSE_ANSI`, without
 changing lifecycle commands or service selection. The security check's Composer
-dry run also uses the shared ANSI choice.
+dry run also uses the shared native choice.
 GitHub-format Psalm/PHPStan analysis always stays plain, independent of status
 colors, preserving annotations and JSON report formats.
 
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
 hardcodes colors without a disable option. `scripts/native-output.sh` removes
 only SGR decoration from their plain-mode output, and from the configuration
-check's existing colored messages. It streams stdout/stderr separately and
-preserves command failures; filtering failures also fail the target. It never
-rewrites report files, annotations, or other terminal controls. Enabled color
-executes the native command unchanged. Tools with no force-color support
-(including ECS's TTY-only renderer and parallel-lint installations lacking
-optional color libraries) retain their native detection; `COLOR=always` does
-not manufacture decorations or bypass tool-specific agent safeguards.
+check's existing colored messages. It streams ordinary bytes, including
+partial lines, immediately; preserves separate stdout/stderr and the child's
+TTY detection; and returns the command's status. It never rewrites report files,
+annotations, or other terminal controls. Enabled color executes the native
+command unchanged. Tools with no force-color support (including ECS's TTY-only
+renderer and parallel-lint installations lacking optional color libraries)
+retain their native detection; `COLOR=always` does not manufacture decorations
+or bypass tool-specific agent safeguards.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
@@ -134,11 +135,12 @@ not manufacture decorations or bypass tool-specific agent safeguards.
 * `[INFO]` is uncolored context, such as a report path, not a success claim.
 * Labels remain readable without color. Status messages use stderr, leaving
   child stdout and stderr unbuffered and otherwise unchanged.
-* `COLOR=auto` uses the status terminal, excluding `TERM=dumb`. Host Make
-  forwarding resolves this before `exec -T` and passes it into the container.
-  `COLOR=always` forces ANSI colors; `COLOR=never` disables them. A nonempty
-  `NO_COLOR` overrides color settings. Native commands use supported flags or
-  the narrow plain-output filter described above.
+* `COLOR=auto` uses stderr's terminal for shared status messages and stdout's
+  terminal for native tool color, excluding `TERM=dumb`. Host Make forwards
+  both choices separately through `exec -T`. `COLOR=always` forces native ANSI
+  color; `COLOR=never` disables it. A nonempty `NO_COLOR` overrides either
+  choice. Native commands use supported flags or the narrow plain-output
+  filter described above.
 * The wrapper preserves command exit status, including failures and
   interruptions; Make itself may translate a failed recipe into exit 2.
   Existing informational update-check policies are unchanged.

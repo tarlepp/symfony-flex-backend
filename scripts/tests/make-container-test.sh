@@ -10,6 +10,7 @@ cat > "$temporary/docker" <<'MOCK'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >> "$DOCKER_CALLS"
 printf 'COLOR=%s NO_COLOR=%s\n' "${COLOR:-}" "${NO_COLOR:-}" >> "$DOCKER_CALLS"
+printf 'NATIVE_COLOR=%s\n' "${NATIVE_COLOR:-}" >> "$DOCKER_CALLS"
 if [ "${1:-}" = ps ]; then
     printf 'symfony-backend\n%.0s' {1..5}
 fi
@@ -42,7 +43,7 @@ for target in cache-clear cache-warmup clear clear-tools run-tests check-skills 
     phploc check-security check-action-updates project-stats configure-ci; do
     : > "$DOCKER_CALLS"
     host_make "$target"
-    grep -Eq "compose exec -T --env COLOR --env NO_COLOR +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
+    grep -Eq "compose exec -T --env COLOR --env NO_COLOR --env NATIVE_COLOR +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
 done
 
 : > "$DOCKER_CALLS"
@@ -52,7 +53,12 @@ grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CAL
 : > "$DOCKER_CALLS"
 host_make test-docker-images COLOR=always NO_COLOR=1
 grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
+grep -q 'NATIVE_COLOR=never' "$DOCKER_CALLS"
 grep -Eq 'php bash scripts/make.sh test-docker-images$' "$DOCKER_CALLS"
+
+: > "$DOCKER_CALLS"
+host_make test-docker-images COLOR=always NO_COLOR=
+grep -q 'NATIVE_COLOR=always' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
 host_make -n cache-clear clear run-tests

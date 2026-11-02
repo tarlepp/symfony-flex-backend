@@ -46,9 +46,20 @@ COMPOSE_EXEC := docker compose
 endif
 export COLOR ?= auto
 export NO_COLOR
-NATIVE_COLOR := $(shell bash -c 'source scripts/command-output.sh; if [ -n "$$OUTPUT_RESET" ]; then printf always; else printf never; fi')
+shell_quote = '$(subst ','"'"',$(1))'
+native_color = $(shell COLOR=$(call shell_quote,$(COLOR)) NO_COLOR=$(call shell_quote,$(NO_COLOR)) MAKE_TERMOUT=$(call shell_quote,$(MAKE_TERMOUT)) TERM=$(call shell_quote,$(TERM)) bash -c 'if [ -z "$$NO_COLOR" ] && { [ "$$COLOR" = always ] || { [ "$$COLOR" = auto ] && [ -n "$$MAKE_TERMOUT" ] && [ "$$TERM" != dumb ]; }; }; then printf always; else printf never; fi')
+ifeq ($(origin NATIVE_COLOR),undefined)
+NATIVE_COLOR := $(native_color)
+endif
+ifeq ($(origin COLOR),command line)
+NATIVE_COLOR := $(native_color)
+endif
+ifeq ($(origin NO_COLOR),command line)
+NATIVE_COLOR := $(native_color)
+endif
+export NATIVE_COLOR
 export COMPOSE_ANSI := $(NATIVE_COLOR)
-CONTAINER_ENV := --env COLOR --env NO_COLOR $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
+CONTAINER_ENV := --env COLOR --env NO_COLOR --env NATIVE_COLOR $(foreach name,CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
 
 HOST_TARGETS := help info bash fish logs daemon daemon-build daemon-prod start-prod stop start start-build \
 	docker-prune docker-kill-containers docker-remove-containers docker-remove-images \
@@ -64,11 +75,7 @@ ifneq ($(strip $(FORWARD_TARGETS)),)
 .PHONY: $(MAKECMDGOALS)
 $(FORWARD_TARGETS):
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh php $(COMPOSE_EXEC)
-	@if [ "$$COLOR" = auto ]; then \
-		if [ -t 2 ] && [ "$${TERM:-}" != dumb ]; then COLOR=always; else COLOR=never; fi; \
-		export COLOR; \
-	fi; \
-	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@

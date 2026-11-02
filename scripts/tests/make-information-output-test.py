@@ -26,6 +26,7 @@ class InformationOutputTest(unittest.TestCase):
                      "project-stats.sh", "docker-images.sh", "native-output.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
             (self.root / "scripts" / name).chmod(0o755)
+        shutil.copyfile(ROOT / "scripts/native-output.py", self.root / "scripts/native-output.py")
         fixture = """#!/usr/bin/env bash
 printf '%s %s\\n' "$0" "$*" >> "$CALLS"
 if [ "$(basename "$0")" = "${FAIL_COMMAND:-}" ]; then
