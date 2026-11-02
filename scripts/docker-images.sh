@@ -552,7 +552,7 @@ command_digest() {
 
     ask IMAGE "Image name and tag (e.g. php:8.5.11-fpm-bookworm)"
 
-    info "OK" "Inspecting ${IMAGE}"
+    output_status RUN "Inspecting ${IMAGE}"
 
     if ! raw="$(raw_manifest "$IMAGE")"; then
         error "Could not inspect ${IMAGE}: $(tail -n 1 <<< "$raw")"
@@ -591,8 +591,9 @@ command_digest() {
 
     if grep -nE "^FROM ${repository}[:@]" "${PINNED_DOCKERFILES[@]}" 2> /dev/null; then
         printf '\n'
-        info "INFO" "Lines above use the same image, update those to the new pin reference"
+        output_status INFO "Lines above use the same image; update those to the new pin reference"
     fi
+    output_status OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
 }
 
 # Verify base images of a single Dockerfile and print result per `FROM` line.
