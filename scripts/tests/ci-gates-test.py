@@ -35,7 +35,7 @@ class CiGatesTest(unittest.TestCase):
         cleanup = re.findall(
             r"^        name: Stop PHP development container\n"
             r"        if: (.+)\n"
-            r"        run: make ci-stop$",
+            r"        run: bash scripts/make\.sh ci-stop$",
             self.workflow, re.MULTILINE,
         )
         self.assertTrue(cleanup, "Expected unconditional container cleanup")
