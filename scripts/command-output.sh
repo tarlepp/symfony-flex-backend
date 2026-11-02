@@ -58,15 +58,16 @@ output_stream() {
 output_init
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-    mode=run
-    case "${1:-}" in
-        --run|--stream)
-            mode=${1#--}
-            shift
+    mode=${COMMAND_OUTPUT_MODE:-run}
+    case "$mode" in
+        run|stream) ;;
+        *)
+            output_status FAIL 'Invalid COMMAND_OUTPUT_MODE (expected run or stream)'
+            exit 64
             ;;
     esac
     if [ "$#" -lt 2 ]; then
-        output_status FAIL 'Usage: command-output.sh [--run|--stream] <label> <command> [arguments...]'
+        output_status FAIL 'Usage: command-output.sh <label> <command> [arguments...]'
         exit 64
     fi
     if [ "$mode" = stream ]; then

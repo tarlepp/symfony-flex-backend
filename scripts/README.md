@@ -53,20 +53,21 @@ native stdout/stderr and the command's exit status:
 
 | Mode | Use | Status |
 | --- | --- | --- |
-| `--run` (default) | Finite recipes and information | Start and completion |
-| `--stream` | Shells and followed logs | Start only; execute in place |
+| `run` (default) | Finite recipes and information | Start and completion |
+| `COMMAND_OUTPUT_MODE=stream` | Shells and followed logs | Start only; execute in place |
 
-`--run` streams output without buffering and reports success only after the
+Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
 messages stay on stderr, leaving structured stdout intact. Multi-step commands
 must pass a fail-fast executable or the complete nested Make recipe, not a
 shell function whose intermediate failures could be hidden by Bash conditional
-execution. Make's recipe dispatcher uses explicit `--run` for this boundary.
+execution. Make's recipe dispatcher uses the default run mode for this boundary.
 
-`--stream` replaces the helper process using `exec`, retaining terminal
+Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
-decoration. Make's `STREAM_COMMAND` uses this shared mode rather than a separate
-inline shell implementation. Foreground `start*` remains in `--run` mode because
+decoration. Set `COMMAND_OUTPUT_MODE=stream` when invoking the helper for this
+mode. Make's `STREAM_COMMAND` uses this shared mode rather than a separate inline
+shell implementation. Foreground `start*` remains in run mode because
 its contract includes a final session-ended/cancellation status.
 Existing `<label> <command> ...` invocations and sourced `output_run` callers
 remain compatible.
@@ -75,8 +76,8 @@ Read-only examples, from the repository root inside the PHP container (enter
 with `make bash` from the Docker host first):
 
 ```bash
-bash scripts/command-output.sh --run "Read JSON" printf '{"ready":true}\n'
-bash scripts/command-output.sh --stream "Native output" printf 'payload\n'
+bash scripts/command-output.sh "Read JSON" printf '{"ready":true}\n'
+COMMAND_OUTPUT_MODE=stream bash scripts/command-output.sh "Native output" printf 'payload\n'
 ```
 
 Shared output is used by `test-docker-images`, `check-skills`,
