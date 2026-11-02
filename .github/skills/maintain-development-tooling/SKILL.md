@@ -79,6 +79,9 @@ Inspect the implementation and its actual callers:
    `php bash scripts/make.sh`, filtering container-side Make recipe errors.
    Application recipes must not add a second host-forwarding path; keep native
    commands in the recipe and routing in the central dispatch.
+   `scripts/compose-context.sh` performs on-demand project/service checks:
+   running PHP is required for forwarding/shells; unhealthy PHP warns but
+   remains accessible, and stopped containers remain eligible for logs.
    Preserve mixed goals, default/help behavior, recursive Make, and dry runs
    without creating routing loops or running a host tool inside the container.
 4. Preserve container detection and CI selection as separate concerns.

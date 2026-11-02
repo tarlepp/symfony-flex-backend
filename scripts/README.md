@@ -172,7 +172,20 @@ Application recipes rely exclusively on that central forwarding layer rather
 than repeating host/container branches. Native commands, preparation, reports,
 and informational exit policies remain in their owning recipes. Docker lifecycle
 and interactive commands retain host-side guards and are not forwarded.
-Container counts and service readiness are separate from this routing contract.
+`scripts/compose-context.sh` checks Docker access and Compose service state only
+when a target needs it; Make parsing and help do not query running containers.
+Forwarded commands and Bash/Fish access require only a running PHP service, not
+all optional development services. Running PHP with `starting` or `unhealthy`
+health emits a yellow warning but remains accessible for troubleshooting.
+Stopped, paused, restarting, or absent PHP blocks execution with `[FAIL]`.
+
+Logs require at least one existing PHP, nginx, or MariaDB container, including
+stopped containers, so failed startup remains diagnosable. Startup guards query
+this Compose project rather than matching global container names; running
+services in unrelated projects do not block startup. Production uses its
+override for the check; PHP shell access uses the same development/CI Compose
+selection as execution. No waiting, health-policy change, or automatic restart
+is introduced.
 
 `make test-docker-images` runs offline regression tests of the helper itself,
 using temporary Dockerfiles and mocked registry/Docker commands. It does **not**
@@ -354,9 +367,10 @@ status, not green success or a red execution failure.
 `bash`, `fish`, and `logs` print `[RUN]` before directly executing Compose,
 without wrapping or redirecting their interactive session or streaming output,
 and without a final success banner. Host-only targets fail explicitly when
-called inside a container. Existing running-container guards remain in place,
-but rejected starts and unavailable shell/log contexts now fail instead of
-returning success.
+called inside a container. Startup rejects already-running services in this
+Compose project, while
+unavailable PHP shell contexts fail explicitly. Logs remain accessible when
+the selected services have stopped.
 
 Docker builds and QEMU registration warn before mutation and report completion
 only after Docker succeeds. Existing confirmations remain mandatory for QEMU
