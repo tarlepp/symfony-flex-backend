@@ -20,7 +20,9 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use function getenv;
 use function json_encode;
+use function putenv;
 use function str_repeat;
 use function strlen;
 use function sys_get_temp_dir;
@@ -75,7 +77,7 @@ final class CheckDependenciesTest extends TestCase
         );
 
         self::assertSame(
-            [$groupPath, 'vendor/package', 'Example package', '1.0.0', '1.1.0'],
+            [$groupPath, 'vendor/package', 'Example package', '1.0.0', '<fg=yellow>1.1.0</>'],
             PhpUnitUtil::callMethod(new CheckDependencies('/project'), 'getPackageRow', [$groupPath, $package]),
         );
     }
@@ -203,6 +205,41 @@ final class CheckDependenciesTest extends TestCase
                 PhpUnitUtil::callMethod(new CheckDependencies($projectDir), 'getNamespaceDirectories', []),
             );
         } finally {
+            $filesystem->remove($projectDir);
+        }
+    }
+
+    #[TestWith(['{"installed":[]}', 'no vendor dependency updates were found'])]
+    #[TestWith([
+        '{"installed":[{"name":"vendor/package","version":"1.0.0","latest":"1.1.0"}]}',
+        'Vendor dependency updates are available',
+    ])]
+    public function testUpdateFindingsRemainInformational(string $response, string $message): void
+    {
+        $filesystem = new Filesystem();
+        $projectDir = $filesystem->tempnam(sys_get_temp_dir(), 'dependency-outcomes-');
+        $filesystem->remove($projectDir);
+        $originalPath = getenv('PATH');
+
+        try {
+            $filesystem->mkdir([$projectDir . '/tools', $projectDir . '/bin']);
+            $filesystem->dumpFile(
+                $projectDir . '/bin/composer',
+                "#!/bin/sh\nprintf '%s' '" . $response . "'\n",
+            );
+            $filesystem->chmod($projectDir . '/bin/composer', 0755);
+            putenv('PATH=' . $projectDir . '/bin:' . ($originalPath === false ? '' : $originalPath));
+
+            $tester = new CommandTester(new CheckDependencies($projectDir));
+            self::assertSame(Command::SUCCESS, $tester->execute([]));
+            self::assertStringContainsString($message, $tester->getDisplay());
+
+            if ($response !== '{"installed":[]}') {
+                self::assertStringContainsString('[WARNING]', $tester->getDisplay());
+                self::assertStringNotContainsString('no vendor dependency updates', $tester->getDisplay());
+            }
+        } finally {
+            putenv($originalPath === false ? 'PATH' : 'PATH=' . $originalPath);
             $filesystem->remove($projectDir);
         }
     }

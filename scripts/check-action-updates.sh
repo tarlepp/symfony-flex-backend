@@ -47,7 +47,8 @@ case "${1:-}" in
 esac
 
 # Colors for output
-if [ -n "${NO_COLOR:-}" ]; then
+if [ -n "${NO_COLOR:-}" ] || [ "${COLOR:-auto}" = never ] ||
+    { [ "${COLOR:-auto}" = auto ] && { [ ! -t 2 ] || [ "${TERM:-}" = dumb ]; }; }; then
     RED=''
     GREEN=''
     YELLOW=''
@@ -311,25 +312,25 @@ check_tool() {
     local key=$1 repo=$2 current=$3 refs latest sha
     TOTAL=$((TOTAL + 1))
     if ! refs=$("$TIMEOUT_BIN" 20 "$GIT_BIN" ls-remote --tags "https://github.com/$repo.git"); then
-        printf 'Unable to fetch tool tags: %s\n' "$repo" >&2
+        printf '%sUnable to fetch tool tags: %s%s\n' "$RED" "$repo" "$NC" >&2
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
     sha=$(printf '%s\n' "$refs" | awk -v ref="refs/tags/$current" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
     if [ "$sha" != "${ACTION_REFS[$key]}" ]; then
-        printf 'Tool tag/SHA mismatch: %s (%s); expected %s, resolved %s\n' "$key" "${ACTION_SOURCES[$key]}" "${ACTION_REFS[$key]}" "${sha:-missing}" >&2
+        printf '%sTool tag/SHA mismatch: %s (%s); expected %s, resolved %s%s\n' "$RED" "$key" "${ACTION_SOURCES[$key]}" "${ACTION_REFS[$key]}" "${sha:-missing}" "$NC" >&2
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
     latest=$(printf '%s\n' "$refs" | awk '{sub(/^refs\/tags\//, "", $2); print $2}' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
     if [ -z "$latest" ]; then
-        printf 'No stable tool tags found: %s\n' "$repo" >&2
+        printf '%sNo stable tool tags found: %s%s\n' "$RED" "$repo" "$NC" >&2
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
     if [ "$latest" != "$current" ]; then
         sha=$(printf '%s\n' "$refs" | awk -v ref="refs/tags/$latest" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
-        printf 'UPDATE AVAILABLE (tool): %s %s -> %s\n  Commit SHA: %s\n  Source: %s\n  Verify release asset SHA-256 checksums before updating.\n' "$repo" "$current" "$latest" "$sha" "${ACTION_SOURCES[$key]}"
+        printf '%sUPDATE AVAILABLE (tool): %s %s -> %s%s\n  Commit SHA: %s\n  Source: %s\n  Verify release asset SHA-256 checksums before updating.\n' "$YELLOW" "$repo" "$current" "$latest" "$NC" "$sha" "${ACTION_SOURCES[$key]}"
         OUTDATED=$((OUTDATED + 1))
     else
         printf 'Tool up-to-date: %s %s @ %s (tag verified)\n' "$repo" "$current" "$sha"
@@ -347,7 +348,10 @@ get_latest_compatible_release() {
     # - github/codeql-action/init
     repo_path=$(printf '%s\n' "$action" | cut -d/ -f1-2)
 
-    tags=$($TIMEOUT_BIN 10 $GIT_BIN ls-remote --tags --refs "https://github.com/$repo_path.git" 2>/dev/null | awk '{print $2}' | sed 's#refs/tags/##')
+    if ! tags=$("$TIMEOUT_BIN" 10 "$GIT_BIN" ls-remote --tags --refs "https://github.com/$repo_path.git" 2>/dev/null); then
+        return 1
+    fi
+    tags=$(printf '%s\n' "$tags" | awk '{print $2}' | sed 's#refs/tags/##')
 
     if [ -z "$tags" ]; then
         printf '\n'
@@ -429,7 +433,9 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
         latest=$(get_latest_compatible_release "$repo_name" "$current_version")
 
         if [ -z "$latest" ] || [ "$latest" = "null" ]; then
-            versions_info+=("$current_version||unable||")
+            printf '%sERROR: Unable to fetch action version: %s @ %s%s\n' "$RED" "$repo_name" "$current_version" "$NC" >&2
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            versions_info+=("${current_version}"$'\tunable\t')
             continue
         fi
 
@@ -437,10 +443,15 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
         current_normalized="${current_version#v}"
 
         repo_path=$(printf '%s\n' "$repo_name" | cut -d/ -f1-2)
-        sha=$($TIMEOUT_BIN 10 $GIT_BIN ls-remote --tags "https://github.com/$repo_path.git" "refs/tags/$latest" 2>/dev/null | awk '{print $1}')
+        if ! sha=$("$TIMEOUT_BIN" 10 "$GIT_BIN" ls-remote --tags "https://github.com/$repo_path.git" "refs/tags/$latest" 2>/dev/null); then
+            sha=''
+        fi
+        sha=$(printf '%s\n' "$sha" | awk '{print $1}')
 
         if [ -z "$sha" ]; then
-            versions_info+=("$current_version||error||")
+            printf '%sERROR: Unable to fetch action SHA: %s @ %s%s\n' "$RED" "$repo_name" "$latest" "$NC" >&2
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            versions_info+=("${current_version}"$'\terror\t')
             continue
         fi
 
@@ -459,7 +470,7 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
 
     # Display repo with all versions
     if [ $repo_has_update -eq 1 ]; then
-        printf '%s⚠️ UPDATE AVAILABLE: %s%s\n' "$RED" "$repo_name" "$NC"
+        printf '%s⚠️ UPDATE AVAILABLE: %s%s\n' "$YELLOW" "$repo_name" "$NC"
         for info in "${versions_info[@]}"; do
             # Use printf to handle tab-separated fields
             current=$(printf '%s\n' "$info" | cut -f1)
@@ -523,7 +534,7 @@ print_centered_banner "Summary"
 printf 'Actions/tools checked:   %s\n' "$TOTAL"
 printf 'Discovery warnings:      %s%s%s\n' "$YELLOW" "$DISCOVERY_WARNINGS" "$NC"
 printf 'Up-to-date:              %s%s%s\n' "$GREEN" "$CURRENT" "$NC"
-printf 'Updates available:       %s%s%s\n' "$RED" "$OUTDATED" "$NC"
+printf 'Updates available:       %s%s%s\n' "$YELLOW" "$OUTDATED" "$NC"
 printf '\n'
 
 if [ $OUTDATED -gt 0 ]; then

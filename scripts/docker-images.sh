@@ -40,7 +40,8 @@
 
 set -euo pipefail
 
-if [ -n "${NO_COLOR:-}" ]; then
+if [ -n "${NO_COLOR:-}" ] || [ "${COLOR:-auto}" = never ] ||
+    { [ "${COLOR:-auto}" = auto ] && { [ ! -t 2 ] || [ "${TERM:-}" = dumb ]; }; }; then
     RED=''
     GREEN=''
     YELLOW=''
@@ -211,27 +212,28 @@ update_pin_reference() {
     printf '  Platforms: %s\n' "$platforms"
 }
 
+# Internal outcomes: 0 current, 1 failed, 2 update, 3 skipped, 4 update with pin failure.
 check_image_update() {
     local image="${1%@*}" repository tag suffix prefix current tags latest first
     local pattern='^(v?)((0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))(-[a-zA-Z0-9_.-]+)?$'
 
     if [[ "${image##*/}" != *:* ]]; then
         warning "SKIP" "${image}: no explicit version tag"
-        return 0
+        return 3
     fi
 
     repository="${image%:*}"
     tag="${image##*:}"
     if ! [[ "$tag" =~ $pattern ]]; then
         warning "SKIP" "${image}: tag is not a full stable semantic version with an optional variant"
-        return 0
+        return 3
     fi
     prefix="${BASH_REMATCH[1]}"
     current="${BASH_REMATCH[2]}"
     suffix="${BASH_REMATCH[6]}"
     if [[ "$suffix" =~ ^-(alpha|beta|rc|RC|preview|dev)([0-9.-]|$) ]]; then
         warning "SKIP" "${image}: prerelease tag"
-        return 0
+        return 3
     fi
 
     case "$repository" in
@@ -267,15 +269,15 @@ check_image_update() {
     if jq -en --arg current "$current" --arg latest "$latest" \
         '($latest | split(".") | map(tonumber)) > ($current | split(".") | map(tonumber))' > /dev/null; then
         warning "UPDATE" "${image} -> ${image%:*}:${prefix}${latest}${suffix}"
-        update_pin_reference "${image%:*}:${prefix}${latest}${suffix}" || return 1
-        return 1
+        update_pin_reference "${image%:*}:${prefix}${latest}${suffix}" || return 4
+        return 2
     else
         info "OK" "${image}: no newer stable version"
     fi
 }
 
 command_check_updates() {
-    local file image references tool heading="" issues=0
+    local file image references tool heading="" issues=0 updates=0 skipped=0 status=0
     local -A seen=() results=()
 
     require_docker
@@ -317,7 +319,16 @@ command_check_updates() {
             heading="$file"
         fi
         if [ -z "${results[$image]+set}" ]; then
-            if ! results[$image]="$(check_image_update "$image")"; then
+            status=0
+            results[$image]="$(check_image_update "$image")" || status=$?
+            if [ "$status" -eq 2 ]; then
+                updates=$((updates + 1))
+            elif [ "$status" -eq 4 ]; then
+                updates=$((updates + 1))
+                issues=$((issues + 1))
+            elif [ "$status" -eq 3 ]; then
+                skipped=$((skipped + 1))
+            elif [ "$status" -ne 0 ]; then
                 issues=$((issues + 1))
             fi
         fi
@@ -325,8 +336,15 @@ command_check_updates() {
     done <<< "$references"
 
     if [ "$issues" -gt 0 ]; then
-        printf '\n%s[CHECK]%s %s image(s) require attention: updates available or checks failed\n' "$RED" "$NC" "$issues" >&2
+        printf '\n%s[CHECK]%s %s image check(s) failed; %s image update(s) available\n' "$RED" "$NC" "$issues" "$updates" >&2
         return 1
+    elif [ "$updates" -gt 0 ]; then
+        printf '\n%s[CHECK]%s %s image(s) require attention: updates available\n' "$YELLOW" "$NC" "$updates" >&2
+        return 1
+    elif [ "$skipped" -gt 0 ]; then
+        printf '\n%s[SKIP]%s %s image version check(s) skipped; no updates found among completed checks\n' "$YELLOW" "$NC" "$skipped" >&2
+    else
+        printf '\n%s[OK]%s Image version checks completed; no updates available\n' "$GREEN" "$NC" >&2
     fi
 }
 

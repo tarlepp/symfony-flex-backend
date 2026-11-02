@@ -125,15 +125,7 @@ _ERROR := "\033[31m[%s]\033[0m %s\n" # Red text for "printf"
 # Run a command and decorate output for handled exit codes (1 and 2).
 # Usage: $(call RUN_WITH_DECORATED_EXIT_OUTPUT,<command>,<label>)
 define RUN_WITH_DECORATED_EXIT_OUTPUT
-	@$(1); \
-	status=$$?; \
-	case "$$status" in \
-		0) exit 0 ;; \
-		1|2) \
-			printf "\033[1;31m[%s]\033[0;31m exited with code \033[1;33m%s\033[0;31m - see output above.\033[39m\n" "$(2)" "$$status"; \
-			exit 0 ;; \
-		*) exit "$$status" ;; \
-	esac
+	@bash scripts/action-update-output.sh $(1)
 endef
 
 info_msg := Message
@@ -503,10 +495,8 @@ clear-tools: info
 	$(ALL_DONE)
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
-check-dependencies-latest: info_msg := @printf $(_TITLE) "OK" "Checking vendor dependencies (latest)"
-check-dependencies-latest: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bin/console check-dependencies
+	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -518,10 +508,8 @@ else
 endif
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
-check-dependencies-minor: info_msg := @printf $(_TITLE) "OK" "Checking vendor dependencies (minor)"
-check-dependencies-minor: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bin/console check-dependencies --level=minor
+	@bash scripts/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -533,10 +521,8 @@ else
 endif
 
 check-dependencies-patch: ## Checks if any vendor dependency can be updated (only patch versions)
-check-dependencies-patch: info_msg := @printf $(_TITLE) "OK" "Checking vendor dependencies (patch)"
-check-dependencies-patch: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@bin/console check-dependencies --level=patch
+	@bash scripts/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -813,11 +799,8 @@ else
 endif
 
 check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
-check-security: info_msg := @printf $(_TITLE) "OK" "Checking installed packages for known security vulnerabilities"
-check-security: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@composer update --dry-run --no-plugins roave/security-advisories
-	@if which local-php-security-checker; then local-php-security-checker --update-cache && local-php-security-checker; fi
+	@bash scripts/check-security.sh
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
@@ -929,7 +912,6 @@ generate-ssl-cert: ## Generate self signed SSL certificates inside the PHP conta
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@echo "\033[32mChecking GitHub Action pins and updates\033[39m"
 	$(call RUN_WITH_DECORATED_EXIT_OUTPUT,./scripts/check-action-updates.sh,check-action-updates)
 else ifeq ($(strip $(RUNNING_SOME_CONTAINERS)),)
 	$(WARNING_DOCKER)
