@@ -131,9 +131,10 @@ endif
 
 ERROR_DOCKER = @printf "\033[31mSeems like that all necessary Docker containers are not running atm.\nCheck logs for detailed information about the reason of this\033[39m\n"
 NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker compose exec' command\033[39m\n"
-WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
 WARNING_DOCKER = @printf "\033[31mThis command must be run inside specified docker container and it's not\nrunning atm. Use \`make start\` and/or \`make daemon\` command to get\nnecessary container(s) running and after that run this command again.\033[39m\n"
-WARNING_DOCKER_RUNNING = @printf "\033[31mDocker is already running - you cannot execute this command multiple times\033[39m\n"
+HOST_CONTEXT_FAILURE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Run this target on the Docker host, not inside a container"; exit 1'
+CONTAINERS_UNAVAILABLE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Required application containers are unavailable; inspect docker compose ps and logs"; exit 1'
+CONTAINERS_ALREADY_RUNNING = @bash -c 'source scripts/command-output.sh; output_status FAIL "Application containers are already running; stop them before starting again"; exit 1'
 ALL_DONE = @printf $(_TITLE) "All done" "Have a nice day"
 
 _WARNING := "\033[33m[%s]\033[0m %s\n" # Yellow text for "printf"
@@ -148,6 +149,10 @@ endef
 
 define MUTATION_WARNING
 	@bash -c 'source scripts/command-output.sh; output_status WARN "$$1"' warning "$(1)"
+endef
+
+define STREAM_COMMAND
+	@bash -c 'source scripts/command-output.sh; output_status RUN "$$1"; shift; exec "$$@"' stream "$(1)" $(2)
 endef
 
 info_msg := Message
@@ -602,122 +607,100 @@ else
 endif
 
 bash: ## Get bash inside PHP container
-bash: info_msg := @printf $(_TITLE) "OK" "Opening bash shell to PHP container"
-bash: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
+	$(CONTAINERS_UNAVAILABLE)
 else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php bash --rcfile /app/scripts/bashrc.sh -i
+	$(call STREAM_COMMAND,Opening Bash in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php bash --rcfile /app/scripts/bashrc.sh -i)
 endif
 
 fish: ## Get fish inside PHP container
-fish: info_msg := @printf $(_TITLE) "OK" "Opening fish shell to PHP container"
-fish: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
+	$(CONTAINERS_UNAVAILABLE)
 else
-	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php fish
+	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose exec php fish)
 endif
 
 logs: ## Show logs from all containers
-logs: info_msg := @printf $(_TITLE) "OK" "Showing logs from all the containers"
-logs: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER)
+	$(CONTAINERS_UNAVAILABLE)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
-	$(ERROR_DOCKER)
+	$(CONTAINERS_UNAVAILABLE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose logs --follow php nginx mariadb
+	$(call STREAM_COMMAND,Following PHP nginx and MariaDB logs; Ctrl-C stops following,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose logs --follow php nginx mariadb)
 endif
 
 daemon: ## Start application in development mode in background
-daemon: info_msg := @printf $(_TITLE) "OK" "Starting application in development mode in background"
-daemon: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER_RUNNING)
+	$(CONTAINERS_ALREADY_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up --detach
-	@printf $(_TITLE) "OK" "Containers are running background, check logs for detailed information!"
+	$(call MUTATION_WARNING,Starting development services; entrypoints may install dependencies generate keys and run migrations)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development containers started; readiness was not verified" bash scripts/command-output.sh "Start development services in background" docker compose up --detach
 endif
 
 daemon-build: ## Build containers and start application in development mode in background
-daemon-build: info_msg := @printf $(_TITLE) "OK" "Building containers and starting application in development mode in background"
-daemon-build: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER_RUNNING)
+	$(CONTAINERS_ALREADY_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up --build --detach
-	@printf $(_TITLE) "OK" "Containers are built and those are running background, check logs for detailed information!"
+	$(call MUTATION_WARNING,Building and starting development services; entrypoints may install dependencies generate keys and run migrations)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development containers built and started; readiness was not verified" bash scripts/command-output.sh "Build and start development services in background" docker compose up --build --detach
 endif
 
 daemon-prod: ## Build and start application in local production mode in background
-daemon-prod: info_msg := @printf $(_TITLE) "OK" "Building and starting application in local production mode in background"
-daemon-prod: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER_RUNNING)
+	$(CONTAINERS_ALREADY_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_PROD) up --build --detach --wait
-	@printf $(_TITLE) "OK" "Local production is available at http://localhost:8001"
+	$(call MUTATION_WARNING,Building and starting local production; initialization may generate keys and run migrations; waiting for Compose health checks)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Local production services passed Compose running/health checks; HTTP was not verified" bash scripts/command-output.sh "Build and start local production; wait for Compose health checks" $(COMPOSE_PROD) up --build --detach --wait
 endif
 
 start-prod: ## Build and start application in local production mode + watch output
-start-prod: info_msg := @printf $(_TITLE) "OK" "Building and starting application in local production mode"
-start-prod: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER_RUNNING)
+	$(CONTAINERS_ALREADY_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_PROD) up --build
-	$(ALL_DONE)
+	$(call MUTATION_WARNING,Building and attaching to local production; initialization may generate keys and run migrations; Ctrl-C requests shutdown)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Local production foreground session ended" bash scripts/command-output.sh "Build and attach to local production services" $(COMPOSE_PROD) up --build
 endif
 
 stop: ## Stop application containers (development or local production)
-stop: info_msg := @printf $(_TITLE) "OK" "Stopping application containers"
-stop: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose down
-	$(ALL_DONE)
+	$(call MUTATION_WARNING,Stopping and removing application containers and networks; named volumes are retained)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Application containers stopped and removed; named volumes retained" bash scripts/command-output.sh "Stop application containers" docker compose down
 endif
 
 start: ## Start application in development mode + watch output
-start: info_msg := @printf $(_TITLE) "OK" "Starting application in development mode"
-start: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER_RUNNING)
+	$(CONTAINERS_ALREADY_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up
-	$(ALL_DONE)
+	$(call MUTATION_WARNING,Starting and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development foreground session ended; readiness was not verified" bash scripts/command-output.sh "Start and attach to development services" docker compose up
 endif
 
 start-build: ## Build containers and start application in development mode + watch output
-start-build: info_msg := @printf $(_TITLE) "OK" "Building containers and starting application in development mode"
-start-build: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
-	$(WARNING_DOCKER_RUNNING)
+	$(CONTAINERS_ALREADY_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker compose up --build
-	$(ALL_DONE)
+	$(call MUTATION_WARNING,Building and attaching to development services; entrypoints may install dependencies generate keys and run migrations; Ctrl-C requests shutdown)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="Development build and foreground session ended; readiness was not verified" bash scripts/command-output.sh "Build and attach to development services" docker compose up --build
 endif
 
 local-configuration: ## Create local configuration files
@@ -819,47 +802,32 @@ else
 	$(ALL_DONE)
 endif
 
-docker-prune: info_msg := @printf $(_ERROR) "Caution !!!" "Killing all running containers and pruning all docker stuff"
-docker-prune: info
 docker-prune: ## Kill all running containers and prune all docker stuff
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
-	@echo -n "\033[31mAre you sure that you want to kill ALL running containers and prune ALL docker data? [y/N]\033[39m\n " && read ans && if [ $${ans:-'N'} = 'y' ]; then \
-		printf $(_TITLE) "OK" "Continuing with full system prune"; \
-		docker kill $$(docker ps -q) 2> /dev/null && docker system prune --all --volumes --force; \
-		printf $(_TITLE) "All done" "Have a nice day"; \
-	fi
+	@bash scripts/docker-maintenance.sh prune
 endif
 
 docker-kill-containers: ## Kill all running docker containers
-docker-kill-containers: info_msg := @printf $(_TITLE) "OK" "Killing running docker containers"
-docker-kill-containers: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker kill $$(docker ps -q)
-	$(ALL_DONE)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker-maintenance.sh kill
 endif
 
 docker-remove-containers: ## Remove all docker containers
-docker-remove-containers: info_msg := @printf $(_TITLE) "OK" "Removing docker containers"
-docker-remove-containers: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker rm $$(docker ps -a -q)
-	$(ALL_DONE)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker-maintenance.sh containers
 endif
 
 docker-remove-images: ## Remove all docker images
-docker-remove-images: info_msg := @printf $(_TITLE) "OK" "Removing docker images"
-docker-remove-images: info
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker rmi $$(docker images -q)
-	$(ALL_DONE)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker-maintenance.sh images
 endif
 
 # Multi-platform Docker image helpers, see `doc/DOCKER_MULTI_PLATFORM.md`.
@@ -867,49 +835,49 @@ endif
 # These need host Docker, including on CI runners.
 docker-image-check-updates: ## Report newer stable Docker Hub image versions
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh check-updates
 endif
 
 docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@IMAGE="$(IMAGE)" ./scripts/docker-images.sh digest
 endif
 
 docker-image-verify-pins: ## Verify base images are multi-platform
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@bash scripts/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker-images.sh verify
 endif
 
 docker-builder-platforms: ## Show platforms supported by current buildx builder
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@./scripts/docker-images.sh platforms
 endif
 
 docker-setup-qemu: ## Install QEMU emulators for cross-platform builds (asks PLATFORMS)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@PLATFORMS="$(PLATFORMS)" ./scripts/docker-images.sh setup-qemu
 endif
 
 docker-build-platform: ## Build image for single platform (asks PLATFORM, DOCKERFILE, TARGET, TAG)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" ./scripts/docker-images.sh build
 endif
 
 docker-build-multi-platform: ## Build and push multi-platform image (asks PLATFORMS, DOCKERFILE, TARGET, TAG, BUILDER)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(WARNING_HOST)
+	$(HOST_CONTEXT_FAILURE)
 else
 	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker-images.sh push
 endif
@@ -946,17 +914,19 @@ endif
 
 ci-start: ## Build and start the Compose PHP development service for CI (host only)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	@echo "Run make ci-start on the Docker host." >&2; exit 1
+	$(HOST_CONTEXT_FAILURE)
 else
+	$(call MUTATION_WARNING,Building and starting only the CI PHP service; application initialization is disabled)
 	@mkdir -p "$${COMPOSER_CACHE_DIR:-/tmp/symfony-backend-composer-cache}"
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_CI) up --build --detach --no-deps php
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="CI PHP service started; application initialization and readiness were not verified" bash scripts/command-output.sh "Build and start the CI PHP service" $(COMPOSE_CI) up --build --detach --no-deps php
 endif
 
 ci-stop: ## Stop CI containers (host only)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	@echo "Run make ci-stop on the Docker host." >&2; exit 1
+	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_CI) down
+	$(call MUTATION_WARNING,Stopping and removing CI containers and networks; named volumes are retained)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="CI containers stopped and removed; named volumes retained" bash scripts/command-output.sh "Stop CI containers" $(COMPOSE_CI) down
 endif
 
 install: ## Install project Composer dependencies
