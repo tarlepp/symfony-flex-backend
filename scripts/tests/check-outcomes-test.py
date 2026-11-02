@@ -85,6 +85,27 @@ class CheckOutcomesTest(unittest.TestCase):
                     self.assertEqual(result.returncode, expected, result.stderr)
                     self.assertIn(label, result.stderr)
                     self.assertNotIn("[SKIP]", result.stderr)
+                    if expected:
+                        self.assertNotIn("All dependency security checks completed", result.stderr)
+                        self.assertNotIn("[OK]", result.stderr.split("[FAIL]", 1)[1])
+            (root / "composer").unlink()
+            result = subprocess.run(
+                ["/bin/bash", str(root / "check-security.sh")],
+                env=environment, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 127)
+            self.assertIn("composer: command not found", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
+            (root / "bash").symlink_to("/bin/bash")
+            result = subprocess.run(
+                ["make", "--no-print-directory", "APPLICATION_CONFIG=fixture",
+                 "INSIDE_DOCKER_CONTAINER=1", "check-security"],
+                cwd=ROOT, env=environment,
+                executable=shutil.which("make"), text=True, capture_output=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("[FAIL] Security advisory dependency constraints", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
 
     def test_action_make_target_keeps_handled_errors_nonblocking(self):
         with tempfile.TemporaryDirectory(prefix="action-make-outcomes-") as directory:

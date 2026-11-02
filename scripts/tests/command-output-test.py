@@ -53,6 +53,35 @@ class CommandOutputTest(unittest.TestCase):
                 self.assertIn(f"exit {status}", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
 
+    def test_missing_executable_fails_without_success(self):
+        result = self.run_command(
+            ["bash", str(HELPER), "missing tool", "copilot-output-contract-missing-executable"],
+            COLOR="never",
+        )
+        self.assertEqual(result.returncode, 127)
+        self.assertIn("command not found", result.stderr)
+        self.assertIn("[FAIL] missing tool (exit 127)", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+        result = self.run_command(["bash", str(HELPER)])
+        self.assertEqual(result.returncode, 64)
+        self.assertIn("[FAIL] Usage:", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_success_overrides_never_hide_failure_or_cancellation(self):
+        for status in (0, 7, 130, 143):
+            result = self.run_command(
+                ["bash", str(HELPER), "execute", "bash", "-c", f"exit {status}"],
+                OUTPUT_SUCCESS_STATUS="SKIP", OUTPUT_SUCCESS_MESSAGE="completion only",
+            )
+            self.assertEqual(result.returncode, status)
+            self.assertIn("[RUN] execute", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
+            if status == 0:
+                self.assertIn("[SKIP] completion only", result.stderr)
+            else:
+                self.assertNotIn("completion only", result.stderr)
+                self.assertIn("[FAIL]" if status == 7 else "[WARN]", result.stderr)
+
     def test_status_palette_and_plain_overrides(self):
         command = [
             "bash", "-c",
@@ -205,6 +234,55 @@ class CommandOutputTest(unittest.TestCase):
             self.assertIn("[FAIL] stable major upgrade", result.stderr)
             self.assertNotIn("[OK] stable major upgrade", result.stderr)
             self.assertIn("scenarios passed before failure", result.stderr)
+
+    def test_contract_runner_stops_on_failure_and_missing_python(self):
+        with tempfile.TemporaryDirectory(prefix="output-contract-runner-") as directory:
+            root = Path(directory)
+            (root / "scripts/tests").mkdir(parents=True)
+            (root / "bin").mkdir()
+            shutil.copyfile(HELPER, root / "scripts/command-output.sh")
+            shutil.copyfile(ROOT / "scripts/tests/command-output-contract-test.sh",
+                            root / "scripts/tests/command-output-contract-test.sh")
+            python = root / "bin/python3"
+            python.write_text(
+                '#!/bin/bash\nprintf "%s\\n" "$1" >> "$CALLS"\n'
+                'if [[ "$1" == *"$FAIL_SUITE"* ]] && [ -n "$FAIL_SUITE" ]; then exit 7; fi\n'
+            )
+            python.chmod(0o755)
+            routing = root / "scripts/tests/make-container-test.sh"
+            routing.write_text(
+                '#!/bin/bash\nprintf "routing\\n" >> "$CALLS"\n'
+                'if [ "$FAIL_SUITE" = routing ]; then exit 7; fi\n'
+            )
+            for failed in ("", "command-output-test.py", "make-information-output-test.py", "routing"):
+                calls = root / "calls"
+                calls.write_text("")
+                result = self.run_command(
+                    ["/bin/bash", str(root / "scripts/tests/command-output-contract-test.sh")],
+                    PATH=f"{root / 'bin'}:{os.environ['PATH']}", CALLS=str(calls), FAIL_SUITE=failed,
+                )
+                self.assertEqual(result.returncode, 7 if failed else 0, result.stderr)
+                if failed:
+                    self.assertIn("[FAIL]", result.stderr)
+                    self.assertNotIn("[OK]", result.stderr.split("[FAIL]", 1)[1])
+                    self.assertNotIn("9 regression suites passed", result.stderr)
+                    if failed == "routing":
+                        self.assertEqual(len(calls.read_text().splitlines()), 9)
+                    else:
+                        self.assertNotIn("routing", calls.read_text())
+                else:
+                    self.assertEqual(len(calls.read_text().splitlines()), 9)
+                    self.assertIn("[OK] Command output contracts: 9 regression suites passed", result.stderr)
+            python.unlink()
+            (root / "bin/dirname").symlink_to(shutil.which("dirname"))
+            result = self.run_command(
+                ["/bin/bash", str(root / "scripts/tests/command-output-contract-test.sh")],
+                PATH=str(root / "bin"),
+            )
+            self.assertEqual(result.returncode, 127)
+            self.assertIn("python3: command not found", result.stderr)
+            self.assertIn("[FAIL] command-output regression suite", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
 
 
 if __name__ == "__main__":
