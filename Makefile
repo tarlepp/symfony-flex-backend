@@ -140,7 +140,7 @@ define MUTATION_WARNING
 endef
 
 define STREAM_COMMAND
-	@bash -c 'source scripts/command-output.sh; output_status RUN "$$1"; shift; exec "$$@"' stream "$(1)" $(2)
+	@COMMAND_OUTPUT_MODE=stream bash scripts/command-output.sh "$(1)" $(2)
 endef
 
 define REPORT_PATHS
