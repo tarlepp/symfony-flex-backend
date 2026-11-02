@@ -217,6 +217,46 @@ make run-tests-php
 The application-test recipe retains its existing test-cache cleanup and
 regenerates `build/logs/clover.xml` and `build/logs/junit.xml`.
 
+Setup and mutation targets also use completion-only status messages:
+`install`, `install-tools`, `update`, `update-tools`, `cache-clear`,
+`cache-warmup`, `local-configuration`, `configure-ci`, `generate-jwt-keys`,
+`generate-ssl-cert`, `clear`, `clear-tools`, and `phpmetrics`.
+Yellow warnings describe what will change before cleanup, overwrites, or
+dependency operations. `ecs-fix` and `composer-normalize` also warn before
+rewriting files. These warnings do not introduce new confirmation prompts;
+existing Composer hooks and OpenSSL questions remain unchanged.
+
+Configuration creation warns before replacing local/CI environment files;
+JWT regeneration warns that existing tokens may become invalid. Warnings
+never display configuration contents or key passphrases. Certificate
+generation stops immediately on an OpenSSL failure instead of continuing
+through later steps.
+
+`clear-tools` deletes only `vendor` directories beneath `tools`, handles
+spaces in paths, and does not traverse into vendor directories before deleting
+them. Both dependency cleanup targets require dependencies to be reinstalled.
+When `bin/console` is absent, `cache-clear` retains filesystem cleanup and
+`cache-warmup` ends with `[SKIP]`, not a false success.
+
+PhpMetrics checks `build/logs/junit.xml` and names that same file in its
+prerequisite warning. If it is missing, the existing automatic application-test
+run is retained, but failure stops report generation. A completed test run must
+actually create `junit.xml` before PhpMetrics starts. Existing HTML report files
+in `build/phpmetrics` may be overwritten.
+
+Run setup/mutation regression checks from the repository root on the Docker
+host with development services running:
+
+```bash
+docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+make test-make-routing
+```
+
+These tests use isolated fixtures for installs, updates, configuration copying,
+key/certificate generation, and failure handling. They do not update your
+dependencies or replace your keys. Cleanup checks delete only temporary fixture
+directories, not repository dependencies.
+
 Update and security checks distinguish findings from execution failures:
 
 * `check-action-updates` shows yellow updates and red discovery/lookup failures.
