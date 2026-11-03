@@ -53,8 +53,8 @@ native stdout/stderr and the command's exit status:
 
 | Mode | Use | Status |
 | --- | --- | --- |
-| `run` (default) | Finite recipes and information | Start and completion |
-| `COMMAND_OUTPUT_MODE=stream` | Shells and followed logs | Start only |
+| `--run` (default) | Finite recipes and information | Start and completion |
+| `--stream` | Shells and followed logs | Start only |
 
 Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
@@ -65,7 +65,7 @@ execution. Make's recipe dispatcher uses the default run mode for this boundary.
 
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
-decoration. Set `COMMAND_OUTPUT_MODE=stream` when invoking the helper for this
+decoration. Pass `--stream` before the label when invoking the helper for this
 mode. Make's `STREAM_COMMAND` uses this shared mode rather than a separate inline
 shell implementation. Foreground `start*` remains in run mode because
 its contract includes a final session-ended/cancellation status.

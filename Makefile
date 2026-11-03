@@ -233,7 +233,7 @@ define MUTATION_WARNING
 endef
 
 define STREAM_COMMAND
-	@COMMAND_OUTPUT_MODE=stream bash scripts/command-output.sh "$(1)" $(2)
+	@bash scripts/command-output.sh --stream "$(1)" $(2)
 endef
 
 define REPORT_PATHS
@@ -308,7 +308,7 @@ run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
 	$(call REPORT_PATHS,Test reports: build/logs/clover.xml and build/logs/junit.xml,build/logs/clover.xml build/logs/junit.xml)
 
 test-command-output: ## Run offline command-output contract regression suites
-	@bash scripts/tests/command-output-contract-test.sh
+	@env -u NATIVE_COLOR bash scripts/tests/command-output-contract-test.sh
 
 test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
 	@bash scripts/tests/docker-images-test.sh

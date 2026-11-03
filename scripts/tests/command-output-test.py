@@ -9,6 +9,7 @@ import shutil
 import signal
 import subprocess
 import tempfile
+import time
 import unittest
 
 
@@ -16,12 +17,23 @@ ROOT = Path(__file__).resolve().parents[2]
 HELPER = ROOT / "scripts/command-output.sh"
 SUITE = ROOT / "scripts/tests/docker-images-test.sh"
 NATIVE = ROOT / "scripts/native-output.sh"
+DOCKER_IMAGE_TEST_GROUPS = (
+    ("Manifest validation", 8),
+    ("Version discovery and output formatting", 13),
+    ("Registry responses and pagination", 6),
+    ("Dockerfile discovery", 3),
+    ("Registry lookup failures and retries", 8),
+    ("Update-pin validation", 6),
+    ("Aggregate results and empty discovery", 3),
+)
+DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
 
 
 class CommandOutputTest(unittest.TestCase):
     def environment(self, **overrides):
         environment = dict(os.environ, COLOR="auto", TERM="xterm")
         environment.pop("NO_COLOR", None)
+        environment.pop("NATIVE_COLOR", None)
         environment.update(overrides)
         return environment
 
@@ -160,34 +172,27 @@ class CommandOutputTest(unittest.TestCase):
     def test_stream_mode_preserves_streams_and_has_no_completion_banner(self):
         for status in (0, 7, 130, 143):
             result = self.run_command([
-                "bash", str(HELPER), "session", "bash", "-c",
+                "bash", str(HELPER), "--stream", "session", "bash", "-c",
                 f"printf payload; printf diagnostic >&2; exit {status}",
-            ], COLOR="always", COMMAND_OUTPUT_MODE="stream")
+            ], COLOR="always")
             self.assertEqual(result.returncode, status)
             self.assertEqual(result.stdout, "payload")
             self.assertEqual(result.stderr, "\033[34m[RUN]\033[0m session\ndiagnostic")
         for mode in ("run", "stream"):
             result = self.run_command(
-                ["bash", str(HELPER), "missing command"],
-                COMMAND_OUTPUT_MODE=mode,
+                ["bash", str(HELPER), f"--{mode}", "missing command"],
             )
             self.assertEqual(result.returncode, 64)
             self.assertIn("[FAIL] Usage:", result.stderr)
-        result = self.run_command(
-            ["bash", str(HELPER), "example", "true"],
-            COMMAND_OUTPUT_MODE="invalid",
-        )
-        self.assertEqual(result.returncode, 64)
-        self.assertIn("[FAIL] Invalid COMMAND_OUTPUT_MODE", result.stderr)
         for label in ("--run", "--stream"):
-            result = self.run_command(["bash", str(HELPER), label, "true"])
+            result = self.run_command(["bash", str(HELPER), "--run", label, "true"])
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn(f"[RUN] {label}", result.stderr)
             self.assertIn(f"[OK] {label}", result.stderr)
         result = self.run_command([
-            "bash", str(HELPER), "missing tool",
+            "bash", str(HELPER), "--stream", "missing tool",
             "copilot-output-contract-missing-executable",
-        ], COMMAND_OUTPUT_MODE="stream")
+        ])
         self.assertEqual(result.returncode, 127)
         self.assertIn("[RUN] missing tool", result.stderr)
         self.assertIn("not found", result.stderr)
@@ -197,9 +202,9 @@ class CommandOutputTest(unittest.TestCase):
         master, slave = pty.openpty()
         try:
             process = subprocess.Popen(
-                ["bash", str(HELPER), "terminal", "bash", "-c",
+                ["bash", str(HELPER), "--stream", "terminal", "bash", "-c",
                  'test -t 0 && test -t 1 && test -t 2 && printf "%s" "$$"'],
-                env=self.environment(COLOR="never", COMMAND_OUTPUT_MODE="stream"), stdin=slave,
+                env=self.environment(COLOR="never"), stdin=slave,
                 stdout=slave, stderr=slave,
             )
             self.assertEqual(process.wait(timeout=5), 0)
@@ -345,6 +350,53 @@ class CommandOutputTest(unittest.TestCase):
                         os.killpg(process.pid, signal.SIGKILL)
                         process.communicate()
 
+    def test_stream_mode_directly_propagates_real_signals(self):
+        child = (
+            "import signal, sys, time; "
+            "signal.signal(signal.SIGINT, signal.SIG_DFL); "
+            "signal.signal(signal.SIGTERM, signal.SIG_DFL); "
+            "sys.stdout.write('ready'); sys.stdout.flush(); "
+            "sys.stderr.write('diagnostic'); sys.stderr.flush(); "
+            "time.sleep(30)"
+        )
+        for interruption in (signal.SIGINT, signal.SIGTERM):
+            with self.subTest(signal=interruption):
+                process = subprocess.Popen(
+                    ["bash", str(HELPER), "--stream", "stream", "python3", "-c", child],
+                    env=self.environment(COLOR="never"),
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                    start_new_session=True,
+                )
+                observed = {process.stdout: bytearray(), process.stderr: bytearray()}
+                expected = {
+                    process.stdout: b"ready",
+                    process.stderr: b"[RUN] stream\ndiagnostic",
+                }
+                try:
+                    deadline = time.monotonic() + 5
+                    while any(expected[stream] not in data for stream, data in observed.items()):
+                        remaining = deadline - time.monotonic()
+                        self.assertGreater(remaining, 0, "stream-mode child did not produce both streams")
+                        ready, _, _ = select.select(list(observed), [], [], remaining)
+                        self.assertTrue(ready, "stream-mode child did not produce both streams")
+                        for stream in ready:
+                            observed[stream].extend(os.read(stream.fileno(), 4096))
+
+                    os.killpg(process.pid, interruption)
+                    stdout, stderr = process.communicate(timeout=5)
+                    actual_stdout = bytes(observed[process.stdout]) + stdout
+                    actual_stderr = bytes(observed[process.stderr]) + stderr
+                    self.assertEqual(process.returncode, -interruption)
+                    self.assertEqual(actual_stdout, b"ready")
+                    self.assertEqual(actual_stderr, b"[RUN] stream\ndiagnostic")
+                    self.assertNotIn(b"[OK]", actual_stderr)
+                    self.assertNotIn(b"[WARN]", actual_stderr)
+                    self.assertNotIn(b"[FAIL]", actual_stderr)
+                finally:
+                    if process.poll() is None:
+                        os.killpg(process.pid, signal.SIGKILL)
+                        process.communicate()
+
     def test_suite_colors_are_independent_of_helper_fixture(self):
         result = self.run_command(["bash", str(SUITE)], COLOR="always")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
@@ -372,7 +424,7 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("scenarios passed", result.stderr)
         self.assertIn(
             "[OK]\033[0m empty image discovery fails explicitly\n\n"
-            "\033[32m[OK]\033[0m Docker image tests: 47 scenarios passed\n",
+            f"\033[32m[OK]\033[0m Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed\n",
             result.stderr,
         )
         self.assertNotIn("[FAIL]", result.stderr)
@@ -380,15 +432,7 @@ class CommandOutputTest(unittest.TestCase):
     def test_suite_groups_keep_individual_results_in_order(self):
         result = self.run_command(["bash", str(SUITE)], COLOR="never")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        groups = (
-            ("Manifest validation", 8),
-            ("Version discovery and output formatting", 13),
-            ("Registry responses and pagination", 6),
-            ("Dockerfile discovery", 3),
-            ("Registry lookup failures and retries", 8),
-            ("Update-pin validation", 6),
-            ("Aggregate results and empty discovery", 3),
-        )
+        groups = DOCKER_IMAGE_TEST_GROUPS
         headings = [line for line in result.stderr.splitlines() if line.startswith("[RUN]")]
         self.assertEqual(headings, ["[RUN] Docker image tests"] + [
             f"[RUN] {name}" for name, _ in groups
@@ -398,7 +442,10 @@ class CommandOutputTest(unittest.TestCase):
             section = section.split("\n[RUN]", 1)[0]
             results = [line for line in section.splitlines() if line.startswith("[OK]")]
             if index == len(groups) - 1:
-                self.assertEqual(results.pop(), "[OK] Docker image tests: 47 scenarios passed")
+                self.assertEqual(
+                    results.pop(),
+                    f"[OK] Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed",
+                )
             self.assertEqual(len(results), count, section)
         self.assertNotIn("\033", result.stderr)
 
