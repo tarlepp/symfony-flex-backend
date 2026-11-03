@@ -73,7 +73,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             )
         for name in ("ci-summary", "ci-result"):
             self.assertIn(
-                "    if: ${{ always() && !(" + METADATA_EDIT + ") }}\n", job(name),
+                "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
             )
         for name in ("lint-configuration", "docker-image-verify-pins",
                      "lightweight-analyzers", "static-analyzers", "test", "docker-build"):
@@ -291,7 +291,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         for name in ("ci-summary", "ci-result"):
             self.assertIn("      - changes\n", job(name))
             self.assertIn(
-                "    if: ${{ always() && !(" + METADATA_EDIT + ") }}\n", job(name),
+                "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
             )
 
 

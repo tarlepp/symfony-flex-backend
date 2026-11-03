@@ -10,6 +10,11 @@ import unittest
 
 
 WORKFLOW = Path(__file__).resolve().parents[2] / ".github/workflows/main.yml"
+METADATA_EDIT = (
+    "github.event_name == 'pull_request' && github.event.action == 'edited' && "
+    "github.event.changes.base == null && "
+    "(github.event.changes.title != null || github.event.changes.body != null)"
+)
 
 
 class CiGatesTest(unittest.TestCase):
@@ -27,9 +32,10 @@ class CiGatesTest(unittest.TestCase):
                 conditions = re.findall(
                     r"^    if: (.+)$", self.jobs[job], re.MULTILINE,
                 )
-                # A status function bypasses the implicit success() guard.
-                # Unlike always(), !cancelled() releases superseded runs.
-                self.assertEqual(conditions, ["${{ !cancelled() }}"])
+                # Keep failed prerequisites visible, release cancelled runs,
+                # and skip only confirmed title/body-only PR edits.
+                expected = "${{ !cancelled() && !(" + METADATA_EDIT + ") }}"
+                self.assertEqual(conditions, [expected])
 
     def test_container_cleanup_remains_unconditional(self):
         cleanup = re.findall(
