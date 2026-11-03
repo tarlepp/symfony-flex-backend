@@ -109,11 +109,14 @@ Inspect the implementation and its actual callers:
    preserve bounded retries, timeouts, pagination termination, explicit
    failures, and required checksum verification; a failed lookup is not
    an empty successful result.
-   Reuse `command-output.sh` in its default run mode for finite commands,
-   complete fail-fast recipes, and information output; set
-   `COMMAND_OUTPUT_MODE=stream` for directly attached shells and logs without
-   completion banners. Do not duplicate these execution modes in inline shell
-   wrappers or buffer native output.
+   Reuse `command-output.sh --run` for finite commands, complete fail-fast
+   recipes, and information output; use `--stream` for directly attached shells
+   and logs without completion banners. Do not duplicate these execution modes
+   in inline shell wrappers or buffer native output.
+   Use `--status` for standalone messages rather than inline sourcing; it is
+   notification-only, so failure guards must explicitly exit nonzero.
+   `COMPOSE_RUN` shares lifecycle UID/GID and completion decoration without
+   replacing target-specific guards, warnings, or Compose arguments.
    Derive native tool flags from the shared color policy, with nonempty
    `NO_COLOR` taking precedence. Keep GitHub analyzer formats plain. Use the
    existing SGR-only native-output filter only when native disable controls
