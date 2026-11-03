@@ -311,7 +311,11 @@ Exit codes:
 Available updates are yellow; failed checks/lookups are red. The informational
 `make check-action-updates` target still returns success for handled checker
 exits 1 and 2, with an explicit warning/failure summary describing that policy.
-Other exit codes still fail Make.
+The Make wrapper prints the single final outcome; the checker retains individual
+findings and counts but does not print a second completion line. Failed entries
+remain red so the final summary can point to the affected pin or GitHub lookup.
+Direct script invocations still print their own final outcome and return the
+checker exit code. Other exit codes still fail Make.
 
 Use in CI:
 

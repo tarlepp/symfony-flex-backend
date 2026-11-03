@@ -29,6 +29,12 @@
 set +e
 source "$(dirname "$0")/command-output.sh"
 
+checker_outcome() {
+    if [ "${ACTION_OUTPUT_WRAPPED:-0}" != 1 ]; then
+        output_result "$@"
+    fi
+}
+
 # Command overrides
 GIT_BIN="${GIT_BIN:-git}"
 TIMEOUT_BIN="${TIMEOUT_BIN:-timeout}"
@@ -358,11 +364,11 @@ fi
 
 if [ ${#ACTIONS[@]} -eq 0 ]; then
     if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
-        output_result FAIL 'Discovery checks failed; no pinned actions or tools could be checked'
+        checker_outcome FAIL 'Discovery checks failed; no pinned actions or tools could be checked'
         exit 2
     fi
 
-    output_result SKIP "No pinned GitHub Actions discovered from $WORKFLOW_DIR or $ACTIONS_DIR"
+    checker_outcome SKIP "No pinned GitHub Actions discovered from $WORKFLOW_DIR or $ACTIONS_DIR"
     exit 0
 fi
 
@@ -522,14 +528,14 @@ if [ $OUTDATED -gt 0 ]; then
 fi
 
 if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
-    output_result FAIL 'Discovery checks failed. Fix workflow pinning/version consistency first.'
+    checker_outcome FAIL 'Discovery or lookup checks failed. Review the failed entries above; resolve pin inconsistencies or retry failed GitHub lookups.'
     exit 2
 fi
 
 if [ $OUTDATED -gt 0 ]; then
-    output_result WARN "$OUTDATED action/tool update(s) available"
+    checker_outcome WARN "$OUTDATED action/tool update(s) available"
     exit 1
 fi
 
-output_result OK 'All checked actions and tools are up-to-date'
+checker_outcome OK 'All checked actions and tools are up-to-date'
 exit 0
