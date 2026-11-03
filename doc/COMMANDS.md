@@ -81,6 +81,9 @@ make check-licenses > build/licenses.txt
 Target groups, risk markers, execution routing, and wrapped labels share the
 Makefile's `REGISTER_TARGET` metadata. Recipe descriptions remain beside their
 commands; help no longer guesses categories or risk from target names.
+Registered commands are always `.PHONY`: a file named `help`, `ecs`, or another
+command cannot suppress its execution. Report generators remain commands even
+when their output files already exist.
 
 Verify command output contracts from the repository root on the Docker host
 with development services already running:

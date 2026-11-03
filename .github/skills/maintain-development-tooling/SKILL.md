@@ -83,6 +83,8 @@ Inspect the implementation and its actual callers:
    label) and keep its `##` description beside the recipe. The registry derives
    `HOST_TARGETS`, `WRAPPED_TARGETS`, and labels; help uses the same groups and
    markers. Do not maintain parallel target lists or name-based help rules.
+   Registered commands are declared `.PHONY` through `COMMAND_TARGETS`;
+   preserve execution despite same-named files, including raw recursive recipes.
    Help accepts `GROUP` filtering without Docker access; preserve the full
    default inventory and routine/overwrite/destructive ordering within groups.
    `scripts/compose-context.sh` performs on-demand project/service checks:
