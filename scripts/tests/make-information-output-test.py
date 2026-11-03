@@ -23,9 +23,10 @@ class InformationOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         for name in ("command-output.sh", "make.sh", "make-help.sh", "prepare-sonar-reports.sh",
-                     "project-stats.sh", "docker-images.sh"):
+                     "project-stats.sh", "docker-images.sh", "native-output.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
             (self.root / "scripts" / name).chmod(0o755)
+        shutil.copyfile(ROOT / "scripts/native-output.py", self.root / "scripts/native-output.py")
         fixture = """#!/usr/bin/env bash
 printf '%s %s\\n' "$0" "$*" >> "$CALLS"
 if [ "$(basename "$0")" = "${FAIL_COMMAND:-}" ]; then

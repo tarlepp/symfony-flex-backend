@@ -107,8 +107,27 @@ uses the readable status label `Markdown documentation`.
 Markdown rule diagnostics gain a red `[ERROR]` prefix, retaining their
 original file/line, rule, and message. The prefix respects the shared color
 controls and remains readable without ANSI colors.
-Existing tool-specific color options remain unchanged; the shared
-color controls apply to the new status messages.
+Make derives native color flags from the same shared policy: Symfony/Composer
+commands use `--ansi` or `--no-ansi`, CodeSniffer and parallel-lint use
+`--colors` or `--no-colors`, PHPUnit uses `--colors=always|never`, and plain
+Psalm uses `--monochrome`. Infection passes the color choice to its test runner.
+Compose receives the resolved native choice through `COMPOSE_ANSI`, without
+changing lifecycle commands or service selection. The security check's Composer
+dry run also uses the shared native choice.
+GitHub-format Psalm/PHPStan analysis always stays plain, independent of status
+colors, preserving annotations and JSON report formats.
+
+The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
+hardcodes colors without a disable option. `scripts/native-output.sh` removes
+only SGR decoration from their plain-mode output, and from the configuration
+check's existing colored messages. It streams ordinary bytes, including
+partial lines, immediately; preserves separate stdout/stderr and the child's
+TTY detection; and returns the command's status. It never rewrites report files,
+annotations, or other terminal controls. Enabled color executes the native
+command unchanged. Tools with no force-color support (including ECS's TTY-only
+renderer and parallel-lint installations lacking optional color libraries)
+retain their native detection; `COLOR=always` does not manufacture decorations
+or bypass tool-specific agent safeguards.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
@@ -116,11 +135,12 @@ color controls apply to the new status messages.
 * `[INFO]` is uncolored context, such as a report path, not a success claim.
 * Labels remain readable without color. Status messages use stderr, leaving
   child stdout and stderr unbuffered and otherwise unchanged.
-* `COLOR=auto` uses the status terminal, excluding `TERM=dumb`. Host Make
-  forwarding resolves this before `exec -T` and passes it into the container.
-  `COLOR=always` forces ANSI colors; `COLOR=never` disables them. A nonempty
-  `NO_COLOR` overrides color settings. Existing unmigrated tools may have
-  their own color rules.
+* `COLOR=auto` uses stderr's terminal for shared status messages and stdout's
+  terminal for native tool color, excluding `TERM=dumb`. Host Make forwards
+  both choices separately through `exec -T`. `COLOR=always` forces native ANSI
+  color; `COLOR=never` disables it. A nonempty `NO_COLOR` overrides either
+  choice. Native commands use supported flags or the narrow plain-output
+  filter described above.
 * The wrapper preserves command exit status, including failures and
   interruptions; Make itself may translate a failed recipe into exit 2.
   Existing informational update-check policies are unchanged.
@@ -131,6 +151,15 @@ With development services running, from the repository root on the Docker host:
 make test-docker-images
 make test-docker-images COLOR=always
 make test-docker-images NO_COLOR=1
+```
+
+Native-tool examples use the same controls, from the repository root on the
+Docker host with development services running:
+
+```bash
+bash scripts/make.sh phpcs COLOR=always
+bash scripts/make.sh phpcs COLOR=never
+bash scripts/make.sh phpcs COLOR=always NO_COLOR=1
 ```
 
 For cleaner failure output, use `bash scripts/make.sh` instead of `make`.

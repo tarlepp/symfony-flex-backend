@@ -17,11 +17,18 @@ class WorkflowOutputTest(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory(prefix="workflow-output-")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        for directory in ("scripts", "bin", ".github/workflows", ".github/actions/example"):
+        for directory in ("scripts/tests", "bin", ".github/workflows", ".github/actions/example"):
             (self.root / directory).mkdir(parents=True)
         for name in ("lint-workflows.sh", "command-output.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
-        (self.root / ".github/workflows/main.yml").write_text("name: fixture\n")
+        shutil.copyfile(
+            ROOT / "scripts/tests/ci-gates-test.py",
+            self.root / "scripts/tests/ci-gates-test.py",
+        )
+        shutil.copyfile(
+            ROOT / ".github/workflows/main.yml",
+            self.root / ".github/workflows/main.yml",
+        )
         (self.root / ".github/actions/example/action.yml").write_text("name: fixture\n")
         fixture = """#!/usr/bin/env bash
 name=$(basename "$0")

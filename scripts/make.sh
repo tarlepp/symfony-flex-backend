@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
-# Resolve color before redirecting stderr away from the terminal.
+# Resolve native and status colors separately before redirecting stderr.
+if [ -z "${NATIVE_COLOR+x}" ]; then
+    if [ -z "${NO_COLOR:-}" ] && {
+        [ "${COLOR:-auto}" = always ] ||
+        { [ "${COLOR:-auto}" = auto ] && [ -t 1 ] && [ "${TERM:-}" != dumb ]; }
+    }; then
+        export NATIVE_COLOR=always
+    else
+        export NATIVE_COLOR=never
+    fi
+fi
+
 if [ "${COLOR:-auto}" = auto ]; then
     if [ -t 2 ] && [ "${TERM:-}" != dumb ]; then
         export COLOR=always
