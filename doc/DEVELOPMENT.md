@@ -197,6 +197,37 @@ The check verifies configuration and write access, not GitHub cache restoration
 or warm-cache downloads. Inspect cache size and Composer download logs in a
 hosted run to verify reuse.
 
+Docker builds use BuildKit's GitHub Actions v2 layer cache. Only pushes to
+`master` export caches; PRs (including forks), merge groups and manual runs
+only import them. Bootstrap and application-image targets have separate
+scopes, so they do not overwrite each other's caches. Images are loaded into
+the runner's Docker daemon for Compose and Trivy, never pushed to a registry.
+Build record uploads are disabled.
+
+Bootstrap builds `symfony-flex-backend-php:ci` with the runner's UID/GID,
+then calls `make ci-start CI_PREBUILT=true`. This starts the loaded image
+without rebuilding or pulling; a missing image fails instead of triggering
+a second uncached build. Plain `make ci-start` still builds locally.
+Python and Node installation precede the development source copy, so source
+changes reuse those expensive layers.
+
+Scheduled bootstrap and vulnerability scans pull referenced images and bypass
+all layer caches, refreshing OS/tool packages. The production stage always
+bypasses cache, including on PRs, so dependency installation and Composer
+audit still run. Existing Trivy thresholds and merge gates are unchanged.
+Cache restoration, export and fork/merge-group behavior need hosted-run
+verification; local Docker caching does not prove GitHub backend access.
+
+To build verification images without restarting services, run from the
+repository root on the Docker host:
+
+```bash
+docker buildx build --load --target development \
+    --tag symfony-flex-backend:verify-development .
+docker buildx build --load --target production --no-cache-filter production \
+    --tag symfony-flex-backend:verify-production .
+```
+
 #### Reproducing CI jobs locally [ᐞ](#table-of-contents)
 
 <a id="reproducing-ci-jobs-locally"></a>

@@ -229,6 +229,25 @@ exit "${DOCKER_EXIT:-0}"
                 self.assertNotIn("[OK]", result.stderr)
                 self.assertNotIn("[FAIL]", result.stderr)
 
+    def test_ci_prebuilt_image_is_never_rebuilt_or_pulled(self):
+        for status in ("0", "7"):
+            with self.subTest(status=status):
+                result, calls = self.make("ci-start", "CI_PREBUILT=true", DOCKER_EXIT=status)
+                self.assertIn(
+                    "compose -f compose.yaml -f docker/ci-compose.yaml up "
+                    "--no-build --pull never --detach --no-deps php\n", calls,
+                )
+                self.assertNotIn("--build", calls)
+                self.assertEqual(result.returncode == 0, status == "0", result.stderr)
+                self.assertEqual("[OK]" in result.stderr, status == "0")
+
+    def test_ci_prebuilt_invalid_value_fails_before_docker(self):
+        result, calls = self.make("ci-start", "CI_PREBUILT=false")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("CI_PREBUILT must be empty or true", result.stderr)
+        self.assertEqual(calls, "")
+        self.assertNotIn("[OK]", result.stderr)
+
     def test_context_guards_fail_without_mutation(self):
         targets = (
             "start", "start-build", "start-prod", "daemon", "daemon-build", "daemon-prod",

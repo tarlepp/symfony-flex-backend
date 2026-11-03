@@ -555,9 +555,12 @@ ci-start: ## Build and start the Compose PHP development service for CI (host on
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
+	@if [ "$(CI_PREBUILT)" != "" ] && [ "$(CI_PREBUILT)" != "true" ]; then \
+		echo "CI_PREBUILT must be empty or true." >&2; exit 1; \
+	fi
 	$(call MUTATION_WARNING,Building and starting only the CI PHP service; application initialization is disabled)
 	@mkdir -p "$${COMPOSER_CACHE_DIR:-/tmp/symfony-backend-composer-cache}"
-	$(call COMPOSE_RUN,Build and start the CI PHP service,$(COMPOSE_CI) up --build --detach --no-deps php,CI PHP service started; application initialization and readiness were not verified)
+	$(call COMPOSE_RUN,Build and start the CI PHP service,$(COMPOSE_CI) up $(if $(filter true,$(CI_PREBUILT)),--no-build --pull never,--build) --detach --no-deps php,CI PHP service started; application initialization and readiness were not verified)
 endif
 
 daemon: ## Start application in development mode in background
