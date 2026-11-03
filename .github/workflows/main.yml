@@ -407,6 +407,7 @@ jobs:
         with:
           install-dependencies: 'false'
           print-versions: 'false'
+          cache-dependencies: 'true'
 
       - name: Configure application for CI run
         run: bash scripts/make.sh configure-ci
@@ -559,6 +560,7 @@ jobs:
         with:
           install-dependencies: 'false'
           print-versions: 'false'
+          cache-dependencies: 'true'
 
       - name: Install Coveralls reporter
         run: composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader

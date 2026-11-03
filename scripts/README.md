@@ -41,6 +41,9 @@ This directory contains different scripts that are used during development.
 * [GitHub workflow validator](lint-workflows.sh)
   * Validates all workflows and their supported shell steps, and separately
     validates local action metadata.
+* [Composer cache mount check](check-composer-cache.sh)
+  * Runs inside the CI PHP container to check Composer's effective cache path
+    and write access. Offline regressions run through `make lint-workflows`.
 * [Docker multi-platform image helper](docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.

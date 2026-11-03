@@ -4,6 +4,7 @@ services:
         command: ["sleep", "infinity"]
         environment:
             XDEBUG_MODE: coverage
+            COMPOSER_CACHE_DIR: /home/dev/.cache/composer
         volumes:
             - ${COMPOSER_CACHE_DIR:-/tmp/symfony-backend-composer-cache}:/home/dev/.cache/composer
             - ./docker/php/php-ci.ini:/usr/local/etc/php/conf.d/zz-ci.ini:ro
