@@ -334,7 +334,7 @@ def main() -> int:
             color == "always"
             or (color == "auto" and sys.stderr.isatty() and os.environ.get("TERM") != "dumb")
         )
-        error_label = "\033[31mERROR:\033[0m" if use_color else "ERROR:"
+        error_label = "\033[31m[FAIL]\033[0m" if use_color else "[FAIL]"
         for error in errors:
             print(f"{error_label} {error}", file=sys.stderr)
         print(f"Documentation check failed with {len(errors)} issue(s).", file=sys.stderr)

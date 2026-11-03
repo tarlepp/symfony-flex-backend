@@ -99,10 +99,10 @@ class MakeCheckOutputTest(unittest.TestCase):
 
     def test_documentation_checker_error_label_respects_color_controls(self):
         for color, no_color, expected in (
-            ("always", "", "\033[31mERROR:\033[0m"),
-            ("never", "", "ERROR:"),
-            ("always", "1", "ERROR:"),
-            ("auto", "", "ERROR:"),
+            ("always", "", "\033[31m[FAIL]\033[0m"),
+            ("never", "", "[FAIL]"),
+            ("always", "1", "[FAIL]"),
+            ("auto", "", "[FAIL]"),
         ):
             with self.subTest(color=color, no_color=no_color):
                 result = subprocess.run(
@@ -113,7 +113,7 @@ class MakeCheckOutputTest(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 1)
                 self.assertIn(expected, result.stderr)
-                if expected == "ERROR:":
+                if expected == "[FAIL]":
                     self.assertNotIn("\033", result.stderr)
 
 

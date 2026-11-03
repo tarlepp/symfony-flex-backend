@@ -17,7 +17,7 @@ printf 'Groups: information, tests, quality, checks, reports, setup, lifecycle, 
 printf 'Routine commands first; overwrite and destructive commands last in each group.\n'
 printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
 
-awk '
+awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     /^\$\(call REGISTER_TARGET,/ {
         record = $0
         sub(/^\$\(call REGISTER_TARGET,/, "", record)
@@ -25,7 +25,7 @@ awk '
         split(record, fields, ",")
         name = fields[1]
         if (name in groups) {
-            print "ERROR: Duplicate target metadata: " name > "/dev/stderr"
+            print red "[FAIL]" reset " Duplicate target metadata: " name > "/dev/stderr"
             invalid = 1
         }
         groups[name] = fields[2]
@@ -39,13 +39,13 @@ awk '
     END {
         for (name in descriptions) {
             if (!(name in groups) || groups[name] == "hidden") {
-                print "ERROR: Missing help metadata: " name > "/dev/stderr"
+                print red "[FAIL]" reset " Missing help metadata: " name > "/dev/stderr"
                 invalid = 1
             }
         }
         for (name in groups) {
             if (groups[name] != "hidden" && !(name in descriptions)) {
-                print "ERROR: Missing target description: " name > "/dev/stderr"
+                print red "[FAIL]" reset " Missing target description: " name > "/dev/stderr"
                 invalid = 1
             }
         }
@@ -55,7 +55,7 @@ awk '
     }
 ' Makefile | LC_ALL=C sort -t $'\t' -k1,1 | awk -F '\t' \
     -v blue="$OUTPUT_BLUE" -v green="$OUTPUT_GREEN" \
-    -v yellow="$OUTPUT_YELLOW" -v reset="$OUTPUT_RESET" -v selected="$group" '
+    -v yellow="$OUTPUT_YELLOW" -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" -v selected="$group" '
     BEGIN {
         groups["lifecycle"] = 1
         groups["docker"] = 2
@@ -76,7 +76,7 @@ awk '
     }
     {
         if (!($3 in groups) || ($4 != "" && $4 != "DESTRUCTIVE" && $4 != "OVERWRITE")) {
-            print "ERROR: Invalid help metadata: " $1 > "/dev/stderr"
+            print red "[FAIL]" reset " Invalid help metadata: " $1 > "/dev/stderr"
             invalid = 1
             next
         }

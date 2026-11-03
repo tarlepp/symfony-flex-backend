@@ -100,15 +100,15 @@ class ToolUpdatesTest(unittest.TestCase):
     def test_action_lookup_failures_are_not_reported_as_up_to_date(self):
         result = self.run_checker("", mode="", git_status=1, action=True)
         self.assertEqual(result.returncode, 2)
-        self.assertIn("ERROR: Unable to fetch action version: example/action", result.stderr)
+        self.assertIn("[FAIL] Unable to fetch action version: example/action", result.stderr)
         self.assertNotIn("All checked actions and tools are up-to-date", result.stdout)
 
     def test_available_tool_updates_are_yellow(self):
         refs = f"{SHA}\trefs/tags/v1.0.0\n{NEW_SHA}\trefs/tags/v2.0.0"
         result = self.run_checker(refs, color=True)
         self.assertEqual(result.returncode, 1)
-        self.assertIn("\033[1;33mUPDATE AVAILABLE (tool):", result.stdout)
-        self.assertIn("Updates available:       \033[1;33m1", result.stdout)
+        self.assertIn("\033[33m[WARN]\033[0m UPDATE AVAILABLE (tool):", result.stdout)
+        self.assertIn("Updates available:       \033[33m1", result.stdout)
 
     def test_action_sha_lookup_failure_is_a_red_discovery_error(self):
         result = self.run_checker(
@@ -116,7 +116,7 @@ class ToolUpdatesTest(unittest.TestCase):
             color=True, sha_failure=True,
         )
         self.assertEqual(result.returncode, 2)
-        self.assertIn("\033[0;31mERROR: Unable to fetch action SHA:", result.stderr)
+        self.assertIn("\033[31m[FAIL]\033[0m Unable to fetch action SHA:", result.stderr)
         self.assertNotIn("All checked actions and tools are up-to-date", result.stdout)
 
 
