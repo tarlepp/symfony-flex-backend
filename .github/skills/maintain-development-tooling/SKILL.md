@@ -129,6 +129,9 @@ Inspect the implementation and its actual callers:
    `NO_COLOR` taking precedence. Keep GitHub analyzer formats plain. Use the
    existing SGR-only native-output filter only when native disable controls
    are unavailable or unreliable; never filter generated report files.
+   Use `report-output.sh` to check declared local outputs before announcing
+   paths. Distinguish analyzer/client completion from upload confirmation;
+   preserve Shepherd's non-blocking upload behavior and native diagnostics.
 7. Keep checks read-only unless mutation is explicitly part of the approved
    command. Use isolated temporary fixtures and cleanup limited to their
    resolved paths. Mock Docker, registry, Git, and other external commands
