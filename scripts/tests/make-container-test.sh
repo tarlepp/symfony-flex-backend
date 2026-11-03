@@ -9,7 +9,7 @@ export DOCKER_CALLS="$temporary/docker-calls"
 cat > "$temporary/docker" <<'MOCK'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >> "$DOCKER_CALLS"
-printf 'COLOR=%s NO_COLOR=%s\n' "${COLOR:-}" "${NO_COLOR:-}" >> "$DOCKER_CALLS"
+printf 'COLOR=%s NO_COLOR=%s PROGRESS=%s SHARED=%s\n' "${COLOR:-}" "${NO_COLOR:-}" "${PROGRESS:-}" "${OUTPUT_PROGRESS_SHARED:-}" >> "$DOCKER_CALLS"
 printf 'NATIVE_COLOR=%s\n' "${NATIVE_COLOR:-}" >> "$DOCKER_CALLS"
 if [ "${1:-}" = ps ]; then
     printf 'symfony-backend\n%.0s' {1..5}
@@ -23,7 +23,7 @@ exit "${DOCKER_EXIT_CODE:-0}"
 MOCK
 chmod +x "$temporary/docker"
 export PATH="$temporary:$PATH"
-unset GITHUB_WORKFLOW DATABASE_URL CI XDEBUG_MODE COVERALLS_REPO_TOKEN \
+unset PROGRESS OUTPUT_PROGRESS_SHARED GITHUB_WORKFLOW DATABASE_URL CI XDEBUG_MODE COVERALLS_REPO_TOKEN \
     COVERALLS_RUN_LOCALLY GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB \
     GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME GITHUB_BASE_REF \
     GITHUB_SERVER_URL
@@ -43,7 +43,7 @@ for target in cache-clear cache-warmup clear clear-tools run-tests check-skills 
     phploc check-security check-action-updates project-stats configure-ci; do
     : > "$DOCKER_CALLS"
     host_make "$target"
-    grep -Eq "compose exec -T --env COLOR --env NO_COLOR --env NATIVE_COLOR +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
+    grep -Eq "compose exec -T --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
 done
 
 : > "$DOCKER_CALLS"
@@ -86,7 +86,11 @@ host_make check-skills lint-markdown COLOR=never
 grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
 grep -Eq 'php bash scripts/make.sh lint-markdown$' "$DOCKER_CALLS"
 [ "$(grep -c 'compose exec -T' "$DOCKER_CALLS")" -eq 2 ]
-grep -q 'COLOR=never NO_COLOR=' "$DOCKER_CALLS"
+grep -q 'COLOR=never NO_COLOR= PROGRESS=never SHARED=0' "$DOCKER_CALLS"
+
+: > "$DOCKER_CALLS"
+host_make check-skills PROGRESS=always
+grep -q 'PROGRESS=always' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
 host_make bash check-skills COLOR=always
@@ -98,7 +102,7 @@ GITHUB_WORKFLOW=CI CI=true XDEBUG_MODE=coverage host_make check-skills lint-mark
 [ "$(grep -c 'compose -f compose.yaml -f docker/ci-compose.yaml exec -T' "$DOCKER_CALLS")" -eq 2 ]
 grep -q -- '--env CI' "$DOCKER_CALLS"
 grep -q -- '--env XDEBUG_MODE' "$DOCKER_CALLS"
-grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
+grep -q 'COLOR=always NO_COLOR=1 PROGRESS=never' "$DOCKER_CALLS"
 if grep -q -- '--env CI=true\|--env XDEBUG_MODE=coverage' "$DOCKER_CALLS"; then
     echo "CI environment values must not be interpolated into Docker arguments." >&2
     exit 1

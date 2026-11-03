@@ -121,6 +121,10 @@ disable flags are unavailable or unreliable. Configuration lint uses the
 shared status helper directly. Tools without force-color support retain their
 native detection. Blocking failures stay nonzero. Compose receives the resolved
 native choice via `COMPOSE_ANSI`.
+`PROGRESS=auto|always|never` controls the spinner and elapsed time shown for
+silent finite commands on an interactive terminal; it is disabled in CI and
+with `NO_COLOR`. See
+[the progress indicator notes](../scripts/README.md#progress-indicator).
 See [the regression guide](../scripts/README.md#output-contract-regressions)
 for individual suites and the informational action-update exception.
 

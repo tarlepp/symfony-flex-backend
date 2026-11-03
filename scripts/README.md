@@ -14,6 +14,7 @@ This directory contains different scripts that are used during development.
   * [Table of Contents](#table-of-contents)
     * [Resources](#resources)
       * [Command status output](#command-status-output)
+        * [Progress indicator](#progress-indicator)
       * [Output contract regressions](#output-contract-regressions)
       * [Project stats script](#project-stats-script)
       * [Skill documentation checker](#skill-documentation-checker)
@@ -48,13 +49,14 @@ This directory contains different scripts that are used during development.
 
 <a id="command-status-output"></a>
 
-`scripts/command-output.sh` owns two command execution modes, both preserving
+`scripts/command-output.sh` owns three command execution modes, all preserving
 native stdout/stderr and the command's exit status:
 
 | Mode | Use | Status |
 | --- | --- | --- |
 | `--run` (default) | Finite recipes and information | Start and completion |
-| `--stream` | Shells and followed logs | Start only |
+| `--stream` | Shells and followed logs | Start only; execute in place |
+| `--progress` | Self-reporting checks | None; the script prints its own |
 
 Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
@@ -172,6 +174,54 @@ decorations or bypass tool-specific agent safeguards.
 * `make help` keeps its listing on stdout and reports its outcome on stderr.
   `make info info_msg="..."` displays a blue information message instead of
   executing the value as a shell command.
+
+#### Progress indicator [ᐞ](#table-of-contents)
+
+<a id="progress-indicator"></a>
+
+Finite commands run through `output_run` (wrapped Make targets and script
+steps) show a spinner with the label and elapsed time while the command is
+silent, and add the duration to the final outcome, for example
+`[OK] phpstan (took 45.1s)` or `[FAIL] phpstan (exit 1, took 12.0s)`.
+
+* `PROGRESS=auto` (default) enables the indicator only when stderr is a
+  terminal, `TERM` is not `dumb`, and `CI` and `NO_COLOR` are empty. Host Make
+  forwarding resolves this before `exec -T` and passes it into the container.
+  `PROGRESS=always` forces it; `PROGRESS=never` (or any other value) disables
+  it, including the duration.
+* `scripts/command-progress.py` relays output: terminal descriptors through a
+  pseudo-terminal and other descriptors through pipes, so commands see the same
+  descriptor kinds, colors, and progress bars as a direct run. Stdout stays
+  separate from stderr when they differ, and exit codes and cancellation
+  statuses are unchanged.
+* The spinner is drawn on stderr only after a second of silence while the
+  cursor is at the start of a line; it is cleared before any output, so prompts
+  and native progress bars are never overwritten.
+* Nested steps receive `PROGRESS=never`, so only the outermost run draws. Shell
+  functions run directly with duration only, and commands run without the
+  spinner when `python3` is unavailable.
+* Self-reporting scripts that print their own `[RUN]` and outcome lines use
+  `--progress <label> <command> ...`: it adds only the spinner and exports the
+  start time, and the script ends with `output_outcome <status> <message>` to
+  append the duration. `docker-image-check-updates`, `docker-image-digest`, and
+  `check-action-updates` use this mode.
+* `scripts/make.sh` forwards partial stderr lines, such as prompts and spinner
+  frames, after a short pause instead of waiting for a newline; only text that
+  can still become a Make recipe-error line is held back.
+* When stdout and stderr are the same terminal, the outermost launcher (or host
+  forwarding) exports `OUTPUT_PROGRESS_SHARED=1` and the relay sends the
+  command's stdout through the stderr stream, so spinner clears and output stay
+  ordered through `docker compose exec -T` and the stderr filter. Redirected
+  stdout (`make target > file`) keeps its own stream unchanged.
+* `make help`, `make info`, interactive shells, logs, and attached
+  `docker compose up` sessions never show the indicator.
+
+From the repository root on the Docker host with development services running:
+
+```bash
+make phpstan
+make phpstan PROGRESS=never
+```
 
 With development services running, from the repository root on the Docker host:
 
@@ -616,6 +666,7 @@ isolated fixtures or mocks. This does not prove live service health, registry
 availability, successful uploads, or real application-test report generation.
 
 Coverage includes forced/plain/auto color, `NO_COLOR`, stdout/stderr preservation,
+progress indicator policy and terminal relaying,
 missing executables, blocking failures, explicit skips, interruptions,
 expected-negative assertions, CI environment forwarding, dry runs, and multiple
 Make goals. Missing tools and blocking checks remain nonzero. An expected-negative
