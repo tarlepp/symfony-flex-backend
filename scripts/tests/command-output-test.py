@@ -172,32 +172,27 @@ class CommandOutputTest(unittest.TestCase):
     def test_stream_mode_preserves_streams_and_has_no_completion_banner(self):
         for status in (0, 7, 130, 143):
             result = self.run_command([
-                "bash", str(HELPER), "session", "bash", "-c",
+                "bash", str(HELPER), "--stream", "session", "bash", "-c",
                 f"printf payload; printf diagnostic >&2; exit {status}",
-            ], COLOR="always", COMMAND_OUTPUT_MODE="stream")
+            ], COLOR="always")
             self.assertEqual(result.returncode, status)
             self.assertEqual(result.stdout, "payload")
             self.assertEqual(result.stderr, "\033[34m[RUN]\033[0m session\ndiagnostic")
         for mode in ("run", "stream"):
             result = self.run_command(
-                ["bash", str(HELPER), "missing command"], COMMAND_OUTPUT_MODE=mode,
+                ["bash", str(HELPER), f"--{mode}", "missing command"],
             )
             self.assertEqual(result.returncode, 64)
             self.assertIn("[FAIL] Usage:", result.stderr)
-        result = self.run_command(
-            ["bash", str(HELPER), "example", "true"], COMMAND_OUTPUT_MODE="invalid",
-        )
-        self.assertEqual(result.returncode, 64)
-        self.assertIn("[FAIL] Invalid COMMAND_OUTPUT_MODE", result.stderr)
         for label in ("--run", "--stream"):
-            result = self.run_command(["bash", str(HELPER), label, "true"])
+            result = self.run_command(["bash", str(HELPER), "--run", label, "true"])
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn(f"[RUN] {label}", result.stderr)
             self.assertIn(f"[OK] {label}", result.stderr)
         result = self.run_command([
-            "bash", str(HELPER), "missing tool",
+            "bash", str(HELPER), "--stream", "missing tool",
             "copilot-output-contract-missing-executable",
-        ], COMMAND_OUTPUT_MODE="stream")
+        ])
         self.assertEqual(result.returncode, 127)
         self.assertIn("[RUN] missing tool", result.stderr)
         self.assertIn("not found", result.stderr)
@@ -207,9 +202,9 @@ class CommandOutputTest(unittest.TestCase):
         master, slave = pty.openpty()
         try:
             process = subprocess.Popen(
-                ["bash", str(HELPER), "terminal", "bash", "-c",
+                ["bash", str(HELPER), "--stream", "terminal", "bash", "-c",
                  'test -t 0 && test -t 1 && test -t 2 && printf "%s" "$$"'],
-                env=self.environment(COLOR="never", COMMAND_OUTPUT_MODE="stream"), stdin=slave,
+                env=self.environment(COLOR="never"), stdin=slave,
                 stdout=slave, stderr=slave,
             )
             self.assertEqual(process.wait(timeout=5), 0)
@@ -367,8 +362,8 @@ class CommandOutputTest(unittest.TestCase):
         for interruption in (signal.SIGINT, signal.SIGTERM):
             with self.subTest(signal=interruption):
                 process = subprocess.Popen(
-                    ["bash", str(HELPER), "stream", "python3", "-c", child],
-                    env=self.environment(COLOR="never", COMMAND_OUTPUT_MODE="stream"),
+                    ["bash", str(HELPER), "--stream", "stream", "python3", "-c", child],
+                    env=self.environment(COLOR="never"),
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                     start_new_session=True,
                 )

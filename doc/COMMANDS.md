@@ -68,6 +68,11 @@ bash scripts/make.sh help GROUP=docker COLOR=never
 `checks`, `reports`, `setup`, `lifecycle`, and `docker`. Invalid groups fail
 explicitly and list supported choices.
 
+The Makefile target registry and recipes use the same order as help: group,
+then routine/overwrite/destructive risk, then alphabetical target name.
+Group comments mark both sections; keep registrations and recipes aligned
+when adding commands.
+
 Help reports a separated final outcome on stderr. Shared `[RUN]` and `[INFO]`
 labels are blue, `[OK]` is green, `[WARN]`/`[SKIP]` are yellow, and
 `[FAIL]` is red for diagnostics and outcomes; plain and `NO_COLOR` output retains
