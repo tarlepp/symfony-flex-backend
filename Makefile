@@ -138,16 +138,6 @@ PSALM_COLOR_FLAG := $(if $(filter never,$(NATIVE_COLOR)),--monochrome)
 
 HOST_CONTEXT_FAILURE = @bash -c 'source scripts/command-output.sh; output_status FAIL "Run this target on the Docker host, not inside a container"; exit 1'
 
-_WARNING := "\033[33m[%s]\033[0m %s\n" # Yellow text for "printf"
-_TITLE := "\033[32m[%s]\033[0m %s\n" # Green text for "printf"
-_ERROR := "\033[31m[%s]\033[0m %s\n" # Red text for "printf"
-
-# Run a command and decorate output for handled exit codes (1 and 2).
-# Usage: $(call RUN_WITH_DECORATED_EXIT_OUTPUT,<command>,<label>)
-define RUN_WITH_DECORATED_EXIT_OUTPUT
-	@bash scripts/action-update-output.sh $(1)
-endef
-
 define MUTATION_WARNING
 	@bash -c 'source scripts/command-output.sh; output_status WARN "$$1"' warning "$(1)"
 endef
@@ -547,7 +537,7 @@ generate-ssl-cert: ## Generate self signed SSL certificates inside the PHP conta
 	@cd docker/nginx/ssl && ./create-keys.sh
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
-	$(call RUN_WITH_DECORATED_EXIT_OUTPUT,./scripts/check-action-updates.sh,check-action-updates)
+	@bash scripts/action-update-output.sh ./scripts/check-action-updates.sh
 
 
 project-stats: ## Create simple project stats
@@ -603,7 +593,7 @@ test-make-routing: ## Test host and CI container command routing
 	@bash scripts/command-output.sh "Make container routing (offline mocked tests)" bash scripts/tests/make-container-test.sh
 
 test-command-output: ## Run offline command-output contract regression suites
-	@bash scripts/tests/command-output-contract-test.sh
+	@env -u NATIVE_COLOR bash scripts/tests/command-output-contract-test.sh
 
 test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
 	@bash scripts/tests/docker-images-test.sh

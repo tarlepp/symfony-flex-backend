@@ -127,6 +127,17 @@ class CheckOutcomesTest(unittest.TestCase):
                     )
                     self.assertEqual(result.returncode, 0 if status < 3 else 2, result.stderr)
                     self.assertIn(f"[{label}]", result.stderr)
+                    self.assertEqual(result.stderr.count("[RUN]"), 1)
+                    if status:
+                        self.assertNotIn("[OK]", result.stderr)
+                    if status in (1, 2):
+                        self.assertIn("informational Make target remains successful", result.stderr)
+
+    def test_makefile_has_no_legacy_status_helpers(self):
+        makefile = (ROOT / "Makefile").read_text()
+        for helper in ("_WARNING", "_TITLE", "_ERROR"):
+            self.assertNotRegex(makefile, rf"(?m)^{helper}\s*[:?+]?=")
+        self.assertNotIn("RUN_WITH_DECORATED_EXIT_OUTPUT", makefile)
 
 
 if __name__ == "__main__":

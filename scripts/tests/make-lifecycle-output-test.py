@@ -64,15 +64,22 @@ exit "${DOCKER_EXIT:-0}"
         docker.chmod(0o755)
         self.calls = self.root / "calls"
 
-    def run_command(self, command, answer=None, **overrides):
-        self.calls.write_text("")
-        environment = dict(
-            os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+    def environment(self, **overrides):
+        environment = dict(os.environ)
+        for name in ("NATIVE_COLOR", "MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKE_TERMOUT", "MAKE_TERMERR"):
+            environment.pop(name, None)
+        environment.update(
+            PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(self.calls), COLOR="never", NO_COLOR="", RUNNING="0",
             DOCKER_EXIT="0", FAIL_QUERY="0", RESOURCES="",
             COMPOSER_CACHE_DIR=str(self.root / "composer-cache"),
         )
         environment.update(overrides)
+        return environment
+
+    def run_command(self, command, answer=None, **overrides):
+        self.calls.write_text("")
+        environment = self.environment(**overrides)
         master = slave = None
         if answer is not None:
             master, slave = pty.openpty()
@@ -91,13 +98,7 @@ exit "${DOCKER_EXIT:-0}"
 
     def run_with_stdout_terminal(self, command, **overrides):
         self.calls.write_text("")
-        environment = dict(
-            os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
-            CALLS=str(self.calls), COLOR="auto", NO_COLOR="", RUNNING="0",
-            DOCKER_EXIT="0", FAIL_QUERY="0", RESOURCES="",
-            COMPOSER_CACHE_DIR=str(self.root / "composer-cache"),
-        )
-        environment.update(overrides)
+        environment = self.environment(COLOR="auto", **overrides)
         master, slave = pty.openpty()
         try:
             process = subprocess.Popen(
@@ -164,13 +165,7 @@ exit "${DOCKER_EXIT:-0}"
                 ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
                  "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "daemon"],
                 cwd=self.root,
-                env=dict(
-                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
-                    CALLS=str(self.calls), COLOR_CALLS=str(color_calls), COLOR="auto",
-                    NO_COLOR="", RUNNING="0", DOCKER_EXIT="0", FAIL_QUERY="0",
-                    RESOURCES="", COMPOSER_CACHE_DIR=str(self.root / "composer-cache"),
-                    TERM="xterm",
-                ),
+                env=self.environment(COLOR_CALLS=str(color_calls), TERM="xterm"),
                 stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=slave,
                 text=True, capture_output=False, check=False, timeout=15,
             )
@@ -246,20 +241,33 @@ exit "${DOCKER_EXIT:-0}"
             self.assertNotIn("compose up", calls)
 
     def test_sessions_and_logs_use_direct_tty_commands_without_final_success(self):
-        for target, invocation in (
-            ("bash", "compose exec php bash --rcfile /app/scripts/bashrc.sh -i"),
-            ("fish", "compose exec php fish --init-command source /app/scripts/make-shell.fish"),
-            ("logs", "compose logs --follow php nginx mariadb"),
-        ):
-            result, calls = self.make(target, RUNNING="5")
-            self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn(invocation, calls)
-            self.assertNotIn("exec -T", calls)
-            self.assertIn("[RUN]", result.stderr)
-            self.assertNotIn("[OK]", result.stderr)
-            self.assertIn("native progress", result.stdout)
-            result, _ = self.make(target, RUNNING="5", DOCKER_EXIT="7")
-            self.assertNotEqual(result.returncode, 0)
+        streams = {
+            "bash": ("Opening Bash in the PHP container", "compose exec php bash --rcfile /app/scripts/bashrc.sh -i"),
+            "fish": ("Opening Fish in the PHP container", "compose exec php fish --init-command source /app/scripts/make-shell.fish"),
+            "logs": ("Following PHP nginx and MariaDB logs; Ctrl-C stops following", "compose logs --follow php nginx mariadb"),
+        }
+        for target, (label, invocation) in streams.items():
+            with self.subTest(target=target):
+                result, calls = self.make(target, RUNNING="5")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(invocation + "\n", calls)
+                self.assertNotIn("exec -T", calls)
+                self.assertIn(f"[RUN] {label}\n", result.stderr)
+                self.assertLess(
+                    result.stderr.index(f"[RUN] {label}"),
+                    result.stderr.index("native Docker diagnostic"),
+                )
+                self.assertNotIn("[OK]", result.stderr)
+                self.assertIn("native progress", result.stdout)
+                for status in ("7", "130", "143"):
+                    result, calls = self.make(target, RUNNING="5", DOCKER_EXIT=status)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(invocation + "\n", calls)
+                    self.assertIn(f"[RUN] {label}\n", result.stderr)
+                    self.assertIn("native Docker diagnostic", result.stderr)
+                    self.assertNotIn("[OK]", result.stderr)
+                    self.assertNotIn("[FAIL]", result.stderr)
+                    self.assertNotIn("[WARN]", result.stderr)
             result, calls = self.make(target, RUNNING="0")
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("[FAIL]", result.stderr)
