@@ -192,14 +192,22 @@ skill, for example, does not imply that recipes were updated.
 For database changes, state whether a migration was generated, reviewed, or
 applied to a non-production database.
 
-After each AI task that changes files, end the response with proposed commit
-messages using `Type(scope): short description`. These are proposals only:
-do not commit unless explicitly asked, and never insert proposed commit
-messages into source or documentation files. Place this section after any
-copyable Markdown version and follow these rules:
+For every completed changeset, follow the
+[repository commit-proposal requirement](../../AGENTS.md#clarification-and-documentation).
+A changeset is a logical set of file changes reported as complete, even when
+the larger task continues. Include proposals in each such user-facing response
+and again in the final handoff; do not defer them until the entire task ends.
+Read-only answers and in-progress updates do not need proposals.
+
+Use `Type(scope): short description`. These are proposals only: do not commit
+unless explicitly asked, and never insert proposed commit messages into source
+or documentation files. Place this section after any copyable Markdown version
+and follow these rules:
 
 * Provide an individual proposal for each logical change and explicitly list
   the changed file paths it covers.
+* Give each proposal a readable label and put only the complete commit message
+  in its fenced code block, without shell commands or commentary.
 * Combine related files changed for the same task into one logical proposal;
   do not split a cohesive change into separate proposals merely by file.
 * After the individual proposals, provide one combined commit message covering

@@ -174,8 +174,13 @@ and the actual code, dependency manifests, and CI workflows.
   host-safe Make targets; for direct project commands show how to enter the
   container first. Never include secret values in examples.
 * At handoff, summarize changes, touched files, and validation run or skipped.
-  Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
-  commit and commit-message expectations.
+* After every completed changeset that changes files, end the user-facing
+  response with proposed commit messages in readable and copy-pasteable form.
+  This is mandatory for intermediate completed steps and the final handoff,
+  including documentation-only work, follow-up fixes, and delegated changes,
+  whether or not a skill was used. Do not wait for the user to request it.
+  Follow the [shared handoff format](.github/skills/shared-guidance.md#handoff)
+  for file coverage, message blocks, and the final combined proposal.
 
 ## Reference guidance [ᐞ](#table-of-contents)
 
