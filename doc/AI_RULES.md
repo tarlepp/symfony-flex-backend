@@ -156,6 +156,10 @@ Both gates accept skips of application-related jobs only when change detection
 succeeded and reported `code=false` on a pull request.
 See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) for the merge-gate rules.
 
+Scheduled CI runs use a separate concurrency group from non-scheduled runs
+on the same ref, so `master` pushes do not cancel periodic checks.
+Cancellation of superseded runs within each group remains enabled.
+
 Separate workflows cover the rest of the pipeline: `dependency-review.yml`
 (pull request dependency review), `vulnerability-scan.yml` (daily Trivy scan
 of the development and production images, with SARIF upload), `scorecard.yml`
