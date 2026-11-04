@@ -164,12 +164,21 @@ you really don't want.
 
 <a id="continuous-integration"></a>
 
-Every pull request runs the full `main.yml` workflow: linting, security
+Pull request validation runs the full `main.yml` workflow: linting, security
 checks, static analyzers, PHPUnit and both Docker image builds. `Validate CI
 result` is the single required gate, together with `dependency-review`. The
 [workflow overview](REQUIRED_CHECKS.md#workflow-overview) lists every
 workflow, and [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch
 protection and troubleshooting.
+
+Title/body-only PR edits do not repeat validation. The `edited` trigger remains:
+base-branch changes and unclear edit payloads still run CI. Only edits with a
+title/body change and no base change skip all jobs. These runs use a separate
+`-metadata` concurrency group so they cannot cancel validation of the same
+commit. Their skipped final job is named `Metadata-only PR edit (no validation)`,
+not `Validate CI result`, so it cannot replace a required failure with a skipped
+success. Existing validation of the unchanged commit remains authoritative.
+Other workflows keep their own event filters.
 
 Confirmed Markdown-only pull requests run change detection, documentation
 checks, workflow validation and Gitleaks, plus the separate Dependency Review
@@ -198,7 +207,8 @@ CI concurrency is scoped to the workflow and Git ref, with a `-schedule`
 suffix only for scheduled runs. Pushes and manual runs on `master` cannot
 cancel daily checks, nor can daily checks cancel them. New runs still cancel
 older runs in their own group, including superseded PR runs and overlapping
-schedules. Non-scheduled events keep their existing shared groups.
+schedules. Other validation events keep their existing shared groups; confirmed
+metadata-only edits use the isolated group described above.
 
 PHPUnit and Docker builds start after successful change detection, in parallel
 with lint, security and analyzer jobs. They no longer wait for

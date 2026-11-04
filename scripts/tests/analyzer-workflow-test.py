@@ -4,6 +4,7 @@
 import os
 from pathlib import Path
 import re
+import shlex
 import subprocess
 import tempfile
 import textwrap
@@ -12,6 +13,11 @@ import unittest
 
 WORKFLOW = Path(__file__).resolve().parents[2] / ".github/workflows/main.yml"
 CONTENT = WORKFLOW.read_text()
+METADATA_EDIT = (
+    "github.event_name == 'pull_request' && github.event.action == 'edited' && "
+    "github.event.changes.base == null && "
+    "(github.event.changes.title != null || github.event.changes.body != null)"
+)
 
 
 def job(name):
@@ -25,6 +31,64 @@ def job(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_metadata_edit_guard_preserves_base_changes_and_unclear_payloads(self):
+        condition = re.search(
+            r"^    if: \$\{\{ github.event_name != 'schedule' && !\((.+)\) \}\}$",
+            job("changes"), re.MULTILINE,
+        )
+        self.assertIsNotNone(condition)
+        self.assertEqual(condition.group(1), METADATA_EDIT)
+        for event in ("pull_request", "push", "merge_group", "schedule", "workflow_dispatch"):
+            for action in ("edited", "opened", "synchronize", "reopened", ""):
+                for fields in ((), ("title",), ("body",), ("title", "body"),
+                               ("base",), ("base", "title"), ("base", "body")):
+                    with self.subTest(event=event, action=action, fields=fields):
+                        expression = condition.group(1)
+                        values = {
+                            "github.event_name": event,
+                            "github.event.action": action,
+                            **{f"github.event.changes.{field}":
+                               "present" if field in fields else "null"
+                               for field in ("base", "title", "body")},
+                        }
+                        for name, value in values.items():
+                            expression = expression.replace(name, shlex.quote(value))
+                        result = subprocess.run(
+                            ["bash", "-c", f"[[ {expression} ]]"], check=False,
+                            capture_output=True, text=True, timeout=10,
+                        )
+                        expected = (
+                            event == "pull_request" and action == "edited"
+                            and "base" not in fields
+                            and ("title" in fields or "body" in fields)
+                        )
+                        self.assertIn(result.returncode, (0, 1), result.stderr)
+                        self.assertEqual(result.returncode == 0, expected)
+
+    def test_metadata_edit_skip_covers_roots_and_gates_without_relaxing_results(self):
+        for name in ("changes", "lint-documentation", "lint-workflows", "gitleaks"):
+            self.assertIn(
+                "    if: ${{ github.event_name != 'schedule' && !("
+                + METADATA_EDIT + ") }}\n", job(name),
+            )
+        for name in ("ci-summary", "ci-result"):
+            self.assertIn(
+                "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
+            )
+        for name in ("lint-configuration", "docker-image-verify-pins",
+                     "lightweight-analyzers", "static-analyzers", "test", "docker-build"):
+            self.assertRegex(job(name), r"    needs:(?: changes\n|\n      - changes\n)")
+            self.assertNotIn("always()", job(name).split("    steps:", 1)[0])
+        for name in ("security-check", "docker-image-check-updates"):
+            self.assertIn("needs.changes.result == 'success'", job(name))
+        self.assertIn("github.event_name == 'push'", job("report"))
+        self.assertIn("      - edited\n", CONTENT.split("  merge_group:", 1)[0])
+        self.assertIn(
+            "    name: ${{ " + METADATA_EDIT
+            + " && 'Metadata-only PR edit (no validation)' || 'Validate CI result' }}\n",
+            job("ci-result"),
+        )
+
     def test_only_image_update_availability_is_advisory(self):
         section = job("docker-image-check-updates")
         self.assertIn("run: bash scripts/docker-images.sh check-updates --advisory\n", section)
@@ -88,8 +152,10 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         concurrency = CONTENT.split("concurrency:\n", 1)[1].split("jobs:\n", 1)[0]
         self.assertEqual(
             concurrency,
+            "  # Metadata-only edits must not cancel validation of the unchanged PR commit.\n"
             "  group: ${{ github.workflow }}-${{ github.ref }}"
-            "${{ github.event_name == 'schedule' && '-schedule' || '' }}\n"
+            "${{ github.event_name == 'schedule' && '-schedule' || '' }}"
+            "${{ " + METADATA_EDIT + " && '-metadata' || '' }}\n"
             "  cancel-in-progress: true\n",
         )
 
@@ -217,11 +283,16 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 "&& needs.changes.outputs.code == 'false'))) }}", job(name),
             )
         for name in ("lint-documentation", "lint-workflows", "gitleaks"):
-            self.assertIn("    if: ${{ github.event_name != 'schedule' }}\n", job(name))
+            self.assertIn(
+                "    if: ${{ github.event_name != 'schedule' && !("
+                + METADATA_EDIT + ") }}\n", job(name),
+            )
             self.assertNotIn("needs.changes", job(name))
         for name in ("ci-summary", "ci-result"):
             self.assertIn("      - changes\n", job(name))
-            self.assertIn("    if: ${{ !cancelled() }}\n", job(name))
+            self.assertIn(
+                "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
+            )
 
 
 class ChangeDetectionTest(unittest.TestCase):

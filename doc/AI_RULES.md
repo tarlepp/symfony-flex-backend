@@ -167,6 +167,13 @@ Scheduled CI runs use a separate concurrency group from non-scheduled runs
 on the same ref, so `master` pushes do not cancel periodic checks.
 Cancellation of superseded runs within each group remains enabled.
 
+Confirmed title/body-only PR edits skip core CI jobs and use an isolated
+`-metadata` concurrency group. Base-branch edits and unclear payloads still
+validate. The skipped metadata final job has a distinct name,
+`Metadata-only PR edit (no validation)`, so it cannot overwrite the required
+`Validate CI result` context with a skipped success. Existing validation of the
+unchanged commit remains authoritative. Other workflows retain their filters.
+
 Separate workflows cover the rest of the pipeline: `dependency-review.yml`
 (pull request dependency review), `vulnerability-scan.yml` (daily Trivy scan
 of the development and production images, with SARIF upload), `scorecard.yml`

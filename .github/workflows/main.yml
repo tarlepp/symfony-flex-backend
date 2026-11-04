@@ -25,13 +25,14 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}${{ github.event_name == 'schedule' && '-schedule' || '' }}
+  # Metadata-only edits must not cancel validation of the unchanged PR commit.
+  group: ${{ github.workflow }}-${{ github.ref }}${{ github.event_name == 'schedule' && '-schedule' || '' }}${{ github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null) && '-metadata' || '' }}
   cancel-in-progress: true
 jobs:
   changes:
     name: Detect changed files
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     timeout-minutes: 5
     outputs:
       code: ${{ steps.detect.outputs.code }}
@@ -115,7 +116,7 @@ jobs:
   lint-documentation:
     name: Lint documentation files
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     timeout-minutes: 10
 
     steps:
@@ -140,7 +141,7 @@ jobs:
   lint-workflows:
     name: Validate GitHub workflows
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     timeout-minutes: 10
     steps:
       - *harden_runner_step
@@ -185,7 +186,7 @@ jobs:
   gitleaks:
     name: Gitleaks scan
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     timeout-minutes: 5
     steps:
       - *harden_runner_step
@@ -371,7 +372,7 @@ jobs:
       - security-check
       - lightweight-analyzers
       - static-analyzers
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     steps:
       - *harden_runner_step
 
@@ -701,7 +702,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
   ci-result:
-    name: Validate CI result
+    name: ${{ github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null) && 'Metadata-only PR edit (no validation)' || 'Validate CI result' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     needs:
@@ -711,7 +712,7 @@ jobs:
       - static-analyzers
       - test
       - docker-build
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     steps:
       - *harden_runner_step
 
