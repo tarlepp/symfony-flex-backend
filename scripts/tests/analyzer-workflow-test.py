@@ -153,7 +153,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertNotIn("needs.changes", job(name))
         for name in ("ci-summary", "ci-result"):
             self.assertIn("      - changes\n", job(name))
-            self.assertIn("    if: ${{ always() }}\n", job(name))
+            self.assertIn("    if: ${{ !cancelled() }}\n", job(name))
 
 
 class ChangeDetectionTest(unittest.TestCase):
