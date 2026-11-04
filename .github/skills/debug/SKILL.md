@@ -1,8 +1,6 @@
 ---
 name: debug
-description: >-
-  Diagnose unexpected behavior, runtime errors, and failing tests in this
-  Symfony backend using repository evidence and focused reproduction.
+description: Diagnose unexpected behavior, runtime errors, and failing tests in this Symfony backend using repository evidence and focused reproduction.
 ---
 
 # What is this?
