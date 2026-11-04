@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa84a4de081245445a9bdbbf7cbb2e5a",
+    "content-hash": "82875347b305994a9a6903e2db088b73",
     "packages": [],
     "packages-dev": [
         {
@@ -4463,16 +4463,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "13.3.7",
+            "version": "13.3.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ecsphp/ecs.git",
-                "reference": "3716728056141c461b9f16e1facf55eb2d776449"
+                "reference": "712df94dba55ddda2a8f360a65c13fa3160f24b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ecsphp/ecs/zipball/3716728056141c461b9f16e1facf55eb2d776449",
-                "reference": "3716728056141c461b9f16e1facf55eb2d776449",
+                "url": "https://api.github.com/repos/ecsphp/ecs/zipball/712df94dba55ddda2a8f360a65c13fa3160f24b2",
+                "reference": "712df94dba55ddda2a8f360a65c13fa3160f24b2",
                 "shasum": ""
             },
             "require": {
@@ -4505,9 +4505,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ecsphp/ecs/issues",
-                "source": "https://github.com/ecsphp/ecs/tree/13.3.7"
+                "source": "https://github.com/ecsphp/ecs/tree/13.3.12"
             },
-            "time": "2026-10-14T21:46:31+00:00"
+            "time": "2026-10-29T14:53:28+00:00"
         },
         {
             "name": "webmozart/assert",
