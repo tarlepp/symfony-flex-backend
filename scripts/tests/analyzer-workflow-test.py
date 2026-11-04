@@ -47,6 +47,28 @@ def dependencies(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_both_required_workflows_validate_merge_groups(self):
+        review = (WORKFLOW.parent / "dependency-review.yml").read_text()
+        self.assertEqual(
+            review.split("on:\n", 1)[1].split("\npermissions:", 1)[0],
+            "  pull_request:\n  merge_group:\n    types:\n      - checks_requested\n",
+        )
+        self.assertIn("  merge_group:\n    types:\n      - checks_requested\n", CONTENT)
+        self.assertIn("\npermissions:\n  contents: read\n", review)
+        self.assertIn("\n  dependency-review:\n", review)
+        self.assertNotIn("    if:", review)
+        self.assertNotIn("continue-on-error", review)
+        self.assertNotIn("warn-only:", review)
+        self.assertNotIn("pull_request_target:", review)
+        self.assertIn("          persist-credentials: false\n", review)
+        action = re.search(r"        uses: actions/dependency-review-action@\S+.*\n", review)
+        self.assertIsNotNone(action)
+        self.assertRegex(action.group(), r"@[a-f0-9]{40}")
+        # Native action defaults select PR or merge-group base/head SHAs.
+        self.assertEqual(review.split(action.group(), 1)[1].strip(), "")
+        self.assertEqual(self.run_gate("ci-summary", "merge_group").returncode, 0)
+        self.assertEqual(self.run_gate("ci-result", "merge_group").returncode, 0)
+
     def test_every_core_job_is_checked_by_the_required_gate(self):
         names = set(re.findall(r"^  ([a-z][a-z-]*):$", CONTENT.split("jobs:\n", 1)[1],
                                re.MULTILINE))

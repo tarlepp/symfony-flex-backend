@@ -175,7 +175,8 @@ validate. The skipped metadata final job has a distinct name,
 unchanged commit remains authoritative. Other workflows retain their filters.
 
 Separate workflows cover the rest of the pipeline: `dependency-review.yml`
-(pull request dependency review), `vulnerability-scan.yml` (daily Trivy scan
+(pull request and merge-group dependency review), `vulnerability-scan.yml`
+(daily Trivy scan
 of the development and production images, with SARIF upload), `scorecard.yml`
 (OpenSSF Scorecard) and `codeql.yml` (CodeQL analysis of the workflow files).
 
