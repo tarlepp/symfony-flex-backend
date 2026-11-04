@@ -85,11 +85,11 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             covered.add(name)
 
         visit("ci-result", set())
-        self.assertEqual(names - covered, {"report"})
+        self.assertEqual(names - covered, set())
         for name in covered:
             header = job(name).split("    steps:", 1)[0]
             self.assertNotRegex(header, r"^    continue-on-error:", name)
-        self.assertNotIn("report", covered)
+        self.assertIn("report", covered)
 
     def test_gate_dependencies_have_real_result_bindings(self):
         for name in ("ci-summary", "ci-result"):
@@ -110,6 +110,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
                 self.assertEqual(self.run_gate(name, event).returncode, 0)
                 for variable in variables:
+                    if variable == "REPORT" and event in ("merge_group", "workflow_dispatch"):
+                        continue
                     for result in ("failure", "cancelled", "skipped", "", "unknown"):
                         with self.subTest(gate=name, event=event, variable=variable,
                                           result=result):
@@ -264,7 +266,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                                 or (event == "push" and ref == "refs/heads/master")
                             )
                             self.assertEqual(result, expected)
-        self.assertNotIn("report", dependencies("ci-result"))
+        self.assertIn("report", dependencies("ci-result"))
         self.assertIn("          ref: ${{ github.sha }}\n", section)
         self.assertIn("          persist-credentials: false\n", section)
         self.assertIn("    permissions:\n      contents: read\n", section)
@@ -303,6 +305,61 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "needs.changes.outputs.code == 'true' }}\n", job("test"),
         )
 
+    def test_coveralls_install_and_upload_use_the_development_container(self):
+        section = job("report")
+        self.assertIn(
+            "        run: docker compose -f compose.yaml -f docker/ci-compose.yaml "
+            "exec -T php composer install --working-dir=tools/06_php-coveralls "
+            "--no-progress --optimize-autoloader\n", section,
+        )
+        upload = re.search(
+            r"^      - name: Report results to Coveralls[^\n]*\n"
+            r"(.*?)(?=^      - |\Z)", section, re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(upload)
+        script = textwrap.dedent(upload.group(1).split("        run: |\n", 1)[1]
+                                 .split("        env:\n", 1)[0])
+        command = shlex.split(script.replace("\\\n", ""))
+        self.assertEqual(
+            command[:9],
+            ["docker", "compose", "-f", "compose.yaml", "-f",
+             "docker/ci-compose.yaml", "exec", "-T", "--env"],
+        )
+        forwarded = command[8:-4]
+        self.assertEqual(forwarded[::2], ["--env"] * 7)
+        self.assertEqual(
+            set(forwarded[1::2]),
+            {"GITHUB_TOKEN", "COVERALLS_REPO_TOKEN", "COVERALLS_RUN_LOCALLY",
+             "GITHUB_ACTIONS", "GITHUB_EVENT_NAME", "GITHUB_REF", "GITHUB_RUN_ID"},
+        )
+        self.assertEqual(
+            command[-4:],
+            ["php", "php", "./tools/06_php-coveralls/vendor/bin/php-coveralls", "-v"],
+        )
+        self.assertLess(
+            section.index("Bootstrap PHP tools"), section.index("Install Coveralls reporter"),
+        )
+        self.assertLess(
+            section.index("Install Coveralls reporter"), section.index("Report results to Coveralls"),
+        )
+
+    def test_reporting_gate_requires_success_only_on_eligible_events(self):
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch", "schedule"):
+            for ref in ("refs/heads/master", "refs/heads/feature", "refs/pull/42/merge"):
+                expected = "success" if (
+                    event == "pull_request"
+                    or (event == "push" and ref == "refs/heads/master")
+                ) else "skipped"
+                for result in ("success", "failure", "cancelled", "skipped", "", "unknown"):
+                    with self.subTest(event=event, ref=ref, result=result):
+                        outcome = self.run_gate(
+                            "ci-result", event,
+                            "skipped" if event == "schedule" else "success",
+                            REF=ref, REPORT=result,
+                        )
+                        self.assertEqual(outcome.returncode == 0, result == expected,
+                                         outcome.stdout)
+
     def test_early_test_or_build_success_cannot_bypass_failed_gate(self):
         for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
             for variable in ("CI_SUMMARY", "TEST", "DOCKER_BUILD"):
@@ -311,7 +368,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         outcome = self.run_gate("ci-result", event, **{variable: result})
                         self.assertNotEqual(outcome.returncode, 0, outcome.stdout)
         section = job("ci-result")
-        for name in ("ci-summary", "test", "docker-build"):
+        for name in ("ci-summary", "test", "docker-build", "report"):
             self.assertIn(f"      - {name}\n", section)
 
     def test_scheduled_concurrency_is_isolated_without_changing_other_events(self):
@@ -330,7 +387,9 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         script = textwrap.dedent(section.split("        run: |\n")[-1])
         variables = re.findall(r"^          ([A-Z_]+):", section, re.MULTILINE)
         environment = dict(os.environ, **dict.fromkeys(variables, "success"))
-        environment.update(EVENT_NAME=event, CODE_CHANGED="true")
+        environment.update(EVENT_NAME=event, CODE_CHANGED="true", REF="refs/heads/master")
+        if event in ("merge_group", "workflow_dispatch"):
+            environment["REPORT"] = "skipped"
         if event == "schedule":
             for variable in variables:
                 if variable not in (
@@ -388,7 +447,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def documentation_gate(self, name, **overrides):
         variables = (
             "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
-            "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
+            "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD", "REPORT",
         )
         environment = dict.fromkeys(variables, "skipped")
         environment.update(CODE_CHANGED="false")
@@ -400,11 +459,11 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertEqual(self.documentation_gate(name).returncode, 0)
             variables = re.findall(r"^          ([A-Z_]+):", job(name), re.MULTILINE)
             for variable in variables:
-                if variable in ("EVENT_NAME", "CODE_CHANGED"):
+                if variable in ("EVENT_NAME", "CODE_CHANGED", "REF"):
                     continue
                 expected = "skipped" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
-                    "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
+                    "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD", "REPORT",
                 ) else "success"
                 for result in ("success", "failure", "cancelled", "skipped", "", "unknown"):
                     if result == expected:

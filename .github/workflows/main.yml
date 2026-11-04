@@ -616,11 +616,15 @@ jobs:
           cache-dependencies: 'true'
 
       - name: Install Coveralls reporter
-        run: composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
+        run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
-        run: ./tools/06_php-coveralls/vendor/bin/php-coveralls -v
+        run: |
+          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T \
+            --env GITHUB_TOKEN --env COVERALLS_REPO_TOKEN --env COVERALLS_RUN_LOCALLY \
+            --env GITHUB_ACTIONS --env GITHUB_EVENT_NAME --env GITHUB_REF --env GITHUB_RUN_ID \
+            php php ./tools/06_php-coveralls/vendor/bin/php-coveralls -v
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -710,6 +714,7 @@ jobs:
       - static-analyzers
       - test
       - docker-build
+      - report
     if: ${{ !cancelled() && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
     steps:
       - *harden_runner_step
@@ -717,6 +722,7 @@ jobs:
       - name: Validate final job results
         env:
           EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
           CHANGES: ${{ needs.changes.result }}
           CODE_CHANGED: ${{ needs.changes.outputs.code }}
           CI_SUMMARY: ${{ needs.ci-summary.result }}
@@ -724,6 +730,7 @@ jobs:
           LIGHTWEIGHT_ANALYZERS: ${{ needs.lightweight-analyzers.result }}
           TEST: ${{ needs.test.result }}
           DOCKER_BUILD: ${{ needs.docker-build.result }}
+          REPORT: ${{ needs.report.result }}
         run: |
           echo "Event: $EVENT_NAME"
           echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
@@ -732,6 +739,7 @@ jobs:
           echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"
           echo "PHPUnit result: $TEST"
           echo "Docker build matrix result: $DOCKER_BUILD"
+          echo "External reporting result: $REPORT"
 
           # Scheduled runs skip change detection and application jobs.
           # Application jobs may also be skipped, but only when change
@@ -752,9 +760,18 @@ jobs:
             fi
           fi
 
+          report_expected=skipped
+          if [ "$expected_skipped" = "success" ] && {
+            [ "$EVENT_NAME" = "pull_request" ] ||
+            { [ "$EVENT_NAME" = "push" ] && [ "$REF" = "refs/heads/master" ]; }
+          }; then
+            report_expected=success
+          fi
+
           test "$CHANGES" = "$changes_expected"
           test "$CI_SUMMARY" = "success"
           test "$STATIC_ANALYZERS" = "$analyzers_expected"
           test "$LIGHTWEIGHT_ANALYZERS" = "$analyzers_expected"
           test "$TEST" = "$expected_skipped"
           test "$DOCKER_BUILD" = "$expected_skipped"
+          test "$REPORT" = "$report_expected"
