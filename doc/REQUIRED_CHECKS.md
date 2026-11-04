@@ -7,6 +7,10 @@ This document describes which GitHub checks should block merging into
 verify the repository settings. The settings live in GitHub, not in the
 repository, so this document is the source for what they should be.
 
+For workflow triggers, execution graphs, job details, reports and local
+reproduction, see the [GitHub workflow guide](GITHUB_WORKFLOWS.md).
+This document stays focused on merge protection and repository settings.
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
@@ -26,75 +30,24 @@ repository, so this document is the source for what they should be.
 
 <a id="workflow-overview"></a>
 
-Workflows live in `.github/workflows/`; `main.yml` is the core pipeline.
+Core CI in [`main.yml`](../.github/workflows/main.yml) aggregates its checks
+through `Validate CI result`. The separate
+[`dependency-review.yml`](../.github/workflows/dependency-review.yml) reports
+`dependency-review`. Require both; the core aggregate cannot cover a separate
+workflow.
 
-Confirmed title/body-only PR edits skip all core CI jobs, without changing the
-required contexts for validation runs. Base changes and unclear edit payloads
-still validate. Metadata-only runs have isolated concurrency and a distinct
-skipped final context, `Metadata-only PR edit (no validation)`. Never require
-that context or rename it to `Validate CI result`: a skipped metadata check must
-not mask an earlier failed validation of the same commit. Existing required
-validation remains authoritative; a metadata edit does not repair failed CI.
+The [event tables](GITHUB_WORKFLOWS.md#when-workflows-run) and
+[job dependency graph](GITHUB_WORKFLOWS.md#job-dependency-graph) explain which
+jobs run and how they reach the gate. Eligible external reporting is enforced
+through `Validate CI result`, not a separate required context. Scheduled
+maintenance, Scorecard and CodeQL are not additional required checks under the
+current policy.
 
-* `main.yml` (`CI`): pull requests, `master` pushes, `merge_group`, manual
-  runs and a daily schedule. It is the only pull request pipeline that runs
-  the application checks. Scheduled runs execute only `security-check` and
-  `docker-image-check-updates`. Required through `Validate CI result`.
-* `dependency-review.yml` (`Dependency Review`): pull requests and merge groups.
-  Reviews dependency changes for known vulnerabilities. Required as
-  `dependency-review`.
-* `vulnerability-scan.yml` (`Vulnerability Scan`): daily and manual. Builds
-  and scans the development and production images with Trivy, enforcing
-  `CRITICAL,HIGH` fixable findings, and uploads SARIF to code scanning. Not
-  a pull request check, so never required.
-* `scorecard.yml` (`Scorecard supply-chain security`): `master` pushes,
-  weekly schedule and branch protection rule changes. Publishes OpenSSF
-  Scorecard results. Never required.
-* `codeql.yml` (`CodeQL`): pull requests, `master` pushes, weekly schedule
-  and manual runs. Analyzes the workflow files only. Not required unless
-  you decide that code scanning findings should block merging.
-
-Jobs in `main.yml`, in dependency order:
-
-Docker update availability is advisory on every event. The image-update job
-still must succeed: registry/checker errors, invalid update pins and regression
-failures remain blocking. Confirmed updates emit warnings and a maintenance
-summary instead of failing. Base-pin and vulnerability policies are unchanged.
-
-* No dependencies: `Detect changed files`, `Lint documentation files`,
-  `Validate GitHub workflows` and `Gitleaks scan`.
-* After change detection: `Lint configuration`, `PHP Security Checker`,
-  `Verify Docker base image pins (multi-platform)`,
-  `Check Docker image versions`, `Lightweight static analyzers` and the
-  `Static analyzers (...)` matrix (Psalm, PHPStan and PHP Insights).
-  These skip confirmed Markdown-only PRs. Periodic security/update checks
-  still run on schedules even though change detection is skipped.
-* `Validate CI prerequisites` (`ci-summary`): needs all of the above,
-  including change detection.
-* `PHPUnit tests` and `Build application Docker image (...)`: need
-  only successful change detection, so run in parallel with prerequisite
-  checks; skipped for Markdown-only pull requests and schedules.
-* `External reporting`: eligible on all PRs and successful `master` pushes,
-  after both `PHPUnit tests` and `ci-summary` succeed. Each upload requires its
-  optional token; upload errors fail the reporting job and workflow. Fork PRs
-  run the job without repository secrets and skip uploads. Markdown-only PRs
-  skip reporting because tests and artifacts are skipped. Eligible reporting
-  must succeed for the final merge gate to pass.
-* `Validate CI result` (`ci-result`): needs change detection, the
-  prerequisite gate, the lightweight analyzers, the analyzer matrix, tests
-  Docker builds and external reporting. This is the merge gate.
-
-Both aggregate gates use `!cancelled()`: failed or skipped dependencies still
-reach their result checks, while workflow cancellation stops the gates and
-releases the concurrency slot for the next run. Container cleanup steps remain
-unconditional with `always()`. `make lint-workflows` includes offline
-regressions that execute both gates' actual Bash checks. They verify every
-dependency's failure, cancellation and skip outcomes across validation events,
-exact scheduled and Markdown-only exceptions, result bindings, and transitive
-coverage of every job. Reporting must succeed on code PRs and `master` pushes;
-it must be skipped on schedules, manual runs, merge groups and Markdown-only
-PRs. These tests do not execute GitHub jobs or verify branch-protection
-settings.
+Confirmed title/body-only PR edits use the distinct skipped context
+`Metadata-only PR edit (no validation)`. Never require that context or rename
+it to `Validate CI result`: a skipped metadata check must not mask an earlier
+failed validation of the same commit. Existing required validation remains
+authoritative; a metadata edit does not repair failed CI.
 
 ## Current state [ᐞ](#table-of-contents)
 
@@ -136,8 +89,9 @@ request run, not workflow display labels.
 
 Require only these two. Jobs behind the aggregate gate, including
 `Validate CI prerequisites`, `PHPUnit tests` and the Docker builds, do not
-need their own entries, and adding a job or matrix target only means adding
-it to the `needs` of `ci-result`.
+need their own entries. Keep new jobs covered by the aggregate's dependency
+graph and result checks; a new variant of an already-covered matrix remains
+covered without a separate branch-protection entry.
 
 Rules for this set:
 
@@ -154,8 +108,9 @@ Rules for this set:
   (directly or through a job that is), or it is not part of the merge gate.
 * A job skipped because the gate failed counts as passing for GitHub. This is
   safe only while the gate itself is required and fails first.
-* Matrix jobs need one required entry per expanded name. Adding a matrix
-  target means adding its context here and in the branch protection.
+* If requiring a matrix job directly instead of through the aggregate, each
+  expanded name needs its own entry. The current policy uses the aggregate,
+  so adding a matrix target does not require a new required context.
 * Select the GitHub Actions app as the source of each check, so a third-party
   app cannot satisfy it by reporting the same name.
 * `External reporting` is eligible on PRs and successful `master` pushes and
@@ -164,9 +119,9 @@ Rules for this set:
   uploads still skip without their tokens.
 * The scheduled runs of `main.yml` and `vulnerability-scan.yml` are not pull
   request checks and must not be required.
-* The current per-job entries (lint, security, gitleaks, pin verification,
-  PHPUnit, Docker builds) are redundant with `Validate CI result`. Remove
-  them once the aggregate gate has run successfully on a pull request.
+* Per-job entries (lint, security, Gitleaks, pin verification, PHPUnit,
+  Docker builds) would be redundant with `Validate CI result`; do not
+  reintroduce them when updating branch protection.
 
 ## Protected branches [ᐞ](#table-of-contents)
 

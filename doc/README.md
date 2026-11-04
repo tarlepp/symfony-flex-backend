@@ -28,6 +28,7 @@ application.
 * [Docker multi-platform images](DOCKER_MULTI_PLATFORM.md)
 * [Event listeners and subscribers](EVENT_HANDLING.md)
 * [Feature delivery agents](FEATURE_AGENTS.md)
+* [GitHub workflows and execution graphs](GITHUB_WORKFLOWS.md)
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
 * [Required checks and branch protection](REQUIRED_CHECKS.md)
 * [Security policy](SECURITY.md)
@@ -42,6 +43,7 @@ For the most common starting points:
 * New contributor setup: [`../README.md`](../README.md)
 * AI-assisted change policy: [`AI_RULES.md`](AI_RULES.md)
 * Day-to-day commands: [`COMMANDS.md`](COMMANDS.md)
+* CI events, jobs and troubleshooting: [`GITHUB_WORKFLOWS.md`](GITHUB_WORKFLOWS.md)
 * GitHub Actions pin maintenance: [`ACTIONS_UPDATE.md`](ACTIONS_UPDATE.md)
 
 ---
