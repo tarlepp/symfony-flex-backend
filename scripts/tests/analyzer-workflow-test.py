@@ -287,13 +287,16 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 section, re.MULTILINE | re.DOTALL,
             )
             self.assertIsNotNone(step)
-            self.assertIn("        continue-on-error: true\n", step.group(1))
+            self.assertNotIn("continue-on-error", step.group(1))
             self.assertIn("        if: ${{ env." + token + " != '' }}\n", step.group(1))
             self.assertIn(token + ": ${{ secrets." + token + " }}\n", step.group(1))
         self.assertIn(
             "      - name: Prepare reports for host-side SonarQube scan\n"
             "        if: ${{ env.SONAR_TOKEN != '' }}\n", section,
         )
+        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("|| true", section)
+        self.assertIn("      - *stop_php_step\n", section)
         # Markdown-only PRs skip tests, so success() prevents artifact downloads.
         self.assertIn(
             "    if: ${{ github.event_name != 'schedule' && "

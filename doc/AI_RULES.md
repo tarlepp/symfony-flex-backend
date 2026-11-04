@@ -142,8 +142,9 @@ contains:
 * optional coverage and Sonar reporting on all PRs and successful `master`
   pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
   outside the core CI gate and not required for merging. Uploads require their
-  respective optional tokens and are non-blocking. Fork PRs run the job without
-  repository secrets and skip uploads; Markdown-only PRs skip reporting
+  respective optional tokens; upload errors fail the reporting job and workflow.
+  Fork PRs run the job without repository secrets and skip uploads;
+  Markdown-only PRs skip reporting
   because tests and artifacts are skipped.
 
 Both aggregate gates use `!cancelled()` at job level. They still run after

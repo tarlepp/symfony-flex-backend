@@ -218,9 +218,10 @@ requires the prerequisite gate, all analyzers, tests and both image builds.
 External reporting is eligible on all PRs and successful pushes to `master`,
 but requires both successful tests and the prerequisite gate (`ci-summary`),
 so early test success cannot publish reports after failed prerequisite checks.
-Coveralls and SonarCloud uploads require their respective optional tokens and
-are non-blocking. Fork PRs run the job without repository secrets and skip
-uploads. Markdown-only PRs skip reporting because tests and artifacts are
+Coveralls and SonarCloud uploads require their respective optional tokens;
+upload errors fail the reporting job and workflow. Fork PRs run the job
+without repository secrets and skip uploads. Markdown-only PRs skip reporting
+because tests and artifacts are
 skipped; schedules also skip reporting. It remains outside the core CI gate
 and is not a required merge check.
 

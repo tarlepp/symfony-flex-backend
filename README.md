@@ -365,8 +365,8 @@ protection](doc/REQUIRED_CHECKS.md) and the
 The Coveralls, CodeClimate and SonarCloud badges come from
 external services. GitHub Actions uploads reports only to Coveralls and
 SonarCloud on all PRs and successful pushes to `master`, after both tests and
-`ci-summary` succeed. Each upload requires its optional token and is
-non-blocking; external reporting stays outside the core gate and is not
+`ci-summary` succeed. Each upload requires its optional token; upload errors
+fail the reporting job. External reporting stays outside the core gate and is not
 required for merging. Fork PRs run the job without repository secrets and skip
 uploads. Markdown-only PRs skip reporting because tests and artifacts are
 skipped.

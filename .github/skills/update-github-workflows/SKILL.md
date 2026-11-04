@@ -95,9 +95,9 @@ replacement for their actual event filters and conditions:
    renaming a prerequisite, update its `needs` entry and result
    checks/messages together. Check failure, cancellation, and skipped-job
    paths, not only success. Do not use `continue-on-error` or permissive
-   result checks to make a required failure appear green; only the
-   third-party reporting steps in `report` and the informational job
-   summary may be non-blocking.
+   result checks to make a failure appear green. Reporting upload failures
+   must fail `report`, even though it remains outside the required merge gate.
+   Only the informational job summary may be non-blocking.
 4. Preserve shared setup contracts. Inspect all callers before changing
    `php-bootstrap` defaults or input names. Its boolean-like inputs are
    strings compared with `'true'`; preserve compatible caller values.
@@ -135,8 +135,9 @@ replacement for their actual event filters and conditions:
 7. Preserve reporting and artifact contracts. External coverage/Sonar uploads
    are eligible on all PRs and successful `master` pushes, after both tests and
    `ci-summary` succeed. They remain outside the core CI gate and are not
-   required checks. Each upload requires its optional token and is non-blocking;
-   fork PRs run the job without repository secrets and skip uploads.
+   required checks. Each upload requires its optional token; upload errors
+   fail the reporting job and workflow. Fork PRs run the job without repository
+   secrets and skip uploads.
    Markdown-only PRs skip reporting because tests and artifacts are skipped.
    Keep core tests independent of those uploads.
    Verify producer paths match upload paths for coverage, analyzer reports,
