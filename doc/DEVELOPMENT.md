@@ -221,9 +221,8 @@ so early test success cannot publish reports after failed prerequisite checks.
 Coveralls and SonarCloud uploads require their respective optional tokens;
 upload errors fail the reporting job and workflow. Fork PRs run the job
 without repository secrets and skip uploads. Markdown-only PRs skip reporting
-because tests and artifacts are
-skipped; schedules also skip reporting. It remains outside the core CI gate
-and is not a required merge check.
+because tests and artifacts are  skipped; schedules also skip reporting. It
+remains outside the core CI gate and is not a required merge check.
 
 The PHPUnit MariaDB service uses the same version and multi-platform digest as
 `docker/mariadb/Dockerfile`. Update both references together when changing the

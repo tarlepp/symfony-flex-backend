@@ -137,9 +137,8 @@ replacement for their actual event filters and conditions:
    `ci-summary` succeed. They remain outside the core CI gate and are not
    required checks. Each upload requires its optional token; upload errors
    fail the reporting job and workflow. Fork PRs run the job without repository
-   secrets and skip uploads.
-   Markdown-only PRs skip reporting because tests and artifacts are skipped.
-   Keep core tests independent of those uploads.
+   secrets and skip uploads. Markdown-only PRs skip reporting because tests
+   and artifacts are skipped. Keep core tests independent of those uploads.
    Verify producer paths match upload paths for coverage, analyzer reports,
    metrics, and SARIF; keep names unique across matrix jobs where required. Do
    not upload JWT keys, environment secrets, or unrelated workspace contents.

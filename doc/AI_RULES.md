@@ -144,8 +144,7 @@ contains:
   outside the core CI gate and not required for merging. Uploads require their
   respective optional tokens; upload errors fail the reporting job and workflow.
   Fork PRs run the job without repository secrets and skip uploads;
-  Markdown-only PRs skip reporting
-  because tests and artifacts are skipped.
+  Markdown-only PRs skip reporting because tests and artifacts are skipped.
 
 Both aggregate gates use `!cancelled()` at job level. They still run after
 failed or skipped prerequisites, but stop when the workflow is cancelled so
