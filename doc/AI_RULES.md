@@ -138,7 +138,7 @@ contains:
   static-analysis job results,
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
   both static-analysis jobs, tests, Docker builds and eligible external
-  reporting, and is the required  merge check together with
+  reporting, and is the required merge check together with
   `dependency-review`, and
 * optional coverage and Sonar reporting on all PRs and successful `master`
   pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
@@ -153,12 +153,14 @@ superseded runs release their concurrency slot. Container cleanup steps retain
 `always()`. `make lint-workflows` checks these guards and runs offline
 regressions of the actual gate result scripts; it does not execute GitHub jobs.
 
-The workflow also runs on `merge_group` events. Scheduled runs execute only
-the periodic `security-check` and `docker-image-check-updates` jobs; every
-other check job is skipped. Markdown-only PRs retain documentation checks,
-workflow validation and Gitleaks (plus separate Dependency Review and CodeQL).
-Both gates accept skips of application-related jobs only when change detection
-succeeded and reported `code=false` on a pull request.
+The workflow also runs on `merge_group` events. Scheduled runs execute the
+periodic `security-check` and `docker-image-check-updates` jobs and both
+aggregate gates; other check jobs are skipped. Markdown-only PRs retain
+documentation checks, workflow validation and Gitleaks (plus separate
+Dependency Review and CodeQL). Both gates accept skips of
+application-related jobs on schedules or when change  detection succeeded and
+reported `code=false` on a pull request. External reporting additionally skips
+manual runs and merge groups.
 
 Docker update availability uses the checker's explicit advisory mode on every
 event: confirmed newer stable multi-platform images produce warnings rather

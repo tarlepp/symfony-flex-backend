@@ -49,8 +49,9 @@ For pull requests, start with the **Checks** tab:
   aggregate's final `test` command.
 * Markdown-only PRs intentionally skip application tests and image builds.
   Editing only a PR title or body does not repeat core validation.
-* A green PR does not imply the daily image scan or external reporting ran.
-  These have different triggers and are not merge requirements.
+* A green PR does not imply the daily image scan or external uploads ran.
+  The scan has separate triggers; uploads require tokens, and Markdown-only
+  PRs skip reporting. Eligible reporting is enforced by the core gate.
 
 To run a workflow manually, select it under **Actions > Run workflow**, choose
 the branch and confirm. Only workflows with `workflow_dispatch` expose this
@@ -99,7 +100,7 @@ default branch and may be delayed; they are not exact-time guarantees.
 Core CI's schedule also runs its two aggregate gates to validate the periodic
 results. It does **not** run PHPUnit, PHP analyzers or the core image-build
 matrix. A manual CI run, unlike a scheduled one, runs full validation even
-when the selected branch changes only Markdown.
+when the selected branch changes only Markdown, but skips external reporting.
 
 ## Core CI execution [ᐞ](#table-of-contents)
 
@@ -158,7 +159,7 @@ flowchart TD
     Builds["docker-build: development + production"]
     Prereq["ci-summary: Validate CI prerequisites"]
     Final["ci-result: Validate CI result"]
-    Report["report: External reporting (master pushes only)"]
+    Report["report: External reporting (PRs + master pushes)"]
     Changes --> Checks
     Changes --> Images
     Changes --> Analyzers
@@ -176,13 +177,15 @@ flowchart TD
     Builds --> Final
     Prereq --> Report
     Tests --> Report
+    Report --> Final
 ```
 
 Tests and image builds start after successful change detection, **without
 waiting for prerequisite checks**. This gives earlier feedback but can spend
 compute even if lint or security checks subsequently fail. External reporting
-waits for successful tests and the prerequisite gate, but is outside the final
-merge gate. Dependency Review is separate from this graph and is required too.
+waits for successful tests and the prerequisite gate. Eligible reporting must
+succeed for the final merge gate to pass. Dependency Review is separate from
+this graph and is required too.
 
 ### Job reference [ᐞ](#table-of-contents)
 
@@ -206,7 +209,7 @@ Display names appear in GitHub's run graph and logs.
 | `test` | PHPUnit, coverage and PhpMetrics reports |
 | `docker-build` | Build and Trivy-scan development and production images |
 | `ci-summary` | Validate expected prerequisite results |
-| `report` | Optional Coveralls and SonarCloud uploads |
+| `report` | Coveralls/SonarCloud uploads; eligible job must succeed |
 | `ci-result` | Validate the combined core CI result |
 
 Documentation, workflow validation and Gitleaks have no dependency on change
@@ -227,10 +230,11 @@ one failing variant does not cancel the others.
 <a id="gates-and-cancellation"></a>
 
 `ci-summary` checks every prerequisite result. `ci-result` checks change
-detection, the prerequisite gate, both analyzer jobs, PHPUnit and the Docker
-matrix. Ordinary validation requires success; only the exact scheduled and
-confirmed Markdown-only exceptions allow skips. A skipped job is not general
-permission to merge.
+detection, the prerequisite gate, both analyzer jobs, PHPUnit, the Docker
+matrix and external reporting. Application jobs must succeed except on
+schedules and confirmed Markdown-only PRs. Reporting must succeed on code PRs
+and `master` pushes; it must be skipped on schedules, manual runs, merge groups
+and Markdown-only PRs. A skipped job is not general permission to merge.
 
 Both gates use `!cancelled()`: failed/skipped dependencies still reach their
 result checks, but cancellation stops the gates. Periodic security/update
@@ -339,12 +343,19 @@ reports fail the job. The test/coverage job summary is informational and may
 fail without failing the job; it does not replace the required artifacts.
 PhpMetrics needs a usable JUnit report.
 
-`External reporting` downloads Clover/JUnit artifacts only on successful
-`master` push test/prerequisite results. Coveralls and SonarCloud uploads each
-require their optional token; absent tokens skip the corresponding upload.
-Those third-party upload steps allow failure. Setup or artifact-download
-failures can still fail the reporting job, but that job is outside the merge
-gate. No reports are uploaded to CodeClimate by the active workflow.
+`External reporting` runs on PRs and `master` pushes after both tests and
+`ci-summary` succeed, then downloads Clover/JUnit artifacts. Coveralls and
+SonarCloud uploads each require their optional token; absent tokens skip the
+corresponding upload. Fork PRs run the job without repository secrets and skip
+uploads. Markdown-only PRs skip the job because tests and artifacts are skipped;
+schedules, manual runs and merge groups also skip reporting.
+
+The job installs and runs the isolated Coveralls tool in the Compose PHP
+development container, forwarding its tokens and required GitHub CI metadata.
+SonarCloud uses host-side report copies with relative source paths. Upload,
+setup and artifact-download errors fail the reporting job and workflow;
+eligible reporting must succeed for `Validate CI result` to pass even when
+tokens are absent. No reports are uploaded to CodeClimate by the active workflow.
 
 ## Reproducing checks locally [ᐞ](#table-of-contents)
 
@@ -392,7 +403,7 @@ verification. Never set CI environment flags locally to bypass setup guards.
 | Tests/builds skipped | Event type, change detection and cancellation |
 | Required context stays pending | Branch protection's exact check name |
 | Image update job fails despite advisory mode | Lookup/pin/helper errors |
-| No coverage upload on a PR | Reporting is only for `master` pushes |
+| No coverage upload on a PR | Prerequisite results, docs-only diff, tokens |
 | Missing Coveralls/SonarCloud update | Reporting logs and optional tokens |
 | Trivy report exists but job is red | Enforcement scan after SARIF upload |
 | CodeQL default-setup conflict | Choose default setup or YAML, not both |
