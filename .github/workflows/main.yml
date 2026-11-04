@@ -59,7 +59,7 @@ jobs:
           # Fail safe: anything unclear counts as a code change.
           code=true
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            if files=$(git diff --name-only "$BASE_SHA...$HEAD_SHA") && [ -n "$files" ]; then
+            if files=$(git diff --no-renames --name-only "$BASE_SHA...$HEAD_SHA") && [ -n "$files" ]; then
               echo "Changed files:"
               echo "$files"
               if ! echo "$files" | grep -qvE '\.md$'; then
@@ -73,7 +73,8 @@ jobs:
   lint-configuration:
     name: Lint configuration
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    needs: changes
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -160,6 +161,8 @@ jobs:
   security-check:
     name: PHP Security Checker
     runs-on: ubuntu-24.04
+    needs: changes
+    if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false'))) }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -197,7 +200,8 @@ jobs:
   docker-image-verify-pins:
     name: Verify Docker base image pins (multi-platform)
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    needs: changes
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
     timeout-minutes: 5
     permissions:
       contents: read
@@ -219,6 +223,8 @@ jobs:
   docker-image-check-updates:
     name: Check Docker image versions
     runs-on: ubuntu-24.04
+    needs: changes
+    if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false'))) }}
     timeout-minutes: 10
     permissions:
       contents: read
@@ -268,7 +274,8 @@ jobs:
   lightweight-analyzers:
     name: Lightweight static analyzers
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    needs: changes
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
     timeout-minutes: 10
     steps:
       - *harden_runner_step
@@ -314,7 +321,8 @@ jobs:
   static-analyzers:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' }}
+    needs: changes
+    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -353,6 +361,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     needs:
+      - changes
       - docker-image-check-updates
       - docker-image-verify-pins
       - gitleaks
@@ -369,6 +378,8 @@ jobs:
       - name: Validate prerequisite job results
         env:
           EVENT_NAME: ${{ github.event_name }}
+          CHANGES: ${{ needs.changes.result }}
+          CODE_CHANGED: ${{ needs.changes.outputs.code }}
           SECURITY_CHECK: ${{ needs.security-check.result }}
           LINT_CONFIGURATION: ${{ needs.lint-configuration.result }}
           LINT_DOCUMENTATION: ${{ needs.lint-documentation.result }}
@@ -380,6 +391,7 @@ jobs:
           DOCKER_UPDATES: ${{ needs.docker-image-check-updates.result }}
         run: |
           echo "Event: $EVENT_NAME"
+          echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
           echo "PHP Security Checker result: $SECURITY_CHECK"
           echo "Lint configuration result: $LINT_CONFIGURATION"
           echo "Lint documentation result: $LINT_DOCUMENTATION"
@@ -390,23 +402,33 @@ jobs:
           echo "Docker base image pin verification result: $DOCKER_PINS"
           echo "Docker image version check result: $DOCKER_UPDATES"
 
-          # Scheduled runs execute only the periodic jobs; every other
-          # prerequisite must be skipped there. Elsewhere all must succeed.
+          # Skip only the jobs irrelevant to a confirmed Markdown-only PR.
+          # Scheduled runs execute only the two periodic checks.
           if [ "$EVENT_NAME" = "schedule" ]; then
-            periodic_skipped=skipped
+            test "$CHANGES" = "skipped"
+            application_expected=skipped
+            retained_expected=skipped
+            periodic_expected=success
           else
-            periodic_skipped=success
+            test "$CHANGES" = "success"
+            application_expected=success
+            retained_expected=success
+            periodic_expected=success
+            if [ "$EVENT_NAME" = "pull_request" ] && [ "$CODE_CHANGED" = "false" ]; then
+              application_expected=skipped
+              periodic_expected=skipped
+            fi
           fi
 
-          test "$SECURITY_CHECK" = "success"
-          test "$DOCKER_UPDATES" = "success"
-          test "$LINT_CONFIGURATION" = "$periodic_skipped"
-          test "$LINT_DOCUMENTATION" = "$periodic_skipped"
-          test "$LINT_WORKFLOWS" = "$periodic_skipped"
-          test "$STATIC_ANALYZERS" = "$periodic_skipped"
-          test "$LIGHTWEIGHT_ANALYZERS" = "$periodic_skipped"
-          test "$GITLEAKS" = "$periodic_skipped"
-          test "$DOCKER_PINS" = "$periodic_skipped"
+          test "$SECURITY_CHECK" = "$periodic_expected"
+          test "$DOCKER_UPDATES" = "$periodic_expected"
+          test "$LINT_CONFIGURATION" = "$application_expected"
+          test "$LINT_DOCUMENTATION" = "$retained_expected"
+          test "$LINT_WORKFLOWS" = "$retained_expected"
+          test "$STATIC_ANALYZERS" = "$application_expected"
+          test "$LIGHTWEIGHT_ANALYZERS" = "$application_expected"
+          test "$GITLEAKS" = "$retained_expected"
+          test "$DOCKER_PINS" = "$application_expected"
 
   test:
     name: PHPUnit tests
@@ -714,8 +736,8 @@ jobs:
           echo "PHPUnit result: $TEST"
           echo "Docker build matrix result: $DOCKER_BUILD"
 
-          # Scheduled runs skip change detection, tests and image builds.
-          # Tests and image builds may also be skipped, but only when change
+          # Scheduled runs skip change detection and application jobs.
+          # Application jobs may also be skipped, but only when change
           # detection succeeded and found a documentation-only pull request.
           # Elsewhere every result must be a success.
           if [ "$EVENT_NAME" = "schedule" ]; then
@@ -726,6 +748,7 @@ jobs:
             changes_expected=success
             analyzers_expected=success
             if [ "$CODE_CHANGED" = "false" ] && [ "$EVENT_NAME" = "pull_request" ]; then
+              analyzers_expected=skipped
               expected_skipped=skipped
             else
               expected_skipped=success

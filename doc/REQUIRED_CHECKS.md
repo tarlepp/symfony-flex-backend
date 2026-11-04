@@ -48,14 +48,16 @@ Workflows live in `.github/workflows/`; `main.yml` is the core pipeline.
 
 Jobs in `main.yml`, in dependency order:
 
-* No dependencies: `Detect changed files`, the lint jobs
-  (`Lint configuration`, `Lint documentation files`,
-  `Validate GitHub workflows`), `PHP Security Checker`, `Gitleaks scan`,
+* No dependencies: `Detect changed files`, `Lint documentation files`,
+  `Validate GitHub workflows` and `Gitleaks scan`.
+* After change detection: `Lint configuration`, `PHP Security Checker`,
   `Verify Docker base image pins (multi-platform)`,
   `Check Docker image versions`, `Lightweight static analyzers` and the
   `Static analyzers (...)` matrix (Psalm, PHPStan and PHP Insights).
-* `Validate CI prerequisites` (`ci-summary`): needs all of the above except
-  change detection.
+  These skip confirmed Markdown-only PRs. Periodic security/update checks
+  still run on schedules even though change detection is skipped.
+* `Validate CI prerequisites` (`ci-summary`): needs all of the above,
+  including change detection.
 * `PHPUnit tests` and `Build application Docker image (...)`: need
   `ci-summary` and change detection; skipped for Markdown-only pull
   requests.
@@ -104,7 +106,7 @@ request run, not workflow display labels.
   prerequisite gate, the lightweight analyzers, the analyzer matrix,
   `PHPUnit tests` and both Docker
   builds, and fails unless all of them succeeded (skipped only on
-  scheduled runs).
+  scheduled runs or confirmed Markdown-only PRs as described below).
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the
   aggregate gate cannot cover it.
 
@@ -116,10 +118,13 @@ it to the `needs` of `ci-result`.
 Rules for this set:
 
 * Documentation-only pull requests (every changed file is `*.md`) skip
-  `PHPUnit tests` and the Docker builds. `Validate CI result` accepts those
-  skips only when `Detect changed files` succeeded and reported no code
-  changes on a `pull_request` event. Detection fails safe: any unclear case
-  counts as a code change.
+  application configuration checks, PHP dependency security, Docker pin/update
+  checks, both PHP analyzer jobs, `PHPUnit tests` and Docker builds.
+  Documentation checks, workflow validation, Gitleaks, Dependency Review and
+  CodeQL remain enabled. Both gates accept the listed skips only when
+  `Detect changed files` succeeded and reported `code=false` on a
+  `pull_request` event. Detection fails safe: any unclear case counts as code.
+  Renames include both paths, so code renamed to Markdown still runs full CI.
 
 * Every new job in `main.yml` must be added to the `needs` of `ci-result`
   (directly or through a job that is), or it is not part of the merge gate.
@@ -214,8 +219,9 @@ it:
 
 * `Validate CI result` fails after a skipped job: a skip is accepted only
   when `Detect changed files` succeeded and found a Markdown-only pull
-  request. Otherwise a skipped `test` or `docker-build` means an upstream
-  job failed or was cancelled; open the first failed job in the run.
+  request, and only for the jobs listed above (or scheduled periodic-only
+  coverage). Documentation, workflow and Gitleaks skips are never accepted
+  on PRs. Otherwise open the first failed or cancelled prerequisite.
 * A required check stays pending forever: the context no longer reports,
   usually after renaming a job or workflow. Follow the order in
   [Changing required checks](#changing-required-checks) and remove the old

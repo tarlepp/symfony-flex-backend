@@ -69,15 +69,20 @@ replacement for their actual event filters and conditions:
    rules when relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
    `!cancelled()` and explicitly requires successful prerequisite results
-   (skipped only for non-periodic jobs on `schedule`, never on PRs or
-   pushes); tests and Docker builds depend on that gate. The final
+   (skipped only for non-periodic jobs on `schedule` or application-related
+   jobs of confirmed Markdown-only PRs); tests and Docker builds depend
+   on that gate. The final
    `ci-result` job needs the gate, analyzers, tests and Docker builds and
    uses `!cancelled()` so superseded workflows release their concurrency
    slot, while failed prerequisites still reach the result checks. It
    is the required merge gate, so add every new job to its `needs` and
-   result checks. The `changes` job skips tests and Docker builds for
-   Markdown-only pull requests, and `ci-result` accepts that only when
-   it reports `code=false` on `pull_request`. When adding, removing, or
+   result checks. The `changes` job gates application configuration, PHP
+   dependency security, Docker pin/update checks, PHP analyzers, tests and
+   builds for Markdown-only PRs. Both gates accept these skips only when
+   change detection succeeded and reports `code=false` on `pull_request`;
+   documentation, workflow validation and Gitleaks must still succeed.
+   Periodic jobs need `!cancelled()` to run on schedules despite skipped
+   change detection. When adding, removing, or
    renaming a prerequisite, update its `needs` entry and result
    checks/messages together. Check failure, cancellation, and skipped-job
    paths, not only success. Do not use `continue-on-error` or permissive
