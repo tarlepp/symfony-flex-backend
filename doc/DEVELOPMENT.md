@@ -215,9 +215,14 @@ with lint, security and analyzer jobs. They no longer wait for
 `Validate CI prerequisites`; this improves feedback latency but spends compute
 on tests/builds even when another check later fails. The final merge gate still
 requires the prerequisite gate, all analyzers, tests and both image builds.
-External reporting requires both successful tests and the prerequisite gate,
+External reporting is eligible on all PRs and successful pushes to `master`,
+but requires both successful tests and the prerequisite gate (`ci-summary`),
 so early test success cannot publish reports after failed prerequisite checks.
-Documentation-only and scheduled skips are unchanged.
+Coveralls and SonarCloud uploads require their respective optional tokens and
+are non-blocking. Fork PRs run the job without repository secrets and skip
+uploads. Markdown-only PRs skip reporting because tests and artifacts are
+skipped; schedules also skip reporting. It remains outside the core CI gate
+and is not a required merge check.
 
 The PHPUnit MariaDB service uses the same version and multi-platform digest as
 `docker/mariadb/Dockerfile`. Update both references together when changing the

@@ -139,9 +139,12 @@ contains:
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
   both static-analysis jobs, tests and Docker builds, and is the required
   merge check together with `dependency-review`, and
-* optional coverage and Sonar reporting on `master` pushes after both tests
-  and the prerequisite gate succeed, outside the core CI gate; failures of
-  those third-party steps do not fail the run.
+* optional coverage and Sonar reporting on all PRs and successful `master`
+  pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
+  outside the core CI gate and not required for merging. Uploads require their
+  respective optional tokens and are non-blocking. Fork PRs run the job without
+  repository secrets and skip uploads; Markdown-only PRs skip reporting
+  because tests and artifacts are skipped.
 
 Both aggregate gates use `!cancelled()` at job level. They still run after
 failed or skipped prerequisites, but stop when the workflow is cancelled so

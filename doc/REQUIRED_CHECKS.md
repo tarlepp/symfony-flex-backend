@@ -74,8 +74,12 @@ summary instead of failing. Base-pin and vulnerability policies are unchanged.
 * `PHPUnit tests` and `Build application Docker image (...)`: need
   only successful change detection, so run in parallel with prerequisite
   checks; skipped for Markdown-only pull requests and schedules.
-* `External reporting`: needs both `PHPUnit tests` and `ci-summary`; runs
-  only on successful `master` pushes.
+* `External reporting`: eligible on all PRs and successful `master` pushes,
+  after both `PHPUnit tests` and `ci-summary` succeed. Each upload requires its
+  optional token and is non-blocking. Fork PRs run the job without repository
+  secrets and skip uploads. Markdown-only PRs skip reporting because tests
+  and artifacts are skipped. Reporting remains outside the core CI gate and
+  is not required for merging.
 * `Validate CI result` (`ci-result`): needs change detection, the
   prerequisite gate, the lightweight analyzers, the analyzer matrix, tests
   and Docker builds. This is
@@ -153,7 +157,8 @@ Rules for this set:
   target means adding its context here and in the branch protection.
 * Select the GitHub Actions app as the source of each check, so a third-party
   app cannot satisfy it by reporting the same name.
-* `External reporting` runs only on `master` pushes and must not be required.
+* `External reporting` is eligible on PRs and successful `master` pushes but
+  must not be required.
 * The scheduled runs of `main.yml` and `vulnerability-scan.yml` are not pull
   request checks and must not be required.
 * The current per-job entries (lint, security, gitleaks, pin verification,

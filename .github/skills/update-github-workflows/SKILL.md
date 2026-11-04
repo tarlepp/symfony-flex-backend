@@ -133,8 +133,12 @@ replacement for their actual event filters and conditions:
    `# zizmor: ignore[rule]` comment with the reason; rule-wide changes go in
    `.github/zizmor.yml`.
 7. Preserve reporting and artifact contracts. External coverage/Sonar uploads
-   run only after successful pushes to `master`, outside the core CI gate, and
-   require their optional token. Keep core tests independent of those uploads.
+   are eligible on all PRs and successful `master` pushes, after both tests and
+   `ci-summary` succeed. They remain outside the core CI gate and are not
+   required checks. Each upload requires its optional token and is non-blocking;
+   fork PRs run the job without repository secrets and skip uploads.
+   Markdown-only PRs skip reporting because tests and artifacts are skipped.
+   Keep core tests independent of those uploads.
    Verify producer paths match upload paths for coverage, analyzer reports,
    metrics, and SARIF; keep names unique across matrix jobs where required. Do
    not upload JWT keys, environment secrets, or unrelated workspace contents.

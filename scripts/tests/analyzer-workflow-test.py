@@ -237,10 +237,67 @@ class AnalyzerWorkflowTest(unittest.TestCase):
 
     def test_reporting_still_requires_prerequisites_and_tests(self):
         section = job("report")
-        self.assertIn("    needs:\n      - ci-summary\n      - test\n", section)
+        self.assertEqual(dependencies("report"), {"ci-summary", "test"})
+        condition = re.search(r"^    if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
+        self.assertIsNotNone(condition)
+        self.assertEqual(
+            condition.group(1),
+            "success() && (github.event_name == 'pull_request' || "
+            "(github.event_name == 'push' && github.ref == 'refs/heads/master'))",
+        )
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch", "schedule"):
+            for ref in ("refs/heads/master", "refs/heads/feature", "refs/pull/42/merge"):
+                for gate in ("success", "failure", "cancelled", "skipped"):
+                    for tests in ("success", "failure", "cancelled", "skipped"):
+                        with self.subTest(event=event, ref=ref, gate=gate, tests=tests):
+                            successful = gate == tests == "success"
+                            expression = condition.group(1).replace(
+                                "success()", "true" if successful else "false",
+                            ).replace("github.event_name", repr(event)).replace(
+                                "github.ref", repr(ref),
+                            ).replace("&&", "and").replace("||", "or")
+                            # Only the asserted expression and fixed values reach eval.
+                            result = eval(expression, {"__builtins__": {}},
+                                          {"true": True, "false": False})
+                            expected = successful and (
+                                event == "pull_request"
+                                or (event == "push" and ref == "refs/heads/master")
+                            )
+                            self.assertEqual(result, expected)
+        self.assertNotIn("report", dependencies("ci-result"))
+        self.assertIn("          ref: ${{ github.sha }}\n", section)
+        self.assertIn("          persist-credentials: false\n", section)
+        self.assertIn("    permissions:\n      contents: read\n", section)
+        self.assertNotIn("pull_request_target:", CONTENT)
+        for artifact in ("clover.xml", "junit.xml"):
+            self.assertIn(
+                f"          name: {artifact}\n          path: ./build/logs\n", section,
+            )
+            self.assertIn(
+                f"          name: {artifact}\n          path: ./build/logs/{artifact}\n",
+                job("test"),
+            )
+        uploads = (
+            ("Report results to Coveralls", "COVERALLS_REPO_TOKEN"),
+            ("SonarQube Scan", "SONAR_TOKEN"),
+        )
+        for name, token in uploads:
+            step = re.search(
+                rf"^      - name: {re.escape(name)}[^\n]*\n(.*?)(?=^      - |\Z)",
+                section, re.MULTILINE | re.DOTALL,
+            )
+            self.assertIsNotNone(step)
+            self.assertIn("        continue-on-error: true\n", step.group(1))
+            self.assertIn("        if: ${{ env." + token + " != '' }}\n", step.group(1))
+            self.assertIn(token + ": ${{ secrets." + token + " }}\n", step.group(1))
         self.assertIn(
-            "    if: ${{ success() && github.event_name == 'push' && "
-            "github.ref == 'refs/heads/master' }}\n", section,
+            "      - name: Prepare reports for host-side SonarQube scan\n"
+            "        if: ${{ env.SONAR_TOKEN != '' }}\n", section,
+        )
+        # Markdown-only PRs skip tests, so success() prevents artifact downloads.
+        self.assertIn(
+            "    if: ${{ github.event_name != 'schedule' && "
+            "needs.changes.outputs.code == 'true' }}\n", job("test"),
         )
 
     def test_early_test_or_build_success_cannot_bypass_failed_gate(self):
