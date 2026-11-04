@@ -64,6 +64,14 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   continue a later step on a branch already used for an earlier PR. When the
   parent is rebased or amended, rebase the children with
   `git rebase --onto <new-parent> <old-parent-tip>`.
+* Always use rebase instead of merge when updating or synchronizing task
+  branches with their base, parent, or remote branch. Use `git fetch` followed
+  by `git rebase <upstream>`, or `git pull --rebase`; never kuse `git merge` or
+  plain `git pull`, and do not create merge commits for branch synchronization.
+  Preserve the worktree and branch-approval safeguards in this section.
+  If a rebase requires rewriting published history, obtain explicit approval
+  before force-pushing and use `git push --force-with-lease`, never `--force`.
+  This rule does not change the repository's pull request merge settings.
 * Apply the new-branch rule to separate follow-up enhancements too, even when
   they concern the same files or topic as the previous task. Reserve branch
   reuse for corrections to the same PR or an explicit user request to reuse
