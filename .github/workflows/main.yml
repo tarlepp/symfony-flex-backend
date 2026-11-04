@@ -436,7 +436,6 @@ jobs:
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.code == 'true' }}
     timeout-minutes: 20
     needs:
-      - ci-summary
       - changes
     services:
       mariadb:
@@ -582,6 +581,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     needs:
+      - ci-summary
       - test
     if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     permissions:
@@ -657,7 +657,6 @@ jobs:
       matrix:
         target: [development, production]
     needs:
-      - ci-summary
       - changes
 
     steps:

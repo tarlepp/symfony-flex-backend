@@ -59,9 +59,10 @@ Jobs in `main.yml`, in dependency order:
 * `Validate CI prerequisites` (`ci-summary`): needs all of the above,
   including change detection.
 * `PHPUnit tests` and `Build application Docker image (...)`: need
-  `ci-summary` and change detection; skipped for Markdown-only pull
-  requests.
-* `External reporting`: needs `PHPUnit tests`; runs only on `master` pushes.
+  only successful change detection, so run in parallel with prerequisite
+  checks; skipped for Markdown-only pull requests and schedules.
+* `External reporting`: needs both `PHPUnit tests` and `ci-summary`; runs
+  only on successful `master` pushes.
 * `Validate CI result` (`ci-result`): needs change detection, the
   prerequisite gate, the lightweight analyzers, the analyzer matrix, tests
   and Docker builds. This is
