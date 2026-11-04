@@ -635,6 +635,8 @@ Update and security checks distinguish findings from execution failures:
 * `docker-image-check-updates` keeps exit 1 for updates **or** failed checks.
   Its yellow summary means updates only; its red summary separately counts
   failed checks and updates. Skipped versions remain yellow and return success.
+  CI uses the direct script's `check-updates --advisory` mode: confirmed updates
+  return success with visible warnings, while failed checks remain nonzero.
   `docker-image-verify-pins` remains blocking for invalid/unresolvable pins.
 * `check-security` remains blocking for advisory-constraint, cache-refresh,
   or installed-package audit failures. If the optional local checker is absent,
@@ -907,10 +909,22 @@ including cycles spanning multiple pages.
 Update labels are yellow and up-to-date labels are green; set `NO_COLOR=1`
 to disable colors.
 
-Use `./scripts/docker-images.sh check-updates` in CI to fail the step when an
-update is available or a check fails. All image results are reported before
+Use `./scripts/docker-images.sh check-updates` for a strict check that fails
+when an update is available or a check fails. All image results are reported before
 exiting. `make docker-image-check-updates` also fails in these cases, but Make
 uses its own non-zero exit status rather than preserving the script's code.
+To reproduce CI's advisory policy, run from the repository root on the Docker
+host:
+
+```bash
+bash scripts/docker-images.sh check-updates --advisory
+```
+
+Confirmed updates return zero with warnings; GitHub Actions also receives
+warning annotations and a maintenance summary. Lookup and invalid update-pin
+errors remain nonzero, even alongside confirmed updates. Unknown or repeated
+update-check options return `64`. The default script and Make policy is unchanged.
+
 Registry inspection retries transient errors up to three attempts, with 10 and
 20 second delays. The first `429` error prints a notification to authenticate
 with `docker login docker.io` or wait for the quota to reset, before retrying.
@@ -922,7 +936,9 @@ the next attempt number and remaining delay. Rate-limited waits also remind
 users to press `Ctrl+C` and run `docker login docker.io`.
 
 The `Check Docker image versions` CI job runs alongside linting and is required
-by `ci-summary`, so updates or errors block tests and Docker builds. It runs the
+by `ci-summary`. Updates alone are advisory on every event; lookup, pin-validation
+and regression failures still block merging. Tests and Docker builds start
+independently after change detection. The image-update job runs the
 helper regression tests first. Configure optional `DOCKERHUB_USERNAME` and
 `DOCKERHUB_TOKEN` repository secrets (a read-only Docker Hub access token) to
 authenticate registry inspection. Both secrets must be present or both absent.

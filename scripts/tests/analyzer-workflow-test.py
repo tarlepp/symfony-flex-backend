@@ -25,6 +25,19 @@ def job(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_only_image_update_availability_is_advisory(self):
+        section = job("docker-image-check-updates")
+        self.assertIn("run: bash scripts/docker-images.sh check-updates --advisory\n", section)
+        self.assertIn("run: bash scripts/make.sh test-docker-images\n", section)
+        self.assertNotIn("continue-on-error", section)
+        self.assertIn("      - docker-image-check-updates\n", job("ci-summary"))
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch", "schedule"):
+            for result in ("failure", "cancelled", "skipped", ""):
+                with self.subTest(event=event, result=result):
+                    self.assertNotEqual(
+                        self.run_gate("ci-summary", event, DOCKER_UPDATES=result).returncode, 0,
+                    )
+
     def test_ci_database_matches_pinned_development_baseline(self):
         dockerfile = WORKFLOW.parents[2] / "docker/mariadb/Dockerfile"
         image = re.search(r"^FROM (mariadb:\S+)$", dockerfile.read_text(), re.MULTILINE)

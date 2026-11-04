@@ -263,6 +263,18 @@ or errors (explicit skips are allowed). Available updates or lookup errors exit
 so the command can be used as a CI gate. Make also fails, but does not preserve
 the script's exact non-zero exit code.
 
+For advisory maintenance checks, run from the repository root on the Docker host:
+
+```bash
+bash scripts/docker-images.sh check-updates --advisory
+```
+
+This mode returns `0` for confirmed updates, retaining yellow diagnostics and
+adding GitHub warning annotations and a maintenance summary in Actions.
+Lookup and update-pin validation errors still return nonzero, including when
+other images have confirmed updates. The default script and Make policy remain
+strict; unknown update-check options return `64`.
+
 Review compatibility before choosing the new tag, especially for major upgrades.
 Use the following steps to inspect and update its digest.
 
@@ -396,14 +408,14 @@ The `Check Docker image versions` job (`docker-image-check-updates` in
 pull request, scheduled and manual runs. It is one of the two periodic jobs
 that run on the daily schedule, together with `security-check`. It runs
 `make test-docker-images` inside the PHP development container and
-`make docker-image-check-updates` on the Docker host.
+`bash scripts/docker-images.sh check-updates --advisory` on the Docker host.
 
-The `ci-summary` prerequisite gate requires this job to succeed, so
-available updates or lookup errors block both tests and Docker builds, which
-depend on that gate. On scheduled runs the gate additionally requires all
-other prerequisites to be skipped; on every other event they must succeed.
-The final `ci-result` gate then requires `ci-summary`, the static-analysis
-matrix, tests and both Docker builds to succeed. It is the check that branch
+The `ci-summary` prerequisite gate requires this job to succeed. Confirmed
+updates alone are advisory on every event; lookup, pin-validation and regression
+errors still fail the gate. Tests and Docker builds run independently after
+change detection. The final `ci-result` gate still requires the prerequisite
+gate, analyzers, tests and both image builds, with skips accepted only for the
+documented schedule and Markdown-only PR cases. It is the check that branch
 protection requires (see [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)).
 Explicitly skipped tags remain non-failing.
 
