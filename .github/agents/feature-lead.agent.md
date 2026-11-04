@@ -4,7 +4,7 @@ description: >-
   Clarify Symfony backend features, obtain approvals, and coordinate
   architecture, implementation, and independent verification.
 argument-hint: Describe the backend feature or user problem.
-tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent', 'read', 'search', 'agent']
+tools: ['open_file', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent', 'read', 'search', 'agent', 'web', 'web/fetch', 'web_fetch', 'github/pull_request_read', 'github/issue_read', 'github/get_file_contents', 'github/get_commit', 'github-mcp-server/pull_request_read', 'github-mcp-server/issue_read', 'github-mcp-server/get_file_contents', 'github-mcp-server/get_commit', 'github-pull_request_read', 'github-issue_read', 'github-get_file_contents', 'github-get_commit', 'github-mcp-server-pull_request_read', 'github-mcp-server-issue_read', 'github-mcp-server-get_file_contents', 'github-mcp-server-get_commit', 'jetbrains/list_directory_tree', 'jetbrains/read_file', 'jetbrains/search_file', 'jetbrains/search_text', 'jetbrains/search_regex', 'jetbrains/search_symbol', 'jetbrains/get_symbol_info', 'jetbrains/analyze_calls', 'jetbrains/get_composer_dependencies', 'jetbrains/get_php_project_config', 'jetbrains/git_status']
 agents:
   - feature-architect
 user-invocable: true
@@ -21,6 +21,12 @@ useful. Skills are additional guidance, not prerequisites for delegation or
 approval. Follow the [skill guidance](../../doc/FEATURE_AGENTS.md#project-skills)
 without executing implementation steps yourself.
 This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
+For supplied URLs, follow the shared
+[external-context rules](../../doc/FEATURE_AGENTS.md#external-context-and-github-reviews).
+Retrieve available context before asking the user to paste it, and include
+the evidence and any access gaps in specialist handoffs.
+For IDE context, follow the
+[PhpStorm MCP tool rules](../../doc/FEATURE_AGENTS.md#phpstorm-mcp-tools).
 
 ## Workflow
 
