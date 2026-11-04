@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise change detection and analyzer gates from the actual workflow."""
+"""Exercise change detection, job contracts and merge gates from the workflow."""
 
 import os
 from pathlib import Path
@@ -30,7 +30,91 @@ def job(name):
     return match.group(1)
 
 
+def dependencies(name):
+    section = job(name)
+    match = re.search(r"^    needs:([^\n]*)\n((?:      - [^\n]+\n)*)", section, re.MULTILINE)
+    if match is None:
+        return set()
+    if match.group(1).strip():
+        value = match.group(1).strip()
+        if not re.fullmatch(r"[a-z][a-z-]*", value):
+            raise AssertionError(f"Unsupported needs format in {name}: {value}")
+        return {value}
+    values = re.findall(r"^      - ([a-z][a-z-]*)$", match.group(2), re.MULTILINE)
+    if not values or len(values) != len(match.group(2).splitlines()):
+        raise AssertionError(f"Unsupported or empty needs list in {name}")
+    return set(values)
+
+
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_every_core_job_is_checked_by_the_required_gate(self):
+        names = set(re.findall(r"^  ([a-z][a-z-]*):$", CONTENT.split("jobs:\n", 1)[1],
+                               re.MULTILINE))
+        graph = {name: dependencies(name) for name in names}
+        covered = set()
+
+        def visit(name, ancestors):
+            self.assertIn(name, names, f"Unknown dependency: {name}")
+            self.assertNotIn(name, ancestors, f"Dependency cycle at {name}")
+            if name in covered:
+                return
+            for dependency in graph[name]:
+                visit(dependency, ancestors | {name})
+            covered.add(name)
+
+        visit("ci-result", set())
+        self.assertEqual(names - covered, {"report"})
+        for name in covered:
+            header = job(name).split("    steps:", 1)[0]
+            self.assertNotRegex(header, r"^    continue-on-error:", name)
+        self.assertNotIn("report", covered)
+
+    def test_gate_dependencies_have_real_result_bindings(self):
+        for name in ("ci-summary", "ci-result"):
+            section = job(name)
+            bindings = re.findall(
+                r"^          ([A-Z_]+): \$\{\{ needs\.([a-z][a-z-]*)\.result \}\}$",
+                section, re.MULTILINE,
+            )
+            self.assertEqual({dependency for _, dependency in bindings}, dependencies(name))
+            self.assertEqual(len(bindings), len(dependencies(name)))
+
+    def test_every_gate_result_rejects_unexpected_outcomes_on_validation_events(self):
+        for name in ("ci-summary", "ci-result"):
+            variables = re.findall(
+                r"^          ([A-Z_]+): \$\{\{ needs\.[a-z][a-z-]*\.result \}\}$",
+                job(name), re.MULTILINE,
+            )
+            for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
+                self.assertEqual(self.run_gate(name, event).returncode, 0)
+                for variable in variables:
+                    for result in ("failure", "cancelled", "skipped", "", "unknown"):
+                        with self.subTest(gate=name, event=event, variable=variable,
+                                          result=result):
+                            outcome = self.run_gate(name, event, **{variable: result})
+                            self.assertNotEqual(outcome.returncode, 0, outcome.stdout)
+
+    def test_schedule_accepts_exactly_the_declared_result_for_every_dependency(self):
+        for name in ("ci-summary", "ci-result"):
+            self.assertEqual(
+                self.run_gate(name, "schedule", "skipped").returncode, 0,
+            )
+            variables = re.findall(
+                r"^          ([A-Z_]+): \$\{\{ needs\.[a-z][a-z-]*\.result \}\}$",
+                job(name), re.MULTILINE,
+            )
+            for variable in variables:
+                expected = "success" if variable in (
+                    "SECURITY_CHECK", "DOCKER_UPDATES", "CI_SUMMARY",
+                ) else "skipped"
+                for result in ("success", "failure", "cancelled", "skipped", "", "unknown"):
+                    with self.subTest(gate=name, variable=variable, result=result):
+                        outcome = self.run_gate(
+                            name, "schedule", "skipped", **{variable: result},
+                        )
+                        self.assertEqual(outcome.returncode == 0, result == expected,
+                                         outcome.stdout)
+
     def test_metadata_edit_guard_preserves_base_changes_and_unclear_payloads(self):
         condition = re.search(
             r"^    if: \$\{\{ github.event_name != 'schedule' && !\((.+)\) \}\}$",
@@ -240,7 +324,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
                     "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
                 ) else "success"
-                for result in ("success", "failure", "cancelled", "skipped", ""):
+                for result in ("success", "failure", "cancelled", "skipped", "", "unknown"):
                     if result == expected:
                         continue
                     with self.subTest(gate=name, variable=variable, result=result):
