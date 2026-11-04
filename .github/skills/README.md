@@ -51,6 +51,9 @@ references only for layers the task actually changes:
   [implement-api-authentication](implement-api-authentication/SKILL.md).
   For subject-based permissions, start with
   [add-security-voter](add-security-voter/SKILL.md).
+* For diagnosing unexpected application behavior, runtime errors, or failing
+  tests, use [debug](debug/SKILL.md). Use
+  [write-tests](write-tests/SKILL.md) whenever tests change.
 * For the supported PHP runtime baseline, start with
   [update-php-runtime](update-php-runtime/SKILL.md). For other package versions,
   use [update-dependencies](update-dependencies/SKILL.md); for installed recipe
@@ -108,6 +111,7 @@ references only for layers the task actually changes:
 | [add-rest-resource](add-rest-resource/SKILL.md) | Adding or extending a complete CRUD REST resource. |
 | [add-security-voter](add-security-voter/SKILL.md) | Changing voters, subject-based permissions, or authorization call sites. |
 | [add-validation-constraint](add-validation-constraint/SKILL.md) | Adding or changing a project-specific Symfony Validator constraint and validator. |
+| [debug](debug/SKILL.md) | Diagnosing unexpected application behavior, runtime errors, or failing tests. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
 | [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
