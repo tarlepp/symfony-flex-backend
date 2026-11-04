@@ -81,9 +81,9 @@ request run, not workflow display labels.
 * `Validate CI result` (`main.yml`): final aggregate gate. It needs the
   prerequisite gate, the lightweight analyzers, the analyzer matrix,
   `PHPUnit tests`, eligible `External reporting` and both Docker builds, and
-  fails unless all eligible jobs succeeded. Application jobs skip only on
-  schedules or confirmed Markdown-only PRs; reporting additionally skips merge
-  groups and manual runs.
+  fails unless all selected jobs succeeded. Skips require explicit successful
+  category selection or the schedule policy; reporting additionally skips
+  merge groups, manual runs and test-unaffected changes.
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the
   aggregate gate cannot cover it.
 
@@ -95,14 +95,18 @@ covered without a separate branch-protection entry.
 
 Rules for this set:
 
-* Documentation-only pull requests (every changed file is `*.md`) skip
-  application configuration checks, PHP dependency security, Docker pin/update
-  checks, both PHP analyzer jobs, `PHPUnit tests` and Docker builds.
-  Documentation checks, workflow validation, Gitleaks, Dependency Review and
-  CodeQL remain enabled. Both gates accept the listed skips only when
-  `Detect changed files` succeeded and reported `code=false` on a
-  `pull_request` event. Detection fails safe: any unclear case counts as code.
-  Renames include both paths, so code renamed to Markdown still runs full CI.
+* PRs, pushes and merge groups select independent validation categories using
+  the [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path).
+  Both gates accept a job's skip only after `Detect changed files` succeeded
+  and emitted the exact category's `false` flag. Missing/unknown flags fail.
+  Markdown-only changes run documentation checks and Gitleaks; analyzer-only
+  changes run PHP checks without PHPUnit or image builds. Other selected PHP
+  jobs still run full suites, not changed-file-only subsets.
+* Empty, unclear or failed diffs, manual runs, shared execution inputs and
+  unclassified paths retain full validation. Renames include both paths, so
+  code moved to Markdown still selects PHP checks and tests. Gitleaks remains
+  enabled on every non-scheduled validation event; separate Dependency Review
+  and CodeQL retain their own triggers. Required check names are unchanged.
 
 * Every new job in `main.yml` must be added to the `needs` of `ci-result`
   (directly or through a job that is), or it is not part of the merge gate.
@@ -168,11 +172,11 @@ Never merge a child into its parent's branch as a substitute for retargeting.
 The merge queue is not enabled by these workflow changes. Both `main.yml` and
 `dependency-review.yml` handle `merge_group: checks_requested`, retaining
 `Validate CI result` and `dependency-review` as the required contexts.
-Change detection treats queue runs as code changes, so all core checks run.
-The pinned Dependency Review v5 action natively compares the payload's
-`merge_group.base_sha` and `merge_group.head_sha`; it does not require a PR
-payload or custom ref overrides. Its vulnerability policy and read-only
-permissions remain unchanged.
+Change detection selects affected categories from the queue's base/head diff;
+unknown or empty comparisons retain full validation. The pinned Dependency
+Review v5 action natively compares the payload's `merge_group.base_sha` and
+`merge_group.head_sha`; it does not require a PR payload or custom ref
+overrides. Its vulnerability policy and read-only permissions remain unchanged.
 
 Native merge-group support was verified in the
 [pinned action's ref selection](https://github.com/actions/dependency-review-action/blob/a1d282b36b6f3519aa1f3fc636f609c47dddb294/src/git-refs.ts).
@@ -215,10 +219,11 @@ that live test is completed.
 <a id="troubleshooting"></a>
 
 * `Validate CI result` fails after a skipped job: a skip is accepted only
-  when `Detect changed files` succeeded and found a Markdown-only pull
-  request, and only for the jobs listed above (or scheduled periodic-only
-  coverage). Documentation, workflow and Gitleaks skips are never accepted
-  on PRs. Otherwise open the first failed or cancelled prerequisite.
+  when `Detect changed files` succeeded and emitted `false` for that job's
+  category (or under scheduled periodic-only coverage). Unknown outputs,
+  failed detection, and unexpected skips fail the gate. Gitleaks skips are
+  never accepted on ordinary validation events. Inspect detection outputs
+  and the first failed or cancelled prerequisite.
 * A required check stays pending forever: the context no longer reports,
   usually after renaming a job or workflow. Follow the order in
   [Changing required checks](#changing-required-checks) and remove the old

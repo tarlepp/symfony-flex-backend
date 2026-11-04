@@ -76,8 +76,8 @@ replacement for their actual event filters and conditions:
    rules when relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
    `!cancelled()` and explicitly requires successful prerequisite results
-   (skipped only for non-periodic jobs on `schedule` or application-related
-   jobs of confirmed Markdown-only PRs). Tests and Docker builds depend only
+   (skipped only for non-periodic jobs on `schedule` or explicit successful
+   change selection). Tests and Docker builds depend only
    on successful change detection and run in parallel with prerequisite
    checks; external reporting needs both tests and the prerequisite gate.
    The final
@@ -85,11 +85,17 @@ replacement for their actual event filters and conditions:
    It uses `!cancelled()` so superseded workflows release their concurrency
    slot, while failed prerequisites still reach the result checks. It
    is the required merge gate, so add every new job to its `needs` and
-   result checks. The `changes` job gates application configuration, PHP
-   dependency security, Docker pin/update checks, PHP analyzers, tests and
-   builds for Markdown-only PRs. Both gates accept these skips only when
-   change detection succeeded and reports `code=false` on `pull_request`;
-   documentation, workflow validation and Gitleaks must still succeed.
+   result checks. The `changes` job selects configuration, dependency security,
+   Docker pins/updates, PHP analyzers, tests, builds, documentation and workflow
+   validation independently on PRs, pushes and merge groups, using the
+   [CI selection table](../../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path).
+   Both gates accept skips only after successful detection emits the exact
+   category's `false` output. Empty/unknown flags are errors; Gitleaks remains
+   required on non-scheduled validation events. Configuration steps also
+   select Composer, runtime, Symfony YAML, Compose and tooling checks.
+   Selected PHP jobs and PHPUnit still run whole suites, not changed-file-only
+   subsets. Manual runs, unclassified paths, shared execution inputs and
+   unclear diffs retain full validation.
    Periodic jobs need `!cancelled()` to run on schedules despite skipped
    change detection. When adding, removing, or
    renaming a prerequisite, update its `needs` entry and result
@@ -137,9 +143,9 @@ replacement for their actual event filters and conditions:
    `ci-summary` succeed. The reporting job must succeed for `ci-result` on
    eligible events; it is not a separate required-check context. `ci-result`
    expects reporting to be skipped on schedules, manual runs, merge groups and
-   Markdown-only PRs. Each upload requires its optional token; upload errors
-   fail the reporting job and workflow. Fork PRs run without repository secrets
-   and skip uploads. Markdown-only PRs skip reporting because tests and
+   whenever tests were not selected. Each upload requires its optional token;
+   upload errors fail the reporting job and workflow. Fork PRs run without secrets
+   and skip uploads. Test-unaffected changes skip reporting because tests and
    artifacts are skipped. Keep core tests independent of those uploads. Verify
    producer paths match upload paths for coverage, analyzer reports, metrics,
    and SARIF; keep names unique across matrix jobs where required. Do not

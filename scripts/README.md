@@ -42,7 +42,10 @@ This directory contains different scripts that are used during development.
   * Validates all workflows and their supported shell steps, and separately
     validates local action metadata. Offline analyzer regressions exercise
     the actual prerequisite/final gate shell predicates, grouped steps and
-    fail-safe Markdown-only PR detection using isolated Git repositories.
+    fail-safe category selection for PRs, pushes and merge groups using
+    isolated Git repositories. The path matrix covers independent lint,
+    analyzer, test, build and dependency/image-check selection, mixed changes,
+    renames, unknown inputs and strict acceptance of expected skipped jobs.
 * [Composer cache mount check](check-composer-cache.sh)
   * Runs inside the CI PHP container to check Composer's effective cache path
     and write access. Offline regressions run through `make lint-workflows`.

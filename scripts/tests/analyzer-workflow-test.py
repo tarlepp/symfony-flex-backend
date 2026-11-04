@@ -174,7 +174,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         self.assertEqual(result.returncode == 0, expected)
 
     def test_metadata_edit_skip_covers_roots_and_gates_without_relaxing_results(self):
-        for name in ("changes", "lint-documentation", "lint-workflows", "gitleaks"):
+        for name in ("changes", "gitleaks"):
             self.assertIn(
                 "    if: ${{ github.event_name != 'schedule' && !("
                 + METADATA_EDIT + ") }}\n", job(name),
@@ -227,14 +227,14 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIn("${{ job.services.mariadb.ports['3306'] }}", section)
 
     def test_tests_and_builds_start_after_change_detection_only(self):
-        for name in ("test", "docker-build"):
+        for name, output in (("test", "tests"), ("docker-build", "docker")):
             section = job(name)
             needs = re.search(r"^    needs:\n((?:      - .+\n)+)", section, re.MULTILINE)
             self.assertIsNotNone(needs)
             self.assertEqual(needs.group(1), "      - changes\n")
             self.assertIn(
                 "    if: ${{ github.event_name != 'schedule' && "
-                "needs.changes.outputs.code == 'true' }}\n", section,
+                f"needs.changes.outputs.{output} == 'true' }}}}\n", section,
             )
 
     def test_reporting_still_requires_prerequisites_and_tests(self):
@@ -302,7 +302,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         # Markdown-only PRs skip tests, so success() prevents artifact downloads.
         self.assertIn(
             "    if: ${{ github.event_name != 'schedule' && "
-            "needs.changes.outputs.code == 'true' }}\n", job("test"),
+            "needs.changes.outputs.tests == 'true' }}\n", job("test"),
         )
 
     def test_coveralls_install_and_upload_use_the_development_container(self):
@@ -387,7 +387,13 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         script = textwrap.dedent(section.split("        run: |\n")[-1])
         variables = re.findall(r"^          ([A-Z_]+):", section, re.MULTILINE)
         environment = dict(os.environ, **dict.fromkeys(variables, "success"))
-        environment.update(EVENT_NAME=event, CODE_CHANGED="true", REF="refs/heads/master")
+        environment.update(EVENT_NAME=event, CODE_CHANGED="true",
+                           DOCUMENTATION_CHANGED="true", REF="refs/heads/master")
+        flags = re.findall(
+            r"^          (\w+): \$\{\{ needs\.changes\.outputs\.\w+ \}\}$",
+            section, re.MULTILINE,
+        )
+        environment.update(dict.fromkeys(flags, "true"))
         if event in ("merge_group", "workflow_dispatch"):
             environment["REPORT"] = "skipped"
         if event == "schedule":
@@ -448,9 +454,14 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         variables = (
             "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
             "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD", "REPORT",
+            "LINT_WORKFLOWS",
         )
         environment = dict.fromkeys(variables, "skipped")
         environment.update(CODE_CHANGED="false")
+        environment.update(dict.fromkeys((
+            "CONFIGURATION_CHANGED", "SECURITY_CHANGED", "IMAGES_CHANGED", "PHP_CHANGED",
+            "TESTS_CHANGED", "DOCKER_CHANGED", "WORKFLOWS_CHANGED",
+        ), "false"))
         environment.update(overrides)
         return self.run_gate(name, **environment)
 
@@ -459,11 +470,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertEqual(self.documentation_gate(name).returncode, 0)
             variables = re.findall(r"^          ([A-Z_]+):", job(name), re.MULTILINE)
             for variable in variables:
-                if variable in ("EVENT_NAME", "CODE_CHANGED", "REF"):
+                if variable in ("EVENT_NAME", "CODE_CHANGED", "REF") or variable.endswith("_CHANGED"):
                     continue
                 expected = "skipped" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
                     "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD", "REPORT",
+                    "LINT_WORKFLOWS",
                 ) else "success"
                 for result in ("success", "failure", "cancelled", "skipped", "", "unknown"):
                     if result == expected:
@@ -473,41 +485,39 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         self.assertNotEqual(outcome.returncode, 0, outcome.stdout)
             self.assertNotEqual(self.documentation_gate(name, CHANGES="skipped").returncode, 0)
 
-    def test_skip_requires_explicit_documentation_pr(self):
+    def test_scoped_skips_apply_to_pushes_and_merge_groups_too(self):
         for name in ("ci-summary", "ci-result"):
             for event in ("push", "merge_group", "workflow_dispatch"):
                 with self.subTest(gate=name, event=event):
-                    self.assertNotEqual(self.documentation_gate(name, event=event).returncode, 0)
-            for code in ("true", "", "unknown"):
-                with self.subTest(gate=name, code=code):
-                    self.assertNotEqual(self.documentation_gate(name, CODE_CHANGED=code).returncode, 0)
+                    self.assertEqual(self.documentation_gate(name, event=event).returncode, 0)
 
     def test_retained_checks_cannot_be_skipped(self):
-        for variable in ("LINT_DOCUMENTATION", "LINT_WORKFLOWS", "GITLEAKS"):
+        for variable in ("LINT_DOCUMENTATION", "GITLEAKS"):
             with self.subTest(variable=variable):
                 self.assertNotEqual(
                     self.documentation_gate("ci-summary", **{variable: "skipped"}).returncode, 0,
                 )
 
     def test_job_conditions_keep_periodic_and_documentation_coverage(self):
-        condition = (
-            "    if: ${{ github.event_name != 'schedule' && "
-            "!(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}"
-        )
-        for name in (
-            "lint-configuration", "docker-image-verify-pins",
-            "lightweight-analyzers", "static-analyzers",
+        for name, output in (
+            ("lint-configuration", "configuration"), ("docker-image-verify-pins", "images"),
+            ("lightweight-analyzers", "php"), ("static-analyzers", "php"),
+            ("lint-workflows", "workflows"),
         ):
             self.assertIn("    needs: changes\n", job(name))
-            self.assertIn(condition, job(name))
-        for name in ("security-check", "docker-image-check-updates"):
+            self.assertIn(
+                "    if: ${{ github.event_name != 'schedule' && "
+                f"needs.changes.outputs.{output} == 'true' }}}}", job(name),
+            )
+        for name, output in (("security-check", "security"),
+                             ("docker-image-check-updates", "images")):
             self.assertIn("    needs: changes\n", job(name))
             self.assertIn(
                 "    if: ${{ !cancelled() && (github.event_name == 'schedule' || "
-                "(needs.changes.result == 'success' && !(github.event_name == 'pull_request' "
-                "&& needs.changes.outputs.code == 'false'))) }}", job(name),
+                "(needs.changes.result == 'success' && "
+                f"needs.changes.outputs.{output} == 'true')) }}}}", job(name),
             )
-        for name in ("lint-documentation", "lint-workflows", "gitleaks"):
+        for name in ("gitleaks",):
             self.assertIn(
                 "    if: ${{ github.event_name != 'schedule' && !("
                 + METADATA_EDIT + ") }}\n", job(name),
@@ -518,6 +528,152 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertIn(
                 "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
             )
+
+    def test_documentation_job_and_step_follow_detected_inputs(self):
+        section = job("lint-documentation")
+        self.assertEqual(dependencies("lint-documentation"), {"changes"})
+        self.assertIn(
+            "    if: ${{ github.event_name != 'schedule' && "
+            "needs.changes.outputs.documentation == 'true' }}\n", section,
+        )
+        self.assertIn(
+            "        if: ${{ needs.changes.outputs.markdown == 'true' }}\n"
+            "        run: bash scripts/make.sh lint-markdown\n", section,
+        )
+        self.assertIn("run: bash scripts/make.sh check-skills\n", section)
+        for output in (
+            "markdown", "documentation", "configuration", "runtime", "composer", "yaml",
+            "compose", "tooling", "workflows", "security", "images", "php", "tests", "docker",
+        ):
+            self.assertIn(f"      {output}: ${{{{ steps.detect.outputs.{output} }}}}", job("changes"))
+
+    def test_documentation_skip_requires_successful_explicit_detection(self):
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
+            environment = dict(DOCUMENTATION_CHANGED="false", LINT_DOCUMENTATION="skipped")
+            with self.subTest(event=event):
+                self.assertEqual(self.run_gate("ci-summary", event, **environment).returncode, 0)
+                for result in ("success", "failure", "cancelled", "", "unknown"):
+                    self.assertNotEqual(
+                        self.run_gate("ci-summary", event, **dict(
+                            environment, LINT_DOCUMENTATION=result,
+                        )).returncode, 0,
+                    )
+                for changes in ("failure", "cancelled", "skipped", ""):
+                    self.assertNotEqual(
+                        self.run_gate("ci-summary", event, **dict(
+                            environment, CHANGES=changes,
+                        )).returncode, 0,
+                    )
+                for output in ("", "unknown"):
+                    self.assertNotEqual(
+                        self.run_gate("ci-summary", event, **dict(
+                            environment, DOCUMENTATION_CHANGED=output,
+                        )).returncode, 0,
+                    )
+
+    def test_each_gate_flag_authorizes_only_its_exact_job_outcome(self):
+        mappings = {
+            "ci-summary": {
+                "CONFIGURATION_CHANGED": ("LINT_CONFIGURATION",),
+                "DOCUMENTATION_CHANGED": ("LINT_DOCUMENTATION",),
+                "WORKFLOWS_CHANGED": ("LINT_WORKFLOWS",),
+                "SECURITY_CHANGED": ("SECURITY_CHECK",),
+                "IMAGES_CHANGED": ("DOCKER_PINS", "DOCKER_UPDATES"),
+                "PHP_CHANGED": ("STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS"),
+            },
+            "ci-result": {
+                "PHP_CHANGED": ("STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS"),
+                "TESTS_CHANGED": ("TEST",),
+                "DOCKER_CHANGED": ("DOCKER_BUILD",),
+            },
+        }
+        for gate, mapping in mappings.items():
+            for flag, results in mapping.items():
+                for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
+                    environment = dict.fromkeys(results, "skipped")
+                    environment[flag] = "false"
+                    if flag == "TESTS_CHANGED":
+                        environment["REPORT"] = "skipped"
+                    with self.subTest(gate=gate, flag=flag, event=event):
+                        outcome = self.run_gate(gate, event, **environment)
+                        self.assertEqual(outcome.returncode, 0, outcome.stdout)
+                        for result in results:
+                            for status in ("success", "failure", "cancelled", "", "unknown"):
+                                self.assertNotEqual(self.run_gate(gate, event, **dict(
+                                    environment, **{result: status},
+                                )).returncode, 0)
+                        for invalid in ("", "unknown", "skipped"):
+                            self.assertNotEqual(self.run_gate(gate, event, **dict(
+                                environment, **{flag: invalid},
+                            )).returncode, 0)
+                        for changes in ("failure", "skipped", "cancelled", ""):
+                            self.assertNotEqual(self.run_gate(gate, event, **dict(
+                                environment, CHANGES=changes,
+                            )).returncode, 0)
+
+    def test_configuration_steps_are_individually_scoped(self):
+        section = job("lint-configuration")
+        for target, output in (
+            ("application-info", "runtime"), ("composer-validate", "composer"),
+            ("check-requirements", "runtime"), ("lint-yaml", "yaml"),
+        ):
+            self.assertIn(
+                f"        if: ${{{{ needs.changes.outputs.{output} == 'true' }}}}\n"
+                f"        run: bash scripts/make.sh {target}\n", section,
+            )
+        self.assertIn(
+            "        if: ${{ needs.changes.outputs.compose == 'true' }}\n"
+            "        run: |\n          docker compose config --quiet\n", section,
+        )
+        self.assertIn(
+            "        if: ${{ needs.changes.outputs.tooling == 'true' }}\n"
+            "        run: |\n          bash scripts/make.sh test-command-output\n", section,
+        )
+
+    def test_devcontainer_validation_parses_compose_and_json(self):
+        section = job("lint-configuration")
+        step = re.search(
+            r"^      - name: Validate Compose and Dev Container configurations\n"
+            r"        if: \$\{\{ needs.changes.outputs.compose == 'true' \}\}\n"
+            r"        run: \|\n((?:          .+\n)+)",
+            section, re.MULTILINE,
+        )
+        self.assertIsNotNone(step)
+        commands = [shlex.split(line.strip()) for line in step.group(1).splitlines()]
+        self.assertIn([
+            "docker", "compose", "-f", "compose.yaml", "-f",
+            ".devcontainer/docker-compose.devcontainer.yml", "config", "--quiet",
+        ], commands)
+        json_command = next(command for command in commands if "json.tool" in command)
+        self.assertEqual(json_command[:9], [
+            "docker", "compose", "-f", "compose.yaml", "-f", "docker/ci-compose.yaml",
+            "exec", "-T", "php",
+        ])
+        self.assertEqual(json_command[9:], [
+            "python3", "-m", "json.tool", ".devcontainer/devcontainer.json", "/dev/null",
+        ])
+        with tempfile.TemporaryDirectory(prefix="ci-devcontainer-") as directory:
+            root = Path(directory)
+            target = root / ".devcontainer/devcontainer.json"
+            target.parent.mkdir()
+            for content, valid in (
+                ('{"name": "Fixture", "service": "php"}', True),
+                ('{"name": "Fixture" "service": "php"}', False),
+                ('{"name": "Fixture",}', False),
+            ):
+                with self.subTest(content=content):
+                    target.write_text(content)
+                    result = subprocess.run(
+                        json_command[9:], cwd=root, text=True, capture_output=True,
+                        check=False, timeout=10,
+                    )
+                    self.assertEqual(result.returncode == 0, valid, result.stderr)
+            target.unlink()
+            result = subprocess.run(
+                json_command[9:], cwd=root, text=True, capture_output=True,
+                check=False, timeout=10,
+            )
+            self.assertNotEqual(result.returncode, 0)
 
 
 class ChangeDetectionTest(unittest.TestCase):
@@ -547,7 +703,7 @@ class ChangeDetectionTest(unittest.TestCase):
         output = self.root / ".git/detection-output"
         script = textwrap.dedent(job("changes").split("        run: |\n")[-1])
         result = subprocess.run(
-            ["bash", "-e", "-c", script], cwd=self.root, capture_output=True,
+            ["bash", "-eo", "pipefail", "-c", script], cwd=self.root, capture_output=True,
             text=True, check=False, timeout=10,
             env=dict(
                 os.environ, EVENT_NAME=event, BASE_SHA=base or self.base,
@@ -555,26 +711,188 @@ class ChangeDetectionTest(unittest.TestCase):
             ),
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        return output.read_text().splitlines()[-1], result
+        self.outputs = dict(line.split("=", 1) for line in output.read_text().splitlines())
+        return "code=" + self.outputs["code"], result
+
+    def assert_documentation(self, markdown, documentation):
+        self.assertEqual(self.outputs["markdown"], str(markdown).lower())
+        self.assertEqual(self.outputs["documentation"], str(documentation).lower())
+
+    def test_path_selection_matrix(self):
+        cases = {
+            "src/Service/Example.php": {"runtime", "php", "tests", "docker"},
+            "config/services.yaml": {"runtime", "yaml", "php", "tests", "docker"},
+            "tests/Unit/ExampleTest.php": {"php", "tests"},
+            "phpunit.xml.dist": {"php", "tests"},
+            "ecs.php": {"php"},
+            "phpstan.neon.dist": {"php"},
+            ".phplint.yml": {"php"},
+            ".phpinsights.php": {"php"},
+            "psalm.xml": {"php"},
+            "tools/02_phpstan/composer.lock": {"php", "security"},
+            "tools/06_php-coveralls/composer.json": {"php", "tests", "security"},
+            "templates/example.html.twig": {"runtime", "php", "tests", "docker"},
+            "translations/messages.fi.yaml": {"runtime", "php", "tests", "docker"},
+            "composer.lock": {"composer", "runtime", "yaml", "php", "tests", "docker", "security"},
+            ".env.test": {"runtime", "php", "tests", "compose", "docker"},
+            "docker/php/php.ini": {"runtime", "php", "tests", "compose", "docker"},
+            "compose.prod.yaml": {"runtime", "php", "tests", "compose", "docker"},
+            "docker/mariadb/Dockerfile": {"runtime", "php", "tests", "compose", "docker", "images"},
+            "docker/nginx/Dockerfile": {"compose", "docker", "tooling", "images"},
+            "docker/nginx/nginx.conf": {"compose", "docker", "tooling"},
+            ".devcontainer/devcontainer.json": {"compose", "docker", "tooling"},
+            ".devcontainer/docker-compose.devcontainer.yml": {"compose", "docker", "tooling"},
+            ".github/workflows/scorecard.yml": {"workflows"},
+            ".github/zizmor.yml": {"workflows"},
+            "scripts/tests/ci-gates-test.py": {"workflows"},
+            "scripts/lint-workflows.sh": {"workflows"},
+            "scripts/docker-images.sh": {"images"},
+            "scripts/tests/docker-images-test.sh": {"images"},
+            "scripts/check-security.sh": {"security", "tooling"},
+            "scripts/make-help.sh": {"tooling"},
+            "scripts/tests/check-workflow-tool-updates-test.py": {"tooling"},
+            "scripts/check-skills.py": {"documentation"},
+            "README.md": {"markdown", "documentation"},
+            ".github/agents/implementer.agent.md": {"markdown", "documentation"},
+            ".markdownlint.yml": {"markdown", "documentation", "tooling"},
+            "doc/images/new.png": {"documentation"},
+        }
+        for number, (path, expected) in enumerate(cases.items()):
+            with self.subTest(path=path):
+                self.git("checkout", "--quiet", "-b", f"path-{number}", self.base)
+                target = self.root / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text("Updated fixture\n")
+                self.commit()
+                if expected & {"runtime", "composer", "yaml", "compose", "tooling"}:
+                    expected = expected | {"configuration"}
+                for event in ("pull_request", "push", "merge_group"):
+                    self.detect(event)
+                    selected = {key for key, value in self.outputs.items()
+                                if value == "true" and key != "code"}
+                    self.assertEqual(selected, expected)
+
+    def test_shared_and_unknown_inputs_keep_all_checks(self):
+        for number, path in enumerate((
+            "Makefile", "Dockerfile", ".dockerignore", ".github/actions/php-bootstrap/action.yml",
+            ".github/workflows/main.yml", "scripts/make.sh", "scripts/command-output.sh",
+            "scripts/native-output.sh", "unclassified.new-format",
+        )):
+            with self.subTest(path=path):
+                self.git("checkout", "--quiet", "-b", f"shared-{number}", self.base)
+                target = self.root / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text("Fixture\n")
+                self.commit()
+                self.detect()
+                self.assertTrue(all(value == "true" for value in self.outputs.values()))
+
+    def test_mixed_changes_union_checks_and_renames_keep_old_path_impact(self):
+        (self.root / "ecs.php").write_text("Fixture\n")
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        self.detect()
+        self.assertEqual(self.outputs["php"], "true")
+        self.assertEqual(self.outputs["tests"], "false")
+        self.assert_documentation(True, True)
+        (self.root / "source.php").rename(self.root / "archived.md")
+        self.commit()
+        self.detect()
+        for key in ("php", "tests", "docker"):
+            self.assertEqual(self.outputs[key], "true")
+        self.assert_documentation(True, True)
 
     def test_markdown_only_edit_skips_code(self):
         (self.root / "README.md").write_text("Updated documentation\n")
         self.commit()
         self.assertEqual(self.detect()[0], "code=false")
+        self.assert_documentation(True, True)
+
+    def test_code_only_edit_skips_documentation_on_diff_events(self):
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        for event in ("pull_request", "push", "merge_group"):
+            with self.subTest(event=event):
+                self.assertEqual(self.detect(event)[0], "code=true")
+                self.assert_documentation(False, False)
+
+    def test_documentation_tool_inputs_and_deleted_link_targets(self):
+        for path, markdown in (
+            (".markdownlint.json", True),
+            ("scripts/markdown-output.sh", True),
+            ("Makefile", True),
+            ("Dockerfile", True),
+            ("scripts/check-skills.py", False),
+        ):
+            with self.subTest(path=path):
+                self.git("checkout", "--quiet", "-b", "fixture-" + path.replace("/", "-"),
+                         self.base)
+                target = self.root / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text("Fixture\n")
+                self.commit()
+                self.detect()
+                self.assert_documentation(markdown, True)
+        self.git("checkout", "--quiet", "-b", "deleted-target", self.base)
+        (self.root / "source.php").unlink()
+        self.commit()
+        self.detect()
+        self.assert_documentation(False, True)
+
+    def test_manual_unknown_empty_and_quoted_diffs_keep_documentation(self):
+        self.detect()
+        self.assert_documentation(True, True)
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
+        self.detect(base="missing-commit")
+        self.assert_documentation(True, True)
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        self.detect(event="workflow_dispatch")
+        self.assert_documentation(True, True)
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
+        (self.root / "unusual\nname.md").write_text("Documentation\n")
+        self.commit()
+        self.detect()
+        self.assert_documentation(True, True)
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
+
+    def test_push_uses_two_dot_comparison_not_pr_merge_base(self):
+        (self.root / "README.md").write_text("Previous documentation\n")
+        self.commit()
+        previous = self.git("rev-parse", "HEAD")
+        self.git("checkout", "--quiet", "-b", "divergent", self.base)
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        self.detect(event="push", base=previous)
+        self.assert_documentation(True, True)
+        self.detect(event="pull_request", base=previous)
+        self.assert_documentation(False, False)
+
+    def test_large_mixed_diff_cannot_lose_markdown_under_pipefail(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        for number in range(1200):
+            (self.root / f"source-{number:04d}-with-a-long-name.php").write_text("<?php\n")
+        self.commit()
+        self.assertEqual(self.detect()[0], "code=true")
+        self.assert_documentation(True, True)
 
     def test_markdown_add_delete_and_rename_skip_code(self):
         (self.root / "README.md").rename(self.root / "GUIDE.md")
         (self.root / "NEW.md").write_text("New documentation\n")
         self.commit()
         self.assertEqual(self.detect()[0], "code=false")
+        self.assert_documentation(True, True)
         (self.root / "GUIDE.md").unlink()
         self.commit()
         self.assertEqual(self.detect()[0], "code=false")
+        self.assert_documentation(True, True)
 
     def test_code_renamed_to_markdown_still_runs_code(self):
         (self.root / "source.php").rename(self.root / "source.md")
         self.commit()
         self.assertEqual(self.detect()[0], "code=true")
+        self.assert_documentation(True, True)
 
     def test_mixed_changes_run_code(self):
         (self.root / "README.md").write_text("Updated documentation\n")

@@ -36,6 +36,20 @@ jobs:
     timeout-minutes: 5
     outputs:
       code: ${{ steps.detect.outputs.code }}
+      markdown: ${{ steps.detect.outputs.markdown }}
+      documentation: ${{ steps.detect.outputs.documentation }}
+      configuration: ${{ steps.detect.outputs.configuration }}
+      runtime: ${{ steps.detect.outputs.runtime }}
+      composer: ${{ steps.detect.outputs.composer }}
+      yaml: ${{ steps.detect.outputs.yaml }}
+      compose: ${{ steps.detect.outputs.compose }}
+      tooling: ${{ steps.detect.outputs.tooling }}
+      workflows: ${{ steps.detect.outputs.workflows }}
+      security: ${{ steps.detect.outputs.security }}
+      images: ${{ steps.detect.outputs.images }}
+      php: ${{ steps.detect.outputs.php }}
+      tests: ${{ steps.detect.outputs.tests }}
+      docker: ${{ steps.detect.outputs.docker }}
     steps:
       - &harden_runner_step
         name: Harden the runner (Audit all outbound calls)
@@ -50,32 +64,111 @@ jobs:
           fetch-depth: '0'
           persist-credentials: false
 
-      - name: Detect documentation-only pull requests
+      - name: Detect affected validation
         id: detect
         env:
           EVENT_NAME: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
         run: |
-          # Fail safe: anything unclear counts as a code change.
+          # Unknown/empty comparisons and manual runs retain full validation.
           code=true
+          names=(markdown documentation runtime composer yaml compose tooling workflows security images php tests docker)
+          declare -A checks
+          enable() {
+            local check
+            for check in "$@"; do checks["$check"]=true; done
+          }
+          enable "${names[@]}"
+          comparison="$BASE_SHA..$HEAD_SHA"
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            if files=$(git diff --no-renames --name-only "$BASE_SHA...$HEAD_SHA") && [ -n "$files" ]; then
+            comparison="$BASE_SHA...$HEAD_SHA"
+          fi
+          if [ "$EVENT_NAME" != "workflow_dispatch" ] && [ -n "$BASE_SHA" ] && [ -n "$HEAD_SHA" ]; then
+            if files=$(git diff --no-renames --name-only "$comparison") && [ -n "$files" ]; then
               echo "Changed files:"
               echo "$files"
-              if ! echo "$files" | grep -qvE '\.md$'; then
+              if [ "$EVENT_NAME" = "pull_request" ] && ! grep -qvE '\.md$' <<< "$files"; then
                 code=false
+              fi
+              # Quoted Git paths (including embedded newlines) stay fail-safe.
+              if ! grep -q '^"' <<< "$files"; then
+                for check in "${names[@]}"; do checks["$check"]=false; done
+                while IFS= read -r file; do
+                  case "$file" in
+                    *.md) enable markdown documentation ;;
+                    .markdownlint*|*/.markdownlint*|scripts/markdown-output.sh)
+                      enable markdown documentation tooling ;;
+                    scripts/check-skills.py) enable documentation ;;
+                    doc/*|LICENSE) enable documentation ;;
+                    # These inputs can change any runner, command or job contract.
+                    Makefile|Dockerfile|.dockerignore|.github/workflows/main.yml|.github/actions/*|scripts/make.sh|scripts/command-output.sh|scripts/native-output.*|scripts/report-output.sh|scripts/command-progress.py|scripts/compose-context.sh)
+                      enable "${names[@]}" ;;
+                    composer.json|composer.lock|symfony.lock)
+                      enable composer runtime yaml php tests docker security ;;
+                    phpunit*.xml*|infection.json*|tools/05_infection/*|tools/06_php-coveralls/*|tools/08_phpmetrics/*|scripts/prepare-sonar-reports.sh|sonar-project.properties)
+                      enable php tests ;;
+                    ecs.php|.php-cs-fixer*|.phplint*|phpstan*|psalm*|phpinsights*|.phpinsights*|phpmd*|.phan/*|rector.php)
+                      enable php ;;
+                    tools/*/composer.json|tools/*/composer.lock)
+                      enable php security ;;
+                    src/*|migrations/*|bin/*|public/*|templates/*|translations/*|secrets/*)
+                      enable runtime php tests docker ;;
+                    config/*)
+                      enable runtime php tests docker
+                      case "$file" in *.yaml|*.yml) enable yaml ;; esac ;;
+                    tests/*) enable php tests ;;
+                    *.php) enable runtime php tests docker ;;
+                    .env*|docker-entrypoint*.sh|docker/php/*|docker/mariadb/*)
+                      enable runtime php tests compose docker
+                      case "$file" in *Dockerfile*) enable images ;; esac ;;
+                    compose*.yaml|docker/ci-compose.yaml)
+                      enable runtime php tests compose docker ;;
+                    docker-sync.yml) enable compose tooling ;;
+                    docker/*|.devcontainer/*)
+                      enable compose docker tooling
+                      case "$file" in *Dockerfile*) enable images ;; esac ;;
+                    .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py)
+                      enable workflows ;;
+                    scripts/docker-images.sh|scripts/tests/docker-images-test.sh)
+                      enable images ;;
+                    scripts/check-security.sh) enable security tooling ;;
+                    scripts/*) enable tooling ;;
+                    .github/*|.idea/*|.editorconfig|.gitattributes|.gitignore|.pre-commit-config.yaml|.codeclimate.yml)
+                      enable tooling ;;
+                    *) echo "Unclassified path: $file; retaining full validation"
+                      enable "${names[@]}" ;;
+                  esac
+                  # Tool locks include audit inputs even for report/test tools.
+                  case "$file" in tools/*/composer.json|tools/*/composer.lock) enable security ;; esac
+                done <<< "$files"
+                # Deleted/renamed non-Markdown targets can break existing links.
+                if deleted=$(git diff --no-renames --name-only --diff-filter=D "$comparison"); then
+                  if [ -n "$deleted" ] || grep -qE '^scripts/check-skills\.py$' <<< "$files"; then
+                    enable documentation
+                  fi
+                else
+                  enable documentation
+                fi
               fi
             fi
           fi
+          configuration=false
+          for check in runtime composer yaml compose tooling; do
+            if [ "${checks[$check]}" = "true" ]; then configuration=true; fi
+          done
           echo "Code changes: $code"
-          echo "code=$code" >> "$GITHUB_OUTPUT"
+          {
+            for check in "${names[@]}"; do echo "$check=${checks[$check]}"; done
+            echo "configuration=$configuration"
+            echo "code=$code"
+          } >> "$GITHUB_OUTPUT"
 
   lint-configuration:
     name: Lint configuration
     runs-on: ubuntu-24.04
     needs: changes
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.configuration == 'true' }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -86,27 +179,40 @@ jobs:
 
       - name: Bootstrap PHP project
         uses: ./.github/actions/php-bootstrap
+        with:
+          install-dependencies: ${{ (needs.changes.outputs.runtime == 'true' || needs.changes.outputs.composer == 'true' || needs.changes.outputs.yaml == 'true') && 'true' || 'false' }}
+          print-versions: 'false'
 
       - name: Display Symfony application information
+        if: ${{ needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh application-info
 
       - name: Validate main `composer.json` and `composer.lock` files
+        if: ${{ needs.changes.outputs.composer == 'true' }}
         run: bash scripts/make.sh composer-validate
 
       - name: Check that environment is configured correctly
+        if: ${{ needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh check-requirements
 
       - name: Lint YAML configurations
+        if: ${{ needs.changes.outputs.yaml == 'true' }}
         run: bash scripts/make.sh lint-yaml
 
-      - name: Test container command routing
-        run: bash scripts/make.sh test-make-routing
+      - name: Test development tooling contracts
+        if: ${{ needs.changes.outputs.tooling == 'true' }}
+        run: |
+          bash scripts/make.sh test-command-output
+          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/tests/check-workflow-tool-updates-test.py
 
-      - name: Validate development and local production Compose configurations
+      - name: Validate Compose and Dev Container configurations
+        if: ${{ needs.changes.outputs.compose == 'true' }}
         run: |
           docker compose config --quiet
           docker compose -f compose.yaml -f compose.prod.yaml config --quiet
           docker compose -f compose.yaml -f docker/ci-compose.yaml config --quiet
+          docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml config --quiet
+          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 -m json.tool .devcontainer/devcontainer.json /dev/null
 
       - &stop_php_step
         name: Stop PHP development container
@@ -116,7 +222,8 @@ jobs:
   lint-documentation:
     name: Lint documentation files
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
+    needs: changes
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.documentation == 'true' }}
     timeout-minutes: 10
 
     steps:
@@ -131,6 +238,7 @@ jobs:
           print-versions: 'false'
 
       - name: Lint all markdown documentation files
+        if: ${{ needs.changes.outputs.markdown == 'true' }}
         run: bash scripts/make.sh lint-markdown
 
       - name: Validate skill metadata, index coverage, and repository Markdown links
@@ -141,7 +249,8 @@ jobs:
   lint-workflows:
     name: Validate GitHub workflows
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
+    needs: changes
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.workflows == 'true' }}
     timeout-minutes: 10
     steps:
       - *harden_runner_step
@@ -163,7 +272,7 @@ jobs:
     name: PHP Security Checker
     runs-on: ubuntu-24.04
     needs: changes
-    if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false'))) }}
+    if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && needs.changes.outputs.security == 'true')) }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -202,7 +311,7 @@ jobs:
     name: Verify Docker base image pins (multi-platform)
     runs-on: ubuntu-24.04
     needs: changes
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.images == 'true' }}
     timeout-minutes: 5
     permissions:
       contents: read
@@ -225,7 +334,7 @@ jobs:
     name: Check Docker image versions
     runs-on: ubuntu-24.04
     needs: changes
-    if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false'))) }}
+    if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && needs.changes.outputs.images == 'true')) }}
     timeout-minutes: 10
     permissions:
       contents: read
@@ -276,7 +385,7 @@ jobs:
     name: Lightweight static analyzers
     runs-on: ubuntu-24.04
     needs: changes
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.php == 'true' }}
     timeout-minutes: 10
     steps:
       - *harden_runner_step
@@ -323,7 +432,7 @@ jobs:
     name: Static analyzers (${{ matrix.analyzer.name }})
     runs-on: ubuntu-24.04
     needs: changes
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && needs.changes.outputs.code == 'false') }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.php == 'true' }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -381,6 +490,12 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           CHANGES: ${{ needs.changes.result }}
           CODE_CHANGED: ${{ needs.changes.outputs.code }}
+          DOCUMENTATION_CHANGED: ${{ needs.changes.outputs.documentation }}
+          CONFIGURATION_CHANGED: ${{ needs.changes.outputs.configuration }}
+          WORKFLOWS_CHANGED: ${{ needs.changes.outputs.workflows }}
+          SECURITY_CHANGED: ${{ needs.changes.outputs.security }}
+          IMAGES_CHANGED: ${{ needs.changes.outputs.images }}
+          PHP_CHANGED: ${{ needs.changes.outputs.php }}
           SECURITY_CHECK: ${{ needs.security-check.result }}
           LINT_CONFIGURATION: ${{ needs.lint-configuration.result }}
           LINT_DOCUMENTATION: ${{ needs.lint-documentation.result }}
@@ -403,38 +518,40 @@ jobs:
           echo "Docker base image pin verification result: $DOCKER_PINS"
           echo "Docker image version check result: $DOCKER_UPDATES"
 
-          # Skip only the jobs irrelevant to a confirmed Markdown-only PR.
-          # Scheduled runs execute only the two periodic checks.
+          expect_selected() {
+            case "$1" in
+              true) test "$2" = "success" ;;
+              false) test "$2" = "skipped" ;;
+              *) echo "Invalid change detection output: $1"; return 1 ;;
+            esac
+          }
           if [ "$EVENT_NAME" = "schedule" ]; then
             test "$CHANGES" = "skipped"
-            application_expected=skipped
-            retained_expected=skipped
-            periodic_expected=success
+            test "$SECURITY_CHECK" = "success"
+            test "$DOCKER_UPDATES" = "success"
+            test "$GITLEAKS" = "skipped"
+            CONFIGURATION_CHANGED=false
+            DOCUMENTATION_CHANGED=false
+            WORKFLOWS_CHANGED=false
+            PHP_CHANGED=false
+            IMAGES_CHANGED=false
           else
             test "$CHANGES" = "success"
-            application_expected=success
-            retained_expected=success
-            periodic_expected=success
-            if [ "$EVENT_NAME" = "pull_request" ] && [ "$CODE_CHANGED" = "false" ]; then
-              application_expected=skipped
-              periodic_expected=skipped
-            fi
+            expect_selected "$SECURITY_CHANGED" "$SECURITY_CHECK"
+            expect_selected "$IMAGES_CHANGED" "$DOCKER_UPDATES"
+            test "$GITLEAKS" = "success"
           fi
-
-          test "$SECURITY_CHECK" = "$periodic_expected"
-          test "$DOCKER_UPDATES" = "$periodic_expected"
-          test "$LINT_CONFIGURATION" = "$application_expected"
-          test "$LINT_DOCUMENTATION" = "$retained_expected"
-          test "$LINT_WORKFLOWS" = "$retained_expected"
-          test "$STATIC_ANALYZERS" = "$application_expected"
-          test "$LIGHTWEIGHT_ANALYZERS" = "$application_expected"
-          test "$GITLEAKS" = "$retained_expected"
-          test "$DOCKER_PINS" = "$application_expected"
+          expect_selected "$CONFIGURATION_CHANGED" "$LINT_CONFIGURATION"
+          expect_selected "$DOCUMENTATION_CHANGED" "$LINT_DOCUMENTATION"
+          expect_selected "$WORKFLOWS_CHANGED" "$LINT_WORKFLOWS"
+          expect_selected "$PHP_CHANGED" "$STATIC_ANALYZERS"
+          expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
+          expect_selected "$IMAGES_CHANGED" "$DOCKER_PINS"
 
   test:
     name: PHPUnit tests
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.code == 'true' }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.tests == 'true' }}
     timeout-minutes: 20
     needs:
       - changes
@@ -652,7 +769,7 @@ jobs:
   docker-build:
     name: Build application Docker image (${{ matrix.target }})
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.code == 'true' }}
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.docker == 'true' }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -725,6 +842,9 @@ jobs:
           REF: ${{ github.ref }}
           CHANGES: ${{ needs.changes.result }}
           CODE_CHANGED: ${{ needs.changes.outputs.code }}
+          PHP_CHANGED: ${{ needs.changes.outputs.php }}
+          TESTS_CHANGED: ${{ needs.changes.outputs.tests }}
+          DOCKER_CHANGED: ${{ needs.changes.outputs.docker }}
           CI_SUMMARY: ${{ needs.ci-summary.result }}
           STATIC_ANALYZERS: ${{ needs.static-analyzers.result }}
           LIGHTWEIGHT_ANALYZERS: ${{ needs.lightweight-analyzers.result }}
@@ -741,37 +861,33 @@ jobs:
           echo "Docker build matrix result: $DOCKER_BUILD"
           echo "External reporting result: $REPORT"
 
-          # Scheduled runs skip change detection and application jobs.
-          # Application jobs may also be skipped, but only when change
-          # detection succeeded and found a documentation-only pull request.
-          # Elsewhere every result must be a success.
+          expect_selected() {
+            case "$1" in
+              true) test "$2" = "success" ;;
+              false) test "$2" = "skipped" ;;
+              *) echo "Invalid change detection output: $1"; return 1 ;;
+            esac
+          }
           if [ "$EVENT_NAME" = "schedule" ]; then
-            changes_expected=skipped
-            analyzers_expected=skipped
-            expected_skipped=skipped
+            test "$CHANGES" = "skipped"
+            PHP_CHANGED=false
+            TESTS_CHANGED=false
+            DOCKER_CHANGED=false
           else
-            changes_expected=success
-            analyzers_expected=success
-            if [ "$CODE_CHANGED" = "false" ] && [ "$EVENT_NAME" = "pull_request" ]; then
-              analyzers_expected=skipped
-              expected_skipped=skipped
-            else
-              expected_skipped=success
-            fi
+            test "$CHANGES" = "success"
           fi
 
           report_expected=skipped
-          if [ "$expected_skipped" = "success" ] && {
+          if [ "$TESTS_CHANGED" = "true" ] && {
             [ "$EVENT_NAME" = "pull_request" ] ||
             { [ "$EVENT_NAME" = "push" ] && [ "$REF" = "refs/heads/master" ]; }
           }; then
             report_expected=success
           fi
 
-          test "$CHANGES" = "$changes_expected"
           test "$CI_SUMMARY" = "success"
-          test "$STATIC_ANALYZERS" = "$analyzers_expected"
-          test "$LIGHTWEIGHT_ANALYZERS" = "$analyzers_expected"
-          test "$TEST" = "$expected_skipped"
-          test "$DOCKER_BUILD" = "$expected_skipped"
+          expect_selected "$PHP_CHANGED" "$STATIC_ANALYZERS"
+          expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
+          expect_selected "$TESTS_CHANGED" "$TEST"
+          expect_selected "$DOCKER_CHANGED" "$DOCKER_BUILD"
           test "$REPORT" = "$report_expected"

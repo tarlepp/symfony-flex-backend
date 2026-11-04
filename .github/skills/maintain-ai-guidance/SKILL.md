@@ -132,13 +132,19 @@ invariants from the profiles and
 
 <a id="validation"></a>
 
-With the development services running, execute from the repository root on the
-Docker host after the final edit:
+When guidance Markdown changes, execute from the repository root on the
+Docker host with development services running after the final relevant edit:
 
 ```bash
 make lint-markdown
 make check-skills
 ```
+
+These are conditional checks under the
+[shared selection rules](../shared-guidance.md#running-and-validating-changes),
+not requirements for every task that consults this skill. Pure checker or
+workflow changes use their affected tooling checks; Markdown lint is required
+only if Markdown or its lint tooling/configuration also changes.
 
 Inspect the complete diff, including new files, for scope, duplicate policy,
 contradictory instructions, stale paths, and agreement between contracts and

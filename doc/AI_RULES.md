@@ -117,9 +117,15 @@ Use `.github/workflows/main.yml` as the source of truth; this map is an
 orientation and should be reviewed when that workflow changes. It currently
 contains:
 
-* fail-safe change detection, which skips application configuration,
-  PHP dependency security, Docker pin/update checks, PHP analyzers, tests
-  and Docker builds for confirmed Markdown-only pull requests,
+* fail-safe category selection on PRs, pushes and merge groups, covering
+  configuration, PHP dependency security, Docker pins/updates, PHP analyzers,
+  tests, builds, workflow validation and documentation independently;
+  selected PHP jobs still check whole suites,
+* change-scoped documentation validation on PRs, pushes and merge groups:
+  Markdown style runs for Markdown or lint-tool/configuration changes;
+  skill/link checks also run for checker changes and deleted/renamed targets,
+  while manual runs, shared execution inputs, unclassified paths and unclear
+  diffs retain full validation,
 * configuration lint and documentation checks, including skill metadata,
   index coverage, and local Markdown links and anchors across the repository
   (project tooling uses Make targets inside the Compose `php` development
@@ -145,7 +151,7 @@ contains:
   covered by the final merge gate when eligible. Uploads require their
   respective optional tokens; upload errors fail the reporting job and workflow.
   Fork PRs run the job without repository secrets and skip uploads;
-  Markdown-only PRs skip reporting because tests and artifacts are skipped.
+  test-unaffected changes skip reporting because tests and artifacts skip.
 
 Both aggregate gates use `!cancelled()` at job level. They still run after
 failed or skipped prerequisites, but stop when the workflow is cancelled so
@@ -155,12 +161,15 @@ regressions of the actual gate result scripts; it does not execute GitHub jobs.
 
 The workflow also runs on `merge_group` events. Scheduled runs execute the
 periodic `security-check` and `docker-image-check-updates` jobs and both
-aggregate gates; other check jobs are skipped. Markdown-only PRs retain
-documentation checks, workflow validation and Gitleaks (plus separate
-Dependency Review and CodeQL). Both gates accept skips of
-application-related jobs on schedules or when change  detection succeeded and
-reported `code=false` on a pull request. External reporting additionally skips
-manual runs and merge groups.
+aggregate gates; other check jobs are skipped. Markdown-only changes retain
+documentation checks and Gitleaks (plus separate Dependency Review and CodeQL).
+On non-scheduled validation events both gates accept a category's skip only
+after successful detection explicitly reports its flag as `false`; unknown
+or empty outputs cannot authorize skips. Gitleaks remains required.
+External reporting additionally skips manual runs, merge groups and changes
+that did not select tests. See the
+[selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path) for the
+owning path policy; CI skips are not decided by local focused-test advice.
 
 Docker update availability uses the checker's explicit advisory mode on every
 event: confirmed newer stable multi-platform images produce warnings rather
