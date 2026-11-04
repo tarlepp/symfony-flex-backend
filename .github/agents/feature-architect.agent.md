@@ -42,7 +42,10 @@ Missing skill metadata or loading evidence is not a delivery prerequisite.
 5. Map changes to concrete paths and acceptance criteria. Select existing
    tests and checks using [the validation guide](../../doc/TESTING.md#selecting-validation)
    and actual repository tooling. Include caller-boundary coverage, not only
-   direct method tests.
+   direct method tests. Give each selected check a changed-path or behavior
+   rationale using the
+   [shared selection rules](../skills/shared-guidance.md#running-and-validating-changes);
+   do not copy entire skill checklists into the plan.
 6. Return the plan to the lead for approval. Do not invoke `implementer` in
    design mode. Return unclear or contradictory requirements to the lead
    rather than trusting unsupported assumptions.

@@ -25,6 +25,19 @@ This project includes a Dev Container definition in `.devcontainer/`.
 * The `development` target in the root `Dockerfile`, selected by `compose.yaml`
 * A small Compose override: `.devcontainer/docker-compose.devcontainer.yml`
 
+CI validates the merged Compose override and parses `devcontainer.json` when
+the Compose validation category is selected. Keep `devcontainer.json` strict
+JSON, without comments or trailing commas. This checks syntax, not the Dev
+Container schema or IDE attachment.
+
+To reproduce from the repository root on the Docker host with the PHP
+development service running:
+
+```bash
+docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml config --quiet
+docker compose exec -T php python3 -m json.tool .devcontainer/devcontainer.json /dev/null
+```
+
 ## How to use [ᐞ](#table-of-contents)
 
 <a id="how-to-use"></a>

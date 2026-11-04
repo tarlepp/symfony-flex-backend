@@ -181,15 +181,15 @@ not `Validate CI result`, so it cannot replace a required failure with a skipped
 success. Existing validation of the unchanged commit remains authoritative.
 Other workflows keep their own event filters.
 
-Confirmed Markdown-only pull requests run change detection, documentation
-checks, workflow validation and Gitleaks, plus the separate Dependency Review
-and CodeQL workflows. They skip application configuration checks, PHP
-dependency security checks, Docker pin/update checks, PHP analyzers, PHPUnit
-and Docker builds. Both gates accept these skips only after successful change
-detection reports `code=false` on a `pull_request`. Renames are listed as
-deletions/additions, so renaming code to `.md` still runs full CI; an empty or
-failed diff counts as code. Other events keep full coverage, except schedules,
-which run only the dependency-advisory and Docker-image-update checks.
+PRs, pushes and merge groups select checks using the
+[CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path).
+Markdown-only changes run documentation checks and Gitleaks; analyzer-only
+changes run PHP checks without PHPUnit or image builds. Both gates accept
+skips only after successful detection emits the exact category's `false`
+flag. Renames include both paths. Unknown/empty comparisons, unclassified
+paths, shared execution inputs and manual runs retain full validation.
+Schedules run the dependency-advisory and Docker-image-update checks;
+separate Dependency Review and CodeQL keep their own policies.
 
 Docker image update availability is advisory on every event: confirmed updates
 produce warnings and a maintenance summary, without failing the merge gate.
@@ -215,14 +215,14 @@ PHPUnit and Docker builds start after successful change detection, in parallel
 with lint, security and analyzer jobs. They no longer wait for
 `Validate CI prerequisites`; this improves feedback latency but spends compute
 on tests/builds even when another check later fails. The final merge gate still
-requires the prerequisite gate, all analyzers, tests, both image builds and
+requires the prerequisite gate, selected analyzers, tests, image builds and
 eligible external reporting. External reporting is eligible on all PRs and
 successful pushes to `master`, but requires both successful tests and the
 prerequisite gate (`ci-summary`), so early test success cannot publish reports
 after failed prerequisite checks. Coveralls and SonarCloud uploads require
 their respective optional tokens; upload errors fail the reporting job and
 workflow. Fork PRs run the job without repository secrets and skip uploads.
-Markdown-only PRs skip reporting because tests and artifacts are skipped.
+Test-unaffected changes skip reporting because tests and artifacts are skipped.
 Schedules, manual runs and merge groups also skip reporting. Eligible reporting
 must succeed for the final merge gate to pass; it does not need a separate
 required-check entry.
@@ -240,8 +240,8 @@ PHPLint, PHP Parallel Lint and PHPLoc. Each tool has its own step and runs
 after earlier tool failures, provided bootstrap succeeded and the job has
 not been cancelled. Failures remain blocking. Psalm, PHPStan and PHP Insights
 retain separate matrix jobs; PHPLoc's artifact name and retention are unchanged.
-Both CI gates require the grouped job and the remaining matrix, except for
-confirmed Markdown-only PRs and schedules.
+Both CI gates require the grouped job and remaining matrix when PHP analysis
+is selected. Selected analyzers and PHPUnit still run their full suites.
 
 The shared PHP bootstrap caches Composer downloads only for dependency
 installers. Jobs that defer installation (tests and external reporting) opt in

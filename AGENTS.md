@@ -104,6 +104,14 @@ and the actual code, dependency manifests, and CI workflows.
 * Use `make lint-markdown` for Markdown checks. Do not install additional
   testing or linting tools when the repository already provides the relevant
   command.
+* Scope checks to the full task diff and affected behavior, not all commands
+  listed in an agent or skill. Markdown additions, edits, renames, and deletions
+  require `make lint-markdown`; skip it when neither Markdown nor its lint
+  tooling/configuration changed. Follow the
+  [shared selection rules](.github/skills/shared-guidance.md#running-and-validating-changes)
+  for other linters, tests, builds, documentation links, final-content checks,
+  and result reuse. Application configuration and dependency/runtime changes
+  can require PHP checks and tests without any changed PHP source.
 
 ## Testing and validation [ᐞ](#table-of-contents)
 
@@ -140,7 +148,6 @@ and the actual code, dependency manifests, and CI workflows.
   make phploc
   make phpinsights
   make check-security
-  make lint-markdown
   make run-tests
   ```
 

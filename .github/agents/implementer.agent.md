@@ -52,6 +52,10 @@ implementation, repair, or verification.
    migration; do not use production schema-update commands.
 5. Run the smallest relevant existing checks, expanding for cross-cutting
    behavior as specified by [the validation guide](../../doc/TESTING.md#selecting-validation).
+   Map checks to the accumulated task diff, not every command in consulted
+   skills. Apply the [shared selection rules](../skills/shared-guidance.md#running-and-validating-changes):
+   lint changed Markdown, skip unrelated checks, and rerun only checks whose
+   inputs changed after their last successful run.
    Execute project tooling only in the PHP development container, using
    host-safe Make targets or `docker compose exec -T php <command>` from the
    repository root. Never fall back to host project tooling.

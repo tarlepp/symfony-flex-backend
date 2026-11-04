@@ -129,23 +129,47 @@ safeguards; do not replace them with generic assumptions.
   verify behavior through the real caller or configured component: direct
   method calls alone do not prove that wiring works. Preserve domain-specific
   assertions and negative cases specified by the skill.
+* Select checks from the complete task diff against its original baseline,
+  including staged, unstaged, and new task files; exclude unrelated work.
+  Map each check to changed behavior or an affected consumer before running it.
+  Skill validation sections are conditional menus, not mandatory command
+  lists: reading or invoking a skill does not require executing every check
+  it mentions. Skip unrelated linters, analyzers, tests, and builds.
 * For Symfony service wiring or package configuration changes, run
   `bin/console lint:container` and check the affected environments. Container
   linting is not a substitute for caller-boundary tests or runtime env
   resolution. Use `make lint-yaml` when configuration YAML changes.
-* Run relevant quality checks for the changed code. For PHP changes, these
-  include `make ecs`, `make phplint`, `make phpstan`, and `make psalm`. Run
-  `make lint-markdown` when Markdown files change.
-  For documentation-only changes, including AI instructions and skill text,
-  Markdown lint and documentation checks are sufficient through handoff and
-  commit; do not run PHPUnit or PHP static analysis merely because a skill
-  documents test commands. Select other checks using
+* Run relevant quality checks for the changed code. For application PHP
+  changes, these include `make ecs`, `make phplint`, `make phpstan`, and
+  `make psalm`; tool configuration changes need their affected tool, not
+  automatically every PHP analyzer or PHPUnit. Run `make lint-markdown` when
+  Markdown files change. For documentation-only changes, including AI
+  instructions and skill text, Markdown lint and documentation checks are
+  sufficient through handoff and commit; do not run PHPUnit or PHP static
+  analysis merely because a skill documents test commands. Select other
+  checks using
   [the validation selection guide](../../doc/TESTING.md#selecting-validation).
-* Run checks against the final file contents, after the last edit. For
-  Markdown changes, rerun `make lint-markdown` and
-  `python3 scripts/check-skills.py`; an earlier passing run does not validate
-  later edits. Inspect staged and unstaged diffs before handoff or commit,
-  including first-line headings and the 80-character Markdown line limit.
+* Apply the same selection to non-Markdown work: Symfony YAML lint is for
+  `config/` YAML, workflow lint is for workflows/actions and their validators,
+  Compose checks are for container configuration, and script regressions
+  are for affected tooling. Application tests are required for PHP behavior,
+  dependency/runtime changes, or executable application configuration even
+  without a changed `.php` file; they are not required for isolated lint
+  configuration or unrelated developer scripts. CI's conservative
+  [path selection](../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path)
+  keeps whole suites when selected; do not turn local focused-test advice
+  into changed-file-only CI testing.
+* Run checks against the final affected file contents. Run
+  `make lint-markdown` whenever task Markdown is added, modified, renamed, or
+  deleted, including agent profiles and skill text. Also run `make check-skills`
+  for those changes and for removed/renamed link targets or checker changes.
+  Without Markdown or Markdown-linter/configuration changes, skip Markdown
+  lint; without documentation/checker impact, skip `check-skills`.
+  Reuse successful results on unchanged inputs during the same agent's work;
+  rerun only checks invalidated by later edits, not the entire checklist.
+  Independent verification still runs its own scoped checks.  Inspect staged
+  and unstaged diffs before handoff or commit, including first-line headings
+  and the 80-character Markdown line limit.
 * Before a commit, follow the change-scoped validation requirements in
   [`AGENTS.md`](../../AGENTS.md#testing-and-validation). The broader application
   suite is not mandatory for changes that do not affect application behavior.

@@ -121,19 +121,59 @@ flowchart TD
     Schedule -->|Yes| Periodic["Security advisories + image updates"]
     Periodic --> Gates["Prerequisite gate + final gate"]
     Schedule -->|No| Changes["Detect changed files"]
-    Changes --> Docs{"PR with only .md paths?"}
-    Docs -->|Yes| Retained["Docs + workflow validation + Gitleaks"]
-    Retained --> Gates
-    Docs -->|No| Full["Full checks + analyzers + tests + image builds"]
+    Changes --> Known{"Known, nonempty diff?"}
+    Known -->|Yes| Selected["Affected categories + Gitleaks"]
+    Selected --> Gates
+    Known -->|No| Full["Full checks + analyzers + tests + image builds"]
     Full --> Gates
 ```
 
-Only a nonempty, successful PR diff containing exclusively paths ending in
-`.md` reports `code=false`. Change detection uses the PR base/head comparison
-and disables rename detection, so both old and new paths count. Renaming PHP
-to Markdown still runs full CI. An empty/unclear diff counts as code; a failed
-detection job cannot authorize skips. Push, manual and merge-group events
-always count as code.
+PRs, pushes and merge groups select checks from the complete event diff.
+PR comparisons use the merge base; pushes and merge groups compare event
+base/head directly. Rename detection is disabled, so both old and new paths
+contribute; moving PHP to Markdown still selects PHP checks and tests.
+Mixed changes take the union of affected categories. Selected analyzers and
+PHPUnit run their complete existing suites, not only changed files.
+
+| Changed inputs | Selected validation |
+| --- | --- |
+| Markdown or lint configuration | Markdown lint, skill/link checks |
+| Removed link targets or doc checker | Skill/link checks |
+| App PHP, views, locales, public files | Runtime, PHP, PHPUnit, builds |
+| Migrations and `config/` | Runtime, PHP, PHPUnit, builds; YAML lint |
+| Tests, PHPUnit/report configuration | PHP, PHPUnit/report producers |
+| Analyzer configuration/dependencies | PHP; tool dependency audits |
+| Root Composer/Flex files | Composer, runtime, YAML, audit, PHP, tests |
+| PHP/database runtime, env, Compose | Runtime, Compose, PHP, PHPUnit, builds |
+| nginx, dev shell, Dev Container | Compose, tooling regressions, builds |
+| Other workflows and validators | Workflow validation |
+| Image helper and its regressions | Pins/updates, helper regressions |
+| Other scripts and tooling metadata | Offline tooling regressions |
+| Shared execution inputs or unclassified paths | Full validation |
+
+Here PHP means both analyzer jobs; builds mean both application image targets.
+Root Composer/Flex changes also select builds. Symfony YAML lint applies to
+YAML files under `config/`, not workflow or translation YAML. Dockerfile edits
+also select image pin/update checks. Tool Composer manifests/locks select
+dependency audits; report/test tools also select PHPUnit and report producers.
+The Compose category validates development, local production, CI and Dev
+Container overrides. It also parses `.devcontainer/devcontainer.json` inside
+the PHP container using Python's standard JSON parser. Keep that file strict
+JSON (without comments or trailing commas); no JSONC parser is installed.
+These checks validate syntax and merged Compose configuration, not the Dev
+Container schema or actual IDE attachment.
+
+Shared inputs include `Makefile`, the root `Dockerfile`, `.dockerignore`,
+`main.yml`, local composite actions, and shared command/routing/report
+wrappers. Changes there can affect many job contracts, so they deliberately
+retain full coverage. The owning case list in `main.yml` is authoritative;
+new paths must be classified before they can safely skip checks.
+
+Manual runs, empty/failed comparisons and unclear Git-quoted filenames also
+retain full validation. Gitleaks stays enabled for every non-scheduled
+validation event; separate security workflows keep their own policies.
+Daily dependency-security and image-update checks remain enabled even
+without file changes.
 
 A confirmed metadata edit has a title/body change and no base change in its
 payload. Base changes and unclear edits validate normally. The metadata run
@@ -151,7 +191,8 @@ validation path; the event rules above decide which jobs actually run.
 ```mermaid
 flowchart TD
     Changes["changes: Detect changed files"]
-    Independent["lint-documentation + lint-workflows + gitleaks"]
+    Independent["gitleaks"]
+    Documentation["lint-documentation + lint-workflows (when affected)"]
     Checks["lint-configuration + security-check"]
     Images["docker-image-verify-pins + docker-image-check-updates"]
     Analyzers["lightweight-analyzers + static-analyzers matrix"]
@@ -161,12 +202,14 @@ flowchart TD
     Final["ci-result: Validate CI result"]
     Report["report: External reporting (PRs + master pushes)"]
     Changes --> Checks
+    Changes --> Documentation
     Changes --> Images
     Changes --> Analyzers
     Changes --> Tests
     Changes --> Builds
     Changes --> Prereq
     Independent --> Prereq
+    Documentation --> Prereq
     Checks --> Prereq
     Images --> Prereq
     Analyzers --> Prereq
@@ -196,7 +239,7 @@ Display names appear in GitHub's run graph and logs.
 
 | Job ID | Responsibility |
 | --- | --- |
-| `changes` | Detect whether a PR changes anything beyond Markdown |
+| `changes` | Detect code and documentation validation inputs |
 | `lint-documentation` | Markdown style, skill metadata, local links/anchors |
 | `lint-workflows` | Workflow syntax, shell, security and action metadata |
 | `gitleaks` | Scan for committed secrets |
@@ -212,9 +255,10 @@ Display names appear in GitHub's run graph and logs.
 | `report` | Coveralls/SonarCloud uploads; eligible job must succeed |
 | `ci-result` | Validate the combined core CI result |
 
-Documentation, workflow validation and Gitleaks have no dependency on change
-detection and remain enabled for Markdown-only PRs. All application checks,
-including PHP security and Docker pin/update checks, skip those PRs.
+Only Gitleaks runs independently of change detection. All other check jobs
+depend on successful selection (except the two periodic checks on schedules).
+Markdown-only changes run documentation checks and Gitleaks; unrelated
+workflow, application, analyzer, security and image jobs skip.
 
 `lint-workflows` runs actionlint with ShellCheck, zizmor security auditing,
 local composite-action schema validation and offline tooling regressions.
@@ -231,10 +275,12 @@ one failing variant does not cancel the others.
 
 `ci-summary` checks every prerequisite result. `ci-result` checks change
 detection, the prerequisite gate, both analyzer jobs, PHPUnit, the Docker
-matrix and external reporting. Application jobs must succeed except on
-schedules and confirmed Markdown-only PRs. Reporting must succeed on code PRs
-and `master` pushes; it must be skipped on schedules, manual runs, merge groups
-and Markdown-only PRs. A skipped job is not general permission to merge.
+matrix and external reporting. Selected jobs must succeed; a skip is accepted
+only after successful detection explicitly emits `false` for that category,
+or under the existing schedule policy. Unknown or empty selection outputs
+fail the gates. Reporting must succeed on PRs and `master` pushes when tests
+are selected; it must skip on schedules, manual runs, merge groups and
+test-unaffected changes. A skipped job is not general permission to merge.
 
 Both gates use `!cancelled()`: failed/skipped dependencies still reach their
 result checks, but cancellation stops the gates. Periodic security/update
@@ -347,7 +393,7 @@ PhpMetrics needs a usable JUnit report.
 `ci-summary` succeed, then downloads Clover/JUnit artifacts. Coveralls and
 SonarCloud uploads each require their optional token; absent tokens skip the
 corresponding upload. Fork PRs run the job without repository secrets and skip
-uploads. Markdown-only PRs skip the job because tests and artifacts are skipped;
+uploads. Test-unaffected changes skip the job because tests and artifacts skip;
 schedules, manual runs and merge groups also skip reporting.
 
 The job installs and runs the isolated Coveralls tool in the Compose PHP

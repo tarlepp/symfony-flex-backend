@@ -19,12 +19,12 @@ SUITE = ROOT / "scripts/tests/docker-images-test.sh"
 NATIVE = ROOT / "scripts/native-output.sh"
 DOCKER_IMAGE_TEST_GROUPS = (
     ("Manifest validation", 8),
-    ("Version discovery and output formatting", 13),
-    ("Registry responses and pagination", 6),
+    ("Version discovery and output formatting", 18),
+    ("Registry responses and pagination", 7),
     ("Dockerfile discovery", 3),
     ("Registry lookup failures and retries", 8),
-    ("Update-pin validation", 6),
-    ("Aggregate results and empty discovery", 3),
+    ("Update-pin validation", 10),
+    ("Aggregate results and empty discovery", 4),
 )
 DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
 

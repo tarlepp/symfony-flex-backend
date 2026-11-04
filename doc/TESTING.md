@@ -43,6 +43,13 @@ outputs, rather than running PHPUnit for every AI task. These rules apply
 during iteration, at handoff, and before commit. They govern local validation;
 they do not disable or change required GitHub CI checks.
 
+Use the complete task diff from its original baseline, including new files,
+not just the last repair or latest commit. Exclude unrelated pre-existing
+work. Apply the [shared selection rules](../.github/skills/shared-guidance.md#running-and-validating-changes):
+skill checklists are conditional, changed Markdown must be linted, and checks
+with unchanged inputs need not be repeated during one agent's work.
+Independent verification must still obtain its own scoped evidence.
+
 * **Documentation only:** for Markdown, AI instructions, skill text, comments,
   or non-executable examples, run `make lint-markdown` and
   `python3 scripts/check-skills.py` when Markdown changes. Review example
@@ -91,6 +98,16 @@ the diff before deciding that a change is non-behavioral. When impact is
 unclear, trace callers and expand validation rather than assuming no tests
 are needed. Rerun affected checks after the final edit; earlier passing
 results only cover the content tested then.
+
+For example, `config/services.yaml` needs Symfony YAML/wiring checks and
+affected application tests even when no PHP file changed; a workflow YAML
+file needs `make lint-workflows`, not `make lint-yaml`. An ECS/PHPStan/Psalm
+configuration-only edit needs the affected analyzer, not PHPUnit. A shell
+helper needs syntax checks and its regression suite, not PHP static analysis.
+Container and dependency changes can invalidate several categories at once.
+The [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path)
+documents the conservative automated counterpart; local checks can be more
+focused with caller/behavior evidence. Unknown impact expands validation.
 
 At handoff, state which checks ran, their results, and why PHPUnit was not
 applicable or could not run. Missing containers, dependencies, credentials,

@@ -40,6 +40,11 @@ another agent consulted a supporting skill.
    checks from actual repository tooling and
    [the validation guide](../../doc/TESTING.md#selecting-validation).
    Run focused checks yourself; do not rely solely on reported outcomes.
+   Apply the [shared selection rules](../skills/shared-guidance.md#running-and-validating-changes)
+   to accumulated task changes, including Markdown in profiles and skills.
+   Do not expand to unrelated checks just because a skill lists them.
+   After repairs, rerun checks affected by the repair, retaining your own
+   earlier evidence only when its inputs remain unchanged.
    Use the PHP development container and host-safe Make targets or
    `docker compose exec -T php <command>` from the repository root.
    Missing containers, dependencies, or services mean blocked evidence,

@@ -70,7 +70,13 @@ class CiGatesTest(unittest.TestCase):
             for event in ("pull_request", "push", "merge_group",
                           "workflow_dispatch", "schedule"):
                 environment = dict.fromkeys(result_names, "success")
-                environment.update(EVENT_NAME=event, CODE_CHANGED="true", REF="refs/heads/master")
+                environment.update(EVENT_NAME=event, CODE_CHANGED="true",
+                                   DOCUMENTATION_CHANGED="true", REF="refs/heads/master")
+                flags = re.findall(
+                    r"^          (\w+): \$\{\{ needs\.changes\.outputs\.\w+ \}\}$",
+                    self.jobs[job], re.MULTILINE,
+                )
+                environment.update(dict.fromkeys(flags, "true"))
                 if job == "ci-result" and event in ("merge_group", "workflow_dispatch"):
                     environment["REPORT"] = "skipped"
                 if event == "schedule":
