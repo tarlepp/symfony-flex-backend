@@ -81,8 +81,8 @@ replacement for their actual event filters and conditions:
    on successful change detection and run in parallel with prerequisite
    checks; external reporting needs both tests and the prerequisite gate.
    The final
-   `ci-result` job needs the gate, analyzers, tests and Docker builds and
-   uses `!cancelled()` so superseded workflows release their concurrency
+   `ci-result` job needs the gate, analyzers, tests, Docker builds and reporting.
+   It uses `!cancelled()` so superseded workflows release their concurrency
    slot, while failed prerequisites still reach the result checks. It
    is the required merge gate, so add every new job to its `needs` and
    result checks. The `changes` job gates application configuration, PHP
@@ -95,9 +95,9 @@ replacement for their actual event filters and conditions:
    renaming a prerequisite, update its `needs` entry and result
    checks/messages together. Check failure, cancellation, and skipped-job
    paths, not only success. Do not use `continue-on-error` or permissive
-   result checks to make a required failure appear green; only the
-   third-party reporting steps in `report` and the informational job
-   summary may be non-blocking.
+   result checks to make a failure appear green. Reporting upload failures
+   must fail `report` and the required merge gate on eligible events.
+   Only the informational job summary may be non-blocking.
 4. Preserve shared setup contracts. Inspect all callers before changing
    `php-bootstrap` defaults or input names. Its boolean-like inputs are
    strings compared with `'true'`; preserve compatible caller values.
@@ -133,13 +133,19 @@ replacement for their actual event filters and conditions:
    `# zizmor: ignore[rule]` comment with the reason; rule-wide changes go in
    `.github/zizmor.yml`.
 7. Preserve reporting and artifact contracts. External coverage/Sonar uploads
-   run only after successful pushes to `master`, outside the core CI gate, and
-   require their optional token. Keep core tests independent of those uploads.
-   Verify producer paths match upload paths for coverage, analyzer reports,
-   metrics, and SARIF; keep names unique across matrix jobs where required. Do
-   not upload JWT keys, environment secrets, or unrelated workspace contents.
-   Keep vulnerability thresholds and scan failure behavior unless a policy
-   change is explicitly requested.
+   are eligible on all PRs and successful `master` pushes, after both tests and
+   `ci-summary` succeed. The reporting job must succeed for `ci-result` on
+   eligible events; it is not a separate required-check context. `ci-result`
+   expects reporting to be skipped on schedules, manual runs, merge groups and
+   Markdown-only PRs. Each upload requires its optional token; upload errors
+   fail the reporting job and workflow. Fork PRs run without repository secrets
+   and skip uploads. Markdown-only PRs skip reporting because tests and
+   artifacts are skipped. Keep core tests independent of those uploads. Verify
+   producer paths match upload paths for coverage, analyzer reports, metrics,
+   and SARIF; keep names unique across matrix jobs where required. Do not
+   upload JWT keys, environment secrets, or unrelated workspace contents. Keep
+   vulnerability thresholds and scan failure behavior unless a policy change
+   is explicitly requested.
 8. Update directly related contributor or AI guidance when CI commands or
    required checks change, including
    [AI rules](../../../doc/AI_RULES.md) and

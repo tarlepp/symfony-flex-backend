@@ -74,12 +74,15 @@ summary instead of failing. Base-pin and vulnerability policies are unchanged.
 * `PHPUnit tests` and `Build application Docker image (...)`: need
   only successful change detection, so run in parallel with prerequisite
   checks; skipped for Markdown-only pull requests and schedules.
-* `External reporting`: needs both `PHPUnit tests` and `ci-summary`; runs
-  only on successful `master` pushes.
+* `External reporting`: eligible on all PRs and successful `master` pushes,
+  after both `PHPUnit tests` and `ci-summary` succeed. Each upload requires its
+  optional token; upload errors fail the reporting job and workflow. Fork PRs
+  run the job without repository secrets and skip uploads. Markdown-only PRs
+  skip reporting because tests and artifacts are skipped. Eligible reporting
+  must succeed for the final merge gate to pass.
 * `Validate CI result` (`ci-result`): needs change detection, the
   prerequisite gate, the lightweight analyzers, the analyzer matrix, tests
-  and Docker builds. This is
-  the merge gate.
+  Docker builds and external reporting. This is the merge gate.
 
 Both aggregate gates use `!cancelled()`: failed or skipped dependencies still
 reach their result checks, while workflow cancellation stops the gates and
@@ -88,8 +91,9 @@ unconditional with `always()`. `make lint-workflows` includes offline
 regressions that execute both gates' actual Bash checks. They verify every
 dependency's failure, cancellation and skip outcomes across validation events,
 exact scheduled and Markdown-only exceptions, result bindings, and transitive
-coverage of every core job. External reporting is the only intentionally
-excluded job. These tests do not execute GitHub jobs or verify branch-protection
+coverage of every job. Reporting must succeed on code PRs and `master` pushes;
+it must be skipped on schedules, manual runs, merge groups and Markdown-only
+PRs. These tests do not execute GitHub jobs or verify branch-protection
 settings.
 
 ## Current state [ᐞ](#table-of-contents)
@@ -109,7 +113,7 @@ in the GitHub settings.
   not required: `Detect changed files`, `Validate CI prerequisites`, the
   lint and security jobs, `Validate GitHub workflows`, the
   `Static analyzers (...)` matrix, `Check Docker image versions`,
-  `PHPUnit tests` and the Docker builds. `CodeQL`, `External reporting` and
+  `PHPUnit tests`, the Docker builds and `External reporting`. `CodeQL` and
   the scheduled workflows are not required.
 
 Re-inspect and update this date whenever the settings change.
@@ -123,9 +127,10 @@ request run, not workflow display labels.
 
 * `Validate CI result` (`main.yml`): final aggregate gate. It needs the
   prerequisite gate, the lightweight analyzers, the analyzer matrix,
-  `PHPUnit tests` and both Docker
-  builds, and fails unless all of them succeeded (skipped only on
-  scheduled runs or confirmed Markdown-only PRs as described below).
+  `PHPUnit tests`, eligible `External reporting` and both Docker builds, and
+  fails unless all eligible jobs succeeded. Application jobs skip only on
+  schedules or confirmed Markdown-only PRs; reporting additionally skips merge
+  groups and manual runs.
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the
   aggregate gate cannot cover it.
 
@@ -153,7 +158,10 @@ Rules for this set:
   target means adding its context here and in the branch protection.
 * Select the GitHub Actions app as the source of each check, so a third-party
   app cannot satisfy it by reporting the same name.
-* `External reporting` runs only on `master` pushes and must not be required.
+* `External reporting` is eligible on PRs and successful `master` pushes and
+  is enforced through `Validate CI result`, not a separate required context.
+  Its job must succeed even when optional upload tokens are absent; individual
+  uploads still skip without their tokens.
 * The scheduled runs of `main.yml` and `vulnerability-scan.yml` are not pull
   request checks and must not be required.
 * The current per-job entries (lint, security, gitleaks, pin verification,

@@ -137,11 +137,15 @@ contains:
 * a prerequisite gate (`ci-summary`) that validates the lint, security and
   static-analysis job results,
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
-  both static-analysis jobs, tests and Docker builds, and is the required
-  merge check together with `dependency-review`, and
-* optional coverage and Sonar reporting on `master` pushes after both tests
-  and the prerequisite gate succeed, outside the core CI gate; failures of
-  those third-party steps do not fail the run.
+  both static-analysis jobs, tests, Docker builds and eligible external
+  reporting, and is the required  merge check together with
+  `dependency-review`, and
+* optional coverage and Sonar reporting on all PRs and successful `master`
+  pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
+  covered by the final merge gate when eligible. Uploads require their
+  respective optional tokens; upload errors fail the reporting job and workflow.
+  Fork PRs run the job without repository secrets and skip uploads;
+  Markdown-only PRs skip reporting because tests and artifacts are skipped.
 
 Both aggregate gates use `!cancelled()` at job level. They still run after
 failed or skipped prerequisites, but stop when the workflow is cancelled so
@@ -190,6 +194,9 @@ The shared bootstrap starts the existing development image using
 cache actions, and artifact uploads remain on the runner. Sonar receives
 separate report copies with relative source paths, while container-based
 uploaders and archived reports retain their original paths.
+The reporting job installs and runs the isolated Coveralls tool in the PHP
+development container, forwarding its tokens and required GitHub CI metadata.
+It does not use the runner's PHP or Composer.
 
 BuildKit layer caches are imported for ordinary builds and exported only by
 `master` pushes. Bootstrap loads an explicitly tagged development image before
