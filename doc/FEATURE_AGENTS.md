@@ -375,8 +375,9 @@ validate custom-agent frontmatter or execute this multi-agent workflow.
 Profile changes also need frontmatter and routing review, plus client-level
 discovery and delegation checks where the intended host is available.
 For tool-access changes, also run the read-only review smoke request above in
-VS Code and JetBrains. Record the client, exposed tool names, retrieval result,
-and any missing inline anchors or pagination. Static checks do not prove MCP
+VS Code and JetBrains, plus the PhpStorm MCP smoke request when PhpStorm MCP
+entries change. Record the client, exposed tool names, retrieval result, and
+any missing inline anchors or pagination. Static checks do not prove MCP
 authentication, tool availability inside specialists, or complete review access.
 
 ---
