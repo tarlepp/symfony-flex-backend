@@ -52,7 +52,8 @@ Jobs in `main.yml`, in dependency order:
   (`Lint configuration`, `Lint documentation files`,
   `Validate GitHub workflows`), `PHP Security Checker`, `Gitleaks scan`,
   `Verify Docker base image pins (multi-platform)`,
-  `Check Docker image versions` and the `Static analyzers (...)` matrix.
+  `Check Docker image versions`, `Lightweight static analyzers` and the
+  `Static analyzers (...)` matrix (Psalm, PHPStan and PHP Insights).
 * `Validate CI prerequisites` (`ci-summary`): needs all of the above except
   change detection.
 * `PHPUnit tests` and `Build application Docker image (...)`: need
@@ -60,7 +61,8 @@ Jobs in `main.yml`, in dependency order:
   requests.
 * `External reporting`: needs `PHPUnit tests`; runs only on `master` pushes.
 * `Validate CI result` (`ci-result`): needs change detection, the
-  prerequisite gate, the analyzer matrix, tests and Docker builds. This is
+  prerequisite gate, the lightweight analyzers, the analyzer matrix, tests
+  and Docker builds. This is
   the merge gate.
 
 Both aggregate gates use `!cancelled()`: failed or skipped dependencies still
@@ -99,7 +101,8 @@ The check names below are the exact check-run contexts reported on a real pull
 request run, not workflow display labels.
 
 * `Validate CI result` (`main.yml`): final aggregate gate. It needs the
-  prerequisite gate, the analyzer matrix, `PHPUnit tests` and both Docker
+  prerequisite gate, the lightweight analyzers, the analyzer matrix,
+  `PHPUnit tests` and both Docker
   builds, and fails unless all of them succeeded (skipped only on
   scheduled runs).
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the

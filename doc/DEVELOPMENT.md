@@ -175,6 +175,13 @@ Pull requests that change only Markdown files skip PHPUnit and the Docker
 builds; the gate accepts those skips only for such pull requests. Scheduled
 runs execute only the dependency-advisory and Docker-image-update checks.
 
+`Lightweight static analyzers` shares one bootstrap across CodeSniffer, ECS,
+PHPLint, PHP Parallel Lint and PHPLoc. Each tool has its own step and runs
+after earlier tool failures, provided bootstrap succeeded and the job has
+not been cancelled. Failures remain blocking. Psalm, PHPStan and PHP Insights
+retain separate matrix jobs; PHPLoc's artifact name and retention are unchanged.
+Both CI gates require the grouped job and the remaining matrix.
+
 The shared PHP bootstrap caches Composer downloads only for dependency
 installers. Jobs that defer installation (tests and external reporting) opt in
 with `cache-dependencies: 'true'`; documentation and workflow checks do not
