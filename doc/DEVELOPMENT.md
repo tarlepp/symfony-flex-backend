@@ -164,12 +164,13 @@ you really don't want.
 
 <a id="continuous-integration"></a>
 
-Pull request validation runs the full `main.yml` workflow: linting, security
-checks, static analyzers, PHPUnit and both Docker image builds. `Validate CI
-result` is the single required gate, together with `dependency-review`. The
-[workflow overview](REQUIRED_CHECKS.md#workflow-overview) lists every
-workflow, and [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch
-protection and troubleshooting.
+Pull request validation normally runs linting, security checks, static
+analyzers, PHPUnit and both Docker image builds, with the skip rules below.
+`Validate CI result` is the single required core gate, together with the
+separate `dependency-review` check. The
+[GitHub workflow guide](GITHUB_WORKFLOWS.md) explains events, job dependencies,
+reports and troubleshooting with execution graphs.
+[REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch protection.
 
 Title/body-only PR edits do not repeat validation. The `edited` trigger remains:
 base-branch changes and unclear edit payloads still run CI. Only edits with a
