@@ -700,7 +700,7 @@ jobs:
     needs:
       - ci-summary
       - test
-    if: ${{ success() && (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')) }}
+    if: ${{ !cancelled() && needs.ci-summary.result == 'success' && needs.test.result == 'success' && (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')) }}
     permissions:
       contents: read
     steps:

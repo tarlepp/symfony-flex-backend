@@ -34,6 +34,11 @@ PHP development container.
 Do not use Symfony's `bin/phpunit` entry point, which does not exist in this
 project.
 
+PHPUnit is configured with `failOnDeprecation="true"`. Reported deprecations,
+including those from dependencies, produce a nonzero exit code locally and
+fail the CI test job even when all assertions pass. Deprecation details remain
+visible in the test output.
+
 ### Selecting validation [ᐞ](#table-of-contents)
 
 <a id="selecting-validation"></a>

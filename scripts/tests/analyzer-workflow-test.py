@@ -244,28 +244,40 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIsNotNone(condition)
         self.assertEqual(
             condition.group(1),
-            "success() && (github.event_name == 'pull_request' || "
+            "!cancelled() && needs.ci-summary.result == 'success' && "
+            "needs.test.result == 'success' && (github.event_name == 'pull_request' || "
             "(github.event_name == 'push' && github.ref == 'refs/heads/master'))",
         )
         for event in ("pull_request", "push", "merge_group", "workflow_dispatch", "schedule"):
             for ref in ("refs/heads/master", "refs/heads/feature", "refs/pull/42/merge"):
                 for gate in ("success", "failure", "cancelled", "skipped"):
                     for tests in ("success", "failure", "cancelled", "skipped"):
-                        with self.subTest(event=event, ref=ref, gate=gate, tests=tests):
-                            successful = gate == tests == "success"
-                            expression = condition.group(1).replace(
-                                "success()", "true" if successful else "false",
-                            ).replace("github.event_name", repr(event)).replace(
-                                "github.ref", repr(ref),
-                            ).replace("&&", "and").replace("||", "or")
-                            # Only the asserted expression and fixed values reach eval.
-                            result = eval(expression, {"__builtins__": {}},
-                                          {"true": True, "false": False})
-                            expected = successful and (
-                                event == "pull_request"
-                                or (event == "push" and ref == "refs/heads/master")
-                            )
-                            self.assertEqual(result, expected)
+                        for cancelled in (False, True):
+                            for upstream_skipped in (False, True):
+                                with self.subTest(
+                                    event=event, ref=ref, gate=gate, tests=tests,
+                                    cancelled=cancelled, upstream_skipped=upstream_skipped,
+                                ):
+                                    successful = gate == tests == "success"
+                                    expression = condition.group(1).replace(
+                                        "success()",
+                                        repr(successful and not upstream_skipped),
+                                    ).replace(
+                                        "!cancelled()", repr(not cancelled),
+                                    ).replace(
+                                        "needs.ci-summary.result", repr(gate),
+                                    ).replace(
+                                        "needs.test.result", repr(tests),
+                                    ).replace("github.event_name", repr(event)).replace(
+                                        "github.ref", repr(ref),
+                                    ).replace("&&", "and").replace("||", "or")
+                                    # Only the asserted expression and fixed values reach eval.
+                                    result = eval(expression, {"__builtins__": {}})
+                                    expected = not cancelled and successful and (
+                                        event == "pull_request"
+                                        or (event == "push" and ref == "refs/heads/master")
+                                    )
+                                    self.assertEqual(result, expected)
         self.assertIn("report", dependencies("ci-result"))
         self.assertIn("          ref: ${{ github.sha }}\n", section)
         self.assertIn("          persist-credentials: false\n", section)

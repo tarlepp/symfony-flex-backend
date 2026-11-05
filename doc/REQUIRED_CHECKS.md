@@ -119,6 +119,9 @@ Rules for this set:
   app cannot satisfy it by reporting the same name.
 * `External reporting` is eligible on PRs and successful `master` pushes and
   is enforced through `Validate CI result`, not a separate required context.
+  Its job condition explicitly checks successful prerequisite and test jobs,
+  allowing intentionally skipped upstream checks without bypassing failures
+  or workflow cancellation.
   Its job must succeed even when optional upload tokens are absent; individual
   uploads still skip without their tokens.
 * The scheduled runs of `main.yml` and `vulnerability-scan.yml` are not pull
