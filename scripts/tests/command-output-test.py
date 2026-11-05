@@ -19,6 +19,7 @@ SUITE = ROOT / "scripts/tests/docker-images-test.sh"
 NATIVE = ROOT / "scripts/native-output.sh"
 DOCKER_IMAGE_TEST_GROUPS = (
     ("Manifest validation", 8),
+    ("Pinned tag/digest parity", 5),
     ("Version discovery and output formatting", 18),
     ("Registry responses and pagination", 7),
     ("Dockerfile discovery", 3),
@@ -653,7 +654,7 @@ class CommandOutputTest(unittest.TestCase):
             for name in ("command-output.sh", "docker-images.sh"):
                 shutil.copyfile(ROOT / "scripts" / name, scripts / name)
             content = SUITE.read_text()
-            marker = '    start_case "$name"\n'
+            marker = '    start_case "$name"\n    : > "$TEST_REQUESTS"\n'
             self.assertEqual(content.count(marker), 1)
             suite = tests / SUITE.name
             suite.write_text(content.replace(marker, marker + "    exit 9\n"))
