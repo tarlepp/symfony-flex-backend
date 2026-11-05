@@ -81,6 +81,12 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
                                     log
 ```
 
+Doctrine connections default to `utf8mb4` in
+`config/packages/doctrine.yaml`, independently of the table charset default.
+This avoids provisional platform detection during charset inference when
+`DATABASE_URL` does not specify a server version. No local configuration update
+is required.
+
 ## External links / resources [ᐞ](#table-of-contents)
 
 <a id="external-links-resources"></a>
