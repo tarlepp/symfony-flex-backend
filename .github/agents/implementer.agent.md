@@ -4,7 +4,7 @@ description: >-
   Implement approved Symfony backend plans, add focused tests, and hand off
   completed changes to independent verification; repair verifier findings.
 argument-hint: Provide the approved plan and initial or repair-only mode.
-tools: ['insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply_patch', 'get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'validate_cves', 'run_subagent', 'read', 'search', 'edit', 'execute']
+tools: ['insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply_patch', 'get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'validate_cves', 'run_subagent', 'read', 'search', 'edit', 'execute', 'web', 'web/fetch', 'web_fetch', 'github/pull_request_read', 'github/issue_read', 'github/get_file_contents', 'github/get_commit', 'github-mcp-server/pull_request_read', 'github-mcp-server/issue_read', 'github-mcp-server/get_file_contents', 'github-mcp-server/get_commit', 'github-pull_request_read', 'github-issue_read', 'github-get_file_contents', 'github-get_commit', 'github-mcp-server-pull_request_read', 'github-mcp-server-issue_read', 'github-mcp-server-get_file_contents', 'github-mcp-server-get_commit', 'jetbrains/list_directory_tree', 'jetbrains/read_file', 'jetbrains/search_file', 'jetbrains/search_text', 'jetbrains/search_regex', 'jetbrains/search_symbol', 'jetbrains/get_symbol_info', 'jetbrains/analyze_calls', 'jetbrains/get_composer_dependencies', 'jetbrains/get_php_project_config', 'jetbrains/git_status', 'jetbrains/get_file_problems', 'jetbrains/lint_files', 'jetbrains/execute_terminal_command', 'jetbrains/apply_patch', 'jetbrains/create_new_file', 'jetbrains/rename_refactoring']
 agents:
   - verifier
 user-invocable: false
@@ -24,6 +24,13 @@ The [test-writing skill](../skills/write-tests/SKILL.md) provides test patterns.
 Skills do not authorize edits in inspection-only mode. Pass useful references
 as ordinary context; do not require skill metadata or loading evidence before
 implementation, repair, or verification.
+Follow the shared
+[external-context rules](../../doc/FEATURE_AGENTS.md#external-context-and-github-reviews)
+for supplied URLs and review feedback. Retrieve missing context with available
+read tools before returning an access blocker; carry the evidence and gaps
+into verification and repair reports.
+For IDE context and approved edits, follow the
+[PhpStorm MCP tool rules](../../doc/FEATURE_AGENTS.md#phpstorm-mcp-tools).
 
 ## Implementation
 

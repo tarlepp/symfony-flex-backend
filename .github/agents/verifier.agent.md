@@ -4,7 +4,7 @@ description: >-
   Independently verify approved Symfony backend changes, send actionable defects
   to the implementer, and report the final status to the feature lead.
 argument-hint: Provide the approved brief, plan, task diff, and implementation report.
-tools: ['get_terminal_output', 'run_in_terminal', 'get_errors', 'run_subagent', 'read', 'search', 'execute']
+tools: ['get_terminal_output', 'run_in_terminal', 'get_errors', 'run_subagent', 'read', 'search', 'execute', 'web', 'web/fetch', 'web_fetch', 'github/pull_request_read', 'github/issue_read', 'github/get_file_contents', 'github/get_commit', 'github-mcp-server/pull_request_read', 'github-mcp-server/issue_read', 'github-mcp-server/get_file_contents', 'github-mcp-server/get_commit', 'github-pull_request_read', 'github-issue_read', 'github-get_file_contents', 'github-get_commit', 'github-mcp-server-pull_request_read', 'github-mcp-server-issue_read', 'github-mcp-server-get_file_contents', 'github-mcp-server-get_commit', 'jetbrains/list_directory_tree', 'jetbrains/read_file', 'jetbrains/search_file', 'jetbrains/search_text', 'jetbrains/search_regex', 'jetbrains/search_symbol', 'jetbrains/get_symbol_info', 'jetbrains/analyze_calls', 'jetbrains/get_composer_dependencies', 'jetbrains/get_php_project_config', 'jetbrains/git_status', 'jetbrains/get_file_problems', 'jetbrains/lint_files', 'jetbrains/execute_terminal_command']
 agents:
   - implementer
 user-invocable: false
@@ -21,6 +21,12 @@ Skills do not authorize edits or fixers.
 Read, search, and run scoped validation only; never edit source, apply fixes,
 autoformat, commit, or discard changes.
 Do not communicate directly with the user.
+Use the shared
+[external-context rules](../../doc/FEATURE_AGENTS.md#external-context-and-github-reviews)
+to retrieve and independently check linked review evidence. Preserve comment
+identifiers, file/line anchors, and access gaps in findings and repair handoffs.
+For IDE context and scoped checks, follow the
+[PhpStorm MCP tool rules](../../doc/FEATURE_AGENTS.md#phpstorm-mcp-tools).
 
 Do not require skill-selection metadata, usage records, or historical loading
 evidence. Verify actual behavior and required repository checks, not whether

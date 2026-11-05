@@ -4,7 +4,7 @@ description: >-
   Design evidence-based Symfony backend changes and hand an explicitly approved
   plan to the implementer.
 argument-hint: Provide a confirmed brief and design or deliver mode.
-tools: ['get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent', 'read', 'search']
+tools: ['open_file', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'run_subagent', 'read', 'search', 'web', 'web/fetch', 'web_fetch', 'github/pull_request_read', 'github/issue_read', 'github/get_file_contents', 'github/get_commit', 'github-mcp-server/pull_request_read', 'github-mcp-server/issue_read', 'github-mcp-server/get_file_contents', 'github-mcp-server/get_commit', 'github-pull_request_read', 'github-issue_read', 'github-get_file_contents', 'github-get_commit', 'github-mcp-server-pull_request_read', 'github-mcp-server-issue_read', 'github-mcp-server-get_file_contents', 'github-mcp-server-get_commit', 'jetbrains/list_directory_tree', 'jetbrains/read_file', 'jetbrains/search_file', 'jetbrains/search_text', 'jetbrains/search_regex', 'jetbrains/search_symbol', 'jetbrains/get_symbol_info', 'jetbrains/analyze_calls', 'jetbrains/get_composer_dependencies', 'jetbrains/get_php_project_config', 'jetbrains/git_status']
 agents:
   - implementer
 user-invocable: false
@@ -21,6 +21,12 @@ when useful, following the
 Do not execute their implementation or validation commands yourself.
 Read and search only, except for the explicitly permitted delegation below.
 Do not edit files, run commands, or create planning documents or ADRs.
+Use read-only web and GitHub tools under the shared
+[external-context rules](../../doc/FEATURE_AGENTS.md#external-context-and-github-reviews).
+Retrieve supplied links when available; preserve their evidence and access
+gaps in the plan and implementation handoff.
+For IDE context, follow the
+[PhpStorm MCP tool rules](../../doc/FEATURE_AGENTS.md#phpstorm-mcp-tools).
 
 Pass useful skill references as ordinary implementation context when relevant.
 Missing skill metadata or loading evidence is not a delivery prerequisite.
