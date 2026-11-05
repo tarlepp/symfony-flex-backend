@@ -211,7 +211,7 @@ and `jq`. The read-only update checker additionally requires `curl`.
   for external Dockerfile images, including `COPY --from` tools; optionally
   set `IMAGE` to check a single image
 * `make docker-image-verify-pins` - verify that PHP, nginx and MariaDB
-  base images are multi-platform
+  base image pins are multi-platform and match their tags
 * `make docker-builder-platforms` - show platforms supported by the buildx
   builder
 * `make docker-setup-qemu` - install QEMU emulators (asks `PLATFORMS`)
@@ -256,11 +256,13 @@ group but are checked only once. Each update includes a copyable
 `tag@sha256:digest` reference and its supported platforms, verified by inspecting
 the resolved digest as an index with at least two distinct runnable platforms.
 Failed digest lookups or single-platform updates fail explicitly.
-It reports updates without modifying files or checking current-tag digest
-changes or upgrade compatibility. It exits `0` only when there are no updates
-or errors (explicit skips are allowed). Available updates or lookup errors exit
-`1`; missing tools exit `69`. All images are checked before reporting failure,
-so the command can be used as a CI gate. Make also fails, but does not preserve
+It reports updates without modifying files or checking upgrade compatibility.
+It does not check whether an existing `tag@digest` pin still matches its tag;
+`make docker-image-verify-pins` performs that check for the repository's base
+images. The update checker exits `0` only when there are no updates or errors
+(explicit skips are allowed). Available updates or lookup errors exit `1`;
+missing tools exit `69`. All images are checked before reporting failure, so
+the command can be used as a CI gate. Make also fails, but does not preserve
 the script's exact non-zero exit code.
 
 For advisory maintenance checks, run from the repository root on the Docker host:
@@ -345,8 +347,11 @@ FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a
 make docker-image-verify-pins
 ```
 
-This checks registry base images and shows the result per file and per `FROM` line,
-followed by a summary.
+This checks registry base images and shows the result per file and per `FROM`
+line, followed by a summary. For tagged digest pins, it verifies that the
+current tag resolves to the pinned digest as well as confirming that the
+pinned digest is a multi-platform index. A tag that has moved since the pin
+was recorded fails verification.
 
 It checks that every external `FROM` line in these files uses a multi-platform
 base image:
@@ -360,6 +365,7 @@ base image:
 
 Dockerfile
   line 2: php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
+  OK    Tag digest matches
   OK    Multi-platform: linux/amd64 linux/arm/v7 linux/arm64/v8 linux/386 linux/ppc64le
 
 ...
@@ -378,7 +384,7 @@ Summary
     docker/nginx/Dockerfile                                  OK
     docker/mariadb/Dockerfile                                OK
 
-[OK] All Dockerfiles use multi-platform base images
+[OK] All Dockerfiles use valid multi-platform image pins
 ```
 
 Statuses for each `FROM` line:
@@ -386,10 +392,14 @@ Statuses for each `FROM` line:
 * `OK` - pinned to a multi-platform index digest; supported platforms are
   listed.
 * `WARN` - not pinned with a digest. Tags resolve to the index, so this is
-  multi-platform if the upstream image is, but it is not reproducible.
+  multi-platform if the upstream image is, but it is not reproducible; or
+  pinned by digest without an explicit tag, so tag/digest parity cannot be
+  checked.
 * `FAIL` - pinned to a single platform manifest, an index with fewer than two
-  distinct runnable platforms, or the image could not be inspected. Choose
-  an available multi-platform image using `make docker-image-digest`.
+  distinct runnable platforms, a tag that no longer resolves to the pinned
+  digest, or the image/tag could not be inspected. Choose an available
+  multi-platform image using `make docker-image-digest` and update the
+  Dockerfile's tag and digest together.
 
 References to earlier build stages (`FROM base AS final`) are skipped.
 

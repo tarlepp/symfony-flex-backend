@@ -323,8 +323,8 @@ docker-image-check-updates  # Report newer stable Docker Hub image versions
                             # (optional IMAGE; otherwise external Dockerfile images)
 docker-image-digest         # Show multi-platform index digest for image
                             # (asks IMAGE)
-docker-image-verify-pins    # Verify that PHP, nginx and MariaDB base
-                            # images are multi-platform
+docker-image-verify-pins    # Verify base image pins are multi-platform and
+                            # match their tags
 docker-kill-containers      # Kill all running docker containers
 docker-prune                # Kill all running containers and prune all docker
                             # stuff
