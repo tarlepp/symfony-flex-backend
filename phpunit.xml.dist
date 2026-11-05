@@ -7,6 +7,7 @@
     testdox="false"
     testdoxSummary="true"
     beStrictAboutOutputDuringTests="true"
+    failOnDeprecation="true"
     stopOnError="true"
     stopOnFailure="true"
     stopOnDefect="true"
@@ -41,7 +42,8 @@
         <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb" />
         <!--
         To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
-        indirect deprecations are just shown on test output to help to track those.
+        PHPUnit also fails on all deprecations it reports, including indirect ones,
+        through failOnDeprecation above.
 
         Note that you can change this behaviour if you want to, just see following documentation and see
         how you can configure that.
