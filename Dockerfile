@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.19
-FROM php:8.5.12-fpm-bookworm@sha256:740a5adab5af19504d8aa0754e903e20b40b0153cfd4013c11e4df2029a7b73c AS base
+FROM php:8.5.12-fpm-bookworm@sha256:eec275cd99580e0a6e103dd343a7c160c86917003f6b9bba2d4c75d82419c683 AS base
 
 RUN apt-get update \
     && apt-get install --only-upgrade -y apt \
