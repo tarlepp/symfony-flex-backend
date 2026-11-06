@@ -245,7 +245,7 @@ Display names appear in GitHub's run graph and logs.
 | `gitleaks` | Scan for committed secrets |
 | `lint-configuration` | Composer, runtime, YAML, routing and Compose checks |
 | `security-check` | Symfony security checker and `make check-security` |
-| `docker-image-verify-pins` | Verify multi-platform base-image pins |
+| `docker-image-verify-pins` | Verify pins and tag/digest parity |
 | `docker-image-check-updates` | Helper regressions and advisory update lookup |
 | `lightweight-analyzers` | CodeSniffer, ECS, PHPLint, Parallel Lint, PHPLoc |
 | `static-analyzers` | Separate Psalm, PHPStan and PHP Insights matrix jobs |

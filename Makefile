@@ -674,7 +674,7 @@ else
 	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image digest inspection" ./scripts/docker-images.sh digest
 endif
 
-docker-image-verify-pins: ## Verify base images are multi-platform
+docker-image-verify-pins: ## Verify base image pins are multi-platform and match their tags
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else

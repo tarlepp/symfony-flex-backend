@@ -395,9 +395,10 @@ make docker-image-verify-pins
 ```
 
 Blue `[RUN]`
-headings group manifest validation, version discovery/output formatting,
-registry responses/pagination, Dockerfile discovery, lookup failures/retries,
-update-pin validation, and aggregate results/empty discovery. Individual
+headings group manifest validation, pinned tag/digest parity, version
+discovery/output formatting, registry responses/pagination, Dockerfile
+discovery, lookup failures/retries, update-pin validation, and aggregate
+results/empty discovery. Individual
 `[OK]` results remain visible beneath each heading. Expected negative
 cases are passing tests when their rejection assertions succeed. Case success
 is printed after its follow-up assertions, and failures include the scenario,
@@ -640,7 +641,8 @@ Update and security checks distinguish findings from execution failures:
   failed checks and updates. Skipped versions remain yellow and return success.
   CI uses the direct script's `check-updates --advisory` mode: confirmed updates
   return success with visible warnings, while failed checks remain nonzero.
-  `docker-image-verify-pins` remains blocking for invalid/unresolvable pins.
+  `docker-image-verify-pins` remains blocking for invalid, unresolvable, or
+  tag-mismatched pins.
 * `check-security` remains blocking for advisory-constraint, cache-refresh,
   or installed-package audit failures. If the optional local checker is absent,
   a yellow `[SKIP]` replaces its previous silent omission; exit success is
@@ -883,8 +885,10 @@ non-interactive shell, required values without defaults must be given as
 variables.
 
 Digest lookup and pin verification require at least two distinct runnable
-platforms in an image index. Empty and single-platform indexes fail with an
-explicit diagnostic instead of being accepted as multi-platform.
+platforms in an image index. Pin verification also requires tagged digests to
+match their current tag; digest-only references warn because parity cannot be
+checked. Empty and single-platform indexes fail with an explicit diagnostic
+instead of being accepted as multi-platform.
 
 Check a single image with
 `make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm`, or run

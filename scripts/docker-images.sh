@@ -12,8 +12,8 @@
 # Commands:
 #   check-updates  Report newer stable image versions (Docker Hub)
 #   digest      Show multi-platform index digest and pin reference for image
-#   verify      Verify that PHP, nginx and MariaDB Dockerfile base images are
-#               multi-platform
+#   verify      Verify that PHP, nginx and MariaDB Dockerfile pins are
+#               multi-platform and match their tags
 #   platforms   Show platforms that the current buildx builder supports
 #   setup-qemu  Install QEMU emulators for cross-platform builds
 #   build       Build image for a single platform and load it locally
@@ -66,8 +66,8 @@ Usage:
 Commands:
   check-updates  Report newer stable image versions (Docker Hub)
   digest         Show multi-platform index digest and pin reference for image
-  verify         Verify that PHP, nginx and MariaDB Dockerfile base images are
-                 multi-platform
+  verify         Verify that PHP, nginx and MariaDB Dockerfile pins are
+                 multi-platform and match their tags
   platforms      Show platforms that the current buildx builder supports
   setup-qemu     Install QEMU emulators for cross-platform builds
   build          Build image for a single platform and load it locally
@@ -625,6 +625,7 @@ verify_dockerfile() {
     local file="$1"
     local -A stages=()
     local line_number line word ref raw type platforms is_stage status=0 found=0 warnings=0
+    local tag_ref pinned_digest tag_digest parity_result pin_status
     local -a words
 
     printf '%s%s%s\n' "$BOLD" "$file" "$NC"
@@ -683,20 +684,57 @@ verify_dockerfile() {
         raw="${MANIFEST_CACHE[$ref]}"
         type="$(media_type "$raw")"
         platforms="$(image_platforms "$raw")"
+        tag_ref="${ref%@*}"
+        pinned_digest="${ref##*@}"
+        parity_result=''
+        pin_status=0
+
+        if [[ "${tag_ref##*/}" != *:* ]]; then
+            printf '  %s[WARN]%s Cannot verify tag/digest parity: reference has no explicit tag\n' "$YELLOW" "$NC"
+            github_annotation warning "$file" "$line_number" "Tag/digest parity not checked" "${ref} has no explicit tag to compare with its digest"
+            parity_result='tag/digest parity not checked (no explicit tag)'
+            warnings=$((warnings + 1))
+        else
+            if ! tag_digest="$(inspect_image "$tag_ref" --format '{{.Manifest.Digest}}')"; then
+                printf '  %s[FAIL]%s Could not resolve current tag digest: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$tag_digest")"
+                github_annotation error "$file" "$line_number" "Tag digest could not be resolved" "${tag_ref}: $(tail -n 1 <<< "$tag_digest")"
+                parity_result='tag digest lookup failed'
+                status=1
+                pin_status=1
+            elif ! [[ "$tag_digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
+                printf '  %s[FAIL]%s Invalid digest for current tag: %s\n' "$RED" "$NC" "$tag_digest"
+                github_annotation error "$file" "$line_number" "Invalid tag digest" "${tag_ref} resolved to an invalid digest: ${tag_digest}"
+                parity_result='invalid current tag digest'
+                status=1
+                pin_status=1
+            elif [ "$tag_digest" != "$pinned_digest" ]; then
+                printf '  %s[FAIL]%s Tag digest mismatch: tag resolves to %s, pinned digest is %s\n' "$RED" "$NC" "$tag_digest" "$pinned_digest"
+                github_annotation error "$file" "$line_number" "Tag and digest do not match" "${tag_ref} resolves to ${tag_digest}, but the Dockerfile pins ${pinned_digest}"
+                parity_result="tag digest mismatch (tag: ${tag_digest}; pinned: ${pinned_digest})"
+                status=1
+                pin_status=1
+            else
+                printf '  %s[OK]%s Tag digest matches\n' "$GREEN" "$NC"
+                parity_result='tag digest matches'
+            fi
+        fi
 
         if ! is_index "$type"; then
             printf '  %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
             github_annotation error "$file" "$line_number" "Single platform base image digest" "${ref} points to a single platform manifest. Replace it with the multi-platform index digest from: make docker-image-digest IMAGE=${ref%@*}"
-            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest |")
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest; ${parity_result} |")
             status=1
         elif [[ "$platforms" != *" "* ]]; then
             printf '  %s[FAIL]%s Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
             github_annotation error "$file" "$line_number" "Insufficient base image platforms" "${ref} contains fewer than two distinct runnable platforms (${platforms:-none}). Wait for upstream platform images or choose another tag and digest."
-            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}) |")
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}); ${parity_result} |")
             status=1
+        elif [ "$pin_status" -eq 1 ]; then
+            printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Multi-platform: ${platforms}; ${parity_result} |")
         else
             printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
-            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms} |")
+            IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms}; ${parity_result} |")
         fi
     done < <(grep -niE '^[[:space:]]*FROM[[:space:]]' "$file")
 
@@ -740,9 +778,9 @@ write_verify_summary() {
     if [ "$failures" -gt 0 ]; then
         github_summary ":x: **${failures} check(s) failed.** See $(doc_link) how to fix those." ""
     elif [ "$warnings" -gt 0 ]; then
-        github_summary ":warning: All base images are multi-platform, ${warnings} Dockerfile(s) with unpinned tags." ""
+        github_summary ":warning: Base image checks completed with ${warnings} warning(s)." ""
     else
-        github_summary ":white_check_mark: All base images are multi-platform." ""
+        github_summary ":white_check_mark: All base image pins are valid multi-platform references." ""
     fi
 
     github_summary "| Multi-platform base images | Result |" "|---|---|"
@@ -807,11 +845,11 @@ command_verify() {
     fi
 
     if [ "$warnings" -gt 0 ]; then
-        output_result WARN "All Dockerfiles use multi-platform base images, ${warnings} with unpinned tags"
+        output_result WARN "Base image checks completed with ${warnings} warning(s)"
         return 0
     fi
 
-    output_result OK 'All Dockerfiles use multi-platform base images'
+    output_result OK 'All Dockerfiles use valid multi-platform image pins'
 }
 
 command_platforms() {

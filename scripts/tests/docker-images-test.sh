@@ -114,7 +114,16 @@ case "$*" in
             printf 'Digest lookup failed\n' >&2
             exit 1
         fi
-        printf '%s\n' "${TEST_DIGEST:-sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}"
+        ref="${@: -3:1}"
+        if [[ -n "${TEST_VERIFY_TAG_DIGEST+x}" ]] && [[ "$ref" != *@* ]]; then
+            if [ "${TEST_VERIFY_TAG_FAILURE:-}" = 1 ]; then
+                printf 'Tag digest lookup failed\n' >&2
+                exit 1
+            fi
+            printf '%s\n' "$TEST_VERIFY_TAG_DIGEST"
+        else
+            printf '%s\n' "${TEST_DIGEST:-sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}"
+        fi
         ;;
     *) printf 'Unexpected Docker command: %s\n' "$*" >&2; exit 1 ;;
 esac
@@ -217,6 +226,46 @@ check 'attestation with platform metadata' 1 \
 check 'single-platform manifest' 1 \
     '{"mediaType":"application/vnd.oci.image.manifest.v1+json","config":{},"layers":[]}' \
     '[Ss]ingle platform'
+
+verify_pin_parity() {
+    local name="$1" tag_digest="$2" expected="$3" message="$4" failure="${5:-}" status=0
+
+    start_case "$name"
+    : > "$GITHUB_STEP_SUMMARY"
+    TEST_VERIFY_TAG_DIGEST="$tag_digest" TEST_VERIFY_TAG_FAILURE="$failure" \
+        bash "$SCRIPT" verify > "$WORK/output" 2>&1 || status=$?
+    if [ "$status" -ne "$expected" ] || ! grep -Fq -- "$message" "$WORK/output"; then
+        printf 'FAIL: %s: expected exit %s and message "%s", got exit %s\n' \
+            "$name" "$expected" "$message" "$status"
+        cat "$WORK/output"
+        exit 1
+    fi
+}
+
+start_group 'Pinned tag/digest parity'
+printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}}]}\n' \
+    > "$TEST_MANIFEST"
+verify_pin_parity 'matching tag digest' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
+    'Tag digest matches'
+verify_pin_parity 'mismatched tag digest fails verification' \
+    'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' 1 \
+    'Tag digest mismatch: tag resolves to sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+grep -Fq '::error file=Dockerfile,line=1,title=Tag and digest do not match::' "$WORK/output"
+verify_pin_parity 'tag digest lookup failure fails verification' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 1 \
+    'Could not resolve current tag digest' 1
+verify_pin_parity 'invalid tag digest fails verification' 'invalid-digest' 1 \
+    'Invalid digest for current tag: invalid-digest'
+printf 'FROM test@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa AS base\nFROM base AS final\n' \
+    > "$WORK/Dockerfile"
+verify_pin_parity 'digest-only reference warns that parity cannot be checked' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
+    'Cannot verify tag/digest parity: reference has no explicit tag'
+grep -Fq '::warning file=Dockerfile,line=1' "$WORK/output"
+grep -Fq 'OK (with warnings)' "$WORK/output"
+printf 'FROM test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa AS base\nFROM base AS final\n' \
+    > "$WORK/Dockerfile"
 
 start_group 'Version discovery and output formatting'
 printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}}]}\n' > "$TEST_MANIFEST"
