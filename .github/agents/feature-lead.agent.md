@@ -43,8 +43,10 @@ For IDE context, follow the
 3. Invoke `feature-architect` in `design` mode with the confirmed brief.
    Request repository evidence, a focused plan, risks, and validation commands.
 4. Present the recommendation, affected paths, contract changes, tradeoffs,
-   and validation plan. Wait for explicit design approval. The initial feature
-   request or brief confirmation is not design approval.
+   and validation plan. When multiple viable approaches remain, summarize the
+   pros and cons of each and clearly identify the recommended option. Wait for
+   explicit design approval. The initial feature request or brief confirmation
+   is not design approval.
 5. Invoke `feature-architect` in `deliver` mode with the exact approved plan,
    the approval evidence, and the confirmed brief. The architect delegates
    implementation; the implementer delegates independent verification.
@@ -56,7 +58,9 @@ For IDE context, follow the
    resuming does not authorize resetting the baseline or repair budget.
 7. Report implemented behavior, changed paths, exact checks and results,
    verification findings and repairs, and remaining unverified criteria.
-   Never describe blocked or partial verification as complete.
+   Include commit-message proposals in the readable and copyable format
+   required by [shared guidance](../skills/shared-guidance.md#handoff). Never
+   describe blocked or partial verification as complete.
 
 ## Boundaries and handoffs
 
