@@ -18,6 +18,9 @@ replacing repository policy or adding a frontend application.
     * [Using the agents](#using-the-agents)
     * [External context and GitHub reviews](#external-context-and-github-reviews)
       * [IDE setup](#ide-setup)
+      * [VS Code setup](#vs-code-setup)
+      * [JetBrains setup](#jetbrains-setup)
+      * [Tool-access diagnostics](#tool-access-diagnostics)
       * [PhpStorm MCP tools](#phpstorm-mcp-tools)
     * [Compatibility and limitations](#compatibility-and-limitations)
     * [Validation](#validation)
@@ -189,17 +192,78 @@ disabled by the user or organization. Use an account with access to the target
 repository and the minimum necessary read permissions. Keep credentials in the
 client's secure authentication configuration, never in repository files.
 
-* **VS Code:** install/connect the GitHub MCP server using the
-  [official setup guide][github-mcp-setup]. Start it with **MCP: List Servers**,
-  complete authentication, and enable its read tools. In the Local harness,
-  use Chat's **Configure Tools** picker; in the Copilot harness, use
-  **Chat: Open Customizations** and the **Tools** tab. Use the `github` or
-  `github-mcp-server` server name to match the profiles' explicit references.
-* **JetBrains:** update the GitHub Copilot plugin, sign in, and open Copilot
-  Chat's **Agent** tab. Use the MCP registry or **Configure your MCP server**
-  and **Add MCP Tools** to connect GitHub following the
-  [IDE MCP instructions][ide-mcp]. Enable its read tools in the tool picker.
-  An already exposed GitHub read tool does not require a second server.
+The profiles already permit GitHub reads; permission entries alone do not
+connect the IDE to GitHub. Use the following configuration in the client
+location described below. This is an IDE-host configuration, not a container
+command or agent `mcp-servers` entry. Merge the `github` server into an existing
+`servers` object without replacing other servers. If GitHub tools already work,
+reuse that connection rather than adding a duplicate.
+
+```json
+{
+  "servers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/readonly"
+    }
+  }
+}
+```
+
+The official [remote server reference][github-mcp-remote] documents the
+`/readonly` endpoint. It exposes only read operations and uses client-managed
+OAuth, without a token in this example. The explicit profile allowlists still
+limit which of those tools each agent may use. Authenticate with an account
+that can access the linked repository; IDE sign-in alone does not prove MCP
+authentication. Do not commit client credentials or paste tokens into chat.
+
+### VS Code setup [ᐞ](#table-of-contents)
+
+<a id="vs-code-setup"></a>
+
+Open this repository on the IDE host and use **MCP: Add Server** to add the
+HTTP server above with ID `github`, choosing your user configuration. For a
+deliberately shared workspace connection, use `.vscode/mcp.json` at the
+repository root instead. Configure a server in only one location. The
+[official setup guide][github-mcp-setup] also provides registry installation;
+check its resulting server ID against the profile references.
+
+Use **MCP: List Servers** to select and start `github`, accept the trust prompt,
+and complete OAuth authentication. In the Local harness, enable
+`pull_request_read`, `issue_read`, `get_file_contents`, and `get_commit` in
+Chat's **Configure Tools** picker. In the Copilot harness, use
+**Chat: Open Customizations** and the **Tools** tab. Keep the native web-fetch
+tool enabled for non-GitHub documentation URLs.
+
+Reload the agent profiles and start a fresh `feature-lead` conversation.
+Inspect tools in the same harness used for the failing session: successful
+retrieval in another harness does not establish this session's access.
+
+### JetBrains setup [ᐞ](#table-of-contents)
+
+<a id="jetbrains-setup"></a>
+
+On the IDE host, update the GitHub Copilot plugin, sign in, and open Copilot
+Chat's **Agent** tab. Click **Configure your MCP server**, then **Add MCP Tools**
+to open Copilot's `mcp.json`. Merge the configuration above into that file;
+use the location opened by the plugin rather than guessing an `.idea` path.
+These steps follow the [official setup guide][github-mcp-setup] and
+[IDE MCP instructions][ide-mcp].
+
+Accept the MCP authentication prompt and complete the browser OAuth flow.
+Reconnect the server if required, then enable `pull_request_read`, `issue_read`,
+`get_file_contents`, and `get_commit` in the Copilot tool picker. Keep the native
+`web_fetch` tool enabled for non-GitHub documentation URLs. Reload profiles or
+start a fresh `feature-lead` conversation after changing tool exposure.
+
+Copilot's MCP connection is separate from PhpStorm's built-in IDE MCP server.
+Enabling the latter alone cannot fetch GitHub reviews. Organization policy or
+OAuth app restrictions may require administrator approval; adding profile
+entries cannot override those restrictions.
+
+### Tool-access diagnostics [ᐞ](#table-of-contents)
+
+<a id="tool-access-diagnostics"></a>
 
 The allowlists include `web`, VS Code's canonical `web/fetch`, the observed
 JetBrains `web_fetch` tool, and `github/<tool>` / `github-mcp-server/<tool>`
@@ -220,14 +284,19 @@ parsing issue, not that the tool name should include a leading dash. Restore
 the flow-array format and reload the profile before diagnosing tool
 availability. Valid YAML alone does not prove client parser compatibility.
 
-After changing tools, reload the profiles or start a fresh lead conversation
-as required by the client. Before delivery, use this read-only smoke request
-in each IDE, replacing the placeholder with a review URL you can access:
+Before delivery, use this read-only diagnostic request in each IDE, replacing
+the placeholder with a review URL you can access:
 
 ```text
 Read <GitHub review URL> without editing files or changing GitHub state.
-Retrieve the review body and all inline threads, following pagination.
-Report comment identifiers, paths, line anchors, and any access gaps.
+Inspect your available tools and report the exact GitHub read and web-fetch
+tool names. Use pull_request_read with get_reviews and get_review_comments
+to retrieve the linked review body and inline threads, following pagination.
+Include relevant replies, comment identifiers, paths, and current/original
+line anchors. Do not substitute the PR description for review comments.
+If retrieval fails, report the exact tool, method, target, and observed error.
+Distinguish a missing tool from authentication or repository-access failure.
+Preserve partial evidence and identify only the remaining gaps.
 Do not start implementation or delegate a delivery task.
 ```
 
@@ -237,6 +306,31 @@ during an authorized delivery; a successful lead fetch does not prove that
 subagents inherit the same tools. If tools are missing or return authorization
 errors, check the picker, MCP connection/logs, sign-in, repository permissions,
 and organization MCP policy before retrying. Do not request tokens in chat.
+
+Apply the matching diagnostic on the IDE host:
+
+* **No GitHub tools in the normal Agent picker:** start/reconnect MCP, complete
+  OAuth, enable the four read tools, and check organization policy.
+* **Normal Agent can read; custom agent cannot:** compare discovered canonical
+  tool names with that profile's `tools` entries, reload it, and retry in a
+  fresh session.
+* **Lead can read; specialist cannot:** inspect the specialist's actual
+  inventory and inherited tool exposure during authorized delivery; forward
+  retrieved evidence through the existing caller.
+* **Authentication or permission errors:** reauthenticate MCP and check target
+  repository access and organization OAuth restrictions. Do not enable write
+  tools.
+* **PR body loads but inline comments are missing:** retrieve both review
+  methods and all pages/cursors. An HTML fetch is not proof of complete review
+  access.
+
+An access blocker must carry the diagnostic evidence above, not just
+"I couldn't access GitHub." If no applicable tool is exposed, report that
+inventory gap without inventing an attempted call. Do not infer that the user
+declined to provide comments unless their actual response says so. Forward
+successfully retrieved context even when another part remains inaccessible.
+Only the lead asks for setup changes or genuinely missing pasted context;
+specialists return the specific gap through their caller.
 
 ### PhpStorm MCP tools [ᐞ](#table-of-contents)
 
@@ -354,6 +448,7 @@ For GitHub context access, also consult the
 [vscode-subagents]: https://code.visualstudio.com/docs/agents/run/subagents#_nested-subagents
 [github-mcp-setup]: https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/customize-copilot/extend-copilot-with-tools-and-context/set-up-the-github-mcp-server
 [github-mcp-usage]: https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/copilot-for-common-tasks/use-the-github-mcp-server
+[github-mcp-remote]: https://github.com/github/github-mcp-server/blob/main/docs/remote-server.md
 [ide-mcp]: https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp/extend-copilot-chat-with-mcp
 [vscode-tools]: https://code.visualstudio.com/docs/agents/run/tools
 [phpstorm-mcp]: https://www.jetbrains.com/help/phpstorm/mcp-server.html
