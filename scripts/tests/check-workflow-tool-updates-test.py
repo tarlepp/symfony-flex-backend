@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline regression checks for workflow-tool release pin discovery."""
+"""Offline regression checks for GitHub Action and workflow-tool updates."""
 
 import os
 from pathlib import Path
@@ -16,14 +16,22 @@ TAG_SHA = "3" * 40
 
 class ToolUpdatesTest(unittest.TestCase):
     def run_checker(self, refs, mode="--tools-only", pin=None, git_status=0,
-                    action=False, color=False, sha_failure=False, wrapped=False):
+                    action=False, color=False, sha_failure=False, wrapped=False,
+                    action_refs=None, action_path="example/action",
+                    action_sha_refs=None, composite=False, git_error="",
+                    sha_failure_status=1):
         with tempfile.TemporaryDirectory(prefix="tool-update-test-") as directory:
             root = Path(directory)
             (root / "workflows").mkdir()
             (root / "actions").mkdir()
             if action:
                 (root / "workflows/check.yml").write_text(
-                    f"steps:\n  - uses: example/action@{SHA} # v1.0.0\n"
+                    f"steps:\n  - uses: {action_path}@{SHA} # v1.0.0\n"
+                )
+            if composite:
+                (root / "actions/bootstrap").mkdir()
+                (root / "actions/bootstrap/action.yml").write_text(
+                    f"runs:\n  steps:\n    - uses: {action_path}@{SHA} # v1.0.0\n"
                 )
             pins = root / "pins.sh"
             pins.write_text(
@@ -31,12 +39,32 @@ class ToolUpdatesTest(unittest.TestCase):
                 else f"FIXTURE_TAG=v1.0.0 # tool-pin: example/tool@{SHA}\n"
             )
             (root / "refs").write_text(refs)
+            (root / "action-refs").write_text(
+                refs if action_refs is None else action_refs
+            )
+            (root / "action-sha-refs").write_text(
+                (refs if action_refs is None else action_refs)
+                if action_sha_refs is None else action_sha_refs
+            )
             git = root / "git"
+            (root / "git-error").write_text(git_error)
             git.write_text(
                 '#!/bin/bash\n'
-                + ('if [[ "$*" == *example/action.git* && "$*" != *--refs* ]]; then exit 1; fi\n'
+                + f'cat "{root}/git-error" >&2\n'
+                + (f'if [[ "$*" == *example/action.git* && "$*" != *--refs* ]]; then exit {sha_failure_status}; fi\n'
                    if sha_failure else '')
-                + f'cat "{root}/refs"\nexit {git_status}\n'
+                + '[[ "$1" == ls-remote ]] || exit 64\n'
+                + 'case "$*" in\n'
+                + '  *https://github.com/example/action.git*)\n'
+                + '    if [[ "$*" == *--refs* ]]; then\n'
+                + f'      grep -v \'\\^{{}}$\' "{root}/action-refs"\n'
+                + '    else\n'
+                + '      [[ "$*" == *"^{}"* ]] || exit 64\n'
+                + f'      cat "{root}/action-sha-refs"\n'
+                + '    fi ;;\n'
+                + f'  *https://github.com/example/tool.git*) cat "{root}/refs" ;;\n'
+                + '  *) exit 64 ;;\n'
+                + f'esac\nexit {git_status}\n'
             )
             git.chmod(0o755)
             environment = dict(
@@ -144,6 +172,140 @@ class ToolUpdatesTest(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("\033[31m[FAIL]\033[0m Unable to fetch action SHA:", result.stderr)
         self.assertNotIn("All checked actions and tools are up-to-date", result.stdout)
+
+    def test_timeout_diagnostics_show_repository_and_limit(self):
+        result = self.run_checker(
+            "", mode="", action=True, git_status=124,
+        )
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn(
+            "example/action @ v1.0.0 (GitHub lookup timed out after 10s",
+            result.stderr,
+        )
+        self.assertIn(
+            "example/tool (GitHub lookup timed out after 20s",
+            result.stderr,
+        )
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+            sha_failure=True, sha_failure_status=124,
+        )
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn(
+            "Unable to fetch action SHA: example/action @ v1.0.0 "
+            "(GitHub lookup timed out after 10s",
+            result.stderr,
+        )
+
+    def test_git_failures_preserve_exit_status_and_native_diagnostic(self):
+        for wrapped in (False, True):
+            with self.subTest(wrapped=wrapped):
+                result = self.run_checker(
+                    "", mode="", action=True, git_status=128,
+                    git_error="fatal: Could not resolve host: github.com\n",
+                    wrapped=wrapped,
+                )
+                self.assertEqual(result.returncode, 0 if wrapped else 2)
+                self.assertIn("git ls-remote failed with exit 128", result.stderr)
+                self.assertIn(
+                    "Git diagnostic: fatal: Could not resolve host: github.com",
+                    result.stderr,
+                )
+                self.assertNotIn("timed out", result.stderr)
+
+    def test_successful_lookup_without_version_tags_is_not_network_failure(self):
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+            action_refs=f"{SHA}\trefs/tags/v5",
+        )
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn(
+            "GitHub lookup succeeded, but no version-like tags", result.stderr,
+        )
+        self.assertNotIn("git ls-remote failed", result.stderr)
+        self.assertNotIn("timed out", result.stderr)
+
+    def test_action_matching_lightweight_or_peeled_commit_is_current(self):
+        for refs in (
+            f"{SHA}\trefs/tags/v1.0.0",
+            f"{TAG_SHA}\trefs/tags/v1.0.0\n{SHA}\trefs/tags/v1.0.0^{{}}",
+        ):
+            with self.subTest(refs=refs):
+                result = self.run_checker(refs, mode="", action=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("[OK] example/action", result.stdout)
+                self.assertNotIn("UPDATE AVAILABLE", result.stdout)
+
+    def test_same_version_pin_difference_reports_commit_and_source(self):
+        for refs in (
+            f"{NEW_SHA}\trefs/tags/v1.0.0",
+            f"{SHA}\trefs/tags/v1.0.0\n{NEW_SHA}\trefs/tags/v1.0.0^{{}}",
+        ):
+            with self.subTest(refs=refs):
+                result = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+                    action_refs=refs,
+                )
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("v1.0.0 -> v1.0.0", result.stdout)
+                self.assertIn("Pin differs from tag commit (same version)", result.stdout)
+                self.assertIn(f"Pinned SHA: {SHA}", result.stdout)
+                self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
+                self.assertIn("workflows/check.yml:2", result.stdout)
+                self.assertIn("Updates available:       1", result.stdout)
+                self.assertNotIn("[OK] example/action", result.stdout)
+                wrapped = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+                    action_refs=refs, wrapped=True,
+                )
+                self.assertEqual(wrapped.returncode, 0, wrapped.stderr)
+                self.assertIn("UPDATE AVAILABLE: example/action", wrapped.stdout)
+                self.assertIn("[WARN]", wrapped.stderr)
+
+    def test_new_action_version_resolves_exact_annotated_subpath_tag(self):
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+            action_path="example/action/init",
+            action_refs=(
+                f"{SHA}\trefs/tags/v1.0.0\n"
+                f"{TAG_SHA}\trefs/tags/v2.0.0\n"
+                f"{NEW_SHA}\trefs/tags/v2.0.0^{{}}"
+            ),
+        )
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("UPDATE AVAILABLE: example/action/init", result.stdout)
+        self.assertIn("v1.0.0 -> v2.0.0", result.stdout)
+        self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
+        self.assertNotIn(f"SHA:   {TAG_SHA}", result.stdout)
+
+    def test_same_version_update_groups_workflow_and_composite_sources(self):
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", mode="", action=True, composite=True,
+            action_refs=f"{NEW_SHA}\trefs/tags/v1.0.0",
+        )
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("workflows/check.yml:2", result.stdout)
+        self.assertIn("actions/bootstrap/action.yml:3", result.stdout)
+        self.assertEqual(result.stdout.count("UPDATE AVAILABLE: example/action"), 1)
+        self.assertIn("Updates available:       1", result.stdout)
+
+    def test_missing_or_malformed_action_commit_is_an_error(self):
+        for refs in (
+            f"{NEW_SHA}\trefs/tags/v1.0.0-unrelated",
+            "invalid\trefs/tags/v1.0.0",
+            f"{SHA}\trefs/tags/v1.0.0\ninvalid\trefs/tags/v1.0.0^{{}}",
+        ):
+            with self.subTest(refs=refs):
+                result = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+                    action_sha_refs=refs,
+                )
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn("Unable to fetch action SHA:", result.stderr)
+                self.assertIn(
+                    "exact tag resolved to a missing or invalid", result.stderr,
+                )
+                self.assertNotIn("[OK] example/action", result.stdout)
 
 
 if __name__ == "__main__":

@@ -110,7 +110,8 @@ Tool checks verify tag/commit parity, prefer peeled commits for annotated tags,
 and report the newest full stable version tag and commit, excluding prerelease
 and floating tags. Missing pins, lookup failures, and moved/missing tags fail
 with exit code `2`; updates return `1`. This stricter parity/error behavior is
-specific to tool pins. Action version/SHA lookup failures also return exit 2.
+specific to tool pins. Action version/SHA lookup failures also return exit 2;
+same-version Action pin differences are reported as updates (exit `1`).
 Review compatibility and update the release tag, commit comment, and both
 platforms' binary checksums together. Do not substitute a commit SHA for a
 binary checksum or automatically install the suggested version.
@@ -274,8 +275,10 @@ What it does:
 * Discovers pinned actions dynamically from `.github/workflows/*.yml` and
   `.github/actions/*/action.yml`.
 * Compares version comments against the latest version-like tag it discovers.
-* Reports a SHA candidate for discovered updates; verify annotated tag targets
-  separately before pinning them.
+* Resolves the exact candidate tag, preferring its peeled commit for annotated
+  tags rather than the tag-object SHA.
+* Reports same-version updates when the pinned SHA differs from that commit,
+  including moved tags and pins that mistakenly use an annotated tag object.
 * Shows summary output and source lines for each finding.
 * Reports discovery warnings such as unpinned refs.
 
@@ -317,6 +320,12 @@ remain red so the final summary can point to the affected pin or GitHub lookup.
 Direct script invocations still print their own final outcome and return the
 checker exit code. Other exit codes still fail Make.
 
+Failed GitHub lookups show whether the command timed out (10 seconds for Action
+lookups, 20 seconds for tools) or failed with a Git exit status and diagnostic.
+Successful lookups with no version-like tags or missing/invalid candidate SHAs
+are reported separately. For timeouts, check network and DNS connectivity from
+the PHP development container before retrying; the time limits are unchanged.
+
 Use in CI:
 
 ```yaml
@@ -352,8 +361,10 @@ Important behavior:
   applying a major upgrade suggestion.
 * Discovery is line-based and limited to the paths above; inspect alternate
   YAML filenames and unusual reference forms separately when present.
-* The script does not verify current tag/SHA parity, including moved tags.
-  Review individual lookup results rather than trusting the final summary.
+* An Action is current only when its version label and pinned SHA match the
+  latest candidate tag and resolved commit. Older version pins are compared
+  with the latest candidate, not independently verified against their old tag.
+  Review individual lookup results rather than trusting Make's exit status.
 
 Note: the script reports updates but does not apply them.
 

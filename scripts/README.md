@@ -796,6 +796,24 @@ Exit codes:
 * `1` = updates available
 * `2` = discovery issues found (for example unpinned refs or conflicting versions)
 
+Action checks compare both the version label and pin with the latest candidate
+tag's commit, preferring peeled commits for annotated tags. Same-version pin
+differences (including moved tags or tag-object pins) return `1` and show the
+old SHA, candidate commit, and source locations. Missing or malformed candidate
+SHAs and failed lookups return `2`. The informational Make wrapper preserves
+success for handled checker exits `1` and `2`; read its findings and summary.
+Lookup failures identify the repository and distinguish timeouts (10 seconds
+for Actions, 20 seconds for tools) from Git errors, retaining Git's stderr
+diagnostics. Successful lookups without version-like tags or a valid candidate
+SHA report those data problems separately rather than suggesting network failure.
+
+Run the offline Action/tool regressions from the repository root inside the
+PHP development container (enter with `make bash` from the Docker host):
+
+```bash
+python3 scripts/tests/check-workflow-tool-updates-test.py
+```
+
 ### GitHub workflow validator [ᐞ](#table-of-contents)
 
 <a id="github-workflow-validator"></a>

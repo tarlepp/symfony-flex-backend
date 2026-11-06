@@ -289,11 +289,35 @@ discover_tools() {
     fi
 }
 
+lookup_action_tags() {
+    local seconds=$1 context=$2 errors refs status
+    shift 2
+
+    if ! errors=$(mktemp); then
+        output_status FAIL "$context (cannot create temporary Git diagnostic file)"
+        return 1
+    fi
+    refs=$("$TIMEOUT_BIN" "$seconds" "$GIT_BIN" ls-remote --tags "$@" 2>"$errors")
+    status=$?
+    if [ "$status" -ne 0 ]; then
+        if [ "$status" -eq 124 ]; then
+            output_status FAIL "$context (GitHub lookup timed out after ${seconds}s; check network/DNS connectivity and retry)"
+        else
+            output_status FAIL "$context (git ls-remote failed with exit $status)"
+        fi
+        if [ -s "$errors" ]; then
+            sed 's/^/   Git diagnostic: /' "$errors" >&2
+        fi
+    fi
+    rm -f "$errors"
+    [ "$status" -eq 0 ] || return "$status"
+    printf '%s\n' "$refs"
+}
+
 check_tool() {
     local key=$1 repo=$2 current=$3 refs latest sha
     TOTAL=$((TOTAL + 1))
-    if ! refs=$("$TIMEOUT_BIN" 20 "$GIT_BIN" ls-remote --tags "https://github.com/$repo.git"); then
-        output_status FAIL "Unable to fetch tool tags: $repo"
+    if ! refs=$(lookup_action_tags 20 "Unable to fetch tool tags: $repo" "https://github.com/$repo.git"); then
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
@@ -329,20 +353,19 @@ get_latest_compatible_release() {
     # - github/codeql-action/init
     repo_path=$(printf '%s\n' "$action" | cut -d/ -f1-2)
 
-    if ! tags=$("$TIMEOUT_BIN" 10 "$GIT_BIN" ls-remote --tags --refs "https://github.com/$repo_path.git" 2>/dev/null); then
+    if ! tags=$(lookup_action_tags 10 "Unable to fetch action version: $action @ $current_version" --refs "https://github.com/$repo_path.git"); then
         return 1
     fi
     tags=$(printf '%s\n' "$tags" | awk '{print $2}' | sed 's#refs/tags/##')
-
-    if [ -z "$tags" ]; then
-        printf '\n'
-        return
-    fi
 
     # Get the absolute latest version tag (semver-like only, at least X.Y to exclude
     # floating major alias tags like v1, v2 and non-version tags like "verbose")
     latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+' | sort -V | tail -n 1)
 
+    if [ -z "$latest" ]; then
+        output_status FAIL "Unable to fetch action version: $action @ $current_version (GitHub lookup succeeded, but no version-like tags matching vX.Y were found)"
+        return 1
+    fi
     printf '%s\n' "$latest"
 }
 
@@ -411,10 +434,7 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
         fi
         ((TOTAL++))
 
-        latest=$(get_latest_compatible_release "$repo_name" "$current_version")
-
-        if [ -z "$latest" ] || [ "$latest" = "null" ]; then
-            output_status FAIL "Unable to fetch action version: $repo_name @ $current_version"
+        if ! latest=$(get_latest_compatible_release "$repo_name" "$current_version"); then
             DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
             versions_info+=("${current_version}"$'\tunable\t')
             continue
@@ -424,23 +444,25 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
         current_normalized="${current_version#v}"
 
         repo_path=$(printf '%s\n' "$repo_name" | cut -d/ -f1-2)
-        if ! sha=$("$TIMEOUT_BIN" 10 "$GIT_BIN" ls-remote --tags "https://github.com/$repo_path.git" "refs/tags/$latest" 2>/dev/null); then
-            sha=''
+        if ! sha=$(lookup_action_tags 10 "Unable to fetch action SHA: $repo_name @ $latest" "https://github.com/$repo_path.git" "refs/tags/$latest" "refs/tags/$latest^{}"); then
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            versions_info+=("${current_version}"$'\terror\t')
+            continue
         fi
-        sha=$(printf '%s\n' "$sha" | awk '{print $1}')
+        sha=$(printf '%s\n' "$sha" | awk -v ref="refs/tags/$latest" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
 
-        if [ -z "$sha" ]; then
-            output_status FAIL "Unable to fetch action SHA: $repo_name @ $latest"
+        if ! printf '%s\n' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
+            output_status FAIL "Unable to fetch action SHA: $repo_name @ $latest (GitHub lookup succeeded, but the exact tag resolved to a missing or invalid 40-character commit SHA)"
             DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
             versions_info+=("${current_version}"$'\terror\t')
             continue
         fi
 
-        if [ "$latest_normalized" != "$current_normalized" ]; then
+        if [ "$latest_normalized" != "$current_normalized" ] || [ "$sha" != "${ACTION_REFS[$action_key]}" ]; then
             repo_has_update=1
             # Store with ||| as source delimiter (won't appear in paths)
             sources_str=$(printf '%s\n' "${ACTION_SOURCES[$action_key]}" | tr '\n' '|' | sed 's/|$//')
-            versions_info+=("${current_version}	${latest}	${sha}	${sources_str}")
+            versions_info+=("${current_version}	${latest}	${sha}	${sources_str}	${ACTION_REFS[$action_key]}")
         else
             ((CURRENT++))
             versions_info+=("${current_version}	current	")
@@ -457,7 +479,8 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
             current=$(printf '%s\n' "$info" | cut -f1)
             latest=$(printf '%s\n' "$info" | cut -f2)
             sha=$(printf '%s\n' "$info" | cut -f3)
-            sources_str=$(printf '%s\n' "$info" | cut -f4-)
+            sources_str=$(printf '%s\n' "$info" | cut -f4)
+            pinned_sha=$(printf '%s\n' "$info" | cut -f5)
 
             if [ "$latest" = "current" ]; then
                 printf '   %s (up-to-date)\n' "$current"
@@ -467,6 +490,10 @@ for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
                 printf '   %s -> (error fetching SHA)\n' "$current"
             else
                 printf '   %s -> %s\n' "$current" "$latest"
+                if [ "${current#v}" = "${latest#v}" ]; then
+                    printf '      Pin differs from tag commit (same version)\n'
+                    printf '      Pinned SHA: %s\n' "$pinned_sha"
+                fi
                 printf '      SHA:   %s\n' "$sha"
                 printf '      Short: %s\n' "${sha:0:8}"
 

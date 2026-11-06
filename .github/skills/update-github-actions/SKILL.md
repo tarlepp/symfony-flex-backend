@@ -55,10 +55,13 @@ stricter mode. Verify release-asset checksums separately for every platform.
 
 Read warnings and individual lookup results, not only the exit code:
 
-* `0` means no updates or discovery warnings were recorded, not that every
-  remote lookup or current tag/SHA pair was verified.
+* `0` means all discovered pins match their latest candidate versions/commits
+  and no discovery or lookup failures were recorded. Older Action tags are not
+  independently verified when a newer candidate exists.
 * `1` means updates were found; `2` means discovery warnings, which take
-  precedence over available updates. Unsupported arguments return `64`.
+  precedence over available updates, or lookup failures. Unsupported arguments
+  return `64`. Same-version Action pin differences return `1`; candidate SHAs
+  prefer peeled commits for annotated tags.
 * Candidate selection sorts version-like tags across major versions and may
   suggest a major upgrade. It does not enforce compatibility or reliably
   exclude prerelease tags; treat the result as a candidate, not approval.
@@ -119,8 +122,9 @@ Read warnings and individual lookup results, not only the exit code:
 
 * Rerun inventory and check modes. Review remaining warnings and updates:
   unrelated candidates or unapproved major upgrades may remain legitimately.
-  Verify tag/SHA parity separately, including same-version tag moves; the
-  checker compares version labels and does not establish current pin parity.
+  The checker compares both version labels and candidate commit SHAs, including
+  same-version pin differences. Verify the intended exact tag/SHA separately
+  before applying updates, especially when retaining an older version line.
 * Search all in-scope references for stale pins/comments and inspect the diff
   for unintended workflow or permission changes. Confirm each new action path
   exists at the pinned commit.
