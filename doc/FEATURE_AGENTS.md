@@ -80,6 +80,8 @@ for a design, then obtains explicit approval of that design before delivery.
 The second architect invocation carries the approved plan and delegates to the
 implementer. Branch/base selection and treatment of existing work must also
 follow [shared guidance](../.github/skills/shared-guidance.md).
+When the design has multiple viable approaches, the lead presents concise pros
+and cons for each and clearly recommends one before asking for design approval.
 
 Implementation and verification are sequential. The initial implementer pauses
 while the verifier works. For defects, the verifier calls an implementer in
@@ -106,6 +108,10 @@ Verification reports include repair reports and cumulative changed paths.
 The returning implementer summarizes the final repaired state, not just its
 initial changes. Any subsequent implementation edit requires affected
 verification to run again.
+
+The feature lead's final handoff includes proposed commit messages in the
+readable and copyable format specified by
+[shared guidance](../.github/skills/shared-guidance.md#handoff).
 
 ## Using the agents [ᐞ](#table-of-contents)
 
