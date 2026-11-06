@@ -98,7 +98,7 @@ esac
             "Download and verify actionlint v1.7.12",
             "Download and verify ShellCheck v0.11.0",
             "Download and verify action-validator v0.9.0",
-            "Download and verify zizmor v1.31.1",
+            "Download and verify zizmor v1.32.0",
             "Workflow syntax and embedded shell (1 files)",
             "Workflow and action security audit (zizmor)",
             "Local action metadata: .github/actions/example/action.yml",
