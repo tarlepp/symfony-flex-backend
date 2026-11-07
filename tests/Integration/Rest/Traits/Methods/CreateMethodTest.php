@@ -64,8 +64,7 @@ final class CreateMethodTest extends KernelTestCase
         $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         new CreateMethodTestClass($resourceStub, $responseHandlerStub)
-            ->createMethod(Request::create('/', $httpMethod), $restDtoStub)
-            ->getContent();
+            ->createMethod(Request::create('/', $httpMethod), $restDtoStub);
     }
 
     /**
@@ -89,8 +88,7 @@ final class CreateMethodTest extends KernelTestCase
         $this->expectExceptionCode($expectedCode);
 
         new CreateMethodTestClass($resourceMock, $responseHandlerStub)
-            ->createMethod(Request::create('/', Request::METHOD_POST), $restDtoStub)
-            ->getContent();
+            ->createMethod(Request::create('/', Request::METHOD_POST), $restDtoStub);
     }
 
     /**
