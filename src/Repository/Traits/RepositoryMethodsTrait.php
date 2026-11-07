@@ -132,12 +132,18 @@ trait RepositoryMethodsTrait
         RepositoryHelper::resetParameterCount();
 
         if ($limit === null) {
-            return $queryBuilder->getQuery()->getResult();
+            /** @var array<int, TEntity> $results */
+            $results = $queryBuilder->getQuery()->getResult();
+
+            return $results;
         }
 
         $paginator = new OffsetPaginator(fetchJoinCollection: true);
 
-        return $paginator->paginate($queryBuilder, new Window($offset ?? 0, $limit))->getItems();
+        /** @var array<int, TEntity> $results */
+        $results = $paginator->paginate($queryBuilder, new Window($offset ?? 0, $limit))->getItems();
+
+        return $results;
     }
 
     /**
@@ -180,7 +186,10 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+        /** @var array<int, string> $ids */
+        $ids = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        return $ids;
     }
 
     /**

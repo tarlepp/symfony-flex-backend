@@ -18,6 +18,8 @@ use Stringable;
  * template TValue
  * extends ArrayObject<array-key, TValue>
  *
+ * @psalm-suppress ImmutableDependency Psalm's ArrayObject capability contract
+ *     cannot represent arbitrary Stringable::__toString() calls.
  * @psalm-suppress MissingTemplateParam
  */
 final class StringableArrayObject extends ArrayObject implements Stringable
