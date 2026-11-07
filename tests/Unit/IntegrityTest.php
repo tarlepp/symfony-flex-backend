@@ -360,7 +360,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatControllerHasE2ETests(): array
     {
@@ -372,7 +372,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
@@ -385,7 +385,8 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @phpstan-return array<int, array{0: string, 1: string, 2: StringableArrayObject<array<int, string>>}>
+     * @psalm-return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
      */
     public static function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
@@ -412,6 +413,10 @@ FORMAT;
             );
         };
 
+        /**
+         * @phpstan-return array{0: string, 1: string, 2: StringableArrayObject<array<int, string>>}
+         * @psalm-return array{0: string, 1: string, 2: StringableArrayObject}
+         */
         $formatter = static function (ReflectionClass $reflectionClass) use (
             &$repositoryMethods,
             $folder,
@@ -435,7 +440,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
@@ -448,7 +453,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
@@ -461,7 +466,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
@@ -473,7 +478,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
@@ -485,7 +490,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
@@ -497,7 +502,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
@@ -512,7 +517,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
@@ -525,7 +530,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
@@ -538,7 +543,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
@@ -550,7 +555,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
@@ -563,7 +568,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
@@ -576,7 +581,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
@@ -589,7 +594,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatConstraintHasUnitTest(): array
     {
@@ -602,7 +607,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
@@ -615,7 +620,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
@@ -628,7 +633,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
@@ -642,7 +647,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
@@ -657,7 +662,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
@@ -669,7 +674,7 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array<array-key, mixed>>
+     * @return array<int, array{0: string, 1: string}>
      */
     public static function dataProviderTestThatValueResolverServiceHasIntegrationTest(): array
     {
@@ -682,9 +687,11 @@ FORMAT;
     }
 
     /**
-     * @psalm-param (Closure(ReflectionClass): bool)|null $filter
-     * @psalm-param (Closure(ReflectionClass): array<array-key, mixed>)|null $formatter
-     * @return array<int, array<array-key, mixed>>
+     * @template T of array<array-key, mixed>
+     *
+     * @param (Closure(ReflectionClass<object>): bool)|null $filter
+     * @param (Closure(ReflectionClass<object>): T)|null $formatter
+     * @return array<int, ($formatter is null ? array{0: string, 1: string} : T)>
      */
     private static function getTestCases(
         string $folder,
@@ -699,7 +706,6 @@ FORMAT;
         $formatter ??= self::getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = self::getReflectionClass($folder, $namespace);
 
-        /** @var array<int, array<array-key, mixed>> $result */
         $result = array_map(
             $formatter,
             array_filter(
@@ -726,6 +732,8 @@ FORMAT;
 
     /**
      * Formatter closure to return an array which contains names of expected test class and actual class.
+     *
+     * @return Closure(ReflectionClass<object>): array{0: string, 1: string}
      */
     private static function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
     {
