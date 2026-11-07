@@ -85,7 +85,6 @@ final class GenericRestRequestMapperTest extends KernelTestCase
             '::$properties" contains properties to convert',
         );
 
-        /** @psalm-suppress MixedArgument */
         new TestRestRequestMapperWithoutProperties()
             ->mapToObject(
                 new Request(),

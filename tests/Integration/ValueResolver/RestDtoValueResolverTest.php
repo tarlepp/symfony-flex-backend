@@ -38,7 +38,6 @@ final class RestDtoValueResolverTest extends KernelTestCase
     ): void {
         $autoMapperStub = self::createStub(AutoMapperInterface::class);
 
-        /** @psalm-suppress MixedMethodCall, MixedArgument */
         $controllerCollection
             ->expects($this->{$method}())
             ->method('has')
@@ -104,7 +103,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
      */
     public static function dataProviderTestThatSupportMethodWorksAsExpected(): Generator
     {
-        /** @psalm-suppress InternalMethod, MixedAssignment */
+        /** @psalm-suppress InternalMethod */
         $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -131,7 +130,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             'never',
         ];
 
-        /** @psalm-suppress InternalMethod, MixedAssignment */
+        /** @psalm-suppress InternalMethod */
         $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,7 +149,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             'once',
         ];
 
-        /** @psalm-suppress InternalMethod, MixedAssignment */
+        /** @psalm-suppress InternalMethod */
         $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -169,7 +168,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             'never',
         ];
 
-        /** @psalm-suppress InternalMethod, MixedAssignment */
+        /** @psalm-suppress InternalMethod */
         $controllerCollectionMock = new MockBuilder(new self(self::class), ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();

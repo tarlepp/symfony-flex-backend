@@ -138,10 +138,8 @@ abstract class DtoTestCase extends KernelTestCase
             $getter = 'get' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
-            /** @psalm-suppress MixedMethodCall */
             $dto->{$setter}($value);
 
-            /** @psalm-suppress MixedMethodCall */
             self::assertSame($value, $dto->{$getter}());
         }
     }
@@ -161,7 +159,6 @@ abstract class DtoTestCase extends KernelTestCase
         $setter = 'set' . ucfirst($field);
 
         $dto = new static::$dtoClass();
-        /** @psalm-suppress MixedMethodCall */
         $dto->{$setter}($value);
 
         $message = sprintf(
