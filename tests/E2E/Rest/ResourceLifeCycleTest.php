@@ -14,6 +14,7 @@ use App\Tests\E2E\TestCase\WebTestCase;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function sprintf;
 
@@ -36,7 +37,7 @@ final class ResourceLifeCycleTest extends WebTestCase
             ]);
 
         self::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
-        self::assertSame(418, $response->getStatusCode(), (string)$response->getContent());
+        self::assertResponseStatusCode(Response::HTTP_I_AM_A_TEAPOT, $response);
         self::assertSame('Description - ' . $role, $entity->getDescription());
     }
 

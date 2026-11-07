@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 final class TimeZoneControllerTest extends WebTestCase
@@ -32,7 +33,7 @@ final class TimeZoneControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(405, $response->getStatusCode(), $content);
+        self::assertResponseStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $response);
     }
 
     /**
@@ -48,7 +49,7 @@ final class TimeZoneControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response);
     }
 
     /**

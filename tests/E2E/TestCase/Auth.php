@@ -10,6 +10,7 @@ namespace App\Tests\E2E\TestCase;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -132,9 +133,9 @@ final class Auth
 
             $response = $client->getResponse();
 
-            if ($response->getStatusCode() !== 200) {
+            if ($response->getStatusCode() !== Response::HTTP_OK) {
                 throw new UnexpectedValueException(
-                    'Invalid status code: ' . $response->getStatusCode() . " Response:\n" . $response,
+                    'Invalid status code: ' . $response->getStatusCode() . " Response:\n" . (string)$response,
                 );
             }
 

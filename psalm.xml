@@ -31,12 +31,6 @@
             </errorLevel>
         </ClassMustBeFinal>
 
-        <ImplicitToStringCast>
-            <errorLevel type="suppress">
-                <directory name="tests/E2E" />
-            </errorLevel>
-        </ImplicitToStringCast>
-
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <file name="src/Validator/Constraints/EntityReferenceExists.php" />

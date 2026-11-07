@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_search;
 use function array_slice;
@@ -35,7 +36,7 @@ final class InheritedRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response, $content);
     }
 
     /**
@@ -54,7 +55,7 @@ final class InheritedRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_FORBIDDEN, $response);
     }
 
     /**
@@ -71,7 +72,7 @@ final class InheritedRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response);
     }
 
     /**
@@ -98,7 +99,7 @@ final class InheritedRolesControllerTest extends WebTestCase
             $content = $response->getContent();
 
             self::assertNotFalse($content);
-            self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+            self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
             self::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $content);
         }
     }

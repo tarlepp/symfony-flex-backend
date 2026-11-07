@@ -9,6 +9,7 @@ namespace App\Tests\E2E;
 
 use App\Tests\E2E\TestCase\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 final class DocumentationTest extends WebTestCase
@@ -22,7 +23,7 @@ final class DocumentationTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/api/doc');
 
-        self::assertSame(200, $client->getResponse()->getStatusCode());
+        self::assertResponseStatusCode(Response::HTTP_OK, $client->getResponse());
     }
 
     /**
@@ -34,6 +35,6 @@ final class DocumentationTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/api/doc.json');
 
-        self::assertSame(200, $client->getResponse()->getStatusCode());
+        self::assertResponseStatusCode(Response::HTTP_OK, $client->getResponse());
     }
 }

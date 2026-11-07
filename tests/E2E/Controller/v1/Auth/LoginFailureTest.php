@@ -8,12 +8,13 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller\v1\Auth;
 
 use App\Resource\LogLoginFailureResource;
+use App\Tests\E2E\TestCase\WebTestCase;
 use App\Tests\Utils\PhpUnitUtil;
 use App\Utils\JSON;
 use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 final class LoginFailureTest extends WebTestCase
@@ -51,7 +52,7 @@ final class LoginFailureTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertSame(401, $response->getStatusCode());
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
 
         /** @var LogLoginFailureResource $resource */
         $resource = static::getContainer()->get(LogLoginFailureResource::class);
@@ -82,7 +83,7 @@ final class LoginFailureTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertSame(200, $response->getStatusCode());
+        self::assertResponseStatusCode(Response::HTTP_OK, $response);
         self::assertSame(
             [],
             $resource->find(),
@@ -103,14 +104,14 @@ final class LoginFailureTest extends WebTestCase
 
             $response = $client->getResponse();
 
-            self::assertSame(401, $response->getStatusCode());
+            self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
         }
 
         $this->makeValidLoginRequest($client);
 
         $response = $client->getResponse();
 
-        self::assertSame(401, $response->getStatusCode());
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
         self::assertSame('{"message":"Locked account.","code":0,"status":401}', $response->getContent());
     }
 

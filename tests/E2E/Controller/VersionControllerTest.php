@@ -12,6 +12,7 @@ use App\Tests\E2E\TestCase\WebTestCase;
 use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function file_get_contents;
 
@@ -28,7 +29,7 @@ final class VersionControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response);
     }
 
     /**

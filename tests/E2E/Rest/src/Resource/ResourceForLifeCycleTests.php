@@ -13,6 +13,7 @@ use App\Entity\Role as Entity;
 use App\Repository\RoleRepository as Repository;
 use App\Rest\RestResource;
 use Override;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -49,6 +50,6 @@ final class ResourceForLifeCycleTests extends RestResource
             $entity->setDescription('some description');
         }
 
-        throw new HttpException(418, 'this should not trigger entity flush to database');
+        throw new HttpException(Response::HTTP_I_AM_A_TEAPOT, 'this should not trigger entity flush to database');
     }
 }
