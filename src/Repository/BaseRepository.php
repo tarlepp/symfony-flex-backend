@@ -16,7 +16,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Override;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use function array_map;
 use function array_unshift;
 use function implode;
 use function in_array;
@@ -183,12 +182,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         foreach (self::$joins as $joinType => $joins) {
-            array_map(
-                static function (array $joinParameters) use ($queryBuilder, $joinType): QueryBuilder {
-                    return $queryBuilder->{$joinType}(...$joinParameters);
-                },
-                $joins,
-            );
+            foreach ($joins as $joinParameters) {
+                $queryBuilder->{$joinType}(...$joinParameters);
+            }
 
             self::$joins[$joinType] = [];
         }
