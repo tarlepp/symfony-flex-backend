@@ -21,9 +21,6 @@ use Override;
 use Throwable;
 use function array_map;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LoadUserData extends Fixture implements OrderedFixtureInterface
 {
     /**

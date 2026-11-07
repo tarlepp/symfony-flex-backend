@@ -163,7 +163,6 @@ final class UserRepositoryTest extends KernelTestCase
      * @throws Throwable
      *
      * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     private function getRepository(): UserRepository
     {

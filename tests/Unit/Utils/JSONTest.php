@@ -44,7 +44,6 @@ final class JSONTest extends KernelTestCase
     #[TestDox('Test that `JSON::decode` method returns `$expected` when using `$parameters` as input')]
     public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, mixed $expected): void
     {
-        /** @psalm-suppress InvalidArgument */
         self::assertSame(
             serialize($expected),
             serialize(JSON::decode(...$parameters)),

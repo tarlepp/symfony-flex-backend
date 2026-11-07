@@ -20,9 +20,6 @@ use Throwable;
 use function array_map;
 use function str_pad;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
 {
     /**
