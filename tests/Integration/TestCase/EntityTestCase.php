@@ -555,7 +555,6 @@ abstract class EntityTestCase extends KernelTestCase
 
             self::assertTrue(class_exists($class));
 
-            /** @psalm-suppress MixedMethodCall */
             $targetEntity = new $class();
 
             /** @var string $fieldName */
@@ -620,7 +619,6 @@ abstract class EntityTestCase extends KernelTestCase
 
             /** @var class-string<EntityInterface> $targetClass */
             $targetClass = $mapping['targetEntity'];
-            /** @psalm-suppress MixedMethodCall */
             $targetEntity = new $targetClass(...$params);
 
             return [
@@ -673,7 +671,6 @@ abstract class EntityTestCase extends KernelTestCase
 
             self::assertTrue(class_exists($target));
 
-            /** @psalm-suppress MixedMethodCall */
             $input = match ($target) {
                 LogLogin::class => new LogLogin(LogLoginEnum::SUCCESS, new Request(), new DeviceDetector()),
                 LogLoginFailure::class => new LogLoginFailure(new User()),
