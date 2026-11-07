@@ -456,7 +456,7 @@ abstract class EntityTestCase extends KernelTestCase
      *  - testThatSetterReturnsInstanceOfEntity
      *  - testThatGetterReturnsExpectedValue
      *
-     * @return array<int, array<mixed>>
+     * @return array<int, array{0: string, 1: string, 2: array<array-key, mixed>, 3: bool}>
      */
     public static function dataProviderTestThatSetterAndGettersWorks(): array
     {
@@ -477,7 +477,7 @@ abstract class EntityTestCase extends KernelTestCase
          *  3) Mapping data
          *  4) Read-only flag
          *
-         * @return array
+         * @return array{0: string, 1: string, 2: array<array-key, mixed>, 3: bool}
          */
         $iterator = static fn (string $field): array => [
             $field,
@@ -515,13 +515,11 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return Generator<int, array<mixed>>
+     * @return Generator<int, array{0: string, 1: string, 2: array<array-key, mixed>}>
      */
     public static function dataProviderTestThatSetterAndGettersWorksWithoutReadOnlyFlag(): Generator
     {
         foreach (self::dataProviderTestThatSetterAndGettersWorks() as $data) {
-            self::assertCount(4, $data);
-
             // Remove 'Read-only flag' from data
             unset($data[3]);
 
