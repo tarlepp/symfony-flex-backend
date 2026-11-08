@@ -13,6 +13,7 @@ use App\Utils\JSON;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function getenv;
 
@@ -39,11 +40,11 @@ final class UserUpdateInvalidUserTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_FORBIDDEN, $response);
         self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
-            "Response:\n" . $response,
+            "Response:\n" . (string)$response,
         );
     }
 
@@ -68,11 +69,11 @@ final class UserUpdateInvalidUserTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_FORBIDDEN, $response);
         self::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $content,
-            "Response:\n" . $response,
+            "Response:\n" . (string)$response,
         );
     }
 

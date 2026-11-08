@@ -16,6 +16,7 @@ use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function getenv;
 use function property_exists;
@@ -38,15 +39,15 @@ final class IndexControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        $info = "\nResponse:\n" . $response;
+        $info = "\nResponse:\n" . (string)$response;
 
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
-        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
@@ -69,7 +70,7 @@ final class IndexControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
     }
 
     /**
@@ -85,15 +86,15 @@ final class IndexControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        $info = "\nResponse:\n" . $response;
+        $info = "\nResponse:\n" . (string)$response;
 
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
-        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',
@@ -116,15 +117,15 @@ final class IndexControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        $info = "\nResponse:\n" . $response;
+        $info = "\nResponse:\n" . (string)$response;
 
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
-        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'JWT Token not found',

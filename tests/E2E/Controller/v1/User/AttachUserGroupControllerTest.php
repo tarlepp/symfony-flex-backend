@@ -16,6 +16,7 @@ use Generator;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function getenv;
 
@@ -58,7 +59,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response, $content);
     }
 
     /**
@@ -78,7 +79,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_FORBIDDEN, $response, $content);
     }
 
     /**
@@ -98,7 +99,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode($expectedStatus, $response);
         /** @var array<mixed> $decoded */
         $decoded = JSON::decode($content);
         self::assertCount(1, $decoded);
@@ -133,7 +134,7 @@ final class AttachUserGroupControllerTest extends WebTestCase
      */
     public static function dataProviderTestThatAttachUserGroupWorksAsExpected(): Generator
     {
-        yield [201];
-        yield [200];
+        yield [Response::HTTP_CREATED];
+        yield [Response::HTTP_OK];
     }
 }

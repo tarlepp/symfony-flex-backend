@@ -34,6 +34,14 @@ PHP development container.
 Do not use Symfony's `bin/phpunit` entry point, which does not exist in this
 project.
 
+E2E tests extending `App\Tests\E2E\TestCase\WebTestCase` should use
+`self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response)` with
+the appropriate `Symfony\Component\HttpFoundation\Response::HTTP_*` constant.
+The helper checks the explicitly supplied response and includes its status,
+headers, and body on failure. An optional third argument adds custom context,
+such as the request payload; callers do not need to format the response again.
+Use the same HTTP status constants in test data providers.
+
 PHPUnit is configured with `failOnDeprecation="true"`. Reported deprecations,
 including those from dependencies, produce a nonzero exit code locally and
 fail the CI test job even when all assertions pass. Deprecation details remain

@@ -13,6 +13,7 @@ use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function getenv;
 use function json_encode;
@@ -36,7 +37,7 @@ final class GetTokenControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(405, $response->getStatusCode(), $content);
+        self::assertResponseStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $response);
     }
 
     /**
@@ -71,10 +72,10 @@ final class GetTokenControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(
-            200,
-            $response->getStatusCode(),
-            "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response,
+        self::assertResponseStatusCode(
+            Response::HTTP_OK,
+            $response,
+            "User login was not successfully with payload:\n" . $payload,
         );
 
         /** @var stdClass $responseContent */
@@ -121,15 +122,15 @@ final class GetTokenControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode());
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response);
 
         /** @var stdClass $responseContent */
         $responseContent = JSON::decode($content);
 
-        $info = "\nResponse: \n" . $response;
+        $info = "\nResponse: \n" . (string)$response;
 
         self::assertTrue(property_exists($responseContent, 'code'), 'Response does not contain "code"' . $info);
-        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $responseContent->code, 'Response code was not expected' . $info);
         self::assertTrue(property_exists($responseContent, 'message'), 'Response does not contain "message"' . $info);
         self::assertSame(
             'Invalid credentials.',

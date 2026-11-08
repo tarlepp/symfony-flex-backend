@@ -15,6 +15,7 @@ use App\Utils\JSON;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function getenv;
 
@@ -35,7 +36,7 @@ final class UserRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_UNAUTHORIZED, $response, $content);
     }
 
     /**
@@ -52,7 +53,7 @@ final class UserRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_FORBIDDEN, $response, $content);
     }
 
     /**
@@ -69,7 +70,7 @@ final class UserRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
         self::assertJsonStringEqualsJsonString($e, $content);
     }
 
@@ -87,7 +88,7 @@ final class UserRolesControllerTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
         self::assertJsonStringEqualsJsonString($e, $content);
     }
 

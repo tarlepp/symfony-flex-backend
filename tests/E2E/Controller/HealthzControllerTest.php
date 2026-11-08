@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Controller;
 use App\Resource\LogRequestResource;
 use App\Tests\E2E\TestCase\WebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 final class HealthzControllerTest extends WebTestCase
@@ -25,7 +26,7 @@ final class HealthzControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response);
     }
 
     /**

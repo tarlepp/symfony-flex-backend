@@ -10,6 +10,7 @@ namespace App\Tests\E2E\TestCase;
 use Override;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_merge;
 use function gc_collect_cycles;
@@ -17,6 +18,18 @@ use function gc_enable;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
+    protected static function assertResponseStatusCode(
+        int $expectedStatusCode,
+        Response $response,
+        string $message = '',
+    ): void {
+        self::assertSame(
+            $expectedStatusCode,
+            $response->getStatusCode(),
+            ($message === '' ? '' : $message . "\n") . "Response:\n" . (string)$response,
+        );
+    }
+
     /**
      * @codeCoverageIgnore
      */

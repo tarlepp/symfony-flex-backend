@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 final class UserManagementFlowTest extends WebTestCase
@@ -42,7 +43,7 @@ final class UserManagementFlowTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_CREATED, $response, $content);
 
         /** @var stdClass $decoded */
         $decoded = JSON::decode($content);
@@ -82,7 +83,7 @@ final class UserManagementFlowTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
 
         $data['id'] = $id;
 
@@ -110,7 +111,7 @@ final class UserManagementFlowTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_BAD_REQUEST, $response, $content);
 
         return $id;
     }
@@ -146,7 +147,7 @@ final class UserManagementFlowTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
         self::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $content);
 
         return $id;
@@ -166,6 +167,6 @@ final class UserManagementFlowTest extends WebTestCase
         $content = $response->getContent();
 
         self::assertNotFalse($content);
-        self::assertSame(200, $response->getStatusCode(), $content . "Response:\n" . $response);
+        self::assertResponseStatusCode(Response::HTTP_OK, $response, $content);
     }
 }
