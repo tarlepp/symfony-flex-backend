@@ -6,6 +6,7 @@
     errorLevel="2"
     rememberPropertyAssignmentsAfterCall="false"
     findUnusedBaselineEntry="true"
+    findUnusedPsalmSuppress="true"
     findUnusedCode="false"
 >
     <projectFiles>
