@@ -33,7 +33,6 @@
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <file name="src/Validator/Constraints/EntityReferenceExists.php" />
                 <referencedProperty name="App\Entity\UserGroup::$role" />
                 <referencedProperty name="App\Rest\RestResource::$validator" />
             </errorLevel>
