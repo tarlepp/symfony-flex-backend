@@ -36,9 +36,6 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
     #[Override]
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
-        /**
-         * @psalm-suppress MissingDependency, InvalidArgument
-         */
         $event = new AuthenticationFailureEvent(
             $exception,
             new JWTAuthenticationFailureResponse($this->translator->trans('Invalid credentials.', [], 'security')),
