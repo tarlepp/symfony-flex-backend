@@ -165,14 +165,13 @@ $createJwtAuthCache = static function (): void {
 };
 
 // And finally call each of initialize functions to make test environment ready
-array_map(
-    '\call_user_func',
-    [
-        $dropDatabaseDoctrineCommand,
-        $createDatabaseDoctrineCommand,
-        $updateSchemaDoctrineCommand,
-        $resetDoctrineState,
-        $loadFixturesDoctrineCommand,
-        $createJwtAuthCache,
-    ],
-);
+foreach ([
+    $dropDatabaseDoctrineCommand,
+    $createDatabaseDoctrineCommand,
+    $updateSchemaDoctrineCommand,
+    $resetDoctrineState,
+    $loadFixturesDoctrineCommand,
+    $createJwtAuthCache,
+] as $initialize) {
+    $initialize();
+}
