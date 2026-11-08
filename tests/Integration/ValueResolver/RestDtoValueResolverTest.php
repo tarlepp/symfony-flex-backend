@@ -34,12 +34,12 @@ final class RestDtoValueResolverTest extends KernelTestCase
         mixed $controllerCollection,
         Request $request,
         ArgumentMetadata $argumentMetadata,
-        string $method,
+        int $expectedCalls,
     ): void {
         $autoMapperStub = self::createStub(AutoMapperInterface::class);
 
         $controllerCollection
-            ->expects($this->{$method}())
+            ->expects($this->exactly($expectedCalls))
             ->method('has')
             ->willReturn($expected);
 
@@ -116,7 +116,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollectionMock,
             Request::create('/'),
             $argumentMetaData,
-            'never',
+            0,
         ];
 
         $request = new Request(attributes: [
@@ -128,7 +128,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollectionMock,
             $request,
             $argumentMetaData,
-            'never',
+            0,
         ];
 
         /** @psalm-suppress InternalMethod */
@@ -147,7 +147,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollectionMock,
             $request,
             $argumentMetaData,
-            'once',
+            1,
         ];
 
         /** @psalm-suppress InternalMethod */
@@ -166,7 +166,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollectionMock,
             $request,
             $argumentMetaData,
-            'never',
+            0,
         ];
 
         /** @psalm-suppress InternalMethod */
@@ -185,7 +185,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
             $controllerCollectionMock,
             $request,
             $argumentMetaData,
-            'once',
+            1,
         ];
     }
 }
