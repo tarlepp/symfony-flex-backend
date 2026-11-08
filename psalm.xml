@@ -24,12 +24,6 @@
     </plugins>
 
     <issueHandlers>
-        <ArgumentTypeCoercion>
-            <errorLevel type="suppress">
-                <directory name="tests/Integration" />
-            </errorLevel>
-        </ArgumentTypeCoercion>
-
         <PossiblyInvalidArgument>
             <errorLevel type="suppress">
                 <!-- Entity provider payload contains nullable values for generic base assertions -->

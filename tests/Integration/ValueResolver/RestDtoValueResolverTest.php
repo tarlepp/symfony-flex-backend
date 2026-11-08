@@ -54,6 +54,7 @@ final class RestDtoValueResolverTest extends KernelTestCase
     #[TestDox('Test that `resolve` method works as expected')]
     public function testThatResolveMethodWorksAsExpected(): void
     {
+        /** @var ControllerCollection<Controller>&MockObject $controllerCollectionMock */
         $controllerCollectionMock = $this->getMockBuilder(ControllerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
