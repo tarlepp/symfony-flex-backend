@@ -191,7 +191,7 @@ final class PhpUnitUtil
     /**
      * Helper method to get valid value for specified type.
      *
-     * @param array<string, string>|null $meta
+     * @param array<array-key, mixed>|null $meta
      *
      * @throws Throwable
      */
@@ -250,7 +250,7 @@ final class PhpUnitUtil
     }
 
     /**
-     * @param array<string, string>|null $meta
+     * @param array<array-key, mixed>|null $meta
      *
      * @throws Throwable
      */

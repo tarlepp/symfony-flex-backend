@@ -94,7 +94,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, mixed> $meta
+     * @param array<array-key, mixed> $meta
      */
     #[DataProvider('dataProviderTestThatSetterAndGettersWorks')]
     #[TestDox('Test that `getter` and `setter` methods exists for `$type $property` property')]
@@ -132,7 +132,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, mixed> $meta
+     * @param array<array-key, mixed> $meta
      *
      * @throws Throwable
      */
@@ -165,7 +165,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, string> $meta
+     * @param array<array-key, mixed> $meta
      *
      * @throws Throwable
      */
@@ -199,7 +199,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @param array<string, string> $meta
+     * @param array<array-key, mixed> $meta
      *
      * @throws Throwable
      */
@@ -528,7 +528,15 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<int, array<mixed>>
+     * @return array<int, array{
+     *     0: string|null,
+     *     1: string|null,
+     *     2: string|null,
+     *     3: string|null,
+     *     4: string|null,
+     *     5: EntityInterface|null,
+     *     6: array<array-key, mixed>,
+     * }>
      */
     public static function dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected(): array
     {
@@ -542,7 +550,7 @@ abstract class EntityTestCase extends KernelTestCase
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
         $iterator = static function (AssociationMapping $mapping): array {
-            /** @var class-string $class */
+            /** @var class-string<EntityInterface> $class */
             $class = $mapping['targetEntity'];
 
             self::assertTrue(class_exists($class));
@@ -562,7 +570,7 @@ abstract class EntityTestCase extends KernelTestCase
                     'add' . ucfirst($singular),
                     'remove' . ucfirst($singular),
                     'clear' . ucfirst((string)$mapping['fieldName']),
-                    $mapping['fieldName'],
+                    $fieldName,
                     $targetEntity,
                     (array)$mapping,
                 ],
@@ -590,7 +598,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<int, array<mixed>>
+     * @return array<int, array{0: string|null, 1: string|null, 2: EntityInterface|null, 3: string|null}>
      */
     public static function dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected(): array
     {
@@ -610,7 +618,7 @@ abstract class EntityTestCase extends KernelTestCase
                 $params = ['Some Role'];
             }
 
-            /** @var class-string $targetClass */
+            /** @var class-string<EntityInterface> $targetClass */
             $targetClass = $mapping['targetEntity'];
             /** @psalm-suppress MixedMethodCall */
             $targetEntity = new $targetClass(...$params);
@@ -620,7 +628,7 @@ abstract class EntityTestCase extends KernelTestCase
                     $meta->isReadOnly ? null : 'set' . ucfirst((string)$mapping['fieldName']),
                     'get' . ucfirst((string)$mapping['fieldName']),
                     $targetEntity,
-                    $mapping['fieldName'],
+                    $mapping->fieldName,
                 ],
             ];
         };
@@ -646,7 +654,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<int, array<mixed>>
+     * @return array<int, array{0: string|null, 1: string|null, 2: EntityInterface|false|null, 3: class-string|null}>
      */
     public static function dataProviderTestThatAssociationMethodsExists(): array
     {
@@ -660,24 +668,22 @@ abstract class EntityTestCase extends KernelTestCase
         $meta = $entityManager->getClassMetadata(static::$entityName);
 
         $iterator = static function (AssociationMapping $mapping) use ($meta): array {
-            /** @var class-string $target */
+            /** @var class-string<EntityInterface> $target */
             $target = $mapping['targetEntity'];
 
             self::assertTrue(class_exists($target));
 
-            $arguments = match ($target) {
-                LogLogin::class => [LogLoginEnum::SUCCESS, new Request(), new DeviceDetector()],
-                LogLoginFailure::class => [new User()],
-                LogRequest::class => [[]],
-                Role::class => ['some role'],
-                default => [],
+            /** @psalm-suppress MixedMethodCall */
+            $input = match ($target) {
+                LogLogin::class => new LogLogin(LogLoginEnum::SUCCESS, new Request(), new DeviceDetector()),
+                LogLoginFailure::class => new LogLoginFailure(new User()),
+                LogRequest::class => new LogRequest([]),
+                Role::class => new Role('some role'),
+                default => new $target(),
             };
 
-            /** @psalm-suppress MixedMethodCall */
-            $input = new $target(...$arguments);
-
             $methods = [
-                ['get' . ucfirst((string)$mapping['fieldName']), $mapping['fieldName'], false, null],
+                ['get' . ucfirst($mapping->fieldName), $mapping->fieldName, false, null],
             ];
 
             switch ($mapping['type']) {
@@ -688,7 +694,7 @@ abstract class EntityTestCase extends KernelTestCase
                     if ($meta->isReadOnly === false) {
                         $methods[] = [
                             'set' . ucfirst((string)$mapping['fieldName']),
-                            $mapping['fieldName'],
+                            $mapping->fieldName,
                             $input,
                             static::$entityName,
                         ];
@@ -704,7 +710,7 @@ abstract class EntityTestCase extends KernelTestCase
                     $methods = [
                         [
                             'get' . ucfirst((string)$mapping['fieldName']),
-                            $mapping['fieldName'],
+                            $mapping->fieldName,
                             $input,
                             ArrayCollection::class,
                         ],
@@ -714,19 +720,19 @@ abstract class EntityTestCase extends KernelTestCase
                         $setters = [
                             [
                                 'add' . ucfirst($singular),
-                                $mapping['fieldName'],
+                                $mapping->fieldName,
                                 $input,
                                 static::$entityName,
                             ],
                             [
                                 'remove' . ucfirst($singular),
-                                $mapping['fieldName'],
+                                $mapping->fieldName,
                                 $input,
                                 static::$entityName,
                             ],
                             [
                                 'clear' . ucfirst((string)$mapping['fieldName']),
-                                $mapping['fieldName'],
+                                $mapping->fieldName,
                                 $input,
                                 static::$entityName,
                             ],
@@ -757,7 +763,7 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * @return array<int, array<mixed>>
+     * @return array<int, array{0: string|null, 1: string|null}>
      */
     public static function dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected(): array
     {
@@ -773,7 +779,7 @@ abstract class EntityTestCase extends KernelTestCase
         $iterator = static fn (AssociationMapping $mapping): array => [
             [
                 'get' . ucfirst((string)$mapping['fieldName']),
-                $mapping['fieldName'],
+                $mapping->fieldName,
             ],
         ];
 

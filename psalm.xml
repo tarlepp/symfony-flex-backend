@@ -26,8 +26,6 @@
     <issueHandlers>
         <PossiblyInvalidArgument>
             <errorLevel type="suppress">
-                <!-- Entity provider payload contains nullable values for generic base assertions -->
-                <file name="tests/Integration/TestCase/EntityTestCase.php" />
                 <!-- Reflection-driven data providers allow nullable payloads for integrity assertions -->
                 <file name="tests/Unit/IntegrityTest.php" />
             </errorLevel>
