@@ -316,6 +316,7 @@ class CheckDependencies extends Command
     private function decodeComposerOutput(string $output, string $path): array
     {
         try {
+            /** @var mixed $decoded */
             $decoded = json_decode($output, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new JsonException(

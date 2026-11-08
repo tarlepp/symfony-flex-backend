@@ -360,6 +360,7 @@ final class CheckDependenciesTest extends TestCase
         mixed $value,
         bool $missing = false,
     ): void {
+        /** @var array<string, mixed> $package */
         $package = [
             'name' => 'vendor/package',
             'version' => '1.0.0',
@@ -368,6 +369,7 @@ final class CheckDependenciesTest extends TestCase
         if ($missing) {
             unset($package[$field]);
         } else {
+            /** @psalm-suppress MixedAssignment Intentional malformed response value. */
             $package[$field] = $value;
         }
 
