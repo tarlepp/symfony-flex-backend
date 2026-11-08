@@ -52,7 +52,7 @@ final class RequestHandlerTest extends KernelTestCase
     ): void {
         $fakeRequest = Request::create(
             '/',
-            'GET',
+            $method,
             [
                 'where' => json_encode($where->getArrayCopy(), JSON_THROW_ON_ERROR),
             ],
