@@ -15,8 +15,10 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use SortDirection;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use function hex2bin;
 
 final class RepositoryHelperTest extends KernelTestCase
 {
@@ -180,6 +182,140 @@ DQL;
         $message = 'getExpression method did modify expression with no criteria - this should not happen';
 
         self::assertSame($expression, $output, $message);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatEmptyGroupsProduceNoExpressionOrBindings(): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+        $expression = $queryBuilder->expr()->andX();
+
+        $output = RepositoryHelper::getExpression($queryBuilder, $expression, [
+            [
+                'and' => [],
+                'or' => [],
+            ],
+        ]);
+
+        self::assertSame($expression, $output);
+        self::assertSame('', (string)$output);
+        self::assertCount(0, $queryBuilder->getParameters());
+        self::assertSame(0, RepositoryHelper::$parameterCount);
+    }
+
+    /**
+     * @param array<array-key, mixed> $criteria Malformed comparisons or groups supplied to the public array boundary.
+     *
+     * @throws Throwable
+     */
+    #[DataProvider('invalidExpressionCriteria')]
+    public function testThatGetExpressionRejectsMalformedCriteria(array $criteria, string $message): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageIs($message);
+
+        RepositoryHelper::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $criteria);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatProcessCriteriaRejectsScalarGroups(): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageIs('Criteria AND/OR groups must be arrays.');
+
+        RepositoryHelper::processCriteria($queryBuilder, [
+            'and' => 'invalid',
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatProcessCriteriaPreservesScalarCoercionAndListValues(): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+
+        RepositoryHelper::processCriteria($queryBuilder, [
+            'foo' => 123,
+            'bar' => false,
+            'baz' => [1, true, false, 2.5, 'text'],
+        ]);
+
+        self::assertSame(
+            'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar = ?2'
+                . " AND entity.baz IN(1, 1, '', 2, 'text')",
+            $queryBuilder->getDQL(),
+        );
+        self::assertSame('123', $queryBuilder->getParameter(1)?->getValue());
+        self::assertSame('', $queryBuilder->getParameter(2)?->getValue());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatProcessCriteriaAcceptsStringableValues(): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+        $value = new StringableArrayObject([1]);
+
+        RepositoryHelper::processCriteria($queryBuilder, [
+            'foo' => $value,
+            'bar' => [$value],
+        ]);
+
+        self::assertSame(
+            "SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar IN('[1]')",
+            $queryBuilder->getDQL(),
+        );
+        self::assertSame('[1]', $queryBuilder->getParameter(1)?->getValue());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatProcessCriteriaPreservesUuidListConversion(): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+        $uuid = '12345678-1234-1234-9234-123456789abc';
+
+        RepositoryHelper::processCriteria($queryBuilder, [
+            'id' => [$uuid],
+        ]);
+
+        $bytes = hex2bin('12341234123456789234123456789abc');
+        self::assertNotFalse($bytes);
+        self::assertSame(
+            'SELECT entity FROM App\Entity\User entity WHERE entity.id IN(\'' . $bytes . '\')',
+            $queryBuilder->getDQL(),
+        );
+        self::assertCount(0, $queryBuilder->getParameters());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatProcessCriteriaPreservesMixedUuidListFallback(): void
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
+        $uuid = '12345678-1234-1234-9234-123456789abc';
+
+        RepositoryHelper::processCriteria($queryBuilder, [
+            'id' => [$uuid, 'text'],
+        ]);
+
+        self::assertSame(
+            "SELECT entity FROM App\Entity\User entity WHERE entity.id IN('" . $uuid . "', 'text')",
+            $queryBuilder->getDQL(),
+        );
+        self::assertCount(0, $queryBuilder->getParameters());
     }
 
     /**
@@ -390,11 +526,95 @@ DQL;
     }
 
     /**
+     * @return Generator<string, array{array<array-key, mixed>, string}>
+     */
+    public static function invalidExpressionCriteria(): Generator
+    {
+        $tupleMessage = 'A criteria comparison must contain exactly a field, operator, and value.';
+        $listMessage = 'Criteria list and range operands must be scalars or stringable objects.';
+        $rangeMessage = 'The BETWEEN operator requires exactly two indexed bounds.';
+
+        yield 'scalar group' => [[
+            'or' => 'invalid',
+        ], 'Criteria groups must contain comparison arrays or nested groups.'];
+
+        yield 'scalar child' => [[
+            'and' => [1],
+        ], 'Criteria groups must contain comparison arrays or nested groups.'];
+
+        yield 'missing operand' => [[['entity.id', 'eq']], $tupleMessage];
+
+        yield 'extra operand' => [[['entity.id', 'eq', 1, 2]], $tupleMessage];
+
+        yield 'non-string field' => [[[1, 'eq', 1]], 'Criteria fields and operators must be strings.'];
+
+        yield 'non-string operator' => [[['entity.id', 1, 1]], 'Criteria fields and operators must be strings.'];
+
+        yield 'unknown operator' => [[['entity.id', 'unknown', 1]], 'Unknown criteria expression operator.'];
+
+        yield 'object operand' => [
+            [['entity.id', 'eq', new stdClass()]],
+            'Criteria operands must be scalars, stringable objects, arrays, or null.',
+        ];
+
+        yield 'nested list' => [[['entity.id', 'in', [[1]]]], $listMessage];
+
+        yield 'null list item' => [[['entity.id', 'in', [null]]], $listMessage];
+
+        yield 'IN scalar' => [[['entity.id', 'in', 1]], 'The IN and NOT IN operators require an array operand.'];
+
+        yield 'NOT IN scalar' => [
+            [['entity.id', 'notIn', '1']],
+            'The IN and NOT IN operators require an array operand.',
+        ];
+
+        yield 'BETWEEN scalar' => [[['entity.id', 'between', 1]], $rangeMessage];
+
+        yield 'BETWEEN too short' => [[['entity.id', 'between', [1]]], $rangeMessage];
+
+        yield 'BETWEEN too long' => [[['entity.id', 'between', [1, 2, 3]]], $rangeMessage];
+
+        yield 'BETWEEN named bounds' => [[[
+            'entity.id', 'between', [
+                'min' => 1,
+                'max' => 2,
+            ]]], 'The BETWEEN operator requires exactly two indexed bounds.'];
+    }
+
+    /**
      * @psalm-return Generator<int, array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
      * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
     public static function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithCriteria(): Generator
     {
+        yield [
+            new StringableArrayObject([
+                'field' => 'u.id',
+                'operator' => 'EQ',
+                'value' => 123,
+            ]),
+            'SELECT u FROM App\Entity\User u WHERE u.id = ?1',
+            new StringableArrayObject([[
+                'name' => '1',
+                'value' => 123,
+            ]]),
+        ];
+
+        yield [
+            new StringableArrayObject(['u.firstName', 'concat', 'suffix']),
+            'SELECT u FROM App\Entity\User u WHERE CONCAT(u.firstName, ?1)',
+            new StringableArrayObject([[
+                'name' => '1',
+                'value' => 'suffix',
+            ]]),
+        ];
+
+        yield [
+            new StringableArrayObject(['u.id', 'in', []]),
+            'SELECT u FROM App\Entity\User u WHERE u.id IN()',
+            new StringableArrayObject([]),
+        ];
+
         yield [
             new StringableArrayObject(['u.id', 'eq', 123]),
             /* @lang text */
