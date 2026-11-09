@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use function array_keys;
 use function str_starts_with;
 
 class StopwatchCompilerPass implements CompilerPassInterface
@@ -29,7 +30,7 @@ class StopwatchCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         foreach (self::SERVICE_TAGS as $tag) {
-            foreach ($container->findTaggedServiceIds($tag) as $serviceId => $tags) {
+            foreach (array_keys($container->findTaggedServiceIds($tag)) as $serviceId) {
                 if (!str_starts_with($serviceId, 'App')) {
                     continue;
                 }
