@@ -60,8 +60,7 @@ final class FindOneMethodTest extends KernelTestCase
         $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         new FindOneMethodTestClass($resourceStub, $responseHandlerStub)
-            ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id')
-            ->getContent();
+            ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id');
     }
 
     /**
