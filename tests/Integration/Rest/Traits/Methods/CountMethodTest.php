@@ -59,8 +59,7 @@ final class CountMethodTest extends KernelTestCase
         $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         new CountMethodTestClass($resourceStub, $responseHandlerStub)
-            ->countMethod(Request::create('/', $httpMethod))
-            ->getContent();
+            ->countMethod(Request::create('/', $httpMethod));
     }
 
     /**
