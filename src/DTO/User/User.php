@@ -236,7 +236,6 @@ class User extends RestDto
             $this->locale = $entity->getLocale();
             $this->timezone = $entity->getTimezone();
 
-            /** @var array<int, UserGroupEntity> $groups */
             $groups = $entity->getUserGroups()
                 ->toArray();
 
