@@ -59,8 +59,7 @@ final class IdsMethodTest extends KernelTestCase
         $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         new IdsMethodTestClass($resourceStub, $responseHandlerStub)
-            ->idsMethod(Request::create('/', $httpMethod))
-            ->getContent();
+            ->idsMethod(Request::create('/', $httpMethod));
     }
 
     /**

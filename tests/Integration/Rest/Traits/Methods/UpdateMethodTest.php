@@ -70,8 +70,7 @@ final class UpdateMethodTest extends KernelTestCase
                 Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
                 $restDtoStub,
                 'some-id',
-            )
-            ->getContent();
+            );
     }
 
     /**

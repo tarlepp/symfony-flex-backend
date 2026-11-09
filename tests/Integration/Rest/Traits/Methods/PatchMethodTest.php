@@ -69,8 +69,7 @@ final class PatchMethodTest extends KernelTestCase
                 Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
                 self::createStub(RestDtoInterface::class),
                 'some-id',
-            )
-            ->getContent();
+            );
     }
 
     /**
