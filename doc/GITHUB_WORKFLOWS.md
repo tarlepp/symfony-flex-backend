@@ -80,10 +80,11 @@ cross-workflow dependency on core CI.
 [scorecard]: ../.github/workflows/scorecard.yml
 [vulnerability-scan]: ../.github/workflows/vulnerability-scan.yml
 
-Core CI explicitly handles PR `opened`, `synchronize` (new commits),
-`reopened` and `edited` events. Dependency Review and CodeQL use the default
-PR activity types: `opened`, `synchronize` and `reopened`; they do not rerun
-just because the PR title/body was edited. Both core CI and Dependency Review
+Core CI explicitly handles PR `opened`, `synchronize` (new commits) and
+`reopened` events. Dependency Review and CodeQL use the same default
+PR activity types. These workflows do not run on title, body or base edits,
+avoiding duplicate skipped checks for unchanged commits.
+Both core CI and Dependency Review
 handle `merge_group: checks_requested` for merge-queue validation.
 Scorecard also handles `branch_protection_rule` events.
 
@@ -175,10 +176,11 @@ validation event; separate security workflows keep their own policies.
 Daily dependency-security and image-update checks remain enabled even
 without file changes.
 
-A confirmed metadata edit has a title/body change and no base change in its
-payload. Base changes and unclear edits validate normally. The metadata run
-uses the distinct skipped context `Metadata-only PR edit (no validation)`;
-it must never satisfy or replace `Validate CI result`.
+PR edits do not create a CI run; existing validation remains authoritative
+for an unchanged base and head. After changing a PR's base branch, push a new
+commit or close and reopen the PR to validate against the new base before
+merging. Rerunning an old run reuses its original event and is not a substitute
+for validation against a changed base.
 
 ### Job dependency graph [ᐞ](#table-of-contents)
 
@@ -282,15 +284,25 @@ fail the gates. Reporting must succeed on PRs and `master` pushes when tests
 are selected; it must skip on schedules, manual runs, merge groups and
 test-unaffected changes. A skipped job is not general permission to merge.
 
+On the Actions run's **Summary** page, `Validate CI prerequisites` and
+`Validate CI result` publish tables listing job results and skip explanations.
+These distinguish unaffected paths, scheduled scope, reporting eligibility,
+unsuccessful prerequisites and unexpected skips. Tables are written before
+gate validation, so failures still show their context. A skipped job cannot
+publish its own summary; these explanations appear on the gate summaries,
+not directly on GitHub's skipped check badge. Cancelled runs may not reach
+the gates and therefore may have no summary. Summary output does not change
+the gate's acceptance rules.
+
 Both gates use `!cancelled()`: failed/skipped dependencies still reach their
 result checks, but cancellation stops the gates. Periodic security/update
 jobs also use this guard to run despite scheduled change detection being
 skipped. Container cleanup steps use `always()`.
 
 Core CI cancels older runs in the same workflow/ref concurrency group.
-Schedules have a separate `-schedule` group; confirmed metadata edits have a
-separate `-metadata` group. Neither can cancel ordinary validation on the
-same ref. CodeQL has its own workflow/ref cancellation group. The other
+Schedules have a separate `-schedule` group and cannot cancel ordinary
+validation on the same ref. PR edits do not create runs or cancel validation.
+CodeQL has its own workflow/ref cancellation group. The other
 workflows do not declare concurrency groups.
 
 ## Containers and test setup [ᐞ](#table-of-contents)
@@ -455,8 +467,8 @@ verification. Never set CI environment flags locally to bypass setup guards.
 | CodeQL default-setup conflict | Choose default setup or YAML, not both |
 
 For an unexpected skip, open `Detect changed files` and inspect `Code changes`
-in its log. On schedules and confirmed metadata edits the detection job itself
-is intentionally skipped. Retitling a PR never repairs a failed validation.
+in its log. On schedules the detection job itself is intentionally skipped.
+PR edits do not trigger CI. Retitling a PR never repairs a failed validation.
 
 To retry a transient failure, open the run under **Actions** and use
 **Re-run failed jobs**. If the failure is reproducible, fix its cause and push

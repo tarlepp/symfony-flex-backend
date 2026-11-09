@@ -172,14 +172,12 @@ separate `dependency-review` check. The
 reports and troubleshooting with execution graphs.
 [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch protection.
 
-Title/body-only PR edits do not repeat validation. The `edited` trigger remains:
-base-branch changes and unclear edit payloads still run CI. Only edits with a
-title/body change and no base change skip all jobs. These runs use a separate
-`-metadata` concurrency group so they cannot cancel validation of the same
-commit. Their skipped final job is named `Metadata-only PR edit (no validation)`,
-not `Validate CI result`, so it cannot replace a required failure with a skipped
-success. Existing validation of the unchanged commit remains authoritative.
-Other workflows keep their own event filters.
+PR edits do not trigger core CI, so changing a title or body does not create
+duplicate skipped checks or cancel validation. Existing validation remains
+authoritative for an unchanged base and head. After changing a PR's base branch,
+push a new commit or close and reopen the PR to validate against the new base
+before merging. Rerunning an old run reuses its original event rather than the
+new base. Other workflows keep their own event filters.
 
 PRs, pushes and merge groups select checks using the
 [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path).
@@ -208,8 +206,8 @@ CI concurrency is scoped to the workflow and Git ref, with a `-schedule`
 suffix only for scheduled runs. Pushes and manual runs on `master` cannot
 cancel daily checks, nor can daily checks cancel them. New runs still cancel
 older runs in their own group, including superseded PR runs and overlapping
-schedules. Other validation events keep their existing shared groups; confirmed
-metadata-only edits use the isolated group described above.
+schedules. Other validation events keep their existing shared groups; PR edits
+do not create runs.
 
 PHPUnit and Docker builds start after successful change detection, in parallel
 with lint, security and analyzer jobs. They no longer wait for

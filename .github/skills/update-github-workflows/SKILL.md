@@ -67,11 +67,11 @@ replacement for their actual event filters and conditions:
    expressions, and concurrency groups/cancellation. Do not assume the default
    branch is named `main`. Consider same-repository PRs, fork PRs, pushes, and
    non-PR events explicitly; not every event supplies a pull-request payload.
-   Core CI skips only confirmed title/body-only `edited` payloads without a
-   base change; base edits and unclear payloads still validate. Keep these
-   metadata-only runs in their own concurrency group and their skipped final
-   job named `Metadata-only PR edit (no validation)`, not the required
-   `Validate CI result`, to avoid masking earlier failures on the same commit.
+   Core CI handles PR opens, new commits and reopens, not `edited` events;
+   title/body edits must not create duplicate skipped checks. Keep the final
+   job named `Validate CI result`. After a PR base change, require a new commit
+   or close/reopen event to validate against the new base before merging;
+   rerunning an old run reuses its original event.
    Path filters or job renames can affect required checks; confirm repository
    rules when relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with

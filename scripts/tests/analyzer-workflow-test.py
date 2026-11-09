@@ -13,11 +13,6 @@ import unittest
 
 WORKFLOW = Path(__file__).resolve().parents[2] / ".github/workflows/main.yml"
 CONTENT = WORKFLOW.read_text()
-METADATA_EDIT = (
-    "github.event_name == 'pull_request' && github.event.action == 'edited' && "
-    "github.event.changes.base == null && "
-    "(github.event.changes.title != null || github.event.changes.body != null)"
-)
 
 
 def job(name):
@@ -139,49 +134,24 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         self.assertEqual(outcome.returncode == 0, result == expected,
                                          outcome.stdout)
 
-    def test_metadata_edit_guard_preserves_base_changes_and_unclear_payloads(self):
-        condition = re.search(
-            r"^    if: \$\{\{ github.event_name != 'schedule' && !\((.+)\) \}\}$",
-            job("changes"), re.MULTILINE,
+    def test_pr_edits_do_not_create_duplicate_skipped_checks(self):
+        events = CONTENT.split("  pull_request:\n", 1)[1].split("  merge_group:", 1)[0]
+        self.assertEqual(
+            events,
+            "    types:\n      - opened\n      - synchronize\n      - reopened\n",
         )
-        self.assertIsNotNone(condition)
-        self.assertEqual(condition.group(1), METADATA_EDIT)
-        for event in ("pull_request", "push", "merge_group", "schedule", "workflow_dispatch"):
-            for action in ("edited", "opened", "synchronize", "reopened", ""):
-                for fields in ((), ("title",), ("body",), ("title", "body"),
-                               ("base",), ("base", "title"), ("base", "body")):
-                    with self.subTest(event=event, action=action, fields=fields):
-                        expression = condition.group(1)
-                        values = {
-                            "github.event_name": event,
-                            "github.event.action": action,
-                            **{f"github.event.changes.{field}":
-                               "present" if field in fields else "null"
-                               for field in ("base", "title", "body")},
-                        }
-                        for name, value in values.items():
-                            expression = expression.replace(name, shlex.quote(value))
-                        result = subprocess.run(
-                            ["bash", "-c", f"[[ {expression} ]]"], check=False,
-                            capture_output=True, text=True, timeout=10,
-                        )
-                        expected = (
-                            event == "pull_request" and action == "edited"
-                            and "base" not in fields
-                            and ("title" in fields or "body" in fields)
-                        )
-                        self.assertIn(result.returncode, (0, 1), result.stderr)
-                        self.assertEqual(result.returncode == 0, expected)
+        self.assertNotIn("github.event.action", CONTENT)
+        self.assertNotIn("github.event.changes", CONTENT)
+        self.assertIn("    name: Validate CI result\n", job("ci-result"))
 
-    def test_metadata_edit_skip_covers_roots_and_gates_without_relaxing_results(self):
+    def test_roots_and_gates_preserve_validation_without_metadata_guards(self):
         for name in ("changes", "gitleaks"):
             self.assertIn(
-                "    if: ${{ github.event_name != 'schedule' && !("
-                + METADATA_EDIT + ") }}\n", job(name),
+                "    if: ${{ github.event_name != 'schedule' }}\n", job(name),
             )
         for name in ("ci-summary", "ci-result"):
             self.assertIn(
-                "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
+                "    if: ${{ !cancelled() }}\n", job(name),
             )
         for name in ("lint-configuration", "docker-image-verify-pins",
                      "lightweight-analyzers", "static-analyzers", "test", "docker-build"):
@@ -190,12 +160,6 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         for name in ("security-check", "docker-image-check-updates"):
             self.assertIn("needs.changes.result == 'success'", job(name))
         self.assertIn("github.event_name == 'push'", job("report"))
-        self.assertIn("      - edited\n", CONTENT.split("  merge_group:", 1)[0])
-        self.assertIn(
-            "    name: ${{ " + METADATA_EDIT
-            + " && 'Metadata-only PR edit (no validation)' || 'Validate CI result' }}\n",
-            job("ci-result"),
-        )
 
     def test_only_image_update_availability_is_advisory(self):
         section = job("docker-image-check-updates")
@@ -387,12 +351,54 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         concurrency = CONTENT.split("concurrency:\n", 1)[1].split("jobs:\n", 1)[0]
         self.assertEqual(
             concurrency,
-            "  # Metadata-only edits must not cancel validation of the unchanged PR commit.\n"
             "  group: ${{ github.workflow }}-${{ github.ref }}"
-            "${{ github.event_name == 'schedule' && '-schedule' || '' }}"
-            "${{ " + METADATA_EDIT + " && '-metadata' || '' }}\n"
+            "${{ github.event_name == 'schedule' && '-schedule' || '' }}\n"
             "  cancel-in-progress: true\n",
         )
+
+    def test_summaries_explain_selected_unaffected_and_scheduled_jobs(self):
+        scenarios = [
+            ("ci-summary", "pull_request",
+             {"SECURITY_CHANGED": "false", "SECURITY_CHECK": "skipped"},
+             "| Dependency security | skipped | Changed files do not affect dependency audit inputs. |"),
+            ("ci-summary", "schedule", {"LIGHTWEIGHT_ANALYZERS": "skipped"},
+             "| Configuration lint | skipped | Scheduled CI runs only dependency security and image-update checks. |"),
+            ("ci-result", "pull_request",
+             {"TESTS_CHANGED": "false", "TEST": "skipped", "REPORT": "skipped"},
+             "| External reporting | skipped | Tests were not selected, so no coverage artifacts were produced. |"),
+            ("ci-result", "workflow_dispatch", {},
+             "| External reporting | skipped | Uploads run only on PRs and master pushes with selected, successful tests and prerequisites. |"),
+        ]
+        for gate, event, overrides, explanation in scenarios:
+            with self.subTest(gate=gate, event=event):
+                with tempfile.TemporaryDirectory() as directory:
+                    summary = Path(directory) / "summary.md"
+                    result = self.run_gate(
+                        gate, event, GITHUB_STEP_SUMMARY=str(summary), **overrides,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertIn(explanation, summary.read_text())
+                    self.assertIn("| Check | Result | Explanation |", summary.read_text())
+
+    def test_summaries_explain_failures_without_relaxing_gates(self):
+        scenarios = [
+            ("ci-summary", {"SECURITY_CHECK": "skipped"}, "Unexpected skip: validation was selected."),
+            ("ci-summary", {"CHANGES": "failure"}, "Change detection | failure"),
+            ("ci-result", {"CHANGES": "failure", "TEST": "skipped"},
+             "Change detection did not succeed; validation selection is unavailable."),
+            ("ci-result", {"CI_SUMMARY": "failure", "REPORT": "skipped"},
+             "Tests or prerequisite checks did not succeed; uploads require both."),
+            ("ci-result", {"REPORT": "skipped"}, "Unexpected skip: uploads were expected."),
+        ]
+        for gate, overrides, explanation in scenarios:
+            with self.subTest(gate=gate, overrides=overrides):
+                with tempfile.TemporaryDirectory() as directory:
+                    summary = Path(directory) / "summary.md"
+                    result = self.run_gate(
+                        gate, GITHUB_STEP_SUMMARY=str(summary), **overrides,
+                    )
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(explanation, summary.read_text())
 
     def run_gate(self, name, event="pull_request", lightweight="success", **overrides):
         section = job(name)
@@ -531,14 +537,13 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             )
         for name in ("gitleaks",):
             self.assertIn(
-                "    if: ${{ github.event_name != 'schedule' && !("
-                + METADATA_EDIT + ") }}\n", job(name),
+                "    if: ${{ github.event_name != 'schedule' }}\n", job(name),
             )
             self.assertNotIn("needs.changes", job(name))
         for name in ("ci-summary", "ci-result"):
             self.assertIn("      - changes\n", job(name))
             self.assertIn(
-                "    if: ${{ !cancelled() && !(" + METADATA_EDIT + ") }}\n", job(name),
+                "    if: ${{ !cancelled() }}\n", job(name),
             )
 
     def test_documentation_job_and_step_follow_detected_inputs(self):

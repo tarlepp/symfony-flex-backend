@@ -43,11 +43,11 @@ through `Validate CI result`, not a separate required context. Scheduled
 maintenance, Scorecard and CodeQL are not additional required checks under the
 current policy.
 
-Confirmed title/body-only PR edits use the distinct skipped context
-`Metadata-only PR edit (no validation)`. Never require that context or rename
-it to `Validate CI result`: a skipped metadata check must not mask an earlier
-failed validation of the same commit. Existing required validation remains
-authoritative; a metadata edit does not repair failed CI.
+PR title/body edits do not trigger CI or replace existing required validation.
+The final job always uses `Validate CI result`; a metadata edit does not repair
+failed CI. After changing the base branch, push a new commit or close and reopen
+the PR to validate against its new base before merging. Rerunning an old run
+does not refresh the original event's base.
 
 ## Current state [ᐞ](#table-of-contents)
 

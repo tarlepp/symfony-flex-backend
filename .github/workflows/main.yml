@@ -13,7 +13,6 @@ on:
       - opened
       - synchronize
       - reopened
-      - edited
   merge_group:
     types:
       - checks_requested
@@ -25,14 +24,13 @@ on:
 permissions:
   contents: read
 concurrency:
-  # Metadata-only edits must not cancel validation of the unchanged PR commit.
-  group: ${{ github.workflow }}-${{ github.ref }}${{ github.event_name == 'schedule' && '-schedule' || '' }}${{ github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null) && '-metadata' || '' }}
+  group: ${{ github.workflow }}-${{ github.ref }}${{ github.event_name == 'schedule' && '-schedule' || '' }}
   cancel-in-progress: true
 jobs:
   changes:
     name: Detect changed files
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     outputs:
       code: ${{ steps.detect.outputs.code }}
@@ -295,7 +293,7 @@ jobs:
   gitleaks:
     name: Gitleaks scan
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
+    if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     steps:
       - *harden_runner_step
@@ -481,7 +479,7 @@ jobs:
       - security-check
       - lightweight-analyzers
       - static-analyzers
-    if: ${{ !cancelled() && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
+    if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
 
@@ -517,6 +515,46 @@ jobs:
           echo "Gitleaks result: $GITLEAKS"
           echo "Docker base image pin verification result: $DOCKER_PINS"
           echo "Docker image version check result: $DOCKER_UPDATES"
+
+          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+            summary_row() {
+              local reason="Job completed with result: $2."
+              if [ "$2" = "skipped" ]; then
+                if [ "$EVENT_NAME" = "schedule" ]; then
+                  case "$1" in
+                    "Dependency security"|"Docker image updates")
+                      reason="Unexpected skip: this periodic check is required. The merge gate rejects this result." ;;
+                    *) reason="Scheduled CI runs only dependency security and image-update checks." ;;
+                  esac
+                elif [ "$CHANGES" != "success" ]; then
+                  reason="Change detection did not succeed; this is not an approved path-based skip."
+                elif [ "$3" = "false" ]; then
+                  reason="Changed files do not affect $4."
+                else
+                  reason="Unexpected skip: validation was selected. The merge gate rejects this result."
+                fi
+              fi
+              printf '| %s | %s | %s |\n' "$1" "$2" "$reason"
+            }
+            {
+              echo "## CI prerequisite results"
+              echo
+              echo "Skipped does not mean passed. The gate accepts only skips allowed by event and change selection."
+              echo
+              echo "| Check | Result | Explanation |"
+              echo "| --- | --- | --- |"
+              summary_row "Change detection" "$CHANGES" true ""
+              summary_row "Configuration lint" "$LINT_CONFIGURATION" "$CONFIGURATION_CHANGED" "application configuration or tooling"
+              summary_row "Documentation lint" "$LINT_DOCUMENTATION" "$DOCUMENTATION_CHANGED" "documentation"
+              summary_row "Workflow validation" "$LINT_WORKFLOWS" "$WORKFLOWS_CHANGED" "workflow definitions or validators"
+              summary_row "Dependency security" "$SECURITY_CHECK" "$SECURITY_CHANGED" "dependency audit inputs"
+              summary_row "Docker image updates" "$DOCKER_UPDATES" "$IMAGES_CHANGED" "Docker image pins or their tooling"
+              summary_row "Docker pin verification" "$DOCKER_PINS" "$IMAGES_CHANGED" "Docker image pins or their tooling"
+              summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
+              summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
+              summary_row "Gitleaks" "$GITLEAKS" true ""
+            } >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write the CI prerequisite summary."
+          fi
 
           expect_selected() {
             case "$1" in
@@ -821,7 +859,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
   ci-result:
-    name: ${{ github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null) && 'Metadata-only PR edit (no validation)' || 'Validate CI result' }}
+    name: Validate CI result
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     needs:
@@ -832,7 +870,7 @@ jobs:
       - test
       - docker-build
       - report
-    if: ${{ !cancelled() && !(github.event_name == 'pull_request' && github.event.action == 'edited' && github.event.changes.base == null && (github.event.changes.title != null || github.event.changes.body != null)) }}
+    if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
 
@@ -860,6 +898,52 @@ jobs:
           echo "PHPUnit result: $TEST"
           echo "Docker build matrix result: $DOCKER_BUILD"
           echo "External reporting result: $REPORT"
+
+          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+            summary_row() {
+              local reason="Job completed with result: $2."
+              if [ "$2" = "skipped" ]; then
+                if [ "$EVENT_NAME" = "schedule" ]; then
+                  reason="Not part of scheduled dependency-security and image-update validation."
+                elif [ "$CHANGES" != "success" ]; then
+                  reason="Change detection did not succeed; validation selection is unavailable."
+                elif [ "$3" = "false" ]; then
+                  reason="Changed files do not affect $4."
+                else
+                  reason="Unexpected skip: validation was selected. The merge gate rejects this result."
+                fi
+              fi
+              printf '| %s | %s | %s |\n' "$1" "$2" "$reason"
+            }
+            {
+              echo "## Final CI results"
+              echo
+              echo "See the CI prerequisite results summary for lint, security and image-check skip reasons."
+              echo
+              echo "| Check | Result | Explanation |"
+              echo "| --- | --- | --- |"
+              summary_row "Prerequisite gate" "$CI_SUMMARY" true ""
+              summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
+              summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
+              summary_row "PHPUnit" "$TEST" "$TESTS_CHANGED" "application tests"
+              summary_row "Docker builds" "$DOCKER_BUILD" "$DOCKER_CHANGED" "application images"
+              if [ "$REPORT" = "skipped" ]; then
+                if [ "$EVENT_NAME" != "pull_request" ] && {
+                  [ "$EVENT_NAME" != "push" ] || [ "$REF" != "refs/heads/master" ];
+                }; then
+                  echo "| External reporting | skipped | Uploads run only on PRs and master pushes with selected, successful tests and prerequisites. |"
+                elif [ "$TESTS_CHANGED" = "false" ] && [ "$CHANGES" = "success" ]; then
+                  echo "| External reporting | skipped | Tests were not selected, so no coverage artifacts were produced. |"
+                elif [ "$TEST" != "success" ] || [ "$CI_SUMMARY" != "success" ]; then
+                  echo "| External reporting | skipped | Tests or prerequisite checks did not succeed; uploads require both. |"
+                else
+                  echo "| External reporting | skipped | Unexpected skip: uploads were expected. The merge gate rejects this result. |"
+                fi
+              else
+                summary_row "External reporting" "$REPORT" true ""
+              fi
+            } >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write the final CI summary."
+          fi
 
           expect_selected() {
             case "$1" in
