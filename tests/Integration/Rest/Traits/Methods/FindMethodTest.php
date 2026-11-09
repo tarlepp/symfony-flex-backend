@@ -59,7 +59,7 @@ final class FindMethodTest extends KernelTestCase
         $responseHandlerStub = self::createStub(ResponseHandlerInterface::class);
 
         new FindMethodTestClass($resourceStub, $responseHandlerStub)
-            ->findMethod(Request::create('/', $httpMethod))->getContent();
+            ->findMethod(Request::create('/', $httpMethod));
     }
 
     /**
