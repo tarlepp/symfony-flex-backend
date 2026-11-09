@@ -471,7 +471,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def documentation_gate(self, name, **overrides):
         variables = (
             "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
-            "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD", "REPORT",
+            "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
+            "DOCKER_SCAN", "REPORT",
             "LINT_WORKFLOWS",
         )
         environment = dict.fromkeys(variables, "skipped")
@@ -492,7 +493,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     continue
                 expected = "skipped" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
-                    "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD", "REPORT",
+                    "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
+                    "DOCKER_SCAN", "REPORT",
                     "LINT_WORKFLOWS",
                 ) else "success"
                 for result in ("success", "failure", "cancelled", "skipped", "", "unknown"):
@@ -601,7 +603,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "ci-result": {
                 "PHP_CHANGED": ("STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS"),
                 "TESTS_CHANGED": ("TEST",),
-                "DOCKER_CHANGED": ("DOCKER_BUILD",),
+                "DOCKER_CHANGED": ("DOCKER_BUILD", "DOCKER_SCAN"),
             },
         }
         for gate, mapping in mappings.items():

@@ -80,8 +80,9 @@ request run, not workflow display labels.
 
 * `Validate CI result` (`main.yml`): final aggregate gate. It needs the
   prerequisite gate, the lightweight analyzers, the analyzer matrix,
-  `PHPUnit tests`, eligible `External reporting` and both Docker builds, and
-  fails unless all selected jobs succeeded. Skips require explicit successful
+  `PHPUnit tests`, eligible `External reporting`, both Docker builds and
+  their separate Trivy image scans, and fails unless all selected jobs
+  succeeded. Skips require explicit successful
   category selection or the schedule policy; reporting additionally skips
   merge groups, manual runs and test-unaffected changes.
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the
