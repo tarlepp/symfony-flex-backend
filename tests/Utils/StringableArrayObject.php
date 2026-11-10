@@ -12,6 +12,7 @@ use ArrayObject;
 use JsonException;
 use Override;
 use Stringable;
+use function array_map;
 
 /**
  * TODO: make these annotations to work as expected:

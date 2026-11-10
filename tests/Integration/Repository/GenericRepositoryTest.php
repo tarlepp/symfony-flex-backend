@@ -26,6 +26,7 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use UnexpectedValueException;
+use function array_keys;
 
 final class GenericRepositoryTest extends KernelTestCase
 {

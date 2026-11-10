@@ -14,6 +14,7 @@ application.
     * [Development](#development)
       * [Branch names and pull request titles](#branch-names-and-pull-request-titles)
       * [Composer PHP platform](#composer-php-platform)
+      * [Native PHP function calls](#native-php-function-calls)
       * [IDE](#ide)
       * [PHP Code Sniffer](#php-code-sniffer)
       * [Database changes](#database-changes)
@@ -95,6 +96,50 @@ PHP runtime, and refresh their lockfiles after changing these settings.
 If `roave/security-advisories` rejects the configured PHP version, upgrade the
 runtime and Composer platform baseline rather than disabling security checks.
 Rebuilding the PHP container alone does not change Composer's platform override.
+
+### Native PHP function calls [ᐞ](#table-of-contents)
+
+<a id="native-php-function-calls"></a>
+
+In namespaced PHP code, explicitly import native functions with `use function`,
+following the existing project style:
+
+```php
+use function array_map;
+use function file_get_contents;
+
+$values = array_map($mapper, $items);
+$contents = file_get_contents($path);
+```
+
+An explicit import resolves the global function just like `\array_map(...)` or
+`\file_get_contents(...)`, avoiding PHP's namespace fallback lookup. It also
+allows specialized compiler opcodes where PHP supports them; not every native
+function has a specialized opcode or a measurable performance improvement.
+This addresses PhpStorm EA notices about qualifying native function calls.
+Already imported calls do not need an additional leading backslash.
+
+The ECS rules in [`ecs.php`](../ecs.php) qualify native function calls in
+`src/` and `tests/`, then normalize them to sorted `use function` imports.
+They leave classes, constants, methods, language constructs, and imported
+namespaced helpers unchanged. Global-namespace code needs no qualification.
+Do not edit vendor code, generated files such as `config/reference.php`, or
+string callback names merely to add backslashes.
+
+Clock and DNS functions supported by Symfony PHPUnit Bridge are excluded from
+automatic native-function qualification so namespace-based mocks remain usable.
+Do not explicitly import or qualify those calls when they must remain mockable.
+Likewise, preserve intentional namespace overrides rather than bypassing them;
+review automated changes before accepting them.
+
+From the repository root on the Docker host with development services running,
+check or apply these rules using the existing commands:
+
+```bash
+make ecs
+make ecs-fix
+make ecs
+```
 
 ### IDE [ᐞ](#table-of-contents)
 
