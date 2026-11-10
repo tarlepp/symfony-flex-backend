@@ -144,6 +144,32 @@ final class UserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      */
+    #[DataProvider('malformedCriteriaRequests')]
+    public function testThatMalformedCriteriaReturns400(string $path, string $where, string $message): void
+    {
+        $client = $this->getTestClient('john-admin', 'password-admin');
+        $client->request('GET', $this->baseUrl . $path, [
+            'where' => $where,
+        ]);
+
+        $response = $client->getResponse();
+        $content = $response->getContent();
+
+        self::assertNotFalse($content);
+        self::assertResponseStatusCode(Response::HTTP_BAD_REQUEST, $response);
+        self::assertJsonStringEqualsJsonString(
+            JSON::encode([
+                'message' => $message,
+                'code' => Response::HTTP_BAD_REQUEST,
+                'status' => Response::HTTP_BAD_REQUEST,
+            ]),
+            $content,
+        );
+    }
+
+    /**
+     * @throws Throwable
+     */
     #[DataProvider('dataProviderInvalidUsers')]
     #[TestDox('Test that `GET /v1/user` request returns 403 when using invalid user `$username` + `$password`')]
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
@@ -236,6 +262,26 @@ final class UserControllerTest extends WebTestCase
         if (getenv('USE_ALL_USER_COMBINATIONS') === 'yes') {
             yield ['root'];
         }
+    }
+
+    /**
+     * @return Generator<string, array{string, string, string}>
+     */
+    public static function malformedCriteriaRequests(): Generator
+    {
+        yield 'find scalar group' => ['', '{"and":"invalid"}', 'Criteria AND/OR groups must be arrays.'];
+
+        yield 'count null list element' => [
+            '/count',
+            '{"id":[null]}',
+            'Criteria list and range operands must be scalars or stringable objects.',
+        ];
+
+        yield 'ids invalid BETWEEN' => [
+            '/ids',
+            '{"and":[["entity.id","between",[1]]]}',
+            'The BETWEEN operator requires exactly two indexed bounds.',
+        ];
     }
 
     /**

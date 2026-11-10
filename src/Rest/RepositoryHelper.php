@@ -7,27 +7,28 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
-use Closure;
+use App\Rest\Criteria\Comparison;
+use App\Rest\Criteria\Group;
 use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Literal;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use SortDirection;
-use stdClass;
-use function array_combine;
-use function array_key_exists;
+use Stringable;
 use function array_map;
-use function array_walk;
 use function call_user_func_array;
 use function is_array;
 use function is_numeric;
 use function sprintf;
 use function str_contains;
-use function strcmp;
 use function strtolower;
 use function syslog;
 
+/**
+ * @phpstan-import-type Operand from Comparison
+ * @phpstan-type ExpressionParameters list<string|array<array-key, Literal>>
+ */
 class RepositoryHelper
 {
     /**
@@ -79,7 +80,8 @@ class RepositoryHelper
      *
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
-     * @param array<int|string, mixed>|null $criteria
+     * @param array<int|string, mixed>|null $criteria Field filters or nested comparison groups;
+     *                                                null applies no filters.
      *
      * @throws InvalidArgumentException
      */
@@ -91,14 +93,11 @@ class RepositoryHelper
             return;
         }
 
-        // Initialize condition array
-        $condition = [];
+        $expression = $queryBuilder->expr()->andX();
 
-        // Create used condition array
-        array_walk($criteria, self::getIterator($condition));
+        self::processExpression($queryBuilder, $expression, Group::fromFilters($criteria));
 
-        // And attach search term condition to main query
-        $queryBuilder->andWhere(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $condition));
+        $queryBuilder->andWhere($expression);
     }
 
     /**
@@ -108,9 +107,8 @@ class RepositoryHelper
      *
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
-     * @param array<int, string> $columns
-     * @phpstan-param array<mixed>|null $terms
-     * @psalm-param array<string, array<int, string>|string>|null $terms
+     * @param array<int, string> $columns Entity fields searched by each term.
+     * @param array<string, array<int, string>|string>|null $terms Search terms indexed by their AND/OR operand.
      *
      * @throws InvalidArgumentException
      */
@@ -135,7 +133,8 @@ class RepositoryHelper
     /**
      * Simple process method for order by part of for current query builder.
      *
-     * @param array<string, string|SortDirection::*>|null $orderBy
+     * @param array<string, string|SortDirection>|null $orderBy Sort directions indexed by entity field;
+     *                                                          null adds no sorting.
      */
     public static function processOrderBy(QueryBuilder $queryBuilder, ?array $orderBy = null): void
     {
@@ -234,7 +233,7 @@ class RepositoryHelper
      *
      * @see https://gist.github.com/jgornick/8671644
      *
-     * @param array<int|string, mixed> $criteria
+     * @param array<int|string, mixed> $criteria Comparison tuples and nested AND/OR groups to append.
      *
      * @throws InvalidArgumentException
      */
@@ -243,114 +242,79 @@ class RepositoryHelper
         Composite $expression,
         array $criteria,
     ): Composite {
-        self::processExpression($queryBuilder, $expression, $criteria);
+        self::processExpression($queryBuilder, $expression, Group::fromArray($criteria));
 
         return $expression;
     }
 
     /**
-     * @param array<int|string, mixed> $criteria
-     *
      * @throws InvalidArgumentException
      */
-    private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
+    private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, Group $criteria): void
     {
-        $iterator = static function (array $comparison, string|int $key) use ($queryBuilder, $expression): void {
-            $expressionAnd = ($key === 'and' || array_key_exists('and', $comparison));
-            $expressionOr = ($key === 'or' || array_key_exists('or', $comparison));
+        foreach ($criteria->children as $comparison) {
+            if ($comparison instanceof Group) {
+                $nestedExpression = $comparison->conjunction
+                    ? $queryBuilder->expr()->andX()
+                    : $queryBuilder->expr()->orX();
 
-            self::buildExpression($queryBuilder, $expression, $expressionAnd, $expressionOr, $comparison);
-        };
+                self::processExpression($queryBuilder, $nestedExpression, $comparison);
 
-        array_walk($criteria, $iterator);
+                $expression->add($nestedExpression);
+            } else {
+                self::buildExpression($queryBuilder, $expression, $comparison);
+            }
+        }
     }
 
     /**
-     * @param array<int|string, mixed> $comparison
-     *
      * @throws InvalidArgumentException
      */
     private static function buildExpression(
         QueryBuilder $queryBuilder,
         Composite $expression,
-        bool $expressionAnd,
-        bool $expressionOr,
-        array $comparison,
+        Comparison $comparison,
     ): void {
-        if ($expressionAnd) {
-            $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
-        } elseif ($expressionOr) {
-            $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
-        } else {
-            /** @psalm-suppress MixedArgumentTypeCoercion */
-            [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
+        $parameters = self::determineComparisonAndParameters($queryBuilder, $comparison);
 
-            /** @var callable $callable */
-            /** @var stdClass $comparison */
-            $callable = [$queryBuilder->expr(), $comparison->operator];
+        /** @var callable(string|array<array-key, Literal>...): (string|Stringable) $callable */
+        $callable = [$queryBuilder->expr(), $comparison->operator];
 
-            // And finally add new expression to main one with specified parameters
-            /** @psalm-suppress MixedArgument */
-            $expression->add(call_user_func_array($callable, $parameters));
-        }
+        $expression->add(call_user_func_array($callable, $parameters));
     }
 
     /**
-     * Lambda function to create condition array for 'getExpression' method.
-     *
-     * @param string|array<int, string> $value
-     *
-     * @return array{0: string, 1: string, 2: string|array<int, string>}
-     */
-    private static function createCriteria(string $column, string|array $value): array
-    {
-        if (!str_contains($column, '.')) {
-            $column = 'entity.' . $column;
-        }
-
-        $operator = is_array($value) ? 'in' : 'eq';
-
-        return [$column, $operator, $value];
-    }
-
-    /**
-     * @param array<int|string, string|array<mixed>> $comparison
-     *
-     * @return array{0: stdClass, 1: array<int, mixed>}
+     * @return ExpressionParameters
      *
      * @throws InvalidArgumentException
      */
-    private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
+    private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, Comparison $comparison): array
     {
-        /** @var stdClass $comparisonObject */
-        $comparisonObject = (object)array_combine(['field', 'operator', 'value'], $comparison);
-
         // Increase parameter count
         self::$parameterCount++;
 
         // Initialize used callback parameters
-        $parameters = [$comparisonObject->field];
+        $parameters = [$comparison->field];
 
-        $lowercaseOperator = strtolower((string)$comparisonObject->operator);
+        $lowercaseOperator = strtolower($comparison->operator);
 
         if ($lowercaseOperator !== 'isnull' && $lowercaseOperator !== 'isnotnull') {
-            /** @psalm-suppress MixedArgumentTypeCoercion */
             $parameters = self::getComparisonParameters(
                 $queryBuilder,
-                $comparisonObject,
+                $comparison,
                 $lowercaseOperator,
                 $parameters,
             );
         }
 
-        return [$comparisonObject, $parameters];
+        return $parameters;
     }
 
     /**
-     * @param array<int, string> $parameters
-     * @param array<int, mixed> $value
+     * @param list<string> $parameters Expression arguments already containing the field name.
+     * @param array<array-key, Operand> $value BETWEEN bounds or the elements of an IN/NOT IN comparison.
      *
-     * @return array<int, array<int, Literal>|string>
+     * @return ExpressionParameters
      */
     private static function getParameters(
         QueryBuilder $queryBuilder,
@@ -369,6 +333,11 @@ class RepositoryHelper
             $queryBuilder->setParameter(self::$parameterCount, $value[1], UuidHelper::getType((string)$value[1]));
         } else {
             // Otherwise this must be IN or NOT IN expression
+            $value = array_map(
+                static fn (string|int|float|bool|Stringable $element): string => (string)$element,
+                $value,
+            );
+
             try {
                 $value = array_map(static fn (string $value): string => UuidHelper::getBytes($value), $value);
             } catch (InvalidUuidStringException $exception) {
@@ -389,37 +358,19 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, array<array-key, array<int, string>|mixed|string>|string> $condition
-     */
-    private static function getIterator(array &$condition): Closure
-    {
-        return static function (string|array $value, string $column) use (&$condition): void {
-            // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
-            if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
-                $condition[$column] = $value;
-            } else {
-                // Add condition
-                /** @psalm-suppress MixedArgumentTypeCoercion */
-                $condition[] = self::createCriteria($column, $value);
-            }
-        };
-    }
-
-    /**
-     * @param array<int, string> $parameters
+     * @param list<string> $parameters Expression arguments already containing the field name.
      *
-     * @return array<int, array<int, Literal>|string>
+     * @return ExpressionParameters
      */
     private static function getComparisonParameters(
         QueryBuilder $queryBuilder,
-        stdClass $comparison,
+        Comparison $comparison,
         string $lowercaseOperator,
         array $parameters,
     ): array {
         if (is_array($comparison->value)) {
             $value = $comparison->value;
 
-            /** @psalm-suppress MixedArgumentTypeCoercion */
             $parameters = self::getParameters($queryBuilder, $lowercaseOperator, $parameters, $value);
         } else {
             $parameters[] = '?' . self::$parameterCount;

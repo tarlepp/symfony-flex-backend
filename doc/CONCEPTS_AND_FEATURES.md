@@ -324,6 +324,18 @@ are replacements for what doctrine itself is providing)
   complex custom queries - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L63)
   for examples.
+  Simple filters map field names to scalar values or lists of scalar values.
+  Advanced `and`/`or` groups contain comparison tuples with exactly three
+  values: field name, Doctrine expression method name, and operand. Groups
+  can be nested; traversal order determines parameter binding order.
+  Repository criteria are validated after controller/resource customization
+  and converted to typed comparison/group nodes. Direct PHP callers may also
+  supply stringable operands. List elements cannot be null or nested arrays;
+  `in`/`notIn` require arrays, and `between` requires exactly bounds `0` and `1`.
+  Null checks still use a three-value tuple with a null operand. Top-level
+  null filters in HTTP requests are removed before criteria validation.
+  Malformed criteria raise `InvalidArgumentException`; generic REST endpoints
+  return HTTP 400 with the usual `message`, `code`, and `status` error fields.
 * Handling for `order` parameter, which you can use to order results
   easily - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L104)
