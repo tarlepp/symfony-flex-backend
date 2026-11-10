@@ -11,6 +11,7 @@ use App\Utils\JSON;
 use Closure;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Throwable;
@@ -24,6 +25,7 @@ class Version
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
+        #[Target('app.cache.apcu')]
         private readonly CacheInterface $appCacheApcu,
         private readonly LoggerInterface $logger,
     ) {
