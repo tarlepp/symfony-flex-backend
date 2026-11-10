@@ -25,6 +25,9 @@ This project includes a Dev Container definition in `.devcontainer/`.
 * The `development` target in the root `Dockerfile`, selected by `compose.yaml`
 * A small Compose override: `.devcontainer/docker-compose.devcontainer.yml`
 
+The shared development image also includes [fzf](../doc/FZF.md), with Bash and
+Fish key bindings for fuzzy file selection, history search, and navigation.
+
 CI validates the merged Compose override and parses `devcontainer.json` when
 the Compose validation category is selected. Keep `devcontainer.json` strict
 JSON, without comments or trailing commas. This checks syntax, not the Dev

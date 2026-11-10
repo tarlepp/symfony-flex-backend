@@ -28,6 +28,7 @@ application.
 * [Docker multi-platform images](DOCKER_MULTI_PLATFORM.md)
 * [Event listeners and subscribers](EVENT_HANDLING.md)
 * [Feature delivery agents](FEATURE_AGENTS.md)
+* [fzf fuzzy finder](FZF.md)
 * [GitHub workflows and execution graphs](GITHUB_WORKFLOWS.md)
 * [Installation without docker](INSTALLATION_WITHOUT_DOCKER.md)
 * [Required checks and branch protection](REQUIRED_CHECKS.md)
