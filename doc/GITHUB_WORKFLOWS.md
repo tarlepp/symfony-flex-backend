@@ -200,6 +200,7 @@ flowchart TD
     Analyzers["lightweight-analyzers + static-analyzers matrix"]
     Tests["test: PHPUnit tests"]
     Builds["docker-build: development + production"]
+    Scans["docker-scan: Trivy development + production"]
     Prereq["ci-summary: Validate CI prerequisites"]
     Final["ci-result: Validate CI result"]
     Report["report: External reporting (PRs + master pushes)"]
@@ -209,6 +210,8 @@ flowchart TD
     Changes --> Analyzers
     Changes --> Tests
     Changes --> Builds
+    Changes --> Scans
+    Builds --> Scans
     Changes --> Prereq
     Independent --> Prereq
     Documentation --> Prereq
@@ -220,6 +223,7 @@ flowchart TD
     Analyzers --> Final
     Tests --> Final
     Builds --> Final
+    Scans --> Final
     Prereq --> Report
     Tests --> Report
     Report --> Final
@@ -252,7 +256,8 @@ Display names appear in GitHub's run graph and logs.
 | `lightweight-analyzers` | CodeSniffer, ECS, PHPLint, Parallel Lint, PHPLoc |
 | `static-analyzers` | Separate Psalm, PHPStan and PHP Insights matrix jobs |
 | `test` | PHPUnit, coverage and PhpMetrics reports |
-| `docker-build` | Build and Trivy-scan development and production images |
+| `docker-build` | Build and archive development and production images |
+| `docker-scan` | Trivy-scan the images produced by `docker-build` |
 | `ci-summary` | Validate expected prerequisite results |
 | `report` | Coveralls/SonarCloud uploads; eligible job must succeed |
 | `ci-result` | Validate the combined core CI result |
@@ -268,16 +273,23 @@ local composite-action schema validation and offline tooling regressions.
 
 Lightweight tools have separate steps sharing one bootstrap; later tools
 still run after earlier tool failures if setup succeeded and the job was not
-cancelled. Both analyzer and image-build matrices use `fail-fast: false`, so
-one failing variant does not cancel the others.
+cancelled. Analyzer, image-build and image-scan matrices use
+`fail-fast: false`, so one failing variant does not cancel the others.
+
+Image scans wait for the build matrix to succeed and download its per-target
+Docker image archives; they do not rebuild or publish images to a registry.
+Archives expire after one day. Separate build and scan checks distinguish
+build failures from vulnerability findings. Trivy still rejects fixable
+`CRITICAL` and `HIGH` OS and library vulnerabilities. The scheduled/manual
+`vulnerability-scan.yml` workflow keeps its existing build-and-scan jobs.
 
 ### Gates and cancellation [ᐞ](#table-of-contents)
 
 <a id="gates-and-cancellation"></a>
 
 `ci-summary` checks every prerequisite result. `ci-result` checks change
-detection, the prerequisite gate, both analyzer jobs, PHPUnit, the Docker
-matrix and external reporting. Selected jobs must succeed; a skip is accepted
+detection, the prerequisite gate, both analyzer jobs, PHPUnit, both Docker
+matrices and external reporting. Selected jobs must succeed; a skip is accepted
 only after successful detection explicitly emits `false` for that category,
 or under the existing schedule policy. Unknown or empty selection outputs
 fail the gates. Reporting must succeed on PRs and `master` pushes when tests

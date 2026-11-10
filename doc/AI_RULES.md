@@ -134,7 +134,8 @@ contains:
   security audits of workflows and local actions with zizmor, plus separate
   schema validation for local action metadata,
 * dependency and secret checks,
-* Docker image pin verification and image builds/scanning,
+* Docker image pin verification, image builds and a separate Trivy scan matrix
+  consuming the built image artifacts without rebuilding,
 * a lightweight static-analysis job (CodeSniffer, ECS, syntax checks and
   PHPLoc) with independent failure-preserving steps, plus a matrix for
   Psalm, PHPStan and PHP Insights,
@@ -143,7 +144,7 @@ contains:
 * a prerequisite gate (`ci-summary`) that validates the lint, security and
   static-analysis job results,
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
-  both static-analysis jobs, tests, Docker builds and eligible external
+  both static-analysis jobs, tests, Docker builds/scans and eligible external
   reporting, and is the required merge check together with
   `dependency-review`, and
 * optional coverage and Sonar reporting on all PRs and successful `master`

@@ -840,7 +840,7 @@ jobs:
           context: .
           file: Dockerfile
           target: ${{ matrix.target }}
-          load: true
+          outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
           push: false
           tags: symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}-${{ matrix.target }}
           cache-from: type=gha,version=2,scope=ci-image-${{ matrix.target }}
@@ -848,10 +848,43 @@ jobs:
           pull: true
           no-cache-filters: production
 
+      - name: Upload Docker image for scanning
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: docker-image-${{ matrix.target }}
+          path: ${{ runner.temp }}/docker-image.tar
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+  docker-scan:
+    name: Scan application Docker image with Trivy (${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.docker == 'true' }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [development, production]
+    needs:
+      - changes
+      - docker-build
+
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Download Docker image for scanning
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: docker-image-${{ matrix.target }}
+          path: ${{ runner.temp }}/docker-image
+
       - name: Scan Docker image with Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
-          image-ref: 'symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}-${{ matrix.target }}'
+          input: ${{ runner.temp }}/docker-image/docker-image.tar
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -869,6 +902,7 @@ jobs:
       - static-analyzers
       - test
       - docker-build
+      - docker-scan
       - report
     if: ${{ !cancelled() }}
     steps:
@@ -888,6 +922,7 @@ jobs:
           LIGHTWEIGHT_ANALYZERS: ${{ needs.lightweight-analyzers.result }}
           TEST: ${{ needs.test.result }}
           DOCKER_BUILD: ${{ needs.docker-build.result }}
+          DOCKER_SCAN: ${{ needs.docker-scan.result }}
           REPORT: ${{ needs.report.result }}
         run: |
           echo "Event: $EVENT_NAME"
@@ -897,6 +932,7 @@ jobs:
           echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"
           echo "PHPUnit result: $TEST"
           echo "Docker build matrix result: $DOCKER_BUILD"
+          echo "Docker scan matrix result: $DOCKER_SCAN"
           echo "External reporting result: $REPORT"
 
           if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
@@ -927,6 +963,7 @@ jobs:
               summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
               summary_row "PHPUnit" "$TEST" "$TESTS_CHANGED" "application tests"
               summary_row "Docker builds" "$DOCKER_BUILD" "$DOCKER_CHANGED" "application images"
+              summary_row "Trivy image scans" "$DOCKER_SCAN" "$DOCKER_CHANGED" "application images"
               if [ "$REPORT" = "skipped" ]; then
                 if [ "$EVENT_NAME" != "pull_request" ] && {
                   [ "$EVENT_NAME" != "push" ] || [ "$REF" != "refs/heads/master" ];
@@ -974,4 +1011,5 @@ jobs:
           expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
           expect_selected "$TESTS_CHANGED" "$TEST"
           expect_selected "$DOCKER_CHANGED" "$DOCKER_BUILD"
+          expect_selected "$DOCKER_CHANGED" "$DOCKER_SCAN"
           test "$REPORT" = "$report_expected"

@@ -40,6 +40,34 @@ class CiGatesTest(unittest.TestCase):
         self.assertTrue(cleanup, "Expected unconditional container cleanup")
         self.assertTrue(all(condition == "${{ always() }}" for condition in cleanup))
 
+    def test_image_scans_consume_build_artifacts_without_rebuilding(self):
+        build = self.jobs["docker-build"]
+        scan = self.jobs["docker-scan"]
+        self.assertNotIn("aquasecurity/trivy-action@", build)
+        self.assertIn("outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar", build)
+        self.assertIn("uses: actions/upload-artifact@", build)
+        self.assertIn("path: ${{ runner.temp }}/docker-image.tar", build)
+        self.assertIn("if-no-files-found: error", build)
+        self.assertNotIn("uses: docker/build-push-action@", scan)
+        self.assertIn("uses: actions/download-artifact@", scan)
+        self.assertIn("path: ${{ runner.temp }}/docker-image", scan)
+        self.assertIn("input: ${{ runner.temp }}/docker-image/docker-image.tar", scan)
+        self.assertIn("uses: aquasecurity/trivy-action@", scan)
+        self.assertIn("exit-code: '1'", scan)
+        self.assertIn("severity: 'CRITICAL,HIGH'", scan)
+        self.assertIn("ignore-unfixed: true", scan)
+        self.assertIn("vuln-type: 'os,library'", scan)
+        self.assertIn("    needs:\n      - changes\n      - docker-build\n", scan)
+        self.assertIn("      - docker-scan\n", self.jobs["ci-result"])
+        for job in (build, scan):
+            self.assertIn("name: docker-image-${{ matrix.target }}", job)
+            self.assertIn("target: [development, production]", job)
+            self.assertIn("fail-fast: false", job)
+            self.assertIn(
+                "if: ${{ github.event_name != 'schedule' && "
+                "needs.changes.outputs.docker == 'true' }}", job,
+            )
+
     def run_gate(self, job, environment):
         script = re.search(
             r"^        run: \|\n((?:^          .*\n|^\n)+)",
