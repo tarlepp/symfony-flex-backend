@@ -7,10 +7,13 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Decorator;
 
+use App\Controller\v1\Profile\IndexController;
 use App\Decorator\StopwatchDecorator;
 use App\Entity\ApiKey;
+use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Resource\ApiKeyResource;
+use App\Utils\JSON;
 use App\Validator\Constraints\EntityReferenceExists;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,6 +23,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\NullLogger;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 
@@ -93,6 +99,51 @@ final class StopwatchDecoratorTest extends KernelTestCase
         // Since the class is final, it should return the same instance
         self::assertSame($service, $result);
         self::assertSame('final-test', $result->testMethod());
+    }
+
+    #[TestDox('Test that serializer final methods retain initialized state after decoration')]
+    public function testThatDecoratorPreservesSerializerState(): void
+    {
+        $service = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+        $decorator = new StopwatchDecorator(new Stopwatch(), new NullLogger());
+        $data = new FluentService()->setValue('test');
+
+        $result = $decorator->decorate($service);
+
+        self::assertSame('{"value":"test"}', $result->serialize($data, 'json'));
+        self::assertEquals(
+            $data,
+            $result->deserialize('{"value":"test"}', FluentService::class, 'json'),
+        );
+        self::assertSame($service, $result);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[TestDox('Test that the development profile controller uses an initialized serializer')]
+    public function testThatDevelopmentProfileSerializationWorks(): void
+    {
+        $kernel = self::bootKernel([
+            'environment' => 'dev',
+            'debug' => true,
+        ]);
+        $controller = $kernel->getContainer()->get(IndexController::class);
+        $user = new User()->setUsername('profile-test');
+
+        $response = $controller($user);
+        $content = $response->getContent();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertNotFalse($content);
+
+        /** @var array<string, mixed> $profile */
+        $profile = JSON::decode($content, true);
+
+        self::assertSame('profile-test', $profile['username']);
+        self::assertArrayHasKey('roles', $profile);
+        self::assertArrayNotHasKey('password', $profile);
+        self::assertArrayNotHasKey('plainPassword', $profile);
     }
 
     #[TestDox('Test that decorator handles parameters with internal class default values')]

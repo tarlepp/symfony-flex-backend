@@ -13,6 +13,7 @@ use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -27,6 +28,7 @@ readonly class Localization
     final public const string DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
     public function __construct(
+        #[Target('app.cache.apcu')]
         private CacheInterface $appCacheApcu,
         private LoggerInterface $logger,
         private RequestStack $requestStack,
