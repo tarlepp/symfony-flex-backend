@@ -512,6 +512,14 @@ class SomeService
 With this example you can see how much your custom code will take time to
 process and you can see this easily from your profiler.
 
+Development services tagged with `app.stopwatch`, plus the configured database
+connection and serializer, also use `StopwatchDecorator` for automatic timing.
+The decorator leaves final classes and classes with final public instance
+methods unchanged. Its forwarding proxies cannot override final methods or
+safely initialize the original service's state. These services, including
+Symfony's serializer, retain their initialized instances without custom
+decorator timing.
+
 ---
 
 [Back to previous](README.md) - [Back to main README.md](../README.md)

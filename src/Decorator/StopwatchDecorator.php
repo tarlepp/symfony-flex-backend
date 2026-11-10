@@ -64,7 +64,17 @@ readonly class StopwatchDecorator
     {
         return $class->getFileName() === false
             || $class->isFinal()
+            || $this->hasFinalPublicInstanceMethods($class)
             || $this->isExcludedClassName($class->getName());
+    }
+
+    private function hasFinalPublicInstanceMethods(ReflectionClass $class): bool
+    {
+        // Final methods cannot be forwarded and would access uninitialized proxy state.
+        return array_any(
+            $class->getMethods(ReflectionMethod::IS_PUBLIC),
+            static fn ($method) => $method->isFinal() && !$method->isStatic(),
+        );
     }
 
     private function isExcludedClassName(string $className): bool
