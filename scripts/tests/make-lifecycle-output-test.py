@@ -268,8 +268,18 @@ exit "${DOCKER_EXIT:-0}"
         for target in ("start", "start-build", "start-prod", "daemon", "daemon-build", "daemon-prod"):
             result, calls = self.make(target, RUNNING="1")
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("already running", result.stderr)
-            self.assertNotIn("compose up", calls)
+            self.assertIn("already running; startup cancelled", result.stderr)
+            self.assertIn(
+                "run 'make stop' on the Docker host, then rerun your original command",
+                result.stderr,
+            )
+            self.assertIn("To keep services running and follow application logs instead", result.stderr)
+            self.assertIn("run 'make logs' on the Docker host", result.stderr)
+            self.assertIn("Ctrl-C only stops following logs", result.stderr)
+            self.assertNotIn("[OK]", result.stderr)
+            self.assertNotIn(" up", calls)
+            self.assertNotIn(" down", calls)
+            self.assertNotIn("logs --follow", calls)
 
     def test_sessions_and_logs_use_direct_tty_commands_without_final_success(self):
         streams = {
@@ -426,9 +436,11 @@ exit "${DOCKER_EXIT:-0}"
         result, calls = self.make("daemon", SERVICE_STATUS="php|exited|\nnginx|exited|")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("compose up --detach", calls)
-        result, calls = self.make("daemon", SERVICE_STATUS="adminer|running|")
+        result, calls = self.make("start", SERVICE_STATUS="adminer|running|")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("service 'adminer' is already running", result.stderr)
+        self.assertIn("run 'make stop'", result.stderr)
+        self.assertIn("run 'make logs'", result.stderr)
         self.assertNotIn("compose up", calls)
 
     def test_context_failures_stop_before_native_operations(self):

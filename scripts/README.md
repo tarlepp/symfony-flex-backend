@@ -384,6 +384,12 @@ override for the check; PHP shell access uses the same development/CI Compose
 selection as execution. No waiting, health-policy change, or automatic restart
 is introduced.
 
+Rejected startup attempts name the running service and explain how to restart
+with `make stop` followed by the original command, or keep services running
+and follow application logs with `make logs`. Both options run on the Docker
+host; Ctrl-C in the log follower leaves services running. See the
+[command reference](../doc/COMMANDS.md#commands) for examples.
+
 `make test-docker-images` runs offline regression tests of the helper itself,
 using temporary Dockerfiles and mocked registry/Docker commands. It does **not**
 validate the actual repository Dockerfile pins; its startup notice makes this

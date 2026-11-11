@@ -47,7 +47,9 @@ while IFS='|' read -r service state health; do
         running=true
     fi
     if [ "$mode" = idle ] && [ "$state" = running ]; then
-        output_status FAIL "Compose service '$service' is already running; stop this project before starting again"
+        output_status FAIL "Compose service '$service' is already running; startup cancelled"
+        output_status INFO "To restart this project, run 'make stop' on the Docker host, then rerun your original command"
+        output_status INFO "To keep services running and follow application logs instead, run 'make logs' on the Docker host; Ctrl-C only stops following logs"
         exit 1
     fi
     if [ "$mode" = php ] && [ "$state" = running ] && [ -n "$health" ] && [ "$health" != healthy ]; then

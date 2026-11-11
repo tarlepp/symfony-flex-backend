@@ -221,6 +221,25 @@ PHP/nginx/MariaDB containers. Startup checks only this Compose project's running
 services, not globally matching container names. Help and dry runs do not query
 Docker service state.
 
+If startup reports that a service is already running, no services are changed.
+To restart the project, run the following from the repository root on the Docker
+host. This interrupts running services but retains named volumes. Replace
+`make start` with your original startup command if using another mode:
+
+```bash
+make stop
+make start
+```
+
+To leave services running and follow PHP, nginx, and MariaDB logs instead, run
+from the repository root on the Docker host:
+
+```bash
+make logs
+```
+
+Press Ctrl-C to stop following logs without stopping the services.
+
 Docker maintenance helpers affect all host resources, not just this project.
 Warnings precede destructive operations; the existing prune confirmation is
 unchanged. Empty kill/remove selections and declined confirmations report
