@@ -196,7 +196,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $cacheKey = spl_object_hash($exception);
 
         if (!array_key_exists($cacheKey, self::$cache)) {
-            $intersect = array_intersect((array)class_implements($exception), self::$clientExceptions);
+            $intersect = array_intersect(class_implements($exception), self::$clientExceptions);
 
             self::$cache[$cacheKey] = $intersect !== [];
         }
