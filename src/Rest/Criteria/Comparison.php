@@ -43,16 +43,18 @@ final readonly class Comparison
             );
         }
 
-        [$field, $operator, $value] = array_values($comparison);
+        $values = array_values($comparison);
 
-        if (!is_string($field) || !is_string($operator)) {
+        if (!is_string($values[0]) || !is_string($values[1])) {
             throw new InvalidArgumentException('Criteria fields and operators must be strings.');
         }
 
-        if (is_array($value)) {
+        [$field, $operator] = $values;
+
+        if (is_array($values[2])) {
             $elements = [];
 
-            foreach ($value as $key => $element) {
+            foreach ($values[2] as $key => $element) {
                 if (!is_scalar($element) && !$element instanceof Stringable) {
                     throw new InvalidArgumentException(
                         'Criteria list and range operands must be scalars or stringable objects.',
@@ -63,10 +65,12 @@ final readonly class Comparison
             }
 
             $value = $elements;
-        } elseif ($value !== null && !is_scalar($value) && !$value instanceof Stringable) {
+        } elseif ($values[2] !== null && !is_scalar($values[2]) && !$values[2] instanceof Stringable) {
             throw new InvalidArgumentException(
                 'Criteria operands must be scalars, stringable objects, arrays, or null.',
             );
+        } else {
+            $value = $values[2];
         }
 
         $normalizedOperator = strtolower($operator);
