@@ -58,10 +58,13 @@ ENV PATH="$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION=v0.40.8
 ENV NODE_VERSION=26.12.1
 
-RUN apt-get update \
+# Debian slim otherwise excludes fzf's Bash integration as documentation.
+RUN echo 'path-include /usr/share/doc/fzf/examples/key-bindings.bash' > /etc/dpkg/dpkg.cfg.d/zz-fzf \
+    && apt-get update \
     && apt-get install -y \
         bash-completion \
         build-essential \
+        fzf \
         gnupg \
         iproute2 \
         locales \
@@ -160,6 +163,8 @@ RUN chmod +x /app/bin/console \
 USER dev
 
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
+    && echo 'source /usr/share/bash-completion/completions/fzf' >> /home/dev/.bashrc \
+    && echo 'source /usr/share/doc/fzf/examples/key-bindings.bash' >> /home/dev/.bashrc \
     && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc \
     && echo 'source /app/docker/bash/make.sh' >> /home/dev/.bashrc
 

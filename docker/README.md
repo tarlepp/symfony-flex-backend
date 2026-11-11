@@ -3,6 +3,8 @@
 <a id="what-is-this"></a>
 
 This folder contains necessary configuration files for Docker containers.
+For fuzzy file selection and shell history search in the development container,
+see the [fzf guide](../doc/FZF.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
