@@ -7,6 +7,10 @@ provides a workflow grounded in the existing implementation, plus relevant
 validation checks. Skills supplement the repository instructions; they do not
 replace them.
 
+For an introduction to how skills support the project agents, see
+[AI agents and skills](../../doc/AI_AGENTS_AND_SKILLS.md), including interaction
+diagrams and practical starting points.
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>

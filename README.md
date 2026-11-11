@@ -306,9 +306,15 @@ For detailed usage, UID/GID notes, and port mappings, see
 
 <a id="ai-assisted-development"></a>
 
+New to the project agents and skills? Start with the
+[visual introduction](doc/AI_AGENTS_AND_SKILLS.md) for roles, approval steps,
+repair and conflict flows, and practical skill selection.
+
 If you use AI assistance in this repository, use this canonical inventory and
 reading order for its guidance:
 
+* [`doc/AI_AGENTS_AND_SKILLS.md`](doc/AI_AGENTS_AND_SKILLS.md) for a
+  contributor-friendly overview with interaction diagrams
 * [`AGENTS.md`](AGENTS.md) for agent-specific instructions
 * [`.github/copilot-instructions.md`](.github/copilot-instructions.md) as the
   Copilot entry point to actionable repository instructions
