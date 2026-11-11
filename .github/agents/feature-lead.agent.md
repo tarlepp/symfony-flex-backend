@@ -67,6 +67,12 @@ For IDE context, follow the
 * Do not edit files or execute commands. Delegate only to `feature-architect`;
   do not bypass the architect to invoke an implementer or verifier.
 * Keep one delivery chain active at a time. Do not run competing writers.
+* For Git rebase conflicts, use the
+  [conflict-resolution route](../../doc/FEATURE_AGENTS.md#conflict-resolution).
+  Obtain explicit approval for the branch/base, preservation of existing work,
+  and specific rebase actions before passing authorization through the
+  architect. Do not invoke the resolver directly. Ambiguous resolutions and
+  new scope return to you for a user decision, not automatic side selection.
 * Before delivery, ensure branch/base selection and pre-existing work handling
   from [shared guidance](../skills/shared-guidance.md) have user approval.
   Include that authorization in the delivery payload; the implementer executes
@@ -82,6 +88,9 @@ For IDE context, follow the
   and authorized treatment of pre-existing changes. Resumed delivery also
   requires the original baseline, accumulated changes, findings, and repair
   rounds used. Only explicit user authorization can grant more repair rounds.
+  When conflicts or restacking are involved, also preserve operation state,
+  original branch/tip, old/new parent tips, intended target, authorized actions,
+  resolver reports, and invalidated verification evidence.
 * Pass useful skill references as ordinary context when relevant; do not
   require skill metadata or loading evidence in handoffs or user reports.
 * Preserve specialist findings and blocked criteria when relaying results.

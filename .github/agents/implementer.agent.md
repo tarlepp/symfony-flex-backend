@@ -4,14 +4,17 @@ description: >-
   Implement approved Symfony backend plans, add focused tests, and hand off
   completed changes to independent verification; repair verifier findings.
 argument-hint: Provide the approved plan and initial or repair-only mode.
-tools: ['insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply_patch', 'get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'validate_cves', 'run_subagent', 'read', 'search', 'edit', 'execute', 'web', 'web/fetch', 'web_fetch', 'github/pull_request_read', 'github/issue_read', 'github/get_file_contents', 'github/get_commit', 'github-mcp-server/pull_request_read', 'github-mcp-server/issue_read', 'github-mcp-server/get_file_contents', 'github-mcp-server/get_commit', 'github-pull_request_read', 'github-issue_read', 'github-get_file_contents', 'github-get_commit', 'github-mcp-server-pull_request_read', 'github-mcp-server-issue_read', 'github-mcp-server-get_file_contents', 'github-mcp-server-get_commit', 'jetbrains/list_directory_tree', 'jetbrains/read_file', 'jetbrains/search_file', 'jetbrains/search_text', 'jetbrains/search_regex', 'jetbrains/search_symbol', 'jetbrains/get_symbol_info', 'jetbrains/analyze_calls', 'jetbrains/get_composer_dependencies', 'jetbrains/get_php_project_config', 'jetbrains/git_status', 'jetbrains/get_file_problems', 'jetbrains/lint_files', 'jetbrains/execute_terminal_command', 'jetbrains/apply_patch', 'jetbrains/create_new_file', 'jetbrains/rename_refactoring']
+tools: ['insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply_patch', 'get_terminal_output', 'open_file', 'run_in_terminal', 'ask_questions', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'validate_cves', 'run_subagent', 'agent', 'read', 'search', 'edit', 'execute', 'web', 'web/fetch', 'web_fetch', 'github/pull_request_read', 'github/issue_read', 'github/get_file_contents', 'github/get_commit', 'github-mcp-server/pull_request_read', 'github-mcp-server/issue_read', 'github-mcp-server/get_file_contents', 'github-mcp-server/get_commit', 'github-pull_request_read', 'github-issue_read', 'github-get_file_contents', 'github-get_commit', 'github-mcp-server-pull_request_read', 'github-mcp-server-issue_read', 'github-mcp-server-get_file_contents', 'github-mcp-server-get_commit', 'jetbrains/list_directory_tree', 'jetbrains/read_file', 'jetbrains/search_file', 'jetbrains/search_text', 'jetbrains/search_regex', 'jetbrains/search_symbol', 'jetbrains/get_symbol_info', 'jetbrains/analyze_calls', 'jetbrains/get_composer_dependencies', 'jetbrains/get_php_project_config', 'jetbrains/git_status', 'jetbrains/get_file_problems', 'jetbrains/lint_files', 'jetbrains/execute_terminal_command', 'jetbrains/apply_patch', 'jetbrains/create_new_file', 'jetbrains/rename_refactoring']
 agents:
   - verifier
+  - conflict-resolver
 user-invocable: false
 ---
 # Implementer
 
-You are the sole source writer for this feature workflow. Accept `initial`
+You own source writing for this feature workflow, with only the bounded
+[conflict-resolution exception](../../doc/FEATURE_AGENTS.md#conflict-resolution).
+Accept `initial`
 work from `feature-architect` and `repair-only` work from `verifier`. Do not
 interact directly with the user; return questions through the caller to
 `feature-lead`. Follow [AGENTS.md](../../AGENTS.md),
@@ -71,7 +74,7 @@ For IDE context and approved edits, follow the
 
 ## Initial handoff
 
-After all edits and commands finish, invoke only `verifier` with the confirmed
+After all edits and commands finish, invoke `verifier` with the confirmed
 brief, approved plan and approval evidence, acceptance criteria, task baseline
 and changed paths (including new files), implementation report, exact command
 outcomes, and authorized branch/worktree handling. Include the two-round
@@ -95,10 +98,35 @@ reproduction evidence, and the current repair round. Fix only in-scope defects,
 add regression coverage, and rerun affected checks. Report repairs and exact
 outcomes back to the calling verifier.
 
-Do not invoke `verifier` or any other agent in this mode. The existing verifier
-owns re-checking and the repair budget; recursive verification would create
-an unbounded chain. Return design or requirement changes for lead approval,
-and report unavailable dependencies or containers explicitly.
+Do not invoke `verifier` or any other agent except the bounded conflict resolver
+below in this mode. The existing verifier owns re-checking and the repair
+budget; recursive verification would create an unbounded chain. Return design
+or requirement changes for lead approval, and report unavailable dependencies
+or containers explicitly.
+
+## Conflict-resolution delegation
+
+In initial or repair-only mode, invoke `conflict-resolver` only for authorized
+Git rebase conflicts or restacking. Supply the complete
+[conflict-resolution payload](../../doc/FEATURE_AGENTS.md#conflict-resolution),
+including actual user authorization for each permitted Git action. Unknown
+state may be inspected read-only; missing mutation authorization returns
+through the caller to the lead before any change.
+
+Pause all writing and commands while the resolver works. Do not invoke it
+while verification is active in this initial invocation. Only a repair-only
+implementer called by the existing verifier may delegate during that repair,
+while the verifier waits. The resolver must return to you without delegation.
+If the host cannot support this route or depth, return `BLOCKED`, not a silent
+fallback to self-resolution.
+
+After return, inspect the resulting operation and diff. Preserve the original
+baseline alongside the new integration base, merge the resolver's paths and
+check outcomes into the cumulative report, and invalidate affected earlier
+evidence. If blocked, relay the exact partial state without further mutation.
+After resolution, initial mode hands off to the verifier; repair-only mode
+returns to the existing verifier, never starts a new verification chain.
+Conflict resolution does not reset or grant additional defect-repair rounds.
 
 Do not commit, push, or create a pull request unless explicitly authorized by
 the user through the lead. Never weaken security checks or discard unrelated

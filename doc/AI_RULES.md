@@ -62,6 +62,9 @@ roles, approval gates, and specialist handoffs. They supplement repository
 instructions and skills, not override them. Keep their routing, tool access,
 and client limitations aligned when changing the workflow; only the feature
 lead is user-facing.
+The implementer may delegate bounded, explicitly authorized rebase conflict
+work to the hidden conflict resolver while paused; independent verification
+and approval gates remain unchanged.
 
 When documentation conflicts with actual behavior, resolve the drift by
 updating the inaccurate guidance or the implementation as appropriate; do not
