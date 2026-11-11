@@ -13,6 +13,8 @@ use PhpCsFixer\Fixer\CastNotation\CastSpacesFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
 use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
+use PhpCsFixer\Fixer\FunctionNotation\NativeFunctionInvocationFixer;
+use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer;
 use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
@@ -33,6 +35,28 @@ return ECSConfig::configure()
         __DIR__ . '/tests',
     ])
     ->withPreparedSets(psr12: true, common: true, cleanCode: true)
+    ->withConfiguredRule(
+        NativeFunctionInvocationFixer::class,
+        [
+            'include' => ['@internal'],
+            'scope' => 'namespaced',
+            'strict' => false,
+            // Preserve namespace fallback for Symfony PHPUnit Bridge clock and DNS mocks.
+            'exclude' => [
+                'time', 'microtime', 'sleep', 'usleep', 'date', 'gmdate', 'hrtime', 'strtotime',
+                'checkdnsrr', 'dns_check_record', 'getmxrr', 'dns_get_mx',
+                'gethostbyaddr', 'gethostbyname', 'gethostbynamel', 'dns_get_record',
+            ],
+        ],
+    )
+    ->withConfiguredRule(
+        GlobalNamespaceImportFixer::class,
+        [
+            'import_classes' => null,
+            'import_constants' => null,
+            'import_functions' => true,
+        ],
+    )
     ->withConfiguredRule(
         IncrementStyleFixer::class,
         [

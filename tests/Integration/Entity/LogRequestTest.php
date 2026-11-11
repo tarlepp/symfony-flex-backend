@@ -25,6 +25,7 @@ use function array_key_exists;
 use function in_array;
 use function is_array;
 use function is_object;
+use function is_string;
 use function sprintf;
 use function ucfirst;
 

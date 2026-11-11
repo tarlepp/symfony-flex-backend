@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Attribute\Groups;
+use function array_fill_keys;
 use function array_key_exists;
 use function array_map;
 use function array_walk;

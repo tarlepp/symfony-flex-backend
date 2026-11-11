@@ -18,6 +18,7 @@ use ReflectionType;
 use ReflectionUnionType;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
+use function array_any;
 use function array_filter;
 use function array_map;
 use function implode;

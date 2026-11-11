@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
+use function array_map;
 
 /**
  * @extends AbstractType<UserGroup>

@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function is_array;
+use function mb_convert_encoding;
 use function serialize;
 
 /**

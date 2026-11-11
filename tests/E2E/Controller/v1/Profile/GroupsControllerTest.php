@@ -22,6 +22,7 @@ use Throwable;
 use function array_map;
 use function getenv;
 use function property_exists;
+use function str_pad;
 
 final class GroupsControllerTest extends WebTestCase
 {

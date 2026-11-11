@@ -33,6 +33,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use function array_filter;
 use function array_map;
+use function array_values;
 use function class_exists;
 use function count;
 use function implode;

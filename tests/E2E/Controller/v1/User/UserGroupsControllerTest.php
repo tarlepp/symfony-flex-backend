@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use function array_map;
 use function getenv;
 
 final class UserGroupsControllerTest extends WebTestCase
