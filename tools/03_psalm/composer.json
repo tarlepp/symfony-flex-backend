@@ -7,9 +7,9 @@
 	},
 	"require-dev": {
 		"psalm/plugin-phpunit": "0.21.1",
-		"psalm/plugin-symfony": "5.10.0",
+		"psalm/plugin-symfony": "5.10.1",
 		"roave/security-advisories": "dev-latest",
-		"vimeo/psalm": "7.0.2",
+		"vimeo/psalm": "7.1.0",
 		"weirdan/doctrine-psalm-plugin": "2.11.1"
 	},
 	"config": {
