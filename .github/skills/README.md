@@ -70,6 +70,9 @@ references only for layers the task actually changes:
 * For AI instructions, custom agent profiles, skill contracts, and their
   indexes, use [maintain-ai-guidance](maintain-ai-guidance/SKILL.md).
   Documentation checks do not prove live-client discovery or delegation.
+* For authorized Git rebase conflicts or stacked PR restacking, use
+  [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). It does not grant
+  permission to start, continue, or publish a rebase.
 * For shared output serialization, population groups, response formats,
   headers, or error envelopes, use
   [update-api-response-contract](update-api-response-contract/SKILL.md).
@@ -115,6 +118,7 @@ references only for layers the task actually changes:
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
 | [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
+| [resolve-git-conflicts](resolve-git-conflicts/SKILL.md) | Resolving authorized Git rebase conflicts, including rewritten stacked PR parents. |
 | [update-api-documentation](update-api-documentation/SKILL.md) | Changing OpenAPI metadata, schemas, reusable responses, security descriptions, or documentation areas. |
 | [update-api-response-contract](update-api-response-contract/SKILL.md) | Changing shared response serialization, population groups, formats, headers, or error envelopes. |
 | [update-application-configuration](update-application-configuration/SKILL.md) | Changing JSON settings, environment overrides, or Symfony service wiring. |
