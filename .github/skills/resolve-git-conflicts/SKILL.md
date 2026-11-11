@@ -14,6 +14,13 @@ permissions. If an existing merge, cherry-pick, or unknown operation is found,
 report its state and request an authorized recovery decision rather than
 converting or continuing it.
 
+This workflow is rebase-only: update a conflicted branch by rebasing it onto
+its approved base or parent, never by merging that base or parent into it.
+Do not use `git merge`, plain `git pull`, or `git rebase --rebase-merges`
+to synchronize branches or resolve conflicts; do not introduce merge commits.
+An already active merge is a blocker requiring an authorized recovery decision,
+not permission to finish the merge.
+
 Follow [shared guidance](../shared-guidance.md) for branch selection,
 pre-existing work, rebase-only synchronization, container execution, and
 publishing safeguards. Follow the
