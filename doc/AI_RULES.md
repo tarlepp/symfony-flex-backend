@@ -202,7 +202,10 @@ The daily (04:17 UTC) and manually dispatched `docker-image-updates.yml`
 workflow applies same-major
 minor/patch updates and digest refreshes, verifies pins, and creates or updates
 a PR against the selected branch. It is separate from required CI gates;
-see [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
+the same job also reports available major versions through the existing
+read-only advisory checker and run summary, without applying major upgrades
+or adding a required-check context.
+See [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
 for token permissions, dispatch prerequisites and runtime evidence limits.
 
 For application tests, the workflow runs `make run-tests-php`. The local

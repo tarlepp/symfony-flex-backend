@@ -748,3 +748,36 @@ IMAGE=test:1.0.0 update_pins 'IMAGE is not accepted for bulk mutation' 64 'accep
 printf 'FROM test:1.0.0\n' > Dockerfile
 update_pins 'unpinned images are not automatically pinned' 1 'No tagged digest pins found'
 grep -Fxq 'FROM test:1.0.0' Dockerfile
+
+start_group 'Major reporting stays separate from automatic pin updates'
+printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}}]}\n' > "$TEST_MANIFEST"
+printf '{"next":null,"results":[{"name":"1.0.0"},{"name":"1.10.0"},{"name":"2.0.0"}]}\n' > "$TEST_TAGS"
+printf 'FROM %s\n' "$old_pin" > Dockerfile
+update_pins 'automatic update selects minor when a newer major exists' 0 '1 Dockerfile(s) changed'
+grep -Fxq "FROM $new_pin" Dockerfile
+before="$(sha256sum Dockerfile)"
+: > "$GITHUB_STEP_SUMMARY"
+COLOR=always NO_COLOR='' check_updates 'advisory reports major after minor update without changing files' '' 0 \
+    'test:1.10.0 -> test:2.0.0' --advisory
+[ "$before" = "$(sha256sum Dockerfile)" ]
+grep -Fq 'test:1.10.0 -> test:2.0.0' "$GITHUB_STEP_SUMMARY"
+grep -Fq 'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$GITHUB_STEP_SUMMARY"
+grep -Fq 'Platforms: linux/amd64 linux/arm64/v8' "$GITHUB_STEP_SUMMARY"
+grep -Fq 'Major upgrades require manual review' "$GITHUB_STEP_SUMMARY"
+if grep -q $'\033' "$GITHUB_STEP_SUMMARY"; then
+    printf 'FAIL: advisory summary contains ANSI escapes\n'
+    exit 1
+fi
+: > "$GITHUB_STEP_SUMMARY"
+check_updates 'advisory current summary is explicit' 'test:2.0.0' 0 \
+    'no newer stable version' --advisory
+grep -Fq '0 update(s), 0 failed check(s), 0 skipped check(s)' "$GITHUB_STEP_SUMMARY"
+: > "$GITHUB_STEP_SUMMARY"
+check_updates 'advisory skipped summary is explicit' 'test:stable' 0 '[SKIP]' --advisory
+grep -Fq '0 update(s), 0 failed check(s), 1 skipped check(s)' "$GITHUB_STEP_SUMMARY"
+: > "$GITHUB_STEP_SUMMARY"
+TEST_TAG_MODE=failure check_updates 'advisory lookup failures appear in summary and fail' 'test:1.10.0' 1 \
+    'Could not fetch Docker Hub tags' --advisory
+grep -Fq '0 update(s), 1 failed check(s), 0 skipped check(s)' "$GITHUB_STEP_SUMMARY"
+grep -Fq 'Could not fetch Docker Hub tags' "$GITHUB_STEP_SUMMARY"
+[ "$before" = "$(sha256sum Dockerfile)" ]

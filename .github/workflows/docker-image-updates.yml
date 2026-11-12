@@ -59,6 +59,9 @@ jobs:
       - name: Verify updated multi-platform pins and tag parity
         run: bash scripts/make.sh docker-image-verify-pins
 
+      - name: Report available stable versions including major upgrades
+        run: bash scripts/docker-images.sh check-updates --advisory
+
       - name: Prepare pull request details
         id: details
         env:
@@ -78,6 +81,7 @@ jobs:
           * `bash scripts/make.sh test-docker-images`: passed (offline regressions).
           * `bash scripts/make.sh docker-image-update-pins`: passed (live registry resolution).
           * `bash scripts/make.sh docker-image-verify-pins`: passed (live pin verification).
+          * `bash scripts/docker-images.sh check-updates --advisory`: passed (includes major upgrades; see run summary).
           * Application tests and builds were not run by this maintenance workflow.
           * Changed files:
 
@@ -140,7 +144,7 @@ jobs:
           if [ -n "$PR_URL" ]; then
             printf 'Docker image update PR (%s): %s\n' "$PR_OPERATION" "$PR_URL" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "All image pins are current; no update PR was needed." >> "$GITHUB_STEP_SUMMARY"
+            echo "No eligible minor/patch or digest changes; no update PR was needed. Major upgrades may still be listed in the version report and require manual review." >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Log out of Docker Hub

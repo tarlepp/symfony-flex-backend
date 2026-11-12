@@ -224,6 +224,23 @@ class DockerImageWorkflowTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             summary = self.summary.read_text()
             self.assertIn(url if url else "no update PR was needed", summary)
+            if not url:
+                self.assertIn("Major upgrades may still be listed", summary)
+
+    def test_major_report_reuses_advisory_checker_after_minor_updates(self):
+        report_name = "Report available stable versions including major upgrades"
+        report = step(WORKFLOW, report_name)
+        self.assertIn("run: bash scripts/docker-images.sh check-updates --advisory", report)
+        self.assertNotIn("continue-on-error:", WORKFLOW)
+        self.assertNotIn("if:", report)
+        self.assertLess(
+            WORKFLOW.index("- name: Apply minor/patch updates and digest refreshes"),
+            WORKFLOW.index(f"- name: {report_name}"),
+        )
+        self.assertLess(
+            WORKFLOW.index(f"- name: {report_name}"),
+            WORKFLOW.index("- name: Create or update the Docker image pull request"),
+        )
 
 
 if __name__ == "__main__":

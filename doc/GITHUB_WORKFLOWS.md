@@ -386,6 +386,16 @@ It verifies the resulting pins before creating or updating one PR per selected
 base branch. No changes means no new PR. Existing core CI gates are unchanged;
 this workflow does not build the updated images or run application tests.
 
+After applying eligible updates, the same job runs the existing read-only
+`check-updates --advisory` checker, including major versions. The run summary
+lists current-to-candidate versions, verified pins and platforms, or explicit
+current/skipped/failed results. Major upgrades require manual review and are
+never applied by `update-pins` or included in its automatic PR. A no-change PR
+result therefore does not mean there are no newer major versions. Confirmed
+updates do not fail the job; lookup and pin-validation errors do. Core CI's
+existing daily advisory check remains unchanged; no extra job or required-check
+context is added.
+
 The workflow must exist on `master` before GitHub enables manual dispatch,
 even when selecting another branch. In **Actions > Update Docker image pins >
 Run workflow**, choose the branch that should receive the update PR.
