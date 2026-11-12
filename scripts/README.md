@@ -398,6 +398,7 @@ the repository root on the Docker host:
 
 ```bash
 make docker-image-verify-pins
+make docker-image-update-pins    # OVERWRITE: update existing Dockerfile pins
 ```
 
 Blue `[RUN]`
@@ -942,6 +943,27 @@ intervening comments and blank lines. Repeated pagination URLs fail explicitly,
 including cycles spanning multiple pages.
 Update labels are yellow and up-to-date labels are green; set `NO_COLOR=1`
 to disable colors.
+
+To apply stable minor/patch updates within the current major version and
+refresh digests, run `make docker-image-update-pins` from the repository root
+on the Docker host. This reuses discovery and registry validation, preserves
+variants and existing platforms, and changes only existing tagged digest pins.
+Non-semver tags receive digest refreshes only; unpinned references are reported
+and left untouched. All registry lookups finish before any files are edited.
+It accepts neither `IMAGE` nor options. Exit `0` means pins were resolved and
+any updates applied; errors return nonzero (`64` for invalid input, `69` for
+missing tools). It never commits, pushes, builds images or recreates services.
+The [maintenance workflow][image-maintenance] uses this command daily at
+04:17 UTC on `master` and on manual dispatch. It creates or updates the same
+maintenance PR per base branch only when a diff exists.
+It authenticates registry pulls before bootstrap and runs helper regressions
+in the lightweight `maintenance` PHP target through Compose. PR authentication
+prefers a short-lived repository-scoped App token, then a configured PAT,
+with an explicit CI-trigger warning on `GITHUB_TOKEN` fallback.
+`make lint-workflows` runs `scripts/tests/docker-image-workflow-test.py` for
+offline authentication, schedule, bootstrap and PR-output contracts.
+
+[image-maintenance]: ../doc/GITHUB_WORKFLOWS.md#security-and-maintenance-workflows
 
 Use `./scripts/docker-images.sh check-updates` for a strict check that fails
 when an update is available or a check fails. All image results are reported before

@@ -764,6 +764,7 @@ class ChangeDetectionTest(unittest.TestCase):
             ".github/workflows/scorecard.yml": {"workflows"},
             ".github/zizmor.yml": {"workflows"},
             "scripts/tests/ci-gates-test.py": {"workflows"},
+            "scripts/tests/docker-image-workflow-test.py": {"workflows"},
             "scripts/lint-workflows.sh": {"workflows"},
             "scripts/docker-images.sh": {"images"},
             "scripts/tests/docker-images-test.sh": {"images"},

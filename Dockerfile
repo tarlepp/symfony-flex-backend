@@ -1,4 +1,12 @@
 # syntax=docker/dockerfile:1.19
+FROM php:8.5.12-fpm-bookworm@sha256:eec275cd99580e0a6e103dd343a7c160c86917003f6b9bba2d4c75d82419c683 AS maintenance
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y jq make \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
 FROM php:8.5.12-fpm-bookworm@sha256:eec275cd99580e0a6e103dd343a7c160c86917003f6b9bba2d4c75d82419c683 AS base
 
 RUN apt-get update \

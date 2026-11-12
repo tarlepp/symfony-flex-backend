@@ -175,6 +175,7 @@ $(call REGISTER_TARGET,docker-image-verify-pins,docker,host)
 $(call REGISTER_TARGET,docker-setup-qemu,docker,host)
 $(call REGISTER_TARGET,docker-build-multi-platform,docker,host,OVERWRITE)
 $(call REGISTER_TARGET,docker-build-platform,docker,host,OVERWRITE)
+$(call REGISTER_TARGET,docker-image-update-pins,docker,host,OVERWRITE)
 $(call REGISTER_TARGET,docker-kill-containers,docker,host,DESTRUCTIVE)
 $(call REGISTER_TARGET,docker-prune,docker,host,DESTRUCTIVE)
 $(call REGISTER_TARGET,docker-remove-containers,docker,host,DESTRUCTIVE)
@@ -665,6 +666,13 @@ ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image version checks" ./scripts/docker-images.sh check-updates
+endif
+
+docker-image-update-pins: ## Apply same-major minor/patch updates and refresh Dockerfile image digests
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(HOST_CONTEXT_FAILURE)
+else
+	@bash scripts/command-output.sh --progress "Update Dockerfile image pins" ./scripts/docker-images.sh update-pins
 endif
 
 docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)

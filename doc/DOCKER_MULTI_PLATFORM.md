@@ -107,7 +107,7 @@ platforms.
 
 <a id="php-build-targets"></a>
 
-The root `Dockerfile` has a shared `base` stage and two runnable targets:
+The root `Dockerfile` has a shared `base` stage for two application targets:
 
 * `development` includes Xdebug, the host-mapped `dev` user, Bash/Fish
   completions, editors, Python helpers and Node.js via nvm. It uses
@@ -117,6 +117,19 @@ The root `Dockerfile` has a shared `base` stage and two runnable targets:
   `APP_ENV=prod` / `APP_DEBUG=0`, installs optimized Composer dependencies
   without dev packages and audits them during the build. Development-only
   tools and Xdebug are not inherited.
+
+The independent `maintenance` target uses the same pinned upstream PHP image
+with only jq and Make added for Docker helper regression tests. It avoids
+application extensions, Composer and the development toolchain. The Docker
+update workflow selects it explicitly through the existing CI bootstrap and
+idle Compose PHP service; it is not an application runtime.
+
+To build it without restarting services, run from the repository root on the
+Docker host:
+
+```bash
+docker build --target maintenance -t symfony-flex-backend:maintenance .
+```
 
 Production is the last stage and therefore the default for `docker build .`.
 Docker Compose selects `development` explicitly, including when used by Dev
@@ -213,6 +226,8 @@ and `jq`. The read-only update checker additionally requires `curl`.
   set `IMAGE` to check a single image
 * `make docker-image-verify-pins` - verify that PHP, nginx and MariaDB
   base image pins are multi-platform and match their tags
+* `make docker-image-update-pins` - apply minor/patch updates within the
+  current major version and refresh existing Dockerfile digest pins
 * `make docker-builder-platforms` - show platforms supported by the buildx
   builder
 * `make docker-setup-qemu` - install QEMU emulators (asks `PLATFORMS`)
@@ -415,6 +430,32 @@ Use `make docker-image-digest` to check any other image.
 ### Continuous integration [ᐞ](#table-of-contents)
 
 <a id="continuous-integration"></a>
+
+For PR-based maintenance, **Update Docker image pins** runs daily at 04:17 UTC
+against `master` after the workflow is merged there. Manual runs remain
+available for a selected branch. It updates existing tagged digest pins in
+external `FROM` and `COPY --from` references, preserving the major version,
+exact variant and existing platforms. Tags without full stable semantic
+versions receive digest refreshes only. All registry lookups must succeed
+before files are changed; unpinned references  are reported and left untouched.
+It creates or updates a PR against the branch selected for the run, or reports
+no changes without opening a new PR.
+See the [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
+for dispatch, repository permissions and CI-triggering token setup.
+
+To apply the same updates locally, run from the repository root on the Docker
+host, review the diff, then verify the pins:
+
+```bash
+make docker-image-update-pins
+git diff -- Dockerfile 'docker/*/Dockerfile*'
+make docker-image-verify-pins
+```
+
+This changes files but does not commit, push, build images or recreate services.
+Review upgrade compatibility and run affected image builds and application
+checks before merging. Registry or pin-validation failures return nonzero;
+unlike the read-only checker, available updates are applied and return zero.
 
 The `Check Docker image versions` job (`docker-image-check-updates` in
 `.github/workflows/main.yml`) starts alongside linting on the workflow's push,

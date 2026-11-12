@@ -126,7 +126,7 @@ jobs:
                     docker/*|.devcontainer/*)
                       enable compose docker tooling
                       case "$file" in *Dockerfile*) enable images ;; esac ;;
-                    .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py)
+                    .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py|scripts/tests/docker-image-workflow-test.py)
                       enable workflows ;;
                     scripts/docker-images.sh|scripts/tests/docker-images-test.sh)
                       enable images ;;
