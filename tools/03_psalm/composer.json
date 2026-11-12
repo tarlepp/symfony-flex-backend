@@ -6,10 +6,10 @@
 		"php": "^8.5.12"
 	},
 	"require-dev": {
-		"psalm/plugin-phpunit": "0.21.1",
-		"psalm/plugin-symfony": "5.10.0",
+		"psalm/plugin-phpunit": "1.1.0",
+		"psalm/plugin-symfony": "5.11.0",
 		"roave/security-advisories": "dev-latest",
-		"vimeo/psalm": "7.0.2",
+		"vimeo/psalm": "7.3.0",
 		"weirdan/doctrine-psalm-plugin": "2.11.1"
 	},
 	"config": {
