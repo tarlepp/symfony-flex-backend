@@ -72,6 +72,9 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   If a rebase requires rewriting published history, obtain explicit approval
   before force-pushing and use `git push --force-with-lease`, never `--force`.
   This rule does not change the repository's pull request merge settings.
+  For conflict inspection, semantic resolution, and restacking safeguards,
+  use [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). That skill does
+  not authorize Git mutations or expand an agent's role.
 * Apply the new-branch rule to separate follow-up enhancements too, even when
   they concern the same files or topic as the previous task. Reserve branch
   reuse for corrections to the same PR or an explicit user request to reuse
