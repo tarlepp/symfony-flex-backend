@@ -399,7 +399,7 @@ psalm: ## Runs Psalm static analysis tool
 	@mkdir -p build
 	@@bin/console cache:clear $(ANSI_FLAG)
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json $(PSALM_COLOR_FLAG)
+	@php ./vendor/bin/psalm --no-cache --show-info=true --report=./build/psalm.json $(PSALM_COLOR_FLAG)
 	$(call REPORT_PATHS,JSON report: build/psalm.json,build/psalm.json)
 
 psalm-github: ## Runs Psalm static analysis tool (GitHub)
