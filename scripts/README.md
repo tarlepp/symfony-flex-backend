@@ -979,9 +979,10 @@ bash scripts/docker-images.sh check-updates --advisory
 Confirmed updates return zero with warnings; GitHub Actions also receives
 warning annotations and a maintenance summary with version transitions,
 verified pins and platforms. The summary includes major upgrades and explicit
-current, skipped and failed results. The daily/manual maintenance workflow runs
-this read-only check after `update-pins`; major upgrades require manual review
-and never enter automatic minor/patch PRs. Lookup and invalid update-pin
+current, skipped and failed results. Core CI's existing daily/manual version
+check owns this read-only report; the independent automatic update workflow
+does not repeat it. Major upgrades require manual review and never enter
+automatic minor/patch PRs. Lookup and invalid update-pin
 errors remain nonzero, even alongside confirmed updates. Unknown or repeated
 update-check options return `64`. The default script and Make policy is unchanged.
 

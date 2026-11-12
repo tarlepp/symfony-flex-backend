@@ -225,22 +225,24 @@ class DockerImageWorkflowTest(unittest.TestCase):
             summary = self.summary.read_text()
             self.assertIn(url if url else "no update PR was needed", summary)
             if not url:
-                self.assertIn("Major upgrades may still be listed", summary)
+                self.assertIn("core CI's Docker image version report", summary)
 
-    def test_major_report_reuses_advisory_checker_after_minor_updates(self):
-        report_name = "Report available stable versions including major upgrades"
-        report = step(WORKFLOW, report_name)
-        self.assertIn("run: bash scripts/docker-images.sh check-updates --advisory", report)
+    def test_major_reporting_is_independent_of_automatic_updates(self):
+        self.assertNotIn("check-updates", WORKFLOW)
         self.assertNotIn("continue-on-error:", WORKFLOW)
-        self.assertNotIn("if:", report)
-        self.assertLess(
-            WORKFLOW.index("- name: Apply minor/patch updates and digest refreshes"),
-            WORKFLOW.index(f"- name: {report_name}"),
+        self.assertIn("run: bash scripts/make.sh docker-image-update-pins", WORKFLOW)
+        core = (ROOT / ".github/workflows/main.yml").read_text()
+        report = re.search(
+            r"^  docker-image-check-updates:\n(.*?)(?=^  [a-z][a-z-]*:\n|\Z)",
+            core, re.MULTILINE | re.DOTALL,
         )
-        self.assertLess(
-            WORKFLOW.index(f"- name: {report_name}"),
-            WORKFLOW.index("- name: Create or update the Docker image pull request"),
+        self.assertIsNotNone(report)
+        self.assertIn("github.event_name == 'schedule'", report.group(1))
+        self.assertIn(
+            "run: bash scripts/docker-images.sh check-updates --advisory",
+            report.group(1),
         )
+        self.assertIn("  workflow_dispatch:\n", core)
 
 
 if __name__ == "__main__":
