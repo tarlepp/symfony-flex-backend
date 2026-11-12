@@ -70,9 +70,9 @@ procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKER_MULTI_PLATFORM.md).
    scope, preserving stage aliases, build targets, and build arguments.
    The root PHP `base` stage is shared by `development` and `production`;
    nginx also has one shared Dockerfile.
-5. Run `make docker-image-verify-pins`. It covers external `FROM` references
-   in the root PHP, nginx, and MariaDB Dockerfiles, not every image reference
-   in the repository. Inspect changed external `COPY --from`, Compose, CI,
+5. Run `make docker-image-verify-pins`. It covers external `FROM` and
+   `COPY --from` references in the root PHP, nginx, and MariaDB Dockerfiles,
+   not every image reference in the repository. Inspect changed Compose, CI,
    or frontend images separately with `make docker-image-digest IMAGE=...`.
    Review warnings as well as failures: unpinned references can warn without
    failing verification. Confirm each updated tag resolves to its recorded
