@@ -541,13 +541,18 @@ See [Docker image maintenance](DOCKER_MULTI_PLATFORM.md) for update procedures.
 Test reports originate in `build/logs/`, `build/report/` and
 `build/phpmetrics/`. The container-side
 [`ci-test-reports.py`](../scripts/ci-test-reports.py) helper validates JUnit
-before PhpMetrics, checks required files, and prints the test/coverage summary
-in three separate steps. The runner appends the summary's stdout to its own
-`GITHUB_STEP_SUMMARY`; Python does not run on the runner.
+before PhpMetrics, checks required files and XML contents, and prints the
+test/coverage summary in three separate steps. The runner appends the summary's
+stdout to its own `GITHUB_STEP_SUMMARY`; Python does not run on the runner.
 Changes to this helper select workflow regressions and full PHP/test validation.
 After PHPUnit succeeds or fails (unless cancelled), CI
 checks required report files and attempts artifact uploads. Missing required
-reports fail the job. The test/coverage job summary is informational and may
+reports fail the job, as do malformed or structurally invalid JUnit/Clover XML
+and missing or invalid nonnegative count metrics. JUnit suite counts must be
+integers; Clover project metrics must include statement and covered-statement
+counts, with coverage no greater than the total. Zero counts and reports
+recording failed tests remain valid inputs. HTML reports are checked only for
+nonempty files. The test/coverage job summary is informational and may
 fail without failing the job; it does not replace the required artifacts.
 PhpMetrics needs a usable JUnit report.
 

@@ -14,23 +14,51 @@ REQUIRED_REPORTS = (
 )
 
 
+def count_metric(node, name):
+    value = node.get(name, "")
+    if not value.isascii() or not value.isdecimal():
+        raise ValueError(f"{node.tag} requires a nonnegative integer {name} metric.")
+    return int(value)
+
+
 def validate_junit():
     report = ET.parse(JUNIT).getroot()
     if report.tag != "testsuites" or report.find("testsuite") is None:
         raise ValueError("JUnit report is not usable for PhpMetrics.")
+    for suite in report.iter("testsuite"):
+        for name in ("tests", "assertions", "failures", "errors", "skipped"):
+            count_metric(suite, name)
+    return 0
+
+
+def validate_clover():
+    report = ET.parse(CLOVER).getroot()
+    metrics = report.find("./project/metrics")
+    if report.tag != "coverage" or metrics is None:
+        raise ValueError("Clover report requires a coverage root and project metrics.")
+    statements = count_metric(metrics, "statements")
+    covered = count_metric(metrics, "coveredstatements")
+    if covered > statements:
+        raise ValueError("Clover coveredstatements exceeds statements.")
     return 0
 
 
 def verify_reports():
-    missing = False
+    invalid = False
+    validators = {JUNIT: validate_junit, CLOVER: validate_clover}
     for report in REQUIRED_REPORTS:
-        if not report.is_file() or report.stat().st_size == 0:
+        try:
+            if not report.is_file() or report.stat().st_size == 0:
+                raise ValueError(f"Required report is missing or empty: {report}")
+            if report in validators:
+                validators[report]()
+        except (OSError, ET.ParseError, ValueError) as error:
             print(
-                f"::error file={report}::Required report is missing or empty: {report}",
+                f"::error file={report}::{error}",
                 file=sys.stderr,
             )
-            missing = True
-    return int(missing)
+            invalid = True
+    return int(invalid)
 
 
 def print_summary():
