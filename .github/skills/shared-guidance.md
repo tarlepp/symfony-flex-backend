@@ -36,6 +36,19 @@ those repository-wide rules alongside the task-specific workflow in the skill.
 * Inspect staged, unstaged, and untracked changes before editing. Preserve
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.
+* Skills do not authorize Git commits or pushes. By default, leave completed
+  changes uncommitted and unpushed, and provide commit-message proposals.
+  Before creating or amending a commit, ask the user for explicit approval
+  unless they already authorized that operation for the current changes.
+  Before pushing, separately confirm authorization for the intended remote
+  and branch; permission to commit does not imply permission to push.
+  An explicit user request covering both operations authorizes both within
+  its stated scope; do not ask again for an already authorized operation.
+  Approval of implementation, a plan, branch creation, a PR title, or a
+  proposed commit message alone is not permission to commit or push.
+  Do not infer publication approval from validation success, a skill, an
+  agent handoff, or earlier tasks. Existing stricter role restrictions and
+  the explicit authorization required for rebase continuation still apply.
 * Before making task changes, propose the pull request title and create a new
   task branch following the
   [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
@@ -235,9 +248,10 @@ the larger task continues. Include proposals in each such user-facing response
 and again in the final handoff; do not defer them until the entire task ends.
 Read-only answers and in-progress updates do not need proposals.
 
-Use `Type(scope): short description`. These are proposals only: do not commit
-unless explicitly asked, and never insert proposed commit messages into source
-or documentation files. Place this section after any copyable Markdown version
+Use `Type(scope): short description`. These are proposals only; follow the
+[commit and push approval rules](#preparing-a-change) before taking either
+action. Never insert proposed commit messages into source or documentation
+files. Place this section after any copyable Markdown version
 and follow these rules:
 
 * Provide an individual proposal for each logical change and explicitly list
