@@ -93,7 +93,7 @@ classify_path() {
             enable_checks workflows
             ;;
         scripts/docker-images.sh|scripts/tests/docker-images-test.sh)
-            enable_checks images
+            enable_checks images tooling
             ;;
         scripts/check-security.sh)
             enable_checks security tooling

@@ -28,6 +28,7 @@ DOCKER_IMAGE_TEST_GROUPS = (
     ("Update-pin validation", 10),
     ("Aggregate results and empty discovery", 4),
     ("Applying minor/patch updates and digest refreshes", 19),
+    ("Major reporting stays separate from automatic pin updates", 5),
 )
 DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
 
