@@ -55,7 +55,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - &checkout_step
+      - &checkout_full_history_step
         name: Make checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -79,7 +79,12 @@ jobs:
     steps:
       - *harden_runner_step
 
-      - *checkout_step
+      - &checkout_step
+        name: Make checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: '1'
+          persist-credentials: false
 
       - name: Bootstrap PHP project
         id: bootstrap
@@ -203,7 +208,7 @@ jobs:
     steps:
       - *harden_runner_step
 
-      - *checkout_step
+      - *checkout_full_history_step
 
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
@@ -293,7 +298,7 @@ jobs:
     steps:
       - *harden_runner_step
 
-      - *checkout_step
+      - *checkout_full_history_step
 
       - name: Bootstrap PHP project
         id: bootstrap
