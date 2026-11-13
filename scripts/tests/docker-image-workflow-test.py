@@ -14,6 +14,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = (ROOT / ".github/workflows/docker-image-updates.yml").read_text()
 BOOTSTRAP = (ROOT / ".github/actions/php-bootstrap/action.yml").read_text()
+CORE_WORKFLOW = (ROOT / ".github/workflows/main.yml").read_text()
 
 
 def step(content, name):
@@ -139,6 +140,57 @@ class DockerImageWorkflowTest(unittest.TestCase):
             DOCKERHUB_USERNAME="example", DOCKERHUB_TOKEN="",
         )
         self.assertNotEqual(result.returncode, 0)
+
+    def test_core_registry_login_precedes_bootstrap_and_preserves_policy(self):
+        job = CORE_WORKFLOW.split("  docker-image-check-updates:\n", 1)[1].split(
+            "\n  lightweight-analyzers:", 1,
+        )[0]
+        login_name = "Authenticate to Docker Hub when credentials are available"
+        self.assertLess(
+            job.index(f"- name: {login_name}"),
+            job.index("uses: ./.github/actions/php-bootstrap"),
+        )
+        self.assertLess(
+            job.index("run: bash scripts/make.sh test-docker-images"),
+            job.index("run: bash scripts/docker-images.sh check-updates --advisory"),
+        )
+        self.assertIn(
+            "if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}",
+            step(job, login_name),
+        )
+        self.assertIn("if: ${{ always() }}", step(job, "Log out of Docker Hub"))
+        binary = self.root / "docker"
+        binary.write_text(
+            '#!/bin/bash\n'
+            'printf "%s\\n" "$*" >> "$DOCKER_CALLS"\n'
+            '[ "$*" = "login docker.io --username example --password-stdin" ] || exit 64\n'
+            'read -r token\n[ "$token" = example-token ] || exit 1\n'
+            'exit "${LOGIN_EXIT:-0}"\n'
+        )
+        binary.chmod(0o755)
+        calls = self.root / "docker-calls"
+        for username, token, login_exit, expected, invoked in (
+            ("example", "example-token", "0", 0, True),
+            ("example", "example-token", "7", 7, True),
+            ("", "", "0", 0, False),
+            ("example", "", "0", 1, False),
+            ("", "example-token", "0", 1, False),
+        ):
+            with self.subTest(username=username, token=bool(token), exit=login_exit):
+                calls.unlink(missing_ok=True)
+                result = self.run_script(
+                    job, login_name, DOCKERHUB_USERNAME=username,
+                    DOCKERHUB_TOKEN=token, LOGIN_EXIT=login_exit,
+                    DOCKER_CALLS=str(calls),
+                    PATH=f"{self.root}:{os.environ['PATH']}",
+                )
+                self.assertEqual(result.returncode, expected, result.stderr)
+                self.assertEqual(calls.exists(), invoked)
+                self.assertNotIn("example-token", result.stdout + result.stderr)
+                if not username and not token:
+                    self.assertIn("anonymous registry requests", result.stdout)
+                elif not username or not token:
+                    self.assertIn("::error::Configure both", result.stdout)
 
     def test_bootstrap_defaults_and_maintenance_guards(self):
         self.assertIn("    default: development", BOOTSTRAP)
