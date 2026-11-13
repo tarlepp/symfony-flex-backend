@@ -198,12 +198,15 @@ jobs:
       - *checkout_step
 
       - name: Bootstrap PHP project
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
 
       - name: PHP Security Checker
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
 
       - name: Check installed dependencies for known vulnerabilities
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh check-security
 
       - *failure_diagnostics_step

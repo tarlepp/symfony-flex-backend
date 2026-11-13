@@ -376,6 +376,10 @@ skipped. Every PHP-bootstrap consumer ends with container cleanup using
 artifact uploads, including when setup, tests or uploads fail. Cleanup stops
 the job's Compose development container, not the separate MariaDB job service.
 
+Both dependency-security checks run after successful bootstrap unless the run
+is canceled, even if the earlier check fails. Either failure still fails
+the security job and the required CI gates.
+
 Core CI cancels older runs in the same workflow/ref concurrency group.
 Schedules have a separate `-schedule` group and cannot cancel ordinary
 validation on the same ref. PR edits do not create runs or cancel validation.
