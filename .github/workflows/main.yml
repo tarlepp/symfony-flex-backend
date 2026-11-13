@@ -391,6 +391,8 @@ jobs:
     steps:
       - *harden_runner_step
 
+      - *checkout_step
+
       - name: Validate prerequisite job results
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -411,88 +413,7 @@ jobs:
           GITLEAKS: ${{ needs.gitleaks.result }}
           DOCKER_PINS: ${{ needs.docker-image-verify-pins.result }}
           DOCKER_UPDATES: ${{ needs.docker-image-check-updates.result }}
-        run: |
-          echo "Event: $EVENT_NAME"
-          echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
-          echo "PHP Security Checker result: $SECURITY_CHECK"
-          echo "Lint configuration result: $LINT_CONFIGURATION"
-          echo "Lint documentation result: $LINT_DOCUMENTATION"
-          echo "Workflow validation result: $LINT_WORKFLOWS"
-          echo "Static analyzer matrix result: $STATIC_ANALYZERS"
-          echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"
-          echo "Gitleaks result: $GITLEAKS"
-          echo "Docker base image pin verification result: $DOCKER_PINS"
-          echo "Docker image version check result: $DOCKER_UPDATES"
-
-          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
-            summary_row() {
-              local reason="Job completed with result: $2."
-              if [ "$2" = "skipped" ]; then
-                if [ "$EVENT_NAME" = "schedule" ]; then
-                  case "$1" in
-                    "Dependency security"|"Docker image updates")
-                      reason="Unexpected skip: this periodic check is required. The merge gate rejects this result." ;;
-                    *) reason="Scheduled CI runs only dependency security and image-update checks." ;;
-                  esac
-                elif [ "$CHANGES" != "success" ]; then
-                  reason="Change detection did not succeed; this is not an approved path-based skip."
-                elif [ "$3" = "false" ]; then
-                  reason="Changed files do not affect $4."
-                else
-                  reason="Unexpected skip: validation was selected. The merge gate rejects this result."
-                fi
-              fi
-              printf '| %s | %s | %s |\n' "$1" "$2" "$reason"
-            }
-            {
-              echo "## CI prerequisite results"
-              echo
-              echo "Skipped does not mean passed. The gate accepts only skips allowed by event and change selection."
-              echo
-              echo "| Check | Result | Explanation |"
-              echo "| --- | --- | --- |"
-              summary_row "Change detection" "$CHANGES" true ""
-              summary_row "Configuration lint" "$LINT_CONFIGURATION" "$CONFIGURATION_CHANGED" "application configuration or tooling"
-              summary_row "Documentation lint" "$LINT_DOCUMENTATION" "$DOCUMENTATION_CHANGED" "documentation"
-              summary_row "Workflow validation" "$LINT_WORKFLOWS" "$WORKFLOWS_CHANGED" "workflow definitions or validators"
-              summary_row "Dependency security" "$SECURITY_CHECK" "$SECURITY_CHANGED" "dependency audit inputs"
-              summary_row "Docker image updates" "$DOCKER_UPDATES" "$IMAGES_CHANGED" "Docker image pins or their tooling"
-              summary_row "Docker pin verification" "$DOCKER_PINS" "$IMAGES_CHANGED" "Docker image pins or their tooling"
-              summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-              summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-              summary_row "Gitleaks" "$GITLEAKS" true ""
-            } >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write the CI prerequisite summary."
-          fi
-
-          expect_selected() {
-            case "$1" in
-              true) test "$2" = "success" ;;
-              false) test "$2" = "skipped" ;;
-              *) echo "Invalid change detection output: $1"; return 1 ;;
-            esac
-          }
-          if [ "$EVENT_NAME" = "schedule" ]; then
-            test "$CHANGES" = "skipped"
-            test "$SECURITY_CHECK" = "success"
-            test "$DOCKER_UPDATES" = "success"
-            test "$GITLEAKS" = "skipped"
-            CONFIGURATION_CHANGED=false
-            DOCUMENTATION_CHANGED=false
-            WORKFLOWS_CHANGED=false
-            PHP_CHANGED=false
-            IMAGES_CHANGED=false
-          else
-            test "$CHANGES" = "success"
-            expect_selected "$SECURITY_CHANGED" "$SECURITY_CHECK"
-            expect_selected "$IMAGES_CHANGED" "$DOCKER_UPDATES"
-            test "$GITLEAKS" = "success"
-          fi
-          expect_selected "$CONFIGURATION_CHANGED" "$LINT_CONFIGURATION"
-          expect_selected "$DOCUMENTATION_CHANGED" "$LINT_DOCUMENTATION"
-          expect_selected "$WORKFLOWS_CHANGED" "$LINT_WORKFLOWS"
-          expect_selected "$PHP_CHANGED" "$STATIC_ANALYZERS"
-          expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
-          expect_selected "$IMAGES_CHANGED" "$DOCKER_PINS"
+        run: bash scripts/ci-prerequisite-gate.sh
 
   test:
     name: PHPUnit tests
@@ -816,6 +737,8 @@ jobs:
     steps:
       - *harden_runner_step
 
+      - *checkout_step
+
       - name: Validate final job results
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -832,92 +755,4 @@ jobs:
           DOCKER_BUILD: ${{ needs.docker-build.result }}
           DOCKER_SCAN: ${{ needs.docker-scan.result }}
           REPORT: ${{ needs.report.result }}
-        run: |
-          echo "Event: $EVENT_NAME"
-          echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
-          echo "Prerequisite gate result: $CI_SUMMARY"
-          echo "Static analyzer matrix result: $STATIC_ANALYZERS"
-          echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"
-          echo "PHPUnit result: $TEST"
-          echo "Docker build matrix result: $DOCKER_BUILD"
-          echo "Docker scan matrix result: $DOCKER_SCAN"
-          echo "External reporting result: $REPORT"
-
-          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
-            summary_row() {
-              local reason="Job completed with result: $2."
-              if [ "$2" = "skipped" ]; then
-                if [ "$EVENT_NAME" = "schedule" ]; then
-                  reason="Not part of scheduled dependency-security and image-update validation."
-                elif [ "$CHANGES" != "success" ]; then
-                  reason="Change detection did not succeed; validation selection is unavailable."
-                elif [ "$3" = "false" ]; then
-                  reason="Changed files do not affect $4."
-                else
-                  reason="Unexpected skip: validation was selected. The merge gate rejects this result."
-                fi
-              fi
-              printf '| %s | %s | %s |\n' "$1" "$2" "$reason"
-            }
-            {
-              echo "## Final CI results"
-              echo
-              echo "See the CI prerequisite results summary for lint, security and image-check skip reasons."
-              echo
-              echo "| Check | Result | Explanation |"
-              echo "| --- | --- | --- |"
-              summary_row "Prerequisite gate" "$CI_SUMMARY" true ""
-              summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-              summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-              summary_row "PHPUnit" "$TEST" "$TESTS_CHANGED" "application tests"
-              summary_row "Docker builds" "$DOCKER_BUILD" "$DOCKER_CHANGED" "application images"
-              summary_row "Trivy image scans" "$DOCKER_SCAN" "$DOCKER_CHANGED" "application images"
-              if [ "$REPORT" = "skipped" ]; then
-                if [ "$EVENT_NAME" != "pull_request" ] && {
-                  [ "$EVENT_NAME" != "push" ] || [ "$REF" != "refs/heads/master" ];
-                }; then
-                  echo "| External reporting | skipped | Uploads run only on PRs and master pushes with selected, successful tests and prerequisites. |"
-                elif [ "$TESTS_CHANGED" = "false" ] && [ "$CHANGES" = "success" ]; then
-                  echo "| External reporting | skipped | Tests were not selected, so no coverage artifacts were produced. |"
-                elif [ "$TEST" != "success" ] || [ "$CI_SUMMARY" != "success" ]; then
-                  echo "| External reporting | skipped | Tests or prerequisite checks did not succeed; uploads require both. |"
-                else
-                  echo "| External reporting | skipped | Unexpected skip: uploads were expected. The merge gate rejects this result. |"
-                fi
-              else
-                summary_row "External reporting" "$REPORT" true ""
-              fi
-            } >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write the final CI summary."
-          fi
-
-          expect_selected() {
-            case "$1" in
-              true) test "$2" = "success" ;;
-              false) test "$2" = "skipped" ;;
-              *) echo "Invalid change detection output: $1"; return 1 ;;
-            esac
-          }
-          if [ "$EVENT_NAME" = "schedule" ]; then
-            test "$CHANGES" = "skipped"
-            PHP_CHANGED=false
-            TESTS_CHANGED=false
-            DOCKER_CHANGED=false
-          else
-            test "$CHANGES" = "success"
-          fi
-
-          report_expected=skipped
-          if [ "$TESTS_CHANGED" = "true" ] && {
-            [ "$EVENT_NAME" = "pull_request" ] ||
-            { [ "$EVENT_NAME" = "push" ] && [ "$REF" = "refs/heads/master" ]; }
-          }; then
-            report_expected=success
-          fi
-
-          test "$CI_SUMMARY" = "success"
-          expect_selected "$PHP_CHANGED" "$STATIC_ANALYZERS"
-          expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
-          expect_selected "$TESTS_CHANGED" "$TEST"
-          expect_selected "$DOCKER_CHANGED" "$DOCKER_BUILD"
-          expect_selected "$DOCKER_CHANGED" "$DOCKER_SCAN"
-          test "$REPORT" = "$report_expected"
+        run: bash scripts/ci-result-gate.sh
