@@ -79,6 +79,40 @@ class CiGatesTest(unittest.TestCase):
                 )
                 self.assertNotIn("        if:", steps)
 
+    def test_full_history_is_limited_to_history_consumers(self):
+        anchors = dict(re.findall(
+            r"^      - &(checkout\w+)\n(.*?)(?=^      - |\Z)",
+            self.workflow, re.MULTILINE | re.DOTALL,
+        ))
+        self.assertEqual(set(anchors), {"checkout_step", "checkout_full_history_step"})
+        history_consumers = {"changes", "gitleaks", "lightweight-analyzers", "report"}
+        self.assertTrue(history_consumers <= self.jobs.keys())
+        job_names = re.findall(
+            r"^  ([\w-]+):$", self.workflow.split("jobs:\n", 1)[1], re.MULTILINE,
+        )
+        for name in job_names:
+            body = self.jobs[name]
+            with self.subTest(job=name):
+                checkouts = []
+                for step in re.findall(
+                    r"^      - (.*?)(?=^      - |\Z)", body, re.MULTILINE | re.DOTALL,
+                ):
+                    if step.strip().startswith("*checkout"):
+                        step = anchors[step.strip()[1:]]
+                    if "uses: actions/checkout@" in step:
+                        checkouts.append(step)
+                self.assertEqual(len(checkouts), 1)
+                depth = "0" if name in history_consumers else "1"
+                self.assertIn(f"          fetch-depth: '{depth}'\n", checkouts[0])
+                self.assertIn("          persist-credentials: false\n", checkouts[0])
+                self.assertRegex(checkouts[0], r"uses: actions/checkout@[a-f0-9]{40}\b")
+                if name == "report":
+                    self.assertIn("          ref: ${{ github.sha }}\n", checkouts[0])
+                    self.assertIn(
+                        "        if: ${{ steps.reporting.outputs.enabled == 'true' }}\n",
+                        checkouts[0],
+                    )
+
     def test_missing_shared_helper_or_required_inputs_fail_explicitly(self):
         for script in ("ci-prerequisite-gate.sh", "ci-result-gate.sh"):
             with self.subTest(script=script), tempfile.TemporaryDirectory() as directory:
