@@ -139,6 +139,23 @@ class CiGatesTest(unittest.TestCase):
         )
 
     def test_actual_scripts_preserve_result_validation(self):
+        labels = {
+            "CHANGES": "Change detection",
+            "SECURITY_CHECK": "Dependency security",
+            "DOCKER_UPDATES": "Docker image updates",
+            "DOCKER_PINS": "Docker pin verification",
+            "GITLEAKS": "Gitleaks",
+            "LINT_CONFIGURATION": "Configuration lint",
+            "LINT_DOCUMENTATION": "Documentation lint",
+            "LINT_WORKFLOWS": "Workflow validation",
+            "STATIC_ANALYZERS": "Static analyzer matrix",
+            "LIGHTWEIGHT_ANALYZERS": "Lightweight analyzers",
+            "CI_SUMMARY": "Prerequisite gate",
+            "TEST": "PHPUnit",
+            "DOCKER_BUILD": "Docker builds",
+            "DOCKER_SCAN": "Trivy image scans",
+            "REPORT": "External reporting",
+        }
         for job in ("ci-summary", "ci-result"):
             result_names = re.findall(
                 r"^          (\w+): \$\{\{ needs\.[\w-]+\.result \}\}$",
@@ -165,13 +182,19 @@ class CiGatesTest(unittest.TestCase):
                 with self.subTest(job=job, event=event):
                     result = self.run_gate(job, environment)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertNotIn("::error::", result.stderr)
                 for name in result_names:
-                    for status in ("failure", "cancelled", "skipped"):
+                    for status in ("success", "failure", "cancelled", "skipped", "", "unknown"):
                         if status == environment[name]:
                             continue
                         with self.subTest(job=job, event=event, name=name, status=status):
                             result = self.run_gate(job, dict(environment, **{name: status}))
                             self.assertNotEqual(result.returncode, 0, result.stdout)
+                            self.assertEqual(
+                                result.stderr,
+                                f"::error::{labels[name]}: expected result "
+                                f"'{environment[name]}', got '{status}'.\n",
+                            )
 
 
 if __name__ == "__main__":
