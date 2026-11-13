@@ -660,6 +660,44 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIn("          retention-days: 14\n", section)
         self.assertIn("steps.phploc.outcome == 'failure'", section)
 
+    def test_security_checks_continue_after_failure_but_require_successful_setup(self):
+        section = job("security-check")
+        self.assertIn(
+            "      - name: Bootstrap PHP project\n"
+            "        id: bootstrap\n"
+            "        uses: ./.github/actions/php-bootstrap\n", section,
+        )
+        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("|| true", section)
+        for name, command in (
+            ("PHP Security Checker", "uses: symfonycorp/security-checker-action@"),
+            ("Check installed dependencies for known vulnerabilities",
+             "run: bash scripts/make.sh check-security"),
+        ):
+            step = re.search(
+                rf"^      - name: {name}\n(.*?)(?=^      - |\Z)",
+                section, re.MULTILINE | re.DOTALL,
+            ).group(1)
+            self.assertIn(command, step)
+            condition = re.search(r"^        if: \$\{\{ (.+) \}\}$",
+                                  step, re.MULTILINE).group(1)
+            self.assertEqual(
+                condition, "!cancelled() && steps.bootstrap.outcome == 'success'",
+            )
+            for bootstrap in ("success", "failure", "cancelled", "skipped"):
+                for cancelled in (False, True):
+                    with self.subTest(step=name, bootstrap=bootstrap, cancelled=cancelled):
+                        expression = condition.replace(
+                            "!cancelled()", repr(not cancelled),
+                        ).replace(
+                            "steps.bootstrap.outcome", repr(bootstrap),
+                        ).replace("&&", "and")
+                        self.assertEqual(
+                            eval(expression, {"__builtins__": {}}),
+                            not cancelled and bootstrap == "success",
+                        )
+        self.assertIn("- *failure_diagnostics_step\n      - *stop_php_step", section)
+
     def test_remaining_matrix_contains_only_heavy_analyzers(self):
         names = re.findall(r"^          - name: (.+)$", job("static-analyzers"), re.MULTILINE)
         self.assertEqual(names, ["Psalm", "PHPStan", "PHP Insights"])
