@@ -180,6 +180,26 @@ its passed mocks do not prove a real Docker daemon or application is healthy.
 If a checker has no suite, add focused fixtures in `scripts/tests/` using
 existing test mechanisms instead of installing a new framework.
 
+Run the consolidated output-contract checks when changing Make target
+registrations or recipe ordering, composing regression runners, or changing
+suite output such as group headings, scenario counts, or completion summaries.
+From the repository root on the Docker host with the PHP development service
+running:
+
+```bash
+make test-command-output
+```
+
+Trace these changes into `scripts/tests/command-output-test.py`,
+`scripts/tests/make-information-output-test.py`, and
+`scripts/tests/lint-workflows-output-test.py` as applicable. Preserve Make
+registration, recipe, and help ordering; update expected suite output and
+isolated runner fixtures together. A newly invoked regression script must be
+represented in affected fixtures, with failures still propagated. Focused
+producer tests and `make lint-workflows` do not replace these consumer checks.
+See [command output contracts](../../../doc/TESTING.md#command-output-contracts)
+for coverage and limits.
+
 For changed Bash scripts, check syntax inside the container with `bash -n`
 against each exact changed path. Use existing relevant lint commands;
 `make lint-workflows` validates workflow shell steps and its own validator

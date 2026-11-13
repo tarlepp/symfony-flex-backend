@@ -186,6 +186,10 @@ replacement for their actual event filters and conditions:
   action-validator schema checks of local action metadata. These checks do
   not execute jobs or validate shell bodies inside composite actions; do not
   report static validation as a successful workflow execution.
+* When changing validator regression runners or their suite output, follow
+  the [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
+  for output-contract consumers and isolated fixtures. A passing
+  `make lint-workflows` does not replace those checks.
 * When an authorized push or PR produces a run, inspect affected job logs,
   matrix results, prerequisite gating, and expected artifacts. Separate
   runtime evidence from static review and local command results. Scheduled

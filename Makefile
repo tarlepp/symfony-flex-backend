@@ -668,13 +668,6 @@ else
 	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image version checks" ./scripts/docker-images.sh check-updates
 endif
 
-docker-image-update-pins: ## Apply same-major minor/patch updates and refresh Dockerfile image digests
-ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
-	$(HOST_CONTEXT_FAILURE)
-else
-	@bash scripts/command-output.sh --progress "Update Dockerfile image pins" ./scripts/docker-images.sh update-pins
-endif
-
 docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
@@ -708,6 +701,13 @@ ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" ./scripts/docker-images.sh build
+endif
+
+docker-image-update-pins: ## Apply same-major minor/patch updates and refresh Dockerfile image digests
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(HOST_CONTEXT_FAILURE)
+else
+	@bash scripts/command-output.sh --progress "Update Dockerfile image pins" ./scripts/docker-images.sh update-pins
 endif
 
 docker-kill-containers: ## Kill all running docker containers

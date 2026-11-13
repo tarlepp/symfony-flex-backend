@@ -27,6 +27,7 @@ DOCKER_IMAGE_TEST_GROUPS = (
     ("Registry lookup failures and retries", 8),
     ("Update-pin validation", 10),
     ("Aggregate results and empty discovery", 4),
+    ("Applying minor/patch updates and digest refreshes", 19),
 )
 DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
 
@@ -597,9 +598,10 @@ class CommandOutputTest(unittest.TestCase):
             )
         self.assertNotIn("[PASS]", result.stderr)
         self.assertIn("scenarios passed", result.stderr)
-        self.assertIn(
-            "[OK]\033[0m empty image discovery fails explicitly\n\n"
-            f"\033[32m[OK]\033[0m Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed\n",
+        self.assertTrue(
+            result.stderr.endswith(
+                f"\n\033[32m[OK]\033[0m Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed\n"
+            ),
             result.stderr,
         )
         self.assertNotIn("[FAIL]", result.stderr)
@@ -655,10 +657,10 @@ class CommandOutputTest(unittest.TestCase):
             for name in ("command-output.sh", "docker-images.sh"):
                 shutil.copyfile(ROOT / "scripts" / name, scripts / name)
             content = SUITE.read_text()
-            marker = '    start_case "$name"\n    : > "$TEST_REQUESTS"\n'
+            marker = '    IMAGE="$image" bash "$SCRIPT" check-updates'
             self.assertEqual(content.count(marker), 1)
             suite = tests / SUITE.name
-            suite.write_text(content.replace(marker, marker + "    exit 9\n"))
+            suite.write_text(content.replace(marker, '    exit 9\n' + marker))
             result = self.run_command(["bash", str(suite)])
             self.assertEqual(result.returncode, 9)
             self.assertIn("[FAIL] stable major upgrade", result.stderr)
