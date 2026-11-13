@@ -1,15 +1,16 @@
 ---
 name: maintain-development-tooling
-description: Maintain repository scripts, Make targets, checker contracts, container forwarding, and offline script regression tests while preserving exit behavior, execution boundaries, and generated outputs.
+description: Review and improve shell script readability, repository scripts, Make targets, checker contracts, container forwarding, and offline regressions while preserving behavior and execution boundaries.
 ---
 
 # What is this?
 
 <a id="what-is-this"></a>
 
-Use this skill when changing repository development scripts, Make targets,
-checker behavior, command routing, or script regression tests. It owns tooling
-behavior, not dependency upgrades or application features. Use
+Use this skill when reviewing or changing repository development scripts,
+shell readability, Make targets, checker behavior, command routing, or script
+regression tests. It owns tooling behavior, not dependency upgrades or
+application features. Use
 [update-github-workflows](../update-github-workflows/SKILL.md) for CI job
 behavior, [update-github-actions](../update-github-actions/SKILL.md) for action
 pins, and [update-docker-images](../update-docker-images/SKILL.md) for image
@@ -30,6 +31,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
   * [Table of Contents](#table-of-contents)
     * [Tooling path map](#tooling-path-map)
     * [Workflow](#workflow)
+    * [Shell readability reviews](#shell-readability-reviews)
     * [Validation](#validation)
 
 ## Tooling path map [ᐞ](#table-of-contents)
@@ -160,6 +162,62 @@ Inspect the implementation and its actual callers:
     from hosted CI runs. Use
     [update-dependencies](../update-dependencies/SKILL.md) for justified tool
     dependency changes rather than downloading an alternative ad hoc.
+
+## Shell readability reviews [ᐞ](#table-of-contents)
+
+<a id="shell-readability-reviews"></a>
+
+For repository-wide reviews, inventory tracked shell files from the repository
+root on the Docker host:
+
+```bash
+git ls-files '*.sh'
+```
+
+Read every inventoried file, including root entrypoints, files under `docker/`,
+sourced shell integrations, shared libraries, and regression fixtures. Inspect
+their Make, CI, Docker, and shell callers as relevant. Do not execute a script
+merely to review it: entrypoints, certificate generation, dependency updates,
+uploads, and Docker maintenance can mutate shared state.
+
+Return a backlog grouped by exact file path. For each file, give concrete
+observations with function names or line references, proposed improvements,
+priority, status, and the affected validation boundary. Mark files with no
+justified change as reviewed with no action; do not manufacture a refactor to
+fill the inventory. Separate readability work from correctness findings and
+intentional behavior changes. A review request alone does not authorize
+implementing the backlog or changing command contracts.
+
+Assess these concerns against the actual code:
+
+* Prefer descriptive names, explicit phases, readable multiline commands, and
+  focused functions for substantial parsing, validation, execution, or
+  reporting blocks. Keep short linear wrappers simple; do not extract every
+  command, impose arbitrary function/file limits, or split scripts by size
+  alone. Use argument arrays where they clarify quoting and optional flags.
+* Remove repeated algorithms through the closest existing owner. Extract a
+  helper only when it has a clear responsibility and reduces cognitive load;
+  avoid extra files or generic dispatch frameworks for single-use logic.
+* Make state and data flow visible: declare function-local variables, identify
+  intentional shared arrays and side effects, and name internal outcome codes.
+  Explain non-obvious delimiters, regexes, and embedded awk/jq programs.
+  Prefer replacing misleading comments and redundant steps over adding prose
+  that merely repeats each command.
+* Preserve interpreter and sourced-versus-executed behavior, working-directory
+  assumptions, argument boundaries, pipeline/subshell status handling, traps,
+  signals, cleanup, output streams, color controls, and machine-readable data.
+  Do not add blanket `set -euo pipefail` to sourced helpers or status-collecting
+  wrappers; Bash conditional execution can also disable `errexit` in functions.
+* Keep test setup, action, and assertions distinguishable. Use named scenarios
+  and reusable fixture builders where they remove repetition; unexpected mock
+  calls must still fail. Preserve coverage and failure diagnostics, including
+  partial lines, TTY behavior, and interrupted commands where relevant.
+
+Implement approved items in bounded changesets, preserving the
+[shared branch and publication rules](../shared-guidance.md#preparing-a-change).
+Establish focused behavior coverage before restructuring a complex script.
+Use the validation section below; documentation checks alone do not prove
+shell behavior or live CI execution.
 
 ## Validation [ᐞ](#table-of-contents)
 
