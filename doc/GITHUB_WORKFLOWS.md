@@ -280,9 +280,13 @@ workflow, application, analyzer, security and image jobs skip.
 local composite-action schema validation and offline tooling regressions.
 `make lint-yaml` checks Symfony configuration, not GitHub workflows.
 
-Lightweight tools have separate steps sharing one bootstrap; later tools
-still run after earlier tool failures if setup succeeded and the job was not
-cancelled. Analyzer, image-build and image-scan matrices use
+Selected configuration checks and lightweight tools have separate steps
+sharing their job's bootstrap. Later checks still run after earlier check
+failures if bootstrap succeeded and the job was not cancelled; failed,
+skipped or cancelled bootstrap prevents these checks from running. Each
+failure remains blocking, and container cleanup still runs unconditionally.
+Commands within a single check retain fail-fast behavior.
+Analyzer, image-build and image-scan matrices use
 `fail-fast: false`, so one failing variant does not cancel the others.
 The analyzer matrix declares Make targets, not shell commands. Its fixed
 `scripts/make.sh` invocation receives the target through a quoted environment
