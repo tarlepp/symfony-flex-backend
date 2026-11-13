@@ -828,6 +828,12 @@ diagnostics. Successful lookups without version-like tags or a valid candidate
 SHA report those data problems separately rather than suggesting network
 failure.
 
+For maintenance, `discover_actions_in_file` owns parsing for both workflows
+and composite actions. Action checks store named outcomes, candidate versions,
+and commits by action/version key; rendering reads those results and the
+original source locations without packing fields into delimited strings.
+`main` coordinates discovery, repository checks, summary, and final exit status.
+
 Run the offline Action/tool regressions from the repository root inside the
 PHP development container (enter with `make bash` from the Docker host):
 

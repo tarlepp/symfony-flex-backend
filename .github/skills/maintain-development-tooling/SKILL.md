@@ -190,6 +190,13 @@ implementing the backlog or changing command contracts.
 
 Assess these concerns against the actual code:
 
+* Treat human readability as a primary acceptance criterion, not merely fewer
+  lines or extracted functions. Use blank lines to separate logical steps:
+  declarations and setup, assignments and the conditions that inspect them,
+  independent `if` blocks, and validation, execution, and reporting phases.
+  Keep related assignments together; do not insert blank lines mechanically
+  between every statement. Review the final source for visual breathing room
+  as well as behavior preservation.
 * Prefer descriptive names, explicit phases, readable multiline commands, and
   focused functions for substantial parsing, validation, execution, or
   reporting blocks. Keep short linear wrappers simple; do not extract every
