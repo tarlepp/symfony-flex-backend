@@ -140,7 +140,7 @@ jobs:
           if [ -n "$PR_URL" ]; then
             printf 'Docker image update PR (%s): %s\n' "$PR_OPERATION" "$PR_URL" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "All image pins are current; no update PR was needed." >> "$GITHUB_STEP_SUMMARY"
+            echo "No eligible minor/patch or digest changes; no update PR was needed. Check core CI's Docker image version report for major upgrades requiring manual review." >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Log out of Docker Hub

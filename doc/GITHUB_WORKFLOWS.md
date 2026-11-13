@@ -386,6 +386,19 @@ It verifies the resulting pins before creating or updating one PR per selected
 base branch. No changes means no new PR. Existing core CI gates are unchanged;
 this workflow does not build the updated images or run application tests.
 
+Major-version reporting belongs to core CI's existing **Check Docker image
+versions** job, not this automatic updater. Its read-only
+`check-updates --advisory` command reports current-to-candidate versions,
+verified pins and platforms, or explicit current/skipped/failed results in
+the core CI run summary. Major upgrades require manual review and are never
+applied by `update-pins` or included in its automatic PR. A no-change PR result
+therefore does not mean there are no newer major versions.
+Reporting runs daily at 00:00 UTC and on manually dispatched core CI runs
+(which also run the other core checks). Confirmed updates are advisory;
+lookup and pin-validation errors still fail core CI, but cannot block the
+independently running updater. No extra workflow, job or required-check context
+is added, and the updater does not repeat the broad version lookup.
+
 The workflow must exist on `master` before GitHub enables manual dispatch,
 even when selecting another branch. In **Actions > Update Docker image pins >
 Run workflow**, choose the branch that should receive the update PR.

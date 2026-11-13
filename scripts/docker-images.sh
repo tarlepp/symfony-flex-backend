@@ -415,6 +415,7 @@ command_update_pins() {
 
 command_check_updates() {
     local file image references tool heading="" issues=0 updates=0 skipped=0 status=0
+    local summary_details=""
     local advisory=false
     local -A seen=() results=()
 
@@ -491,7 +492,19 @@ command_check_updates() {
             fi
         fi
         printf '%s\n' "${results[$image]}" | sed 's/^/  /'
+        if [ "$advisory" = true ]; then
+            summary_details+="### ${file}: ${image}"$'\n\n```text\n'
+            summary_details+="$(printf '%s\n' "${results[$image]}" | sed $'s/\033\\[[0-9;]*m//g')"
+            summary_details+=$'\n```\n\n'
+        fi
     done <<< "$references"
+
+    if [ "$advisory" = true ]; then
+        github_summary "## Docker image maintenance" "" \
+            "Stable version report including major upgrades. Major upgrades require manual review; update-pins applies only minor/patch updates and digest refreshes." "" \
+            "Updates are advisory. ${updates} update(s), ${issues} failed check(s), ${skipped} skipped check(s). No files were changed by this check." "" \
+            "$summary_details"
+    fi
 
     if [ "$issues" -gt 0 ]; then
         output_outcome FAIL "$issues image check(s) failed; $updates image update(s) available"
@@ -499,8 +512,6 @@ command_check_updates() {
     elif [ "$updates" -gt 0 ]; then
         output_outcome WARN "$updates image(s) require attention: updates available"
         if [ "$advisory" = true ]; then
-            github_summary "## Docker image maintenance" "" \
-                ":warning: ${updates} image update(s) available. Updates are advisory; see the check logs for verified pins. No files were changed."
             return 0
         fi
         return 1

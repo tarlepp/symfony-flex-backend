@@ -439,8 +439,13 @@ exact variant and existing platforms. Tags without full stable semantic
 versions receive digest refreshes only. All registry lookups must succeed
 before files are changed; unpinned references  are reported and left untouched.
 It creates or updates a PR against the branch selected for the run, or reports
-no changes without opening a new PR.
-See the [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
+no changes without opening a new PR. Core CI's separate **Check Docker image
+versions** job reports newer major versions in its run summary with verified
+pins and supported platforms. It runs daily and on manual core CI runs;
+reporting failures do not block the independent automatic updater.
+Those major upgrades are for manual review only, not automatic PR changes.
+An empty automatic update diff can still have major upgrades available. See the
+[workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
 for dispatch, repository permissions and CI-triggering token setup.
 
 To apply the same updates locally, run from the repository root on the Docker

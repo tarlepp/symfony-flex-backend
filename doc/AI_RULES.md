@@ -201,8 +201,12 @@ of the development and production images, with SARIF upload), `scorecard.yml`
 The daily (04:17 UTC) and manually dispatched `docker-image-updates.yml`
 workflow applies same-major
 minor/patch updates and digest refreshes, verifies pins, and creates or updates
-a PR against the selected branch. It is separate from required CI gates;
-see [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
+a PR against the selected branch. It is separate from required CI gates.
+Major-version reporting stays in core CI's existing daily/manual read-only
+advisory check and run summary, without applying major upgrades or adding a
+workflow or required-check context. Reporting failures cannot block the
+independent automatic updater.
+See [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
 for token permissions, dispatch prerequisites and runtime evidence limits.
 
 For application tests, the workflow runs `make run-tests-php`. The local

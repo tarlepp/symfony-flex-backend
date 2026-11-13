@@ -224,6 +224,25 @@ class DockerImageWorkflowTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             summary = self.summary.read_text()
             self.assertIn(url if url else "no update PR was needed", summary)
+            if not url:
+                self.assertIn("core CI's Docker image version report", summary)
+
+    def test_major_reporting_is_independent_of_automatic_updates(self):
+        self.assertNotIn("check-updates", WORKFLOW)
+        self.assertNotIn("continue-on-error:", WORKFLOW)
+        self.assertIn("run: bash scripts/make.sh docker-image-update-pins", WORKFLOW)
+        core = (ROOT / ".github/workflows/main.yml").read_text()
+        report = re.search(
+            r"^  docker-image-check-updates:\n(.*?)(?=^  [a-z][a-z-]*:\n|\Z)",
+            core, re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(report)
+        self.assertIn("github.event_name == 'schedule'", report.group(1))
+        self.assertIn(
+            "run: bash scripts/docker-images.sh check-updates --advisory",
+            report.group(1),
+        )
+        self.assertIn("  workflow_dispatch:\n", core)
 
 
 if __name__ == "__main__":
