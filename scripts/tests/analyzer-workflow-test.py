@@ -274,12 +274,88 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         )
         self.assertNotIn("continue-on-error", section)
         self.assertNotIn("|| true", section)
-        self.assertIn("      - *stop_php_step\n", section)
+        self.assertIn(
+            "        if: ${{ always() && steps.bootstrap.outcome != 'skipped' }}\n"
+            "        run: bash scripts/make.sh ci-stop\n", section,
+        )
         # Markdown-only PRs skip tests, so success() prevents artifact downloads.
         self.assertIn(
             "    if: ${{ github.event_name != 'schedule' && "
             "needs.changes.outputs.tests == 'true' }}\n", job("test"),
         )
+
+    def test_reporting_selection_skips_expensive_setup_without_tokens(self):
+        section = job("report")
+        selection = re.search(
+            r"^      - name: Select external reporting\n"
+            r"(.*?)(?=^      - )", section, re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(selection)
+        self.assertIn("        id: reporting\n", selection.group(1))
+        for token in ("COVERALLS_REPO_TOKEN", "SONAR_TOKEN"):
+            self.assertIn(token + ": ${{ secrets." + token + " }}\n", selection.group(1))
+        script = textwrap.dedent(selection.group(1).split("        run: |\n", 1)[1])
+        for coveralls, sonar in (("", ""), ("coveralls-fixture", ""),
+                                 ("", "sonar-fixture"),
+                                 ("coveralls-fixture", "sonar-fixture")):
+            with self.subTest(coveralls=bool(coveralls), sonar=bool(sonar)):
+                with tempfile.TemporaryDirectory() as directory:
+                    output = Path(directory) / "output"
+                    summary = Path(directory) / "summary"
+                    result = subprocess.run(
+                        ["bash", "--noprofile", "--norc", "-euo", "pipefail", "-c", script],
+                        env={**os.environ, "COVERALLS_REPO_TOKEN": coveralls,
+                             "SONAR_TOKEN": sonar, "GITHUB_OUTPUT": str(output),
+                             "GITHUB_STEP_SUMMARY": str(summary)},
+                        text=True, capture_output=True, check=False, timeout=10,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    enabled = bool(coveralls or sonar)
+                    self.assertEqual(output.read_text(), f"enabled={str(enabled).lower()}\n")
+                    self.assertEqual(
+                        summary.read_text() if summary.exists() else "",
+                        "" if enabled else
+                        "External reporting skipped: neither upload token is available.\n",
+                    )
+                    self.assertEqual(result.stdout + result.stderr, "")
+        for name in ("Checkout tested source", "Download Clover coverage report",
+                     "Download JUnit test report", "Bootstrap PHP tools"):
+            step = re.search(
+                rf"^      - name: {name}\n(.*?)(?=^      - )",
+                section, re.MULTILINE | re.DOTALL,
+            )
+            self.assertIsNotNone(step)
+            self.assertIn(
+                "        if: ${{ steps.reporting.outputs.enabled == 'true' }}\n",
+                step.group(1),
+            )
+            self.assertLess(selection.start(), step.start())
+        self.assertIn(
+            "      - name: Bootstrap PHP tools\n        id: bootstrap\n", section,
+        )
+        self.assertIn(
+            "      - name: Install Coveralls reporter\n"
+            "        if: ${{ env.COVERALLS_REPO_TOKEN != '' }}\n"
+            "        env:\n"
+            "          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}\n",
+            section,
+        )
+        cleanup = re.search(
+            r"^      - name: Stop PHP development container\n"
+            r"        if: \$\{\{ (.+) \}\}$", section, re.MULTILINE,
+        )
+        self.assertIsNotNone(cleanup)
+        self.assertEqual(
+            cleanup.group(1), "always() && steps.bootstrap.outcome != 'skipped'",
+        )
+        for outcome in ("success", "failure", "cancelled", "skipped"):
+            with self.subTest(bootstrap=outcome):
+                expression = cleanup.group(1).replace("always()", "True").replace(
+                    "steps.bootstrap.outcome", repr(outcome),
+                ).replace("&&", "and")
+                self.assertEqual(
+                    eval(expression, {"__builtins__": {}}), outcome != "skipped",
+                )
 
     def test_coveralls_install_and_upload_use_the_development_container(self):
         section = job("report")

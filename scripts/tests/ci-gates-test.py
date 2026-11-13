@@ -51,6 +51,11 @@ class CiGatesTest(unittest.TestCase):
             with self.subTest(job=name):
                 if name == "lint-configuration":
                     self.assertTrue(body.rstrip().endswith("run: bash scripts/make.sh ci-stop"))
+                elif name == "report":
+                    self.assertTrue(body.rstrip().endswith("run: bash scripts/make.sh ci-stop"))
+                    self.assertIn(
+                        "if: ${{ always() && steps.bootstrap.outcome != 'skipped' }}", body,
+                    )
                 else:
                     self.assertTrue(body.rstrip().endswith("- *stop_php_step"))
                     self.assertEqual(body.count("- *stop_php_step"), 1)
