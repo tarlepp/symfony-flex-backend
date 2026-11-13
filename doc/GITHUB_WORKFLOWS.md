@@ -380,6 +380,11 @@ Both dependency-security checks run after successful bootstrap unless the run
 is canceled, even if the earlier check fails. Either failure still fails
 the security job and the required CI gates.
 
+Documentation checks also run independently after successful bootstrap unless
+the run is cancelled. Markdown lint remains selected by Markdown changes;
+metadata and link checks still run when Markdown lint fails. Either check's
+failure remains blocking.
+
 Core CI cancels older runs in the same workflow/ref concurrency group.
 Schedules have a separate `-schedule` group and cannot cancel ordinary
 validation on the same ref. PR edits do not create runs or cancel validation.
