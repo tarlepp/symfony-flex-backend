@@ -1359,18 +1359,22 @@ class ChangeDetectionTest(unittest.TestCase):
         self.git("add", "--all")
         self.git("commit", "--quiet", "-m", "Fixture")
 
-    def detect(self, event="pull_request", base=None, head=None):
+    def detect(self, event="pull_request", base=None, head=None, **overrides):
         output = self.root / ".git/detection-output"
         output.unlink(missing_ok=True)
+        environment = dict(
+            os.environ, EVENT_NAME=event, BASE_SHA=self.base if base is None else base,
+            HEAD_SHA=self.git("rev-parse", "HEAD") if head is None else head,
+            GITHUB_OUTPUT=str(output),
+            **dict(dict(COLOR="never", NO_COLOR="", GITHUB_ACTIONS="false",
+                        GITHUB_STEP_SUMMARY=""), **overrides),
+        )
+        environment = {key: value for key, value in environment.items() if value is not None}
         result = subprocess.run(
             ["bash", str(WORKFLOW.parents[2] / "scripts/ci-detect-changes.sh")],
             cwd=self.root, capture_output=True,
             text=True, check=False, timeout=10,
-            env=dict(
-                os.environ, EVENT_NAME=event, BASE_SHA=self.base if base is None else base,
-                HEAD_SHA=self.git("rev-parse", "HEAD") if head is None else head,
-                GITHUB_OUTPUT=str(output),
-            ),
+            env=environment,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         lines = output.read_text().splitlines()
@@ -1378,7 +1382,73 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertEqual(len(lines), len(self.outputs), "Duplicate detector outputs")
         self.assertTrue(set(self.outputs.values()) <= {"true", "false"})
         self.assertNotIn("code", self.outputs)
+        self.assertIn("Validation selection (not a list of changed files):", result.stdout)
+        selection = re.findall(
+            r"^  (\w+)\s+(selected|not selected)$",
+            re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), re.MULTILINE,
+        )
+        self.assertEqual(
+            selection,
+            [(name, "selected" if value == "true" else "not selected")
+             for name, value in self.outputs.items()],
+        )
         return result
+
+    def test_selection_colors_respect_shared_policy_and_keep_outputs_plain(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        for color, no_color, colored in (
+            ("always", "", True), ("never", "", False),
+            ("auto", "", False), ("always", "1", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result = self.detect(COLOR=color, NO_COLOR=no_color)
+                self.assertEqual("\x1b[32mselected\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[33mnot selected\x1b[0m" in result.stdout, colored)
+                self.assertNotIn("\x1b", (self.root / ".git/detection-output").read_text())
+
+    def test_actions_defaults_to_color_and_writes_ansi_free_summary(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        summary = self.root / ".git/summary"
+        result = self.detect(
+            COLOR=None, GITHUB_ACTIONS="true", GITHUB_STEP_SUMMARY=str(summary),
+        )
+        self.assertIn("\x1b[32m", result.stdout)
+        content = summary.read_text()
+        self.assertNotIn("\x1b", content)
+        self.assertIn("not a pass/fail result", content)
+        for category, selected in self.outputs.items():
+            status = "🟢 Selected" if selected == "true" else "⚪ Not selected"
+            self.assertIn(f"| {category} | {status} |\n", content)
+        self.assertEqual(len(re.findall(r"^\| \w+ \|", content, re.MULTILINE)), 15)
+        for overrides in ({"COLOR": "never"}, {"COLOR": None, "NO_COLOR": "1"}):
+            result = self.detect(GITHUB_ACTIONS="true", **overrides)
+            self.assertNotIn("\x1b", result.stdout)
+
+    def test_summary_write_failure_is_explicit_and_preserves_selection(self):
+        result = self.detect(GITHUB_STEP_SUMMARY=str(self.root / ".git"))
+        self.assertIn("::warning::Could not write validation selection summary.", result.stderr)
+
+    def test_selection_diagnostics_show_selected_and_unselected_categories(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        result = self.detect()
+        self.assertIn("Changed files:\nREADME.md\n", result.stdout)
+        self.assertEqual(self.outputs["markdown"], "true")
+        self.assertEqual(self.outputs["php"], "false")
+
+    def test_full_selection_diagnostics_explain_fallbacks(self):
+        for event, base, expected in (
+            ("workflow_dispatch", self.base, "Manual run"),
+            ("push", "", "Comparison SHA unavailable"),
+            ("push", "invalid-revision", "Changed-file comparison failed"),
+            ("push", self.base, "No changed files found"),
+        ):
+            with self.subTest(event=event, base=base):
+                result = self.detect(event=event, base=base)
+                self.assertIn(expected, result.stdout)
+                self.assertEqual(set(self.outputs.values()), {"true"})
 
     def assert_documentation(self, markdown, documentation):
         self.assertEqual(self.outputs["markdown"], str(markdown).lower())

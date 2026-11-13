@@ -45,7 +45,7 @@ if make --no-print-directory INSIDE_DOCKER_CONTAINER=1 INSIDE_CONTAINER_RUNTIME=
     exit 1
 fi
 
-for target in cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
+for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
     lint-markdown composer-validate install application-info check-requirements \
     tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output \
     configuration generate-jwt-keys run-tests-php run-tests-phpdbg infection phpmetrics phpcs \
@@ -56,11 +56,16 @@ for target in cache-clear cache-warmup clear clear-tools run-tests check-skills 
     phploc check-security check-action-updates project-stats configure-ci; do
     : > "$DOCKER_CALLS"
     host_make "$target"
-    grep -Eq "compose exec -T --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
+    if [ "$target" = ci-detect-changes ]; then
+        grep -Eq 'compose exec -T .*--env BASE_SHA --env HEAD_SHA --env EVENT_NAME .*php bash scripts/make.sh ci-detect-changes$' "$DOCKER_CALLS"
+    else
+        grep -Eq "compose exec -T --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED +php bash scripts/make.sh $target$" "$DOCKER_CALLS"
+    fi
 done
 
 : > "$DOCKER_CALLS"
-host_make bash
+host_make bash > "$temporary/bash-output" 2>&1
+grep -Fq 'Opening Bash in the PHP container' "$temporary/bash-output"
 grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
@@ -74,7 +79,10 @@ host_make test-docker-images COLOR=always NO_COLOR=
 grep -q 'NATIVE_COLOR=always' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
-host_make -n cache-clear clear run-tests
+host_make -n cache-clear clear run-tests > "$temporary/dry-run-commands"
+for target in cache-clear clear run-tests; do
+    grep -Fq "php bash scripts/make.sh $target" "$temporary/dry-run-commands"
+done
 if grep -q 'exec -T' "$DOCKER_CALLS"; then
     echo "Dry-run unexpectedly executed a forwarded command." >&2
     exit 1
@@ -106,7 +114,8 @@ host_make check-skills PROGRESS=always
 grep -q 'PROGRESS=always' "$DOCKER_CALLS"
 
 : > "$DOCKER_CALLS"
-host_make bash check-skills COLOR=always
+host_make bash check-skills COLOR=always > "$temporary/mixed-bash-output" 2>&1
+grep -Fq 'Opening Bash in the PHP container' "$temporary/mixed-bash-output"
 grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
 grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
 
