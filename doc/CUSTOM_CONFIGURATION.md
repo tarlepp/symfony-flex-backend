@@ -23,11 +23,13 @@ For AI-assisted changes to settings or Symfony service wiring, follow the
 
 <a id="prologue"></a>
 
-This application is using [Dotenv](https://symfony.com/doc/current/components/dotenv.html)
+This application is using
+[Dotenv](https://symfony.com/doc/current/components/dotenv.html)
 component parses `.env` files to make environment variables stored in them
 accessible via `$_ENV` or `$_SERVER`.
 
-To get basic knowledge how this works you should see [External links / resources](#external-links-resources)
+To get basic knowledge how this works you should see
+[External links / resources](#external-links-resources)
 section of this document.
 
 Within this application we define _all_ environment specified settings to

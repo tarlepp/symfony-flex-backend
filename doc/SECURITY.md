@@ -103,9 +103,11 @@ make check-security
 
 This project supports multiple authentication methods:
 
-* **JWT (JSON Web Tokens):** Stateless token-based authentication via Bearer tokens
+* **JWT (JSON Web Tokens):** Stateless token-based authentication via Bearer
+  tokens
   in the `Authorization` header. Configured with public/private key pair.
-* **API Keys:** Application-level API key authentication for programmatic access.
+* **API Keys:** Application-level API key authentication for programmatic
+  access.
 
 Authorization uses role-based access control (RBAC):
 
@@ -147,7 +149,8 @@ version control.
 * Always use HTTPS/TLS in production.
 * Ensure CORS configuration (`config/packages/nelmio_cors.yaml`) is appropriate
   for your use case.
-* Review and configure role-based access control in `config/packages/security.yaml`.
+* Review and configure role-based access control in
+  `config/packages/security.yaml`.
 * Regularly run `make check-security` to scan for known vulnerabilities.
 
 ---

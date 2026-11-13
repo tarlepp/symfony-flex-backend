@@ -57,7 +57,8 @@ procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKER_MULTI_PLATFORM.md).
 3. Run Docker inspection and build commands from the host, not inside the
    PHP container. These helpers require Docker with buildx, `jq`, and registry
    access. Resolve each candidate using
-   `make docker-image-digest IMAGE=<image>:<tag>`, supplying the image explicitly
+   `make docker-image-digest IMAGE=<image>:<tag>`, supplying the image
+   explicitly
    to avoid interactive prompts. Use the multi-platform image index digest,
    never a single-platform manifest digest or a digest from a locally pulled
    image. Confirm the index includes the required platforms, including

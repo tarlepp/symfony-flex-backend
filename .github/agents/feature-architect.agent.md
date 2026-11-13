@@ -46,7 +46,8 @@ Missing skill metadata or loading evidence is not a delivery prerequisite.
    compatibility, migration needs, and relevant documentation. Recommend the
    smallest complete design; discuss alternatives only for real tradeoffs.
 5. Map changes to concrete paths and acceptance criteria. Select existing
-   tests and checks using [the validation guide](../../doc/TESTING.md#selecting-validation)
+   tests and checks using
+   [the validation guide](../../doc/TESTING.md#selecting-validation)
    and actual repository tooling. Include caller-boundary coverage, not only
    direct method tests. Give each selected check a changed-path or behavior
    rationale using the

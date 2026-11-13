@@ -60,7 +60,8 @@ a general preference from another project.
   `Symfony\Component\EventDispatcher\EventSubscriberInterface`. The `App\`
   service discovery and `autoconfigure: true` in `config/services.yaml`
   register them automatically.
-* Declare subscriptions in `public static function getSubscribedEvents(): array`,
+* Declare subscriptions in
+  `public static function getSubscribedEvents(): array`,
   with `#[Override]`, following nearby classes. Use the dispatched event class
   or string name, not a guessed equivalent. Bundle events may use named string
   constants; inspect their dispatch sites before changing existing mappings.

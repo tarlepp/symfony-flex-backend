@@ -79,7 +79,8 @@ execution. Make's recipe dispatcher uses the default run mode for this boundary.
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
 decoration. Pass `--stream` before the label when invoking the helper for this
-mode. Make's `STREAM_COMMAND` uses this shared mode rather than a separate inline
+mode. Make's `STREAM_COMMAND` uses this shared mode rather than a separate
+inline
 shell implementation. Foreground `start*` remains in run mode because
 its contract includes a final session-ended/cancellation status.
 Existing `<label> <command> ...` invocations and sourced `output_run` callers
@@ -119,7 +120,8 @@ Quality targets include `run-tests*`, `infection`, `phpcs`, `ecs*`,
 `lint-configuration`, `lint-yaml`, `lint-markdown`, `composer-normalize`,
 `composer-validate`, `composer-require-checker`, and `composer-unused`.
 Information and reporting targets also use the same wrapper: `configuration`,
-`project-stats`, `application-info`, `tool-versions`, `check-licenses`, `phploc`,
+`project-stats`, `application-info`, `tool-versions`, `check-licenses`,
+`phploc`,
 `report-coveralls`, and `prepare-sonar-reports`.
 Each complete recipe, including preparation, prints one `[RUN]` and a
 separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
@@ -161,9 +163,11 @@ decorations or bypass tool-specific agent safeguards.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
-* `[WARN]` and `[SKIP]` are yellow; `[FAIL]` is red for diagnostics and outcomes.
+* `[WARN]` and `[SKIP]` are yellow; `[FAIL]` is red for diagnostics and
+  outcomes.
 * `[INFO]` is blue context, such as a report path, not a success claim.
-* Labels remain readable without color. Shared status messages use stderr, leaving
+* Labels remain readable without color. Shared status messages use stderr,
+  leaving
   child stdout and stderr unbuffered and otherwise unchanged.
 * Status colors are owned by `command-output.sh`, not legacy Make printf
   constants. The action-update target calls `action-update-output.sh` directly;
@@ -268,7 +272,8 @@ bash scripts/make.sh stop
 bash scripts/make.sh daemon-build
 ```
 
-For immediate use without recreating services, enter with `make bash`/`make fish`
+For immediate use without recreating services, enter with `make bash` /`make
+fish`
 or source the appropriate integration in your current terminal. Host startup
 files are never modified by this repository. Raw `command make` and absolute
 GNU Make paths deliberately bypass the function and may still emit recipe-error
@@ -674,7 +679,8 @@ make test-command-output COLOR=always NO_COLOR=1
 
 Host invocations forward into the PHP development container, including when
 `GITHUB_WORKFLOW` selects the CI Compose override. Inside that container,
-the same `make test-command-output` command runs directly. Container availability
+the same `make test-command-output` command runs directly. Container
+availability
 is required; this target never falls back to host Python or other project tools.
 
 The runner executes nine suites: shared statuses and expected-negative Docker
@@ -687,12 +693,15 @@ All Docker, registry, configuration, dependency, key, and upload mutations use
 isolated fixtures or mocks. This does not prove live service health, registry
 availability, successful uploads, or real application-test report generation.
 
-Coverage includes forced/plain/auto color, `NO_COLOR`, stdout/stderr preservation,
+Coverage includes forced/plain/auto color, `NO_COLOR`, stdout/stderr
+preservation,
 progress indicator policy and terminal relaying,
 missing executables, blocking failures, explicit skips, interruptions,
 expected-negative assertions, CI environment forwarding, dry runs, and multiple
-Make goals. Missing tools and blocking checks remain nonzero. An expected-negative
-scenario reports `[OK]` only after verifying the intended failure and diagnostics.
+Make goals. Missing tools and blocking checks remain nonzero. An
+expected-negative
+scenario reports `[OK]` only after verifying the intended failure and
+diagnostics.
 Successful earlier stages may remain visible before a later failure; no failed
 stage or aggregate reports success.
 
@@ -804,7 +813,8 @@ Exit codes:
 
 * `0` = no discovery issues and no updates found
 * `1` = updates available
-* `2` = discovery issues found (for example unpinned refs or conflicting versions)
+* `2` = discovery issues found (for example unpinned refs or conflicting
+  versions)
 
 Action checks compare both the version label and pin with the latest candidate
 tag's commit, preferring peeled commits for annotated tags. Same-version pin
@@ -815,7 +825,8 @@ success for handled checker exits `1` and `2`; read its findings and summary.
 Lookup failures identify the repository and distinguish timeouts (10 seconds
 for Actions, 20 seconds for tools) from Git errors, retaining Git's stderr
 diagnostics. Successful lookups without version-like tags or a valid candidate
-SHA report those data problems separately rather than suggesting network failure.
+SHA report those data problems separately rather than suggesting network
+failure.
 
 Run the offline Action/tool regressions from the repository root inside the
 PHP development container (enter with `make bash` from the Docker host):
@@ -882,8 +893,10 @@ tools on exit. Downloaded archives/binaries persist in the ignored
 Every cache hit is reverified before copying into the temporary tools directory;
 a corrupt hit fails explicitly without extraction, execution or redownload.
 Failed downloads/checksums never populate the cache; verified downloads are
-published atomically. Linux AMD64 and ARM64 are supported; cold downloads require
-network access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail
+published atomically. Linux AMD64 and ARM64 are supported; cold downloads
+require
+network access, `curl`, `tar`, and `sha256sum`. Download or checksum failures
+fail
 the check.
 
 The workflow-validation job restores/saves this directory using `actions/cache`,
@@ -956,7 +969,8 @@ File: [scripts/ci-detect-changes.sh](ci-detect-changes.sh)
 The `changes` job invokes this Bash script on the GitHub runner after checkout.
 It reads the current working directory's Git repository; it must not change to
 the script directory, because offline tests use isolated repositories.
-`EVENT_NAME`, `BASE_SHA`, `HEAD_SHA`, and `GITHUB_OUTPUT` are required environment
+`EVENT_NAME`, `BASE_SHA`, `HEAD_SHA`, and `GITHUB_OUTPUT` are required
+environment
 variables. Empty SHA values are allowed and select full validation.
 PRs use a three-dot comparison; pushes and merge groups use two dots.
 Manual runs, empty or failed comparisons, quoted paths and unclassified files
@@ -1154,7 +1168,8 @@ offline authentication, schedule, bootstrap and PR-output contracts.
 [image-maintenance]: ../doc/GITHUB_WORKFLOWS.md#security-and-maintenance-workflows
 
 Use `./scripts/docker-images.sh check-updates` for a strict check that fails
-when an update is available or a check fails. All image results are reported before
+when an update is available or a check fails. All image results are reported
+before
 exiting. `make docker-image-check-updates` also fails in these cases, but Make
 uses its own non-zero exit status rather than preserving the script's code.
 To reproduce CI's advisory policy, run from the repository root on the Docker
@@ -1172,7 +1187,8 @@ check owns this read-only report; the independent automatic update workflow
 does not repeat it. Major upgrades require manual review and never enter
 automatic minor/patch PRs. Lookup and invalid update-pin
 errors remain nonzero, even alongside confirmed updates. Unknown or repeated
-update-check options return `64`. The default script and Make policy is unchanged.
+update-check options return `64`. The default script and Make policy is
+unchanged.
 
 Registry inspection retries transient errors up to three attempts, with 10 and
 20 second delays. The first `429` error prints a notification to authenticate
@@ -1185,7 +1201,8 @@ the next attempt number and remaining delay. Rate-limited waits also remind
 users to press `Ctrl+C` and run `docker login docker.io`.
 
 The `Check Docker image versions` CI job runs alongside linting and is required
-by `ci-summary`. Updates alone are advisory on every event; lookup, pin-validation
+by `ci-summary`. Updates alone are advisory on every event; lookup,
+pin-validation
 and regression failures still block merging. Tests and Docker builds start
 independently after change detection. The image-update job runs the
 helper regression tests first. Configure optional `DOCKERHUB_USERNAME` and

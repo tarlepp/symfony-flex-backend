@@ -80,7 +80,8 @@ upgrading packages.
      `composer recipes`, targeted updates, conflict handling, and validation.
      Do not assume a package upgrade also updates its installed recipe.
    * Docker images: follow
-     [update-docker-images](../update-docker-images/SKILL.md) for image selection,
+     [update-docker-images](../update-docker-images/SKILL.md) for image
+     selection,
      multi-platform digest pinning, and validation.
    * GitHub Actions: follow
      [update-github-actions](../update-github-actions/SKILL.md) for the existing

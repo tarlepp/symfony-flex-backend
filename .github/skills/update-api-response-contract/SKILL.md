@@ -12,7 +12,8 @@ serialization contexts and population groups, output formats, response headers,
 status handling, or error envelopes. For endpoint-specific behavior, also use
 [add-custom-api-endpoint](../add-custom-api-endpoint/SKILL.md) or
 [add-rest-resource](../add-rest-resource/SKILL.md). For request DTOs and input
-mapping, use [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); an input DTO
+mapping, use [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); an input
+DTO
 change does not automatically change response exposure.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
@@ -63,7 +64,8 @@ Inspect the affected producers and consumers before editing:
 
 <a id="workflow"></a>
 
-1. Define the affected routes, operations, identities, formats, and environments.
+1. Define the affected routes, operations, identities, formats, and
+   environments.
    Record the existing status, headers, body shape, field types, null/empty
    behavior, and error output. Ask before changing compatibility, default
    exposure, negotiation policy, or public error semantics. Do not silently
