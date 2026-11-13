@@ -50,7 +50,7 @@ write_summary() {
 }
 
 echo "Event: $EVENT_NAME"
-echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
+echo "Change detection result: $CHANGES"
 echo "PHP Security Checker result: $SECURITY_CHECK"
 echo "Lint configuration result: $LINT_CONFIGURATION"
 echo "Lint documentation result: $LINT_DOCUMENTATION"

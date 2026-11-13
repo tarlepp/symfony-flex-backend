@@ -257,7 +257,7 @@ Display names appear in GitHub's run graph and logs.
 
 | Job ID | Responsibility |
 | --- | --- |
-| `changes` | Detect code and documentation validation inputs |
+| `changes` | Select independent validation categories from changed paths |
 | `lint-documentation` | Markdown style, skill metadata, local links/anchors |
 | `lint-workflows` | Workflow syntax, shell, security and action metadata |
 | `gitleaks` | Scan for committed secrets |
