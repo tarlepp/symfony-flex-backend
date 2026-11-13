@@ -909,7 +909,10 @@ non-interactive shell, required values without defaults must be given as
 variables.
 
 Digest lookup and pin verification require at least two distinct runnable
-platforms in an image index. Pin verification also requires tagged digests to
+platforms in an image index. Pin verification covers external `FROM` and
+`COPY --from` images in the root PHP, nginx and MariaDB Dockerfiles, skipping
+local build stages, numeric copy stages and `scratch`. Continued instructions
+are reported at their starting line. It also requires tagged digests to
 match their current tag; digest-only references warn because parity cannot be
 checked. Empty and single-platform indexes fail with an explicit diagnostic
 instead of being accepted as multi-platform.

@@ -97,10 +97,11 @@ For development, `compose.yaml` mounts `nginx-dev.conf` over the image's default
 configuration and mounts the local TLS certificates. No separate nginx
 Dockerfile or build arguments are needed.
 
-Other images (for example `mlocati/php-extension-installer` in
-`COPY --from=...` and the images in `compose.yaml`) use plain tags. Plain tags
-always resolve to the image index, so they are multi-platform as long as the
-upstream image publishes several platforms.
+The external `COPY --from=...` images for the PHP extension installer and
+Composer are also pinned to multi-platform index digests. Images in
+`compose.yaml` use plain tags. Plain tags always resolve to the image index,
+so they are multi-platform as long as the upstream image publishes several
+platforms.
 
 ## PHP build targets [ᐞ](#table-of-contents)
 
@@ -347,16 +348,15 @@ FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a
 make docker-image-verify-pins
 ```
 
-This checks registry base images and shows the result per file and per `FROM`
-line, followed by a summary. For tagged digest pins, it verifies that the
-current tag resolves to the pinned digest as well as confirming that the
+This checks external `FROM` and `COPY --from` images and shows the result per
+file and instruction line, followed by a summary. For tagged digest pins,
+it verifies that the current tag resolves to the pinned digest and that the
 pinned digest is a multi-platform index. A tag that has moved since the pin
 was recorded fails verification.
 
-It checks that every external `FROM` line in these files uses a multi-platform
-base image:
+It checks every external `FROM` and `COPY --from` image in these files:
 
-* `Dockerfile` - shared PHP base
+* `Dockerfile` - shared PHP base, PHP extension installer and Composer
 * `docker/nginx/Dockerfile` - shared nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
 
@@ -387,7 +387,7 @@ Summary
 [OK] All Dockerfiles use valid multi-platform image pins
 ```
 
-Statuses for each `FROM` line:
+Statuses for each external image reference:
 
 * `OK` - pinned to a multi-platform index digest; supported platforms are
   listed.
@@ -401,7 +401,10 @@ Statuses for each `FROM` line:
   multi-platform image using `make docker-image-digest` and update the
   Dockerfile's tag and digest together.
 
-References to earlier build stages (`FROM base AS final`) are skipped.
+References to earlier build stages (`FROM base AS final` and `COPY --from=base`)
+and numeric copy stages (`COPY --from=0`) are skipped, as is `FROM scratch`.
+Backslash-continued instructions are supported; annotations point to the
+instruction's first line.
 
 No production/development file comparison is needed: both PHP targets inherit
 the same `base` stage, and nginx also uses one shared Dockerfile.
@@ -458,8 +461,8 @@ permissions and a shallow checkout without persisted credentials.
 
 When running in GitHub Actions, the command also:
 
-* Adds error and warning annotations to the failing `FROM` lines, so problems
-  are shown directly in the pull request "Files changed" view.
+* Adds error and warning annotations to the failing `FROM` or `COPY` lines,
+  so problems are shown directly in the pull request "Files changed" view.
 * Writes a result summary with per-file and per-image tables to the job
   summary page.
 

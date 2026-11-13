@@ -20,6 +20,7 @@ NATIVE = ROOT / "scripts/native-output.sh"
 DOCKER_IMAGE_TEST_GROUPS = (
     ("Manifest validation", 8),
     ("Pinned tag/digest parity", 5),
+    ("External COPY pin verification", 8),
     ("Version discovery and output formatting", 18),
     ("Registry responses and pagination", 7),
     ("Dockerfile discovery", 3),

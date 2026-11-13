@@ -267,6 +267,69 @@ grep -Fq 'OK (with warnings)' "$WORK/output"
 printf 'FROM test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa AS base\nFROM base AS final\n' \
     > "$WORK/Dockerfile"
 
+start_group 'External COPY pin verification'
+for file in docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
+    printf 'FROM scratch\n' > "$WORK/$file"
+done
+cat > "$WORK/Dockerfile" << 'EOF'
+FROM \
+    --platform=linux/amd64 scratch AS base
+FROM BASE AS final
+COPY --from=BASE /bin/tool /bin/tool
+COPY --from=0 /bin/tool /bin/tool
+# External tool image follows.
+COPY \
+    # Keep the instruction start line in diagnostics.
+
+    --from=test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
+    /bin/tool /bin/tool
+RUN printf "not an instruction" \
+    COPY --from=ignored/tool:fixture /bin/tool /bin/tool
+EOF
+verify_pin_parity 'multiline external COPY pin and local stage exclusions' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
+    'Tag digest matches'
+grep -Fq 'line 7: test:fixture@sha256:' "$WORK/output"
+grep -Fq '| `Dockerfile` | 7 | `test:fixture@sha256:' "$GITHUB_STEP_SUMMARY"
+[ "$(grep -c 'Tag digest matches' "$WORK/output")" -eq 1 ]
+if grep -q '\[WARN\]\|ignored/tool\|line [2345]:' "$WORK/output"; then
+    printf 'FAIL: verification included a local stage, scratch or a continued RUN\n'
+    exit 1
+fi
+verify_pin_parity 'external COPY tag mismatch fails with instruction location' \
+    'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' 1 \
+    'Tag digest mismatch'
+grep -Fq '::error file=Dockerfile,line=7,title=Tag and digest do not match::' "$WORK/output"
+grep -Fq ':x: Multi-platform:' "$GITHUB_STEP_SUMMARY"
+verify_pin_parity 'external COPY tag lookup failure fails verification' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 1 \
+    'Could not resolve current tag digest' 1
+verify_pin_parity 'external COPY invalid tag digest fails verification' \
+    'invalid-digest' 1 'Invalid digest for current tag'
+TEST_DOCKER_FAILURE=manifest verify_pin_parity \
+    'external COPY manifest lookup failure fails verification' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 1 \
+    'Could not inspect image'
+printf '{"mediaType":"application/vnd.oci.image.manifest.v1+json","config":{},"layers":[]}\n' \
+    > "$TEST_MANIFEST"
+verify_pin_parity 'external COPY single-platform digest fails verification' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 1 \
+    'Single platform digest'
+printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}}]}\n' \
+    > "$TEST_MANIFEST"
+verify_pin_parity 'external COPY single-platform index fails verification' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 1 \
+    'fewer than two distinct runnable platforms'
+printf 'FROM scratch\nCOPY --from=test:fixture /bin/tool /bin/tool\n' > "$WORK/Dockerfile"
+verify_pin_parity 'unpinned external COPY warns without failing' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
+    'Not pinned with digest'
+grep -Fq '::warning file=Dockerfile,line=2' "$WORK/output"
+grep -Fq 'OK (with warnings)' "$WORK/output"
+for file in Dockerfile docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
+    printf 'FROM test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa AS base\nFROM base AS final\n' > "$WORK/$file"
+done
+
 start_group 'Version discovery and output formatting'
 printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}}]}\n' > "$TEST_MANIFEST"
 export TEST_REQUIRE_PIN=1
@@ -386,7 +449,7 @@ start_group 'Dockerfile discovery'
 printf '{"next":null,"results":[{"name":"2.0.0"}]}\n' > "$TEST_TAGS"
 cat > "$WORK/Dockerfile" << 'EOF'
 FROM --platform=linux/amd64 test:1.0.0@sha256:aaaa AS base
-COPY --from=tools/installer:1.0.0 /bin/tool /bin/tool
+COPY --from=tools/installer:1.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa /bin/tool /bin/tool
 COPY --from=tools/installer:1.0.0 /bin/tool /bin/tool
 FROM BASE AS development
 COPY --from=base /bin/tool /bin/tool

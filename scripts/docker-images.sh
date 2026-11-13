@@ -3,7 +3,7 @@
 ################################################################################
 # Docker multi-platform image helper
 #
-# Helper commands for maintaining multi-platform Docker base image pins and for
+# Helper commands for maintaining multi-platform Docker image pins and for
 # building images for other platforms. See doc/DOCKER_MULTI_PLATFORM.md.
 #
 # Usage:
@@ -12,7 +12,7 @@
 # Commands:
 #   check-updates  Report newer stable image versions (Docker Hub)
 #   digest      Show multi-platform index digest and pin reference for image
-#   verify      Verify that PHP, nginx and MariaDB Dockerfile pins are
+#   verify      Verify that external FROM and COPY --from Dockerfile pins are
 #               multi-platform and match their tags
 #   platforms   Show platforms that the current buildx builder supports
 #   setup-qemu  Install QEMU emulators for cross-platform builds
@@ -66,7 +66,7 @@ Usage:
 Commands:
   check-updates  Report newer stable image versions (Docker Hub)
   digest         Show multi-platform index digest and pin reference for image
-  verify         Verify that PHP, nginx and MariaDB Dockerfile pins are
+  verify         Verify that external FROM and COPY --from Dockerfile pins are
                  multi-platform and match their tags
   platforms      Show platforms that the current buildx builder supports
   setup-qemu     Install QEMU emulators for cross-platform builds
@@ -103,12 +103,17 @@ Make targets:
 EOF
 }
 
-# List registry references, excluding earlier stages, numeric stages and scratch.
+# List registry references; optional "locations" mode prefixes instruction lines.
 dockerfile_images() {
-    awk '
+    awk -v locations="${2:-}" '
+        function emit(ref) {
+            if (locations == "locations") printf "%d:", start
+            print ref
+        }
         {
             sub(/\r$/, "")
             if ($0 ~ /^[[:space:]]*(#|$)/) next
+            if (instruction == "") start = NR
             if (sub(/\\[[:space:]]*$/, "")) {
                 instruction = instruction $0
                 next
@@ -120,14 +125,14 @@ dockerfile_images() {
             i = 2
             while ($i ~ /^--/) i++
             ref = $i
+            if (!(tolower(ref) in stages) && tolower(ref) != "scratch") emit(ref)
             if (tolower($(i + 1)) == "as") stages[tolower($(i + 2))] = 1
-            if (!(tolower(ref) in stages) && tolower(ref) != "scratch") print ref
         }
         toupper($1) == "COPY" {
             for (i = 2; i <= NF; i++) {
                 if ($i ~ /^--from=/) {
                     ref = substr($i, 8)
-                    if (!(tolower(ref) in stages) && ref !~ /^[0-9]+$/) print ref
+                    if (!(tolower(ref) in stages) && ref !~ /^[0-9]+$/) emit(ref)
                     break
                 }
             }
@@ -618,15 +623,13 @@ command_digest() {
     output_outcome OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
 }
 
-# Verify base images of a single Dockerfile and print result per `FROM` line.
+# Verify external FROM and COPY images, reporting their instruction line numbers.
 # Usage: verify_dockerfile <file>
 # Returns: 0 = all OK, 1 = problems found, 2 = OK with warnings
 verify_dockerfile() {
     local file="$1"
-    local -A stages=()
-    local line_number line word ref raw type platforms is_stage status=0 found=0 warnings=0
+    local line_number ref raw type platforms status=0 warnings=0
     local tag_ref pinned_digest tag_digest parity_result pin_status
-    local -a words
 
     printf '%s%s%s\n' "$BOLD" "$file" "$NC"
 
@@ -637,28 +640,7 @@ verify_dockerfile() {
         return 1
     fi
 
-    while IFS=: read -r line_number line; do
-        read -r -a words <<< "$line"
-
-        # Skip `FROM` flags like `--platform=...` to get the image reference
-        ref=""
-        for word in "${words[@]:1}"; do
-            [[ "$word" == --* ]] && continue
-            ref="$word"
-            break
-        done
-
-        is_stage=0
-        [ -n "${stages[${ref,,}]:-}" ] && is_stage=1
-
-        if [ "${#words[@]}" -ge 4 ] && [ "${words[-2],,}" = "as" ]; then
-            stages["${words[-1],,}"]=1
-        fi
-
-        # Reference to an earlier build stage, not a registry image
-        [ "$is_stage" -eq 1 ] && continue
-
-        found=1
+    while IFS=: read -r line_number ref; do
         printf '  line %s: %s\n' "$line_number" "$ref"
 
         if ! [[ "$ref" =~ @sha256:[a-f0-9]{64}$ ]]; then
@@ -736,9 +718,9 @@ verify_dockerfile() {
             printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms}; ${parity_result} |")
         fi
-    done < <(grep -niE '^[[:space:]]*FROM[[:space:]]' "$file")
+    done < <(dockerfile_images "$file" locations)
 
-    if [ "$found" -eq 0 ]; then
+    if ! grep -qiE '^[[:space:]]*FROM([[:space:]]|$)' "$file"; then
         printf '  %s[FAIL]%s No FROM instruction found\n' "$RED" "$NC"
         github_annotation error "$file" "" "No FROM instruction" "${file} does not contain any FROM instruction"
         status=1
