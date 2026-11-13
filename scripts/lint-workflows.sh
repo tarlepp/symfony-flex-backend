@@ -46,25 +46,41 @@ trap 'rm -rf "$tools"' EXIT
 
 download() {
     local url=$1 checksum=$2 file=$3
+    local cache="build/cache/workflow-validators/linux-${arch}/${checksum}"
+    if [[ -f "$cache" ]]; then
+        printf '%s  %s\n' "$checksum" "$cache" | sha256sum --check --quiet || return "$?"
+        cp "$cache" "$file"
+        return
+    fi
     curl --fail --silent --show-error --location --retry 3 "$url" --output "$file" || return "$?"
-    printf '%s  %s\n' "$checksum" "$file" | sha256sum --check --quiet
+    printf '%s  %s\n' "$checksum" "$file" | sha256sum --check --quiet || return "$?"
+    mkdir -p "$(dirname "$cache")" || return "$?"
+    local staging
+    staging=$(mktemp "${cache}.XXXXXX") || return "$?"
+    if cp "$file" "$staging" && mv "$staging" "$cache"; then
+        return 0
+    else
+        local status=$?
+        rm -f "$staging"
+        return "$status"
+    fi
 }
 
 printf '\n' >&2
 output_status RUN '1/4 - Prepare pinned workflow validators'
-output_run "Download and verify actionlint $ACTIONLINT_TAG" download \
+output_run "Prepare and verify actionlint $ACTIONLINT_TAG" download \
     "https://github.com/rhysd/actionlint/releases/download/${ACTIONLINT_TAG}/actionlint_${ACTIONLINT_TAG#v}_linux_${arch}.tar.gz" \
     "$actionlint_sha" "$tools/actionlint.tar.gz"
 tar -xzf "$tools/actionlint.tar.gz" -C "$tools" actionlint
-output_run "Download and verify ShellCheck $SHELLCHECK_TAG" download \
+output_run "Prepare and verify ShellCheck $SHELLCHECK_TAG" download \
     "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_TAG}/shellcheck-${SHELLCHECK_TAG}.linux.${shellcheck_arch}.tar.gz" \
     "$shellcheck_sha" "$tools/shellcheck.tar.gz"
 tar -xzf "$tools/shellcheck.tar.gz" -C "$tools" --strip-components=1 "shellcheck-${SHELLCHECK_TAG}/shellcheck"
-output_run "Download and verify action-validator $VALIDATOR_TAG" download \
+output_run "Prepare and verify action-validator $VALIDATOR_TAG" download \
     "https://github.com/mpalmer/action-validator/releases/download/${VALIDATOR_TAG}/action-validator_linux_${arch}" \
     "$validator_sha" "$tools/action-validator"
 chmod +x "$tools/action-validator"
-output_run "Download and verify zizmor $ZIZMOR_TAG" download \
+output_run "Prepare and verify zizmor $ZIZMOR_TAG" download \
     "https://github.com/zizmorcore/zizmor/releases/download/${ZIZMOR_TAG}/zizmor-${zizmor_target}.tar.gz" \
     "$zizmor_sha" "$tools/zizmor.tar.gz"
 tar -xzf "$tools/zizmor.tar.gz" -C "$tools" zizmor

@@ -167,6 +167,12 @@ jobs:
 
       - *checkout_step
 
+      - name: Cache verified workflow validator downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/cache/workflow-validators
+          key: workflow-validators-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/lint-workflows.sh') }}
+
       - name: Bootstrap development container
         uses: ./.github/actions/php-bootstrap
         with:
