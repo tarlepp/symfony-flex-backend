@@ -861,7 +861,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "needs.changes.outputs.documentation == 'true' }}\n", section,
         )
         self.assertIn(
-            "        if: ${{ needs.changes.outputs.markdown == 'true' }}\n"
+            "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
+            "needs.changes.outputs.markdown == 'true' }}\n"
             "        run: bash scripts/make.sh lint-markdown\n", section,
         )
         self.assertIn("run: bash scripts/make.sh check-skills\n", section)
@@ -1002,6 +1003,44 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                                     not cancelled and bootstrap == "success"
                                     and selected == "true",
                                 )
+
+    def test_documentation_checks_are_independent_after_successful_bootstrap(self):
+        section = job("lint-documentation")
+        self.assertIn(
+            "      - name: Bootstrap development container\n"
+            "        id: bootstrap\n"
+            "        uses: ./.github/actions/php-bootstrap\n", section,
+        )
+        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("|| true", section)
+        for target in ("lint-markdown", "check-skills"):
+            condition = re.search(
+                r"^        if: \$\{\{ (.+) \}\}\n"
+                rf"        run: bash scripts/make.sh {target}\n",
+                section, re.MULTILINE,
+            ).group(1)
+            expected = "!cancelled() && steps.bootstrap.outcome == 'success'"
+            if target == "lint-markdown":
+                expected += " && needs.changes.outputs.markdown == 'true'"
+            self.assertEqual(condition, expected)
+            for bootstrap in ("success", "failure", "cancelled", "skipped"):
+                for selected in ("true", "false", "", "unknown"):
+                    for cancelled in (False, True):
+                        with self.subTest(target=target, bootstrap=bootstrap,
+                                          selected=selected, cancelled=cancelled):
+                            expression = condition.replace(
+                                "!cancelled()", repr(not cancelled),
+                            ).replace(
+                                "steps.bootstrap.outcome", repr(bootstrap),
+                            ).replace(
+                                "needs.changes.outputs.markdown", repr(selected),
+                            ).replace("&&", "and")
+                            self.assertEqual(
+                                eval(expression, {"__builtins__": {}}),
+                                not cancelled and bootstrap == "success"
+                                and (target == "check-skills" or selected == "true"),
+                            )
+        self.assertIn("- *failure_diagnostics_step\n      - *stop_php_step", section)
 
     def test_devcontainer_validation_parses_compose_and_json(self):
         section = job("lint-configuration")
