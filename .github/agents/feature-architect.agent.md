@@ -70,6 +70,12 @@ accumulated changes, unresolved findings, and repair rounds already used.
 If the approved plan no longer fits repository evidence, return the discrepancy
 for renewed approval rather than changing the design.
 
+For rebase conflicts, forward the lead's explicit Git authorization and the
+[conflict-resolution payload](../../doc/FEATURE_AGENTS.md#conflict-resolution)
+to the implementer. Preserve original and integration baselines, operation
+state, resolver outcomes, and invalidated verification evidence on resumption.
+Do not invoke the resolver or authorize a Git action yourself.
+
 Invoke only `implementer`, in `initial` mode, with the complete approved payload
 and relevant repository evidence. Require the implementer to finish writing
 before it invokes `verifier`, then return both implementation and independent

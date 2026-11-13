@@ -316,7 +316,8 @@ reading order for its guidance:
 * [`doc/AI_RULES.md`](doc/AI_RULES.md) for AI guidance maintenance
 * [`.github/skills/README.md`](.github/skills/README.md) for task workflows
 * [`doc/FEATURE_AGENTS.md`](doc/FEATURE_AGENTS.md) for the feature lead,
-  architect, implementer, and verifier workflow and client requirements
+  architect, implementer, verifier, and conflict-resolver workflow and client
+  requirements
 * [`.github/pull_request_template.md`](.github/pull_request_template.md) for
   the human review checklist when preparing pull requests
 

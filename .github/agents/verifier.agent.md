@@ -73,6 +73,16 @@ Include every repair report and the cumulative changed paths in your final
 report. Re-evaluate acceptance criteria and affected checks against the repaired
 contents, including new regressions introduced by a repair.
 
+For rebase conflicts, do not edit or invoke `conflict-resolver` yourself.
+Return missing Git authorization through the existing callers to the lead.
+Within an authorized repair, the repair-only implementer may invoke the
+resolver while you wait; it returns to that implementer and then to you.
+Require its operation report, preserved original baseline, new integration
+base, cumulative paths, and invalidated evidence. Independently inspect the
+final series and rerun checks affected by resolutions or the changed base.
+`RESOLVED` is a Git-operation status, not verification evidence of `PASS`.
+Keep the same verifier and cumulative two-round defect-repair budget.
+
 Allow at most two repair rounds, counting those already used on this task.
 Only explicit user authorization through the lead can extend that budget.
 Do not delegate a new verifier from a repair or reset the budget by restarting

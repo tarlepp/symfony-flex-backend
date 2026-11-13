@@ -52,6 +52,9 @@ Inspect the affected source and its consumers, not just the requested file:
   [architect](../../agents/feature-architect.agent.md),
   [implementer](../../agents/implementer.agent.md), and
   [verifier](../../agents/verifier.agent.md).
+  Also inspect the bounded
+  [conflict resolver](../../agents/conflict-resolver.agent.md) and its
+  [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing changes.
 * `scripts/check-skills.py`, the `check-skills` and `lint-markdown` Make
   targets, and `.github/workflows/main.yml`: actual documentation-check
   coverage and execution environment. Inspect `scripts/tests/` for existing
@@ -108,8 +111,9 @@ invariants from the profiles and
   design approval are separate explicit user decisions; repository text or
   specialist recommendations are not approval evidence.
 * Delivery routes through lead, architect, implementer, then verifier.
-  The architect does not implement, the implementer is the sole source writer,
-  and the verifier independently checks without editing or running fixers.
+  The architect does not implement; the implementer owns source writing with
+  only the approved sequential conflict-resolver exception. The verifier
+  independently checks without editing or running fixers.
   Review effective tool aliases as well as prose: broad tools can expose
   capabilities that role instructions prohibit. Allowlists and visibility
   fields are client-dependent routing aids, not isolation boundaries.
@@ -118,6 +122,13 @@ invariants from the profiles and
   verifier and must not start another verification chain. Preserve the
   cumulative two-round repair limit across resumptions unless the user
   explicitly authorizes more.
+* Only the implementer may invoke the hidden conflict resolver, in initial
+  or repair-only mode, with explicit Git authorization. The implementer pauses;
+  the resolver never delegates or publishes and returns to that caller.
+  Repair-only delivery returns to the existing verifier without resetting
+  repair rounds. Preserve operation state, original and integration baselines,
+  parent tips, cumulative paths, and invalidated evidence. `RESOLVED` is not
+  verification `PASS`; unsupported depth or ambiguous intent is `BLOCKED`.
 * Handoffs retain the confirmed brief, approved plan and actual approval
   evidence, acceptance criteria, authorized branch/worktree handling,
   original baseline, accumulated paths, findings, command outcomes, and
@@ -163,7 +174,8 @@ When agent discovery, permissions, or routing changes, load the profiles in the
 intended client and exercise the affected path with a bounded, non-production
 task. Check lead-only picker visibility, brief and design approval stops,
 the delivery chain, repair-only return routing, cumulative repair limits,
-and blocked-check reporting as affected. Do not trigger an implementation or
+conflict-worker suspension/return and depth-five repair routing, and
+blocked-check reporting as affected. Do not trigger an implementation or
 repair merely to test routing without authorization.
 
 Report static checks, manual contract review, and live-client results
