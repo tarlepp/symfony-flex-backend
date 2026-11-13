@@ -492,6 +492,47 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         names = re.findall(r"^          - name: (.+)$", job("static-analyzers"), re.MULTILINE)
         self.assertEqual(names, ["Psalm", "PHPStan", "PHP Insights"])
 
+    def test_analyzer_matrix_passes_targets_as_one_argument_and_preserves_failures(self):
+        section = job("static-analyzers")
+        entries = re.findall(
+            r"^          - name: (.+)\n            target: ([\w-]+)$",
+            section, re.MULTILINE,
+        )
+        self.assertEqual(entries, [
+            ("Psalm", "psalm-github"), ("PHPStan", "phpstan-github"),
+            ("PHP Insights", "phpinsights"),
+        ])
+        self.assertNotIn("            command:", section)
+        step = re.search(
+            r"^      - name: Run static analyzer[^\n]*\n(.*?)(?=^      - |\Z)",
+            section, re.MULTILINE | re.DOTALL,
+        ).group(1)
+        self.assertIn("          ANALYZER_TARGET: ${{ matrix.analyzer.target }}\n", step)
+        command = re.search(r"^        run: (.+)$", step, re.MULTILINE).group(1)
+        self.assertEqual(command, 'bash scripts/make.sh "$ANALYZER_TARGET"')
+        self.assertNotIn("${{", command)
+
+        with tempfile.TemporaryDirectory(prefix="ci-analyzer-target-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            (root / "scripts/make.sh").write_text(
+                'printf "%s\\n" "$#" "$@"\nexit "$FIXTURE_EXIT"\n',
+            )
+            for target in [value for _, value in entries] + [
+                "target with spaces", "$(touch injected); echo unexpected", "",
+            ]:
+                for status in (0, 7):
+                    with self.subTest(target=target, status=status):
+                        result = subprocess.run(
+                            ["bash", "-eo", "pipefail", "-c", command], cwd=root,
+                            env=dict(os.environ, ANALYZER_TARGET=target,
+                                     FIXTURE_EXIT=str(status)),
+                            text=True, capture_output=True, check=False, timeout=10,
+                        )
+                        self.assertEqual(result.returncode, status, result.stderr)
+                        self.assertEqual(result.stdout, f"1\n{target}\n")
+                        self.assertFalse((root / "injected").exists())
+
     def test_gates_require_lightweight_job_and_reject_failures(self):
         for name in ("ci-summary", "ci-result"):
             self.assertIn("      - lightweight-analyzers\n", job(name))
