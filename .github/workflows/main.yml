@@ -265,15 +265,6 @@ jobs:
           fetch-depth: '1'
           persist-credentials: false
 
-      - name: Bootstrap development container
-        uses: ./.github/actions/php-bootstrap
-        with:
-          install-dependencies: 'false'
-          print-versions: 'false'
-
-      - name: Run Docker image helper regression tests
-        run: bash scripts/make.sh test-docker-images
-
       - name: Authenticate to Docker Hub when credentials are available
         if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}
         env:
@@ -288,6 +279,15 @@ jobs:
           else
             echo "::notice::Docker Hub credentials unavailable; using anonymous registry requests (rate limits apply)."
           fi
+
+      - name: Bootstrap development container
+        uses: ./.github/actions/php-bootstrap
+        with:
+          install-dependencies: 'false'
+          print-versions: 'false'
+
+      - name: Run Docker image helper regression tests
+        run: bash scripts/make.sh test-docker-images
 
       - name: Check for newer stable Docker image versions
         run: bash scripts/docker-images.sh check-updates --advisory
