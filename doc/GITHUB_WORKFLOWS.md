@@ -280,6 +280,13 @@ workflow, application, analyzer, security and image jobs skip.
 local composite-action schema validation and offline tooling regressions.
 `make lint-yaml` checks Symfony configuration, not GitHub workflows.
 
+Core CI uses depth-one checkouts for ordinary validation, Docker builds/scans
+and result gates. Full history is retained only for change detection (base/head
+comparisons), Gitleaks (history scanning), lightweight analyzers
+(`parallel-lint --blame` diagnostics), and external reporting (SonarCloud SCM
+analysis). Reporting still checks out the tested SHA only when an upload token
+is available. All checkouts disable credential persistence.
+
 Selected configuration checks and lightweight tools have separate steps
 sharing their job's bootstrap. Later checks still run after earlier check
 failures if bootstrap succeeded and the job was not cancelled; failed,
