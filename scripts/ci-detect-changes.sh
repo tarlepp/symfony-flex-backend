@@ -87,6 +87,7 @@ classify_path() {
             esac
             ;;
         .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|\
+        scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|scripts/ci-gate-common.sh|\
         scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|\
         scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py|\
         scripts/tests/docker-image-workflow-test.py)

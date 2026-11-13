@@ -19,7 +19,10 @@ class WorkflowOutputTest(unittest.TestCase):
         self.root = Path(self.temporary.name)
         for directory in ("scripts/tests", "bin", ".github/workflows", ".github/actions/example"):
             (self.root / directory).mkdir(parents=True)
-        for name in ("lint-workflows.sh", "command-output.sh"):
+        for name in (
+            "lint-workflows.sh", "command-output.sh", "ci-prerequisite-gate.sh",
+            "ci-result-gate.sh", "ci-gate-common.sh",
+        ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
         shutil.copyfile(
             ROOT / "scripts/tests/ci-gates-test.py",
@@ -121,7 +124,9 @@ esac
         self.assertIn("RUST_LOG=warn", calls)
         self.assertIn(
             "shellcheck scripts/lint-workflows.sh scripts/command-output.sh "
-            "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh", calls,
+            "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
+            "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
+            "scripts/ci-gate-common.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
         groups = (

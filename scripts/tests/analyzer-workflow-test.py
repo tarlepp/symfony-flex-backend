@@ -400,9 +400,22 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     self.assertNotEqual(result.returncode, 0)
                     self.assertIn(explanation, summary.read_text())
 
+    def test_summary_write_failures_do_not_override_gate_results(self):
+        for gate, result_variable in (("ci-summary", "GITLEAKS"), ("ci-result", "TEST")):
+            with tempfile.TemporaryDirectory() as directory:
+                for result in ("success", "failure", "skipped", ""):
+                    with self.subTest(gate=gate, result=result):
+                        outcome = self.run_gate(
+                            gate, GITHUB_STEP_SUMMARY=directory,
+                            **{result_variable: result},
+                        )
+                        self.assertEqual(outcome.returncode == 0, result == "success")
+                        self.assertIn("::warning::Could not write", outcome.stdout)
+
     def run_gate(self, name, event="pull_request", lightweight="success", **overrides):
         section = job(name)
-        script = textwrap.dedent(section.split("        run: |\n")[-1])
+        script = re.search(r"^        run: bash (scripts/ci-[\w-]+\.sh)$", section, re.MULTILINE)
+        self.assertIsNotNone(script, f"Missing gate script for {name}")
         variables = re.findall(r"^          ([A-Z_]+):", section, re.MULTILINE)
         environment = dict(os.environ, **dict.fromkeys(variables, "success"))
         environment.update(EVENT_NAME=event, CODE_CHANGED="true",
@@ -423,7 +436,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         environment["LIGHTWEIGHT_ANALYZERS"] = lightweight
         environment.update(overrides)
         return subprocess.run(
-            ["bash", "-e", "-c", script], env=environment,
+            ["bash", str(WORKFLOW.parents[2] / script.group(1))], env=environment,
             capture_output=True, text=True, check=False, timeout=10,
         )
 
@@ -787,6 +800,9 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/tests/ci-gates-test.py": {"workflows"},
             "scripts/tests/docker-image-workflow-test.py": {"workflows"},
             "scripts/lint-workflows.sh": {"workflows"},
+            "scripts/ci-prerequisite-gate.sh": {"workflows"},
+            "scripts/ci-result-gate.sh": {"workflows"},
+            "scripts/ci-gate-common.sh": {"workflows"},
             "scripts/docker-images.sh": {"images", "tooling"},
             "scripts/tests/docker-images-test.sh": {"images", "tooling"},
             "scripts/tests/command-output-test.py": {"tooling"},

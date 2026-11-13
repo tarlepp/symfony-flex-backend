@@ -162,6 +162,9 @@ failed or skipped prerequisites, but stop when the workflow is cancelled so
 superseded runs release their concurrency slot. Container cleanup steps retain
 `always()`. `make lint-workflows` checks these guards and runs offline
 regressions of the actual gate result scripts; it does not execute GitHub jobs.
+The gate jobs check out source before invoking `scripts/ci-prerequisite-gate.sh`
+and `scripts/ci-result-gate.sh`; both source `scripts/ci-gate-common.sh`.
+Keep their workflow environment bindings and strict result rules aligned.
 
 The workflow also runs on `merge_group` events. Scheduled runs execute the
 periodic `security-check` and `docker-image-check-updates` jobs and both
