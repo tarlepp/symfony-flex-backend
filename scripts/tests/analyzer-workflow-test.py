@@ -42,6 +42,80 @@ def dependencies(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_failure_diagnostics_are_bounded_allowlisted_and_read_only(self):
+        with tempfile.TemporaryDirectory(prefix="ci-diagnostics-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            script = root / "scripts/ci-failure-diagnostics.sh"
+            script.write_text((WORKFLOW.parents[2] / "scripts/ci-failure-diagnostics.sh").read_text())
+            docker = root / "docker"
+            docker.write_text(
+                "#!/usr/bin/env bash\nset -eu\n"
+                'printf "%s\\n" "$*" >> "$CALLS"\n'
+                'if [[ "$1" == compose ]]; then\n'
+                '  printf "%s" "$IDS"; exit "${LIST_EXIT:-0}"\n'
+                'elif [[ "$1" == inspect && "$2" == --format ]]; then\n'
+                '  printf "%s" "$STATE"; echo "secret native error" >&2\n'
+                '  exit "${INSPECT_EXIT:-0}"\n'
+                'fi\nexit 99\n'
+            )
+            docker.chmod(0o755)
+            timeout = root / "timeout"
+            timeout.write_text(
+                "#!/usr/bin/env bash\nset -eu\n"
+                '[[ "$1" == 10s ]] || exit 99\nshift\n'
+                'if [[ "${TIMED_OUT:-0}" == 1 ]]; then exit 124; fi\nexec "$@"\n'
+            )
+            timeout.chmod(0o755)
+            calls = root / "calls"
+
+            def diagnose(**overrides):
+                calls.write_text("")
+                return subprocess.run(
+                    ["bash", str(script)], cwd=root.parent,
+                    env={**os.environ, "PATH": f"{root}:{os.environ['PATH']}",
+                         "CALLS": str(calls), "IDS": "a" * 64,
+                         "STATE": "exited 137 true unhealthy",
+                         "LIST_EXIT": "0", "INSPECT_EXIT": "0", "TIMED_OUT": "0",
+                         **overrides},
+                    text=True, capture_output=True, check=False, timeout=10,
+                )
+
+            for state in ("exited 137 true unhealthy", "running 0 false none",
+                          "running 0 false healthy", "restarting 1 false starting"):
+                with self.subTest(state=state):
+                    result = diagnose(STATE=state)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(len(result.stdout.splitlines()), 1)
+                    self.assertLess(len(result.stdout), 150)
+                    self.assertEqual(result.stderr, "")
+                    commands = calls.read_text().splitlines()
+                    self.assertEqual(commands[0],
+                                     "compose -f compose.yaml -f docker/ci-compose.yaml "
+                                     "ps --all --quiet php")
+                    self.assertTrue(commands[1].startswith("inspect --format "))
+                    self.assertIn("{{.State.Status}} {{.State.ExitCode}}", commands[1])
+                    self.assertNotIn("State.Health.Log", commands[1])
+            result = diagnose(IDS="")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("no PHP container exists", result.stdout)
+            self.assertEqual(len(calls.read_text().splitlines()), 1)
+            for overrides in (
+                {"IDS": "secret-invalid-id"}, {"IDS": "\n".join(["a" * 64] * 6)},
+                {"STATE": "secret-token"}, {"STATE": "running 0 false healthy\nsecret"},
+                {"STATE": "running " + "9" * 1000 + " false none"},
+                {"LIST_EXIT": "7"}, {"INSPECT_EXIT": "7"}, {"TIMED_OUT": "1"},
+            ):
+                with self.subTest(overrides=overrides):
+                    result = diagnose(**overrides)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn("::error::Container diagnostics failed:", result.stderr)
+                    self.assertNotIn("secret", result.stdout + result.stderr)
+                    self.assertEqual(result.stdout, "")
+            result = diagnose(IDS="\n".join(["a" * 64] * 5))
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(len(result.stdout.splitlines()), 5)
+
     def test_workflow_validator_download_cache_is_scoped_and_shared_with_container(self):
         section = job("lint-workflows")
         self.assertIn(
@@ -851,14 +925,15 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertNotIn("continue-on-error", section)
         self.assertNotIn("|| true", section)
         conditions = re.findall(r"^        if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
-        self.assertEqual(len(conditions), 7)
+        self.assertEqual(len(conditions), 8)
         self.assertEqual(conditions[-1], "always()")
+        self.assertEqual(conditions[-2], "failure()")
         self.assertEqual(
             [re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
-             for condition in conditions[:-1]],
+             for condition in conditions[:-2]],
             ["runtime", "composer", "runtime", "yaml", "tooling", "compose"],
         )
-        for condition in conditions[:-1]:
+        for condition in conditions[:-2]:
             output = re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
             self.assertEqual(
                 condition,
@@ -1257,6 +1332,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/tests/docker-image-workflow-test.py": {"workflows"},
             "scripts/lint-workflows.sh": {"workflows"},
             "scripts/ci-validate-compose.sh": {"compose", "workflows"},
+            "scripts/ci-failure-diagnostics.sh": {"workflows"},
             "scripts/check-composite-action-shell.py": {"workflows"},
             "scripts/tests/composite-action-shell-test.py": {"workflows"},
             "scripts/ci-prerequisite-gate.sh": {"workflows"},
