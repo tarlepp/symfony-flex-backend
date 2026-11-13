@@ -300,6 +300,16 @@ comparisons), Gitleaks (history scanning), lightweight analyzers
 analysis). Reporting still checks out the tested SHA only when an upload token
 is available. All checkouts disable credential persistence.
 
+Before cleanup, every PHP-bootstrap consumer runs failure-only container
+diagnostics. The reporting job omits these when bootstrap was skipped.
+[`ci-failure-diagnostics.sh`](../scripts/ci-failure-diagnostics.sh) lists only
+the current CI Compose project's PHP containers and prints allowlisted status,
+exit code, OOM flag and health status. It limits output to five containers,
+uses ten-second Docker-command timeouts and has a two-minute step timeout.
+Raw logs, health-check output, environment and full inspection data are never
+printed; sensitive data is excluded rather than heuristically redacted.
+Diagnostic failures are explicit and cleanup still runs unconditionally.
+
 Selected configuration checks and lightweight tools have separate steps
 sharing their job's bootstrap. Later checks still run after earlier check
 failures if bootstrap succeeded and the job was not cancelled; failed,
