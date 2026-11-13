@@ -14,7 +14,8 @@ behavior, not dependency upgrades or application features. Use
 behavior, [update-github-actions](../update-github-actions/SKILL.md) for action
 pins, and [update-docker-images](../update-docker-images/SKILL.md) for image
 inspection and pins. Use
-[maintain-ai-guidance](../maintain-ai-guidance/SKILL.md) for skill and instruction
+[maintain-ai-guidance](../maintain-ai-guidance/SKILL.md) for skill and
+instruction
 contracts rather than expanding a checker to impose new policy implicitly.
 
 Follow the [shared skill guidance](../shared-guidance.md), including

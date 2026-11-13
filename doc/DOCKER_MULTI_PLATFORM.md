@@ -269,7 +269,8 @@ versions numerically, not by publication date. Floating and prerelease tags
 are skipped with a diagnostic; registries other than Docker Hub are unsupported.
 Results are grouped by source Dockerfile. Shared images appear in each relevant
 group but are checked only once. Each update includes a copyable
-`tag@sha256:digest` reference and its supported platforms, verified by inspecting
+`tag@sha256:digest` reference and its supported platforms, verified by
+inspecting
 the resolved digest as an index with at least two distinct runnable platforms.
 Failed digest lookups or single-platform updates fail explicitly.
 It reports updates without modifying files or checking upgrade compatibility.
@@ -281,7 +282,8 @@ missing tools exit `69`. All images are checked before reporting failure, so
 the command can be used as a CI gate. Make also fails, but does not preserve
 the script's exact non-zero exit code.
 
-For advisory maintenance checks, run from the repository root on the Docker host:
+For advisory maintenance checks, run from the repository root on the Docker
+host:
 
 ```bash
 bash scripts/docker-images.sh check-updates --advisory
@@ -516,7 +518,8 @@ Transient registry errors (for example Docker Hub `429 Too Many Requests`,
 timeouts and server errors) are retried twice with a short delay, both in CI
 and locally. This includes update digest lookups and raw manifest inspection,
 with delays of 10 and 20 seconds. Persistent throttling still fails the check;
-retries do not bypass Docker Hub quotas. Authenticate with `docker login docker.io`
+retries do not bypass Docker Hub quotas. Authenticate with
+`docker login docker.io`
 or wait for the limit to reset before retrying.
 Retry progress streams to stderr every five seconds, showing the next attempt
 number and remaining delay. For rate limits, each countdown includes a reminder
@@ -648,7 +651,8 @@ platform (linux/arm64/v8)` or `exec format error`:
 
 * Docker Hub limits anonymous registry requests. Log in with `docker login`
   or wait for the limit to reset.
-* For CI, authenticate to Docker Hub before running the checker, using credentials
+* For CI, authenticate to Docker Hub before running the checker, using
+  credentials
   stored in CI secrets. The script uses Docker's existing credentials; it never
   logs in automatically. Authentication can help with anonymous quotas but does
   not guarantee protection from all rate limits.

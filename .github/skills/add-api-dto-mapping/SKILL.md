@@ -53,7 +53,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    classes, preserving operation-specific requirements such as create-only
    password constraints. Reuse existing custom constraints in `src/Validator/`
    when appropriate. When creating or changing a project-specific constraint,
-   also follow [add-validation-constraint](../add-validation-constraint/SKILL.md).
+   also follow
+   [add-validation-constraint](../add-validation-constraint/SKILL.md).
    Inspect `RestResource::getDtoForEntity()` and
    `RestResourceBaseMethods`: patch loads existing state before merging
    visited input and validating, whereas update starts from a fresh DTO.

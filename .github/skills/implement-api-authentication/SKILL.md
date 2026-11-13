@@ -46,7 +46,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    patterns, including `#[IsGranted]` where appropriate. Keep authorization
    decisions scoped to the right endpoint or voter rather than embedding them
    in unrelated controller logic. Follow
-   [add-security-voter](../add-security-voter/SKILL.md) for voter implementation,
+   [add-security-voter](../add-security-voter/SKILL.md) for voter
+   implementation,
    subject binding, decision-strategy interactions, and authorization tests.
 5. Handle credentials as secrets. Do not expose tokens, passwords, private JWT
    keys, or sensitive authentication details in API responses, DTOs, logs,
@@ -54,12 +55,14 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    rotation, and revocation workflows; do not invent a new token storage or
    lifecycle design without explicit requirements.
 6. Cover valid and invalid or missing credentials, status codes, permitted and
-   denied roles, and anonymous access where relevant. Exercise both JWT and API-key
+   denied roles, and anonymous access where relevant. Exercise both JWT and
+   API-key
    authentication when shared firewall or policy behavior changes.
 7. Update OpenAPI security metadata or relevant documentation when the
    documented authentication requirements or endpoint access contract changes.
    If the work changes persisted security data, follow
-   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for the entity and migration.
+   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for the entity and
+   migration.
 
 ## Validation [ᐞ](#table-of-contents)
 

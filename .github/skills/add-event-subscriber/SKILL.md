@@ -86,7 +86,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
   affected callback and priority. For a dedicated dispatcher, select it with
   `--dispatcher`.
 * Confirm the handler is invoked only as often as intended through the real
-  dispatcher, not merely that `getSubscribedEvents()` returns the expected array.
+  dispatcher, not merely that `getSubscribedEvents()` returns the expected
+  array.
 
 ---
 

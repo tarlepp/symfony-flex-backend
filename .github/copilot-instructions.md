@@ -3,7 +3,8 @@
 <a id="what-is-this"></a>
 
 Copilot entry point for repository guidance. The actionable repository-wide
-instructions live in [`AGENTS.md`](../AGENTS.md); this file points to those rules
+instructions live in [`AGENTS.md`](../AGENTS.md); this file points to those
+rules
 instead of duplicating them.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -30,8 +31,10 @@ selection and loading evidence are not prerequisites for project work.
 <a id="task-guidance"></a>
 
 The [README AI guidance inventory](../README.md#ai-assisted-development) is the
-canonical reading order. See [`CLAUDE.md`](../CLAUDE.md) for project architecture
-and workflow context, and [`doc/AI_RULES.md`](../doc/AI_RULES.md) for AI-guidance
+canonical reading order. See [`CLAUDE.md`](../CLAUDE.md) for project
+architecture
+and workflow context, and [`doc/AI_RULES.md`](../doc/AI_RULES.md) for
+AI-guidance
 maintenance and CI enforcement.
 
 ## References [ᐞ](#table-of-contents)
