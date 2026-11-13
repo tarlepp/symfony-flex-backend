@@ -19,6 +19,7 @@ application.
 <a id="resources"></a>
 
 * [AI-assisted change policy](AI_RULES.md)
+* [AI agents and skills: visual introduction](AI_AGENTS_AND_SKILLS.md)
 * [Application commands](COMMANDS.md)
 * [GitHub Actions update guide](ACTIONS_UPDATE.md)
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)
@@ -43,6 +44,7 @@ For the most common starting points:
 
 * New contributor setup: [`../README.md`](../README.md)
 * AI-assisted change policy: [`AI_RULES.md`](AI_RULES.md)
+* AI agents and skills explained: [`AI_AGENTS_AND_SKILLS.md`](AI_AGENTS_AND_SKILLS.md)
 * Day-to-day commands: [`COMMANDS.md`](COMMANDS.md)
 * CI events, jobs and troubleshooting: [`GITHUB_WORKFLOWS.md`](GITHUB_WORKFLOWS.md)
 * GitHub Actions pin maintenance: [`ACTIONS_UPDATE.md`](ACTIONS_UPDATE.md)

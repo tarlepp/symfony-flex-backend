@@ -6,6 +6,10 @@ Project-specific Copilot agents for approved Symfony backend feature delivery.
 They supplement [AGENTS.md](../AGENTS.md) and the existing skills rather than
 replacing repository policy or adding a frontend application.
 
+For a reader-friendly overview with interaction diagrams, start with
+[AI agents and skills](AI_AGENTS_AND_SKILLS.md). This page remains the detailed
+workflow and client reference.
+
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>
