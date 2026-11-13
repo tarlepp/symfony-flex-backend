@@ -122,6 +122,33 @@ exit 0
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertCountEqual(re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M), expected)
 
+    def test_change_preview_defaults_overrides_cleanup_and_failure(self):
+        detector = self.root / "scripts/ci-detect-changes.sh"
+        detector.write_text(
+            '#!/bin/bash\n'
+            'printf "%s|%s|%s|%s|%s\\n" "$BASE_SHA" "$HEAD_SHA" "$EVENT_NAME" '
+            '"$COLOR" "$GITHUB_OUTPUT"\n'
+            'printf "php=true\\n" >> "$GITHUB_OUTPUT"\n'
+            'exit "${DETECT_EXIT:-0}"\n'
+        )
+        for arguments, expected, exit_code in (
+            ((), "HEAD^|HEAD|pull_request|never|", 0),
+            (("BASE_SHA=master", "HEAD_SHA=topic", "EVENT_NAME=push", "COLOR=always"),
+             "master|topic|push|always|", 0),
+            (("COLOR=always", "NO_COLOR=1"), "HEAD^|HEAD|pull_request|never|", 0),
+            ((), "HEAD^|HEAD|pull_request|never|", 7),
+        ):
+            with self.subTest(arguments=arguments, exit_code=exit_code):
+                result = self.make(
+                    "ci-detect-changes", *arguments, DETECT_EXIT=str(exit_code),
+                )
+                self.assertEqual(result.returncode == 0, exit_code == 0, result.stderr)
+                self.assertTrue(result.stdout.startswith(expected), result.stdout)
+                output = Path(result.stdout.strip().split("|")[-1])
+                self.assertFalse(output.exists(), "Temporary output must be removed")
+                if exit_code:
+                    self.assertIn("[FAIL] Preview CI validation selection (exit 2)", result.stderr)
+
     def test_info_displays_message_without_executing_it(self):
         for color, no_color, prefix in (
             ("always", "", "\033[34m[INFO]\033[0m"),

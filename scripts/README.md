@@ -967,6 +967,19 @@ validation does not replace testing actual GitHub workflow execution.
 File: [scripts/ci-detect-changes.sh](ci-detect-changes.sh)
 
 The `changes` job invokes this Bash script on the GitHub runner after checkout.
+For a local preview, run from the repository root on the Docker host with the
+PHP development service running:
+
+```bash
+make ci-detect-changes COLOR=always
+make ci-detect-changes BASE_SHA=master HEAD_SHA=HEAD COLOR=always
+```
+
+The Make target defaults to `BASE_SHA=HEAD^`, `HEAD_SHA=HEAD` and
+`EVENT_NAME=pull_request`. It uses container forwarding, removes its temporary
+output file, and does not write a GitHub Summary. Only committed changes are
+compared; uncommitted edits are excluded. Colors follow the shared Make policy.
+
 It reads the current working directory's Git repository; it must not change to
 the script directory, because offline tests use isolated repositories.
 `EVENT_NAME`, `BASE_SHA`, `HEAD_SHA`, and `GITHUB_OUTPUT` are required
@@ -976,13 +989,27 @@ PRs use a three-dot comparison; pushes and merge groups use two dots.
 Manual runs, empty or failed comparisons, quoted paths and unclassified files
 retain full validation. Changes to the detector itself also select every check.
 
-The script prints selection diagnostics to stdout, leaves Git errors on stderr,
-and appends the workflow's category flags and aggregate `configuration` flag
+The script prints changed filenames and every validation category's
+`selected` or `not selected` status to stdout, including the derived
+`configuration` flag. These statuses describe validation selection, not
+whether files in each category changed: conservative fallbacks can select all
+checks. Manual runs and unavailable, failed, empty or quoted-path comparisons
+include an explanation for full validation. Git errors remain on stderr.
+The script appends the workflow's category flags and aggregate `configuration` flag
 as `name=true|false` lines to `GITHUB_OUTPUT`. There is no aggregate application
 code flag: each job consumes its own category so unrelated work can skip.
 A failed comparison deliberately returns success with full validation; script
 execution or output-write failures fail the step. It does not modify tracked
 files or contact external services.
+
+Selected statuses are green and unselected statuses yellow when color is
+enabled. The shared `COLOR=auto|always|never` and `NO_COLOR` policy applies;
+GitHub Actions defaults to color when `COLOR` is unset. Noninteractive local
+runs can set `COLOR=always` explicitly. Machine-readable flags stay plain.
+When `GITHUB_STEP_SUMMARY` is set, the script also appends a Markdown table
+with green/neutral status icons, not ANSI escape codes. These icons indicate
+selection, not passing checks. Summary-write errors warn without changing
+selection or hiding output-write failures.
 
 From the repository root on the Docker host with the PHP development service
 running, run the isolated detector and gate regressions:
