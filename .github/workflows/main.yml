@@ -119,6 +119,12 @@ jobs:
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.compose == 'true' }}
         run: bash scripts/ci-validate-compose.sh
 
+      - &failure_diagnostics_step
+        name: Diagnose PHP container failure
+        if: ${{ failure() }}
+        timeout-minutes: 2
+        run: bash scripts/ci-failure-diagnostics.sh
+
       - &stop_php_step
         name: Stop PHP development container
         if: ${{ always() }}
@@ -149,6 +155,7 @@ jobs:
       - name: Validate skill metadata, index coverage, and repository Markdown links
         run: bash scripts/make.sh check-skills
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   lint-workflows:
@@ -177,6 +184,7 @@ jobs:
       - name: Validate workflows, embedded shell, and local action metadata
         run: bash scripts/make.sh lint-workflows
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   security-check:
@@ -199,6 +207,7 @@ jobs:
       - name: Check that application doesn't have installed dependencies with known security vulnerabilities
         run: bash scripts/make.sh check-security
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   gitleaks:
@@ -288,6 +297,7 @@ jobs:
         if: ${{ always() }}
         run: docker logout docker.io
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   lightweight-analyzers:
@@ -335,6 +345,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   static-analyzers:
@@ -375,6 +386,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   ci-summary:
@@ -514,6 +526,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - *failure_diagnostics_step
       - *stop_php_step
 
   report:
@@ -607,6 +620,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Diagnose PHP container failure
+        if: ${{ failure() && steps.bootstrap.outcome != 'skipped' }}
+        timeout-minutes: 2
+        run: bash scripts/ci-failure-diagnostics.sh
 
       - name: Stop PHP development container
         if: ${{ always() && steps.bootstrap.outcome != 'skipped' }}

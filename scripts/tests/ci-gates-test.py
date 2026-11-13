@@ -79,6 +79,27 @@ class CiGatesTest(unittest.TestCase):
                 )
                 self.assertNotIn("        if:", steps)
 
+    def test_every_php_consumer_diagnoses_failure_before_cleanup(self):
+        for name, body in self.jobs.items():
+            if "uses: ./.github/actions/php-bootstrap\n" not in body:
+                continue
+            with self.subTest(job=name):
+                if name in ("lint-configuration", "report"):
+                    self.assertLess(body.index("name: Diagnose PHP container failure"),
+                                    body.index("name: Stop PHP development container"))
+                    condition = "failure()" + (
+                        " && steps.bootstrap.outcome != 'skipped'" if name == "report" else ""
+                    )
+                    self.assertIn(
+                        f"        if: ${{{{ {condition} }}}}\n"
+                        "        timeout-minutes: 2\n"
+                        "        run: bash scripts/ci-failure-diagnostics.sh\n", body,
+                    )
+                else:
+                    self.assertIn(
+                        "      - *failure_diagnostics_step\n      - *stop_php_step\n", body,
+                    )
+
     def test_full_history_is_limited_to_history_consumers(self):
         anchors = dict(re.findall(
             r"^      - &(checkout\w+)\n(.*?)(?=^      - |\Z)",
