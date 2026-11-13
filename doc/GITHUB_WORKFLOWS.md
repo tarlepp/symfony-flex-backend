@@ -325,7 +325,10 @@ the gate's acceptance rules.
 Both gates use `!cancelled()`: failed/skipped dependencies still reach their
 result checks, but cancellation stops the gates. Periodic security/update
 jobs also use this guard to run despite scheduled change detection being
-skipped. Container cleanup steps use `always()`.
+skipped. Every PHP-bootstrap consumer ends with container cleanup using
+`always()`. In the PHPUnit job this runs after report processing and all
+artifact uploads, including when setup, tests or uploads fail. Cleanup stops
+the job's Compose development container, not the separate MariaDB job service.
 
 Core CI cancels older runs in the same workflow/ref concurrency group.
 Schedules have a separate `-schedule` group and cannot cancel ordinary

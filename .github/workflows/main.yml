@@ -519,6 +519,8 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - *stop_php_step
+
   report:
     name: External reporting
     runs-on: ubuntu-24.04
