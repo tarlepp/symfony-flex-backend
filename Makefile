@@ -64,8 +64,9 @@ export NATIVE_COLOR
 export COMPOSE_ANSI := $(NATIVE_COLOR)
 # Progress indicator policy: auto (interactive terminal outside CI), always or never
 export PROGRESS ?= auto
-CONTAINER_ENV := --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED $(foreach name,\
+CONTAINER_ENV = --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED $(foreach name,\
 	CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY \
+	BASE_SHA HEAD_SHA EVENT_NAME \
 	GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB \
 	GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME \
 	GITHUB_BASE_REF GITHUB_SERVER_URL,$(if $(filter undefined,$(origin $(name))),,--env $(name)))
@@ -89,9 +90,14 @@ $(call REGISTER_TARGET,info,hidden,host)
 
 # Configuration and information
 $(call REGISTER_TARGET,application-info,information,wrapped,,Read application information)
+$(call REGISTER_TARGET,ci-detect-changes,information,wrapped,,Preview CI validation selection)
 $(call REGISTER_TARGET,configuration,information,wrapped,,Read application configuration)
 $(call REGISTER_TARGET,project-stats,information,wrapped,,Read project statistics)
 $(call REGISTER_TARGET,tool-versions,information,wrapped,,Read tool versions)
+
+ci-detect-changes: export BASE_SHA ?= HEAD^
+ci-detect-changes: export HEAD_SHA ?= HEAD
+ci-detect-changes: export EVENT_NAME ?= pull_request
 
 # Application tests and tooling regressions
 $(call REGISTER_TARGET,infection,tests,wrapped)
@@ -277,6 +283,9 @@ info:
 
 application-info: ## Display Symfony application information
 	@bin/console about $(ANSI_FLAG)
+
+ci-detect-changes: ## Preview CI selection for committed changes (BASE_SHA=HEAD^ HEAD_SHA=HEAD)
+	@bash -eu -c 'output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; COLOR=$(NATIVE_COLOR) GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci-detect-changes.sh'
 
 configuration: ## Prints out application current configuration
 	@echo | jq -r . ${APPLICATION_CONFIG}
