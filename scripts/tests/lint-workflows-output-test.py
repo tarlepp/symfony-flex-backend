@@ -76,7 +76,14 @@ case "$name" in
         chmod +x "$directory/$name"
         ;;
     sha256sum)
-        cat >/dev/null
+        read -r checksum file
+        if ! cmp -s "$file" "$FIXTURE"; then
+            printf 'fixture checksum mismatch\\n' >&2
+            exit 9
+        fi
+        ;;
+    uname)
+        if [ "$1" = -m ]; then printf '%s\\n' "${FIXTURE_ARCH:-x86_64}"; else echo Linux; fi
         ;;
     shellcheck)
         if [ "${1:-}" = --shell ]; then cat >> "$CALLS"; fi
@@ -91,11 +98,12 @@ esac
         self.fixture = self.root / "fixture"
         self.fixture.write_text(fixture)
         self.fixture.chmod(0o755)
-        for name in ("curl", "tar", "sha256sum"):
+        for name in ("curl", "tar", "sha256sum", "uname"):
             shutil.copyfile(self.fixture, self.root / "bin" / name)
             (self.root / "bin" / name).chmod(0o755)
 
     def run_script(self, **overrides):
+        (self.root / "calls").unlink(missing_ok=True)
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(self.root / "calls"), FIXTURE=str(self.fixture),
@@ -113,10 +121,10 @@ esac
         result, calls = self.run_script()
         self.assertEqual(result.returncode, 0, result.stderr)
         for label in (
-            "Download and verify actionlint v1.7.12",
-            "Download and verify ShellCheck v0.11.0",
-            "Download and verify action-validator v0.9.0",
-            "Download and verify zizmor v1.32.0",
+            "Prepare and verify actionlint v1.7.12",
+            "Prepare and verify ShellCheck v0.11.0",
+            "Prepare and verify action-validator v0.9.0",
+            "Prepare and verify zizmor v1.32.0",
             "Workflow syntax and embedded shell (1 files)",
             "Workflow and action security audit (zizmor)",
             "Local action metadata: .github/actions/example/action.yml",
@@ -159,6 +167,9 @@ esac
     def test_failures_stop_the_stage_and_preserve_exit_code(self):
         for tool in ("curl", "sha256sum", "actionlint", "zizmor", "action-validator", "shellcheck"):
             with self.subTest(tool=tool):
+                for cached in self.root.glob("build/cache/workflow-validators/**/*"):
+                    if cached.is_file():
+                        cached.unlink()
                 result, calls = self.run_script(FAIL_TOOL=tool)
                 self.assertEqual(result.returncode, 7, result.stderr)
                 self.assertIn(f"fixture failure: {tool}", result.stderr)
@@ -166,7 +177,60 @@ esac
                 if tool == "curl":
                     self.assertNotIn("sha256sum", calls)
                 if tool in ("curl", "sha256sum"):
-                    self.assertNotIn("[OK] Download and verify actionlint", result.stderr)
+                    self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
+
+    def test_warm_cache_is_verified_without_downloads(self):
+        cold, cold_calls = self.run_script()
+        self.assertEqual(cold.returncode, 0, cold.stderr)
+        self.assertEqual(cold_calls.count("curl "), 4)
+        warm, warm_calls = self.run_script()
+        self.assertEqual(warm.returncode, 0, warm.stderr)
+        self.assertNotIn("curl ", warm_calls)
+        self.assertEqual(warm_calls.count("sha256sum --check --quiet"), 4)
+        self.assertEqual(warm_calls.count("tar "), 3)
+        self.assertIn("action-validator .github/actions/example/action.yml", warm_calls)
+        cached = list(self.root.glob("build/cache/workflow-validators/linux-amd64/*"))
+        self.assertEqual(len(cached), 4)
+        self.assertTrue(all(len(path.name) == 64 for path in cached))
+
+    def test_corrupt_cached_download_fails_before_extraction_or_execution(self):
+        first, _ = self.run_script()
+        self.assertEqual(first.returncode, 0, first.stderr)
+        for cached in self.root.glob("build/cache/workflow-validators/linux-amd64/*"):
+            cached.write_text("corrupt")
+        result, calls = self.run_script()
+        self.assertEqual(result.returncode, 9, result.stderr)
+        self.assertIn("fixture checksum mismatch", result.stderr)
+        self.assertNotIn("curl ", calls)
+        self.assertNotIn("tar ", calls)
+        self.assertNotIn("actionlint -shellcheck", calls)
+
+    def test_platform_and_checksum_changes_cannot_reuse_wrong_download(self):
+        first, _ = self.run_script()
+        self.assertEqual(first.returncode, 0, first.stderr)
+        arm, arm_calls = self.run_script(FIXTURE_ARCH="aarch64")
+        self.assertEqual(arm.returncode, 0, arm.stderr)
+        self.assertEqual(arm_calls.count("curl "), 4)
+        self.assertEqual(len(list(self.root.glob(
+            "build/cache/workflow-validators/linux-arm64/*",
+        ))), 4)
+        script = self.root / "scripts/lint-workflows.sh"
+        script.write_text(script.read_text().replace(
+            "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+            "a" * 64,
+        ))
+        changed, changed_calls = self.run_script()
+        self.assertEqual(changed.returncode, 0, changed.stderr)
+        self.assertEqual(changed_calls.count("curl "), 1)
+
+    def test_failed_download_or_checksum_never_populates_cache(self):
+        for tool in ("curl", "sha256sum"):
+            with self.subTest(tool=tool):
+                result, _ = self.run_script(FAIL_TOOL=tool)
+                self.assertEqual(result.returncode, 7, result.stderr)
+                self.assertEqual(list(self.root.glob(
+                    "build/cache/workflow-validators/**/*",
+                )), [])
 
     def test_explicit_debug_logging_is_preserved(self):
         result, calls = self.run_script(RUST_LOG="debug", COLOR="always", NO_COLOR="1")

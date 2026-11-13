@@ -42,6 +42,23 @@ def dependencies(name):
 
 
 class AnalyzerWorkflowTest(unittest.TestCase):
+    def test_workflow_validator_download_cache_is_scoped_and_shared_with_container(self):
+        section = job("lint-workflows")
+        self.assertIn(
+            "      - name: Cache verified workflow validator downloads\n"
+            "        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0\n"
+            "        with:\n"
+            "          path: build/cache/workflow-validators\n"
+            "          key: workflow-validators-v1-${{ runner.os }}-${{ runner.arch }}-"
+            "${{ hashFiles('scripts/lint-workflows.sh') }}\n", section,
+        )
+        self.assertNotIn("restore-keys", section)
+        self.assertLess(section.index("Cache verified workflow validator downloads"),
+                        section.index("Bootstrap development container"))
+        self.assertLess(section.index("*checkout_step"),
+                        section.index("Cache verified workflow validator downloads"))
+        self.assertNotIn("continue-on-error", section)
+
     def test_both_required_workflows_validate_merge_groups(self):
         review = (WORKFLOW.parent / "dependency-review.yml").read_text()
         self.assertEqual(
