@@ -696,6 +696,22 @@ class AnalyzerWorkflowTest(unittest.TestCase):
 
 
 class ChangeDetectionTest(unittest.TestCase):
+    def test_workflow_invokes_detector_with_event_inputs_and_declared_outputs(self):
+        section = job("changes")
+        self.assertIn("        run: bash scripts/ci-detect-changes.sh\n", section)
+        for binding in (
+            "EVENT_NAME: ${{ github.event_name }}",
+            "BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}",
+            "HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}",
+        ):
+            self.assertIn("          " + binding + "\n", section)
+        outputs = re.findall(
+            r"^      (\w+): \$\{\{ steps\.detect\.outputs\.(\w+) \}\}$",
+            section, re.MULTILINE,
+        )
+        self.detect()
+        self.assertEqual(dict(outputs), {key: key for key in self.outputs})
+
     def git(self, *arguments):
         return subprocess.run(
             ["git", *arguments], cwd=self.root, text=True, capture_output=True,
@@ -720,17 +736,22 @@ class ChangeDetectionTest(unittest.TestCase):
 
     def detect(self, event="pull_request", base=None, head=None):
         output = self.root / ".git/detection-output"
-        script = textwrap.dedent(job("changes").split("        run: |\n")[-1])
+        output.unlink(missing_ok=True)
         result = subprocess.run(
-            ["bash", "-eo", "pipefail", "-c", script], cwd=self.root, capture_output=True,
+            ["bash", str(WORKFLOW.parents[2] / "scripts/ci-detect-changes.sh")],
+            cwd=self.root, capture_output=True,
             text=True, check=False, timeout=10,
             env=dict(
-                os.environ, EVENT_NAME=event, BASE_SHA=base or self.base,
-                HEAD_SHA=head or self.git("rev-parse", "HEAD"), GITHUB_OUTPUT=str(output),
+                os.environ, EVENT_NAME=event, BASE_SHA=self.base if base is None else base,
+                HEAD_SHA=self.git("rev-parse", "HEAD") if head is None else head,
+                GITHUB_OUTPUT=str(output),
             ),
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.outputs = dict(line.split("=", 1) for line in output.read_text().splitlines())
+        lines = output.read_text().splitlines()
+        self.outputs = dict(line.split("=", 1) for line in lines)
+        self.assertEqual(len(lines), len(self.outputs), "Duplicate detector outputs")
+        self.assertTrue(set(self.outputs.values()) <= {"true", "false"})
         return "code=" + self.outputs["code"], result
 
     def assert_documentation(self, markdown, documentation):
@@ -796,7 +817,7 @@ class ChangeDetectionTest(unittest.TestCase):
         for number, path in enumerate((
             "Makefile", "Dockerfile", ".dockerignore", ".github/actions/php-bootstrap/action.yml",
             ".github/workflows/main.yml", "scripts/make.sh", "scripts/command-output.sh",
-            "scripts/native-output.sh", "unclassified.new-format",
+            "scripts/native-output.sh", "scripts/ci-detect-changes.sh", "unclassified.new-format",
         )):
             with self.subTest(path=path):
                 self.git("checkout", "--quiet", "-b", f"shared-{number}", self.base)
@@ -876,6 +897,15 @@ class ChangeDetectionTest(unittest.TestCase):
         self.detect()
         self.assert_documentation(True, True)
         self.assertTrue(all(value == "true" for value in self.outputs.values()))
+
+    def test_empty_comparison_inputs_keep_all_checks(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        for event in ("pull_request", "push", "merge_group"):
+            for base, head in (("", None), (None, ""), ("", "")):
+                with self.subTest(event=event, base=base, head=head):
+                    self.detect(event=event, base=base, head=head)
+                    self.assertTrue(all(value == "true" for value in self.outputs.values()))
 
     def test_push_uses_two_dot_comparison_not_pr_merge_base(self):
         (self.root / "README.md").write_text("Previous documentation\n")

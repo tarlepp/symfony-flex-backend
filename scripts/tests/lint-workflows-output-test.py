@@ -119,6 +119,10 @@ esac
         self.assertEqual(calls.count("sha256sum --check --quiet"), 4)
         self.assertIn("zizmor --no-progress --offline --min-severity low", calls)
         self.assertIn("RUST_LOG=warn", calls)
+        self.assertIn(
+            "shellcheck scripts/lint-workflows.sh scripts/command-output.sh "
+            "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh", calls,
+        )
         self.assertNotIn("\033", result.stderr)
         groups = (
             "1/4 - Prepare pinned workflow validators",

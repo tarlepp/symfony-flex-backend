@@ -92,7 +92,8 @@ done
 printf '\n' >&2
 output_status RUN '4/4 - Validate tooling scripts'
 output_run 'Workflow validator script (ShellCheck)' "$tools/shellcheck" \
-    scripts/lint-workflows.sh scripts/command-output.sh scripts/check-composer-cache.sh
+    scripts/lint-workflows.sh scripts/command-output.sh scripts/check-composer-cache.sh \
+    scripts/ci-detect-changes.sh
 output_run 'Composer cache mount regressions (offline)' \
     python3 scripts/tests/composer-cache-test.py
 output_run 'Analyzer job and gate regressions (offline)' \

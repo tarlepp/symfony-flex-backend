@@ -168,10 +168,12 @@ These checks validate syntax and merged Compose configuration, not the Dev
 Container schema or actual IDE attachment.
 
 Shared inputs include `Makefile`, the root `Dockerfile`, `.dockerignore`,
-`main.yml`, local composite actions, and shared command/routing/report
-wrappers. Changes there can affect many job contracts, so they deliberately
-retain full coverage. The owning case list in `main.yml` is authoritative;
-new paths must be classified before they can safely skip checks.
+`main.yml`, `scripts/ci-detect-changes.sh`, local composite actions, and shared
+command/routing/report wrappers. Changes there can affect many job contracts,
+so they deliberately retain full coverage. The `changes` job calls
+[`scripts/ci-detect-changes.sh`](../scripts/ci-detect-changes.sh), whose case
+list is authoritative; new paths must be classified before they can safely
+skip checks.
 
 Manual runs, empty/failed comparisons and unclear Git-quoted filenames also
 retain full validation. Gitleaks stays enabled for every non-scheduled
