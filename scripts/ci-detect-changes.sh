@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-code_changed=true
 categories=(
     markdown documentation
     runtime composer yaml compose tooling
@@ -150,9 +149,6 @@ detect_changes() {
 
     echo "Changed files:"
     echo "$changed_files"
-    if [ "$EVENT_NAME" = "pull_request" ] && ! grep -qvE '\.md$' <<< "$changed_files"; then
-        code_changed=false
-    fi
 
     # Quoted Git paths (including embedded newlines) stay fail-safe.
     if grep -q '^"' <<< "$changed_files"; then
@@ -185,13 +181,11 @@ write_outputs() {
         fi
     done
 
-    echo "Code changes: $code_changed"
     {
         for category in "${categories[@]}"; do
             echo "$category=${selected_checks[$category]}"
         done
         echo "configuration=$configuration_changed"
-        echo "code=$code_changed"
     } >> "$GITHUB_OUTPUT"
 }
 

@@ -963,8 +963,9 @@ Manual runs, empty or failed comparisons, quoted paths and unclassified files
 retain full validation. Changes to the detector itself also select every check.
 
 The script prints selection diagnostics to stdout, leaves Git errors on stderr,
-and appends the workflow's category flags, aggregate `configuration` flag and
-legacy `code` flag as `name=true|false` lines to `GITHUB_OUTPUT`.
+and appends the workflow's category flags and aggregate `configuration` flag
+as `name=true|false` lines to `GITHUB_OUTPUT`. There is no aggregate application
+code flag: each job consumes its own category so unrelated work can skip.
 A failed comparison deliberately returns success with full validation; script
 execution or output-write failures fail the step. It does not modify tracked
 files or contact external services.
