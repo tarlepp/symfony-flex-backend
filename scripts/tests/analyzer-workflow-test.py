@@ -833,7 +833,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIn(
             "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
             "needs.changes.outputs.compose == 'true' }}\n"
-            "        run: |\n          docker compose config --quiet\n", section,
+            "        run: bash scripts/ci-validate-compose.sh\n", section,
         )
         self.assertIn(
             "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
@@ -892,25 +892,42 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             r"^      - name: Validate Compose and Dev Container configurations\n"
             r"        if: \$\{\{ !cancelled\(\) && steps.bootstrap.outcome == 'success' && "
             r"needs.changes.outputs.compose == 'true' \}\}\n"
-            r"        run: \|\n((?:          .+\n)+)",
+            r"        run: bash scripts/ci-validate-compose.sh\n",
             section, re.MULTILINE,
         )
         self.assertIsNotNone(step)
-        commands = [shlex.split(line.strip()) for line in step.group(1).splitlines()]
-        self.assertIn([
-            "docker", "compose", "-f", "compose.yaml", "-f",
-            ".devcontainer/docker-compose.devcontainer.yml", "config", "--quiet",
-        ], commands)
-        json_command = next(command for command in commands if "json.tool" in command)
-        self.assertEqual(json_command[:9], [
-            "docker", "compose", "-f", "compose.yaml", "-f", "docker/ci-compose.yaml",
-            "exec", "-T", "php",
-        ])
-        self.assertEqual(json_command[9:], [
-            "python3", "-m", "json.tool", ".devcontainer/devcontainer.json", "/dev/null",
-        ])
         with tempfile.TemporaryDirectory(prefix="ci-devcontainer-") as directory:
             root = Path(directory)
+            (root / "scripts").mkdir()
+            script = root / "scripts/ci-validate-compose.sh"
+            script.write_text((WORKFLOW.parents[2] / "scripts/ci-validate-compose.sh").read_text())
+            docker = root / "docker"
+            docker.write_text(
+                "#!/usr/bin/env bash\nset -eu\n"
+                'printf "%s\\n" "$*" >> "$CALLS"\n'
+                'if [[ $(wc -l < "$CALLS") == "${FAIL_AT:-0}" ]]; then\n'
+                '  echo "fixture failure" >&2; exit 7\nfi\n'
+                'if [[ "$*" == *" exec "* ]]; then\n'
+                '  shift 8\n  exec "$@"\nfi\n'
+            )
+            docker.chmod(0o755)
+            calls = root / "calls"
+            expected = [
+                "compose config --quiet",
+                "compose -f compose.yaml -f compose.prod.yaml config --quiet",
+                "compose -f compose.yaml -f docker/ci-compose.yaml config --quiet",
+                "compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml config --quiet",
+                "compose -f compose.yaml -f docker/ci-compose.yaml exec -T php "
+                "python3 -m json.tool .devcontainer/devcontainer.json /dev/null",
+            ]
+            def validate(fail_at=0):
+                calls.unlink(missing_ok=True)
+                return subprocess.run(
+                    ["bash", str(script)], cwd=root.parent,
+                    env={**os.environ, "PATH": f"{root}:{os.environ['PATH']}",
+                         "CALLS": str(calls), "FAIL_AT": str(fail_at)},
+                    text=True, capture_output=True, check=False, timeout=10,
+                )
             target = root / ".devcontainer/devcontainer.json"
             target.parent.mkdir()
             for content, valid in (
@@ -920,16 +937,18 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             ):
                 with self.subTest(content=content):
                     target.write_text(content)
-                    result = subprocess.run(
-                        json_command[9:], cwd=root, text=True, capture_output=True,
-                        check=False, timeout=10,
-                    )
+                    result = validate()
                     self.assertEqual(result.returncode == 0, valid, result.stderr)
+                    self.assertEqual(calls.read_text().splitlines(), expected)
+                    self.assertEqual(result.stdout, "")
+            for fail_at in range(1, 6):
+                with self.subTest(fail_at=fail_at):
+                    result = validate(fail_at)
+                    self.assertEqual(result.returncode, 7, result.stderr)
+                    self.assertIn("fixture failure", result.stderr)
+                    self.assertEqual(calls.read_text().splitlines(), expected[:fail_at])
             target.unlink()
-            result = subprocess.run(
-                json_command[9:], cwd=root, text=True, capture_output=True,
-                check=False, timeout=10,
-            )
+            result = validate()
             self.assertNotEqual(result.returncode, 0)
 
 
@@ -1237,6 +1256,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/tests/ci-gates-test.py": {"workflows"},
             "scripts/tests/docker-image-workflow-test.py": {"workflows"},
             "scripts/lint-workflows.sh": {"workflows"},
+            "scripts/ci-validate-compose.sh": {"compose", "workflows"},
             "scripts/check-composite-action-shell.py": {"workflows"},
             "scripts/tests/composite-action-shell-test.py": {"workflows"},
             "scripts/ci-prerequisite-gate.sh": {"workflows"},
