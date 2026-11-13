@@ -19,19 +19,22 @@ class ToolUpdatesTest(unittest.TestCase):
                     action=False, color=False, sha_failure=False, wrapped=False,
                     action_refs=None, action_path="example/action",
                     action_sha_refs=None, composite=False, git_error="",
-                    sha_failure_status=1):
+                    sha_failure_status=1, workflow_content=None,
+                    composite_content=None):
         with tempfile.TemporaryDirectory(prefix="tool-update-test-") as directory:
             root = Path(directory)
             (root / "workflows").mkdir()
             (root / "actions").mkdir()
-            if action:
+            if action or workflow_content is not None:
                 (root / "workflows/check.yml").write_text(
-                    f"steps:\n  - uses: {action_path}@{SHA} # v1.0.0\n"
+                    workflow_content if workflow_content is not None
+                    else f"steps:\n  - uses: {action_path}@{SHA} # v1.0.0\n"
                 )
-            if composite:
+            if composite or composite_content is not None:
                 (root / "actions/bootstrap").mkdir()
                 (root / "actions/bootstrap/action.yml").write_text(
-                    f"runs:\n  steps:\n    - uses: {action_path}@{SHA} # v1.0.0\n"
+                    composite_content if composite_content is not None
+                    else f"runs:\n  steps:\n    - uses: {action_path}@{SHA} # v1.0.0\n"
                 )
             pins = root / "pins.sh"
             pins.write_text(
@@ -306,6 +309,80 @@ class ToolUpdatesTest(unittest.TestCase):
                     "exact tag resolved to a missing or invalid", result.stderr,
                 )
                 self.assertNotIn("[OK] example/action", result.stdout)
+
+    def test_multiple_versions_share_one_heading_and_keep_their_sources(self):
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0",
+            mode="",
+            workflow_content=(
+                f"steps:\n  - uses: example/action@{SHA} # v1.0.0\n"
+                f"  - uses: example/action@{NEW_SHA} # v2.0.0\n"
+            ),
+            composite=True,
+            action_refs=(
+                f"{SHA}\trefs/tags/v1.0.0\n"
+                f"{TAG_SHA}\trefs/tags/v2.0.0\n"
+                f"{NEW_SHA}\trefs/tags/v2.0.0^{{}}"
+            ),
+        )
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(result.stdout.count("UPDATE AVAILABLE: example/action"), 1)
+        self.assertIn("v1.0.0 -> v2.0.0", result.stdout)
+        self.assertIn("v2.0.0 (up-to-date)", result.stdout)
+        self.assertIn("Source: ", result.stdout)
+        self.assertIn("workflows/check.yml:2", result.stdout)
+        self.assertIn("actions/bootstrap/action.yml:3", result.stdout)
+        self.assertNotIn("workflows/check.yml:3", result.stdout)
+        self.assertIn("Actions/tools checked:   3", result.stdout)
+        self.assertIn("Up-to-date:              2", result.stdout)
+        self.assertIn("Updates available:       1", result.stdout)
+
+    def test_both_discovery_sources_ignore_local_and_reusable_references(self):
+        ignored = (
+            "  - uses: ./local/action\n"
+            "  - uses: ../other/action\n"
+            "  - uses: example/repo/.github/workflows/check.yml@main\n"
+            "  - uses: invalid\n"
+        )
+        for source in ("workflow_content", "composite_content"):
+            with self.subTest(source=source):
+                result = self.run_checker(
+                    "", mode="--current-pins-md",
+                    **{source: ignored + f"  - uses: example/action@{SHA} # v1.0.0\n"},
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout.count("| example/action@v1.0.0 |"), 1)
+                self.assertNotIn("local/action", result.stdout)
+                self.assertNotIn("other/action", result.stdout)
+                self.assertNotIn("example/repo", result.stdout)
+
+    def test_conflicting_composite_pin_keeps_first_ref_and_reports_sources(self):
+        result = self.run_checker(
+            "", mode="--current-pins-md", action=True,
+            composite_content=f"  - uses: example/action@{NEW_SHA} # v1.0.0\n",
+        )
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn("Conflicting pinned refs detected", result.stderr)
+        self.assertIn("workflows/check.yml:2", result.stderr)
+        self.assertIn("actions/bootstrap/action.yml:1", result.stderr)
+        self.assertIn(f"`{SHA[:8]}`", result.stdout)
+        self.assertNotIn(f"`{NEW_SHA[:8]}`", result.stdout)
+
+    def test_both_discovery_sources_preserve_unpinned_and_missing_version_warnings(self):
+        for source in ("workflow_content", "composite_content"):
+            with self.subTest(source=source):
+                result = self.run_checker(
+                    "", mode="--current-pins-md",
+                    **{source: (
+                        "  - uses: example/action@v1.0.0\n"
+                        f"  - uses: example/unknown@{'a' * 40}\n"
+                    )},
+                )
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn("Unpinned action reference", result.stderr)
+                self.assertIn("Cannot determine version for example/unknown", result.stderr)
+                self.assertIn("| example/action@v1.0.0 |", result.stdout)
+                self.assertNotIn("| example/unknown@", result.stdout)
 
 
 if __name__ == "__main__":
