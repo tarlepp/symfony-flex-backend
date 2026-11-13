@@ -163,13 +163,16 @@ dependency audits; report/test tools also select PHPUnit and report producers.
 Image-helper and helper-test changes select tooling checks as well as image
 checks, so `make test-command-output` validates their output consumers. Passing
 the helper suite alone does not verify group headings or scenario-count
-expectations in the output-contract tests.
-The Compose category validates development, local production, CI and Dev
-Container overrides. It also parses `.devcontainer/devcontainer.json` inside
+expectations in the output-contract tests. The Compose category runs
+[`ci-validate-compose.sh`](../scripts/ci-validate-compose.sh)
+on the runner to validate development, local production, CI and Dev Container
+overrides. It also parses `.devcontainer/devcontainer.json` inside
 the PHP container using Python's standard JSON parser. Keep that file strict
 JSON (without comments or trailing commas); no JSONC parser is installed.
 These checks validate syntax and merged Compose configuration, not the Dev
-Container schema or actual IDE attachment.
+Container schema or actual IDE attachment. The script stops at the first
+failing command and preserves its exit status; changes to it select Compose
+validation and workflow regressions.
 
 Shared inputs include `Makefile`, the root `Dockerfile`, `.dockerignore`,
 `main.yml`, `scripts/ci-detect-changes.sh`, local composite actions, and shared
