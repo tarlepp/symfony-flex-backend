@@ -973,8 +973,15 @@ File: [scripts/ci-test-reports.py](ci-test-reports.py)
 The test job runs this Python standard-library helper inside the PHP development
 container, from the repository root. Three subcommands preserve separate CI
 steps: `validate-junit` requires a parseable `build/logs/junit.xml` with a
-`testsuites` root and a `testsuite` child before PhpMetrics runs; `verify` checks
-that Clover, JUnit, coverage HTML and PhpMetrics HTML files are nonempty;
+`testsuites` root and a `testsuite` child before PhpMetrics runs. Every suite,
+including nested suites, must have nonnegative integer `tests`, `assertions`,
+`failures`, `errors` and `skipped` counts. `verify` requires nonempty Clover,
+JUnit, coverage HTML and PhpMetrics HTML files and validates both XML reports.
+Clover must have a `coverage` root and `project/metrics` with nonnegative
+integer `statements` and `coveredstatements`; covered statements cannot exceed
+total statements. Zero counts and JUnit reports containing test failures are
+valid. Every invalid required file gets an error annotation and verification
+fails; HTML contents are not parsed.
 `summary` prints the PHPUnit totals and optional line coverage as Markdown.
 
 The helper reads existing reports without generating or modifying them.
