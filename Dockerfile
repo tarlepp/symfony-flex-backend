@@ -128,13 +128,10 @@ RUN mkdir -p /home/dev/.config/fish/completions \
 
 USER dev
 
+COPY --chown=dev:dev requirements.txt /home/dev/requirements.txt
+
 RUN python3 -m venv /home/dev/.venv \
-    && python3 -m venv /home/dev/.local/share/thefuck \
-    && /home/dev/.venv/bin/python -m pip install --no-cache-dir setuptools==84.2.1 PyYAML==6.0.3 \
-    && /home/dev/.local/share/thefuck/bin/python -m pip install --no-cache-dir setuptools==84.2.1 \
-    && /home/dev/.local/share/thefuck/bin/python -m pip install --no-cache-dir thefuck \
-    && mkdir -p /home/dev/.local/bin \
-    && ln -s /home/dev/.local/share/thefuck/bin/thefuck /home/dev/.local/bin/thefuck
+    && /home/dev/.venv/bin/python -m pip install --no-cache-dir -r /home/dev/requirements.txt
 
 ENV VIRTUAL_ENV=/home/dev/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH:/home/dev/.local/bin"
