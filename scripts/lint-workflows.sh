@@ -97,4 +97,6 @@ output_run 'Composer cache mount regressions (offline)' \
     python3 scripts/tests/composer-cache-test.py
 output_run 'Analyzer job and gate regressions (offline)' \
     python3 scripts/tests/analyzer-workflow-test.py
+output_run 'Docker maintenance workflow regressions (offline)' \
+    python3 scripts/tests/docker-image-workflow-test.py
 printf '\n' >&2

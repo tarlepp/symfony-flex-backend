@@ -344,6 +344,8 @@ docker-image-digest         # Show multi-platform index digest for image
                             # (asks IMAGE)
 docker-image-verify-pins    # Verify external FROM and COPY image pins are
                             # multi-platform and match their tags
+docker-image-update-pins    # OVERWRITE: apply same-major minor/patch updates
+                            # and refresh existing Dockerfile digest pins
 docker-kill-containers      # Kill all running docker containers
 docker-prune                # Kill all running containers and prune all docker
                             # stuff

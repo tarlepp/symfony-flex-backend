@@ -1,6 +1,10 @@
 name: PHP bootstrap
 description: Start the Compose development container, restore Composer cache, and optionally install dependencies and print versions
 inputs:
+  build-target:
+    description: Dockerfile target (development or maintenance); maintenance requires dependency installation, caching and version reporting disabled
+    required: false
+    default: development
   install-dependencies:
     description: Whether to run make install
     required: false
@@ -16,6 +20,25 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Validate bootstrap target
+      shell: bash
+      env:
+        BUILD_TARGET: ${{ inputs.build-target }}
+        INSTALL_DEPENDENCIES: ${{ inputs.install-dependencies }}
+        CACHE_DEPENDENCIES: ${{ inputs.cache-dependencies }}
+        PRINT_VERSIONS: ${{ inputs.print-versions }}
+      run: |
+        case "$BUILD_TARGET" in
+          development) ;;
+          maintenance)
+            if [ "$INSTALL_DEPENDENCIES" != false ] || [ "$CACHE_DEPENDENCIES" != false ] || [ "$PRINT_VERSIONS" != false ]; then
+              echo "::error::Maintenance requires install-dependencies, cache-dependencies and print-versions to be false."
+              exit 1
+            fi
+            ;;
+          *) echo "::error::Unsupported bootstrap build-target."; exit 1 ;;
+        esac
+
     - name: Set Composer cache location
       shell: bash
       # The value is a runner-controlled path, not attacker input.
@@ -41,22 +64,22 @@ runs:
         echo "uid=$(id -u)" >> "$GITHUB_OUTPUT"
         echo "gid=$(id -g)" >> "$GITHUB_OUTPUT"
 
-    - name: Build PHP development image
+    - name: Build PHP CI image
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
       env:
         DOCKER_BUILD_RECORD_UPLOAD: 'false'
       with:
         context: .
         file: Dockerfile
-        target: development
+        target: ${{ inputs.build-target }}
         load: true
         push: false
         tags: symfony-flex-backend-php:ci
         build-args: |
           HOST_UID=${{ steps.identity.outputs.uid }}
           HOST_GID=${{ steps.identity.outputs.gid }}
-        cache-from: ${{ github.event_name != 'schedule' && 'type=gha,version=2,scope=ci-bootstrap-development' || '' }}
-        cache-to: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'type=gha,version=2,scope=ci-bootstrap-development,mode=max' || '' }}
+        cache-from: ${{ inputs.build-target == 'development' && github.event_name != 'schedule' && 'type=gha,version=2,scope=ci-bootstrap-development' || '' }}
+        cache-to: ${{ inputs.build-target == 'development' && github.event_name == 'push' && github.ref == 'refs/heads/master' && 'type=gha,version=2,scope=ci-bootstrap-development,mode=max' || '' }}
         no-cache: ${{ github.event_name == 'schedule' }}
         pull: true
 

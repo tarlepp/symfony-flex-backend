@@ -11,6 +11,7 @@
 #
 # Commands:
 #   check-updates  Report newer stable image versions (Docker Hub)
+#   update-pins    Apply same-major stable updates and refresh pinned digests
 #   digest      Show multi-platform index digest and pin reference for image
 #   verify      Verify that external FROM and COPY --from Dockerfile pins are
 #               multi-platform and match their tags
@@ -65,6 +66,7 @@ Usage:
 
 Commands:
   check-updates  Report newer stable image versions (Docker Hub)
+  update-pins    Apply minor/patch updates and digest refreshes to Dockerfiles
   digest         Show multi-platform index digest and pin reference for image
   verify         Verify that external FROM and COPY --from Dockerfile pins are
                  multi-platform and match their tags
@@ -83,6 +85,10 @@ changes no files. Exit status: 0 = no updates or errors, 1 = updates or errors,
 69 = missing tools. Floating and prerelease tags are skipped explicitly.
 With check-updates --advisory, confirmed updates produce warnings and exit 0;
 lookup or pin-validation errors still fail. Other commands do not use this flag.
+update-pins changes only existing tagged digest pins in project Dockerfiles.
+It preserves the major version, variant, and all currently supported platforms.
+Floating tags receive digest refreshes only. All lookups must succeed before
+any file is changed. IMAGE and command options are not accepted by update-pins.
 
   IMAGE       Image reference (digest), or optional single image (check-updates)
   PLATFORM    Single target platform, e.g. linux/arm64 (build)
@@ -94,6 +100,7 @@ lookup or pin-validation errors still fail. Other commands do not use this flag.
 
 Make targets:
   make docker-image-check-updates
+  make docker-image-update-pins
   make docker-image-digest
   make docker-image-verify-pins
   make docker-builder-platforms
@@ -179,7 +186,7 @@ hub_tags() {
     done
 }
 
-update_pin_reference() {
+resolve_image_pin() {
     local image="$1" digest raw type platforms
 
     if ! digest="$(inspect_image "$image" --format '{{.Manifest.Digest}}')"; then
@@ -208,31 +215,38 @@ update_pin_reference() {
         return 1
     fi
 
-    printf '  Multi-platform pin: %s@%s\n' "$image" "$digest"
-    printf '  Platforms: %s\n' "$platforms"
+    RESOLVED_PIN="${image}@${digest}"
+    RESOLVED_PLATFORMS="$platforms"
 }
 
-# Internal outcomes: 0 current, 1 failed, 2 update, 3 skipped, 4 update with pin failure.
-check_image_update() {
+update_pin_reference() {
+    resolve_image_pin "$1" || return 1
+    printf '  Multi-platform pin: %s\n' "$RESOLVED_PIN"
+    printf '  Platforms: %s\n' "$RESOLVED_PLATFORMS"
+}
+
+# Returns a tag on stdout, or 3 for intentionally unsupported version tags.
+latest_image_tag() {
     local image="${1%@*}" repository tag suffix prefix current tags latest first
+    local scope="${2:-all}"
     local pattern='^(v?)((0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))(-[a-zA-Z0-9_.-]+)?$'
 
     if [[ "${image##*/}" != *:* ]]; then
-        warning "SKIP" "${image}: no explicit version tag"
+        warning "SKIP" "${image}: no explicit version tag" >&2
         return 3
     fi
 
     repository="${image%:*}"
     tag="${image##*:}"
     if ! [[ "$tag" =~ $pattern ]]; then
-        warning "SKIP" "${image}: tag is not a full stable semantic version with an optional variant"
+        warning "SKIP" "${image}: tag is not a full stable semantic version with an optional variant" >&2
         return 3
     fi
     prefix="${BASH_REMATCH[1]}"
     current="${BASH_REMATCH[2]}"
     suffix="${BASH_REMATCH[6]}"
     if [[ "$suffix" =~ ^-(alpha|beta|rc|RC|preview|dev)([0-9.-]|$) ]]; then
-        warning "SKIP" "${image}: prerelease tag"
+        warning "SKIP" "${image}: prerelease tag" >&2
         return 3
     fi
 
@@ -242,38 +256,161 @@ check_image_update() {
     esac
     first="${repository%%/*}"
     if [[ "$repository" == */* ]] && [[ "$first" == *.* || "$first" == *:* || "$first" = localhost ]]; then
-        error "${image}: version lookup currently supports Docker Hub only"
+        error "${image}: version lookup currently supports Docker Hub only" >&2
         return 1
     fi
     [[ "$repository" == */* ]] || repository="library/${repository}"
     if ! [[ "$repository" =~ ^[a-z0-9_-]+/[a-z0-9_.-]+$ ]]; then
-        error "${image}: invalid Docker Hub repository"
+        error "${image}: invalid Docker Hub repository" >&2
         return 1
     fi
 
-    if ! tags="$(hub_tags "$repository" "$suffix")"; then
+    if ! tags="$(hub_tags "$repository" "$suffix" 2>&1)"; then
+        printf '%s\n' "$tags" >&2
         return 1
     fi
 
-    latest="$(jq -Rrs --arg suffix "$suffix" --arg prefix "$prefix" '
+    latest="$(jq -Rrs --arg suffix "$suffix" --arg prefix "$prefix" \
+        --arg scope "$scope" --arg current "$current" '
         [split("\n")[] |
             capture("^(?<prefix>v?)(?<version>(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*))(?<suffix>-[a-zA-Z0-9_.-]+)?$") |
             select(.prefix == $prefix and (.suffix // "") == $suffix) |
-            {version: .version, parts: (.version | split(".") | map(tonumber))}]
+            {version: .version, parts: (.version | split(".") | map(tonumber))} |
+            select($scope == "all" or .parts[0] == ($current | split(".")[0] | tonumber))]
         | sort_by(.parts) | last | .version // empty' <<< "$tags")"
     if [ -z "$latest" ]; then
-        error "${image}: no matching stable version tags found"
+        error "${image}: no matching stable version tags found" >&2
         return 1
     fi
 
     if jq -en --arg current "$current" --arg latest "$latest" \
         '($latest | split(".") | map(tonumber)) > ($current | split(".") | map(tonumber))' > /dev/null; then
-        warning "WARN" "${image} -> ${image%:*}:${prefix}${latest}${suffix}"
-        update_pin_reference "${image%:*}:${prefix}${latest}${suffix}" || return 4
+        printf '%s:%s%s%s\n' "${image%:*}" "$prefix" "$latest" "$suffix"
+    else
+        printf '%s\n' "$image"
+    fi
+}
+
+# Internal outcomes: 0 current, 1 failed, 2 update, 3 skipped, 4 update with pin failure.
+check_image_update() {
+    local image="${1%@*}" latest status=0
+    latest="$(latest_image_tag "$image" 2>&1)" || status=$?
+    if [ "$status" -ne 0 ]; then
+        printf '%s\n' "$latest"
+        return "$status"
+    fi
+    if [ "$latest" != "$image" ]; then
+        warning "WARN" "${image} -> ${latest}"
+        update_pin_reference "$latest" || return 4
         return 2
     else
         info "OK" "${image}: no newer stable version"
     fi
+}
+
+command_update_pins() {
+    local file location ref image candidate status raw platforms platform temporary count=0
+    local -A pins=() plans=()
+    if [ "$#" -ne 0 ] || [ -n "${IMAGE:-}" ]; then
+        error "update-pins accepts neither options nor IMAGE"
+        return 64
+    fi
+    require_docker
+    if ! command -v curl > /dev/null 2>&1; then
+        error "curl command not found, install it first"
+        return 69
+    fi
+    output_status RUN 'Resolving minor/patch image updates and digest refreshes'
+    for file in "${PINNED_DOCKERFILES[@]}"; do
+        [ -f "$file" ] || continue
+        while IFS=: read -r location ref; do
+            if ! [[ "$ref" =~ ^[^@]+:[^/@]+@sha256:[a-f0-9]{64}$ ]]; then
+                warning SKIP "${file}: ${ref}: not an existing tagged digest pin"
+                continue
+            fi
+            count=$((count + 1))
+            if [ -z "${pins[$ref]+set}" ]; then
+                image="${ref%@*}"
+                status=0
+                candidate="$(latest_image_tag "$image" minor)" || status=$?
+                case "$status" in
+                    0) ;;
+                    3) candidate="$image" ;;
+                    *) return "$status" ;;
+                esac
+                resolve_image_pin "$candidate" || return 1
+                if ! raw="$(raw_manifest "$ref")" || ! platforms="$(image_platforms "$raw")"; then
+                    error "Could not inspect current platforms for ${ref}"
+                    return 1
+                fi
+                if [ -z "$platforms" ]; then
+                    error "${ref}: current pin has no runnable platforms to preserve"
+                    return 1
+                fi
+                for platform in $platforms; do
+                    if [[ " $RESOLVED_PLATFORMS " != *" $platform "* ]]; then
+                        error "${candidate}: update would remove platform ${platform}"
+                        return 1
+                    fi
+                done
+                pins[$ref]="$RESOLVED_PIN"
+            fi
+            if [ "$ref" != "${pins[$ref]}" ]; then
+                plans[$file]+="${location}"$'\t'"${ref}"$'\t'"${pins[$ref]}"$'\n'
+                info UPDATE "${file}: ${ref} -> ${pins[$ref]}"
+            fi
+        done < <(dockerfile_images "$file" locations)
+    done
+    if [ "$count" -eq 0 ]; then
+        error "No tagged digest pins found; run from the project root"
+        return 1
+    fi
+    # Resolve every registry lookup before editing any Dockerfile.
+    for file in "${PINNED_DOCKERFILES[@]}"; do
+        [ -n "${plans[$file]:-}" ] || continue
+        temporary="$(mktemp "${file}.XXXXXX")"
+        if ! awk -v updates="${plans[$file]}" '
+            BEGIN {
+                n = split(updates, rows, "\n")
+                for (i = 1; i <= n; i++) {
+                    if (rows[i] == "") continue
+                    split(rows[i], columns, "\t")
+                    old[columns[1]] = columns[2]
+                    new[columns[1]] = columns[3]
+                    expected++
+                }
+            }
+            NR in old { start = NR }
+            start && $0 !~ /^[[:space:]]*(#|$)/ {
+                rest = $0
+                offset = 0
+                while (match(rest, /[^ \t\r]+/)) {
+                    token = substr(rest, RSTART, RLENGTH)
+                    replacement = ""
+                    if (token == old[start]) replacement = new[start]
+                    if (token == "--from=" old[start]) replacement = "--from=" new[start]
+                    if (replacement != "") {
+                        $0 = substr($0, 1, offset + RSTART - 1) replacement \
+                            substr($0, offset + RSTART + RLENGTH)
+                        changed++
+                        break
+                    }
+                    offset += RSTART + RLENGTH - 1
+                    rest = substr(rest, RSTART + RLENGTH)
+                }
+                if ($0 !~ /\\[[:space:]]*$/) start = 0
+            }
+            { print }
+            END { if (changed != expected) exit 1 }
+        ' "$file" > "$temporary"; then
+            rm -f "$temporary"
+            error "Could not rewrite image instructions in ${file}"
+            return 1
+        fi
+        chmod --reference="$file" "$temporary"
+        mv "$temporary" "$file"
+    done
+    output_result OK "Docker image pins resolved; ${#plans[@]} Dockerfile(s) changed"
 }
 
 command_check_updates() {
@@ -954,6 +1091,7 @@ command_push() {
 
 case "${1:-}" in
     check-updates ) shift; command_check_updates "$@" ;;
+    update-pins ) shift; command_update_pins "$@" ;;
     digest ) require_docker; command_digest ;;
     verify ) require_docker; command_verify ;;
     platforms ) require_docker; command_platforms ;;

@@ -107,7 +107,11 @@ case "$*" in
             printf 'Manifest unavailable\n' >&2
             exit 1
         fi
-        cat "$TEST_MANIFEST"
+        if [ -n "${TEST_CURRENT_MANIFEST:-}" ] && [[ "${!#}" == *@sha256:bbbb* ]]; then
+            printf '%s\n' "$TEST_CURRENT_MANIFEST"
+        else
+            cat "$TEST_MANIFEST"
+        fi
         ;;
     "buildx imagetools inspect "*" --format {{.Manifest.Digest}}")
         if [ "${TEST_DOCKER_FAILURE:-}" = digest ]; then
@@ -620,3 +624,127 @@ for file in Dockerfile docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
     printf 'FROM scratch\n' > "$WORK/$file"
 done
 check_updates 'empty image discovery fails explicitly' '' 1 'No external Dockerfile images found'
+
+start_group 'Applying minor/patch updates and digest refreshes'
+export IMAGE=''
+export TEST_TAG_MODE=''
+export TEST_REQUIRE_PIN=1
+printf '{"next":null,"results":[{"name":"1.0.0"},{"name":"1.10.0"},{"name":"1.9.9"},{"name":"2.0.0"},{"name":"1.11.0-rc1"},{"name":"1.99.0-alpine"}]}\n' > "$TEST_TAGS"
+old_pin="test:1.0.0@sha256:$(printf 'b%.0s' {1..64})"
+new_pin="test:1.10.0@sha256:$(printf 'a%.0s' {1..64})"
+
+update_pins() {
+    local name="$1" expected="$2" message="$3" status=0
+    start_case "$name"
+    : > "$TEST_REQUESTS"
+    bash "$SCRIPT" update-pins "${@:4}" > "$WORK/output" 2>&1 || status=$?
+    if [ "$status" -ne "$expected" ] || ! grep -Fq "$message" "$WORK/output"; then
+        printf 'FAIL: %s: expected exit %s and "%s", got %s\n' "$name" "$expected" "$message" "$status"
+        cat "$WORK/output"
+        exit 1
+    fi
+}
+
+for file in Dockerfile docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
+    printf 'FROM %s AS base\nFROM base AS final\n' "$old_pin" > "$WORK/$file"
+done
+update_pins 'minor/patch updates preserve major and deduplicate lookups' 0 '3 Dockerfile(s) changed'
+[ "$(wc -l < "$TEST_REQUESTS")" -eq 1 ]
+for file in Dockerfile docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
+    grep -Fxq "FROM $new_pin AS base" "$file"
+    grep -Fxq 'FROM base AS final' "$file"
+done
+update_pins 'idempotent updates make no changes' 0 '0 Dockerfile(s) changed'
+for file in docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
+    printf 'FROM scratch\n' > "$file"
+done
+
+printf '{"next":null,"results":[{"name":"1.0.0"},{"name":"2.0.0"}]}\n' > "$TEST_TAGS"
+printf 'FROM %s\n' "$old_pin" > Dockerfile
+update_pins 'same-tag digest drift is refreshed without major upgrade' 0 'Dockerfile(s) changed'
+grep -Fxq "FROM test:1.0.0@${new_pin##*@}" Dockerfile
+
+printf '{"next":null,"results":[{"name":"v1.0.0-bookworm"},{"name":"v1.2.0-bookworm"},{"name":"v2.0.0-bookworm"},{"name":"v1.9.0-alpine"}]}\n' > "$TEST_TAGS"
+printf 'FROM test:v1.0.0-bookworm@%s\n' "${old_pin##*@}" > Dockerfile
+update_pins 'version prefix and exact variant are preserved' 0 'Dockerfile(s) changed'
+grep -Fxq "FROM test:v1.2.0-bookworm@${new_pin##*@}" Dockerfile
+
+for file in docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
+    printf 'FROM scratch\n' > "$file"
+done
+printf 'FROM test:stable@%s\n' "${old_pin##*@}" > Dockerfile
+update_pins 'floating tag receives only a digest refresh' 0 'Dockerfile(s) changed'
+[ ! -s "$TEST_REQUESTS" ]
+grep -Fxq "FROM test:stable@${new_pin##*@}" Dockerfile
+
+printf '{"next":null,"results":[{"name":"1.0.0"},{"name":"1.10.0"},{"name":"2.0.0"}]}\n' > "$TEST_TAGS"
+cat > Dockerfile << EOF
+# FROM $old_pin
+FROM \\
+    --platform=linux/amd64 \\
+    $old_pin AS base
+COPY \\
+    # Keep $old_pin in this comment.
+
+    --from=$old_pin \\
+    /bin/tool /bin/tool
+FROM BASE AS final
+COPY --from=base /bin/tool /bin/tool
+COPY --from=0 /bin/tool /bin/tool
+RUN echo $old_pin
+EOF
+update_pins 'continued FROM and COPY edits preserve comments and other instructions' 0 '1 Dockerfile(s) changed'
+grep -Fxq "    $new_pin AS base" Dockerfile
+grep -Fxq "    --from=$new_pin \\" Dockerfile
+grep -Fxq "# FROM $old_pin" Dockerfile
+grep -Fxq "    # Keep $old_pin in this comment." Dockerfile
+grep -Fxq "RUN echo $old_pin" Dockerfile
+grep -Fxq 'COPY --from=base /bin/tool /bin/tool' Dockerfile
+grep -Fxq 'COPY --from=0 /bin/tool /bin/tool' Dockerfile
+
+printf 'FROM %s\n' "$old_pin" > Dockerfile
+printf 'FROM ghcr.io/owner/test:1.0.0@%s\n' "${old_pin##*@}" > docker/nginx/Dockerfile
+before="$(sha256sum Dockerfile docker/nginx/Dockerfile)"
+update_pins 'a later registry error prevents all file edits' 1 'supports Docker Hub only'
+[ "$before" = "$(sha256sum Dockerfile docker/nginx/Dockerfile)" ]
+printf 'FROM scratch\n' > docker/nginx/Dockerfile
+
+export TEST_CURRENT_MANIFEST='{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64","variant":"v8"}},{"platform":{"os":"linux","architecture":"s390x"}}]}'
+before="$(sha256sum Dockerfile)"
+update_pins 'loss of an existing platform blocks updates' 1 'update would remove platform linux/s390x'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+unset TEST_CURRENT_MANIFEST
+export TEST_CURRENT_MANIFEST='{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[]}'
+update_pins 'an empty current index cannot silently lose platform guarantees' 1 'current pin has no runnable platforms'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+export TEST_CURRENT_MANIFEST='invalid-json'
+update_pins 'malformed current manifest does not edit files' 1 'Could not inspect current platforms'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+unset TEST_CURRENT_MANIFEST
+
+for failure in digest manifest; do
+    export TEST_DOCKER_FAILURE="$failure"
+    update_pins "failed ${failure} resolution does not edit files" 1 '[FAIL]'
+    [ "$before" = "$(sha256sum Dockerfile)" ]
+done
+unset TEST_DOCKER_FAILURE
+export TEST_TAG_MODE=failure
+update_pins 'failed tag discovery does not edit files' 1 'Could not fetch Docker Hub tags'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+export TEST_TAG_MODE=invalid
+update_pins 'malformed tag discovery does not edit files' 1 'Invalid Docker Hub tag response'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+export TEST_TAG_MODE=''
+export TEST_DIGEST=invalid
+update_pins 'invalid update digest does not edit files' 1 'Invalid index digest'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+unset TEST_DIGEST
+printf '{"mediaType":"application/vnd.oci.image.manifest.v1+json","config":{},"layers":[]}\n' > "$TEST_MANIFEST"
+update_pins 'single-platform candidate is rejected without editing files' 1 'single platform manifest'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+
+update_pins 'unknown mutation option is rejected' 64 'accepts neither options nor IMAGE' --unknown
+IMAGE=test:1.0.0 update_pins 'IMAGE is not accepted for bulk mutation' 64 'accepts neither options nor IMAGE'
+printf 'FROM test:1.0.0\n' > Dockerfile
+update_pins 'unpinned images are not automatically pinned' 1 'No tagged digest pins found'
+grep -Fxq 'FROM test:1.0.0' Dockerfile

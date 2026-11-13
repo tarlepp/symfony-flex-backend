@@ -39,6 +39,11 @@ class WorkflowOutputTest(unittest.TestCase):
             "import sys\n"
             "sys.exit(int(os.environ.get('ANALYZER_TEST_EXIT', '0')))\n"
         )
+        (self.root / "scripts/tests/docker-image-workflow-test.py").write_text(
+            "import os\n"
+            "import sys\n"
+            "sys.exit(int(os.environ.get('DOCKER_WORKFLOW_TEST_EXIT', '0')))\n"
+        )
         (self.root / ".github/actions/example/action.yml").write_text("name: fixture\n")
         fixture = """#!/usr/bin/env bash
 name=$(basename "$0")
@@ -105,6 +110,7 @@ esac
             "Workflow validator script (ShellCheck)",
             "Composer cache mount regressions (offline)",
             "Analyzer job and gate regressions (offline)",
+            "Docker maintenance workflow regressions (offline)",
         ):
             self.assertIn("[RUN] " + label, result.stderr)
             self.assertIn("[OK] " + label, result.stderr)
@@ -156,6 +162,12 @@ esac
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Analyzer job and gate regressions (offline)", result.stderr)
         self.assertNotIn("[OK] Analyzer job and gate regressions (offline)", result.stderr)
+
+    def test_docker_workflow_regression_failure_blocks_validation(self):
+        result, _ = self.run_script(DOCKER_WORKFLOW_TEST_EXIT="7")
+        self.assertEqual(result.returncode, 7, result.stderr)
+        self.assertIn("[FAIL] Docker maintenance workflow regressions (offline)", result.stderr)
+        self.assertNotIn("[OK] Docker maintenance workflow regressions (offline)", result.stderr)
 
 
 if __name__ == "__main__":

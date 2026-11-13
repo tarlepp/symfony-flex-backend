@@ -32,6 +32,19 @@ host_make() {
     make --no-print-directory INSIDE_DOCKER_CONTAINER=0 INSIDE_CONTAINER_RUNTIME=0 "$@"
 }
 
+: > "$DOCKER_CALLS"
+host_make -n docker-image-update-pins > "$temporary/image-update-command"
+grep -Fq './scripts/docker-images.sh update-pins' "$temporary/image-update-command"
+if grep -q 'exec -T' "$DOCKER_CALLS"; then
+    echo "Docker image updates must run on the host." >&2
+    exit 1
+fi
+if make --no-print-directory INSIDE_DOCKER_CONTAINER=1 INSIDE_CONTAINER_RUNTIME=1 \
+    docker-image-update-pins > "$temporary/image-update-container" 2>&1; then
+    echo "Docker image updates must reject execution inside the container." >&2
+    exit 1
+fi
+
 for target in cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
     lint-markdown composer-validate install application-info check-requirements \
     tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output \

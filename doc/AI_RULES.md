@@ -198,12 +198,18 @@ Separate workflows cover the rest of the pipeline: `dependency-review.yml`
 (daily Trivy scan
 of the development and production images, with SARIF upload), `scorecard.yml`
 (OpenSSF Scorecard) and `codeql.yml` (CodeQL analysis of the workflow files).
+The daily (04:17 UTC) and manually dispatched `docker-image-updates.yml`
+workflow applies same-major
+minor/patch updates and digest refreshes, verifies pins, and creates or updates
+a PR against the selected branch. It is separate from required CI gates;
+see [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
+for token permissions, dispatch prerequisites and runtime evidence limits.
 
 For application tests, the workflow runs `make run-tests-php`. The local
 `make run-tests` target may instead select phpdbg when it is installed. Use
 `make run-tests-php` locally when reproducing the CI test runner.
 
-The shared bootstrap starts the existing development image using
+The shared bootstrap defaults to the existing development image using
 `make ci-start`; project Make targets execute in that container, and an
 `always()` step calls `make ci-stop`. Docker orchestration, hosted scanners,
 cache actions, and artifact uploads remain on the runner. Sonar receives
@@ -212,6 +218,14 @@ uploaders and archived reports retain their original paths.
 The reporting job installs and runs the isolated Coveralls tool in the PHP
 development container, forwarding its tokens and required GitHub CI metadata.
 It does not use the runner's PHP or Composer.
+
+Docker PR maintenance opts into the independent lightweight `maintenance`
+target, retaining the idle Compose PHP service and host-side registry checks.
+Docker Hub authentication precedes image pulls. PR authentication prefers a
+repository-scoped, short-lived App token, then a configured PAT, and explicitly
+warns when `GITHUB_TOKEN` fallback cannot trigger PR CI. Partial App settings
+fail rather than silently selecting weaker automation. Offline maintenance
+workflow contracts run through `make lint-workflows`.
 
 BuildKit layer caches are imported for ordinary builds and exported only by
 `master` pushes. Bootstrap loads an explicitly tagged development image before

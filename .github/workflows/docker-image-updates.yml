@@ -1,0 +1,152 @@
+name: Update Docker image pins
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: docker-image-updates-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  update:
+    name: Update Docker image versions and digests
+    if: ${{ github.ref_type == 'branch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
+      - name: Make checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref_name }}
+          persist-credentials: false
+
+      - name: Authenticate to Docker Hub when credentials are available
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
+            printf '%s' "$DOCKERHUB_TOKEN" | docker login docker.io --username "$DOCKERHUB_USERNAME" --password-stdin
+          elif [ -n "$DOCKERHUB_USERNAME" ] || [ -n "$DOCKERHUB_TOKEN" ]; then
+            echo "::error::Configure both DOCKERHUB_USERNAME and DOCKERHUB_TOKEN, or neither."
+            exit 1
+          else
+            echo "::notice::Using anonymous Docker Hub requests (rate limits apply)."
+          fi
+
+      - name: Bootstrap maintenance container
+        uses: ./.github/actions/php-bootstrap
+        with:
+          build-target: maintenance
+          install-dependencies: 'false'
+          print-versions: 'false'
+
+      - name: Run Docker image helper regression tests
+        run: bash scripts/make.sh test-docker-images
+
+      - name: Apply minor/patch updates and digest refreshes
+        run: bash scripts/make.sh docker-image-update-pins
+
+      - name: Verify updated multi-platform pins and tag parity
+        run: bash scripts/make.sh docker-image-verify-pins
+
+      - name: Prepare pull request details
+        id: details
+        env:
+          BASE_BRANCH: ${{ github.ref_name }}
+        run: |
+          branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
+          echo "branch=chore(docker)/image-updates-${branch_id}" >> "$GITHUB_OUTPUT"
+          sed \
+            -e 's/^\* Describe the change$/* Update Dockerfile image versions and multi-platform digest pins./' \
+            -e 's/^\* Explain why it is needed$/* Refresh upstream images while preserving major versions, variants and platforms./' \
+            .github/pull_request_template.md > "$RUNNER_TEMP/docker-image-pr.md"
+          {
+            cat << 'EOF'
+
+          ## Automated maintenance evidence
+
+          * `bash scripts/make.sh test-docker-images`: passed (offline regressions).
+          * `bash scripts/make.sh docker-image-update-pins`: passed (live registry resolution).
+          * `bash scripts/make.sh docker-image-verify-pins`: passed (live pin verification).
+          * Application tests and builds were not run by this maintenance workflow.
+          * Changed files:
+
+          EOF
+            git diff --name-only -- Dockerfile 'docker/*/Dockerfile*'
+          } >> "$RUNNER_TEMP/docker-image-pr.md"
+
+      - name: Select pull request authentication
+        id: authentication
+        env:
+          APP_CLIENT_ID: ${{ vars.DOCKER_IMAGE_UPDATE_APP_CLIENT_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY }}
+          UPDATE_TOKEN: ${{ secrets.DOCKER_IMAGE_UPDATE_TOKEN }}
+        run: |
+          if [ -n "$APP_CLIENT_ID" ] && [ -n "$APP_PRIVATE_KEY" ]; then
+            echo "app=true" >> "$GITHUB_OUTPUT"
+          elif [ -n "$APP_CLIENT_ID" ] || [ -n "$APP_PRIVATE_KEY" ]; then
+            echo "::error::Configure both DOCKER_IMAGE_UPDATE_APP_CLIENT_ID and DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY, or neither."
+            exit 1
+          elif [ -n "$UPDATE_TOKEN" ]; then
+            echo "app=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "app=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Using GITHUB_TOKEN: generated PRs will not trigger CI. Configure the update App or PAT, or close and reopen the PR as a maintainer before merging."
+            echo "Warning: GITHUB_TOKEN fallback does not trigger PR CI; maintainer action is required." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Create repository-scoped GitHub App token
+        id: app-token
+        if: ${{ steps.authentication.outputs.app == 'true' }}
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.DOCKER_IMAGE_UPDATE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Create or update the Docker image pull request
+        id: pull-request
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3
+        with:
+          token: ${{ steps.app-token.outputs.token || secrets.DOCKER_IMAGE_UPDATE_TOKEN || github.token }}
+          base: ${{ github.ref_name }}
+          branch: ${{ steps.details.outputs.branch }}
+          add-paths: |
+            Dockerfile
+            docker/*/Dockerfile*
+          commit-message: |
+            Chore(docker): update image versions and digest pins
+
+            Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+          title: Chore(docker) - Update image versions and digest pins
+          body-path: ${{ runner.temp }}/docker-image-pr.md
+
+      - name: Summarize pull request result
+        env:
+          PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
+          PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
+        run: |
+          if [ -n "$PR_URL" ]; then
+            printf 'Docker image update PR (%s): %s\n' "$PR_OPERATION" "$PR_URL" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "All image pins are current; no update PR was needed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Log out of Docker Hub
+        if: ${{ always() }}
+        run: docker logout docker.io
+
+      - name: Stop PHP development container
+        if: ${{ always() }}
+        run: bash scripts/make.sh ci-stop

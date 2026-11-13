@@ -73,12 +73,14 @@ cross-workflow dependency on core CI.
 | [CodeQL][codeql] | PR, push, weekly | Yes |
 | [Scorecard][scorecard] | Push, weekly, protection rule | Yes |
 | [Vulnerability Scan][vulnerability-scan] | Daily | Yes |
+| [Update Docker image pins][docker-image-updates] | Daily | Yes |
 
 [ci]: ../.github/workflows/main.yml
 [dependency-review]: ../.github/workflows/dependency-review.yml
 [codeql]: ../.github/workflows/codeql.yml
 [scorecard]: ../.github/workflows/scorecard.yml
 [vulnerability-scan]: ../.github/workflows/vulnerability-scan.yml
+[docker-image-updates]: ../.github/workflows/docker-image-updates.yml
 
 Core CI explicitly handles PR `opened`, `synchronize` (new commits) and
 `reopened` events. Dependency Review and CodeQL use the same default
@@ -94,6 +96,7 @@ default branch and may be delayed; they are not exact-time guarantees.
 | Workflow | Schedule | Work performed |
 | --- | --- | --- |
 | CI | Daily, 00:00 (`0 0 * * *`) | Dependency advisories, image updates |
+| Update Docker image pins | Daily, 04:17 (`17 4 * * *`) | Image update PR |
 | Vulnerability Scan | Daily, 12:00 (`0 12 * * *`) | Both image builds/scans |
 | CodeQL | Monday, 03:30 (`30 3 * * 1`) | GitHub Actions analysis |
 | Scorecard | Friday, 09:29 (`29 9 * * 5`) | Supply-chain assessment |
@@ -314,8 +317,9 @@ skipped. Container cleanup steps use `always()`.
 Core CI cancels older runs in the same workflow/ref concurrency group.
 Schedules have a separate `-schedule` group and cannot cancel ordinary
 validation on the same ref. PR edits do not create runs or cancel validation.
-CodeQL has its own workflow/ref cancellation group. The other
-workflows do not declare concurrency groups.
+CodeQL has its own workflow/ref cancellation group. Docker image maintenance
+serializes runs per selected branch without cancelling an active update.
+The other workflows do not declare concurrency groups.
 
 ## Containers and test setup [ᐞ](#table-of-contents)
 
@@ -329,6 +333,13 @@ the development image, not a separate runner PHP installation.
 
 By default, bootstrap installs Composer dependencies and prints tool versions.
 Documentation/workflow checks and image-update checks disable both.
+Docker PR maintenance opts into `build-target: maintenance`, a minimal PHP
+target containing the Bash/Make/jq tooling used by the offline image tests.
+It uses the same idle Compose PHP service without development-only packages,
+Composer, Xdebug or application initialization. All existing bootstrap callers
+default to `development`; maintenance rejects dependency installation, Composer
+caching and version reporting. Maintenance never imports or exports the
+development build cache.
 Tests defer installation and version output until CI configuration and JWT
 keys exist. Tests and reporting opt into Composer download caching despite
 deferring installation; cache keys include all Composer lockfiles.
@@ -362,6 +373,82 @@ by the core analyzer jobs and optional SonarCloud reporting.
 **Scorecard** assesses repository supply-chain practices, publishes results
 to OpenSSF for this public repository, and uploads SARIF to artifacts and
 code scanning. It does not run on ordinary PRs and is not required for merging.
+
+**Update Docker image pins** runs daily at 04:17 UTC and on manual dispatch.
+Scheduled runs target `master`, the default branch, after the workflow is
+merged there. They create or update the same maintenance PR when updates are
+available, without creating duplicate PRs on each run. It applies stable
+minor/patch updates within each image's current major version and refreshes
+digests, preserving variants and existing platforms. It updates existing tagged
+digest pins in Dockerfile `FROM` and external `COPY --from` instructions;
+Compose images and GitHub Actions references are outside its scope.
+It verifies the resulting pins before creating or updating one PR per selected
+base branch. No changes means no new PR. Existing core CI gates are unchanged;
+this workflow does not build the updated images or run application tests.
+
+The workflow must exist on `master` before GitHub enables manual dispatch,
+even when selecting another branch. In **Actions > Update Docker image pins >
+Run workflow**, choose the branch that should receive the update PR.
+For a stacked demonstration, choose the implementation branch, not its parent,
+so the run includes the new helper and workflow.
+
+Enable **Settings > Actions > General > Workflow permissions > Allow GitHub
+Actions to create and approve pull requests** when using `GITHUB_TOKEN`.
+Prefer a GitHub App installed on this repository with **Contents: Read and
+write** and **Pull requests: Read and write**. Configure its client ID as the
+`DOCKER_IMAGE_UPDATE_APP_CLIENT_ID` repository variable and its private key as
+the `DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY` repository secret. The workflow mints
+a short-lived token scoped to this repository with those two permissions;
+the token action revokes it during job cleanup.
+
+Authentication precedence is App, then `DOCKER_IMAGE_UPDATE_TOKEN` (a
+fine-grained PAT with the same permissions), then `GITHUB_TOKEN`. Generated
+PRs trigger CI automatically with the App or PAT. A partial App configuration
+fails explicitly, even if a PAT exists. Failed App authentication does not
+silently fall back.
+
+From a Docker host checkout with GitHub CLI installed and authenticated, set
+the App configuration interactively; the private-key file stays outside Git:
+
+```bash
+cd /path/to/symfony-flex-backend
+gh variable set DOCKER_IMAGE_UPDATE_APP_CLIENT_ID
+gh secret set DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY < /path/to/app-private-key.pem
+```
+
+For the PAT alternative, omit both App settings and enter the token at the
+GitHub CLI prompt on the Docker host:
+
+```bash
+cd /path/to/symfony-flex-backend
+gh secret set DOCKER_IMAGE_UPDATE_TOKEN
+```
+
+The default `GITHUB_TOKEN` creates PRs but does not trigger PR workflows;
+fallback emits a warning in the logs and run summary. A maintainer must close
+and reopen the PR to start validation before merging. Existing optional
+Docker Hub credentials are supported, and login runs before bootstrap pulls.
+Token or registry errors fail the workflow, not an empty success.
+`make lint-workflows` includes offline maintenance contracts for authentication,
+schedule, bootstrap guards, PR branch/base selection and no-change summaries;
+these do not execute the GitHub App or PR actions.
+
+From a Docker host checkout of this repository, with GitHub CLI installed
+and authenticated, dispatch after the workflow is available on `master`.
+Set `BASE_BRANCH` to the branch containing the implementation to demonstrate a
+stacked run, or leave `master` for ordinary maintenance:
+
+```bash
+cd /path/to/symfony-flex-backend
+BASE_BRANCH=master
+gh workflow run docker-image-updates.yml --ref "$BASE_BRANCH"
+gh run list --workflow docker-image-updates.yml --branch "$BASE_BRANCH" --limit 1
+```
+
+Inspect the matching run's summary for the PR URL or the explicit no-change
+result. A successful static lint or a different green CI run does not prove
+PR creation. If all pins are current, wait for an upstream update rather than
+deliberately downgrading application images to manufacture a PR.
 
 **Vulnerability Scan** builds both Docker targets independently of core CI.
 The graph below shows the steps for each matrix target:
