@@ -21,7 +21,7 @@ class WorkflowOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         for name in (
             "lint-workflows.sh", "command-output.sh", "ci-prerequisite-gate.sh",
-            "ci-result-gate.sh", "ci-gate-common.sh",
+            "ci-result-gate.sh", "ci-gate-common.sh", "check-composite-action-shell.py",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
         shutil.copyfile(
@@ -47,7 +47,14 @@ class WorkflowOutputTest(unittest.TestCase):
             "import sys\n"
             "sys.exit(int(os.environ.get('DOCKER_WORKFLOW_TEST_EXIT', '0')))\n"
         )
-        (self.root / ".github/actions/example/action.yml").write_text("name: fixture\n")
+        (self.root / "scripts/tests/composite-action-shell-test.py").write_text(
+            "import os\nimport sys\n"
+            "sys.exit(int(os.environ.get('COMPOSITE_TEST_EXIT', '0')))\n"
+        )
+        (self.root / ".github/actions/example/action.yml").write_text(
+            "name: fixture\nruns:\n  using: composite\n  steps:\n"
+            "    - name: Fixture shell\n      shell: bash\n      run: echo fixture\n"
+        )
         fixture = """#!/usr/bin/env bash
 name=$(basename "$0")
 printf '%s %s\\n' "$name" "$*" >> "$CALLS"
@@ -70,6 +77,9 @@ case "$name" in
         ;;
     sha256sum)
         cat >/dev/null
+        ;;
+    shellcheck)
+        if [ "${1:-}" = --shell ]; then cat >> "$CALLS"; fi
         ;;
     zizmor)
         printf 'RUST_LOG=%s\\n' "$RUST_LOG" >> "$CALLS"
@@ -110,6 +120,8 @@ esac
             "Workflow syntax and embedded shell (1 files)",
             "Workflow and action security audit (zizmor)",
             "Local action metadata: .github/actions/example/action.yml",
+            "Local composite action shell (ShellCheck)",
+            "Composite action shell regressions (offline)",
             "Workflow validator script (ShellCheck)",
             "Composer cache mount regressions (offline)",
             "Analyzer job and gate regressions (offline)",
@@ -129,6 +141,8 @@ esac
             "scripts/ci-gate-common.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
+        self.assertIn("shellcheck --shell bash -", calls)
+        self.assertIn("echo fixture", calls)
         groups = (
             "1/4 - Prepare pinned workflow validators",
             "2/4 - Validate workflows",
@@ -177,6 +191,19 @@ esac
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Docker maintenance workflow regressions (offline)", result.stderr)
         self.assertNotIn("[OK] Docker maintenance workflow regressions (offline)", result.stderr)
+
+    def test_composite_shell_regression_failure_blocks_validation(self):
+        result, _ = self.run_script(COMPOSITE_TEST_EXIT="7")
+        self.assertEqual(result.returncode, 7, result.stderr)
+        self.assertIn("[FAIL] Composite action shell regressions (offline)", result.stderr)
+        self.assertNotIn("[RUN] 4/4", result.stderr)
+
+    def test_invalid_composite_metadata_blocks_shell_validation(self):
+        (self.root / ".github/actions/example/action.yml").write_text("runs: [")
+        result, _ = self.run_script()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("[FAIL] Local composite action shell (ShellCheck)", result.stderr)
+        self.assertNotIn("[RUN] 4/4", result.stderr)
 
 
 if __name__ == "__main__":

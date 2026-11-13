@@ -89,6 +89,10 @@ output_status RUN '3/4 - Validate local actions'
 for action in "${actions[@]}"; do
     output_run "Local action metadata: $action" "$tools/action-validator" "$action"
 done
+output_run 'Local composite action shell (ShellCheck)' \
+    python3 scripts/check-composite-action-shell.py --shellcheck "$tools/shellcheck" "${actions[@]}"
+output_run 'Composite action shell regressions (offline)' \
+    python3 scripts/tests/composite-action-shell-test.py "$tools/shellcheck"
 printf '\n' >&2
 output_status RUN '4/4 - Validate tooling scripts'
 output_run 'Workflow validator script (ShellCheck)' "$tools/shellcheck" \

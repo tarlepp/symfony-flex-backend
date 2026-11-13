@@ -1220,6 +1220,8 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/tests/ci-gates-test.py": {"workflows"},
             "scripts/tests/docker-image-workflow-test.py": {"workflows"},
             "scripts/lint-workflows.sh": {"workflows"},
+            "scripts/check-composite-action-shell.py": {"workflows"},
+            "scripts/tests/composite-action-shell-test.py": {"workflows"},
             "scripts/ci-prerequisite-gate.sh": {"workflows"},
             "scripts/ci-result-gate.sh": {"workflows"},
             "scripts/ci-gate-common.sh": {"workflows"},
