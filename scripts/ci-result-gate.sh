@@ -53,7 +53,7 @@ write_summary() {
 }
 
 echo "Event: $EVENT_NAME"
-echo "Change detection result: $CHANGES (code changed: $CODE_CHANGED)"
+echo "Change detection result: $CHANGES"
 echo "Prerequisite gate result: $CI_SUMMARY"
 echo "Static analyzer matrix result: $STATIC_ANALYZERS"
 echo "Lightweight analyzer result: $LIGHTWEIGHT_ANALYZERS"

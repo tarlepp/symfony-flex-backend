@@ -244,7 +244,7 @@ class CiGatesTest(unittest.TestCase):
             for event in ("pull_request", "push", "merge_group",
                           "workflow_dispatch", "schedule"):
                 environment = dict.fromkeys(result_names, "success")
-                environment.update(EVENT_NAME=event, CODE_CHANGED="true",
+                environment.update(EVENT_NAME=event,
                                    DOCUMENTATION_CHANGED="true", REF="refs/heads/master")
                 flags = re.findall(
                     r"^          (\w+): \$\{\{ needs\.changes\.outputs\.\w+ \}\}$",

@@ -180,6 +180,11 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def test_gate_dependencies_have_real_result_bindings(self):
         for name in ("ci-summary", "ci-result"):
             section = job(name)
+            self.assertNotIn("CODE_CHANGED", section)
+            script = "ci-prerequisite-gate.sh" if name == "ci-summary" else "ci-result-gate.sh"
+            self.assertNotIn(
+                "CODE_CHANGED", (WORKFLOW.parents[2] / "scripts" / script).read_text(),
+            )
             bindings = re.findall(
                 r"^          ([A-Z_]+): \$\{\{ needs\.([a-z][a-z-]*)\.result \}\}$",
                 section, re.MULTILINE,
@@ -615,7 +620,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIsNotNone(script, f"Missing gate script for {name}")
         variables = re.findall(r"^          ([A-Z_]+):", section, re.MULTILINE)
         environment = dict(os.environ, **dict.fromkeys(variables, "success"))
-        environment.update(EVENT_NAME=event, CODE_CHANGED="true",
+        environment.update(EVENT_NAME=event,
                            DOCUMENTATION_CHANGED="true", REF="refs/heads/master")
         flags = re.findall(
             r"^          (\w+): \$\{\{ needs\.changes\.outputs\.\w+ \}\}$",
@@ -739,7 +744,6 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "LINT_WORKFLOWS",
         )
         environment = dict.fromkeys(variables, "skipped")
-        environment.update(CODE_CHANGED="false")
         environment.update(dict.fromkeys((
             "CONFIGURATION_CHANGED", "SECURITY_CHANGED", "IMAGES_CHANGED", "PHP_CHANGED",
             "TESTS_CHANGED", "DOCKER_CHANGED", "WORKFLOWS_CHANGED",
@@ -752,7 +756,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertEqual(self.documentation_gate(name).returncode, 0)
             variables = re.findall(r"^          ([A-Z_]+):", job(name), re.MULTILINE)
             for variable in variables:
-                if variable in ("EVENT_NAME", "CODE_CHANGED", "REF") or variable.endswith("_CHANGED"):
+                if variable in ("EVENT_NAME", "REF") or variable.endswith("_CHANGED"):
                     continue
                 expected = "skipped" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
@@ -1253,6 +1257,7 @@ class ChangeDetectionTest(unittest.TestCase):
             section, re.MULTILINE,
         )
         self.detect()
+        self.assertNotIn("code", dict(outputs))
         self.assertEqual(dict(outputs), {key: key for key in self.outputs})
 
     def git(self, *arguments):
@@ -1295,7 +1300,8 @@ class ChangeDetectionTest(unittest.TestCase):
         self.outputs = dict(line.split("=", 1) for line in lines)
         self.assertEqual(len(lines), len(self.outputs), "Duplicate detector outputs")
         self.assertTrue(set(self.outputs.values()) <= {"true", "false"})
-        return "code=" + self.outputs["code"], result
+        self.assertNotIn("code", self.outputs)
+        return result
 
     def assert_documentation(self, markdown, documentation):
         self.assertEqual(self.outputs["markdown"], str(markdown).lower())
@@ -1363,7 +1369,7 @@ class ChangeDetectionTest(unittest.TestCase):
                 for event in ("pull_request", "push", "merge_group"):
                     self.detect(event)
                     selected = {key for key, value in self.outputs.items()
-                                if value == "true" and key != "code"}
+                                if value == "true"}
                     self.assertEqual(selected, expected)
 
     def test_shared_and_unknown_inputs_keep_all_checks(self):
@@ -1396,10 +1402,13 @@ class ChangeDetectionTest(unittest.TestCase):
             self.assertEqual(self.outputs[key], "true")
         self.assert_documentation(True, True)
 
-    def test_markdown_only_edit_skips_code(self):
+    def test_markdown_only_edit_skips_application_checks(self):
         (self.root / "README.md").write_text("Updated documentation\n")
         self.commit()
-        self.assertEqual(self.detect()[0], "code=false")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "false")
+        self.assertEqual(self.outputs["tests"], "false")
+        self.assertEqual(self.outputs["docker"], "false")
         self.assert_documentation(True, True)
 
     def test_code_only_edit_skips_documentation_on_diff_events(self):
@@ -1407,7 +1416,9 @@ class ChangeDetectionTest(unittest.TestCase):
         self.commit()
         for event in ("pull_request", "push", "merge_group"):
             with self.subTest(event=event):
-                self.assertEqual(self.detect(event)[0], "code=true")
+                self.detect(event)
+                self.assertEqual(self.outputs["php"], "true")
+                self.assertEqual(self.outputs["tests"], "true")
                 self.assert_documentation(False, False)
 
     def test_documentation_tool_inputs_and_deleted_link_targets(self):
@@ -1477,56 +1488,66 @@ class ChangeDetectionTest(unittest.TestCase):
         for number in range(1200):
             (self.root / f"source-{number:04d}-with-a-long-name.php").write_text("<?php\n")
         self.commit()
-        self.assertEqual(self.detect()[0], "code=true")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "true")
         self.assert_documentation(True, True)
 
     def test_markdown_add_delete_and_rename_skip_code(self):
         (self.root / "README.md").rename(self.root / "GUIDE.md")
         (self.root / "NEW.md").write_text("New documentation\n")
         self.commit()
-        self.assertEqual(self.detect()[0], "code=false")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "false")
         self.assert_documentation(True, True)
         (self.root / "GUIDE.md").unlink()
         self.commit()
-        self.assertEqual(self.detect()[0], "code=false")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "false")
         self.assert_documentation(True, True)
 
     def test_code_renamed_to_markdown_still_runs_code(self):
         (self.root / "source.php").rename(self.root / "source.md")
         self.commit()
-        self.assertEqual(self.detect()[0], "code=true")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "true")
         self.assert_documentation(True, True)
 
     def test_mixed_changes_run_code(self):
         (self.root / "README.md").write_text("Updated documentation\n")
         (self.root / "source.php").write_text("<?php echo 1;\n")
         self.commit()
-        self.assertEqual(self.detect()[0], "code=true")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "true")
 
     def test_empty_diff_runs_code(self):
-        self.assertEqual(self.detect()[0], "code=true")
+        self.detect()
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
 
     def test_code_deletion_runs_code(self):
         (self.root / "source.php").unlink()
         self.commit()
-        self.assertEqual(self.detect()[0], "code=true")
+        self.detect()
+        self.assertEqual(self.outputs["php"], "true")
 
     def test_quoted_filename_fails_safe(self):
         (self.root / "unusual\nname.md").write_text("Documentation\n")
         self.commit()
-        self.assertEqual(self.detect()[0], "code=true")
+        self.detect()
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
 
     def test_failed_diff_runs_code_and_reports_error(self):
-        code, result = self.detect(base="missing-commit")
-        self.assertEqual(code, "code=true")
+        result = self.detect(base="missing-commit")
+        self.assertTrue(all(value == "true" for value in self.outputs.values()))
         self.assertIn("fatal:", result.stderr)
 
-    def test_non_pr_events_run_code_even_for_markdown_changes(self):
+    def test_non_pr_events_use_categories_or_full_manual_validation(self):
         (self.root / "README.md").write_text("Updated documentation\n")
         self.commit()
         for event in ("push", "merge_group", "workflow_dispatch"):
             with self.subTest(event=event):
-                self.assertEqual(self.detect(event)[0], "code=true")
+                self.detect(event)
+                self.assertEqual(self.outputs["php"],
+                                 "true" if event == "workflow_dispatch" else "false")
 
 
 if __name__ == "__main__":
