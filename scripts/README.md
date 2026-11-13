@@ -830,6 +830,23 @@ python3 scripts/tests/check-workflow-tool-updates-test.py
 
 File: `scripts/lint-workflows.sh`
 
+The configuration job's separate `scripts/ci-validate-compose.sh` runs on the
+Docker host. It checks development, production, CI and Dev Container Compose
+variants with `config --quiet`, then invokes Python's strict JSON parser in the
+existing CI PHP service for `.devcontainer/devcontainer.json`. It resolves the
+repository root from its own location, stops on the first failure and preserves
+that command's status. It never starts containers or runs application setup.
+This validates configuration syntax, not Dev Container schema or IDE behavior.
+Changes select Compose and workflow checks; ShellCheck and mocked execution
+regressions run through `make lint-workflows`.
+
+From the repository root on the Docker host with the CI PHP service already
+running:
+
+```bash
+bash scripts/ci-validate-compose.sh
+```
+
 The validator first runs `scripts/tests/ci-gates-test.py` offline. It checks
 that both aggregate CI gates stop on workflow cancellation, container cleanup
 remains unconditional, and the actual Bash result checks still reject failed,
