@@ -142,16 +142,18 @@ jobs:
       - *checkout_step
 
       - name: Bootstrap development container
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           install-dependencies: 'false'
           print-versions: 'false'
 
       - name: Lint all markdown documentation files
-        if: ${{ needs.changes.outputs.markdown == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.markdown == 'true' }}
         run: bash scripts/make.sh lint-markdown
 
       - name: Validate skill metadata, index coverage, and repository Markdown links
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh check-skills
 
       - *failure_diagnostics_step
