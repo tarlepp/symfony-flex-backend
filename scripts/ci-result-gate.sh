@@ -67,12 +67,12 @@ if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
 fi
 
 if [ "$EVENT_NAME" = "schedule" ]; then
-    test "$CHANGES" = "skipped"
+    expect_result "Change detection" skipped "$CHANGES"
     PHP_CHANGED=false
     TESTS_CHANGED=false
     DOCKER_CHANGED=false
 else
-    test "$CHANGES" = "success"
+    expect_result "Change detection" success "$CHANGES"
 fi
 
 report_expected=skipped
@@ -83,10 +83,10 @@ if [ "$TESTS_CHANGED" = "true" ] && {
     report_expected=success
 fi
 
-test "$CI_SUMMARY" = "success"
-expect_selected "$PHP_CHANGED" "$STATIC_ANALYZERS"
-expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
-expect_selected "$TESTS_CHANGED" "$TEST"
-expect_selected "$DOCKER_CHANGED" "$DOCKER_BUILD"
-expect_selected "$DOCKER_CHANGED" "$DOCKER_SCAN"
-test "$REPORT" = "$report_expected"
+expect_result "Prerequisite gate" success "$CI_SUMMARY"
+expect_selected "Static analyzer matrix" "$PHP_CHANGED" "$STATIC_ANALYZERS"
+expect_selected "Lightweight analyzers" "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
+expect_selected "PHPUnit" "$TESTS_CHANGED" "$TEST"
+expect_selected "Docker builds" "$DOCKER_CHANGED" "$DOCKER_BUILD"
+expect_selected "Trivy image scans" "$DOCKER_CHANGED" "$DOCKER_SCAN"
+expect_result "External reporting" "$report_expected" "$REPORT"

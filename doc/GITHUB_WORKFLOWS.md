@@ -305,6 +305,11 @@ fail the gates. Reporting must succeed on PRs and `master` pushes when tests
 are selected; it must skip on schedules, manual runs, merge groups and
 test-unaffected changes. A skipped job is not general permission to merge.
 
+Failed comparisons produce error annotations naming the check, expected result
+and actual result. Invalid selection flags report the accepted boolean values
+and received flag, including empty values. Gates remain fail-fast; diagnostic
+messages do not relax any acceptance rule.
+
 Both jobs check out the workflow revision before running their Bash gate:
 [`ci-prerequisite-gate.sh`](../scripts/ci-prerequisite-gate.sh) and
 [`ci-result-gate.sh`](../scripts/ci-result-gate.sh). They share the strict

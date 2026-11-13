@@ -412,6 +412,36 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         self.assertEqual(outcome.returncode == 0, result == "success")
                         self.assertIn("::warning::Could not write", outcome.stdout)
 
+    def test_gate_diagnostics_identify_invalid_selection_and_expected_skips(self):
+        for gate, flag, result, label in (
+            ("ci-summary", "DOCUMENTATION_CHANGED", "LINT_DOCUMENTATION", "Documentation lint"),
+            ("ci-result", "TESTS_CHANGED", "TEST", "PHPUnit"),
+        ):
+            for selection in ("", "unknown", "skipped"):
+                with self.subTest(gate=gate, selection=selection):
+                    outcome = self.run_gate(gate, **{flag: selection})
+                    self.assertNotEqual(outcome.returncode, 0)
+                    self.assertEqual(
+                        outcome.stderr,
+                        f"::error::{label}: expected selection 'true' or 'false', "
+                        f"got '{selection}' (job result 'success').\n",
+                    )
+            outcome = self.run_gate(gate, **{flag: "false", result: "failure"})
+            self.assertNotEqual(outcome.returncode, 0)
+            self.assertEqual(
+                outcome.stderr,
+                f"::error::{label}: expected result 'skipped', got 'failure'.\n",
+            )
+
+    def test_gate_annotations_escape_percent_and_line_breaks(self):
+        outcome = self.run_gate("ci-result", TEST="bad%\r\n::warning::not-an-annotation")
+        self.assertNotEqual(outcome.returncode, 0)
+        self.assertEqual(
+            outcome.stderr,
+            "::error::PHPUnit: expected result 'success', "
+            "got 'bad%25%0D%0A::warning::not-an-annotation'.\n",
+        )
+
     def run_gate(self, name, event="pull_request", lightweight="success", **overrides):
         section = job(name)
         script = re.search(r"^        run: bash (scripts/ci-[\w-]+\.sh)$", section, re.MULTILINE)
