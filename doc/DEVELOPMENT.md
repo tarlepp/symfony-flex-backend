@@ -172,7 +172,8 @@ command is available via following example command.
 ./vendor/bin/phpcs -i
 ```
 
-If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) this following link
+If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) this following
+link
 will help you to get things rolling.
 
 * [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html)
@@ -192,10 +193,12 @@ these changes to your database with following command:
 After that you can start to modify or delete existing entities or create your
 own ones. Easiest way to make this all work is to follow below workflow:
 
-1. Make your changes (create, delete, modify) to entities in `/src/Entity/` folder
+1. Make your changes (create, delete, modify) to entities in `/src/Entity/`
+   folder
 1. Run `diff` command to create new migration file
 1. Run `migrate` command to make actual changes to your database
-1. Run `validate` command to validate your mappings and actual database structure
+1. Run `validate` command to validate your mappings and actual database
+   structure
 
 Those commands you can run with `./bin/console doctrine:migrations:<command>`.
 

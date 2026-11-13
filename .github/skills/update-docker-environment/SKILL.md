@@ -48,14 +48,16 @@ Inspect every affected variant, including effective override behavior:
   disabled, an idle command, Composer cache, and CI PHP configuration.
 * `.devcontainer/devcontainer.json` and
   `.devcontainer/docker-compose.devcontainer.yml`: existing Compose service
-  attachment, `/app` workspace, UID/GID, remote user, ports, and lifecycle hooks.
+  attachment, `/app` workspace, UID/GID, remote user, ports, and lifecycle
+  hooks.
 * `docker-entrypoint-dev.sh` and `docker-entrypoint.sh`: configuration checks,
   dependency/key/database initialization, migrations, final process execution,
   and production asset publication.
 * `docker/php/`, `docker/nginx/`, and `docker/mariadb/`: image builds,
   development/production PHP and FPM settings, nginx upstream/TLS, and database
   configuration. Inspect safe configuration, never private TLS/JWT key contents.
-* `Makefile`, CI bootstrap, [Dev Container guide](../../../.devcontainer/README.md),
+* `Makefile`, CI bootstrap,
+  [Dev Container guide](../../../.devcontainer/README.md),
   [Docker guide](../../../docker/README.md), and
   [local production guide](../../../doc/DOCKER_MULTI_PLATFORM.md#running-production-locally):
   build/start commands, routing, variant selection, and operator instructions.

@@ -146,7 +146,8 @@ code /home/wnd/PhpstormProjects/symfony-flex-backend
 
 Project Make targets run inside the container terminal. Docker lifecycle and
 image-management targets, including `make ci-start` and `make ci-stop`, require
-a separate host terminal. See [command execution contexts](../doc/COMMANDS.md#commands).
+a separate host terminal. See
+[command execution contexts](../doc/COMMANDS.md#commands).
 
 ---
 

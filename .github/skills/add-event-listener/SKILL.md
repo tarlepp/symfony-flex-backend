@@ -67,7 +67,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    authorization, and sensitive-data handling. Do not swallow exceptions,
    perform unrelated side effects, or treat synchronous events as background
    jobs.
-8. Cover the handler's effect, relevant no-op paths, invalid inputs, and failures.
+8. Cover the handler's effect, relevant no-op paths, invalid inputs, and
+   failures.
    Add registration
    coverage through the actual caller boundary: dispatch a Symfony event
    through the container's dispatcher, or persist/update and flush an entity

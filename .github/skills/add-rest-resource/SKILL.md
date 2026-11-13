@@ -40,7 +40,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    Validator constraints consistent with the field's API exposure and
    validation needs. Generate and review a Doctrine migration; do not use
    `doctrine:schema:update` or hand-write schema changes. Follow
-   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for entity changes; every
+   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for entity changes;
+   every
    entity requires a corresponding repository and resource.
 4. Define API input/output through DTOs in `src/DTO/`. Follow the existing
    `RestDto` patterns, validation constraints, and patch/visited-field behavior.
@@ -52,7 +53,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 5. Add or update the repository in `src/Repository/`, following
    `BaseRepository` conventions and entity generics. Keep query/data-access
    behavior there; put orchestration and business rules in a resource or
-   service. Follow [add-doctrine-query](../add-doctrine-query/SKILL.md) for custom
+   service. Follow [add-doctrine-query](../add-doctrine-query/SKILL.md) for
+   custom
    queries, filtering, search, sorting, pagination, and database tests.
 6. Add or update the resource in `src/Resource/`, extending `RestResource` and
    preserving its entity/repository types. Reuse lifecycle callbacks and

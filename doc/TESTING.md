@@ -58,7 +58,8 @@ they do not disable or change required GitHub CI checks.
 
 Use the complete task diff from its original baseline, including new files,
 not just the last repair or latest commit. Exclude unrelated pre-existing
-work. Apply the [shared selection rules](../.github/skills/shared-guidance.md#running-and-validating-changes):
+work. Apply the
+[shared selection rules](../.github/skills/shared-guidance.md#running-and-validating-changes):
 skill checklists are conditional, changed Markdown must be linted, and checks
 with unchanged inputs need not be repeated during one agent's work.
 Independent verification must still obtain its own scoped evidence.
@@ -153,7 +154,8 @@ checks for changes to either the helper or its regression suite. A failing
 baseline check remains a blocker to a green CI result; do not report the
 changeset as CI-ready while that failure remains unresolved. See
 [output contract regressions](../scripts/README.md#output-contract-regressions)
-for color controls, multiple-goal behavior, troubleshooting, and coverage limits.
+for color controls, multiple-goal behavior, troubleshooting, and coverage
+limits.
 
 ### Commands to run tests [ᐞ](#table-of-contents)
 
