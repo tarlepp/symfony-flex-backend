@@ -599,12 +599,6 @@ jobs:
 
       - *checkout_step
 
-      - name: Set tag var
-        id: vars
-        env:
-          REF_NAME: ${{ github.ref_name }}
-        run: echo "DOCKER_TAG=$(echo "$REF_NAME" | sed -E 's#[/().]+#_#g')-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
         with:
@@ -620,7 +614,7 @@ jobs:
           target: ${{ matrix.target }}
           outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar
           push: false
-          tags: symfony-flex-backend:${{ steps.vars.outputs.DOCKER_TAG }}-${{ matrix.target }}
+          tags: symfony-flex-backend:ci-${{ github.sha }}-${{ matrix.target }}
           cache-from: type=gha,version=2,scope=ci-image-${{ matrix.target }}
           cache-to: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && format('type=gha,version=2,scope=ci-image-{0},mode=max', matrix.target) || '' }}
           pull: true
