@@ -93,6 +93,9 @@ Inspect the affected source and its consumers, not just the requested file:
    Missing skill-selection metadata or loading evidence alone must not block
    delivery or verification. Platform requirements for native skill invocation
    still apply; guidance cannot expand tool access or override host policy.
+   Preserve the shared
+   [commit and push approval rules](../shared-guidance.md#preparing-a-change):
+   a skill or implementation handoff never substitutes for user approval.
 6. Select validation by what actually changed. Guidance-only Markdown needs
    documentation checks, not execution of every command it describes.
    Checker, Makefile, or CI changes additionally need the relevant script
