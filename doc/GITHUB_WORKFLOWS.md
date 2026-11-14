@@ -395,10 +395,11 @@ the development image, not a separate runner PHP installation.
 
 By default, bootstrap installs Composer dependencies and prints tool versions.
 Documentation/workflow checks and image-update checks disable both.
-Docker PR maintenance opts into `build-target: maintenance`, a minimal PHP
-target containing the Bash/Make/jq tooling used by the offline image tests.
+Docker PR maintenance and core image-update checks opt into
+`build-target: maintenance`, a minimal PHP target containing the Bash/Make/jq
+tooling used by the offline image tests.
 It uses the same idle Compose PHP service without development-only packages,
-Composer, Xdebug or application initialization. All existing bootstrap callers
+Composer, Xdebug or application initialization. Other bootstrap callers
 default to `development`; maintenance rejects dependency installation, Composer
 caching and version reporting. Maintenance never imports or exports the
 development build cache.

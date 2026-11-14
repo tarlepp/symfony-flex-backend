@@ -192,6 +192,29 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 elif not username or not token:
                     self.assertIn("::error::Configure both", result.stdout)
 
+    def test_core_image_updates_use_maintenance_only_for_offline_tests(self):
+        job = CORE_WORKFLOW.split("  docker-image-check-updates:\n", 1)[1].split(
+            "\n  lightweight-analyzers:", 1,
+        )[0]
+        bootstrap = step(job, "Bootstrap maintenance container")
+        self.assertIn("uses: ./.github/actions/php-bootstrap", bootstrap)
+        self.assertIn("build-target: maintenance", bootstrap)
+        for option in ("install-dependencies", "print-versions", "cache-dependencies"):
+            self.assertIn(f"{option}: 'false'", bootstrap)
+        self.assertIn(
+            "run: bash scripts/make.sh test-docker-images",
+            step(job, "Run Docker image helper regression tests"),
+        )
+        self.assertIn(
+            "run: bash scripts/docker-images.sh check-updates --advisory",
+            step(job, "Check for newer stable Docker image versions"),
+        )
+        self.assertLess(
+            job.index("uses: ./.github/actions/php-bootstrap"),
+            job.index("run: bash scripts/make.sh test-docker-images"),
+        )
+        self.assertIn("- *failure_diagnostics_step\n      - *stop_php_step", job)
+
     def test_bootstrap_defaults_and_maintenance_guards(self):
         self.assertIn("    default: development", BOOTSTRAP)
         self.assertIn("target: ${{ inputs.build-target }}", BOOTSTRAP)
