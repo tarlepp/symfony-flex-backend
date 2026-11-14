@@ -41,6 +41,20 @@ class CiGatesTest(unittest.TestCase):
         self.assertTrue(cleanup, "Expected unconditional container cleanup")
         self.assertTrue(all(condition == "${{ always() }}" for condition in cleanup))
 
+    def test_every_bootstrap_consumer_finishes_with_container_cleanup(self):
+        consumers = {
+            name: body for name, body in self.jobs.items()
+            if "uses: ./.github/actions/php-bootstrap\n" in body
+        }
+        self.assertIn("test", consumers)
+        for name, body in consumers.items():
+            with self.subTest(job=name):
+                if name == "lint-configuration":
+                    self.assertTrue(body.rstrip().endswith("run: bash scripts/make.sh ci-stop"))
+                else:
+                    self.assertTrue(body.rstrip().endswith("- *stop_php_step"))
+                    self.assertEqual(body.count("- *stop_php_step"), 1)
+
     def test_gate_scripts_are_checked_out_without_prerequisite_success_guards(self):
         for job, script in (
             ("ci-summary", "ci-prerequisite-gate.sh"),
