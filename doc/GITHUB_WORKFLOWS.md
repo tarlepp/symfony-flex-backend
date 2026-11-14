@@ -151,7 +151,7 @@ PHPUnit run their complete existing suites, not only changed files.
 | PHP/database runtime, env, Compose | Runtime, Compose, PHP, PHPUnit, builds |
 | nginx, dev shell, Dev Container | Compose, tooling regressions, builds |
 | Other workflows and validators | Workflow validation |
-| Image helper and its regressions | Pins/updates, helper regressions |
+| Image helper and regressions | Pins/updates, helper and output regressions |
 | Other scripts and tooling metadata | Offline tooling regressions |
 | Shared execution inputs or unclassified paths | Full validation |
 
@@ -160,6 +160,10 @@ Root Composer/Flex changes also select builds. Symfony YAML lint applies to
 YAML files under `config/`, not workflow or translation YAML. Dockerfile edits
 also select image pin/update checks. Tool Composer manifests/locks select
 dependency audits; report/test tools also select PHPUnit and report producers.
+Image-helper and helper-test changes select tooling checks as well as image
+checks, so `make test-command-output` validates their output consumers. Passing
+the helper suite alone does not verify group headings or scenario-count
+expectations in the output-contract tests.
 The Compose category validates development, local production, CI and Dev
 Container overrides. It also parses `.devcontainer/devcontainer.json` inside
 the PHP container using Python's standard JSON parser. Keep that file strict
@@ -168,10 +172,12 @@ These checks validate syntax and merged Compose configuration, not the Dev
 Container schema or actual IDE attachment.
 
 Shared inputs include `Makefile`, the root `Dockerfile`, `.dockerignore`,
-`main.yml`, local composite actions, and shared command/routing/report
-wrappers. Changes there can affect many job contracts, so they deliberately
-retain full coverage. The owning case list in `main.yml` is authoritative;
-new paths must be classified before they can safely skip checks.
+`main.yml`, `scripts/ci-detect-changes.sh`, local composite actions, and shared
+command/routing/report wrappers. Changes there can affect many job contracts,
+so they deliberately retain full coverage. The `changes` job calls
+[`scripts/ci-detect-changes.sh`](../scripts/ci-detect-changes.sh), whose case
+list is authoritative; new paths must be classified before they can safely
+skip checks.
 
 Manual runs, empty/failed comparisons and unclear Git-quoted filenames also
 retain full validation. Gitleaks stays enabled for every non-scheduled

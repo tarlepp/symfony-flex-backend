@@ -146,7 +146,12 @@ information/report output, expected-negative scenarios, and host/CI forwarding.
 The suites use temporary fixtures and mocked Docker/registry/upload operations.
 They do not replace PHPUnit or verify live service health or real uploads.
 Use focused suites while iterating; run the consolidated target when changing
-the shared output contract. See
+the shared output contract. When adding Docker-helper test scenarios or groups,
+update `DOCKER_IMAGE_TEST_GROUPS` in `scripts/tests/command-output-test.py` and
+run this target, not only `make test-docker-images`. CI selects these consumer
+checks for changes to either the helper or its regression suite. A failing
+baseline check remains a blocker to a green CI result; do not report the
+changeset as CI-ready while that failure remains unresolved. See
 [output contract regressions](../scripts/README.md#output-contract-regressions)
 for color controls, multiple-goal behavior, troubleshooting, and coverage limits.
 

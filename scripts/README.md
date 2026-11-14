@@ -20,6 +20,7 @@ This directory contains different scripts that are used during development.
       * [Skill documentation checker](#skill-documentation-checker)
       * [GitHub Actions update checker](#github-actions-update-checker)
       * [GitHub workflow validator](#github-workflow-validator)
+      * [CI change detection](#ci-change-detection)
       * [Docker multi-platform image helper](#docker-multi-platform-image-helper)
 
 ## Resources [ᐞ](#table-of-contents)
@@ -877,12 +878,45 @@ permissions. A deliberate exception needs an inline
 `.github/zizmor.yml` holds rule-wide settings; it currently disables only the
 `self-repository` rule, because local actions use `./` rather than `$/`.
 Disable or configure a rule there only with a comment explaining why.
-ShellCheck also checks the validator script itself.
+ShellCheck also checks the validator, shared command-output and Composer-cache
+helpers, and the extracted CI change-detection script.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
 cancellations, or skipped validation block tests and Docker builds.
 `make lint-yaml` remains the separate Symfony configuration check. Static
 validation does not replace testing actual GitHub workflow execution.
+
+### CI change detection [ᐞ](#table-of-contents)
+
+<a id="ci-change-detection"></a>
+
+File: [scripts/ci-detect-changes.sh](ci-detect-changes.sh)
+
+The `changes` job invokes this Bash script on the GitHub runner after checkout.
+It reads the current working directory's Git repository; it must not change to
+the script directory, because offline tests use isolated repositories.
+`EVENT_NAME`, `BASE_SHA`, `HEAD_SHA`, and `GITHUB_OUTPUT` are required environment
+variables. Empty SHA values are allowed and select full validation.
+PRs use a three-dot comparison; pushes and merge groups use two dots.
+Manual runs, empty or failed comparisons, quoted paths and unclassified files
+retain full validation. Changes to the detector itself also select every check.
+
+The script prints selection diagnostics to stdout, leaves Git errors on stderr,
+and appends the workflow's category flags, aggregate `configuration` flag and
+legacy `code` flag as `name=true|false` lines to `GITHUB_OUTPUT`.
+A failed comparison deliberately returns success with full validation; script
+execution or output-write failures fail the step. It does not modify tracked
+files or contact external services.
+
+From the repository root on the Docker host with the PHP development service
+running, run the isolated detector and gate regressions:
+
+```bash
+docker compose exec -T php python3 scripts/tests/analyzer-workflow-test.py
+```
+
+`make lint-workflows` also runs these regressions and explicitly ShellChecks the
+detector. Workflow wiring checks cover event inputs and declared output names.
 
 ### Docker multi-platform image helper [ᐞ](#table-of-contents)
 
