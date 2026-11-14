@@ -46,6 +46,9 @@ classify_path() {
         tools/08_phpmetrics/*|scripts/prepare-sonar-reports.sh|sonar-project.properties)
             enable_checks php tests
             ;;
+        scripts/ci-test-reports.py)
+            enable_checks php tests workflows
+            ;;
         ecs.php|.php-cs-fixer*|.phplint*|phpstan*|psalm*|phpinsights*|\
         .phpinsights*|phpmd*|.phan/*|rector.php)
             enable_checks php

@@ -708,6 +708,133 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
 
 
+class TestReportProcessingTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="ci-test-reports-")
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.write("build/logs/junit.xml", '<testsuites><testsuite tests="4" assertions="8" '
+                   'failures="1" errors="0" skipped="1"/></testsuites>')
+        self.write("build/logs/clover.xml", '<coverage><project><metrics statements="8" '
+                   'coveredstatements="3"/></project></coverage>')
+        self.write("build/report/index.html", "<html>Coverage</html>")
+        self.write("build/phpmetrics/index.html", "<html>Metrics</html>")
+
+    def write(self, name, content):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content)
+
+    def run_report(self, operation):
+        return subprocess.run(
+            ["python3", str(WORKFLOW.parents[2] / "scripts/ci-test-reports.py"), operation],
+            cwd=self.root, text=True, capture_output=True, check=False, timeout=10,
+        )
+
+    def test_workflow_keeps_container_execution_and_failure_policies(self):
+        section = job("test")
+        condition = (
+            "${{ !cancelled() && (steps.phpunit.outcome == 'success' || "
+            "steps.phpunit.outcome == 'failure')"
+        )
+        for name, operation, suffix in (
+            ("Create PhpMetrics report", "validate-junit",
+             " && hashFiles('build/logs/junit.xml') != '' }}"),
+            ("Verify required report files", "verify", " }}"),
+            ("Publish test and coverage summary", "summary",
+             " && hashFiles('build/logs/junit.xml', 'build/logs/clover.xml') != '' }}"),
+        ):
+            step = re.search(
+                rf"^      - name: {name}\n(.*?)(?=^      - |\Z)",
+                section, re.MULTILINE | re.DOTALL,
+            ).group(1)
+            self.assertIn(f"        if: {condition}{suffix}\n", step)
+            command = (
+                "docker compose -f compose.yaml -f docker/ci-compose.yaml "
+                f"exec -T php python3 scripts/ci-test-reports.py {operation}"
+            )
+            self.assertIn(command, step)
+            self.assertEqual("continue-on-error: true" in step, operation == "summary")
+            if operation == "validate-junit":
+                self.assertLess(step.index(command), step.index("bash scripts/make.sh phpmetrics"))
+            if operation == "summary":
+                self.assertIn(command + ' >> "$GITHUB_STEP_SUMMARY"\n', step)
+
+    def test_valid_reports_and_exact_summary(self):
+        for operation in ("validate-junit", "verify"):
+            result = self.run_report(operation)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout, "")
+        result = self.run_report("summary")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(
+            result.stdout,
+            "### PHPUnit results\n\n"
+            "| Tests | Assertions | Failures | Errors | Skipped |\n"
+            "|---|---|---|---|---|\n| 4 | 8 | 1 | 0 | 1 |\n\n"
+            "Line coverage: **37.50%** (3/8 statements)\n",
+        )
+
+    def test_junit_validation_rejects_missing_empty_malformed_and_wrong_shapes(self):
+        junit = self.root / "build/logs/junit.xml"
+        for content in (None, "", "<testsuites>", "<testsuite/>", "<testsuites/>"):
+            with self.subTest(content=content):
+                if content is None:
+                    junit.unlink()
+                else:
+                    junit.write_text(content)
+                result = self.run_report("validate-junit")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("::error::Test report validate-junit failed:", result.stderr)
+
+    def test_verify_reports_all_missing_or_empty_paths(self):
+        for path in self.root.glob("build/**/*"):
+            if path.is_file():
+                path.write_text("")
+        (self.root / "build/logs/clover.xml").unlink()
+        result = self.run_report("verify")
+        self.assertNotEqual(result.returncode, 0)
+        for name in ("logs/clover.xml", "logs/junit.xml", "report/index.html", "phpmetrics/index.html"):
+            self.assertIn(f"::error file=build/{name}::", result.stderr)
+        self.assertEqual(result.stderr.count("::error file="), 4)
+
+    def test_summary_sums_siblings_without_double_counting_nested_totals(self):
+        child = '<testsuite tests="2" assertions="3"><testsuite tests="99"/></testsuite>'
+        for junit in (
+            f"<testsuites>{child}{child}</testsuites>",
+            f'<testsuites><testsuites tests="4" assertions="6">{child}{child}</testsuites></testsuites>',
+        ):
+            with self.subTest(junit=junit):
+                self.write("build/logs/junit.xml", junit)
+                result = self.run_report("summary")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("| 4 | 6 | 0 | 0 | 0 |", result.stdout)
+
+    def test_summary_omits_coverage_when_metrics_absent_or_statements_zero(self):
+        for metrics in ("", '<metrics statements="0" coveredstatements="0"/>'):
+            with self.subTest(metrics=metrics):
+                self.write("build/logs/clover.xml", f"<coverage><project>{metrics}</project></coverage>")
+                result = self.run_report("summary")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertNotIn("Line coverage:", result.stdout)
+
+    def test_summary_fails_explicitly_for_unusable_inputs_and_invalid_operation(self):
+        for path, content in (
+            ("build/logs/junit.xml", '<testsuite tests="invalid"/>'),
+            ("build/logs/clover.xml", "<coverage>"),
+            ("build/logs/clover.xml", ""),
+        ):
+            with self.subTest(path=path, content=content):
+                self.write(path, content)
+                result = self.run_report("summary")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("::error::", result.stderr)
+                self.write("build/logs/junit.xml", "<testsuites><testsuite/></testsuites>")
+        (self.root / "build/logs/clover.xml").unlink()
+        self.assertNotEqual(self.run_report("summary").returncode, 0)
+        self.assertNotEqual(self.run_report("unknown").returncode, 0)
+
+
 class ChangeDetectionTest(unittest.TestCase):
     def test_workflow_invokes_detector_with_event_inputs_and_declared_outputs(self):
         section = job("changes")
@@ -777,6 +904,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "config/services.yaml": {"runtime", "yaml", "php", "tests", "docker"},
             "tests/Unit/ExampleTest.php": {"php", "tests"},
             "phpunit.xml.dist": {"php", "tests"},
+            "scripts/ci-test-reports.py": {"php", "tests", "workflows"},
             "ecs.php": {"php"},
             "phpstan.neon.dist": {"php"},
             ".phplint.yml": {"php"},
