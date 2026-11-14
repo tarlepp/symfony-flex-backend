@@ -551,6 +551,9 @@ own cache only on `master` pushes.
 
 Docker **update availability** in core CI is advisory: newer stable images
 produce warnings and a maintenance summary, not a failing gate.
+On `master` pushes and schedules, optional Docker Hub login runs before
+bootstrap so its image pulls also use the supplied credentials. PRs and other
+events remain anonymous; logout runs even after a failure.
 Registry/checker errors, invalid pins and helper regression failures still
 fail. Pin verification and vulnerability enforcement remain blocking.
 See [Docker image maintenance](DOCKER_MULTI_PLATFORM.md) for update procedures.
