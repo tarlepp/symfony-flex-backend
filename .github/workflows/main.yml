@@ -117,12 +117,7 @@ jobs:
 
       - name: Validate Compose and Dev Container configurations
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.compose == 'true' }}
-        run: |
-          docker compose config --quiet
-          docker compose -f compose.yaml -f compose.prod.yaml config --quiet
-          docker compose -f compose.yaml -f docker/ci-compose.yaml config --quiet
-          docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml config --quiet
-          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 -m json.tool .devcontainer/devcontainer.json /dev/null
+        run: bash scripts/ci-validate-compose.sh
 
       - &stop_php_step
         name: Stop PHP development container

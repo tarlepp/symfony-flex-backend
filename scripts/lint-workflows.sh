@@ -114,7 +114,7 @@ output_status RUN '4/4 - Validate tooling scripts'
 output_run 'Workflow validator script (ShellCheck)' "$tools/shellcheck" \
     scripts/lint-workflows.sh scripts/command-output.sh scripts/check-composer-cache.sh \
     scripts/ci-detect-changes.sh scripts/ci-prerequisite-gate.sh \
-    scripts/ci-result-gate.sh scripts/ci-gate-common.sh
+    scripts/ci-result-gate.sh scripts/ci-gate-common.sh scripts/ci-validate-compose.sh
 output_run 'Composer cache mount regressions (offline)' \
     python3 scripts/tests/composer-cache-test.py
 output_run 'Analyzer job and gate regressions (offline)' \

@@ -89,6 +89,9 @@ classify_path() {
                 *Dockerfile*) enable_checks images ;;
             esac
             ;;
+        scripts/ci-validate-compose.sh)
+            enable_checks compose workflows
+            ;;
         .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|\
         scripts/check-composite-action-shell.py|scripts/tests/composite-action-shell-test.py|\
         scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|scripts/ci-gate-common.sh|\
