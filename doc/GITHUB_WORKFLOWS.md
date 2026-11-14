@@ -305,6 +305,13 @@ fail the gates. Reporting must succeed on PRs and `master` pushes when tests
 are selected; it must skip on schedules, manual runs, merge groups and
 test-unaffected changes. A skipped job is not general permission to merge.
 
+Both jobs check out the workflow revision before running their Bash gate:
+[`ci-prerequisite-gate.sh`](../scripts/ci-prerequisite-gate.sh) and
+[`ci-result-gate.sh`](../scripts/ci-result-gate.sh). They share the strict
+selection predicate in [`ci-gate-common.sh`](../scripts/ci-gate-common.sh),
+while event-specific policies remain in the individual scripts. Checkout
+and validation steps are not conditional on successful prerequisites.
+
 On the Actions run's **Summary** page, `Validate CI prerequisites` and
 `Validate CI result` publish tables listing job results and skip explanations.
 These distinguish unaffected paths, scheduled scope, reporting eligibility,

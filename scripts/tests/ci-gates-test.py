@@ -4,8 +4,9 @@
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
-import textwrap
+import tempfile
 import unittest
 
 
@@ -40,6 +41,48 @@ class CiGatesTest(unittest.TestCase):
         self.assertTrue(cleanup, "Expected unconditional container cleanup")
         self.assertTrue(all(condition == "${{ always() }}" for condition in cleanup))
 
+    def test_gate_scripts_are_checked_out_without_prerequisite_success_guards(self):
+        for job, script in (
+            ("ci-summary", "ci-prerequisite-gate.sh"),
+            ("ci-result", "ci-result-gate.sh"),
+        ):
+            with self.subTest(job=job):
+                steps = self.jobs[job].split("    steps:\n", 1)[1]
+                self.assertEqual(
+                    steps.split("        env:\n", 1)[0],
+                    "      - *harden_runner_step\n\n"
+                    "      - *checkout_step\n\n"
+                    f"      - name: Validate {'prerequisite' if job == 'ci-summary' else 'final'} job results\n",
+                )
+                self.assertEqual(
+                    re.findall(r"^        run: (.+)$", steps, re.MULTILINE),
+                    [f"bash scripts/{script}"],
+                )
+                self.assertNotIn("        if:", steps)
+
+    def test_missing_shared_helper_or_required_inputs_fail_explicitly(self):
+        for script in ("ci-prerequisite-gate.sh", "ci-result-gate.sh"):
+            with self.subTest(script=script), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                shutil.copyfile(WORKFLOW.parents[2] / "scripts" / script, root / script)
+                environment = {"PATH": os.environ["PATH"]}
+                missing_helper = subprocess.run(
+                    ["bash", str(root / script)], cwd=WORKFLOW.parent, env=environment,
+                    text=True, capture_output=True, check=False, timeout=10,
+                )
+                self.assertNotEqual(missing_helper.returncode, 0)
+                self.assertIn("ci-gate-common.sh", missing_helper.stderr)
+                shutil.copyfile(
+                    WORKFLOW.parents[2] / "scripts/ci-gate-common.sh",
+                    root / "ci-gate-common.sh",
+                )
+                missing_inputs = subprocess.run(
+                    ["bash", str(root / script)], cwd=WORKFLOW.parent, env=environment,
+                    text=True, capture_output=True, check=False, timeout=10,
+                )
+                self.assertNotEqual(missing_inputs.returncode, 0)
+                self.assertIn("EVENT_NAME: unbound variable", missing_inputs.stderr)
+
     def test_image_scans_consume_build_artifacts_without_rebuilding(self):
         build = self.jobs["docker-build"]
         scan = self.jobs["docker-scan"]
@@ -70,15 +113,15 @@ class CiGatesTest(unittest.TestCase):
 
     def run_gate(self, job, environment):
         script = re.search(
-            r"^        run: \|\n((?:^          .*\n|^\n)+)",
+            r"^        run: bash (scripts/ci-[\w-]+\.sh)$",
             self.jobs[job], re.MULTILINE,
         )
         self.assertIsNotNone(script, f"Missing result script for {job}")
         return subprocess.run(
-            ["bash", "--noprofile", "--norc", "-eo", "pipefail", "-c",
-             textwrap.dedent(script.group(1))],
+            ["bash", str(WORKFLOW.parents[2] / script.group(1))],
+            cwd=WORKFLOW.parent,
             env=dict(os.environ, **environment),
-            text=True, capture_output=True, check=False,
+            text=True, capture_output=True, check=False, timeout=10,
         )
 
     def test_actual_scripts_preserve_result_validation(self):

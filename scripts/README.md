@@ -21,6 +21,7 @@ This directory contains different scripts that are used during development.
       * [GitHub Actions update checker](#github-actions-update-checker)
       * [GitHub workflow validator](#github-workflow-validator)
       * [CI change detection](#ci-change-detection)
+      * [CI result gates](#ci-result-gates)
       * [Docker multi-platform image helper](#docker-multi-platform-image-helper)
 
 ## Resources [ᐞ](#table-of-contents)
@@ -879,7 +880,7 @@ permissions. A deliberate exception needs an inline
 `self-repository` rule, because local actions use `./` rather than `$/`.
 Disable or configure a rule there only with a comment explaining why.
 ShellCheck also checks the validator, shared command-output and Composer-cache
-helpers, and the extracted CI change-detection script.
+helpers, the CI change detector, and both result gates and their shared helper.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
 cancellations, or skipped validation block tests and Docker builds.
@@ -917,6 +918,44 @@ docker compose exec -T php python3 scripts/tests/analyzer-workflow-test.py
 
 `make lint-workflows` also runs these regressions and explicitly ShellChecks the
 detector. Workflow wiring checks cover event inputs and declared output names.
+
+### CI result gates [ᐞ](#table-of-contents)
+
+<a id="ci-result-gates"></a>
+
+The `ci-summary` job calls
+[`scripts/ci-prerequisite-gate.sh`](ci-prerequisite-gate.sh), and `ci-result`
+calls [`scripts/ci-result-gate.sh`](ci-result-gate.sh).
+Both run on the GitHub runner after an unconditional checkout, including on
+schedules and after failed prerequisites. They do not start a PHP container.
+Job conditions, dependencies and environment bindings remain in `main.yml`.
+
+Each script requires the event, change flags and dependency results declared
+in its workflow step's `env` mapping. The final gate also requires `REF` for
+reporting eligibility. Empty or unknown selection flags cannot authorize skips.
+The scripts source [`ci-gate-common.sh`](ci-gate-common.sh) relative to their
+own location, so they do not depend on the caller's working directory.
+The helper shares only the strict `true`/success and `false`/skipped predicate;
+scheduled-job rules and summary explanations remain specific to each gate.
+
+Result diagnostics go to stdout. If `GITHUB_STEP_SUMMARY` is nonempty, each
+script appends its Markdown table before validating results. Summary-write
+errors produce a warning without changing the gate's result. The scripts exit
+zero only for the expected job outcomes; invalid inputs, unexpected results,
+or a missing helper fail. They do not access the network or modify application
+files. Changes to any of these scripts select workflow validation.
+
+From the repository root on the Docker host with the PHP development service
+running, run the focused offline gate and workflow-output regressions:
+
+```bash
+docker compose exec -T php python3 scripts/tests/ci-gates-test.py
+docker compose exec -T php python3 scripts/tests/analyzer-workflow-test.py
+docker compose exec -T php python3 scripts/tests/lint-workflows-output-test.py
+```
+
+`make lint-workflows` runs the gate regressions and explicitly ShellChecks all
+three scripts. These checks do not execute hosted GitHub jobs.
 
 ### Docker multi-platform image helper [ᐞ](#table-of-contents)
 
