@@ -409,10 +409,10 @@ write_summary() {
     printf '| Validation | Category | Preview | Reason |\n| --- | --- | --- | --- |\n'
     for category in "${categories[@]}" configuration; do
         if [ "${selected_checks[$category]}" = "true" ]; then
-            printf '| %s | `%s` | 🟢 Enabled | [%s] |\n' \
+            printf "| %s | \`%s\` | 🟢 Enabled | [%s] |\n" \
                 "${category_labels[$category]}" "$category" "${reason_references[$category]}"
         else
-            printf '| %s | `%s` | ⚪ Not enabled | [%s] |\n' \
+            printf "| %s | \`%s\` | ⚪ Not enabled | [%s] |\n" \
                 "${category_labels[$category]}" "$category" "${reason_references[$category]}"
         fi
     done
@@ -426,7 +426,7 @@ write_summary() {
     printf 'Conditional jobs depend on results or event details unavailable here.\n\n'
     printf '| Job | Preview | Details |\n| --- | --- | --- |\n'
     for category in "${job_ids[@]}"; do
-        printf '| %s (`%s`) | %s | %s |\n' \
+        printf "| %s (\`%s\`) | %s | %s |\n" \
             "${job_labels[$category]}" "$category" "${job_states[$category]}" "${job_notes[$category]}"
     done
 }
