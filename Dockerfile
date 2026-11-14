@@ -1,4 +1,8 @@
 # syntax=docker/dockerfile:1.19
+ARG NVM_VERSION=v0.40.8
+ARG NVM_INSTALLER_SHA256=48a0eee9a60e07422dce0eb5774754c83889570ca1ee2566c516acbe8af03a9e
+ARG NODE_VERSION=26.12.1
+
 FROM php:8.5.12-fpm-bookworm@sha256:eec275cd99580e0a6e103dd343a7c160c86917003f6b9bba2d4c75d82419c683 AS php-upstream
 FROM mlocati/php-extension-installer:2.13.2@sha256:4fd45396c16685266d32bf147a24ecd5e81029d3820295895bf4a90131190ac9 AS extension-installer-upstream
 FROM composer:2.11.2@sha256:5bcb28b8d0edc4091125f8218f9d088f998bdfc843f8fbb9a4beb4dcd8625684 AS composer-upstream
@@ -65,10 +69,13 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 ARG HOST_UID=1000
 ARG HOST_GID=1000
+ARG NVM_VERSION
+ARG NVM_INSTALLER_SHA256
+ARG NODE_VERSION
 
 ENV PATH="$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
-ENV NVM_VERSION=v0.40.8
-ENV NODE_VERSION=26.12.1
+ENV NVM_VERSION=${NVM_VERSION}
+ENV NODE_VERSION=${NODE_VERSION}
 
 # Debian slim otherwise excludes fzf's Bash integration as documentation.
 RUN echo 'path-include /usr/share/doc/fzf/examples/key-bindings.bash' > /etc/dpkg/dpkg.cfg.d/zz-fzf \
@@ -143,7 +150,12 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH:/home/dev/.local/bin"
 RUN echo 'eval "$(thefuck --alias)"' >> /home/dev/.bashrc \
     && echo 'export PATH="/home/dev/.venv/bin:$PATH"' >> /home/dev/.profile
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
+RUN curl --fail --silent --show-error --location \
+        --output /tmp/nvm-install.sh \
+        "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" \
+    && printf '%s  /tmp/nvm-install.sh\n' "$NVM_INSTALLER_SHA256" | sha256sum --check --strict \
+    && bash /tmp/nvm-install.sh \
+    && rm /tmp/nvm-install.sh
 
 USER root
 
@@ -152,7 +164,7 @@ RUN chmod 777 -R /home/dev
 USER dev
 
 RUN source ~/.nvm/nvm.sh \
-    && nvm install $NODE_VERSION \
+    && nvm install "$NODE_VERSION" \
     && npm install -g composer-version \
     && npm install --prefix /tmp/npm-fixes --no-save --no-package-lock --ignore-scripts --no-audit --no-fund \
         brace-expansion@5.0.11 \

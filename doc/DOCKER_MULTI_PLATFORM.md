@@ -21,6 +21,7 @@ images.
       * [Why the digest matters](#why-the-digest-matters)
     * [Pinned base images](#pinned-base-images)
     * [PHP build targets](#php-build-targets)
+    * [Development toolchain versions and checksums](#development-toolchain-versions-and-checksums)
     * [Running production locally](#running-production-locally)
     * [Make commands](#make-commands)
     * [How to update a base image pin](#how-to-update-a-base-image-pin)
@@ -153,6 +154,38 @@ docker build --target development \
 `HOST_UID` and `HOST_GID` default to `1000` and only configure the development
 user. Existing checkouts should rebuild the PHP image after switching to the
 unified Dockerfile (`make daemon-build` or `make start-build`).
+
+## Development toolchain versions and checksums [ᐞ](#table-of-contents)
+
+<a id="development-toolchain-versions-and-checksums"></a>
+
+The root `Dockerfile` groups the Node toolchain defaults above the external
+image declarations:
+
+* `NVM_VERSION` selects the nvm release.
+* `NVM_INSTALLER_SHA256` pins the downloaded nvm installer script.
+* `NODE_VERSION` selects the Node.js release installed through nvm.
+
+These are build arguments, not image references. Only `development` imports
+them; `maintenance` and `production` do not install nvm or Node. Override them
+with `docker build --build-arg`, or edit the defaults for repository-wide
+updates. Runtime environment changes do not reinstall either tool.
+See the [Node toolchain build instructions](../docker/README.md#node-toolchain-build-arguments)
+for a complete host-side command that builds without restarting services.
+
+When updating nvm, update its version and installer checksum together after
+verifying the intended upstream release. The build downloads the installer
+to a file, checks its SHA-256 checksum, and executes it only if the check
+passes. This checksum identifies the script bytes, not a Docker image index,
+and is architecture independent. Node uses nvm's built-in download checksum
+verification; it does not use a Docker image digest. Checksums do not
+authenticate a release through signatures.
+
+The Docker image discovery, update, and pin-verification commands described
+below inspect external image references, not these toolchain arguments.
+They do not discover nvm/Node updates or refresh the installer checksum.
+After a toolchain change, build the development target and confirm the
+installed versions before recreating any shared service.
 
 ## Running production locally [ᐞ](#table-of-contents)
 
