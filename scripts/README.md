@@ -840,13 +840,25 @@ execute GitHub jobs or simulate its scheduler.
 make lint-workflows
 ```
 
-The target runs in the PHP development container locally and directly on the
-GitHub runner in CI. It downloads actionlint 1.7.12, ShellCheck 0.11.0,
-action-validator 0.9.0, and zizmor 1.31.1 into a temporary directory,
-verifies their pinned SHA-256 checksums before execution, and removes them
-on exit. Linux AMD64 and ARM64 are supported; downloads require network
-access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail
+The target runs in the PHP development container both locally and in CI.
+It prepares the actionlint, ShellCheck, action-validator and zizmor releases
+pinned in `scripts/lint-workflows.sh` in a temporary directory,
+verifies their pinned SHA-256 checksums before execution, and removes extracted
+tools on exit. Downloaded archives/binaries persist in the ignored
+`build/cache/workflow-validators/linux-<architecture>/<sha256>` directory.
+Every cache hit is reverified before copying into the temporary tools directory;
+a corrupt hit fails explicitly without extraction, execution or redownload.
+Failed downloads/checksums never populate the cache; verified downloads are
+published atomically. Linux AMD64 and ARM64 are supported; cold downloads require
+network access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail
 the check.
+
+The workflow-validation job restores/saves this directory using `actions/cache`,
+keyed by runner OS/architecture and the validator script's content hash, without
+partial restore keys. The repository bind mount makes the same relative path
+available inside the PHP container; no extra mounts or environment forwarding
+are needed. Unlike `var/`, `build/` is not hidden by the PHP container's tmpfs.
+Warm local `make lint-workflows` runs reuse the same verified files.
 
 After metadata validation, `scripts/check-composite-action-shell.py` parses all
 local composite actions with PyYAML and sends each Bash/sh `run` body to the

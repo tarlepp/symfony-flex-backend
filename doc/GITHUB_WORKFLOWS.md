@@ -282,8 +282,13 @@ Composite Bash/sh steps are also parsed with PyYAML and checked individually
 using the pinned ShellCheck, with action/step diagnostics. These checks do not
 execute scripts; GitHub expressions become inert placeholders for shell
 analysis. Unsupported shells fail explicitly, and metadata validation still
-covers non-composite actions. `make lint-yaml` checks Symfony configuration,
-not GitHub workflows.
+covers non-composite actions. Validator downloads are cached under
+`build/cache/workflow-validators`, shared through the repository mount. GitHub
+cache keys include OS, architecture and the validator script hash; individual
+files use platform/checksum keys and are reverified on every hit before
+extraction or execution. Corrupt cached files fail validation explicitly;
+failed downloads never populate the cache. `make lint-yaml` checks Symfony
+configuration, not GitHub workflows.
 
 Core CI uses depth-one checkouts for ordinary validation, Docker builds/scans
 and result gates. Full history is retained only for change detection (base/head
