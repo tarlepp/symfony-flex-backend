@@ -123,6 +123,30 @@ Information and reporting targets also use the same wrapper: `configuration`,
 `project-stats`, `application-info`, `tool-versions`, `check-licenses`,
 `phploc`,
 `report-coveralls`, and `prepare-sonar-reports`.
+`tool-versions` delegates its read-only development-container inventory to
+`tool-versions.sh`. The development report includes installed runtimes,
+Composer tool packages, Python packages,
+global npm packages, supporting utilities, and optional validators on `PATH`.
+Host Make forwarding first adds Docker client/Engine, Compose, nginx, and
+MariaDB versions from the selected host/services; stopped services are noted
+without starting them. Direct container execution reports only that container.
+Do not invoke the script directly on the Docker host; use `make tool-versions`
+for development.
+
+For PHP, loaded extensions, and direct runtime dependencies in an
+already-running local production deployment, run from the repository root
+on the Docker host:
+
+```bash
+docker compose -f compose.yaml -f compose.prod.yaml exec -T -w /app php \
+    bash scripts/tool-versions.sh --production
+```
+
+The production image must contain the updated script. This command does not
+start services; use the actual deployed PHP container, not the development
+container with `APP_ENV=prod`.
+
+See the [command reference](../doc/COMMANDS.md#commands) for scope and execution.
 Each complete recipe, including preparation, prints one `[RUN]` and a
 separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
 selection without duplicate summaries. A failed preparation step cannot

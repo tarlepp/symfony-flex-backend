@@ -85,6 +85,120 @@ Defaults compare `HEAD^...HEAD`; `EVENT_NAME=push` uses a two-dot comparison.
 This only previews selection for committed changes, without running checks.
 `NO_COLOR=1` disables colors even with `COLOR=always`.
 
+Display installed development tool versions from the repository root on the
+Docker host with the PHP development service running:
+
+```bash
+bash scripts/make.sh tool-versions
+```
+
+From the Docker host, this Make target first reports Docker client/Engine,
+Compose, nginx, and MariaDB versions, then inspects the PHP development
+container. Direct invocation inside PHP cannot inspect sibling containers.
+The host stack phase uses the shared `[RUN]`/`[OK]`/`[FAIL]` wrapper and
+color policy, with a blank line before the PHP inventory phase.
+
+The full application platform also includes **nginx** (web server) and
+**MariaDB** (database), orchestrated by **Docker Engine** and **Docker Compose**.
+These versions are collected host-side by `make tool-versions`, not by
+the PHP-container inventory. Stopped nginx/MariaDB services are identified
+explicitly and are never started. Failed version queries fail the command.
+From the repository root on the Docker host, inspect the host tooling and
+already-running development services separately:
+
+```bash
+docker version
+docker compose version
+docker compose exec -T nginx nginx -v
+docker compose exec -T mariadb mariadbd --version
+```
+
+`docker version` distinguishes the CLI client from the daemon/server.
+The service commands report installed binaries in the selected containers;
+they do not start services or connect to the database. A stopped service
+causes `exec` to fail; do not substitute a configured image tag for an observed
+version. Adminer and Dozzle are supporting development interfaces rather than
+the API's core web-server/database platform.
+
+For already-running local production services, use the production Compose
+selection from the repository root on the Docker host:
+
+```bash
+docker compose -f compose.yaml -f compose.prod.yaml exec -T nginx nginx -v
+docker compose -f compose.yaml -f compose.prod.yaml exec -T mariadb \
+    mariadbd --version
+```
+
+For the same grouped stack summary against local production, run on the host:
+
+```bash
+bash scripts/tool-versions.sh --stack \
+    docker compose -f compose.yaml -f compose.prod.yaml
+```
+
+For an already-running local production deployment built with this script,
+run from the repository root on the Docker host:
+
+```bash
+docker compose -f compose.yaml -f compose.prod.yaml exec -T -w /app php \
+    bash scripts/tool-versions.sh --production
+```
+
+For another production deployment, execute
+`bash scripts/tool-versions.sh --production` from its `/app` directory inside
+the actual PHP container. This mode reports PHP, all loaded PHP extensions,
+and installed direct production dependencies with descriptions. It requires
+only Bash, PHP, jq, and standard shell utilities, not Python, Node.js, Make,
+Composer, or PHPUnit. It does not initialize Symfony, install packages, run
+migrations, or alter services. Missing or malformed installed metadata fails
+the command.
+
+`--production` selects the report scope; it does not transform or authenticate
+the environment. Setting `APP_ENV=prod` in a development container is not a
+production inventory. Inspect the deployed container to obtain its versions.
+An older production image must include the updated script before using it.
+
+For the purpose and basic usage of Fish, fzf, thefuck, and other bundled
+utilities, see [bundled development tools](DEVELOPMENT.md#bundled-development-tools).
+
+The inventory includes PHP, Symfony, PHPUnit, Composer, PHP development tools
+and analyzer plugins, Python/pip and installed Python packages, Node.js/npm/nvm
+and global npm packages, shell utilities, and optional security/workflow tools
+on the container's `PATH`. PHP tool versions come from installed Composer
+metadata, not dependency constraints or lock files. Missing optional tools
+and uninstalled tool directories are identified explicitly; failed version
+commands or malformed installed metadata still fail the target.
+OS/distribution, CPU architecture, PHP CLI, PHP-FPM, and the installed Symfony
+framework version appear first under platform versions in both modes.
+Development also includes Node.js and Python; Composer is under Tooling.
+PHP runtime extensions and debugging follow, before project dependencies.
+Project main dependencies lists installed packages declared in the root
+`require` section, with their versions and short descriptions from Composer
+metadata. Development-only and transitive packages are excluded from that
+section. Installed PHP development packages separates root `require-dev`
+packages (including PHPUnit) from isolated `tools/*/composer.json` packages.
+Both groups use installed metadata rather than manifest constraints;
+isolated tools retain their purpose-based subgroups.
+PHP development packages, Python/Node.js tooling, shell utilities, and
+security/workflow validators share one top-level `Tooling` section.
+Its area headings are indented two spaces, entries four spaces, and nested
+package inventories six spaces. Isolated PHP tool purpose headings and
+packages use six and eight spaces respectively.
+All section and subgroup headings use blue. Installed entries use green for
+the entire row, including runtime details and Python/npm package inventories;
+missing entries use yellow. Shared `COLOR=always`,
+`COLOR=never`, and `NO_COLOR=1` controls apply; `NO_COLOR` takes precedence.
+Version queries disable Xdebug modes only within this command to avoid
+debugger connection messages. The installed Xdebug version remains listed.
+Version-query stderr omits deprecation-channel log records (text or JSON)
+and informational command hints, regardless of the package or command named.
+Other warnings, errors, and failing exit statuses remain visible.
+
+The command loads an existing nvm installation when noninteractive execution
+cannot find Node.js. It does not install or download tools, invoke analyzers,
+or upload reports. Docker/Compose host versions, temporary workflow-validator
+downloads, and npx caches are outside this container inventory.
+
 Help reports a separated final outcome on stderr. Shared `[RUN]` and `[INFO]`
 labels are blue, `[OK]` is green, `[WARN]`/`[SKIP]` are yellow, and
 `[FAIL]` is red for diagnostics and outcomes; plain and `NO_COLOR` output
@@ -410,7 +524,7 @@ start-prod                  # Build and start local production + watch output
 stop                        # Stop application containers
 test-make-routing           # Test local and CI Make command forwarding
 test-docker-images          # Test Docker helpers inside the development container
-tool-versions               # Display PHP project tool versions
+tool-versions               # Display installed runtimes and development tool versions
 update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
 ```
