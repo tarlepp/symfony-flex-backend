@@ -82,35 +82,36 @@ jobs:
       - *checkout_step
 
       - name: Bootstrap PHP project
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           install-dependencies: ${{ (needs.changes.outputs.runtime == 'true' || needs.changes.outputs.composer == 'true' || needs.changes.outputs.yaml == 'true') && 'true' || 'false' }}
           print-versions: 'false'
 
       - name: Display Symfony application information
-        if: ${{ needs.changes.outputs.runtime == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh application-info
 
       - name: Validate main `composer.json` and `composer.lock` files
-        if: ${{ needs.changes.outputs.composer == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.composer == 'true' }}
         run: bash scripts/make.sh composer-validate
 
       - name: Check that environment is configured correctly
-        if: ${{ needs.changes.outputs.runtime == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh check-requirements
 
       - name: Lint YAML configurations
-        if: ${{ needs.changes.outputs.yaml == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.yaml == 'true' }}
         run: bash scripts/make.sh lint-yaml
 
       - name: Test development tooling contracts
-        if: ${{ needs.changes.outputs.tooling == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.tooling == 'true' }}
         run: |
           bash scripts/make.sh test-command-output
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/tests/check-workflow-tool-updates-test.py
 
       - name: Validate Compose and Dev Container configurations
-        if: ${{ needs.changes.outputs.compose == 'true' }}
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.compose == 'true' }}
         run: |
           docker compose config --quiet
           docker compose -f compose.yaml -f compose.prod.yaml config --quiet
