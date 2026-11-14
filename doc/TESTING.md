@@ -117,8 +117,11 @@ For example, `config/services.yaml` needs Symfony YAML/wiring checks and
 affected application tests even when no PHP file changed; a workflow YAML
 file needs `make lint-workflows`, not `make lint-yaml`. An ECS/PHPStan/Psalm
 configuration-only edit needs the affected analyzer, not PHPUnit. A shell
-helper needs syntax checks and its regression suite, not PHP static analysis.
-Container and dependency changes can invalidate several categories at once.
+helper needs syntax checks, relevant lint, and its regression suite, not PHP
+static analysis. Inspect the ShellCheck invocation in
+`scripts/lint-workflows.sh` and run `make lint-workflows` when a changed
+script is listed; it does not lint every shell script. Container and
+dependency changes can invalidate several categories at once.
 The [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path)
 documents the conservative automated counterpart; local checks can be more
 focused with caller/behavior evidence. Unknown impact expands validation.
