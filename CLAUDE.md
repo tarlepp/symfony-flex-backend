@@ -70,7 +70,8 @@ exact dependency and tooling versions.
 For current versions, use these files as the source of truth:
 
 * `composer.json` for PHP, Symfony, Doctrine, and all package versions
-* `Dockerfile` for shared PHP base image versions and development/production targets
+* `Dockerfile` for shared PHP base image versions and development/production
+  targets
 * `phpstan.neon.dist` for PHPStan level and configuration
 * `psalm.xml` for Psalm configuration
 * `ecs.php` for ECS (Easy Coding Standard) rules
@@ -195,7 +196,8 @@ copying it into long-form documentation.
 <a id="database"></a>
 
 * `bin/console doctrine:migrations:migrate` - Run migrations
-* `bin/console doctrine:migrations:diff` - Generate migration from entity changes
+* `bin/console doctrine:migrations:diff` - Generate migration from entity
+  changes
 * `bin/console doctrine:schema:validate` - Validate database schema
 
 ### Dependencies [ᐞ](#table-of-contents)
@@ -253,7 +255,8 @@ are a reference; the agent instructions own the required validation workflow.
 
 For targeted tests, use just `phpunit` from the repository root inside the PHP
 development container; no explicit runner path is needed. Open a container
-shell with `make bash` or `make fish` from the host, or use the IDE Dev Container
+shell with `make bash` or `make fish` from the host, or use the IDE Dev
+Container
 terminal. See [the testing guide](doc/TESTING.md) for details and
 [the test-writing skill](.github/skills/write-tests/SKILL.md) for test selection
 and conventions.
@@ -347,7 +350,8 @@ Use `make configuration` to view current application configuration.
 * `README.md` - Project overview and installation
 * `AGENTS.md` - Repository instructions for AI coding agents
 * `CLAUDE.md` - This file - long-form AI assistant context
-* `.github/copilot-instructions.md` - Copilot entry point for repository guidance
+* `.github/copilot-instructions.md` - Copilot entry point for repository
+  guidance
 * `doc/AI_RULES.md` - AI policy maintenance and CI strategy guidance
 * `doc/REQUIRED_CHECKS.md` - Required checks and branch protection; new
   `main.yml` jobs must be added to the `needs` of `ci-result`

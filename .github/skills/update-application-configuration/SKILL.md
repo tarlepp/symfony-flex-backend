@@ -124,7 +124,8 @@ For locale defaults, translator fallback, or timezone behavior, also use
   keys, types, env precedence, or consumer behavior; validate those separately.
   If editing a different configuration file, verify that file too rather than
   assuming the active-file check covers it.
-* Env values may resolve lazily: inspect `bin/console lint:container` support for
+* Env values may resolve lazily: inspect `bin/console lint:container` support
+  for
   `--resolve-env-vars` when required, and exercise the consumer to verify
   runtime resolution. Do not print resolved secret values.
 * For Compose changes, validate with

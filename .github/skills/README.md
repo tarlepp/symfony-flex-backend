@@ -97,7 +97,8 @@ references only for layers the task actually changes:
   or Dev Container setup, use
   [update-docker-environment](update-docker-environment/SKILL.md).
   Image tag/digest-only changes remain in the image-update skill.
-* For OpenAPI metadata, model schemas, reusable responses, security descriptions,
+* For OpenAPI metadata, model schemas, reusable responses, security
+  descriptions,
   or generated documentation areas, use
   [update-api-documentation](update-api-documentation/SKILL.md).
   Documentation availability alone does not establish contract accuracy.
@@ -159,7 +160,8 @@ references only for layers the task actually changes:
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
 * Before adding a skill or shared policy, follow the recurrence and
-  non-overlap criteria in [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills);
+  non-overlap criteria in
+  [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills);
   prefer extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
   exactly once, and local links and anchors resolve across repository Markdown

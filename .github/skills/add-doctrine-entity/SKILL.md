@@ -71,7 +71,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
     patterns where relevant. An entity's repository and resource are required
     even when it has no CRUD controller.
 10. If the request needs DTOs, request mapping, or a CRUD REST endpoint, follow
-     [add-rest-resource](../add-rest-resource/SKILL.md) for those parts. Add these
+     [add-rest-resource](../add-rest-resource/SKILL.md) for those parts. Add
+     these
      layers only when required by the requested behavior.
 
 ## Validation [ᐞ](#table-of-contents)

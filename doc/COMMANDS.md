@@ -75,7 +75,8 @@ when adding commands.
 
 Help reports a separated final outcome on stderr. Shared `[RUN]` and `[INFO]`
 labels are blue, `[OK]` is green, `[WARN]`/`[SKIP]` are yellow, and
-`[FAIL]` is red for diagnostics and outcomes; plain and `NO_COLOR` output retains
+`[FAIL]` is red for diagnostics and outcomes; plain and `NO_COLOR` output
+retains
 the same labels.
 The legacy `info` target now displays `info_msg` rather than executing it.
 From the repository root on the Docker host:
@@ -275,7 +276,8 @@ do not skip cleanup. Keep CI setup separate from a running local development
 stack; both use the same Compose PHP service.
 
 The host Make targets pass your UID and GID to Compose. For IDE Dev Container
-UID/GID configuration, see [UID/GID mapping](../.devcontainer/README.md#uidgid-mapping).
+UID/GID configuration, see
+[UID/GID mapping](../.devcontainer/README.md#uidgid-mapping).
 
 For a targeted test, run `phpunit <test-file-or-directory>` from the repository
 root inside the PHP development container; no explicit runner path is needed.
@@ -515,7 +517,8 @@ successful command can still report conflicts or skipped files; resolve and
 validate these before considering the update complete. Do not substitute a
 forced `recipes:install` for an update without reviewing its overwrite risk.
 
-Follow the [Symfony Flex recipe skill](../.github/skills/update-symfony-recipes/SKILL.md)
+Follow the
+[Symfony Flex recipe skill](../.github/skills/update-symfony-recipes/SKILL.md)
 for the detailed workflow, preservation of project customizations, and
 change-specific validation.
 

@@ -99,7 +99,8 @@ and the actual code, dependency manifests, and CI workflows.
   host invocations forward project targets into the container. Docker
   orchestration and GitHub platform actions remain host-side. Do not treat
   `GITHUB_WORKFLOW` as proof that a command is inside a container, or fall back
-  to host PHP, Composer, Python, or Node tooling when containers are unavailable;
+  to host PHP, Composer, Python, or Node tooling when containers are
+  unavailable;
   report the blocker instead.
 * Use `make lint-markdown` for Markdown checks. Do not install additional
   testing or linting tools when the repository already provides the relevant
@@ -193,7 +194,8 @@ and the actual code, dependency manifests, and CI workflows.
 
 <a id="reference-guidance"></a>
 
-Use the [README's canonical AI documentation inventory](README.md#ai-assisted-development)
+Use the
+[README's canonical AI documentation inventory](README.md#ai-assisted-development)
 to find project context, AI-guidance maintenance policy, task-specific skills,
 and the pull request review checklist. The reading order is not precedence:
 platform instructions apply first, and the implementation, tests,
