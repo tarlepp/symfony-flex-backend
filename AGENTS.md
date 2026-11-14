@@ -94,6 +94,11 @@ and the actual code, dependency manifests, and CI workflows.
   `chore(ai)/...` and `Chore(ai) - ...`. State the base branch for every
   task; anything other than `master` is a stacked PR, so confirm the parent
   branch with the user.
+* Do not commit or push changes by default. Follow the
+  [commit and push approval rules](.github/skills/shared-guidance.md#preparing-a-change):
+  ask the user before either operation unless they explicitly authorized
+  that operation for the current changes. Implementation or branch approval
+  does not authorize committing or pushing; commit proposals are not actions.
 * Run repository application tooling inside the Compose PHP development
   container in both local development and CI. Prefer existing `make` targets:
   host invocations forward project targets into the container. Docker
