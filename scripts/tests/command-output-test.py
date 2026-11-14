@@ -23,7 +23,7 @@ DOCKER_IMAGE_TEST_GROUPS = (
     ("External COPY pin verification", 8),
     ("Version discovery and output formatting", 18),
     ("Registry responses and pagination", 7),
-    ("Dockerfile discovery", 3),
+    ("Dockerfile discovery", 4),
     ("Registry lookup failures and retries", 8),
     ("Update-pin validation", 10),
     ("Aggregate results and empty discovery", 4),

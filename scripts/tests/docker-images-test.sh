@@ -452,6 +452,23 @@ check_updates 'repeated pagination page' 'test:1.0.0' 1 'Repeated Docker Hub pag
 start_group 'Dockerfile discovery'
 printf '{"next":null,"results":[{"name":"2.0.0"}]}\n' > "$TEST_TAGS"
 cat > "$WORK/Dockerfile" << 'EOF'
+FROM test:1.0.0 AS php-upstream
+FROM tools/installer:1.0.0 AS installer-upstream
+FROM php-upstream AS maintenance
+FROM php-upstream AS base
+COPY --from=installer-upstream /bin/tool /bin/tool
+FROM base AS development
+FROM base AS production
+EOF
+check_updates 'centralized upstream stages and named tool copies' '' 1 \
+    'tools/installer:1.0.0 -> tools/installer:2.0.0'
+[ "$(wc -l < "$TEST_REQUESTS")" -eq 2 ]
+if grep -q 'registry-1.docker.io/v2/library/php-upstream\|registry-1.docker.io/v2/library/installer-upstream' "$TEST_REQUESTS"; then
+    echo 'Internal stage names must not be queried as external images.' >&2
+    exit 1
+fi
+
+cat > "$WORK/Dockerfile" << 'EOF'
 FROM --platform=linux/amd64 test:1.0.0@sha256:aaaa AS base
 COPY --from=tools/installer:1.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa /bin/tool /bin/tool
 COPY --from=tools/installer:1.0.0 /bin/tool /bin/tool
