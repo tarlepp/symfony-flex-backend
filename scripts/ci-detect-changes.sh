@@ -38,7 +38,7 @@ classify_path() {
             enable_checks documentation
             ;;
         # These inputs can change any runner, command or job contract.
-        Makefile|Dockerfile|.dockerignore|.github/workflows/main.yml|.github/actions/*|\
+        Makefile|Dockerfile|requirements.txt|.dockerignore|.github/workflows/main.yml|.github/actions/*|\
         scripts/ci-detect-changes.sh|scripts/make.sh|scripts/command-output.sh|\
         scripts/native-output.*|scripts/report-output.sh|scripts/command-progress.py|\
         scripts/compose-context.sh)

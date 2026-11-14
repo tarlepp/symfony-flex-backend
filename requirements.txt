@@ -1,0 +1,3 @@
+setuptools==84.2.1
+PyYAML==6.0.3
+thefuck==3.32

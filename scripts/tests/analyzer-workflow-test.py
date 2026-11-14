@@ -1521,7 +1521,8 @@ class ChangeDetectionTest(unittest.TestCase):
 
     def test_shared_and_unknown_inputs_keep_all_checks(self):
         for number, path in enumerate((
-            "Makefile", "Dockerfile", ".dockerignore", ".github/actions/php-bootstrap/action.yml",
+            "Makefile", "Dockerfile", "requirements.txt", ".dockerignore",
+            ".github/actions/php-bootstrap/action.yml",
             ".github/workflows/main.yml", "scripts/make.sh", "scripts/command-output.sh",
             "scripts/native-output.sh", "scripts/ci-detect-changes.sh", "unclassified.new-format",
         )):
