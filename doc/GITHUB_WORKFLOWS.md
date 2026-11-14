@@ -548,11 +548,15 @@ fail without failing the job; it does not replace the required artifacts.
 PhpMetrics needs a usable JUnit report.
 
 `External reporting` runs on PRs and `master` pushes after both tests and
-`ci-summary` succeed, then downloads Clover/JUnit artifacts. Coveralls and
-SonarCloud uploads each require their optional token; absent tokens skip the
-corresponding upload. Fork PRs run the job without repository secrets and skip
-uploads. Test-unaffected changes skip the job because tests and artifacts skip;
-schedules, manual runs and merge groups also skip reporting.
+`ci-summary` succeed. Before checkout, the job checks whether either optional
+upload token is available. If neither is available (including fork PRs), it
+writes an explicit skip explanation to the job summary and succeeds without
+checkout, artifact downloads, PHP bootstrap or container cleanup. Otherwise,
+it downloads Clover/JUnit artifacts and starts the PHP container. Coveralls
+installation and upload require its token; SonarCloud preparation and upload
+require its token. Cleanup runs even after failure or cancellation when bootstrap
+was attempted. Test-unaffected changes skip the job because tests and artifacts
+skip; schedules, manual runs and merge groups also skip reporting.
 
 The job installs and runs the isolated Coveralls tool in the Compose PHP
 development container, forwarding its tokens and required GitHub CI metadata.
