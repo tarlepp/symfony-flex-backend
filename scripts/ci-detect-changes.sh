@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [ "${GITHUB_ACTIONS:-}" = "true" ] && [ -z "${COLOR+x}" ]; then
+    COLOR=always
+fi
+# shellcheck source=scripts/command-output.sh
+source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
+
 categories=(
     markdown documentation
     runtime composer yaml compose tooling
@@ -131,7 +137,12 @@ detect_changes() {
     local comparison changed_files deleted_files category file
 
     # Unknown/empty comparisons and manual runs retain full validation.
-    if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
+    if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+        echo "Manual run: retaining full validation."
+        return 0
+    fi
+    if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
+        echo "Comparison SHA unavailable: retaining full validation."
         return 0
     fi
 
@@ -141,9 +152,11 @@ detect_changes() {
     fi
 
     if ! changed_files=$(git diff --no-renames --name-only "$comparison"); then
+        echo "Changed-file comparison failed: retaining full validation."
         return 0
     fi
     if [ -z "$changed_files" ]; then
+        echo "No changed files found: retaining full validation."
         return 0
     fi
 
@@ -152,6 +165,7 @@ detect_changes() {
 
     # Quoted Git paths (including embedded newlines) stay fail-safe.
     if grep -q '^"' <<< "$changed_files"; then
+        echo "Quoted Git paths found: retaining full validation."
         return 0
     fi
 
@@ -168,6 +182,7 @@ detect_changes() {
             enable_checks documentation
         fi
     else
+        echo "Deleted-file comparison failed: selecting documentation checks."
         enable_checks documentation
     fi
 }
@@ -181,14 +196,36 @@ write_outputs() {
         fi
     done
 
-    {
-        for category in "${categories[@]}"; do
-            echo "$category=${selected_checks[$category]}"
-        done
-        echo "configuration=$configuration_changed"
-    } >> "$GITHUB_OUTPUT"
+    selected_checks[configuration]=$configuration_changed
+    printf '\nValidation selection (not a list of changed files):\n'
+    for category in "${categories[@]}" configuration; do
+        printf '%s=%s\n' "$category" "${selected_checks[$category]}" >> "$GITHUB_OUTPUT"
+        if [ "${selected_checks[$category]}" = "true" ]; then
+            printf '  %-15s %sselected%s\n' "$category" "$OUTPUT_GREEN" "$OUTPUT_RESET"
+        else
+            printf '  %-15s %snot selected%s\n' "$category" "$OUTPUT_YELLOW" "$OUTPUT_RESET"
+        fi
+    done
+}
+
+write_summary() {
+    local category
+    printf '## Validation selection\n\n'
+    printf 'Selection is not a pass/fail result or a list of changed files.\n'
+    printf 'Conservative fallbacks can select checks without matching changes.\n\n'
+    printf '| Category | Selection |\n| --- | --- |\n'
+    for category in "${categories[@]}" configuration; do
+        if [ "${selected_checks[$category]}" = "true" ]; then
+            printf '| %s | 🟢 Selected |\n' "$category"
+        else
+            printf '| %s | ⚪ Not selected |\n' "$category"
+        fi
+    done
 }
 
 enable_checks "${categories[@]}"
 detect_changes
 write_outputs
+if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+    write_summary >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write validation selection summary." >&2
+fi

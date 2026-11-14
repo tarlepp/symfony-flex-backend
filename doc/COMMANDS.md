@@ -73,6 +73,18 @@ then routine/overwrite/destructive risk, then alphabetical target name.
 Group comments mark both sections; keep registrations and recipes aligned
 when adding commands.
 
+Preview CI change selection from the repository root on the Docker host with
+the PHP development service running:
+
+```bash
+make ci-detect-changes COLOR=always
+make ci-detect-changes BASE_SHA=master HEAD_SHA=HEAD COLOR=always
+```
+
+Defaults compare `HEAD^...HEAD`; `EVENT_NAME=push` uses a two-dot comparison.
+This only previews selection for committed changes, without running checks.
+`NO_COLOR=1` disables colors even with `COLOR=always`.
+
 Help reports a separated final outcome on stderr. Shared `[RUN]` and `[INFO]`
 labels are blue, `[OK]` is green, `[WARN]`/`[SKIP]` are yellow, and
 `[FAIL]` is red for diagnostics and outcomes; plain and `NO_COLOR` output
