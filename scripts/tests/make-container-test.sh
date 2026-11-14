@@ -63,6 +63,16 @@ for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-t
     fi
 done
 
+host_make tool-versions COLOR=always > "$temporary/stack-output" 2>&1
+grep -Fq '[RUN]' "$temporary/stack-output"
+grep -Fq $'\033[34mStack platform versions' "$temporary/stack-output"
+grep -Fq '[OK]' "$temporary/stack-output"
+host_make tool-versions COLOR=always NO_COLOR=1 > "$temporary/stack-plain" 2>&1
+if grep -q $'\033' "$temporary/stack-plain"; then
+    echo "NO_COLOR must disable host stack inventory colors." >&2
+    exit 1
+fi
+
 : > "$DOCKER_CALLS"
 host_make bash > "$temporary/bash-output" 2>&1
 grep -Fq 'Opening Bash in the PHP container' "$temporary/bash-output"
