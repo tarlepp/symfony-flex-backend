@@ -12,6 +12,7 @@ application.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Development](#development)
+      * [Bundled development tools](#bundled-development-tools)
       * [Branch names and pull request titles](#branch-names-and-pull-request-titles)
       * [Composer PHP platform](#composer-php-platform)
       * [Native PHP function calls](#native-php-function-calls)
@@ -42,6 +43,82 @@ expression before the compared value (for example, `$status === 'active'`).
 * [PSR-12: Extended Coding Style Guide](https://www.php-fig.org/psr/psr-12/)
 * [Symfony Coding
   Standards](https://symfony.com/doc/current/contributing/code/standards.html)
+
+### Bundled development tools [ᐞ](#table-of-contents)
+
+<a id="bundled-development-tools"></a>
+
+The PHP development image includes interactive shell helpers and command-line
+utilities. These are development conveniences, not application dependencies
+or requirements for the production image. See
+[the command reference](COMMANDS.md) for the full version-inventory contract;
+versions are reported from the installed environment rather than repeated here.
+
+From the repository root on the Docker host, with development services running:
+
+```bash
+make tool-versions
+```
+
+From the Docker host, this inventory covers Docker/Compose and the running
+nginx/MariaDB services before reporting the PHP-container inventory.
+The application also depends on nginx and MariaDB, with Docker Engine and
+Compose providing container orchestration. See
+[the command reference](COMMANDS.md) for read-only commands to inspect those
+versions in development and local production. Query the actual host or
+service container; configured image tags are not runtime version evidence.
+Adminer and Dozzle provide supporting database and log interfaces.
+
+* **Bash**: standard shell for repository scripts; open it with `make bash`
+  from the host.
+* **Fish**: alternative interactive shell with suggestions and completions;
+  open it with `make fish` from the host.
+* **fzf**: fuzzy selection of files and shell history; see the
+  [fzf guide](FZF.md) for shortcuts and examples.
+* **thefuck**: suggests corrections for the previous failed command using the
+  `fuck` shell function. Review the suggestion before confirming; it may
+  execute a modifying command.
+* **Git**: inspect repository changes with `git status` or `git diff`.
+* **jq**: query JSON, for example `jq '.require' composer.json`.
+* **curl**: inspect HTTP responses, for example
+  `curl --head https://example.com`.
+* **OpenSSL**: inspect cryptographic tooling with `openssl version`; use
+  repository commands for JWT key generation.
+* **GNU Make**: run registered project commands; start with `make help`.
+* **Node.js/npm/nvm**: run JavaScript-based tooling; inspect versions with
+  `node --version`, `npm --version`, and, in Bash, `nvm --version`.
+* **Python/pip**: run offline script regression fixtures; inspect installed
+  packages with `python3 -m pip list`.
+
+For interactive use, open Fish from the repository root on the Docker host:
+
+```bash
+make fish
+```
+
+Inside that container shell, from `/app`, these read-only commands demonstrate
+the bundled helpers:
+
+```fish
+git status
+jq '.require' composer.json
+git ls-files | fzf
+```
+
+Use `make bash` from the Docker host for Bash instead. Both interactive shells
+initialize fzf bindings and thefuck's correction function. Fish has its own
+syntax; run repository Bash scripts using their existing Make targets or
+explicitly with `bash`, rather than sourcing them into Fish. nvm is a Bash
+shell function, not a standalone executable; the version inventory loads its
+existing initialization when needed.
+
+Optional security and workflow validator versions are queried only when
+available on `PATH`; a temporary validator download or npx cache is not a
+permanent tool installation. Missing tools are reported explicitly by
+`make tool-versions`.
+If bundled tools are missing from an older image, follow the
+[Docker development-image rebuild instructions](../docker/README.md) rather
+than installing packages ad hoc into the running container.
 
 ### Branch names and pull request titles [ᐞ](#table-of-contents)
 

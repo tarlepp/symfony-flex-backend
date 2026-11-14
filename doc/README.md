@@ -47,6 +47,8 @@ For the most common starting points:
 * AI agents and skills explained:
   [`AI_AGENTS_AND_SKILLS.md`](AI_AGENTS_AND_SKILLS.md)
 * Day-to-day commands: [`COMMANDS.md`](COMMANDS.md)
+* Bundled shell helpers and utilities:
+  [development tools](DEVELOPMENT.md#bundled-development-tools)
 * CI events, jobs and troubleshooting:
   [`GITHUB_WORKFLOWS.md`](GITHUB_WORKFLOWS.md)
 * GitHub Actions pin maintenance: [`ACTIONS_UPDATE.md`](ACTIONS_UPDATE.md)
