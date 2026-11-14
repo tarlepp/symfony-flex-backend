@@ -184,8 +184,10 @@ replacement for their actual event filters and conditions:
   semantics. Run `make lint-workflows` for actionlint (including YAML anchors
   and aliases), ShellCheck on supported workflow shell steps, and separate
   action-validator schema checks of local action metadata. These checks do
-  not execute jobs or validate shell bodies inside composite actions; do not
-  report static validation as a successful workflow execution.
+  not execute jobs. Local composite Bash/sh bodies are parsed with PyYAML and
+  checked using the pinned ShellCheck; GitHub expressions become placeholders.
+  Unsupported shells fail explicitly. Do not report static validation as a
+  successful workflow execution.
 * When changing validator regression runners or their suite output, follow
   the [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
   for output-contract consumers and isolated fixtures. A passing
