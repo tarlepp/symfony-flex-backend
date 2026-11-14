@@ -33,7 +33,6 @@ jobs:
     if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     outputs:
-      code: ${{ steps.detect.outputs.code }}
       markdown: ${{ steps.detect.outputs.markdown }}
       documentation: ${{ steps.detect.outputs.documentation }}
       configuration: ${{ steps.detect.outputs.configuration }}
@@ -414,7 +413,6 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           CHANGES: ${{ needs.changes.result }}
-          CODE_CHANGED: ${{ needs.changes.outputs.code }}
           DOCUMENTATION_CHANGED: ${{ needs.changes.outputs.documentation }}
           CONFIGURATION_CHANGED: ${{ needs.changes.outputs.configuration }}
           WORKFLOWS_CHANGED: ${{ needs.changes.outputs.workflows }}
@@ -735,7 +733,6 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           REF: ${{ github.ref }}
           CHANGES: ${{ needs.changes.result }}
-          CODE_CHANGED: ${{ needs.changes.outputs.code }}
           PHP_CHANGED: ${{ needs.changes.outputs.php }}
           TESTS_CHANGED: ${{ needs.changes.outputs.tests }}
           DOCKER_CHANGED: ${{ needs.changes.outputs.docker }}
