@@ -97,11 +97,18 @@ For development, `compose.yaml` mounts `nginx-dev.conf` over the image's default
 configuration and mounts the local TLS certificates. No separate nginx
 Dockerfile or build arguments are needed.
 
-The external `COPY --from=...` images for the PHP extension installer and
-Composer are also pinned to multi-platform index digests. Images in
-`compose.yaml` use plain tags. Plain tags always resolve to the image index,
-so they are multi-platform as long as the upstream image publishes several
-platforms.
+The root Dockerfile declares all external images together at the top as
+`php-upstream`, `extension-installer-upstream`, and `composer-upstream`.
+Each tag and multi-platform digest appears once. Both `maintenance` and
+`base` inherit `php-upstream`; tool copies use the other named stages via
+`COPY --from`. Keep those references as stage names rather than repeating
+external image pins. Existing image discovery and pin-update commands inspect
+the external `FROM` declarations.
+
+The PHP extension installer and Composer are also pinned to multi-platform
+index digests. Images in `compose.yaml` use plain tags. Plain tags always
+resolve to the image index, so they are multi-platform as long as the upstream
+image publishes several platforms.
 
 ## PHP build targets [ᐞ](#table-of-contents)
 
@@ -349,13 +356,16 @@ docker buildx imagetools inspect php:8.5.11-fpm-bookworm \
 <a id="step-3-update-the-dockerfiles"></a>
 
 Replace the `FROM` lines listed by the previous command with the printed pin
-reference. PHP has a single pin in the shared `base` stage of `Dockerfile`,
-so both targets automatically use the same reference. For nginx, update
-`docker/nginx/Dockerfile`:
+reference. PHP has a single pin in the `php-upstream` stage of `Dockerfile`,
+so maintenance, development, and production automatically use the same
+reference. Update installer and Composer pins in their adjacent upstream
+stages. For example, the PHP declaration has this form:
 
 ```dockerfile
-FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef AS base
+FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef AS php-upstream
 ```
+
+For nginx, update `docker/nginx/Dockerfile`.
 
 ### Step 4: Verify the pins [ᐞ](#table-of-contents)
 
