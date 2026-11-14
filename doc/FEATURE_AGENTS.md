@@ -98,7 +98,8 @@ That repair invocation must not call another verifier. At most two repair
 rounds are allowed, including rounds used before a pause or resumption;
 unresolved defects or blocked checks return to the lead, not an endless
 delegation loop. Only explicit user authorization can extend the repair budget.
-Resume with the original task baseline, accumulated changes, approvals, findings,
+Resume with the original task baseline, accumulated changes, approvals,
+findings,
 and repair history, rather than treating existing task edits as unrelated work.
 
 Every handoff carries the confirmed brief, approved plan and approval evidence
@@ -195,7 +196,8 @@ Constraints and non-goals: <scope boundaries>.
 Confirm the lead's brief, then review and explicitly approve the architect's
 design. Remain in the lead conversation; the specialists are subagent-only.
 If the lead reports a blocked check, resolve the reported dependency or decision
-and ask the lead to resume with the existing brief, approvals, and repair history.
+and ask the lead to resume with the existing brief, approvals, and repair
+history.
 Do not invoke a hidden specialist to bypass an approval gate.
 
 For a stopped development environment, run this from the repository root on the
@@ -212,7 +214,8 @@ No model is pinned; the host selects models using its current configuration.
 <a id="external-context-and-github-reviews"></a>
 
 The four delivery profiles allow web access and named, read-only GitHub tools
-for pull requests, issues, repository files, and commits. This does not authorize
+for pull requests, issues, repository files, and commits. This does not
+authorize
 GitHub writes, shell use by the lead or architect, or work outside the approved
 scope.
 Do not post comments, resolve threads, or change remote state to retrieve
@@ -317,7 +320,8 @@ retrieval in another harness does not establish this session's access.
 <a id="jetbrains-setup"></a>
 
 On the IDE host, update the GitHub Copilot plugin, sign in, and open Copilot
-Chat's **Agent** tab. Click **Configure your MCP server**, then **Add MCP Tools**
+Chat's **Agent** tab. Click **Configure your MCP server**, then **Add MCP
+Tools**
 to open Copilot's `mcp.json`. Merge the configuration above into that file;
 use the location opened by the plugin rather than guessing an `.idea` path.
 These steps follow the [official setup guide][github-mcp-setup] and
@@ -325,7 +329,8 @@ These steps follow the [official setup guide][github-mcp-setup] and
 
 Accept the MCP authentication prompt and complete the browser OAuth flow.
 Reconnect the server if required, then enable `pull_request_read`, `issue_read`,
-`get_file_contents`, and `get_commit` in the Copilot tool picker. Keep the native
+`get_file_contents`, and `get_commit` in the Copilot tool picker. Keep the
+native
 `web_fetch` tool enabled for non-GitHub documentation URLs. Reload profiles or
 start a fresh `feature-lead` conversation after changing tool exposure.
 
@@ -504,7 +509,8 @@ If the host cannot perform the chain, the lead must report `BLOCKED`; it must
 not silently replace it with a different orchestration.
 
 The lead includes `ask_user`, the question tool exposed in this JetBrains
-Copilot environment, and `vscode/askQuestions` for VS Code. It uses the available
+Copilot environment, and `vscode/askQuestions` for VS Code. It uses the
+available
 tool for requirement clarification, brief confirmation, design approval, and
 blocker decisions, asking one focused question at a time with choices where
 useful. Hosts ignore unavailable tool names; if neither question tool is

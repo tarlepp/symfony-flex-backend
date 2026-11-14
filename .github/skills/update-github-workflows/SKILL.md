@@ -46,7 +46,8 @@ replacement for their actual event filters and conditions:
 * `.github/workflows/scorecard.yml`: supply-chain analysis, artifact and SARIF
   uploads, with push, schedule, branch-protection, and manual triggers.
 * `.github/workflows/vulnerability-scan.yml`: scheduled/manual development and
-  production image builds and vulnerability scans; it does not run on ordinary PRs.
+  production image builds and vulnerability scans; it does not run on ordinary
+  PRs.
 * `.github/workflows/codeql.yml`: CodeQL analysis of the workflow files
   (CodeQL does not support PHP).
 * `.github/actions/php-bootstrap/action.yml`: shared Compose development
@@ -81,7 +82,8 @@ replacement for their actual event filters and conditions:
    on successful change detection and run in parallel with prerequisite
    checks; external reporting needs both tests and the prerequisite gate.
    The final
-   `ci-result` job needs the gate, analyzers, tests, Docker builds and reporting.
+   `ci-result` job needs the gate, analyzers, tests, Docker builds and
+   reporting.
    It uses `!cancelled()` so superseded workflows release their concurrency
    slot, while failed prerequisites still reach the result checks. It
    is the required merge gate, so add every new job to its `needs` and
@@ -144,7 +146,8 @@ replacement for their actual event filters and conditions:
    eligible events; it is not a separate required-check context. `ci-result`
    expects reporting to be skipped on schedules, manual runs, merge groups and
    whenever tests were not selected. Each upload requires its optional token;
-   upload errors fail the reporting job and workflow. Fork PRs run without secrets
+   upload errors fail the reporting job and workflow. Fork PRs run without
+   secrets
    and skip uploads. Test-unaffected changes skip reporting because tests and
    artifacts are skipped. Keep core tests independent of those uploads. Verify
    producer paths match upload paths for coverage, analyzer reports, metrics,
@@ -189,7 +192,8 @@ replacement for their actual event filters and conditions:
   Unsupported shells fail explicitly. Do not report static validation as a
   successful workflow execution.
 * When changing validator regression runners or their suite output, follow
-  the [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
+  the
+  [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
   for output-contract consumers and isolated fixtures. A passing
   `make lint-workflows` does not replace those checks.
 * When an authorized push or PR produces a run, inspect affected job logs,

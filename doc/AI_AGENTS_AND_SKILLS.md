@@ -180,7 +180,8 @@ the child as described in the
 [stacked PR procedure](REQUIRED_CHECKS.md#stacked-pull-requests).
 Merging a parent PR is distinct from merging a base branch into a conflicted
 task branch. See the
-[conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md) for safeguards.
+[conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md) for
+safeguards.
 
 ## How skills support the agents [ᐞ](#table-of-contents)
 
@@ -296,7 +297,8 @@ lead instead of asking another specialist to start over.
 
 * [Agent workflow reference](FEATURE_AGENTS.md): permissions, handoffs, client
   setup, tool diagnostics, and validation details.
-* [Skills index](../.github/skills/README.md): all playbooks and when to use them.
+* [Skills index](../.github/skills/README.md): all playbooks and when to use
+  them.
 * [Shared guidance](../.github/skills/shared-guidance.md): branches, worktrees,
   checks, and final handoffs.
 * [AI maintenance policy](AI_RULES.md): where new guidance belongs and how to

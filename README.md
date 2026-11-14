@@ -172,16 +172,21 @@ workflows.
 When containers are running (either via Make commands or Dev Containers),
 following ports are exposed on `localhost` on your host machine:
 
-* symfony-backend-nginx - [https://localhost:8000](https://localhost:8000) (nginx)
-  * PHP-FPM status page -  [https://localhost:8000/status](https://localhost:8000/status)
+* symfony-backend-nginx - [https://localhost:8000](https://localhost:8000)
+  (nginx)
+  * PHP-FPM status page -
+    [https://localhost:8000/status](https://localhost:8000/status)
   * SSL with self-signed certificates
 * symfony-backend-nginx - [http://localhost:8080](http://localhost:8080) (nginx)
-  * PHP-FPM status page -  [http://localhost:8080/status](http://localhost:8080/status)
+  * PHP-FPM status page -
+    [http://localhost:8080/status](http://localhost:8080/status)
   * Normal HTTP
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
 * symfony-backend-mariadb - `localhost:33060` (mariadb)
-* symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
-* symfony-backend-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
+* symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100)
+  (dozzle)
+* symfony-backend-adminer - [http://localhost:8200](http://localhost:8200)
+  (adminer)
 
 And this application is usable in your browser at `https://localhost:8000`.
 When you open that site for the first time, you will see a "Your connection is
@@ -274,7 +279,8 @@ curl -I http://localhost:8080
 curl -k -I https://localhost:8000
 ```
 
-Alternatively, you can use **Dozzle** (container log viewer) to monitor all services:
+Alternatively, you can use **Dozzle** (container log viewer) to monitor all
+services:
 
 * Open [http://localhost:8100](http://localhost:8100) in your browser
 * View real-time logs for all running containers

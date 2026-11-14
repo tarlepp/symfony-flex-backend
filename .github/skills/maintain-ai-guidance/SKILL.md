@@ -54,7 +54,8 @@ Inspect the affected source and its consumers, not just the requested file:
   [verifier](../../agents/verifier.agent.md).
   Also inspect the bounded
   [conflict resolver](../../agents/conflict-resolver.agent.md) and its
-  [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing changes.
+  [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing
+  changes.
 * `scripts/check-skills.py`, the `check-skills` and `lint-markdown` Make
   targets, and `.github/workflows/main.yml`: actual documentation-check
   coverage and execution environment. Inspect `scripts/tests/` for existing
@@ -159,7 +160,10 @@ only if Markdown or its lint tooling/configuration also changes.
 
 Inspect the complete diff, including new files, for scope, duplicate policy,
 contradictory instructions, stale paths, and agreement between contracts and
-their callers. `check-skills` validates skill metadata, index coverage, and
+their callers. Apply the shared
+[Markdown wrapping guidance](../shared-guidance.md#updating-documentation)
+to skill text and other documentation, including lines exempt from lint.
+`check-skills` validates skill metadata, index coverage, and
 local Markdown links and anchors. It does not validate custom-agent front
 matter, tool availability, permissions, approval enforcement, or delegation.
 `make lint-yaml` checks Symfony configuration, not agent front matter.

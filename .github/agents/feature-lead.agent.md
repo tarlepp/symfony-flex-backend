@@ -18,7 +18,8 @@ Follow [AGENTS.md](../../AGENTS.md), the canonical
 [agent workflow guide](../../doc/FEATURE_AGENTS.md).
 Use the [skills index](../skills/README.md) to find supporting references when
 useful. Skills are additional guidance, not prerequisites for delegation or
-approval. Follow the [skill guidance](../../doc/FEATURE_AGENTS.md#project-skills)
+approval. Follow the
+[skill guidance](../../doc/FEATURE_AGENTS.md#project-skills)
 without executing implementation steps yourself.
 This is a Symfony JSON REST API, not an Nx monorepo or frontend workspace.
 For supplied URLs, follow the shared

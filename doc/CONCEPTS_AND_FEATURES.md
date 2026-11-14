@@ -290,7 +290,8 @@ attached to following resource methods;
 
 Each of these you can use `before` and `after` methods within your resource
 service to control your request and response as you like. For more information
-about these see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
+about these see
+[this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
 
 ## Event listeners and subscribers [ᐞ](#table-of-contents)
 
@@ -331,7 +332,8 @@ are replacements for what doctrine itself is providing)
   Repository criteria are validated after controller/resource customization
   and converted to typed comparison/group nodes. Direct PHP callers may also
   supply stringable operands. List elements cannot be null or nested arrays;
-  `in`/`notIn` require arrays, and `between` requires exactly bounds `0` and `1`.
+  `in` /`notIn` require arrays, and `between` requires exactly bounds `0` and
+  `1`.
   Null checks still use a three-value tuple with a null operand. Top-level
   null filters in HTTP requests are removed before criteria validation.
   Malformed criteria raise `InvalidArgumentException`; generic REST endpoints
@@ -446,8 +448,10 @@ create/update/patch controller actions:
 The purpose of this resolver is to convert user `request` to corresponding DTO
 object so that resource service can process those requests correctly.
 
-It uses [AutoMapperPlusBundle](https://github.com/mark-gerarts/automapper-plus-bundle)
-to map the request to the DTO configured for the corresponding controller action.
+It uses
+[AutoMapperPlusBundle](https://github.com/mark-gerarts/automapper-plus-bundle)
+to map the request to the DTO configured for the corresponding controller
+action.
 
 [source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ValueResolver/RestDtoValueResolver.php)
 

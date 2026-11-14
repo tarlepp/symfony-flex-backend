@@ -316,13 +316,17 @@ checks.
 
 <a id="related-files"></a>
 
-* [README](../README.md#ai-assisted-development) - canonical AI guidance inventory
+* [README](../README.md#ai-assisted-development) - canonical AI guidance
+  inventory
 * [AGENTS.md](../AGENTS.md) - actionable repository-wide instructions
 * [CLAUDE.md](../CLAUDE.md) - project architecture and workflow context
-* [Copilot instructions](../.github/copilot-instructions.md) - Copilot entry point
+* [Copilot instructions](../.github/copilot-instructions.md) - Copilot entry
+  point
 * [Skills index](../.github/skills/README.md) - task-specific workflows
-* [Shared skill guidance](../.github/skills/shared-guidance.md) - common skill workflow
-* [Pull request template](../.github/pull_request_template.md) - review checklist
+* [Shared skill guidance](../.github/skills/shared-guidance.md) - common skill
+  workflow
+* [Pull request template](../.github/pull_request_template.md) - review
+  checklist
 * [Main CI workflow](../.github/workflows/main.yml) - actual CI behavior
 
 ---

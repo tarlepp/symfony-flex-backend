@@ -606,7 +606,8 @@ writes an explicit skip explanation to the job summary and succeeds without
 checkout, artifact downloads, PHP bootstrap or container cleanup. Otherwise,
 it downloads Clover/JUnit artifacts and starts the PHP container. Coveralls
 installation and upload require its token; SonarCloud preparation and upload
-require its token. Cleanup runs even after failure or cancellation when bootstrap
+require its token. Cleanup runs even after failure or cancellation when
+bootstrap
 was attempted. Test-unaffected changes skip the job because tests and artifacts
 skip; schedules, manual runs and merge groups also skip reporting.
 
@@ -615,7 +616,8 @@ development container, forwarding its tokens and required GitHub CI metadata.
 SonarCloud uses host-side report copies with relative source paths. Upload,
 setup and artifact-download errors fail the reporting job and workflow;
 eligible reporting must succeed for `Validate CI result` to pass even when
-tokens are absent. No reports are uploaded to CodeClimate by the active workflow.
+tokens are absent. No reports are uploaded to CodeClimate by the active
+workflow.
 
 ## Reproducing checks locally [ᐞ](#table-of-contents)
 

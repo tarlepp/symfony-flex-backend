@@ -10,7 +10,8 @@ description: Add or update Doctrine repository queries, filtering, search, sorti
 Use this skill when adding or changing repository queries, query criteria,
 searchable fields, joins, sorting, pagination, counts, or ID lookups. For entity
 mapping or index changes, also follow
-[add-doctrine-entity](../add-doctrine-entity/SKILL.md). For a full endpoint change,
+[add-doctrine-entity](../add-doctrine-entity/SKILL.md). For a full endpoint
+change,
 also follow [add-rest-resource](../add-rest-resource/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
@@ -81,7 +82,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    during processing, not automatically applied by every repository method.
    Ensure required restrictions reach each related list, count, and ID query;
    do not assume one queued callback persists across those calls.
-8. Preserve sorting and pagination contracts. `RepositoryHelper::processOrderBy()`
+8. Preserve sorting and pagination contracts.
+   `RepositoryHelper::processOrderBy()`
    handles string directions and `SortDirection`; resource normalization may
    affect what reaches it. `findByAdvanced()` currently returns an empty array
    for a non-positive limit, uses no paginator when the limit is absent, and

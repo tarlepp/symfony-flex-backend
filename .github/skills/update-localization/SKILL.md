@@ -157,7 +157,8 @@ Inspect the affected source, configuration, and consumers:
 * Verify preference persistence and newly issued JWT claims when affected,
   plus existing-row compatibility and migration/schema checks for enum changes.
   Apply shared guidance for PHP quality and configuration checks. Do not run
-  migrations against production or rewrite existing preferences without approval.
+  migrations against production or rewrite existing preferences without
+  approval.
 * For this skill's Markdown alone, run from the repository root on the Docker
   host with development services running:
 

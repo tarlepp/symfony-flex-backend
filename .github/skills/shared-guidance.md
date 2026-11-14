@@ -182,6 +182,14 @@ safeguards; do not replace them with generic assumptions.
 
 <a id="updating-documentation"></a>
 
+Aim for at most 80 characters per source line in Markdown, including skill
+text. Wrap prose and list continuations at word boundaries; do not rely on
+editor soft wrapping or a passing lint result. Preserve list indentation and
+rendered meaning. Keep commands, code, URLs, link destinations, tables, and
+metadata intact when wrapping would change their behavior or structure.
+Review lines over 80 characters explicitly: Markdown lint permits some long
+lines and excludes fenced code, so it is not a complete line-width audit.
+
 Update existing documentation when behavior, architecture, configuration, or
 contributor/deployment commands change. Keep public API metadata and CLI help
 aligned with the implemented contract where affected. Before editing:
@@ -198,7 +206,8 @@ aligned with the implemented contract where affected. Before editing:
   Dev Container terminal), never directly on the host, to check local links
   and anchors across repository Markdown files, as well as
   `make lint-markdown` for Markdown style.
-* Follow [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
+* Follow
+  [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
   for every use case, including troubleshooting and CI reproduction. Label the
   execution environment, show setup separately from subsequent commands, and
   keep fenced command blocks directly runnable without shell prompt prefixes.

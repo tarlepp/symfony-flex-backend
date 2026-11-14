@@ -17,7 +17,8 @@ use this template as in base of your own application.
 
 <a id="checklist"></a>
 
-Below you have _basic_ checklist that **_you need to go through_** after you have
+Below you have _basic_ checklist that **_you need to go through_** after you
+have
 started to use this template.
 
 * [ ] Check that [LICENSE](../LICENSE) matches to your needs and change it if
@@ -40,7 +41,8 @@ started to use this template.
         changes to [application_test.json](../secrets/application_test.json)
         files.
   * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
-        contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
+        contents -
+        [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
         * and made necessary changes.
   * [ ] [robots.txt](../public/robots.txt) - check that file contents -
         [information](https://developers.google.com/search/docs/advanced/robots/intro)
@@ -64,8 +66,10 @@ started to use this template.
 * [ ] 3rd party services that you might not need _or_ you need to change those
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.
-  * [ ] [.codeclimate.yml](../.codeclimate.yml) - [https://codeclimate.com/](https://codeclimate.com/)
-  * [ ] [sonar-project.properties](../sonar-project.properties) - [https://sonarcloud.io/](https://sonarcloud.io/)
+  * [ ] [.codeclimate.yml](../.codeclimate.yml) -
+    [https://codeclimate.com/](https://codeclimate.com/)
+  * [ ] [sonar-project.properties](../sonar-project.properties) -
+    [https://sonarcloud.io/](https://sonarcloud.io/)
 * [ ] Github Actions - This application is using GitHub Actions to run multiple
       jobs to check application code.
   * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and
@@ -86,7 +90,8 @@ started to use this template.
         Actions pinning/update process and adapt it for your project.
   * [ ] Run `make check-action-updates` after workflow changes to verify pins,
         version consistency, and available updates.
-* [ ] Review the AI-assisted change policy files: `.github/copilot-instructions.md`,
+* [ ] Review the AI-assisted change policy files:
+  `.github/copilot-instructions.md`,
       `CLAUDE.md`, and [AI_RULES.md](AI_RULES.md). Update or replace them so
       they match your own architecture, workflow, and review expectations.
 * [ ] Last step when all above is done - just delete this file.

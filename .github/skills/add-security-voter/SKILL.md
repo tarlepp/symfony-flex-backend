@@ -14,7 +14,8 @@ follow [implement-api-authentication](../implement-api-authentication/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Read [SECURITY.md](../../../doc/SECURITY.md)
+[AI rules](../../../doc/AI_RULES.md). Read
+[SECURITY.md](../../../doc/SECURITY.md)
 for the repository security policy.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -85,7 +86,8 @@ for the repository security policy.
    manually instantiate a voter at application call sites. If service
    configuration is exceptional, inspect its registration before changing it.
    Keep request-specific identities and subjects out of shared service state.
-9. Use `tests/Integration/Security/Voter/IsUserHimselfVoterTest.php` as a reference
+9. Use `tests/Integration/Security/Voter/IsUserHimselfVoterTest.php` as a
+   reference
    for exercising the public `vote()` boundary and asserting grant, deny, and
    abstain results, not protected methods. Cover unsupported attributes and
    subjects, anonymous or inappropriate identities, matching and different
