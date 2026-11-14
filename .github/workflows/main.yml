@@ -3,8 +3,8 @@
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: CI
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the master branch
+  # Validate master pushes, pull requests targeting any branch, merge groups,
+  # and manual runs. Scheduled runs select only the periodic checks below.
   push:
     branches:
       - master
@@ -55,7 +55,7 @@ jobs:
           egress-policy: audit
 
       - &checkout_full_history_step
-        name: Make checkout
+        name: Check out repository with full history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: '0'
@@ -79,7 +79,7 @@ jobs:
       - *harden_runner_step
 
       - &checkout_step
-        name: Make checkout
+        name: Check out repository with shallow history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: '1'
@@ -100,11 +100,11 @@ jobs:
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.composer == 'true' }}
         run: bash scripts/make.sh composer-validate
 
-      - name: Check that environment is configured correctly
+      - name: Check application runtime requirements
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh check-requirements
 
-      - name: Lint YAML configurations
+      - name: Lint Symfony YAML configuration
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.yaml == 'true' }}
         run: bash scripts/make.sh lint-yaml
 
@@ -203,7 +203,7 @@ jobs:
       - name: PHP Security Checker
         uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
 
-      - name: Check that application doesn't have installed dependencies with known security vulnerabilities
+      - name: Check installed dependencies for known vulnerabilities
         run: bash scripts/make.sh check-security
 
       - *failure_diagnostics_step
@@ -236,8 +236,8 @@ jobs:
     steps:
       - *harden_runner_step
 
-      # Only Dockerfiles are needed, so use shallow checkout without credentials
-      - name: Make checkout
+      # Pin verification needs repository files and scripts, not Git history.
+      - name: Check out repository with shallow history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: '1'
@@ -259,7 +259,7 @@ jobs:
     steps:
       - *harden_runner_step
 
-      - name: Make checkout
+      - name: Check out repository with shallow history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: '1'
@@ -464,7 +464,7 @@ jobs:
       - name: Install Composer dependencies
         run: bash scripts/make.sh install
 
-      - name: Check which versions we're using
+      - name: Display PHP, Composer, Symfony, and PHPUnit versions
         run: bash scripts/make.sh tool-versions
 
       - name: Run application test suites with PHPUnit
@@ -497,7 +497,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Archive code coverage results (junit.xml)
+      - name: Archive JUnit test results (junit.xml)
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -506,7 +506,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Archive Code Coverage
+      - name: Archive HTML code coverage report
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
