@@ -284,6 +284,9 @@ Lightweight tools have separate steps sharing one bootstrap; later tools
 still run after earlier tool failures if setup succeeded and the job was not
 cancelled. Analyzer, image-build and image-scan matrices use
 `fail-fast: false`, so one failing variant does not cancel the others.
+The analyzer matrix declares Make targets, not shell commands. Its fixed
+`scripts/make.sh` invocation receives the target through a quoted environment
+variable, preserving one argument and the analyzer's failure status.
 
 Image scans wait for the build matrix to succeed and download its per-target
 Docker image archives; they do not rebuild or publish images to a registry.

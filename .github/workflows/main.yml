@@ -345,11 +345,11 @@ jobs:
       matrix:
         analyzer:
           - name: Psalm
-            command: bash scripts/make.sh psalm-github
+            target: psalm-github
           - name: PHPStan
-            command: bash scripts/make.sh phpstan-github
+            target: phpstan-github
           - name: PHP Insights
-            command: bash scripts/make.sh phpinsights
+            target: phpinsights
     steps:
       - *harden_runner_step
 
@@ -359,7 +359,9 @@ jobs:
         uses: ./.github/actions/php-bootstrap
 
       - name: Run static analyzer (${{ matrix.analyzer.name }})
-        run: ${{ matrix.analyzer.command }}
+        env:
+          ANALYZER_TARGET: ${{ matrix.analyzer.target }}
+        run: bash scripts/make.sh "$ANALYZER_TARGET"
 
       - name: Archive Psalm results (psalm.json)
         if: ${{ !cancelled() && matrix.analyzer.name == 'Psalm' }}
