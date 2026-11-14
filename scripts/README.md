@@ -848,6 +848,20 @@ on exit. Linux AMD64 and ARM64 are supported; downloads require network
 access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail
 the check.
 
+After metadata validation, `scripts/check-composite-action-shell.py` parses all
+local composite actions with PyYAML and sends each Bash/sh `run` body to the
+same pinned ShellCheck. Diagnostics identify the action and step; scripts are
+never executed. GitHub expressions are replaced with inert placeholders before
+shell analysis, so this does not validate their runtime values. Unsupported
+shells fail explicitly. Non-composite actions are left to metadata validation.
+Real ShellCheck regression fixtures cover syntax, quoting, expressions and
+failure propagation. Changes to the checker or fixtures select workflow checks.
+
+The development image installs pinned PyYAML in `/home/dev/.venv`; existing
+development containers need rebuilding to acquire it. Run the existing
+`make lint-workflows` target from the repository root on the Docker host after
+the updated development image is available.
+
 Release tags are declared once with a `tool-pin: owner/repo@COMMIT_SHA`
 comment recording the verified release commit. Binary SHA-256 checksums remain
 the execution integrity pins; a source commit SHA is not a binary checksum.

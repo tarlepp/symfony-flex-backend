@@ -278,7 +278,12 @@ workflow, application, analyzer, security and image jobs skip.
 
 `lint-workflows` runs actionlint with ShellCheck, zizmor security auditing,
 local composite-action schema validation and offline tooling regressions.
-`make lint-yaml` checks Symfony configuration, not GitHub workflows.
+Composite Bash/sh steps are also parsed with PyYAML and checked individually
+using the pinned ShellCheck, with action/step diagnostics. These checks do not
+execute scripts; GitHub expressions become inert placeholders for shell
+analysis. Unsupported shells fail explicitly, and metadata validation still
+covers non-composite actions. `make lint-yaml` checks Symfony configuration,
+not GitHub workflows.
 
 Core CI uses depth-one checkouts for ordinary validation, Docker builds/scans
 and result gates. Full history is retained only for change detection (base/head
