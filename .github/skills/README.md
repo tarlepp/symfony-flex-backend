@@ -89,8 +89,8 @@ references only for layers the task actually changes:
   catalogs, or timezone behavior, use
   [update-localization](update-localization/SKILL.md). User preferences,
   translator fallback, and storage timezone are distinct contracts.
-* For repository scripts, Make targets, checker behavior, container forwarding,
-  or script regression tests, use
+* For shell readability reviews, repository scripts, Make targets, checker
+  behavior, container forwarding, or script regression tests, use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md).
   Use the workflow and dependency skills for those separate contracts.
 * For Docker build behavior, Compose services, entrypoints, runtime mounts,
@@ -122,7 +122,7 @@ references only for layers the task actually changes:
 | [debug](debug/SKILL.md) | Diagnosing unexpected application behavior, runtime errors, or failing tests. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
-| [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
+| [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Reviewing shell readability or changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
 | [resolve-git-conflicts](resolve-git-conflicts/SKILL.md) | Resolving authorized Git rebase conflicts, including rewritten stacked PR parents. |
 | [update-api-documentation](update-api-documentation/SKILL.md) | Changing OpenAPI metadata, schemas, reusable responses, security descriptions, or documentation areas. |
 | [update-api-response-contract](update-api-response-contract/SKILL.md) | Changing shared response serialization, population groups, formats, headers, or error envelopes. |
