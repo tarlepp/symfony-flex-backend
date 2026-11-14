@@ -492,6 +492,18 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         names = re.findall(r"^          - name: (.+)$", job("static-analyzers"), re.MULTILINE)
         self.assertEqual(names, ["Psalm", "PHPStan", "PHP Insights"])
 
+    def test_only_matrix_jobs_have_a_strategy_and_keep_fail_fast_disabled(self):
+        names = re.findall(r"^  ([a-z][a-z-]*):$", CONTENT.split("jobs:\n", 1)[1],
+                           re.MULTILINE)
+        matrix_jobs = {"static-analyzers", "docker-build", "docker-scan"}
+        for name in names:
+            with self.subTest(job=name):
+                header = job(name).split("    steps:", 1)[0]
+                if name in matrix_jobs:
+                    self.assertIn("    strategy:\n      fail-fast: false\n      matrix:\n", header)
+                else:
+                    self.assertNotIn("    strategy:", header)
+
     def test_analyzer_matrix_passes_targets_as_one_argument_and_preserves_failures(self):
         section = job("static-analyzers")
         entries = re.findall(

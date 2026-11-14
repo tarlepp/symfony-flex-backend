@@ -76,8 +76,6 @@ jobs:
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.configuration == 'true' }}
     timeout-minutes: 10
-    strategy:
-      fail-fast: false
     steps:
       - *harden_runner_step
 
@@ -180,8 +178,6 @@ jobs:
     needs: changes
     if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && needs.changes.outputs.security == 'true')) }}
     timeout-minutes: 10
-    strategy:
-      fail-fast: false
     steps:
       - *harden_runner_step
 
@@ -433,8 +429,6 @@ jobs:
         ports:
           - 3306/tcp
         options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-start-period=30s --health-interval=10s --health-timeout=5s --health-retries=3
-    strategy:
-      fail-fast: false
     steps:
       - *harden_runner_step
 
@@ -455,14 +449,6 @@ jobs:
 
       - name: Check which versions we're using
         run: bash scripts/make.sh tool-versions
-
-      #- name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
-      #  run: |
-      #    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      #    chmod +x ./cc-test-reporter
-      #    GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
-      #  env:
-      #    CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
       - name: Run application test suites with PHPUnit
         id: phpunit
