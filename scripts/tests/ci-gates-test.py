@@ -125,6 +125,25 @@ class CiGatesTest(unittest.TestCase):
                 "needs.changes.outputs.docker == 'true' }}", job,
             )
 
+    def test_image_tags_are_valid_and_independent_of_git_ref_names(self):
+        build = self.jobs["docker-build"]
+        tags = re.findall(r"^          tags: (.+)$", build, re.MULTILINE)
+        self.assertEqual(tags, [
+            "symfony-flex-backend:ci-${{ github.sha }}-${{ matrix.target }}",
+        ])
+        self.assertNotIn("github.ref_name", build)
+        self.assertNotIn("DOCKER_TAG", build)
+        self.assertNotIn("steps.vars", build)
+        for sha in ("a" * 40, "0123456789abcdef" * 2 + "01234567"):
+            for target in ("development", "production"):
+                with self.subTest(sha=sha, target=target):
+                    image = tags[0].replace("${{ github.sha }}", sha).replace(
+                        "${{ matrix.target }}", target,
+                    )
+                    tag = image.split(":", 1)[1]
+                    self.assertRegex(tag, r"^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$")
+                    self.assertEqual(tag, f"ci-{sha}-{target}")
+
     def run_gate(self, job, environment):
         script = re.search(
             r"^        run: bash (scripts/ci-[\w-]+\.sh)$",

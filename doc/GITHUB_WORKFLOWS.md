@@ -290,6 +290,10 @@ variable, preserving one argument and the analyzer's failure status.
 
 Image scans wait for the build matrix to succeed and download its per-target
 Docker image archives; they do not rebuild or publish images to a registry.
+Core CI tags each local image as
+`symfony-flex-backend:ci-<github.sha>-<development|production>`. The SHA is the
+workflow's tested revision (the merge revision for PR events); branch names
+are not included, so their length or characters cannot invalidate the tag.
 Archives expire after one day. Separate build and scan checks distinguish
 build failures from vulnerability findings. Trivy still rejects fixable
 `CRITICAL` and `HIGH` OS and library vulnerabilities. The scheduled/manual
