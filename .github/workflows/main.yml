@@ -522,7 +522,21 @@ jobs:
     steps:
       - *harden_runner_step
 
+      - name: Select external reporting
+        id: reporting
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [[ -n "$COVERALLS_REPO_TOKEN" || -n "$SONAR_TOKEN" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "External reporting skipped: neither upload token is available." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Checkout tested source
+        if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
@@ -530,18 +544,22 @@ jobs:
           persist-credentials: false
 
       - name: Download Clover coverage report
+        if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: clover.xml
           path: ./build/logs
 
       - name: Download JUnit test report
+        if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: junit.xml
           path: ./build/logs
 
       - name: Bootstrap PHP tools
+        id: bootstrap
+        if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: ./.github/actions/php-bootstrap
         with:
           install-dependencies: 'false'
@@ -549,6 +567,9 @@ jobs:
           cache-dependencies: 'true'
 
       - name: Install Coveralls reporter
+        if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
@@ -580,7 +601,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - *stop_php_step
+      - name: Stop PHP development container
+        if: ${{ always() && steps.bootstrap.outcome != 'skipped' }}
+        run: bash scripts/make.sh ci-stop
 
   docker-build:
     name: Build application Docker image (${{ matrix.target }})
