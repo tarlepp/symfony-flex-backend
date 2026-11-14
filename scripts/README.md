@@ -936,15 +936,21 @@ in its workflow step's `env` mapping. The final gate also requires `REF` for
 reporting eligibility. Empty or unknown selection flags cannot authorize skips.
 The scripts source [`ci-gate-common.sh`](ci-gate-common.sh) relative to their
 own location, so they do not depend on the caller's working directory.
-The helper shares only the strict `true`/success and `false`/skipped predicate;
-scheduled-job rules and summary explanations remain specific to each gate.
+The helper shares strict result comparisons, the `true`/success and
+`false`/skipped predicate, and error annotation formatting; scheduled-job rules
+and summary explanations remain specific to each gate.
 
-Result diagnostics go to stdout. If `GITHUB_STEP_SUMMARY` is nonempty, each
-script appends its Markdown table before validating results. Summary-write
-errors produce a warning without changing the gate's result. The scripts exit
-zero only for the expected job outcomes; invalid inputs, unexpected results,
-or a missing helper fail. They do not access the network or modify application
-files. Changes to any of these scripts select workflow validation.
+Result logs go to stdout. Failed comparisons emit an `::error::` annotation on
+stderr identifying the check, expected result and actual result. Invalid
+selection flags report the expected boolean values, actual flag and job result.
+Empty values stay visible as `''`; annotation data escapes percent signs and
+line breaks. The gates still stop at the first invalid outcome. If
+`GITHUB_STEP_SUMMARY` is nonempty, each script appends its Markdown table
+before validating results. Summary-write errors produce a warning without
+changing the gate's result. The scripts exit zero only for the expected job
+outcomes; invalid inputs, unexpected results, or a missing helper fail. They
+do not access the network or modify application files. Changes to any of these
+scripts select workflow validation.
 
 From the repository root on the Docker host with the PHP development service
 running, run the focused offline gate and workflow-output regressions:

@@ -66,25 +66,25 @@ if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
 fi
 
 if [ "$EVENT_NAME" = "schedule" ]; then
-    test "$CHANGES" = "skipped"
-    test "$SECURITY_CHECK" = "success"
-    test "$DOCKER_UPDATES" = "success"
-    test "$GITLEAKS" = "skipped"
+    expect_result "Change detection" skipped "$CHANGES"
+    expect_result "Dependency security" success "$SECURITY_CHECK"
+    expect_result "Docker image updates" success "$DOCKER_UPDATES"
+    expect_result "Gitleaks" skipped "$GITLEAKS"
     CONFIGURATION_CHANGED=false
     DOCUMENTATION_CHANGED=false
     WORKFLOWS_CHANGED=false
     PHP_CHANGED=false
     IMAGES_CHANGED=false
 else
-    test "$CHANGES" = "success"
-    expect_selected "$SECURITY_CHANGED" "$SECURITY_CHECK"
-    expect_selected "$IMAGES_CHANGED" "$DOCKER_UPDATES"
-    test "$GITLEAKS" = "success"
+    expect_result "Change detection" success "$CHANGES"
+    expect_selected "Dependency security" "$SECURITY_CHANGED" "$SECURITY_CHECK"
+    expect_selected "Docker image updates" "$IMAGES_CHANGED" "$DOCKER_UPDATES"
+    expect_result "Gitleaks" success "$GITLEAKS"
 fi
 
-expect_selected "$CONFIGURATION_CHANGED" "$LINT_CONFIGURATION"
-expect_selected "$DOCUMENTATION_CHANGED" "$LINT_DOCUMENTATION"
-expect_selected "$WORKFLOWS_CHANGED" "$LINT_WORKFLOWS"
-expect_selected "$PHP_CHANGED" "$STATIC_ANALYZERS"
-expect_selected "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
-expect_selected "$IMAGES_CHANGED" "$DOCKER_PINS"
+expect_selected "Configuration lint" "$CONFIGURATION_CHANGED" "$LINT_CONFIGURATION"
+expect_selected "Documentation lint" "$DOCUMENTATION_CHANGED" "$LINT_DOCUMENTATION"
+expect_selected "Workflow validation" "$WORKFLOWS_CHANGED" "$LINT_WORKFLOWS"
+expect_selected "Static analyzer matrix" "$PHP_CHANGED" "$STATIC_ANALYZERS"
+expect_selected "Lightweight analyzers" "$PHP_CHANGED" "$LIGHTWEIGHT_ANALYZERS"
+expect_selected "Docker pin verification" "$IMAGES_CHANGED" "$DOCKER_PINS"
