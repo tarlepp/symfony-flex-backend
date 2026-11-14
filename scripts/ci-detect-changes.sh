@@ -89,6 +89,9 @@ classify_path() {
                 *Dockerfile*) enable_checks images ;;
             esac
             ;;
+        scripts/ci-failure-diagnostics.sh)
+            enable_checks workflows
+            ;;
         scripts/ci-validate-compose.sh)
             enable_checks compose workflows
             ;;
