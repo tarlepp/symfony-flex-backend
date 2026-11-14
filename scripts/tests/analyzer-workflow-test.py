@@ -1006,6 +1006,90 @@ class TestReportProcessingTest(unittest.TestCase):
             self.assertIn(f"::error file=build/{name}::", result.stderr)
         self.assertEqual(result.stderr.count("::error file="), 4)
 
+    def test_junit_count_metrics_are_required_in_every_suite(self):
+        counts = dict(tests="4", assertions="8", failures="1", errors="0", skipped="1")
+        for name in counts:
+            for value in (None, "", "-1", "1.5", "NaN", "inf", " 1", "+1", "\u0661"):
+                with self.subTest(metric=name, value=value):
+                    attributes = counts.copy()
+                    if value is None:
+                        del attributes[name]
+                    else:
+                        attributes[name] = value
+                    invalid = "<testsuite " + " ".join(
+                        f'{key}="{value}"' for key, value in attributes.items()
+                    ) + "/>"
+                    valid = '<testsuite tests="4" assertions="8" failures="1" errors="0" skipped="1">'
+                    self.write("build/logs/junit.xml",
+                               f"<testsuites>{valid}{invalid}</testsuite></testsuites>")
+                    for operation in ("validate-junit", "verify"):
+                        result = self.run_report(operation)
+                        self.assertNotEqual(result.returncode, 0)
+                        self.assertIn(f"nonnegative integer {name} metric", result.stderr)
+
+    def test_verify_rejects_malformed_and_wrong_xml_shapes(self):
+        for path, contents in (
+            ("build/logs/junit.xml", ("<testsuites>", "<testsuite/>", "<testsuites/>")),
+            ("build/logs/clover.xml", ("<coverage>", "<wrong><project><metrics "
+                                      'statements="1" coveredstatements="0"/></project></wrong>',
+                                      "<coverage/>", "<coverage><project/></coverage>",
+                                      "<coverage><metrics/></coverage>")),
+        ):
+            original = (self.root / path).read_text()
+            for content in contents:
+                with self.subTest(path=path, content=content):
+                    self.write(path, content)
+                    result = self.run_report("verify")
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(f"::error file={path}::", result.stderr)
+            self.write(path, original)
+
+    def test_clover_statement_metrics_reject_missing_invalid_and_excess_coverage(self):
+        for name in ("statements", "coveredstatements"):
+            for value in (None, "", "-1", "1.5", "NaN", "inf", " 1", "+1", "\u0661"):
+                with self.subTest(metric=name, value=value):
+                    attributes = dict(statements="8", coveredstatements="3")
+                    if value is None:
+                        del attributes[name]
+                    else:
+                        attributes[name] = value
+                    metrics = "<metrics " + " ".join(
+                        f'{key}="{value}"' for key, value in attributes.items()
+                    ) + "/>"
+                    self.write("build/logs/clover.xml",
+                               f"<coverage><project>{metrics}</project></coverage>")
+                    result = self.run_report("verify")
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(f"nonnegative integer {name} metric", result.stderr)
+        self.write("build/logs/clover.xml", '<coverage><project><metrics statements="2" '
+                   'coveredstatements="3"/></project></coverage>')
+        result = self.run_report("verify")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("coveredstatements exceeds statements", result.stderr)
+
+    def test_verify_accepts_zero_counts_and_full_coverage(self):
+        self.write("build/logs/junit.xml", '<testsuites><testsuite tests="0" assertions="0" '
+                   'failures="0" errors="0" skipped="0"/></testsuites>')
+        for total, covered in ((0, 0), (8, 8)):
+            with self.subTest(total=total, covered=covered):
+                self.write("build/logs/clover.xml", "<coverage><project>"
+                           f'<metrics statements="{total}" coveredstatements="{covered}"/>'
+                           "</project></coverage>")
+                result = self.run_report("verify")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout + result.stderr, "")
+
+    def test_verify_reports_all_content_errors_together(self):
+        self.write("build/logs/junit.xml", "<testsuites>")
+        self.write("build/logs/clover.xml", "<coverage/>")
+        self.write("build/report/index.html", "")
+        result = self.run_report("verify")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stderr.count("::error file="), 3)
+        for path in ("logs/junit.xml", "logs/clover.xml", "report/index.html"):
+            self.assertIn(f"::error file=build/{path}::", result.stderr)
+        self.assertEqual(result.stdout, "")
+
     def test_summary_sums_siblings_without_double_counting_nested_totals(self):
         child = '<testsuite tests="2" assertions="3"><testsuite tests="99"/></testsuite>'
         for junit in (
