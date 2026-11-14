@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import re
 import shlex
+import shutil
 import subprocess
 import tempfile
 import textwrap
@@ -1320,6 +1321,23 @@ class TestReportProcessingTest(unittest.TestCase):
 
 
 class ChangeDetectionTest(unittest.TestCase):
+    labels = {
+        "markdown": "Markdown lint",
+        "documentation": "Documentation links and skill metadata",
+        "runtime": "Application information and requirements",
+        "composer": "Root Composer validation",
+        "yaml": "Symfony YAML lint",
+        "compose": "Compose and Dev Container configuration",
+        "tooling": "Development tooling regression tests",
+        "workflows": "GitHub workflow validation",
+        "security": "PHP dependency security checks",
+        "images": "Docker image pins and update checks",
+        "php": "PHP static and lightweight analyzers",
+        "tests": "PHPUnit and test reports",
+        "docker": "Docker image builds and scans",
+        "configuration": "Configuration job (any configuration check)",
+    }
+
     def test_workflow_invokes_detector_with_event_inputs_and_declared_outputs(self):
         section = job("changes")
         self.assertIn("        run: bash scripts/ci-detect-changes.sh\n", section)
@@ -1382,17 +1400,105 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertEqual(len(lines), len(self.outputs), "Duplicate detector outputs")
         self.assertTrue(set(self.outputs.values()) <= {"true", "false"})
         self.assertNotIn("code", self.outputs)
-        self.assertIn("Validation selection (not a list of changed files):", result.stdout)
+        plain_stdout = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+        self.assertIn("CI validation preview (not results or changed-file categories):", plain_stdout)
+        self.assertIn("Enabled means eligible to run; event rules and prerequisites still apply.", result.stdout)
+        self.assertIn("Numbers refer to the reasons below.", result.stdout)
         selection = re.findall(
-            r"^  (\w+)\s+(selected|not selected)$",
-            re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), re.MULTILINE,
+            r"^  (enabled|not enabled)\s+\[(\d+)\] (.+?) \((\w+)\)$",
+            plain_stdout, re.MULTILINE,
         )
         self.assertEqual(
-            selection,
-            [(name, "selected" if value == "true" else "not selected")
+            [(label, name, status) for status, _, label, name in selection],
+            [(self.labels[name], name, "enabled" if value == "true" else "not enabled")
              for name, value in self.outputs.items()],
         )
+        reasons = dict(re.findall(r"^  \[(\d+)\] (.+)$", plain_stdout, re.MULTILINE))
+        self.assertEqual(set(reasons), {reference for _, reference, _, _ in selection})
+        self.reasons = {name: reasons[reference] for _, reference, _, name in selection}
+        self.references = {name: reference for _, reference, _, name in selection}
+        jobs_section = plain_stdout.split("\nCore CI jobs\n", 1)[1]
+        groups = re.findall(
+            r"^  (eligible|conditional|not enabled)\n((?:    - .+\n)+)",
+            jobs_section, re.MULTILINE,
+        )
+        self.assertEqual([state for state, _ in groups], ["eligible", "conditional", "not enabled"])
+        job_rows = [
+            (state, label, name)
+            for state, section in groups
+            for label, name in re.findall(r"^    - (.+?) \(([\w-]+)\)$", section, re.MULTILINE)
+        ]
+        self.jobs = {name: state for state, _, name in job_rows}
+        self.assertEqual(len(job_rows), len(self.jobs))
+        workflow_ids = re.findall(
+            r"^  ([a-z][a-z-]+):$", CONTENT.split("\njobs:\n", 1)[1], re.MULTILINE,
+        )
+        self.assertEqual(set(self.jobs), set(workflow_ids))
         return result
+
+    def test_job_preview_matches_workflow_conditions_and_matrices(self):
+        categories = {
+            "lint-configuration": "configuration", "lint-documentation": "documentation",
+            "lint-workflows": "workflows", "docker-image-verify-pins": "images",
+            "lightweight-analyzers": "php", "static-analyzers": "php",
+            "test": "tests", "docker-build": "docker", "docker-scan": "docker",
+        }
+        for job_id, category in categories.items():
+            self.assertIn(f"needs.changes.outputs.{category} == 'true'", job(job_id))
+        for job_id, category in (("security-check", "security"),
+                                 ("docker-image-check-updates", "images")):
+            section = job(job_id)
+            self.assertIn(f"needs.changes.outputs.{category} == 'true'", section)
+            self.assertIn("github.event_name == 'schedule'", section)
+        self.assertEqual(
+            re.findall(r"^          - name: (.+)$", job("static-analyzers"), re.MULTILINE),
+            ["Psalm", "PHPStan", "PHP Insights"],
+        )
+        for job_id in ("docker-build", "docker-scan"):
+            self.assertIn("target: [development, production]", job(job_id))
+        self.assertIn("      - docker-build\n", job("docker-scan"))
+        self.assertIn("github.event_name == 'pull_request'", job("report"))
+        self.assertIn("github.ref == 'refs/heads/master'", job("report"))
+        for job_id in ("changes", "gitleaks"):
+            self.assertIn("github.event_name != 'schedule'", job(job_id))
+        for job_id in ("ci-summary", "ci-result"):
+            self.assertIn("if: ${{ !cancelled() }}", job(job_id))
+
+    def test_job_preview_for_changed_files_and_event_types(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        self.commit()
+        result = self.detect()
+        self.assertEqual(self.jobs["lint-documentation"], "eligible")
+        self.assertEqual(self.jobs["docker-build"], "not enabled")
+        self.assertEqual(self.jobs["report"], "not enabled")
+        self.assertEqual(self.jobs["gitleaks"], "eligible")
+        self.assertEqual(self.jobs["ci-result"], "conditional")
+        self.assertRegex(result.stdout, r"\n  eligible\n(?:    - .+\n)+")
+        self.assertRegex(result.stdout, r"\n  conditional\n(?:    - .+\n)+")
+        self.assertRegex(result.stdout, r"\n  not enabled\n(?:    - .+\n)+")
+        self.assertIn("Configuration and documentation steps depend on their category flags.", result.stdout)
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        summary = self.root / ".git/summary"
+        result = self.detect(GITHUB_STEP_SUMMARY=str(summary))
+        self.assertEqual(self.jobs["docker-build"], "eligible")
+        self.assertEqual(self.jobs["docker-scan"], "eligible")
+        self.assertEqual(self.jobs["report"], "conditional")
+        self.assertIn("Docker build and scan: development and production; scans require builds.", result.stdout)
+        self.assertIn("Static analyzers: Psalm, PHPStan, PHP Insights.", result.stdout)
+        self.assertIn("External reporting requires eligible events, successful tests and gates; uploads require tokens.", result.stdout)
+        self.assertIn("| External reporting (`report`) | conditional |", summary.read_text())
+        self.detect(event="push")
+        self.assertEqual(self.jobs["report"], "conditional")
+        self.detect(event="merge_group")
+        self.assertEqual(self.jobs["report"], "not enabled")
+        self.detect(event="workflow_dispatch")
+        self.assertEqual(self.jobs["report"], "not enabled")
+        self.detect(event="schedule")
+        self.assertEqual(self.jobs["changes"], "not enabled")
+        self.assertEqual(self.jobs["security-check"], "eligible")
+        self.assertEqual(self.jobs["docker-image-check-updates"], "eligible")
+        self.assertEqual(self.jobs["test"], "not enabled")
 
     def test_selection_colors_respect_shared_policy_and_keep_outputs_plain(self):
         (self.root / "README.md").write_text("Updated documentation\n")
@@ -1403,8 +1509,18 @@ class ChangeDetectionTest(unittest.TestCase):
         ):
             with self.subTest(color=color, no_color=no_color):
                 result = self.detect(COLOR=color, NO_COLOR=no_color)
-                self.assertEqual("\x1b[32mselected\x1b[0m" in result.stdout, colored)
-                self.assertEqual("\x1b[33mnot selected\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[34mChanged files\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[34mCI validation preview\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[34m[1]\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[32meligible\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[34mconditional\x1b[0m" in result.stdout, colored)
+                self.assertEqual("\x1b[33mnot enabled\x1b[0m" in result.stdout, colored)
+                if colored:
+                    self.assertIn("  \x1b[34m[1]\x1b[0m Changed file: README.md (example)", result.stdout)
+                    self.assertIn("\x1b[0m  \x1b[34m[1]\x1b[0m Markdown lint", result.stdout)
+                self.assertIn("  - README.md\n", result.stdout)
+                self.assertEqual("\x1b[32menabled" in result.stdout, colored)
+                self.assertEqual("\x1b[33mnot enabled\x1b[0m" in result.stdout, colored)
                 self.assertNotIn("\x1b", (self.root / ".git/detection-output").read_text())
 
     def test_actions_defaults_to_color_and_writes_ansi_free_summary(self):
@@ -1419,9 +1535,12 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertNotIn("\x1b", content)
         self.assertIn("not a pass/fail result", content)
         for category, selected in self.outputs.items():
-            status = "🟢 Selected" if selected == "true" else "⚪ Not selected"
-            self.assertIn(f"| {category} | {status} |\n", content)
-        self.assertEqual(len(re.findall(r"^\| \w+ \|", content, re.MULTILINE)), 15)
+            status = "🟢 Enabled" if selected == "true" else "⚪ Not enabled"
+            self.assertIn(
+                f"| {self.labels[category]} | `{category}` | {status} | "
+                f"[{self.references[category]}] |\n", content,
+            )
+        self.assertEqual(len(re.findall(r"^\| [^|\n]+ \| `\w+` \|", content, re.MULTILINE)), 14)
         for overrides in ({"COLOR": "never"}, {"COLOR": None, "NO_COLOR": "1"}):
             result = self.detect(GITHUB_ACTIONS="true", **overrides)
             self.assertNotIn("\x1b", result.stdout)
@@ -1434,9 +1553,23 @@ class ChangeDetectionTest(unittest.TestCase):
         (self.root / "README.md").write_text("Updated documentation\n")
         self.commit()
         result = self.detect()
-        self.assertIn("Changed files:\nREADME.md\n", result.stdout)
+        self.assertIn("\nChanged files\n  - README.md\n\nCI validation preview", result.stdout)
         self.assertEqual(self.outputs["markdown"], "true")
         self.assertEqual(self.outputs["php"], "false")
+        self.assertEqual(self.reasons["markdown"], "Changed file: README.md (example)")
+        self.assertEqual(self.reasons["php"], "No changed files matched this check")
+        self.assertEqual(self.reasons["configuration"], "No configuration categories enabled")
+        self.assertEqual(self.references["markdown"], self.references["documentation"])
+        self.assertEqual(result.stdout.count("Changed file: README.md (example)"), 1)
+
+    def test_changed_file_list_preserves_spaces_and_leading_dashes(self):
+        (self.root / "-notes.md").write_text("Notes\n")
+        (self.root / "file name.md").write_text("Notes\n")
+        self.commit()
+        result = self.detect()
+        self.assertIn("Changed files\n  - -notes.md\n  - file name.md\n", result.stdout)
+        self.assertEqual(self.outputs["markdown"], "true")
+        self.assertEqual(self.outputs["docker"], "false")
 
     def test_full_selection_diagnostics_explain_fallbacks(self):
         for event, base, expected in (
@@ -1448,7 +1581,73 @@ class ChangeDetectionTest(unittest.TestCase):
             with self.subTest(event=event, base=base):
                 result = self.detect(event=event, base=base)
                 self.assertIn(expected, result.stdout)
+                self.assertIn(expected, self.reasons["php"])
                 self.assertEqual(set(self.outputs.values()), {"true"})
+
+    def test_reasons_cover_shared_unknown_and_configuration_inputs(self):
+        (self.root / "Dockerfile").write_text("Fixture\n")
+        self.commit()
+        result = self.detect()
+        self.assertEqual(self.reasons["docker"], "Shared input: Dockerfile; full validation")
+        self.assertEqual(result.stdout.count("Shared input: Dockerfile; full validation"), 1)
+        self.assertEqual(
+            self.reasons["configuration"],
+            "Enabled configuration categories: runtime, composer, yaml, compose, tooling",
+        )
+        self.git("checkout", "--quiet", "-b", "unknown-reason", self.base)
+        (self.root / "unclassified.new-format").write_text("Fixture\n")
+        self.commit()
+        result = self.detect()
+        self.assertEqual(
+            self.reasons["docker"], "Unclassified file: unclassified.new-format; full validation",
+        )
+
+    def test_summary_escapes_changed_filenames(self):
+        (self.root / "a|<b>&_notes.md").write_text("Fixture\n")
+        self.commit()
+        summary = self.root / ".git/summary"
+        result = self.detect(GITHUB_STEP_SUMMARY=str(summary))
+        self.assertIn("Changed file: a|<b>&_notes.md (example)", result.stdout)
+        content = summary.read_text()
+        self.assertIn("Changed file: a&#124;&lt;b&gt;&amp;&#95;notes.md (example)", content)
+        self.assertEqual(len(re.findall(r"^\| [^|\n]+ \| `\w+` \|", content, re.MULTILINE)), 14)
+
+    def test_deleted_file_reason_is_explained(self):
+        (self.root / "source.php").unlink()
+        self.commit()
+        result = self.detect()
+        self.assertIn("Deleted or renamed files may affect documentation links", result.stdout)
+        self.assertEqual(self.outputs["documentation"], "true")
+
+    def test_deleted_file_comparison_failure_explains_documentation_fallback(self):
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        git = shutil.which("git")
+        self.assertIsNotNone(git)
+        bin_path = self.root / "bin"
+        bin_path.mkdir()
+        mock = bin_path / "git"
+        mock.write_text(
+            "#!/bin/bash\n"
+            "for arg in \"$@\"; do\n"
+            "  if [ \"$arg\" = --diff-filter=D ]; then exit 1; fi\n"
+            "done\n"
+            f"exec {shlex.quote(git)} \"$@\"\n"
+        )
+        mock.chmod(0o755)
+        result = self.detect(PATH=f"{bin_path}:{os.environ['PATH']}")
+        self.assertIn("Deleted-file comparison failed; documentation checks retained", result.stdout)
+        self.assertEqual(self.outputs["documentation"], "true")
+        self.assertEqual(self.outputs["markdown"], "false")
+
+    def test_mixed_changes_show_example_for_each_category(self):
+        (self.root / "README.md").write_text("Updated documentation\n")
+        (self.root / "source.php").write_text("<?php echo 1;\n")
+        self.commit()
+        result = self.detect()
+        self.assertIn("Changed file: README.md (example)", result.stdout)
+        self.assertIn("Changed file: source.php (example)", result.stdout)
+        self.assertIn("Enabled configuration categories: runtime", result.stdout)
 
     def assert_documentation(self, markdown, documentation):
         self.assertEqual(self.outputs["markdown"], str(markdown).lower())
@@ -1680,7 +1879,10 @@ class ChangeDetectionTest(unittest.TestCase):
     def test_quoted_filename_fails_safe(self):
         (self.root / "unusual\nname.md").write_text("Documentation\n")
         self.commit()
-        self.detect()
+        result = self.detect()
+        self.assertIn('  - "unusual\\nname.md"\n', result.stdout)
+        self.assertIn("Quoted Git paths found: retaining full validation.", result.stdout)
+        self.assertEqual(self.reasons["docker"], "Quoted Git paths; full validation")
         self.assertTrue(all(value == "true" for value in self.outputs.values()))
 
     def test_failed_diff_runs_code_and_reports_error(self):

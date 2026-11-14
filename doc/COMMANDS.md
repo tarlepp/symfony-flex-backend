@@ -83,6 +83,9 @@ make ci-detect-changes BASE_SHA=master HEAD_SHA=HEAD COLOR=always
 
 Defaults compare `HEAD^...HEAD`; `EVENT_NAME=push` uses a two-dot comparison.
 This only previews selection for committed changes, without running checks.
+Labels describe eligible checks; actual execution depends on the CI event and
+prerequisites. Docker image builds/scans and image pin/update checks are
+separate categories.
 `NO_COLOR=1` disables colors even with `COLOR=always`.
 
 Display installed development tool versions from the repository root on the
