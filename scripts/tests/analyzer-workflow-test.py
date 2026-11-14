@@ -809,23 +809,72 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             ("check-requirements", "runtime"), ("lint-yaml", "yaml"),
         ):
             self.assertIn(
-                f"        if: ${{{{ needs.changes.outputs.{output} == 'true' }}}}\n"
+                "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
+                f"needs.changes.outputs.{output} == 'true' }}}}\n"
                 f"        run: bash scripts/make.sh {target}\n", section,
             )
         self.assertIn(
-            "        if: ${{ needs.changes.outputs.compose == 'true' }}\n"
+            "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
+            "needs.changes.outputs.compose == 'true' }}\n"
             "        run: |\n          docker compose config --quiet\n", section,
         )
         self.assertIn(
-            "        if: ${{ needs.changes.outputs.tooling == 'true' }}\n"
+            "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
+            "needs.changes.outputs.tooling == 'true' }}\n"
             "        run: |\n          bash scripts/make.sh test-command-output\n", section,
         )
+
+    def test_configuration_checks_continue_after_failure_but_require_successful_setup(self):
+        section = job("lint-configuration")
+        self.assertIn(
+            "      - name: Bootstrap PHP project\n"
+            "        id: bootstrap\n"
+            "        uses: ./.github/actions/php-bootstrap\n", section,
+        )
+        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("|| true", section)
+        conditions = re.findall(r"^        if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
+        self.assertEqual(len(conditions), 7)
+        self.assertEqual(conditions[-1], "always()")
+        self.assertEqual(
+            [re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
+             for condition in conditions[:-1]],
+            ["runtime", "composer", "runtime", "yaml", "tooling", "compose"],
+        )
+        for condition in conditions[:-1]:
+            output = re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
+            self.assertEqual(
+                condition,
+                "!cancelled() && steps.bootstrap.outcome == 'success' && "
+                f"needs.changes.outputs.{output} == 'true'",
+            )
+            for bootstrap in ("success", "failure", "cancelled", "skipped"):
+                for selected in ("true", "false", "", "unknown"):
+                    for cancelled in (False, True):
+                        for earlier in ("success", "failure", "skipped"):
+                            with self.subTest(condition=condition, bootstrap=bootstrap,
+                                              selected=selected, cancelled=cancelled,
+                                              earlier=earlier):
+                                # GitHub adds success() only without a status function.
+                                expression = condition.replace(
+                                    "!cancelled()", repr(not cancelled),
+                                ).replace(
+                                    "steps.bootstrap.outcome", repr(bootstrap),
+                                ).replace(
+                                    f"needs.changes.outputs.{output}", repr(selected),
+                                ).replace("&&", "and")
+                                self.assertEqual(
+                                    eval(expression, {"__builtins__": {}}),
+                                    not cancelled and bootstrap == "success"
+                                    and selected == "true",
+                                )
 
     def test_devcontainer_validation_parses_compose_and_json(self):
         section = job("lint-configuration")
         step = re.search(
             r"^      - name: Validate Compose and Dev Container configurations\n"
-            r"        if: \$\{\{ needs.changes.outputs.compose == 'true' \}\}\n"
+            r"        if: \$\{\{ !cancelled\(\) && steps.bootstrap.outcome == 'success' && "
+            r"needs.changes.outputs.compose == 'true' \}\}\n"
             r"        run: \|\n((?:          .+\n)+)",
             section, re.MULTILINE,
         )
