@@ -580,6 +580,9 @@ does. Image-scan reports can therefore be available even when enforcement
 fails. After a successful build, the blocking scan also runs if SARIF
 generation or upload fails, unless the run is cancelled. Report and upload
 failures still fail the job; a failed or skipped build prevents the scan.
+The scheduled/manual SARIF report includes all severities by default, while
+the blocking scan and core PR SARIF report use only `CRITICAL,HIGH`. Both
+reports ignore unfixed findings.
 
 Both workflows build and load images locally, with `push: false`. Core builds
 read target-specific GitHub Actions caches and write them only on `master`
