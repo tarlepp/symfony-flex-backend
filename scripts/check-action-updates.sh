@@ -25,7 +25,7 @@
 #
 ################################################################################
 
-# Don't exit on error - handle errors gracefully
+# Collect discovery and lookup failures so remaining checks still run.
 set +e
 source "$(dirname "$0")/command-output.sh"
 
@@ -53,16 +53,20 @@ case "${1:-}" in
         ;;
 esac
 
-RED=$OUTPUT_RED
 GREEN=$OUTPUT_GREEN
 YELLOW=$OUTPUT_YELLOW
 NC=$OUTPUT_RESET
 
-# Tracked GitHub Actions are discovered dynamically from workflow files.
+# Discovery state, keyed by owner/repository[/action-path]@version.
 declare -A ACTIONS=()
 declare -A ACTION_SOURCES=()
 declare -A ACTION_REFS=()
 declare -A TOOL_KEYS=()
+
+# Check results use the same keys; source locations stay in ACTION_SOURCES.
+declare -A ACTION_RESULTS=()
+declare -A ACTION_LATEST=()
+declare -A ACTION_LATEST_SHAS=()
 
 # Track statistics
 TOTAL=0
@@ -70,163 +74,94 @@ CURRENT=0
 OUTDATED=0
 DISCOVERY_WARNINGS=0
 
+discover_actions_in_file() {
+    local file=$1 line line_number=0 uses_ref comment_version repo ref version
+    local action_key existing_ref source
+
+    while IFS= read -r line; do
+        line_number=$((line_number + 1))
+        [[ "$line" == *uses:* ]] || continue
+
+        uses_ref=$(printf '%s\n' "$line" |
+            sed -n 's/.*uses:[[:space:]]*\([^[:space:]#][^[:space:]#]*\).*/\1/p')
+        comment_version=$(printf '%s\n' "$line" |
+            sed -n 's/.*#[[:space:]]*\([^[:space:]]\+\).*/\1/p')
+
+        [ -n "$uses_ref" ] || continue
+
+        case "$uses_ref" in
+            ./*|../*|*/.github/workflows/*) continue ;;
+        esac
+
+        repo="${uses_ref%@*}"
+        ref="${uses_ref#*@}"
+
+        [[ "$repo" == */* ]] || continue
+
+        source="$file:$line_number"
+
+        version=''
+
+        if [ -n "$comment_version" ]; then
+            version="$comment_version"
+        elif printf '%s\n' "$ref" | grep -Eq '^v?[0-9]+(\.|$)'; then
+            version="$ref"
+        fi
+
+        if ! printf '%s\n' "$ref" | grep -Eq '^[0-9a-f]{40}$'; then
+            output_status WARN "Unpinned action reference at $source -> $uses_ref"
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        fi
+
+        if [ -z "$version" ]; then
+            output_status WARN "Cannot determine version for $repo at $source (add '# vX.Y.Z' comment)"
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            continue
+        fi
+
+        action_key="$repo@$version"
+        existing_ref="${ACTION_REFS[$action_key]}"
+
+        if [ -n "$existing_ref" ] && [ "$existing_ref" != "$ref" ]; then
+            output_status WARN "Conflicting pinned refs detected for $action_key: $existing_ref (${ACTION_SOURCES[$action_key]}) vs $ref ($source)"
+            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            continue
+        fi
+
+        ACTIONS["$action_key"]="$version"
+        ACTION_REFS["$action_key"]="$ref"
+
+        if [ -n "${ACTION_SOURCES[$action_key]}" ]; then
+            ACTION_SOURCES["$action_key"]+=$'\n'"$source"
+        else
+            ACTION_SOURCES["$action_key"]="$source"
+        fi
+    done < "$file"
+}
+
 discover_actions() {
-    local workflow line uses_ref version repo existing_version ref comment_version existing_ref
-    local line_number discovered_version
+    local file
 
     if [ ! -d "$WORKFLOW_DIR" ]; then
         output_status WARN "Workflow directory not found: $WORKFLOW_DIR"
         return
     fi
 
-    for workflow in "$WORKFLOW_DIR"/*.yml; do
-        [ -f "$workflow" ] || continue
+    for file in "$WORKFLOW_DIR"/*.yml; do
+        [ -f "$file" ] || continue
 
-        line_number=0
-        while IFS= read -r line; do
-            line_number=$((line_number + 1))
-
-            case "$line" in
-                *uses:*) ;;
-                *) continue ;;
-            esac
-
-            uses_ref=$(printf '%s\n' "$line" | sed -n 's/.*uses:[[:space:]]*\([^[:space:]#][^[:space:]#]*\).*/\1/p')
-            comment_version=$(printf '%s\n' "$line" | sed -n 's/.*#[[:space:]]*\([^[:space:]]\+\).*/\1/p')
-
-            [ -n "$uses_ref" ] || continue
-
-            case "$uses_ref" in
-                ./*|../*|*/.github/workflows/* )
-                    continue
-                    ;;
-            esac
-
-            repo="${uses_ref%@*}"
-            ref="${uses_ref#*@}"
-
-            case "$repo" in
-                */*) ;;
-                *) continue ;;
-            esac
-
-            discovered_version=''
-            if [ -n "$comment_version" ]; then
-                discovered_version="$comment_version"
-            elif printf '%s\n' "$ref" | grep -Eq '^v?[0-9]+(\.|$)'; then
-                discovered_version="$ref"
-            fi
-
-            if ! printf '%s\n' "$ref" | grep -Eq '^[0-9a-f]{40}$'; then
-                output_status WARN "Unpinned action reference at $workflow:$line_number -> $uses_ref"
-                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-            fi
-
-            if [ -z "$discovered_version" ]; then
-                output_status WARN "Cannot determine version for $repo at $workflow:$line_number (add '# vX.Y.Z' comment)"
-                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-                continue
-            fi
-
-            version="$discovered_version"
-
-            # Use composite key to support multiple versions of the same action
-            local action_key="${repo}@${version}"
-            local existing_ref="${ACTION_REFS[$action_key]}"
-
-            if [ -n "$existing_ref" ] && [ "$existing_ref" != "$ref" ]; then
-                output_status WARN "Conflicting pinned refs detected for $action_key: $existing_ref (${ACTION_SOURCES[$action_key]}) vs $ref ($workflow:$line_number)"
-                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-                continue
-            fi
-
-            ACTIONS["$action_key"]="$version"
-            # Append source, separating multiple occurrences with newlines
-            if [ -n "${ACTION_SOURCES[$action_key]}" ]; then
-                ACTION_SOURCES["$action_key"]="${ACTION_SOURCES[$action_key]}"$'\n'"$workflow:$line_number"
-            else
-                ACTION_SOURCES["$action_key"]="$workflow:$line_number"
-            fi
-            ACTION_REFS["$action_key"]="$ref"
-        done < "$workflow"
+        discover_actions_in_file "$file"
     done
 
-    # Discover actions from .github/actions/*/action.yml files
     if [ ! -d "$ACTIONS_DIR" ]; then
         output_status WARN "Actions directory not found: $ACTIONS_DIR"
         return
     fi
 
-    for action_file in "$ACTIONS_DIR"/*/action.yml; do
-        [ -f "$action_file" ] || continue
+    for file in "$ACTIONS_DIR"/*/action.yml; do
+        [ -f "$file" ] || continue
 
-        line_number=0
-        while IFS= read -r line; do
-            line_number=$((line_number + 1))
-
-            case "$line" in
-                *uses:*) ;;
-                *) continue ;;
-            esac
-
-            uses_ref=$(printf '%s\n' "$line" | sed -n 's/.*uses:[[:space:]]*\([^[:space:]#][^[:space:]#]*\).*/\1/p')
-            comment_version=$(printf '%s\n' "$line" | sed -n 's/.*#[[:space:]]*\([^[:space:]]\+\).*/\1/p')
-
-            [ -n "$uses_ref" ] || continue
-
-            case "$uses_ref" in
-                ./*|../*|*/.github/workflows/* )
-                    continue
-                    ;;
-            esac
-
-            repo="${uses_ref%@*}"
-            ref="${uses_ref#*@}"
-
-            case "$repo" in
-                */*) ;;
-                *) continue ;;
-            esac
-
-            discovered_version=''
-            if [ -n "$comment_version" ]; then
-                discovered_version="$comment_version"
-            elif printf '%s\n' "$ref" | grep -Eq '^v?[0-9]+(\.|$)'; then
-                discovered_version="$ref"
-            fi
-
-            if ! printf '%s\n' "$ref" | grep -Eq '^[0-9a-f]{40}$'; then
-                output_status WARN "Unpinned action reference at $action_file:$line_number -> $uses_ref"
-                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-            fi
-
-            if [ -z "$discovered_version" ]; then
-                output_status WARN "Cannot determine version for $repo at $action_file:$line_number (add '# vX.Y.Z' comment)"
-                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-                continue
-            fi
-
-            version="$discovered_version"
-
-            # Use composite key to support multiple versions of the same action
-            local action_key="${repo}@${version}"
-            local existing_ref="${ACTION_REFS[$action_key]}"
-
-            if [ -n "$existing_ref" ] && [ "$existing_ref" != "$ref" ]; then
-                output_status WARN "Conflicting pinned refs detected for $action_key: $existing_ref (${ACTION_SOURCES[$action_key]}) vs $ref ($action_file:$line_number)"
-                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-                continue
-            fi
-
-            ACTIONS["$action_key"]="$version"
-            # Append source, separating multiple occurrences with newlines
-            if [ -n "${ACTION_SOURCES[$action_key]}" ]; then
-                ACTION_SOURCES["$action_key"]="${ACTION_SOURCES[$action_key]}"$'\n'"$action_file:$line_number"
-            else
-                ACTION_SOURCES["$action_key"]="$action_file:$line_number"
-            fi
-            ACTION_REFS["$action_key"]="$ref"
-        done < "$action_file"
+        discover_actions_in_file "$file"
     done
 }
 
@@ -238,6 +173,7 @@ print_current_pins_markdown() {
 
     while IFS= read -r action; do
         [ -n "$action" ] || continue
+
         version="${ACTIONS[$action]}"
         ref="${ACTION_REFS[$action]}"
         source="${ACTION_SOURCES[$action]}"
@@ -256,33 +192,41 @@ print_current_pins_markdown() {
 
 discover_tools() {
     local line number=0 version repo ref key
+
     if [ ! -f "$TOOL_PINS_FILE" ]; then
         printf 'Tool pin file not found: %s\n' "$TOOL_PINS_FILE" >&2
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
+
     while IFS= read -r line; do
         number=$((number + 1))
+
         [[ "$line" == *"# tool-pin:"* ]] || continue
+
         if [[ ! "$line" =~ ^[A-Z_]+_TAG=(v[0-9]+\.[0-9]+\.[0-9]+)[[:space:]]+#\ tool-pin:\ ([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)@([0-9a-f]{40})$ ]]; then
             printf 'Invalid tool pin at %s:%s\n' "$TOOL_PINS_FILE" "$number" >&2
             DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
             continue
         fi
+
         version="${BASH_REMATCH[1]}"
         repo="${BASH_REMATCH[2]}"
         ref="${BASH_REMATCH[3]}"
         key="$repo@$version"
+
         if [ -n "${ACTION_REFS[$key]}" ] && [ "${ACTION_REFS[$key]}" != "$ref" ]; then
             printf 'Conflicting tool pins for %s\n' "$key" >&2
             DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
             continue
         fi
+
         ACTIONS["$key"]="$version"
         ACTION_REFS["$key"]="$ref"
         ACTION_SOURCES["$key"]="$TOOL_PINS_FILE:$number"
         TOOL_KEYS["$key"]=1
     done < "$TOOL_PINS_FILE"
+
     if [ "${#TOOL_KEYS[@]}" -eq 0 ]; then
         printf 'No workflow tool pins discovered in %s\n' "$TOOL_PINS_FILE" >&2
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
@@ -297,44 +241,68 @@ lookup_action_tags() {
         output_status FAIL "$context (cannot create temporary Git diagnostic file)"
         return 1
     fi
+
     refs=$("$TIMEOUT_BIN" "$seconds" "$GIT_BIN" ls-remote --tags "$@" 2>"$errors")
     status=$?
+
     if [ "$status" -ne 0 ]; then
         if [ "$status" -eq 124 ]; then
             output_status FAIL "$context (GitHub lookup timed out after ${seconds}s; check network/DNS connectivity and retry)"
         else
             output_status FAIL "$context (git ls-remote failed with exit $status)"
         fi
+
         if [ -s "$errors" ]; then
             sed 's/^/   Git diagnostic: /' "$errors" >&2
         fi
     fi
+
     rm -f "$errors"
+
     [ "$status" -eq 0 ] || return "$status"
+
     printf '%s\n' "$refs"
+}
+
+tag_commit() {
+    local tag=$1
+
+    # Annotated tags resolve to their peeled commit; lightweight tags use the ref.
+    awk -v ref="refs/tags/$tag" '
+        $2 == ref { plain = $1 }
+        $2 == ref "^{}" { peeled = $1 }
+        END { print peeled ? peeled : plain }
+    '
 }
 
 check_tool() {
     local key=$1 repo=$2 current=$3 refs latest sha
+
     TOTAL=$((TOTAL + 1))
+
     if ! refs=$(lookup_action_tags 20 "Unable to fetch tool tags: $repo" "https://github.com/$repo.git"); then
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
-    sha=$(printf '%s\n' "$refs" | awk -v ref="refs/tags/$current" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
+
+    sha=$(tag_commit "$current" <<< "$refs")
+
     if [ "$sha" != "${ACTION_REFS[$key]}" ]; then
         output_status FAIL "Tool tag/SHA mismatch: $key (${ACTION_SOURCES[$key]}); expected ${ACTION_REFS[$key]}, resolved ${sha:-missing}"
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
+
     latest=$(printf '%s\n' "$refs" | awk '{sub(/^refs\/tags\//, "", $2); print $2}' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+
     if [ -z "$latest" ]; then
         output_status FAIL "No stable tool tags found: $repo"
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
         return
     fi
+
     if [ "$latest" != "$current" ]; then
-        sha=$(printf '%s\n' "$refs" | awk -v ref="refs/tags/$latest" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
+        sha=$(tag_commit "$latest" <<< "$refs")
         printf '%s[WARN]%s UPDATE AVAILABLE (tool): %s %s -> %s\n  Commit SHA: %s\n  Source: %s\n  Verify release asset SHA-256 checksums before updating.\n' "$YELLOW" "$NC" "$repo" "$current" "$latest" "$sha" "${ACTION_SOURCES[$key]}"
         OUTDATED=$((OUTDATED + 1))
     else
@@ -343,7 +311,7 @@ check_tool() {
     fi
 }
 
-get_latest_compatible_release() {
+latest_action_version() {
     local action="$1"
     local current_version="$2"
     local tags latest repo_path
@@ -356,6 +324,7 @@ get_latest_compatible_release() {
     if ! tags=$(lookup_action_tags 10 "Unable to fetch action version: $action @ $current_version" --refs "https://github.com/$repo_path.git"); then
         return 1
     fi
+
     tags=$(printf '%s\n' "$tags" | awk '{print $2}' | sed 's#refs/tags/##')
 
     # Get the absolute latest version tag (semver-like only, at least X.Y to exclude
@@ -366,203 +335,214 @@ get_latest_compatible_release() {
         output_status FAIL "Unable to fetch action version: $action @ $current_version (GitHub lookup succeeded, but no version-like tags matching vX.Y were found)"
         return 1
     fi
+
     printf '%s\n' "$latest"
 }
 
-if [ "$MODE" != "current-pins-md" ] && [ "${ACTION_OUTPUT_WRAPPED:-0}" != 1 ]; then
-    output_status RUN 'GitHub Actions and workflow tool updates'
-fi
+check_action() {
+    local key=$1 repo=$2 current=${ACTIONS[$1]} latest refs sha repo_path
 
-if [ "$MODE" != "tools-only" ]; then
-    discover_actions
-fi
-discover_tools
+    TOTAL=$((TOTAL + 1))
 
-if [ "$DISCOVERY_WARNINGS" -gt 0 ] && [ "$MODE" = "check" ]; then
-    output_status WARN "Discovery warnings found: $DISCOVERY_WARNINGS"
-    printf '\n'
-    output_status INFO 'Continuing with version checks so all findings are shown in this run'
-    printf '\n'
-fi
-
-if [ ${#ACTIONS[@]} -eq 0 ]; then
-    if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
-        checker_outcome FAIL 'Discovery checks failed; no pinned actions or tools could be checked'
-        exit 2
+    if ! latest=$(latest_action_version "$repo" "$current"); then
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        ACTION_RESULTS["$key"]=version-error
+        return
     fi
 
-    checker_outcome SKIP "No pinned GitHub Actions discovered from $WORKFLOW_DIR or $ACTIONS_DIR"
-    exit 0
-fi
+    repo_path=$(printf '%s\n' "$repo" | cut -d/ -f1-2)
 
-if [ "$MODE" = "current-pins-md" ]; then
-    print_current_pins_markdown
-    if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
-        exit 2
+    if ! refs=$(lookup_action_tags 10 "Unable to fetch action SHA: $repo @ $latest" \
+        "https://github.com/$repo_path.git" "refs/tags/$latest" "refs/tags/$latest^{}"); then
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        ACTION_RESULTS["$key"]=commit-error
+        return
     fi
-    exit 0
-fi
 
-printf 'Checking %s GitHub Actions and workflow tools for updates...\n' "${#ACTIONS[@]}"
-printf '\n'
+    sha=$(tag_commit "$latest" <<< "$refs")
 
-# Group actions by repo name
-declare -A repo_versions
-for action_key in "${!ACTIONS[@]}"; do
-    repo_name="${action_key%@*}"
-    if [ -z "${repo_versions[$repo_name]}" ]; then
-        repo_versions["$repo_name"]="$action_key"
+    if ! printf '%s\n' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
+        output_status FAIL "Unable to fetch action SHA: $repo @ $latest (GitHub lookup succeeded, but the exact tag resolved to a missing or invalid 40-character commit SHA)"
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        ACTION_RESULTS["$key"]=commit-error
+        return
+    fi
+
+    ACTION_LATEST["$key"]="$latest"
+    ACTION_LATEST_SHAS["$key"]="$sha"
+
+    if [ "${latest#v}" != "${current#v}" ] || [ "$sha" != "${ACTION_REFS[$key]}" ]; then
+        ACTION_RESULTS["$key"]=update
+        OUTDATED=$((OUTDATED + 1))
     else
-        repo_versions["$repo_name"]="${repo_versions[$repo_name]} $action_key"
+        ACTION_RESULTS["$key"]=current
+        CURRENT=$((CURRENT + 1))
     fi
-done
+}
 
-# Check each action repo (potentially with multiple versions)
-for repo_name in $(printf '%s\n' "${!repo_versions[@]}" | sort); do
-    action_keys="${repo_versions[$repo_name]}"
+print_action_update() {
+    local key=$1 current=${ACTIONS[$1]} latest=${ACTION_LATEST[$1]}
+    local sha=${ACTION_LATEST_SHAS[$1]} source prefix='      Source: '
 
-    # Track if any version is outdated for this repo
-    repo_has_update=0
-    unset versions_info
-    declare -a versions_info
+    printf '   %s -> %s\n' "$current" "$latest"
 
-    for action_key in $action_keys; do
-        current_version="${ACTIONS[$action_key]}"
-        if [ -n "${TOOL_KEYS[$action_key]}" ]; then
-            check_tool "$action_key" "$repo_name" "$current_version"
-            continue
-        fi
-        ((TOTAL++))
+    if [ "${current#v}" = "${latest#v}" ]; then
+        printf '      Pin differs from tag commit (same version)\n'
+        printf '      Pinned SHA: %s\n' "${ACTION_REFS[$key]}"
+    fi
 
-        if ! latest=$(get_latest_compatible_release "$repo_name" "$current_version"); then
-            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-            versions_info+=("${current_version}"$'\tunable\t')
-            continue
-        fi
+    printf '      SHA:   %s\n' "$sha"
+    printf '      Short: %s\n' "${sha:0:8}"
 
-        latest_normalized="${latest#v}"
-        current_normalized="${current_version#v}"
+    while IFS= read -r source; do
+        [ -n "$source" ] || continue
 
-        repo_path=$(printf '%s\n' "$repo_name" | cut -d/ -f1-2)
-        if ! sha=$(lookup_action_tags 10 "Unable to fetch action SHA: $repo_name @ $latest" "https://github.com/$repo_path.git" "refs/tags/$latest" "refs/tags/$latest^{}"); then
-            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-            versions_info+=("${current_version}"$'\terror\t')
-            continue
-        fi
-        sha=$(printf '%s\n' "$sha" | awk -v ref="refs/tags/$latest" '$2 == ref {plain=$1} $2 == ref "^{}" {peeled=$1} END {print peeled ? peeled : plain}')
+        printf '%s%s\n' "$prefix" "$source"
+        prefix='              '
+    done <<< "${ACTION_SOURCES[$key]}"
+}
 
-        if ! printf '%s\n' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
-            output_status FAIL "Unable to fetch action SHA: $repo_name @ $latest (GitHub lookup succeeded, but the exact tag resolved to a missing or invalid 40-character commit SHA)"
-            DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-            versions_info+=("${current_version}"$'\terror\t')
-            continue
-        fi
+print_repository_results() {
+    local repo=$1 key has_update=false all_current=true
 
-        if [ "$latest_normalized" != "$current_normalized" ] || [ "$sha" != "${ACTION_REFS[$action_key]}" ]; then
-            repo_has_update=1
-            # Store with ||| as source delimiter (won't appear in paths)
-            sources_str=$(printf '%s\n' "${ACTION_SOURCES[$action_key]}" | tr '\n' '|' | sed 's/|$//')
-            versions_info+=("${current_version}	${latest}	${sha}	${sources_str}	${ACTION_REFS[$action_key]}")
-        else
-            ((CURRENT++))
-            versions_info+=("${current_version}	current	")
-        fi
+    shift
+
+    [ "$#" -gt 0 ] || return
+
+    for key in "$@"; do
+        case "${ACTION_RESULTS[$key]}" in
+            update) has_update=true; all_current=false ;;
+            current) ;;
+            *) all_current=false ;;
+        esac
     done
 
-    [ "${#versions_info[@]}" -gt 0 ] || continue
+    # Lookup failures already have diagnostics; do not label them up-to-date.
+    if [ "$has_update" = true ]; then
+        printf '%s[WARN]%s UPDATE AVAILABLE: %s\n' "$YELLOW" "$NC" "$repo"
 
-    # Display repo with all versions
-    if [ $repo_has_update -eq 1 ]; then
-        printf '%s[WARN]%s UPDATE AVAILABLE: %s\n' "$YELLOW" "$NC" "$repo_name"
-        for info in "${versions_info[@]}"; do
-            # Use printf to handle tab-separated fields
-            current=$(printf '%s\n' "$info" | cut -f1)
-            latest=$(printf '%s\n' "$info" | cut -f2)
-            sha=$(printf '%s\n' "$info" | cut -f3)
-            sources_str=$(printf '%s\n' "$info" | cut -f4)
-            pinned_sha=$(printf '%s\n' "$info" | cut -f5)
-
-            if [ "$latest" = "current" ]; then
-                printf '   %s (up-to-date)\n' "$current"
-            elif [ "$latest" = "unable" ]; then
-                printf '   %s -> (unable to fetch)\n' "$current"
-            elif [ "$latest" = "error" ]; then
-                printf '   %s -> (error fetching SHA)\n' "$current"
-            else
-                printf '   %s -> %s\n' "$current" "$latest"
-                if [ "${current#v}" = "${latest#v}" ]; then
-                    printf '      Pin differs from tag commit (same version)\n'
-                    printf '      Pinned SHA: %s\n' "$pinned_sha"
-                fi
-                printf '      SHA:   %s\n' "$sha"
-                printf '      Short: %s\n' "${sha:0:8}"
-
-                # Display sources for this version (pipe-delimited, convert to newlines)
-                sources_array=()
-                i=0
-                while IFS= read -r line; do
-                    [ -n "$line" ] && sources_array[$i]="$line" && ((i++))
-                done < <(printf '%s\n' "$sources_str" | tr '|' '\n')
-
-                for idx in "${!sources_array[@]}"; do
-                    if [ "$idx" -eq 0 ]; then
-                        printf '      Source: %s\n' "${sources_array[$idx]}"
-                    else
-                        printf '              %s\n' "${sources_array[$idx]}"
-                    fi
-                done
-                ((OUTDATED++))
-            fi
+        for key in "$@"; do
+            case "${ACTION_RESULTS[$key]}" in
+                current) printf '   %s (up-to-date)\n' "${ACTIONS[$key]}" ;;
+                version-error) printf '   %s -> (unable to fetch)\n' "${ACTIONS[$key]}" ;;
+                commit-error) printf '   %s -> (error fetching SHA)\n' "${ACTIONS[$key]}" ;;
+                update) print_action_update "$key" ;;
+            esac
         done
+
         printf '\n'
-    else
-        # All versions of this repo are up-to-date
-        all_current=1
-        for info in "${versions_info[@]}"; do
-            latest=$(printf '%s\n' "$info" | cut -f2)
-            if [ "$latest" != "current" ] && [ -n "$latest" ]; then
-                all_current=0
-                break
-            fi
+    elif [ "$all_current" = true ]; then
+        printf '%s[OK]%s %s\n' "$GREEN" "$NC" "$repo"
+
+        for key in "$@"; do
+            printf '   %s (up-to-date)\n' "${ACTIONS[$key]}"
         done
 
-        if [ $all_current -eq 1 ]; then
-            printf '%s[OK]%s %s\n' "$GREEN" "$NC" "$repo_name"
-            for info in "${versions_info[@]}"; do
-                current=$(printf '%s\n' "$info" | cut -f1)
-                printf '   %s (up-to-date)\n' "$current"
-            done
-            printf '\n'
-        fi
+        printf '\n'
     fi
-done
+}
 
-# Summary
-output_status INFO 'Action/tool update summary'
-printf 'Actions/tools checked:   %s\n' "$TOTAL"
-printf 'Discovery warnings:      %s%s%s\n' "$YELLOW" "$DISCOVERY_WARNINGS" "$NC"
-printf 'Up-to-date:              %s%s%s\n' "$GREEN" "$CURRENT" "$NC"
-printf 'Updates available:       %s%s%s\n' "$YELLOW" "$OUTDATED" "$NC"
-printf '\n'
+check_repositories() {
+    local key repo
+    local -A repository_keys=()
+    local -a checked_actions=()
 
-if [ $OUTDATED -gt 0 ]; then
-    printf '%sTo update actions:%s\n' "$YELLOW" "$NC"
-    printf '1. Review the new versions and their changelogs\n'
-    printf '2. Follow the update process in doc/ACTIONS_UPDATE.md\n'
-    printf '3. Test changes in a feature branch\n'
-    printf '4. Create a PR and verify CI passes\n'
+    # Newline-separated keys retain each action's version and optional subpath.
+    for key in "${!ACTIONS[@]}"; do
+        repo="${key%@*}"
+        repository_keys["$repo"]+="$key"$'\n'
+    done
+
+    while IFS= read -r repo; do
+        checked_actions=()
+
+        while IFS= read -r key; do
+            [ -n "$key" ] || continue
+
+            if [ -n "${TOOL_KEYS[$key]}" ]; then
+                check_tool "$key" "$repo" "${ACTIONS[$key]}"
+            else
+                check_action "$key" "$repo"
+                checked_actions+=("$key")
+            fi
+        done <<< "${repository_keys[$repo]}"
+
+        print_repository_results "$repo" "${checked_actions[@]}"
+    done < <(printf '%s\n' "${!repository_keys[@]}" | sort)
+}
+
+print_summary() {
+    output_status INFO 'Action/tool update summary'
+    printf 'Actions/tools checked:   %s\n' "$TOTAL"
+    printf 'Discovery warnings:      %s%s%s\n' "$YELLOW" "$DISCOVERY_WARNINGS" "$NC"
+    printf 'Up-to-date:              %s%s%s\n' "$GREEN" "$CURRENT" "$NC"
+    printf 'Updates available:       %s%s%s\n' "$YELLOW" "$OUTDATED" "$NC"
     printf '\n'
-fi
 
-if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
-    checker_outcome FAIL 'Discovery or lookup checks failed. Review the failed entries above; resolve pin inconsistencies or retry failed GitHub lookups.'
-    exit 2
-fi
+    if [ "$OUTDATED" -gt 0 ]; then
+        printf '%sTo update actions:%s\n' "$YELLOW" "$NC"
+        printf '1. Review the new versions and their changelogs\n'
+        printf '2. Follow the update process in doc/ACTIONS_UPDATE.md\n'
+        printf '3. Test changes in a feature branch\n'
+        printf '4. Create a PR and verify CI passes\n'
+        printf '\n'
+    fi
+}
 
-if [ $OUTDATED -gt 0 ]; then
-    checker_outcome WARN "$OUTDATED action/tool update(s) available"
-    exit 1
-fi
+finish_checks() {
+    if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
+        checker_outcome FAIL 'Discovery or lookup checks failed. Review the failed entries above; resolve pin inconsistencies or retry failed GitHub lookups.'
+        return 2
+    fi
 
-checker_outcome OK 'All checked actions and tools are up-to-date'
-exit 0
+    if [ "$OUTDATED" -gt 0 ]; then
+        checker_outcome WARN "$OUTDATED action/tool update(s) available"
+        return 1
+    fi
+
+    checker_outcome OK 'All checked actions and tools are up-to-date'
+}
+
+main() {
+    if [ "$MODE" != "current-pins-md" ] && [ "${ACTION_OUTPUT_WRAPPED:-0}" != 1 ]; then
+        output_status RUN 'GitHub Actions and workflow tool updates'
+    fi
+
+    if [ "$MODE" != "tools-only" ]; then
+        discover_actions
+    fi
+
+    discover_tools
+
+    if [ "$DISCOVERY_WARNINGS" -gt 0 ] && [ "$MODE" = "check" ]; then
+        output_status WARN "Discovery warnings found: $DISCOVERY_WARNINGS"
+        printf '\n'
+        output_status INFO 'Continuing with version checks so all findings are shown in this run'
+        printf '\n'
+    fi
+
+    if [ "${#ACTIONS[@]}" -eq 0 ]; then
+        if [ "$DISCOVERY_WARNINGS" -gt 0 ]; then
+            checker_outcome FAIL 'Discovery checks failed; no pinned actions or tools could be checked'
+            return 2
+        fi
+
+        checker_outcome SKIP "No pinned GitHub Actions discovered from $WORKFLOW_DIR or $ACTIONS_DIR"
+        return 0
+    fi
+
+    if [ "$MODE" = "current-pins-md" ]; then
+        print_current_pins_markdown
+        [ "$DISCOVERY_WARNINGS" -eq 0 ] || return 2
+        return 0
+    fi
+
+    printf 'Checking %s GitHub Actions and workflow tools for updates...\n\n' "${#ACTIONS[@]}"
+
+    check_repositories
+    print_summary
+    finish_checks
+}
+
+main
+exit $?
