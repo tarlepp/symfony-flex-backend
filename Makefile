@@ -448,7 +448,14 @@ check-dependencies-patch: ## Checks if any vendor dependency can be updated (onl
 	@bash scripts/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch $(ANSI_FLAG)
 
 check-licenses: ## Check vendor licenses
-	@bash -o pipefail -c 'composer license --format=json | jq -r '"'"'.dependencies[] | .license | join(" OR ") | if length == 0 then "UNSPECIFIED" else . end'"'"' | sort | uniq -c | sort -rn'
+	@bash -o pipefail -c 'XDEBUG_MODE=off composer license --format=json | \
+		jq -r '"'"'.dependencies[] | .license | join(" OR ") | if length == 0 then "UNSPECIFIED" else . end'"'"' | \
+		sort | uniq -c | sort -rn | \
+		awk '"'"'{ \
+			if (ENVIRON["NATIVE_COLOR"] == "always" && ENVIRON["NO_COLOR"] == "" && match($$0, /[0-9]+/)) \
+				printf "%s\033[34m%s\033[0m%s\n", substr($$0, 1, RSTART-1), substr($$0, RSTART, RLENGTH), substr($$0, RSTART+RLENGTH); \
+			else print \
+		}'"'"''
 
 check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
 	@bash scripts/check-security.sh

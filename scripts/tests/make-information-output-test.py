@@ -385,14 +385,16 @@ exit 0
                 result = self.make(target, COLOR="always")
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertNotRegex(result.stdout, r"\[(RUN|OK|INFO|FAIL)\]")
-                if target not in ("tool-versions", "project-stats"):
+                if target not in ("tool-versions", "project-stats", "check-licenses"):
                     self.assertNotIn("\x1b", result.stdout)
                 self.assertEqual(result.stderr.count("[OK]"), 1)
                 if target == "configuration":
                     self.assertEqual(json.loads(result.stdout), {"fixture": True})
                 if target == "check-licenses":
+                    plain = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+                    self.assertIn("\x1b[34m", result.stdout)
                     self.assertEqual(
-                        {line.strip() for line in result.stdout.splitlines()},
+                        {line.strip() for line in plain.splitlines()},
                         {"2 MIT", "1 MIT OR Apache-2.0", "1 UNSPECIFIED"},
                     )
                 if target == "project-stats":
@@ -400,6 +402,59 @@ exit 0
                     self.assertIn("\x1b[", result.stdout)
                     self.assertTrue(plain.startswith("Project file statistics"))
                     self.assertRegex(plain, r"(?m)^Total\s+1\s+1$")
+
+    def test_license_summary_disables_xdebug_without_hiding_composer_errors(self):
+        result = self.make("check-licenses", XDEBUG_MODE="debug", CHECK_VERSION_XDEBUG="1")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("Xdebug:", result.stderr)
+        self.assertIn("MIT", result.stdout)
+
+        result = self.make(
+            "check-licenses", XDEBUG_MODE="debug", CHECK_VERSION_XDEBUG="1", FAIL_COMMAND="composer",
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("native failure diagnostic", result.stderr)
+        self.assertNotIn("Xdebug:", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_license_summary_colors_follow_native_policy(self):
+        plain = self.make("check-licenses", COLOR="never")
+        for color, no_color, expected in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result = self.make("check-licenses", COLOR=color, NO_COLOR=no_color, TERM="xterm")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+                self.assertNotIn("\x1b", plain.stdout)
+
+        for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
+            with self.subTest(term=term, no_color=no_color):
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                    CALLS=str(self.calls), COLOR="auto", NO_COLOR=no_color, TERM=term,
+                    FAIL_COMMAND="", NVM_DIR=str(self.root / "missing-nvm"),
+                )
+                environment.pop("NATIVE_COLOR", None)
+                master, slave = pty.openpty()
+                try:
+                    result = subprocess.run(
+                        ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
+                         "INSIDE_DOCKER_CONTAINER=1", "check-licenses"],
+                        cwd=self.root, env=environment, stdout=slave, stderr=subprocess.PIPE, check=False,
+                    )
+                    os.close(slave)
+                    slave = -1
+                    output = os.read(master, 65536).decode().replace("\r\n", "\n")
+                finally:
+                    os.close(master)
+                    if slave != -1:
+                        os.close(slave)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[" in output, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", output), plain.stdout)
 
     def test_project_stats_color_respects_native_policy(self):
         self.init_stats_repository()
