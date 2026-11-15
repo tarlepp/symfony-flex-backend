@@ -12,7 +12,7 @@ shift
 : "${EVENT_NAME:?EVENT_NAME is required}"
 : "${PRIOR_STATUS:?PRIOR_STATUS is required}"
 
-echo "## Workflow run overview"
+printf '## %s\n' "${OVERVIEW_TITLE:-Workflow run overview}"
 echo
 printf 'Event: %s' "$EVENT_NAME"
 if [ -n "${TARGET:-}" ]; then

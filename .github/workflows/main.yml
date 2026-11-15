@@ -93,30 +93,58 @@ jobs:
           print-versions: 'false'
 
       - name: Display Symfony application information
+        id: application-info
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh application-info
 
       - name: Validate main `composer.json` and `composer.lock` files
+        id: composer
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.composer == 'true' }}
         run: bash scripts/make.sh composer-validate
 
       - name: Check application runtime requirements
+        id: requirements
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.runtime == 'true' }}
         run: bash scripts/make.sh check-requirements
 
       - name: Lint Symfony YAML configuration
+        id: yaml
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.yaml == 'true' }}
         run: bash scripts/make.sh lint-yaml
 
       - name: Test development tooling contracts
+        id: tooling
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.tooling == 'true' }}
         run: |
           bash scripts/make.sh test-command-output
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/tests/check-workflow-tool-updates-test.py
 
       - name: Validate Compose and Dev Container configurations
+        id: compose
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.compose == 'true' }}
         run: bash scripts/ci-validate-compose.sh
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Configuration validation
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          INFO: ${{ steps.application-info.outcome || 'skipped' }}
+          COMPOSER: ${{ steps.composer.outcome || 'skipped' }}
+          REQUIREMENTS: ${{ steps.requirements.outcome || 'skipped' }}
+          YAML: ${{ steps.yaml.outcome || 'skipped' }}
+          TOOLING: ${{ steps.tooling.outcome || 'skipped' }}
+          COMPOSE: ${{ steps.compose.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Checks are selected by changed paths; see step logs for details.' \
+            'Bootstrap' "$BOOTSTRAP" 'Application information' "$INFO" \
+            'Composer validation' "$COMPOSER" 'Runtime requirements' "$REQUIREMENTS" \
+            'Symfony YAML' "$YAML" 'Tooling contracts' "$TOOLING" \
+            'Compose and Dev Container' "$COMPOSE" >> "$GITHUB_STEP_SUMMARY"
 
       - &failure_diagnostics_step
         name: Diagnose PHP container failure
@@ -149,12 +177,30 @@ jobs:
           print-versions: 'false'
 
       - name: Lint all markdown documentation files
+        id: markdown
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.markdown == 'true' }}
         run: bash scripts/make.sh lint-markdown
 
       - name: Validate skill metadata, index coverage, and repository Markdown links
+        id: documentation
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh check-skills
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Documentation validation
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          MARKDOWN: ${{ steps.markdown.outcome || 'skipped' }}
+          DOCUMENTATION: ${{ steps.documentation.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Markdown lint is selected by changed paths; see step logs for details.' \
+            'Bootstrap' "$BOOTSTRAP" 'Markdown lint' "$MARKDOWN" \
+            'Metadata and links' "$DOCUMENTATION" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
       - *stop_php_step
@@ -177,13 +223,29 @@ jobs:
           key: workflow-validators-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/lint-workflows.sh') }}
 
       - name: Bootstrap development container
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           install-dependencies: 'false'
           print-versions: 'false'
 
       - name: Validate workflows, embedded shell, and local action metadata
+        id: validation
         run: bash scripts/make.sh lint-workflows
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Workflow validation
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          VALIDATION: ${{ steps.validation.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'See the validation step log for errors and supported checks.' \
+            'Bootstrap' "$BOOTSTRAP" 'Workflow and action validation' "$VALIDATION" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
       - *stop_php_step
@@ -204,12 +266,30 @@ jobs:
         uses: ./.github/actions/php-bootstrap
 
       - name: PHP Security Checker
+        id: symfony-security
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         uses: symfonycorp/security-checker-action@258311ef7ac571f1310780ef3d79fc5abef642b5 # v5
 
       - name: Check installed dependencies for known vulnerabilities
+        id: dependency-security
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh check-security
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Dependency security
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          SYMFONY_SECURITY: ${{ steps.symfony-security.outcome || 'skipped' }}
+          DEPENDENCY_SECURITY: ${{ steps.dependency-security.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'See the security check logs for advisories and failure details.' \
+            'Bootstrap' "$BOOTSTRAP" 'Symfony security checker' "$SYMFONY_SECURITY" \
+            'Installed dependency audit' "$DEPENDENCY_SECURITY" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
       - *stop_php_step
@@ -225,9 +305,23 @@ jobs:
       - *checkout_full_history_step
 
       - name: Gitleaks scan
+        id: scan
         uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Secret scanning
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          SCAN: ${{ steps.scan.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'See the Gitleaks step log and annotations for findings.' \
+            'Gitleaks scan' "$SCAN" >> "$GITHUB_STEP_SUMMARY"
 
   docker-image-verify-pins:
     name: Verify Docker base image pins (multi-platform)
@@ -250,7 +344,21 @@ jobs:
 
       # Failures are reported as pull request annotations and job summary
       - name: Verify multi-platform base images
+        id: verify
         run: bash scripts/make.sh docker-image-verify-pins
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Docker base image pins
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          VERIFY: ${{ steps.verify.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'See the verification log and annotations for image pin details.' \
+            'Multi-platform pin verification' "$VERIFY" >> "$GITHUB_STEP_SUMMARY"
 
   docker-image-check-updates:
     name: Check Docker image versions
@@ -271,6 +379,7 @@ jobs:
           persist-credentials: false
 
       - name: Authenticate to Docker Hub when credentials are available
+        id: authentication
         if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -286,6 +395,7 @@ jobs:
           fi
 
       - name: Bootstrap maintenance container
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           build-target: maintenance
@@ -294,10 +404,29 @@ jobs:
           cache-dependencies: 'false'
 
       - name: Run Docker image helper regression tests
+        id: tests
         run: bash scripts/make.sh test-docker-images
 
       - name: Check for newer stable Docker image versions
+        id: updates
         run: bash scripts/docker-images.sh check-updates --advisory
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Docker image updates
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          AUTHENTICATION: ${{ steps.authentication.outcome || 'skipped' }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          TESTS: ${{ steps.tests.outcome || 'skipped' }}
+          UPDATES: ${{ steps.updates.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Version updates are advisory; see the update check log for candidates.' \
+            'Docker Hub credential check' "$AUTHENTICATION" 'Bootstrap' "$BOOTSTRAP" \
+            'Helper regression tests' "$TESTS" 'Image version check' "$UPDATES" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Log out of Docker Hub
         if: ${{ always() }}
@@ -322,18 +451,22 @@ jobs:
         uses: ./.github/actions/php-bootstrap
 
       - name: Run PHP CodeSniffer
+        id: phpcs
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh phpcs
 
       - name: Run ECS
+        id: ecs
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh ecs
 
       - name: Run PHPLint
+        id: phplint
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh phplint
 
       - name: Run PHP Parallel Lint
+        id: parallel-lint
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh php-parallel-lint
 
@@ -343,6 +476,7 @@ jobs:
         run: bash scripts/make.sh phploc
 
       - name: Archive `phploc` results (phploc.json)
+        id: artifact
         if: ${{ !cancelled() && (steps.phploc.outcome == 'success' || steps.phploc.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -350,6 +484,27 @@ jobs:
           path: ./build/phploc.json
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Lightweight static analyzers
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          PHPCS: ${{ steps.phpcs.outcome || 'skipped' }}
+          ECS: ${{ steps.ecs.outcome || 'skipped' }}
+          PHPLINT: ${{ steps.phplint.outcome || 'skipped' }}
+          PARALLEL_LINT: ${{ steps.parallel-lint.outcome || 'skipped' }}
+          PHPLOC: ${{ steps.phploc.outcome || 'skipped' }}
+          ARTIFACT: ${{ steps.artifact.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'See step logs for findings; phploc.json is available as an artifact when uploaded.' \
+            'Bootstrap' "$BOOTSTRAP" 'PHP CodeSniffer' "$PHPCS" 'ECS' "$ECS" \
+            'PHPLint' "$PHPLINT" 'PHP Parallel Lint' "$PARALLEL_LINT" \
+            'PHPLoc' "$PHPLOC" 'PHPLoc artifact' "$ARTIFACT" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
       - *stop_php_step
@@ -376,14 +531,17 @@ jobs:
       - *checkout_step
 
       - name: Bootstrap PHP project
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
 
       - name: Run static analyzer (${{ matrix.analyzer.name }})
+        id: analyzer
         env:
           ANALYZER_TARGET: ${{ matrix.analyzer.target }}
         run: bash scripts/make.sh "$ANALYZER_TARGET"
 
       - name: Archive Psalm results (psalm.json)
+        id: artifact
         if: ${{ !cancelled() && matrix.analyzer.name == 'Psalm' }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -391,6 +549,23 @@ jobs:
           path: ./build/psalm.json
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Static analyzer
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          ANALYZER: ${{ matrix.analyzer.name }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          ANALYSIS: ${{ steps.analyzer.outcome || 'skipped' }}
+          ARTIFACT: ${{ steps.artifact.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'See the analyzer log and annotations for findings; only Psalm uploads a JSON artifact.' \
+            'Analyzer' "$ANALYZER" 'Bootstrap' "$BOOTSTRAP" \
+            'Analysis' "$ANALYSIS" 'Psalm artifact' "$ARTIFACT" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
       - *stop_php_step
@@ -459,6 +634,7 @@ jobs:
       - *checkout_step
 
       - name: Bootstrap PHP project
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           install-dependencies: 'false'
@@ -466,9 +642,11 @@ jobs:
           cache-dependencies: 'true'
 
       - name: Configure application for CI run
+        id: configure
         run: bash scripts/make.sh configure-ci
 
       - name: Install Composer dependencies
+        id: install
         run: bash scripts/make.sh install
 
       - name: Display PHP, Composer, Symfony, and PHPUnit versions
@@ -481,21 +659,25 @@ jobs:
           DATABASE_URL: mysql://root:symfony@host.docker.internal:${{ job.services.mariadb.ports['3306'] }}/symfony
 
       - name: Create PhpMetrics report
+        id: metrics
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml') != '' }}
         run: |
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/ci-test-reports.py validate-junit
           bash scripts/make.sh phpmetrics
 
       - name: Verify required report files
+        id: verify-reports
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/ci-test-reports.py verify
 
       - name: Publish test and coverage summary
+        id: coverage-summary
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml', 'build/logs/clover.xml') != '' }}
         continue-on-error: true
         run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/ci-test-reports.py summary >> "$GITHUB_STEP_SUMMARY"
 
       - name: Archive code coverage results (clover.xml)
+        id: clover
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -505,6 +687,7 @@ jobs:
           retention-days: 14
 
       - name: Archive JUnit test results (junit.xml)
+        id: junit
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -514,6 +697,7 @@ jobs:
           retention-days: 14
 
       - name: Archive HTML code coverage report
+        id: coverage
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -523,6 +707,7 @@ jobs:
           retention-days: 14
 
       - name: Archive PhpMetrics results
+        id: metrics-artifact
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -530,6 +715,34 @@ jobs:
           path: ./build/phpmetrics
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: PHPUnit and reports
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          CONFIGURE: ${{ steps.configure.outcome || 'skipped' }}
+          INSTALL: ${{ steps.install.outcome || 'skipped' }}
+          PHPUNIT: ${{ steps.phpunit.outcome || 'skipped' }}
+          METRICS: ${{ steps.metrics.outcome || 'skipped' }}
+          VERIFY: ${{ steps.verify-reports.outcome || 'skipped' }}
+          SUMMARY: ${{ steps.coverage-summary.outcome || 'skipped' }}
+          CLOVER: ${{ steps.clover.outcome || 'skipped' }}
+          JUNIT: ${{ steps.junit.outcome || 'skipped' }}
+          COVERAGE: ${{ steps.coverage.outcome || 'skipped' }}
+          METRICS_ARTIFACT: ${{ steps.metrics-artifact.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Test totals and coverage appear separately when reports are available; see logs and artifacts for details.' \
+            'Bootstrap' "$BOOTSTRAP" 'CI configuration' "$CONFIGURE" \
+            'Dependency installation' "$INSTALL" 'PHPUnit' "$PHPUNIT" \
+            'PhpMetrics report' "$METRICS" 'Report verification' "$VERIFY" \
+            'Test and coverage summary' "$SUMMARY" 'Clover artifact' "$CLOVER" \
+            'JUnit artifact' "$JUNIT" 'HTML coverage artifact' "$COVERAGE" \
+            'PhpMetrics artifact' "$METRICS_ARTIFACT" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
       - *stop_php_step
@@ -561,6 +774,7 @@ jobs:
           fi
 
       - name: Checkout tested source
+        id: checkout-report
         if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -569,6 +783,7 @@ jobs:
           persist-credentials: false
 
       - name: Download Clover coverage report
+        id: clover
         if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -576,6 +791,7 @@ jobs:
           path: ./build/logs
 
       - name: Download JUnit test report
+        id: junit
         if: ${{ steps.reporting.outputs.enabled == 'true' }}
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -592,12 +808,14 @@ jobs:
           cache-dependencies: 'true'
 
       - name: Install Coveralls reporter
+        id: install-coveralls
         if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php composer install --working-dir=tools/06_php-coveralls --no-progress --optimize-autoloader
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
+        id: coveralls
         if: ${{ env.COVERALLS_REPO_TOKEN != '' }}
         run: |
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T \
@@ -610,12 +828,14 @@ jobs:
           COVERALLS_RUN_LOCALLY: 1
 
       - name: Prepare reports for host-side SonarQube scan
+        id: prepare-sonar
         if: ${{ env.SONAR_TOKEN != '' }}
         run: bash scripts/make.sh prepare-sonar-reports
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+        id: sonar
         if: ${{ env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@e805d875275f728fac1885b413934be6d7c63f65 # v8.4.1
         with:
@@ -625,6 +845,29 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Publish job overview
+        if: ${{ !cancelled() && steps.checkout-report.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: External reporting
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          REPORTING: ${{ steps.reporting.outcome || 'skipped' }}
+          CLOVER: ${{ steps.clover.outcome || 'skipped' }}
+          JUNIT: ${{ steps.junit.outcome || 'skipped' }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          INSTALL: ${{ steps.install-coveralls.outcome || 'skipped' }}
+          COVERALLS: ${{ steps.coveralls.outcome || 'skipped' }}
+          PREPARE: ${{ steps.prepare-sonar.outcome || 'skipped' }}
+          SONAR: ${{ steps.sonar.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Uploads require their respective tokens; see step logs for reporting details.' \
+            'Reporting selection' "$REPORTING" 'Clover download' "$CLOVER" \
+            'JUnit download' "$JUNIT" 'Bootstrap' "$BOOTSTRAP" \
+            'Coveralls installation' "$INSTALL" 'Coveralls upload' "$COVERALLS" \
+            'Sonar report preparation' "$PREPARE" 'SonarQube scan' "$SONAR" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Diagnose PHP container failure
         if: ${{ failure() && steps.bootstrap.outcome != 'skipped' }}
@@ -653,11 +896,13 @@ jobs:
       - *checkout_step
 
       - name: Set up Docker Buildx
+        id: buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
         with:
           buildkitd-flags: ''
 
       - name: Build the Docker image
+        id: build
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         env:
           DOCKER_BUILD_RECORD_UPLOAD: 'false'
@@ -674,6 +919,7 @@ jobs:
           no-cache-filters: production
 
       - name: Upload Docker image for scanning
+        id: artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: docker-image-${{ matrix.target }}
@@ -681,6 +927,23 @@ jobs:
           if-no-files-found: error
           compression-level: 0
           retention-days: 1
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Docker image build
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          TARGET: ${{ matrix.target }}
+          BUILDX: ${{ steps.buildx.outcome || 'skipped' }}
+          BUILD: ${{ steps.build.outcome || 'skipped' }}
+          ARTIFACT: ${{ steps.artifact.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'The image artifact is retained for one day for the Trivy scan; Docker Build supplies its own build details.' \
+            'Buildx setup' "$BUILDX" 'Image build' "$BUILD" \
+            'Image artifact upload' "$ARTIFACT" >> "$GITHUB_STEP_SUMMARY"
 
   docker-scan:
     name: Scan application Docker image with Trivy (${{ matrix.target }})
@@ -711,6 +974,7 @@ jobs:
           path: ${{ runner.temp }}/docker-image
 
       - name: Scan Docker image with Trivy vulnerability scanner
+        id: scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           input: ${{ runner.temp }}/docker-image/docker-image.tar
@@ -735,11 +999,30 @@ jobs:
           limit-severities-for-sarif: 'true'
 
       - name: Upload PR image scan SARIF
+        id: upload
         if: ${{ !cancelled() && steps.sarif.outcome == 'success' }}
         uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           sarif_file: trivy-${{ matrix.target }}.sarif
           category: trivy-${{ matrix.target }}
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Docker image vulnerability scan
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          TARGET: ${{ matrix.target }}
+          IMAGE: ${{ steps.image.outcome || 'skipped' }}
+          SCAN: ${{ steps.scan.outcome || 'skipped' }}
+          SARIF: ${{ steps.sarif.outcome || 'skipped' }}
+          UPLOAD: ${{ steps.upload.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'The blocking scan checks fixable HIGH and CRITICAL OS and library vulnerabilities. SARIF is published for same-repository PRs only; see scan logs for findings.' \
+            'Image artifact download' "$IMAGE" 'Blocking Trivy scan' "$SCAN" \
+            'PR SARIF generation' "$SARIF" 'Code scanning upload' "$UPLOAD" >> "$GITHUB_STEP_SUMMARY"
 
   ci-result:
     name: Validate CI result
