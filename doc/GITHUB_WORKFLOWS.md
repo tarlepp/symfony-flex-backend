@@ -576,8 +576,10 @@ flowchart LR
 Both this workflow and core image builds enforce fixable `CRITICAL,HIGH`
 OS/library vulnerabilities with Trivy; unfixed findings are ignored. The
 separate SARIF generation step does not enforce the threshold: the later scan
-does. Image-scan reports can therefore be available even when enforcement fails.
-Earlier build/report/upload failures can prevent later steps.
+does. Image-scan reports can therefore be available even when enforcement
+fails. After a successful build, the blocking scan also runs if SARIF
+generation or upload fails, unless the run is cancelled. Report and upload
+failures still fail the job; a failed or skipped build prevents the scan.
 
 Both workflows build and load images locally, with `push: false`. Core builds
 read target-specific GitHub Actions caches and write them only on `master`
