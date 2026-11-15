@@ -39,9 +39,13 @@ fi
 # unless they could still become a Make recipe error line.
 filter_make_errors() {
     local chunk status pending='' midline=false
+    # Match complete recipe error lines, including recursive make[depth] prefixes.
     local pattern='^make(\[[0-9]+\])?: \*\*\* \[.+\] Error [0-9]+$'
+    # A timed-out partial read stays buffered while it can still become such a line.
+    # tail covers the optional ": *** [target]..." portion after make or make[depth].
     local tail='(:( (\*(\*(\*( (\[.*)?)?)?)?)?)?)?'
     local prefix="^m(a(k(e(${tail}|\\[([0-9]+(\\]${tail})?)?)?)?)?)?$"
+
     while true; do
         chunk=''
         IFS= read -r -t 0.05 chunk
