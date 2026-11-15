@@ -435,6 +435,75 @@ jobs:
       - *failure_diagnostics_step
       - *stop_php_step
 
+  statistics:
+    name: Project statistics
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name != 'schedule' }}
+    timeout-minutes: 15
+    steps:
+      - *harden_runner_step
+
+      - *checkout_step
+
+      - name: Bootstrap PHP project
+        id: bootstrap
+        continue-on-error: true
+        uses: ./.github/actions/php-bootstrap
+        with:
+          print-versions: 'false'
+
+      - name: Summarize selected tool versions
+        id: versions
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        env:
+          COLOR: never
+          NO_COLOR: '1'
+          NATIVE_COLOR: never
+        run: |
+          bash scripts/make.sh tool-versions | tee "$RUNNER_TEMP/tool-versions.txt"
+          bash scripts/ci-statistics-summary.sh versions 'Tool versions' "$RUNNER_TEMP/tool-versions.txt"
+
+      - name: Summarize project files
+        id: project
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        continue-on-error: true
+        run: bash scripts/ci-statistics-summary.sh run 'Project file statistics' bash scripts/make.sh project-stats
+
+      - name: Summarize dependency licenses
+        id: licenses
+        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
+        continue-on-error: true
+        run: bash scripts/ci-statistics-summary.sh run 'Dependency licenses' bash scripts/make.sh check-licenses
+
+      - name: Summarize Docker builder platforms
+        id: platforms
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: bash scripts/ci-statistics-summary.sh run 'Docker builder platforms' bash scripts/make.sh docker-builder-platforms
+
+      - name: Publish job overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          OVERVIEW_TITLE: Project statistics collection
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
+          VERSIONS: ${{ steps.versions.outcome || 'skipped' }}
+          PROJECT: ${{ steps.project.outcome || 'skipped' }}
+          LICENSES: ${{ steps.licenses.outcome || 'skipped' }}
+          PLATFORMS: ${{ steps.platforms.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Informational only; failures do not block the merge gate. See step logs for diagnostics.' \
+            'Bootstrap' "$BOOTSTRAP" 'Tool versions' "$VERSIONS" 'Project files' "$PROJECT" \
+            'Dependency licenses' "$LICENSES" 'Docker builder platforms' "$PLATFORMS" >> "$GITHUB_STEP_SUMMARY"
+
+      - *failure_diagnostics_step
+      - *stop_php_step
+
   lightweight-analyzers:
     name: Lightweight static analyzers
     runs-on: ubuntu-24.04
@@ -473,7 +542,17 @@ jobs:
       - name: Run PHPLoc
         id: phploc
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
-        run: bash scripts/make.sh phploc
+        shell: bash
+        env:
+          COLOR: never
+          NO_COLOR: '1'
+          NATIVE_COLOR: never
+        run: bash scripts/make.sh phploc | tee "$RUNNER_TEMP/phploc-output.txt"
+
+      - name: Publish PHPLoc statistics
+        if: ${{ !cancelled() && (steps.phploc.outcome == 'success' || steps.phploc.outcome == 'failure') }}
+        continue-on-error: true
+        run: bash scripts/ci-statistics-summary.sh file 'PHPLoc statistics' "$RUNNER_TEMP/phploc-output.txt"
 
       - name: Archive `phploc` results (phploc.json)
         id: artifact
@@ -536,9 +615,20 @@ jobs:
 
       - name: Run static analyzer (${{ matrix.analyzer.name }})
         id: analyzer
+        shell: bash
         env:
           ANALYZER_TARGET: ${{ matrix.analyzer.target }}
-        run: bash scripts/make.sh "$ANALYZER_TARGET"
+        run: |
+          if [ "$ANALYZER_TARGET" = phpinsights ]; then
+            COLOR=never NO_COLOR=1 NATIVE_COLOR=never bash scripts/make.sh "$ANALYZER_TARGET" | tee "$RUNNER_TEMP/phpinsights-output.txt"
+          else
+            bash scripts/make.sh "$ANALYZER_TARGET"
+          fi
+
+      - name: Publish PHP Insights scores
+        if: ${{ !cancelled() && matrix.analyzer.name == 'PHP Insights' && (steps.analyzer.outcome == 'success' || steps.analyzer.outcome == 'failure') }}
+        continue-on-error: true
+        run: bash scripts/ci-statistics-summary.sh insights 'PHP Insights scores' "$RUNNER_TEMP/phpinsights-output.txt"
 
       - name: Archive Psalm results (psalm.json)
         id: artifact
@@ -661,9 +751,19 @@ jobs:
       - name: Create PhpMetrics report
         id: metrics
         if: ${{ !cancelled() && (steps.phpunit.outcome == 'success' || steps.phpunit.outcome == 'failure') && hashFiles('build/logs/junit.xml') != '' }}
+        shell: bash
+        env:
+          COLOR: never
+          NO_COLOR: '1'
+          NATIVE_COLOR: never
         run: |
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/ci-test-reports.py validate-junit
-          bash scripts/make.sh phpmetrics
+          bash scripts/make.sh phpmetrics | tee "$RUNNER_TEMP/phpmetrics-output.txt"
+
+      - name: Publish PhpMetrics statistics
+        if: ${{ !cancelled() && (steps.metrics.outcome == 'success' || steps.metrics.outcome == 'failure') }}
+        continue-on-error: true
+        run: bash scripts/ci-statistics-summary.sh file 'PhpMetrics statistics' "$RUNNER_TEMP/phpmetrics-output.txt"
 
       - name: Verify required report files
         id: verify-reports
@@ -1037,6 +1137,7 @@ jobs:
       - docker-build
       - docker-scan
       - report
+      - statistics
     if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
@@ -1058,4 +1159,5 @@ jobs:
           DOCKER_BUILD: ${{ needs.docker-build.result }}
           DOCKER_SCAN: ${{ needs.docker-scan.result }}
           REPORT: ${{ needs.report.result }}
+          STATISTICS: ${{ needs.statistics.result }}
         run: bash scripts/ci-result-gate.sh

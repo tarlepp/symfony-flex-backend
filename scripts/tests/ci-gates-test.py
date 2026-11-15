@@ -24,6 +24,93 @@ class CiGatesTest(unittest.TestCase):
             cls.workflow, re.MULTILINE | re.DOTALL,
         ))
 
+    def test_statistics_summary_preserves_output_and_failure(self):
+        helper = WORKFLOW.parents[2] / "scripts/ci-statistics-summary.sh"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            summary = root / "summary"
+            environment = {**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
+                           "COLOR": "always", "NATIVE_COLOR": "always", "NO_COLOR": ""}
+            command = (
+                "printf 'color=%s native=%s no_color=%s\\n```\\n' \"$COLOR\" \"$NATIVE_COLOR\" \"$NO_COLOR\"; "
+                "echo diagnostic >&2; exit \"$1\""
+            )
+            for status in (0, 7):
+                summary.write_text("")
+                result = subprocess.run(
+                    ["bash", str(helper), "run", "Example", "bash", "-c", command, "_", str(status)],
+                    env=environment, text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stdout, "color=never native=never no_color=1\n```\n")
+                self.assertEqual(result.stderr, "diagnostic\n")
+                self.assertIn("    color=never native=never no_color=1\n    ```\n", summary.read_text())
+                self.assertEqual("Command failed" in summary.read_text(), status != 0)
+            output = root / "output"
+            output.write_text("first\nsecond\n")
+            result = subprocess.run(
+                ["bash", str(helper), "file", "Existing", str(output)],
+                env=environment, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("## Existing\n\n    first\n    second\n", summary.read_text())
+            output.unlink()
+            result = subprocess.run(
+                ["bash", str(helper), "file", "Missing", str(output)],
+                env=environment, text=True, capture_output=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("missing", result.stderr)
+            result = subprocess.run(
+                ["bash", str(helper), "run", "Example", "true"],
+                env={**environment, "GITHUB_STEP_SUMMARY": str(root)},
+                text=True, capture_output=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+
+    def test_selected_statistics_require_complete_known_formats(self):
+        helper = WORKFLOW.parents[2] / "scripts/ci-statistics-summary.sh"
+        fixtures = {
+            "versions": (
+                "  PHP 8.5.12 (cli) (built: test)\n  PHP 8.5.12 (fpm-fcgi)\n"
+                "  Symfony: v8.1.11\n    Composer version 2.11.1\n"
+                "      phpunit/phpunit: 13.4.6\n      other/package: 1.0\n",
+                ("PHP 8.5.12 (cli)", "Symfony: v8.1.11",
+                 "Composer version 2.11.1", "phpunit/phpunit: 13.4.6"),
+                ("fpm-fcgi", "other/package"),
+            ),
+            "insights": (
+                "[CODE] 97.7 pts within 10094 lines\n[COMPLEXITY] 95.5 pts\n"
+                "[ARCHITECTURE] 100 pts\n[MISC] 100 pts on coding style\n"
+                "• [Code] detailed findings\n",
+                ("[CODE]", "[COMPLEXITY]", "[ARCHITECTURE]", "[MISC]"),
+                ("detailed findings",),
+            ),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "input"
+            summary = root / "summary"
+            for mode, (fixture, expected, excluded) in fixtures.items():
+                with self.subTest(mode=mode):
+                    source.write_text(fixture)
+                    summary.write_text("")
+                    command = ["bash", str(helper), mode, "Summary", str(source)]
+                    environment = {**os.environ, "GITHUB_STEP_SUMMARY": str(summary)}
+                    result = subprocess.run(command, env=environment, text=True, capture_output=True)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    for text in expected:
+                        self.assertIn(text, summary.read_text())
+                    for text in excluded:
+                        self.assertNotIn(text, summary.read_text())
+                    summary.write_text("")
+                    source.write_text(fixture.replace(next(line for line in fixture.splitlines()
+                                                          if expected[-1] in line), ""))
+                    result = subprocess.run(command, env=environment, text=True, capture_output=True)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn("Could not identify", result.stderr)
+                    self.assertEqual(summary.read_text(), "")
+
     def test_core_job_overviews_report_actual_outcomes(self):
         jobs = {
             "lint-configuration": {
@@ -50,6 +137,12 @@ class CiGatesTest(unittest.TestCase):
                 "AUTHENTICATION": ("authentication", "Docker Hub credential check"),
                 "BOOTSTRAP": ("bootstrap", "Bootstrap"), "TESTS": ("tests", "Helper regression tests"),
                 "UPDATES": ("updates", "Image version check"),
+            },
+            "statistics": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "VERSIONS": ("versions", "Tool versions"),
+                "PROJECT": ("project", "Project files"),
+                "LICENSES": ("licenses", "Dependency licenses"),
+                "PLATFORMS": ("platforms", "Docker builder platforms"),
             },
             "lightweight-analyzers": {
                 "BOOTSTRAP": ("bootstrap", "Bootstrap"), "PHPCS": ("phpcs", "PHP CodeSniffer"),
@@ -682,6 +775,10 @@ class CiGatesTest(unittest.TestCase):
                     self.assertNotIn("::error::", result.stderr)
                 for name in result_names:
                     for status in ("success", "failure", "cancelled", "skipped", "", "unknown"):
+                        if name == "STATISTICS":
+                            result = self.run_gate(job, dict(environment, **{name: status}))
+                            self.assertEqual(result.returncode == 0, bool(status) and status != "unknown")
+                            continue
                         if status == environment[name]:
                             continue
                         with self.subTest(job=job, event=event, name=name, status=status):

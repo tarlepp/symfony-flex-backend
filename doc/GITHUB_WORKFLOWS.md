@@ -230,6 +230,7 @@ validation path; the event rules above decide which jobs actually run.
 flowchart TD
     Changes["changes: Detect changed files"]
     Independent["gitleaks"]
+    Statistics["statistics: informational summaries"]
     Documentation["lint-documentation + lint-workflows (when affected)"]
     Checks["lint-configuration + security-check"]
     Images["docker-image-verify-pins + docker-image-check-updates"]
@@ -255,6 +256,7 @@ flowchart TD
     Images --> Prereq
     Analyzers --> Prereq
     Changes --> Final
+    Statistics --> Final
     Prereq --> Final
     Analyzers --> Final
     Tests --> Final
@@ -289,6 +291,7 @@ Display names appear in GitHub's run graph and logs.
 | `security-check` | Symfony security checker and `make check-security` |
 | `docker-image-verify-pins` | Verify pins and tag/digest parity |
 | `docker-image-check-updates` | Helper regressions and advisory update lookup |
+| `statistics` | Informational project, license and Docker builder summaries |
 | `lightweight-analyzers` | CodeSniffer, ECS, PHPLint, Parallel Lint, PHPLoc |
 | `static-analyzers` | Separate Psalm, PHPStan and PHP Insights matrix jobs |
 | `test` | PHPUnit, coverage and PhpMetrics reports |
@@ -298,8 +301,9 @@ Display names appear in GitHub's run graph and logs.
 | `report` | Coveralls/SonarCloud uploads; eligible job must succeed |
 | `ci-result` | Validate the combined core CI result |
 
-Only Gitleaks runs independently of change detection. All other check jobs
-depend on successful selection (except the two periodic checks on schedules).
+Gitleaks and informational statistics run independently of change detection.
+All other check jobs depend on successful selection (except the two periodic
+checks on schedules).
 Markdown-only changes run documentation checks and Gitleaks; unrelated workflow,
 application, analyzer, security and image jobs skip.
 
@@ -632,6 +636,19 @@ Test reports originate in `build/logs/`, `build/report/` and
 before PhpMetrics, checks required files and XML contents, and prints the
 test/coverage summary in three separate steps. The runner appends the summary's
 stdout to its own `GITHUB_STEP_SUMMARY`; Python does not run on the runner.
+On non-scheduled CI runs, the informational statistics job first publishes
+selected PHP, Symfony, Composer and PHPUnit versions from `make tool-versions`,
+then the outputs of `make project-stats`, `make check-licenses` and
+`make docker-builder-platforms`. These describe the checked-out files,
+installed dependencies and the GitHub runner's current builder respectively;
+the builder platforms do not prove that application images were built for them.
+Collection failures are shown in the job overview and do not block the merge
+gate. Setup failures can leave some summaries unavailable. When PHP analyzers
+are selected, the lightweight analyzer job also publishes its existing PHPLoc
+output and the PHP Insights matrix job publishes its four score lines. When
+tests produce usable JUnit results, the test job also publishes its existing
+PhpMetrics output. Summary publication does not change analyzer or test
+results; these job summaries may appear in any order because jobs run in parallel.
 Changes to this helper select workflow regressions and full PHP/test validation.
 After PHPUnit succeeds or fails (unless cancelled), CI checks required report
 files and attempts artifact uploads. Missing required reports fail the job, as

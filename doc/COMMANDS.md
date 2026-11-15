@@ -225,6 +225,25 @@ counts, while redirected output is plain by default. `COLOR=always` forces
 color; `COLOR=never` or a nonempty `NO_COLOR` disables it. The Composer license
 query disables Xdebug for that process to avoid unnecessary debugger connections.
 
+The read-only statistics commands below run from the repository root on the
+Docker host. The first two need the running PHP development service; the license
+summary also needs installed Composer dependencies. The builder command inspects
+and may start the current host's Docker buildx builder, not the application
+images.
+
+```bash
+make project-stats
+make check-licenses
+make docker-builder-platforms
+```
+
+`project-stats` counts tracked working-tree files and text lines by file type,
+excluding lockfiles and recognized generated artifacts. CI publishes these
+three outputs and selected `make tool-versions` entries as informational
+summaries on non-scheduled runs. `make phploc` analyzes `src` and writes
+`build/phploc.json`; its output and PHP Insights scores are summarized when PHP
+analyzers run. PhpMetrics output is summarized when its test job runs.
+
 Target groups, risk markers, execution routing, and wrapped labels share the
 Makefile's `REGISTER_TARGET` metadata. Recipe descriptions remain beside their
 commands; help no longer guesses categories or risk from target names.

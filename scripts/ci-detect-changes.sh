@@ -136,7 +136,7 @@ classify_path() {
             ;;
         .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|\
         scripts/check-composite-action-shell.py|scripts/tests/composite-action-shell-test.py|\
-        scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|scripts/ci-gate-common.sh|scripts/ci-workflow-overview.sh|\
+        scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|scripts/ci-gate-common.sh|scripts/ci-workflow-overview.sh|scripts/ci-statistics-summary.sh|\
         scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|\
         scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py|\
         scripts/tests/docker-image-workflow-test.py)
@@ -291,6 +291,7 @@ prepare_jobs() {
     add_job gitleaks 'Gitleaks scan' "$always" 'Independent of changed files'
     add_category_job docker-image-verify-pins 'Verify Docker base image pins' images 'Multi-platform pin verification'
     add_job docker-image-check-updates 'Check Docker image versions' "$periodic_images" 'Scheduled runs also enable this job'
+    add_job statistics 'Project statistics' "$always" 'Informational on non-scheduled runs'
     add_category_job lightweight-analyzers 'Lightweight static analyzers' php 'CodeSniffer, ECS, PHPLint, Parallel Lint and PHPLoc'
     add_category_job static-analyzers 'Static analyzers' php 'Matrix: Psalm, PHPStan, PHP Insights'
     add_job ci-summary 'Validate CI prerequisites' conditional 'Runs unless cancelled'

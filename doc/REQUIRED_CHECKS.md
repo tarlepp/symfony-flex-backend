@@ -83,15 +83,17 @@ request run, not workflow display labels.
   separate Trivy image scans, and fails unless all selected jobs succeeded.
   Skips require explicit successful category selection or the schedule policy;
   reporting additionally skips merge groups, manual runs and test-unaffected
-  changes.
+  changes. The statistics job is included for visibility but its result is
+  informational and does not block this gate.
 * `dependency-review` (`dependency-review.yml`): separate workflow, so the
   aggregate gate cannot cover it.
 
 Require only these two. Jobs behind the aggregate gate, including
 `Validate CI prerequisites`, `PHPUnit tests` and the Docker builds, do not need
 their own entries. Keep new jobs covered by the aggregate's dependency graph and
-result checks; a new variant of an already-covered matrix remains covered
-without a separate branch-protection entry.
+result checks, explicitly identifying any informational results; a new variant
+of an already-covered matrix remains covered without a separate
+branch-protection entry.
 
 Rules for this set:
 

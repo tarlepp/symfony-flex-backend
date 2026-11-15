@@ -21,7 +21,7 @@ class WorkflowOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         for name in (
             "lint-workflows.sh", "command-output.sh", "ci-prerequisite-gate.sh",
-            "ci-result-gate.sh", "ci-gate-common.sh", "ci-workflow-overview.sh",
+            "ci-result-gate.sh", "ci-gate-common.sh", "ci-workflow-overview.sh", "ci-statistics-summary.sh",
             "check-composite-action-shell.py",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
@@ -145,7 +145,7 @@ esac
             "shellcheck scripts/lint-workflows.sh scripts/command-output.sh "
             "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
             "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
-            "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-validate-compose.sh "
+            "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-statistics-summary.sh scripts/ci-validate-compose.sh "
             "scripts/ci-failure-diagnostics.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
