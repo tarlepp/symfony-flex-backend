@@ -110,7 +110,9 @@ Make targets:
 EOF
 }
 
-# List registry references; optional "locations" mode prefixes instruction lines.
+# Join continued instructions while retaining their starting line. Track named
+# stages case-insensitively so local FROM/COPY references are not treated as images.
+# Optional "locations" mode prefixes each external reference with its start line.
 dockerfile_images() {
     awk -v locations="${2:-}" '
         function emit(ref) {
@@ -308,27 +310,22 @@ check_image_update() {
     fi
 }
 
-command_update_pins() {
-    local file location ref image candidate status raw platforms platform temporary count=0
-    local -A pins=() plans=()
-    if [ "$#" -ne 0 ] || [ -n "${IMAGE:-}" ]; then
-        error "update-pins accepts neither options nor IMAGE"
-        return 64
-    fi
-    require_docker
-    if ! command -v curl > /dev/null 2>&1; then
-        error "curl command not found, install it first"
-        return 69
-    fi
-    output_status RUN 'Resolving minor/patch image updates and digest refreshes'
+# Populate the caller's plans array only after resolving and validating each pin.
+plan_pin_updates() {
+    local file location ref image candidate status raw platforms platform count=0
+    local -A pins=()
+
     for file in "${PINNED_DOCKERFILES[@]}"; do
         [ -f "$file" ] || continue
+
         while IFS=: read -r location ref; do
             if ! [[ "$ref" =~ ^[^@]+:[^/@]+@sha256:[a-f0-9]{64}$ ]]; then
                 warning SKIP "${file}: ${ref}: not an existing tagged digest pin"
                 continue
             fi
+
             count=$((count + 1))
+
             if [ -z "${pins[$ref]+set}" ]; then
                 image="${ref%@*}"
                 status=0
@@ -338,36 +335,50 @@ command_update_pins() {
                     3) candidate="$image" ;;
                     *) return "$status" ;;
                 esac
+
                 resolve_image_pin "$candidate" || return 1
+
                 if ! raw="$(raw_manifest "$ref")" || ! platforms="$(image_platforms "$raw")"; then
                     error "Could not inspect current platforms for ${ref}"
                     return 1
                 fi
+
                 if [ -z "$platforms" ]; then
                     error "${ref}: current pin has no runnable platforms to preserve"
                     return 1
                 fi
+
                 for platform in $platforms; do
                     if [[ " $RESOLVED_PLATFORMS " != *" $platform "* ]]; then
                         error "${candidate}: update would remove platform ${platform}"
                         return 1
                     fi
                 done
+
                 pins[$ref]="$RESOLVED_PIN"
             fi
+
             if [ "$ref" != "${pins[$ref]}" ]; then
+                # Each plan row is instruction start line, old pin, new pin (tab-separated).
                 plans[$file]+="${location}"$'\t'"${ref}"$'\t'"${pins[$ref]}"$'\n'
                 info UPDATE "${file}: ${ref} -> ${pins[$ref]}"
             fi
         done < <(dockerfile_images "$file" locations)
     done
+
     if [ "$count" -eq 0 ]; then
         error "No tagged digest pins found; run from the project root"
         return 1
     fi
-    # Resolve every registry lookup before editing any Dockerfile.
+}
+
+# Apply the caller's plans after all registry lookups have succeeded.
+apply_pin_updates() {
+    local file temporary
+
     for file in "${PINNED_DOCKERFILES[@]}"; do
         [ -n "${plans[$file]:-}" ] || continue
+
         temporary="$(mktemp "${file}.XXXXXX")"
         if ! awk -v updates="${plans[$file]}" '
             BEGIN {
@@ -407,9 +418,31 @@ command_update_pins() {
             error "Could not rewrite image instructions in ${file}"
             return 1
         fi
+
         chmod --reference="$file" "$temporary"
         mv "$temporary" "$file"
     done
+}
+
+command_update_pins() {
+    local -A plans=()
+
+    if [ "$#" -ne 0 ] || [ -n "${IMAGE:-}" ]; then
+        error "update-pins accepts neither options nor IMAGE"
+        return 64
+    fi
+
+    require_docker
+    if ! command -v curl > /dev/null 2>&1; then
+        error "curl command not found, install it first"
+        return 69
+    fi
+
+    output_status RUN 'Resolving minor/patch image updates and digest refreshes'
+
+    plan_pin_updates
+    apply_pin_updates
+
     output_result OK "Docker image pins resolved; ${#plans[@]} Dockerfile(s) changed"
 }
 
