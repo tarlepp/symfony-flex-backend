@@ -350,6 +350,17 @@ from vulnerability findings. Trivy still rejects fixable `CRITICAL` and `HIGH`
 OS and library vulnerabilities. The scheduled/manual `vulnerability-scan.yml`
 workflow keeps its existing build-and-scan jobs.
 
+On same-repository PRs, each core image scan also generates and uploads SARIF
+to Code scanning using the corresponding `trivy-development` or
+`trivy-production` category. The scan job has `security-events: write` for
+this upload; fork PRs and other events do not upload SARIF. The blocking scan
+runs first and retains its existing policy. SARIF generation and upload still
+run after a failed blocking scan when the image download succeeded and the run
+was not cancelled. A generation or upload failure fails the scan job and final
+gate; SARIF generation itself does not fail merely because findings exist.
+The PR report is restricted to the same fixable `CRITICAL,HIGH` findings as the
+blocking scan.
+
 ### Gates and cancellation [ᐞ](#table-of-contents)
 
 <a id="gates-and-cancellation"></a>
