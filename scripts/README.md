@@ -178,8 +178,11 @@ for the checker process to avoid debugger connection attempts.
 
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
 hardcodes colors without a disable option. `scripts/native-output.sh` removes
-only SGR decoration from their plain-mode output. Configuration lint uses the
-shared blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors. The
+only SGR decoration from their plain-mode output. PhpMetrics additionally
+highlights metric headings and values in color mode and disables Xdebug for its
+version and analysis processes. If JUnit is missing, its test fallback uses
+Xdebug coverage mode without step debugging. Configuration lint uses the shared
+blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors. The
 filter streams ordinary bytes, including partial lines, immediately; preserves
 separate stdout/stderr and the child's TTY detection; and returns the command's
 status. Filtering failures also fail the target. It never rewrites report files,

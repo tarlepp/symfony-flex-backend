@@ -484,11 +484,16 @@ phpmetrics: ## Generates PhpMetrics static analysis
 	$(call MUTATION_WARNING,Writing the HTML report to build/phpmetrics; existing report files may be replaced)
 	@if [ ! -f build/logs/junit.xml ] ; then \
 		bash scripts/command-output.sh --status WARN "build/logs/junit.xml not found; running application tests to generate it" ; \
-		$(MAKE) -s run-tests || exit $$?; \
+		$(MAKE) -s run-tests XDEBUG_MODE=coverage || exit $$?; \
 	fi;
 	@test -f build/logs/junit.xml || { bash scripts/command-output.sh --status FAIL "Required report build/logs/junit.xml was not generated"; exit 1; }
-	@php ./vendor/bin/phpmetrics --version
-	@bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
+	@XDEBUG_MODE=off php ./vendor/bin/phpmetrics --version
+	@if [ "$(NATIVE_COLOR)" = always ] && [ -z "$$NO_COLOR" ]; then \
+		bash -o pipefail -c 'XDEBUG_MODE=off bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics . | \
+			python3 scripts/phpmetrics-output.py'; \
+	else \
+		XDEBUG_MODE=off bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .; \
+	fi
 	$(call REPORT_PATHS,HTML report: build/phpmetrics,build/phpmetrics/index.html)
 
 report-coveralls: ## Upload coverage to Coveralls
