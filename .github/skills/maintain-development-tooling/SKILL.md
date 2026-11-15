@@ -267,11 +267,13 @@ See [command output contracts](../../../doc/TESTING.md#command-output-contracts)
 for coverage and limits.
 
 For changed Bash scripts, check syntax inside the container with `bash -n`
-against each exact changed path. Use existing relevant lint commands;
-`make lint-workflows` validates workflow shell steps and its own validator
-script, not every shell script in the repository. Syntax checks alone do not
-verify behavior. Exercise the real read-only caller where feasible, and
-explicitly distinguish network-dependent checks from offline tests.
+against each exact changed path. Inspect the ShellCheck invocation in
+`scripts/lint-workflows.sh` and run `make lint-workflows` when any changed
+script is listed there. That validator also checks workflow and composite
+action shell, but does not check every shell script in the repository. Use
+other relevant lint commands for scripts outside that list; syntax checks and
+behavior tests do not replace lint. Exercise the real read-only caller where
+feasible, and distinguish network-dependent checks from offline tests.
 
 For this skill's Markdown alone, run from the repository root on the Docker
 host with development services running:
