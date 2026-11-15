@@ -309,6 +309,11 @@ and `jq`. The read-only update checker additionally requires `curl`.
 * `make docker-build-multi-platform` - build and push a multi-platform image
   (asks `PLATFORMS`, `DOCKERFILE`, `TARGET`, `TAG`, `BUILDER`)
 
+Builder output aligns values and explains each field. Platforms are reported for
+the first builder node, not necessarily every node. Headings and field labels use
+color on terminals by default; redirected output stays plain. Set `COLOR=always`
+to force color, or `COLOR=never` or a nonempty `NO_COLOR` to disable it.
+
 Missing values are asked interactively, and the suggested default is shown in
 brackets. Values can also be given as Make variables to skip the questions:
 

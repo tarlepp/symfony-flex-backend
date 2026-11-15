@@ -1016,8 +1016,41 @@ command_verify() {
 }
 
 command_platforms() {
+    local color='' heading='' reset=''
+    if [ -z "${NO_COLOR:-}" ] && {
+        [ "${NATIVE_COLOR:-}" = always ] ||
+        { [ -z "${NATIVE_COLOR+x}" ] && {
+            [ "${COLOR:-auto}" = always ] ||
+            { [ "${COLOR:-auto}" = auto ] && [ -t 1 ] && [ "${TERM:-}" != dumb ]; }
+        }; }
+    }; then
+        color=$'\033[34m'
+        heading=$'\033[1;34m'
+        reset=$'\033[0m'
+    fi
+
+    # shellcheck disable=SC2016 # Positional parameters belong to the child shell and awk.
     output_run 'Inspect buildx builder platforms' bash -o pipefail -c \
-        'docker buildx inspect --bootstrap | awk '"'"'/^(Name|Driver|Platforms):/ && !seen[$1]++'"'"
+        'docker buildx inspect --bootstrap | awk -v color="$1" -v reset="$2" -v heading="$3" '"'"'
+            /^(Name|Driver|Platforms):/ && !seen[$1]++ {
+                if (!printed_heading++) {
+                    printf "%sBuildx builder%s\n", heading, reset
+                    print "Current builder and first node"
+                    print ""
+                }
+                colon = index($0, ":")
+                label = substr($0, 1, colon)
+                value = substr($0, colon + 1)
+                sub(/^[[:space:]]+/, "", value)
+                printf "%s%s%s%*s%s\n", color, label, reset, 12 - length(label), "", value
+            }
+        '"'"' &&
+        printf "\n" &&
+        printf "%sField descriptions%s\n" "$3" "$2" &&
+        printf "%s\n" \
+            "  Name       Current buildx builder." \
+            "  Driver     Backend used to run the builder." \
+            "  Platforms  Build targets reported for the first builder node."' bash "$color" "$reset" "$heading"
 }
 
 command_setup_qemu() {
