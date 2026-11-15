@@ -2,6 +2,8 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."
+
+# Isolate Docker calls so routing tests never contact the real daemon.
 temporary=$(mktemp -d)
 trap 'rm -rf "$temporary"' EXIT
 export DOCKER_CALLS="$temporary/docker-calls"
@@ -32,6 +34,7 @@ host_make() {
     make --no-print-directory INSIDE_DOCKER_CONTAINER=0 INSIDE_CONTAINER_RUNTIME=0 "$@"
 }
 
+# Image pin updates are host-only, including in dry runs.
 : > "$DOCKER_CALLS"
 host_make -n docker-image-update-pins > "$temporary/image-update-command"
 grep -Fq './scripts/docker-images.sh update-pins' "$temporary/image-update-command"
@@ -45,6 +48,7 @@ if make --no-print-directory INSIDE_DOCKER_CONTAINER=1 INSIDE_CONTAINER_RUNTIME=
     exit 1
 fi
 
+# Registered application targets forward to the PHP container.
 for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
     lint-markdown composer-validate install application-info check-requirements \
     tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output \
@@ -63,6 +67,7 @@ for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-t
     fi
 done
 
+# Host-side stack inventory honors color controls.
 host_make tool-versions COLOR=always > "$temporary/stack-output" 2>&1
 grep -Fq '[RUN]' "$temporary/stack-output"
 grep -Fq $'\033[34mStack platform versions' "$temporary/stack-output"
@@ -73,11 +78,13 @@ if grep -q $'\033' "$temporary/stack-plain"; then
     exit 1
 fi
 
+# Interactive shells keep their host-side Compose invocation.
 : > "$DOCKER_CALLS"
 host_make bash > "$temporary/bash-output" 2>&1
 grep -Fq 'Opening Bash in the PHP container' "$temporary/bash-output"
 grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
 
+# Forward native color choices, with NO_COLOR taking precedence.
 : > "$DOCKER_CALLS"
 host_make test-docker-images COLOR=always NO_COLOR=1
 grep -q 'COLOR=always NO_COLOR=1' "$DOCKER_CALLS"
@@ -88,6 +95,7 @@ grep -Eq 'php bash scripts/make.sh test-docker-images$' "$DOCKER_CALLS"
 host_make test-docker-images COLOR=always NO_COLOR=
 grep -q 'NATIVE_COLOR=always' "$DOCKER_CALLS"
 
+# Dry runs show forwarded commands without executing them.
 : > "$DOCKER_CALLS"
 host_make -n cache-clear clear run-tests > "$temporary/dry-run-commands"
 for target in cache-clear clear run-tests; do
@@ -98,6 +106,7 @@ if grep -q 'exec -T' "$DOCKER_CALLS"; then
     exit 1
 fi
 
+# CI forwarding selects its Compose override and passes environment names only.
 : > "$DOCKER_CALLS"
 GITHUB_WORKFLOW=CI DATABASE_URL=example host_make run-tests-php
 grep -Eq 'compose -f compose.yaml -f docker/ci-compose.yaml exec -T .*--env DATABASE_URL .*php bash scripts/make.sh run-tests-php$' "$DOCKER_CALLS"
@@ -106,12 +115,14 @@ if grep -q example "$DOCKER_CALLS"; then
     exit 1
 fi
 
+# A single container failure remains a Make failure.
 if DOCKER_EXIT_CODE=7 host_make check-skills > "$temporary/failed-command" 2>&1; then
     echo "Container failures must propagate to Make." >&2
     exit 1
 fi
 grep -q 'Error 7' "$temporary/failed-command"
 
+# Multiple forwarded goals retain color, progress, and ordering.
 : > "$DOCKER_CALLS"
 host_make check-skills lint-markdown COLOR=never
 grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
@@ -123,12 +134,14 @@ grep -q 'COLOR=never NO_COLOR= PROGRESS=never SHARED=0' "$DOCKER_CALLS"
 host_make check-skills PROGRESS=always
 grep -q 'PROGRESS=always' "$DOCKER_CALLS"
 
+# Mixed interactive and forwarded goals each use their own routing.
 : > "$DOCKER_CALLS"
 host_make bash check-skills COLOR=always > "$temporary/mixed-bash-output" 2>&1
 grep -Fq 'Opening Bash in the PHP container' "$temporary/mixed-bash-output"
 grep -Fq 'compose exec php bash --rcfile /app/scripts/bashrc.sh -i' "$DOCKER_CALLS"
 grep -Eq 'php bash scripts/make.sh check-skills$' "$DOCKER_CALLS"
 
+# Multiple CI goals preserve environment isolation and color policy.
 : > "$DOCKER_CALLS"
 GITHUB_WORKFLOW=CI CI=true XDEBUG_MODE=coverage host_make check-skills lint-markdown COLOR=always NO_COLOR=1
 [ "$(grep -c 'compose -f compose.yaml -f docker/ci-compose.yaml exec -T' "$DOCKER_CALLS")" -eq 2 ]
@@ -140,6 +153,7 @@ if grep -q -- '--env CI=true\|--env XDEBUG_MODE=coverage' "$DOCKER_CALLS"; then
     exit 1
 fi
 
+# A failing first goal stops later forwarded goals and suppresses success.
 : > "$DOCKER_CALLS"
 if DOCKER_EXIT_CODE=7 host_make check-skills lint-markdown > "$temporary/failed-multiple" 2>&1; then
     echo "Multiple goals must retain a blocking container failure." >&2
