@@ -204,6 +204,8 @@ discover_tools() {
 
         [[ "$line" == *"# tool-pin:"* ]] || continue
 
+        # Expected: NAME_TAG=vX.Y.Z # tool-pin: owner/repository@<40-char SHA>.
+        # Captures: version, repository, and commit SHA (in that order).
         if [[ ! "$line" =~ ^[A-Z_]+_TAG=(v[0-9]+\.[0-9]+\.[0-9]+)[[:space:]]+#\ tool-pin:\ ([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)@([0-9a-f]{40})$ ]]; then
             printf 'Invalid tool pin at %s:%s\n' "$TOOL_PINS_FILE" "$number" >&2
             DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
