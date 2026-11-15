@@ -47,7 +47,9 @@ overviews describe their own run, not the status of other workflows. The
 standalone workflow overviews report the status of prior steps, including
 skipped steps after a failure; consult the step logs and security reports for
 findings. A cancelled or skipped job may not publish an overview. Publishing
-an overview is informational and does not change validation results.
+an overview is informational and does not change validation results. The
+standalone overviews use `scripts/ci-workflow-overview.sh` from the checkout;
+if checkout fails, the overview cannot be rendered.
 
 For pull requests, start with the **Checks** tab:
 

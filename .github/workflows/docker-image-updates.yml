@@ -165,15 +165,9 @@ jobs:
           VERIFY: ${{ steps.verify.outcome || 'skipped' }}
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
         run: |
-          {
-            echo "## Workflow run overview"
-            printf '\nEvent: %s · Prior steps: **%s**\n\n' "$EVENT_NAME" "$PRIOR_STATUS"
-            echo '| Check | Result |'
-            echo '| --- | --- |'
-            printf '| Helper regression tests | %s |\n' "$TESTS"
-            printf '| Image pin updates | %s |\n' "$UPDATE"
-            printf '| Pin verification | %s |\n' "$VERIFY"
-            printf '| Pull request action | %s |\n' "$PULL_REQUEST"
-            echo
-            echo 'See the pull request result above and step logs for details; a successful action may have no changes.'
-          } >> "$GITHUB_STEP_SUMMARY"
+          bash scripts/ci-workflow-overview.sh \
+            'See the pull request result above and step logs for details; a successful action may have no changes.' \
+            'Helper regression tests' "$TESTS" \
+            'Image pin updates' "$UPDATE" \
+            'Pin verification' "$VERIFY" \
+            'Pull request action' "$PULL_REQUEST" >> "$GITHUB_STEP_SUMMARY"

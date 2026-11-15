@@ -43,12 +43,6 @@ jobs:
           PRIOR_STATUS: ${{ job.status }}
           REVIEW: ${{ steps.review.outcome || 'skipped' }}
         run: |
-          {
-            echo "## Workflow run overview"
-            printf '\nEvent: %s · Prior steps: **%s**\n\n' "$EVENT_NAME" "$PRIOR_STATUS"
-            echo '| Check | Result |'
-            echo '| --- | --- |'
-            printf '| Dependency review | %s |\n' "$REVIEW"
-            echo
-            echo 'See the dependency review step log for findings and failure details.'
-          } >> "$GITHUB_STEP_SUMMARY"
+          bash scripts/ci-workflow-overview.sh \
+            'See the dependency review step log for findings and failure details.' \
+            'Dependency review' "$REVIEW" >> "$GITHUB_STEP_SUMMARY"
