@@ -124,6 +124,43 @@ class CiGatesTest(unittest.TestCase):
             )
             self.assertNotEqual(result.returncode, 0)
 
+    def test_scheduled_image_enforcement_is_independent_of_reporting(self):
+        workflow = (WORKFLOWS / "vulnerability-scan.yml").read_text()
+        steps = dict(re.findall(
+            r"^      - name: ([^\n]+)\n(.*?)(?=^      - |\Z)",
+            workflow, re.MULTILINE | re.DOTALL,
+        ))
+        build = steps["Build the Docker image"]
+        sarif = steps["Create Trivy SARIF report"]
+        upload = steps["Upload Trivy SARIF report"]
+        scan = steps["Scan image with Trivy"]
+        self.assertIn("        id: build\n", build)
+        self.assertIn("        id: sarif\n", sarif)
+        self.assertIn("        id: upload\n", upload)
+        self.assertIn("        id: scan\n", scan)
+        self.assertLess(workflow.index("name: Upload Trivy SARIF report"),
+                        workflow.index("name: Scan image with Trivy"))
+        condition = re.search(r"^        if: \$\{\{ (.+) \}\}$", scan, re.MULTILINE)
+        self.assertIsNotNone(condition)
+        self.assertEqual(condition.group(1),
+                         "!cancelled() && steps.build.outcome == 'success'")
+        for build_result in ("success", "failure", "skipped"):
+            for sarif_result in ("success", "failure", "skipped"):
+                for upload_result in ("success", "failure", "skipped"):
+                    for cancelled in (False, True):
+                        with self.subTest(build=build_result, sarif=sarif_result,
+                                          upload=upload_result, cancelled=cancelled):
+                            expression = condition.group(1).replace(
+                                "!cancelled()", repr(not cancelled),
+                            ).replace("steps.build.outcome", repr(build_result)).replace(
+                                "&&", "and",
+                            )
+                            result = eval(expression, {"__builtins__": {}})
+                            self.assertEqual(result, not cancelled and build_result == "success")
+        for step in (sarif, upload, scan):
+            self.assertNotIn("continue-on-error", step)
+        self.assertIn("exit-code: '1'", scan)
+
     def test_gates_run_after_failed_dependencies_but_not_cancelled_workflows(self):
         for job in ("ci-summary", "ci-result"):
             with self.subTest(job=job):
