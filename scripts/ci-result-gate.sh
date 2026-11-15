@@ -24,12 +24,15 @@ summary_row() {
 }
 
 write_summary() {
-    echo "## Final CI results"
+    echo "## Workflow run overview"
+    echo
+    printf 'Event: %s\n' "$EVENT_NAME"
     echo
     echo "See the CI prerequisite results summary for lint, security and image-check skip reasons."
     echo
     echo "| Check | Result | Explanation |"
     echo "| --- | --- | --- |"
+    summary_row "Change detection" "$CHANGES" true ""
     summary_row "Prerequisite gate" "$CI_SUMMARY" true ""
     summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
     summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"

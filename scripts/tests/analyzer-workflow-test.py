@@ -143,16 +143,20 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIn("  merge_group:\n    types:\n      - checks_requested\n", CONTENT)
         self.assertIn("\npermissions:\n  contents: read\n", review)
         self.assertIn("\n  dependency-review:\n", review)
-        self.assertNotIn("    if:", review)
-        self.assertNotIn("continue-on-error", review)
+        self.assertNotRegex(review, r"(?m)^    if:")
         self.assertNotIn("warn-only:", review)
         self.assertNotIn("pull_request_target:", review)
         self.assertIn("          persist-credentials: false\n", review)
         action = re.search(r"        uses: actions/dependency-review-action@\S+.*\n", review)
         self.assertIsNotNone(action)
         self.assertRegex(action.group(), r"@[a-f0-9]{40}")
+        review_step = review.split("      - name: 'Dependency Review'\n", 1)[1].split(
+            "\n      - ", 1,
+        )[0]
+        self.assertNotIn("if:", review_step)
+        self.assertNotIn("continue-on-error", review_step)
         # Native action defaults select PR or merge-group base/head SHAs.
-        self.assertEqual(review.split(action.group(), 1)[1].strip(), "")
+        self.assertEqual(review_step.split(action.group().strip(), 1)[1].strip(), "")
         self.assertEqual(self.run_gate("ci-summary", "merge_group").returncode, 0)
         self.assertEqual(self.run_gate("ci-result", "merge_group").returncode, 0)
 
@@ -552,6 +556,9 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertIn(explanation, summary.read_text())
                     self.assertIn("| Check | Result | Explanation |", summary.read_text())
+                    if gate == "ci-result":
+                        self.assertIn("## Workflow run overview", summary.read_text())
+                        self.assertIn("| Change detection | success |", summary.read_text())
 
     def test_summaries_explain_failures_without_relaxing_gates(self):
         scenarios = [

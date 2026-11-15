@@ -51,12 +51,15 @@ jobs:
           print-versions: 'false'
 
       - name: Run Docker image helper regression tests
+        id: tests
         run: bash scripts/make.sh test-docker-images
 
       - name: Apply minor/patch updates and digest refreshes
+        id: update
         run: bash scripts/make.sh docker-image-update-pins
 
       - name: Verify updated multi-platform pins and tag parity
+        id: verify
         run: bash scripts/make.sh docker-image-verify-pins
 
       - name: Prepare pull request details
@@ -150,3 +153,27 @@ jobs:
       - name: Stop PHP development container
         if: ${{ always() }}
         run: bash scripts/make.sh ci-stop
+
+      - name: Publish workflow run overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          TESTS: ${{ steps.tests.outcome || 'skipped' }}
+          UPDATE: ${{ steps.update.outcome || 'skipped' }}
+          VERIFY: ${{ steps.verify.outcome || 'skipped' }}
+          PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
+        run: |
+          {
+            echo "## Workflow run overview"
+            printf '\nEvent: %s · Prior steps: **%s**\n\n' "$EVENT_NAME" "$PRIOR_STATUS"
+            echo '| Check | Result |'
+            echo '| --- | --- |'
+            printf '| Helper regression tests | %s |\n' "$TESTS"
+            printf '| Image pin updates | %s |\n' "$UPDATE"
+            printf '| Pin verification | %s |\n' "$VERIFY"
+            printf '| Pull request action | %s |\n' "$PULL_REQUEST"
+            echo
+            echo 'See the pull request result above and step logs for details; a successful action may have no changes.'
+          } >> "$GITHUB_STEP_SUMMARY"

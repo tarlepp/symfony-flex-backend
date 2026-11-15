@@ -304,7 +304,11 @@ class DockerImageWorkflowTest(unittest.TestCase):
 
     def test_major_reporting_is_independent_of_automatic_updates(self):
         self.assertNotIn("check-updates", WORKFLOW)
-        self.assertNotIn("continue-on-error:", WORKFLOW)
+        without_overview = WORKFLOW.replace(
+            "      - name: Publish workflow run overview\n"
+            + step(WORKFLOW, "Publish workflow run overview"), "",
+        )
+        self.assertNotIn("continue-on-error:", without_overview)
         self.assertIn("run: bash scripts/make.sh docker-image-update-pins", WORKFLOW)
         core = (ROOT / ".github/workflows/main.yml").read_text()
         report = re.search(
