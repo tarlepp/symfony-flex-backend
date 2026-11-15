@@ -384,7 +384,8 @@ make docker-image-digest
 
 The command asks the image name and prints the media type, index digest,
 supported platforms, the `FROM` line to use, and the current `FROM` lines that
-use the same image:
+use the same image. Digest labels follow the shared color policy; the `FROM`
+line remains uncolored for copying, and redirected output is plain by default:
 
 ```text
 Image name and tag (e.g. php:8.5.11-fpm-bookworm): php:8.5.11-fpm-bookworm
