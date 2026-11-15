@@ -24,6 +24,123 @@ class CiGatesTest(unittest.TestCase):
             cls.workflow, re.MULTILINE | re.DOTALL,
         ))
 
+    def test_core_job_overviews_report_actual_outcomes(self):
+        jobs = {
+            "lint-configuration": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "INFO": ("application-info", "Application information"),
+                "COMPOSER": ("composer", "Composer validation"), "REQUIREMENTS": ("requirements", "Runtime requirements"),
+                "YAML": ("yaml", "Symfony YAML"), "TOOLING": ("tooling", "Tooling contracts"),
+                "COMPOSE": ("compose", "Compose and Dev Container"),
+            },
+            "lint-documentation": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "MARKDOWN": ("markdown", "Markdown lint"),
+                "DOCUMENTATION": ("documentation", "Metadata and links"),
+            },
+            "lint-workflows": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "VALIDATION": ("validation", "Workflow and action validation"),
+            },
+            "security-check": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"),
+                "SYMFONY_SECURITY": ("symfony-security", "Symfony security checker"),
+                "DEPENDENCY_SECURITY": ("dependency-security", "Installed dependency audit"),
+            },
+            "gitleaks": {"SCAN": ("scan", "Gitleaks scan")},
+            "docker-image-verify-pins": {"VERIFY": ("verify", "Multi-platform pin verification")},
+            "docker-image-check-updates": {
+                "AUTHENTICATION": ("authentication", "Docker Hub credential check"),
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "TESTS": ("tests", "Helper regression tests"),
+                "UPDATES": ("updates", "Image version check"),
+            },
+            "lightweight-analyzers": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "PHPCS": ("phpcs", "PHP CodeSniffer"),
+                "ECS": ("ecs", "ECS"), "PHPLINT": ("phplint", "PHPLint"),
+                "PARALLEL_LINT": ("parallel-lint", "PHP Parallel Lint"),
+                "PHPLOC": ("phploc", "PHPLoc"), "ARTIFACT": ("artifact", "PHPLoc artifact"),
+            },
+            "static-analyzers": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "ANALYSIS": ("analyzer", "Analysis"),
+                "ARTIFACT": ("artifact", "Psalm artifact"),
+            },
+            "test": {
+                "BOOTSTRAP": ("bootstrap", "Bootstrap"), "CONFIGURE": ("configure", "CI configuration"),
+                "INSTALL": ("install", "Dependency installation"), "PHPUNIT": ("phpunit", "PHPUnit"),
+                "METRICS": ("metrics", "PhpMetrics report"), "VERIFY": ("verify-reports", "Report verification"),
+                "SUMMARY": ("coverage-summary", "Test and coverage summary"),
+                "CLOVER": ("clover", "Clover artifact"), "JUNIT": ("junit", "JUnit artifact"),
+                "COVERAGE": ("coverage", "HTML coverage artifact"),
+                "METRICS_ARTIFACT": ("metrics-artifact", "PhpMetrics artifact"),
+            },
+            "report": {
+                "REPORTING": ("reporting", "Reporting selection"), "CLOVER": ("clover", "Clover download"),
+                "JUNIT": ("junit", "JUnit download"), "BOOTSTRAP": ("bootstrap", "Bootstrap"),
+                "INSTALL": ("install-coveralls", "Coveralls installation"),
+                "COVERALLS": ("coveralls", "Coveralls upload"),
+                "PREPARE": ("prepare-sonar", "Sonar report preparation"), "SONAR": ("sonar", "SonarQube scan"),
+            },
+            "docker-build": {
+                "BUILDX": ("buildx", "Buildx setup"), "BUILD": ("build", "Image build"),
+                "ARTIFACT": ("artifact", "Image artifact upload"),
+            },
+            "docker-scan": {
+                "IMAGE": ("image", "Image artifact download"), "SCAN": ("scan", "Blocking Trivy scan"),
+                "SARIF": ("sarif", "PR SARIF generation"), "UPLOAD": ("upload", "Code scanning upload"),
+            },
+        }
+        for job, outcomes in jobs.items():
+            with self.subTest(job=job), tempfile.TemporaryDirectory() as directory:
+                content = self.jobs[job]
+                matches = re.findall(
+                    r"^      - name: Publish job overview\n(.*?)(?=^      - |\Z)",
+                    content, re.MULTILINE | re.DOTALL,
+                )
+                self.assertEqual(len(matches), 1)
+                step = matches[0]
+                condition = "!cancelled()"
+                if job == "report":
+                    condition += " && steps.checkout-report.outcome == 'success'"
+                self.assertIn(f"if: ${{{{ {condition} }}}}", step)
+                self.assertIn("continue-on-error: true", step)
+                self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
+                title = re.search(r"^          OVERVIEW_TITLE: (.+)$", step, re.MULTILINE).group(1)
+                for variable, (step_id, _) in outcomes.items():
+                    self.assertIn(f"        id: {step_id}\n", content)
+                    self.assertIn(f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step)
+                shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+                variants = (
+                    ("development", "production") if job in ("docker-build", "docker-scan")
+                    else ("Psalm", "PHPStan", "PHP Insights") if job == "static-analyzers"
+                    else ("",)
+                )
+                scenarios = [(None, variant) for variant in variants]
+                scenarios.extend((failed, variants[0]) for failed in outcomes)
+                for failed, variant in scenarios:
+                    values = dict.fromkeys(outcomes, "success" if failed is None else "skipped")
+                    if failed is not None:
+                        values[failed] = "failure"
+                    summary = Path(directory) / "summary"
+                    result = subprocess.run(
+                        ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
+                        env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
+                             "OVERVIEW_TITLE": title, "EVENT_NAME": "pull_request",
+                             "PRIOR_STATUS": "success" if failed is None else "failure",
+                             "ANALYZER": variant if job == "static-analyzers" else "",
+                             "TARGET": variant if job in (
+                                 "docker-build", "docker-scan",
+                             ) else "", **values},
+                        capture_output=True, text=True, check=False,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    output = summary.read_text()
+                    self.assertIn(f"## {title}", output)
+                    self.assertIn(f"Prior steps: **{'success' if failed is None else 'failure'}**", output)
+                    for variable, (_, label) in outcomes.items():
+                        self.assertIn(f"| {label} | {values[variable]} |", output)
+                    if job in ("docker-build", "docker-scan"):
+                        self.assertIn(f"Image: {variant}", output)
+                    if job == "static-analyzers":
+                        self.assertIn(f"| Analyzer | {variant} |", output)
+                    summary.unlink()
+
     def test_standalone_workflow_overviews_report_actual_step_outcomes(self):
         workflows = {
             "dependency-review.yml": {"REVIEW": ("review", "Dependency review")},
@@ -438,7 +555,11 @@ class CiGatesTest(unittest.TestCase):
         self.assertIn("category: trivy-${{ matrix.target }}", upload)
         self.assertLess(scan.index("name: Generate PR image scan SARIF"),
                         scan.index("name: Upload PR image scan SARIF"))
-        self.assertNotIn("continue-on-error", scan)
+        without_overview = re.sub(
+            r"^      - name: Publish job overview\n.*?(?=^      - |\Z)",
+            "", scan, flags=re.MULTILINE | re.DOTALL,
+        )
+        self.assertNotIn("continue-on-error", without_overview)
 
     def test_trivy_policies_across_image_workflows(self):
         workflows = {

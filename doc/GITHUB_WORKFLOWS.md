@@ -41,14 +41,17 @@ contains downloadable artifacts and any generated summaries. Security analysis
 results are also available under **Security > Code scanning**.
 
 Each workflow publishes a run overview with its relevant checks and outcomes.
-The daily vulnerability scan publishes one overview per image target. These
-overviews describe their own run, not the status of other workflows. The
-standalone workflow overviews report the status of prior steps, including
-skipped steps after a failure; consult the step logs and security reports for
-findings. A cancelled or skipped job may not publish an overview. Publishing an
-overview is informational and does not change validation results. The standalone
+Core CI also publishes job-specific tables for its checks, analyzers, tests,
+image builds and scans, and external reporting. The daily vulnerability scan
+publishes one overview per image target. These overviews describe their own
+run, not the status of other workflows. Job tables report prior step outcomes,
+including skips after a failure; later cleanup failures are not included.
+Consult step logs, annotations and artifacts for findings and detailed
+results. A skipped or cancelled job may not publish an overview. Publishing an
+overview is informational and does not change validation results. Job
 overviews use `scripts/ci-workflow-overview.sh` from the checkout; if checkout
-fails, the overview cannot be rendered.
+fails, they cannot be rendered. External reporting instead writes its skip
+reason when neither upload token is available.
 
 For pull requests, start with the **Checks** tab:
 

@@ -26,6 +26,16 @@ def job(name):
     return match.group(1)
 
 
+def without_overview(section):
+    result, count = re.subn(
+        r"^      - name: Publish job overview\n.*?(?=^      - |\Z)",
+        "", section, flags=re.MULTILINE | re.DOTALL,
+    )
+    if count != 1:
+        raise AssertionError("Expected exactly one informational job overview")
+    return result
+
+
 def dependencies(name):
     section = job(name)
     match = re.search(r"^    needs:([^\n]*)\n((?:      - [^\n]+\n)*)", section, re.MULTILINE)
@@ -132,7 +142,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         section.index("Bootstrap development container"))
         self.assertLess(section.index("*checkout_step"),
                         section.index("Cache verified workflow validator downloads"))
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
 
     def test_both_required_workflows_validate_merge_groups(self):
         review = (WORKFLOW.parent / "dependency-review.yml").read_text()
@@ -266,7 +276,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         section = job("docker-image-check-updates")
         self.assertIn("run: bash scripts/docker-images.sh check-updates --advisory\n", section)
         self.assertIn("run: bash scripts/make.sh test-docker-images\n", section)
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
         self.assertIn("      - docker-image-check-updates\n", job("ci-summary"))
         for event in ("pull_request", "push", "merge_group", "workflow_dispatch", "schedule"):
             for result in ("failure", "cancelled", "skipped", ""):
@@ -371,9 +381,10 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertIn(token + ": ${{ secrets." + token + " }}\n", step.group(1))
         self.assertIn(
             "      - name: Prepare reports for host-side SonarQube scan\n"
+            "        id: prepare-sonar\n"
             "        if: ${{ env.SONAR_TOKEN != '' }}\n", section,
         )
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
         self.assertNotIn("|| true", section)
         self.assertIn(
             "        if: ${{ always() && steps.bootstrap.outcome != 'skipped' }}\n"
@@ -436,6 +447,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         )
         self.assertIn(
             "      - name: Install Coveralls reporter\n"
+            "        id: install-coveralls\n"
             "        if: ${{ env.COVERALLS_REPO_TOKEN != '' }}\n"
             "        env:\n"
             "          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}\n",
@@ -659,7 +671,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     f"        run: bash scripts/make.sh {target}\n", section,
                 )
                 self.assertEqual(CONTENT.count(f"run: bash scripts/make.sh {target}\n"), 1)
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
         self.assertIn("        id: bootstrap\n", section)
         self.assertIn("      - *stop_php_step\n", section)
         self.assertIn("          name: phploc.json\n", section)
@@ -675,7 +687,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "        id: bootstrap\n"
             "        uses: ./.github/actions/php-bootstrap\n", section,
         )
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
         self.assertNotIn("|| true", section)
         for name, command in (
             ("PHP Security Checker", "uses: symfonycorp/security-checker-action@"),
@@ -973,9 +985,9 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "        id: bootstrap\n"
             "        uses: ./.github/actions/php-bootstrap\n", section,
         )
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
         self.assertNotIn("|| true", section)
-        conditions = re.findall(r"^        if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
+        conditions = re.findall(r"^        if: \$\{\{ (.+) \}\}$", without_overview(section), re.MULTILINE)
         self.assertEqual(len(conditions), 8)
         self.assertEqual(conditions[-1], "always()")
         self.assertEqual(conditions[-2], "failure()")
@@ -1019,7 +1031,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "        id: bootstrap\n"
             "        uses: ./.github/actions/php-bootstrap\n", section,
         )
-        self.assertNotIn("continue-on-error", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
         self.assertNotIn("|| true", section)
         for target in ("lint-markdown", "check-skills"):
             condition = re.search(
@@ -1054,6 +1066,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         section = job("lint-configuration")
         step = re.search(
             r"^      - name: Validate Compose and Dev Container configurations\n"
+            r"        id: compose\n"
             r"        if: \$\{\{ !cancelled\(\) && steps.bootstrap.outcome == 'success' && "
             r"needs.changes.outputs.compose == 'true' \}\}\n"
             r"        run: bash scripts/ci-validate-compose.sh\n",
