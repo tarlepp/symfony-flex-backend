@@ -28,40 +28,40 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 <a id="workflow"></a>
 
 1. Read the event dispatch sites or framework contracts, and nearby subscribers
-   and tests. Confirm exact event names,
-   argument types, timing, and the dispatcher used. Read
+   and tests. Confirm exact event names, argument types, timing, and the
+   dispatcher used. Read
    [the event-handling guide](../../../doc/EVENT_HANDLING.md) for the
    listener/subscriber decision.
 2. Extend an existing subscriber when the responsibility matches. For a new
    Symfony subscriber, place it in `src/EventSubscriber/` and implement
    `Symfony\Component\EventDispatcher\EventSubscriberInterface`. Follow
    `AcceptLanguageSubscriber` for one event or `LockedUserSubscriber` for
-   related authentication events. Keep unrelated concerns in separate
-   services; one subscriber may legitimately handle just one event.
+   related authentication events. Keep unrelated concerns in separate services;
+   one subscriber may legitimately handle just one event.
 3. Implement `public static function getSubscribedEvents(): array` with
    `#[Override]`. Map each dispatched event name to a public callback, using
    `[method, priority]` or multiple callback entries only when needed. Match
    existing typing conventions. Prefer the event class where the dispatcher
    supports it, but preserve bundle string event names and compatibility
-   mappings when required by actual dispatch sites; do not blindly register
-   both class and string names.
+   mappings when required by actual dispatch sites; do not blindly register both
+   class and string names.
 4. Rely on the existing `App\` service discovery and `autoconfigure: true` in
-   `config/services.yaml` for normal Symfony subscriber registration. Do not
-   add redundant `kernel.event_listener` tags or `AsEventListener` attributes
-   to subscriber callbacks. If a dedicated dispatcher is required, inspect
-   its registration mechanism rather than assuming the default dispatcher
-   receives the event.
-5. Inject dependencies through the constructor, keep event adaptation thin,
-   and delegate business behavior to resources or services. Keep all methods
-   typed and request-specific state out of shared services. Account for
+   `config/services.yaml` for normal Symfony subscriber registration. Do not add
+   redundant `kernel.event_listener` tags or `AsEventListener` attributes to
+   subscriber callbacks. If a dedicated dispatcher is required, inspect its
+   registration mechanism rather than assuming the default dispatcher receives
+   the event.
+5. Inject dependencies through the constructor, keep event adaptation thin, and
+   delegate business behavior to resources or services. Keep all methods typed
+   and request-specific state out of shared services. Account for
    `app.stopwatch` tagging and `StopwatchCompilerPass`; do not make the service
    readonly or bypass decoration just to simplify a test.
-6. Preserve existing subscriptions, priorities, callback names, propagation,
-   and exception behavior unless the task changes them. Higher Symfony
-   priorities run first. Inspect surrounding handlers before changing order,
-   especially locale, authentication, response, and exception processing.
-   Decide main-request/subrequest handling explicitly when relevant. Preserve
-   security checks and never silently swallow handler failures.
+6. Preserve existing subscriptions, priorities, callback names, propagation, and
+   exception behavior unless the task changes them. Higher Symfony priorities
+   run first. Inspect surrounding handlers before changing order, especially
+   locale, authentication, response, and exception processing. Decide
+   main-request/subrequest handling explicitly when relevant. Preserve security
+   checks and never silently swallow handler failures.
 7. Do not confuse Symfony subscribers with Doctrine lifecycle subscriptions.
    `DoctrineExtensionSubscriber` reacts to a Symfony request event; its name
    does not make it a Doctrine subscriber. For ORM events, use
@@ -70,13 +70,13 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    legacy Doctrine subscribers.
 8. Cover the exact subscription map, including priorities, as in
    `tests/Unit/EventSubscriber/AcceptLanguageSubscriberTest.php`, and observable
-   handler behavior as in its integration tests. Also exercise the actual
-   caller boundary for registration changes: dispatch through the container's
+   handler behavior as in its integration tests. Also exercise the actual caller
+   boundary for registration changes: dispatch through the container's
    appropriate dispatcher or make an HTTP request when kernel sequencing
    matters. Direct handler calls and subscription-map assertions alone cannot
-   detect missing registration, wrong dispatcher, or duplicate execution.
-   Cover relevant subrequests, no-op paths, invalid inputs, errors, ordering,
-   and security outcomes.
+   detect missing registration, wrong dispatcher, or duplicate execution. Cover
+   relevant subrequests, no-op paths, invalid inputs, errors, ordering, and
+   security outcomes.
 
 ## Validation [ᐞ](#table-of-contents)
 

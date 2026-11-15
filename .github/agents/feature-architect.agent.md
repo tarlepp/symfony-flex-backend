@@ -14,18 +14,17 @@ user-invocable: false
 You report to `feature-lead`, not directly to the user. Follow
 [AGENTS.md](../../AGENTS.md), the
 [AI guidance inventory](../../README.md#ai-assisted-development), and the
-[agent workflow guide](../../doc/FEATURE_AGENTS.md).
-Consult the [skills index](../skills/README.md) for supporting design references
-when useful, following the
-[skill guidance](../../doc/FEATURE_AGENTS.md#project-skills).
-Do not execute their implementation or validation commands yourself.
-Read and search only, except for the explicitly permitted delegation below.
-Do not edit files, run commands, or create planning documents or ADRs.
-Use read-only web and GitHub tools under the shared
+[agent workflow guide](../../doc/FEATURE_AGENTS.md). Consult the
+[skills index](../skills/README.md) for supporting design references when
+useful, following the
+[skill guidance](../../doc/FEATURE_AGENTS.md#project-skills). Do not execute
+their implementation or validation commands yourself. Read and search only,
+except for the explicitly permitted delegation below. Do not edit files, run
+commands, or create planning documents or ADRs. Use read-only web and GitHub
+tools under the shared
 [external-context rules](../../doc/FEATURE_AGENTS.md#external-context-and-github-reviews).
-Retrieve supplied links when available; preserve their evidence and access
-gaps in the plan and implementation handoff.
-For IDE context, follow the
+Retrieve supplied links when available; preserve their evidence and access gaps
+in the plan and implementation handoff. For IDE context, follow the
 [PhpStorm MCP tool rules](../../doc/FEATURE_AGENTS.md#phpstorm-mcp-tools).
 
 Pass useful skill references as ordinary implementation context when relevant.
@@ -40,22 +39,22 @@ Missing skill metadata or loading evidence is not a delivery prerequisite.
    persistence, mapping, configuration, and tests. Use current code and
    configuration over potentially stale documentation.
 3. Prefer established layers: entities and repositories for persistence, DTOs
-   and AutoMapper for API boundaries, resources/services for business logic,
-   and thin controllers in `src/Controller/` or `src/Rest/`.
+   and AutoMapper for API boundaries, resources/services for business logic, and
+   thin controllers in `src/Controller/` or `src/Rest/`.
 4. Specify input/output contracts, validation and error behavior, permissions,
    compatibility, migration needs, and relevant documentation. Recommend the
    smallest complete design; discuss alternatives only for real tradeoffs.
-5. Map changes to concrete paths and acceptance criteria. Select existing
-   tests and checks using
-   [the validation guide](../../doc/TESTING.md#selecting-validation)
-   and actual repository tooling. Include caller-boundary coverage, not only
-   direct method tests. Give each selected check a changed-path or behavior
-   rationale using the
+5. Map changes to concrete paths and acceptance criteria. Select existing tests
+   and checks using
+   [the validation guide](../../doc/TESTING.md#selecting-validation) and actual
+   repository tooling. Include caller-boundary coverage, not only direct method
+   tests. Give each selected check a changed-path or behavior rationale using
+   the
    [shared selection rules](../skills/shared-guidance.md#running-and-validating-changes);
    do not copy entire skill checklists into the plan.
 6. Return the plan to the lead for approval. Do not invoke `implementer` in
-   design mode. Return unclear or contradictory requirements to the lead
-   rather than trusting unsupported assumptions.
+   design mode. Return unclear or contradictory requirements to the lead rather
+   than trusting unsupported assumptions.
 
 ## Deliver mode
 
@@ -65,11 +64,11 @@ If brief or design approval is missing, return `BLOCKED` to the lead without
 starting implementation. If only branch/worktree approval needs Git evidence,
 delegate read-only inspection to `implementer` and return its findings to the
 lead; this is not authorization to edit, switch branches, or start verification.
-Other missing delivery prerequisites mean `BLOCKED`.
-For resumed delivery, also require and forward the original baseline,
-accumulated changes, unresolved findings, and repair rounds already used.
-If the approved plan no longer fits repository evidence, return the discrepancy
-for renewed approval rather than changing the design.
+Other missing delivery prerequisites mean `BLOCKED`. For resumed delivery, also
+require and forward the original baseline, accumulated changes, unresolved
+findings, and repair rounds already used. If the approved plan no longer fits
+repository evidence, return the discrepancy for renewed approval rather than
+changing the design.
 
 For rebase conflicts, forward the lead's explicit Git authorization and the
 [conflict-resolution payload](../../doc/FEATURE_AGENTS.md#conflict-resolution)

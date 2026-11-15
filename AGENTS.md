@@ -26,14 +26,14 @@ and the actual code, dependency manifests, and CI workflows.
 
 * Before changing framework-dependent code, check `composer.json` for the PHP
   and Symfony versions and available packages, and `symfony.lock` for Flex
-  recipes. Do not rely on remembered versions or assume an uninstalled
-  component is available.
+  recipes. Do not rely on remembered versions or assume an uninstalled component
+  is available.
 * This repository is a JSON REST API using Doctrine ORM, migrations, Symfony
   Serializer and Validator, Security, and Twig. API Platform, Messenger, and
   Lock are not current architectural assumptions; verify dependencies and
   configuration before using any component.
-* Treat the existing implementation, tests, configuration, and CI as the
-  source of truth when documentation conflicts with behavior.
+* Treat the existing implementation, tests, configuration, and CI as the source
+  of truth when documentation conflicts with behavior.
 
 ## Architecture and Symfony conventions [ᐞ](#table-of-contents)
 
@@ -56,12 +56,11 @@ and the actual code, dependency manifests, and CI workflows.
   Preserve established configuration and routing conventions rather than
   imposing blanket rules or hand-writing framework infrastructure.
 * Add Symfony packages with Composer/Flex when a capability is needed and
-  justified. Reuse existing dependencies first, review recipe-generated
-  changes, and do not hand-edit bundle registration or base bundle
-  configuration in place of a Flex recipe.
-* Use constructor property promotion and `readonly` for suitable DTOs and
-  value objects. Do not mark services `readonly` where lazy proxies may be
-  used.
+  justified. Reuse existing dependencies first, review recipe-generated changes,
+  and do not hand-edit bundle registration or base bundle configuration in place
+  of a Flex recipe.
+* Use constructor property promotion and `readonly` for suitable DTOs and value
+  objects. Do not mark services `readonly` where lazy proxies may be used.
 
 ## Security and change scope [ᐞ](#table-of-contents)
 
@@ -72,8 +71,8 @@ and the actual code, dependency manifests, and CI workflows.
   ECS; do not weaken types to satisfy tooling.
 * Validate input with Symfony Validator constraints. Never remove or weaken
   authentication, authorization, or other security checks.
-* Never commit secrets, JWT keys, or `.env.local`. See `doc/SECURITY.md` for
-  the full security policy.
+* Never commit secrets, JWT keys, or `.env.local`. See `doc/SECURITY.md` for the
+  full security policy.
 * Make the smallest task-focused change, preserve public APIs, and avoid
   unrelated refactors or dependencies.
 * For Doctrine entity changes, create and review a migration; do not update
@@ -91,22 +90,21 @@ and the actual code, dependency manifests, and CI workflows.
   task branch setup, handling pre-existing work, and commit-message proposals.
   Documentation-only changes use a `chore(docs)/...` branch and a
   `Chore(docs) - ...` pull request title; AI-guidance-only changes use
-  `chore(ai)/...` and `Chore(ai) - ...`. State the base branch for every
-  task; anything other than `master` is a stacked PR, so confirm the parent
-  branch with the user.
+  `chore(ai)/...` and `Chore(ai) - ...`. State the base branch for every task;
+  anything other than `master` is a stacked PR, so confirm the parent branch
+  with the user.
 * Do not commit or push changes by default. Follow the
   [commit and push approval rules](.github/skills/shared-guidance.md#preparing-a-change):
-  ask the user before either operation unless they explicitly authorized
-  that operation for the current changes. Implementation or branch approval
-  does not authorize committing or pushing; commit proposals are not actions.
+  ask the user before either operation unless they explicitly authorized that
+  operation for the current changes. Implementation or branch approval does not
+  authorize committing or pushing; commit proposals are not actions.
 * Run repository application tooling inside the Compose PHP development
   container in both local development and CI. Prefer existing `make` targets:
   host invocations forward project targets into the container. Docker
   orchestration and GitHub platform actions remain host-side. Do not treat
   `GITHUB_WORKFLOW` as proof that a command is inside a container, or fall back
   to host PHP, Composer, Python, or Node tooling when containers are
-  unavailable;
-  report the blocker instead.
+  unavailable; report the blocker instead.
 * Use `make lint-markdown` for Markdown checks. Do not install additional
   testing or linting tools when the repository already provides the relevant
   command.
@@ -116,8 +114,8 @@ and the actual code, dependency manifests, and CI workflows.
   tooling/configuration changed. Follow the
   [shared selection rules](.github/skills/shared-guidance.md#running-and-validating-changes)
   for other linters, tests, builds, documentation links, final-content checks,
-  and result reuse. Application configuration and dependency/runtime changes
-  can require PHP checks and tests without any changed PHP source.
+  and result reuse. Application configuration and dependency/runtime changes can
+  require PHP checks and tests without any changed PHP source.
 
 ## Testing and validation [ᐞ](#table-of-contents)
 
@@ -134,13 +132,13 @@ and the actual code, dependency manifests, and CI workflows.
   using [the validation selection guide](doc/TESTING.md#selecting-validation).
   Documentation-only changes, including AI instructions and skill text, require
   Markdown lint and documentation checks, not PHPUnit or PHP static analysis.
-  Apply the same scope before commit; a documentation example mentioning a
-  test command does not require executing that command.
+  Apply the same scope before commit; a documentation example mentioning a test
+  command does not require executing that command.
 * For application changes requiring broad regression coverage, run the local
   pre-commit suite below from the repository root in the development container.
-  Use the selection guide for targeted changes and non-application tooling.
-  This suite is not a command-for-command mirror of CI; see `doc/AI_RULES.md`
-  for CI job coverage. Merge gates and branch protection are described in
+  Use the selection guide for targeted changes and non-application tooling. This
+  suite is not a command-for-command mirror of CI; see `doc/AI_RULES.md` for CI
+  job coverage. Merge gates and branch protection are described in
   `doc/REQUIRED_CHECKS.md`; every new `main.yml` job must be added to the
   `needs` of `ci-result`.
 
@@ -175,10 +173,10 @@ and the actual code, dependency manifests, and CI workflows.
 * Update relevant documentation when behavior, architecture, workflows, or
   commands change. For Markdown, follow `README.md` structure and list-format
   conventions.
-* For every response containing Markdown, present the readable, rendered
-  version first, followed by the same content in a fenced `markdown` code
-  block for copying and pasting. Use a longer outer fence when the content
-  includes code fences, and do not recursively duplicate the copyable version.
+* For every response containing Markdown, present the readable, rendered version
+  first, followed by the same content in a fenced `markdown` code block for
+  copying and pasting. Use a longer outer fence when the content includes code
+  fences, and do not recursively duplicate the copyable version.
 * Provide copy-pasteable instructions in every use case: setup, implementation,
   validation, troubleshooting, CI reproduction, and handoff. Put complete
   commands in fenced code blocks, identify whether they run on the Docker host
@@ -203,8 +201,8 @@ Use the
 [README's canonical AI documentation inventory](README.md#ai-assisted-development)
 to find project context, AI-guidance maintenance policy, task-specific skills,
 and the pull request review checklist. The reading order is not precedence:
-platform instructions apply first, and the implementation, tests,
-configuration, and CI are the source of truth for current behavior.
+platform instructions apply first, and the implementation, tests, configuration,
+and CI are the source of truth for current behavior.
 
 ---
 

@@ -28,10 +28,10 @@ This project includes a Dev Container definition in `.devcontainer/`.
 The shared development image also includes [fzf](../doc/FZF.md), with Bash and
 Fish key bindings for fuzzy file selection, history search, and navigation.
 
-CI validates the merged Compose override and parses `devcontainer.json` when
-the Compose validation category is selected. Keep `devcontainer.json` strict
-JSON, without comments or trailing commas. This checks syntax, not the Dev
-Container schema or IDE attachment.
+CI validates the merged Compose override and parses `devcontainer.json` when the
+Compose validation category is selected. Keep `devcontainer.json` strict JSON,
+without comments or trailing commas. This checks syntax, not the Dev Container
+schema or IDE attachment.
 
 To reproduce from the repository root on the Docker host with the PHP
 development service running:
@@ -59,13 +59,13 @@ Compose development environment; Python is not added to the production image.
 The default Python interpreter is in `/home/dev/.venv`, owned by `dev`.
 `VIRTUAL_ENV` and `PATH` are configured in the image, so `python`, `python3`,
 and `python -m pip` use this environment automatically in `make bash`,
-`make fish`, IDE Dev Container terminals, and `docker compose exec php`.
-No shell-specific activation or host Python installation is needed.
+`make fish`, IDE Dev Container terminals, and `docker compose exec php`. No
+shell-specific activation or host Python installation is needed.
 
-Run all repository Python commands **inside the PHP development container**,
-not in a host terminal. From the host, first open a shell with `make bash` or
-`make fish`; an IDE Dev Container terminal is already inside the container.
-Then run the repository's standard-library documentation checker from `/app`:
+Run all repository Python commands **inside the PHP development container**, not
+in a host terminal. From the host, first open a shell with `make bash` or
+`make fish`; an IDE Dev Container terminal is already inside the container. Then
+run the repository's standard-library documentation checker from `/app`:
 
 ```bash
 python3 --version
@@ -73,8 +73,8 @@ python3 -c 'import sys; print(sys.executable); print(sys.prefix)'
 python3 scripts/check-skills.py
 ```
 
-The interpreter and prefix should point to `/home/dev/.venv`. To run the
-checker from the host without an interactive shell, use Docker explicitly:
+The interpreter and prefix should point to `/home/dev/.venv`. To run the checker
+from the host without an interactive shell, use Docker explicitly:
 
 ```bash
 docker compose exec -T php python3 scripts/check-skills.py
@@ -84,15 +84,14 @@ Alternatively, run `make check-skills` from either the host or the container.
 The Make target always executes the checker inside Docker.
 
 For third-party packages, run `python -m pip install <package>` inside the
-container to install into the default development venv. These installations
-are container-local and are lost when the container is recreated; required
-shared tooling belongs in the Dockerfile.
+container to install into the default development venv. These installations are
+container-local and are lost when the container is recreated; required shared
+tooling belongs in the Dockerfile.
 
 Do not install packages into Debian's system Python with `sudo pip`,
 `pip --user`, or `--break-system-packages`. The existing `thefuck` shell helper
-is installed in its own virtual environment at
-`/home/dev/.local/share/thefuck`, with its command linked into
-`/home/dev/.local/bin` for Bash and Fish.
+is installed in its own virtual environment at `/home/dev/.local/share/thefuck`,
+with its command linked into `/home/dev/.local/bin` for Bash and Fish.
 
 CI also uses the existing Compose `php` development service for project tools.
 The shared bootstrap calls `make ci-start`, then commands such as
@@ -101,8 +100,8 @@ The shared bootstrap calls `make ci-start`, then commands such as
 entrypoint, keeps PHP available for commands, and mounts the Composer cache.
 `make ci-stop` cleans up after the job; no separate documentation image is used.
 
-Rebuild the development image after pulling this change. Use your IDE's
-Dev Container rebuild action, or follow the root
+Rebuild the development image after pulling this change. Use your IDE's Dev
+Container rebuild action, or follow the root
 [container rebuild instructions](../README.md#building-containers).
 
 ## UID/GID mapping [ᐞ](#table-of-contents)

@@ -43,26 +43,26 @@ such as the request payload; callers do not need to format the response again.
 Use the same HTTP status constants in test data providers.
 
 PHPUnit is configured with `failOnDeprecation="true"`. Reported deprecations,
-including those from dependencies, produce a nonzero exit code locally and
-fail the CI test job even when all assertions pass. Deprecation details remain
+including those from dependencies, produce a nonzero exit code locally and fail
+the CI test job even when all assertions pass. Deprecation details remain
 visible in the test output.
 
 ### Selecting validation [ᐞ](#table-of-contents)
 
 <a id="selecting-validation"></a>
 
-Choose checks by the behavior affected, including callers and generated
-outputs, rather than running PHPUnit for every AI task. These rules apply
-during iteration, at handoff, and before commit. They govern local validation;
-they do not disable or change required GitHub CI checks.
+Choose checks by the behavior affected, including callers and generated outputs,
+rather than running PHPUnit for every AI task. These rules apply during
+iteration, at handoff, and before commit. They govern local validation; they do
+not disable or change required GitHub CI checks.
 
-Use the complete task diff from its original baseline, including new files,
-not just the last repair or latest commit. Exclude unrelated pre-existing
-work. Apply the
+Use the complete task diff from its original baseline, including new files, not
+just the last repair or latest commit. Exclude unrelated pre-existing work.
+Apply the
 [shared selection rules](../.github/skills/shared-guidance.md#running-and-validating-changes):
 skill checklists are conditional, changed Markdown must be linted, and checks
-with unchanged inputs need not be repeated during one agent's work.
-Independent verification must still obtain its own scoped evidence.
+with unchanged inputs need not be repeated during one agent's work. Independent
+verification must still obtain its own scoped evidence.
 
 * **Documentation only:** for Markdown, AI instructions, skill text, comments,
   or non-executable examples, run `make lint-markdown` and
@@ -73,28 +73,28 @@ Independent verification must still obtain its own scoped evidence.
   syntax/style checks; annotations or metadata that tools execute are not
   comments-only changes.
 * **Application behavior:** for PHP logic, API contracts, validation,
-  authentication, serialization, or persistence changes, add or update tests
-  at the affected boundary and run the smallest relevant class or directory.
-  Run relevant PHP quality checks and expand to the broader application suite
-  in [AGENTS.md](../AGENTS.md#testing-and-validation) for cross-cutting changes,
+  authentication, serialization, or persistence changes, add or update tests at
+  the affected boundary and run the smallest relevant class or directory. Run
+  relevant PHP quality checks and expand to the broader application suite in
+  [AGENTS.md](../AGENTS.md#testing-and-validation) for cross-cutting changes,
   shared infrastructure, or uncertain regression impact.
 * **Tests only:** run changed tests and affected consumers of shared fixtures,
-  test helpers, or bootstrap code, plus relevant PHP quality checks. Changes
-  to PHPUnit configuration, suite discovery, coverage configuration, or test
+  test helpers, or bootstrap code, plus relevant PHP quality checks. Changes to
+  PHPUnit configuration, suite discovery, coverage configuration, or test
   runners require exercising those contracts, not only one passing test.
 * **Workflows and artifacts:** use workflow-aware, composite-action, and shell
   validation as applicable. Trigger, permission, runner, action-pin, or
   documentation changes alone do not require local PHPUnit. Changes to test
-  execution, coverage, report generation, or report paths require exercising
-  the affected producer and checking its actual outputs. A targeted test
-  cannot prove full-suite discovery or complete coverage artifact generation.
-  Preserve failed-run diagnostics and distinguish local checks from hosted
-  workflow execution.
-* **Configuration and database:** run the relevant configuration/container
-  lint and tests that exercise affected wiring or environment resolution.
-  Entity or migration changes also require schema/migration validation and
-  relevant database tests. Executable configuration is not documentation-only,
-  even when no PHP source changes.
+  execution, coverage, report generation, or report paths require exercising the
+  affected producer and checking its actual outputs. A targeted test cannot
+  prove full-suite discovery or complete coverage artifact generation. Preserve
+  failed-run diagnostics and distinguish local checks from hosted workflow
+  execution.
+* **Configuration and database:** run the relevant configuration/container lint
+  and tests that exercise affected wiring or environment resolution. Entity or
+  migration changes also require schema/migration validation and relevant
+  database tests. Executable configuration is not documentation-only, even when
+  no PHP source changes.
 * **Dependencies, runtime, and containers:** follow the matching dependency,
   PHP-runtime, or Docker skill. Application package or runtime changes need
   affected application tests and broader coverage where compatibility is
@@ -107,30 +107,30 @@ Independent verification must still obtain its own scoped evidence.
   executable scripts follow this rule, not the skill-text exemption.
 
 For mixed changes, combine the relevant checks for the entire changeset;
-documentation edits do not exempt accompanying behavioral changes. Inspect
-the diff before deciding that a change is non-behavioral. When impact is
-unclear, trace callers and expand validation rather than assuming no tests
-are needed. Rerun affected checks after the final edit; earlier passing
-results only cover the content tested then.
+documentation edits do not exempt accompanying behavioral changes. Inspect the
+diff before deciding that a change is non-behavioral. When impact is unclear,
+trace callers and expand validation rather than assuming no tests are needed.
+Rerun affected checks after the final edit; earlier passing results only cover
+the content tested then.
 
 For example, `config/services.yaml` needs Symfony YAML/wiring checks and
-affected application tests even when no PHP file changed; a workflow YAML
-file needs `make lint-workflows`, not `make lint-yaml`. An ECS/PHPStan/Psalm
-configuration-only edit needs the affected analyzer, not PHPUnit. A shell
-helper needs syntax checks, relevant lint, and its regression suite, not PHP
-static analysis. Inspect the ShellCheck invocation in
-`scripts/lint-workflows.sh` and run `make lint-workflows` when a changed
-script is listed; it does not lint every shell script. Container and
-dependency changes can invalidate several categories at once.
-The [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path)
-documents the conservative automated counterpart; local checks can be more
-focused with caller/behavior evidence. Unknown impact expands validation.
+affected application tests even when no PHP file changed; a workflow YAML file
+needs `make lint-workflows`, not `make lint-yaml`. An ECS/PHPStan/Psalm
+configuration-only edit needs the affected analyzer, not PHPUnit. A shell helper
+needs syntax checks, relevant lint, and its regression suite, not PHP static
+analysis. Inspect the ShellCheck invocation in `scripts/lint-workflows.sh` and
+run `make lint-workflows` when a changed script is listed; it does not lint
+every shell script. Container and dependency changes can invalidate several
+categories at once. The
+[CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path) documents
+the conservative automated counterpart; local checks can be more focused with
+caller/behavior evidence. Unknown impact expands validation.
 
 At handoff, state which checks ran, their results, and why PHPUnit was not
-applicable or could not run. Missing containers, dependencies, credentials,
-or services are blockers, not exemptions: do not claim blocked checks passed.
-Use the development container for PHP tooling and the documented command for
-each other check; do not replace a required runtime check with a YAML parse.
+applicable or could not run. Missing containers, dependencies, credentials, or
+services are blockers, not exemptions: do not claim blocked checks passed. Use
+the development container for PHP tooling and the documented command for each
+other check; do not replace a required runtime check with a YAML parse.
 
 ### Command output contracts [ᐞ](#table-of-contents)
 
@@ -148,9 +148,9 @@ It covers shared colors and streams, filtered Make errors, blocking and
 informational check policies, quality/setup mutations, lifecycle cancellation,
 information/report output, expected-negative scenarios, and host/CI forwarding.
 The suites use temporary fixtures and mocked Docker/registry/upload operations.
-They do not replace PHPUnit or verify live service health or real uploads.
-Use focused suites while iterating; run the consolidated target when changing
-the shared output contract. When adding Docker-helper test scenarios or groups,
+They do not replace PHPUnit or verify live service health or real uploads. Use
+focused suites while iterating; run the consolidated target when changing the
+shared output contract. When adding Docker-helper test scenarios or groups,
 update `DOCKER_IMAGE_TEST_GROUPS` in `scripts/tests/command-output-test.py` and
 run this target, not only `make test-docker-images`. CI selects these consumer
 checks for changes to either the helper or its regression suite. A failing
@@ -176,9 +176,9 @@ make run-tests-phpdbg         # Runs all tests via phpunit (phpdbg)
 All of those above commands will run whole test suite, so it might take some
 time to run those all.
 
-If you just want to run a single test or all tests in a specified directory,
-run `phpunit` directly from a shell inside the PHP development container, not
-on the host machine:
+If you just want to run a single test or all tests in a specified directory, run
+`phpunit` directly from a shell inside the PHP development container, not on the
+host machine:
 
 From the repository root on the host, open the container shell with:
 
@@ -220,8 +220,8 @@ file, just change database and others to match your testing environment.
 
 <a id="metrics"></a>
 
-Project also contains [PhpMetrics](https://github.com/phpmetrics/phpmetrics)
-to make some analyze of your code. Note that you need run tests before this
+Project also contains [PhpMetrics](https://github.com/phpmetrics/phpmetrics) to
+make some analyze of your code. Note that you need run tests before this
 command. You can run this by following command:
 
 ```bash

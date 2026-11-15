@@ -4,8 +4,7 @@
 
 Copilot entry point for repository guidance. The actionable repository-wide
 instructions live in [`AGENTS.md`](../AGENTS.md); this file points to those
-rules
-instead of duplicating them.
+rules instead of duplicating them.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -32,18 +31,15 @@ selection and loading evidence are not prerequisites for project work.
 
 The [README AI guidance inventory](../README.md#ai-assisted-development) is the
 canonical reading order. See [`CLAUDE.md`](../CLAUDE.md) for project
-architecture
-and workflow context, and [`doc/AI_RULES.md`](../doc/AI_RULES.md) for
-AI-guidance
-maintenance and CI enforcement.
+architecture and workflow context, and [`doc/AI_RULES.md`](../doc/AI_RULES.md)
+for AI-guidance maintenance and CI enforcement.
 
 ## References [ᐞ](#table-of-contents)
 
 <a id="references"></a>
 
 See [`doc/SECURITY.md`](../doc/SECURITY.md) for the security policy. For
-pull-request reviews, use the
-[pull request template](pull_request_template.md).
+pull-request reviews, use the [pull request template](pull_request_template.md).
 
 ---
 

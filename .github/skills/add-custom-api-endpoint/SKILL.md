@@ -36,8 +36,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    `User/DeleteUserController` for authenticated profile and state-changing
    operations. For small service-backed operational endpoints, also inspect
    `HealthzController` with `tests/E2E/Controller/HealthzControllerTest` and
-   `VersionController` with `tests/E2E/Controller/VersionControllerTest`.
-   These illustrate focused controllers delegating to services, documenting a
+   `VersionController` with `tests/E2E/Controller/VersionControllerTest`. These
+   illustrate focused controllers delegating to services, documenting a
    response, and testing HTTP behavior and relevant side effects (such as
    avoiding request-log rows). Check their current behavior before reusing a
    pattern. Read route configuration and affected services, DTOs, callers, and
@@ -45,8 +45,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 2. Define the endpoint contract before implementation: route and HTTP method,
    path/query/body inputs, response status and shape, validation and error
    behavior, authorization, and side effects. Preserve compatibility where
-   applicable. Ask before making unspecified choices that change the public
-   API, access policy, or persistent data.
+   applicable. Ask before making unspecified choices that change the public API,
+   access policy, or persistent data.
 3. Put a single custom endpoint action in a focused controller under
    `src/Controller/`, normally using `#[AsController]`, a route attribute, and
    `__invoke`. Use typed constructor injection and keep the controller at the
@@ -56,33 +56,32 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    by a resource.
 4. Declare the intended HTTP methods and constrain route parameters where
    appropriate. Trace how route values become controller arguments, including
-   entity resolution, and verify this against a nearby endpoint. Do not assume
-   a route placeholder alone enforces the intended format or existence checks.
+   entity resolution, and verify this against a nearby endpoint. Do not assume a
+   route placeholder alone enforces the intended format or existence checks.
 5. For request data, use a DTO with Symfony Validator constraints when the
    operation has structured or validated input. Keep accepted fields and
    response exposure explicit; never return entities or sensitive properties
    unintentionally. Inspect request-body handling before choosing how JSON is
    mapped. `RestDtoValueResolver` is for registered generic REST controller
-   create/update/patch actions; do not assume it binds DTOs to custom
-   `__invoke` controllers. Follow
-   [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) when request mapping,
-   DTO validation, or AutoMapper configuration changes.
+   create/update/patch actions; do not assume it binds DTOs to custom `__invoke`
+   controllers. Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
+   when request mapping, DTO validation, or AutoMapper configuration changes.
 6. Apply authorization explicitly at the endpoint or relevant service boundary
    using the established security attributes and voter patterns. Trace the
    actual caller identity, subject, and route argument binding; do not assume
-   authentication alone permits the operation. Preserve existing firewall,
-   role, voter, and access-control behavior. Follow
-   [implement-api-authentication](../implement-api-authentication/SKILL.md)
-   for authentication or broad access-policy changes, and
+   authentication alone permits the operation. Preserve existing firewall, role,
+   voter, and access-control behavior. Follow
+   [implement-api-authentication](../implement-api-authentication/SKILL.md) for
+   authentication or broad access-policy changes, and
    [add-security-voter](../add-security-voter/SKILL.md) for subject-based
    permissions.
 7. Document the public API with the project's OpenAPI attributes where
    applicable: operation or tag, inputs, request body, success response shape,
-   and relevant validation or authorization errors. Keep the documented
-   contract aligned with the actual route and response serialization context.
-   For shared serialization, formats, headers, or error envelopes, also use
-   [update-api-response-contract](../update-api-response-contract/SKILL.md).
-   For schema, security-description, or generation changes, also use
+   and relevant validation or authorization errors. Keep the documented contract
+   aligned with the actual route and response serialization context. For shared
+   serialization, formats, headers, or error envelopes, also use
+   [update-api-response-contract](../update-api-response-contract/SKILL.md). For
+   schema, security-description, or generation changes, also use
    [update-api-documentation](../update-api-documentation/SKILL.md).
 8. Add or update an E2E HTTP test under `tests/E2E/Controller/` that exercises
    the real route and relevant collaborators. Cover successful status and
@@ -95,8 +94,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for repository,
    resource, migration, and schema work. If it adds repository filtering or
    search behavior, also follow
-   [add-doctrine-query](../add-doctrine-query/SKILL.md). Avoid those layers
-   for endpoint-only behavior that does not require them.
+   [add-doctrine-query](../add-doctrine-query/SKILL.md). Avoid those layers for
+   endpoint-only behavior that does not require them.
 
 ## Validation [ᐞ](#table-of-contents)
 
@@ -105,11 +104,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 * Run the targeted E2E controller test inside the PHP development container,
   following shared guidance and the testing skill.
 * Verify the route and allowed methods with the affected HTTP test or
-  `bin/console debug:router`; verify authorization with both allowed and
-  denied requests when access is restricted.
-* For controller or service wiring changes, run
-  `bin/console lint:container`. For configuration changes, use the relevant
-  configuration lint command from shared guidance.
+  `bin/console debug:router`; verify authorization with both allowed and denied
+  requests when access is restricted.
+* For controller or service wiring changes, run `bin/console lint:container`.
+  For configuration changes, use the relevant configuration lint command from
+  shared guidance.
 * Run relevant PHP quality checks from shared guidance. If OpenAPI metadata
   changes, verify the generated API documentation using the repository's
   existing workflow or tooling; a successful PHP lint does not verify the

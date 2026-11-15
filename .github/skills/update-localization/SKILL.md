@@ -18,8 +18,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 [AI rules](../../../doc/AI_RULES.md). Use
 [update-application-configuration](../update-application-configuration/SKILL.md)
 for settings and wiring, and
-[add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) when preference inputs
-or request mappings change.
+[add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) when preference inputs or
+request mappings change.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -45,14 +45,14 @@ Inspect the affected source, configuration, and consumers:
 * `config/services.yaml`, `config/packages/framework.yaml`, and
   `translation.yaml`: default locale, translator resource path and fallback.
 * `translations/`, currently including `security+intl-icu.fi.xlf`, and
-  `src/Security/Handler/TranslatedAuthenticationFailureHandler.php`:
-  actual message keys, domains, formats, and authentication translation.
-* `src/Controller/v1/Localization/` and its integration/E2E tests:
-  language, locale, and timezone list contracts and OpenAPI metadata.
+  `src/Security/Handler/TranslatedAuthenticationFailureHandler.php`: actual
+  message keys, domains, formats, and authentication translation.
+* `src/Controller/v1/Localization/` and its integration/E2E tests: language,
+  locale, and timezone list contracts and OpenAPI metadata.
 * `src/Entity/User.php`, `src/DTO/User/User.php`,
-  `src/AutoMapper/User/RequestMapper.php`, `src/Security/SecurityUser.php`,
-  and `src/EventSubscriber/JWTCreatedSubscriber.php`: preference defaults,
-  input conversion, persisted values, security-user snapshots, and JWT claims.
+  `src/AutoMapper/User/RequestMapper.php`, `src/Security/SecurityUser.php`, and
+  `src/EventSubscriber/JWTCreatedSubscriber.php`: preference defaults, input
+  conversion, persisted values, security-user snapshots, and JWT claims.
 * Language, locale, and timezone constraints under `src/Validator/Constraints/`,
   and enum types under `src/Doctrine/DBAL/Types/`: accepted inputs and database
   representation. Shared log entities use UTC independently of user timezone.
@@ -73,47 +73,47 @@ Inspect the affected source, configuration, and consumers:
    with strict matching. Missing/unsupported headers use `%locale%`; weighted
    lists, regional tags, and case variants are not parsed or normalized.
    Preserve this behavior unless a negotiation change is approved. Specify
-   precedence and fallback for those cases before adopting a parser.
-   Inspect request type and event ordering; do not assume there is a
-   main-request guard or that setting the locale late updates earlier messages.
-3. Keep defaults and sources distinct. `Localization::getRequestLocale()`
-   checks the current request locale against `Locale` values and otherwise
-   returns the enum default, including when there is no request. Translator
+   precedence and fallback for those cases before adopting a parser. Inspect
+   request type and event ordering; do not assume there is a main-request guard
+   or that setting the locale late updates earlier messages.
+3. Keep defaults and sources distinct. `Localization::getRequestLocale()` checks
+   the current request locale against `Locale` values and otherwise returns the
+   enum default, including when there is no request. Translator
    defaults/fallbacks use `%locale%`, while user/entity/DTO defaults use enums
-   and `Localization::DEFAULT_TIMEZONE`. Stored preferences and JWT claims
-   do not by themselves establish the locale of the current HTTP request.
-   Trace actual consumers rather than inventing user/header precedence.
+   and `Localization::DEFAULT_TIMEZONE`. Stored preferences and JWT claims do
+   not by themselves establish the locale of the current HTTP request. Trace
+   actual consumers rather than inventing user/header precedence.
 4. For supported-value changes, update the appropriate enum, list consumers,
    validation, mapper conversions, defaults, fixtures, and metadata within
    scope. Language and locale are different enums even where their values
    currently coincide. `EnumLanguageType` and `EnumLocaleType` use `EnumType`,
    whose SQL declaration is a database `ENUM`; additions/removals can therefore
-   require a schema migration even without editing an entity attribute.
-   Follow [add-doctrine-entity](../add-doctrine-entity/SKILL.md) to generate and
-   review it. Renames/removals also need an approved plan for existing values;
-   never silently coerce stored preferences to make hydration succeed.
+   require a schema migration even without editing an entity attribute. Follow
+   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) to generate and review
+   it. Renames/removals also need an approved plan for existing values; never
+   silently coerce stored preferences to make hydration succeed.
 5. Keep translation catalogs aligned with the actual domain and call site.
-   Preserve XLIFF structure, source keys, target locale, placeholders, and
-   ICU formatting semantics. Do not translate machine-readable identifiers,
+   Preserve XLIFF structure, source keys, target locale, placeholders, and ICU
+   formatting semantics. Do not translate machine-readable identifiers,
    exception codes, or API field names. Check missing keys and fallback using
    the real translator; a catalog file alone does not prove it is loaded.
-   `TranslatedAuthenticationFailureHandler` translates `Invalid credentials.`
-   in the `security` domain and dispatches the authentication-failure event.
+   `TranslatedAuthenticationFailureHandler` translates `Invalid credentials.` in
+   the `security` domain and dispatches the authentication-failure event.
    Preserve that event and generic credential message; translation must not
    reveal whether a username exists or bypass failure/lockout logging.
 6. For preference changes, preserve create/update/patch and visited-field
    semantics through the DTO and mapper. Verify language/locale enum conversion
    and timezone validation separately. Trace security-user values and newly
-   issued JWT localization claims; do not assume editing a preference updates
-   an already issued token. Use
-   [implement-api-authentication](../implement-api-authentication/SKILL.md)
-   when token or authentication behavior changes.
+   issued JWT localization claims; do not assume editing a preference updates an
+   already issued token. Use
+   [implement-api-authentication](../implement-api-authentication/SKILL.md) when
+   token or authentication behavior changes.
 7. For timezones, retain identifiers as stable machine values and distinguish
    them from display labels and offsets. `getFormattedTimezones()` builds
    `timezone`, `identifier`, `offset`, and `value` using PHP timezone data and
-   the current instant. Verify negative and fractional offsets, daylight
-   saving, and label formatting when affected; a count-only test is not enough.
-   Do not treat a current offset as a permanent property of a zone.
+   the current instant. Verify negative and fractional offsets, daylight saving,
+   and label formatting when affected; a count-only test is not enough. Do not
+   treat a current offset as a permanent property of a zone.
 8. Account for cache behavior and validation coupling. `getTimezones()` caches
    under `application_timezone` for one year and logs failures while returning
    its existing empty result; `TimezoneValidator` consumes that cached list.
@@ -127,8 +127,8 @@ Inspect the affected source, configuration, and consumers:
    parallel translation service. Follow
    [add-event-subscriber](../add-event-subscriber/SKILL.md) when locale event
    registration changes and
-   [update-api-response-contract](../update-api-response-contract/SKILL.md)
-   when shared output behavior changes.
+   [update-api-response-contract](../update-api-response-contract/SKILL.md) when
+   shared output behavior changes.
 
 ## Validation [ᐞ](#table-of-contents)
 
@@ -145,8 +145,8 @@ Inspect the affected source, configuration, and consumers:
   constructed subscriber.
 * For translation changes, check catalog syntax with available Symfony tooling
   after inspecting its supported commands/options inside the PHP development
-  container. Verify actual translated output, domain, placeholders, and
-  fallback through the caller. The mock in
+  container. Verify actual translated output, domain, placeholders, and fallback
+  through the caller. The mock in
   `tests/Integration/Security/Handler/TranslatedAuthenticationFailureHandlerTest.php`
   verifies a translation call, not catalog loading or HTTP locale selection.
 * For timezone changes, assert representative identifiers, exact output shape,
@@ -154,9 +154,9 @@ Inspect the affected source, configuration, and consumers:
   results. Keep time-sensitive expectations deterministic. The E2E tests in
   `tests/E2E/Controller/v1/Localization/` cover endpoint contracts, not all
   offset calculations or fallback paths.
-* Verify preference persistence and newly issued JWT claims when affected,
-  plus existing-row compatibility and migration/schema checks for enum changes.
-  Apply shared guidance for PHP quality and configuration checks. Do not run
+* Verify preference persistence and newly issued JWT claims when affected, plus
+  existing-row compatibility and migration/schema checks for enum changes. Apply
+  shared guidance for PHP quality and configuration checks. Do not run
   migrations against production or rewrite existing preferences without
   approval.
 * For this skill's Markdown alone, run from the repository root on the Docker

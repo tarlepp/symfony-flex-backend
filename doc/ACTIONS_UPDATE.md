@@ -5,8 +5,8 @@
 This document explains how to maintain SHA-pinned GitHub Actions in this
 project.
 
-All actions are pinned to commit SHAs (not version tags) to reduce
-supply-chain risk.
+All actions are pinned to commit SHAs (not version tags) to reduce supply-chain
+risk.
 
 For AI-assisted updates, follow the
 [GitHub Actions update skill](../.github/skills/update-github-actions/SKILL.md).
@@ -68,8 +68,8 @@ That gives:
 <a id="workflows-with-pinned-actions"></a>
 
 * `.github/workflows/main.yml` for linting, tests, and builds.
-* `.github/workflows/dependency-review.yml` for dependency vulnerability
-  review on pull requests.
+* `.github/workflows/dependency-review.yml` for dependency vulnerability review
+  on pull requests.
 * `.github/workflows/scorecard.yml` for supply-chain scoring.
 * `.github/workflows/vulnerability-scan.yml` for vulnerability scanning, with
   Trivy results also uploaded as SARIF to code scanning.
@@ -94,13 +94,13 @@ bash scripts/check-action-updates.sh --current-pins-md
 If you are on the host machine, run it in the dev container (`make bash`) or in
 your Dev Container terminal.
 
-The standalone workflow validators (actionlint, ShellCheck, action-validator
-and zizmor) are release binaries, not Actions. They are pinned with
-`tool-pin` declarations in `scripts/lint-workflows.sh`, which
-`check-action-updates.sh` reads to track each tool.
-Their declarations pair an exact release tag with its verified source commit
-SHA; platform-specific SHA-256 checksums separately pin the downloaded bytes.
-The normal update check includes these tools. To check only workflow tools:
+The standalone workflow validators (actionlint, ShellCheck, action-validator and
+zizmor) are release binaries, not Actions. They are pinned with `tool-pin`
+declarations in `scripts/lint-workflows.sh`, which `check-action-updates.sh`
+reads to track each tool. Their declarations pair an exact release tag with its
+verified source commit SHA; platform-specific SHA-256 checksums separately pin
+the downloaded bytes. The normal update check includes these tools. To check
+only workflow tools:
 
 ```bash
 bash scripts/check-action-updates.sh --tools-only
@@ -111,10 +111,10 @@ and report the newest full stable version tag and commit, excluding prerelease
 and floating tags. Missing pins, lookup failures, and moved/missing tags fail
 with exit code `2`; updates return `1`. This stricter parity/error behavior is
 specific to tool pins. Action version/SHA lookup failures also return exit 2;
-same-version Action pin differences are reported as updates (exit `1`).
-Review compatibility and update the release tag, commit comment, and both
-platforms' binary checksums together. Do not substitute a commit SHA for a
-binary checksum or automatically install the suggested version.
+same-version Action pin differences are reported as updates (exit `1`). Review
+compatibility and update the release tag, commit comment, and both platforms'
+binary checksums together. Do not substitute a commit SHA for a binary checksum
+or automatically install the suggested version.
 
 ---
 
@@ -359,12 +359,12 @@ Important behavior:
 * The script continues checks even when discovery warnings are present.
 * Review release notes and compatibility, and obtain explicit agreement before
   applying a major upgrade suggestion.
-* Discovery is line-based and limited to the paths above; inspect alternate
-  YAML filenames and unusual reference forms separately when present.
+* Discovery is line-based and limited to the paths above; inspect alternate YAML
+  filenames and unusual reference forms separately when present.
 * An Action is current only when its version label and pinned SHA match the
-  latest candidate tag and resolved commit. Older version pins are compared
-  with the latest candidate, not independently verified against their old tag.
-  Review individual lookup results rather than trusting Make's exit status.
+  latest candidate tag and resolved commit. Older version pins are compared with
+  the latest candidate, not independently verified against their old tag. Review
+  individual lookup results rather than trusting Make's exit status.
 
 Note: the script reports updates but does not apply them.
 
@@ -547,20 +547,20 @@ git ls-remote https://github.com/OWNER/REPO.git | grep TAG_NAME
 
 <a id="faq"></a>
 
-Q: Why not use version tags directly?
-A: Tags can be retagged or deleted. SHAs are immutable.
+Q: Why not use version tags directly? A: Tags can be retagged or deleted. SHAs
+are immutable.
 
-Q: Can SHAs be updated automatically?
-A: You can automate detection, but verification should stay manual.
+Q: Can SHAs be updated automatically? A: You can automate detection, but
+verification should stay manual.
 
-Q: What if a security patch is released?
-A: Update the pin quickly after reviewing changelog and CI impact.
+Q: What if a security patch is released? A: Update the pin quickly after
+reviewing changelog and CI impact.
 
-Q: How often should actions be updated?
-A: Apply security fixes quickly and review regular updates monthly.
+Q: How often should actions be updated? A: Apply security fixes quickly and
+review regular updates monthly.
 
-Q: Can I use short SHAs?
-A: GitHub supports short SHAs, but full SHAs are recommended.
+Q: Can I use short SHAs? A: GitHub supports short SHAs, but full SHAs are
+recommended.
 
 ---
 

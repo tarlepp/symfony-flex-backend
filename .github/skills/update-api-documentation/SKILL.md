@@ -60,11 +60,11 @@ Inspect the actual generation inputs and runtime evidence:
 <a id="workflow"></a>
 
 1. Establish which operations, schemas, components, and areas are affected.
-   Compare current generated documentation with source and HTTP evidence
-   before editing. Decide whether the defect is in metadata or implementation;
-   ask before changing public behavior, area exposure, or security policy.
-   A documentation task must not weaken validation or authorization to make
-   an inaccurate example work.
+   Compare current generated documentation with source and HTTP evidence before
+   editing. Decide whether the defect is in metadata or implementation; ask
+   before changing public behavior, area exposure, or security policy. A
+   documentation task must not weaken validation or authorization to make an
+   inaccurate example work.
 2. Verify inclusion and route discovery. The default area covers selected
    operational/auth/profile/localization paths; the internal area is broader.
    Check configured regexes against real paths, HTTP methods, class prefixes,
@@ -77,41 +77,41 @@ Inspect the actual generation inputs and runtime evidence:
    explicit null and create/update/patch behavior using
    [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md). Check operation IDs
    for uniqueness and avoid duplicate operations from overlapping attributes.
-4. Describe responses from actual serializer contexts, not request DTO shape
-   or entity properties alone. Match Nelmio `Model` groups to runtime groups,
+4. Describe responses from actual serializer contexts, not request DTO shape or
+   entity properties alone. Match Nelmio `Model` groups to runtime groups,
    including `Set.*` and nested associations. Preserve sensitive-field
    exclusions. Specify array versus object/scalar, empty results, formats,
-   status codes, and headers accurately. Do not claim `Accept` negotiation
-   where the handler instead selects formats from request content type.
+   status codes, and headers accurately. Do not claim `Accept` negotiation where
+   the handler instead selects formats from request content type.
 5. Trace error producers separately: generic REST exception conversion,
-   `ExceptionSubscriber`, Lexik authentication, and custom controllers can
-   have different envelopes and statuses. Describe actual required fields and
-   safe examples, not one universal error schema by assumption. Keep
-   development debug details out of public production examples.
+   `ExceptionSubscriber`, Lexik authentication, and custom controllers can have
+   different envelopes and statuses. Describe actual required fields and safe
+   examples, not one universal error schema by assumption. Keep development
+   debug details out of public production examples.
 6. Align security descriptions with actual firewalls, authenticators,
    attributes, and voters. Check every declared security requirement references
-   a defined scheme in the generated document. Current configuration includes
-   a global `Bearer` requirement and commented legacy `securityDefinitions`;
-   do not assume those comments define a working OpenAPI component.
-   Verify the generated OpenAPI version before choosing scheme syntax.
-   Distinguish unauthenticated operations from operations inheriting global
-   requirements, and alternatives from combined requirements. Document
-   JWT/API-key transport without exposing real credentials or implying that
-   an Authorization parameter enforces authentication.
-7. Prefer existing attribute/model patterns. When introducing reusable
-   schemas or responses, use the installed Nelmio/swagger-php mechanism and
-   verify component discovery and every reference in each affected area.
-   Do not assume a reusable component registry already exists, create a
-   parallel specification, or extract unrelated repeated metadata merely for
-   consistency. Preserve intentionally different responses and model groups.
+   a defined scheme in the generated document. Current configuration includes a
+   global `Bearer` requirement and commented legacy `securityDefinitions`; do
+   not assume those comments define a working OpenAPI component. Verify the
+   generated OpenAPI version before choosing scheme syntax. Distinguish
+   unauthenticated operations from operations inheriting global requirements,
+   and alternatives from combined requirements. Document JWT/API-key transport
+   without exposing real credentials or implying that an Authorization parameter
+   enforces authentication.
+7. Prefer existing attribute/model patterns. When introducing reusable schemas
+   or responses, use the installed Nelmio/swagger-php mechanism and verify
+   component discovery and every reference in each affected area. Do not assume
+   a reusable component registry already exists, create a parallel
+   specification, or extract unrelated repeated metadata merely for consistency.
+   Preserve intentionally different responses and model groups.
 8. Use synthetic examples with correct shape, format, enum values, and
    placeholder syntax. Do not copy tokens, private URLs, user records, or
-   diagnostic traces into documentation. Do not translate machine-readable
-   field names or introduce undocumented write-only inputs by showing
-   serializer output as a request example.
+   diagnostic traces into documentation. Do not translate machine-readable field
+   names or introduce undocumented write-only inputs by showing serializer
+   output as a request example.
 9. Update the owning attributes/configuration and relevant contributor
-   instructions, not generated output by hand. Inspect generation warnings
-   and schema references rather than treating JSON serialization as semantic
+   instructions, not generated output by hand. Inspect generation warnings and
+   schema references rather than treating JSON serialization as semantic
    validation. Use the configuration skill for wiring/area settings and the
    response-contract skill for approved runtime changes.
 
@@ -119,10 +119,10 @@ Inspect the actual generation inputs and runtime evidence:
 
 <a id="validation"></a>
 
-For executable metadata/configuration changes, generate each affected area
-and inspect paths, methods, components, references, security, and examples.
-The installed `nelmio:apidoc:dump` command supports area and format selection.
-From the repository root on the Docker host with development services running:
+For executable metadata/configuration changes, generate each affected area and
+inspect paths, methods, components, references, security, and examples. The
+installed `nelmio:apidoc:dump` command supports area and format selection. From
+the repository root on the Docker host with development services running:
 
 ```bash
 docker compose exec -T php bin/console nelmio:apidoc:dump --area=default --format=json
@@ -130,26 +130,26 @@ docker compose exec -T php bin/console nelmio:apidoc:dump --area=internal --form
 ```
 
 Select the affected command(s); these write the generated document to stdout.
-Check current command help or installed implementation before adding flags.
-If generation/help is blocked, report the failure rather than substituting an
-empty document or claiming validation. Store any temporary output outside the
-tracked specification and review it for sensitive examples before sharing.
+Check current command help or installed implementation before adding flags. If
+generation/help is blocked, report the failure rather than substituting an empty
+document or claiming validation. Store any temporary output outside the tracked
+specification and review it for sensitive examples before sharing.
 
 Use [write-tests](../write-tests/SKILL.md) for changed tests. Assert affected
 generated-document fields and relevant HTTP contracts, not only status 200.
 `tests/E2E/DocumentationTest.php` currently checks UI/JSON availability, not
 schema accuracy or the internal area. A successful dump does not prove that
-examples match runtime output, security requirements resolve correctly, or
-every documented operation is included in the intended area.
+examples match runtime output, security requirements resolve correctly, or every
+documented operation is included in the intended area.
 
-OpenAPI PHP attributes are executable metadata, not Markdown-only prose:
-run affected syntax/style checks, generation, and focused regression checks
-using [the validation guide](../../../doc/TESTING.md#selecting-validation).
-Apply shared configuration/container checks when wiring changes. Do not add a
-new validator dependency when existing tooling and focused assertions suffice.
+OpenAPI PHP attributes are executable metadata, not Markdown-only prose: run
+affected syntax/style checks, generation, and focused regression checks using
+[the validation guide](../../../doc/TESTING.md#selecting-validation). Apply
+shared configuration/container checks when wiring changes. Do not add a new
+validator dependency when existing tooling and focused assertions suffice.
 
-For this skill's Markdown alone, run from the repository root on the Docker
-host with development services running:
+For this skill's Markdown alone, run from the repository root on the Docker host
+with development services running:
 
 ```bash
 make lint-markdown

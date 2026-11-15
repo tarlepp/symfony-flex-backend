@@ -65,15 +65,15 @@ Then open `https://localhost:8000` in your browser. For more details, see
 <a id="requirements"></a>
 
 * [Docker Engine](https://docs.docker.com/engine/install/)
-* [Docker Compose v2](https://docs.docker.com/compose/install/)
-  (included with Docker Desktop)
+* [Docker Compose v2](https://docs.docker.com/compose/install/) (included with
+  Docker Desktop)
 
 Standalone installation is not currently maintained; see the
 [standalone installation status](doc/INSTALLATION_WITHOUT_DOCKER.md) before
 attempting to run without Docker.
 
-Docker images are multi-platform, so the same setup works natively on
-x86-64 (`linux/amd64`) and ARM (`linux/arm64`, e.g. Apple Silicon) hosts. See
+Docker images are multi-platform, so the same setup works natively on x86-64
+(`linux/amd64`) and ARM (`linux/arm64`, e.g. Apple Silicon) hosts. See
 [Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md) for details.
 
 ### Recommendations [ᐞ](#table-of-contents)
@@ -86,9 +86,8 @@ x86-64 (`linux/amd64`) and ARM (`linux/arm64`, e.g. Apple Silicon) hosts. See
   development environment for Docker and tooling.
 * `Dev Container capable IDE` - recommended for the quickest setup (e.g. VS Code
   or JetBrains IDEs with Dev Container support).
-* `Makefile` support - recommended if you run containers with Make commands;
-  if you do not have `make`, check `Makefile` to see equivalent Docker
-  commands.
+* `Makefile` support - recommended if you run containers with Make commands; if
+  you do not have `make`, check `Makefile` to see equivalent Docker commands.
 
 ## Installation [ᐞ](#table-of-contents)
 
@@ -145,8 +144,7 @@ migrations. It requires Docker Compose 2.24.4 or newer. See
 [Running production locally](doc/DOCKER_MULTI_PLATFORM.md#running-production-locally)
 for configuration, limitations and switching back to development.
 
-These commands will create following containers to run this backend
-application:
+These commands will create following containers to run this backend application:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
@@ -155,8 +153,8 @@ application:
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
 * [adminer](https://www.adminer.org/) (to manage your database via browser)
 
-For next steps (application URLs, shell access, and rebuilding containers),
-see [Running the application](#running-the-application).
+For next steps (application URLs, shell access, and rebuilding containers), see
+[Running the application](#running-the-application).
 
 ## Running the application [ᐞ](#table-of-contents)
 
@@ -188,9 +186,9 @@ following ports are exposed on `localhost` on your host machine:
 * symfony-backend-adminer - [http://localhost:8200](http://localhost:8200)
   (adminer)
 
-And this application is usable in your browser at `https://localhost:8000`.
-When you open that site for the first time, you will see a "Your connection is
-not private" warning - see [this](./docker/nginx/ssl/README.md) to resolve that.
+And this application is usable in your browser at `https://localhost:8000`. When
+you open that site for the first time, you will see a "Your connection is not
+private" warning - see [this](./docker/nginx/ssl/README.md) to resolve that.
 
 Another choice is to use `http://localhost:8080`, which does not use SSL.
 
@@ -290,11 +288,11 @@ services:
 
 <a id="dev-containers"></a>
 
-This project also includes a Dev Container setup in `.devcontainer/` that can
-be used from VS Code and JetBrains IDEs with Dev Container support.
+This project also includes a Dev Container setup in `.devcontainer/` that can be
+used from VS Code and JetBrains IDEs with Dev Container support.
 
-When you reopen the repository in a container, it starts the full Docker
-Compose stack:
+When you reopen the repository in a container, it starts the full Docker Compose
+stack:
 
 * `php`
 * `nginx`
@@ -330,12 +328,12 @@ reading order for its guidance:
 * [`doc/FEATURE_AGENTS.md`](doc/FEATURE_AGENTS.md) for the feature lead,
   architect, implementer, verifier, and conflict-resolver workflow and client
   requirements
-* [`.github/pull_request_template.md`](.github/pull_request_template.md) for
-  the human review checklist when preparing pull requests
+* [`.github/pull_request_template.md`](.github/pull_request_template.md) for the
+  human review checklist when preparing pull requests
 
 This is a reading order, not a precedence rule: platform instructions apply
-first, and the implementation, tests, configuration, and CI remain the source
-of truth for current behavior.
+first, and the implementation, tests, configuration, and CI remain the source of
+truth for current behavior.
 
 As a simple rule of thumb, update the AI guidance when the same review comment,
 architectural correction, or project convention appears repeatedly and should
@@ -369,20 +367,20 @@ locally when reproducing CI's test runner.
 
 <a id="continuous-integration"></a>
 
-GitHub Actions runs linting, static analysis, PHPUnit and Docker builds,
-with reduced checks for Markdown-only PRs and no repeat core validation for
+GitHub Actions runs linting, static analysis, PHPUnit and Docker builds, with
+reduced checks for Markdown-only PRs and no repeat core validation for
 title/body-only PR edits. `Validate CI result` and `dependency-review` are the
-required checks. See the [workflow guide and execution
-graphs](doc/GITHUB_WORKFLOWS.md), [required checks and branch
-protection](doc/REQUIRED_CHECKS.md), and the
+required checks. See the
+[workflow guide and execution graphs](doc/GITHUB_WORKFLOWS.md),
+[required checks and branch protection](doc/REQUIRED_CHECKS.md), and the
 [contributor CI guide](doc/DEVELOPMENT.md#continuous-integration).
 
 The Coveralls, CodeClimate and SonarCloud badges come from external services.
 GitHub Actions uploads reports only to Coveralls and SonarCloud on all PRs and
 successful pushes to `master`, after both tests and `ci-summary` succeed. Each
 upload requires its optional token; upload errors fail the reporting job.
-Eligible external reporting must succeed for `Validate CI result` to pass;
-it does not need a separate required-check entry. Fork PRs run the job without
+Eligible external reporting must succeed for `Validate CI result` to pass; it
+does not need a separate required-check entry. Fork PRs run the job without
 repository secrets and skip uploads. Markdown-only PRs skip reporting because
 tests and artifacts are skipped. The CI and OpenSSF Scorecard badges reflect
 GitHub-hosted checks.
@@ -395,10 +393,10 @@ This backend API can be consumed by any frontend technology or framework. You
 can use React, Vue, Angular, Svelte, or any other frontend solution that can
 make HTTP requests.
 
-As a reference example, I've created an [Angular NgRx powered frontend template
-project](https://github.com/tarlepp/angular-ngrx-frontend) that works with this
-backend. It demonstrates how to integrate with this API, but you're free to use
-any technology stack that fits your project needs.
+As a reference example, I've created an
+[Angular NgRx powered frontend template project](https://github.com/tarlepp/angular-ngrx-frontend)
+that works with this backend. It demonstrates how to integrate with this API,
+but you're free to use any technology stack that fits your project needs.
 
 With this backend, it should be quite easy to start building _your_ own
 application with the frontend technology of your choice.

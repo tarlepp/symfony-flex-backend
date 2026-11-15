@@ -2,8 +2,7 @@
 
 <a id="what-is-this"></a>
 
-This folder contains all docker configuration for local development
-environment.
+This folder contains all docker configuration for local development environment.
 
 <a id="table-of-contents"></a>
 
@@ -28,13 +27,13 @@ Note that this directory contains following SSL certification files:
 * [tls.key](tls.key)
 
 And these are just for _local_ development environment and these should **not**
-be used in _production_ environment. These certificates are valid until 2050,
-so I think that is long enough - and if not I'll update those certificates.
+be used in _production_ environment. These certificates are valid until 2050, so
+I think that is long enough - and if not I'll update those certificates.
 
-Because application is running on `https` by default now, you will see
-security issue on your browser when you access `https://localhost:8000` url.
-You see this issue because of these selfsigned certificates. To solve this
-issue you've basically two choices:
+Because application is running on `https` by default now, you will see security
+issue on your browser when you access `https://localhost:8000` url. You see this
+issue because of these selfsigned certificates. To solve this issue you've
+basically two choices:
 
 1. Just ignore that security issue (easy way)
 2. Import that [rootCA.pem](rootCA.pem) to your browser as a trusted root

@@ -34,8 +34,8 @@ This directory contains different scripts that are used during development.
     output with some basic stats about project.
 * [Skill documentation checker](check-skills.py)
   * Validates skill front matter, exact skills-index coverage, and relative
-    Markdown links and anchors across repository Markdown files. Dependency
-    and generated directories are excluded.
+    Markdown links and anchors across repository Markdown files. Dependency and
+    generated directories are excluded.
 * [GitHub Actions update checker](check-action-updates.sh)
   * Checks pinned GitHub Actions and workflow-tool release declarations, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
@@ -43,12 +43,12 @@ This directory contains different scripts that are used during development.
     approval before applying a major-version upgrade suggestion.
 * [GitHub workflow validator](lint-workflows.sh)
   * Validates all workflows and their supported shell steps, and separately
-    validates local action metadata. Offline analyzer regressions exercise
-    the actual prerequisite/final gate shell predicates, grouped steps and
-    fail-safe category selection for PRs, pushes and merge groups using
-    isolated Git repositories. The path matrix covers independent lint,
-    analyzer, test, build and dependency/image-check selection, mixed changes,
-    renames, unknown inputs and strict acceptance of expected skipped jobs.
+    validates local action metadata. Offline analyzer regressions exercise the
+    actual prerequisite/final gate shell predicates, grouped steps and fail-safe
+    category selection for PRs, pushes and merge groups using isolated Git
+    repositories. The path matrix covers independent lint, analyzer, test, build
+    and dependency/image-check selection, mixed changes, renames, unknown inputs
+    and strict acceptance of expected skipped jobs.
 * [Composer cache mount check](check-composer-cache.sh)
   * Runs inside the CI PHP container to check Composer's effective cache path
     and write access. Offline regressions run through `make lint-workflows`.
@@ -72,28 +72,27 @@ native stdout/stderr and the command's exit status:
 Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
 messages stay on stderr, leaving structured stdout intact. Multi-step commands
-must pass a fail-fast executable or the complete nested Make recipe, not a
-shell function whose intermediate failures could be hidden by Bash conditional
+must pass a fail-fast executable or the complete nested Make recipe, not a shell
+function whose intermediate failures could be hidden by Bash conditional
 execution. Make's recipe dispatcher uses the default run mode for this boundary.
 
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
 decoration. Pass `--stream` before the label when invoking the helper for this
 mode. Make's `STREAM_COMMAND` uses this shared mode rather than a separate
-inline
-shell implementation. Foreground `start*` remains in run mode because
-its contract includes a final session-ended/cancellation status.
-Existing `<label> <command> ...` invocations and sourced `output_run` callers
-remain compatible.
+inline shell implementation. Foreground `start*` remains in run mode because its
+contract includes a final session-ended/cancellation status. Existing
+`<label> <command> ...` invocations and sourced `output_run` callers remain
+compatible.
 
 `--status <status> <message>` prints a single shared status to stderr without
-executing a command. It validates its arguments (usage errors exit 64), but
-a valid notification always exits zero, even when displaying `[FAIL]`.
-Callers must explicitly return failure when the underlying operation failed:
-Make's host-context guard prints the message and then exits 1.
-Warnings use this entrypoint rather than repeated `bash -c` source/printf
-snippets. Report-path macros use `report-output.sh` to validate their files
-before printing a shared `[INFO]` message.
+executing a command. It validates its arguments (usage errors exit 64), but a
+valid notification always exits zero, even when displaying `[FAIL]`. Callers
+must explicitly return failure when the underlying operation failed: Make's
+host-context guard prints the message and then exits 1. Warnings use this
+entrypoint rather than repeated `bash -c` source/printf snippets. Report-path
+macros use `report-output.sh` to validate their files before printing a shared
+`[INFO]` message.
 
 `COMPOSE_RUN` shares the UID/GID environment and completion-message wrapper for
 finite Docker lifecycle commands. Each target still owns its context guard,
@@ -110,10 +109,10 @@ bash scripts/command-output.sh --stream "Native output" printf 'payload\n'
 bash scripts/command-output.sh --status INFO "Report path: build/phploc.json"
 ```
 
-Shared output is used by `test-docker-images`, `check-skills`,
-`lint-workflows`, `check-requirements`, `test-make-routing`, and
-`docker-image-verify-pins`, and the quality targets below. Other targets retain
-their existing output until migrated separately.
+Shared output is used by `test-docker-images`, `check-skills`, `lint-workflows`,
+`check-requirements`, `test-make-routing`, and `docker-image-verify-pins`, and
+the quality targets below. Other targets retain their existing output until
+migrated separately.
 
 Quality targets include `run-tests*`, `infection`, `phpcs`, `ecs*`,
 `phpinsights`, `phplint`, `php-parallel-lint`, `psalm*`, `phpstan*`,
@@ -121,21 +120,19 @@ Quality targets include `run-tests*`, `infection`, `phpcs`, `ecs*`,
 `composer-validate`, `composer-require-checker`, and `composer-unused`.
 Information and reporting targets also use the same wrapper: `configuration`,
 `project-stats`, `application-info`, `tool-versions`, `check-licenses`,
-`phploc`,
-`report-coveralls`, and `prepare-sonar-reports`.
-`tool-versions` delegates its read-only development-container inventory to
-`tool-versions.sh`. The development report includes installed runtimes,
-Composer tool packages, Python packages,
-global npm packages, supporting utilities, and optional validators on `PATH`.
-Host Make forwarding first adds Docker client/Engine, Compose, nginx, and
-MariaDB versions from the selected host/services; stopped services are noted
-without starting them. Direct container execution reports only that container.
-Do not invoke the script directly on the Docker host; use `make tool-versions`
-for development.
+`phploc`, `report-coveralls`, and `prepare-sonar-reports`. `tool-versions`
+delegates its read-only development-container inventory to `tool-versions.sh`.
+The development report includes installed runtimes, Composer tool packages,
+Python packages, global npm packages, supporting utilities, and optional
+validators on `PATH`. Host Make forwarding first adds Docker client/Engine,
+Compose, nginx, and MariaDB versions from the selected host/services; stopped
+services are noted without starting them. Direct container execution reports
+only that container. Do not invoke the script directly on the Docker host; use
+`make tool-versions` for development.
 
 For PHP, loaded extensions, and direct runtime dependencies in an
-already-running local production deployment, run from the repository root
-on the Docker host:
+already-running local production deployment, run from the repository root on the
+Docker host:
 
 ```bash
 docker compose -f compose.yaml -f compose.prod.yaml exec -T -w /app php \
@@ -146,44 +143,44 @@ The production image must contain the updated script. This command does not
 start services; use the actual deployed PHP container, not the development
 container with `APP_ENV=prod`.
 
-See the [command reference](../doc/COMMANDS.md#commands) for scope and execution.
-Each complete recipe, including preparation, prints one `[RUN]` and a
+See the [command reference](../doc/COMMANDS.md#commands) for scope and
+execution. Each complete recipe, including preparation, prints one `[RUN]` and a
 separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
-selection without duplicate summaries. A failed preparation step cannot
-produce a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable
-prevents recursive decoration; callers should not set it.
+selection without duplicate summaries. A failed preparation step cannot produce
+a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents
+recursive decoration; callers should not set it.
 
 Native progress, diagnostics, GitHub annotations, analyzer options and report
 paths remain unchanged. Quality summaries report the nested Make exit status
 (normally 2 on recipe failure), while its native diagnostics retain the tool's
 exit code. Nested Make recipe error lines are filtered before the final status;
-the shell integration filters the outer Make error lines. Markdown linting
-uses the readable status label `Markdown documentation`.
-Markdown rule diagnostics gain a red `[FAIL]` prefix, retaining their
-original file/line, rule, and message. The prefix respects the shared color
-controls and remains readable without ANSI colors.
-Make derives native color flags from the same shared policy: Symfony/Composer
-commands use `--ansi` or `--no-ansi`, CodeSniffer and parallel-lint use
+the shell integration filters the outer Make error lines. Markdown linting uses
+the readable status label `Markdown documentation`. Markdown rule diagnostics
+gain a red `[FAIL]` prefix, retaining their original file/line, rule, and
+message. The prefix respects the shared color controls and remains readable
+without ANSI colors. Make derives native color flags from the same shared
+policy: Symfony/Composer commands use `--ansi` or `--no-ansi`, CodeSniffer and
+parallel-lint use
 `--colors` or `--no-colors`, PHPUnit uses `--colors=always|never`, and plain
 Psalm uses `--monochrome`. Infection passes the color choice to its test runner.
 Compose receives the resolved native choice through `COMPOSE_ANSI`, without
 changing lifecycle commands or service selection. The security check's Composer
-dry run also uses the shared native choice.
-GitHub-format Psalm/PHPStan analysis always stays plain, independent of status
-colors, preserving annotations and JSON report formats.
+dry run also uses the shared native choice. GitHub-format Psalm/PHPStan analysis
+always stays plain, independent of status colors, preserving annotations and
+JSON report formats.
 
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
 hardcodes colors without a disable option. `scripts/native-output.sh` removes
 only SGR decoration from their plain-mode output. Configuration lint uses the
-shared blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors.
-The filter streams ordinary bytes, including partial lines, immediately;
-preserves separate stdout/stderr and the child's TTY detection; and returns the
-command's status. Filtering failures also fail the target. It never rewrites
-report files, annotations, or other terminal controls. Enabled color executes
-the native command unchanged. Tools with no force-color support (including
-ECS's TTY-only renderer and parallel-lint installations lacking optional color
-libraries) retain their native detection; `COLOR=always` does not manufacture
-decorations or bypass tool-specific agent safeguards.
+shared blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors. The
+filter streams ordinary bytes, including partial lines, immediately; preserves
+separate stdout/stderr and the child's TTY detection; and returns the command's
+status. Filtering failures also fail the target. It never rewrites report files,
+annotations, or other terminal controls. Enabled color executes the native
+command unchanged. Tools with no force-color support (including ECS's TTY-only
+renderer and parallel-lint installations lacking optional color libraries)
+retain their native detection; `COLOR=always` does not manufacture decorations
+or bypass tool-specific agent safeguards.
 
 * `[RUN]` is blue and means execution started, not success.
 * `[OK]` is green and appears only after successful execution/assertions.
@@ -191,25 +188,24 @@ decorations or bypass tool-specific agent safeguards.
   outcomes.
 * `[INFO]` is blue context, such as a report path, not a success claim.
 * Labels remain readable without color. Shared status messages use stderr,
-  leaving
-  child stdout and stderr unbuffered and otherwise unchanged.
+  leaving child stdout and stderr unbuffered and otherwise unchanged.
 * Status colors are owned by `command-output.sh`, not legacy Make printf
   constants. The action-update target calls `action-update-output.sh` directly;
   that script owns its intentional informational exit policy.
 * `COLOR=auto` uses stderr's terminal for shared status messages and stdout's
-  terminal for native tool color, excluding `TERM=dumb`. Host Make forwards
-  both choices separately through `exec -T`. `COLOR=always` forces native ANSI
-  color; `COLOR=never` disables it. A nonempty `NO_COLOR` overrides either
-  choice. Native commands use supported flags or the narrow plain-output
-  filter described above.
+  terminal for native tool color, excluding `TERM=dumb`. Host Make forwards both
+  choices separately through `exec -T`. `COLOR=always` forces native ANSI color;
+  `COLOR=never` disables it. A nonempty `NO_COLOR` overrides either choice.
+  Native commands use supported flags or the narrow plain-output filter
+  described above.
 * The wrapper preserves command exit status, including failures and
-  interruptions; Make itself may translate a failed recipe into exit 2.
-  Existing informational update-check policies are unchanged.
+  interruptions; Make itself may translate a failed recipe into exit 2. Existing
+  informational update-check policies are unchanged.
 * Finite commands separate the final outcome from details with a blank line.
   Sourced helpers use `output_result <status> <message>` for this separation.
   Docker verification groups details by Dockerfile; action/tool checks group
-  findings by repository and show aggregate counts. Warning outcomes never
-  imply that updates were installed or that an upload succeeded.
+  findings by repository and show aggregate counts. Warning outcomes never imply
+  that updates were installed or that an upload succeeded.
 * `make help` keeps its listing on stdout and reports its outcome on stderr.
   `make info info_msg="..."` displays a blue information message instead of
   executing the value as a shell command.
@@ -218,10 +214,10 @@ decorations or bypass tool-specific agent safeguards.
 
 <a id="progress-indicator"></a>
 
-Finite commands run through `output_run` (wrapped Make targets and script
-steps) show a spinner with the label and elapsed time while the command is
-silent, and add the duration to the final outcome, for example
-`[OK] phpstan (took 45.1s)` or `[FAIL] phpstan (exit 1, took 12.0s)`.
+Finite commands run through `output_run` (wrapped Make targets and script steps)
+show a spinner with the label and elapsed time while the command is silent, and
+add the duration to the final outcome, for example `[OK] phpstan (took 45.1s)`
+or `[FAIL] phpstan (exit 1, took 12.0s)`.
 
 * `PROGRESS=auto` (default) enables the indicator only when stderr is a
   terminal, `TERM` is not `dumb`, and `CI` and `NO_COLOR` are empty. Host Make
@@ -233,9 +229,9 @@ silent, and add the duration to the final outcome, for example
   descriptor kinds, colors, and progress bars as a direct run. Stdout stays
   separate from stderr when they differ, and exit codes and cancellation
   statuses are unchanged.
-* The spinner is drawn on stderr only after a second of silence while the
-  cursor is at the start of a line; it is cleared before any output, so prompts
-  and native progress bars are never overwritten.
+* The spinner is drawn on stderr only after a second of silence while the cursor
+  is at the start of a line; it is cleared before any output, so prompts and
+  native progress bars are never overwritten.
 * Nested steps receive `PROGRESS=never`, so only the outermost run draws. Shell
   functions run directly with duration only, and commands run without the
   spinner when `python3` is unavailable.
@@ -280,28 +276,28 @@ bash scripts/make.sh phpcs COLOR=always NO_COLOR=1
 ```
 
 For cleaner failure output, use `bash scripts/make.sh` instead of `make`.
-Development-image Bash and Fish startup automatically load the repository's
-Make function, including ordinary Docker and IDE terminal sessions. The function
-filters every target at the repository root and uses normal Make elsewhere.
-Bash sources `docker/bash/make.sh`; Fish sources the integration from its
-development configuration. Production shell setup is unchanged.
+Development-image Bash and Fish startup automatically load the repository's Make
+function, including ordinary Docker and IDE terminal sessions. The function
+filters every target at the repository root and uses normal Make elsewhere. Bash
+sources `docker/bash/make.sh`; Fish sources the integration from its development
+configuration. Production shell setup is unchanged.
 
 Existing container images need a rebuild to acquire these startup changes;
-already-open shells need reopening or the explicit sourcing commands below.
-No shared services are rebuilt or restarted automatically. From the repository
-root on the Docker host, when it is safe to recreate your development services:
+already-open shells need reopening or the explicit sourcing commands below. No
+shared services are rebuilt or restarted automatically. From the repository root
+on the Docker host, when it is safe to recreate your development services:
 
 ```bash
 bash scripts/make.sh stop
 bash scripts/make.sh daemon-build
 ```
 
-For immediate use without recreating services, enter with `make bash` /`make
-fish`
-or source the appropriate integration in your current terminal. Host startup
-files are never modified by this repository. Raw `command make` and absolute
-GNU Make paths deliberately bypass the function and may still emit recipe-error
-lines; suppressing those inside a Makefile would require hiding failures.
+For immediate use without recreating services, enter with `make bash`
+/`make fish` or source the appropriate integration in your current terminal.
+Host startup files are never modified by this repository. Raw `command make` and
+absolute GNU Make paths deliberately bypass the function and may still emit
+recipe-error lines; suppressing those inside a Makefile would require hiding
+failures.
 
 The launcher removes only GNU Make's redundant recipe error-location lines
 (including recursive Make lines). It preserves `[FAIL]`, native diagnostics,
@@ -316,29 +312,28 @@ bash scripts/make.sh check-skills
 bash scripts/make.sh lint-workflows COLOR=always
 ```
 
-The launcher does not add result messages to unmigrated targets or change
-their failure policies. Color auto-detection happens before stderr filtering.
+The launcher does not add result messages to unmigrated targets or change their
+failure policies. Color auto-detection happens before stderr filtering.
 
 Shells opened through `make bash` or `make fish` automatically enable filtered
 Make output after loading normal user configuration. Bash loads `~/.bashrc`;
 Fish uses `--init-command` after its regular startup files. No image rebuild or
-user configuration rewrite is needed.
-Existing shells and shells opened directly through Docker or the IDE are
-unchanged.
+user configuration rewrite is needed. Existing shells and shells opened directly
+through Docker or the IDE are unchanged.
 
 To keep typing `make` with filtered output in those shells, opt in per session.
-From the repository root, inside the PHP development container or on the
-Docker host with development services running:
+From the repository root, inside the PHP development container or on the Docker
+host with development services running:
 
 ```bash
 source scripts/make-shell.sh
 make check-skills
 ```
 
-This defines a shell function only for the current session. It uses the
-launcher when the working directory is this repository's root and delegates
-to ordinary Make elsewhere. It does not modify user startup files.
-To disable it or bypass it for one command:
+This defines a shell function only for the current session. It uses the launcher
+when the working directory is this repository's root and delegates to ordinary
+Make elsewhere. It does not modify user startup files. To disable it or bypass
+it for one command:
 
 ```bash
 unset -f make
@@ -361,41 +356,41 @@ command make check-skills
 ```
 
 Central host forwarding invokes `php bash scripts/make.sh`, so container-side
-Make recipe-error lines are filtered even when the host uses raw Make.
-Filtering the host's outer line still requires the launcher or a shell function.
-CI Make commands in `main.yml` and the shared PHP bootstrap use the launcher
-explicitly on the runner host. This preserves native diagnostics, annotations,
-stdout, exit policies, and existing job gates without installing a global
-replacement for Make.
+Make recipe-error lines are filtered even when the host uses raw Make. Filtering
+the host's outer line still requires the launcher or a shell function. CI Make
+commands in `main.yml` and the shared PHP bootstrap use the launcher explicitly
+on the runner host. This preserves native diagnostics, annotations, stdout, exit
+policies, and existing job gates without installing a global replacement for
+Make.
 
-The Makefile's `REGISTER_TARGET` records are the single source for target
-help groups, risk markers, execution routing, and wrapped-command labels.
-Each record has `name,group,execution,risk,label` fields; the last two are
-optional, and the label defaults to the target name. Descriptions stay beside
-the owning recipes as `##` comments.
-Every registered command is declared `.PHONY` from `COMMAND_TARGETS`, including
-help, direct scripts, wrapped recipes, and host lifecycle commands. Same-named
-files never make these commands appear up to date. Register commands rather
-than adding separate phony lists; actual file-producing build rules should not
-be registered as commands. Host forwarding still declares explicit forwarded
-goals phony to retain its existing dispatch behavior.
+The Makefile's `REGISTER_TARGET` records are the single source for target help
+groups, risk markers, execution routing, and wrapped-command labels. Each record
+has `name,group,execution,risk,label` fields; the last two are optional, and the
+label defaults to the target name. Descriptions stay beside the owning recipes
+as `##` comments. Every registered command is declared `.PHONY` from
+`COMMAND_TARGETS`, including help, direct scripts, wrapped recipes, and host
+lifecycle commands. Same-named files never make these commands appear up to
+date. Register commands rather than adding separate phony lists; actual
+file-producing build rules should not be registered as commands. Host forwarding
+still declares explicit forwarded goals phony to retain its existing dispatch
+behavior.
 
-`host` excludes a target from container forwarding; `wrapped` forwards from
-the host and decorates the complete container-side recipe; `direct` forwards
-but leaves decoration to the owning script. Make derives `HOST_TARGETS` and
-`WRAPPED_TARGETS` from those records rather than separate inventories.
-The old `QUALITY_TARGETS` name is replaced because wrapped recipes also cover
-setup, information, and reports. `COMMAND_LABEL` and `COMMAND_OUTPUT_RUN`
-replace the quality-specific internal names; callers should not override them.
+`host` excludes a target from container forwarding; `wrapped` forwards from the
+host and decorates the complete container-side recipe; `direct` forwards but
+leaves decoration to the owning script. Make derives `HOST_TARGETS` and
+`WRAPPED_TARGETS` from those records rather than separate inventories. The old
+`QUALITY_TARGETS` name is replaced because wrapped recipes also cover setup,
+information, and reports. `COMMAND_LABEL` and `COMMAND_OUTPUT_RUN` replace the
+quality-specific internal names; callers should not override them.
 
 Help reads the same records for categories and markers. Everyday information,
 tests, quality checks, dependencies, and reports precede setup and host Docker
 groups. Each group lists routine commands first, then overwrite commands, then
 destructive commands, with target names sorted alphabetically at each risk
-level. Missing/invalid help metadata or
-descriptions fail explicitly; Make rejects duplicate registrations and invalid
-execution modes. Register every new public target and add its recipe description
-instead of updating parallel routing lists or help regular expressions.
+level. Missing/invalid help metadata or descriptions fail explicitly; Make
+rejects duplicate registrations and invalid execution modes. Register every new
+public target and add its recipe description instead of updating parallel
+routing lists or help regular expressions.
 
 Application recipes rely exclusively on that central forwarding layer rather
 than repeating host/container branches. Native commands, preparation, reports,
@@ -417,9 +412,9 @@ selection as execution. No waiting, health-policy change, or automatic restart
 is introduced.
 
 Rejected startup attempts name the running service and explain how to restart
-with `make stop` followed by the original command, or keep services running
-and follow application logs with `make logs`. Both options run on the Docker
-host; Ctrl-C in the log follower leaves services running. See the
+with `make stop` followed by the original command, or keep services running and
+follow application logs with `make logs`. Both options run on the Docker host;
+Ctrl-C in the log follower leaves services running. See the
 [command reference](../doc/COMMANDS.md#commands) for examples.
 
 `make test-docker-images` runs offline regression tests of the helper itself,
@@ -433,16 +428,15 @@ make docker-image-verify-pins
 make docker-image-update-pins    # OVERWRITE: update existing Dockerfile pins
 ```
 
-Blue `[RUN]`
-headings group manifest validation, pinned tag/digest parity, version
-discovery/output formatting, registry responses/pagination, Dockerfile
+Blue `[RUN]` headings group manifest validation, pinned tag/digest parity,
+version discovery/output formatting, registry responses/pagination, Dockerfile
 discovery, lookup failures/retries, update-pin validation, and aggregate
-results/empty discovery. Individual
-`[OK]` results remain visible beneath each heading. Expected negative
-cases are passing tests when their rejection assertions succeed. Case success
-is printed after its follow-up assertions, and failures include the scenario,
-failed assertion where available, captured helper output, and a final summary.
-Fixture-specific color controls do not change the test runner's palette.
+results/empty discovery. Individual `[OK]` results remain visible beneath each
+heading. Expected negative cases are passing tests when their rejection
+assertions succeed. Case success is printed after its follow-up assertions, and
+failures include the scenario, failed assertion where available, captured helper
+output, and a final summary. Fixture-specific color controls do not change the
+test runner's palette.
 
 Run the output-contract and forwarding regression checks from the same host
 directory with development services running:
@@ -460,14 +454,14 @@ make test-make-routing
 The blocking check targets print `[RUN]` before their native diagnostics and
 `[OK]` only after successful completion. Failures print `[FAIL]` with the
 original command exit code and still fail Make; statuses 1 and 2 are not
-silently accepted. The existing informational `check-action-updates` policy
-is unchanged. Wrapper messages use stderr, preserving native stdout.
+silently accepted. The existing informational `check-action-updates` policy is
+unchanged. Wrapper messages use stderr, preserving native stdout.
 
-The Make recipe regression suite above uses offline command fixtures to
-exercise success, failures, color controls, and command arguments. It does not
-perform live registry validation or run the workflow validators themselves.
-To run the real read-only checks, use these commands from the repository root
-on the Docker host with development services running:
+The Make recipe regression suite above uses offline command fixtures to exercise
+success, failures, color controls, and command arguments. It does not perform
+live registry validation or run the workflow validators themselves. To run the
+real read-only checks, use these commands from the repository root on the Docker
+host with development services running:
 
 ```bash
 make check-skills
@@ -477,17 +471,17 @@ make docker-image-verify-pins
 ```
 
 `lint-workflows` downloads pinned validator releases, and
-`docker-image-verify-pins` needs host Docker/buildx and registry access.
-The routing target uses offline Docker mocks, not real service health checks.
+`docker-image-verify-pins` needs host Docker/buildx and registry access. The
+routing target uses offline Docker mocks, not real service health checks.
 
 Workflow validation shows named download/checksum and validation stages instead
 of temporary checksum paths, grouped into four numbered sections separated by
 blank lines: validator preparation, workflows, local actions, and tooling
-scripts. Zizmor's per-file informational progress is quiet
-by default, while warnings, findings, and ignored/suppressed counts remain
-visible. Set `RUST_LOG=debug` inside the PHP container when troubleshooting
-zizmor logging. The offline workflow-output suite covers these stages and
-failure propagation without downloading or executing the actual validators.
+scripts. Zizmor's per-file informational progress is quiet by default, while
+warnings, findings, and ignored/suppressed counts remain visible. Set
+`RUST_LOG=debug` inside the PHP container when troubleshooting zizmor logging.
+The offline workflow-output suite covers these stages and failure propagation
+without downloading or executing the actual validators.
 
 The quality-output regression suite uses temporary fixtures to check every
 migrated recipe, runner selection, report arguments, annotations, preparation
@@ -504,25 +498,24 @@ make run-tests-php
 The application-test recipe retains its existing test-cache cleanup and
 regenerates `build/logs/clover.xml` and `build/logs/junit.xml`.
 
-Setup and mutation targets also use completion-only status messages:
-`install`, `install-tools`, `update`, `update-tools`, `cache-clear`,
-`cache-warmup`, `local-configuration`, `configure-ci`, `generate-jwt-keys`,
-`generate-ssl-cert`, `clear`, `clear-tools`, and `phpmetrics`.
-Yellow warnings describe what will change before cleanup, overwrites, or
-dependency operations. `ecs-fix` and `composer-normalize` also warn before
-rewriting files. These warnings do not introduce new confirmation prompts;
-existing Composer hooks and OpenSSL questions remain unchanged.
+Setup and mutation targets also use completion-only status messages: `install`,
+`install-tools`, `update`, `update-tools`, `cache-clear`, `cache-warmup`,
+`local-configuration`, `configure-ci`, `generate-jwt-keys`, `generate-ssl-cert`,
+`clear`, `clear-tools`, and `phpmetrics`. Yellow warnings describe what will
+change before cleanup, overwrites, or dependency operations. `ecs-fix` and
+`composer-normalize` also warn before rewriting files. These warnings do not
+introduce new confirmation prompts; existing Composer hooks and OpenSSL
+questions remain unchanged.
 
-Configuration creation warns before replacing local/CI environment files;
-JWT regeneration warns that existing tokens may become invalid. Warnings
-never display configuration contents or key passphrases. Certificate
-generation stops immediately on an OpenSSL failure instead of continuing
-through later steps.
+Configuration creation warns before replacing local/CI environment files; JWT
+regeneration warns that existing tokens may become invalid. Warnings never
+display configuration contents or key passphrases. Certificate generation stops
+immediately on an OpenSSL failure instead of continuing through later steps.
 
-`clear-tools` deletes only `vendor` directories beneath `tools`, handles
-spaces in paths, and does not traverse into vendor directories before deleting
-them. Both dependency cleanup targets require dependencies to be reinstalled.
-When `bin/console` is absent, `cache-clear` retains filesystem cleanup and
+`clear-tools` deletes only `vendor` directories beneath `tools`, handles spaces
+in paths, and does not traverse into vendor directories before deleting them.
+Both dependency cleanup targets require dependencies to be reinstalled. When
+`bin/console` is absent, `cache-clear` retains filesystem cleanup and
 `cache-warmup` ends with `[SKIP]`, not a false success.
 
 PhpMetrics checks `build/logs/junit.xml` and names that same file in its
@@ -531,8 +524,8 @@ run is retained, but failure stops report generation. A completed test run must
 actually create `junit.xml` before PhpMetrics starts. Existing HTML report files
 in `build/phpmetrics` may be overwritten.
 
-Run setup/mutation regression checks from the repository root on the Docker
-host with development services running:
+Run setup/mutation regression checks from the repository root on the Docker host
+with development services running:
 
 ```bash
 docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
@@ -545,15 +538,15 @@ dependencies or replace your keys. Cleanup checks delete only temporary fixture
 directories, not repository dependencies.
 
 `make help` groups the documented target inventory by purpose, with host-only
-Docker groups identified explicitly. `[DESTRUCTIVE]` marks resource deletion
-or shutdown (including cache cleanup); `[OVERWRITE]` marks configuration, key,
+Docker groups identified explicitly. `[DESTRUCTIVE]` marks resource deletion or
+shutdown (including cache cleanup); `[OVERWRITE]` marks configuration, key,
 source-fixing, report-copying, and image-tag replacement commands. The list is
 read from Makefile descriptions and shared target metadata, not a separate
-help-only inventory.
-Help respects `COLOR` and `NO_COLOR` and remains usable without Docker.
-Use `GROUP` to show only one purpose; omitted or `GROUP=all` shows the full
-inventory. Unknown groups fail with the supported choices instead of an empty
-successful listing. Filtering changes only help output, not command routing.
+help-only inventory. Help respects `COLOR` and `NO_COLOR` and remains usable
+without Docker. Use `GROUP` to show only one purpose; omitted or `GROUP=all`
+shows the full inventory. Unknown groups fail with the supported choices instead
+of an empty successful listing. Filtering changes only help output, not command
+routing.
 
 From the repository root on the Docker host (no running services required):
 
@@ -573,15 +566,15 @@ details. Shared status and report-path messages go to stderr, so redirects do
 not acquire success banners. License and statistics pipelines propagate failed
 commands instead of reporting success based only on their final pipeline stage.
 The existing configuration command still intentionally displays configuration;
-added messages never repeat its values.
-License counts are extracted from Composer JSON rather than its human-readable
-table, excluding headers and version columns. Alternative licenses are joined
-with `OR`; empty license lists are labeled `UNSPECIFIED`.
+added messages never repeat its values. License counts are extracted from
+Composer JSON rather than its human-readable table, excluding headers and
+version columns. Alternative licenses are joined with `OR`; empty license lists
+are labeled `UNSPECIFIED`.
 
 Successful report generators identify `build/logs/clover.xml`,
 `build/logs/junit.xml`, `build/phpmetrics`, `build/phploc.json`, and
-`build/psalm.json` as applicable. Infection identifies `build/infection`;
-its native output owns the exact generated file inventory.
+`build/psalm.json` as applicable. Infection identifies `build/infection`; its
+native output owns the exact generated file inventory.
 `scripts/report-output.sh` verifies every declared local report is a nonempty
 file before printing its `[INFO]` path message. Test XML, Psalm/PHPLOC JSON,
 PhpMetrics `index.html`, and prepared Sonar copies use this shared check.
@@ -590,35 +583,35 @@ This checks file availability, not schema validity or freshness of existing
 reports. Infection names its report directory only; native output owns which
 files its configured reporters actually generated.
 
-Psalm's local JSON report message does not claim Shepherd upload success.
-The installed Shepherd plugin can skip submission or print HTTP/cURL errors
-without failing analysis. `psalm-shepherd` and `psalm-github` therefore finish
-with analysis/local-report completion and explicit unverified upload status.
-Native upload diagnostics remain visible and the existing exit policy is
-unchanged; a successful analysis does not imply a successful submission.
-`report-coveralls` retains verbose client output, including its configured
-JSON payload path and HTTP submission status. A generated payload alone does
-not produce `[OK]` if the client returns an upload failure. Its completion
-message confirms the client finished and directs the reader to native HTTP
-status for upload confirmation, rather than inferring success from JSON creation
-or dry-run completion. No payload is dumped by the shared output helpers.
+Psalm's local JSON report message does not claim Shepherd upload success. The
+installed Shepherd plugin can skip submission or print HTTP/cURL errors without
+failing analysis. `psalm-shepherd` and `psalm-github` therefore finish with
+analysis/local-report completion and explicit unverified upload status. Native
+upload diagnostics remain visible and the existing exit policy is unchanged; a
+successful analysis does not imply a successful submission. `report-coveralls`
+retains verbose client output, including its configured JSON payload path and
+HTTP submission status. A generated payload alone does not produce `[OK]` if the
+client returns an upload failure. Its completion message confirms the client
+finished and directs the reader to native HTTP status for upload confirmation,
+rather than inferring success from JSON creation or dry-run completion. No
+payload is dumped by the shared output helpers.
 
 `prepare-sonar-reports` checks both nonempty source reports first, prepares
-relative-path copies in temporary files, then replaces the local copies.
-It names `build/sonar/clover.xml` and `build/sonar/junit.xml` and explicitly
-states that no upload occurred. It does not alter the source reports.
-The host-side Sonar action performs upload separately.
+relative-path copies in temporary files, then replaces the local copies. It
+names `build/sonar/clover.xml` and `build/sonar/junit.xml` and explicitly states
+that no upload occurred. It does not alter the source reports. The host-side
+Sonar action performs upload separately.
 
-Run the information/reporting regression checks from the repository root on
-the Docker host with the PHP development service already running:
+Run the information/reporting regression checks from the repository root on the
+Docker host with the PHP development service already running:
 
 ```bash
 docker compose exec -T php python3 scripts/tests/make-information-output-test.py
 docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
 ```
 
-These checks use temporary report fixtures and mocked generators/uploaders;
-they never contact Coveralls or Sonar. Read-only help needs no running services:
+These checks use temporary report fixtures and mocked generators/uploaders; they
+never contact Coveralls or Sonar. Read-only help needs no running services:
 
 ```bash
 make help COLOR=never
@@ -637,21 +630,20 @@ status, not green success or a red execution failure.
 without wrapping or redirecting their interactive session or streaming output,
 and without a final success banner. Host-only targets fail explicitly when
 called inside a container. Startup rejects already-running services in this
-Compose project, while
-unavailable PHP shell contexts fail explicitly. Logs remain accessible when
-the selected services have stopped.
+Compose project, while unavailable PHP shell contexts fail explicitly. Logs
+remain accessible when the selected services have stopped.
 
 Docker builds and QEMU registration warn before mutation and report completion
-only after Docker succeeds. Existing confirmations remain mandatory for QEMU
-and registry pushes; declining prints yellow `[SKIP]` and retains exit 0.
-Build success does not prove runtime behavior.
+only after Docker succeeds. Existing confirmations remain mandatory for QEMU and
+registry pushes; declining prints yellow `[SKIP]` and retains exit 0. Build
+success does not prove runtime behavior.
 
 Host-wide cleanup helpers warn that they affect unrelated projects too. Prune
 retains its existing `y` confirmation; declining or reaching end-of-input skips
 without changes. Empty resource lists skip kill/remove operations rather than
-invoking Docker without IDs. Listing and mutation errors remain visible and
-stop further operations; prune never follows a failed container kill.
-No maintenance command is restricted to this Compose project.
+invoking Docker without IDs. Listing and mutation errors remain visible and stop
+further operations; prune never follows a failed container kill. No maintenance
+command is restricted to this Compose project.
 
 Run offline lifecycle regression tests from the repository root on the Docker
 host, with the PHP development service already running:
@@ -662,9 +654,9 @@ make test-make-routing
 make test-docker-images
 ```
 
-The lifecycle fixtures mock Docker, including confirmations and failures.
-They do not build images, start/stop services, register emulators, publish
-registry tags, or prune real Docker resources.
+The lifecycle fixtures mock Docker, including confirmations and failures. They
+do not build images, start/stop services, register emulators, publish registry
+tags, or prune real Docker resources.
 
 Update and security checks distinguish findings from execution failures:
 
@@ -673,8 +665,8 @@ Update and security checks distinguish findings from execution failures:
   discovery or lookups. The informational Make target still accepts 1 and 2,
   explicitly reporting that policy rather than claiming a clean result.
 * `check-dependencies-*` keeps its existing informational success status for
-  available updates, with yellow new-version values and a warning summary.
-  A failed Composer invocation still fails the command and Make.
+  available updates, with yellow new-version values and a warning summary. A
+  failed Composer invocation still fails the command and Make.
 * `docker-image-check-updates` keeps exit 1 for updates **or** failed checks.
   Its yellow summary means updates only; its red summary separately counts
   failed checks and updates. Skipped versions remain yellow and return success.
@@ -682,17 +674,17 @@ Update and security checks distinguish findings from execution failures:
   return success with visible warnings, while failed checks remain nonzero.
   `docker-image-verify-pins` remains blocking for invalid, unresolvable, or
   tag-mismatched pins.
-* `check-security` remains blocking for advisory-constraint, cache-refresh,
-  or installed-package audit failures. If the optional local checker is absent,
-  a yellow `[SKIP]` replaces its previous silent omission; exit success is
+* `check-security` remains blocking for advisory-constraint, cache-refresh, or
+  installed-package audit failures. If the optional local checker is absent, a
+  yellow `[SKIP]` replaces its previous silent omission; exit success is
   preserved, but it does not claim that all security checks ran.
 
 ### Output contract regressions [ᐞ](#table-of-contents)
 
 <a id="output-contract-regressions"></a>
 
-Run the consolidated offline suite from the repository root on the Docker
-host, with the PHP development service already running:
+Run the consolidated offline suite from the repository root on the Docker host,
+with the PHP development service already running:
 
 ```bash
 make test-command-output
@@ -702,30 +694,26 @@ make test-command-output COLOR=always NO_COLOR=1
 ```
 
 Host invocations forward into the PHP development container, including when
-`GITHUB_WORKFLOW` selects the CI Compose override. Inside that container,
-the same `make test-command-output` command runs directly. Container
-availability
-is required; this target never falls back to host Python or other project tools.
+`GITHUB_WORKFLOW` selects the CI Compose override. Inside that container, the
+same `make test-command-output` command runs directly. Container availability is
+required; this target never falls back to host Python or other project tools.
 
 The runner executes nine suites: shared statuses and expected-negative Docker
 scenarios, Make filtering/shell integration, blocking checks, quality/mutation
 recipes, lifecycle commands, information/reports, check outcome policies,
-workflow output, and host/CI forwarding. It stops on the first failed suite
-and prints the aggregate `[OK]` only after all suites succeed.
-The Docker scenario suite is exercised by the shared-status tests.
-All Docker, registry, configuration, dependency, key, and upload mutations use
-isolated fixtures or mocks. This does not prove live service health, registry
-availability, successful uploads, or real application-test report generation.
+workflow output, and host/CI forwarding. It stops on the first failed suite and
+prints the aggregate `[OK]` only after all suites succeed. The Docker scenario
+suite is exercised by the shared-status tests. All Docker, registry,
+configuration, dependency, key, and upload mutations use isolated fixtures or
+mocks. This does not prove live service health, registry availability,
+successful uploads, or real application-test report generation.
 
 Coverage includes forced/plain/auto color, `NO_COLOR`, stdout/stderr
-preservation,
-progress indicator policy and terminal relaying,
-missing executables, blocking failures, explicit skips, interruptions,
-expected-negative assertions, CI environment forwarding, dry runs, and multiple
-Make goals. Missing tools and blocking checks remain nonzero. An
-expected-negative
-scenario reports `[OK]` only after verifying the intended failure and
-diagnostics.
+preservation, progress indicator policy and terminal relaying, missing
+executables, blocking failures, explicit skips, interruptions, expected-negative
+assertions, CI environment forwarding, dry runs, and multiple Make goals.
+Missing tools and blocking checks remain nonzero. An expected-negative scenario
+reports `[OK]` only after verifying the intended failure and diagnostics.
 Successful earlier stages may remain visible before a later failure; no failed
 stage or aggregate reports success.
 
@@ -736,8 +724,8 @@ command files, missing generated reports, filtered report help, and multiple
 goals with and without `--keep-going`. It verifies structured native stdout,
 both levels of Make-error filtering, report failure propagation, and isolation
 of upload-client completion messages. Independent later targets may succeed
-under `--keep-going`, but the overall invocation remains nonzero.
-It additionally checks default development shell hooks and injects an exit-64
+under `--keep-going`, but the overall invocation remains nonzero. It
+additionally checks default development shell hooks and injects an exit-64
 recipe for every registered command name, individually and with `--keep-going`.
 Native `[FAIL]` diagnostics remain visible while GNU Make recipe-location errors
 are removed and the invocation remains nonzero. These injected failures cover
@@ -759,12 +747,12 @@ wrapper is the established exception: direct checker exits 1/2 produce
 Color controls apply to shared statuses, not every native tool's formatting.
 `COLOR=auto` enables color only on a suitable stderr terminal; host forwarding
 resolves this before `exec -T`. `COLOR=always` forces color, `COLOR=never`
-disables it, and any nonempty `NO_COLOR` takes precedence. `TERM=dumb`
-disables automatic color. Labels remain meaningful without ANSI escapes.
+disables it, and any nonempty `NO_COLOR` takes precedence. `TERM=dumb` disables
+automatic color. Labels remain meaningful without ANSI escapes.
 
 If a suite fails, retain its native diagnostics and run that focused script
-inside the PHP development container. For example, from the repository root
-on the Docker host with the development service running:
+inside the PHP development container. For example, from the repository root on
+the Docker host with the development service running:
 
 ```bash
 docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
@@ -798,8 +786,8 @@ File: `scripts/check-skills.py`
 
 Run from the repository root **inside the PHP development container**, not on
 the host. Open it with `make bash` or `make fish`, or use an IDE Dev Container
-terminal. Python automatically uses `/home/dev/.venv`.
-See [Python tooling](../.devcontainer/README.md#python-tooling) for details.
+terminal. Python automatically uses `/home/dev/.venv`. See
+[Python tooling](../.devcontainer/README.md#python-tooling) for details.
 
 ```bash
 python3 scripts/check-skills.py
@@ -810,9 +798,9 @@ the target always runs the checker inside Docker.
 
 This standard-library Python check also runs via `make check-skills` in the
 documentation CI job, using the existing Compose `php` development service
-rather than running Python directly on the runner. It
-validates local file links and Markdown anchors across repository Markdown
-files, in addition to checking skill metadata and index coverage.
+rather than running Python directly on the runner. It validates local file links
+and Markdown anchors across repository Markdown files, in addition to checking
+skill metadata and index coverage.
 
 ### GitHub Actions update checker [ᐞ](#table-of-contents)
 
@@ -846,20 +834,20 @@ differences (including moved tags or tag-object pins) return `1` and show the
 old SHA, candidate commit, and source locations. Missing or malformed candidate
 SHAs and failed lookups return `2`. The informational Make wrapper preserves
 success for handled checker exits `1` and `2`; read its findings and summary.
-Lookup failures identify the repository and distinguish timeouts (10 seconds
-for Actions, 20 seconds for tools) from Git errors, retaining Git's stderr
+Lookup failures identify the repository and distinguish timeouts (10 seconds for
+Actions, 20 seconds for tools) from Git errors, retaining Git's stderr
 diagnostics. Successful lookups without version-like tags or a valid candidate
 SHA report those data problems separately rather than suggesting network
 failure.
 
-For maintenance, `discover_actions_in_file` owns parsing for both workflows
-and composite actions. Action checks store named outcomes, candidate versions,
-and commits by action/version key; rendering reads those results and the
-original source locations without packing fields into delimited strings.
-`main` coordinates discovery, repository checks, summary, and final exit status.
+For maintenance, `discover_actions_in_file` owns parsing for both workflows and
+composite actions. Action checks store named outcomes, candidate versions, and
+commits by action/version key; rendering reads those results and the original
+source locations without packing fields into delimited strings. `main`
+coordinates discovery, repository checks, summary, and final exit status.
 
-Run the offline Action/tool regressions from the repository root inside the
-PHP development container (enter with `make bash` from the Docker host):
+Run the offline Action/tool regressions from the repository root inside the PHP
+development container (enter with `make bash` from the Docker host):
 
 ```bash
 python3 scripts/tests/check-workflow-tool-updates-test.py
@@ -872,16 +860,16 @@ python3 scripts/tests/check-workflow-tool-updates-test.py
 File: `scripts/lint-workflows.sh`
 
 `scripts/ci-failure-diagnostics.sh` runs on the Docker host before cleanup when
-a PHP-bootstrap job fails. It prints only PHP container status, exit code,
-OOM flag and health enum, never raw logs, environment or full inspect data.
-It queries only the CI Compose project's PHP service, accepts at most five
-container IDs and gives each Docker command ten seconds. Unexpected output
-or Docker failures produce explicit nonzero errors without echoing raw data.
-It does not start, stop or modify containers. CI still cleans up if diagnostics
+a PHP-bootstrap job fails. It prints only PHP container status, exit code, OOM
+flag and health enum, never raw logs, environment or full inspect data. It
+queries only the CI Compose project's PHP service, accepts at most five
+container IDs and gives each Docker command ten seconds. Unexpected output or
+Docker failures produce explicit nonzero errors without echoing raw data. It
+does not start, stop or modify containers. CI still cleans up if diagnostics
 fail; cancelled runs retain cleanup without starting failure diagnostics.
 
-From the repository root on the Docker host, inspect existing CI container
-state without modifying it:
+From the repository root on the Docker host, inspect existing CI container state
+without modifying it:
 
 ```bash
 bash scripts/ci-failure-diagnostics.sh
@@ -907,27 +895,25 @@ bash scripts/ci-validate-compose.sh
 The validator first runs `scripts/tests/ci-gates-test.py` offline. It checks
 that both aggregate CI gates stop on workflow cancellation, container cleanup
 remains unconditional, and the actual Bash result checks still reject failed,
-cancelled and unexpected skipped prerequisites. These regressions do not
-execute GitHub jobs or simulate its scheduler.
+cancelled and unexpected skipped prerequisites. These regressions do not execute
+GitHub jobs or simulate its scheduler.
 
 ```bash
 make lint-workflows
 ```
 
-The target runs in the PHP development container both locally and in CI.
-It prepares the actionlint, ShellCheck, action-validator and zizmor releases
-pinned in `scripts/lint-workflows.sh` in a temporary directory,
-verifies their pinned SHA-256 checksums before execution, and removes extracted
-tools on exit. Downloaded archives/binaries persist in the ignored
-`build/cache/workflow-validators/linux-<architecture>/<sha256>` directory.
-Every cache hit is reverified before copying into the temporary tools directory;
-a corrupt hit fails explicitly without extraction, execution or redownload.
-Failed downloads/checksums never populate the cache; verified downloads are
-published atomically. Linux AMD64 and ARM64 are supported; cold downloads
-require
-network access, `curl`, `tar`, and `sha256sum`. Download or checksum failures
-fail
-the check.
+The target runs in the PHP development container both locally and in CI. It
+prepares the actionlint, ShellCheck, action-validator and zizmor releases pinned
+in `scripts/lint-workflows.sh` in a temporary directory, verifies their pinned
+SHA-256 checksums before execution, and removes extracted tools on exit.
+Downloaded archives/binaries persist in the ignored
+`build/cache/workflow-validators/linux-<architecture>/<sha256>` directory. Every
+cache hit is reverified before copying into the temporary tools directory; a
+corrupt hit fails explicitly without extraction, execution or redownload. Failed
+downloads/checksums never populate the cache; verified downloads are published
+atomically. Linux AMD64 and ARM64 are supported; cold downloads require network
+access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail the
+check.
 
 The workflow-validation job restores/saves this directory using `actions/cache`,
 keyed by runner OS/architecture and the validator script's content hash, without
@@ -950,13 +936,13 @@ development containers need rebuilding to acquire it. Run the existing
 `make lint-workflows` target from the repository root on the Docker host after
 the updated development image is available.
 
-Release tags are declared once with a `tool-pin: owner/repo@COMMIT_SHA`
-comment recording the verified release commit. Binary SHA-256 checksums remain
-the execution integrity pins; a source commit SHA is not a binary checksum.
-The existing update checker inventories these declarations and checks for
-newer stable tags, verifying current tag/commit parity (including annotated
-tags). Run all action/tool checks with `make check-action-updates`, or only
-these tools inside the development container:
+Release tags are declared once with a `tool-pin: owner/repo@COMMIT_SHA` comment
+recording the verified release commit. Binary SHA-256 checksums remain the
+execution integrity pins; a source commit SHA is not a binary checksum. The
+existing update checker inventories these declarations and checks for newer
+stable tags, verifying current tag/commit parity (including annotated tags). Run
+all action/tool checks with `make check-action-updates`, or only these tools
+inside the development container:
 
 ```bash
 bash scripts/check-action-updates.sh --tools-only
@@ -971,19 +957,19 @@ tools automatically. Tool update lookups are separate from `lint-workflows`.
 
 Actionlint validates every `.yml` and `.yaml` workflow, including YAML anchors,
 aliases, expressions, and job dependencies, with ShellCheck enabled for
-supported workflow shell steps. Action-validator separately checks every
-local `action.yml` and `action.yaml` against its bundled metadata schema.
-Composite-action shell bodies are not checked by these metadata checks.
-Zizmor runs offline with `--min-severity low` and the `.github/zizmor.yml`
+supported workflow shell steps. Action-validator separately checks every local
+`action.yml` and `action.yaml` against its bundled metadata schema.
+Composite-action shell bodies are not checked by these metadata checks. Zizmor
+runs offline with `--min-severity low` and the `.github/zizmor.yml`
 configuration. It audits workflows and local actions for template injection,
 credential persistence, dangerous environment-file writes, and excessive
-permissions. A deliberate exception needs an inline
-`# zizmor: ignore[rule]` comment with the reason.
-`.github/zizmor.yml` holds rule-wide settings; it currently disables only the
-`self-repository` rule, because local actions use `./` rather than `$/`.
-Disable or configure a rule there only with a comment explaining why.
-ShellCheck also checks the validator, shared command-output and Composer-cache
-helpers, the CI change detector, and both result gates and their shared helper.
+permissions. A deliberate exception needs an inline `# zizmor: ignore[rule]`
+comment with the reason. `.github/zizmor.yml` holds rule-wide settings; it
+currently disables only the `self-repository` rule, because local actions use
+`./` rather than `$/`. Disable or configure a rule there only with a comment
+explaining why. ShellCheck also checks the validator, shared command-output and
+Composer-cache helpers, the CI change detector, and both result gates and their
+shared helper.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
 cancellations, or skipped validation block tests and Docker builds.
@@ -1013,46 +999,45 @@ compared; uncommitted edits are excluded. Colors follow the shared Make policy.
 It reads the current working directory's Git repository; it must not change to
 the script directory, because offline tests use isolated repositories.
 `EVENT_NAME`, `BASE_SHA`, `HEAD_SHA`, and `GITHUB_OUTPUT` are required
-environment
-variables. Empty SHA values are allowed and select full validation.
-PRs use a three-dot comparison; pushes and merge groups use two dots.
-Manual runs, empty or failed comparisons, quoted paths and unclassified files
-retain full validation. Changes to the detector itself also select every check.
+environment variables. Empty SHA values are allowed and select full validation.
+PRs use a three-dot comparison; pushes and merge groups use two dots. Manual
+runs, empty or failed comparisons, quoted paths and unclassified files retain
+full validation. Changes to the detector itself also select every check.
 
-The script prints changed filenames and descriptive validation labels with
-their category keys and `enabled` or `not enabled` status to stdout, including
-the derived `configuration` flag. Enabled means eligible to run, not that a
-check has run or passed: event rules and prerequisites still apply. The
-categories are checks, not types of changed files; conservative fallbacks can
-enable all checks. `docker` covers image builds and scans, while `images`
-covers image pin and update checks. `configuration` is enabled if any of
-`runtime`, `composer`, `yaml`, `compose`, or `tooling` is enabled.
-Each row references a numbered reason shown below the checks: an enabled check
-shows one example triggering file, a full-validation reason, or the enabled
-configuration categories. Checks sharing a reason use the same number.
-Not enabled means no changed file matched that check. Example files are not
-an exhaustive list of triggers; deletion/link safeguards can also enable
-documentation checks. The same reasons appear in the GitHub summary.
-The core CI job preview groups each job by eligibility, with matrix variants
-and key conditions summarized below, including checks independent of changed
-files. Empty groups show `None`. It reports eligibility, not actual execution:
-conditions on prior results, cancellation, event details, and upload tokens
-still apply. Other workflows and individual job steps are not enumerated.
-Manual runs and unavailable, failed, empty or quoted-path comparisons
-include an explanation for full validation. Git errors remain on stderr.
-The script appends the workflow's category flags and aggregate `configuration` flag
+The script prints changed filenames and descriptive validation labels with their
+category keys and `enabled` or `not enabled` status to stdout, including the
+derived `configuration` flag. Enabled means eligible to run, not that a check
+has run or passed: event rules and prerequisites still apply. The categories are
+checks, not types of changed files; conservative fallbacks can enable all
+checks. `docker` covers image builds and scans, while `images` covers image pin
+and update checks. `configuration` is enabled if any of `runtime`, `composer`,
+`yaml`, `compose`, or `tooling` is enabled. Each row references a numbered
+reason shown below the checks: an enabled check shows one example triggering
+file, a full-validation reason, or the enabled configuration categories. Checks
+sharing a reason use the same number. Not enabled means no changed file matched
+that check. Example files are not an exhaustive list of triggers; deletion/link
+safeguards can also enable documentation checks. The same reasons appear in the
+GitHub summary. The core CI job preview groups each job by eligibility, with
+matrix variants and key conditions summarized below, including checks
+independent of changed files. Empty groups show `None`. It reports eligibility,
+not actual execution: conditions on prior results, cancellation, event details,
+and upload tokens still apply. Other workflows and individual job steps are not
+enumerated. Manual runs and unavailable, failed, empty or quoted-path
+comparisons include an explanation for full validation. Git errors remain on
+stderr. The script appends the workflow's category flags and aggregate
+`configuration` flag
 as `name=true|false` lines to `GITHUB_OUTPUT`. There is no aggregate application
-code flag: each job consumes its own category so unrelated work can skip.
-A failed comparison deliberately returns success with full validation; script
+code flag: each job consumes its own category so unrelated work can skip. A
+failed comparison deliberately returns success with full validation; script
 execution or output-write failures fail the step. It does not modify tracked
 files or contact external services.
 
 Enabled statuses are green and disabled statuses yellow when color is
 enabled. The shared `COLOR=auto|always|never` and `NO_COLOR` policy applies;
 GitHub Actions defaults to color when `COLOR` is unset. Noninteractive local
-runs can set `COLOR=always` explicitly. Machine-readable flags stay plain.
-When `GITHUB_STEP_SUMMARY` is set, the script also appends a Markdown table
-with green/neutral status icons, not ANSI escape codes. These icons indicate
+runs can set `COLOR=always` explicitly. Machine-readable flags stay plain. When
+`GITHUB_STEP_SUMMARY` is set, the script also appends a Markdown table with
+green/neutral status icons, not ANSI escape codes. These icons indicate
 selection, not passing checks. Summary-write errors warn without changing
 selection or hiding output-write failures.
 
@@ -1072,31 +1057,31 @@ detector. Workflow wiring checks cover event inputs and declared output names.
 
 The `ci-summary` job calls
 [`scripts/ci-prerequisite-gate.sh`](ci-prerequisite-gate.sh), and `ci-result`
-calls [`scripts/ci-result-gate.sh`](ci-result-gate.sh).
-Both run on the GitHub runner after an unconditional checkout, including on
-schedules and after failed prerequisites. They do not start a PHP container.
-Job conditions, dependencies and environment bindings remain in `main.yml`.
+calls [`scripts/ci-result-gate.sh`](ci-result-gate.sh). Both run on the GitHub
+runner after an unconditional checkout, including on schedules and after failed
+prerequisites. They do not start a PHP container. Job conditions, dependencies
+and environment bindings remain in `main.yml`.
 
-Each script requires the event, change flags and dependency results declared
-in its workflow step's `env` mapping. The final gate also requires `REF` for
+Each script requires the event, change flags and dependency results declared in
+its workflow step's `env` mapping. The final gate also requires `REF` for
 reporting eligibility. Empty or unknown selection flags cannot authorize skips.
 The scripts source [`ci-gate-common.sh`](ci-gate-common.sh) relative to their
-own location, so they do not depend on the caller's working directory.
-The helper shares strict result comparisons, the `true`/success and
-`false`/skipped predicate, and error annotation formatting; scheduled-job rules
-and summary explanations remain specific to each gate.
+own location, so they do not depend on the caller's working directory. The
+helper shares strict result comparisons, the `true`/success and `false`/skipped
+predicate, and error annotation formatting; scheduled-job rules and summary
+explanations remain specific to each gate.
 
 Result logs go to stdout. Failed comparisons emit an `::error::` annotation on
 stderr identifying the check, expected result and actual result. Invalid
 selection flags report the expected boolean values, actual flag and job result.
 Empty values stay visible as `''`; annotation data escapes percent signs and
 line breaks. The gates still stop at the first invalid outcome. If
-`GITHUB_STEP_SUMMARY` is nonempty, each script appends its Markdown table
-before validating results. Summary-write errors produce a warning without
-changing the gate's result. The scripts exit zero only for the expected job
-outcomes; invalid inputs, unexpected results, or a missing helper fail. They
-do not access the network or modify application files. Changes to any of these
-scripts select workflow validation.
+`GITHUB_STEP_SUMMARY` is nonempty, each script appends its Markdown table before
+validating results. Summary-write errors produce a warning without changing the
+gate's result. The scripts exit zero only for the expected job outcomes; invalid
+inputs, unexpected results, or a missing helper fail. They do not access the
+network or modify application files. Changes to any of these scripts select
+workflow validation.
 
 From the repository root on the Docker host with the PHP development service
 running, run the focused offline gate and workflow-output regressions:
@@ -1127,8 +1112,8 @@ Clover must have a `coverage` root and `project/metrics` with nonnegative
 integer `statements` and `coveredstatements`; covered statements cannot exceed
 total statements. Zero counts and JUnit reports containing test failures are
 valid. Every invalid required file gets an error annotation and verification
-fails; HTML contents are not parsed.
-`summary` prints the PHPUnit totals and optional line coverage as Markdown.
+fails; HTML contents are not parsed. `summary` prints the PHPUnit totals and
+optional line coverage as Markdown.
 
 The helper reads existing reports without generating or modifying them.
 Successful operations exit zero; missing, malformed or unusable inputs exit
@@ -1164,8 +1149,8 @@ production.
 
 File: `scripts/docker-images.sh`
 
-This script uses Docker on the host machine, so run it from the host (not
-inside the `php` container). Use these Make targets:
+This script uses Docker on the host machine, so run it from the host (not inside
+the `php` container). Use these Make targets:
 
 ```bash
 make docker-image-check-updates   # all external Dockerfile images
@@ -1178,72 +1163,67 @@ make docker-build-multi-platform  # asks PLATFORMS, DOCKERFILE, TARGET, TAG, BUI
 ```
 
 Missing values are asked interactively. Values can also be given as Make
-variables, for example
-`make docker-image-digest IMAGE=php:8.5.11-fpm-bookworm`. In a
-non-interactive shell, required values without defaults must be given as
+variables, for example `make docker-image-digest IMAGE=php:8.5.11-fpm-bookworm`.
+In a non-interactive shell, required values without defaults must be given as
 variables.
 
 Digest lookup and pin verification require at least two distinct runnable
 platforms in an image index. Pin verification covers external `FROM` and
 `COPY --from` images in the root PHP, nginx and MariaDB Dockerfiles, skipping
 local build stages, numeric copy stages and `scratch`. Continued instructions
-are reported at their starting line. It also requires tagged digests to
-match their current tag; digest-only references warn because parity cannot be
-checked. Empty and single-platform indexes fail with an explicit diagnostic
-instead of being accepted as multi-platform.
+are reported at their starting line. It also requires tagged digests to match
+their current tag; digest-only references warn because parity cannot be checked.
+Empty and single-platform indexes fail with an explicit diagnostic instead of
+being accepted as multi-platform.
 
 Check a single image with
 `make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm`, or run
 `./scripts/docker-images.sh check-updates` to check external `FROM` and
-`COPY --from` images in the root and `docker/*/Dockerfile*` Dockerfiles.
-The checker uses public Docker Hub tags via `curl` and `jq`, and Docker with
-buildx to resolve update digests. It reports the latest stable full semantic
-version, including major upgrades, while preserving the exact variant suffix
-and optional `v` prefix.
-Floating, unversioned and prerelease tags are explicitly skipped. Other
-registries are not supported. Exit status is `0` when there are no updates or
-errors (explicit skips are allowed), `1` for available updates or errors, or
+`COPY --from` images in the root and `docker/*/Dockerfile*` Dockerfiles. The
+checker uses public Docker Hub tags via `curl` and `jq`, and Docker with buildx
+to resolve update digests. It reports the latest stable full semantic version,
+including major upgrades, while preserving the exact variant suffix and optional
+`v` prefix. Floating, unversioned and prerelease tags are explicitly skipped.
+Other registries are not supported. Exit status is `0` when there are no updates
+or errors (explicit skips are allowed), `1` for available updates or errors, or
 `69` for missing tools. Results are grouped under Dockerfile headings, with
 shared images shown in each matching group but checked only once. An `IMAGE`
 input with no matching file has its own labeled group. Each update includes a
-copyable `tag@sha256:digest` pin and supported platforms.
-The digest is inspected directly
-and must identify an index with at least two distinct runnable platforms;
-single-platform images and failed digest lookups fail the check explicitly.
-No files, images or running services are changed. Review compatibility and
-required platform support separately before updating pins.
+copyable `tag@sha256:digest` pin and supported platforms. The digest is
+inspected directly and must identify an index with at least two distinct
+runnable platforms; single-platform images and failed digest lookups fail the
+check explicitly. No files, images or running services are changed. Review
+compatibility and required platform support separately before updating pins.
 Dockerfile discovery supports backslash-continued instructions, including
 intervening comments and blank lines. Repeated pagination URLs fail explicitly,
-including cycles spanning multiple pages.
-Update labels are yellow and up-to-date labels are green; set `NO_COLOR=1`
-to disable colors.
+including cycles spanning multiple pages. Update labels are yellow and
+up-to-date labels are green; set `NO_COLOR=1` to disable colors.
 
-To apply stable minor/patch updates within the current major version and
-refresh digests, run `make docker-image-update-pins` from the repository root
-on the Docker host. This reuses discovery and registry validation, preserves
-variants and existing platforms, and changes only existing tagged digest pins.
-Non-semver tags receive digest refreshes only; unpinned references are reported
-and left untouched. All registry lookups finish before any files are edited.
-It accepts neither `IMAGE` nor options. Exit `0` means pins were resolved and
-any updates applied; errors return nonzero (`64` for invalid input, `69` for
-missing tools). It never commits, pushes, builds images or recreates services.
-The [maintenance workflow][image-maintenance] uses this command daily at
-04:17 UTC on `master` and on manual dispatch. It creates or updates the same
-maintenance PR per base branch only when a diff exists.
-It authenticates registry pulls before bootstrap and runs helper regressions
-in the lightweight `maintenance` PHP target through Compose. PR authentication
-prefers a short-lived repository-scoped App token, then a configured PAT,
-with an explicit CI-trigger warning on `GITHUB_TOKEN` fallback.
-`make lint-workflows` runs `scripts/tests/docker-image-workflow-test.py` for
-offline authentication, schedule, bootstrap and PR-output contracts.
+To apply stable minor/patch updates within the current major version and refresh
+digests, run `make docker-image-update-pins` from the repository root on the
+Docker host. This reuses discovery and registry validation, preserves variants
+and existing platforms, and changes only existing tagged digest pins. Non-semver
+tags receive digest refreshes only; unpinned references are reported and left
+untouched. All registry lookups finish before any files are edited. It accepts
+neither `IMAGE` nor options. Exit `0` means pins were resolved and any updates
+applied; errors return nonzero (`64` for invalid input, `69` for missing tools).
+It never commits, pushes, builds images or recreates services. The [maintenance
+workflow][image-maintenance] uses this command daily at 04:17 UTC on `master`
+and on manual dispatch. It creates or updates the same maintenance PR per base
+branch only when a diff exists. It authenticates registry pulls before bootstrap
+and runs helper regressions in the lightweight `maintenance` PHP target through
+Compose. PR authentication prefers a short-lived repository-scoped App token,
+then a configured PAT, with an explicit CI-trigger warning on `GITHUB_TOKEN`
+fallback. `make lint-workflows` runs
+`scripts/tests/docker-image-workflow-test.py` for offline authentication,
+schedule, bootstrap and PR-output contracts.
 
 [image-maintenance]: ../doc/GITHUB_WORKFLOWS.md#security-and-maintenance-workflows
 
 Use `./scripts/docker-images.sh check-updates` for a strict check that fails
 when an update is available or a check fails. All image results are reported
-before
-exiting. `make docker-image-check-updates` also fails in these cases, but Make
-uses its own non-zero exit status rather than preserving the script's code.
+before exiting. `make docker-image-check-updates` also fails in these cases, but
+Make uses its own non-zero exit status rather than preserving the script's code.
 To reproduce CI's advisory policy, run from the repository root on the Docker
 host:
 
@@ -1252,31 +1232,29 @@ bash scripts/docker-images.sh check-updates --advisory
 ```
 
 Confirmed updates return zero with warnings; GitHub Actions also receives
-warning annotations and a maintenance summary with version transitions,
-verified pins and platforms. The summary includes major upgrades and explicit
-current, skipped and failed results. Core CI's existing daily/manual version
-check owns this read-only report; the independent automatic update workflow
-does not repeat it. Major upgrades require manual review and never enter
-automatic minor/patch PRs. Lookup and invalid update-pin
-errors remain nonzero, even alongside confirmed updates. Unknown or repeated
-update-check options return `64`. The default script and Make policy is
-unchanged.
+warning annotations and a maintenance summary with version transitions, verified
+pins and platforms. The summary includes major upgrades and explicit current,
+skipped and failed results. Core CI's existing daily/manual version check owns
+this read-only report; the independent automatic update workflow does not repeat
+it. Major upgrades require manual review and never enter automatic minor/patch
+PRs. Lookup and invalid update-pin errors remain nonzero, even alongside
+confirmed updates. Unknown or repeated update-check options return `64`. The
+default script and Make policy is unchanged.
 
 Registry inspection retries transient errors up to three attempts, with 10 and
 20 second delays. The first `429` error prints a notification to authenticate
 with `docker login docker.io` or wait for the quota to reset, before retrying.
-Persistent errors still fail. In CI,
-authenticate with credentials from CI secrets before running this command.
-Retry diagnostics stream immediately to stderr rather than waiting for the
-grouped result. During the wait, progress is printed every five seconds with
-the next attempt number and remaining delay. Rate-limited waits also remind
-users to press `Ctrl+C` and run `docker login docker.io`.
+Persistent errors still fail. In CI, authenticate with credentials from CI
+secrets before running this command. Retry diagnostics stream immediately to
+stderr rather than waiting for the grouped result. During the wait, progress is
+printed every five seconds with the next attempt number and remaining delay.
+Rate-limited waits also remind users to press `Ctrl+C` and run
+`docker login docker.io`.
 
 The `Check Docker image versions` CI job runs alongside linting and is required
 by `ci-summary`. Updates alone are advisory on every event; lookup,
-pin-validation
-and regression failures still block merging. Tests and Docker builds start
-independently after change detection. The image-update job runs the
+pin-validation and regression failures still block merging. Tests and Docker
+builds start independently after change detection. The image-update job runs the
 helper regression tests first. Configure optional `DOCKERHUB_USERNAME` and
 `DOCKERHUB_TOKEN` repository secrets (a read-only Docker Hub access token) to
 authenticate registry inspection. Both secrets must be present or both absent.
@@ -1292,12 +1270,11 @@ make test-docker-images
 ```
 
 The root `Dockerfile` defaults to the `production` target. Use
-`TARGET=development` to build the development image instead. Dockerfiles
-with an unnamed final stage do not prompt for a target and use Docker's final
-stage by default. Use `TARGET` explicitly to select a named intermediate stage.
+`TARGET=development` to build the development image instead. Dockerfiles with an
+unnamed final stage do not prompt for a target and use Docker's final stage by
+default. Use `TARGET` explicitly to select a named intermediate stage.
 
-See [Docker multi-platform images](../doc/DOCKER_MULTI_PLATFORM.md) for
-details.
+See [Docker multi-platform images](../doc/DOCKER_MULTI_PLATFORM.md) for details.
 
 ---
 

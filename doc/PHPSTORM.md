@@ -3,12 +3,12 @@
 <a id="what-is-this"></a>
 
 This document contains information how you can setup your
-[PhpStorm](https://www.jetbrains.com/phpstorm/)
-for this application _"correct"_ way.
+[PhpStorm](https://www.jetbrains.com/phpstorm/) for this application _"correct"_
+way.
 
 For recommend plugins see
-[External links / resources](#external-links-resources)
-section of this documentation.
+[External links / resources](#external-links-resources) section of this
+documentation.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -32,14 +32,13 @@ section of this documentation.
 <a id="cli-interpreter"></a>
 
 First thing that you need to do is select correct CLI interpreter for your
-PhpStorm. Selection should be available on `Settings -> Languages & Frameworks
--> PHP`
-section.
+PhpStorm. Selection should be available on
+`Settings -> Languages & Frameworks -> PHP` section.
 
 Just choose the `Docker-PHP` from dropdown, if that does not exist there you
 need to click that `...` and follow the instructions found in
-[External links / resources](#external-links-resources)
-section - Configuring Remote PHP Interpreters.
+[External links / resources](#external-links-resources) section - Configuring
+Remote PHP Interpreters.
 
 ![Path mappings](images/phpstorm_01.png)
 
@@ -59,10 +58,9 @@ docker container.
 <a id="test-frameworks"></a>
 
 Application itself contains quite lot of tests as you know from that
-[testing](TESTING.md)
-documentation. To get support to run tests directly from your IDE you need to
-do following configuration in `Settings -> Languages & Frameworks -> PHP ->
-Test Frameworks`.
+[testing](TESTING.md) documentation. To get support to run tests directly from
+your IDE you need to do following configuration in
+`Settings -> Languages & Frameworks -> PHP -> Test Frameworks`.
 
 By default settings should be set correctly but just ensure that  those are set
 as in image below.
@@ -83,8 +81,8 @@ those earlier configured settings.
 <a id="debugging"></a>
 
 Application supports using of XDebug for debugging tool, so just read
-[Using Xdebug](XDEBUG.md)
-documentation and you're ready to start debugging your application.
+[Using Xdebug](XDEBUG.md) documentation and you're ready to start debugging your
+application.
 
 ## External links / resources [ᐞ](#table-of-contents)
 

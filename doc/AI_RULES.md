@@ -2,9 +2,9 @@
 
 <a id="what-is-this"></a>
 
-`AI_RULES.md` explains how to maintain this repository's AI guidance and how
-to turn recurring, machine-detectable mistakes into existing tests or CI checks.
-It does not restate day-to-day coding instructions.
+`AI_RULES.md` explains how to maintain this repository's AI guidance and how to
+turn recurring, machine-detectable mistakes into existing tests or CI checks. It
+does not restate day-to-day coding instructions.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -27,15 +27,14 @@ It does not restate day-to-day coding instructions.
 
 <a id="purpose-and-scope"></a>
 
-The actionable repository-wide requirements are in
-[`AGENTS.md`](../AGENTS.md). This document has a narrower role: keep the AI
-documentation system maintainable, and guide decisions about whether recurring
-review feedback should become a documented rule, a task-specific skill, or an
-automated check.
+The actionable repository-wide requirements are in [`AGENTS.md`](../AGENTS.md).
+This document has a narrower role: keep the AI documentation system
+maintainable, and guide decisions about whether recurring review feedback should
+become a documented rule, a task-specific skill, or an automated check.
 
 The canonical AI documentation inventory and reading order is in the
-[README](../README.md#ai-assisted-development). Keep that inventory current
-when AI guidance files are added, removed, or renamed.
+[README](../README.md#ai-assisted-development). Keep that inventory current when
+AI guidance files are added, removed, or renamed.
 
 ## Guidance roles and precedence [ᐞ](#table-of-contents)
 
@@ -57,18 +56,17 @@ Use the following precedence when instructions conflict:
 The [pull request template](../.github/pull_request_template.md) is a review
 checklist, not an instruction hierarchy layer.
 
-The [project agent profiles](FEATURE_AGENTS.md) define feature-delivery
-roles, approval gates, and specialist handoffs. They supplement repository
-instructions and skills, not override them. Keep their routing, tool access,
-and client limitations aligned when changing the workflow; only the feature
-lead is user-facing.
-The implementer may delegate bounded, explicitly authorized rebase conflict
-work to the hidden conflict resolver while paused; independent verification
-and approval gates remain unchanged.
+The [project agent profiles](FEATURE_AGENTS.md) define feature-delivery roles,
+approval gates, and specialist handoffs. They supplement repository instructions
+and skills, not override them. Keep their routing, tool access, and client
+limitations aligned when changing the workflow; only the feature lead is
+user-facing. The implementer may delegate bounded, explicitly authorized rebase
+conflict work to the hidden conflict resolver while paused; independent
+verification and approval gates remain unchanged.
 
-When documentation conflicts with actual behavior, resolve the drift by
-updating the inaccurate guidance or the implementation as appropriate; do not
-preserve a rule that the project no longer follows.
+When documentation conflicts with actual behavior, resolve the drift by updating
+the inaccurate guidance or the implementation as appropriate; do not preserve a
+rule that the project no longer follows.
 
 ## Maintaining task-specific skills [ᐞ](#table-of-contents)
 
@@ -82,14 +80,14 @@ and safeguards in their specific skills.
 
 For changes to instructions, agent profiles, or skill contracts, use
 [maintain-ai-guidance](../.github/skills/maintain-ai-guidance/SKILL.md) for
-inspection targets, routing safeguards, and static versus live-client
-validation boundaries.
+inspection targets, routing safeguards, and static versus live-client validation
+boundaries.
 
 Add a skill or expand shared policy only when a recurring need justifies it.
 Before creating a new document, check whether the workflow belongs in an
 existing skill or the shared guidance. New skills should cover a distinct
-workflow rather than repeat repository-wide instructions or overlap an
-existing skill.
+workflow rather than repeat repository-wide instructions or overlap an existing
+skill.
 
 ## Enforcement model [ᐞ](#table-of-contents)
 
@@ -122,34 +120,34 @@ contains:
 
 * fail-safe category selection on PRs, pushes and merge groups, covering
   configuration, PHP dependency security, Docker pins/updates, PHP analyzers,
-  tests, builds, workflow validation and documentation independently;
-  selected PHP jobs still check whole suites,
+  tests, builds, workflow validation and documentation independently; selected
+  PHP jobs still check whole suites,
 * change-scoped documentation validation on PRs, pushes and merge groups:
   Markdown style runs for Markdown or lint-tool/configuration changes;
   skill/link checks also run for checker changes and deleted/renamed targets,
   while manual runs, shared execution inputs, unclassified paths and unclear
   diffs retain full validation,
-* configuration lint and documentation checks, including skill metadata,
-  index coverage, and local Markdown links and anchors across the repository
-  (project tooling uses Make targets inside the Compose `php` development
-  service, including Python and Markdown checks),
+* configuration lint and documentation checks, including skill metadata, index
+  coverage, and local Markdown links and anchors across the repository (project
+  tooling uses Make targets inside the Compose `php` development service,
+  including Python and Markdown checks),
 * workflow-aware validation and embedded shell checks for all workflows,
   security audits of workflows and local actions with zizmor, plus separate
   schema validation for local action metadata,
 * dependency and secret checks,
 * Docker image pin verification, image builds and a separate Trivy scan matrix
   consuming the built image artifacts without rebuilding,
-* a lightweight static-analysis job (CodeSniffer, ECS, syntax checks and
-  PHPLoc) with independent failure-preserving steps, plus a matrix for
-  Psalm, PHPStan and PHP Insights,
+* a lightweight static-analysis job (CodeSniffer, ECS, syntax checks and PHPLoc)
+  with independent failure-preserving steps, plus a matrix for Psalm, PHPStan
+  and PHP Insights,
 * application tests and image builds starting after change detection,
   independently of the lint/security/analyzer prerequisite gate,
 * a prerequisite gate (`ci-summary`) that validates the lint, security and
   static-analysis job results,
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
   both static-analysis jobs, tests, Docker builds/scans and eligible external
-  reporting, and is the required merge check together with
-  `dependency-review`, and
+  reporting, and is the required merge check together with `dependency-review`,
+  and
 * optional coverage and Sonar reporting on all PRs and successful `master`
   pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
   covered by the final merge gate when eligible. Uploads require their
@@ -163,31 +161,31 @@ superseded runs release their concurrency slot. Container cleanup steps retain
 `always()`. `make lint-workflows` checks these guards and runs offline
 regressions of the actual gate result scripts; it does not execute GitHub jobs.
 The gate jobs check out source before invoking `scripts/ci-prerequisite-gate.sh`
-and `scripts/ci-result-gate.sh`; both source `scripts/ci-gate-common.sh`.
-Keep their workflow environment bindings and strict result rules aligned.
+and `scripts/ci-result-gate.sh`; both source `scripts/ci-gate-common.sh`. Keep
+their workflow environment bindings and strict result rules aligned.
 
 The workflow also runs on `merge_group` events. Scheduled runs execute the
 periodic `security-check` and `docker-image-check-updates` jobs and both
 aggregate gates; other check jobs are skipped. Markdown-only changes retain
 documentation checks and Gitleaks (plus separate Dependency Review and CodeQL).
 On non-scheduled validation events both gates accept a category's skip only
-after successful detection explicitly reports its flag as `false`; unknown
-or empty outputs cannot authorize skips. Gitleaks remains required.
-External reporting additionally skips manual runs, merge groups and changes
-that did not select tests. See the
+after successful detection explicitly reports its flag as `false`; unknown or
+empty outputs cannot authorize skips. Gitleaks remains required. External
+reporting additionally skips manual runs, merge groups and changes that did not
+select tests. See the
 [selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path) for the
 owning path policy; CI skips are not decided by local focused-test advice.
 
 Docker update availability uses the checker's explicit advisory mode on every
-event: confirmed newer stable multi-platform images produce warnings rather
-than gate failures. Lookup, pin-validation and helper regression errors still
-fail the required image-update job; base-pin and vulnerability checks remain
+event: confirmed newer stable multi-platform images produce warnings rather than
+gate failures. Lookup, pin-validation and helper regression errors still fail
+the required image-update job; base-pin and vulnerability checks remain
 blocking. The default local image-update command keeps its strict exit policy.
 See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) for the merge-gate rules.
 
-Scheduled CI runs use a separate concurrency group from non-scheduled runs
-on the same ref, so `master` pushes do not cancel periodic checks.
-Cancellation of superseded runs within each group remains enabled.
+Scheduled CI runs use a separate concurrency group from non-scheduled runs on
+the same ref, so `master` pushes do not cancel periodic checks. Cancellation of
+superseded runs within each group remains enabled.
 
 Core CI handles PR opens, new commits and reopens, not `edited` events.
 Title/body edits therefore cannot create duplicate skipped checks or cancel
@@ -196,21 +194,19 @@ After a base-branch change, push a new commit or close and reopen the PR before
 merging; rerunning an old run reuses its original event. Other workflows retain
 their filters.
 
-Separate workflows cover the rest of the pipeline: `dependency-review.yml`
-(pull request and merge-group dependency review), `vulnerability-scan.yml`
-(daily Trivy scan
-of the development and production images, with SARIF upload), `scorecard.yml`
-(OpenSSF Scorecard) and `codeql.yml` (CodeQL analysis of the workflow files).
-The daily (04:17 UTC) and manually dispatched `docker-image-updates.yml`
-workflow applies same-major
-minor/patch updates and digest refreshes, verifies pins, and creates or updates
-a PR against the selected branch. It is separate from required CI gates.
-Major-version reporting stays in core CI's existing daily/manual read-only
-advisory check and run summary, without applying major upgrades or adding a
-workflow or required-check context. Reporting failures cannot block the
-independent automatic updater.
-See [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
-for token permissions, dispatch prerequisites and runtime evidence limits.
+Separate workflows cover the rest of the pipeline: `dependency-review.yml` (pull
+request and merge-group dependency review), `vulnerability-scan.yml` (daily
+Trivy scan of the development and production images, with SARIF upload),
+`scorecard.yml` (OpenSSF Scorecard) and `codeql.yml` (CodeQL analysis of the
+workflow files). The daily (04:17 UTC) and manually dispatched
+`docker-image-updates.yml` workflow applies same-major minor/patch updates and
+digest refreshes, verifies pins, and creates or updates a PR against the
+selected branch. It is separate from required CI gates. Major-version reporting
+stays in core CI's existing daily/manual read-only advisory check and run
+summary, without applying major upgrades or adding a workflow or required-check
+context. Reporting failures cannot block the independent automatic updater. See
+[maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows) for
+token permissions, dispatch prerequisites and runtime evidence limits.
 
 For application tests, the workflow runs `make run-tests-php`. The local
 `make run-tests` target may instead select phpdbg when it is installed. Use
@@ -221,10 +217,10 @@ The shared bootstrap defaults to the existing development image using
 `always()` step calls `make ci-stop`. Docker orchestration, hosted scanners,
 cache actions, and artifact uploads remain on the runner. Sonar receives
 separate report copies with relative source paths, while container-based
-uploaders and archived reports retain their original paths.
-The reporting job installs and runs the isolated Coveralls tool in the PHP
-development container, forwarding its tokens and required GitHub CI metadata.
-It does not use the runner's PHP or Composer.
+uploaders and archived reports retain their original paths. The reporting job
+installs and runs the isolated Coveralls tool in the PHP development container,
+forwarding its tokens and required GitHub CI metadata. It does not use the
+runner's PHP or Composer.
 
 Docker PR maintenance opts into the independent lightweight `maintenance`
 target, retaining the idle Compose PHP service and host-side registry checks.
@@ -243,10 +239,9 @@ dependency installation and auditing. See the
 
 This CI coverage map is distinct from the broader local pre-commit suite in
 [`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a
-command-for-command description of CI. The workflow defines the exact
-commands, conditions, matrices, artifacts, and failure behavior. Update this
-summary when the workflow's structure changes, without duplicating the full
-local checklist.
+command-for-command description of CI. The workflow defines the exact commands,
+conditions, matrices, artifacts, and failure behavior. Update this summary when
+the workflow's structure changes, without duplicating the full local checklist.
 
 ## Maintenance workflow [ᐞ](#table-of-contents)
 
@@ -256,10 +251,10 @@ When AI-assisted work produces recurring review feedback:
 
 1. Confirm that the correction reflects current project behavior and is not a
    one-off.
-2. Decide where it belongs: repository-wide instructions, an existing or
-   focused skill, shared guidance, a human review checklist, or an automated
-   check. Prefer extending the closest existing source over creating
-   overlapping guidance.
+2. Decide where it belongs: repository-wide instructions, an existing or focused
+   skill, shared guidance, a human review checklist, or an automated check.
+   Prefer extending the closest existing source over creating overlapping
+   guidance.
 3. Add the rule at the narrowest appropriate location and link to an existing
    source instead of copying policy into several files.
 4. If the rule is machine-detectable, prefer extending existing tooling or CI.

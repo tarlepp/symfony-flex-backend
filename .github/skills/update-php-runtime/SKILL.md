@@ -7,9 +7,9 @@ description: Update the supported PHP runtime baseline consistently across Compo
 
 <a id="what-is-this"></a>
 
-Use this skill when changing the PHP version supported by the application or
-the PHP runtime version used by the development, production, and CI workflows.
-For Composer package updates that do not change the PHP baseline, use
+Use this skill when changing the PHP version supported by the application or the
+PHP runtime version used by the development, production, and CI workflows. For
+Composer package updates that do not change the PHP baseline, use
 [update-dependencies](../update-dependencies/SKILL.md). For PHP image tag or
 digest refreshes that keep the supported PHP version unchanged, use
 [update-docker-images](../update-docker-images/SKILL.md).
@@ -46,9 +46,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 3. Keep the runtime baseline aligned across the project:
    * Update the root and `tools/*/composer.json` PHP requirements and
      `config.platform.php` values to the approved baseline.
-   * Refresh each affected lockfile with Composer in the development
-     container. Do not hand-edit lockfiles or use a broad dependency update
-     unless required and approved.
+   * Refresh each affected lockfile with Composer in the development container.
+     Do not hand-edit lockfiles or use a broad dependency update unless required
+     and approved.
    * Preserve the different purposes of version fields: `require.php` defines
      the supported constraint, `config.platform.php` simulates the Composer
      platform, and the PHP image uses a concrete patch tag shared by local
@@ -57,13 +57,13 @@ Follow the [shared skill guidance](../shared-guidance.md), including
      [update-docker-images](../update-docker-images/SKILL.md) for multi-platform
      digest resolution and pin verification.
    * Review `.github/actions/php-bootstrap/action.yml` and
-     `docker/ci-compose.yaml`. CI uses the Compose development image rather
-     than selecting a separate runner PHP version; keep that shared runtime.
+     `docker/ci-compose.yaml`. CI uses the Compose development image rather than
+     selecting a separate runner PHP version; keep that shared runtime.
    * Search documentation and automation for explicit PHP-version statements,
-     including `doc/DEVELOPMENT.md` and
-     `doc/INSTALLATION_WITHOUT_DOCKER.md`; update statements that describe the
-     supported baseline. Avoid copying version numbers into documents that can
-     link to the Composer source of truth instead.
+     including `doc/DEVELOPMENT.md` and `doc/INSTALLATION_WITHOUT_DOCKER.md`;
+     update statements that describe the supported baseline. Avoid copying
+     version numbers into documents that can link to the Composer source of
+     truth instead.
 4. Review the full diff for accidental dependency changes, lockfile churn,
    inconsistent platform values, and outdated examples. Keep a baseline
    migration coherent across root, tools, runtime image, CI, and documentation;

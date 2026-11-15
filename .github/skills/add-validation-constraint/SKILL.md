@@ -8,8 +8,8 @@ description: Add or change a Symfony Validator constraint and validator in this 
 <a id="what-is-this"></a>
 
 Use this skill when adding or changing a project-specific Symfony validation
-rule under `src/Validator/Constraints/`. For using constraints on API DTOs,
-also follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); a custom
+rule under `src/Validator/Constraints/`. For using constraints on API DTOs, also
+follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); a custom
 constraint does not require changing a DTO if its validation scope is elsewhere.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
@@ -47,23 +47,23 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    options, use a typed constructor compatible with Symfony's base constructor;
    preserve options, groups, and payload behavior.
 4. Implement the matching `*Validator` as a `ConstraintValidator` in the same
-   namespace. Inject required collaborators through the constructor and use
-   the existing `App\` autowiring/autoconfiguration rather than manual
-   instantiation or redundant service tags. Verify Symfony's validator
-   discovery and naming behavior when using a non-default validator class.
-5. Keep validation focused on the rule. Define deliberately how `null` or
-   blank values are handled; optionality and requiredness usually belong to
-   separate constraints such as `NotBlank`. Validate supported value types
-   explicitly: throw Symfony's `UnexpectedTypeException` for the wrong
-   constraint and `UnexpectedValueException` for incompatible values when
-   that is the intended contract. Do not silently cast, normalize, or accept
-   malformed input unless the rule explicitly defines that behavior.
+   namespace. Inject required collaborators through the constructor and use the
+   existing `App\` autowiring/autoconfiguration rather than manual instantiation
+   or redundant service tags. Verify Symfony's validator discovery and naming
+   behavior when using a non-default validator class.
+5. Keep validation focused on the rule. Define deliberately how `null` or blank
+   values are handled; optionality and requiredness usually belong to separate
+   constraints such as `NotBlank`. Validate supported value types explicitly:
+   throw Symfony's `UnexpectedTypeException` for the wrong constraint and
+   `UnexpectedValueException` for incompatible values when that is the intended
+   contract. Do not silently cast, normalize, or accept malformed input unless
+   the rule explicitly defines that behavior.
 6. Add violations through the validator context using the declared message,
-   parameters, and error code. Avoid leaking secrets or unnecessary personal
-   or persisted data through violation messages, logs, or parameters. Surface
+   parameters, and error code. Avoid leaking secrets or unnecessary personal or
+   persisted data through violation messages, logs, or parameters. Surface
    collaborator failures according to the repository's error-handling
-   conventions; do not convert infrastructure failures into a valid result or
-   a misleading validation violation.
+   conventions; do not convert infrastructure failures into a valid result or a
+   misleading validation violation.
 7. Add tests for valid and invalid values, null/blank and unsupported types
    where relevant, and the exact violation message/code/parameters. If the
    validator uses a repository or service, test the rule's observable behavior
@@ -75,8 +75,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    preserve operation-specific validation groups and create/update/patch
    behavior. Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) for
    request mapping, DTO validation, and HTTP-boundary coverage when the API
-   contract changes. Keep entity validation separate from request DTO
-   validation unless the existing domain behavior requires both.
+   contract changes. Keep entity validation separate from request DTO validation
+   unless the existing domain behavior requires both.
 9. Update API error documentation or other existing documentation when the
    externally observable validation contract changes. Do not add a migration
    unless persisted entity structure changes; follow the entity skill when it
@@ -88,12 +88,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 * Run the focused test under `tests/Integration/Validator/Constraints/` inside
   the PHP development container, following shared guidance.
-* Confirm the configured Validator reports the expected violation for an
-  invalid value and no violation for a valid value. Check actual validator
-  service resolution when the constraint or validator depends on autowiring.
+* Confirm the configured Validator reports the expected violation for an invalid
+  value and no violation for a valid value. Check actual validator service
+  resolution when the constraint or validator depends on autowiring.
 * When attached to a DTO or endpoint, run the relevant DTO and caller-boundary
-  tests as described in
-  [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md).
+  tests as described in [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md).
 * Run relevant PHP quality checks from shared guidance.
 
 ---
