@@ -287,6 +287,66 @@ class CiGatesTest(unittest.TestCase):
                 "needs.changes.outputs.docker == 'true' }}", job,
             )
 
+    def test_pr_image_sarif_is_scoped_and_independent_of_scan_result(self):
+        scan = self.jobs["docker-scan"]
+        self.assertIn("    permissions:\n      contents: read\n      security-events: write\n", scan)
+        steps = dict(re.findall(
+            r"^      - name: ([^\n]+)\n(.*?)(?=^      - |\Z)",
+            scan, re.MULTILINE | re.DOTALL,
+        ))
+        image = steps["Download Docker image for scanning"]
+        blocking = steps["Scan Docker image with Trivy vulnerability scanner"]
+        sarif = steps["Generate PR image scan SARIF"]
+        upload = steps["Upload PR image scan SARIF"]
+        self.assertIn("        id: image\n", image)
+        self.assertNotIn("        if:", blocking)
+        self.assertLess(scan.index("name: Scan Docker image with Trivy vulnerability scanner"),
+                        scan.index("name: Generate PR image scan SARIF"))
+        self.assertIn("        id: sarif\n", sarif)
+        condition = re.search(r"^        if: \$\{\{ (.+) \}\}$", sarif, re.MULTILINE)
+        self.assertIsNotNone(condition)
+        self.assertEqual(
+            condition.group(1),
+            "!cancelled() && steps.image.outcome == 'success' && "
+            "github.event_name == 'pull_request' && "
+            "github.event.pull_request.head.repo.full_name == github.repository",
+        )
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
+            for same_repo in (False, True):
+                for image_result in ("success", "failure", "skipped"):
+                    for cancelled in (False, True):
+                        with self.subTest(event=event, same_repo=same_repo,
+                                          image=image_result, cancelled=cancelled):
+                            expression = condition.group(1).replace(
+                                "!cancelled()", repr(not cancelled),
+                            ).replace("steps.image.outcome", repr(image_result)).replace(
+                                "github.event_name", repr(event),
+                            ).replace("github.event.pull_request.head.repo.full_name",
+                                      repr("owner/repo" if same_repo else "fork/repo")).replace(
+                                "github.repository", repr("owner/repo"),
+                            ).replace("&&", "and")
+                            result = eval(expression, {"__builtins__": {}})
+                            self.assertEqual(result, not cancelled and image_result == "success"
+                                             and event == "pull_request" and same_repo)
+        for item in (blocking, sarif):
+            self.assertIn("input: ${{ runner.temp }}/docker-image/docker-image.tar", item)
+            self.assertIn("ignore-unfixed: true", item)
+            self.assertIn("vuln-type: 'os,library'", item)
+            self.assertIn("severity: 'CRITICAL,HIGH'", item)
+        self.assertIn("exit-code: '1'", blocking)
+        self.assertIn("exit-code: '0'", sarif)
+        self.assertIn("uses: aquasecurity/trivy-action@", sarif)
+        self.assertIn("format: sarif", sarif)
+        self.assertIn("limit-severities-for-sarif: 'true'", sarif)
+        self.assertIn("output: trivy-${{ matrix.target }}.sarif", sarif)
+        self.assertIn("if: ${{ !cancelled() && steps.sarif.outcome == 'success' }}", upload)
+        self.assertIn("uses: github/codeql-action/upload-sarif@", upload)
+        self.assertIn("sarif_file: trivy-${{ matrix.target }}.sarif", upload)
+        self.assertIn("category: trivy-${{ matrix.target }}", upload)
+        self.assertLess(scan.index("name: Generate PR image scan SARIF"),
+                        scan.index("name: Upload PR image scan SARIF"))
+        self.assertNotIn("continue-on-error", scan)
+
     def test_image_tags_are_valid_and_independent_of_git_ref_names(self):
         build = self.jobs["docker-build"]
         tags = re.findall(r"^          tags: (.+)$", build, re.MULTILINE)
