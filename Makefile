@@ -93,7 +93,7 @@ $(call REGISTER_TARGET,application-info,information,wrapped,,Read application in
 $(call REGISTER_TARGET,ci-detect-changes,information,wrapped,,Preview CI validation selection)
 $(call REGISTER_TARGET,configuration,information,wrapped,,Read application configuration)
 $(call REGISTER_TARGET,project-stats,information,wrapped,,Read project statistics)
-$(call REGISTER_TARGET,tool-versions,information,wrapped,,Read tool versions)
+$(call REGISTER_TARGET,tool-versions,information,wrapped,,Read development environment tool versions)
 
 ci-detect-changes: export BASE_SHA ?= HEAD^
 ci-detect-changes: export HEAD_SHA ?= HEAD
@@ -215,6 +215,7 @@ $(FORWARD_TARGETS):
 		if [ -t 1 ] && [ -t 2 ]; then OUTPUT_PROGRESS_SHARED=1; else OUTPUT_PROGRESS_SHARED=0; fi; \
 		export OUTPUT_PROGRESS_SHARED; \
 	fi; \
+	$(if $(filter tool-versions,$@),bash scripts/command-output.sh --run "Read Docker and stack service versions" bash scripts/tool-versions.sh --stack $(COMPOSE_EXEC) || exit $$?; printf '\n' >&2;,) \
 	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
@@ -293,11 +294,8 @@ configuration: ## Prints out application current configuration
 project-stats: ## Create simple project stats
 	@./scripts/project-stats.sh
 
-tool-versions: ## Display PHP, Composer, Symfony, and PHPUnit versions
-	@php --version
-	@bin/console --version $(ANSI_FLAG)
-	@php ./vendor/bin/phpunit --version
-	@composer --version $(ANSI_FLAG)
+tool-versions: ## Display PHP development-container runtimes, dependencies, and tools
+	@ANSI_FLAG=$(ANSI_FLAG) bash scripts/tool-versions.sh
 
 # Application tests and tooling regressions
 

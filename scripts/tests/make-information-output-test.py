@@ -23,20 +23,53 @@ class InformationOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         for name in ("command-output.sh", "make.sh", "make-help.sh", "prepare-sonar-reports.sh",
-                     "project-stats.sh", "docker-images.sh", "native-output.sh", "report-output.sh"):
+                     "project-stats.sh", "docker-images.sh", "native-output.sh", "report-output.sh",
+                     "tool-versions.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
             (self.root / "scripts" / name).chmod(0o755)
         shutil.copyfile(ROOT / "scripts/native-output.py", self.root / "scripts/native-output.py")
         fixture = """#!/usr/bin/env bash
 printf '%s %s\\n' "$0" "$*" >> "$CALLS"
+if [ "${CHECK_VERSION_XDEBUG:-0}" = 1 ]; then
+    case "$(basename "$0")" in
+        php|console|composer)
+            if [ "${XDEBUG_MODE:-}" != off ]; then
+                echo 'Xdebug: [Step Debug] unexpected connection attempt' >&2
+                exit 8
+            fi ;;
+    esac
+fi
+if [ "${VERSION_DIAGNOSTICS:-0}" = 1 ]; then
+    case "$(basename "$0")" in
+        console)
+            echo '[2099-01-01T00:00:00+00:00] deprecation.INFO: Unrelated package deprecated an API' >&2
+            echo '[2099-02-02T00:00:00+00:00] deprecation.WARNING: Another deprecation' >&2
+            echo '{"message":"Different deprecation","channel":"deprecation","level":200}' >&2
+            echo '[2099-01-01T00:00:00+00:00] app.WARNING: Keep this warning' >&2 ;;
+        composer)
+            if [[ " $* " == *" --ansi "* ]]; then
+                printf '\\033[32mPHP\\033[39m version \\033[33m9.9.9\\033[39m (/different/php)\\n' >&2
+            fi
+            echo '[2099-01-01T00:00:00+00:00] deprecation.INFO: Unrelated package deprecated an API' >&2
+            echo '{"message":"Different deprecation","channel":"deprecation","level":200}' >&2
+            echo 'PHP version 9.9.9 (/different/php)' >&2
+            echo 'Run the "some-other-command" command to get more detailed diagnostics output.' >&2
+            echo 'Composer warning: Keep this warning' >&2 ;;
+    esac
+fi
 if [ "$(basename "$0")" = "${FAIL_COMMAND:-}" ]; then
     echo 'native failure diagnostic' >&2
     exit 7
 fi
 case "$(basename "$0")" in
     jq)
-        if [[ "$*" == *dependencies* ]]; then exec /usr/bin/jq "$@"; fi
+        if [[ "$*" == *dependencies* || "$*" == *--slurpfile* ]]; then exec /usr/bin/jq "$@"; fi
         printf '{"fixture": true}\\n' ;;
+    python3)
+        if [ "${1:-}" != --version ] && [[ "$*" != "-m pip "* ]]; then
+            exec /usr/bin/python3 "$@"
+        fi
+        printf 'Python fixture version\\n' ;;
     composer)
         if [[ "$*" == *--format=json* ]]; then
             printf '{"dependencies":{"first":{"license":["MIT"]},"second":{"license":["MIT"]},"third":{"license":["MIT","Apache-2.0"]},"fourth":{"license":[]}}}\\n'
@@ -56,7 +89,8 @@ if [[ "$*" == *php-coveralls* ]]; then
 fi
 if [[ "$*" == *--log-json=* ]] && [ "${OMIT_REPORTS:-0}" != 1 ]; then printf '{}\\n' > build/phploc.json; fi
 """
-        for name in ("bin/php", "bin/console", "bin/composer", "bin/jq"):
+        for name in ("bin/php", "bin/php-fpm", "bin/console", "bin/composer", "bin/jq",
+                     "bin/python3", "bin/node", "bin/npm"):
             file = self.root / name
             file.write_text(fixture)
             file.chmod(0o755)
@@ -75,6 +109,23 @@ exit 0
 """)
         docker.chmod(0o755)
         self.calls = self.root / "calls"
+        (self.root / "vendor/composer").mkdir()
+        (self.root / "composer.json").write_text(json.dumps({
+            "require": {"example/runtime": "*"},
+            "require-dev": {"phpunit/phpunit": "*"},
+        }))
+        (self.root / "vendor/composer/installed.json").write_text(json.dumps({
+            "packages": [
+                {"name": "example/runtime", "version": "2.3.4",
+                 "description": "Runtime dependency introduction"},
+                {"name": "symfony/framework-bundle", "version": "v8.1.11",
+                 "description": "Symfony framework"},
+                {"name": "phpunit/phpunit", "version": "13.4.6",
+                 "description": "Development test framework"},
+                {"name": "example/transitive", "version": "1.0.0",
+                 "description": "Transitive dependency"},
+            ]
+        }))
         self.clover = self.root / "build/logs/clover.xml"
         self.junit = self.root / "build/logs/junit.xml"
         self.clover.write_text('<coverage><file name="/app/src/Example.php"/></coverage>\n')
@@ -86,6 +137,7 @@ exit 0
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(self.calls), COLOR="never", NO_COLOR="", FAIL_COMMAND="", UPLOAD_FAIL="0",
+            NVM_DIR=str(self.root / "missing-nvm"),
         )
         environment.update(overrides)
         result = subprocess.run(
@@ -323,7 +375,9 @@ exit 0
                 (self.root / target).touch()
                 result = self.make(target, COLOR="always")
                 self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertNotRegex(result.stdout, r"\[(RUN|OK|INFO|FAIL)\]|\x1b")
+                self.assertNotRegex(result.stdout, r"\[(RUN|OK|INFO|FAIL)\]")
+                if target != "tool-versions":
+                    self.assertNotIn("\x1b", result.stdout)
                 self.assertEqual(result.stderr.count("[OK]"), 1)
                 if target == "configuration":
                     self.assertEqual(json.loads(result.stdout), {"fixture": True})
@@ -350,6 +404,315 @@ exit 0
         result = self.make("project-stats")
         self.assertNotEqual(result.returncode, 0)
         self.assertNotIn("[OK]", result.stderr)
+
+    def test_tool_versions_reports_installed_packages_and_runtime_inventory(self):
+        tool = self.root / "tools/fixture"
+        metadata = tool / "vendor/composer"
+        metadata.mkdir(parents=True)
+        (tool / "composer.json").write_text(json.dumps({
+            "require-dev": {"example/analyzer": "9.0.0"}
+        }))
+        (tool / "composer.lock").write_text("not installed metadata")
+        (metadata / "installed.json").write_text(json.dumps({"packages": [
+            {"name": "example/analyzer", "version": "1.2.3"},
+            {"name": "squizlabs/php_codesniffer", "version": "3.4.5"},
+            {"name": "cmgmyr/phploc", "version": "8.0.6"},
+            {"name": "example/transitive-library", "version": "2.0.0"},
+            {"name": "roave/security-advisories", "version": "dev-latest"},
+        ]}))
+
+        result = self.make("tool-versions")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for heading in (
+            "Platform versions", "Project main dependencies",
+            "Installed PHP development packages",
+            "Python tooling", "Node.js tooling", "Shell and supporting tools",
+            "Optional security and workflow validators on PATH",
+        ):
+            self.assertIn(heading, result.stdout)
+        self.assertIn("example/analyzer: 1.2.3", result.stdout)
+        self.assertIn("squizlabs/php_codesniffer: 3.4.5", result.stdout)
+        self.assertIn("cmgmyr/phploc: 8.0.6", result.stdout)
+        self.assertNotIn("9.0.0", result.stdout)
+        self.assertNotIn("example/transitive-library", result.stdout)
+        self.assertNotIn("roave/security-advisories", result.stdout)
+        self.assertNotIn("Workflow validator downloads and npx caches", result.stdout)
+        self.assertTrue(result.stdout.startswith(
+            "\nDevelopment environment tool inventory (current container)\n"))
+        platform, dependencies = result.stdout.split("\nProject main dependencies\n", 1)
+        self.assertIn("Node.js: native information", platform)
+        self.assertIn("Python fixture version", platform)
+        self.assertNotIn("native Composer version", platform)
+        self.assertIn("OS: ", platform)
+        self.assertIn("Architecture: ", platform)
+        self.assertIn("Symfony: v8.1.11", platform)
+        runtime = dependencies.split("\nTooling\n")[0]
+        self.assertIn("example/runtime: 2.3.4 - Runtime dependency introduction", runtime)
+        self.assertNotIn("phpunit/phpunit", runtime)
+        self.assertNotIn("example/transitive", runtime)
+        self.assertNotIn("native Composer version", runtime)
+        development = dependencies.split("\n  Installed PHP development packages\n")[1]
+        project, isolated = development.split(
+            "    Isolated tool packages (tools/*/composer.json)\n", 1)
+        self.assertIn("    Project packages (composer.json require-dev)\n", project)
+        self.assertIn("      phpunit/phpunit: 13.4.6", project)
+        self.assertNotIn("example/analyzer", project)
+        self.assertNotIn("example/runtime", project)
+        self.assertNotIn("phpunit/phpunit", isolated)
+        self.assertEqual(result.stdout.count("Node.js: "), 1)
+        self.assertIn("      tools/fixture\n        example/analyzer: 1.2.3", result.stdout)
+        self.assertEqual(
+            [line for line in result.stdout.splitlines() if line and not line.startswith(" ")],
+            ["Development environment tool inventory (current container)",
+             "Platform versions", "PHP runtime extensions and debugging",
+             "Project main dependencies", "Tooling"],
+        )
+        tooling = result.stdout.split("\nTooling\n", 1)[1]
+        for heading in ("Installed PHP development packages", "Python tooling",
+                        "Node.js tooling", "Shell and supporting tools",
+                        "Optional security and workflow validators on PATH"):
+            self.assertIn(f"\n  {heading}\n", tooling)
+        for line in result.stdout.splitlines():
+            if line.strip() and line not in (
+                "Development environment tool inventory (current container)",
+                "Platform versions", "Project main dependencies", "Tooling",
+                "PHP runtime extensions and debugging",
+                "Installed PHP development packages", "Python tooling",
+                "Node.js tooling", "Shell and supporting tools",
+                "Optional security and workflow validators on PATH",
+            ):
+                self.assertTrue(line.startswith("  "), line)
+        calls = self.calls.read_text()
+        for arguments in (
+            "php --version", "php-fpm --version",
+            "composer --version --no-ansi", "python3 --version", "python3 -m pip --version",
+            "python3 -m pip list --disable-pip-version-check --format=columns",
+            "node --version", "npm --version", "npm list --global --depth=0 --offline",
+        ):
+            self.assertIn(arguments, calls)
+        self.assertNotRegex(calls, r"\b(install|update|npx)\b")
+
+    def test_stack_inventory_queries_running_services_and_preserves_failures(self):
+        docker = self.root / "bin/docker"
+        docker.write_text("""#!/bin/bash
+printf '%s\\n' "$*" >> "$CALLS"
+case "$*" in
+    'version --format '*) echo '  Docker client: fixture / Engine: fixture' ;;
+    'compose version --short') echo 'fixture-compose' ;;
+    'compose ps --services --status running') printf '%s\\n' "${SERVICES:-nginx}" ;;
+    'compose exec -T nginx nginx -v') echo 'nginx version: fixture' >&2 ;;
+    'compose exec -T mariadb mariadbd --version')
+        echo 'MariaDB diagnostic' >&2
+        exit 7 ;;
+    *) exit 99 ;;
+esac
+""")
+        for services, status in (("nginx", 0), ("nginx\nmariadb", 7)):
+            result = subprocess.run(
+                ["bash", "scripts/tool-versions.sh", "--stack", "docker", "compose"],
+                cwd=self.root, capture_output=True, text=True, check=False,
+                env=dict(os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                         CALLS=str(self.calls), COLOR="never", SERVICES=services),
+            )
+            self.assertEqual(result.returncode, status, result.stderr)
+            self.assertIn("Docker client: fixture / Engine: fixture", result.stdout)
+            self.assertIn("Docker Compose: fixture-compose", result.stdout)
+            self.assertIn("nginx version: fixture", result.stdout)
+            if status == 0:
+                self.assertIn("mariadb: service not running", result.stdout)
+            else:
+                self.assertIn("MariaDB diagnostic", result.stderr)
+        self.assertNotRegex(self.calls.read_text(), r"\b(up|start|run)\b")
+
+    def test_inventory_rejects_host_execution_before_querying_tools(self):
+        script = self.root / "scripts/tool-versions.sh"
+        script.write_text(script.read_text().replace(
+            "[ ! -f /.dockerenv ]", "[ ! -f /fixture-no-container-marker ]"))
+
+        for arguments, expected in (
+            ([], "make tool-versions"),
+            (["--production"], "docker compose -f compose.yaml -f compose.prod.yaml exec"),
+        ):
+            with self.subTest(arguments=arguments):
+                result = subprocess.run(
+                    ["bash", "scripts/tool-versions.sh", *arguments],
+                    cwd=self.root, capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("not on the Docker host", result.stderr)
+                self.assertIn(expected, result.stderr)
+                self.assertNotIn("command not found", result.stderr)
+                self.assertEqual(result.stdout, "")
+                self.assertFalse(self.calls.exists())
+
+    def test_production_inventory_uses_only_runtime_tools(self):
+        for name in ("node", "npm", "python3", "composer"):
+            (self.root / "bin" / name).write_text("#!/bin/sh\nexit 99\n")
+
+        result = subprocess.run(
+            ["bash", "scripts/tool-versions.sh", "--production"],
+            cwd=self.root, capture_output=True, text=True, check=False,
+            env=dict(os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                     CALLS=str(self.calls), COLOR="never", FAIL_COMMAND=""),
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Production runtime inventory (current container)", result.stdout)
+        self.assertIn("Loaded PHP extensions", result.stdout)
+        self.assertIn("example/runtime: 2.3.4 - Runtime dependency introduction",
+                      result.stdout)
+        self.assertNotIn("Tooling", result.stdout)
+        self.assertNotIn("phpunit/phpunit", result.stdout)
+        self.assertNotRegex(self.calls.read_text(), r"phpunit|console|pip|npm|node")
+
+        failed = subprocess.run(
+            ["bash", "scripts/tool-versions.sh", "--invalid"],
+            cwd=self.root, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(failed.returncode, 64)
+        self.assertIn("Usage:", failed.stderr)
+
+    def test_tool_versions_disables_debugger_without_hiding_diagnostics(self):
+        result = self.make("tool-versions", XDEBUG_MODE="debug", CHECK_VERSION_XDEBUG="1")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("Xdebug: [Step Debug]", result.stdout + result.stderr)
+
+        failed = self.make("tool-versions", XDEBUG_MODE="debug",
+                           CHECK_VERSION_XDEBUG="1", FAIL_COMMAND="composer")
+
+        self.assertNotEqual(failed.returncode, 0)
+        self.assertIn("native failure diagnostic", failed.stderr)
+        self.assertNotIn("[OK]", failed.stderr)
+
+    def test_tool_versions_filters_diagnostic_categories_not_specific_messages(self):
+        for failed_command in ("", "composer"):
+            with self.subTest(failed_command=failed_command):
+                result = self.make("tool-versions", COLOR="always", VERSION_DIAGNOSTICS="1",
+                                   FAIL_COMMAND=failed_command)
+
+                self.assertEqual(result.returncode == 0, not failed_command,
+                                 result.stderr)
+                self.assertNotIn("deprecation", result.stderr)
+                self.assertNotIn("get more detailed diagnostics", result.stderr)
+                self.assertNotIn("PHP version 9.9.9", result.stderr)
+                self.assertIn("Composer warning: Keep this warning", result.stderr)
+                if failed_command:
+                    self.assertIn("native failure diagnostic", result.stderr)
+                    self.assertNotIn("[OK]", result.stderr)
+
+    def test_tool_versions_colors_respect_shared_controls(self):
+        thefuck = self.root / "bin/thefuck"
+        thefuck.write_text("#!/bin/sh\nprintf 'The Fuck fixture version\\n' >&2\n")
+        thefuck.chmod(0o755)
+        tool = self.root / "tools/fixture"
+        metadata = tool / "vendor/composer"
+        metadata.mkdir(parents=True)
+        (tool / "composer.json").write_text(json.dumps({
+            "require-dev": {"example/analyzer": "*"}
+        }))
+        (metadata / "installed.json").write_text(json.dumps({"packages": [
+            {"name": "example/analyzer", "version": "1.2.3"},
+        ]}))
+
+        plain = self.make("tool-versions", COLOR="never")
+        colored = self.make("tool-versions", COLOR="always")
+        no_color = self.make("tool-versions", COLOR="always", NO_COLOR="1")
+
+        for result in (plain, colored, no_color):
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+        self.assertIn("\033[34mPlatform versions\033[0m", colored.stdout)
+        self.assertIn("\033[34mProject main dependencies\033[0m", colored.stdout)
+        self.assertIn("\033[32mnative information\033[0m", colored.stdout)
+        self.assertIn("  \033[32mnative information\033[0m", colored.stdout)
+        for label in ("Node.js", "npm"):
+            self.assertIn(f"  \033[32m{label}: native information\033[0m",
+                          colored.stdout)
+        self.assertIn("  \033[32mthefuck: The Fuck fixture version\033[0m",
+                      colored.stdout)
+        self.assertIn("    \033[32mexample/analyzer: 1.2.3\033[0m", colored.stdout)
+        self.assertIn("  \033[34mInstalled packages\033[0m", colored.stdout)
+        self.assertIn("  \033[34mGlobal packages\033[0m", colored.stdout)
+        for line in colored.stdout.splitlines():
+            if line.startswith("  ") and line.strip():
+                self.assertRegex(line, r"^ +\x1b\[(32|33|34)m.+\x1b\[0m$")
+        self.assertNotIn("\033", plain.stdout)
+        self.assertNotIn("\033", no_color.stdout)
+        self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", colored.stdout), plain.stdout)
+
+    def test_tool_versions_handles_missing_optional_tools_and_packages_explicitly(self):
+        tool = self.root / "tools/missing"
+        tool.mkdir(parents=True)
+        (tool / "composer.json").write_text("{}")
+        for name in ("node", "npm"):
+            (self.root / "bin" / name).unlink()
+        for name in ("bash", "basename", "dirname", "sed", "awk", "uname"):
+            (self.root / "bin" / name).symlink_to(shutil.which(name))
+
+        result = subprocess.run(
+            ["/bin/bash", "scripts/tool-versions.sh"],
+            cwd=self.root, capture_output=True, text=True, check=False,
+            env=dict(os.environ, PATH=str(self.root / "bin"),
+                     NVM_DIR=str(self.root / "missing-nvm"), CALLS=str(self.calls),
+                     FAIL_COMMAND=""),
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("tools/missing: dependencies not installed", result.stdout)
+        for label in ("phpdbg", "Node.js", "npm", "thefuck", "ShellCheck"):
+            self.assertIn(f"{label}: not installed or not on PATH", result.stdout)
+
+    def test_tool_versions_propagates_runtime_and_metadata_failures(self):
+        for command in ("python3", "node", "npm"):
+            with self.subTest(command=command):
+                result = self.make("tool-versions", FAIL_COMMAND=command)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("native failure diagnostic", result.stderr)
+                self.assertNotIn("[OK]", result.stderr)
+
+        tool = self.root / "tools/broken"
+        metadata = tool / "vendor/composer"
+        metadata.mkdir(parents=True)
+        (tool / "composer.json").write_text("{}")
+        (metadata / "installed.json").write_text("invalid json")
+
+        result = self.make("tool-versions")
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("parse error", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_tool_versions_loads_existing_nvm_for_noninteractive_node(self):
+        runtime = self.root / "node-runtime"
+        runtime.mkdir()
+        for name in ("node", "npm"):
+            (self.root / "bin" / name).rename(runtime / name)
+        for name in ("bash", "basename", "dirname", "sed", "awk", "uname"):
+            (self.root / "bin" / name).symlink_to(shutil.which(name))
+        nvm = self.root / "nvm"
+        nvm.mkdir()
+        (nvm / "nvm.sh").write_text(
+            f'export PATH="{runtime}:$PATH"\n'
+            'nvm() {\n'
+            '    [ "$#" -eq 1 ] && [ "$1" = --version ] || return 64\n'
+            '    printf "fixture-nvm-version\\n"\n'
+            '}\n'
+        )
+
+        result = subprocess.run(
+            ["/bin/bash", "scripts/tool-versions.sh"],
+            cwd=self.root, capture_output=True, text=True, check=False,
+            env=dict(os.environ, PATH=str(self.root / "bin"),
+                     NVM_DIR=str(nvm), CALLS=str(self.calls), FAIL_COMMAND=""),
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Node.js: native information", result.stdout)
+        self.assertIn("npm: native information", result.stdout)
+        self.assertIn("nvm: fixture-nvm-version", result.stdout)
+        self.assertIn("npm list --global --depth=0 --offline", self.calls.read_text())
 
     def test_image_digest_and_platform_stdout_excludes_status_banners(self):
         jq = self.root / "bin/jq"
