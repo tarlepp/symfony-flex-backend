@@ -5,10 +5,25 @@ source "$(dirname "$0")/command-output.sh"
 
 action=${1:-}
 case "$action" in
-    kill|prune) query=(ps -q); command=(kill); label='Kill Docker containers' ;;
-    containers) query=(ps -a -q); command=(rm); label='Remove Docker containers' ;;
-    images) query=(images -q); command=(rmi); label='Remove Docker images' ;;
-    *) output_status FAIL 'Usage: docker-maintenance.sh <kill|containers|images|prune>'; exit 64 ;;
+    kill|prune)
+        query=(ps -q)
+        command=(kill)
+        label='Kill Docker containers'
+        ;;
+    containers)
+        query=(ps -a -q)
+        command=(rm)
+        label='Remove Docker containers'
+        ;;
+    images)
+        query=(images -q)
+        command=(rmi)
+        label='Remove Docker images'
+        ;;
+    *)
+        output_status FAIL 'Usage: docker-maintenance.sh <kill|containers|images|prune>'
+        exit 64
+        ;;
 esac
 
 output_status WARN 'This operation affects ALL Docker resources on this host, including unrelated projects'
