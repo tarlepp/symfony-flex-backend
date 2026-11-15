@@ -139,6 +139,18 @@ contribute; moving PHP to Markdown still selects PHP checks and tests.
 Mixed changes take the union of affected categories. Selected analyzers and
 PHPUnit run their complete existing suites, not only changed files.
 
+The local `make ci-detect-changes` preview labels each check and its CI
+category key. `enabled` means eligible to run, not a result or a guarantee:
+event rules and prerequisites still apply. `docker` covers image builds and
+scans; `images` covers pin verification and update checks. The derived
+`configuration` category is enabled when any of `runtime`, `composer`, `yaml`,
+`compose`, or `tooling` is enabled. Conservative fallbacks can enable checks
+without a corresponding changed file.
+The preview also lists core CI jobs and matrix variants; eligibility assumes
+the workflow starts and does not guarantee execution. Prerequisite results,
+cancellation, event details, and optional reporting tokens still matter.
+Other workflows and individual steps are not enumerated.
+
 | Changed inputs | Selected validation |
 | --- | --- |
 | Markdown or lint configuration | Markdown lint, skill/link checks |

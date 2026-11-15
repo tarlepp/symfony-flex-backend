@@ -1019,11 +1019,26 @@ PRs use a three-dot comparison; pushes and merge groups use two dots.
 Manual runs, empty or failed comparisons, quoted paths and unclassified files
 retain full validation. Changes to the detector itself also select every check.
 
-The script prints changed filenames and every validation category's
-`selected` or `not selected` status to stdout, including the derived
-`configuration` flag. These statuses describe validation selection, not
-whether files in each category changed: conservative fallbacks can select all
-checks. Manual runs and unavailable, failed, empty or quoted-path comparisons
+The script prints changed filenames and descriptive validation labels with
+their category keys and `enabled` or `not enabled` status to stdout, including
+the derived `configuration` flag. Enabled means eligible to run, not that a
+check has run or passed: event rules and prerequisites still apply. The
+categories are checks, not types of changed files; conservative fallbacks can
+enable all checks. `docker` covers image builds and scans, while `images`
+covers image pin and update checks. `configuration` is enabled if any of
+`runtime`, `composer`, `yaml`, `compose`, or `tooling` is enabled.
+Each row references a numbered reason shown below the checks: an enabled check
+shows one example triggering file, a full-validation reason, or the enabled
+configuration categories. Checks sharing a reason use the same number.
+Not enabled means no changed file matched that check. Example files are not
+an exhaustive list of triggers; deletion/link safeguards can also enable
+documentation checks. The same reasons appear in the GitHub summary.
+The core CI job preview groups each job by eligibility, with matrix variants
+and key conditions summarized below, including checks independent of changed
+files. Empty groups show `None`. It reports eligibility, not actual execution:
+conditions on prior results, cancellation, event details, and upload tokens
+still apply. Other workflows and individual job steps are not enumerated.
+Manual runs and unavailable, failed, empty or quoted-path comparisons
 include an explanation for full validation. Git errors remain on stderr.
 The script appends the workflow's category flags and aggregate `configuration` flag
 as `name=true|false` lines to `GITHUB_OUTPUT`. There is no aggregate application
@@ -1032,7 +1047,7 @@ A failed comparison deliberately returns success with full validation; script
 execution or output-write failures fail the step. It does not modify tracked
 files or contact external services.
 
-Selected statuses are green and unselected statuses yellow when color is
+Enabled statuses are green and disabled statuses yellow when color is
 enabled. The shared `COLOR=auto|always|never` and `NO_COLOR` policy applies;
 GitHub Actions defaults to color when `COLOR` is unset. Noninteractive local
 runs can set `COLOR=always` explicitly. Machine-readable flags stay plain.
