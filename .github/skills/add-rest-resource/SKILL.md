@@ -27,22 +27,21 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="workflow"></a>
 
-1. Inspect the target endpoint's tests and a complete nearby feature.
-   `ApiKey` is one reference implementation; confirm
-   its patterns against current code before reusing them. Check existing routes,
-   role requirements, DTO conventions, and migrations before editing.
+1. Inspect the target endpoint's tests and a complete nearby feature. `ApiKey`
+   is one reference implementation; confirm its patterns against current code
+   before reusing them. Check existing routes, role requirements, DTO
+   conventions, and migrations before editing.
 2. Keep the change within the existing vertical-slice architecture:
-   `Entity -> DTO / AutoMapper -> Repository -> Resource -> Controller`.
-   Extend an existing class or pattern where appropriate; do not create a
-   parallel abstraction.
+   `Entity -> DTO / AutoMapper -> Repository -> Resource -> Controller`. Extend
+   an existing class or pattern where appropriate; do not create a parallel
+   abstraction.
 3. For a persistence change, update the entity using Doctrine attributes and
    existing entity interfaces/traits. Add serialization groups and Symfony
-   Validator constraints consistent with the field's API exposure and
-   validation needs. Generate and review a Doctrine migration; do not use
+   Validator constraints consistent with the field's API exposure and validation
+   needs. Generate and review a Doctrine migration; do not use
    `doctrine:schema:update` or hand-write schema changes. Follow
    [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for entity changes;
-   every
-   entity requires a corresponding repository and resource.
+   every entity requires a corresponding repository and resource.
 4. Define API input/output through DTOs in `src/DTO/`. Follow the existing
    `RestDto` patterns, validation constraints, and patch/visited-field behavior.
    Update `src/AutoMapper/` request mapping and configuration when request
@@ -50,12 +49,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    references). Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
    for the detailed DTO, validation, mapping, and argument-resolution workflow.
    Do not expose entities directly in responses.
-5. Add or update the repository in `src/Repository/`, following
-   `BaseRepository` conventions and entity generics. Keep query/data-access
-   behavior there; put orchestration and business rules in a resource or
-   service. Follow [add-doctrine-query](../add-doctrine-query/SKILL.md) for
-   custom
-   queries, filtering, search, sorting, pagination, and database tests.
+5. Add or update the repository in `src/Repository/`, following `BaseRepository`
+   conventions and entity generics. Keep query/data-access behavior there; put
+   orchestration and business rules in a resource or service. Follow
+   [add-doctrine-query](../add-doctrine-query/SKILL.md) for custom queries,
+   filtering, search, sorting, pagination, and database tests.
 6. Add or update the resource in `src/Resource/`, extending `RestResource` and
    preserving its entity/repository types. Reuse lifecycle callbacks and
    repository helpers where they fit instead of duplicating generic CRUD
@@ -69,8 +67,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 8. Exercise the changed actions through HTTP. Assert successful response status,
    shape, and field exposure, plus validation failures and permitted/denied
    callers where affected. For writes, verify persisted state and
-   create/update/patch differences rather than only a successful status.
-   Update fixtures only when the tests need the new data.
+   create/update/patch differences rather than only a successful status. Update
+   fixtures only when the tests need the new data.
 
 ## Validation [ᐞ](#table-of-contents)
 
@@ -81,8 +79,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
   available.
 * Verify registered routes, allowed HTTP methods, action-to-DTO selection, and
   response serializer groups through the affected endpoint tests. Inspect
-  `ResponseHandler` and the resource's serializer context rather than assuming
-  a request DTO's fields define the response.
+  `ResponseHandler` and the resource's serializer context rather than assuming a
+  request DTO's fields define the response.
 
 ---
 

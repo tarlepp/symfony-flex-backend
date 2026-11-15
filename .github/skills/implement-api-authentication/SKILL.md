@@ -7,8 +7,8 @@ description: Implement or update API authentication and authorization using this
 
 <a id="what-is-this"></a>
 
-Use this skill when changing how API callers authenticate, which credentials
-are accepted, or which authenticated callers may access an endpoint or resource.
+Use this skill when changing how API callers authenticate, which credentials are
+accepted, or which authenticated callers may access an endpoint or resource.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
@@ -28,8 +28,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 <a id="workflow"></a>
 
 1. Inspect `config/packages/security.yaml`, the relevant routes and controllers,
-   and nearby security classes and tests
-   before changing behavior.
+   and nearby security classes and tests before changing behavior.
 2. Clarify the intended caller, credentials, public/protected endpoints, and
    required roles when they are not specified. Ask before making non-trivial
    changes to authentication methods, role policy, token lifecycle, or access
@@ -44,11 +43,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    `RolesService`, `App\Enum\Role`, the configured role hierarchy, and existing
    voters. Use the project's established route/controller authorization
    patterns, including `#[IsGranted]` where appropriate. Keep authorization
-   decisions scoped to the right endpoint or voter rather than embedding them
-   in unrelated controller logic. Follow
+   decisions scoped to the right endpoint or voter rather than embedding them in
+   unrelated controller logic. Follow
    [add-security-voter](../add-security-voter/SKILL.md) for voter
-   implementation,
-   subject binding, decision-strategy interactions, and authorization tests.
+   implementation, subject binding, decision-strategy interactions, and
+   authorization tests.
 5. Handle credentials as secrets. Do not expose tokens, passwords, private JWT
    keys, or sensitive authentication details in API responses, DTOs, logs,
    fixtures, or documentation. Follow the existing credential creation,
@@ -56,8 +55,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    lifecycle design without explicit requirements.
 6. Cover valid and invalid or missing credentials, status codes, permitted and
    denied roles, and anonymous access where relevant. Exercise both JWT and
-   API-key
-   authentication when shared firewall or policy behavior changes.
+   API-key authentication when shared firewall or policy behavior changes.
 7. Update OpenAPI security metadata or relevant documentation when the
    documented authentication requirements or endpoint access contract changes.
    If the work changes persisted security data, follow

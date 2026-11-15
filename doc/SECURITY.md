@@ -37,8 +37,8 @@ fixes.
 
 Please use private reporting channels only:
 
-* Preferred: GitHub Security Advisories private reporting (`Report a
-  vulnerability` in the Security tab).
+* Preferred: GitHub Security Advisories private reporting
+  (`Report a vulnerability` in the Security tab).
 * Alternative: email `tarmo.leppanen@pinja.com` with subject
   `SECURITY: symfony-flex-backend`.
 
@@ -78,8 +78,8 @@ Containerized security checks are enabled in repository scripts by default:
 
 * Development container startup runs `composer audit --abandoned=report`
   (`docker-entrypoint-dev.sh`).
-* Both PHP image targets inherit Debian package security updates via
-  `debsecan` from the shared `base` stage (`Dockerfile`).
+* Both PHP image targets inherit Debian package security updates via `debsecan`
+  from the shared `base` stage (`Dockerfile`).
 * The `production` image build also runs `composer audit` (`Dockerfile`).
 * Docker image vulnerability scanning via Trivy (`debsecan` + `trivy` for
   container image analysis).
@@ -104,8 +104,7 @@ make check-security
 This project supports multiple authentication methods:
 
 * **JWT (JSON Web Tokens):** Stateless token-based authentication via Bearer
-  tokens
-  in the `Authorization` header. Configured with public/private key pair.
+  tokens in the `Authorization` header. Configured with public/private key pair.
 * **API Keys:** Application-level API key authentication for programmatic
   access.
 
@@ -126,8 +125,8 @@ version control.
 
 **Secrets Management:**
 
-* Never commit `.env.local`, JWT keys (`config/jwt/`), or credentials to
-  version control.
+* Never commit `.env.local`, JWT keys (`config/jwt/`), or credentials to version
+  control.
 * Store sensitive values in `secrets/` directory or environment variables only.
 * Use `make generate-jwt-keys` to create JWT key pairs (output: not committed).
 
@@ -139,8 +138,8 @@ version control.
 
 **Data Exposure Control:**
 
-* Use DTOs (Data Transfer Objects) in `src/DTO/` to control what data is
-  exposed in API responses.
+* Use DTOs (Data Transfer Objects) in `src/DTO/` to control what data is exposed
+  in API responses.
 * Never expose raw entities in API responses.
 * Use the AutoMapper for safe entity-to-DTO mapping.
 

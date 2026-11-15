@@ -9,9 +9,9 @@ description: Update Composer, Composer tool, Docker image, or GitHub Actions dep
 
 Use this skill when updating or reviewing dependency versions, lockfiles, base
 images, or pinned GitHub Actions. Do not use it to add unrelated dependencies;
-follow the feature-specific skill and repository rules when a feature requires
-a new package. For coordinated changes to the supported PHP runtime baseline,
-use [update-php-runtime](../update-php-runtime/SKILL.md).
+follow the feature-specific skill and repository rules when a feature requires a
+new package. For coordinated changes to the supported PHP runtime baseline, use
+[update-php-runtime](../update-php-runtime/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
@@ -33,11 +33,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 For Composer dependency updates, update the tool dependencies under `tools/`
 first. Validate and commit those changes separately before updating the main
-application dependencies in the root `composer.json` and `composer.lock`.
-Do not combine tool and application dependency updates in the same commit.
-If commit authorization has not been given, ask for it and wait before
-committing or starting the main dependency update. If no tool updates are
-available, state that and proceed without an empty commit.
+application dependencies in the root `composer.json` and `composer.lock`. Do not
+combine tool and application dependency updates in the same commit. If commit
+authorization has not been given, ask for it and wait before committing or
+starting the main dependency update. If no tool updates are available, state
+that and proceed without an empty commit.
 
 Standalone Symfony Flex recipe updates are configuration/scaffolding updates,
 not Composer package upgrades; this tool-first ordering does not apply to them.
@@ -54,17 +54,17 @@ upgrading packages.
    and Compose files for image versions, or workflow files for GitHub Actions.
    Read `symfony.lock` when Symfony recipes may be affected. If the scope or
    acceptable version range is unclear, ask before making a broad update.
-2. Check the existing update procedures before changing versions:
-   Inspect root Composer scripts and plugin forwarding before choosing a
-   command. This project's `post-update-cmd` runs `make update-tools` and
-   auto-scripts, and `extra.bamarni-bin.forward-command` is enabled. A targeted
-   package argument alone does not guarantee that only that package's files
-   change. Plan for these side effects and review tool lockfiles as well as
-   the root lockfile. If a scoped update requires suppressing scripts or
-   forwarding, check the installed tooling's supported controls, state what
-   will be skipped, and perform the necessary autoload/cache/validation steps
-   explicitly. Do not silently disable plugins or security checks, or rerun
-   the broad update hook merely to finish a focused update.
+2. Check the existing update procedures before changing versions: Inspect root
+   Composer scripts and plugin forwarding before choosing a command. This
+   project's `post-update-cmd` runs `make update-tools` and auto-scripts, and
+   `extra.bamarni-bin.forward-command` is enabled. A targeted package argument
+   alone does not guarantee that only that package's files change. Plan for
+   these side effects and review tool lockfiles as well as the root lockfile. If
+   a scoped update requires suppressing scripts or forwarding, check the
+   installed tooling's supported controls, state what will be skipped, and
+   perform the necessary autoload/cache/validation steps explicitly. Do not
+   silently disable plugins or security checks, or rerun the broad update hook
+   merely to finish a focused update.
 
    * Application Composer dependencies: use `make check-dependencies-patch`,
      `make check-dependencies-minor`, or `make check-dependencies-latest` to
@@ -76,13 +76,12 @@ upgrading packages.
      includes those tools.
    * Symfony Flex recipes: follow
      [update-symfony-recipes](../update-symfony-recipes/SKILL.md) for inspection
-     with
-     `composer recipes`, targeted updates, conflict handling, and validation.
-     Do not assume a package upgrade also updates its installed recipe.
+     with `composer recipes`, targeted updates, conflict handling, and
+     validation. Do not assume a package upgrade also updates its installed
+     recipe.
    * Docker images: follow
      [update-docker-images](../update-docker-images/SKILL.md) for image
-     selection,
-     multi-platform digest pinning, and validation.
+     selection, multi-platform digest pinning, and validation.
    * GitHub Actions: follow
      [update-github-actions](../update-github-actions/SKILL.md) for the existing
      update-check script, verified SHA pins, composite-action coverage, and
@@ -95,20 +94,20 @@ upgrading packages.
    Symfony version.
 4. Review generated lockfile and recipe changes. Keep lockfiles in sync with
    their manifest, inspect changes to `symfony.lock` and recipe-generated
-   configuration, and retain only changes required by the requested updates.
-   Do not hand-edit lockfiles or replace dependency management with manual
-   version pinning.
-5. Include dependency scopes and versions changed, plus notable compatibility
-   or recipe changes, in the handoff.
+   configuration, and retain only changes required by the requested updates. Do
+   not hand-edit lockfiles or replace dependency management with manual version
+   pinning.
+5. Include dependency scopes and versions changed, plus notable compatibility or
+   recipe changes, in the handoff.
 
 ## Validation [ᐞ](#table-of-contents)
 
 <a id="validation"></a>
 
-* For Composer changes, run `make composer-validate`, `make check-security`,
-  and `make run-tests`.
-* For Docker and GitHub Actions updates, run their documented pin/update
-  checks and relevant CI checks.
+* For Composer changes, run `make composer-validate`, `make check-security`, and
+  `make run-tests`.
+* For Docker and GitHub Actions updates, run their documented pin/update checks
+  and relevant CI checks.
 
 ---
 

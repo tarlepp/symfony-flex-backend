@@ -56,9 +56,9 @@ frontend applications or other backend services.
 Use the [README AI guidance inventory](README.md#ai-assisted-development) for
 the canonical document list and reading order.
 
-This order is for navigation, not precedence. Platform instructions apply
-first, and the actual code, scripts, tests, configuration, and CI are the
-source of truth for implementation details.
+This order is for navigation, not precedence. Platform instructions apply first,
+and the actual code, scripts, tests, configuration, and CI are the source of
+truth for implementation details.
 
 ## Version sources of truth [ᐞ](#table-of-contents)
 
@@ -161,8 +161,8 @@ copying it into long-form documentation.
   `make lint-markdown` for markdown/documentation checks.
 * Project Make targets forward host invocations into the PHP development
   container in local development and CI. Do not fall back to host project
-  tooling if Docker is unavailable; report the blocker. Docker orchestration
-  and GitHub platform actions remain host-side.
+  tooling if Docker is unavailable; report the blocker. Docker orchestration and
+  GitHub platform actions remain host-side.
 
 ### Code Quality [ᐞ](#table-of-contents)
 
@@ -220,8 +220,8 @@ copying it into long-form documentation.
 
 For CRUD resources, follow the
 [add-rest-resource skill](.github/skills/add-rest-resource/SKILL.md), which
-covers this repository's entity, migration, DTO, resource, controller, and
-test conventions. For non-CRUD endpoints, use the
+covers this repository's entity, migration, DTO, resource, controller, and test
+conventions. For non-CRUD endpoints, use the
 [custom API endpoint skill](.github/skills/add-custom-api-endpoint/SKILL.md).
 The [skills index](.github/skills/README.md) routes other task types to their
 specific workflows.
@@ -254,9 +254,8 @@ are a reference; the agent instructions own the required validation workflow.
 <a id="running-tests"></a>
 
 For targeted tests, use just `phpunit` from the repository root inside the PHP
-development container; no explicit runner path is needed. Open a container
-shell with `make bash` or `make fish` from the host, or use the IDE Dev
-Container
+development container; no explicit runner path is needed. Open a container shell
+with `make bash` or `make fish` from the host, or use the IDE Dev Container
 terminal. See [the testing guide](doc/TESTING.md) for details and
 [the test-writing skill](.github/skills/write-tests/SKILL.md) for test selection
 and conventions.
@@ -374,10 +373,9 @@ Use `make configuration` to view current application configuration.
 <a id="practical-guidance-for-ai-assistants"></a>
 
 For actionable repository-wide instructions, including architecture, change
-scope, validation, and handoff expectations, follow
-[`AGENTS.md`](AGENTS.md). This guide focuses on project context and command
-references; task-specific workflows live in the
-[skills index](.github/skills/README.md).
+scope, validation, and handoff expectations, follow [`AGENTS.md`](AGENTS.md).
+This guide focuses on project context and command references; task-specific
+workflows live in the [skills index](.github/skills/README.md).
 
 ### Documentation drift [⇩](#table-of-contents)
 

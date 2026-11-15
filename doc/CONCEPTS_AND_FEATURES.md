@@ -5,8 +5,8 @@
 This document contains information about main concepts and features how this
 application is built and how you can use it.
 
-This template application has quite lot features that aren't so clear for
-new developers - so this document is trying to solve that issue.
+This template application has quite lot features that aren't so clear for new
+developers - so this document is trying to solve that issue.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -43,8 +43,8 @@ new developers - so this document is trying to solve that issue.
 
 <a id="rest-api-wtf"></a>
 
-This application provides a REST API that you can easily use - and now you
-might be asking question - why, isn't there a ton of those already?
+This application provides a REST API that you can easily use - and now you might
+be asking question - why, isn't there a ton of those already?
 
 ### Explanation [ᐞ](#table-of-contents)
 
@@ -80,8 +80,8 @@ The main points to make this from scratch are following things;
 
 <a id="base-workflow"></a>
 
-Within this application the base workflow is following, when we're talking
-about "big" sections at time;
+Within this application the base workflow is following, when we're talking about
+"big" sections at time;
 
 `Controller/Command <--> Resource <--> Repository`
 
@@ -93,8 +93,8 @@ application where you can control your request / response handling as you like.
 
 <a id="rest-traits"></a>
 
-Application relies traits within those basic CRUD actions. You can easily
-attach any of following generic trait to your application controller;
+Application relies traits within those basic CRUD actions. You can easily attach
+any of following generic trait to your application controller;
 
 * use Actions\_{role}_\CountAction
 * use Actions\_{role}_\FindAction
@@ -105,8 +105,8 @@ attach any of following generic trait to your application controller;
 * use Actions\_{role}_\PatchAction
 * use Actions\_{role}_\UpdateAction
 
-Where you can use that _{role}_ to specify which role user needs to have
-to access that action.
+Where you can use that _{role}_ to specify which role user needs to have to
+access that action.
 
 ### How to make new REST API? [ᐞ](#table-of-contents)
 
@@ -145,12 +145,12 @@ separated DTO's for that.
 
 These users are authenticated via `Json Web Token (JWT)`, each JWT is created
 using private/public keys and those keys are always re-generated when
-environment is started. This will ensure that eg. each application update
-users needs to make new login - this can be changed if needed but imho this is
-most _safest_ way to handle token invalidation on application updates.
+environment is started. This will ensure that eg. each application update users
+needs to make new login - this can be changed if needed but imho this is most
+_safest_ way to handle token invalidation on application updates.
 
-Also note that if/when you want to use something else as user provider than
-your application database, you just need to change `SecurityUserFactory`
+Also note that if/when you want to use something else as user provider than your
+application database, you just need to change `SecurityUserFactory`
 implementation and/or create your own one.
 
 #### ApiKey "users" [ᐞ](#table-of-contents)
@@ -227,9 +227,9 @@ really should look/try also.
 * [API Platform](https://api-platform.com/)
 * [FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle)
 
-Another note is that you might benefit a lot within your skill set if you
-build REST API from scratch - within that process you will learn basically
-the main aspects of Symfony based applications (security, controllers, dto,
+Another note is that you might benefit a lot within your skill set if you build
+REST API from scratch - within that process you will learn basically the main
+aspects of Symfony based applications (security, controllers, dto,
 request/response handling, etc.).
 
 ## Resources [ᐞ](#table-of-contents)
@@ -237,16 +237,16 @@ request/response handling, etc.).
 <a id="resources"></a>
 
 Resource services are layer between your controller/command and repository.
-Within this layer you can control how to `mutate` that repository data for
-your needs etc. Also this resource layer is providing following base methods
-that you can easily use within your application;
+Within this layer you can control how to `mutate` that repository data for your
+needs etc. Also this resource layer is providing following base methods that you
+can easily use within your application;
 
 * getRepository(): BaseRepositoryInterface;
 * getValidator(): ValidatorInterface;
 * getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto, ?bool
   $patch = null): RestDtoInterface;
-* find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null,
-  ?int $offset = null, ?array $search = null): array
+* find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int
+  $offset = null, ?array $search = null): array
 * findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
 * findOneBy(array $criteria, ?array $orderBy = null, ?bool
   $throwExceptionIfNotFound = null): ?EntityInterface
@@ -259,8 +259,8 @@ that you can easily use within your application;
   $skipValidation = null): EntityInterface
 * delete(string $id, ?bool $flush = null): EntityInterface
 * getIds(?array $criteria = null, ?array $search = null): array
-* save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation
-  = null): EntityInterface
+* save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation =
+  null): EntityInterface
 
 Methods itself should be quite self-explanatory, but you can read detailed
 information about those from
@@ -272,8 +272,8 @@ These resource services are the main backbone of your application.
 
 <a id="lifecycle-callbacks"></a>
 
-Using resource services give you ability to use `lifecycle callbacks` that
-give you extra layer to control how your requests are handled within your
+Using resource services give you ability to use `lifecycle callbacks` that give
+you extra layer to control how your requests are handled within your
 application. These lifecycle callbacks are basically just middleware that are
 attached to following resource methods;
 
@@ -309,37 +309,36 @@ registration requirements, ordering, and testing guidance.
 
 <a id="repositories"></a>
 
-Repositories within this application are much like the same as Symfony
-itself provides by default, but there is couple of extra features within those;
+Repositories within this application are much like the same as Symfony itself
+provides by default, but there is couple of extra features within those;
 
 ### Parameter handling [ᐞ](#table-of-contents)
 
 <a id="parameter-handling"></a>
 
-This application has builtin generic parameter handling to help you with
-generic REST queries. Handling of following generic parameters has been
-attached to _all_ Advanced `find/findBy/count/ids` methods (some of these
-are replacements for what doctrine itself is providing)
+This application has builtin generic parameter handling to help you with generic
+REST queries. Handling of following generic parameters has been attached to
+_all_ Advanced `find/findBy/count/ids` methods (some of these are replacements
+for what doctrine itself is providing)
 
 * Handling for `where` parameter, within this you can easily create quite
   complex custom queries - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L63)
-  for examples.
-  Simple filters map field names to scalar values or lists of scalar values.
-  Advanced `and`/`or` groups contain comparison tuples with exactly three
-  values: field name, Doctrine expression method name, and operand. Groups
-  can be nested; traversal order determines parameter binding order.
-  Repository criteria are validated after controller/resource customization
-  and converted to typed comparison/group nodes. Direct PHP callers may also
-  supply stringable operands. List elements cannot be null or nested arrays;
-  `in` /`notIn` require arrays, and `between` requires exactly bounds `0` and
-  `1`.
-  Null checks still use a three-value tuple with a null operand. Top-level
-  null filters in HTTP requests are removed before criteria validation.
-  Malformed criteria raise `InvalidArgumentException`; generic REST endpoints
-  return HTTP 400 with the usual `message`, `code`, and `status` error fields.
-* Handling for `order` parameter, which you can use to order results
-  easily - see
+  for examples. Simple filters map field names to scalar values or lists of
+  scalar values. Advanced `and`/`or` groups contain comparison tuples with
+  exactly three values: field name, Doctrine expression method name, and
+  operand. Groups can be nested; traversal order determines parameter binding
+  order. Repository criteria are validated after controller/resource
+  customization and converted to typed comparison/group nodes. Direct PHP
+  callers may also supply stringable operands. List elements cannot be null or
+  nested arrays; `in` /`notIn` require arrays, and `between` requires exactly
+  bounds `0` and `1`. Null checks still use a three-value tuple with a null
+  operand. Top-level null filters in HTTP requests are removed before criteria
+  validation. Malformed criteria raise `InvalidArgumentException`; generic REST
+  endpoints return HTTP 400 with the usual `message`, `code`, and `status` error
+  fields.
+* Handling for `order` parameter, which you can use to order results easily -
+  see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L104)
   for examples.
 * Handling for `limit/offset` parameters, which you can use for paginator
@@ -348,12 +347,12 @@ are replacements for what doctrine itself is providing)
   and
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L145)
   for examples.
-* Handling for `search` parameter, which you can use to make generic search
-  for your data out of the box - see
+* Handling for `search` parameter, which you can use to make generic search for
+  your data out of the box - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L169)
   for examples.
-* Handling for `populate` parameter, which you can use to change the context
-  of serialization groups.
+* Handling for `populate` parameter, which you can use to change the context of
+  serialization groups.
 
 Note that within base REST CRUD actions these parameters have been passed
 through from `resource` service to repository level.
@@ -391,11 +390,11 @@ $this->getRepository()
 So eg. in this use case code above is executed via `beforeFind` and
 `beforeFindOne` lifecycle callbacks. And what is happening there is that on
 those queries we're _automatically_ attaching three (3) joins to query and
-adding selects to three (3) another entities so that there isn't Doctrine
-lazy loading with those.
+adding selects to three (3) another entities so that there isn't Doctrine lazy
+loading with those.
 
-This will save some serious time on request / response processing + it'll
-just make one query instead of `1+n` queries.
+This will save some serious time on request / response processing + it'll just
+make one query instead of `1+n` queries.
 
 ## Argument value resolvers [ᐞ](#table-of-contents)
 
@@ -414,12 +413,12 @@ This provides automatic entity resolution for controller arguments, similar to
 the use case covered by SensioFrameworkExtraBundle's
 [`@ParamConverter`](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle).
 The argument must be an entity with a registered resource, and its name must
-match the entity's camel-case name (for example, `UserGroup $userGroup`) and
-the corresponding request parameter. The resolver uses the entity resource's
+match the entity's camel-case name (for example, `UserGroup $userGroup`) and the
+corresponding request parameter. The resolver uses the entity resource's
 `findOne` method to load it.
 
-And because this is using specified `resource` service you can easily use
-those [lifecycle callbacks](#lifecycle-callbacks) as you like.
+And because this is using specified `resource` service you can easily use those
+[lifecycle callbacks](#lifecycle-callbacks) as you like.
 
 [source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ValueResolver/EntityValueResolver.php)
 
@@ -464,8 +463,8 @@ everywhere in your application.
 
 _**Note** that you should use these only to help you to debug your application
 quickly - these helpers are not mentioned to be use in your production code!!!
-eg. if you need `LoggerInterface` in your service, just use DI to inject that
-to your service._
+eg. if you need `LoggerInterface` in your service, just use DI to inject that to
+your service._
 
 ### LoggerAwareTrait [ᐞ](#table-of-contents)
 

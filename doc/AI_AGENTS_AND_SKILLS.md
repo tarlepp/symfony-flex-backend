@@ -58,8 +58,8 @@ explanation so the guide also works when diagrams appear as source text.
 
 <a id="meet-the-agents"></a>
 
-You select **feature-lead** and stay in that conversation. The other agents
-are hidden specialists, called only through their approved routes.
+You select **feature-lead** and stay in that conversation. The other agents are
+hidden specialists, called only through their approved routes.
 
 | Agent | Plain-language job | Important boundary |
 | --- | --- | --- |
@@ -107,10 +107,10 @@ sequenceDiagram
 ```
 
 The architect is called first to design, then again to deliver the approved
-plan. Reports return through existing callers; nobody starts another lead.
-A detailed original request is not a substitute for either approval.
-If the approved design no longer fits, the lead brings the decision back to
-you instead of allowing a specialist to silently change scope.
+plan. Reports return through existing callers; nobody starts another lead. A
+detailed original request is not a substitute for either approval. If the
+approved design no longer fits, the lead brings the decision back to you instead
+of allowing a specialist to silently change scope.
 
 ## When verification finds a problem [ᐞ](#table-of-contents)
 
@@ -137,8 +137,8 @@ does not reset the two-round budget. More rounds, changed requirements, or
 design changes need explicit user authorization through the lead.
 
 Every handoff carries the relevant approvals, original baseline, accumulated
-changes, findings, and repair history. Think of this as the task's shared
-case file: a repair must not forget earlier work or treat it as unrelated.
+changes, findings, and repair history. Think of this as the task's shared case
+file: a repair must not forget earlier work or treat it as unrelated.
 
 ## When branches conflict [ᐞ](#table-of-contents)
 
@@ -146,8 +146,8 @@ case file: a repair must not forget earlier work or treat it as unrelated.
 
 Conflict resolution is a **rebase workflow, not branch synchronization by
 merge**. It applies when rebasing onto an approved base or restacking a child
-after its parent changes. Conflicting requirements still go to the lead.
-An active merge requires an authorized recovery decision, not automatic
+after its parent changes. Conflicting requirements still go to the lead. An
+active merge requires an authorized recovery decision, not automatic
 continuation.
 
 ```mermaid
@@ -167,20 +167,19 @@ sequenceDiagram
 The skill interaction is a reference lookup, not delegation to another worker.
 The resolver cannot invoke agents or push changes. Approving conflict edits
 alone does not authorize starting or continuing a rebase. Unclear intent,
-missing authorization, or unavailable required tooling stops the work with
-the exact partial Git state reported.
+missing authorization, or unavailable required tooling stops the work with the
+exact partial Git state reported.
 
 In initial mode, the implementer returns resolved work to verification. In
 repair-only mode, it returns to the **existing verifier**. Resolving conflicts
 does not reset the repair budget, and `RESOLVED` does not mean verifier `PASS`.
 
-For stacked PRs, preserve the old parent tip and replay only the child's
-commits onto the new target. Merge the parent PR first, then retarget/restack
-the child as described in the
-[stacked PR procedure](REQUIRED_CHECKS.md#stacked-pull-requests).
-Merging a parent PR is distinct from merging a base branch into a conflicted
-task branch. See the
-[conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md) for
+For stacked PRs, preserve the old parent tip and replay only the child's commits
+onto the new target. Merge the parent PR first, then retarget/restack the child
+as described in the
+[stacked PR procedure](REQUIRED_CHECKS.md#stacked-pull-requests). Merging a
+parent PR is distinct from merging a base branch into a conflicted task branch.
+See the [conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md) for
 safeguards.
 
 ## How skills support the agents [ᐞ](#table-of-contents)
@@ -234,8 +233,8 @@ its precise trigger.
 | Resolve a rebase conflict | [resolve-git-conflicts](../.github/skills/resolve-git-conflicts/SKILL.md) | Explicit Git authorization and affected behavior checks. |
 
 For example, adding a resource with a new entity and input validation may use
-several skills. Changing a DTO alone should not trigger resource scaffolding,
-a migration, or a full unrelated test suite.
+several skills. Changing a DTO alone should not trigger resource scaffolding, a
+migration, or a full unrelated test suite.
 
 ## Your first request [ᐞ](#table-of-contents)
 
@@ -258,8 +257,8 @@ questions, confirm the brief, review the design, and authorize branch/base
 selection and existing-work handling. Remain in the lead conversation; do not
 select a hidden specialist to bypass a stop.
 
-If development services are stopped, start them from the repository root on
-the Docker host before requesting implementation:
+If development services are stopped, start them from the repository root on the
+Docker host before requesting implementation:
 
 ```bash
 make daemon
@@ -267,8 +266,8 @@ make daemon
 
 If the host cannot support required nested delegation, the workflow reports
 `BLOCKED`; profiles cannot enable unsupported capabilities. The deepest
-repair-only conflict resolver reaches nesting level five in VS Code Local.
-That limit is not a claim of equivalent support in CLI or JetBrains.
+repair-only conflict resolver reaches nesting level five in VS Code Local. That
+limit is not a claim of equivalent support in CLI or JetBrains.
 
 ## Reading the outcome [ᐞ](#table-of-contents)
 
@@ -281,8 +280,8 @@ That limit is not a claim of equivalent support in CLI or JetBrains.
 | `BLOCKED` | Missing approval, evidence, tooling, or a necessary decision. |
 | Resolver `RESOLVED` | Rebase finished; verification still needed. |
 
-A useful handoff names the changed files, exact checks and results, findings
-and repairs, and remaining gaps. Read "not verified" literally: passing Markdown
+A useful handoff names the changed files, exact checks and results, findings and
+repairs, and remaining gaps. Read "not verified" literally: passing Markdown
 checks does not prove that a client discovers agents or delegates correctly.
 Implementation success alone is not independent verification. A blocker report
 must preserve known defects, not hide them behind missing evidence.
@@ -303,8 +302,8 @@ lead instead of asking another specialist to start over.
   checks, and final handoffs.
 * [AI maintenance policy](AI_RULES.md): where new guidance belongs and how to
   avoid duplicate rules.
-* [Validation selection](TESTING.md#selecting-validation): choose checks for
-  the behavior and files actually affected.
+* [Validation selection](TESTING.md#selecting-validation): choose checks for the
+  behavior and files actually affected.
 
 ---
 

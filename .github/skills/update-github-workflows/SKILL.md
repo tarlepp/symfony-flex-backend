@@ -7,8 +7,8 @@ description: Add or change GitHub Actions workflows, CI jobs, triggers, matrices
 
 <a id="what-is-this"></a>
 
-Use this skill when changing CI behavior in `.github/workflows/` or shared
-steps in `.github/actions/`. For action-version and SHA-pin updates alone, use
+Use this skill when changing CI behavior in `.github/workflows/` or shared steps
+in `.github/actions/`. For action-version and SHA-pin updates alone, use
 [update-github-actions](../update-github-actions/SKILL.md). For Docker image
 changes, also follow [update-docker-images](../update-docker-images/SKILL.md).
 
@@ -33,11 +33,10 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 Read the current files before editing; this map is an orientation, not a
 replacement for their actual event filters and conditions:
 
-* `.github/workflows/main.yml`: configuration/documentation lint, dependency
-  and secret checks, Docker pin verification, static-analysis matrix, tests,
-  and development/production image builds with vulnerability scanning.
-  It handles pushes to `master`, PRs targeting any branch, a schedule, and
-  manual runs.
+* `.github/workflows/main.yml`: configuration/documentation lint, dependency and
+  secret checks, Docker pin verification, static-analysis matrix, tests, and
+  development/production image builds with vulnerability scanning. It handles
+  pushes to `master`, PRs targeting any branch, a schedule, and manual runs.
   Scheduled runs execute only the periodic `security-check` and
   `docker-image-check-updates` jobs; all other jobs are skipped.
 * `.github/workflows/dependency-review.yml`: dependency review on PRs and
@@ -48,8 +47,8 @@ replacement for their actual event filters and conditions:
 * `.github/workflows/vulnerability-scan.yml`: scheduled/manual development and
   production image builds and vulnerability scans; it does not run on ordinary
   PRs.
-* `.github/workflows/codeql.yml`: CodeQL analysis of the workflow files
-  (CodeQL does not support PHP).
+* `.github/workflows/codeql.yml`: CodeQL analysis of the workflow files (CodeQL
+  does not support PHP).
 * `.github/actions/php-bootstrap/action.yml`: shared Compose development
   container setup, Composer download cache, optional installation, and version
   reporting.
@@ -58,8 +57,8 @@ replacement for their actual event filters and conditions:
 
 <a id="workflow"></a>
 
-1. Identify the intended behavior and affected events, jobs, and callers.
-   Read the relevant Make targets, scripts, bootstrap inputs, and configuration
+1. Identify the intended behavior and affected events, jobs, and callers. Read
+   the relevant Make targets, scripts, bootstrap inputs, and configuration
    before adding shell commands. Reuse existing checks rather than creating a
    second implementation. Ask before changing event coverage, required-check
    identities, permissions, or the policy for blocking tests/builds.
@@ -69,75 +68,70 @@ replacement for their actual event filters and conditions:
    branch is named `main`. Consider same-repository PRs, fork PRs, pushes, and
    non-PR events explicitly; not every event supplies a pull-request payload.
    Core CI handles PR opens, new commits and reopens, not `edited` events;
-   title/body edits must not create duplicate skipped checks. Keep the final
-   job named `Validate CI result`. After a PR base change, require a new commit
-   or close/reopen event to validate against the new base before merging;
-   rerunning an old run reuses its original event.
-   Path filters or job renames can affect required checks; confirm repository
-   rules when relevant rather than assuming they are defined in YAML.
+   title/body edits must not create duplicate skipped checks. Keep the final job
+   named `Validate CI result`. After a PR base change, require a new commit or
+   close/reopen event to validate against the new base before merging; rerunning
+   an old run reuses its original event. Path filters or job renames can affect
+   required checks; confirm repository rules when relevant rather than assuming
+   they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
    `!cancelled()` and explicitly requires successful prerequisite results
    (skipped only for non-periodic jobs on `schedule` or explicit successful
-   change selection). Tests and Docker builds depend only
-   on successful change detection and run in parallel with prerequisite
-   checks; external reporting needs both tests and the prerequisite gate.
-   The final
-   `ci-result` job needs the gate, analyzers, tests, Docker builds and
-   reporting.
-   It uses `!cancelled()` so superseded workflows release their concurrency
-   slot, while failed prerequisites still reach the result checks. It
-   is the required merge gate, so add every new job to its `needs` and
-   result checks. The `changes` job selects configuration, dependency security,
-   Docker pins/updates, PHP analyzers, tests, builds, documentation and workflow
-   validation independently on PRs, pushes and merge groups, using the
+   change selection). Tests and Docker builds depend only on successful change
+   detection and run in parallel with prerequisite checks; external reporting
+   needs both tests and the prerequisite gate. The final `ci-result` job needs
+   the gate, analyzers, tests, Docker builds and reporting. It uses
+   `!cancelled()` so superseded workflows release their concurrency slot, while
+   failed prerequisites still reach the result checks. It is the required merge
+   gate, so add every new job to its `needs` and result checks. The `changes`
+   job selects configuration, dependency security, Docker pins/updates, PHP
+   analyzers, tests, builds, documentation and workflow validation independently
+   on PRs, pushes and merge groups, using the
    [CI selection table](../../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path).
    Both gates accept skips only after successful detection emits the exact
    category's `false` output. Empty/unknown flags are errors; Gitleaks remains
-   required on non-scheduled validation events. Configuration steps also
-   select Composer, runtime, Symfony YAML, Compose and tooling checks.
-   Selected PHP jobs and PHPUnit still run whole suites, not changed-file-only
-   subsets. Manual runs, unclassified paths, shared execution inputs and
-   unclear diffs retain full validation.
-   Periodic jobs need `!cancelled()` to run on schedules despite skipped
-   change detection. When adding, removing, or
-   renaming a prerequisite, update its `needs` entry and result
-   checks/messages together. Check failure, cancellation, and skipped-job
-   paths, not only success. Do not use `continue-on-error` or permissive
-   result checks to make a failure appear green. Reporting upload failures
-   must fail `report` and the required merge gate on eligible events.
-   Only the informational job summary may be non-blocking.
+   required on non-scheduled validation events. Configuration steps also select
+   Composer, runtime, Symfony YAML, Compose and tooling checks. Selected PHP
+   jobs and PHPUnit still run whole suites, not changed-file-only subsets.
+   Manual runs, unclassified paths, shared execution inputs and unclear diffs
+   retain full validation. Periodic jobs need `!cancelled()` to run on schedules
+   despite skipped change detection. When adding, removing, or renaming a
+   prerequisite, update its `needs` entry and result checks/messages together.
+   Check failure, cancellation, and skipped-job paths, not only success. Do not
+   use `continue-on-error` or permissive result checks to make a failure appear
+   green. Reporting upload failures must fail `report` and the required merge
+   gate on eligible events. Only the informational job summary may be
+   non-blocking.
 4. Preserve shared setup contracts. Inspect all callers before changing
-   `php-bootstrap` defaults or input names. Its boolean-like inputs are
-   strings compared with `'true'`; preserve compatible caller values.
-   The test job deliberately defers dependency installation and version
-   reporting until after copying `.env.gh-actions` and generating JWT keys.
-   The PHP runtime, extensions, and coverage driver come from the development
-   Dockerfile, not runner PHP setup. Keep service health checks and the
-   dynamically assigned MariaDB host port reachable via `host.docker.internal`
-   and forwarded into the PHP container.
-   Do not copy CI environment files over a developer's local configuration
-   merely to validate a workflow edit.
+   `php-bootstrap` defaults or input names. Its boolean-like inputs are strings
+   compared with `'true'`; preserve compatible caller values. The test job
+   deliberately defers dependency installation and version reporting until after
+   copying `.env.gh-actions` and generating JWT keys. The PHP runtime,
+   extensions, and coverage driver come from the development Dockerfile, not
+   runner PHP setup. Keep service health checks and the dynamically assigned
+   MariaDB host port reachable via `host.docker.internal` and forwarded into the
+   PHP container. Do not copy CI environment files over a developer's local
+   configuration merely to validate a workflow edit.
 5. Keep runner and command assumptions explicit. Check PHP requirements in
    `composer.json` and actual tools/extensions in the bootstrap. Inspect
    Makefile environment detection: local and hosted project commands execute
    inside the Compose PHP development service through Make targets.
    `make ci-start` starts that service without the application entrypoint or
    dependencies, and `make ci-stop` must run with `always()` after consumers.
-   Docker/Compose checks and GitHub platform actions run on the host.
-   Preserve YAML anchors and aliases
-   in `main.yml`; changing an anchored checkout or hardening step affects
-   every alias. Retain suitable timeouts and intentional matrix `fail-fast`
-   behavior; inspect all matrix variants affected by a shared change.
+   Docker/Compose checks and GitHub platform actions run on the host. Preserve
+   YAML anchors and aliases in `main.yml`; changing an anchored checkout or
+   hardening step affects every alias. Retain suitable timeouts and intentional
+   matrix `fail-fast` behavior; inspect all matrix variants affected by a shared
+   change.
 6. Preserve trust boundaries and least-privilege intent. Keep external actions
-   SHA-pinned and runner hardening in place. Review permissions at workflow
-   and job scope, checkout credentials, cache keys/restore scope, and shell
-   handling of untrusted event values. Do not switch to `pull_request_target`,
-   execute untrusted PR code with privileged credentials, or expose secrets
-   to make a job work. Pass untrusted values through quoted environment
-   variables instead of interpolating them into shell source; never inline
-   `${{ github.* }}` or `${{ matrix.* }}` values in `run:`. Set
-   `persist-credentials: false` on every checkout that does not push. A
-   deliberate zizmor exception needs an inline
+   SHA-pinned and runner hardening in place. Review permissions at workflow and
+   job scope, checkout credentials, cache keys/restore scope, and shell handling
+   of untrusted event values. Do not switch to `pull_request_target`, execute
+   untrusted PR code with privileged credentials, or expose secrets to make a
+   job work. Pass untrusted values through quoted environment variables instead
+   of interpolating them into shell source; never inline `${{ github.* }}` or
+   `${{ matrix.* }}` values in `run:`. Set `persist-credentials: false` on every
+   checkout that does not push. A deliberate zizmor exception needs an inline
    `# zizmor: ignore[rule]` comment with the reason; rule-wide changes go in
    `.github/zizmor.yml`.
 7. Preserve reporting and artifact contracts. External coverage/Sonar uploads
@@ -147,28 +141,25 @@ replacement for their actual event filters and conditions:
    expects reporting to be skipped on schedules, manual runs, merge groups and
    whenever tests were not selected. Each upload requires its optional token;
    upload errors fail the reporting job and workflow. Fork PRs run without
-   secrets
-   and skip uploads. Test-unaffected changes skip reporting because tests and
-   artifacts are skipped. Keep core tests independent of those uploads. Verify
-   producer paths match upload paths for coverage, analyzer reports, metrics,
-   and SARIF; keep names unique across matrix jobs where required. Do not
-   upload JWT keys, environment secrets, or unrelated workspace contents. Keep
-   vulnerability thresholds and scan failure behavior unless a policy change
-   is explicitly requested.
-   Reuse `scripts/ci-workflow-overview.sh` for standalone workflow overview
-   tables rather than duplicating their rendering. Pass step outcomes and
+   secrets and skip uploads. Test-unaffected changes skip reporting because
+   tests and artifacts are skipped. Keep core tests independent of those
+   uploads. Verify producer paths match upload paths for coverage, analyzer
+   reports, metrics, and SARIF; keep names unique across matrix jobs where
+   required. Do not upload JWT keys, environment secrets, or unrelated workspace
+   contents. Keep vulnerability thresholds and scan failure behavior unless a
+   policy change is explicitly requested. Reuse
+   `scripts/ci-workflow-overview.sh` for standalone workflow overview tables
+   rather than duplicating their rendering. Pass step outcomes and
    workflow-specific labels through quoted arguments, and keep the overview
-   informational with `!cancelled()` and `continue-on-error`. The helper needs
-   a successful checkout; if checkout fails, the summary cannot be rendered.
-   Test the real workflow call sites and shared helper for successful, failed,
+   informational with `!cancelled()` and `continue-on-error`. The helper needs a
+   successful checkout; if checkout fails, the summary cannot be rendered. Test
+   the real workflow call sites and shared helper for successful, failed,
    skipped and unavailable steps without changing the underlying job results.
 8. Update directly related contributor or AI guidance when CI commands or
-   required checks change, including
-   [AI rules](../../../doc/AI_RULES.md) and
-   [required checks](../../../doc/REQUIRED_CHECKS.md) where applicable.
-   Delegate pin verification to the action-update skill rather than
-   duplicating that procedure. Do not push, dispatch workflows, or open a PR
-   unless requested.
+   required checks change, including [AI rules](../../../doc/AI_RULES.md) and
+   [required checks](../../../doc/REQUIRED_CHECKS.md) where applicable. Delegate
+   pin verification to the action-update skill rather than duplicating that
+   procedure. Do not push, dispatch workflows, or open a PR unless requested.
 
 ## Validation [ᐞ](#table-of-contents)
 
@@ -193,21 +184,20 @@ replacement for their actual event filters and conditions:
   action-update checker inventories pins, not job graphs or expression
   semantics. Run `make lint-workflows` for actionlint (including YAML anchors
   and aliases), ShellCheck on supported workflow shell steps, and separate
-  action-validator schema checks of local action metadata. These checks do
-  not execute jobs. Local composite Bash/sh bodies are parsed with PyYAML and
+  action-validator schema checks of local action metadata. These checks do not
+  execute jobs. Local composite Bash/sh bodies are parsed with PyYAML and
   checked using the pinned ShellCheck; GitHub expressions become placeholders.
   Unsupported shells fail explicitly. Do not report static validation as a
   successful workflow execution.
-* When changing validator regression runners or their suite output, follow
-  the
+* When changing validator regression runners or their suite output, follow the
   [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
   for output-contract consumers and isolated fixtures. A passing
   `make lint-workflows` does not replace those checks.
 * When an authorized push or PR produces a run, inspect affected job logs,
-  matrix results, prerequisite gating, and expected artifacts. Separate
-  runtime evidence from static review and local command results. Scheduled
-  or manual-only workflows and unavailable fork/secret conditions remain
-  unverified unless actually exercised; state those gaps explicitly.
+  matrix results, prerequisite gating, and expected artifacts. Separate runtime
+  evidence from static review and local command results. Scheduled or
+  manual-only workflows and unavailable fork/secret conditions remain unverified
+  unless actually exercised; state those gaps explicitly.
 
 ---
 

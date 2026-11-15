@@ -32,11 +32,11 @@ and required checks still apply, including the
 [shared guidance](shared-guidance.md),
 [repository instructions](../copilot-instructions.md) and
 [AI rules](../../doc/AI_RULES.md). For the canonical AI documentation inventory
-and reading order, see the [README's AI-assisted development
-section](../../README.md#ai-assisted-development). Use related skills together
-when a task spans multiple concerns. Keep common execution, validation, and
-handoff rules in the shared guidance rather than duplicating them in every
-skill.
+and reading order, see the
+[README's AI-assisted development section](../../README.md#ai-assisted-development).
+Use related skills together when a task spans multiple concerns. Keep common
+execution, validation, and handoff rules in the shared guidance rather than
+duplicating them in every skill.
 
 When consulting skills, start with the requested outcome and use additional
 references only for layers the task actually changes:
@@ -52,12 +52,12 @@ references only for layers the task actually changes:
   [add-validation-constraint](add-validation-constraint/SKILL.md). When the
   constraint is used for API input, also follow the DTO mapping skill.
 * For authentication flows or broad access policy, use
-  [implement-api-authentication](implement-api-authentication/SKILL.md).
-  For subject-based permissions, start with
+  [implement-api-authentication](implement-api-authentication/SKILL.md). For
+  subject-based permissions, start with
   [add-security-voter](add-security-voter/SKILL.md).
 * For diagnosing unexpected application behavior, runtime errors, or failing
-  tests, use [debug](debug/SKILL.md). Use
-  [write-tests](write-tests/SKILL.md) whenever tests change.
+  tests, use [debug](debug/SKILL.md). Use [write-tests](write-tests/SKILL.md)
+  whenever tests change.
 * For the supported PHP runtime baseline, start with
   [update-php-runtime](update-php-runtime/SKILL.md). For other package versions,
   use [update-dependencies](update-dependencies/SKILL.md); for installed recipe
@@ -77,10 +77,10 @@ references only for layers the task actually changes:
 * For authorized Git rebase conflicts or stacked PR restacking, use
   [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). It does not grant
   permission to start, continue, or publish a rebase.
-* For shared output serialization, population groups, response formats,
-  headers, or error envelopes, use
-  [update-api-response-contract](update-api-response-contract/SKILL.md).
-  Request DTO mapping alone does not establish the response contract.
+* For shared output serialization, population groups, response formats, headers,
+  or error envelopes, use
+  [update-api-response-contract](update-api-response-contract/SKILL.md). Request
+  DTO mapping alone does not establish the response contract.
 * For request/login audit records, redaction, ignored paths, or their
   interaction with Monolog, use
   [update-request-logging](update-request-logging/SKILL.md). Database audit
@@ -91,17 +91,16 @@ references only for layers the task actually changes:
   translator fallback, and storage timezone are distinct contracts.
 * For shell readability reviews, repository scripts, Make targets, checker
   behavior, container forwarding, or script regression tests, use
-  [maintain-development-tooling](maintain-development-tooling/SKILL.md).
-  Use the workflow and dependency skills for those separate contracts.
-* For Docker build behavior, Compose services, entrypoints, runtime mounts,
-  or Dev Container setup, use
-  [update-docker-environment](update-docker-environment/SKILL.md).
-  Image tag/digest-only changes remain in the image-update skill.
+  [maintain-development-tooling](maintain-development-tooling/SKILL.md). Use the
+  workflow and dependency skills for those separate contracts.
+* For Docker build behavior, Compose services, entrypoints, runtime mounts, or
+  Dev Container setup, use
+  [update-docker-environment](update-docker-environment/SKILL.md). Image
+  tag/digest-only changes remain in the image-update skill.
 * For OpenAPI metadata, model schemas, reusable responses, security
-  descriptions,
-  or generated documentation areas, use
-  [update-api-documentation](update-api-documentation/SKILL.md).
-  Documentation availability alone does not establish contract accuracy.
+  descriptions, or generated documentation areas, use
+  [update-api-documentation](update-api-documentation/SKILL.md). Documentation
+  availability alone does not establish contract accuracy.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -147,8 +146,8 @@ references only for layers the task actually changes:
 * Use `# What is this?`, its anchor, a scope introduction, a link to shared
   guidance, and a table of contents. Include `Workflow` and `Validation`
   sections; add task-specific sections where needed.
-* Give each section an explicit anchor and a table-of-contents return link.
-  Keep the table of contents aligned with the actual headings.
+* Give each section an explicit anchor and a table-of-contents return link. Keep
+  the table of contents aligned with the actual headings.
 * Link references to existing Markdown files using relative repository paths
   rather than formatting their paths only as inline code.
 * End each skill with `Back to previous` linking to this index and
@@ -159,19 +158,19 @@ references only for layers the task actually changes:
   domain decisions, safety checks, and verification details in each skill.
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
-* Before adding a skill or shared policy, follow the recurrence and
-  non-overlap criteria in
-  [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills);
-  prefer extending an existing skill or shared guidance.
+* Before adding a skill or shared policy, follow the recurrence and non-overlap
+  criteria in
+  [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills); prefer
+  extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
   exactly once, and local links and anchors resolve across repository Markdown
   files. Run `python3 scripts/check-skills.py` from the repository root inside
   the PHP development container (`make bash`, `make fish`, or an IDE Dev
-  Container terminal), never directly on the host;
-  Markdown lint alone does not verify those relationships.
+  Container terminal), never directly on the host; Markdown lint alone does not
+  verify those relationships.
 * Verify referenced classes, commands, flags, and example files against the
-  current repository. Distinguish required policy from illustrative examples;
-  do not turn one implementation detail into an unconditional rule.
+  current repository. Distinguish required policy from illustrative examples; do
+  not turn one implementation detail into an unconditional rule.
 * Run `make lint-markdown` after documentation changes.
 
 ---

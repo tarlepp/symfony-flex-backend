@@ -25,9 +25,9 @@ task-specific workflow and checks.
 
 Before applying a skill, read the
 [repository instructions](../copilot-instructions.md) and
-[AI rules](../../doc/AI_RULES.md), following the canonical inventory and
-reading order in the [README](../../README.md#ai-assisted-development). Follow
-those repository-wide rules alongside the task-specific workflow in the skill.
+[AI rules](../../doc/AI_RULES.md), following the canonical inventory and reading
+order in the [README](../../README.md#ai-assisted-development). Follow those
+repository-wide rules alongside the task-specific workflow in the skill.
 
 ## Preparing a change [ᐞ](#table-of-contents)
 
@@ -37,41 +37,41 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.
 * Skills do not authorize Git commits or pushes. By default, leave completed
-  changes uncommitted and unpushed, and provide commit-message proposals.
-  Before creating or amending a commit, ask the user for explicit approval
-  unless they already authorized that operation for the current changes.
-  Before pushing, separately confirm authorization for the intended remote
-  and branch; permission to commit does not imply permission to push.
-  An explicit user request covering both operations authorizes both within
-  its stated scope; do not ask again for an already authorized operation.
-  Approval of implementation, a plan, branch creation, a PR title, or a
-  proposed commit message alone is not permission to commit or push.
-  Do not infer publication approval from validation success, a skill, an
-  agent handoff, or earlier tasks. Existing stricter role restrictions and
-  the explicit authorization required for rebase continuation still apply.
+  changes uncommitted and unpushed, and provide commit-message proposals. Before
+  creating or amending a commit, ask the user for explicit approval unless they
+  already authorized that operation for the current changes. Before pushing,
+  separately confirm authorization for the intended remote and branch;
+  permission to commit does not imply permission to push. An explicit user
+  request covering both operations authorizes both within its stated scope; do
+  not ask again for an already authorized operation. Approval of implementation,
+  a plan, branch creation, a PR title, or a proposed commit message alone is not
+  permission to commit or push. Do not infer publication approval from
+  validation success, a skill, an agent handoff, or earlier tasks. Existing
+  stricter role restrictions and the explicit authorization required for rebase
+  continuation still apply.
 * Before making task changes, propose the pull request title and create a new
   task branch following the
   [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
   The branch and title use the same type, scope, and change summary in their
   respective formats. Do not stage pre-existing work.
 * When a change touches only documentation (Markdown files and docs-only
-  guidance text, with no code, workflow, configuration, or script changes),
-  the branch must be named `chore(docs)/<short-kebab-case-description>` and
-  the pull request title must be `Chore(docs) - <concise change summary>`.
-  When that documentation is only AI guidance (`AGENTS.md`, `CLAUDE.md`,
-  `.github/copilot-instructions.md`, `.github/skills/`, `doc/AI_RULES.md`),
-  use `chore(ai)/<short-kebab-case-description>` and
+  guidance text, with no code, workflow, configuration, or script changes), the
+  branch must be named `chore(docs)/<short-kebab-case-description>` and the pull
+  request title must be `Chore(docs) - <concise change summary>`. When that
+  documentation is only AI guidance (`AGENTS.md`, `CLAUDE.md`,
+  `.github/copilot-instructions.md`, `.github/skills/`, `doc/AI_RULES.md`), use
+  `chore(ai)/<short-kebab-case-description>` and
   `Chore(ai) - <concise change summary>` instead. Do not use `docs/...` or
-  another type or scope for such changes. Changes that mix documentation
-  with other areas, or AI guidance with other documentation, use the scope
-  of the broader area (`docs` for the latter) or the functional change.
+  another type or scope for such changes. Changes that mix documentation with
+  other areas, or AI guidance with other documentation, use the scope of the
+  broader area (`docs` for the latter) or the functional change.
 * Decide the base branch before creating the task branch and state it in the
-  proposal. The default base is `master`. If the user names another base
-  branch, or the current branch is not `master` and has unmerged work for
-  another task, treat the change as a stacked PR: confirm the intended parent
-  branch with the user instead of guessing, and report it at handoff with the
-  PR base to use (the parent branch, retargeted to `master` once the parent
-  merges). Never base a task on a branch just because it is checked out.
+  proposal. The default base is `master`. If the user names another base branch,
+  or the current branch is not `master` and has unmerged work for another task,
+  treat the change as a stacked PR: confirm the intended parent branch with the
+  user instead of guessing, and report it at handoff with the PR base to use
+  (the parent branch, retargeted to `master` once the parent merges). Never base
+  a task on a branch just because it is checked out.
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
   fresh branch for each step, based on its intended parent branch. Do not
   continue a later step on a branch already used for an earlier PR. When the
@@ -81,30 +81,30 @@ those repository-wide rules alongside the task-specific workflow in the skill.
   branches with their base, parent, or remote branch. Use `git fetch` followed
   by `git rebase <upstream>`, or `git pull --rebase`; never kuse `git merge` or
   plain `git pull`, and do not create merge commits for branch synchronization.
-  Preserve the worktree and branch-approval safeguards in this section.
-  If a rebase requires rewriting published history, obtain explicit approval
-  before force-pushing and use `git push --force-with-lease`, never `--force`.
-  This rule does not change the repository's pull request merge settings.
-  For conflict inspection, semantic resolution, and restacking safeguards,
-  use [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). That skill does
-  not authorize Git mutations or expand an agent's role.
+  Preserve the worktree and branch-approval safeguards in this section. If a
+  rebase requires rewriting published history, obtain explicit approval before
+  force-pushing and use `git push --force-with-lease`, never `--force`. This
+  rule does not change the repository's pull request merge settings. For
+  conflict inspection, semantic resolution, and restacking safeguards, use
+  [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). That skill does not
+  authorize Git mutations or expand an agent's role.
 * Apply the new-branch rule to separate follow-up enhancements too, even when
   they concern the same files or topic as the previous task. Reserve branch
-  reuse for corrections to the same PR or an explicit user request to reuse
-  it for the new task. Prior approval to reuse a branch does not carry over.
-  When asking about existing work, propose a fresh branch for a new task
-  rather than recommending continued work on an already published PR branch.
+  reuse for corrections to the same PR or an explicit user request to reuse it
+  for the new task. Prior approval to reuse a branch does not carry over. When
+  asking about existing work, propose a fresh branch for a new task rather than
+  recommending continued work on an already published PR branch.
 * If the worktree already contains uncommitted changes, or the current branch
   already has commits for this task that are present on its remote, stop before
   switching branches or changing files and ask the user how to continue. State
   what you found and offer safe choices appropriate to the situation; do not
   stash, commit, reset, or move existing work without approval.
-* Before framework-dependent work, check `composer.json` for supported PHP
-  and package constraints, `composer.lock` for locked versions, and
-  `symfony.lock` for Flex recipe metadata. Do not treat recipe versions as
-  installed package versions or assume an uninstalled component is available.
-  If a command's behavior depends on the installed tooling, inspect its help
-  or installed implementation; the vendor directory can differ from the lock.
+* Before framework-dependent work, check `composer.json` for supported PHP and
+  package constraints, `composer.lock` for locked versions, and `symfony.lock`
+  for Flex recipe metadata. Do not treat recipe versions as installed package
+  versions or assume an uninstalled component is available. If a command's
+  behavior depends on the installed tooling, inspect its help or installed
+  implementation; the vendor directory can differ from the lock.
 * Read the affected implementation, configuration, callers, and nearby tests.
   Trace the actual behavior boundary before editing; use existing code and
   supported package contracts over remembered defaults or outdated docs.
@@ -119,8 +119,8 @@ those repository-wide rules alongside the task-specific workflow in the skill.
 Establish the inputs, outputs, defaults, failure behavior, and compatibility
 requirements affected by the change. Ask before resolving unspecified choices
 that alter API, CLI, schema, security, or deployment behavior. Preserve existing
-contracts and security guards unless the requested change explicitly requires
-an approved adjustment. Each skill lists its domain-specific decisions and
+contracts and security guards unless the requested change explicitly requires an
+approved adjustment. Each skill lists its domain-specific decisions and
 safeguards; do not replace them with generic assumptions.
 
 ## Running and validating changes [ᐞ](#table-of-contents)
@@ -132,49 +132,47 @@ safeguards; do not replace them with generic assumptions.
   application tooling into the container, including in CI. From the host, use
   `make bash` or `make fish` for direct commands; if containers are stopped,
   start them with `make start`. Non-interactive commands can use
-  `docker compose exec -T php <command>`. Never silently run project tooling
-  on the host when Docker is unavailable.
-  Docker inspection, Compose validation, and image builds run from the host,
-  as described by the relevant skill.
+  `docker compose exec -T php <command>`. Never silently run project tooling on
+  the host when Docker is unavailable. Docker inspection, Compose validation,
+  and image builds run from the host, as described by the relevant skill.
 * Add or update tests for behavior changes. Use
-  [write-tests](write-tests/SKILL.md) as the single source for test
-  selection, fixtures, test doubles, runner commands, and test-writing
-  practice whenever adding or changing tests. Other skills should state only
-  task-specific behaviors, references, and boundaries that tests must cover.
+  [write-tests](write-tests/SKILL.md) as the single source for test selection,
+  fixtures, test doubles, runner commands, and test-writing practice whenever
+  adding or changing tests. Other skills should state only task-specific
+  behaviors, references, and boundaries that tests must cover.
 * Run the smallest relevant tests first. For wiring or registration changes,
-  verify behavior through the real caller or configured component: direct
-  method calls alone do not prove that wiring works. Preserve domain-specific
+  verify behavior through the real caller or configured component: direct method
+  calls alone do not prove that wiring works. Preserve domain-specific
   assertions and negative cases specified by the skill.
 * Select checks from the complete task diff against its original baseline,
-  including staged, unstaged, and new task files; exclude unrelated work.
-  Map each check to changed behavior or an affected consumer before running it.
-  Skill validation sections are conditional menus, not mandatory command
-  lists: reading or invoking a skill does not require executing every check
-  it mentions. Skip unrelated linters, analyzers, tests, and builds.
+  including staged, unstaged, and new task files; exclude unrelated work. Map
+  each check to changed behavior or an affected consumer before running it.
+  Skill validation sections are conditional menus, not mandatory command lists:
+  reading or invoking a skill does not require executing every check it
+  mentions. Skip unrelated linters, analyzers, tests, and builds.
 * For Symfony service wiring or package configuration changes, run
   `bin/console lint:container` and check the affected environments. Container
   linting is not a substitute for caller-boundary tests or runtime env
   resolution. Use `make lint-yaml` when configuration YAML changes.
-* Run relevant quality checks for the changed code. For application PHP
-  changes, these include `make ecs`, `make phplint`, `make phpstan`, and
-  `make psalm`; tool configuration changes need their affected tool, not
-  automatically every PHP analyzer or PHPUnit. Run `make lint-markdown` when
-  Markdown files change. For documentation-only changes, including AI
-  instructions and skill text, Markdown lint and documentation checks are
-  sufficient through handoff and commit; do not run PHPUnit or PHP static
-  analysis merely because a skill documents test commands. Select other
-  checks using
+* Run relevant quality checks for the changed code. For application PHP changes,
+  these include `make ecs`, `make phplint`, `make phpstan`, and `make psalm`;
+  tool configuration changes need their affected tool, not automatically every
+  PHP analyzer or PHPUnit. Run `make lint-markdown` when Markdown files change.
+  For documentation-only changes, including AI instructions and skill text,
+  Markdown lint and documentation checks are sufficient through handoff and
+  commit; do not run PHPUnit or PHP static analysis merely because a skill
+  documents test commands. Select other checks using
   [the validation selection guide](../../doc/TESTING.md#selecting-validation).
 * Apply the same selection to non-Markdown work: Symfony YAML lint is for
   `config/` YAML, workflow lint is for workflows/actions and their validators,
-  Compose checks are for container configuration, and script regressions
-  are for affected tooling. Application tests are required for PHP behavior,
+  Compose checks are for container configuration, and script regressions are for
+  affected tooling. Application tests are required for PHP behavior,
   dependency/runtime changes, or executable application configuration even
   without a changed `.php` file; they are not required for isolated lint
   configuration or unrelated developer scripts. CI's conservative
   [path selection](../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path)
-  keeps whole suites when selected; do not turn local focused-test advice
-  into changed-file-only CI testing.
+  keeps whole suites when selected; do not turn local focused-test advice into
+  changed-file-only CI testing.
 * Run checks against the final affected file contents. Run
   `make lint-markdown` whenever task Markdown is added, modified, renamed, or
   deleted, including agent profiles and skill text. Also run `make check-skills`
@@ -195,13 +193,18 @@ safeguards; do not replace them with generic assumptions.
 
 <a id="updating-documentation"></a>
 
-Aim for at most 80 characters per source line in Markdown, including skill
-text. Wrap prose and list continuations at word boundaries; do not rely on
-editor soft wrapping or a passing lint result. Preserve list indentation and
-rendered meaning. Keep commands, code, URLs, link destinations, tables, and
-metadata intact when wrapping would change their behavior or structure.
-Review lines over 80 characters explicitly: Markdown lint permits some long
-lines and excludes fenced code, so it is not a complete line-width audit.
+Aim for at most 80 characters per source line in Markdown, including skill text.
+Reflow each changed prose paragraph and list item at word boundaries, filling
+each line as close to 80 characters as practical before starting the next line.
+The final line may be short; do not join separate paragraphs or list items.
+Review surrounding continuations after edits to remove avoidable short lines.
+Do not rely on editor soft wrapping or a passing lint result: Markdown lint
+checks the maximum, not whether prose is filled. Preserve list indentation,
+intentional hard breaks, and rendered meaning. Keep commands, code, URLs, link
+destinations, tables, and metadata intact when wrapping would change their
+behavior or structure. Review lines over 80 characters explicitly: Markdown
+lint permits some long lines and excludes fenced code, so it is not a complete
+line-width audit.
 
 Update existing documentation when behavior, architecture, configuration, or
 contributor/deployment commands change. Keep public API metadata and CLI help
@@ -214,20 +217,19 @@ aligned with the implemented contract where affected. Before editing:
   verify referenced paths and examples against files that exist in the
   repository.
 * Use relative links to existing Markdown files and valid heading or explicit
-  anchors. Run `python3 scripts/check-skills.py` from the repository root
-  inside the PHP development container (`make bash`, `make fish`, or an IDE
-  Dev Container terminal), never directly on the host, to check local links
-  and anchors across repository Markdown files, as well as
-  `make lint-markdown` for Markdown style.
+  anchors. Run `python3 scripts/check-skills.py` from the repository root inside
+  the PHP development container (`make bash`, `make fish`, or an IDE Dev
+  Container terminal), never directly on the host, to check local links and
+  anchors across repository Markdown files, as well as `make lint-markdown` for
+  Markdown style.
 * Follow
   [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
   for every use case, including troubleshooting and CI reproduction. Label the
   execution environment, show setup separately from subsequent commands, and
   keep fenced command blocks directly runnable without shell prompt prefixes.
 
-Individual skills identify domain-specific documents or metadata; avoid
-creating parallel guidance or duplicating fast-changing versions from
-manifests.
+Individual skills identify domain-specific documents or metadata; avoid creating
+parallel guidance or duplicating fast-changing versions from manifests.
 
 ## Handoff [ᐞ](#table-of-contents)
 
@@ -243,27 +245,26 @@ applied to a non-production database.
 
 For every completed changeset, follow the
 [repository commit-proposal requirement](../../AGENTS.md#clarification-and-documentation).
-A changeset is a logical set of file changes reported as complete, even when
-the larger task continues. Include proposals in each such user-facing response
-and again in the final handoff; do not defer them until the entire task ends.
+A changeset is a logical set of file changes reported as complete, even when the
+larger task continues. Include proposals in each such user-facing response and
+again in the final handoff; do not defer them until the entire task ends.
 Read-only answers and in-progress updates do not need proposals.
 
 Use `Type(scope): short description`. These are proposals only; follow the
 [commit and push approval rules](#preparing-a-change) before taking either
 action. Never insert proposed commit messages into source or documentation
-files. Place this section after any copyable Markdown version
-and follow these rules:
+files. Place this section after any copyable Markdown version and follow these
+rules:
 
-* Provide an individual proposal for each logical change and explicitly list
-  the changed file paths it covers.
+* Provide an individual proposal for each logical change and explicitly list the
+  changed file paths it covers.
 * Give each proposal a readable label and put only the complete commit message
   in its fenced code block, without shell commands or commentary.
-* Combine related files changed for the same task into one logical proposal;
-  do not split a cohesive change into separate proposals merely by file.
+* Combine related files changed for the same task into one logical proposal; do
+  not split a cohesive change into separate proposals merely by file.
 * After the individual proposals, provide one combined commit message covering
-  all current uncommitted changes for the task, including earlier steps.
-  Exclude unrelated pre-existing changes and update proposals as the changeset
-  grows.
+  all current uncommitted changes for the task, including earlier steps. Exclude
+  unrelated pre-existing changes and update proposals as the changeset grows.
 * Put every complete message in its own fenced code block for copying and
   pasting. Keep the final combined message last, with no content following it.
 

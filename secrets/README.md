@@ -2,8 +2,8 @@
 
 <a id="what-is-this"></a>
 
-This folder contains _default_ configuration for this application for
-local development and testing environments.
+This folder contains _default_ configuration for this application for local
+development and testing environments.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 

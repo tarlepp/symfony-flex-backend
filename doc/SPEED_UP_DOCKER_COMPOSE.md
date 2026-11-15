@@ -63,8 +63,7 @@ Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`:
 And if that
 [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
 isn't fast enough for you, you could also setup that
-[docker-sync](#installation-of-docker-sync)
-for your environment.
+[docker-sync](#installation-of-docker-sync) for your environment.
 
 ### Linux [ᐞ](#table-of-contents)
 
@@ -76,8 +75,7 @@ No need to do anything `¯\_(ツ)_/¯`
 
 <a id="installation-of-docker-sync"></a>
 
-Follow install instructions from [docker-sync](http://docker-sync.io/)
-website.
+Follow install instructions from [docker-sync](http://docker-sync.io/) website.
 
 ### Configuration [ᐞ](#table-of-contents)
 

@@ -32,33 +32,33 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 1. Inspect a similar entity and its tests under `src/Entity/` and `tests/`
    before choosing a mapping and persistence pattern.
-2. Confirm what the entity needs to support: REST input/output, relations,
-   audit fields, and soft/hard deletion. Reuse an existing entity trait or
-   shared pattern only when its behavior fits; do not add unrelated fields.
+2. Confirm what the entity needs to support: REST input/output, relations, audit
+   fields, and soft/hard deletion. Reuse an existing entity trait or shared
+   pattern only when its behavior fits; do not add unrelated fields.
 3. Place the class in `src/Entity/` and use Doctrine ORM PHP attributes.
    Persisted application entities normally implement
-   `App\Entity\Interfaces\EntityInterface`; follow the existing UUID,
-   timestamp, and blameable conventions where applicable. Check how the
-   interface and traits behave before using them, and account for read-only or
-   derived entities that have different requirements.
+   `App\Entity\Interfaces\EntityInterface`; follow the existing UUID, timestamp,
+   and blameable conventions where applicable. Check how the interface and
+   traits behave before using them, and account for read-only or derived
+   entities that have different requirements.
 4. Define column types, nullability, lengths, indexes, unique constraints, and
-   relationship ownership explicitly and consistently with the schema. Use
-   typed properties and methods. For relationships, update both sides only
-   where the existing bidirectional association pattern requires it. Avoid
-   accidental lazy-loading or serialization cycles.
+   relationship ownership explicitly and consistently with the schema. Use typed
+   properties and methods. For relationships, update both sides only where the
+   existing bidirectional association pattern requires it. Avoid accidental
+   lazy-loading or serialization cycles.
 5. If entity properties are exposed through the API, add the appropriate
-   Serializer groups and OpenAPI attributes following nearby entities. Keep
-   API exposure intentional; do not expose sensitive fields. Put request
-   validation constraints on the appropriate DTO as well as entity-level
-   constraints only where existing patterns call for them.
+   Serializer groups and OpenAPI attributes following nearby entities. Keep API
+   exposure intentional; do not expose sensitive fields. Put request validation
+   constraints on the appropriate DTO as well as entity-level constraints only
+   where existing patterns call for them.
 6. Generate a migration inside the PHP development container with
    `bin/console doctrine:migrations:diff`. Review the generated SQL and
    migration class for data safety, nullability, indexes, foreign keys,
-   defaults, and reversible behavior. Edit the generated migration when
-   needed. Never use `doctrine:schema:update` or hand-write ad hoc SQL to
-   change a live schema. Do not run migrations against production.
-7. Add tests for entity behavior, ORM mapping, persistence, and relationships
-   as applicable.
+   defaults, and reversible behavior. Edit the generated migration when needed.
+   Never use `doctrine:schema:update` or hand-write ad hoc SQL to change a live
+   schema. Do not run migrations against production.
+7. Add tests for entity behavior, ORM mapping, persistence, and relationships as
+   applicable.
 8. Add a corresponding repository under `src/Repository/`, extending or
     following `BaseRepository` and its entity-specific typing conventions.
     Reuse the existing repository methods and traits; add custom queries only

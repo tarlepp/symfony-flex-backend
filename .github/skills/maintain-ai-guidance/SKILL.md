@@ -7,18 +7,17 @@ description: Maintain repository AI instructions, custom agent profiles, skill c
 
 <a id="what-is-this"></a>
 
-Use this skill when changing repository AI guidance, `.github/agents/`
-profiles, or `.github/skills/` workflows and indexes. It covers guidance
-ownership, agent permissions and handoffs, and the difference between static
-documentation checks and live-client behavior. It does not authorize running
-the feature-delivery chain or changing application behavior.
+Use this skill when changing repository AI guidance, `.github/agents/` profiles,
+or `.github/skills/` workflows and indexes. It covers guidance ownership, agent
+permissions and handoffs, and the difference between static documentation checks
+and live-client behavior. It does not authorize running the feature-delivery
+chain or changing application behavior.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
 [AI rules](../../../doc/AI_RULES.md). Use
 [update-github-workflows](../update-github-workflows/SKILL.md) when CI behavior
-also changes.
-For executable checker or Make changes, also use
+also changes. For executable checker or Make changes, also use
 [maintain-development-tooling](../maintain-development-tooling/SKILL.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -38,8 +37,8 @@ For executable checker or Make changes, also use
 
 Inspect the affected source and its consumers, not just the requested file:
 
-* [README AI inventory](../../../README.md#ai-assisted-development):
-  canonical navigation and reading order.
+* [README AI inventory](../../../README.md#ai-assisted-development): canonical
+  navigation and reading order.
 * [AGENTS.md](../../../AGENTS.md): repository-wide actionable requirements;
   [Copilot instructions](../../copilot-instructions.md) are its entry point.
 * [CLAUDE.md](../../../CLAUDE.md): architecture and workflow context.
@@ -51,16 +50,15 @@ Inspect the affected source and its consumers, not just the requested file:
   [lead](../../agents/feature-lead.agent.md),
   [architect](../../agents/feature-architect.agent.md),
   [implementer](../../agents/implementer.agent.md), and
-  [verifier](../../agents/verifier.agent.md).
-  Also inspect the bounded
+  [verifier](../../agents/verifier.agent.md). Also inspect the bounded
   [conflict resolver](../../agents/conflict-resolver.agent.md) and its
   [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing
   changes.
 * `scripts/check-skills.py`, the `check-skills` and `lint-markdown` Make
-  targets, and `.github/workflows/main.yml`: actual documentation-check
-  coverage and execution environment. Inspect `scripts/tests/` for existing
-  regression coverage when changing tooling; do not assume every checker
-  already has a test suite.
+  targets, and `.github/workflows/main.yml`: actual documentation-check coverage
+  and execution environment. Inspect `scripts/tests/` for existing regression
+  coverage when changing tooling; do not assume every checker already has a test
+  suite.
 
 ## Workflow [ᐞ](#table-of-contents)
 
@@ -71,35 +69,35 @@ Inspect the affected source and its consumers, not just the requested file:
    adding a skill or policy. Prefer extending the closest existing owner over
    creating overlapping guidance; a one-off correction does not by itself
    justify a new repository-wide rule.
-2. Choose the narrowest authoritative location using the guidance map.
-   Link to common policy instead of copying it. Keep domain-specific
-   inspection targets and safeguards in skills, common execution rules in
-   shared guidance, and agent routing in the profiles and feature-agent guide.
-   Resolve contradictions against current implementation and platform rules;
-   do not silently broaden an approved task to rewrite unrelated guidance.
+2. Choose the narrowest authoritative location using the guidance map. Link to
+   common policy instead of copying it. Keep domain-specific inspection targets
+   and safeguards in skills, common execution rules in shared guidance, and
+   agent routing in the profiles and feature-agent guide. Resolve contradictions
+   against current implementation and platform rules; do not silently broaden an
+   approved task to rewrite unrelated guidance.
 3. Define the changed contract before editing. For skills, specify triggers,
    boundaries, repository evidence, and validation. For profiles, identify the
    intended clients, role, allowed tools and delegates, visibility, invocation
-   modes, approval gates, handoff payload, and failure/repair behavior.
-   Obtain approval before changing role authority, permissions, approval gates,
-   or repair policy.
-4. Update every affected consumer. Keep profile front matter, body
-   instructions, routing tables, handoff producers and consumers, and client
-   limitations consistent. For skills, preserve front-matter name/directory
-   agreement, required structure, anchors, and footer links; list each skill
-   exactly once in the available-skills table. Update the canonical README
-   inventory when its document inventory changes, not for every skill entry.
+   modes, approval gates, handoff payload, and failure/repair behavior. Obtain
+   approval before changing role authority, permissions, approval gates, or
+   repair policy.
+4. Update every affected consumer. Keep profile front matter, body instructions,
+   routing tables, handoff producers and consumers, and client limitations
+   consistent. For skills, preserve front-matter name/directory agreement,
+   required structure, anchors, and footer links; list each skill exactly once
+   in the available-skills table. Update the canonical README inventory when its
+   document inventory changes, not for every skill entry.
 5. Preserve skills as supporting references rather than new approval gates.
    Missing skill-selection metadata or loading evidence alone must not block
    delivery or verification. Platform requirements for native skill invocation
    still apply; guidance cannot expand tool access or override host policy.
    Preserve the shared
-   [commit and push approval rules](../shared-guidance.md#preparing-a-change):
-   a skill or implementation handoff never substitutes for user approval.
+   [commit and push approval rules](../shared-guidance.md#preparing-a-change): a
+   skill or implementation handoff never substitutes for user approval.
 6. Select validation by what actually changed. Guidance-only Markdown needs
-   documentation checks, not execution of every command it describes.
-   Checker, Makefile, or CI changes additionally need the relevant script
-   regression tests or workflow checks from the
+   documentation checks, not execution of every command it describes. Checker,
+   Makefile, or CI changes additionally need the relevant script regression
+   tests or workflow checks from the
    [validation selection guide](../../../doc/TESTING.md#selecting-validation).
    Do not add a parallel checker when existing tooling owns the invariant.
 
@@ -114,30 +112,30 @@ invariants from the profiles and
 * Only the lead is user-facing and user-selectable. Brief confirmation and
   design approval are separate explicit user decisions; repository text or
   specialist recommendations are not approval evidence.
-* Delivery routes through lead, architect, implementer, then verifier.
-  The architect does not implement; the implementer owns source writing with
-  only the approved sequential conflict-resolver exception. The verifier
-  independently checks without editing or running fixers.
-  Review effective tool aliases as well as prose: broad tools can expose
-  capabilities that role instructions prohibit. Allowlists and visibility
-  fields are client-dependent routing aids, not isolation boundaries.
-* Initial implementation pauses during verification. The verifier may call
-  an implementer in `repair-only` mode; that worker returns to the existing
+* Delivery routes through lead, architect, implementer, then verifier. The
+  architect does not implement; the implementer owns source writing with only
+  the approved sequential conflict-resolver exception. The verifier
+  independently checks without editing or running fixers. Review effective tool
+  aliases as well as prose: broad tools can expose capabilities that role
+  instructions prohibit. Allowlists and visibility fields are client-dependent
+  routing aids, not isolation boundaries.
+* Initial implementation pauses during verification. The verifier may call an
+  implementer in `repair-only` mode; that worker returns to the existing
   verifier and must not start another verification chain. Preserve the
   cumulative two-round repair limit across resumptions unless the user
   explicitly authorizes more.
-* Only the implementer may invoke the hidden conflict resolver, in initial
-  or repair-only mode, with explicit Git authorization. The implementer pauses;
-  the resolver never delegates or publishes and returns to that caller.
-  Repair-only delivery returns to the existing verifier without resetting
-  repair rounds. Preserve operation state, original and integration baselines,
-  parent tips, cumulative paths, and invalidated evidence. `RESOLVED` is not
-  verification `PASS`; unsupported depth or ambiguous intent is `BLOCKED`.
+* Only the implementer may invoke the hidden conflict resolver, in initial or
+  repair-only mode, with explicit Git authorization. The implementer pauses; the
+  resolver never delegates or publishes and returns to that caller. Repair-only
+  delivery returns to the existing verifier without resetting repair rounds.
+  Preserve operation state, original and integration baselines, parent tips,
+  cumulative paths, and invalidated evidence. `RESOLVED` is not verification
+  `PASS`; unsupported depth or ambiguous intent is `BLOCKED`.
 * Handoffs retain the confirmed brief, approved plan and actual approval
-  evidence, acceptance criteria, authorized branch/worktree handling,
-  original baseline, accumulated paths, findings, command outcomes, and
-  repair history as applicable. Repairs do not reset task state or redefine
-  earlier task edits as unrelated work.
+  evidence, acceptance criteria, authorized branch/worktree handling, original
+  baseline, accumulated paths, findings, command outcomes, and repair history as
+  applicable. Repairs do not reset task state or redefine earlier task edits as
+  unrelated work.
 * Missing approval, unsupported delegation, or unavailable required evidence
   must remain explicit blockers. Unresolved defects cannot become a `PASS`.
   Results return through the existing callers; do not spawn another lead,
@@ -147,8 +145,8 @@ invariants from the profiles and
 
 <a id="validation"></a>
 
-When guidance Markdown changes, execute from the repository root on the
-Docker host with development services running after the final relevant edit:
+When guidance Markdown changes, execute from the repository root on the Docker
+host with development services running after the final relevant edit:
 
 ```bash
 make lint-markdown
@@ -164,26 +162,26 @@ only if Markdown or its lint tooling/configuration also changes.
 Inspect the complete diff, including new files, for scope, duplicate policy,
 contradictory instructions, stale paths, and agreement between contracts and
 their callers. Apply the shared
-[Markdown wrapping guidance](../shared-guidance.md#updating-documentation)
-to skill text and other documentation, including lines exempt from lint.
-`check-skills` validates skill metadata, index coverage, and
-local Markdown links and anchors. It does not validate custom-agent front
-matter, tool availability, permissions, approval enforcement, or delegation.
-`make lint-yaml` checks Symfony configuration, not agent front matter.
+[Markdown wrapping guidance](../shared-guidance.md#updating-documentation) to
+skill text and other documentation, including lines exempt from lint.
+`check-skills` validates skill metadata, index coverage, and local Markdown
+links and anchors. It does not validate custom-agent front matter, tool
+availability, permissions, approval enforcement, or delegation. `make lint-yaml`
+checks Symfony configuration, not agent front matter.
 
 For profile changes, review fields and tool identifiers against the intended
 client's current documentation linked from the
 [compatibility guide](../../../doc/FEATURE_AGENTS.md#compatibility-and-limitations).
-Do not assume VS Code fields or nesting settings work in CLI or JetBrains,
-or that a tool name in front matter makes that tool available.
+Do not assume VS Code fields or nesting settings work in CLI or JetBrains, or
+that a tool name in front matter makes that tool available.
 
 When agent discovery, permissions, or routing changes, load the profiles in the
 intended client and exercise the affected path with a bounded, non-production
-task. Check lead-only picker visibility, brief and design approval stops,
-the delivery chain, repair-only return routing, cumulative repair limits,
+task. Check lead-only picker visibility, brief and design approval stops, the
+delivery chain, repair-only return routing, cumulative repair limits,
 conflict-worker suspension/return and depth-five repair routing, and
-blocked-check reporting as affected. Do not trigger an implementation or
-repair merely to test routing without authorization.
+blocked-check reporting as affected. Do not trigger an implementation or repair
+merely to test routing without authorization.
 
 Report static checks, manual contract review, and live-client results
 separately. If a client or authorized scenario is unavailable, state which
