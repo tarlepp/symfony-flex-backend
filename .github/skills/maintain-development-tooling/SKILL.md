@@ -186,6 +186,27 @@ fill the inventory. Separate readability work from correctness findings and
 intentional behavior changes. A review request alone does not authorize
 implementing the backlog or changing command contracts.
 
+Use this readability rubric when assessing each finding:
+
+* **Scanability:** Can a maintainer quickly see the script's phases, branching,
+  and validation/execution/reporting order?
+* **Names and state:** Do names explain intent, and are variable scope, state
+  changes, side effects, and outcome codes easy to follow?
+* **Commands and data flow:** Are quoting, optional arguments, pipelines,
+  subprocesses, and input/output boundaries legible without hiding behavior?
+* **Abstraction and explanation:** Do functions and comments clarify meaningful
+  units and non-obvious shell behavior without fragmenting simple flows or
+  restating syntax?
+
+Label each proposed improvement as a **quick win** when it is a localized
+readability change that preserves the script's structure, or **structural**
+when it requires materially reorganizing control flow, state, or helper
+boundaries. Give the reason and a concrete improvement for each label; keep
+priority and validation separate. Report correctness or safety issues as such,
+not as readability findings. Prefer actionable, behavior-preserving proposals
+and do not treat shorter source or mechanical reformatting as improvement by
+itself.
+
 Assess these concerns against the actual code:
 
 * Treat human readability as a primary acceptance criterion, not merely fewer
