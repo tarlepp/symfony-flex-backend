@@ -33,10 +33,10 @@ case "$mode" in
             trap 'rm -f "$filtered"' EXIT
             if [ "$mode" = versions ]; then
                 awk '
-                    /^  PHP [0-9].*\(cli\)/ { print; php++ }
-                    /^  Symfony: / { print; symfony++ }
-                    /^    Composer version / { print; composer++ }
-                    /^      phpunit\/phpunit: / { print; phpunit++ }
+                    /^  PHP [0-9].*\(cli\)/ { sub(/^ +/, ""); print; php++ }
+                    /^  Symfony: / { sub(/^ +/, ""); print; symfony++ }
+                    /^    Composer version / { sub(/^ +/, ""); print; composer++ }
+                    /^      phpunit\/phpunit: / { sub(/^ +/, ""); print; phpunit++ }
                     END { if (php != 1 || symfony != 1 || composer != 1 || phpunit != 1) exit 1 }
                 ' "$output" > "$filtered" || {
                     echo "Could not identify all selected tool versions." >&2

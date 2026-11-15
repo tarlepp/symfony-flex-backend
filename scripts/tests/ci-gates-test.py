@@ -99,6 +99,15 @@ class CiGatesTest(unittest.TestCase):
                     environment = {**os.environ, "GITHUB_STEP_SUMMARY": str(summary)}
                     result = subprocess.run(command, env=environment, text=True, capture_output=True)
                     self.assertEqual(result.returncode, 0, result.stderr)
+                    if mode == "versions":
+                        self.assertEqual(
+                            summary.read_text(),
+                            "## Summary\n\n"
+                            "    PHP 8.5.12 (cli) (built: test)\n"
+                            "    Symfony: v8.1.11\n"
+                            "    Composer version 2.11.1\n"
+                            "    phpunit/phpunit: 13.4.6\n\n\n",
+                        )
                     for text in expected:
                         self.assertIn(text, summary.read_text())
                     for text in excluded:
