@@ -384,6 +384,48 @@ class CiGatesTest(unittest.TestCase):
                         scan.index("name: Upload PR image scan SARIF"))
         self.assertNotIn("continue-on-error", scan)
 
+    def test_trivy_policies_across_image_workflows(self):
+        workflows = {
+            "core": self.jobs["docker-scan"],
+            "periodic": (WORKFLOWS / "vulnerability-scan.yml").read_text(),
+        }
+        names = {
+            "core": ("Scan Docker image with Trivy vulnerability scanner",
+                     "Generate PR image scan SARIF", "Upload PR image scan SARIF"),
+            "periodic": ("Scan image with Trivy", "Create Trivy SARIF report",
+                         "Upload Trivy SARIF report"),
+        }
+        trivy_actions = set()
+        for workflow_name, content in workflows.items():
+            steps = dict(re.findall(
+                r"^      - name: ([^\n]+)\n(.*?)(?=^      - |\Z)",
+                content, re.MULTILINE | re.DOTALL,
+            ))
+            blocking, sarif, upload = (steps[name] for name in names[workflow_name])
+            with self.subTest(workflow=workflow_name):
+                for step in (blocking, sarif):
+                    action = re.search(
+                        r"^        uses: (aquasecurity/trivy-action@[a-f0-9]{40})",
+                        step, re.MULTILINE,
+                    )
+                    self.assertIsNotNone(action)
+                    trivy_actions.add(action.group(1))
+                    self.assertRegex(step, r"(?m)^          ignore-unfixed: '?true'?$")
+                    self.assertIn("          vuln-type: 'os,library'\n", step)
+                    self.assertIn("          severity: 'CRITICAL,HIGH'\n", step)
+                self.assertIn("          exit-code: '1'\n", blocking)
+                self.assertIn("          exit-code: '0'\n", sarif)
+                self.assertIn("          format: sarif\n", sarif)
+                self.assertIn("          output: trivy-${{ matrix.target }}.sarif\n", sarif)
+                self.assertIn("          sarif_file: trivy-${{ matrix.target }}.sarif\n", upload)
+                self.assertIn("          category: trivy-${{ matrix.target }}\n", upload)
+                self.assertNotIn("continue-on-error", blocking)
+                if workflow_name == "core":
+                    self.assertIn("          limit-severities-for-sarif: 'true'\n", sarif)
+                else:
+                    self.assertNotIn("limit-severities-for-sarif:", sarif)
+        self.assertEqual(len(trivy_actions), 1)
+
     def test_image_tags_are_valid_and_independent_of_git_ref_names(self):
         build = self.jobs["docker-build"]
         tags = re.findall(r"^          tags: (.+)$", build, re.MULTILINE)
