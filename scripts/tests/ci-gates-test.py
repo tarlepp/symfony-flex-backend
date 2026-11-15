@@ -26,15 +26,24 @@ class CiGatesTest(unittest.TestCase):
 
     def test_standalone_workflow_overviews_report_actual_step_outcomes(self):
         workflows = {
-            "dependency-review.yml": {"REVIEW": "review"},
-            "codeql.yml": {"INITIALIZE": "initialize", "ANALYZE": "analyze"},
-            "scorecard.yml": {"ANALYSIS": "analysis", "ARTIFACT": "artifact", "UPLOAD": "upload"},
+            "dependency-review.yml": {"REVIEW": ("review", "Dependency review")},
+            "codeql.yml": {
+                "INITIALIZE": ("initialize", "CodeQL initialization"),
+                "ANALYZE": ("analyze", "Workflow analysis and upload"),
+            },
+            "scorecard.yml": {
+                "ANALYSIS": ("analysis", "Scorecard analysis"),
+                "ARTIFACT": ("artifact", "SARIF artifact upload"),
+                "UPLOAD": ("upload", "Code scanning upload"),
+            },
             "vulnerability-scan.yml": {
-                "BUILD": "build", "SARIF": "sarif", "UPLOAD": "upload", "SCAN": "scan",
+                "BUILD": ("build", "Image build"), "SARIF": ("sarif", "Trivy SARIF report"),
+                "UPLOAD": ("upload", "Code scanning upload"), "SCAN": ("scan", "Blocking Trivy scan"),
             },
             "docker-image-updates.yml": {
-                "TESTS": "tests", "UPDATE": "update", "VERIFY": "verify",
-                "PULL_REQUEST": "pull-request",
+                "TESTS": ("tests", "Helper regression tests"), "UPDATE": ("update", "Image pin updates"),
+                "VERIFY": ("verify", "Pin verification"),
+                "PULL_REQUEST": ("pull-request", "Pull request action"),
             },
         }
         for filename, outcomes in workflows.items():
@@ -49,37 +58,71 @@ class CiGatesTest(unittest.TestCase):
                 self.assertIn("if: ${{ !cancelled() }}", step)
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
-                for variable, step_id in outcomes.items():
+                for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(
                         f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step,
                     )
                 shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+                self.assertIn("bash scripts/ci-workflow-overview.sh", shell)
                 summary = Path(directory) / "summary"
-                for status in ("success", "failure"):
+                scenarios = [("success", None)] + [
+                    ("failure", variable) for variable in outcomes
+                ]
+                for status, failed in scenarios:
                     values = {
                         variable: "skipped" if status == "failure" else "success"
                         for variable in outcomes
                     }
-                    first = next(iter(outcomes))
-                    values[first] = status
+                    if failed is not None:
+                        values[failed] = status
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell],
                         env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
                              "EVENT_NAME": "workflow_dispatch", "PRIOR_STATUS": status,
-                             "TARGET": "production", **values},
+                             "TARGET": "production" if filename == "vulnerability-scan.yml" else "",
+                             **values},
+                        cwd=WORKFLOW.parents[2],
                         capture_output=True, text=True, check=False,
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
                     output = summary.read_text()
                     self.assertIn("## Workflow run overview", output)
                     self.assertIn(f"Prior steps: **{status}**", output)
-                    self.assertIn(f"| {status} |", output)
-                    if status == "failure" and len(outcomes) > 1:
-                        self.assertIn("| skipped |", output)
+                    for variable, (_, label) in outcomes.items():
+                        self.assertIn(f"| {label} | {values[variable]} |", output)
                     if filename == "vulnerability-scan.yml":
                         self.assertIn("Image: production", output)
+                    else:
+                        self.assertNotIn("Image:", output)
                     summary.unlink()
+                unavailable = subprocess.run(
+                    ["bash", "-euo", "pipefail", "-c", shell], cwd=directory,
+                    env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
+                         "EVENT_NAME": "push", "PRIOR_STATUS": "failure",
+                         "TARGET": "", **dict.fromkeys(outcomes, "skipped")},
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertNotEqual(unavailable.returncode, 0)
+                self.assertIn("ci-workflow-overview.sh", unavailable.stderr)
+
+    def test_overview_helper_rejects_invalid_inputs_and_write_errors(self):
+        helper = WORKFLOW.parents[2] / "scripts/ci-workflow-overview.sh"
+        environment = {**os.environ, "EVENT_NAME": "push", "PRIOR_STATUS": "success", "TARGET": ""}
+        for arguments in ([], ["footer"], ["footer", "check"], ["footer", "check", "success", "extra"]):
+            with self.subTest(arguments=arguments):
+                result = subprocess.run(
+                    ["bash", str(helper), *arguments], env=environment,
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Usage:", result.stderr)
+        with tempfile.TemporaryDirectory() as directory:
+            result = subprocess.run(
+                ["bash", "-c", 'bash "$1" footer check success > "$2"', "_", str(helper), directory],
+                env=environment, text=True, capture_output=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
 
     def test_gates_run_after_failed_dependencies_but_not_cancelled_workflows(self):
         for job in ("ci-summary", "ci-result"):

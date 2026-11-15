@@ -1697,6 +1697,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/ci-prerequisite-gate.sh": {"workflows"},
             "scripts/ci-result-gate.sh": {"workflows"},
             "scripts/ci-gate-common.sh": {"workflows"},
+            "scripts/ci-workflow-overview.sh": {"workflows"},
             "scripts/docker-images.sh": {"images", "tooling"},
             "scripts/tests/docker-images-test.sh": {"images", "tooling"},
             "scripts/tests/command-output-test.py": {"tooling"},

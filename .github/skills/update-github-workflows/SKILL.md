@@ -155,6 +155,13 @@ replacement for their actual event filters and conditions:
    upload JWT keys, environment secrets, or unrelated workspace contents. Keep
    vulnerability thresholds and scan failure behavior unless a policy change
    is explicitly requested.
+   Reuse `scripts/ci-workflow-overview.sh` for standalone workflow overview
+   tables rather than duplicating their rendering. Pass step outcomes and
+   workflow-specific labels through quoted arguments, and keep the overview
+   informational with `!cancelled()` and `continue-on-error`. The helper needs
+   a successful checkout; if checkout fails, the summary cannot be rendered.
+   Test the real workflow call sites and shared helper for successful, failed,
+   skipped and unavailable steps without changing the underlying job results.
 8. Update directly related contributor or AI guidance when CI commands or
    required checks change, including
    [AI rules](../../../doc/AI_RULES.md) and

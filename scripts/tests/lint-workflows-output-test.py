@@ -21,17 +21,16 @@ class WorkflowOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         for name in (
             "lint-workflows.sh", "command-output.sh", "ci-prerequisite-gate.sh",
-            "ci-result-gate.sh", "ci-gate-common.sh", "check-composite-action-shell.py",
+            "ci-result-gate.sh", "ci-gate-common.sh", "ci-workflow-overview.sh",
+            "check-composite-action-shell.py",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
         shutil.copyfile(
             ROOT / "scripts/tests/ci-gates-test.py",
             self.root / "scripts/tests/ci-gates-test.py",
         )
-        shutil.copyfile(
-            ROOT / ".github/workflows/main.yml",
-            self.root / ".github/workflows/main.yml",
-        )
+        for workflow in (ROOT / ".github/workflows").glob("*.yml"):
+            shutil.copyfile(workflow, self.root / ".github/workflows" / workflow.name)
         (self.root / "scripts/tests/composer-cache-test.py").write_text(
             "import os\n"
             "import sys\n"
@@ -125,7 +124,7 @@ esac
             "Prepare and verify ShellCheck v0.11.0",
             "Prepare and verify action-validator v0.9.0",
             "Prepare and verify zizmor v1.32.0",
-            "Workflow syntax and embedded shell (1 files)",
+            "Workflow syntax and embedded shell (6 files)",
             "Workflow and action security audit (zizmor)",
             "Local action metadata: .github/actions/example/action.yml",
             "Local composite action shell (ShellCheck)",
@@ -146,7 +145,7 @@ esac
             "shellcheck scripts/lint-workflows.sh scripts/command-output.sh "
             "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
             "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
-            "scripts/ci-gate-common.sh scripts/ci-validate-compose.sh "
+            "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-validate-compose.sh "
             "scripts/ci-failure-diagnostics.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)

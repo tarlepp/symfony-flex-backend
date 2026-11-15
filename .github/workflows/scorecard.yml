@@ -93,14 +93,8 @@ jobs:
           ARTIFACT: ${{ steps.artifact.outcome || 'skipped' }}
           UPLOAD: ${{ steps.upload.outcome || 'skipped' }}
         run: |
-          {
-            echo "## Workflow run overview"
-            printf '\nEvent: %s · Prior steps: **%s**\n\n' "$EVENT_NAME" "$PRIOR_STATUS"
-            echo '| Check | Result |'
-            echo '| --- | --- |'
-            printf '| Scorecard analysis | %s |\n' "$ANALYSIS"
-            printf '| SARIF artifact upload | %s |\n' "$ARTIFACT"
-            printf '| Code scanning upload | %s |\n' "$UPLOAD"
-            echo
-            echo 'See the SARIF artifact, Code scanning and step logs for findings.'
-          } >> "$GITHUB_STEP_SUMMARY"
+          bash scripts/ci-workflow-overview.sh \
+            'See the SARIF artifact, Code scanning and step logs for findings.' \
+            'Scorecard analysis' "$ANALYSIS" \
+            'SARIF artifact upload' "$ARTIFACT" \
+            'Code scanning upload' "$UPLOAD" >> "$GITHUB_STEP_SUMMARY"
