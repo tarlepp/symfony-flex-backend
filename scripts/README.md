@@ -171,6 +171,11 @@ It disables Xdebug for the PHPLoc process to avoid debugger connection attempts.
 GitHub-format Psalm/PHPStan analysis always stays plain, independent of status
 colors, preserving annotations and JSON report formats.
 
+The Symfony requirements checker follows the same native color policy. Forced
+color uses its terminal support detection; plain mode filters ANSI decoration
+without changing the checker's diagnostics or exit status. Xdebug is disabled
+for the checker process to avoid debugger connection attempts.
+
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
 hardcodes colors without a disable option. `scripts/native-output.sh` removes
 only SGR decoration from their plain-mode output. Configuration lint uses the

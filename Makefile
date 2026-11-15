@@ -342,7 +342,8 @@ test-make-routing: ## Test host and CI container command routing
 # Linting and static analysis
 
 check-requirements: ## Check application runtime requirements
-	@bash scripts/command-output.sh "Application runtime requirements" php ./vendor/bin/requirements-checker
+	@bash scripts/command-output.sh "Application runtime requirements" \
+		bash scripts/native-output.sh env TERM_PROGRAM=$(if $(filter always,$(NATIVE_COLOR)),Hyper,) XDEBUG_MODE=off php ./vendor/bin/requirements-checker
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
 	@bash scripts/command-output.sh "Skill metadata and documentation links" python3 scripts/check-skills.py
