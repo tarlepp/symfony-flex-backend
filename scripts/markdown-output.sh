@@ -4,7 +4,9 @@ source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 
 decorate_diagnostics() {
     local line complete errors_started=false
+    # Match markdownlint file:line[:column] diagnostics, not ordinary output.
     local pattern='^.+:[0-9]+(:[0-9]+)? error MD[0-9]+/'
+
     while true; do
         complete=true
         IFS= read -r line || complete=false
@@ -24,12 +26,16 @@ decorate_diagnostics() {
     done
 }
 
+# Each stream has its own decorator and first-error separator; neither is merged.
 exec {output}> >(decorate_diagnostics)
 output_pid=$!
 exec {diagnostics}> >(decorate_diagnostics >&2)
 diagnostics_pid=$!
+
 "$@" >&"$output" 2>&"$diagnostics"
 status=$?
+
+# Close both streams and drain their decorators before returning the command status.
 exec {output}>&-
 exec {diagnostics}>&-
 wait "$output_pid"
