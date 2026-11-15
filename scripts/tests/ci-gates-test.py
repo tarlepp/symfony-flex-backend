@@ -45,6 +45,9 @@ class CiGatesTest(unittest.TestCase):
                 "VERIFY": ("verify", "Pin verification"),
                 "PULL_REQUEST": ("pull-request", "Pull request action"),
             },
+            "action-updates.yml": {
+                "UPDATES": ("updates", "Action and workflow tool update check"),
+            },
         }
         for filename, outcomes in workflows.items():
             with self.subTest(workflow=filename), tempfile.TemporaryDirectory() as directory:
@@ -160,6 +163,59 @@ class CiGatesTest(unittest.TestCase):
         for step in (sarif, upload, scan):
             self.assertNotIn("continue-on-error", step)
         self.assertIn("exit-code: '1'", scan)
+
+    def test_action_update_workflow_preserves_checker_outcomes(self):
+        workflow = (WORKFLOWS / "action-updates.yml").read_text()
+        self.assertIn("  schedule:\n", workflow)
+        self.assertIn("    - cron: '17 6 * * 3'\n", workflow)
+        self.assertIn("  workflow_dispatch:\n", workflow)
+        self.assertIn("permissions:\n  contents: read\n", workflow)
+        self.assertIn("          persist-credentials: false\n", workflow)
+        self.assertIn("          install-dependencies: 'false'\n", workflow)
+        self.assertIn("          print-versions: 'false'\n", workflow)
+        self.assertIn("        if: ${{ failure() }}\n", workflow)
+        self.assertIn("        if: ${{ always() }}\n", workflow)
+        match = re.search(
+            r"^      - name: Check Action and workflow tool updates\n"
+            r".*?^        run: \|\n(.*?)(?=^      - |\Z)",
+            workflow, re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(match)
+        shell = textwrap.dedent(match.group(1))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            docker = root / "docker"
+            docker.write_text(
+                '#!/bin/sh\nprintf "%s\\n" "$*" > "$DOCKER_ARGS"\nexit "$CHECKER_STATUS"\n'
+            )
+            docker.chmod(0o755)
+            for status, expected, message in (
+                (0, 0, "pins are current"),
+                (1, 0, "updates are available"),
+                (2, 2, "checks were incomplete"),
+                (17, 17, "checks were incomplete"),
+            ):
+                with self.subTest(checker_status=status):
+                    summary = root / "summary"
+                    args = root / "args"
+                    result = subprocess.run(
+                        ["bash", "-euo", "pipefail", "-c", shell], cwd=root,
+                        env={**os.environ, "PATH": f"{root}:{os.environ['PATH']}",
+                             "DOCKER_ARGS": str(args), "CHECKER_STATUS": str(status),
+                             "GITHUB_STEP_SUMMARY": str(summary)},
+                        text=True, capture_output=True, check=False,
+                    )
+                    self.assertEqual(result.returncode, expected, result.stderr)
+                    self.assertIn(message, summary.read_text())
+                    self.assertEqual(
+                        args.read_text().strip(),
+                        "compose -f compose.yaml -f docker/ci-compose.yaml exec -T php "
+                        "bash scripts/check-action-updates.sh",
+                    )
+                    if status > 1:
+                        self.assertIn(f"::error::Action and workflow tool update checks failed "
+                                      f"(exit {status}).", result.stdout)
+                    summary.unlink()
 
     def test_gates_run_after_failed_dependencies_but_not_cancelled_workflows(self):
         for job in ("ci-summary", "ci-result"):

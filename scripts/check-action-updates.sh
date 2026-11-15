@@ -331,8 +331,13 @@ latest_action_version() {
     # floating major alias tags like v1, v2 and non-version tags like "verbose")
     latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+' | sort -V | tail -n 1)
 
+    # Some actions publish only major tags; compare them only for a major pin.
+    if [ -z "$latest" ] && [[ "$current_version" =~ ^v?[0-9]+$ ]]; then
+        latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+$' | sort -V | tail -n 1)
+    fi
+
     if [ -z "$latest" ]; then
-        output_status FAIL "Unable to fetch action version: $action @ $current_version (GitHub lookup succeeded, but no version-like tags matching vX.Y were found)"
+        output_status FAIL "Unable to fetch action version: $action @ $current_version (GitHub lookup succeeded, but no usable version-like tags were found)"
         return 1
     fi
 

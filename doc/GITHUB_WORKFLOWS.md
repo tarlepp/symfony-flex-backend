@@ -83,6 +83,7 @@ cross-workflow dependency on core CI.
 | [Scorecard][scorecard] | Push, weekly, protection rule | Yes |
 | [Vulnerability Scan][vulnerability-scan] | Daily | Yes |
 | [Update Docker image pins][docker-image-updates] | Daily | Yes |
+| [Check GitHub Action updates][action-updates] | Weekly | Yes |
 
 [ci]: ../.github/workflows/main.yml
 [dependency-review]: ../.github/workflows/dependency-review.yml
@@ -90,6 +91,7 @@ cross-workflow dependency on core CI.
 [scorecard]: ../.github/workflows/scorecard.yml
 [vulnerability-scan]: ../.github/workflows/vulnerability-scan.yml
 [docker-image-updates]: ../.github/workflows/docker-image-updates.yml
+[action-updates]: ../.github/workflows/action-updates.yml
 
 Core CI explicitly handles PR `opened`, `synchronize` (new commits) and
 `reopened` events. Dependency Review and CodeQL use the same default PR activity
@@ -108,6 +110,7 @@ default branch and may be delayed; they are not exact-time guarantees.
 | Vulnerability Scan | Daily, 12:00 (`0 12 * * *`) | Both image builds/scans |
 | CodeQL | Monday, 03:30 (`30 3 * * 1`) | GitHub Actions analysis |
 | Scorecard | Friday, 09:29 (`29 9 * * 5`) | Supply-chain assessment |
+| Action updates | Wednesday, 06:17 (`17 6 * * 3`) | Action/tool report |
 
 Core CI's schedule also runs its two aggregate gates to validate the periodic
 results. It does **not** run PHPUnit, PHP analyzers or the core image-build
@@ -472,6 +475,13 @@ analyzer jobs and optional SonarCloud reporting.
 **Scorecard** assesses repository supply-chain practices, publishes results to
 OpenSSF for this public repository, and uploads SARIF to artifacts and code
 scanning. It does not run on ordinary PRs and is not required for merging.
+
+**Check GitHub Action updates** runs weekly and on manual dispatch. It uses
+the existing Action and workflow-tool checker inside the development container.
+Available updates are advisory; discovery, pin and lookup failures fail this
+standalone workflow. Its run summary distinguishes current pins, updates and
+incomplete checks; the step log contains candidates and error details. It does
+not update pins or alter the required core CI gate.
 
 **Update Docker image pins** runs daily at 04:17 UTC and on manual dispatch.
 Scheduled runs target `master`, the default branch, after the workflow is merged
