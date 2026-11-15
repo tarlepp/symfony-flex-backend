@@ -697,6 +697,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def test_statistics_job_is_informational_and_runs_on_non_scheduled_events(self):
         section = job("statistics")
         self.assertIn("    if: ${{ github.event_name != 'schedule' }}\n", section)
+        self.assertIn("      - *checkout_full_history_step\n", section)
         self.assertIn("      - statistics\n", job("ci-result"))
         self.assertLess(section.index("Summarize selected tool versions"), section.index("Summarize project files"))
         for step, target in (
@@ -709,6 +710,10 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             self.assertIn(f"bash scripts/make.sh {target}", content)
             self.assertIn("bash scripts/ci-statistics-summary.sh run ", content)
         self.assertIn("      - *stop_php_step\n", section)
+        pr_step = section.split("      - name: Summarize PR changes by area\n", 1)[1].split("\n      - ", 1)[0]
+        self.assertIn("github.event_name == 'pull_request'", pr_step)
+        self.assertIn("continue-on-error: true", pr_step)
+        self.assertIn('python3 scripts/project-stats.py --base "$BASE_SHA" --head "$HEAD_SHA"', pr_step)
 
     def test_phploc_pipeline_preserves_analyzer_failure(self):
         section = job("lightweight-analyzers")

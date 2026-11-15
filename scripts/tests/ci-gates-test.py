@@ -150,6 +150,7 @@ class CiGatesTest(unittest.TestCase):
             "statistics": {
                 "BOOTSTRAP": ("bootstrap", "Bootstrap"), "VERSIONS": ("versions", "Tool versions"),
                 "PROJECT": ("project", "Project files"),
+                "PR_CHANGES": ("pr-changes", "PR changes"),
                 "LICENSES": ("licenses", "Dependency licenses"),
                 "PLATFORMS": ("platforms", "Docker builder platforms"),
             },
@@ -520,7 +521,7 @@ class CiGatesTest(unittest.TestCase):
             self.workflow, re.MULTILINE | re.DOTALL,
         ))
         self.assertEqual(set(anchors), {"checkout_step", "checkout_full_history_step"})
-        history_consumers = {"changes", "gitleaks", "lightweight-analyzers", "report"}
+        history_consumers = {"changes", "gitleaks", "lightweight-analyzers", "report", "statistics"}
         self.assertTrue(history_consumers <= self.jobs.keys())
         job_names = re.findall(
             r"^  ([\w-]+):$", self.workflow.split("jobs:\n", 1)[1], re.MULTILINE,

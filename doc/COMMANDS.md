@@ -238,11 +238,13 @@ make docker-builder-platforms
 ```
 
 `project-stats` counts tracked working-tree files and text lines by file type,
-excluding lockfiles and recognized generated artifacts. CI publishes these
+and by project area; it compares source and test sizes and counts excluded
+lockfiles and recognized generated artifacts. CI publishes these
 three outputs and selected `make tool-versions` entries as informational
 summaries on non-scheduled runs. `make phploc` analyzes `src` and writes
 `build/phploc.json`; its output and PHP Insights scores are summarized when PHP
 analyzers run. PhpMetrics output is summarized when its test job runs.
+PR runs also summarize changes by area from the merge base to the PR head.
 
 Target groups, risk markers, execution routing, and wrapped labels share the
 Makefile's `REGISTER_TARGET` metadata. Recipe descriptions remain beside their

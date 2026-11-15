@@ -642,6 +642,9 @@ then the outputs of `make project-stats`, `make check-licenses` and
 `make docker-builder-platforms`. These describe the checked-out files,
 installed dependencies and the GitHub runner's current builder respectively;
 the builder platforms do not prove that application images were built for them.
+For pull requests, a separate summary compares the merge base and PR head by
+project area, excluding the same lockfiles and recognized generated artifacts.
+Renames are counted as additions and deletions; binary files have no line counts.
 Collection failures are shown in the job overview and do not block the merge
 gate. Setup failures can leave some summaries unavailable. When PHP analyzers
 are selected, the lightweight analyzer job also publishes its existing PHPLoc

@@ -443,7 +443,7 @@ jobs:
     steps:
       - *harden_runner_step
 
-      - *checkout_step
+      - *checkout_full_history_step
 
       - name: Bootstrap PHP project
         id: bootstrap
@@ -471,6 +471,18 @@ jobs:
         continue-on-error: true
         run: bash scripts/ci-statistics-summary.sh run 'Project file statistics' bash scripts/make.sh project-stats
 
+      - name: Summarize PR changes by area
+        id: pr-changes
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && steps.bootstrap.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          bash scripts/ci-statistics-summary.sh run 'PR changes by area' \
+            docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
+            python3 scripts/project-stats.py --base "$BASE_SHA" --head "$HEAD_SHA"
+
       - name: Summarize dependency licenses
         id: licenses
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}
@@ -493,12 +505,14 @@ jobs:
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
           VERSIONS: ${{ steps.versions.outcome || 'skipped' }}
           PROJECT: ${{ steps.project.outcome || 'skipped' }}
+          PR_CHANGES: ${{ steps.pr-changes.outcome || 'skipped' }}
           LICENSES: ${{ steps.licenses.outcome || 'skipped' }}
           PLATFORMS: ${{ steps.platforms.outcome || 'skipped' }}
         run: |
           bash scripts/ci-workflow-overview.sh \
             'Informational only; failures do not block the merge gate. See step logs for diagnostics.' \
             'Bootstrap' "$BOOTSTRAP" 'Tool versions' "$VERSIONS" 'Project files' "$PROJECT" \
+            'PR changes' "$PR_CHANGES" \
             'Dependency licenses' "$LICENSES" 'Docker builder platforms' "$PLATFORMS" >> "$GITHUB_STEP_SUMMARY"
 
       - *failure_diagnostics_step
