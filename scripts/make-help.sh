@@ -17,6 +17,8 @@ printf 'Groups: information, tests, quality, checks, reports, setup, lifecycle, 
 printf 'Routine commands first; overwrite and destructive commands last in each group.\n'
 printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
 
+# REGISTER_TARGET fields are name, group, execution, risk and label. Help uses
+# name, group and risk, then joins them with the adjacent recipe descriptions.
 awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     /^\$\(call REGISTER_TARGET,/ {
         record = $0
@@ -57,6 +59,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     -v blue="$OUTPUT_BLUE" -v green="$OUTPUT_GREEN" \
     -v yellow="$OUTPUT_YELLOW" -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" -v selected="$group" '
     BEGIN {
+        # Group IDs index titles and entries; order maps display positions to IDs.
         groups["lifecycle"] = 1
         groups["docker"] = 2
         groups["setup"] = 3
@@ -75,6 +78,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         order[8] = 2
     }
     {
+        # Input columns: target, description, group, risk.
         if (!($3 in groups) || ($4 != "" && $4 != "DESTRUCTIVE" && $4 != "OVERWRITE")) {
             print red "[FAIL]" reset " Invalid help metadata: " $1 > "/dev/stderr"
             invalid = 1
