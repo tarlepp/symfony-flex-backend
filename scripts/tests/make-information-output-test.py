@@ -4,6 +4,7 @@
 import json
 import os
 from pathlib import Path
+import pty
 import re
 import shutil
 import subprocess
@@ -23,7 +24,7 @@ class InformationOutputTest(unittest.TestCase):
             (self.root / directory).mkdir(parents=True)
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         for name in ("command-output.sh", "make.sh", "make-help.sh", "prepare-sonar-reports.sh",
-                     "project-stats.sh", "docker-images.sh", "native-output.sh", "report-output.sh",
+                     "project-stats.sh", "project-stats.py", "docker-images.sh", "native-output.sh", "report-output.sh",
                      "tool-versions.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
             (self.root / "scripts" / name).chmod(0o755)
@@ -146,6 +147,13 @@ exit 0
             cwd=self.root, env=environment, capture_output=True, text=True, check=False,
         )
         return result
+
+    def init_stats_repository(self):
+        subprocess.run(["git", "init", "-q"], cwd=self.root, check=True, capture_output=True)
+        subprocess.run(
+            ["git", "add", "--", "src/Example.php"],
+            cwd=self.root, check=True, capture_output=True,
+        )
 
     def test_help_lists_every_documented_target_once_with_purpose_and_risk(self):
         (self.root / "help").touch()
@@ -370,13 +378,14 @@ exit 0
                 self.assertNotIn("[OK]", result.stderr)
 
     def test_information_stdout_has_no_status_or_ansi_pollution(self):
+        self.init_stats_repository()
         for target in ("configuration", "project-stats", "application-info", "tool-versions", "check-licenses"):
             with self.subTest(target=target):
                 (self.root / target).touch()
                 result = self.make(target, COLOR="always")
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertNotRegex(result.stdout, r"\[(RUN|OK|INFO|FAIL)\]")
-                if target != "tool-versions":
+                if target not in ("tool-versions", "project-stats"):
                     self.assertNotIn("\x1b", result.stdout)
                 self.assertEqual(result.stderr.count("[OK]"), 1)
                 if target == "configuration":
@@ -387,8 +396,165 @@ exit 0
                         {"2 MIT", "1 MIT OR Apache-2.0", "1 UNSPECIFIED"},
                     )
                 if target == "project-stats":
-                    self.assertTrue(result.stdout.startswith("Extension"))
-                    self.assertIn("Total:", result.stdout)
+                    plain = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+                    self.assertIn("\x1b[", result.stdout)
+                    self.assertTrue(plain.startswith("Project file statistics"))
+                    self.assertRegex(plain, r"(?m)^Total\s+1\s+1$")
+
+    def test_project_stats_color_respects_native_policy(self):
+        self.init_stats_repository()
+        plain = self.make("project-stats", COLOR="never")
+        forced = self.make("project-stats", COLOR="always")
+        disabled = self.make("project-stats", COLOR="always", NO_COLOR="1")
+        automatic = self.make("project-stats", COLOR="auto", TERM="xterm")
+        for result in (plain, forced, disabled, automatic):
+            self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("\x1b[1;34mProject file statistics\x1b[0m", forced.stdout)
+        self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", forced.stdout), plain.stdout)
+        self.assertEqual(disabled.stdout, plain.stdout)
+        self.assertEqual(automatic.stdout, plain.stdout)
+
+        environment = dict(os.environ, COLOR="auto", NO_COLOR="", TERM="xterm")
+        environment.pop("NATIVE_COLOR", None)
+        for overrides, expect_color in (
+            ({}, True),
+            ({"TERM": "dumb"}, False),
+            ({"NO_COLOR": "1"}, False),
+        ):
+            with self.subTest(overrides=overrides):
+                master, slave = pty.openpty()
+                try:
+                    result = subprocess.run(
+                        ["bash", "scripts/project-stats.sh"], cwd=self.root,
+                        env=dict(environment, **overrides),
+                        stdout=slave, stderr=subprocess.PIPE, check=False,
+                    )
+                    os.close(slave)
+                    slave = -1
+                    terminal_output = os.read(master, 65536).decode()
+                finally:
+                    os.close(master)
+                    if slave != -1:
+                        os.close(slave)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[" in terminal_output, expect_color)
+                self.assertEqual(
+                    re.sub(r"\x1b\[[0-9;]*m", "", terminal_output).replace("\r\n", "\n"),
+                    plain.stdout,
+                )
+
+        for native, no_color, expect_color in (
+            ("always", "", True), ("never", "", False), ("always", "1", False),
+        ):
+            with self.subTest(native=native, no_color=no_color):
+                result = subprocess.run(
+                    ["bash", "scripts/project-stats.sh"], cwd=self.root,
+                    env=dict(environment, COLOR="never", NATIVE_COLOR=native, NO_COLOR=no_color),
+                    capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[" in result.stdout, expect_color)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+
+    def test_project_stats_counts_tracked_working_tree_files_and_text_lines(self):
+        self.init_stats_repository()
+        (self.root / "docs").mkdir()
+        (self.root / "docs/guide.MD").write_bytes(b"one\ntwo\npartial")
+        (self.root / "docs/a name.md").write_bytes(b"three\n" * 1000)
+        (self.root / "docs/image.PNG").write_bytes(b"not text\n" * 8000 + b"\0binary\n")
+        (self.root / "Makefile.fixture").write_bytes(b"make\n")
+        (self.root / "LICENSE").write_bytes(b"license\n")
+        (self.root / ".example").write_bytes(b"config\n")
+        (self.root / "untracked.sh").write_bytes(b"ignored\n")
+        (self.root / "docs/link.md").symlink_to("guide.MD")
+        for name in (
+            "composer.lock", "docs/symfony.lock", "docs/package-lock.json",
+            "docs/npm-shrinkwrap.json", "docs/pnpm-lock.yaml", "docs/bun.lockb",
+            "docs/app.min.js", "docs/app.min.css", "docs/app.js.map", "docs/app.css.map",
+            "config/reference.php", "docker/nginx/ssl/rootCA.key", "docker/nginx/ssl/rootCA.pem",
+            "docker/nginx/ssl/tls.crt", "docker/nginx/ssl/tls.csr", "docker/nginx/ssl/tls.key",
+        ):
+            file = self.root / name
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_bytes(b"generated\n" * 100)
+        (self.root / "docs/LockedUser.php").write_bytes(b"source\n")
+        (self.root / "docs/app.js").write_bytes(b"source\n")
+        subprocess.run(
+            ["git", "add", "--", "docs", "Makefile.fixture", "LICENSE", ".example",
+             "composer.lock", "config", "docker"],
+            cwd=self.root, check=True, capture_output=True,
+        )
+        (self.root / "composer.lock").unlink()
+        (self.root / "src/Example.php").write_bytes(b"modified\nworking tree\n")
+
+        result = self.make("project-stats")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        lines = result.stdout.splitlines()
+        self.assertEqual(lines[:3], [
+            "Project file statistics", "Tracked working-tree files (excluding generated artifacts)", "",
+        ])
+        self.assertEqual(lines[3], "File type       Files  Text lines")
+        self.assertEqual(lines[4], "--------------  -----  ----------")
+        summary_index = lines.index("Summary")
+        table = lines[4:summary_index - 1]
+        self.assertEqual(table[-2], lines[4])
+        self.assertTrue(all(len(line) == len(lines[3]) for line in table))
+        self.assertEqual(lines[summary_index:], [
+            "Summary",
+            "  Included files: 10",
+            "  File types:    7",
+            "  Text lines:    1,009",
+            "",
+            "  Most files:",
+            "    .md: 3 files",
+            "    .php: 2 files",
+            "    (no extension): 1 file",
+            "",
+            "  Most text lines:",
+            "    .md: 1,002 lines",
+            "    .php: 3 lines",
+            "    (no extension): 1 line",
+        ])
+        rows = {}
+        for line in table:
+            match = re.fullmatch(r"(.+?)\s+([\d,]+)\s+([\d,]+)", line)
+            if match:
+                rows[match[1]] = tuple(int(value.replace(",", "")) for value in match.groups()[1:])
+        self.assertIn("1,002", result.stdout)
+        self.assertEqual(rows, {
+            ".example": (1, 1),
+            ".fixture": (1, 1),
+            ".js": (1, 1),
+            ".md": (3, 1002),
+            ".php": (2, 3),
+            ".png": (1, 0),
+            "(no extension)": (1, 1),
+            "Total": (10, 1009),
+        })
+        self.assertNotIn(".sh", rows)
+
+    def test_project_stats_supports_empty_index_and_reports_missing_git_repository(self):
+        result = self.make("project-stats")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Project statistics failed:", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+        subprocess.run(["git", "init", "-q"], cwd=self.root, check=True, capture_output=True)
+        result = self.make("project-stats")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertRegex(result.stdout, r"(?m)^Total\s+0\s+0$")
+        self.assertTrue(result.stdout.endswith(
+            "Summary\n  Included files: 0\n  File types:    0\n  Text lines:    0\n"
+            "\n  Most files:\n    None\n\n  Most text lines:\n    None\n"
+        ))
+
+        (self.root / "image.png").write_bytes(b"binary\0\n")
+        subprocess.run(["git", "add", "--", "image.png"], cwd=self.root, check=True, capture_output=True)
+        result = self.make("project-stats")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(result.stdout.endswith(
+            "\n  Most files:\n    .png: 1 file\n\n  Most text lines:\n    None\n"
+        ))
 
     def test_information_pipeline_and_process_failures_propagate(self):
         for target, command in (
@@ -400,9 +566,11 @@ exit 0
             self.assertIn("native failure diagnostic", result.stderr)
             self.assertIn("[FAIL]", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
+        self.init_stats_repository()
         (self.root / "src").rename(self.root / "missing-src")
         result = self.make("project-stats")
         self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Project statistics failed:", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
 
     def test_tool_versions_reports_installed_packages_and_runtime_inventory(self):
