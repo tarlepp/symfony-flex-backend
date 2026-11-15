@@ -74,6 +74,8 @@ That gives:
 * `.github/workflows/vulnerability-scan.yml` for vulnerability scanning, with
   Trivy results also uploaded as SARIF to code scanning.
 * `.github/workflows/codeql.yml` for CodeQL analysis of the workflow files.
+* `.github/workflows/docker-image-updates.yml` for Docker image maintenance.
+* `.github/workflows/action-updates.yml` for the Action/tool update report.
 
 ---
 
@@ -111,10 +113,12 @@ and report the newest full stable version tag and commit, excluding prerelease
 and floating tags. Missing pins, lookup failures, and moved/missing tags fail
 with exit code `2`; updates return `1`. This stricter parity/error behavior is
 specific to tool pins. Action version/SHA lookup failures also return exit 2;
-same-version Action pin differences are reported as updates (exit `1`). Review
-compatibility and update the release tag, commit comment, and both platforms'
-binary checksums together. Do not substitute a commit SHA for a binary checksum
-or automatically install the suggested version.
+same-version Action pin differences are reported as updates (exit `1`).
+For Actions pinned to major-only versions that publish no full-version tags,
+the checker compares major-only tags and reports moved pins without updating
+them automatically. Review compatibility and update the release tag, commit
+comment, and both platforms' binary checksums together. Do not substitute a
+commit SHA for a binary checksum or automatically install the suggested version.
 
 ---
 

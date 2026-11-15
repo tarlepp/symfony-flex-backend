@@ -223,10 +223,52 @@ class ToolUpdatesTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn(
-            "GitHub lookup succeeded, but no version-like tags", result.stderr,
+            "GitHub lookup succeeded, but no usable version-like tags", result.stderr,
         )
         self.assertNotIn("git ls-remote failed", result.stderr)
         self.assertNotIn("timed out", result.stderr)
+
+    def test_major_only_action_tags_check_current_moved_and_newer_pins(self):
+        workflow = f"steps:\n  - uses: example/action@{SHA} # v5\n"
+        for action_refs, expected, message in (
+            (f"{SHA}\trefs/tags/v5", 0, "v5 (up-to-date)"),
+            (f"{TAG_SHA}\trefs/tags/v5\n{SHA}\trefs/tags/v5^{{}}",
+             0, "v5 (up-to-date)"),
+            (f"{NEW_SHA}\trefs/tags/v5", 1, "Pin differs from tag commit (same version)"),
+            (f"{SHA}\trefs/tags/v5\n{NEW_SHA}\trefs/tags/v6", 1, "v5 -> v6"),
+        ):
+            with self.subTest(action_refs=action_refs):
+                result = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="",
+                    workflow_content=workflow, action_refs=action_refs,
+                )
+                self.assertEqual(result.returncode, expected, result.stderr)
+                self.assertIn(message, result.stdout)
+                if expected == 1:
+                    self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
+
+    def test_major_only_fallback_never_selects_nonversion_or_prerelease_tags(self):
+        workflow = f"steps:\n  - uses: example/action@{SHA} # v5\n"
+        for action_refs in (
+            f"{SHA}\trefs/tags/verbose\n{SHA}\trefs/tags/v6-rc1",
+            "",
+        ):
+            with self.subTest(action_refs=action_refs):
+                result = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="",
+                    workflow_content=workflow, action_refs=action_refs,
+                )
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn("no usable version-like tags", result.stderr)
+
+    def test_major_pin_prefers_full_version_tags_when_available(self):
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", mode="",
+            workflow_content=f"steps:\n  - uses: example/action@{SHA} # v5\n",
+            action_refs=f"{SHA}\trefs/tags/v5\n{NEW_SHA}\trefs/tags/v5.1.0",
+        )
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("v5 -> v5.1.0", result.stdout)
 
     def test_action_matching_lightweight_or_peeled_commit_is_current(self):
         for refs in (

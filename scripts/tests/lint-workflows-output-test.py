@@ -124,7 +124,7 @@ esac
             "Prepare and verify ShellCheck v0.11.0",
             "Prepare and verify action-validator v0.9.0",
             "Prepare and verify zizmor v1.32.0",
-            "Workflow syntax and embedded shell (6 files)",
+            "Workflow syntax and embedded shell (7 files)",
             "Workflow and action security audit (zizmor)",
             "Local action metadata: .github/actions/example/action.yml",
             "Local composite action shell (ShellCheck)",

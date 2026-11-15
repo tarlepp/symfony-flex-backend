@@ -1,0 +1,72 @@
+name: Check GitHub Action updates
+on:
+  schedule:
+    # 06:17 UTC every Wednesday
+    - cron: '17 6 * * 3'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check Action and workflow tool updates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Bootstrap development container
+        uses: ./.github/actions/php-bootstrap
+        with:
+          install-dependencies: 'false'
+          print-versions: 'false'
+
+      - name: Check Action and workflow tool updates
+        id: updates
+        run: |
+          status=0
+          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
+            bash scripts/check-action-updates.sh || status=$?
+          case "$status" in
+            0)
+              echo "Action and workflow tool pins are current." >> "$GITHUB_STEP_SUMMARY"
+              ;;
+            1)
+              echo "Action or workflow tool updates are available. See the step log for candidates." >> "$GITHUB_STEP_SUMMARY"
+              ;;
+            *)
+              echo "Action and workflow tool checks were incomplete. See the step log for errors." >> "$GITHUB_STEP_SUMMARY"
+              echo "::error::Action and workflow tool update checks failed (exit $status)."
+              exit "$status"
+              ;;
+          esac
+
+      - name: Diagnose PHP container failure
+        if: ${{ failure() }}
+        timeout-minutes: 2
+        run: bash scripts/ci-failure-diagnostics.sh
+
+      - name: Stop PHP development container
+        if: ${{ always() }}
+        run: bash scripts/make.sh ci-stop
+
+      - name: Publish workflow run overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          UPDATES: ${{ steps.updates.outcome || 'skipped' }}
+        run: |
+          bash scripts/ci-workflow-overview.sh \
+            'Updates are advisory; incomplete checks fail the workflow. See the step log for details.' \
+            'Action and workflow tool update check' "$UPDATES" >> "$GITHUB_STEP_SUMMARY"
