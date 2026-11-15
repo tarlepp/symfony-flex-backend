@@ -32,4 +32,23 @@ jobs:
           persist-credentials: false
 
       - name: 'Dependency Review'
+        id: review
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+
+      - name: Publish workflow run overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          REVIEW: ${{ steps.review.outcome || 'skipped' }}
+        run: |
+          {
+            echo "## Workflow run overview"
+            printf '\nEvent: %s · Prior steps: **%s**\n\n' "$EVENT_NAME" "$PRIOR_STATUS"
+            echo '| Check | Result |'
+            echo '| --- | --- |'
+            printf '| Dependency review | %s |\n' "$REVIEW"
+            echo
+            echo 'See the dependency review step log for findings and failure details.'
+          } >> "$GITHUB_STEP_SUMMARY"

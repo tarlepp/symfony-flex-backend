@@ -41,6 +41,14 @@ The run graph shows job status; selecting a job opens its step logs.
 The run summary contains downloadable artifacts and any generated summaries.
 Security analysis results are also available under **Security > Code scanning**.
 
+Each workflow publishes a run overview with its relevant checks and outcomes.
+The daily vulnerability scan publishes one overview per image target. These
+overviews describe their own run, not the status of other workflows. The
+standalone workflow overviews report the status of prior steps, including
+skipped steps after a failure; consult the step logs and security reports for
+findings. A cancelled or skipped job may not publish an overview. Publishing
+an overview is informational and does not change validation results.
+
 For pull requests, start with the **Checks** tab:
 
 * Wait for `Validate CI result` and `dependency-review`, the two required

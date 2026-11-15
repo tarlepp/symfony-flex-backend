@@ -7,10 +7,12 @@ import re
 import shutil
 import subprocess
 import tempfile
+import textwrap
 import unittest
 
 
 WORKFLOW = Path(__file__).resolve().parents[2] / ".github/workflows/main.yml"
+WORKFLOWS = WORKFLOW.parent
 
 
 class CiGatesTest(unittest.TestCase):
@@ -21,6 +23,63 @@ class CiGatesTest(unittest.TestCase):
             r"^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)",
             cls.workflow, re.MULTILINE | re.DOTALL,
         ))
+
+    def test_standalone_workflow_overviews_report_actual_step_outcomes(self):
+        workflows = {
+            "dependency-review.yml": {"REVIEW": "review"},
+            "codeql.yml": {"INITIALIZE": "initialize", "ANALYZE": "analyze"},
+            "scorecard.yml": {"ANALYSIS": "analysis", "ARTIFACT": "artifact", "UPLOAD": "upload"},
+            "vulnerability-scan.yml": {
+                "BUILD": "build", "SARIF": "sarif", "UPLOAD": "upload", "SCAN": "scan",
+            },
+            "docker-image-updates.yml": {
+                "TESTS": "tests", "UPDATE": "update", "VERIFY": "verify",
+                "PULL_REQUEST": "pull-request",
+            },
+        }
+        for filename, outcomes in workflows.items():
+            with self.subTest(workflow=filename), tempfile.TemporaryDirectory() as directory:
+                content = (WORKFLOWS / filename).read_text()
+                match = re.search(
+                    r"^      - name: Publish workflow run overview\n"
+                    r"(.*?)(?=^      - |\Z)", content, re.MULTILINE | re.DOTALL,
+                )
+                self.assertIsNotNone(match)
+                step = match.group(1)
+                self.assertIn("if: ${{ !cancelled() }}", step)
+                self.assertIn("continue-on-error: true", step)
+                self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
+                for variable, step_id in outcomes.items():
+                    self.assertIn(f"        id: {step_id}\n", content)
+                    self.assertIn(
+                        f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step,
+                    )
+                shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+                summary = Path(directory) / "summary"
+                for status in ("success", "failure"):
+                    values = {
+                        variable: "skipped" if status == "failure" else "success"
+                        for variable in outcomes
+                    }
+                    first = next(iter(outcomes))
+                    values[first] = status
+                    result = subprocess.run(
+                        ["bash", "-euo", "pipefail", "-c", shell],
+                        env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
+                             "EVENT_NAME": "workflow_dispatch", "PRIOR_STATUS": status,
+                             "TARGET": "production", **values},
+                        capture_output=True, text=True, check=False,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    output = summary.read_text()
+                    self.assertIn("## Workflow run overview", output)
+                    self.assertIn(f"Prior steps: **{status}**", output)
+                    self.assertIn(f"| {status} |", output)
+                    if status == "failure" and len(outcomes) > 1:
+                        self.assertIn("| skipped |", output)
+                    if filename == "vulnerability-scan.yml":
+                        self.assertIn("Image: production", output)
+                    summary.unlink()
 
     def test_gates_run_after_failed_dependencies_but_not_cancelled_workflows(self):
         for job in ("ci-summary", "ci-result"):

@@ -38,12 +38,34 @@ jobs:
           persist-credentials: false
 
       - name: Initialize CodeQL
+        id: initialize
         uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           languages: actions
           build-mode: none
 
       - name: Perform CodeQL analysis
+        id: analyze
         uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           category: /language:actions
+
+      - name: Publish workflow run overview
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PRIOR_STATUS: ${{ job.status }}
+          INITIALIZE: ${{ steps.initialize.outcome || 'skipped' }}
+          ANALYZE: ${{ steps.analyze.outcome || 'skipped' }}
+        run: |
+          {
+            echo "## Workflow run overview"
+            printf '\nEvent: %s · Prior steps: **%s**\n\n' "$EVENT_NAME" "$PRIOR_STATUS"
+            echo '| Check | Result |'
+            echo '| --- | --- |'
+            printf '| CodeQL initialization | %s |\n' "$INITIALIZE"
+            printf '| Workflow analysis and upload | %s |\n' "$ANALYZE"
+            echo
+            echo 'CodeQL analyzes GitHub Actions workflows, not PHP. See step logs and Code scanning for details.'
+          } >> "$GITHUB_STEP_SUMMARY"
