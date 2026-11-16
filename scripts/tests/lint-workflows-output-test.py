@@ -146,7 +146,7 @@ esac
             "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
             "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
             "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-statistics-summary.sh scripts/ci-validate-compose.sh "
-            "scripts/ci-failure-diagnostics.sh", calls,
+            "scripts/ci-failure-diagnostics.sh scripts/ci-validate-bootstrap.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
         self.assertIn("shellcheck --shell bash -", calls)

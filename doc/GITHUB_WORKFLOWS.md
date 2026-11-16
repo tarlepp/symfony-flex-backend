@@ -454,6 +454,13 @@ configuration and JWT keys exist. Tests and reporting opt into Composer download
 caching despite deferring installation; cache keys include all Composer
 lockfiles.
 
+The `install-dependencies`, `cache-dependencies`, and `print-versions` inputs
+accept only the exact strings `'true'` and `'false'`. Bootstrap calls
+[`ci-validate-bootstrap.sh`](../scripts/ci-validate-bootstrap.sh) to validate
+these and the build target before any cache, environment, or container setup.
+Malformed or empty boolean values fail explicitly instead of silently disabling
+steps; diagnostics name the input without printing its value.
+
 Project Make targets execute in the Compose PHP development container.
 Docker/Buildx, registry authentication, GitHub actions and artifact operations
 run on the runner host. See the
