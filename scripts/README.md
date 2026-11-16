@@ -778,6 +778,26 @@ make project-stats
 If you are already inside the container, you can still run
 `bash scripts/project-stats.sh` directly.
 
+The table covers Git-tracked working-tree files across the repository, including
+extensionless files and dotfiles, except recognized generated artifacts.
+Exclusions are `*.lock`, `package-lock.json`, `npm-shrinkwrap.json`,
+`pnpm-lock.yaml`, `bun.lockb`, minified JavaScript and CSS (`*.min.js` and
+`*.min.css`), their source maps (`*.js.map` and `*.css.map`),
+`config/reference.php`, and the generated keys and certificates in
+`docker/nginx/ssl/`. Other generated files are included unless covered by these
+rules; reviewed Doctrine migrations remain included. Extensions are grouped
+case-insensitively; dotfiles without another suffix are listed by name. The
+summary reports included files, grouped file types, text lines, and the top
+three types by files and text lines. Ties are ordered by type; types with zero
+text lines are omitted from that ranking. Counts reflect current working-tree
+contents rather than staged contents. A missing included tracked file fails the
+command.
+Symlinks and files containing NUL bytes count as files but contribute no text
+lines; binary detection is based on NUL bytes and may not recognize every binary
+format. Text lines count newline characters, as with `wc -l`.
+Headings and totals follow the shared native `COLOR` and `NO_COLOR` policy;
+redirected output is plain by default.
+
 ### Skill documentation checker [ᐞ](#table-of-contents)
 
 <a id="skill-documentation-checker"></a>
