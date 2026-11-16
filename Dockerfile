@@ -5,7 +5,7 @@ ARG NODE_VERSION=26.12.1
 
 FROM php:8.5.12-fpm-bookworm@sha256:eec275cd99580e0a6e103dd343a7c160c86917003f6b9bba2d4c75d82419c683 AS php-upstream
 FROM mlocati/php-extension-installer:2.13.2@sha256:4fd45396c16685266d32bf147a24ecd5e81029d3820295895bf4a90131190ac9 AS extension-installer-upstream
-FROM composer:2.11.2@sha256:5bcb28b8d0edc4091125f8218f9d088f998bdfc843f8fbb9a4beb4dcd8625684 AS composer-upstream
+FROM composer:2.11.2@sha256:0c8e663f14c94d07b3c45b175c51f5a14718508f21fe4dd7e54f09488dd0ed71 AS composer-upstream
 
 FROM php-upstream AS maintenance
 
@@ -193,6 +193,11 @@ COPY ./docker/fish /home/dev/.config/fish/
 
 USER root
 
+# Keep the targeted fix after source copies so task rebuilds refresh cached tools.
+RUN apt-get update \
+    && apt-get install --only-upgrade --no-install-recommends -y linux-libc-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN chmod 777 -R /home/dev /tmp \
     && rm -rf /tmp/fish.node \
     && chgrp -hR dev /home/dev
@@ -207,6 +212,11 @@ FROM base AS production
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Update only the CVE-affected headers, including when the shared base is cached.
+RUN apt-get update \
+    && apt-get install --only-upgrade --no-install-recommends -y linux-libc-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --exclude=./docker/* . /app
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
