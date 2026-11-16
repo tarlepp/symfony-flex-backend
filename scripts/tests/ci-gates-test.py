@@ -595,10 +595,17 @@ class CiGatesTest(unittest.TestCase):
             self.assertIn("name: docker-image-${{ matrix.target }}", job)
             self.assertIn("target: [development, production]", job)
             self.assertIn("fail-fast: false", job)
-            self.assertIn(
-                "if: ${{ github.event_name != 'schedule' && "
-                "needs.changes.outputs.docker == 'true' }}", job,
-            )
+            self.assertIn("needs.changes.outputs.docker == 'true'", job)
+        self.assertIn(
+            "if: ${{ github.event_name != 'schedule' && "
+            "needs.changes.outputs.docker == 'true' }}", build,
+        )
+        self.assertIn(
+            "if: ${{ !cancelled() && github.event_name != 'schedule' && "
+            "needs.changes.result == 'success' && needs.changes.outputs.docker == 'true' && "
+            "(needs.docker-build.result == 'success' || needs.docker-build.result == 'failure') }}",
+            scan,
+        )
 
     def test_pr_image_sarif_is_scoped_and_independent_of_scan_result(self):
         scan = self.jobs["docker-scan"]

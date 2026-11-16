@@ -320,6 +320,66 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 f"needs.changes.outputs.{output} == 'true' }}}}\n", section,
             )
 
+    def test_image_scans_survive_sibling_build_failure_without_weakening_gates(self):
+        section = job("docker-scan")
+        condition = re.search(r"^    if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
+        self.assertIsNotNone(condition)
+        self.assertEqual(
+            condition.group(1),
+            "!cancelled() && github.event_name != 'schedule' && "
+            "needs.changes.result == 'success' && needs.changes.outputs.docker == 'true' && "
+            "(needs.docker-build.result == 'success' || needs.docker-build.result == 'failure')",
+        )
+        self.assertEqual(dependencies("docker-scan"), {"changes", "docker-build"})
+        for event in ("pull_request", "push", "merge_group", "workflow_dispatch", "schedule"):
+            for detection in ("success", "failure", "skipped", "cancelled"):
+                for selected in ("true", "false", ""):
+                    for build in ("success", "failure", "skipped", "cancelled"):
+                        for cancelled in (False, True):
+                            expression = condition.group(1).replace(
+                                "!cancelled()", repr(not cancelled),
+                            ).replace("github.event_name", repr(event)).replace(
+                                "needs.changes.result", repr(detection),
+                            ).replace("needs.changes.outputs.docker", repr(selected)).replace(
+                                "needs.docker-build.result", repr(build),
+                            ).replace("&&", "and").replace("||", "or")
+                            with self.subTest(event=event, detection=detection,
+                                              selected=selected, build=build,
+                                              cancelled=cancelled):
+                                self.assertEqual(
+                                    eval(expression, {"__builtins__": {}}),
+                                    not cancelled and event != "schedule"
+                                    and detection == "success" and selected == "true"
+                                    and build in ("success", "failure"),
+                                )
+        self.assertIn("      fail-fast: false\n", section)
+        self.assertIn("          name: docker-image-${{ matrix.target }}\n", section)
+        self.assertIn(
+            "          input: ${{ runner.temp }}/docker-image/docker-image.tar\n", section,
+        )
+        self.assertIn("          exit-code: '1'\n", section)
+        self.assertEqual(section.count("          severity: 'CRITICAL,HIGH'\n"), 2)
+        self.assertEqual(section.count("          ignore-unfixed: true\n"), 2)
+        self.assertNotIn("docker/build-push-action@", section)
+        self.assertNotIn("continue-on-error", without_overview(section))
+        download = re.search(
+            r"^      - name: Download Docker image for scanning\n(.*?)(?=^      - )",
+            section, re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(download)
+        self.assertNotIn("        if:", download.group(1))
+        self.assertIn(
+            "        if: ${{ !cancelled() && steps.image.outcome == 'success' && "
+            "github.event_name == 'pull_request' && "
+            "github.event.pull_request.head.repo.full_name == github.repository }}\n",
+            section,
+        )
+        self.assertIn(
+            "        if: ${{ !cancelled() && steps.sarif.outcome == 'success' }}\n", section,
+        )
+        self.assertIn("          category: trivy-${{ matrix.target }}\n", section)
+        self.assertTrue({"docker-build", "docker-scan"} <= dependencies("ci-result"))
+
     def test_reporting_still_requires_prerequisites_and_tests(self):
         section = job("report")
         self.assertEqual(dependencies("report"), {"ci-summary", "test"})
@@ -1659,7 +1719,7 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertEqual(self.jobs["docker-build"], "eligible")
         self.assertEqual(self.jobs["docker-scan"], "eligible")
         self.assertEqual(self.jobs["report"], "conditional")
-        self.assertIn("Docker build and scan: development and production; scans require builds.", result.stdout)
+        self.assertIn("Docker build and scan: development and production; scans require target archives.", result.stdout)
         self.assertIn("Static analyzers: Psalm, PHPStan, PHP Insights.", result.stdout)
         self.assertIn("External reporting requires eligible events, successful tests and gates; uploads require tokens.", result.stdout)
         self.assertIn("| External reporting (`report`) | conditional |", summary.read_text())
