@@ -144,19 +144,37 @@ Docker Compose selects `development` explicitly, including when used by Dev
 Containers. Both targets inherit the same PHP extensions, Composer version,
 security updates, working directory and PHP-FPM port from `base`.
 
-Production refreshes installed Debian packages in its own stage so a cached
-shared base cannot retain packages with newly available security fixes. CI
-bypasses the `production` stage cache, including this refresh and the Composer
-install/audit. Development already upgrades packages during its tool setup;
-use `--no-cache-filter development` with Buildx when refreshing a cached
-development stage. Neither operation updates pinned upstream image digests.
+Both application targets update only the explicitly named CVE-affected Debian
+package `linux-libc-dev` in their own stages, using
+`apt-get install --only-upgrade`.
+This fixes the reported header-package CVEs, including CVE-2026-99083 (fixed in
+Debian version `6.1.192-1`), without adding a blanket package upgrade. The
+command selects the available distribution candidate rather than freezing an
+exact version, allowing later security fixes for the same package.
 
-To refresh production packages locally without restarting shared services, run
-from the repository root on the Docker host:
+Keep future CVE fixes scoped to explicitly identified packages and necessary
+dependencies; do not replace this list with `apt-get upgrade`. Verify the
+installed version against the advisory and inspect the package-manager changes
+and final image scan for unrelated churn. Updating image headers does not patch
+the Docker host's kernel.
+
+CI bypasses the `production` stage cache, including this targeted update and the
+Composer install/audit, so cached shared-base packages can still receive the
+specified fix. Development applies the same targeted fix after source copies:
+source changes invalidate that step even when the earlier tool-setup upgrade is
+cached. Development's existing tool-setup upgrade is unchanged. For a refresh
+without source changes, bypass the affected stage cache explicitly; an ordinary
+cached rebuild does not discover newly published package fixes. Neither
+operation updates pinned upstream image digests.
+
+To apply the targeted production update locally without restarting shared
+services, run from the repository root on the Docker host:
 
 ```bash
 docker buildx build --load --no-cache-filter production \
   --target production -t symfony-flex-backend:prod .
+docker buildx build --load --no-cache-filter development \
+  --target development -t symfony-flex-backend:dev .
 ```
 
 ```bash
