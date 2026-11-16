@@ -13,6 +13,10 @@ follow the feature-specific skill and repository rules when a feature requires a
 new package. For coordinated changes to the supported PHP runtime baseline, use
 [update-php-runtime](../update-php-runtime/SKILL.md).
 
+For a reported CVE or failing vulnerability gate, start with
+[fix-cve](../fix-cve/SKILL.md) for artifact evidence and remediation proof, then
+use this skill for the affected package update mechanics.
+
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
 [AI rules](../../../doc/AI_RULES.md).
