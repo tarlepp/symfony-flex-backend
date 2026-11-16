@@ -1024,7 +1024,12 @@ currently disables only the `self-repository` rule, because local actions use
 `./` rather than `$/`. Disable or configure a rule there only with a comment
 explaining why. ShellCheck also checks the validator, shared command-output and
 Composer-cache helpers, the CI change detector, and both result gates and their
-shared helper.
+shared helper. Its explicit script inputs also include the Action update
+checker (`check-action-updates.sh`), Docker image helper (`docker-images.sh`),
+Make launcher (`make.sh`), dependency security checks (`check-security.sh`) and
+Sonar report preparation (`prepare-sonar-reports.sh`). These scripts are linted,
+not executed by ShellCheck; coverage is limited to the explicit input list in
+`scripts/lint-workflows.sh`, not every shell script in the repository.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
 cancellations, or skipped validation block tests and Docker builds.

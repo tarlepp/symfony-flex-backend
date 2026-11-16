@@ -307,6 +307,10 @@ application, analyzer, security and image jobs skip.
 
 `lint-workflows` runs actionlint with ShellCheck, zizmor security auditing,
 local composite-action schema validation and offline tooling regressions.
+Explicit ShellCheck inputs also cover the Action update checker, Docker image
+helper, Make launcher, dependency security script and Sonar report preparation.
+The maintained script list lives in `scripts/lint-workflows.sh`; this is not a
+repository-wide shell lint.
 Composite Bash/sh steps are also parsed with PyYAML and checked individually
 using the pinned ShellCheck, with action/step diagnostics. These checks do not
 execute scripts; GitHub expressions become inert placeholders for shell

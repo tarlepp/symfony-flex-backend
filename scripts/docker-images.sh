@@ -40,6 +40,7 @@
 ################################################################################
 
 set -euo pipefail
+# shellcheck source=scripts/command-output.sh
 source "$(dirname "$0")/command-output.sh"
 
 RED=$OUTPUT_RED
@@ -938,6 +939,7 @@ doc_link() {
     if [ -n "${GITHUB_SERVER_URL:-}" ] && [ -n "${GITHUB_REPOSITORY:-}" ] && [ -n "${GITHUB_SHA:-}" ]; then
         printf '[%s](%s/%s/blob/%s/%s)' "$path" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$path"
     else
+        # shellcheck disable=SC2016 # Literal backticks delimit Markdown code.
         printf '`%s`' "$path"
     fi
 }
@@ -1066,6 +1068,7 @@ command_platforms() {
 command_setup_qemu() {
     ask PLATFORMS "Emulators to install (comma separated, e.g. arm64,amd64 or all)" "arm64,amd64"
 
+    # shellcheck disable=SC2153 # ask assigns PLATFORMS dynamically.
     if ! [[ "$PLATFORMS" =~ ^[a-z0-9,]+$ ]]; then
         error "Invalid emulator list '${PLATFORMS}'"
         exit 64
@@ -1119,6 +1122,7 @@ command_build() {
 
     ask PLATFORM "Target platform (e.g. linux/amd64, linux/arm64)" "linux/arm64"
 
+    # shellcheck disable=SC2153 # ask assigns PLATFORM dynamically.
     if [[ "$PLATFORM" == *,* ]]; then
         error "Only one platform is supported, use 'make docker-build-multi-platform' for multiple"
         exit 64
