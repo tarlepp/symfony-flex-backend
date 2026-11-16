@@ -388,6 +388,52 @@ class ToolUpdatesTest(unittest.TestCase):
                 self.assertIn("no usable stable version tags", result.stderr)
                 self.assertNotIn("[OK] example/action", result.stdout)
 
+    def test_mixed_prefix_action_tags_use_numeric_order_and_exact_commit(self):
+        for older, newer in (
+            ("v1.0.0", "2.0.0"), ("1.0.0", "v2.0.0"),
+            ("v2.9", "2.10"), ("2.9", "v2.10"),
+            ("v2.9.9", "2.10.0"), ("2.9.9", "v2.10.0"),
+            ("v9", "10"), ("9", "v10"),
+        ):
+            for current in (older, newer):
+                for wrapped in (False, True):
+                    with self.subTest(older=older, newer=newer, current=current, wrapped=wrapped):
+                        current_sha = SHA if current == older else NEW_SHA
+                        result = self.run_checker(
+                            f"{SHA}\trefs/tags/v1.0.0", mode="", wrapped=wrapped,
+                            workflow_content=(
+                                f"steps:\n  - uses: example/action@{current_sha} # {current}\n"
+                            ),
+                            action_refs=f"{SHA}\trefs/tags/{older}\n{TAG_SHA}\trefs/tags/{newer}",
+                            action_sha_refs=(
+                                f"{TAG_SHA}\trefs/tags/{newer}\n"
+                                f"{NEW_SHA}\trefs/tags/{newer}^{{}}"
+                            ),
+                        )
+                        self.assertEqual(
+                            result.returncode, 1 if current == older and not wrapped else 0,
+                            result.stdout + result.stderr,
+                        )
+                        if current == older:
+                            self.assertIn(f"{older} -> {newer}", result.stdout)
+                            self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
+                        else:
+                            self.assertIn(f"{newer} (up-to-date)", result.stdout)
+                            self.assertNotIn("UPDATE AVAILABLE", result.stdout)
+
+    def test_equivalent_action_tag_prefixes_have_deterministic_preference(self):
+        for version in ("2.0.0", "2.1", "2"):
+            refs = [f"{TAG_SHA}\trefs/tags/{version}", f"{SHA}\trefs/tags/v{version}"]
+            for ordered in (refs, list(reversed(refs))):
+                with self.subTest(version=version, refs=ordered):
+                    result = self.run_checker(
+                        f"{SHA}\trefs/tags/v1.0.0", mode="",
+                        workflow_content=f"steps:\n  - uses: example/action@{SHA} # v{version}\n",
+                        action_refs="\n".join(ordered),
+                    )
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertIn(f"v{version} (up-to-date)", result.stdout)
+
     def test_major_fallback_ignores_full_prereleases(self):
         result = self.run_checker(
             f"{SHA}\trefs/tags/v1.0.0", mode="",

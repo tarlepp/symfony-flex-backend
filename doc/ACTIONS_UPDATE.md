@@ -362,10 +362,12 @@ Requirements:
 Important behavior:
 
 * The script sorts stable version tags across major versions and may suggest a
-  major upgrade. It excludes prerelease and suffix tags but does not enforce
-  compatibility, so treat every result as a candidate rather than approval to
-  update. Major-only pins fall back to major-only tags when no stable `X.Y` or
-  `X.Y.Z` tags exist; other pins never use that fallback.
+  major upgrade. Numeric ordering ignores an optional `v` prefix but preserves
+  the exact candidate tag for commit lookup. Equivalent prefixed and unprefixed
+  tags prefer the `v`-prefixed tag. It excludes prerelease and suffix tags but
+  does not enforce compatibility, so treat every result as a candidate rather
+  than approval to update. Major-only pins fall back to major-only tags when no
+  stable `X.Y` or `X.Y.Z` tags exist; other pins never use that fallback.
 * The script continues checks even when discovery warnings are present.
 * Review release notes and compatibility, and obtain explicit agreement before
   applying a major upgrade suggestion.
