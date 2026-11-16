@@ -4,8 +4,6 @@
 
 This directory contains different scripts that are used during development.
 
-<a id="table-of-contents"></a>
-
 ## Table of Contents [ᐞ](#table-of-contents)
 
 <a id="table-of-contents"></a>

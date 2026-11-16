@@ -330,22 +330,19 @@ Successful lookups with no version-like tags or missing/invalid candidate SHAs
 are reported separately. For timeouts, check network and DNS connectivity from
 the PHP development container before retrying; the time limits are unchanged.
 
-Use in CI:
+For CI, use the existing
+[`action-updates.yml`](../.github/workflows/action-updates.yml) workflow rather
+than adding a second checker workflow. It runs weekly and on manual dispatch,
+bootstraps the development container without Composer installation, and runs
+the checker inside that container. Updates (exit 1) are advisory; incomplete
+checks (exit 2) and unexpected failures fail the workflow. See the
+[workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows).
 
-```yaml
-# .github/workflows/check-updates.yml
-name: Check Action Updates
+To reproduce the direct checker's exit status, run from the repository root on
+the Docker host with the development PHP service running:
 
-on:
-  schedule:
-    - cron: '0 9 * * 1'
-
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - run: bash scripts/check-action-updates.sh
+```bash
+docker compose exec -T php bash scripts/check-action-updates.sh
 ```
 
 Requirements:
