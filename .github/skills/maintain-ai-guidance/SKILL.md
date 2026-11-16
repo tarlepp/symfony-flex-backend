@@ -53,7 +53,9 @@ Inspect the affected source and its consumers, not just the requested file:
   [verifier](../../agents/verifier.agent.md). Also inspect the bounded
   [conflict resolver](../../agents/conflict-resolver.agent.md) and its
   [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing
-  changes.
+  changes. For CVE routing, inspect the
+  [CVE fixer](../../agents/cve-fixer.agent.md) and
+  [CVE skill](../fix-cve/SKILL.md) alongside its callers and verifier.
 * `scripts/check-skills.py`, the `check-skills` and `lint-markdown` Make
   targets, and `.github/workflows/main.yml`: actual documentation-check coverage
   and execution environment. Inspect `scripts/tests/` for existing regression
@@ -114,11 +116,11 @@ invariants from the profiles and
   specialist recommendations are not approval evidence.
 * Delivery routes through lead, architect, implementer, then verifier. The
   architect does not implement; the implementer owns source writing with only
-  the approved sequential conflict-resolver exception. The verifier
-  independently checks without editing or running fixers. Review effective tool
-  aliases as well as prose: broad tools can expose capabilities that role
-  instructions prohibit. Allowlists and visibility fields are client-dependent
-  routing aids, not isolation boundaries.
+  the approved sequential conflict-resolver and cve-fixer exceptions. The
+  verifier independently checks without editing or running fixers. Review
+  effective tool aliases as well as prose: broad tools can expose capabilities
+  that role instructions prohibit. Allowlists and visibility fields are
+  client-dependent routing aids, not isolation boundaries.
 * Initial implementation pauses during verification. The verifier may call an
   implementer in `repair-only` mode; that worker returns to the existing
   verifier and must not start another verification chain. Preserve the
@@ -136,6 +138,13 @@ invariants from the profiles and
   baseline, accumulated paths, findings, command outcomes, and repair history as
   applicable. Repairs do not reset task state or redefine earlier task edits as
   unrelated work.
+* Only the implementer may invoke the hidden CVE fixer for approved bounded
+  findings, in initial or repair-only mode. The caller pauses; the fixer cannot
+  delegate, publish, change Git operations, or suppress findings. Retain
+  artifact/scanner evidence, cumulative paths, approvals, and repair count.
+  Initial work returns to independent verification; repairs return to the
+  existing verifier. `FIXED` is not `PASS`; missing compatible fixes or required
+  evidence remain `BLOCKED`.
 * Missing approval, unsupported delegation, or unavailable required evidence
   must remain explicit blockers. Unresolved defects cannot become a `PASS`.
   Results return through the existing callers; do not spawn another lead,
@@ -182,6 +191,8 @@ delivery chain, repair-only return routing, cumulative repair limits,
 conflict-worker suspension/return and depth-five repair routing, and
 blocked-check reporting as affected. Do not trigger an implementation or repair
 merely to test routing without authorization.
+For CVE routing, check fixer suspension/return, depth-five repairs, retained
+scanner evidence, and `FIXED` versus independent `PASS`.
 
 Report static checks, manual contract review, and live-client results
 separately. If a client or authorized scenario is unavailable, state which

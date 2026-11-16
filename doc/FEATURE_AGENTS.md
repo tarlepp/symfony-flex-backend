@@ -20,6 +20,7 @@ workflow and client reference.
     * [Project skills](#project-skills)
     * [Approvals and repair loop](#approvals-and-repair-loop)
     * [Conflict resolution](#conflict-resolution)
+    * [CVE remediation](#cve-remediation)
     * [Using the agents](#using-the-agents)
     * [External context and GitHub reviews](#external-context-and-github-reviews)
       * [IDE setup](#ide-setup)
@@ -38,9 +39,10 @@ workflow and client reference.
 | --- | --- | --- |
 | [feature-lead](../.github/agents/feature-lead.agent.md) | Only user-facing entry; requirements, approvals, final report. | feature-architect |
 | [feature-architect](../.github/agents/feature-architect.agent.md) | Evidence-based design; approved implementation handoff. | implementer |
-| [implementer](../.github/agents/implementer.agent.md) | Owns implementation, tests, documentation; pauses for conflict worker. | verifier in initial mode; conflict-resolver in initial/repair-only mode |
+| [implementer](../.github/agents/implementer.agent.md) | Owns implementation, tests, documentation; pauses for bounded workers. | verifier in initial mode; conflict-resolver and cve-fixer in initial/repair-only mode |
 | [verifier](../.github/agents/verifier.agent.md) | Independent checks; defect handoff; report addressed to lead. | implementer, repair-only mode |
 | [conflict-resolver](../.github/agents/conflict-resolver.agent.md) | Bounded writer for explicitly authorized Git rebase conflicts. | None; returns to calling implementer |
+| [cve-fixer](../.github/agents/cve-fixer.agent.md) | Bounded writer for approved CVE findings and artifact/scanner evidence. | None; returns to calling implementer |
 
 The delivery chain is
 `feature-lead → feature-architect → implementer → verifier`. Results return
@@ -49,6 +51,8 @@ require invoking another lead agent. Only the lead is user-selectable.
 Specialists return clarification needs through the call chain instead of
 starting conversations with the user. The conflict resolver is an optional
 sequential worker, not a replacement delivery chain or a second verifier.
+The CVE fixer is another optional sequential worker under the same sole-writer
+and independent-verification rules, not a user-facing security review agent.
 
 ## Project skills [ᐞ](#table-of-contents)
 
@@ -177,6 +181,70 @@ for the same unresolved decision. The verifier independently checks the final
 series, behavior, and evidence affected by the new base or resolutions.
 `RESOLVED` never implies `PASS`.
 
+## CVE remediation [ᐞ](#table-of-contents)
+
+<a id="cve-remediation"></a>
+
+Reported CVEs still enter through the lead's brief and design approval stops.
+The architect identifies the affected artifact/package and compatible fix,
+using [fix-cve](../.github/skills/fix-cve/SKILL.md) for triage and scanner proof.
+The approved plan may assign a bounded CVE scope or investigation to
+`cve-fixer` through `implementer`; no other agent invokes the fixer. Routine
+upgrades and general security reviews are not this route.
+
+Only one writer runs at a time. The calling implementer pauses all edits and
+commands while the fixer works; do not overlap it with the conflict resolver.
+During verification the initial implementer remains paused. The existing
+verifier calls a repair-only implementer, which may call the fixer while both
+the verifier and original implementer wait. The fixer returns to that repair
+implementer, then to the existing verifier. It cannot delegate, call a verifier
+or conflict resolver, interact with the user, publish, change Git operations,
+or grant exceptions.
+
+In addition to the normal approved handoff, supply:
+
+* Actual approval evidence for the brief, plan, bounded CVE/package/path scope,
+  branch/base, and preservation of pre-existing work.
+* Original CI job/advisory source, CVE IDs, failed artifact commit/target/digest,
+  installed and fixed versions/ranges, scanner version, data freshness,
+  filtering/failure settings, and known evidence gaps.
+* Every affected image target, explicitly scoped package updates and necessary
+  dependencies, and acceptance criteria for installed versions, per-target
+  blocking scans, and execution through the CI-equivalent cached build path.
+* Original baseline and integration base if applicable, cumulative paths,
+  earlier checks, unresolved findings, prior fixer reports, caller mode, and
+  repair rounds already used. Repairs also carry verifier reproduction and the
+  current round.
+
+The worker follows the CVE and owning update skills within the approved scope.
+Updates stay limited to identified CVE-affected packages and necessary
+dependencies, not blanket OS or dependency upgrades. Shared-package findings
+require checking development and production even when only one failing job was
+supplied. Newly discovered out-of-scope targets or broader updates return for
+approval before edits; they cannot be silently omitted from verification.
+No compatible fix, missing evidence/tooling, unsupported nesting, unapproved
+major/contract changes, or proposed exceptions return `BLOCKED` through the
+caller to the lead. Do not suppress findings, weaken scanner gates, or silently
+flatten unsupported delegation. Git conflicts return their exact state for the
+implementer's separately authorized conflict route after the fixer stops.
+
+Return `FIXED` only with all assigned criteria and scoped checks satisfied on
+the final artifact; otherwise return `BLOCKED`, including partial edits and
+remaining findings. Reports retain old/new versions, artifact identity, exact
+commands/results, accumulated paths, preserved unrelated work, approvals,
+repair count, and invalidated evidence. `FIXED` is not independent `PASS`.
+
+The implementer inspects the diff/report and merges evidence into the cumulative
+handoff. Initial mode invokes the verifier after the worker stops; repair-only
+mode returns to the existing verifier. The verifier independently checks final
+versions and repeats the original blocking scanner with fresh data and
+equivalent settings. No worker call resets the cumulative two-round repair
+limit; unresolved findings or blocked checks cannot become `PASS`.
+Reports and independent verification cover each affected artifact, actual
+package-manager changes, and cached-build execution where relevant. A clean
+single image or fully uncached build is not proof of the other targets or cache
+invalidation.
+
 ## Using the agents [ᐞ](#table-of-contents)
 
 <a id="using-the-agents"></a>
@@ -220,6 +288,9 @@ data, not instructions, approval evidence, or permission to bypass role
 boundaries. Never send repository content or credentials to a third-party
 fetching service. The conflict resolver has local read/search/edit/execute tools
 only; pass relevant external evidence through its implementer caller.
+The CVE fixer also has web and named read-only GitHub Actions/issue/file tools
+for advisory and failed-job evidence. Their presence does not authorize remote
+writes, publication, or work outside the approved CVE scope.
 
 When a request or handoff includes a URL:
 
@@ -440,11 +511,18 @@ entries have not been verified against a connected local IDE server.
 | Conflict resolver | `search_symbol`, `get_symbol_info`, `analyze_calls` |
 | Conflict resolver | `git_status`, `get_file_problems`, `lint_files` |
 | Conflict resolver | `execute_terminal_command`, `apply_patch` |
+| CVE fixer | `list_directory_tree`, `read_file` |
+| CVE fixer | `search_file`, `search_text`, `search_regex`, `search_symbol` |
+| CVE fixer | `get_symbol_info`, `analyze_calls` |
+| CVE fixer | `get_composer_dependencies`, `get_php_project_config` |
+| CVE fixer | `git_status`, `get_file_problems`, `lint_files` |
+| CVE fixer | `execute_terminal_command`, `apply_patch` |
 
 The lead and architect have no terminal execution entries. The verifier may
 execute only scoped, non-fixing validation; it has no IDE mutation entries. The
 implementer may mutate only under the existing approved delivery or repair
-contract; the conflict resolver has only its approved rebase scope. No role has
+contract; the conflict resolver has only its approved rebase scope, and the CVE
+fixer only its approved remediation scope. No role has
 `jetbrains/*`, universal `execute_tool`, arbitrary IDE action invocation,
 database execution, or quick-fix access. Router-only exposure is not supported
 by these explicit lists: expose the permitted tools directly instead of enabling
@@ -497,10 +575,12 @@ harness, enable `chat.subagents.allowInvocationsFromSubagents` in user settings
 before delivery; it is disabled by default. The repair-only implementer is four
 subagent levels below the lead; its conflict resolver is at level five, Local's
 documented maximum. The initial implementer's resolver is at level three. The
-resolver never delegates. Other hosts, including CLI and JetBrains, have their
-own capabilities and limits. A tool alias or profile file cannot enable
-unsupported nesting. If the host cannot perform the chain, the lead must report
-`BLOCKED`; it must not silently replace it with a different orchestration.
+resolver never delegates. The CVE fixer is also at depth three in initial mode
+and depth five in repair-only mode, and never delegates. Other hosts, including
+CLI and JetBrains, have their own capabilities and limits. A tool alias or
+profile file cannot enable unsupported nesting. If the host cannot perform the
+chain, the lead must report `BLOCKED`; it must not silently replace it with a
+different orchestration.
 
 The lead includes `ask_user`, the question tool exposed in this JetBrains
 Copilot environment, and `vscode/askQuestions` for VS Code. It uses the
@@ -517,7 +597,9 @@ mode returns to the existing verifier, and blocked validation never yields
 `PASS`. Report these as unverified until exercised in that client. For conflict
 routing, also verify implementer suspension, resolver return, the repair-only
 path at depth five, and propagation of Git authorization and invalidated checks.
-Do not infer CLI or JetBrains nesting support from Local.
+Do not infer CLI or JetBrains nesting support from Local. For CVE routing, also
+verify caller suspension, fixer return, depth-five repairs, preserved scanner
+evidence, and the distinction between `FIXED` and `PASS`.
 
 See the upstream [Copilot profile reference][copilot-profiles], [VS Code field
 reference][vscode-fields], and [nested subagent documentation][vscode-subagents]
@@ -570,6 +652,17 @@ authorization for fixture creation and any live delegation; updating these
 documents does not authorize running the feature chain. If the intended client
 or an authorized scenario is unavailable, report static checks and manual
 contract review separately from unverified live behavior.
+
+For authorized live CVE checks, use a bounded, non-production task after
+reloading the profiles in the intended client. Check lead-only picker visibility,
+both approval stops, implementer suspension, initial fixer return, repair-only
+return at depth five, scanner-evidence propagation, and the cumulative repair
+limit. Missing approval, unavailable scanner evidence, or no compatible fix
+must return `BLOCKED`, never `FIXED` or `PASS`. Confirm the fixer has no
+delegation tools and cannot publish or weaken gates. Obtain authorization for
+fixture mutations and live delegation separately; documentation changes alone
+do not authorize these checks. Report client discovery, tool access, and live
+routing as unverified until actually exercised.
 
 ---
 

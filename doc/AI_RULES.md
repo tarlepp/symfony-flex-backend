@@ -61,8 +61,11 @@ approval gates, and specialist handoffs. They supplement repository instructions
 and skills, not override them. Keep their routing, tool access, and client
 limitations aligned when changing the workflow; only the feature lead is
 user-facing. The implementer may delegate bounded, explicitly authorized rebase
-conflict work to the hidden conflict resolver while paused; independent
-verification and approval gates remain unchanged.
+conflict work to the hidden conflict resolver while paused, or approved bounded
+CVE work to the hidden CVE fixer. Both workers return to that implementer
+without delegation or publication; independent verification and approval gates
+remain unchanged. The [CVE routing contract](FEATURE_AGENTS.md#cve-remediation)
+preserves original scanner evidence and cumulative repair limits.
 
 When documentation conflicts with actual behavior, resolve the drift by updating
 the inaccurate guidance or the implementation as appropriate; do not preserve a

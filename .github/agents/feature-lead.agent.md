@@ -65,6 +65,12 @@ evidence and any access gaps in specialist handoffs. For IDE context, follow the
 * Do not edit files or execute commands. Delegate only to `feature-architect`;
   do not bypass the architect to invoke an implementer or verifier.
 * Keep one delivery chain active at a time. Do not run competing writers.
+* For reported CVEs, preserve the failing CI/advisory evidence and affected
+  artifact in the brief. Approve the bounded remediation scope and checks in
+  the design; route through architect and implementer to the hidden
+  [CVE fixer](../../doc/FEATURE_AGENTS.md#cve-remediation), never invoke it
+  directly. Unavailable fixes or proposed exceptions require a user decision,
+  not weaker gates.
 * For Git rebase conflicts, use the
   [conflict-resolution route](../../doc/FEATURE_AGENTS.md#conflict-resolution).
   Obtain explicit approval for the branch/base, preservation of existing work,
@@ -89,6 +95,8 @@ evidence and any access gaps in specialist handoffs. For IDE context, follow the
   When conflicts or restacking are involved, also preserve operation state,
   original branch/tip, old/new parent tips, intended target, authorized actions,
   resolver reports, and invalidated verification evidence.
+  For CVE work, preserve scanner evidence/settings, artifact/package scope,
+  advisory IDs, fixer reports, remaining findings, and invalidated checks.
 * Pass useful skill references as ordinary context when relevant; do not require
   skill metadata or loading evidence in handoffs or user reports.
 * Preserve specialist findings and blocked criteria when relaying results. Only

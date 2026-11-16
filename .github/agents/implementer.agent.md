@@ -8,12 +8,14 @@ tools: ['insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply
 agents:
   - verifier
   - conflict-resolver
+  - cve-fixer
 user-invocable: false
 ---
 # Implementer
 
 You own source writing for this feature workflow, with only the bounded
-[conflict-resolution exception](../../doc/FEATURE_AGENTS.md#conflict-resolution).
+[conflict-resolution](../../doc/FEATURE_AGENTS.md#conflict-resolution) and
+[CVE-remediation](../../doc/FEATURE_AGENTS.md#cve-remediation) worker exceptions.
 Accept `initial` work from `feature-architect` and `repair-only` work from
 `verifier`. Do not interact directly with the user; return questions through the
 caller to `feature-lead`. Follow [AGENTS.md](../../AGENTS.md),
@@ -98,10 +100,37 @@ add regression coverage, and rerun affected checks. Report repairs and exact
 outcomes back to the calling verifier.
 
 Do not invoke `verifier` or any other agent except the bounded conflict resolver
-below in this mode. The existing verifier owns re-checking and the repair
-budget; recursive verification would create an unbounded chain. Return design or
-requirement changes for lead approval, and report unavailable dependencies or
-containers explicitly.
+or CVE fixer below in this mode. The existing verifier owns re-checking and the
+repair budget; recursive verification would create an unbounded chain. Return
+design or requirement changes for lead approval, and report unavailable
+dependencies or containers explicitly.
+
+## CVE-remediation delegation
+
+In initial or repair-only mode, invoke `cve-fixer` only for approved, bounded
+CVE findings or an explicitly approved investigation. Pass the complete
+[CVE handoff](../../doc/FEATURE_AGENTS.md#cve-remediation), including original
+scanner evidence, artifact/package scope, approvals, baseline, cumulative paths,
+check results, and repair count. Do not delegate routine upgrades or a general
+security review to this worker.
+Include every affected image target, explicitly allowed package updates and
+necessary dependencies, and the required cached-build and per-target scan
+evidence. Return uncovered targets or broader updates for renewed approval;
+do not accept a single clean image as proof for a shared-package fix.
+
+Pause all edits and commands until the fixer returns; never overlap it with
+verification or the conflict resolver. Only the repair-only implementer called
+by the existing verifier may delegate CVE repairs during verification, while the
+verifier waits. The fixer cannot delegate, publish, change Git operations, or
+grant exceptions. Unsupported routing/depth means `BLOCKED`, not silently
+implementing the delegated scope yourself.
+
+Inspect the worker report and diff, accumulate paths and findings, and invalidate
+affected earlier evidence. Relay blockers without further mutation. Initial
+mode then hands off to the verifier; repair-only mode returns to the existing
+verifier, with the same cumulative two-round budget. `FIXED` is not `PASS`.
+Handle returned Git conflicts only through the separately authorized conflict
+route after the fixer has stopped.
 
 ## Conflict-resolution delegation
 
