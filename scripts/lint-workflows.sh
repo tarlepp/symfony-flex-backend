@@ -52,7 +52,9 @@ download() {
         cp "$cache" "$file"
         return
     fi
-    curl --fail --silent --show-error --location --retry 3 "$url" --output "$file" || return "$?"
+    curl --fail --silent --show-error --location \
+        --connect-timeout 10 --max-time 60 --retry 3 --retry-max-time 120 \
+        "$url" --output "$file" || return "$?"
     printf '%s  %s\n' "$checksum" "$file" | sha256sum --check --quiet || return "$?"
     mkdir -p "$(dirname "$cache")" || return "$?"
     local staging

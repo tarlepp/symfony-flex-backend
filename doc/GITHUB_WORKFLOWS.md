@@ -319,6 +319,11 @@ extraction or execution. Corrupt cached files fail validation explicitly; failed
 downloads never populate the cache. `make lint-yaml` checks Symfony
 configuration, not GitHub workflows.
 
+Cold validator downloads allow ten seconds to connect and sixty seconds per
+attempt, with at most three retries within a 120-second retry window. A final
+attempt may finish after that window, within its per-attempt limit. Timeouts
+fail validation with curl's exit status; partial downloads are not cached.
+
 Core CI uses depth-one checkouts for ordinary validation, Docker builds/scans
 and result gates. Full history is retained only for change detection (base/head
 comparisons), Gitleaks (history scanning), project statistics (PR merge-base
