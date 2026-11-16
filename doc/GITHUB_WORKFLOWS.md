@@ -332,10 +332,9 @@ external reporting (SonarCloud SCM analysis). Reporting still checks out the
 tested SHA only when an upload token is available. All checkouts disable
 credential persistence.
 
-Before cleanup, core CI's PHP-bootstrap consumers and the standalone Action
-update checker run failure-only container diagnostics. The reporting job omits
-these when bootstrap was skipped. Docker image PR maintenance currently performs
-cleanup without this diagnostics step.
+Before cleanup, all PHP-bootstrap consumers in core CI, the standalone Action
+update checker and Docker image PR maintenance run failure-only container
+diagnostics. The reporting job omits these when bootstrap was skipped.
 [`ci-failure-diagnostics.sh`](../scripts/ci-failure-diagnostics.sh) lists only
 the current CI Compose project's PHP containers and prints allowlisted status,
 exit code, OOM flag and health status. It limits output to five containers, uses
