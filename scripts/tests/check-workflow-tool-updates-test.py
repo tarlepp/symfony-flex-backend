@@ -20,7 +20,8 @@ class ToolUpdatesTest(unittest.TestCase):
                     action_refs=None, action_path="example/action",
                     action_sha_refs=None, composite=False, git_error="",
                     sha_failure_status=1, workflow_content=None,
-                    composite_content=None):
+                    composite_content=None, files=None, missing_directory=None,
+                    find_status=None, unreadable_file=None):
         with tempfile.TemporaryDirectory(prefix="tool-update-test-") as directory:
             root = Path(directory)
             (root / "workflows").mkdir()
@@ -36,6 +37,18 @@ class ToolUpdatesTest(unittest.TestCase):
                     composite_content if composite_content is not None
                     else f"runs:\n  steps:\n    - uses: {action_path}@{SHA} # v1.0.0\n"
                 )
+            for name, content in (files or {}).items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content)
+            if unreadable_file is not None:
+                (root / unreadable_file).chmod(0)
+            if missing_directory is not None:
+                (root / missing_directory).rmdir()
+            if find_status is not None:
+                find = root / "find"
+                find.write_text(f"#!/bin/bash\nexit {find_status}\n")
+                find.chmod(0o755)
             pins = root / "pins.sh"
             pins.write_text(
                 pin if pin is not None
@@ -78,6 +91,7 @@ class ToolUpdatesTest(unittest.TestCase):
                 ACTIONS_DIR=str(root / "actions"),
                 NO_COLOR="" if color else "1",
                 COLOR="always" if color else "never",
+                PATH=f"{root}:{os.environ['PATH']}",
             )
             command = ["bash", str(CHECKER), mode]
             if wrapped:
@@ -85,6 +99,7 @@ class ToolUpdatesTest(unittest.TestCase):
             return subprocess.run(
                 command,
                 env=environment, text=True, capture_output=True, check=False,
+                timeout=10,
             )
 
     def test_inventory_is_offline_and_includes_full_pin(self):
@@ -92,6 +107,84 @@ class ToolUpdatesTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("example/tool@v1.0.0", result.stdout)
         self.assertIn(SHA[:8], result.stdout)
+
+    def test_discovery_covers_yaml_variants_nested_metadata_and_spaced_paths(self):
+        reference = f"  - uses: example/action@{SHA} # v1.0.0\n"
+        files = {
+            "workflows/check.yml": reference,
+            "workflows/another check.yaml": reference,
+            "actions/bootstrap/action.yml": reference,
+            "actions/nested/with spaces/action.yaml": reference,
+            "actions/root/action.yaml": reference,
+        }
+        ignored = {
+            "workflows/nested/ignored.yml": reference.replace("example/action", "ignored/workflow"),
+            "workflows/ignored.txt": reference.replace("example/action", "ignored/text"),
+            "actions/nested/ignored.yml": reference.replace("example/action", "ignored/metadata"),
+        }
+        result = self.run_checker(
+            "", mode="--current-pins-md", git_status=99, files={**files, **ignored},
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.count("| example/action@v1.0.0 |"), 1)
+        for path in files:
+            self.assertIn(f"{path}:1", result.stdout)
+        self.assertNotIn("ignored/", result.stdout)
+
+    def test_nested_yaml_conflicts_preserve_first_pin_and_source_diagnostics(self):
+        result = self.run_checker(
+            "", mode="--current-pins-md", action=True,
+            files={"actions/nested/bootstrap/action.yaml":
+                   f"  - uses: example/action@{NEW_SHA} # v1.0.0\n"},
+        )
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn("workflows/check.yml:2", result.stderr)
+        self.assertIn("actions/nested/bootstrap/action.yaml:1", result.stderr)
+        self.assertIn(f"`{SHA[:8]}`", result.stdout)
+        self.assertNotIn(f"`{NEW_SHA[:8]}`", result.stdout)
+
+    def test_missing_directories_are_errors_but_other_sources_are_inventoried(self):
+        for directory in ("workflows", "actions"):
+            remaining_source = (
+                "actions/local/action.yaml" if directory == "workflows"
+                else "workflows/check.yaml"
+            )
+            for wrapped in (False, True):
+                with self.subTest(directory=directory, wrapped=wrapped):
+                    result = self.run_checker(
+                        f"{SHA}\trefs/tags/v1.0.0", mode="",
+                        missing_directory=directory, wrapped=wrapped,
+                        files={remaining_source:
+                               f"  - uses: example/action@{SHA} # v1.0.0\n"},
+                    )
+                    self.assertEqual(result.returncode, 0 if wrapped else 2, result.stdout)
+                    self.assertIn("directory not found", result.stderr)
+                    self.assertIn("example/action", result.stdout)
+                    self.assertIn("example/tool", result.stdout)
+
+    def test_unreadable_metadata_is_an_error_and_other_sources_continue(self):
+        path = "actions/nested/action.yaml"
+        result = self.run_checker(
+            "", mode="--current-pins-md", action=True,
+            files={path: f"  - uses: example/action@{SHA} # v1.0.0\n"},
+            unreadable_file=path,
+        )
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn("Cannot read action references:", result.stderr)
+        self.assertIn(path, result.stderr)
+        self.assertIn("example/action", result.stdout)
+        self.assertIn("example/tool", result.stdout)
+
+    def test_failed_inventory_is_an_error_and_tools_only_skips_action_discovery(self):
+        result = self.run_checker("", mode="--current-pins-md", find_status=7)
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn("Cannot discover Workflow files", result.stderr)
+        self.assertIn("Cannot discover Actions files", result.stderr)
+        self.assertIn("example/tool", result.stdout)
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", missing_directory="workflows", find_status=7,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_lightweight_and_annotated_tags(self):
         for refs in (

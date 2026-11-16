@@ -7,8 +7,8 @@
 # updates and displays the new SHA for each outdated action.
 #
 # It discovers actions and workflow tool pins from:
-#   - .github/workflows/*.yml files
-#   - .github/actions/*/action.yml files
+#   - .github/workflows/*.yml and *.yaml files
+#   - action.yml and action.yaml files recursively under .github/actions/
 #   - scripts/lint-workflows.sh tool-pin declarations
 #
 # Usage:
@@ -139,30 +139,42 @@ discover_actions_in_file() {
     done < "$file"
 }
 
+discover_action_files() {
+    local directory=$1 label=$2 inventory file
+    shift 2
+
+    if [ ! -d "$directory" ]; then
+        output_status FAIL "$label directory not found: $directory"
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        return
+    fi
+
+    if ! inventory=$(mktemp); then
+        output_status FAIL "Cannot create $label discovery inventory"
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+        return
+    fi
+
+    if (set -o pipefail; find "$directory" "$@" -print0 | sort -z > "$inventory"); then
+        while IFS= read -r -d '' file; do
+            if ! discover_actions_in_file "$file"; then
+                output_status FAIL "Cannot read action references: $file"
+                DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+            fi
+        done < "$inventory"
+    else
+        output_status FAIL "Cannot discover $label files: $directory"
+        DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
+    fi
+
+    rm -f "$inventory"
+}
+
 discover_actions() {
-    local file
-
-    if [ ! -d "$WORKFLOW_DIR" ]; then
-        output_status WARN "Workflow directory not found: $WORKFLOW_DIR"
-        return
-    fi
-
-    for file in "$WORKFLOW_DIR"/*.yml; do
-        [ -f "$file" ] || continue
-
-        discover_actions_in_file "$file"
-    done
-
-    if [ ! -d "$ACTIONS_DIR" ]; then
-        output_status WARN "Actions directory not found: $ACTIONS_DIR"
-        return
-    fi
-
-    for file in "$ACTIONS_DIR"/*/action.yml; do
-        [ -f "$file" ] || continue
-
-        discover_actions_in_file "$file"
-    done
+    discover_action_files "$WORKFLOW_DIR" Workflow \
+        -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \)
+    discover_action_files "$ACTIONS_DIR" Actions \
+        -type f \( -name action.yml -o -name action.yaml \)
 }
 
 print_current_pins_markdown() {

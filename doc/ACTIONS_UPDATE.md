@@ -83,9 +83,10 @@ That gives:
 
 <a id="current-action-pins"></a>
 
-The current pin list is generated from `.github/workflows/*.yml` and
-`.github/actions/*/action.yml`, plus the `tool-pin` declarations in
-`scripts/lint-workflows.sh`, so it does not become stale.
+The current pin list is generated from top-level `.yml`/`.yaml` workflows in
+`.github/workflows/`, recursive `action.yml`/`action.yaml` metadata under
+`.github/actions/`, and the `tool-pin` declarations in `scripts/lint-workflows.sh`,
+so it does not become stale.
 
 Run this command to print current pins as markdown:
 
@@ -276,8 +277,9 @@ bash scripts/check-action-updates.sh
 
 What it does:
 
-* Discovers pinned actions dynamically from `.github/workflows/*.yml` and
-  `.github/actions/*/action.yml`.
+* Discovers pinned actions from top-level `.yml` and `.yaml` files in
+  `.github/workflows/` and recursively from `action.yml` and `action.yaml`
+  metadata under `.github/actions/`.
 * Compares version comments against the latest version-like tag it discovers.
 * Resolves the exact candidate tag, preferring its peeled commit for annotated
   tags rather than the tag-object SHA.
@@ -285,6 +287,10 @@ What it does:
   including moved tags and pins that mistakenly use an annotated tag object.
 * Shows summary output and source lines for each finding.
 * Reports discovery warnings such as unpinned refs.
+
+Missing workflow/action directories, inventory failures, and unreadable files
+are discovery errors (exit 2); other sources are still checked. Empty
+directories are allowed. `--tools-only` does not inspect action directories.
 
 Example output:
 
