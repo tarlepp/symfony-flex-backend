@@ -254,7 +254,6 @@ flowchart TD
     Images --> Prereq
     Analyzers --> Prereq
     Changes --> Final
-    Statistics --> Final
     Prereq --> Final
     Analyzers --> Final
     Tests --> Final
@@ -271,6 +270,10 @@ compute even if lint or security checks subsequently fail. External reporting
 waits for successful tests and the prerequisite gate. Eligible reporting must
 succeed for the final merge gate to pass. Dependency Review is separate from
 this graph and is required too.
+
+The informational statistics job runs independently. The final gate does not
+wait for it or consume its result; statistics remain visible in their own job
+summaries, which may finish after the required gate.
 
 ### Job reference [ᐞ](#table-of-contents)
 
@@ -670,9 +673,11 @@ the builder platforms do not prove that application images were built for them.
 For pull requests, a separate summary compares the merge base and PR head by
 project area, excluding the same lockfiles and recognized generated artifacts.
 Renames are counted as additions and deletions; binary files have no line counts.
-Collection failures are shown in the job overview and do not block the merge
-gate. Setup failures can leave some summaries unavailable. When PHP analyzers
-are selected, the lightweight analyzer job also publishes its existing PHPLoc
+Collection failures are shown in the job overview and do not block or delay the
+merge gate. The workflow run itself can remain in progress while statistics
+finish; the statistics job's 15-minute timeout is unchanged. Setup failures can
+leave some summaries unavailable. When PHP analyzers are selected, the
+lightweight analyzer job also publishes its existing PHPLoc
 output and the PHP Insights matrix job publishes its four score lines. When
 tests produce usable JUnit results, the test job also publishes its existing
 PhpMetrics output. Summary publication does not change analyzer or test

@@ -90,8 +90,11 @@ replacement for their actual event filters and conditions:
    the gate, analyzers, tests, Docker builds and reporting. It uses
    `!cancelled()` so superseded workflows release their concurrency slot, while
    failed prerequisites still reach the result checks. It is the required merge
-   gate, so add every new job to its `needs` and result checks. The `changes`
-   job selects configuration, dependency security, Docker pins/updates, PHP
+   gate, so add every new blocking job to its `needs` and result checks.
+   The informational `statistics` job is deliberately independent: retain its
+   own summaries without making either gate wait for or consume its result.
+   The `changes` job selects configuration, dependency security, Docker
+   pins/updates, PHP
    analyzers, tests, builds, documentation and workflow validation independently
    on PRs, pushes and merge groups, using the
    [CI selection table](../../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path).

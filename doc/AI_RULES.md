@@ -150,8 +150,8 @@ contains:
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
   both static-analysis jobs, tests, Docker builds/scans and eligible external
   reporting, and is the required merge check together with `dependency-review`,
-* an informational statistics job on non-scheduled runs; its results are
-  reported by the final gate but do not block it, and
+* an independent informational statistics job on non-scheduled runs; its
+  summaries remain in its own job and the final gate does not wait for it, and
 * optional coverage and Sonar reporting on all PRs and successful `master`
   pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
   covered by the final merge gate when eligible. Uploads require their

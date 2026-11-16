@@ -170,7 +170,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertEqual(self.run_gate("ci-summary", "merge_group").returncode, 0)
         self.assertEqual(self.run_gate("ci-result", "merge_group").returncode, 0)
 
-    def test_every_core_job_is_checked_by_the_required_gate(self):
+    def test_every_blocking_core_job_is_checked_by_the_required_gate(self):
         names = set(re.findall(r"^  ([a-z][a-z-]*):$", CONTENT.split("jobs:\n", 1)[1],
                                re.MULTILINE))
         graph = {name: dependencies(name) for name in names}
@@ -186,7 +186,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             covered.add(name)
 
         visit("ci-result", set())
-        self.assertEqual(names - covered, set())
+        self.assertEqual(names - covered, {"statistics"})
+        self.assertEqual(dependencies("statistics"), set())
         for name in covered:
             header = job(name).split("    steps:", 1)[0]
             self.assertNotRegex(header, r"^    continue-on-error:", name)
@@ -216,12 +217,6 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
                 self.assertEqual(self.run_gate(name, event).returncode, 0)
                 for variable in variables:
-                    if variable == "STATISTICS":
-                        for result in ("success", "failure", "cancelled", "skipped"):
-                            self.assertEqual(self.run_gate(name, event, **{variable: result}).returncode, 0)
-                        for result in ("", "unknown"):
-                            self.assertNotEqual(self.run_gate(name, event, **{variable: result}).returncode, 0)
-                        continue
                     if variable == "REPORT" and event in ("merge_group", "workflow_dispatch"):
                         continue
                     for result in ("failure", "cancelled", "skipped", "", "unknown"):
@@ -240,8 +235,6 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 job(name), re.MULTILINE,
             )
             for variable in variables:
-                if variable == "STATISTICS":
-                    continue
                 expected = "success" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "CI_SUMMARY",
                 ) else "skipped"
@@ -706,6 +699,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     if gate == "ci-result":
                         self.assertIn("## Workflow run overview", summary.read_text())
                         self.assertIn("| Change detection | success |", summary.read_text())
+                        self.assertIn("| Project statistics | independent |", summary.read_text())
+                        self.assertIn("this gate does not wait for collection", summary.read_text())
 
     def test_summaries_explain_failures_without_relaxing_gates(self):
         scenarios = [
@@ -825,7 +820,24 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         section = job("statistics")
         self.assertIn("    if: ${{ github.event_name != 'schedule' }}\n", section)
         self.assertIn("      - *checkout_full_history_step\n", section)
-        self.assertIn("      - statistics\n", job("ci-result"))
+        for gate in ("ci-summary", "ci-result"):
+            self.assertNotIn("statistics", dependencies(gate))
+            self.assertNotIn("STATISTICS", job(gate))
+        gate_script = (WORKFLOW.parents[2] / "scripts/ci-result-gate.sh").read_text()
+        self.assertNotIn("STATISTICS", gate_script)
+        self.assertIn("| Project statistics | independent |", gate_script)
+        self.assertIn("this gate does not wait for collection", gate_script)
+        self.assertIn("    timeout-minutes: 15\n", section)
+        with tempfile.TemporaryDirectory() as directory:
+            summary = Path(directory) / "summary"
+            result = self.run_gate(
+                "ci-result", "schedule", "skipped", GITHUB_STEP_SUMMARY=str(summary),
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn(
+                "| Project statistics | skipped | Not collected on scheduled runs. |",
+                summary.read_text(),
+            )
         self.assertLess(section.index("Summarize selected tool versions"), section.index("Summarize project files"))
         for step, target in (
             ("Summarize project files", "project-stats"),
@@ -1011,7 +1023,6 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
             "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
             "DOCKER_SCAN", "REPORT",
-            "STATISTICS",
             "LINT_WORKFLOWS",
         )
         environment = dict.fromkeys(variables, "skipped")
@@ -1028,8 +1039,6 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             variables = re.findall(r"^          ([A-Z_]+):", job(name), re.MULTILINE)
             for variable in variables:
                 if variable in ("EVENT_NAME", "REF") or variable.endswith("_CHANGED"):
-                    continue
-                if variable == "STATISTICS":
                     continue
                 expected = "skipped" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",

@@ -1151,7 +1151,6 @@ jobs:
       - docker-build
       - docker-scan
       - report
-      - statistics
     if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
@@ -1173,5 +1172,4 @@ jobs:
           DOCKER_BUILD: ${{ needs.docker-build.result }}
           DOCKER_SCAN: ${{ needs.docker-scan.result }}
           REPORT: ${{ needs.report.result }}
-          STATISTICS: ${{ needs.statistics.result }}
         run: bash scripts/ci-result-gate.sh
