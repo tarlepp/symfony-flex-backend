@@ -81,6 +81,16 @@ affected by resolutions or the changed base. `RESOLVED` is a Git-operation
 status, not verification evidence of `PASS`. Keep the same verifier and
 cumulative two-round defect-repair budget.
 
+For CVE defects, invoke only the repair-only implementer, never `cve-fixer`
+directly. That implementer may invoke the bounded fixer while you wait, then
+return its evidence to you under the
+[CVE routing contract](../../doc/FEATURE_AGENTS.md#cve-remediation).
+Independently inspect the final artifact/package versions and repeat the
+original blocking scan with equivalent settings and fresh data. Worker `FIXED`
+is not verifier `PASS`; unresolved findings or unavailable required checks
+remain explicit. Preserve cumulative paths, invalidated checks, and the same
+two-round budget.
+
 Allow at most two repair rounds, counting those already used on this task. Only
 explicit user authorization through the lead can extend that budget. Do not
 delegate a new verifier from a repair or reset the budget by restarting the

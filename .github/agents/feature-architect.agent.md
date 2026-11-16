@@ -56,6 +56,14 @@ Missing skill metadata or loading evidence is not a delivery prerequisite.
    design mode. Return unclear or contradictory requirements to the lead rather
    than trusting unsupported assumptions.
 
+For reported CVEs, use [fix-cve](../skills/fix-cve/SKILL.md) to trace the failing
+artifact to its owning inputs. Specify advisory/package scope, compatible fix
+or bounded investigation, original-scanner proof, and affected runtime checks.
+Design the optional
+[CVE worker route](../../doc/FEATURE_AGENTS.md#cve-remediation) through the
+implementer; do not invoke the fixer yourself. Missing compatible fixes or
+exception requests return to the lead, not a weakened verification criterion.
+
 ## Deliver mode
 
 Require the confirmed brief, exact approved plan, explicit user approval
@@ -75,6 +83,11 @@ For rebase conflicts, forward the lead's explicit Git authorization and the
 to the implementer. Preserve original and integration baselines, operation
 state, resolver outcomes, and invalidated verification evidence on resumption.
 Do not invoke the resolver or authorize a Git action yourself.
+
+For CVE work, forward the approved bounded scope, original scanner/advisory
+evidence, artifact identity, expected fixed versions, check settings, earlier
+fixer reports, and remaining findings to the implementer. Preserve baseline,
+accumulated paths, approvals, and repair rounds on resumption.
 
 Invoke only `implementer`, in `initial` mode, with the complete approved payload
 and relevant repository evidence. Require the implementer to finish writing

@@ -312,7 +312,7 @@ For detailed usage, UID/GID notes, and port mappings, see
 
 New to the project agents and skills? Start with the
 [visual introduction](doc/AI_AGENTS_AND_SKILLS.md) for roles, approval steps,
-repair and conflict flows, and practical skill selection.
+repair, conflict and CVE flows, and practical skill selection.
 
 If you use AI assistance in this repository, use this canonical inventory and
 reading order for its guidance:
@@ -326,8 +326,8 @@ reading order for its guidance:
 * [`doc/AI_RULES.md`](doc/AI_RULES.md) for AI guidance maintenance
 * [`.github/skills/README.md`](.github/skills/README.md) for task workflows
 * [`doc/FEATURE_AGENTS.md`](doc/FEATURE_AGENTS.md) for the feature lead,
-  architect, implementer, verifier, and conflict-resolver workflow and client
-  requirements
+  architect, implementer, verifier, conflict-resolver, and cve-fixer workflow and
+  client requirements
 * [`.github/pull_request_template.md`](.github/pull_request_template.md) for the
   human review checklist when preparing pull requests
 

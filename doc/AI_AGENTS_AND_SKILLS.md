@@ -22,6 +22,7 @@ and the [skills index](../.github/skills/README.md) lists available workflows.
     * [From request to verified result](#from-request-to-verified-result)
     * [When verification finds a problem](#when-verification-finds-a-problem)
     * [When branches conflict](#when-branches-conflict)
+    * [When a CVE blocks CI](#when-a-cve-blocks-ci)
     * [How skills support the agents](#how-skills-support-the-agents)
     * [Choose a starting skill](#choose-a-starting-skill)
     * [Your first request](#your-first-request)
@@ -65,9 +66,10 @@ hidden specialists, called only through their approved routes.
 | --- | --- | --- |
 | [feature-lead](../.github/agents/feature-lead.agent.md) | Your point of contact: clarifies the request, asks for approvals, reports the result. | Does not edit files or run commands. |
 | [feature-architect](../.github/agents/feature-architect.agent.md) | Studies the repository and proposes a concrete design. | Does not implement; delegates only an approved plan. |
-| [implementer](../.github/agents/implementer.agent.md) | Writes the approved changes, tests, and related documentation. | Pauses during verification and delegated conflict work. |
+| [implementer](../.github/agents/implementer.agent.md) | Writes the approved changes, tests, and related documentation. | Pauses during verification and bounded conflict/CVE work. |
 | [verifier](../.github/agents/verifier.agent.md) | Independently inspects and checks the final result. | Does not edit or run fixers. |
 | [conflict-resolver](../.github/agents/conflict-resolver.agent.md) | Resolves authorized Git rebase conflicts without losing either side's intent. | Called only by an implementer; cannot delegate or publish. |
+| [cve-fixer](../.github/agents/cve-fixer.agent.md) | Fixes approved CVE findings and checks the rebuilt artifact with the original scanner. | Called only by an implementer; cannot delegate, publish, or suppress findings. |
 
 Tool lists help clients expose the right capabilities; they are not security
 isolation. Actual discovery, tools, and nesting vary by client. See
@@ -182,6 +184,36 @@ parent PR is distinct from merging a base branch into a conflicted task branch.
 See the [conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md) for
 safeguards.
 
+## When a CVE blocks CI [ᐞ](#table-of-contents)
+
+<a id="when-a-cve-blocks-ci"></a>
+
+Bring the failing CI job or advisory to **feature-lead**, not the hidden fixer.
+The same brief and design approval stops apply. The architect identifies the
+affected package/artifact and recommends a compatible remediation with scanner
+proof. The implementer may then delegate the approved bounded scope to
+**cve-fixer** while paused.
+
+```mermaid
+sequenceDiagram
+    participant Writer as Calling implementer
+    participant Fixer as cve-fixer
+    participant Check as Existing verifier
+    Writer->>Fixer: Approved scope, CVE evidence, baseline, repair count
+    Note over Writer: Pause all edits and commands
+    Fixer-->>Writer: FIXED or BLOCKED, paths, versions, scan evidence
+    Writer->>Check: Initial handoff or repair-only return
+    Note over Check: Independently inspect and repeat blocking checks
+```
+
+For a verification defect, the existing verifier calls a repair-only
+implementer, which may call the fixer while the verifier waits. The fixer never
+calls another agent, publishes changes, weakens scanner gates, or resets the
+two-round repair budget. Its `FIXED` result is not verifier `PASS`. Missing
+evidence, unavailable compatible fixes, or unsupported routing remain `BLOCKED`.
+See the [CVE contract](FEATURE_AGENTS.md#cve-remediation) for the complete
+handoff and client limits.
+
 ## How skills support the agents [ᐞ](#table-of-contents)
 
 <a id="how-skills-support-the-agents"></a>
@@ -198,8 +230,10 @@ flowchart LR
     Check["verifier"] -.-> Domain
     Domain -.-> Tests["write-tests when tests change"]
     Resolver["conflict-resolver"] -.-> Git["resolve-git-conflicts"]
+    Fixer["cve-fixer"] -.-> CVE["fix-cve"]
     Domain -.-> Shared["Shared workflow guidance"]
     Git -.-> Shared
+    CVE -.-> Shared
 ```
 
 Here **dotted arrows mean consultation, not agent calls or mandatory execution
@@ -229,6 +263,7 @@ its precise trigger.
 | Change developer scripts or Make targets | [maintain-development-tooling](../.github/skills/maintain-development-tooling/SKILL.md) | Container boundaries and script regressions. |
 | Change containers or CI behavior | [update-docker-environment](../.github/skills/update-docker-environment/SKILL.md) or [update-github-workflows](../.github/skills/update-github-workflows/SKILL.md) | Image-pin and Action-pin skills only when those inputs change. |
 | Update dependencies | [update-dependencies](../.github/skills/update-dependencies/SKILL.md) | Runtime baseline or Symfony recipes when affected. |
+| Fix a reported CVE | [fix-cve](../.github/skills/fix-cve/SKILL.md) | Owning dependency/image/workflow skills and the original blocking scanner. |
 | Maintain agents or skills | [maintain-ai-guidance](../.github/skills/maintain-ai-guidance/SKILL.md) | Contract/routing review and documentation checks. |
 | Resolve a rebase conflict | [resolve-git-conflicts](../.github/skills/resolve-git-conflicts/SKILL.md) | Explicit Git authorization and affected behavior checks. |
 
@@ -266,8 +301,8 @@ make daemon
 
 If the host cannot support required nested delegation, the workflow reports
 `BLOCKED`; profiles cannot enable unsupported capabilities. The deepest
-repair-only conflict resolver reaches nesting level five in VS Code Local. That
-limit is not a claim of equivalent support in CLI or JetBrains.
+repair-only conflict resolver or CVE fixer reaches nesting level five in VS Code
+Local. That limit is not a claim of equivalent support in CLI or JetBrains.
 
 ## Reading the outcome [ᐞ](#table-of-contents)
 
@@ -279,6 +314,7 @@ limit is not a claim of equivalent support in CLI or JetBrains.
 | Verifier `FAIL` | Actionable defects remain. |
 | `BLOCKED` | Missing approval, evidence, tooling, or a necessary decision. |
 | Resolver `RESOLVED` | Rebase finished; verification still needed. |
+| CVE fixer `FIXED` | Assigned fixes checked; verification still needed. |
 
 A useful handoff names the changed files, exact checks and results, findings and
 repairs, and remaining gaps. Read "not verified" literally: passing Markdown
