@@ -81,6 +81,44 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("[OK] example", result.stderr)
         self.assertNotIn("\033", result.stderr)
 
+    def test_grouped_runs_keep_outcomes_with_their_checks(self):
+        for status, outcome in ((0, "OK"), (7, "FAIL"), (130, "WARN"), (143, "WARN")):
+            with self.subTest(status=status):
+                result = self.run_command([
+                    "bash", str(HELPER), "example", "bash", "-c",
+                    f"printf payload; printf 'diagnostic\\n' >&2; exit {status}",
+                ], OUTPUT_RUN_GROUPED="1")
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stdout, "payload")
+                suffix = "" if status == 0 else (
+                    f": cancelled (exit {status})" if status in (130, 143)
+                    else f" (exit {status})"
+                )
+                self.assertEqual(
+                    result.stderr,
+                    f"\n[RUN] example\ndiagnostic\n[{outcome}] example{suffix}\n",
+                )
+        result = self.run_command([
+            "bash", "-c",
+            'source scripts/command-output.sh; OUTPUT_RUN_GROUPED=1; '
+            'output_run first true; output_run second true',
+        ])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stderr,
+                         "\n[RUN] first\n[OK] first\n\n[RUN] second\n[OK] second\n")
+        result = self.run_command([
+            "bash", "-c",
+            'source scripts/command-output.sh; OUTPUT_RUN_GROUPED=1; '
+            'OUTPUT_STATUS_INDENT="  "; '
+            'OUTPUT_STATUS_INDENT="" output_status RUN stage; '
+            'output_run check bash -c \'echo diagnostic >&2; exit 7\'',
+        ])
+        self.assertEqual(result.returncode, 7)
+        self.assertEqual(
+            result.stderr,
+            "[RUN] stage\n\n  [RUN] check\ndiagnostic\n  [FAIL] check (exit 7)\n",
+        )
+
     def test_failure_status_is_not_swallowed(self):
         for status in (1, 2, 7, 127):
             with self.subTest(status=status):
@@ -104,6 +142,51 @@ class CommandOutputTest(unittest.TestCase):
             self.assertEqual("completed" in result.stderr, status == 0)
             if status:
                 self.assertIn("[FAIL] report (exit 7)", result.stderr)
+
+    def test_native_indentation_preserves_streams_colors_and_exit_status(self):
+        for status in (0, 7, 130, 143):
+            with self.subTest(status=status):
+                result = self.run_command([
+                    "python3", str(ROOT / "scripts/native-output.py"), "--indent",
+                    "bash", "-c",
+                    "printf '\\033[32mfirst\\033[0m\\n\\npartial'; "
+                    f"printf 'warning\\n' >&2; exit {status}",
+                ])
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stdout, "    \033[32mfirst\033[0m\n\n    partial\n")
+                self.assertEqual(result.stderr, "    warning\n")
+        status, terminal, stdout = self.run_terminal([
+            "python3", str(ROOT / "scripts/native-output.py"), "--indent",
+            "bash", "-c", 'test -t 1 && test -t 2 && printf "terminal\\n"',
+        ])
+        self.assertEqual(status, 0)
+        self.assertIn(b"    terminal\r\n", terminal)
+        self.assertEqual(stdout, b"")
+        result = self.run_command([
+            "python3", str(ROOT / "scripts/native-output.py"), "--indent",
+            "/nonexistent-workflow-validator",
+        ])
+        self.assertEqual(result.returncode, 127)
+        self.assertIn("command not found", result.stderr)
+
+    def test_native_indentation_keeps_partial_lines_visible(self):
+        process = subprocess.Popen([
+            "python3", str(ROOT / "scripts/native-output.py"), "--indent",
+            "bash", "-c", "printf partial; sleep 1; printf '\\n'",
+        ], cwd=ROOT, env=self.environment(), stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        try:
+            ready, _, _ = select.select([process.stdout], [], [], 0.8)
+            self.assertTrue(ready, "Partial output must stream before the command exits")
+            self.assertEqual(os.read(process.stdout.fileno(), 4096), b"    partial")
+            stdout, stderr = process.communicate(timeout=5)
+            self.assertEqual(process.returncode, 0)
+            self.assertEqual(stdout, b"\n")
+            self.assertEqual(stderr, b"")
+        finally:
+            if process.poll() is None:
+                process.terminate()
+                process.wait(timeout=5)
 
     def test_native_decoration_filter_preserves_streams_and_exit_status(self):
         for color, no_color, enabled in (

@@ -3,8 +3,13 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 source scripts/command-output.sh
+OUTPUT_RUN_GROUPED=1
+OUTPUT_STATUS_INDENT='  '
 
-python3 scripts/tests/ci-gates-test.py
+printf '\n' >&2
+OUTPUT_STATUS_INDENT='' output_status RUN '1/5 - Validate CI gate contracts'
+output_run 'CI gate regressions (offline)' \
+    python3 scripts/run-workflow-tests.py scripts/tests/ci-gates-test.py
 
 ACTIONLINT_TAG=v1.7.12 # tool-pin: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca
 SHELLCHECK_TAG=v0.11.0 # tool-pin: koalaman/shellcheck@aac0823e6b58f8a499e856e93738082691cbf212
@@ -69,7 +74,7 @@ download() {
 }
 
 printf '\n' >&2
-output_status RUN '1/4 - Prepare pinned workflow validators'
+OUTPUT_STATUS_INDENT='' output_status RUN '2/5 - Prepare pinned workflow validators'
 output_run "Prepare and verify actionlint $ACTIONLINT_TAG" download \
     "https://github.com/rhysd/actionlint/releases/download/${ACTIONLINT_TAG}/actionlint_${ACTIONLINT_TAG#v}_linux_${arch}.tar.gz" \
     "$actionlint_sha" "$tools/actionlint.tar.gz"
@@ -87,43 +92,66 @@ output_run "Prepare and verify zizmor $ZIZMOR_TAG" download \
     "$zizmor_sha" "$tools/zizmor.tar.gz"
 tar -xzf "$tools/zizmor.tar.gz" -C "$tools" zizmor
 
-mapfile -d '' workflows < <(find .github/workflows -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \) -print0 | sort -z)
-mapfile -d '' actions < <(find .github/actions -type f \( -name action.yml -o -name action.yaml \) -print0 | sort -z)
+mapfile -d '' workflows < <(
+    find .github/workflows -maxdepth 1 -type f \
+        \( -name '*.yml' -o -name '*.yaml' \) -print0 | sort -z
+)
+mapfile -d '' actions < <(
+    find .github/actions -type f \
+        \( -name action.yml -o -name action.yaml \) -print0 | sort -z
+)
 if (( ${#workflows[@]} == 0 || ${#actions[@]} == 0 )); then
     echo "Expected workflow files and local action metadata were not found." >&2
     exit 1
 fi
 
 printf '\n' >&2
-output_status RUN '2/4 - Validate workflows'
+OUTPUT_STATUS_INDENT='' output_status RUN '3/5 - Validate workflows'
 output_run "Workflow syntax and embedded shell (${#workflows[@]} files)" \
+    python3 scripts/native-output.py --indent \
     "$tools/actionlint" -shellcheck "$tools/shellcheck" "${workflows[@]}"
 # Offline mode skips audits that need the GitHub API, so no token is needed.
 output_run 'Workflow and action security audit (zizmor)' \
+    python3 scripts/native-output.py --indent \
     env RUST_LOG="${RUST_LOG:-warn}" "$tools/zizmor" --no-progress \
     --offline --min-severity low "${workflows[@]}" "${actions[@]}"
+
 printf '\n' >&2
-output_status RUN '3/4 - Validate local actions'
+OUTPUT_STATUS_INDENT='' output_status RUN '4/5 - Validate local actions'
 for action in "${actions[@]}"; do
-    output_run "Local action metadata: $action" "$tools/action-validator" "$action"
+    output_run "Local action metadata: $action" \
+        python3 scripts/native-output.py --indent "$tools/action-validator" "$action"
 done
 output_run 'Local composite action shell (ShellCheck)' \
+    python3 scripts/native-output.py --indent \
     python3 scripts/check-composite-action-shell.py --shellcheck "$tools/shellcheck" "${actions[@]}"
 output_run 'Composite action shell regressions (offline)' \
-    python3 scripts/tests/composite-action-shell-test.py "$tools/shellcheck"
+    python3 scripts/run-workflow-tests.py scripts/tests/composite-action-shell-test.py "$tools/shellcheck"
+
 printf '\n' >&2
-output_status RUN '4/4 - Validate tooling scripts'
-output_run 'Workflow validator script (ShellCheck)' "$tools/shellcheck" \
-    scripts/lint-workflows.sh scripts/command-output.sh scripts/check-composer-cache.sh \
-    scripts/ci-detect-changes.sh scripts/ci-prerequisite-gate.sh \
-    scripts/ci-result-gate.sh scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-statistics-summary.sh scripts/ci-validate-compose.sh \
-    scripts/ci-failure-diagnostics.sh scripts/ci-validate-bootstrap.sh \
-    scripts/check-action-updates.sh scripts/docker-images.sh scripts/make.sh \
-    scripts/check-security.sh scripts/prepare-sonar-reports.sh
+OUTPUT_STATUS_INDENT='' output_status RUN '5/5 - Validate tooling scripts'
+output_run 'CI tooling scripts (ShellCheck)' \
+    python3 scripts/native-output.py --indent "$tools/shellcheck" \
+    scripts/lint-workflows.sh \
+    scripts/command-output.sh \
+    scripts/check-composer-cache.sh \
+    scripts/ci-detect-changes.sh \
+    scripts/ci-prerequisite-gate.sh \
+    scripts/ci-result-gate.sh \
+    scripts/ci-gate-common.sh \
+    scripts/ci-workflow-overview.sh \
+    scripts/ci-statistics-summary.sh \
+    scripts/ci-validate-compose.sh \
+    scripts/ci-failure-diagnostics.sh \
+    scripts/ci-validate-bootstrap.sh \
+    scripts/check-action-updates.sh \
+    scripts/docker-images.sh \
+    scripts/make.sh \
+    scripts/check-security.sh \
+    scripts/prepare-sonar-reports.sh
 output_run 'Composer cache mount regressions (offline)' \
-    python3 scripts/tests/composer-cache-test.py
+    python3 scripts/run-workflow-tests.py scripts/tests/composer-cache-test.py
 output_run 'Analyzer job and gate regressions (offline)' \
-    python3 scripts/tests/analyzer-workflow-test.py
+    python3 scripts/run-workflow-tests.py scripts/tests/analyzer-workflow-test.py
 output_run 'Docker maintenance workflow regressions (offline)' \
-    python3 scripts/tests/docker-image-workflow-test.py
-printf '\n' >&2
+    python3 scripts/run-workflow-tests.py scripts/tests/docker-image-workflow-test.py

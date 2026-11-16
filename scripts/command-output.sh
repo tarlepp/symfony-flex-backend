@@ -61,17 +61,23 @@ output_status() {
         WARN|SKIP) color=$OUTPUT_YELLOW ;;
         FAIL) color=$OUTPUT_RED ;;
     esac
-    printf '%s[%s]%s %s\n' "$color" "$status" "$OUTPUT_RESET" "$message" >&2
+    printf '%s%s[%s]%s %s\n' "${OUTPUT_STATUS_INDENT:-}" \
+        "$color" "$status" "$OUTPUT_RESET" "$message" >&2
 }
 
 output_result() {
-    printf '\n' >&2
+    if [ "${OUTPUT_RUN_GROUPED:-0}" != 1 ]; then
+        printf '\n' >&2
+    fi
     output_status "$@"
 }
 
 output_run() {
     local label=$1 status=0 started='' took=''
     shift
+    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
+        printf '\n' >&2
+    fi
     output_status RUN "$label"
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
         started=$(output_clock)

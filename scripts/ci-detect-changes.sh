@@ -72,17 +72,20 @@ classify_path() {
             enable_checks documentation
             ;;
         # These inputs can change any runner, command or job contract.
-        Makefile|Dockerfile|requirements.txt|.dockerignore|.github/workflows/main.yml|.github/actions/*|\
-        scripts/ci-detect-changes.sh|scripts/ci-validate-bootstrap.sh|scripts/make.sh|scripts/command-output.sh|\
-        scripts/native-output.*|scripts/report-output.sh|scripts/command-progress.py|\
+        Makefile|Dockerfile|requirements.txt|.dockerignore|\
+        .github/workflows/main.yml|.github/actions/*|\
+        scripts/ci-detect-changes.sh|scripts/ci-validate-bootstrap.sh|\
+        scripts/make.sh|scripts/command-output.sh|scripts/native-output.*|\
+        scripts/report-output.sh|scripts/command-progress.py|\
         scripts/compose-context.sh)
             retain_full_validation "Shared input: $file; full validation"
             ;;
         composer.json|composer.lock|symfony.lock)
             enable_checks composer runtime yaml php tests docker security
             ;;
-        phpunit*.xml*|infection.json*|tools/05_infection/*|tools/06_php-coveralls/*|\
-        tools/08_phpmetrics/*|scripts/prepare-sonar-reports.sh|sonar-project.properties)
+        phpunit*.xml*|infection.json*|\
+        tools/05_infection/*|tools/06_php-coveralls/*|tools/08_phpmetrics/*|\
+        scripts/prepare-sonar-reports.sh|sonar-project.properties)
             enable_checks php tests
             ;;
         scripts/ci-test-reports.py)
@@ -134,9 +137,13 @@ classify_path() {
         scripts/ci-validate-compose.sh)
             enable_checks compose workflows
             ;;
-        .github/workflows/*|.github/zizmor.yml|scripts/lint-workflows.sh|\
-        scripts/check-composite-action-shell.py|scripts/tests/composite-action-shell-test.py|\
-        scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|scripts/ci-gate-common.sh|scripts/ci-workflow-overview.sh|scripts/ci-statistics-summary.sh|\
+        .github/workflows/*|.github/zizmor.yml|\
+        scripts/lint-workflows.sh|scripts/run-workflow-tests.py|\
+        scripts/check-composite-action-shell.py|\
+        scripts/tests/composite-action-shell-test.py|\
+        scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|\
+        scripts/ci-gate-common.sh|scripts/ci-workflow-overview.sh|\
+        scripts/ci-statistics-summary.sh|\
         scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|\
         scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py|\
         scripts/tests/docker-image-workflow-test.py)
