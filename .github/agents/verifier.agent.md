@@ -90,6 +90,11 @@ original blocking scan with equivalent settings and fresh data. Worker `FIXED`
 is not verifier `PASS`; unresolved findings or unavailable required checks
 remain explicit. Preserve cumulative paths, invalidated checks, and the same
 two-round budget.
+Check every affected target independently, including development and production
+for shared-package findings. Verify package-manager changes stayed within the
+identified packages and necessary dependencies, and inspect cached-build
+evidence when cache behavior is part of the fix. A clean production scan or
+fully uncached build alone cannot establish those criteria.
 
 Allow at most two repair rounds, counting those already used on this task. Only
 explicit user authorization through the lead can extend that budget. Do not

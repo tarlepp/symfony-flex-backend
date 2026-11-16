@@ -214,6 +214,11 @@ evidence, unavailable compatible fixes, or unsupported routing remain `BLOCKED`.
 See the [CVE contract](FEATURE_AGENTS.md#cve-remediation) for the complete
 handoff and client limits.
 
+The plan names only CVE-affected package updates and necessary dependencies,
+not blanket upgrades. For packages shared by development and production, both
+images need installed-version and blocking-scan evidence. Cached-build checks
+must also prove the fix actually executes; one clean image is not enough.
+
 ## How skills support the agents [ᐞ](#table-of-contents)
 
 <a id="how-skills-support-the-agents"></a>

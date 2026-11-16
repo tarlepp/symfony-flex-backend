@@ -63,6 +63,11 @@ Design the optional
 [CVE worker route](../../doc/FEATURE_AGENTS.md#cve-remediation) through the
 implementer; do not invoke the fixer yourself. Missing compatible fixes or
 exception requests return to the lead, not a weakened verification criterion.
+Enumerate all affected image targets and explicitly scoped package updates,
+including necessary dependencies. Prefer targeted updates over blanket upgrades;
+include installed-version, per-target scan, and cached-build evidence in the
+acceptance criteria. A shared-package CVE is not production-only just because
+the supplied failing job scanned production.
 
 ## Deliver mode
 

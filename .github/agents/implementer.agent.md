@@ -113,6 +113,10 @@ CVE findings or an explicitly approved investigation. Pass the complete
 scanner evidence, artifact/package scope, approvals, baseline, cumulative paths,
 check results, and repair count. Do not delegate routine upgrades or a general
 security review to this worker.
+Include every affected image target, explicitly allowed package updates and
+necessary dependencies, and the required cached-build and per-target scan
+evidence. Return uncovered targets or broader updates for renewed approval;
+do not accept a single clean image as proof for a shared-package fix.
 
 Pause all edits and commands until the fixer returns; never overlap it with
 verification or the conflict resolver. Only the repair-only implementer called

@@ -208,12 +208,20 @@ In addition to the normal approved handoff, supply:
 * Original CI job/advisory source, CVE IDs, failed artifact commit/target/digest,
   installed and fixed versions/ranges, scanner version, data freshness,
   filtering/failure settings, and known evidence gaps.
+* Every affected image target, explicitly scoped package updates and necessary
+  dependencies, and acceptance criteria for installed versions, per-target
+  blocking scans, and execution through the CI-equivalent cached build path.
 * Original baseline and integration base if applicable, cumulative paths,
   earlier checks, unresolved findings, prior fixer reports, caller mode, and
   repair rounds already used. Repairs also carry verifier reproduction and the
   current round.
 
 The worker follows the CVE and owning update skills within the approved scope.
+Updates stay limited to identified CVE-affected packages and necessary
+dependencies, not blanket OS or dependency upgrades. Shared-package findings
+require checking development and production even when only one failing job was
+supplied. Newly discovered out-of-scope targets or broader updates return for
+approval before edits; they cannot be silently omitted from verification.
 No compatible fix, missing evidence/tooling, unsupported nesting, unapproved
 major/contract changes, or proposed exceptions return `BLOCKED` through the
 caller to the lead. Do not suppress findings, weaken scanner gates, or silently
@@ -232,6 +240,10 @@ mode returns to the existing verifier. The verifier independently checks final
 versions and repeats the original blocking scanner with fresh data and
 equivalent settings. No worker call resets the cumulative two-round repair
 limit; unresolved findings or blocked checks cannot become `PASS`.
+Reports and independent verification cover each affected artifact, actual
+package-manager changes, and cached-build execution where relevant. A clean
+single image or fully uncached build is not proof of the other targets or cache
+invalidation.
 
 ## Using the agents [ᐞ](#table-of-contents)
 
