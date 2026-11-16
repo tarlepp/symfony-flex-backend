@@ -82,14 +82,27 @@ not prove the blocking scan passed.
    to affected tool dependencies; do not perform unrelated tool upgrades for
    an OS CVE. Review scripts and bin-plugin forwarding before scoped Composer
    commands. Do not hand-edit locks or patch vendored code as a substitute for
-   a supported upstream fix.
+   a supported upstream fix. For installed Debian packages, use
+   `apt-get install --only-upgrade --no-install-recommends -y <affected-package>`
+   after refreshing indexes, naming only CVE-affected packages and necessary
+   dependencies. Inspect the proposed and actual package changes; do not add a
+   blanket `apt-get upgrade`, broad dependency update, or unrelated digest
+   refresh as a CVE fix. Preserve existing unrelated update behavior rather than
+   expanding this task to remove it. Ask before a required fix broadens scope.
 5. For image findings, trace `FROM`, package installation, and BuildKit caches.
    `apt-get update` refreshes indexes but does not upgrade installed packages;
    `--pull` cannot refresh packages inside a digest-pinned image. An uncached
    child stage does not invalidate cached parent stages. Put remediation where
    it executes for every affected target and preserve pinned multi-platform
-   references. The production stage already bypasses cache in CI; changes to
-   shared base content require checking both PHP targets.
+   references. Inspect both development and production for shared-package
+   findings even when only one failed job was supplied. A production-only fix
+   cannot repair development; its earlier tool-setup upgrade may be cached.
+   Production already bypasses its stage cache in CI; development's targeted
+   fix follows source copies so source changes invalidate it. Without source
+   changes, explicitly bypass the affected stage cache for a security refresh.
+   See the [PHP build targets](../../../doc/DOCKER_MULTI_PLATFORM.md#php-build-targets)
+   for the current implementation. Do not claim an ordinary cached rebuild
+   discovers newly published fixes.
 6. Preserve scanner severity, vulnerability types, failure exit codes, SARIF
    reporting, and required gates. Do not add ignores, VEX, `continue-on-error`,
    remove package metadata, or skip checks merely to make CI green. Any proposed
@@ -116,11 +129,21 @@ For Composer changes, use the owning skill's validation, including
 Check affected tool locks separately; do not claim installed-dependency coverage
 when an optional scanner reports `SKIP`.
 
-For an OS-image fix, build affected targets without recreating shared services,
-then scan those exact images. This production example runs from the repository
-root on the Docker host; choose the scanner version resolved by the failing CI
-job before using it. The example matches Trivy 0.70.0 and the current blocking
-HIGH/CRITICAL, fixable OS/library scope:
+For an OS-image fix, enumerate every target containing the affected package,
+then build and scan each exact image without recreating shared services. Shared
+packages such as `linux-libc-dev` require both development and production
+evidence even when remediation lives in separate target stages. Confirm the
+package-manager output changes only the identified packages and necessary
+dependencies, and compare installed versions with the advisory using the
+distribution's version comparator.
+
+These examples run from the repository root on the Docker host. Choose the
+scanner version resolved by the failing CI job before using them; they match
+Trivy 0.70.0 and the current blocking HIGH/CRITICAL, fixable OS/library scope.
+Run each applicable target's checks separately so a passing second scan cannot
+hide a failing first scan.
+
+Production:
 
 ```bash
 docker buildx build --load --no-cache-filter production \
@@ -133,6 +156,24 @@ docker run --rm \
   --ignore-unfixed --severity CRITICAL,HIGH --exit-code 1 --format json \
   > build/cve-production-trivy.json
 ```
+
+Development:
+
+```bash
+docker buildx build --load --no-cache-filter development \
+  --target development -t symfony-flex-backend:cve-development .
+mkdir -p build
+docker save -o build/cve-development.tar symfony-flex-backend:cve-development
+docker run --rm \
+  -v "$PWD/build/cve-development.tar:/scan/image.tar:ro" \
+  aquasec/trivy:0.70.0 image --input /scan/image.tar --scanners vuln \
+  --ignore-unfixed --severity CRITICAL,HIGH --exit-code 1 --format json \
+  > build/cve-development-trivy.json
+```
+
+Where cache behavior is part of the fix, also build through the ordinary
+CI-equivalent cached path and verify the targeted step executes after the
+changed inputs. A fully uncached build alone cannot prove cache invalidation.
 
 The report remains available when the scanner fails. The scanner receives only
 the image archive, not the Docker socket or repository secrets. Delete only
@@ -154,8 +195,9 @@ documentation checks do not execute the remediation workflow.
 <a id="handoff"></a>
 
 Report the original CI/advisory source, affected artifact and package, old/new
-versions, chosen fix and cache behavior, changed paths, exact check commands and
-exit outcomes, remaining findings, skipped/blocked checks, and compatibility
+versions, explicitly updated packages and necessary dependencies, chosen fix and
+cache behavior, changed paths, exact check commands and exit outcomes for each
+affected target, remaining findings, skipped/blocked checks, and compatibility
 risks. Distinguish local rebuilt-image evidence from a hosted CI rerun and
 independent verification. Include required operator rebuilds without claiming
 running services were updated.
