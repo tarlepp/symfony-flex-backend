@@ -220,6 +220,11 @@ mkdir -p build
 make check-licenses > build/licenses.txt
 ```
 
+License counts use the shared native color policy: terminal output highlights
+counts, while redirected output is plain by default. `COLOR=always` forces
+color; `COLOR=never` or a nonempty `NO_COLOR` disables it. The Composer license
+query disables Xdebug for that process to avoid unnecessary debugger connections.
+
 Target groups, risk markers, execution routing, and wrapped labels share the
 Makefile's `REGISTER_TARGET` metadata. Recipe descriptions remain beside their
 commands; help no longer guesses categories or risk from target names.
