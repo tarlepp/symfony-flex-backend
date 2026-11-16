@@ -4,6 +4,7 @@
 import os
 from pathlib import Path
 import pty
+import re
 import shutil
 import subprocess
 import tempfile
@@ -25,6 +26,7 @@ class LifecycleOutputTest(unittest.TestCase):
                      "compose-context.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
             (self.root / "scripts" / name).chmod(0o755)
+        shutil.copyfile(ROOT / "scripts/command-progress.py", self.root / "scripts/command-progress.py")
         (self.root / "Dockerfile").write_text("FROM scratch AS production\n")
         docker = self.root / "bin/docker"
         docker.write_text("""#!/usr/bin/env bash
@@ -52,7 +54,11 @@ fi
 if [ "$1 $2" = 'buildx version' ]; then exit 0; fi
 if [ "$1 $2" = 'buildx inspect' ]; then
     if [ "${3:-}" != --bootstrap ] && [ "${BUILDER_MISSING:-0}" = 1 ]; then exit 1; fi
-    printf 'Name: fixture\\nDriver: docker\\nPlatforms: linux/amd64, linux/arm64\\n'
+    printf 'Name:          fixture\\nDriver:        docker\\nPlatforms:\\t linux/amd64, linux/arm64\\n'
+    if [ "${3:-}" = --bootstrap ]; then printf 'Name: second\\nPlatforms: ignored\\n'; fi
+    if [ "${3:-}" = --bootstrap ] && [ "${DOCKER_EXIT:-0}" != 0 ]; then
+        echo 'native builder failure' >&2
+    fi
     if [ "${3:-}" = --bootstrap ]; then exit "${DOCKER_EXIT:-0}"; fi
     exit 0
 fi
@@ -351,6 +357,58 @@ exit "${DOCKER_EXIT:-0}"
         self.assertNotEqual(result.returncode, 0)
         self.assertNotIn("system prune", calls)
         self.assertNotIn("[OK]", result.stderr)
+
+    def test_builder_platform_colors_preserve_output_and_failure(self):
+        plain, _ = self.make("docker-builder-platforms", COLOR="never")
+        self.assertEqual(plain.returncode, 0, plain.stderr)
+        self.assertEqual(
+            plain.stdout,
+            "Buildx builder\nCurrent builder and first node\n\n"
+            "Name:       fixture\nDriver:     docker\nPlatforms:  linux/amd64, linux/arm64\n"
+            "\nField descriptions\n"
+            "  Name       Current buildx builder.\n"
+            "  Driver     Backend used to run the builder.\n"
+            "  Platforms  Build targets reported for the first builder node.\n",
+        )
+        for color, no_color, expected in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result, calls = self.make("docker-builder-platforms", COLOR=color, NO_COLOR=no_color, TERM="xterm")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mPlatforms:\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[1;34mBuildx builder\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[1;34mField descriptions\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+                self.assertIn("buildx inspect --bootstrap", calls)
+
+        command = ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
+                   "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "docker-builder-platforms"]
+        for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
+            with self.subTest(term=term, no_color=no_color):
+                result, _ = self.run_with_stdout_terminal(command, TERM=term, NO_COLOR=no_color)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mPlatforms:\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout).replace("\r\n", "\n"), plain.stdout)
+
+        for overrides, expected in (
+            ({"COLOR": "always"}, True), ({"COLOR": "always", "NO_COLOR": "1"}, False),
+            ({"COLOR": "always", "NATIVE_COLOR": "never"}, False),
+            ({"COLOR": "never", "NATIVE_COLOR": "always"}, True),
+        ):
+            with self.subTest(direct=overrides):
+                result, _ = self.run_command(["bash", "scripts/docker-images.sh", "platforms"], **overrides)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mPlatforms:\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+
+        result, _ = self.make("docker-builder-platforms", COLOR="always", DOCKER_EXIT="7")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("native builder failure", result.stderr)
+        self.assertIn("[FAIL]", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+        self.assertNotIn("Field descriptions", result.stdout)
 
     def test_build_helpers_warn_and_never_claim_success_before_completion(self):
         result, calls = self.make(

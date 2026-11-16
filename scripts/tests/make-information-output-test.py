@@ -952,7 +952,8 @@ esac
                 self.assertIn("Digest:     sha256:fixture", result.stdout)
                 self.assertIn("FROM fixture:latest@sha256:fixture", result.stdout)
             else:
-                self.assertIn("Platforms: linux/amd64, linux/arm64", result.stdout)
+                self.assertIn("Platforms:  linux/amd64, linux/arm64", result.stdout)
+                self.assertIn("Build targets reported for the first builder node.", result.stdout)
 
     def test_sonar_paths_are_relative_and_source_reports_remain_unchanged(self):
         originals = (self.clover.read_bytes(), self.junit.read_bytes())
