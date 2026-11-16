@@ -208,6 +208,11 @@ ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+# Refresh inherited packages even when the shared base is cached.
+RUN apt-get update \
+    && apt-get upgrade --no-install-recommends -y \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --exclude=./docker/* . /app
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf

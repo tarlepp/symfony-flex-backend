@@ -144,6 +144,21 @@ Docker Compose selects `development` explicitly, including when used by Dev
 Containers. Both targets inherit the same PHP extensions, Composer version,
 security updates, working directory and PHP-FPM port from `base`.
 
+Production refreshes installed Debian packages in its own stage so a cached
+shared base cannot retain packages with newly available security fixes. CI
+bypasses the `production` stage cache, including this refresh and the Composer
+install/audit. Development already upgrades packages during its tool setup;
+use `--no-cache-filter development` with Buildx when refreshing a cached
+development stage. Neither operation updates pinned upstream image digests.
+
+To refresh production packages locally without restarting shared services, run
+from the repository root on the Docker host:
+
+```bash
+docker buildx build --load --no-cache-filter production \
+  --target production -t symfony-flex-backend:prod .
+```
+
 ```bash
 docker build --target production -t symfony-flex-backend:prod .
 docker build --target development \
