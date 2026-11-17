@@ -92,6 +92,12 @@ case "$name" in
         ;;
     shellcheck)
         if [ "${1:-}" = --shell ]; then cat >> "$CALLS"; fi
+        for input in "$@"; do
+            if [ "$input" = "${FAIL_SHELLCHECK_SCRIPT:-}" ]; then
+                printf 'fixture shell finding: %s\\n' "$input" >&2
+                exit 7
+            fi
+        done
         ;;
     zizmor)
         printf 'RUST_LOG=%s\\n' "$RUST_LOG" >> "$CALLS"
@@ -152,7 +158,9 @@ esac
             "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
             "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
             "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-statistics-summary.sh scripts/ci-validate-compose.sh "
-            "scripts/ci-failure-diagnostics.sh scripts/ci-validate-bootstrap.sh", calls,
+            "scripts/ci-failure-diagnostics.sh scripts/ci-validate-bootstrap.sh "
+            "scripts/check-action-updates.sh scripts/docker-images.sh scripts/make.sh "
+            "scripts/check-security.sh scripts/prepare-sonar-reports.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
         self.assertIn("shellcheck --shell bash -", calls)
@@ -184,6 +192,18 @@ esac
                     self.assertNotIn("sha256sum", calls)
                 if tool in ("curl", "sha256sum"):
                     self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
+
+    def test_ci_entrypoint_shell_findings_block_validation(self):
+        for script in (
+            "check-action-updates.sh", "docker-images.sh", "make.sh",
+            "check-security.sh", "prepare-sonar-reports.sh",
+        ):
+            with self.subTest(script=script):
+                result, _ = self.run_script(FAIL_SHELLCHECK_SCRIPT=f"scripts/{script}")
+                self.assertEqual(result.returncode, 7, result.stderr)
+                self.assertIn(f"fixture shell finding: scripts/{script}", result.stderr)
+                self.assertIn("[FAIL] Workflow validator script (ShellCheck)", result.stderr)
+                self.assertNotIn("[RUN] Composer cache mount regressions", result.stderr)
 
     def test_warm_cache_is_verified_without_downloads(self):
         cold, cold_calls = self.run_script()

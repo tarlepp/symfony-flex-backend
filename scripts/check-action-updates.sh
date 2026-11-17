@@ -27,6 +27,7 @@
 
 # Collect discovery and lookup failures so remaining checks still run.
 set +e
+# shellcheck source=scripts/command-output.sh
 source "$(dirname "$0")/command-output.sh"
 
 checker_outcome() {
@@ -198,6 +199,7 @@ print_current_pins_markdown() {
             ref_display="\`$ref\`"
         fi
 
+        # shellcheck disable=SC2016 # Literal backticks delimit Markdown code.
         printf '| %s | %s | %s | `%s` |\n' "$action" "$version" "$ref_display" "$source"
     done < <(printf '%s\n' "${!ACTIONS[@]}" | sort)
 }
@@ -365,7 +367,7 @@ check_action() {
 
     if ! latest=$(latest_action_version "$repo" "$current"); then
         DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
-        ACTION_RESULTS["$key"]=version-error
+        ACTION_RESULTS["$key"]='version-error'
         return
     fi
 

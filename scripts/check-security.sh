@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# shellcheck source=scripts/command-output.sh
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 ansi_flag=--no-ansi
 if [ -n "$OUTPUT_RESET" ]; then

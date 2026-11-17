@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# shellcheck source=scripts/command-output.sh
 source "$(dirname "$0")/command-output.sh"
 
 for report in build/logs/clover.xml build/logs/junit.xml; do
