@@ -690,9 +690,15 @@ writes an explicit skip explanation to the job summary and succeeds without
 checkout, artifact downloads, PHP bootstrap or container cleanup. Otherwise, it
 downloads Clover/JUnit artifacts and starts the PHP container. Coveralls
 installation and upload require its token; SonarCloud preparation and upload
-require its token. Cleanup runs even after failure or cancellation when
-bootstrap was attempted. Test-unaffected changes skip the job because tests and
-artifacts skip; schedules, manual runs and merge groups also skip reporting.
+require its token. A failed Coveralls installation or upload does not suppress
+SonarCloud: preparation explicitly requires successful checkout, both artifact
+downloads and bootstrap, and scanning requires successful preparation. Both
+Sonar steps stop on cancellation. Coveralls upload still requires successful
+installation. Each reporter error remains blocking; independent attempts do
+not make the job or merge gate green. Cleanup runs even after failure or
+cancellation when bootstrap was attempted. Test-unaffected changes skip the job
+because tests and artifacts skip; schedules, manual runs and merge groups also
+skip reporting.
 
 The job installs and runs the isolated Coveralls tool in the Compose PHP
 development container, forwarding its tokens and required GitHub CI metadata.

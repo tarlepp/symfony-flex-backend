@@ -943,14 +943,14 @@ jobs:
 
       - name: Prepare reports for host-side SonarQube scan
         id: prepare-sonar
-        if: ${{ env.SONAR_TOKEN != '' }}
+        if: ${{ !cancelled() && env.SONAR_TOKEN != '' && steps.checkout-report.outcome == 'success' && steps.clover.outcome == 'success' && steps.junit.outcome == 'success' && steps.bootstrap.outcome == 'success' }}
         run: bash scripts/make.sh prepare-sonar-reports
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarQube Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
         id: sonar
-        if: ${{ env.SONAR_TOKEN != '' }}
+        if: ${{ !cancelled() && env.SONAR_TOKEN != '' && steps.prepare-sonar.outcome == 'success' }}
         uses: SonarSource/sonarqube-scan-action@e805d875275f728fac1885b413934be6d7c63f65 # v8.4.1
         with:
           args: >-

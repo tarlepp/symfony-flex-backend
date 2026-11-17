@@ -385,12 +385,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             )
             self.assertIsNotNone(step)
             self.assertNotIn("continue-on-error", step.group(1))
-            self.assertIn("        if: ${{ env." + token + " != '' }}\n", step.group(1))
+            if token == "COVERALLS_REPO_TOKEN":
+                self.assertIn("        if: ${{ env." + token + " != '' }}\n", step.group(1))
             self.assertIn(token + ": ${{ secrets." + token + " }}\n", step.group(1))
         self.assertIn(
             "      - name: Prepare reports for host-side SonarQube scan\n"
-            "        id: prepare-sonar\n"
-            "        if: ${{ env.SONAR_TOKEN != '' }}\n", section,
+            "        id: prepare-sonar\n", section,
         )
         self.assertNotIn("continue-on-error", without_overview(section))
         self.assertNotIn("|| true", section)
@@ -403,6 +403,73 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "    if: ${{ github.event_name != 'schedule' && "
             "needs.changes.outputs.tests == 'true' }}\n", job("test"),
         )
+
+    def test_sonar_attempts_are_independent_but_require_successful_inputs(self):
+        section = job("report")
+        conditions = {}
+        for name, expected in (
+            ("Prepare reports for host-side SonarQube scan",
+             "!cancelled() && env.SONAR_TOKEN != '' && "
+             "steps.checkout-report.outcome == 'success' && "
+             "steps.clover.outcome == 'success' && steps.junit.outcome == 'success' && "
+             "steps.bootstrap.outcome == 'success'"),
+            ("SonarQube Scan",
+             "!cancelled() && env.SONAR_TOKEN != '' && "
+             "steps.prepare-sonar.outcome == 'success'"),
+        ):
+            step = re.search(
+                rf"^      - name: {re.escape(name)}[^\n]*\n(.*?)(?=^      - |\Z)",
+                section, re.MULTILINE | re.DOTALL,
+            )
+            self.assertIsNotNone(step)
+            condition = re.search(r"^        if: \$\{\{ (.+) \}\}$",
+                                  step.group(1), re.MULTILINE)
+            self.assertIsNotNone(condition)
+            self.assertEqual(condition.group(1), expected)
+            conditions[name] = condition.group(1)
+
+        for coveralls_token in ("", "coveralls-fixture"):
+            for sonar_token in ("", "sonar-fixture"):
+                for failed_input in (None, "checkout-report", "clover", "junit", "bootstrap"):
+                    for outcome in ("success", "failure", "skipped", "cancelled"):
+                        for coveralls_result in ("success", "failure", "skipped"):
+                            for cancelled in (False, True):
+                                inputs = dict.fromkeys(
+                                    ("checkout-report", "clover", "junit", "bootstrap"), "success",
+                                )
+                                if failed_input:
+                                    inputs[failed_input] = outcome
+                                expression = conditions[
+                                    "Prepare reports for host-side SonarQube scan"
+                                ].replace("!cancelled()", repr(not cancelled)).replace(
+                                    "env.SONAR_TOKEN", repr(sonar_token),
+                                )
+                                for identifier, result in inputs.items():
+                                    expression = expression.replace(
+                                        f"steps.{identifier}.outcome", repr(result),
+                                    )
+                                with self.subTest(
+                                    coveralls_token=bool(coveralls_token),
+                                    sonar_token=bool(sonar_token), inputs=inputs,
+                                    coveralls_result=coveralls_result, cancelled=cancelled,
+                                ):
+                                    self.assertEqual(
+                                        eval(expression.replace("&&", "and"),
+                                             {"__builtins__": {}}),
+                                        not cancelled and bool(sonar_token)
+                                        and all(value == "success" for value in inputs.values()),
+                                    )
+
+        for outcome in ("success", "failure", "skipped", "cancelled"):
+            for token in ("", "sonar-fixture"):
+                for cancelled in (False, True):
+                    expression = conditions["SonarQube Scan"].replace(
+                        "!cancelled()", repr(not cancelled),
+                    ).replace("env.SONAR_TOKEN", repr(token)).replace(
+                        "steps.prepare-sonar.outcome", repr(outcome),
+                    ).replace("&&", "and")
+                    self.assertEqual(eval(expression, {"__builtins__": {}}),
+                                     not cancelled and bool(token) and outcome == "success")
 
     def test_reporting_selection_skips_expensive_setup_without_tokens(self):
         section = job("report")
