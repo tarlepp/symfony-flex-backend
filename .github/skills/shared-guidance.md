@@ -33,6 +33,11 @@ repository-wide rules alongside the task-specific workflow in the skill.
 
 <a id="preparing-a-change"></a>
 
+* Work in the user's existing checkout, including when preparing stacked PRs.
+  Do not create a separate Git worktree or clone unless the user explicitly
+  requests one. If existing work prevents a safe branch switch, stop and ask
+  how to proceed in that checkout; do not create another directory as a
+  workaround.
 * Inspect staged, unstaged, and untracked changes before editing. Preserve
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.

@@ -1,0 +1,5 @@
+# actionlint v1.7.12 has no built-in label for GitHub-hosted Ubuntu 26.04.
+# This only extends linting; remove it once actionlint recognizes the label.
+self-hosted-runner:
+  labels:
+    - ubuntu-26.04

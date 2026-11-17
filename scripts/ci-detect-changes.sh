@@ -155,7 +155,7 @@ classify_path() {
         scripts/ci-statistics-summary.sh|scripts/tests/ci-gates-test.py)
             enable_checks workflows tooling
             ;;
-        .github/workflows/*|.github/zizmor.yml|\
+        .github/workflows/*|.github/actionlint.yaml|.github/zizmor.yml|\
         scripts/tests/composite-action-shell-test.py|\
         scripts/check-composer-cache.sh|\
         scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py|\

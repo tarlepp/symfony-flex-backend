@@ -1923,6 +1923,7 @@ class ChangeDetectionTest(unittest.TestCase):
             ".devcontainer/devcontainer.json": {"compose", "docker", "tooling"},
             ".devcontainer/docker-compose.devcontainer.yml": {"compose", "docker", "tooling"},
             ".github/workflows/scorecard.yml": {"workflows"},
+            ".github/actionlint.yaml": {"workflows"},
             ".github/zizmor.yml": {"workflows"},
             "scripts/tests/ci-gates-test.py": {"workflows", "tooling"},
             "scripts/tests/docker-image-workflow-test.py": {"workflows"},

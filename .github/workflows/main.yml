@@ -29,7 +29,7 @@ concurrency:
 jobs:
   changes:
     name: Detect changed files
-    runs-on: &ubuntu_runner ubuntu-24.04
+    runs-on: &ubuntu_runner ubuntu-26.04
     if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     outputs:

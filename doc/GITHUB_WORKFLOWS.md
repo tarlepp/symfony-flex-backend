@@ -452,9 +452,11 @@ declare concurrency groups.
 
 <a id="containers-and-test-setup"></a>
 
-All jobs use Ubuntu runners. Core CI defines its runner label once in the
-`changes` job and reuses it through the `ubuntu_runner` YAML anchor. Standalone
-workflows specify their own labels because YAML anchors are local to each file.
+All jobs pin the Ubuntu runner release rather than using `ubuntu-latest`, so
+GitHub's next rollout will not implicitly change the OS. Core CI defines its
+runner label once in the `changes` job and reuses it through the `ubuntu_runner`
+YAML anchor. Standalone workflows specify their own labels because YAML anchors
+are local to each file.
 
 Most PHP/tooling jobs share
 [`php-bootstrap`](../.github/actions/php-bootstrap/action.yml), which builds the

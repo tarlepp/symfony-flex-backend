@@ -12,7 +12,7 @@ jobs:
   update:
     name: Update Docker image versions and digests
     if: ${{ github.ref_type == 'branch' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     permissions:
       contents: write
