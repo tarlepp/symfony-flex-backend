@@ -3,7 +3,9 @@
 
 import os
 from pathlib import Path
+import pty
 import re
+import select
 import shutil
 import subprocess
 import sys
@@ -32,14 +34,35 @@ class QualityOutputTest(unittest.TestCase):
         shutil.copyfile(ROOT / "scripts/command-output.sh", self.root / "scripts/command-output.sh")
         shutil.copyfile(ROOT / "scripts/native-output.sh", self.root / "scripts/native-output.sh")
         shutil.copyfile(ROOT / "scripts/native-output.py", self.root / "scripts/native-output.py")
+        shutil.copyfile(ROOT / "scripts/phpmetrics-output.py", self.root / "scripts/phpmetrics-output.py")
         shutil.copyfile(ROOT / "scripts/report-output.sh", self.root / "scripts/report-output.sh")
         shutil.copyfile(ROOT / "scripts/make.sh", self.root / "scripts/make.sh")
         shutil.copyfile(ROOT / "scripts/markdown-output.sh", self.root / "scripts/markdown-output.sh")
         fixture = """#!/usr/bin/env bash
-if [ "$(basename "$0")" = python3 ] && [ "${1:-}" = scripts/native-output.py ]; then
+if [ "$(basename "$0")" = python3 ] && [[ "${1:-}" = scripts/native-output.py || "${1:-}" = scripts/phpmetrics-output.py ]]; then
+    if [ "${1:-}" = scripts/phpmetrics-output.py ] && [ "${FAIL_FORMATTER:-0}" = 1 ]; then
+        printf 'formatter failure\\n' >&2
+        exit 7
+    fi
     exec "$REAL_PYTHON" "$@"
 fi
 printf '%s %s\\n' "$0" "$*" >> "$CALLS"
+if [ "${CHECK_FALLBACK_XDEBUG:-0}" = 1 ] && {
+    [ "$(basename "$0")" = phpdbg ] || [ "$(basename "$0")" = phpunit ] || [ "$(basename "$0")" = console ] ||
+    [[ "$(basename "$0")" = php && "$*" == *phpunit* ]];
+}; then
+    printf '%s %s\\n' "$(basename "$0")" "${XDEBUG_MODE:-}" >> "$XDEBUG_RECORD"
+    if [ "${XDEBUG_MODE:-}" != coverage ]; then
+        printf 'Unexpected Xdebug fallback mode\\n' >&2
+        exit 8
+    fi
+fi
+if [ "${CHECK_METRICS_XDEBUG:-0}" = 1 ] && {
+    [ "$(basename "$0")" = phpmetrics ] || [ "${1:-}" = ./vendor/bin/phpmetrics ];
+} && [ "${XDEBUG_MODE:-}" != off ]; then
+    printf 'Xdebug: [Step Debug] unexpected connection attempt\\n' >&2
+    exit 8
+fi
 if [ "$(basename "$0")" = "${FAIL_COMMAND:-}" ]; then
     printf 'native failure diagnostic\\n' >&2
     exit 7
@@ -50,6 +73,10 @@ for argument in "$@"; do
     case "$argument" in --ansi|--colors|--colors=always) color=true ;; esac
 done
 if [ "$color" = true ]; then printf '\\033[32mnative progress\\033[0m\\n'; else printf 'native progress\\n'; fi
+if [ "$(basename "$0")" = phpmetrics ] && [ "${METRICS_SAMPLE:-0}" = 1 ]; then
+    printf 'Complexity\\n    Average complexity     3.57\\n'
+    printf '\\033[32mDone\\033[0m\\n'
+fi
 printf '::notice file=src/Example.php,line=1::native annotation\\n' >&2
 if [[ "$*" == *--shepherd* ]] && [ -n "${SHEPHERD_DIAGNOSTIC:-}" ]; then
     printf '%s\\n' "$SHEPHERD_DIAGNOSTIC" >&2
@@ -412,6 +439,126 @@ done
         self.assertIn("Required generated report is missing or empty: build/logs/junit.xml", result.stderr)
         self.assertNotIn("vendor/bin/phpmetrics", calls)
         self.assertNotIn("[OK]", result.stderr)
+
+    def test_phpmetrics_test_fallback_preserves_coverage_without_debugger(self):
+        self.prepare_mutation_fixtures()
+        record = self.root / "xdebug-record"
+        for runner, arguments in (("phpdbg", ()), ("phpunit", ("PHPDBG=",))):
+            with self.subTest(runner=runner):
+                (self.root / "build/logs/junit.xml").unlink()
+                record.write_text("")
+                result, calls = self.run_target(
+                    "phpmetrics", "XDEBUG_MODE=debug", *arguments,
+                    CHECK_FALLBACK_XDEBUG="1", XDEBUG_RECORD=str(record), CHECK_METRICS_XDEBUG="1",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("build/logs/junit.xml not found", result.stderr)
+                self.assertIn("--junit=build/logs/junit.xml", calls)
+                records = record.read_text().splitlines()
+                self.assertTrue(any(line.startswith("console ") for line in records), records)
+                self.assertTrue(any(line.startswith(f"{runner} ") for line in records), records)
+                self.assertTrue(all(line.endswith(" coverage") for line in records), records)
+                self.assertNotIn("Xdebug:", result.stderr)
+
+    def test_phpmetrics_color_and_xdebug_preserve_report_and_failures(self):
+        self.prepare_mutation_fixtures()
+        plain, _ = self.run_target("phpmetrics", COLOR="never", METRICS_SAMPLE="1",
+                                   XDEBUG_MODE="debug", CHECK_METRICS_XDEBUG="1")
+        self.assertEqual(plain.returncode, 0, plain.stderr)
+        report = (self.root / "build/phpmetrics/index.html").read_bytes()
+        for color, no_color, expected in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result, calls = self.run_target(
+                    "phpmetrics", COLOR=color, NO_COLOR=no_color, TERM="xterm",
+                    METRICS_SAMPLE="1", XDEBUG_MODE="debug", CHECK_METRICS_XDEBUG="1",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[1;34mComplexity\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[34m3.57\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[32mDone\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+                self.assertEqual((self.root / "build/phpmetrics/index.html").read_bytes(), report)
+                self.assertIn("phpmetrics --version", calls)
+                self.assertIn("--junit=build/logs/junit.xml --report-html=build/phpmetrics", calls)
+                self.assertNotIn("Xdebug:", result.stderr)
+                self.assertIn("native annotation", result.stderr)
+
+        for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
+            with self.subTest(term=term, no_color=no_color):
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                    CALLS=str(self.root / "calls"), COLOR="auto", NO_COLOR=no_color, TERM=term,
+                    METRICS_SAMPLE="1", XDEBUG_MODE="debug", CHECK_METRICS_XDEBUG="1",
+                    FAIL_COMMAND="", REAL_PYTHON=sys.executable,
+                )
+                environment.pop("NATIVE_COLOR", None)
+                master, slave = pty.openpty()
+                try:
+                    result = subprocess.run(
+                        ["bash", "scripts/make.sh", "--no-print-directory", "APPLICATION_CONFIG=fixture.json",
+                         "INSIDE_DOCKER_CONTAINER=1", "phpmetrics"],
+                        cwd=self.root, env=environment, stdout=slave, stderr=subprocess.PIPE, check=False,
+                    )
+                    os.close(slave)
+                    slave = -1
+                    output = os.read(master, 65536).decode().replace("\r\n", "\n")
+                finally:
+                    os.close(master)
+                    if slave != -1:
+                        os.close(slave)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[1;34mComplexity\x1b[0m" in output, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", output), plain.stdout)
+
+        for command in ("php", "phpmetrics"):
+            for color in ("always", "never"):
+                with self.subTest(command=command, color=color):
+                    result, _ = self.run_target(
+                        "phpmetrics", COLOR=color, XDEBUG_MODE="debug",
+                        CHECK_METRICS_XDEBUG="1", FAIL_COMMAND=command,
+                    )
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn("native failure diagnostic", result.stderr)
+                    self.assertNotIn("Xdebug:", result.stderr)
+                    self.assertNotIn("HTML report: build/phpmetrics", result.stderr)
+                    self.assertNotIn("[OK] Generate PhpMetrics report", result.stderr)
+
+        result, _ = self.run_target("phpmetrics", COLOR="always", FAIL_FORMATTER="1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("formatter failure", result.stderr)
+        self.assertNotIn("HTML report: build/phpmetrics", result.stderr)
+        self.assertNotIn("[OK] Generate PhpMetrics report", result.stderr)
+
+    def test_phpmetrics_formatter_streams_partial_lines_and_preserves_native_ansi(self):
+        process = subprocess.Popen(
+            [sys.executable, str(ROOT / "scripts/phpmetrics-output.py")],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        try:
+            process.stdin.write(b"Complex")
+            process.stdin.flush()
+            self.assertTrue(select.select([process.stdout], [], [], 5)[0], "partial output was buffered")
+            first = os.read(process.stdout.fileno(), 4096)
+            self.assertEqual(first, b"\x1b[1;34mComplex")
+            process.stdin.write(b"ity\n    Average 3.57\n\x1b[32mDone\x1b[0m")
+            process.stdin.close()
+            process.stdin = None
+            rest, stderr = process.communicate(timeout=5)
+            self.assertEqual(process.returncode, 0, stderr)
+            output = first + rest
+            self.assertIn(b"\x1b[34m3.57\x1b[0m", output)
+            self.assertIn(b"\x1b[32mDone\x1b[0m", output)
+            self.assertEqual(
+                    re.sub(rb"\x1b\[[0-9;]*m", b"", output),
+                    b"Complexity\n    Average 3.57\nDone",
+            )
+        finally:
+            if process.poll() is None:
+                    process.kill()
+                    process.wait()
 
     def test_mutation_dry_run_and_overwrite_failure(self):
         self.prepare_mutation_fixtures()

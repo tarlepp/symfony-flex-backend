@@ -221,8 +221,9 @@ file, just change database and others to match your testing environment.
 <a id="metrics"></a>
 
 Project also contains [PhpMetrics](https://github.com/phpmetrics/phpmetrics) to
-make some analyze of your code. Note that you need run tests before this
-command. You can run this by following command:
+make some analyze of your code. The command runs tests to generate JUnit results
+if `build/logs/junit.xml` is missing, using Xdebug coverage mode without step
+debugging. You can run this by following command:
 
 ```bash
 make phpmetrics
