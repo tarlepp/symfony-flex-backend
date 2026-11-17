@@ -23,7 +23,7 @@ class InformationOutputTest(unittest.TestCase):
         for directory in ("scripts", "bin", "vendor/bin", "build/logs", "src", "tests", "public", "migrations"):
             (self.root / directory).mkdir(parents=True)
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
-        for name in ("command-output.sh", "make.sh", "make-help.sh", "prepare-sonar-reports.sh",
+        for name in ("command-output.sh", "command-progress.py", "make.sh", "make-help.sh", "prepare-sonar-reports.sh",
                      "project-stats.sh", "project-stats.py", "docker-images.sh", "native-output.sh", "report-output.sh",
                      "tool-versions.sh"):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
@@ -1014,6 +1014,102 @@ esac
             else:
                 self.assertIn("Platforms:  linux/amd64, linux/arm64", result.stdout)
                 self.assertIn("Build targets reported for the first builder node.", result.stdout)
+
+    def write_builder_fixture(self):
+        docker = self.root / "bin/docker"
+        docker.write_text("""#!/bin/sh
+case "$*" in
+    'buildx version') exit 0 ;;
+    'buildx inspect --bootstrap')
+        printf 'Name: fixture\\nDriver: docker\\nUnrelated: ignored\\n'
+        printf 'Name: first-node\\nPlatforms: linux/amd64, linux/arm64\\n'
+        printf 'Name: second-node\\nDriver: ignored\\nPlatforms: linux/s390x\\n'
+        if [ "${BUILDER_EXIT:-0}" != 0 ]; then
+            echo 'fixture builder unavailable' >&2
+            exit "$BUILDER_EXIT"
+        fi
+        ;;
+    *) echo "Unexpected Docker command: $*" >&2; exit 64 ;;
+esac
+""")
+        docker.chmod(0o755)
+
+    def test_builder_platforms_keep_first_fields_and_color_policy(self):
+        self.write_builder_fixture()
+        expected = (
+            "Buildx builder\nCurrent builder and first node\n\n"
+            "Name:       fixture\nDriver:     docker\n"
+            "Platforms:  linux/amd64, linux/arm64\n\n"
+            "Field descriptions\n"
+            "  Name       Current buildx builder.\n"
+            "  Driver     Backend used to run the builder.\n"
+            "  Platforms  Build targets reported for the first builder node.\n"
+        )
+        for color, no_color, native_color, progress, colored in (
+            ("never", "", "", "never", False),
+            ("always", "", "", "never", True),
+            ("always", "1", "", "never", False),
+            ("never", "", "always", "never", True),
+            ("always", "", "never", "never", False),
+            ("never", "1", "always", "never", False),
+            ("never", "", "", "always", False),
+            ("always", "", "", "always", True),
+        ):
+            with self.subTest(color=color, no_color=no_color, native_color=native_color):
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                    COLOR=color, NO_COLOR=no_color, PROGRESS=progress,
+                )
+                environment.pop("NATIVE_COLOR", None)
+                if native_color:
+                    environment["NATIVE_COLOR"] = native_color
+                result = subprocess.run(
+                    ["bash", "scripts/docker-images.sh", "platforms"], cwd=self.root,
+                    env=environment, capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), expected)
+                self.assertEqual("\x1b[34mName:\x1b[0m" in result.stdout, colored)
+                self.assertIn("[OK]", result.stderr)
+
+    def test_builder_platforms_propagate_docker_and_formatter_failures(self):
+        self.write_builder_fixture()
+        for command, status, message in (
+            ("docker", 7, "fixture builder unavailable"),
+            ("awk", 9, "fixture formatter failed"),
+        ):
+            with self.subTest(command=command):
+                if command == "awk":
+                    awk = self.root / "bin/awk"
+                    awk.write_text("#!/bin/sh\necho 'fixture formatter failed' >&2\nexit 9\n")
+                    awk.chmod(0o755)
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
+                    COLOR="never", NO_COLOR="1", PROGRESS="never",
+                    BUILDER_EXIT=str(status if command == "docker" else 0),
+                )
+                result = subprocess.run(
+                    ["bash", "scripts/docker-images.sh", "platforms"], cwd=self.root,
+                    env=environment, capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, status, result.stderr)
+                self.assertIn(message, result.stderr)
+                self.assertIn(f"[FAIL] Inspect buildx builder platforms (exit {status})", result.stderr)
+                self.assertNotIn("[OK]", result.stderr)
+                self.assertNotIn("Field descriptions", result.stdout)
+                if command == "docker":
+                    self.assertIn("Name:       fixture", result.stdout)
+
+    def test_builder_platforms_make_failure_does_not_claim_success(self):
+        self.write_builder_fixture()
+        result = self.make(
+            "docker-builder-platforms", "INSIDE_DOCKER_CONTAINER=0",
+            "INSIDE_CONTAINER_RUNTIME=0", BUILDER_EXIT="7",
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("fixture builder unavailable", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+        self.assertNotIn("Field descriptions", result.stdout)
 
     def test_image_digest_color_keeps_pin_copyable(self):
         jq = self.root / "bin/jq"

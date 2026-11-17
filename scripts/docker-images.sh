@@ -904,13 +904,53 @@ command_digest() {
     output_outcome OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
 }
 
+# Set verify_dockerfile's parity_result for its platform report and summary row.
+# Returns: 0 = matching tag, 1 = parity failure, 2 = no explicit tag to compare.
+verify_tag_parity() {
+    local file=$1 line_number=$2 ref=$3 tag_ref pinned_digest tag_digest
+
+    tag_ref="${ref%@*}"
+    pinned_digest="${ref##*@}"
+
+    if [[ "${tag_ref##*/}" != *:* ]]; then
+        printf '  %s[WARN]%s Cannot verify tag/digest parity: reference has no explicit tag\n' "$YELLOW" "$NC"
+        github_annotation warning "$file" "$line_number" "Tag/digest parity not checked" "${ref} has no explicit tag to compare with its digest"
+        parity_result='tag/digest parity not checked (no explicit tag)'
+        return 2
+    fi
+
+    if ! tag_digest="$(inspect_image "$tag_ref" --format '{{.Manifest.Digest}}')"; then
+        printf '  %s[FAIL]%s Could not resolve current tag digest: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$tag_digest")"
+        github_annotation error "$file" "$line_number" "Tag digest could not be resolved" "${tag_ref}: $(tail -n 1 <<< "$tag_digest")"
+        parity_result='tag digest lookup failed'
+        return 1
+    fi
+
+    if ! [[ "$tag_digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
+        printf '  %s[FAIL]%s Invalid digest for current tag: %s\n' "$RED" "$NC" "$tag_digest"
+        github_annotation error "$file" "$line_number" "Invalid tag digest" "${tag_ref} resolved to an invalid digest: ${tag_digest}"
+        parity_result='invalid current tag digest'
+        return 1
+    fi
+
+    if [ "$tag_digest" != "$pinned_digest" ]; then
+        printf '  %s[FAIL]%s Tag digest mismatch: tag resolves to %s, pinned digest is %s\n' "$RED" "$NC" "$tag_digest" "$pinned_digest"
+        github_annotation error "$file" "$line_number" "Tag and digest do not match" "${tag_ref} resolves to ${tag_digest}, but the Dockerfile pins ${pinned_digest}"
+        parity_result="tag digest mismatch (tag: ${tag_digest}; pinned: ${pinned_digest})"
+        return 1
+    fi
+
+    printf '  %s[OK]%s Tag digest matches\n' "$GREEN" "$NC"
+    parity_result='tag digest matches'
+}
+
 # Verify external FROM and COPY images, reporting their instruction line numbers.
 # Usage: verify_dockerfile <file>
 # Returns: 0 = all OK, 1 = problems found, 2 = OK with warnings
 verify_dockerfile() {
     local file="$1"
     local line_number ref raw type platforms status=0 warnings=0
-    local tag_ref pinned_digest tag_digest parity_result pin_status
+    local parity_result parity_status
 
     printf '%s%s%s\n' "$BOLD" "$file" "$NC"
 
@@ -947,40 +987,21 @@ verify_dockerfile() {
         raw="${MANIFEST_CACHE[$ref]}"
         type="$(media_type "$raw")"
         platforms="$(image_platforms "$raw")"
-        tag_ref="${ref%@*}"
-        pinned_digest="${ref##*@}"
-        parity_result=''
-        pin_status=0
 
-        if [[ "${tag_ref##*/}" != *:* ]]; then
-            printf '  %s[WARN]%s Cannot verify tag/digest parity: reference has no explicit tag\n' "$YELLOW" "$NC"
-            github_annotation warning "$file" "$line_number" "Tag/digest parity not checked" "${ref} has no explicit tag to compare with its digest"
-            parity_result='tag/digest parity not checked (no explicit tag)'
-            warnings=$((warnings + 1))
-        else
-            if ! tag_digest="$(inspect_image "$tag_ref" --format '{{.Manifest.Digest}}')"; then
-                printf '  %s[FAIL]%s Could not resolve current tag digest: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$tag_digest")"
-                github_annotation error "$file" "$line_number" "Tag digest could not be resolved" "${tag_ref}: $(tail -n 1 <<< "$tag_digest")"
-                parity_result='tag digest lookup failed'
+        parity_result=''
+        parity_status=0
+
+        verify_tag_parity "$file" "$line_number" "$ref" || parity_status=$?
+
+        case "$parity_status" in
+            0) ;;
+            2)
+                warnings=$((warnings + 1))
+                ;;
+            *)
                 status=1
-                pin_status=1
-            elif ! [[ "$tag_digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
-                printf '  %s[FAIL]%s Invalid digest for current tag: %s\n' "$RED" "$NC" "$tag_digest"
-                github_annotation error "$file" "$line_number" "Invalid tag digest" "${tag_ref} resolved to an invalid digest: ${tag_digest}"
-                parity_result='invalid current tag digest'
-                status=1
-                pin_status=1
-            elif [ "$tag_digest" != "$pinned_digest" ]; then
-                printf '  %s[FAIL]%s Tag digest mismatch: tag resolves to %s, pinned digest is %s\n' "$RED" "$NC" "$tag_digest" "$pinned_digest"
-                github_annotation error "$file" "$line_number" "Tag and digest do not match" "${tag_ref} resolves to ${tag_digest}, but the Dockerfile pins ${pinned_digest}"
-                parity_result="tag digest mismatch (tag: ${tag_digest}; pinned: ${pinned_digest})"
-                status=1
-                pin_status=1
-            else
-                printf '  %s[OK]%s Tag digest matches\n' "$GREEN" "$NC"
-                parity_result='tag digest matches'
-            fi
-        fi
+                ;;
+        esac
 
         if ! is_index "$type"; then
             printf '  %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
@@ -992,7 +1013,7 @@ verify_dockerfile() {
             github_annotation error "$file" "$line_number" "Insufficient base image platforms" "${ref} contains fewer than two distinct runnable platforms (${platforms:-none}). Wait for upstream platform images or choose another tag and digest."
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}); ${parity_result} |")
             status=1
-        elif [ "$pin_status" -eq 1 ]; then
+        elif [ "$parity_status" -eq 1 ]; then
             printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Multi-platform: ${platforms}; ${parity_result} |")
         else
@@ -1116,17 +1137,14 @@ command_verify() {
     output_result OK 'All Dockerfiles use valid multi-platform image pins'
 }
 
-command_platforms() {
-    local color='' heading='' reset=''
-    if native_color_enabled; then
-        color=$'\033[34m'
-        heading=$'\033[1;34m'
-        reset=$'\033[0m'
-    fi
+# The subshell keeps pipefail local; the guard also works under conditional calls.
+inspect_builder_platforms() (
+    local color=$1 reset=$2 heading=$3
 
-    # shellcheck disable=SC2016 # Positional parameters belong to the child shell and awk.
-    output_run 'Inspect buildx builder platforms' bash -o pipefail -c \
-        'docker buildx inspect --bootstrap | awk -v color="$1" -v reset="$2" -v heading="$3" '"'"'
+    set -o pipefail
+
+    docker buildx inspect --bootstrap |
+        awk -v color="$color" -v reset="$reset" -v heading="$heading" '
             /^(Name|Driver|Platforms):/ && !seen[$1]++ {
                 if (!printed_heading++) {
                     printf "%sBuildx builder%s\n", heading, reset
@@ -1139,13 +1157,29 @@ command_platforms() {
                 sub(/^[[:space:]]+/, "", value)
                 printf "%s%s%s%*s%s\n", color, label, reset, 12 - length(label), "", value
             }
-        '"'"' &&
-        printf "\n" &&
-        printf "%sField descriptions%s\n" "$3" "$2" &&
-        printf "%s\n" \
-            "  Name       Current buildx builder." \
-            "  Driver     Backend used to run the builder." \
-            "  Platforms  Build targets reported for the first builder node."' bash "$color" "$reset" "$heading"
+        ' || exit $?
+
+    printf '\n' &&
+        printf '%sField descriptions%s\n' "$heading" "$reset" &&
+        printf '%s\n' \
+            '  Name       Current buildx builder.' \
+            '  Driver     Backend used to run the builder.' \
+            '  Platforms  Build targets reported for the first builder node.'
+)
+
+command_platforms() {
+    local color='' heading='' reset=''
+
+    if native_color_enabled; then
+        color=$'\033[34m'
+        heading=$'\033[1;34m'
+        reset=$'\033[0m'
+    fi
+
+    # Keep an external Bash runner so output_run can relay idle progress.
+    export -f inspect_builder_platforms
+    output_run 'Inspect buildx builder platforms' bash -c \
+        'inspect_builder_platforms "$@"' bash "$color" "$reset" "$heading"
 }
 
 command_setup_qemu() {
@@ -1264,15 +1298,41 @@ command_push() {
 }
 
 case "${1:-}" in
-    check-updates ) shift; command_check_updates "$@" ;;
-    update-pins ) shift; command_update_pins "$@" ;;
-    digest ) require_docker; command_digest ;;
-    verify ) require_docker; command_verify ;;
-    platforms ) require_docker; command_platforms ;;
-    setup-qemu ) require_docker; command_setup_qemu ;;
-    build ) require_docker; command_build ;;
-    push ) require_docker; command_push ;;
-    ""|-h|--help|help ) usage ;;
+    check-updates )
+        shift
+        command_check_updates "$@"
+        ;;
+    update-pins )
+        shift
+        command_update_pins "$@"
+        ;;
+    digest )
+        require_docker
+        command_digest
+        ;;
+    verify )
+        require_docker
+        command_verify
+        ;;
+    platforms )
+        require_docker
+        command_platforms
+        ;;
+    setup-qemu )
+        require_docker
+        command_setup_qemu
+        ;;
+    build )
+        require_docker
+        command_build
+        ;;
+    push )
+        require_docker
+        command_push
+        ;;
+    ""|-h|--help|help )
+        usage
+        ;;
     * )
         error "Unknown command '${1}'"
         printf '\n' >&2
