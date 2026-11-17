@@ -452,7 +452,11 @@ declare concurrency groups.
 
 <a id="containers-and-test-setup"></a>
 
-All jobs use Ubuntu runners. Most PHP/tooling jobs share
+All jobs use Ubuntu runners. Core CI defines its runner label once in the
+`changes` job and reuses it through the `ubuntu_runner` YAML anchor. Standalone
+workflows specify their own labels because YAML anchors are local to each file.
+
+Most PHP/tooling jobs share
 [`php-bootstrap`](../.github/actions/php-bootstrap/action.yml), which builds the
 development Docker target and starts the Compose PHP service without the
 application entrypoint. PHP, extensions and coverage tooling come from the
