@@ -14,6 +14,151 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 
 
+class EntrypointTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="entrypoint-")
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        (self.root / "bin").mkdir()
+        self.bashrc = self.root / "bashrc"
+        self.bashrc.write_text("existing shell configuration\n")
+        self.calls = self.root / "calls"
+
+        # Rewrite absolute runtime paths only in isolated copies, never the originals.
+        for name in ("docker-entrypoint-dev.sh", "docker-entrypoint.sh"):
+            content = (ROOT / name).read_text()
+            for original, replacement in (
+                ("/sbin/ip", str(self.root / "bin/ip")),
+                ("/home/dev/.bashrc", str(self.bashrc)),
+                ("/shared/app", str(self.root / "shared")),
+                ("/app", str(self.root / "app")),
+            ):
+                content = content.replace(original, replacement)
+            (self.root / name).write_text(content)
+
+        mock = """#!/bin/bash
+name=${0##*/}
+printf '%s' "$name" >> "$CALLS"
+printf ' <%s>' "$@" >> "$CALLS"
+printf '\\n' >> "$CALLS"
+if [ "$name $*" = "${FAIL_CALL:-}" ]; then
+    printf 'fixture startup failure\\n' >&2
+    exit 7
+fi
+case "$name" in
+    make|composer|console|mkdir|chmod|chown|find|cp)
+        if [ "$name $*" = 'console completion bash' ]; then
+            printf 'fixture completion\\n'
+        fi
+        if [ "$name" = composer ]; then
+            printf 'environment <%s> <%s> <%s>\\n' \
+                "${DOCKER_IP:-}" "${XDEBUG_SESSION:-}" "${COMPOSER_MEMORY_LIMIT:-}" >> "$CALLS"
+        fi
+        ;;
+    ip)
+        [ "$*" = route ] || exit 64
+        printf 'default via 192.0.2.1 dev eth0\\n'
+        ;;
+    php-fpm|payload)
+        printf 'payload pid=%s\\n' "$$"
+        exit "${PAYLOAD_EXIT:-0}"
+        ;;
+    *) printf 'Unexpected startup command: %s\\n' "$name" >&2; exit 64 ;;
+esac
+"""
+        for name in ("make", "composer", "console", "mkdir", "chmod", "chown",
+                     "find", "cp", "ip", "php-fpm", "payload"):
+            command = self.root / "bin" / name
+            command.write_text(mock)
+            command.chmod(0o755)
+        (self.root / "bin/awk").symlink_to(shutil.which("awk"))
+
+    def run_entrypoint(self, script, *arguments, **overrides):
+        self.calls.write_text("")
+        environment = dict(os.environ, PATH=str(self.root / "bin"), CALLS=str(self.calls))
+        for name in ("DOCKER_IP", "XDEBUG_SESSION", "COMPOSER_MEMORY_LIMIT", "FAIL_CALL", "PAYLOAD_EXIT"):
+            environment.pop(name, None)
+        environment.update(overrides)
+        process = subprocess.Popen(
+            ["/bin/bash", script, *arguments], cwd=self.root, env=environment,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        )
+        stdout, stderr = process.communicate(timeout=10)
+        return process.returncode, stdout, stderr, self.calls.read_text().splitlines(), process.pid
+
+    def development_calls(self):
+        return [
+            "make <lint-configuration>",
+            "ip <route>",
+            "composer <install> <--optimize-autoloader>",
+            "environment <192.0.2.1> <PHPSTORM> <-1>",
+            "composer <audit> <--abandoned=report>",
+            "environment <192.0.2.1> <PHPSTORM> <>",
+            "make <generate-jwt-keys>",
+            "console <doctrine:database:create> <--no-interaction> <--if-not-exists>",
+            "console <doctrine:migrations:migrate> <--no-interaction> <--allow-no-migration> <--all-or-nothing>",
+            "console <completion> <bash>",
+        ]
+
+    def production_calls(self):
+        return [
+            "make <lint-configuration>",
+            f"mkdir <-p> <{self.root}/app/var>",
+            "make <generate-jwt-keys>",
+            f"chmod <644> <{self.root}/app/config/jwt/private.pem>",
+            "console <doctrine:database:create> <--if-not-exists> <--no-interaction> <--no-ansi>",
+            "console <doctrine:migrations:migrate> <--no-interaction> <--no-ansi> <--allow-no-migration>",
+            "console <assets:install> <--symlink> <--relative> <--no-interaction> <--no-ansi> <--env> <prod>",
+            f"chown <-R> <www-data:www-data> <{self.root}/app/var>",
+            f"mkdir <-p> <{self.root}/shared>",
+            f"find <{self.root}/shared> <-mindepth> <1> <-delete>",
+            f"cp <-a> <{self.root}/app/.> <{self.root}/shared/>",
+        ]
+
+    def test_development_order_environment_completion_and_exec(self):
+        status, stdout, stderr, calls, pid = self.run_entrypoint(
+            "docker-entrypoint-dev.sh", "payload", "argument with spaces", "", PAYLOAD_EXIT="23",
+        )
+        self.assertEqual(status, 23, stderr)
+        self.assertEqual(calls, self.development_calls() + ["payload <argument with spaces> <>"])
+        self.assertEqual(stdout, f"payload pid={pid}\n")
+        self.assertEqual(self.bashrc.read_text(), "existing shell configuration\nfixture completion\n")
+
+    def test_production_order_permissions_sync_and_exec(self):
+        status, stdout, stderr, calls, pid = self.run_entrypoint(
+            "docker-entrypoint.sh", "php-fpm", "-F", PAYLOAD_EXIT="23",
+        )
+        self.assertEqual(status, 23, stderr)
+        self.assertEqual(calls, self.production_calls() + ["php-fpm <-F>"])
+        self.assertEqual(stdout, f"payload pid={pid}\n")
+        self.assertEqual(self.bashrc.read_text(), "existing shell configuration\n")
+
+    def test_production_non_fpm_command_skips_setup(self):
+        status, stdout, stderr, calls, pid = self.run_entrypoint(
+            "docker-entrypoint.sh", "payload", "argument with spaces", "",
+        )
+        self.assertEqual(status, 0, stderr)
+        self.assertEqual(calls, ["payload <argument with spaces> <>"])
+        self.assertEqual(stdout, f"payload pid={pid}\n")
+
+    def test_startup_failures_stop_before_later_steps_and_exec(self):
+        for script, expected in (
+            ("docker-entrypoint-dev.sh", self.development_calls()),
+            ("docker-entrypoint.sh", self.production_calls()),
+        ):
+            for index, call in enumerate(expected):
+                if call.startswith(("environment ", "ip ")):
+                    continue
+                with self.subTest(script=script, call=call):
+                    failure = call.replace(" <", " ").replace(">", "")
+                    status, _, stderr, calls, _ = self.run_entrypoint(
+                        script, "php-fpm", FAIL_CALL=failure,
+                    )
+                    self.assertEqual(status, 7, stderr)
+                    self.assertIn("fixture startup failure", stderr)
+                    self.assertEqual(calls, expected[:index + 1])
+
+
 class LifecycleOutputTest(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="make-lifecycle-")
