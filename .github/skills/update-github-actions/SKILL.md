@@ -63,9 +63,11 @@ Read warnings and individual lookup results, not only the exit code:
   precedence over available updates, or lookup failures. Unsupported arguments
   return `64`. Same-version Action pin differences return `1`; candidate SHAs
   prefer peeled commits for annotated tags.
-* Candidate selection sorts version-like tags across major versions and may
-  suggest a major upgrade. It does not enforce compatibility or reliably exclude
-  prerelease tags; treat the result as a candidate, not approval.
+* Action candidates are stable `X.Y` or `X.Y.Z` tags with an optional `v` prefix;
+  prerelease, build-metadata and other suffix tags are excluded. Major-only pins
+  fall back to major-only tags if no stable dotted tags exist. Candidates may
+  cross major versions and do not enforce compatibility; treat the result as a
+  candidate, not approval.
 * Discovery is line-based, not a complete YAML parser. Local action references
   and reusable-workflow references are skipped. Alternate `.yaml` names, deeper
   action directories, unusual quoting, and other reference forms need manual

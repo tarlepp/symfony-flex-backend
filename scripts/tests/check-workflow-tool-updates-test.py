@@ -316,7 +316,7 @@ class ToolUpdatesTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn(
-            "GitHub lookup succeeded, but no usable version-like tags", result.stderr,
+            "GitHub lookup succeeded, but no usable stable version tags", result.stderr,
         )
         self.assertNotIn("git ls-remote failed", result.stderr)
         self.assertNotIn("timed out", result.stderr)
@@ -352,7 +352,50 @@ class ToolUpdatesTest(unittest.TestCase):
                     workflow_content=workflow, action_refs=action_refs,
                 )
                 self.assertEqual(result.returncode, 2, result.stdout)
-                self.assertIn("no usable version-like tags", result.stderr)
+                self.assertIn("no usable stable version tags", result.stderr)
+
+    def test_action_candidates_exclude_prereleases_and_malformed_suffixes(self):
+        excluded = (
+            "v9.0.0-rc1", "v9.0.0-beta.2", "v9.0.0-alpha", "v9.0.0-preview",
+            "v9.0.0+build", "v9.0.0junk", "v9.0.0.1", "v9.1-rc1", "v99",
+        )
+        for stable in ("v2.0.0", "2.0.0", "v2.1", "2.1"):
+            with self.subTest(stable=stable):
+                current = "v1.0.0" if stable.startswith("v") else "1.0.0"
+                result = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
+                    workflow_content=f"steps:\n  - uses: example/action@{SHA} # {current}\n",
+                    action_refs=(
+                        f"{SHA}\trefs/tags/{current}\n{NEW_SHA}\trefs/tags/{stable}\n"
+                        + "\n".join(f"{TAG_SHA}\trefs/tags/{tag}" for tag in excluded)
+                    ),
+                    action_sha_refs=f"{NEW_SHA}\trefs/tags/{stable}",
+                )
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn(f"{current} -> {stable}", result.stdout)
+                self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
+                for tag in excluded:
+                    self.assertNotIn(f"-> {tag}", result.stdout)
+
+    def test_prerelease_only_action_candidates_are_explicit_errors(self):
+        for wrapped in (False, True):
+            with self.subTest(wrapped=wrapped):
+                result = self.run_checker(
+                    f"{SHA}\trefs/tags/v1.0.0", mode="", action=True, wrapped=wrapped,
+                    action_refs=f"{NEW_SHA}\trefs/tags/v2.0.0-rc1",
+                )
+                self.assertEqual(result.returncode, 0 if wrapped else 2, result.stderr)
+                self.assertIn("no usable stable version tags", result.stderr)
+                self.assertNotIn("[OK] example/action", result.stdout)
+
+    def test_major_fallback_ignores_full_prereleases(self):
+        result = self.run_checker(
+            f"{SHA}\trefs/tags/v1.0.0", mode="",
+            workflow_content=f"steps:\n  - uses: example/action@{SHA} # v5\n",
+            action_refs=f"{SHA}\trefs/tags/v5\n{NEW_SHA}\trefs/tags/v6.0.0-rc1",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("v5 (up-to-date)", result.stdout)
 
     def test_major_pin_prefers_full_version_tags_when_available(self):
         result = self.run_checker(

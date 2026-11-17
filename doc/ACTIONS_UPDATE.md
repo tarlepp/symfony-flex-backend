@@ -115,7 +115,7 @@ and floating tags. Missing pins, lookup failures, and moved/missing tags fail
 with exit code `2`; updates return `1`. This stricter parity/error behavior is
 specific to tool pins. Action version/SHA lookup failures also return exit 2;
 same-version Action pin differences are reported as updates (exit `1`).
-For Actions pinned to major-only versions that publish no full-version tags,
+For Actions pinned to major-only versions that publish no stable dotted tags,
 the checker compares major-only tags and reports moved pins without updating
 them automatically. Review compatibility and update the release tag, commit
 comment, and both platforms' binary checksums together. Do not substitute a
@@ -280,7 +280,9 @@ What it does:
 * Discovers pinned actions from top-level `.yml` and `.yaml` files in
   `.github/workflows/` and recursively from `action.yml` and `action.yaml`
   metadata under `.github/actions/`.
-* Compares version comments against the latest version-like tag it discovers.
+* Compares version comments against the latest stable `X.Y` or `X.Y.Z` tag, with
+  an optional `v` prefix. Prerelease, build-metadata and other suffix tags are
+  excluded.
 * Resolves the exact candidate tag, preferring its peeled commit for annotated
   tags rather than the tag-object SHA.
 * Reports same-version updates when the pinned SHA differs from that commit,
@@ -332,7 +334,7 @@ checker exit code. Other exit codes still fail Make.
 
 Failed GitHub lookups show whether the command timed out (10 seconds for Action
 lookups, 20 seconds for tools) or failed with a Git exit status and diagnostic.
-Successful lookups with no version-like tags or missing/invalid candidate SHAs
+Successful lookups with no usable stable tags or missing/invalid candidate SHAs
 are reported separately. For timeouts, check network and DNS connectivity from
 the PHP development container before retrying; the time limits are unchanged.
 
@@ -359,10 +361,11 @@ Requirements:
 
 Important behavior:
 
-* The script sorts version-like tags across major versions and may suggest a
-  major upgrade. It does not enforce compatibility or reliably exclude
-  prereleases, so treat every result as a candidate rather than approval to
-  update.
+* The script sorts stable version tags across major versions and may suggest a
+  major upgrade. It excludes prerelease and suffix tags but does not enforce
+  compatibility, so treat every result as a candidate rather than approval to
+  update. Major-only pins fall back to major-only tags when no stable `X.Y` or
+  `X.Y.Z` tags exist; other pins never use that fallback.
 * The script continues checks even when discovery warnings are present.
 * Review release notes and compatibility, and obtain explicit agreement before
   applying a major upgrade suggestion.

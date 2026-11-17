@@ -343,9 +343,8 @@ latest_action_version() {
 
     tags=$(printf '%s\n' "$tags" | awk '{print $2}' | sed 's#refs/tags/##')
 
-    # Get the absolute latest version tag (semver-like only, at least X.Y to exclude
-    # floating major alias tags like v1, v2 and non-version tags like "verbose")
-    latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+' | sort -V | tail -n 1)
+    # Accept only stable X.Y or X.Y.Z tags, optionally prefixed with v.
+    latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+(\.[0-9]+)?$' | sort -V | tail -n 1)
 
     # Some actions publish only major tags; compare them only for a major pin.
     if [ -z "$latest" ] && [[ "$current_version" =~ ^v?[0-9]+$ ]]; then
@@ -353,7 +352,7 @@ latest_action_version() {
     fi
 
     if [ -z "$latest" ]; then
-        output_status FAIL "Unable to fetch action version: $action @ $current_version (GitHub lookup succeeded, but no usable version-like tags were found)"
+        output_status FAIL "Unable to fetch action version: $action @ $current_version (GitHub lookup succeeded, but no usable stable version tags were found)"
         return 1
     fi
 
