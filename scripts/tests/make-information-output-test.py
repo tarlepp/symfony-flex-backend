@@ -88,7 +88,13 @@ if [[ "$*" == *php-coveralls* ]]; then
     fi
     echo 'Finish submitting. status: 200 OK'
 fi
-if [[ "$*" == *--log-json=* ]] && [ "${OMIT_REPORTS:-0}" != 1 ]; then printf '{}\\n' > build/phploc.json; fi
+if [[ "$*" == *--log-json=* ]]; then
+    if [ "${OMIT_REPORTS:-0}" != 1 ]; then printf '{}\\n' > build/phploc.json; fi
+    if [ "${PHPLOC_SAMPLE:-0}" = 1 ]; then
+        printf 'Size\\n  Lines of Code (LOC)   42\\n  Comment Lines of Code  12 (28.57%%)\\n'
+        printf 'Cyclomatic Complexity\\n  Average Complexity per Class  3.51\\nDependencies\\nStructure\\n'
+    fi
+fi
 """
         for name in ("bin/php", "bin/php-fpm", "bin/console", "bin/composer", "bin/jq",
                      "bin/python3", "bin/node", "bin/npm"):
@@ -1089,6 +1095,86 @@ esac
         self.assertIn("422 Unprocessable Entity", result.stderr)
         self.assertIn("[FAIL] Submit coverage to Coveralls", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
+
+    def test_phploc_console_color_preserves_report_and_failures(self):
+        plain = self.make("phploc", COLOR="never", PHPLOC_SAMPLE="1")
+        self.assertEqual(plain.returncode, 0, plain.stderr)
+        report = (self.root / "build/phploc.json").read_bytes()
+        for color, no_color, expected in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result = self.make("phploc", COLOR=color, NO_COLOR=no_color, TERM="xterm", PHPLOC_SAMPLE="1")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[1;34mSize\x1b[0m" in result.stdout, expected)
+                for heading in ("Cyclomatic Complexity", "Dependencies", "Structure"):
+                    self.assertEqual(f"\x1b[1;34m{heading}\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[34m12 (28.57%)\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[34m3.51\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+                self.assertEqual((self.root / "build/phploc.json").read_bytes(), report)
+
+        for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
+            with self.subTest(term=term, no_color=no_color):
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}", CALLS=str(self.calls),
+                    COLOR="auto", NO_COLOR=no_color, TERM=term, PHPLOC_SAMPLE="1",
+                    FAIL_COMMAND="", NVM_DIR=str(self.root / "missing-nvm"),
+                )
+                environment.pop("NATIVE_COLOR", None)
+                master, slave = pty.openpty()
+                try:
+                    result = subprocess.run(
+                        ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
+                         "INSIDE_DOCKER_CONTAINER=1", "phploc"],
+                        cwd=self.root, env=environment, stdout=slave, stderr=subprocess.PIPE, check=False,
+                    )
+                    os.close(slave)
+                    slave = -1
+                    output = os.read(master, 65536).decode().replace("\r\n", "\n")
+                finally:
+                    os.close(master)
+                    if slave != -1:
+                        os.close(slave)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[1;34mSize\x1b[0m" in output, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", output), plain.stdout)
+                self.assertEqual((self.root / "build/phploc.json").read_bytes(), report)
+
+        result = self.make("phploc", COLOR="always", FAIL_COMMAND="php")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("native failure diagnostic", result.stderr)
+        self.assertNotIn("[INFO] JSON report:", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+        awk = self.root / "bin/awk"
+        awk.write_text("#!/bin/sh\necho 'formatter failure' >&2\nexit 7\n")
+        awk.chmod(0o755)
+        result = self.make("phploc", COLOR="always", PHPLOC_SAMPLE="1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("formatter failure", result.stderr)
+        self.assertNotIn("[INFO] JSON report:", result.stderr)
+
+    def test_phploc_disables_xdebug_without_hiding_php_errors(self):
+        for color in ("always", "never"):
+            with self.subTest(color=color):
+                result = self.make(
+                    "phploc", COLOR=color, XDEBUG_MODE="debug", CHECK_VERSION_XDEBUG="1", PHPLOC_SAMPLE="1",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertNotIn("Xdebug:", result.stderr)
+                self.assertIn("Lines of Code", result.stdout)
+                self.assertIn("[INFO] JSON report:", re.sub(r"\x1b\[[0-9;]*m", "", result.stderr))
+
+                result = self.make(
+                    "phploc", COLOR=color, XDEBUG_MODE="debug", CHECK_VERSION_XDEBUG="1", FAIL_COMMAND="php",
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertNotIn("Xdebug:", result.stderr)
+                self.assertIn("native failure diagnostic", result.stderr)
+                self.assertNotIn("[INFO] JSON report:", result.stderr)
+                self.assertNotIn("[OK]", result.stderr)
 
     def test_phploc_path_is_shown_only_after_generator_success(self):
         result = self.make("phploc")

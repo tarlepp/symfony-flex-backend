@@ -165,9 +165,11 @@ parallel-lint use
 Psalm uses `--monochrome`. Infection passes the color choice to its test runner.
 Compose receives the resolved native choice through `COMPOSE_ANSI`, without
 changing lifecycle commands or service selection. The security check's Composer
-dry run also uses the shared native choice. GitHub-format Psalm/PHPStan analysis
-always stays plain, independent of status colors, preserving annotations and
-JSON report formats.
+dry run also uses the shared native choice. PHPLoc colors console section
+headings and values when native color is enabled; its JSON report is unchanged.
+It disables Xdebug for the PHPLoc process to avoid debugger connection attempts.
+GitHub-format Psalm/PHPStan analysis always stays plain, independent of status
+colors, preserving annotations and JSON report formats.
 
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
 hardcodes colors without a disable option. `scripts/native-output.sh` removes

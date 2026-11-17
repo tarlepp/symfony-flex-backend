@@ -464,7 +464,18 @@ check-security: ## Checks that application doesn't have installed dependencies w
 
 phploc: ## Runs `phploc` and create json output
 	@mkdir -p build
-	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
+	@if [ "$(NATIVE_COLOR)" = always ] && [ -z "$$NO_COLOR" ]; then \
+		bash -o pipefail -c 'XDEBUG_MODE=off php ./vendor/bin/phploc --log-json=./build/phploc.json ./src | \
+			awk '"'"'/^(Size|Cyclomatic Complexity|Dependencies|Structure)$$/ { \
+				printf "\033[1;34m%s\033[0m\n", $$0; next \
+			} \
+			match($$0, /[0-9]+(\.[0-9]+)?( \([0-9.]+%\))?$$/) { \
+				printf "%s\033[34m%s\033[0m\n", substr($$0, 1, RSTART-1), substr($$0, RSTART); next \
+			} \
+			{ print }'"'"''; \
+	else \
+		XDEBUG_MODE=off php ./vendor/bin/phploc --log-json=./build/phploc.json ./src; \
+	fi
 	$(call REPORT_PATHS,JSON report: build/phploc.json,build/phploc.json)
 
 phpmetrics: ## Generates PhpMetrics static analysis
