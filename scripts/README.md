@@ -1084,6 +1084,14 @@ PRs use a three-dot comparison; pushes and merge groups use two dots. Manual
 runs, empty or failed comparisons, quoted paths and unclassified files retain
 full validation. Changes to the detector itself also select every check.
 
+Workflow validator and nested test-runner changes select both `workflows` and
+`tooling`. The same applies to real dependencies copied into the validator's
+output fixtures: the gate scripts, overview/statistics helpers, composite shell
+checker and `ci-gates-test.py`. The `tooling` flag enables the configuration
+job's `make test-command-output` caller, rather than relying on workflow lint
+alone to validate those output contracts. Application tests and image builds
+remain unselected for these isolated helper changes.
+
 The script prints changed filenames and descriptive validation labels with their
 category keys and `enabled` or `not enabled` status to stdout, including the
 derived `configuration` flag. Enabled means eligible to run, not that a check

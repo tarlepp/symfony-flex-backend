@@ -173,7 +173,7 @@ still matter. Other workflows and individual steps are not enumerated.
 | Root Composer/Flex files | Composer, runtime, YAML, audit, PHP, tests |
 | PHP/database runtime, env, Compose | Runtime, Compose, PHP, PHPUnit, builds |
 | nginx, dev shell, Dev Container | Compose, tooling regressions, builds |
-| Other workflows and validators | Workflow validation |
+| Other workflows and validators | Workflow checks; selected output tests |
 | Image helper and regressions | Pins/updates, helper and output regressions |
 | Other scripts and tooling metadata | Offline tooling regressions |
 | Shared execution inputs or unclassified paths | Full validation |
@@ -186,7 +186,13 @@ audits; report/test tools also select PHPUnit and report producers. Image-helper
 and helper-test changes select tooling checks as well as image checks, so
 `make test-command-output` validates their output consumers. Passing the helper
 suite alone does not verify group headings or scenario-count expectations in the
-output-contract tests. The Compose category runs
+output-contract tests. Workflow validator changes, its nested test runner and
+the real helpers copied into its output fixtures also select `tooling`, so
+their isolated output contracts run through the configuration job. This includes
+the gate scripts, overview/statistics helpers, composite shell checker and
+`ci-gates-test.py`. Ordinary workflow-only changes retain workflow validation
+without selecting application tests or builds.
+The Compose category runs
 [`ci-validate-compose.sh`](../scripts/ci-validate-compose.sh) on the runner to
 validate development, local production, CI and Dev Container overrides. It also
 parses `.devcontainer/devcontainer.json` inside the PHP container using Python's
