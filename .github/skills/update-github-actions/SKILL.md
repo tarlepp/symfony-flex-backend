@@ -69,9 +69,10 @@ Read warnings and individual lookup results, not only the exit code:
   cross major versions and do not enforce compatibility; treat the result as a
   candidate, not approval.
 * Discovery is line-based, not a complete YAML parser. Local action references
-  and reusable-workflow references are skipped. Alternate `.yaml` names, deeper
-  action directories, unusual quoting, and other reference forms need manual
-  inspection when present.
+  and reusable-workflow references are skipped. Top-level `.yml`/`.yaml`
+  workflows and recursive `action.yml`/`action.yaml` metadata are discovered
+  automatically. Files outside those paths, unusual quoting, and other
+  reference forms need manual inspection when present.
 
 ## Workflow [ᐞ](#table-of-contents)
 
