@@ -4,6 +4,7 @@ set -euo pipefail
 if [ "${GITHUB_ACTIONS:-}" = "true" ] && [ -z "${COLOR+x}" ]; then
     COLOR=always
 fi
+
 # shellcheck source=scripts/command-output.sh
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 
@@ -14,11 +15,16 @@ categories=(
 )
 declare -A selected_checks
 declare -A check_reasons
+
 declare -A reason_references
 reason_list=('')
+
+# Classification sets the reason consumed by enable_checks; the first reason wins.
 current_reason=''
+
 job_ids=()
 declare -A job_labels job_states job_notes
+
 declare -A category_labels=(
     [markdown]='Markdown lint'
     [documentation]='Documentation links and skill metadata'
@@ -38,8 +44,10 @@ declare -A category_labels=(
 
 enable_checks() {
     local category
+
     for category in "$@"; do
         selected_checks["$category"]=true
+
         if [ -z "${check_reasons[$category]:-}" ]; then
             check_reasons["$category"]=$current_reason
         fi
@@ -48,6 +56,7 @@ enable_checks() {
 
 retain_full_validation() {
     local category
+
     for category in "${categories[@]}"; do
         selected_checks["$category"]=true
         check_reasons["$category"]=$1
@@ -58,6 +67,7 @@ classify_path() {
     local file=$1
 
     current_reason="Changed file: $file (example)"
+
     case "$file" in
         *.md)
             enable_checks markdown documentation
@@ -186,6 +196,7 @@ detect_changes() {
         retain_full_validation "Manual run; full validation"
         return 0
     fi
+
     if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
         echo "Comparison SHA unavailable: retaining full validation."
         retain_full_validation "Comparison SHA unavailable; full validation"
@@ -202,6 +213,7 @@ detect_changes() {
         retain_full_validation "Changed-file comparison failed; full validation"
         return 0
     fi
+
     if [ -z "$changed_files" ]; then
         echo "No changed files found: retaining full validation."
         retain_full_validation "No changed files found; full validation"
@@ -209,6 +221,7 @@ detect_changes() {
     fi
 
     printf '\n%sChanged files%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
+
     while IFS= read -r file; do
         printf '  - %s\n' "$file"
     done <<< "$changed_files"
@@ -224,6 +237,7 @@ detect_changes() {
         selected_checks["$category"]=false
         check_reasons["$category"]=''
     done
+
     while IFS= read -r file; do
         classify_path "$file"
     done <<< "$changed_files"
@@ -236,6 +250,7 @@ detect_changes() {
             else
                 current_reason='Documentation link checker changed'
             fi
+
             enable_checks documentation
         fi
     else
@@ -250,14 +265,17 @@ prepare_reason_references() {
 
     for category in "${categories[@]}" configuration; do
         reason=${check_reasons[$category]:-No changed files matched this check}
+
         for ((index = 1; index < ${#reason_list[@]}; index++)); do
             if [ "${reason_list[$index]}" = "$reason" ]; then
                 break
             fi
         done
+
         if [ "$index" -eq "${#reason_list[@]}" ]; then
             reason_list+=("$reason")
         fi
+
         reason_references["$category"]=$index
     done
 }
@@ -277,11 +295,13 @@ add_category_job() {
     if [ "$EVENT_NAME" != schedule ] && [ "${selected_checks[$category]}" = true ]; then
         state=eligible
     fi
+
     add_job "$id" "$label" "$state" "$note"
 }
 
 prepare_jobs() {
-    local always=eligible periodic_security=not\ enabled periodic_images=not\ enabled
+    local always=eligible
+    local periodic_security='not enabled' periodic_images='not enabled'
     local reporting='not enabled' reporting_note='Requires tests and an eligible event'
 
     if [ "$EVENT_NAME" = schedule ]; then
@@ -294,16 +314,24 @@ prepare_jobs() {
     fi
 
     add_job changes 'Detect changed files' "$always" 'Core CI change detection'
-    add_category_job lint-configuration 'Lint configuration' configuration 'Runtime, Composer, YAML, Compose and tooling steps depend on their flags'
-    add_category_job lint-documentation 'Lint documentation files' documentation 'Markdown lint depends on the markdown flag'
-    add_category_job lint-workflows 'Validate GitHub workflows' workflows 'Workflow and local action checks'
-    add_job security-check 'PHP Security Checker' "$periodic_security" 'Scheduled runs also enable this job'
+    add_category_job lint-configuration 'Lint configuration' configuration \
+        'Runtime, Composer, YAML, Compose and tooling steps depend on their flags'
+    add_category_job lint-documentation 'Lint documentation files' documentation \
+        'Markdown lint depends on the markdown flag'
+    add_category_job lint-workflows 'Validate GitHub workflows' workflows \
+        'Workflow and local action checks'
+    add_job security-check 'PHP Security Checker' "$periodic_security" \
+        'Scheduled runs also enable this job'
     add_job gitleaks 'Gitleaks scan' "$always" 'Independent of changed files'
-    add_category_job docker-image-verify-pins 'Verify Docker base image pins' images 'Multi-platform pin verification'
-    add_job docker-image-check-updates 'Check Docker image versions' "$periodic_images" 'Scheduled runs also enable this job'
+    add_category_job docker-image-verify-pins 'Verify Docker base image pins' images \
+        'Multi-platform pin verification'
+    add_job docker-image-check-updates 'Check Docker image versions' "$periodic_images" \
+        'Scheduled runs also enable this job'
     add_job statistics 'Project statistics' "$always" 'Informational on non-scheduled runs'
-    add_category_job lightweight-analyzers 'Lightweight static analyzers' php 'CodeSniffer, ECS, PHPLint, Parallel Lint and PHPLoc'
-    add_category_job static-analyzers 'Static analyzers' php 'Matrix: Psalm, PHPStan, PHP Insights'
+    add_category_job lightweight-analyzers 'Lightweight static analyzers' php \
+        'CodeSniffer, ECS, PHPLint, Parallel Lint and PHPLoc'
+    add_category_job static-analyzers 'Static analyzers' php \
+        'Matrix: Psalm, PHPStan, PHP Insights'
     add_job ci-summary 'Validate CI prerequisites' conditional 'Runs unless cancelled'
     add_category_job test 'PHPUnit tests' tests 'Includes coverage and report generation'
 
@@ -319,9 +347,12 @@ prepare_jobs() {
                 ;;
         esac
     fi
+
     add_job report 'External reporting' "$reporting" "$reporting_note"
-    add_category_job docker-build 'Build application Docker image' docker 'Matrix: development, production'
-    add_category_job docker-scan 'Scan application Docker image with Trivy' docker 'Matrix: development, production; scans available archives after builds finish'
+    add_category_job docker-build 'Build application Docker image' docker \
+        'Matrix: development, production'
+    add_category_job docker-scan 'Scan application Docker image with Trivy' docker \
+        'Matrix: development, production; scans available archives after builds finish'
     add_job ci-result 'Validate CI result' conditional 'Runs unless cancelled'
 }
 
@@ -341,20 +372,25 @@ write_outputs() {
     else
         check_reasons[configuration]='No configuration categories enabled'
     fi
+
     prepare_reason_references
 
     printf '\n%sCI validation preview%s (not results or changed-file categories):\n' \
         "$OUTPUT_BLUE" "$OUTPUT_RESET"
     printf 'Enabled means eligible to run; event rules and prerequisites still apply.\n'
     printf 'Numbers refer to the reasons below.\n\n'
+
     for category in "${categories[@]}" configuration; do
         printf '%s=%s\n' "$category" "${selected_checks[$category]}" >> "$GITHUB_OUTPUT"
+
         if [ "${selected_checks[$category]}" = "true" ]; then
             printf '  %s%-11s%s  %s[%s]%s %s (%s)\n' "$OUTPUT_GREEN" enabled "$OUTPUT_RESET" \
-                "$OUTPUT_BLUE" "${reason_references[$category]}" "$OUTPUT_RESET" "${category_labels[$category]}" "$category"
+                "$OUTPUT_BLUE" "${reason_references[$category]}" "$OUTPUT_RESET" \
+                "${category_labels[$category]}" "$category"
         else
             printf '  %s%-11s%s  %s[%s]%s %s (%s)\n' "$OUTPUT_YELLOW" 'not enabled' "$OUTPUT_RESET" \
-                "$OUTPUT_BLUE" "${reason_references[$category]}" "$OUTPUT_RESET" "${category_labels[$category]}" "$category"
+                "$OUTPUT_BLUE" "${reason_references[$category]}" "$OUTPUT_RESET" \
+                "${category_labels[$category]}" "$category"
         fi
     done
 
@@ -370,24 +406,29 @@ write_job_preview() {
     printf '\n%sCore CI jobs%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
     printf 'Eligibility assumes core CI starts; dependencies and cancellation still apply.\n'
     printf 'Conditional jobs depend on results or event details unavailable here.\n'
+
     for state in eligible conditional 'not enabled'; do
         case "$state" in
             eligible) color=$OUTPUT_GREEN ;;
             'not enabled') color=$OUTPUT_YELLOW ;;
             conditional) color=$OUTPUT_BLUE ;;
         esac
+
         printf '\n  %s%s%s\n' "$color" "$state" "$OUTPUT_RESET"
         count=0
+
         for id in "${job_ids[@]}"; do
             if [ "${job_states[$id]}" = "$state" ]; then
                 printf '    - %s (%s)\n' "${job_labels[$id]}" "$id"
                 count=$((count + 1))
             fi
         done
+
         if [ "$count" -eq 0 ]; then
             printf '    - None\n'
         fi
     done
+
     printf '\n'
     printf '  Static analyzers: Psalm, PHPStan, PHP Insights.\n'
     printf '  Docker build and scan: development and production; scans require target archives.\n'
@@ -397,6 +438,7 @@ write_job_preview() {
 
 escape_summary_reason() {
     local text=$1
+
     text=${text//&/\&amp;}
     text=${text//</\&lt;}
     text=${text//>/\&gt;}
@@ -408,16 +450,19 @@ escape_summary_reason() {
     text=${text//\[/\&#91;}
     text=${text//\]/\&#93;}
     text=${text//\~/\&#126;}
+
     printf '%s' "$text"
 }
 
 write_summary() {
     local category index reason
+
     printf '## CI validation preview\n\n'
     printf 'Enabled means eligible to run; event rules and prerequisites still apply.\n'
     printf 'This is not a pass/fail result or a list of changed-file categories. '
     printf 'Conservative fallbacks can enable checks without matching changes.\n\n'
     printf '| Validation | Category | Preview | Reason |\n| --- | --- | --- | --- |\n'
+
     for category in "${categories[@]}" configuration; do
         if [ "${selected_checks[$category]}" = "true" ]; then
             printf "| %s | \`%s\` | 🟢 Enabled | [%s] |\n" \
@@ -427,18 +472,22 @@ write_summary() {
                 "${category_labels[$category]}" "$category" "${reason_references[$category]}"
         fi
     done
+
     printf '\n**Reasons**\n\n'
     for ((index = 1; index < ${#reason_list[@]}; index++)); do
         reason=$(escape_summary_reason "${reason_list[$index]}")
         printf -- '- [%s] %s\n' "$index" "$reason"
     done
+
     printf '\n### Core CI jobs\n\n'
     printf 'Eligibility assumes core CI starts; dependencies and cancellation still apply. '
     printf 'Conditional jobs depend on results or event details unavailable here.\n\n'
     printf '| Job | Preview | Details |\n| --- | --- | --- |\n'
+
     for category in "${job_ids[@]}"; do
         printf "| %s (\`%s\`) | %s | %s |\n" \
-            "${job_labels[$category]}" "$category" "${job_states[$category]}" "${job_notes[$category]}"
+            "${job_labels[$category]}" "$category" \
+            "${job_states[$category]}" "${job_notes[$category]}"
     done
 }
 
@@ -446,6 +495,7 @@ detect_changes
 write_outputs
 prepare_jobs
 write_job_preview
+
 if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
     write_summary >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write validation selection summary." >&2
 fi
