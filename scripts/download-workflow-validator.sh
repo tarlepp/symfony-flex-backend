@@ -3,22 +3,25 @@ set -euo pipefail
 
 url=$1
 checksum=$2
-file=$3
-cache=$4
+destination=$3
+cache_file=$4
 
-if [[ -f "$cache" ]]; then
-    printf '%s  %s\n' "$checksum" "$cache" | sha256sum --check --quiet
-    cp "$cache" "$file"
+if [[ -f "$cache_file" ]]; then
+    printf '%s  %s\n' "$checksum" "$cache_file" | sha256sum --check --quiet
+    cp "$cache_file" "$destination"
     exit 0
 fi
 
 curl --fail --silent --show-error --location \
     --connect-timeout 10 --max-time 60 --retry 3 --retry-max-time 120 \
-    "$url" --output "$file"
-printf '%s  %s\n' "$checksum" "$file" | sha256sum --check --quiet
-mkdir -p "$(dirname "$cache")"
-staging=$(mktemp "${cache}.XXXXXX")
-if cp "$file" "$staging" && mv "$staging" "$cache"; then
+    "$url" --output "$destination"
+
+printf '%s  %s\n' "$checksum" "$destination" | sha256sum --check --quiet
+
+mkdir -p "$(dirname "$cache_file")"
+staging=$(mktemp "${cache_file}.XXXXXX")
+
+if cp "$destination" "$staging" && mv "$staging" "$cache_file"; then
     exit 0
 else
     status=$?
