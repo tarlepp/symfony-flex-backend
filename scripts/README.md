@@ -875,7 +875,9 @@ tag's commit, preferring peeled commits for annotated tags. Candidates are stabl
 `X.Y` or `X.Y.Z` tags with an optional `v` prefix; prerelease, build-metadata and
 other suffix tags are excluded. Same-version pin differences (including moved
 tags or tag-object pins) return `1` and show the old SHA, candidate commit, and
-source locations. When an Action's current version is major-only and no stable
+source locations. Numeric ordering ignores the optional `v` prefix while
+retaining the exact tag for commit lookup; equivalent versions prefer the
+`v`-prefixed tag. When an Action's current version is major-only and no stable
 dotted version tags exist, it compares its major-only tags instead; full-version
 pins do not use that fallback. Missing or malformed candidate SHAs and failed
 lookups return `2`. The informational Make wrapper preserves success for handled

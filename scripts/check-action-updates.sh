@@ -327,6 +327,12 @@ check_tool() {
     fi
 }
 
+latest_action_tag() {
+    # Sort numeric versions without losing the exact tag needed for SHA lookup.
+    awk '{ version = $0; sub(/^v/, "", version); print version "\t" $0 }' |
+        LC_ALL=C sort -k1,1V -k2,2 | tail -n 1 | cut -f2
+}
+
 latest_action_version() {
     local action="$1"
     local current_version="$2"
@@ -344,11 +350,11 @@ latest_action_version() {
     tags=$(printf '%s\n' "$tags" | awk '{print $2}' | sed 's#refs/tags/##')
 
     # Accept only stable X.Y or X.Y.Z tags, optionally prefixed with v.
-    latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+(\.[0-9]+)?$' | sort -V | tail -n 1)
+    latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+(\.[0-9]+)?$' | latest_action_tag)
 
     # Some actions publish only major tags; compare them only for a major pin.
     if [ -z "$latest" ] && [[ "$current_version" =~ ^v?[0-9]+$ ]]; then
-        latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+$' | sort -V | tail -n 1)
+        latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+$' | latest_action_tag)
     fi
 
     if [ -z "$latest" ]; then
