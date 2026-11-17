@@ -150,7 +150,8 @@ contains:
 * a final aggregate gate (`ci-result`) that validates the prerequisite gate,
   both static-analysis jobs, tests, Docker builds/scans and eligible external
   reporting, and is the required merge check together with `dependency-review`,
-  and
+* an informational statistics job on non-scheduled runs; its results are
+  reported by the final gate but do not block it, and
 * optional coverage and Sonar reporting on all PRs and successful `master`
   pushes after both tests and the prerequisite gate (`ci-summary`) succeed,
   covered by the final merge gate when eligible. Uploads require their
@@ -170,7 +171,8 @@ their workflow environment bindings and strict result rules aligned.
 The workflow also runs on `merge_group` events. Scheduled runs execute the
 periodic `security-check` and `docker-image-check-updates` jobs and both
 aggregate gates; other check jobs are skipped. Markdown-only changes retain
-documentation checks and Gitleaks (plus separate Dependency Review and CodeQL).
+documentation checks and Gitleaks, plus informational statistics and separate
+Dependency Review and CodeQL.
 On non-scheduled validation events both gates accept a category's skip only
 after successful detection explicitly reports its flag as `false`; unknown or
 empty outputs cannot authorize skips. Gitleaks remains required. External

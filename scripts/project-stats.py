@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Summarize tracked working-tree files by extension."""
 
+import argparse
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -17,15 +19,71 @@ GENERATED_FILES = {
 }
 LOCKFILE_NAMES = {"package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "bun.lockb"}
 GENERATED_ASSET_SUFFIXES = (".min.js", ".min.css", ".js.map", ".css.map")
+AREAS = ("Source", "Tests", "Configuration", "Documentation", "Tooling", "Other")
 
 
-def excluded_from_statistics(relative_path):
+def exclusion_reason(relative_path):
     name = relative_path.name.lower()
-    return (
-        relative_path.as_posix() in GENERATED_FILES
-        or name.endswith((".lock", *GENERATED_ASSET_SUFFIXES))
-        or name in LOCKFILE_NAMES
-    )
+    if name.endswith(".lock") or name in LOCKFILE_NAMES:
+        return "lockfiles"
+    if relative_path.as_posix() in GENERATED_FILES or name.endswith(GENERATED_ASSET_SUFFIXES):
+        return "generated artifacts"
+    return None
+
+
+def area(path):
+    root = path.parts[0]
+    return {
+        "src": "Source", "tests": "Tests", "config": "Configuration", "doc": "Documentation",
+        "scripts": "Tooling", ".github": "Tooling", "tools": "Tooling",
+        "docker": "Tooling", ".devcontainer": "Tooling",
+    }.get(root, "Other")
+
+
+def changes(base, head):
+    if not all(re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", revision) for revision in (base, head)):
+        raise ValueError("Both revisions must be full commit IDs.")
+    merge_base = subprocess.run(
+        ["git", "merge-base", base, head], check=True, stdout=subprocess.PIPE,
+    ).stdout.strip().decode("ascii")
+    command = ["git", "diff", "--no-ext-diff", "--no-renames"]
+    status = subprocess.run(
+        [*command, "--name-status", "-z", merge_base, head, "--"], check=True, stdout=subprocess.PIPE,
+    ).stdout.split(b"\0")
+    numbers = subprocess.run(
+        [*command, "--numstat", "-z", merge_base, head, "--"], check=True, stdout=subprocess.PIPE,
+    ).stdout.split(b"\0")
+    totals = {name: [0, 0, 0, 0, 0, 0] for name in AREAS}
+    for kind, raw_path in zip(status[0:-1:2], status[1:-1:2], strict=True):
+        path = Path(os.fsdecode(raw_path))
+        if exclusion_reason(path):
+            continue
+        if kind not in (b"A", b"D", b"M", b"T"):
+            raise ValueError(f"Unsupported Git change status: {os.fsdecode(kind)}")
+        totals[area(path)][{b"A": 0, b"D": 1, b"M": 2, b"T": 2}[kind]] += 1
+    for row in numbers:
+        if not row:
+            continue
+        added, deleted, raw_path = row.split(b"\t", 2)
+        path = Path(os.fsdecode(raw_path))
+        if exclusion_reason(path):
+            continue
+        counts = totals[area(path)]
+        if added == b"-" and deleted == b"-":
+            counts[5] += 1
+        else:
+            counts[3] += int(added)
+            counts[4] += int(deleted)
+    print("PR changes from merge base to head")
+    print("Tracked changes excluding lockfiles and recognized generated artifacts")
+    print("Renames count as an addition and a deletion; binary files have no line counts.")
+    print()
+    print(f"{'Area':<15} {'Added':>7} {'Deleted':>7} {'Modified':>8} {'Lines +':>9} {'Lines -':>9} {'Binary':>7}")
+    for name in AREAS:
+        values = totals[name]
+        print(f"{name:<15} " + " ".join(f"{value:>{width},}" for value, width in zip(values, (7, 7, 8, 9, 9, 7))))
+    values = [sum(totals[name][index] for name in AREAS) for index in range(6)]
+    print(f"{'Total':<15} " + " ".join(f"{value:>{width},}" for value, width in zip(values, (7, 7, 8, 9, 9, 7))))
 
 
 def file_type(path):
@@ -61,6 +119,15 @@ def color_enabled():
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--base", help="Full base commit ID for PR changes")
+    parser.add_argument("--head", help="Full head commit ID for PR changes")
+    args = parser.parse_args()
+    if bool(args.base) != bool(args.head):
+        parser.error("--base and --head must be supplied together")
+    if args.base:
+        changes(args.base, args.head)
+        return
     root = subprocess.run(
         ["git", "rev-parse", "--show-toplevel"],
         check=True, stdout=subprocess.PIPE,
@@ -71,14 +138,21 @@ def main():
     ).stdout.split(b"\0")
 
     statistics = {}
+    areas = {name: [0, 0] for name in AREAS}
+    exclusions = {"lockfiles": 0, "generated artifacts": 0}
     for name in sorted(set(files) - {b""}):
         relative_path = Path(os.fsdecode(name))
-        if excluded_from_statistics(relative_path):
+        reason = exclusion_reason(relative_path)
+        if reason:
+            exclusions[reason] += 1
             continue
         path = Path(os.fsdecode(root)) / relative_path
         extension = file_type(path)
         files_count, lines_count = statistics.get(extension, (0, 0))
-        statistics[extension] = (files_count + 1, lines_count + text_line_count(path))
+        lines = text_line_count(path)
+        statistics[extension] = (files_count + 1, lines_count + lines)
+        areas[area(relative_path)][0] += 1
+        areas[area(relative_path)][1] += lines
 
     # Escape control characters in unusual filenames before displaying their suffixes.
     rows = [
@@ -107,6 +181,22 @@ def main():
     print(separator)
     print(highlight(f"{'Total':<{type_width}}  {total_files:>{files_width},}  {total_lines:>{lines_width},}", "1"))
     print()
+    print(highlight("Project areas", "1;34"))
+    print(f"  {'Area':<15} {'Files':>8} {'Text lines':>12}")
+    for name, (files_count, lines_count) in areas.items():
+        print(f"  {name:<15} {files_count:>8,} {lines_count:>12,}")
+    source_files, source_lines = areas["Source"]
+    test_files, test_lines = areas["Tests"]
+    print()
+    print(highlight("Tests compared with source", "1;34"))
+    print(f"  Files:      {test_files:,} tests / {source_files:,} source")
+    print(f"  Text lines: {test_lines:,} tests / {source_lines:,} source")
+    print("  Counts describe size, not test quality or coverage.")
+    print()
+    print(highlight("Excluded tracked files", "1;34"))
+    print(f"  Lockfiles:           {exclusions['lockfiles']:,}")
+    print(f"  Generated artifacts: {exclusions['generated artifacts']:,}")
+    print()
     print(highlight("Summary", "1;34"))
     print(f"  Included files: {total_files:,}")
     print(f"  File types:    {len(statistics):,}")
@@ -127,6 +217,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (OSError, subprocess.CalledProcessError) as error:
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
         print(f"Project statistics failed: {error}", file=sys.stderr)
         sys.exit(1)

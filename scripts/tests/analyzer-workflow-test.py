@@ -216,6 +216,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
                 self.assertEqual(self.run_gate(name, event).returncode, 0)
                 for variable in variables:
+                    if variable == "STATISTICS":
+                        for result in ("success", "failure", "cancelled", "skipped"):
+                            self.assertEqual(self.run_gate(name, event, **{variable: result}).returncode, 0)
+                        for result in ("", "unknown"):
+                            self.assertNotEqual(self.run_gate(name, event, **{variable: result}).returncode, 0)
+                        continue
                     if variable == "REPORT" and event in ("merge_group", "workflow_dispatch"):
                         continue
                     for result in ("failure", "cancelled", "skipped", "", "unknown"):
@@ -234,6 +240,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 job(name), re.MULTILINE,
             )
             for variable in variables:
+                if variable == "STATISTICS":
+                    continue
                 expected = "success" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "CI_SUMMARY",
                 ) else "skipped"
@@ -664,14 +672,20 @@ class AnalyzerWorkflowTest(unittest.TestCase):
 
     def test_every_lightweight_tool_keeps_failure_independent_steps(self):
         section = job("lightweight-analyzers")
-        for target in ("phpcs", "ecs", "phplint", "php-parallel-lint", "phploc"):
+        for target in ("phpcs", "ecs", "phplint", "php-parallel-lint"):
             with self.subTest(target=target):
                 self.assertIn(
                     "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' }}\n"
                     f"        run: bash scripts/make.sh {target}\n", section,
                 )
                 self.assertEqual(CONTENT.count(f"run: bash scripts/make.sh {target}\n"), 1)
-        self.assertNotIn("continue-on-error", without_overview(section))
+        self.assertIn('run: bash scripts/make.sh phploc | tee "$RUNNER_TEMP/phploc-output.txt"', section)
+        phploc = section.split("      - name: Run PHPLoc\n", 1)[1].split("\n      - ", 1)[0]
+        self.assertIn("        shell: bash\n", phploc)
+        self.assertNotIn("continue-on-error", phploc)
+        summary = section.split("      - name: Publish PHPLoc statistics\n", 1)[1].split("\n      - ", 1)[0]
+        self.assertIn("continue-on-error: true", summary)
+        self.assertIn("steps.phploc.outcome == 'failure'", summary)
         self.assertIn("        id: bootstrap\n", section)
         self.assertIn("      - *stop_php_step\n", section)
         self.assertIn("          name: phploc.json\n", section)
@@ -679,6 +693,75 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertIn("          if-no-files-found: error\n", section)
         self.assertIn("          retention-days: 14\n", section)
         self.assertIn("steps.phploc.outcome == 'failure'", section)
+
+    def test_statistics_job_is_informational_and_runs_on_non_scheduled_events(self):
+        section = job("statistics")
+        self.assertIn("    if: ${{ github.event_name != 'schedule' }}\n", section)
+        self.assertIn("      - *checkout_full_history_step\n", section)
+        self.assertIn("      - statistics\n", job("ci-result"))
+        self.assertLess(section.index("Summarize selected tool versions"), section.index("Summarize project files"))
+        for step, target in (
+            ("Summarize project files", "project-stats"),
+            ("Summarize dependency licenses", "check-licenses"),
+            ("Summarize Docker builder platforms", "docker-builder-platforms"),
+        ):
+            content = section.split(f"      - name: {step}\n", 1)[1].split("\n      - ", 1)[0]
+            self.assertIn("continue-on-error: true", content)
+            self.assertIn(f"bash scripts/make.sh {target}", content)
+            self.assertIn("bash scripts/ci-statistics-summary.sh run ", content)
+        self.assertIn("      - *stop_php_step\n", section)
+        pr_step = section.split("      - name: Summarize PR changes by area\n", 1)[1].split("\n      - ", 1)[0]
+        self.assertIn("github.event_name == 'pull_request'", pr_step)
+        self.assertIn("continue-on-error: true", pr_step)
+        self.assertIn('python3 scripts/project-stats.py --base "$BASE_SHA" --head "$HEAD_SHA"', pr_step)
+
+    def test_phploc_pipeline_preserves_analyzer_failure(self):
+        section = job("lightweight-analyzers")
+        step = section.split("      - name: Run PHPLoc\n", 1)[1].split("\n      - ", 1)[0]
+        command = re.search(r"^        run: (.+)$", step, re.MULTILINE).group(1)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            (root / "scripts/make.sh").write_text("echo metric; echo diagnostic >&2; exit 7\n")
+            result = subprocess.run(
+                ["bash", "--noprofile", "--norc", "-eo", "pipefail", "-c", command],
+                cwd=root, env={**os.environ, "RUNNER_TEMP": str(root)},
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 7)
+            self.assertEqual(result.stdout, "metric\n")
+            self.assertEqual(result.stderr, "diagnostic\n")
+            self.assertEqual((root / "phploc-output.txt").read_text(), "metric\n")
+
+    def test_metrics_and_insights_summaries_do_not_change_analyzer_results(self):
+        for job_name, label, producer, filename in (
+            ("test", "Publish PhpMetrics statistics", "metrics", "phpmetrics-output.txt"),
+            ("static-analyzers", "Publish PHP Insights scores", "analyzer", "phpinsights-output.txt"),
+        ):
+            section = job(job_name)
+            step = section.split(f"      - name: {label}\n", 1)[1].split("\n      - ", 1)[0]
+            self.assertIn("continue-on-error: true", step)
+            self.assertIn(f"steps.{producer}.outcome == 'success'", step)
+            self.assertIn(f"steps.{producer}.outcome == 'failure'", step)
+            self.assertIn(filename, step)
+        section = job("test")
+        step = section.split("      - name: Create PhpMetrics report\n", 1)[1].split("\n      - ", 1)[0]
+        self.assertIn("        shell: bash\n", step)
+        command = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            (root / "scripts/make.sh").write_text("echo metrics; exit 7\n")
+            docker = root / "docker"
+            docker.write_text("#!/usr/bin/env bash\nexit 0\n")
+            docker.chmod(0o755)
+            result = subprocess.run(
+                ["bash", "-eo", "pipefail", "-c", command], cwd=root,
+                env={**os.environ, "RUNNER_TEMP": str(root), "PATH": f"{root}:{os.environ['PATH']}"},
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 7)
+            self.assertEqual((root / "phpmetrics-output.txt").read_text(), "metrics\n")
 
     def test_security_checks_continue_after_failure_but_require_successful_setup(self):
         section = job("security-check")
@@ -750,8 +833,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             section, re.MULTILINE | re.DOTALL,
         ).group(1)
         self.assertIn("          ANALYZER_TARGET: ${{ matrix.analyzer.target }}\n", step)
-        command = re.search(r"^        run: (.+)$", step, re.MULTILINE).group(1)
-        self.assertEqual(command, 'bash scripts/make.sh "$ANALYZER_TARGET"')
+        self.assertIn("        shell: bash\n", step)
+        command = textwrap.dedent(step.split("        run: |\n", 1)[1])
         self.assertNotIn("${{", command)
 
         with tempfile.TemporaryDirectory(prefix="ci-analyzer-target-") as directory:
@@ -767,13 +850,15 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     with self.subTest(target=target, status=status):
                         result = subprocess.run(
                             ["bash", "-eo", "pipefail", "-c", command], cwd=root,
-                            env=dict(os.environ, ANALYZER_TARGET=target,
+                            env=dict(os.environ, ANALYZER_TARGET=target, RUNNER_TEMP=str(root),
                                      FIXTURE_EXIT=str(status)),
                             text=True, capture_output=True, check=False, timeout=10,
                         )
                         self.assertEqual(result.returncode, status, result.stderr)
                         self.assertEqual(result.stdout, f"1\n{target}\n")
                         self.assertFalse((root / "injected").exists())
+                        if target == "phpinsights":
+                            self.assertEqual((root / "phpinsights-output.txt").read_text(), f"1\n{target}\n")
 
     def test_gates_require_lightweight_job_and_reject_failures(self):
         for name in ("ci-summary", "ci-result"):
@@ -799,6 +884,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
             "STATIC_ANALYZERS", "LIGHTWEIGHT_ANALYZERS", "TEST", "DOCKER_BUILD",
             "DOCKER_SCAN", "REPORT",
+            "STATISTICS",
             "LINT_WORKFLOWS",
         )
         environment = dict.fromkeys(variables, "skipped")
@@ -815,6 +901,8 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             variables = re.findall(r"^          ([A-Z_]+):", job(name), re.MULTILINE)
             for variable in variables:
                 if variable in ("EVENT_NAME", "REF") or variable.endswith("_CHANGED"):
+                    continue
+                if variable == "STATISTICS":
                     continue
                 expected = "skipped" if variable in (
                     "SECURITY_CHECK", "DOCKER_UPDATES", "DOCKER_PINS", "LINT_CONFIGURATION",
@@ -1711,6 +1799,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/ci-result-gate.sh": {"workflows"},
             "scripts/ci-gate-common.sh": {"workflows"},
             "scripts/ci-workflow-overview.sh": {"workflows"},
+            "scripts/ci-statistics-summary.sh": {"workflows"},
             "scripts/docker-images.sh": {"images", "tooling"},
             "scripts/tests/docker-images-test.sh": {"images", "tooling"},
             "scripts/tests/command-output-test.py": {"tooling"},

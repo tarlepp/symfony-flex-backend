@@ -39,6 +39,7 @@ write_summary() {
     summary_row "PHPUnit" "$TEST" "$TESTS_CHANGED" "application tests"
     summary_row "Docker builds" "$DOCKER_BUILD" "$DOCKER_CHANGED" "application images"
     summary_row "Trivy image scans" "$DOCKER_SCAN" "$DOCKER_CHANGED" "application images"
+    printf '| Project statistics | %s | Informational only; see its job summary for individual outcomes. |\n' "$STATISTICS"
 
     if [ "$REPORT" != "skipped" ]; then
         summary_row "External reporting" "$REPORT" true ""
@@ -64,6 +65,7 @@ echo "PHPUnit result: $TEST"
 echo "Docker build matrix result: $DOCKER_BUILD"
 echo "Docker scan matrix result: $DOCKER_SCAN"
 echo "External reporting result: $REPORT"
+echo "Informational statistics result: $STATISTICS"
 
 if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
     write_summary >> "$GITHUB_STEP_SUMMARY" || echo "::warning::Could not write the final CI summary."
@@ -93,3 +95,7 @@ expect_selected "PHPUnit" "$TESTS_CHANGED" "$TEST"
 expect_selected "Docker builds" "$DOCKER_CHANGED" "$DOCKER_BUILD"
 expect_selected "Trivy image scans" "$DOCKER_CHANGED" "$DOCKER_SCAN"
 expect_result "External reporting" "$report_expected" "$REPORT"
+case "$STATISTICS" in
+    success|failure|cancelled|skipped) ;;
+    *) echo "Invalid informational statistics result: $STATISTICS" >&2; exit 1 ;;
+esac

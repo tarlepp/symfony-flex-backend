@@ -561,7 +561,7 @@ exit 0
         self.assertEqual(lines[3], "File type       Files  Text lines")
         self.assertEqual(lines[4], "--------------  -----  ----------")
         summary_index = lines.index("Summary")
-        table = lines[4:summary_index - 1]
+        table = lines[4:lines.index("Project areas") - 1]
         self.assertEqual(table[-2], lines[4])
         self.assertTrue(all(len(line) == len(lines[3]) for line in table))
         self.assertEqual(lines[summary_index:], [
@@ -597,6 +597,56 @@ exit 0
             "Total": (10, 1009),
         })
         self.assertNotIn(".sh", rows)
+        self.assertRegex(result.stdout, r"(?m)^  Source\s+1\s+2$")
+        self.assertRegex(result.stdout, r"(?m)^  Other\s+9\s+1,007$")
+        self.assertIn("  Lockfiles:           6\n", result.stdout)
+        self.assertIn("  Generated artifacts: 10\n", result.stdout)
+        self.assertIn("  Files:      0 tests / 1 source\n", result.stdout)
+        self.assertIn("  Text lines: 0 tests / 2 source\n", result.stdout)
+
+    def test_project_stats_pr_changes_compare_merge_base_and_exclude_generated(self):
+        subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
+        def git(*args):
+            return subprocess.run(
+                ["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", *args],
+                cwd=self.root, text=True, capture_output=True, check=True,
+            ).stdout.strip()
+
+        (self.root / "src/old.php").write_text("one\ntwo\n")
+        (self.root / "src/delete.php").write_text("deleted\n")
+        (self.root / "src/moved.php").write_text("moved\n")
+        (self.root / "composer.lock").write_text("old\n")
+        git("add", "src/old.php", "src/delete.php", "src/moved.php", "composer.lock")
+        git("commit", "-qm", "base")
+        original = git("rev-parse", "HEAD")
+        (self.root / "src/old.php").write_text("one\nchanged\n")
+        (self.root / "src/delete.php").unlink()
+        (self.root / "src/moved.php").rename(self.root / "tests/moved.php")
+        (self.root / "tests/new.php").write_text("test\n")
+        (self.root / "tests/binary.dat").write_bytes(b"binary\0data")
+        (self.root / "composer.lock").write_text("new\n")
+        git("add", "-A", "--", "src/old.php", "src/delete.php", "src/moved.php", "tests", "composer.lock")
+        git("commit", "-qm", "feature")
+        head = git("rev-parse", "HEAD")
+        git("switch", "--detach", original)
+        (self.root / "src/base-only.php").write_text("base only\n")
+        git("add", "src/base-only.php")
+        git("commit", "-qm", "base advanced")
+        base = git("rev-parse", "HEAD")
+        command = ["python3", "scripts/project-stats.py", "--base", base, "--head", head]
+        result = subprocess.run(command, cwd=self.root, text=True, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertRegex(result.stdout, r"(?m)^Source\s+0\s+2\s+1\s+1\s+3\s+0$")
+        self.assertRegex(result.stdout, r"(?m)^Tests\s+3\s+0\s+0\s+2\s+0\s+1$")
+        self.assertRegex(result.stdout, r"(?m)^Other\s+0\s+0\s+0\s+0\s+0\s+0$")
+        self.assertRegex(result.stdout, r"(?m)^Total\s+3\s+2\s+1\s+3\s+3\s+1$")
+        self.assertIn("Renames count as an addition and a deletion", result.stdout)
+        invalid = subprocess.run(
+            ["python3", "scripts/project-stats.py", "--base", "invalid", "--head", head],
+            cwd=self.root, text=True, capture_output=True, check=False,
+        )
+        self.assertNotEqual(invalid.returncode, 0)
+        self.assertIn("Both revisions must be full commit IDs", invalid.stderr)
 
     def test_project_stats_supports_empty_index_and_reports_missing_git_repository(self):
         result = self.make("project-stats")

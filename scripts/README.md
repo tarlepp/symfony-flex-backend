@@ -802,6 +802,20 @@ three types by files and text lines. Ties are ordered by type; types with zero
 text lines are omitted from that ranking. Counts reflect current working-tree
 contents rather than staged contents. A missing included tracked file fails the
 command.
+
+The area table separates `src/`, `tests/`, `config/`, `doc/`, tooling
+(`scripts/`, `.github/`, `tools/`, `docker/`, `.devcontainer/`) and other
+tracked files. A separate comparison shows source and test counts without
+claiming to measure coverage or quality. Exclusion counts distinguish lockfiles
+from recognized generated artifacts.
+
+On pull requests, CI additionally compares the merge base with the PR head,
+grouping added, deleted and modified files and added/deleted Git diff lines by
+the same areas and exclusions. Renames count as deletions and additions; binary
+files are counted separately without line totals. The comparison requires both
+full commit IDs and is omitted for non-PR events. If it cannot be computed,
+the informational summary step fails visibly without blocking CI.
+
 Symlinks and files containing NUL bytes count as files but contribute no text
 lines; binary detection is based on NUL bytes and may not recognize every binary
 format. Text lines count newline characters, as with `wc -l`.
