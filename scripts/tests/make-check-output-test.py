@@ -3,6 +3,8 @@
 
 import os
 from pathlib import Path
+import pty
+import re
 import shutil
 import subprocess
 import tempfile
@@ -29,10 +31,22 @@ class MakeCheckOutputTest(unittest.TestCase):
         (self.root / "scripts/tests").mkdir(parents=True)
         (self.root / "bin").mkdir()
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
-        shutil.copyfile(ROOT / "scripts/command-output.sh", self.root / "scripts/command-output.sh")
+        for name in ("command-output.sh", "native-output.sh", "native-output.py", "make.sh"):
+            shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
         fixture = (
             "#!/usr/bin/env bash\n"
+            "if [[ \"$0\" == */python3 && \"${1:-}\" == scripts/native-output.py ]]; then exec /usr/bin/python3 \"$@\"; fi\n"
             "printf '%s\\n' \"$0 $*\" >> \"$CALLS\"\n"
+            "if [[ \"${1:-}\" == ./vendor/bin/requirements-checker && \"${CHECK_XDEBUG:-0}\" = 1 && \"${XDEBUG_MODE:-}\" != off ]]; then\n"
+            "  echo 'Xdebug: [Step Debug] unexpected connection attempt' >&2; exit 8\n"
+            "fi\n"
+            "if [[ \"${1:-}\" == ./vendor/bin/requirements-checker && \"${CHECKER_COLOR:-0}\" = 1 ]]; then\n"
+            "  if [ \"${TERM_PROGRAM:-}\" = Hyper ] || [ \"${EMIT_ANSI:-0}\" = 1 ]; then\n"
+            "    printf '\\033[34mSymfony Requirements Checker\\033[0m\\n\\033[32m[OK]\\033[0m\\n'\n"
+            "  else printf 'Symfony Requirements Checker\\n[OK]\\n'; fi\n"
+            "  printf 'checker diagnostic\\n' >&2\n"
+            "  exit \"$FIXTURE_STATUS\"\n"
+            "fi\n"
             "printf 'fixture stdout\\n'\n"
             "printf 'fixture diagnostic\\n' >&2\n"
             "exit \"$FIXTURE_STATUS\"\n"
@@ -96,6 +110,84 @@ class MakeCheckOutputTest(unittest.TestCase):
                 result, _ = self.run_check(target, color="always", no_color="1")
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertNotIn("\033", result.stderr)
+
+    def test_requirements_native_color_and_failures(self):
+        calls = self.root / "calls"
+        environment = dict(
+            os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}", CALLS=str(calls),
+            CHECKER_COLOR="1", FIXTURE_STATUS="0", TERM="xterm", NO_COLOR="", EMIT_ANSI="0",
+        )
+        environment.pop("NATIVE_COLOR", None)
+        command = ["make", "--no-print-directory", "APPLICATION_CONFIG=unused",
+                   "INSIDE_DOCKER_CONTAINER=1", "check-requirements"]
+        plain = "Symfony Requirements Checker\n[OK]\n"
+        for color, no_color, emit_ansi, expected in (
+            ("always", "", "0", True), ("never", "", "1", False),
+            ("always", "1", "1", False), ("auto", "", "0", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result = subprocess.run(
+                    command, cwd=self.root, env=dict(environment, COLOR=color, NO_COLOR=no_color, EMIT_ANSI=emit_ansi),
+                    capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mSymfony Requirements Checker\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain)
+                self.assertIn("checker diagnostic", result.stderr)
+
+        for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
+            with self.subTest(term=term, no_color=no_color):
+                master, slave = pty.openpty()
+                try:
+                    result = subprocess.run(
+                        ["bash", "scripts/make.sh", *command[1:]], cwd=self.root,
+                        env=dict(environment, COLOR="auto", NO_COLOR=no_color, TERM=term),
+                        stdout=slave, stderr=subprocess.PIPE, check=False,
+                    )
+                    os.close(slave)
+                    slave = -1
+                    output = os.read(master, 65536).decode().replace("\r\n", "\n")
+                finally:
+                    os.close(master)
+                    if slave != -1:
+                        os.close(slave)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mSymfony Requirements Checker\x1b[0m" in output, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", output), plain)
+
+        result = subprocess.run(
+            command, cwd=self.root, env=dict(environment, COLOR="always", FIXTURE_STATUS="7"),
+            capture_output=True, text=True, check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("checker diagnostic", result.stderr)
+        self.assertIn("[FAIL]", result.stderr)
+        self.assertNotIn("[OK]", result.stderr)
+
+    def test_requirements_disables_xdebug_without_hiding_diagnostics(self):
+        calls = self.root / "calls"
+        environment = dict(
+            os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}", CALLS=str(calls),
+            XDEBUG_MODE="debug", CHECK_XDEBUG="1", CHECKER_COLOR="1", NO_COLOR="", TERM="xterm",
+        )
+        for color in ("always", "never"):
+            for status in ("0", "7"):
+                with self.subTest(color=color, status=status):
+                    result = subprocess.run(
+                        ["make", "--no-print-directory", "APPLICATION_CONFIG=unused",
+                         "INSIDE_DOCKER_CONTAINER=1", f"COLOR={color}", "check-requirements"],
+                        cwd=self.root, env=dict(environment, FIXTURE_STATUS=status),
+                        capture_output=True, text=True, check=False,
+                    )
+                    stderr = re.sub(r"\x1b\[[0-9;]*m", "", result.stderr)
+                    self.assertEqual(result.returncode == 0, status == "0", stderr)
+                    self.assertNotIn("Xdebug:", stderr)
+                    self.assertIn("checker diagnostic", stderr)
+                    if status == "0":
+                        self.assertIn("[OK] Application runtime requirements", stderr)
+                    else:
+                        self.assertIn("[FAIL] Application runtime requirements (exit 7)", stderr)
+                        self.assertNotIn("[OK] Application runtime requirements", stderr)
 
     def test_documentation_checker_error_label_respects_color_controls(self):
         for color, no_color, expected in (

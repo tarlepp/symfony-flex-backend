@@ -246,7 +246,7 @@ class MakeLauncherTest(unittest.TestCase):
         bin_path = self.root / "bin"
         bin_path.mkdir()
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
-        for name in ("make.sh", "command-output.sh", "compose-context.sh"):
+        for name in ("make.sh", "command-output.sh", "compose-context.sh", "native-output.sh", "native-output.py"):
             shutil.copyfile(ROOT / "scripts" / name, scripts / name)
         docker = bin_path / "docker"
         docker.write_text(
