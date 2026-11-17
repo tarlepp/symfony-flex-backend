@@ -26,16 +26,21 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         sub(/\)$/, "", record)
         split(record, fields, ",")
         name = fields[1]
+
         if (name in groups) {
             print red "[FAIL]" reset " Duplicate target metadata: " name > "/dev/stderr"
             invalid = 1
         }
+
         groups[name] = fields[2]
         risks[name] = fields[4]
     }
     /^[a-zA-Z0-9-]+:.*## / {
-        name = $0; sub(/:.*/, "", name)
-        description = $0; sub(/^.*## /, "", description)
+        name = $0
+        sub(/:.*/, "", name)
+
+        description = $0
+        sub(/^.*## /, "", description)
         descriptions[name] = description
     }
     END {
@@ -45,15 +50,21 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
                 invalid = 1
             }
         }
+
         for (name in groups) {
             if (groups[name] != "hidden" && !(name in descriptions)) {
                 print red "[FAIL]" reset " Missing target description: " name > "/dev/stderr"
                 invalid = 1
             }
         }
-        if (invalid) exit 1
-        for (name in descriptions)
+
+        if (invalid) {
+            exit 1
+        }
+
+        for (name in descriptions) {
             print name "\t" descriptions[name] "\t" groups[name] "\t" risks[name]
+        }
     }
 ' Makefile | LC_ALL=C sort -t $'\t' -k1,1 | awk -F '\t' \
     -v blue="$OUTPUT_BLUE" -v green="$OUTPUT_GREEN" \
@@ -68,6 +79,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         groups["quality"] = 6
         groups["information"] = 7
         groups["reports"] = 8
+
         order[1] = 7
         order[2] = 4
         order[3] = 6
@@ -84,15 +96,23 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
             invalid = 1
             next
         }
+
         group = groups[$3]
-        if (selected != "all" && selected != $3) next
+        if (selected != "all" && selected != $3) {
+            next
+        }
+
         risk = $4 == "DESTRUCTIVE" ? 2 : ($4 == "OVERWRITE" ? 1 : 0)
         marker = $4 == "" ? "" : "[" $4 "] "
-        entries[group, risk] = entries[group, risk] sprintf("  %s%-29s%s %s%s%s%s\n", green, $1, reset, yellow, marker, reset, $2)
+        entries[group, risk] = entries[group, risk] sprintf("  %s%-29s%s %s%s%s%s\n",
+            green, $1, reset, yellow, marker, reset, $2)
         populated[group] = 1
     }
     END {
-        if (invalid) exit 1
+        if (invalid) {
+            exit 1
+        }
+
         titles[1] = "Docker lifecycle and interactive sessions (host)"
         titles[2] = "Docker images and host maintenance (host)"
         titles[3] = "Setup, dependencies and application maintenance"
@@ -101,11 +121,15 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         titles[6] = "Linting and static analysis"
         titles[7] = "Configuration and information"
         titles[8] = "Reports and uploads"
+
         for (i = 1; i <= 8; i++) {
             group = order[i]
             if (populated[group]) {
                 printf "%s%s%s\n", blue, titles[group], reset
-                for (risk = 0; risk <= 2; risk++) printf "%s", entries[group, risk]
+                for (risk = 0; risk <= 2; risk++) {
+                    printf "%s", entries[group, risk]
+                }
+
                 printf "\n"
             }
         }
