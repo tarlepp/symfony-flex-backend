@@ -760,9 +760,12 @@ class CommandOutputTest(unittest.TestCase):
             shutil.copyfile(ROOT / "scripts/tests/command-output-contract-test.sh",
                             root / "scripts/tests/command-output-contract-test.sh")
             python = root / "bin/python3"
+            shutil.copyfile(ROOT / "scripts/native-output.py", root / "scripts/native-output.py")
             python.write_text(
-                '#!/bin/bash\nprintf "%s\\n" "$1" >> "$CALLS"\n'
-                'if [[ "$1" == *"$FAIL_SUITE"* ]] && [ -n "$FAIL_SUITE" ]; then exit 7; fi\n'
+                '#!/bin/bash\n'
+                f'if [[ "$1" == scripts/native-output.py ]]; then exec {shutil.which("python3")} "$@"; fi\n'
+                'printf "%s\\n" "$2" >> "$CALLS"\n'
+                'if [[ "$2" == *"$FAIL_SUITE"* ]] && [ -n "$FAIL_SUITE" ]; then exit 7; fi\n'
             )
             python.chmod(0o755)
             routing = root / "scripts/tests/make-container-test.sh"
@@ -799,6 +802,55 @@ class CommandOutputTest(unittest.TestCase):
             self.assertIn("python3: command not found", result.stderr)
             self.assertIn("[FAIL] command-output regression suite", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
+
+    def test_contract_runner_uses_grouped_nested_output(self):
+        suites = (
+            "command-output", "make-launcher", "make-check-output", "make-quality-output",
+            "make-lifecycle-output", "make-information-output", "check-outcomes",
+            "lint-workflows-output",
+        )
+        with tempfile.TemporaryDirectory(prefix="nested-contract-runner-") as directory:
+            root = Path(directory)
+            (root / "scripts/tests").mkdir(parents=True)
+            for name in ("command-output.sh", "native-output.py", "run-workflow-tests.py"):
+                shutil.copyfile(ROOT / "scripts" / name, root / "scripts" / name)
+            runner = root / "scripts/tests/command-output-contract-test.sh"
+            shutil.copyfile(ROOT / "scripts/tests" / runner.name, runner)
+            for suite in suites:
+                (root / f"scripts/tests/{suite}-test.py").write_text(
+                    "import os\nimport unittest\n"
+                    "class Example(unittest.TestCase):\n"
+                    "    def test_example(self):\n"
+                    "        self.assertNotEqual(os.environ.get('FAIL_NESTED'), '1', 'fixture assertion')\n"
+                )
+            (root / "scripts/tests/make-container-test.sh").write_text(
+                "printf 'routing detail\\n'\nprintf 'routing warning\\n' >&2\n"
+            )
+            for failed in ("0", "1"):
+                with self.subTest(failed=failed):
+                    result = self.run_command(
+                        ["bash", str(runner)], FAIL_NESTED=failed, COLOR="never",
+                    )
+                    self.assertEqual(result.returncode, int(failed), result.stderr)
+                    self.assertIn("\n  [RUN] command-output regression suite\n", result.stderr)
+                    self.assertIn("    Ran 1 test", result.stderr)
+                    self.assertNotIn("\nOK\n", result.stderr)
+                    self.assertNotIn("\n    OK\n", result.stderr)
+                    if failed == "1":
+                        self.assertIn("    FAILED (failures=1)\n", result.stderr)
+                        self.assertIn("fixture assertion", result.stderr)
+                        self.assertIn("  [FAIL] command-output regression suite (exit 1)", result.stderr)
+                        self.assertNotIn("make-launcher regression suite", result.stderr)
+                    else:
+                        self.assertIn("    routing detail\n", result.stdout)
+                        self.assertIn("    routing warning\n", result.stderr)
+                        self.assertIn(
+                            "\n  [OK] command-output regression suite\n\n"
+                            "  [RUN] make-launcher regression suite\n", result.stderr,
+                        )
+                        self.assertTrue(result.stderr.endswith(
+                            "\n[OK] Command output contracts: 9 regression suites passed\n",
+                        ))
 
 
 if __name__ == "__main__":

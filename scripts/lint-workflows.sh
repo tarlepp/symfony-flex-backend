@@ -50,27 +50,9 @@ tools=$(mktemp -d)
 trap 'rm -rf "$tools"' EXIT
 
 download() {
-    local url=$1 checksum=$2 file=$3
-    local cache="build/cache/workflow-validators/linux-${arch}/${checksum}"
-    if [[ -f "$cache" ]]; then
-        printf '%s  %s\n' "$checksum" "$cache" | sha256sum --check --quiet || return "$?"
-        cp "$cache" "$file"
-        return
-    fi
-    curl --fail --silent --show-error --location \
-        --connect-timeout 10 --max-time 60 --retry 3 --retry-max-time 120 \
-        "$url" --output "$file" || return "$?"
-    printf '%s  %s\n' "$checksum" "$file" | sha256sum --check --quiet || return "$?"
-    mkdir -p "$(dirname "$cache")" || return "$?"
-    local staging
-    staging=$(mktemp "${cache}.XXXXXX") || return "$?"
-    if cp "$file" "$staging" && mv "$staging" "$cache"; then
-        return 0
-    else
-        local status=$?
-        rm -f "$staging"
-        return "$status"
-    fi
+    python3 scripts/native-output.py --indent \
+        bash scripts/download-workflow-validator.sh "$1" "$2" "$3" \
+        "build/cache/workflow-validators/linux-${arch}/$2"
 }
 
 printf '\n' >&2
@@ -133,6 +115,7 @@ OUTPUT_STATUS_INDENT='' output_status RUN '5/5 - Validate tooling scripts'
 output_run 'CI tooling scripts (ShellCheck)' \
     python3 scripts/native-output.py --indent "$tools/shellcheck" \
     scripts/lint-workflows.sh \
+    scripts/download-workflow-validator.sh \
     scripts/command-output.sh \
     scripts/check-composer-cache.sh \
     scripts/ci-detect-changes.sh \

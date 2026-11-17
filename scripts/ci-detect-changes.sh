@@ -138,6 +138,7 @@ classify_path() {
             enable_checks compose workflows
             ;;
         scripts/lint-workflows.sh|scripts/run-workflow-tests.py|\
+        scripts/download-workflow-validator.sh|\
         scripts/check-composite-action-shell.py|\
         scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|\
         scripts/ci-gate-common.sh|scripts/ci-workflow-overview.sh|\
