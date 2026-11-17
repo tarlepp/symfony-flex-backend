@@ -45,8 +45,9 @@ bash scripts/check-action-updates.sh --tools-only
 ```
 
 The inventory mode needs no upstream lookup. The check mode needs network access
-to GitHub through `git ls-remote` and uses `timeout`. It scans
-`.github/workflows/*.yml` and `.github/actions/*/action.yml`, groups action
+to GitHub through `git ls-remote` and uses `timeout`. It scans top-level
+`.yml`/`.yaml` workflows in `.github/workflows/` and recursively finds
+`action.yml`/`action.yaml` metadata under `.github/actions/`, groups action
 references by path and version comment, and reports source locations. It also
 inventories workflow-tool `tool-pin` declarations. Tool-only mode verifies exact
 tag/commit parity, excludes prerelease tags, and fails upstream lookup errors;
