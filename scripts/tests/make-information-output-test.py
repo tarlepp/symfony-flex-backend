@@ -98,6 +98,10 @@ if [[ "$*" == *--log-json=* ]] && [ "${OMIT_REPORTS:-0}" != 1 ]; then printf '{}
         docker = self.root / "bin/docker"
         docker.write_text("""#!/bin/sh
 if [ "$1 $2 $3" = 'buildx imagetools inspect' ]; then
+    if [ "${DOCKER_FAIL:-0}" = 1 ]; then
+        echo 'fixture registry unavailable' >&2
+        exit 7
+    fi
     case "$*" in
         *--raw*) printf '{"mediaType":"application/vnd.oci.image.index.v1+json","manifests":[{"platform":{"os":"linux","architecture":"amd64"}},{"platform":{"os":"linux","architecture":"arm64"}}]}\\n' ;;
         *) printf 'sha256:fixture\\n' ;;
@@ -954,6 +958,80 @@ esac
             else:
                 self.assertIn("Platforms:  linux/amd64, linux/arm64", result.stdout)
                 self.assertIn("Build targets reported for the first builder node.", result.stdout)
+
+    def test_image_digest_color_keeps_pin_copyable(self):
+        jq = self.root / "bin/jq"
+        jq.write_text('#!/bin/sh\nexec /usr/bin/jq "$@"\n')
+        jq.chmod(0o755)
+        arguments = ("INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "IMAGE=fixture:latest")
+        plain = self.make("docker-image-digest", *arguments, COLOR="never")
+        self.assertEqual(plain.returncode, 0, plain.stderr)
+        pin = "    FROM fixture:latest@sha256:fixture\n"
+        self.assertIn(pin, plain.stdout)
+        for color, no_color, expected in (
+            ("always", "", True), ("never", "", False),
+            ("always", "1", False), ("auto", "", False),
+        ):
+            with self.subTest(color=color, no_color=no_color):
+                result = self.make("docker-image-digest", *arguments, COLOR=color, NO_COLOR=no_color, TERM="xterm")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mDigest:\x1b[0m" in result.stdout, expected)
+                self.assertEqual("\x1b[1;34mPin reference:\x1b[0m" in result.stdout, expected)
+                self.assertIn(pin, result.stdout)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+
+        for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
+            with self.subTest(term=term, no_color=no_color):
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}", CALLS=str(self.calls),
+                    COLOR="auto", NO_COLOR=no_color, TERM=term, PROGRESS="never",
+                )
+                environment.pop("NATIVE_COLOR", None)
+                master, slave = pty.openpty()
+                try:
+                    result = subprocess.run(
+                        ["bash", "scripts/make.sh", "APPLICATION_CONFIG=fixture.json",
+                         "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0",
+                         "docker-image-digest", "IMAGE=fixture:latest"],
+                        cwd=self.root, env=environment, stdout=slave, stderr=subprocess.PIPE, check=False,
+                    )
+                    os.close(slave)
+                    slave = -1
+                    output = os.read(master, 65536).decode().replace("\r\n", "\n")
+                finally:
+                    os.close(master)
+                    if slave != -1:
+                        os.close(slave)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mDigest:\x1b[0m" in output, expected)
+                self.assertIn(pin, output)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", output), plain.stdout)
+
+        for overrides, expected in (
+            ({"COLOR": "always"}, True), ({"COLOR": "always", "NO_COLOR": "1"}, False),
+            ({"COLOR": "always", "NATIVE_COLOR": "never"}, False),
+            ({"COLOR": "never", "NATIVE_COLOR": "always"}, True),
+        ):
+            with self.subTest(direct=overrides):
+                environment = dict(
+                    os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}", CALLS=str(self.calls),
+                    IMAGE="fixture:latest", COLOR="never", NO_COLOR="", PROGRESS="never",
+                )
+                environment.pop("NATIVE_COLOR", None)
+                environment.update(overrides)
+                result = subprocess.run(
+                    ["bash", "scripts/docker-images.sh", "digest"], cwd=self.root, env=environment,
+                    capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("\x1b[34mDigest:\x1b[0m" in result.stdout, expected)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+
+        failed = self.make("docker-image-digest", *arguments, COLOR="always", DOCKER_FAIL="1")
+        self.assertNotEqual(failed.returncode, 0)
+        self.assertIn("fixture registry unavailable", failed.stderr)
+        self.assertNotIn("Pin reference:", failed.stdout)
+        self.assertNotIn("[OK]", failed.stderr)
 
     def test_sonar_paths_are_relative_and_source_reports_remain_unchanged(self):
         originals = (self.clover.read_bytes(), self.junit.read_bytes())

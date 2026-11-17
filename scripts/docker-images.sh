@@ -755,8 +755,24 @@ is_index() {
     esac
 }
 
+native_color_enabled() {
+    [ -z "${NO_COLOR:-}" ] && {
+        [ "${NATIVE_COLOR:-}" = always ] ||
+        { [ -z "${NATIVE_COLOR+x}" ] && {
+            [ "${COLOR:-auto}" = always ] ||
+            { [ "${COLOR:-auto}" = auto ] && [ -t 1 ] && [ "${TERM:-}" != dumb ]; }
+        }; }
+    }
+}
+
 command_digest() {
-    local raw type digest platforms name repository
+    local raw type digest platforms name repository color='' heading='' reset=''
+
+    if native_color_enabled; then
+        color=$'\033[34m'
+        heading=$'\033[1;34m'
+        reset=$'\033[0m'
+    fi
 
     ask IMAGE "Image name and tag (e.g. php:8.5.11-fpm-bookworm)"
 
@@ -776,9 +792,9 @@ command_digest() {
     name="${IMAGE%@*}"
 
     printf '\n'
-    printf 'Media type: %s\n' "$type"
-    printf 'Digest:     %s\n' "$digest"
-    printf 'Platforms:  %s\n' "${platforms:-none listed}"
+    printf '%sMedia type:%s %s\n' "$color" "$reset" "$type"
+    printf '%sDigest:%s     %s\n' "$color" "$reset" "$digest"
+    printf '%sPlatforms:%s  %s\n' "$color" "$reset" "${platforms:-none listed}"
     printf '\n'
 
     if ! is_index "$type"; then
@@ -793,7 +809,7 @@ command_digest() {
         exit 1
     fi
 
-    printf 'Pin reference:\n\n    FROM %s@%s\n\n' "$name" "$digest"
+    printf '%sPin reference:%s\n\n    FROM %s@%s\n\n' "$heading" "$reset" "$name" "$digest"
 
     repository="${name%%:*}"
 
@@ -1017,13 +1033,7 @@ command_verify() {
 
 command_platforms() {
     local color='' heading='' reset=''
-    if [ -z "${NO_COLOR:-}" ] && {
-        [ "${NATIVE_COLOR:-}" = always ] ||
-        { [ -z "${NATIVE_COLOR+x}" ] && {
-            [ "${COLOR:-auto}" = always ] ||
-            { [ "${COLOR:-auto}" = auto ] && [ -t 1 ] && [ "${TERM:-}" != dumb ]; }
-        }; }
-    }; then
+    if native_color_enabled; then
         color=$'\033[34m'
         heading=$'\033[1;34m'
         reset=$'\033[0m'
