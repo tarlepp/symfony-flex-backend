@@ -23,7 +23,7 @@ class WorkflowOutputTest(unittest.TestCase):
         for name in (
             "lint-workflows.sh", "command-output.sh", "ci-prerequisite-gate.sh",
             "ci-result-gate.sh", "ci-gate-common.sh", "ci-workflow-overview.sh", "ci-statistics-summary.sh",
-            "check-composite-action-shell.py",
+            "check-composite-action-shell.py", "run-workflow-tests.py", "native-output.py",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
         shutil.copyfile(
@@ -126,12 +126,14 @@ esac
             ["bash", "scripts/lint-workflows.sh"], cwd=self.root, env=environment,
             text=True, capture_output=True, check=False,
         )
-        return result, (self.root / "calls").read_text()
+        calls = self.root / "calls"
+        return result, calls.read_text() if calls.exists() else ""
 
     def test_named_stages_keep_warnings_and_native_audit_summary(self):
         result, calls = self.run_script()
         self.assertEqual(result.returncode, 0, result.stderr)
         for label in (
+            "CI gate regressions (offline)",
             "Prepare and verify actionlint v1.7.12",
             "Prepare and verify ShellCheck v0.11.0",
             "Prepare and verify action-validator v0.9.0",
@@ -141,7 +143,7 @@ esac
             "Local action metadata: .github/actions/example/action.yml",
             "Local composite action shell (ShellCheck)",
             "Composite action shell regressions (offline)",
-            "Workflow validator script (ShellCheck)",
+            "CI tooling scripts (ShellCheck)",
             "Composer cache mount regressions (offline)",
             "Analyzer job and gate regressions (offline)",
             "Docker maintenance workflow regressions (offline)",
@@ -166,10 +168,11 @@ esac
         self.assertIn("shellcheck --shell bash -", calls)
         self.assertIn("echo fixture", calls)
         groups = (
-            "1/4 - Prepare pinned workflow validators",
-            "2/4 - Validate workflows",
-            "3/4 - Validate local actions",
-            "4/4 - Validate tooling scripts",
+            "1/5 - Validate CI gate contracts",
+            "2/5 - Prepare pinned workflow validators",
+            "3/5 - Validate workflows",
+            "4/5 - Validate local actions",
+            "5/5 - Validate tooling scripts",
         )
         positions = []
         for heading in groups:
@@ -177,6 +180,88 @@ esac
             self.assertEqual(result.stderr.count(marker), 1)
             positions.append(result.stderr.index(marker))
         self.assertEqual(positions, sorted(positions))
+        gate_start = result.stderr.index("[RUN] CI gate regressions (offline)\n")
+        gate_end = result.stderr.index("[OK] CI gate regressions (offline)\n")
+        self.assertIn("Ran 19 tests", result.stderr[gate_start:gate_end])
+        self.assertIn(
+            "\n[RUN] 1/5 - Validate CI gate contracts\n\n"
+            "  [RUN] CI gate regressions (offline)\n", result.stderr,
+        )
+        self.assertRegex(
+            result.stderr,
+            r"\n    Ran 19 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
+        )
+        self.assertNotIn("\nOK\n", result.stderr)
+        self.assertNotIn("\n    OK\n", result.stderr)
+        self.assertIn("\n    WARN: fixture warning remains visible\n", result.stderr)
+        self.assertIn("\n    No findings to report.", "\n" + result.stdout)
+        self.assertIn(
+            "\n    .github/actions/example/action.yml: step 1 (Fixture shell)\n",
+            result.stdout + result.stderr,
+        )
+        self.assertIn(
+            "\n  [RUN] Prepare and verify actionlint v1.7.12\n"
+            "  [OK] Prepare and verify actionlint v1.7.12\n\n"
+            "  [RUN] Prepare and verify ShellCheck v0.11.0\n"
+            "  [OK] Prepare and verify ShellCheck v0.11.0\n",
+            result.stderr,
+        )
+        self.assertNotIn("\n\n\n", result.stderr)
+        self.assertTrue(result.stderr.endswith(
+            "[OK] Docker maintenance workflow regressions (offline)\n",
+        ))
+
+    def test_gate_regression_failure_is_labeled_and_stops_before_downloads(self):
+        (self.root / "scripts/tests/ci-gates-test.py").write_text(
+            "import sys\n"
+            "print('fixture gate diagnostic', file=sys.stderr)\n"
+            "sys.exit(7)\n",
+        )
+        result, calls = self.run_script()
+        self.assertEqual(result.returncode, 7, result.stderr)
+        self.assertIn("[RUN] CI gate regressions (offline)\n", result.stderr)
+        self.assertIn("fixture gate diagnostic\n", result.stderr)
+        self.assertIn(
+            "fixture gate diagnostic\n  [FAIL] CI gate regressions (offline)",
+            result.stderr,
+        )
+        self.assertIn("[FAIL] CI gate regressions (offline) (exit 7)\n", result.stderr)
+        self.assertNotIn("[RUN] 2/5", result.stderr)
+        self.assertEqual(calls, "")
+
+    def test_nested_runner_preserves_results_diagnostics_and_suite_arguments(self):
+        suite = self.root / "scripts/tests/example.py"
+        suite.write_text(
+            "import sys\nimport unittest\n"
+            "argument = sys.argv.pop(1)\n"
+            "class Example(unittest.TestCase):\n"
+            "    def test_example(self):\n"
+            "        print('OK')\n"
+            "        if argument == 'skip': self.skipTest('fixture skip')\n"
+            "        self.assertEqual(argument, 'success', 'fixture assertion')\n"
+            "if __name__ == '__main__': unittest.main()\n",
+        )
+        for argument, status in (("success", 0), ("skip", 0), ("failure", 1)):
+            with self.subTest(argument=argument):
+                result = subprocess.run(
+                    ["python3", str(self.root / "scripts/run-workflow-tests.py"),
+                     str(suite), argument],
+                    cwd=self.root, text=True, capture_output=True, check=False,
+                    timeout=10,
+                )
+                self.assertEqual(result.returncode, status, result.stderr)
+                self.assertEqual(result.stdout, "OK\n")
+                self.assertIn("    Ran 1 test", result.stderr)
+                self.assertTrue(all(
+                    not line or line.startswith("    ")
+                    for line in result.stderr.splitlines()
+                ))
+                self.assertNotIn("\n    OK\n", result.stderr)
+                if argument == "skip":
+                    self.assertIn("skipped=1", result.stderr)
+                if argument == "failure":
+                    self.assertIn("fixture assertion", result.stderr)
+                    self.assertIn("FAILED (failures=1)", result.stderr)
 
     def test_failures_stop_the_stage_and_preserve_exit_code(self):
         for tool in ("curl", "sha256sum", "actionlint", "zizmor", "action-validator", "shellcheck"):
@@ -202,7 +287,7 @@ esac
                 result, _ = self.run_script(FAIL_SHELLCHECK_SCRIPT=f"scripts/{script}")
                 self.assertEqual(result.returncode, 7, result.stderr)
                 self.assertIn(f"fixture shell finding: scripts/{script}", result.stderr)
-                self.assertIn("[FAIL] Workflow validator script (ShellCheck)", result.stderr)
+                self.assertIn("[FAIL] CI tooling scripts (ShellCheck)", result.stderr)
                 self.assertNotIn("[RUN] Composer cache mount regressions", result.stderr)
 
     def test_warm_cache_is_verified_without_downloads(self):
@@ -318,14 +403,14 @@ esac
         result, _ = self.run_script(COMPOSITE_TEST_EXIT="7")
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Composite action shell regressions (offline)", result.stderr)
-        self.assertNotIn("[RUN] 4/4", result.stderr)
+        self.assertNotIn("[RUN] 5/5", result.stderr)
 
     def test_invalid_composite_metadata_blocks_shell_validation(self):
         (self.root / ".github/actions/example/action.yml").write_text("runs: [")
         result, _ = self.run_script()
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("[FAIL] Local composite action shell (ShellCheck)", result.stderr)
-        self.assertNotIn("[RUN] 4/4", result.stderr)
+        self.assertNotIn("[RUN] 5/5", result.stderr)
 
 
 if __name__ == "__main__":

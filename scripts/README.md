@@ -949,6 +949,23 @@ remains unconditional, and the actual Bash result checks still reject failed,
 cancelled and unexpected skipped prerequisites. These regressions do not execute
 GitHub jobs or simulate its scheduler.
 
+Output uses five numbered stages: CI gate contracts, validator preparation,
+workflow validation, local action validation and tooling script validation.
+Every regression suite has a named start and outcome, while native test output,
+warnings and errors remain visible. Each check keeps its `[RUN]`, native output
+and outcome together, with a blank line before the next check rather than before
+the outcome. Inner status lines are indented two spaces beneath their numbered
+stage. `scripts/run-workflow-tests.py` indents unittest diagnostics four spaces
+and omits its standalone `OK` footer and trailing blank lines, leaving `[OK]` as
+the success indicator. Counts, timings, skips and failure details remain visible;
+direct suite invocations retain unittest's usual output. Other validator
+diagnostics use `scripts/native-output.py --indent` to stream both output
+channels with four-space indentation, preserving colors and exit status. The
+validator opts into grouped status lines with non-exported
+`OUTPUT_RUN_GROUPED=1` and `OUTPUT_STATUS_INDENT='  '`; other commands retain their
+existing spacing. ShellCheck's script pass is labeled
+`CI tooling scripts (ShellCheck)` to reflect its full explicit input list.
+
 ```bash
 make lint-workflows
 ```

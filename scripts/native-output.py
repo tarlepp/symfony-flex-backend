@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Filter SGR decoration without buffering partial lines or hiding TTYs."""
+"""Filter SGR decoration or indent output without hiding TTYs or partial lines."""
 
 import errno
 import fcntl
@@ -55,6 +55,23 @@ class SgrFilter:
         return bytes(output)
 
 
+class IndentFilter:
+    def __init__(self):
+        self.line_start = True
+
+    def feed(self, data, final=False):
+        output = bytearray()
+        for value in data:
+            if self.line_start and value not in (10, 13):
+                output.extend(b"    ")
+            output.append(value)
+            self.line_start = value in (10, 13)
+        if final and not self.line_start:
+            output.extend(b"\n")
+            self.line_start = True
+        return bytes(output)
+
+
 def _terminal_pair(fd):
     master, slave = pty.openpty()
     settings = termios.tcgetattr(slave)
@@ -74,14 +91,14 @@ def _write_all(fd, data):
         data = data[written:]
 
 
-def run(command):
+def run(command, filter_type=SgrFilter):
     readers = {}
     child_streams = {}
     terminal_masters = []
     for destination in (1, 2):
         if os.isatty(destination):
             master, slave = _terminal_pair(destination)
-            readers[master] = (destination, SgrFilter())
+            readers[master] = (destination, filter_type())
             child_streams[destination] = slave
             terminal_masters.append(master)
         else:
@@ -106,7 +123,7 @@ def run(command):
     for destination in (1, 2):
         if child_streams[destination] == subprocess.PIPE:
             stream = process.stdout if destination == 1 else process.stderr
-            readers[stream.fileno()] = (destination, SgrFilter())
+            readers[stream.fileno()] = (destination, filter_type())
 
     def forward_signal(signum, _frame):
         if process.poll() is None:
@@ -147,7 +164,12 @@ def run(command):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: native-output.py <command> [arguments...]", file=sys.stderr)
+    arguments = sys.argv[1:]
+    filter_type = SgrFilter
+    if arguments[:1] == ["--indent"]:
+        filter_type = IndentFilter
+        arguments.pop(0)
+    if not arguments:
+        print("Usage: native-output.py [--indent] <command> [arguments...]", file=sys.stderr)
         sys.exit(64)
-    sys.exit(run(sys.argv[1:]))
+    sys.exit(run(arguments, filter_type))
