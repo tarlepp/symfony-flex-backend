@@ -619,7 +619,14 @@ reports ignore unfixed findings.
 
 Neither workflow pushes images to a registry (`push: false`). Core CI exports
 image archives for the separate scan jobs; scheduled/manual vulnerability scans
-load images into the runner's Docker daemon. Core builds read target-specific
+load images into the runner's Docker daemon. Core scans wait for the build
+matrix to finish but also run after a sibling build fails. Each scan downloads
+its own target archive without rebuilding: available images are scanned, while
+missing archives fail explicitly. Failed builds and scans still fail the final
+merge gate. Cancelled or skipped build matrices do not start scans; successful
+change detection must explicitly select Docker validation. Core PR SARIF
+generation still requires a downloaded image and a same-repository PR; fork PRs
+run the blocking scan without SARIF uploads. Core builds read target-specific
 GitHub Actions caches and write them only on `master` pushes. Scheduled
 vulnerability scans disable build cache; manual scans may read core image
 caches. Builds pull base images and bypass the production stage cache. Bootstrap

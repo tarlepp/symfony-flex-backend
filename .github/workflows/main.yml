@@ -1062,7 +1062,7 @@ jobs:
   docker-scan:
     name: Scan application Docker image with Trivy (${{ matrix.target }})
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'schedule' && needs.changes.outputs.docker == 'true' }}
+    if: ${{ !cancelled() && github.event_name != 'schedule' && needs.changes.result == 'success' && needs.changes.outputs.docker == 'true' && (needs.docker-build.result == 'success' || needs.docker-build.result == 'failure') }}
     timeout-minutes: 15
     permissions:
       contents: read

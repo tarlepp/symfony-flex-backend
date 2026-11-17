@@ -318,7 +318,7 @@ prepare_jobs() {
     fi
     add_job report 'External reporting' "$reporting" "$reporting_note"
     add_category_job docker-build 'Build application Docker image' docker 'Matrix: development, production'
-    add_category_job docker-scan 'Scan application Docker image with Trivy' docker 'Matrix: development, production; requires successful builds'
+    add_category_job docker-scan 'Scan application Docker image with Trivy' docker 'Matrix: development, production; scans available archives after builds finish'
     add_job ci-result 'Validate CI result' conditional 'Runs unless cancelled'
 }
 
@@ -387,7 +387,7 @@ write_job_preview() {
     done
     printf '\n'
     printf '  Static analyzers: Psalm, PHPStan, PHP Insights.\n'
-    printf '  Docker build and scan: development and production; scans require builds.\n'
+    printf '  Docker build and scan: development and production; scans require target archives.\n'
     printf '  Configuration and documentation steps depend on their category flags.\n'
     printf '  External reporting requires eligible events, successful tests and gates; uploads require tokens.\n'
 }
