@@ -962,8 +962,12 @@ cache hit is reverified before copying into the temporary tools directory; a
 corrupt hit fails explicitly without extraction, execution or redownload. Failed
 downloads/checksums never populate the cache; verified downloads are published
 atomically. Linux AMD64 and ARM64 are supported; cold downloads require network
-access, `curl`, `tar`, and `sha256sum`. Download or checksum failures fail the
-check.
+access, `curl`, `tar`, and `sha256sum`. Each download uses a ten-second
+connection timeout, a sixty-second transfer limit per attempt, and at most three
+retries. The retry window is 120 seconds; an attempt started within that window
+can finish afterward, subject to its sixty-second transfer limit. Download
+timeouts preserve curl's exit status (28), and download or checksum failures
+fail the check without caching partial files.
 
 The workflow-validation job restores/saves this directory using `actions/cache`,
 keyed by runner OS/architecture and the validator script's content hash, without

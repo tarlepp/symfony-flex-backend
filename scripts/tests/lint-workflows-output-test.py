@@ -3,6 +3,7 @@
 
 import os
 from pathlib import Path
+import shlex
 import shutil
 import subprocess
 import tempfile
@@ -64,6 +65,11 @@ fi
 case "$name" in
     curl)
         while [ "$1" != --output ]; do shift; done
+        if [ "${CURL_TIMEOUT:-}" = 1 ]; then
+            printf 'partial download' > "$2"
+            printf 'curl: (28) fixture transfer timed out\\n' >&2
+            exit 28
+        fi
         cp "$FIXTURE" "$2"
         ;;
     tar)
@@ -192,6 +198,38 @@ esac
         cached = list(self.root.glob("build/cache/workflow-validators/linux-amd64/*"))
         self.assertEqual(len(cached), 4)
         self.assertTrue(all(len(path.name) == 64 for path in cached))
+
+    def test_cold_downloads_have_bounded_connection_transfer_and_retries(self):
+        result, calls = self.run_script()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        downloads = [shlex.split(line) for line in calls.splitlines()
+                     if line.startswith("curl ")]
+        self.assertEqual(len(downloads), 4)
+        for arguments in downloads:
+            with self.subTest(url=arguments[-3]):
+                for option, value in (
+                    ("--connect-timeout", "10"), ("--max-time", "60"),
+                    ("--retry", "3"), ("--retry-max-time", "120"),
+                ):
+                    self.assertEqual(arguments.count(option), 1)
+                    self.assertEqual(arguments[arguments.index(option) + 1], value)
+                self.assertIn("--fail", arguments)
+                self.assertIn("--show-error", arguments)
+
+    def test_timeout_preserves_status_and_cleans_partial_download_without_caching(self):
+        temporary = self.root / "downloads"
+        temporary.mkdir()
+        result, calls = self.run_script(CURL_TIMEOUT="1", TMPDIR=str(temporary))
+        self.assertEqual(result.returncode, 28, result.stderr)
+        self.assertIn("fixture transfer timed out", result.stderr)
+        self.assertIn("[FAIL] Prepare and verify actionlint", result.stderr)
+        self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
+        self.assertEqual(calls.count("curl "), 1)
+        self.assertNotIn("sha256sum", calls)
+        self.assertNotIn("tar ", calls)
+        self.assertNotIn("actionlint -shellcheck", calls)
+        self.assertEqual(list(temporary.iterdir()), [])
+        self.assertEqual(list(self.root.glob("build/cache/workflow-validators/**/*")), [])
 
     def test_corrupt_cached_download_fails_before_extraction_or_execution(self):
         first, _ = self.run_script()
