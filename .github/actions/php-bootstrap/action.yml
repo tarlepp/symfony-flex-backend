@@ -6,15 +6,15 @@ inputs:
     required: false
     default: development
   install-dependencies:
-    description: Whether to run make install
+    description: Whether to run make install (exactly 'true' or 'false')
     required: false
     default: 'true'
   print-versions:
-    description: Whether to print PHP project tool versions
+    description: Whether to print PHP project tool versions (exactly 'true' or 'false')
     required: false
     default: 'true'
   cache-dependencies:
-    description: Restore and save Composer downloads when dependencies are installed after bootstrap
+    description: Restore and save Composer downloads when dependencies are installed after bootstrap (exactly 'true' or 'false')
     required: false
     default: 'false'
 runs:
@@ -27,17 +27,7 @@ runs:
         INSTALL_DEPENDENCIES: ${{ inputs.install-dependencies }}
         CACHE_DEPENDENCIES: ${{ inputs.cache-dependencies }}
         PRINT_VERSIONS: ${{ inputs.print-versions }}
-      run: |
-        case "$BUILD_TARGET" in
-          development) ;;
-          maintenance)
-            if [ "$INSTALL_DEPENDENCIES" != false ] || [ "$CACHE_DEPENDENCIES" != false ] || [ "$PRINT_VERSIONS" != false ]; then
-              echo "::error::Maintenance requires install-dependencies, cache-dependencies and print-versions to be false."
-              exit 1
-            fi
-            ;;
-          *) echo "::error::Unsupported bootstrap build-target."; exit 1 ;;
-        esac
+      run: bash scripts/ci-validate-bootstrap.sh
 
     - name: Set Composer cache location
       shell: bash

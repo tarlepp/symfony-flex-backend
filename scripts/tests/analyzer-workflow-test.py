@@ -1832,6 +1832,7 @@ class ChangeDetectionTest(unittest.TestCase):
         for number, path in enumerate((
             "Makefile", "Dockerfile", "requirements.txt", ".dockerignore",
             ".github/actions/php-bootstrap/action.yml",
+            "scripts/ci-validate-bootstrap.sh",
             ".github/workflows/main.yml", "scripts/make.sh", "scripts/command-output.sh",
             "scripts/native-output.sh", "scripts/ci-detect-changes.sh", "unclassified.new-format",
         )):

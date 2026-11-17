@@ -2,6 +2,7 @@
 """Exercise Docker maintenance workflow contracts without GitHub or registries."""
 
 import hashlib
+import itertools
 import os
 from pathlib import Path
 import re
@@ -9,6 +10,8 @@ import subprocess
 import tempfile
 import textwrap
 import unittest
+
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -29,6 +32,9 @@ def step(content, name):
 
 def script(content, name):
     section = step(content, name)
+    inline = re.search(r"^ +run: ([^|\n].*)$", section, re.MULTILINE)
+    if inline is not None:
+        return inline.group(1)
     match = re.search(r"^ +run: \|\n(.*)", section, re.MULTILINE | re.DOTALL)
     if match is None:
         raise AssertionError(f"Missing shell body: {name}")
@@ -40,6 +46,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix="docker-image-workflow-")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
+        (self.root / "scripts").mkdir()
+        (self.root / "scripts/ci-validate-bootstrap.sh").write_text(
+            (ROOT / "scripts/ci-validate-bootstrap.sh").read_text(),
+        )
         self.output = self.root / "output"
         self.summary = self.root / "summary"
         self.environment = dict(
@@ -257,6 +267,73 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotIn("install-php-extensions", maintenance)
         self.assertNotIn("nvm", maintenance)
         self.assertTrue(dockerfile.rsplit("\nFROM ", 1)[1].startswith("base AS production"))
+
+    def test_bootstrap_boolean_defaults_and_bindings_are_validated_first(self):
+        action = yaml.safe_load(BOOTSTRAP)
+        validation = action["runs"]["steps"][0]
+        self.assertEqual(validation["name"], "Validate bootstrap target")
+        self.assertEqual(validation["shell"], "bash")
+        self.assertEqual(validation["run"], "bash scripts/ci-validate-bootstrap.sh")
+        self.assertNotIn("if", validation)
+        self.assertNotIn("continue-on-error", validation)
+        bindings = {
+            "BUILD_TARGET": "build-target",
+            "INSTALL_DEPENDENCIES": "install-dependencies",
+            "CACHE_DEPENDENCIES": "cache-dependencies",
+            "PRINT_VERSIONS": "print-versions",
+        }
+        self.assertEqual(validation["env"], {
+            variable: "${{ inputs." + name + " }}"
+            for variable, name in bindings.items()
+        })
+        defaults = {
+            variable: action["inputs"][name]["default"]
+            for variable, name in bindings.items()
+        }
+        self.assertEqual(defaults, {
+            "BUILD_TARGET": "development", "INSTALL_DEPENDENCIES": "true",
+            "CACHE_DEPENDENCIES": "false", "PRINT_VERSIONS": "true",
+        })
+        result = self.run_script(BOOTSTRAP, validation["name"], **defaults)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(self.output.exists())
+        self.assertFalse(self.summary.exists())
+
+    def test_bootstrap_accepts_all_development_boolean_combinations(self):
+        keys = ("INSTALL_DEPENDENCIES", "CACHE_DEPENDENCIES", "PRINT_VERSIONS")
+        for values in itertools.product(("true", "false"), repeat=len(keys)):
+            with self.subTest(values=values):
+                result = self.run_script(
+                    BOOTSTRAP, "Validate bootstrap target", BUILD_TARGET="development",
+                    **dict(zip(keys, values)),
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_bootstrap_rejects_malformed_booleans_for_both_targets(self):
+        inputs = {
+            "INSTALL_DEPENDENCIES": "install-dependencies",
+            "CACHE_DEPENDENCIES": "cache-dependencies",
+            "PRINT_VERSIONS": "print-versions",
+        }
+        for target in ("development", "maintenance"):
+            for key, name in inputs.items():
+                for invalid in ("", "TRUE", "False", "1", "0", "yes", " true", "false ",
+                                "true\nfalse", "sensitive-invalid-value"):
+                    with self.subTest(target=target, input=name, value=invalid):
+                        values = dict.fromkeys(inputs, "false")
+                        values[key] = invalid
+                        result = self.run_script(
+                            BOOTSTRAP, "Validate bootstrap target",
+                            BUILD_TARGET=target, **values,
+                        )
+                        self.assertEqual(result.returncode, 1, result.stderr)
+                        self.assertEqual(
+                            result.stdout,
+                            f"::error::Bootstrap input {name} must be exactly 'true' or 'false'.\n",
+                        )
+                        self.assertEqual(result.stderr, "")
+                        self.assertFalse(self.output.exists())
+                        self.assertFalse(self.summary.exists())
 
     def test_pr_base_stable_branch_and_template(self):
         directory = self.root / ".github"
