@@ -137,14 +137,16 @@ classify_path() {
         scripts/ci-validate-compose.sh)
             enable_checks compose workflows
             ;;
-        .github/workflows/*|.github/zizmor.yml|\
         scripts/lint-workflows.sh|scripts/run-workflow-tests.py|\
         scripts/check-composite-action-shell.py|\
-        scripts/tests/composite-action-shell-test.py|\
         scripts/ci-prerequisite-gate.sh|scripts/ci-result-gate.sh|\
         scripts/ci-gate-common.sh|scripts/ci-workflow-overview.sh|\
-        scripts/ci-statistics-summary.sh|\
-        scripts/check-composer-cache.sh|scripts/tests/ci-gates-test.py|\
+        scripts/ci-statistics-summary.sh|scripts/tests/ci-gates-test.py)
+            enable_checks workflows tooling
+            ;;
+        .github/workflows/*|.github/zizmor.yml|\
+        scripts/tests/composite-action-shell-test.py|\
+        scripts/check-composer-cache.sh|\
         scripts/tests/analyzer-workflow-test.py|scripts/tests/composer-cache-test.py|\
         scripts/tests/docker-image-workflow-test.py)
             enable_checks workflows
