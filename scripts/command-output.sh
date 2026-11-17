@@ -8,6 +8,7 @@ output_init() {
     OUTPUT_GREEN=''
     OUTPUT_YELLOW=''
     OUTPUT_RED=''
+
     if [ -z "${NO_COLOR:-}" ] && {
         [ "${COLOR:-auto}" = always ] ||
         { [ "${COLOR:-auto}" = auto ] && [ -t 2 ] && [ "${TERM:-}" != dumb ]; }
@@ -18,6 +19,7 @@ output_init() {
         OUTPUT_YELLOW=$'\033[33m'
         OUTPUT_RED=$'\033[31m'
     fi
+
     OUTPUT_PROGRESS=0
     if [ "${PROGRESS:-auto}" = always ] || {
         [ "${PROGRESS:-auto}" = auto ] && [ -t 2 ] && [ "${TERM:-}" != dumb ] &&
@@ -37,15 +39,19 @@ output_clock() {
 
 output_duration() {
     local tenths seconds minutes hours
+
     tenths=$((($1 + 50000) / 100000))
+
     if [ "$tenths" -lt 600 ]; then
         printf '%d.%ds' "$((tenths / 10))" "$((tenths % 10))"
         return
     fi
+
     seconds=$((($1 + 500000) / 1000000))
     hours=$((seconds / 3600))
     minutes=$((seconds % 3600 / 60))
     seconds=$((seconds % 60))
+
     if [ "$hours" -gt 0 ]; then
         printf '%dh %02dm %02ds' "$hours" "$minutes" "$seconds"
     else
@@ -55,12 +61,14 @@ output_duration() {
 
 output_status() {
     local status=$1 message=$2 color=''
+
     case "$status" in
         RUN|INFO) color=$OUTPUT_BLUE ;;
         OK) color=$OUTPUT_GREEN ;;
         WARN|SKIP) color=$OUTPUT_YELLOW ;;
         FAIL) color=$OUTPUT_RED ;;
     esac
+
     printf '%s%s[%s]%s %s\n' "${OUTPUT_STATUS_INDENT:-}" \
         "$color" "$status" "$OUTPUT_RESET" "$message" >&2
 }
@@ -69,35 +77,52 @@ output_result() {
     if [ "${OUTPUT_RUN_GROUPED:-0}" != 1 ]; then
         printf '\n' >&2
     fi
+
     output_status "$@"
 }
 
 output_run() {
     local label=$1 status=0 started='' took=''
     shift
+
     if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
         printf '\n' >&2
     fi
     output_status RUN "$label"
+
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
         started=$(output_clock)
     fi
-    trap 'took=$(output_elapsed "$started"); output_result WARN "$label: interrupted${took:+ (took $took)}"; exit 130' INT
-    trap 'took=$(output_elapsed "$started"); output_result WARN "$label: terminated${took:+ (took $took)}"; exit 143' TERM
+
+    trap '
+        took=$(output_elapsed "$started")
+        output_result WARN "$label: interrupted${took:+ (took $took)}"
+        exit 130
+    ' INT
+    trap '
+        took=$(output_elapsed "$started")
+        output_result WARN "$label: terminated${took:+ (took $took)}"
+        exit 143
+    ' TERM
+
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
         OUTPUT_PROGRESS_STARTED='' output_relay "$label" "$@" || status=$?
     else
         OUTPUT_PROGRESS_STARTED='' "$@" || status=$?
     fi
+
     trap - INT TERM
     took=$(output_elapsed "$started")
+
     if [ "$status" -eq 0 ]; then
-        output_result "${OUTPUT_SUCCESS_STATUS:-OK}" "${OUTPUT_SUCCESS_MESSAGE:-$label}${took:+ (took $took)}"
+        output_result "${OUTPUT_SUCCESS_STATUS:-OK}" \
+            "${OUTPUT_SUCCESS_MESSAGE:-$label}${took:+ (took $took)}"
     elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then
         output_result WARN "$label: cancelled (exit $status${took:+, took $took})"
     else
         output_result FAIL "$label (exit $status${took:+, took $took})"
     fi
+
     return "$status"
 }
 
@@ -105,8 +130,10 @@ output_run() {
 output_relay() {
     local label=$1 style=plain coerce
     shift
+
     if [ "$(type -t "$1")" = file ] && command -v python3 >/dev/null 2>&1; then
         [ -z "$OUTPUT_BLUE" ] || style=color
+
         # Disable Python locale coercion so the command inherits the caller's locale unchanged.
         coerce=${PYTHONCOERCECLOCALE+set:$PYTHONCOERCECLOCALE}
         OUTPUT_PROGRESS_COERCE=$coerce PYTHONCOERCECLOCALE=0 \
@@ -120,6 +147,7 @@ output_relay() {
 output_progress() {
     local label=$1
     shift
+
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
         OUTPUT_PROGRESS_STARTED=$(output_clock)
         export OUTPUT_PROGRESS_STARTED
@@ -133,6 +161,7 @@ output_progress() {
 # Final outcome of a command run via output_progress, including its elapsed time.
 output_outcome() {
     local took
+
     took=$(output_elapsed "${OUTPUT_PROGRESS_STARTED:-}")
     output_result "$1" "$2${took:+ (took $took)}"
 }
@@ -145,6 +174,7 @@ output_elapsed() {
 output_stream() {
     local label=$1
     shift
+
     output_status RUN "$label"
     exec "$@"
 }
@@ -157,9 +187,11 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
             output_status FAIL 'Usage: command-output.sh --status <RUN|OK|WARN|SKIP|FAIL|INFO> <message>'
             exit 64
         fi
+
         output_status "$2" "$3"
         exit 0
     fi
+
     mode=run
     case "${1:-}" in
         --run|--stream|--progress)
@@ -167,10 +199,12 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
             shift
             ;;
     esac
+
     if [ "$#" -lt 2 ]; then
         output_status FAIL 'Usage: command-output.sh [--run|--stream|--progress] <label> <command> [arguments...]'
         exit 64
     fi
+
     if [ "$mode" = stream ]; then
         output_stream "$@"
     elif [ "$mode" = progress ]; then
