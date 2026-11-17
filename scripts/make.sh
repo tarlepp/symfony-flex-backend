@@ -19,6 +19,7 @@ if [ "${COLOR:-auto}" = auto ]; then
         export COLOR=never
     fi
 fi
+
 if [ "${PROGRESS:-auto}" = auto ]; then
     if [ -t 2 ] && [ "${TERM:-}" != dumb ] && [ -z "${CI:-}" ] && [ -z "${NO_COLOR:-}" ]; then
         export PROGRESS=always
@@ -26,6 +27,7 @@ if [ "${PROGRESS:-auto}" = auto ]; then
         export PROGRESS=never
     fi
 fi
+
 # Record whether stdout shares stderr's terminal; forwarded launchers keep the outer value.
 if [ -z "${OUTPUT_PROGRESS_SHARED:-}" ]; then
     if [ -t 1 ] && [ -t 2 ]; then
@@ -39,34 +41,41 @@ fi
 # unless they could still become a Make recipe error line.
 filter_make_errors() {
     local chunk status pending='' midline=false
+
     # Match complete recipe error lines, including recursive make[depth] prefixes.
-    local pattern='^make(\[[0-9]+\])?: \*\*\* \[.+\] Error [0-9]+$'
+    local complete_error_pattern='^make(\[[0-9]+\])?: \*\*\* \[.+\] Error [0-9]+$'
+
     # A timed-out partial read stays buffered while it can still become such a line.
-    # tail covers the optional ": *** [target]..." portion after make or make[depth].
-    local tail='(:( (\*(\*(\*( (\[.*)?)?)?)?)?)?)?'
-    local prefix="^m(a(k(e(${tail}|\\[([0-9]+(\\]${tail})?)?)?)?)?)?$"
+    # The tail covers the optional ": *** [target]..." after make or make[depth].
+    local partial_error_tail='(:( (\*(\*(\*( (\[.*)?)?)?)?)?)?)?'
+    local partial_error_prefix="^m(a(k(e(${partial_error_tail}|\\[([0-9]+(\\]${partial_error_tail})?)?)?)?)?)?$"
 
     while true; do
         chunk=''
         IFS= read -r -t 0.05 chunk
         status=$?
         pending+="$chunk"
+
         if [ "$status" -eq 0 ]; then
-            if [ "$midline" = true ] || [[ ! "$pending" =~ $pattern ]]; then
+            if [ "$midline" = true ] || [[ ! "$pending" =~ $complete_error_pattern ]]; then
                 printf '%s\n' "$pending"
             fi
+
             pending=''
             midline=false
         elif [ "$status" -gt 128 ]; then
-            if [ -n "$pending" ] && { [ "$midline" = true ] || [[ ! "$pending" =~ $prefix ]]; }; then
+            if [ -n "$pending" ] && {
+                [ "$midline" = true ] || [[ ! "$pending" =~ $partial_error_prefix ]]
+            }; then
                 printf '%s' "$pending"
                 pending=''
                 midline=true
             fi
         else
-            if [ "$midline" = true ] || [[ ! "$pending" =~ $pattern ]]; then
+            if [ "$midline" = true ] || [[ ! "$pending" =~ $complete_error_pattern ]]; then
                 printf '%s' "$pending"
             fi
+
             break
         fi
     done
@@ -74,8 +83,11 @@ filter_make_errors() {
 
 exec {diagnostics}> >(filter_make_errors >&2)
 filter_pid=$!
+
 command make "$@" 2>&"$diagnostics"
 status=$?
+
 exec {diagnostics}>&-
 wait "$filter_pid"
+
 exit "$status"
