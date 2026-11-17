@@ -36,9 +36,10 @@ replacement for their actual event filters and conditions:
 * `.github/workflows/main.yml`: configuration/documentation lint, dependency and
   secret checks, Docker pin verification, static-analysis matrix, tests, and
   development/production image builds with vulnerability scanning. It handles
-  pushes to `master`, PRs targeting any branch, a schedule, and manual runs.
-  Scheduled runs execute only the periodic `security-check` and
-  `docker-image-check-updates` jobs; all other jobs are skipped.
+  pushes to `master`, PRs targeting any branch, merge groups, a schedule, and
+  manual runs. Scheduled runs execute the periodic `security-check` and
+  `docker-image-check-updates` jobs and both aggregate gates; other jobs are
+  skipped. Non-scheduled runs also collect informational project statistics.
 * `.github/workflows/dependency-review.yml`: dependency review on PRs and
   `merge_group: checks_requested`, using the action's native base/head SHA
   selection while preserving the required `dependency-review` context.
@@ -49,6 +50,12 @@ replacement for their actual event filters and conditions:
   PRs.
 * `.github/workflows/codeql.yml`: CodeQL analysis of the workflow files (CodeQL
   does not support PHP).
+* `.github/workflows/docker-image-updates.yml`: scheduled/manual same-major
+  image version and digest updates, pin verification, and maintenance PR
+  creation against the selected branch.
+* `.github/workflows/action-updates.yml`: weekly/manual Action and workflow-tool
+  update discovery inside the development container; updates are advisory,
+  while incomplete checks fail the workflow.
 * `.github/actions/php-bootstrap/action.yml`: shared Compose development
   container setup, Composer download cache, optional installation, and version
   reporting.

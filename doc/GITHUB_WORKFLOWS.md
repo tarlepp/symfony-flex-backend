@@ -133,9 +133,7 @@ Other workflows retain their own triggers.
 
 ```mermaid
 flowchart TD
-    Event["Core CI event"] --> Metadata{"Confirmed title/body-only edit?"}
-    Metadata -->|Yes| Skip["Skip core jobs; preserve earlier validation"]
-    Metadata -->|No| Schedule{"Scheduled run?"}
+    Event["Core CI event"] --> Schedule{"Scheduled run?"}
     Schedule -->|Yes| Periodic["Security advisories + image updates"]
     Periodic --> Gates["Prerequisite gate + final gate"]
     Schedule -->|No| Changes["Detect changed files"]
@@ -323,13 +321,16 @@ configuration, not GitHub workflows.
 
 Core CI uses depth-one checkouts for ordinary validation, Docker builds/scans
 and result gates. Full history is retained only for change detection (base/head
-comparisons), Gitleaks (history scanning), lightweight analyzers
-(`parallel-lint --blame` diagnostics), and external reporting (SonarCloud SCM
-analysis). Reporting still checks out the tested SHA only when an upload token
-is available. All checkouts disable credential persistence.
+comparisons), Gitleaks (history scanning), project statistics (PR merge-base
+comparisons), lightweight analyzers (`parallel-lint --blame` diagnostics), and
+external reporting (SonarCloud SCM analysis). Reporting still checks out the
+tested SHA only when an upload token is available. All checkouts disable
+credential persistence.
 
-Before cleanup, every PHP-bootstrap consumer runs failure-only container
-diagnostics. The reporting job omits these when bootstrap was skipped.
+Before cleanup, core CI's PHP-bootstrap consumers and the standalone Action
+update checker run failure-only container diagnostics. The reporting job omits
+these when bootstrap was skipped. Docker image PR maintenance currently performs
+cleanup without this diagnostics step.
 [`ci-failure-diagnostics.sh`](../scripts/ci-failure-diagnostics.sh) lists only
 the current CI Compose project's PHP containers and prints allowlisted status,
 exit code, OOM flag and health status. It limits output to five containers, uses
@@ -601,12 +602,14 @@ The scheduled/manual SARIF report includes all severities by default, while
 the blocking scan and core PR SARIF report use only `CRITICAL,HIGH`. Both
 reports ignore unfixed findings.
 
-Both workflows build and load images locally, with `push: false`. Core builds
-read target-specific GitHub Actions caches and write them only on `master`
-pushes. Scheduled vulnerability scans disable build cache; manual scans may read
-core image caches. Builds pull base images and bypass the production stage
-cache. Bootstrap similarly disables cache on schedules and writes its own cache
-only on `master` pushes.
+Neither workflow pushes images to a registry (`push: false`). Core CI exports
+image archives for the separate scan jobs; scheduled/manual vulnerability scans
+load images into the runner's Docker daemon. Core builds read target-specific
+GitHub Actions caches and write them only on `master` pushes. Scheduled
+vulnerability scans disable build cache; manual scans may read core image
+caches. Builds pull base images and bypass the production stage cache. Bootstrap
+similarly disables cache on schedules and writes its own cache only on `master`
+pushes.
 
 Docker **update availability** in core CI is advisory: newer stable images
 produce warnings and a maintenance summary, not a failing gate. On `master`
@@ -652,7 +655,8 @@ output and the PHP Insights matrix job publishes its four score lines. When
 tests produce usable JUnit results, the test job also publishes its existing
 PhpMetrics output. Summary publication does not change analyzer or test
 results; these job summaries may appear in any order because jobs run in parallel.
-Changes to this helper select workflow regressions and full PHP/test validation.
+Changes to `ci-test-reports.py` select workflow regressions and full PHP/test
+validation; changes to `ci-statistics-summary.sh` select workflow validation.
 After PHPUnit succeeds or fails (unless cancelled), CI checks required report
 files and attempts artifact uploads. Missing required reports fail the job, as
 do malformed or structurally invalid JUnit/Clover XML and missing or invalid
@@ -733,9 +737,10 @@ environment flags locally to bypass setup guards.
 | Trivy report exists but job is red | Enforcement scan after SARIF upload |
 | CodeQL default-setup conflict | Choose default setup or YAML, not both |
 
-For an unexpected skip, open `Detect changed files` and inspect `Code changes`
-in its log. On schedules the detection job itself is intentionally skipped. PR
-edits do not trigger CI. Retitling a PR never repairs a failed validation.
+For an unexpected skip, open `Detect changed files` and inspect the
+`CI validation preview` in its log or summary. On schedules the detection job
+itself is intentionally skipped. PR edits do not trigger CI. Retitling a PR never
+repairs a failed validation.
 
 To retry a transient failure, open the run under **Actions** and use **Re-run
 failed jobs**. If the failure is reproducible, fix its cause and push the
