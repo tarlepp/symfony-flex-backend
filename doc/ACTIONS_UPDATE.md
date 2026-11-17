@@ -371,8 +371,9 @@ Important behavior:
 * The script continues checks even when discovery warnings are present.
 * Review release notes and compatibility, and obtain explicit agreement before
   applying a major upgrade suggestion.
-* Discovery is line-based and limited to the paths above; inspect alternate YAML
-  filenames and unusual reference forms separately when present.
+* Discovery is line-based and limited to the paths above, including both
+  `.yml`/`.yaml` workflows and recursive `action.yml`/`action.yaml` metadata.
+  Inspect files outside those paths and unusual reference forms separately.
 * An Action is current only when its version label and pinned SHA match the
   latest candidate tag and resolved commit. Older version pins are compared with
   the latest candidate, not independently verified against their old tag. Review

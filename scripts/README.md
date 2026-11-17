@@ -1052,7 +1052,10 @@ not executed by ShellCheck; coverage is limited to the explicit input list in
 `scripts/lint-workflows.sh`, not every shell script in the repository.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
-cancellations, or skipped validation block tests and Docker builds.
+cancellations, or unexpected skips fail that gate and the final merge gate.
+An explicit unaffected-category skip is accepted after successful change
+detection. Selected tests and Docker builds depend only on change detection,
+so they can start without waiting for workflow validation.
 `make lint-yaml` remains the separate Symfony configuration check. Static
 validation does not replace testing actual GitHub workflow execution.
 
