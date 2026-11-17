@@ -792,10 +792,6 @@ class CiGatesTest(unittest.TestCase):
                     self.assertNotIn("::error::", result.stderr)
                 for name in result_names:
                     for status in ("success", "failure", "cancelled", "skipped", "", "unknown"):
-                        if name == "STATISTICS":
-                            result = self.run_gate(job, dict(environment, **{name: status}))
-                            self.assertEqual(result.returncode == 0, bool(status) and status != "unknown")
-                            continue
                         if status == environment[name]:
                             continue
                         with self.subTest(job=job, event=event, name=name, status=status):
