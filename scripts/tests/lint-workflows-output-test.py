@@ -24,6 +24,7 @@ class WorkflowOutputTest(unittest.TestCase):
             "lint-workflows.sh", "command-output.sh", "ci-prerequisite-gate.sh",
             "ci-result-gate.sh", "ci-gate-common.sh", "ci-workflow-overview.sh", "ci-statistics-summary.sh",
             "check-composite-action-shell.py", "run-workflow-tests.py", "native-output.py",
+            "download-workflow-validator.sh",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
         shutil.copyfile(
@@ -156,8 +157,8 @@ esac
         self.assertIn("zizmor --no-progress --offline --min-severity low", calls)
         self.assertIn("RUST_LOG=warn", calls)
         self.assertIn(
-            "shellcheck scripts/lint-workflows.sh scripts/command-output.sh "
-            "scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
+            "shellcheck scripts/lint-workflows.sh scripts/download-workflow-validator.sh "
+            "scripts/command-output.sh scripts/check-composer-cache.sh scripts/ci-detect-changes.sh "
             "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
             "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-statistics-summary.sh scripts/ci-validate-compose.sh "
             "scripts/ci-failure-diagnostics.sh scripts/ci-validate-bootstrap.sh "
@@ -280,6 +281,7 @@ esac
 
     def test_ci_entrypoint_shell_findings_block_validation(self):
         for script in (
+            "download-workflow-validator.sh",
             "check-action-updates.sh", "docker-images.sh", "make.sh",
             "check-security.sh", "prepare-sonar-reports.sh",
         ):
@@ -326,7 +328,8 @@ esac
         temporary.mkdir()
         result, calls = self.run_script(CURL_TIMEOUT="1", TMPDIR=str(temporary))
         self.assertEqual(result.returncode, 28, result.stderr)
-        self.assertIn("fixture transfer timed out", result.stderr)
+        self.assertIn("\n    curl: (28) fixture transfer timed out\n", result.stderr)
+        self.assertNotIn("\ncurl:", result.stderr)
         self.assertIn("[FAIL] Prepare and verify actionlint", result.stderr)
         self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
         self.assertEqual(calls.count("curl "), 1)
@@ -343,7 +346,7 @@ esac
             cached.write_text("corrupt")
         result, calls = self.run_script()
         self.assertEqual(result.returncode, 9, result.stderr)
-        self.assertIn("fixture checksum mismatch", result.stderr)
+        self.assertIn("\n    fixture checksum mismatch\n", result.stderr)
         self.assertNotIn("curl ", calls)
         self.assertNotIn("tar ", calls)
         self.assertNotIn("actionlint -shellcheck", calls)

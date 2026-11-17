@@ -710,8 +710,16 @@ The runner executes nine suites: shared statuses and expected-negative Docker
 scenarios, Make filtering/shell integration, blocking checks, quality/mutation
 recipes, lifecycle commands, information/reports, check outcome policies,
 workflow output, and host/CI forwarding. It stops on the first failed suite and
-prints the aggregate `[OK]` only after all suites succeed. The Docker scenario
-suite is exercised by the shared-status tests. All Docker, registry,
+prints the aggregate `[OK]` only after all suites succeed.
+
+Output follows `make lint-workflows`: suite statuses are indented two spaces,
+unittest diagnostics four spaces, and each suite's output stays between its
+`[RUN]` and outcome. The redundant unittest `OK` footer is omitted; failures,
+counts, timings and skips remain visible. Forwarding diagnostics use the same
+four-space indentation while preserving stdout/stderr and exit status.
+
+The Docker scenario suite is exercised by the shared-status tests. All Docker,
+registry,
 configuration, dependency, key, and upload mutations use isolated fixtures or
 mocks. This does not prove live service health, registry availability,
 successful uploads, or real application-test report generation.
@@ -964,6 +972,9 @@ the success indicator. Counts, timings, skips and failure details remain visible
 direct suite invocations retain unittest's usual output. Other validator
 diagnostics use `scripts/native-output.py --indent` to stream both output
 channels with four-space indentation, preserving colors and exit status. The
+download/cache helper, `scripts/download-workflow-validator.sh`, uses the same
+relay, so curl and checksum errors align with other native diagnostics without
+changing download limits, cache verification or failure statuses. The
 validator opts into grouped status lines with non-exported
 `OUTPUT_RUN_GROUPED=1` and `OUTPUT_STATUS_INDENT='  '`; other commands retain their
 existing spacing. ShellCheck's script pass is labeled
