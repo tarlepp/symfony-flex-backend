@@ -146,6 +146,11 @@ jobs:
             echo "No eligible minor/patch or digest changes; no update PR was needed. Check core CI's Docker image version report for major upgrades requiring manual review." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: Diagnose PHP container failure
+        if: ${{ failure() }}
+        timeout-minutes: 2
+        run: bash scripts/ci-failure-diagnostics.sh
+
       - name: Log out of Docker Hub
         if: ${{ always() }}
         run: docker logout docker.io

@@ -85,6 +85,47 @@ class DockerImageWorkflowTest(unittest.TestCase):
             "if: ${{ always() }}", step(WORKFLOW, "Stop PHP development container"),
         )
 
+    def test_all_bootstrap_consumers_diagnose_failure_before_cleanup(self):
+        consumers = set()
+        for path in sorted((ROOT / ".github/workflows").iterdir()):
+            if path.suffix not in (".yml", ".yaml"):
+                continue
+            workflow = yaml.safe_load(path.read_text())
+            for name, job in workflow["jobs"].items():
+                steps = job.get("steps", [])
+                if not any(item.get("uses") == "./.github/actions/php-bootstrap"
+                           for item in steps):
+                    continue
+                consumers.add(path.name)
+                with self.subTest(workflow=path.name, job=name):
+                    diagnostics = [
+                        item for item in steps
+                        if item.get("run") == "bash scripts/ci-failure-diagnostics.sh"
+                    ]
+                    cleanup = [
+                        item for item in steps
+                        if item.get("run") == "bash scripts/make.sh ci-stop"
+                    ]
+                    self.assertEqual(len(diagnostics), 1)
+                    self.assertEqual(len(cleanup), 1)
+                    guard = (
+                        " && steps.bootstrap.outcome != 'skipped'"
+                        if path.name == "main.yml" and name == "report" else ""
+                    )
+                    self.assertEqual(diagnostics[0]["if"], f"${{{{ failure(){guard} }}}}")
+                    self.assertEqual(diagnostics[0]["timeout-minutes"], 2)
+                    self.assertFalse(diagnostics[0].get("continue-on-error", False))
+                    self.assertEqual(cleanup[0]["if"], f"${{{{ always(){guard} }}}}")
+                    self.assertLess(steps.index(diagnostics[0]), steps.index(cleanup[0]))
+                    for index, item in enumerate(steps):
+                        if (path.name == "docker-image-updates.yml"
+                                and item.get("run") == "docker logout docker.io"):
+                            self.assertLess(steps.index(diagnostics[0]), index)
+                            self.assertEqual(item["if"], "${{ always() }}")
+        self.assertTrue(
+            {"main.yml", "action-updates.yml", "docker-image-updates.yml"} <= consumers,
+        )
+
     def test_app_precedes_pat_and_token_is_repository_scoped(self):
         result = self.authentication(
             APP_CLIENT_ID="example-client", APP_PRIVATE_KEY="example-key",

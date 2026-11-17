@@ -910,13 +910,14 @@ python3 scripts/tests/check-workflow-tool-updates-test.py
 File: `scripts/lint-workflows.sh`
 
 `scripts/ci-failure-diagnostics.sh` runs on the Docker host before cleanup when
-a PHP-bootstrap job fails. It prints only PHP container status, exit code, OOM
-flag and health enum, never raw logs, environment or full inspect data. It
-queries only the CI Compose project's PHP service, accepts at most five
-container IDs and gives each Docker command ten seconds. Unexpected output or
-Docker failures produce explicit nonzero errors without echoing raw data. It
-does not start, stop or modify containers. CI still cleans up if diagnostics
-fail; cancelled runs retain cleanup without starting failure diagnostics.
+a PHP-bootstrap job fails, including standalone Action and Docker image update
+jobs. It prints only PHP container status, exit code, OOM flag and health enum,
+never raw logs, environment or full inspect data. It queries only the CI Compose
+project's PHP service, accepts at most five container IDs and gives each Docker
+command ten seconds. Unexpected output or Docker failures produce explicit
+nonzero errors without echoing raw data. It does not start, stop or modify
+containers. CI still cleans up if diagnostics fail; cancelled runs retain cleanup
+without starting failure diagnostics.
 
 From the repository root on the Docker host, inspect existing CI container state
 without modifying it:
