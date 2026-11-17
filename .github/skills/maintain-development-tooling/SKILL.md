@@ -146,7 +146,11 @@ Inspect the implementation and its actual callers:
    duplicates, ignored paths, file variants, anchors, or index relationships.
    For routing changes, cover local/CI forwarding, mixed goals, dry runs,
    environment isolation, and failure propagation. Reuse fixtures without
-   duplicating the production algorithm in test expectations.
+   duplicating the production algorithm in test expectations. For streaming
+   fixtures, separate the output assertion from teardown and cover inherited
+   ignored SIGINT. Use isolated process groups and bounded cleanup of all
+   descendants, not just the group leader; see the
+   [streaming fixture guidance](../../../doc/TESTING.md#command-output-contracts).
 9. Exercise actual report or test-runner outputs when those contracts change. A
    mocked invocation does not prove PHPUnit discovery, coverage generation,
    report paths, or uploader compatibility. Use

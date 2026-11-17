@@ -9,6 +9,7 @@ import select
 import shutil
 import signal
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -468,21 +469,38 @@ class MakeLauncherTest(unittest.TestCase):
 
     def test_stderr_is_streamed_before_completion(self):
         self.makefile.write_text('all:\n\t@printf "ready\\n" >&2; sleep 30\n')
-        process = subprocess.Popen(
-            ["bash", str(LAUNCHER), "--no-print-directory", "-f", str(self.makefile)],
-            cwd=self.root, env=self.environment, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, start_new_session=True,
-        )
-        try:
-            self.assertTrue(select.select([process.stderr], [], [], 5)[0])
-            self.assertEqual(process.stderr.readline(), b"ready\n")
-            os.killpg(process.pid, signal.SIGINT)
-            process.communicate(timeout=5)
-            self.assertNotEqual(process.returncode, 0)
-        finally:
-            if process.poll() is None:
-                os.killpg(process.pid, signal.SIGKILL)
-                process.communicate()
+        for ignore_sigint in (False, True):
+            with self.subTest(ignore_sigint=ignore_sigint):
+                command = [
+                    "bash", str(LAUNCHER), "--no-print-directory", "-f", str(self.makefile),
+                ]
+                if ignore_sigint:
+                    command = [
+                        sys.executable, "-c",
+                        "import os, signal, sys; "
+                        "signal.signal(signal.SIGINT, signal.SIG_IGN); "
+                        "os.execvp(sys.argv[1], sys.argv[1:])",
+                        *command,
+                    ]
+                process = subprocess.Popen(
+                    command, cwd=self.root, env=self.environment, stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE, start_new_session=True,
+                )
+                try:
+                    self.assertTrue(select.select([process.stderr], [], [], 5)[0])
+                    self.assertEqual(os.read(process.stderr.fileno(), 64), b"ready\n")
+                    self.assertIsNone(process.poll())
+                    # Background runners can pass ignored SIGINT through exec.
+                    os.killpg(process.pid, signal.SIGTERM)
+                    process.communicate(timeout=5)
+                    self.assertNotEqual(process.returncode, 0)
+                finally:
+                    # Descendants may retain the pipes after the launcher exits.
+                    try:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    process.communicate(timeout=5)
 
 
 if __name__ == "__main__":

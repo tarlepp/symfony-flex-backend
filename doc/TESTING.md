@@ -160,6 +160,15 @@ changeset as CI-ready while that failure remains unresolved. See
 for color controls, multiple-goal behavior, troubleshooting, and coverage
 limits.
 
+Streaming fixtures must prove output arrives while the child is still running,
+then terminate their isolated process group with SIGTERM and bounded cleanup.
+Background runners can inherit ignored SIGINT, which survives `exec` and can
+make SIGINT-based teardown hang despite correct streaming. Cover that inherited
+disposition explicitly; test Ctrl-C behavior separately with a controlled signal
+environment. Kill remaining fixture descendants even if the group leader has
+exited, since they can keep captured pipes open. Do not mask these failures by
+increasing timeouts or retrying the suite.
+
 ### Commands to run tests [ᐞ](#table-of-contents)
 
 <a id="commands-to-run-tests"></a>

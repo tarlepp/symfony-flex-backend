@@ -10,10 +10,16 @@ fi
 
 if [ -z "${NO_COLOR:-}" ] && {
     [ "${NATIVE_COLOR:-}" = always ] ||
-    { [ -z "${NATIVE_COLOR:-}" ] && {
-        [ "${COLOR:-auto}" = always ] ||
-        { [ "${COLOR:-auto}" = auto ] && [ -t 1 ] && [ "${TERM:-}" != dumb ]; }
-    }; }
+    {
+        [ -z "${NATIVE_COLOR:-}" ] && {
+            [ "${COLOR:-auto}" = always ] ||
+            {
+                [ "${COLOR:-auto}" = auto ] &&
+                [ -t 1 ] &&
+                [ "${TERM:-}" != dumb ]
+            }
+        }
+    }
 }; then
     exec "$@"
 fi

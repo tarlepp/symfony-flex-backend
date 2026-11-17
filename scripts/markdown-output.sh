@@ -4,19 +4,23 @@ source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 
 decorate_diagnostics() {
     local line complete errors_started=false
+
     # Match markdownlint file:line[:column] diagnostics, not ordinary output.
     local pattern='^.+:[0-9]+(:[0-9]+)? error MD[0-9]+/'
 
     while true; do
         complete=true
         IFS= read -r line || complete=false
+
         if [[ "$line" =~ $pattern ]]; then
             if [ "$errors_started" = false ]; then
                 printf '\n'
                 errors_started=true
             fi
+
             printf '%s[FAIL]%s ' "$OUTPUT_RED" "$OUTPUT_RESET"
         fi
+
         printf '%s' "$line"
         if [ "$complete" = true ]; then
             printf '\n'
@@ -40,4 +44,5 @@ exec {output}>&-
 exec {diagnostics}>&-
 wait "$output_pid"
 wait "$diagnostics_pid"
+
 exit "$status"
