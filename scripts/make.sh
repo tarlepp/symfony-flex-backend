@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Repository Make launcher.
+# Run from the repository root with the same arguments as `make`; it resolves
+# output preferences, filters recipe-error diagnostics, and returns Make's status.
+
 # Resolve native and status colors, and progress, before stderr redirection.
 if [ -z "${NATIVE_COLOR+x}" ]; then
     if [ -z "${NO_COLOR:-}" ] && {
@@ -87,6 +91,7 @@ filter_pid=$!
 command make "$@" 2>&"$diagnostics"
 status=$?
 
+# Drain the diagnostic filter without replacing Make's exit status.
 exec {diagnostics}>&-
 wait "$filter_pid"
 
