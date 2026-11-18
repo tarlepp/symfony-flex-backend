@@ -29,7 +29,7 @@ concurrency:
 jobs:
   changes:
     name: Detect changed files
-    runs-on: ubuntu-24.04
+    runs-on: &ubuntu_runner ubuntu-26.04
     if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     outputs:
@@ -71,7 +71,7 @@ jobs:
 
   lint-configuration:
     name: Lint configuration
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.configuration == 'true' }}
     timeout-minutes: 10
@@ -159,7 +159,7 @@ jobs:
 
   lint-documentation:
     name: Lint documentation files
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.documentation == 'true' }}
     timeout-minutes: 10
@@ -207,7 +207,7 @@ jobs:
 
   lint-workflows:
     name: Validate GitHub workflows
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.workflows == 'true' }}
     timeout-minutes: 10
@@ -252,7 +252,7 @@ jobs:
 
   security-check:
     name: PHP Security Checker
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && needs.changes.outputs.security == 'true')) }}
     timeout-minutes: 10
@@ -296,7 +296,7 @@ jobs:
 
   gitleaks:
     name: Gitleaks scan
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 5
     steps:
@@ -325,7 +325,7 @@ jobs:
 
   docker-image-verify-pins:
     name: Verify Docker base image pins (multi-platform)
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.images == 'true' }}
     timeout-minutes: 5
@@ -362,7 +362,7 @@ jobs:
 
   docker-image-check-updates:
     name: Check Docker image versions
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ !cancelled() && (github.event_name == 'schedule' || (needs.changes.result == 'success' && needs.changes.outputs.images == 'true')) }}
     timeout-minutes: 10
@@ -437,7 +437,7 @@ jobs:
 
   statistics:
     name: Project statistics
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     if: ${{ github.event_name != 'schedule' }}
     timeout-minutes: 15
     steps:
@@ -520,7 +520,7 @@ jobs:
 
   lightweight-analyzers:
     name: Lightweight static analyzers
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.php == 'true' }}
     timeout-minutes: 10
@@ -604,7 +604,7 @@ jobs:
 
   static-analyzers:
     name: Static analyzers (${{ matrix.analyzer.name }})
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     needs: changes
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.php == 'true' }}
     timeout-minutes: 10
@@ -676,7 +676,7 @@ jobs:
 
   ci-summary:
     name: Validate CI prerequisites
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     timeout-minutes: 5
     needs:
       - changes
@@ -718,7 +718,7 @@ jobs:
 
   test:
     name: PHPUnit tests
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.tests == 'true' }}
     timeout-minutes: 20
     needs:
@@ -863,7 +863,7 @@ jobs:
 
   report:
     name: External reporting
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     timeout-minutes: 10
     needs:
       - ci-summary
@@ -994,7 +994,7 @@ jobs:
 
   docker-build:
     name: Build application Docker image (${{ matrix.target }})
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     if: ${{ github.event_name != 'schedule' && needs.changes.outputs.docker == 'true' }}
     timeout-minutes: 15
     strategy:
@@ -1061,7 +1061,7 @@ jobs:
 
   docker-scan:
     name: Scan application Docker image with Trivy (${{ matrix.target }})
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     if: ${{ !cancelled() && github.event_name != 'schedule' && needs.changes.result == 'success' && needs.changes.outputs.docker == 'true' && (needs.docker-build.result == 'success' || needs.docker-build.result == 'failure') }}
     timeout-minutes: 15
     permissions:
@@ -1140,7 +1140,7 @@ jobs:
 
   ci-result:
     name: Validate CI result
-    runs-on: ubuntu-24.04
+    runs-on: *ubuntu_runner
     timeout-minutes: 5
     needs:
       - changes
