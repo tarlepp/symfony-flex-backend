@@ -26,10 +26,10 @@
 		"ext-mbstring": "*",
 		"ext-pdo": "*",
 		"ext-random": "*",
-		"doctrine/dbal": "4.5.1",
-		"doctrine/doctrine-bundle": "3.3.4",
+		"doctrine/dbal": "4.6.0",
+		"doctrine/doctrine-bundle": "3.4.1",
 		"doctrine/doctrine-migrations-bundle": "4.0.1",
-		"doctrine/orm": "3.7.6",
+		"doctrine/orm": "3.8.0",
 		"gedmo/doctrine-extensions": "3.22.2",
 		"lexik/jwt-authentication-bundle": "3.2.0",
 		"mark-gerarts/automapper-plus-bundle": "1.6.0",
@@ -62,7 +62,7 @@
 		"symfony/validator": "8.1.11",
 		"symfony/var-exporter": "8.1.10",
 		"symfony/yaml": "8.1.11",
-		"zircote/swagger-php": "6.14.0"
+		"zircote/swagger-php": "7.6.0"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
