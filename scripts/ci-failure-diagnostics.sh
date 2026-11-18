@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
-# Print bounded diagnostics for PHP containers after CI failure.
-# Runs on the Docker host, inspects at most five containers in the CI Compose
-# project, and uses per-command timeouts; absence of PHP containers is not an
-# additional failure.
+#
+# Print bounded PHP-container diagnostics after a CI failure.
+#
+# Usage:
+#   Run on the Docker host from any directory.
+#
+# Details:
+#   Inspects at most five containers in the CI Compose project with per-command
+#   timeouts. No PHP containers is reported without adding a failure.
+#
 
 set -euo pipefail
 

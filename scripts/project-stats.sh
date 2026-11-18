@@ -1,8 +1,15 @@
 #!/bin/bash
 
-# Entry point for the read-only project statistics report.
-# Delegates collection and output formatting to the adjacent Python
-# implementation, preserving its exit status and command-line behavior.
+#
+# Provide the entry point for the read-only project statistics report.
+#
+# Usage:
+#   Run through the project Make target or invoke this script directly.
+#
+# Details:
+#   Delegates collection and formatting to the adjacent Python implementation,
+#   preserving its exit status and command-line behavior.
+#
 
 set -euo pipefail
 

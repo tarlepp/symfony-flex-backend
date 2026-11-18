@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
+#
 # Validate generated report files before announcing their availability.
-# Usage: <message> <report-file> [report-file...]; every path must exist and be
-# nonempty. This reports local outputs and performs no upload.
+#
+# Usage:
+#   <message> <report-file> [report-file...].
+#
+# Details:
+#   Every path must exist and be nonempty. Reports local outputs only; performs
+#   no upload.
+#
 
 set -euo pipefail
 

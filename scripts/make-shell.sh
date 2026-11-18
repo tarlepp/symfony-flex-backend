@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Source this Bash helper to route project-root Make commands through the
-# repository launcher, which filters Make's recipe-error diagnostics.
-# Outside the repository root, the user's normal Make command remains unchanged.
+#
+# Route project-root Make commands through the repository launcher.
+#
+# Usage:
+#   Source this Bash helper in an interactive shell.
+#
+# Details:
+#   The launcher filters Make recipe-error diagnostics; outside the repository
+#   root, the normal Make command remains unchanged.
+#
 SYMFONY_MAKE_LAUNCHER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/make.sh"
 
 make() {

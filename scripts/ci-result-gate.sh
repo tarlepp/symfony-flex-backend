@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-# Enforce expected outcomes for core CI jobs and eligible external reporting.
-# Requires event/ref, change-selection flags, prerequisite-gate result, and job
-# results from the workflow environment. Writes an optional summary; a skipped
-# selected check or unexpected report skip fails the gate.
+#
+# Enforce core CI job outcomes and eligible external reporting.
+#
+# Usage:
+#   Run in GitHub Actions with event/ref, selection flags, prerequisite gate
+#   result, and job results provided by the workflow environment.
+#
+# Details:
+#   Writes an optional summary; skipped selected checks and unexpected report
+#   skips fail the gate.
+#
 
 set -euo pipefail
 

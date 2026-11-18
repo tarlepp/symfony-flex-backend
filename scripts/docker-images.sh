@@ -1,10 +1,8 @@
 #!/bin/bash
 
-################################################################################
-# Docker multi-platform image helper
 #
-# Helper commands for maintaining multi-platform Docker image pins and for
-# building images for other platforms. See doc/DOCKER_MULTI_PLATFORM.md.
+# Maintain multi-platform Docker image pins and build images for other
+# platforms. See doc/DOCKER_MULTI_PLATFORM.md.
 #
 # Usage:
 #   ./scripts/docker-images.sh <command>
@@ -13,32 +11,32 @@
 #   check-updates  Report newer stable image versions (Docker Hub)
 #   check-php-minor Check the next stable PHP minor against locked dependencies
 #   update-pins    Apply same-major stable updates and refresh pinned digests
-#   digest      Show multi-platform index digest and pin reference for image
-#   verify      Verify that external FROM and COPY --from Dockerfile pins are
-#               multi-platform and match their tags
-#   platforms   Show platforms that the current buildx builder supports
-#   setup-qemu  Install QEMU emulators for cross-platform builds
-#   build       Build image for a single platform and load it locally
-#   push        Build multi-platform image and push it to a registry
+#   digest         Show multi-platform index digest and pin reference for image
+#   verify         Verify external FROM and COPY --from Dockerfile pins
+#   platforms      Show platforms supported by the current buildx builder
+#   setup-qemu     Install QEMU emulators for cross-platform builds
+#   build          Build an image for a single platform and load it locally
+#   push           Build a multi-platform image and push it to a registry
 #
-# Inputs are read from environment variables. When a value is missing and the
-# script is run in an interactive terminal, the value is asked from the user.
-# check-updates defaults to external images in project Dockerfiles.
-#
+# Inputs:
 #   IMAGE       Image reference (digest), or optional single image (check-updates)
-#   PLATFORM    Single target platform, e.g. `linux/arm64` (build)
+#   PLATFORM    Single target platform, e.g. linux/arm64 (build)
 #   PLATFORMS   Comma separated platforms (setup-qemu, push)
-#   DOCKERFILE  Dockerfile path, e.g. `Dockerfile` (build, push)
+#   DOCKERFILE  Dockerfile path, e.g. Dockerfile (build, push)
 #   TARGET      Build stage, defaults to the last stage (build, push)
 #   TAG         Image tag to create (build, push)
 #   BUILDER     buildx builder name for multi-platform builds (push)
+#
+# Input values are prompted for only when running in an interactive terminal.
+# check-updates defaults to external FROM and COPY --from images in project
+# Dockerfiles. Its optional --advisory flag reports confirmed updates as
+# warnings with a successful exit status; the check does not change files.
 #
 # Requirements:
 #   - docker with buildx plugin (host machine)
 #   - jq
 #   - curl (version discovery and pin updates)
 #
-################################################################################
 
 set -euo pipefail
 # shellcheck source=scripts/command-output.sh

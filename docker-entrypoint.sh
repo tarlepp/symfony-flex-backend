@@ -1,9 +1,16 @@
 #!/bin/bash
 
-# Production PHP container entrypoint.
-# For the php-fpm command, prepares runtime configuration, storage, database,
-# assets, and the shared application copy before starting the requested process.
-# Other commands bypass initialization and are executed directly.
+#
+# Initialize the production PHP runtime before php-fpm starts.
+#
+# Usage:
+#   Invoked as the production image entrypoint with the container command.
+#
+# Details:
+#   The php-fpm command validates configuration, prepares storage, database and
+#   assets, then refreshes the shared Nginx application copy. Other commands
+#   bypass initialization and are executed directly.
+#
 
 set -e
 

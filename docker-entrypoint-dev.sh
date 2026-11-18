@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# Development PHP container entrypoint.
-# Validates configuration, prepares development dependencies and the database,
-# then replaces this process with the container command.
-# Runs in the application directory; a failed setup step prevents the command
-# from starting.
+#
+# Initialize the development PHP container before its main process.
+#
+# Usage:
+#   Invoked as the development image entrypoint with the container command.
+#
+# Details:
+#   Validates configuration, prepares development dependencies and the
+# database, then replaces itself with the requested command. A failed setup
+# step prevents command startup.
+#
 
 set -e
 

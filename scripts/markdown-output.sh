@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Run a Markdown linter while marking its file/line diagnostics as failures.
-# Invoke with the linter command and arguments; stdout and stderr stay separate,
-# and the wrapped command's exit status is returned unchanged.
+#
+# Mark Markdown linter file/line diagnostics as failures.
+#
+# Usage:
+#   Run with the linter command and its arguments.
+#
+# Details:
+#   Keeps stdout and stderr separate and returns the wrapped command's exit
+#   status unchanged.
+#
 
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 

@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Repository Make launcher.
-# Run from the repository root with the same arguments as `make`; it resolves
-# output preferences, filters recipe-error diagnostics, and returns Make's status.
+#
+# Launch Make with repository-specific output handling.
+#
+# Usage:
+#   Run from the repository root with the same arguments as make.
+#
+# Details:
+#   Resolves output preferences, filters recipe-error diagnostics, and returns
+#   Make's exit status.
+#
 
 # Resolve native and status colors, and progress, before stderr redirection.
 if [ -z "${NATIVE_COLOR+x}" ]; then

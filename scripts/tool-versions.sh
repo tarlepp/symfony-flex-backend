@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 
-# Report installed development or production tool versions from inside PHP.
-# Default and --production modes inspect the current PHP container; --stack
-# instead inspects Docker and running services from the host using the supplied
-# Compose command. The inventory is read-only and disables Xdebug connections.
+#
+# Report installed development or production tool versions.
+#
+# Usage:
+#   Run inside PHP with [--production], or on the Docker host with
+#   --stack <docker compose command...>.
+#
+# Details:
+#   Default and production modes inspect the current PHP container; stack mode
+#   inspects Docker and running services on the host. Read-only and disables
+#   Xdebug connections.
+#
 
 set -euo pipefail
 

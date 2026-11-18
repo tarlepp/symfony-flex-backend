@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-# Validate workflow YAML, embedded shell, local action metadata, and tooling
-# regressions using SHA-pinned temporary validators. Run from the repository root
-# in the Linux PHP development container; downloads may use the local validator
-# cache, and the zizmor audit runs offline without a GitHub token.
+#
+# Validate workflow YAML, embedded shell, local action metadata, and
+# tooling regressions using SHA-pinned validators.
+#
+# Usage:
+#   Run from the repository root in the Linux PHP development container.
+#
+# Details:
+#   Downloads can use the local validator cache; the zizmor audit runs offline
+#   and does not require a GitHub token.
+#
 
 set -euo pipefail
 

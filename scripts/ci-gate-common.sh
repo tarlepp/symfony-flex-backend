@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Shared predicates for CI prerequisite and final-result gates.
-# Source this file from a gate script; callers provide expected and actual job
-# results to validate selections and emit GitHub Actions error annotations.
+#
+# Provide shared result predicates for CI gate scripts.
+#
+# Usage:
+#   Source from a prerequisite or final-result gate.
+#
+# Details:
+#   Callers compare expected selections and actual job results; failures are
+#   reported as GitHub Actions error annotations.
+#
 
 gate_error() {
     local message=$1

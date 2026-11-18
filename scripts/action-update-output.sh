@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
-# Informational wrapper for the GitHub Action and workflow-tool update checker.
-# Run with the checker command and arguments; it translates update and lookup
-# findings into decorated output while preserving cancellation and unexpected
-# failure statuses.
+#
+# Decorate output from the GitHub Action and workflow-tool update checker.
+#
+# Usage:
+#   Run with the checker command and its arguments.
+#
+# Details:
+#   Update and lookup findings are informational; cancellation and unexpected
+#   failure statuses are preserved.
+#
 
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 

@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-# Enforce expected outcomes for CI prerequisite jobs and report skip reasons.
-# Requires event, change-selection flags, and prerequisite job results from the
-# workflow environment. Writes an optional job summary and exits nonzero when a
-# required check failed or was unexpectedly skipped.
+#
+# Enforce CI prerequisite outcomes and explain skipped checks.
+#
+# Usage:
+#   Run in GitHub Actions with event, selection flags, and prerequisite job
+#   results provided by the workflow environment.
+#
+# Details:
+#   Writes an optional job summary and exits nonzero for failed checks or
+#   unexpected skips.
+#
 
 set -euo pipefail
 

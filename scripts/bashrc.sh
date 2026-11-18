@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Bash startup file for interactive shells in the development container.
-# Load the user's normal configuration first, then install the repository's
-# Make wrapper so it takes precedence for commands run from the project root.
+#
+# Configure interactive Bash shells in the development container.
+#
+# Usage:
+#   Source as the interactive shell's startup file.
+#
+# Details:
+#   Loads the user's Bash configuration first, then installs the repository
+#   Make wrapper for commands run from the project root.
+#
 
 if [ -f "$HOME/.bashrc" ]; then
     source "$HOME/.bashrc"
