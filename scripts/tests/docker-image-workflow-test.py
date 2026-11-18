@@ -376,14 +376,17 @@ class DockerImageWorkflowTest(unittest.TestCase):
                         self.assertFalse(self.output.exists())
                         self.assertFalse(self.summary.exists())
 
-    def test_pr_base_stable_branch_and_template(self):
-        directory = self.root / ".github"
-        directory.mkdir()
-        template = (ROOT / ".github/pull_request_template.md").read_text()
-        (directory / "pull_request_template.md").write_text(template)
+    def test_pr_description_and_base_branch(self):
         binary = self.root / "git"
         binary.write_text(
-            '#!/bin/bash\n[ "$1" = diff ] || exit 64\nprintf "Dockerfile\\n"\n'
+            '#!/bin/bash\n'
+            '[ "$1" = diff ] || exit 64\n'
+            '[ "$2" = --no-ext-diff ] || exit 64\n'
+            '[ "$3" = --unified=0 ] || exit 64\n'
+            'printf "%s\\n" '
+            '"diff --git a/Dockerfile b/Dockerfile" '
+            '"--- a/Dockerfile" "+++ b/Dockerfile" '
+            '"@@ -1 +1 @@" "-FROM php:8.3-cli" "+FROM php:8.3.1-cli"'
         )
         binary.chmod(0o755)
         branch = "feat(ci)/parent-branch"
@@ -397,10 +400,23 @@ class DockerImageWorkflowTest(unittest.TestCase):
             self.output.read_text(), f"branch=chore(docker)/image-updates-{suffix}\n",
         )
         body = (self.root / "docker-image-pr.md").read_text()
-        for line in template.splitlines():
-            if line.startswith("#") or line.startswith("* ["):
-                self.assertIn(line, body)
+        self.assertIn("# Summary\n", body)
+        self.assertIn("stable minor/patch versions", body)
+        self.assertIn("without changing their major versions", body)
+        self.assertIn("supported platforms", body)
+        self.assertIn("Major-version upgrades remain a manual review", body)
+        self.assertIn("# Dockerfile image changes\n", body)
+        self.assertIn("# Validation\n", body)
+        self.assertIn("`bash scripts/make.sh test-docker-images` — passed", body)
+        self.assertIn("`bash scripts/make.sh docker-image-update-pins` — passed", body)
+        self.assertIn("`bash scripts/make.sh docker-image-verify-pins` — passed", body)
+        self.assertIn("Application tests and builds are not run", body)
+        self.assertNotIn("Repository architecture checklist", body)
+        self.assertNotIn("* [ ]", body)
         self.assertIn("Dockerfile", body)
+        self.assertIn("```diff\n", body)
+        self.assertIn("-FROM php:8.3-cli", body)
+        self.assertIn("+FROM php:8.3.1-cli", body)
         pr = step(WORKFLOW, "Create or update the Docker image pull request")
         self.assertIn("base: ${{ github.ref_name }}", pr)
         self.assertIn("branch: ${{ steps.details.outputs.branch }}", pr)
