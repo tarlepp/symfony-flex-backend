@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Run dependency advisory checks in the PHP development container.
+# First validates the Composer advisory constraints without changing the lock
+# file, then refreshes and runs the local checker when it is installed.
+
 set -euo pipefail
 
 # shellcheck source=scripts/command-output.sh
