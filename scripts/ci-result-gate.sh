@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Enforce expected outcomes for core CI jobs and eligible external reporting.
+# Requires event/ref, change-selection flags, prerequisite-gate result, and job
+# results from the workflow environment. Writes an optional summary; a skipped
+# selected check or unexpected report skip fails the gate.
+
 set -euo pipefail
 
 # shellcheck source=scripts/ci-gate-common.sh
