@@ -58,6 +58,15 @@ VERIFY_DOCKERFILES=(
 )
 PLATFORM_PATTERN='^linux/[a-z0-9]+(/v[0-9]+)?$'
 
+# Internal update outcomes; public commands translate these to their CLI status.
+readonly IMAGE_UPDATE_AVAILABLE=2
+readonly IMAGE_UPDATE_SKIPPED=3
+readonly IMAGE_UPDATE_PIN_FAILED=4
+
+# Successful resolution publishes these together for reporting and update plans.
+RESOLVED_PIN=''
+RESOLVED_PLATFORMS=''
+
 usage() {
     cat << EOF
 Docker multi-platform image helper, see doc/DOCKER_MULTI_PLATFORM.md
@@ -166,7 +175,9 @@ hub_tags() {
             error "Repeated Docker Hub pagination URL for ${repository}"
             return 1
         fi
+
         visited[$url]=1
+
         if ! page="$(curl --fail --silent --show-error --retry 3 --connect-timeout 10 --max-time 60 "$url")"; then
             error "Could not fetch Docker Hub tags for ${repository}"
             return 1
@@ -181,10 +192,12 @@ hub_tags() {
 
         jq -r '.results[].name' <<< "$page"
         next="$(jq -r '.next // empty' <<< "$page")"
+
         if [ -n "$next" ] && [[ "$next" != "$endpoint"?* ]]; then
             error "Unexpected Docker Hub pagination URL for ${repository}"
             return 1
         fi
+
         url="$next"
     done
 }
@@ -196,23 +209,28 @@ resolve_image_pin() {
         error "Could not resolve index digest for ${image}: $(tail -n 1 <<< "$digest")"
         return 1
     fi
+
     if ! [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
         error "Invalid index digest for ${image}: ${digest}"
         return 1
     fi
+
     # Inspect the resolved digest so a moving tag cannot mismatch the printed pin.
     if ! raw="$(raw_manifest "${image}@${digest}")"; then
         error "Could not inspect ${image}@${digest}: $(tail -n 1 <<< "$raw")"
         return 1
     fi
+
     if ! type="$(media_type "$raw")" || ! platforms="$(image_platforms "$raw")"; then
         error "Invalid image manifest for ${image}@${digest}"
         return 1
     fi
+
     if ! is_index "$type"; then
         error "${image}: single platform manifest, no multi-platform pin available"
         return 1
     fi
+
     if [[ "$platforms" != *" "* ]]; then
         error "${image}: index contains fewer than two distinct runnable platforms (${platforms:-none})"
         return 1
@@ -224,11 +242,12 @@ resolve_image_pin() {
 
 update_pin_reference() {
     resolve_image_pin "$1" || return 1
+
     printf '  Multi-platform pin: %s\n' "$RESOLVED_PIN"
     printf '  Platforms: %s\n' "$RESOLVED_PLATFORMS"
 }
 
-# Returns a tag on stdout, or 3 for intentionally unsupported version tags.
+# Returns a tag on stdout, or IMAGE_UPDATE_SKIPPED for unsupported version tags.
 latest_image_tag() {
     local image="${1%@*}" repository tag suffix prefix current tags latest first
     local scope="${2:-all}"
@@ -236,33 +255,40 @@ latest_image_tag() {
 
     if [[ "${image##*/}" != *:* ]]; then
         warning "SKIP" "${image}: no explicit version tag" >&2
-        return 3
+        return "$IMAGE_UPDATE_SKIPPED"
     fi
 
     repository="${image%:*}"
     tag="${image##*:}"
+
     if ! [[ "$tag" =~ $pattern ]]; then
         warning "SKIP" "${image}: tag is not a full stable semantic version with an optional variant" >&2
-        return 3
+        return "$IMAGE_UPDATE_SKIPPED"
     fi
+
     prefix="${BASH_REMATCH[1]}"
     current="${BASH_REMATCH[2]}"
     suffix="${BASH_REMATCH[6]}"
+
     if [[ "$suffix" =~ ^-(alpha|beta|rc|RC|preview|dev)([0-9.-]|$) ]]; then
         warning "SKIP" "${image}: prerelease tag" >&2
-        return 3
+        return "$IMAGE_UPDATE_SKIPPED"
     fi
 
     case "$repository" in
         docker.io/*) repository="${repository#docker.io/}" ;;
         index.docker.io/*) repository="${repository#index.docker.io/}" ;;
     esac
+
     first="${repository%%/*}"
+
     if [[ "$repository" == */* ]] && [[ "$first" == *.* || "$first" == *:* || "$first" = localhost ]]; then
         error "${image}: version lookup currently supports Docker Hub only" >&2
         return 1
     fi
+
     [[ "$repository" == */* ]] || repository="library/${repository}"
+
     if ! [[ "$repository" =~ ^[a-z0-9_-]+/[a-z0-9_.-]+$ ]]; then
         error "${image}: invalid Docker Hub repository" >&2
         return 1
@@ -273,14 +299,25 @@ latest_image_tag() {
         return 1
     fi
 
-    latest="$(jq -Rrs --arg suffix "$suffix" --arg prefix "$prefix" \
-        --arg scope "$scope" --arg current "$current" '
-        [split("\n")[] |
-            capture("^(?<prefix>v?)(?<version>(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*))(?<suffix>-[a-zA-Z0-9_.-]+)?$") |
-            select(.prefix == $prefix and (.suffix // "") == $suffix) |
-            {version: .version, parts: (.version | split(".") | map(tonumber))} |
-            select($scope == "all" or .parts[0] == ($current | split(".")[0] | tonumber))]
-        | sort_by(.parts) | last | .version // empty' <<< "$tags")"
+    latest="$(
+        jq -Rrs \
+            --arg suffix "$suffix" \
+            --arg prefix "$prefix" \
+            --arg scope "$scope" \
+            --arg current "$current" '
+            [
+                split("\n")[] |
+                capture("^(?<prefix>v?)(?<version>(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*))(?<suffix>-[a-zA-Z0-9_.-]+)?$") |
+                select(.prefix == $prefix and (.suffix // "") == $suffix) |
+                {version: .version, parts: (.version | split(".") | map(tonumber))} |
+                select($scope == "all" or .parts[0] == ($current | split(".")[0] | tonumber))
+            ]
+            | sort_by(.parts)
+            | last
+            | .version // empty
+        ' <<< "$tags"
+    )"
+
     if [ -z "$latest" ]; then
         error "${image}: no matching stable version tags found" >&2
         return 1
@@ -294,27 +331,69 @@ latest_image_tag() {
     fi
 }
 
-# Internal outcomes: 0 current, 1 failed, 2 update, 3 skipped, 4 update with pin failure.
+# Returns 0 for current, 1 for lookup failure, or a named IMAGE_UPDATE_* outcome.
 check_image_update() {
     local image="${1%@*}" latest status=0
+
     latest="$(latest_image_tag "$image" 2>&1)" || status=$?
+
     if [ "$status" -ne 0 ]; then
         printf '%s\n' "$latest"
         return "$status"
     fi
+
     if [ "$latest" != "$image" ]; then
         warning "WARN" "${image} -> ${latest}"
-        update_pin_reference "$latest" || return 4
-        return 2
+        update_pin_reference "$latest" || return "$IMAGE_UPDATE_PIN_FAILED"
+
+        return "$IMAGE_UPDATE_AVAILABLE"
     else
         info "OK" "${image}: no newer stable version"
     fi
 }
 
-# Populate the caller's plans array only after resolving and validating each pin.
+# Resolve one candidate while preserving every runnable platform of the old pin.
+# Publishes RESOLVED_PIN and RESOLVED_PLATFORMS through resolve_image_pin.
+resolve_pin_update() {
+    local ref=$1 image candidate status=0 raw platforms platform
+
+    image="${ref%@*}"
+    candidate="$(latest_image_tag "$image" minor)" || status=$?
+
+    case "$status" in
+        0) ;;
+        "$IMAGE_UPDATE_SKIPPED")
+            candidate="$image"
+            ;;
+        *)
+            return "$status"
+            ;;
+    esac
+
+    resolve_image_pin "$candidate" || return 1
+
+    if ! raw="$(raw_manifest "$ref")" || ! platforms="$(image_platforms "$raw")"; then
+        error "Could not inspect current platforms for ${ref}"
+        return 1
+    fi
+
+    if [ -z "$platforms" ]; then
+        error "${ref}: current pin has no runnable platforms to preserve"
+        return 1
+    fi
+
+    for platform in $platforms; do
+        if [[ " $RESOLVED_PLATFORMS " != *" $platform "* ]]; then
+            error "${candidate}: update would remove platform ${platform}"
+            return 1
+        fi
+    done
+}
+
+# Populate command_update_pins' dynamically scoped pin_update_plans array.
 plan_pin_updates() {
-    local file location ref image candidate status raw platforms platform count=0
-    local -A pins=()
+    local file location ref count=0
+    local -A resolved_pins=()
 
     for file in "${PINNED_DOCKERFILES[@]}"; do
         [ -f "$file" ] || continue
@@ -327,42 +406,16 @@ plan_pin_updates() {
 
             count=$((count + 1))
 
-            if [ -z "${pins[$ref]+set}" ]; then
-                image="${ref%@*}"
-                status=0
-                candidate="$(latest_image_tag "$image" minor)" || status=$?
-                case "$status" in
-                    0) ;;
-                    3) candidate="$image" ;;
-                    *) return "$status" ;;
-                esac
+            if [ -z "${resolved_pins[$ref]+set}" ]; then
+                resolve_pin_update "$ref" || return $?
 
-                resolve_image_pin "$candidate" || return 1
-
-                if ! raw="$(raw_manifest "$ref")" || ! platforms="$(image_platforms "$raw")"; then
-                    error "Could not inspect current platforms for ${ref}"
-                    return 1
-                fi
-
-                if [ -z "$platforms" ]; then
-                    error "${ref}: current pin has no runnable platforms to preserve"
-                    return 1
-                fi
-
-                for platform in $platforms; do
-                    if [[ " $RESOLVED_PLATFORMS " != *" $platform "* ]]; then
-                        error "${candidate}: update would remove platform ${platform}"
-                        return 1
-                    fi
-                done
-
-                pins[$ref]="$RESOLVED_PIN"
+                resolved_pins[$ref]="$RESOLVED_PIN"
             fi
 
-            if [ "$ref" != "${pins[$ref]}" ]; then
+            if [ "$ref" != "${resolved_pins[$ref]}" ]; then
                 # Each plan row is instruction start line, old pin, new pin (tab-separated).
-                plans[$file]+="${location}"$'\t'"${ref}"$'\t'"${pins[$ref]}"$'\n'
-                info UPDATE "${file}: ${ref} -> ${pins[$ref]}"
+                pin_update_plans[$file]+="${location}"$'\t'"${ref}"$'\t'"${resolved_pins[$ref]}"$'\n'
+                info UPDATE "${file}: ${ref} -> ${resolved_pins[$ref]}"
             fi
         done < <(dockerfile_images "$file" locations)
     done
@@ -373,19 +426,21 @@ plan_pin_updates() {
     fi
 }
 
-# Apply the caller's plans after all registry lookups have succeeded.
+# Apply command_update_pins' plans after all registry lookups have succeeded.
 apply_pin_updates() {
     local file temporary
 
     for file in "${PINNED_DOCKERFILES[@]}"; do
-        [ -n "${plans[$file]:-}" ] || continue
+        [ -n "${pin_update_plans[$file]:-}" ] || continue
 
         temporary="$(mktemp "${file}.XXXXXX")"
-        if ! awk -v updates="${plans[$file]}" '
+
+        if ! awk -v updates="${pin_update_plans[$file]}" '
             BEGIN {
                 n = split(updates, rows, "\n")
                 for (i = 1; i <= n; i++) {
                     if (rows[i] == "") continue
+
                     split(rows[i], columns, "\t")
                     old[columns[1]] = columns[2]
                     new[columns[1]] = columns[3]
@@ -399,21 +454,26 @@ apply_pin_updates() {
                 while (match(rest, /[^ \t\r]+/)) {
                     token = substr(rest, RSTART, RLENGTH)
                     replacement = ""
+
                     if (token == old[start]) replacement = new[start]
                     if (token == "--from=" old[start]) replacement = "--from=" new[start]
+
                     if (replacement != "") {
                         $0 = substr($0, 1, offset + RSTART - 1) replacement \
                             substr($0, offset + RSTART + RLENGTH)
                         changed++
                         break
                     }
+
                     offset += RSTART + RLENGTH - 1
                     rest = substr(rest, RSTART + RLENGTH)
                 }
                 if ($0 !~ /\\[[:space:]]*$/) start = 0
             }
             { print }
-            END { if (changed != expected) exit 1 }
+            END {
+                if (changed != expected) exit 1
+            }
         ' "$file" > "$temporary"; then
             rm -f "$temporary"
             error "Could not rewrite image instructions in ${file}"
@@ -426,7 +486,7 @@ apply_pin_updates() {
 }
 
 command_update_pins() {
-    local -A plans=()
+    local -A pin_update_plans=()
 
     if [ "$#" -ne 0 ] || [ -n "${IMAGE:-}" ]; then
         error "update-pins accepts neither options nor IMAGE"
@@ -434,6 +494,7 @@ command_update_pins() {
     fi
 
     require_docker
+
     if ! command -v curl > /dev/null 2>&1; then
         error "curl command not found, install it first"
         return 69
@@ -444,7 +505,7 @@ command_update_pins() {
     plan_pin_updates
     apply_pin_updates
 
-    output_result OK "Docker image pins resolved; ${#plans[@]} Dockerfile(s) changed"
+    output_result OK "Docker image pins resolved; ${#pin_update_plans[@]} Dockerfile(s) changed"
 }
 
 command_check_updates() {
@@ -467,6 +528,7 @@ command_check_updates() {
             return 64
             ;;
     esac
+
     output_status RUN 'Docker image version checks'
 
     require_docker
@@ -479,13 +541,17 @@ command_check_updates() {
     done
 
     references=""
+
     for file in "${PINNED_DOCKERFILES[@]}"; do
         [ -f "$file" ] || continue
+
         while IFS= read -r image; do
             image="${image%@*}"
+
             if [ -n "${IMAGE:-}" ] && [ "$image" != "${IMAGE%@*}" ]; then
                 continue
             fi
+
             references+="${file}"$'\t'"${image}"$'\n'
         done < <(dockerfile_images "$file")
     done
@@ -493,7 +559,9 @@ command_check_updates() {
     if [ -n "${IMAGE:-}" ] && [ -z "$references" ]; then
         references="IMAGE input (no matching Dockerfile)"$'\t'"${IMAGE%@*}"
     fi
+
     references="${references%$'\n'}"
+
     if [ -z "$references" ]; then
         error "No external Dockerfile images found; run from the project root or set IMAGE"
         return 1
@@ -501,31 +569,44 @@ command_check_updates() {
 
     while IFS=$'\t' read -r file image; do
         [ -z "${seen[$file|$image]+set}" ] || continue
+
         seen[$file|$image]=1
+
         if [ "$heading" != "$file" ]; then
             [ -z "$heading" ] || printf '\n'
             printf '%s%s%s\n' "$BOLD" "$file" "$NC"
             heading="$file"
         fi
+
         if [ -z "${results[$image]+set}" ]; then
             status=0
             results[$image]="$(check_image_update "$image")" || status=$?
-            if [ "$status" -eq 2 ]; then
-                updates=$((updates + 1))
-                if [ "$advisory" = true ]; then
-                    github_annotation warning "$file" "" "Docker image update available" \
-                        "${image}: a newer stable multi-platform image is available; see the check output for its verified pin."
-                fi
-            elif [ "$status" -eq 4 ]; then
-                updates=$((updates + 1))
-                issues=$((issues + 1))
-            elif [ "$status" -eq 3 ]; then
-                skipped=$((skipped + 1))
-            elif [ "$status" -ne 0 ]; then
-                issues=$((issues + 1))
-            fi
+
+            case "$status" in
+                0) ;;
+                "$IMAGE_UPDATE_AVAILABLE")
+                    updates=$((updates + 1))
+
+                    if [ "$advisory" = true ]; then
+                        github_annotation warning "$file" "" "Docker image update available" \
+                            "${image}: a newer stable multi-platform image is available; see the check output for its verified pin."
+                    fi
+                    ;;
+                "$IMAGE_UPDATE_PIN_FAILED")
+                    updates=$((updates + 1))
+                    issues=$((issues + 1))
+                    ;;
+                "$IMAGE_UPDATE_SKIPPED")
+                    skipped=$((skipped + 1))
+                    ;;
+                *)
+                    issues=$((issues + 1))
+                    ;;
+            esac
         fi
+
         printf '%s\n' "${results[$image]}" | sed 's/^/  /'
+
         if [ "$advisory" = true ]; then
             summary_details+="### ${file}: ${image}"$'\n\n```text\n'
             summary_details+="$(printf '%s\n' "${results[$image]}" | sed $'s/\033\\[[0-9;]*m//g')"
@@ -545,9 +626,11 @@ command_check_updates() {
         return 1
     elif [ "$updates" -gt 0 ]; then
         output_outcome WARN "$updates image(s) require attention: updates available"
+
         if [ "$advisory" = true ]; then
             return 0
         fi
+
         return 1
     elif [ "$skipped" -gt 0 ]; then
         output_outcome SKIP "$skipped image version check(s) skipped; no updates found among completed checks"
