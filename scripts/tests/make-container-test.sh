@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Test Make's local/CI routing with a strict Docker command mock.
+# The fixture covers allowed forwarding, forbidden commands, dry runs,
+# environment-name isolation, color propagation, and failure handling without
+# contacting Docker. Run from the repository root with `make test-make-routing`.
+
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Exercise docker-images.sh with isolated Dockerfiles and mocked Docker, curl,
+# and sleep commands; no daemon or registry is contacted and repository pins are
+# not checked. Run from the repository root with `make test-docker-images`.
+# Use `make docker-image-verify-pins` separately to inspect actual project pins.
+
 set -Eeuo pipefail
 
 SCRIPT="$(cd "$(dirname "$0")/.." && pwd)/docker-images.sh"
