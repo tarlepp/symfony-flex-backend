@@ -27,6 +27,7 @@
 
 # Collect discovery and lookup failures so remaining checks still run.
 set +e
+
 # shellcheck source=scripts/command-output.sh
 source "$(dirname "$0")/command-output.sh"
 
@@ -44,6 +45,7 @@ ACTIONS_DIR="${ACTIONS_DIR:-.github/actions}"
 TOOL_PINS_FILE="${TOOL_PINS_FILE:-scripts/lint-workflows.sh}"
 
 MODE="check"
+
 case "${1:-}" in
     "" ) ;;
     --current-pins-md ) MODE="current-pins-md" ;;
@@ -81,6 +83,7 @@ discover_actions_in_file() {
 
     while IFS= read -r line; do
         line_number=$((line_number + 1))
+
         [[ "$line" == *uses:* ]] || continue
 
         uses_ref=$(printf '%s\n' "$line" |
@@ -100,7 +103,6 @@ discover_actions_in_file() {
         [[ "$repo" == */* ]] || continue
 
         source="$file:$line_number"
-
         version=''
 
         if [ -n "$comment_version" ]; then
@@ -142,6 +144,7 @@ discover_actions_in_file() {
 
 discover_action_files() {
     local directory=$1 label=$2 inventory file
+
     shift 2
 
     if [ ! -d "$directory" ]; then
@@ -174,6 +177,7 @@ discover_action_files() {
 discover_actions() {
     discover_action_files "$WORKFLOW_DIR" Workflow \
         -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \)
+
     discover_action_files "$ACTIONS_DIR" Actions \
         -type f \( -name action.yml -o -name action.yaml \)
 }
@@ -200,12 +204,14 @@ print_current_pins_markdown() {
         fi
 
         # shellcheck disable=SC2016 # Literal backticks delimit Markdown code.
-        printf '| %s | %s | %s | `%s` |\n' "$action" "$version" "$ref_display" "$source"
+        printf '| %s | %s | %s | `%s` |\n' \
+            "$action" "$version" "$ref_display" "$source"
     done < <(printf '%s\n' "${!ACTIONS[@]}" | sort)
 }
 
 discover_tools() {
     local line number=0 version repo ref key
+    local tool_pin_pattern='^[A-Z_]+_TAG=(v[0-9]+\.[0-9]+\.[0-9]+)[[:space:]]+# tool-pin: ([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)@([0-9a-f]{40})$'
 
     if [ ! -f "$TOOL_PINS_FILE" ]; then
         printf 'Tool pin file not found: %s\n' "$TOOL_PINS_FILE" >&2
@@ -220,7 +226,7 @@ discover_tools() {
 
         # Expected: NAME_TAG=vX.Y.Z # tool-pin: owner/repository@<40-char SHA>.
         # Captures: version, repository, and commit SHA (in that order).
-        if [[ ! "$line" =~ ^[A-Z_]+_TAG=(v[0-9]+\.[0-9]+\.[0-9]+)[[:space:]]+#\ tool-pin:\ ([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)@([0-9a-f]{40})$ ]]; then
+        if [[ ! "$line" =~ $tool_pin_pattern ]]; then
             printf 'Invalid tool pin at %s:%s\n' "$TOOL_PINS_FILE" "$number" >&2
             DISCOVERY_WARNINGS=$((DISCOVERY_WARNINGS + 1))
             continue
@@ -229,6 +235,7 @@ discover_tools() {
         version="${BASH_REMATCH[1]}"
         repo="${BASH_REMATCH[2]}"
         ref="${BASH_REMATCH[3]}"
+
         key="$repo@$version"
 
         if [ -n "${ACTION_REFS[$key]}" ] && [ "${ACTION_REFS[$key]}" != "$ref" ]; then
@@ -251,6 +258,7 @@ discover_tools() {
 
 lookup_action_tags() {
     local seconds=$1 context=$2 errors refs status
+
     shift 2
 
     if ! errors=$(mktemp); then
@@ -309,7 +317,13 @@ check_tool() {
         return
     fi
 
-    latest=$(printf '%s\n' "$refs" | awk '{sub(/^refs\/tags\//, "", $2); print $2}' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+    latest=$(
+        printf '%s\n' "$refs" |
+            awk '{sub(/^refs\/tags\//, "", $2); print $2}' |
+            grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' |
+            sort -V |
+            tail -n 1
+    )
 
     if [ -z "$latest" ]; then
         output_status FAIL "No stable tool tags found: $repo"
@@ -319,10 +333,15 @@ check_tool() {
 
     if [ "$latest" != "$current" ]; then
         sha=$(tag_commit "$latest" <<< "$refs")
-        printf '%s[WARN]%s UPDATE AVAILABLE (tool): %s %s -> %s\n  Commit SHA: %s\n  Source: %s\n  Verify release asset SHA-256 checksums before updating.\n' "$YELLOW" "$NC" "$repo" "$current" "$latest" "$sha" "${ACTION_SOURCES[$key]}"
+
+        printf '%s[WARN]%s UPDATE AVAILABLE (tool): %s %s -> %s\n  Commit SHA: %s\n  Source: %s\n  Verify release asset SHA-256 checksums before updating.\n' \
+            "$YELLOW" "$NC" "$repo" "$current" "$latest" "$sha" "${ACTION_SOURCES[$key]}"
+
         OUTDATED=$((OUTDATED + 1))
     else
-        printf '%s[OK]%s Tool up-to-date: %s %s @ %s (tag verified)\n' "$GREEN" "$NC" "$repo" "$current" "$sha"
+        printf '%s[OK]%s Tool up-to-date: %s %s @ %s (tag verified)\n' \
+            "$GREEN" "$NC" "$repo" "$current" "$sha"
+
         CURRENT=$((CURRENT + 1))
     fi
 }
@@ -330,7 +349,9 @@ check_tool() {
 latest_action_tag() {
     # Sort numeric versions without losing the exact tag needed for SHA lookup.
     awk '{ version = $0; sub(/^v/, "", version); print version "\t" $0 }' |
-        LC_ALL=C sort -k1,1V -k2,2 | tail -n 1 | cut -f2
+        LC_ALL=C sort -k1,1V -k2,2 |
+        tail -n 1 |
+        cut -f2
 }
 
 latest_action_version() {
@@ -347,14 +368,26 @@ latest_action_version() {
         return 1
     fi
 
-    tags=$(printf '%s\n' "$tags" | awk '{print $2}' | sed 's#refs/tags/##')
+    tags=$(
+        printf '%s\n' "$tags" |
+            awk '{print $2}' |
+            sed 's#refs/tags/##'
+    )
 
     # Accept only stable X.Y or X.Y.Z tags, optionally prefixed with v.
-    latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+\.[0-9]+(\.[0-9]+)?$' | latest_action_tag)
+    latest=$(
+        printf '%s\n' "$tags" |
+            grep -E '^v?[0-9]+\.[0-9]+(\.[0-9]+)?$' |
+            latest_action_tag
+    )
 
     # Some actions publish only major tags; compare them only for a major pin.
     if [ -z "$latest" ] && [[ "$current_version" =~ ^v?[0-9]+$ ]]; then
-        latest=$(printf '%s\n' "$tags" | grep -E '^v?[0-9]+$' | latest_action_tag)
+        latest=$(
+            printf '%s\n' "$tags" |
+                grep -E '^v?[0-9]+$' |
+                latest_action_tag
+        )
     fi
 
     if [ -z "$latest" ]; then
@@ -399,9 +432,11 @@ check_action() {
 
     if [ "${latest#v}" != "${current#v}" ] || [ "$sha" != "${ACTION_REFS[$key]}" ]; then
         ACTION_RESULTS["$key"]=update
+
         OUTDATED=$((OUTDATED + 1))
     else
         ACTION_RESULTS["$key"]=current
+
         CURRENT=$((CURRENT + 1))
     fi
 }
@@ -437,9 +472,14 @@ print_repository_results() {
 
     for key in "$@"; do
         case "${ACTION_RESULTS[$key]}" in
-            update) has_update=true; all_current=false ;;
+            update)
+                has_update=true
+                all_current=false
+                ;;
             current) ;;
-            *) all_current=false ;;
+            *)
+                all_current=false
+                ;;
         esac
     done
 
@@ -449,10 +489,18 @@ print_repository_results() {
 
         for key in "$@"; do
             case "${ACTION_RESULTS[$key]}" in
-                current) printf '   %s (up-to-date)\n' "${ACTIONS[$key]}" ;;
-                version-error) printf '   %s -> (unable to fetch)\n' "${ACTIONS[$key]}" ;;
-                commit-error) printf '   %s -> (error fetching SHA)\n' "${ACTIONS[$key]}" ;;
-                update) print_action_update "$key" ;;
+                current)
+                    printf '   %s (up-to-date)\n' "${ACTIONS[$key]}"
+                    ;;
+                version-error)
+                    printf '   %s -> (unable to fetch)\n' "${ACTIONS[$key]}"
+                    ;;
+                commit-error)
+                    printf '   %s -> (error fetching SHA)\n' "${ACTIONS[$key]}"
+                    ;;
+                update)
+                    print_action_update "$key"
+                    ;;
             esac
         done
 
@@ -489,6 +537,7 @@ check_repositories() {
                 check_tool "$key" "$repo" "${ACTIONS[$key]}"
             else
                 check_action "$key" "$repo"
+
                 checked_actions+=("$key")
             fi
         done <<< "${repository_keys[$repo]}"
@@ -559,7 +608,9 @@ main() {
 
     if [ "$MODE" = "current-pins-md" ]; then
         print_current_pins_markdown
+
         [ "$DISCOVERY_WARNINGS" -eq 0 ] || return 2
+
         return 0
     fi
 
