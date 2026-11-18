@@ -56,11 +56,12 @@ Inspect the affected source and its consumers, not just the requested file:
   changes. For CVE routing, inspect the
   [CVE fixer](../../agents/cve-fixer.agent.md) and
   [CVE skill](../fix-cve/SKILL.md) alongside its callers and verifier.
-* `scripts/check-skills.py`, the `check-skills` and `lint-markdown` Make
+* `scripts/checks/check-skills.py`, the `check-skills` and `lint-markdown` Make
   targets, and `.github/workflows/main.yml`: actual documentation-check coverage
-  and execution environment. Inspect `scripts/tests/` for existing regression
-  coverage when changing tooling; do not assume every checker already has a test
-  suite.
+  and execution environment. Inspect `scripts/**/tests/` for existing
+  regression coverage when changing tooling; focused tests live with their
+  owning script group and cross-group runners live in `scripts/tests/`. Do not
+  assume every checker already has a test suite.
 
 ## Workflow [ᐞ](#table-of-contents)
 

@@ -43,6 +43,6 @@ jobs:
           PRIOR_STATUS: ${{ job.status }}
           REVIEW: ${{ steps.review.outcome || 'skipped' }}
         run: |
-          bash scripts/ci-workflow-overview.sh \
+          bash scripts/ci/ci-workflow-overview.sh \
             'See the dependency review step log for findings and failure details.' \
             'Dependency review' "$REVIEW" >> "$GITHUB_STEP_SUMMARY"

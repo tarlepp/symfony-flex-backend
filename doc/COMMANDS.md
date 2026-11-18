@@ -60,8 +60,8 @@ alphabetical target names at each risk level. Filter from the same host working
 directory without requiring running containers:
 
 ```bash
-bash scripts/make.sh help GROUP=quality
-bash scripts/make.sh help GROUP=docker COLOR=never
+bash scripts/make/make.sh help GROUP=quality
+bash scripts/make/make.sh help GROUP=docker COLOR=never
 ```
 
 `GROUP=all` is the default; other groups are `information`, `tests`, `quality`,
@@ -91,7 +91,7 @@ Display installed development tool versions from the repository root on the
 Docker host with the PHP development service running:
 
 ```bash
-bash scripts/make.sh tool-versions
+bash scripts/make/make.sh tool-versions
 ```
 
 From the Docker host, this Make target first reports Docker client/Engine,
@@ -134,7 +134,7 @@ docker compose -f compose.yaml -f compose.prod.yaml exec -T mariadb \
 For the same grouped stack summary against local production, run on the host:
 
 ```bash
-bash scripts/tool-versions.sh --stack \
+bash scripts/reports/tool-versions.sh --stack \
     docker compose -f compose.yaml -f compose.prod.yaml
 ```
 
@@ -143,11 +143,11 @@ from the repository root on the Docker host:
 
 ```bash
 docker compose -f compose.yaml -f compose.prod.yaml exec -T -w /app php \
-    bash scripts/tool-versions.sh --production
+    bash scripts/reports/tool-versions.sh --production
 ```
 
 For another production deployment, execute
-`bash scripts/tool-versions.sh --production` from its `/app` directory inside
+`bash scripts/reports/tool-versions.sh --production` from its `/app` directory inside
 the actual PHP container. This mode reports PHP, all loaded PHP extensions, and
 installed direct production dependencies with descriptions. It requires only
 Bash, PHP, jq, and standard shell utilities, not Python, Node.js, Make,
@@ -207,7 +207,7 @@ labels. The legacy `info` target now displays `info_msg` rather than executing
 it. From the repository root on the Docker host:
 
 ```bash
-bash scripts/make.sh info info_msg="Local command information"
+bash scripts/make/make.sh info info_msg="Local command information"
 ```
 
 Help marks destructive and overwrite targets. Information commands keep native
@@ -321,16 +321,16 @@ host or inside the PHP development container, enable filtering from the
 repository root:
 
 ```bash
-source scripts/make-shell.sh
+source scripts/make/make-shell.sh
 ```
 
 For an existing Fish terminal in either context, use:
 
 ```fish
-source scripts/make-shell.fish
+source scripts/make/make-shell.fish
 ```
 
-Alternatively, invoke `bash scripts/make.sh <target>` without modifying the
+Alternatively, invoke `bash scripts/make/make.sh <target>` without modifying the
 current shell. These entry points suppress redundant GNU Make recipe-error
 lines, not native diagnostics or useful Make setup errors, and retain failure
 exit statuses. Raw `command make` can still print its own outer error line.
@@ -411,16 +411,16 @@ PHP container; subsequent project targets forward into it, while `make ci-stop`
 runs on the host:
 
 ```bash
-bash scripts/make.sh ci-start
-bash scripts/make.sh install
-bash scripts/make.sh tool-versions
-bash scripts/make.sh composer-validate
-bash scripts/make.sh check-skills
-bash scripts/make.sh ci-stop
+bash scripts/make/make.sh ci-start
+bash scripts/make/make.sh install
+bash scripts/make/make.sh tool-versions
+bash scripts/make/make.sh composer-validate
+bash scripts/make/make.sh check-skills
+bash scripts/make/make.sh ci-stop
 ```
 
 CI uses the launcher explicitly to filter both host and nested container Make
-errors. In workflows, put `bash scripts/make.sh ci-stop` in an `always()` step
+errors. In workflows, put `bash scripts/make/make.sh ci-stop` in an `always()` step
 so failed checks do not skip cleanup. Keep CI setup separate from a running
 local development stack; both use the same Compose PHP service.
 
@@ -578,7 +578,7 @@ the repository root on the Docker host with services running or inside the PHP
 development container:
 
 ```bash
-bash scripts/make.sh check-skills
+bash scripts/make/make.sh check-skills
 ```
 
 Direct `make` continues to print its own recipe error lines unless the shell
@@ -589,7 +589,7 @@ For an opt-in Bash session integration, run from the repository root on the
 Docker host with services running or inside the PHP development container:
 
 ```bash
-source scripts/make-shell.sh
+source scripts/make/make-shell.sh
 make check-skills
 ```
 
@@ -626,7 +626,7 @@ make bash
 Then run inside the container, from `/app`:
 
 ```bash
-bash scripts/check-action-updates.sh --current-pins-md
+bash scripts/checks/check-action-updates.sh --current-pins-md
 ```
 
 To rebuild and start development, use a **host terminal**, not the container

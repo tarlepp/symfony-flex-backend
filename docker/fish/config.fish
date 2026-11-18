@@ -3,6 +3,6 @@ thefuck --alias | source
 if status is-interactive
     fzf_key_bindings
 end
-if test -f /app/scripts/make-shell.fish
-    source /app/scripts/make-shell.fish
+if test -f /app/scripts/make/make-shell.fish
+    source /app/scripts/make/make-shell.fish
 end

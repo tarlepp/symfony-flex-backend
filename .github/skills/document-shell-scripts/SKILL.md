@@ -69,9 +69,9 @@ than compressing them into one line. For example:
 # Check pinned GitHub Actions and workflow tools for available updates.
 #
 # Usage:
-#   ./scripts/check-action-updates.sh
-#   ./scripts/check-action-updates.sh --current-pins-md
-#   ./scripts/check-action-updates.sh --tools-only
+#   ./scripts/checks/check-action-updates.sh
+#   ./scripts/checks/check-action-updates.sh --current-pins-md
+#   ./scripts/checks/check-action-updates.sh --tools-only
 #
 # Requirements:
 #   - git and timeout for bounded release lookups

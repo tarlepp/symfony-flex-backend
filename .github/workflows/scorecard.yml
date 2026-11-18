@@ -93,7 +93,7 @@ jobs:
           ARTIFACT: ${{ steps.artifact.outcome || 'skipped' }}
           UPLOAD: ${{ steps.upload.outcome || 'skipped' }}
         run: |
-          bash scripts/ci-workflow-overview.sh \
+          bash scripts/ci/ci-workflow-overview.sh \
             'See the SARIF artifact, Code scanning and step logs for findings.' \
             'Scorecard analysis' "$ANALYSIS" \
             'SARIF artifact upload' "$ARTIFACT" \

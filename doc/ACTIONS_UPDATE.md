@@ -85,13 +85,13 @@ That gives:
 
 The current pin list is generated from top-level `.yml`/`.yaml` workflows in
 `.github/workflows/`, recursive `action.yml`/`action.yaml` metadata under
-`.github/actions/`, and the `tool-pin` declarations in `scripts/lint-workflows.sh`,
+`.github/actions/`, and the `tool-pin` declarations in `scripts/checks/lint-workflows.sh`,
 so it does not become stale.
 
 Run this command to print current pins as markdown:
 
 ```bash
-bash scripts/check-action-updates.sh --current-pins-md
+bash scripts/checks/check-action-updates.sh --current-pins-md
 ```
 
 If you are on the host machine, run it in the dev container (`make bash`) or in
@@ -99,14 +99,14 @@ your Dev Container terminal.
 
 The standalone workflow validators (actionlint, ShellCheck, action-validator and
 zizmor) are release binaries, not Actions. They are pinned with `tool-pin`
-declarations in `scripts/lint-workflows.sh`, which `check-action-updates.sh`
+declarations in `scripts/checks/lint-workflows.sh`, which `check-action-updates.sh`
 reads to track each tool. Their declarations pair an exact release tag with its
 verified source commit SHA; platform-specific SHA-256 checksums separately pin
 the downloaded bytes. The normal update check includes these tools. To check
 only workflow tools:
 
 ```bash
-bash scripts/check-action-updates.sh --tools-only
+bash scripts/checks/check-action-updates.sh --tools-only
 ```
 
 Tool checks verify tag/commit parity, prefer peeled commits for annotated tags,
@@ -261,7 +261,7 @@ Typical flow:
 
 This repository includes an update-check script:
 
-* Location: `scripts/check-action-updates.sh`
+* Location: `scripts/checks/check-action-updates.sh`
 
 Run it with:
 
@@ -272,7 +272,7 @@ make check-action-updates
 If you are already inside the dev container:
 
 ```bash
-bash scripts/check-action-updates.sh
+bash scripts/checks/check-action-updates.sh
 ```
 
 What it does:
@@ -350,7 +350,7 @@ To reproduce the direct checker's exit status, run from the repository root on
 the Docker host with the development PHP service running:
 
 ```bash
-docker compose exec -T php bash scripts/check-action-updates.sh
+docker compose exec -T php bash scripts/checks/check-action-updates.sh
 ```
 
 Requirements:

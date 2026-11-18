@@ -59,7 +59,7 @@ jobs:
           INITIALIZE: ${{ steps.initialize.outcome || 'skipped' }}
           ANALYZE: ${{ steps.analyze.outcome || 'skipped' }}
         run: |
-          bash scripts/ci-workflow-overview.sh \
+          bash scripts/ci/ci-workflow-overview.sh \
             'CodeQL analyzes GitHub Actions workflows, not PHP. See step logs and Code scanning for details.' \
             'CodeQL initialization' "$INITIALIZE" \
             'Workflow analysis and upload' "$ANALYZE" >> "$GITHUB_STEP_SUMMARY"

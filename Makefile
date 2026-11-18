@@ -202,7 +202,7 @@ endif
 ifneq ($(strip $(FORWARD_TARGETS)),)
 .PHONY: $(MAKECMDGOALS)
 $(FORWARD_TARGETS):
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh php $(COMPOSE_EXEC)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/make/compose-context.sh php $(COMPOSE_EXEC)
 	@if [ "$$COLOR" = auto ]; then \
 		if [ -t 2 ] && [ "$${TERM:-}" != dumb ]; then COLOR=always; else COLOR=never; fi; \
 		export COLOR; \
@@ -215,8 +215,8 @@ $(FORWARD_TARGETS):
 		if [ -t 1 ] && [ -t 2 ]; then OUTPUT_PROGRESS_SHARED=1; else OUTPUT_PROGRESS_SHARED=0; fi; \
 		export OUTPUT_PROGRESS_SHARED; \
 	fi; \
-	$(if $(filter tool-versions,$@),bash scripts/command-output.sh --run "Read Docker and stack service versions" bash scripts/tool-versions.sh --stack $(COMPOSE_EXEC) || exit $$?; printf '\n' >&2;,) \
-	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make.sh $@
+	$(if $(filter tool-versions,$@),bash scripts/output/command-output.sh --run "Read Docker and stack service versions" bash scripts/reports/tool-versions.sh --stack $(COMPOSE_EXEC) || exit $$?; printf '\n' >&2;,) \
+	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make/make.sh $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
@@ -237,7 +237,7 @@ $(WRAPPED_GOALS):
 ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
 	@$(MAKE) COMMAND_OUTPUT_RUN=1 $@
 else
-	+@bash scripts/command-output.sh --run "$(COMMAND_LABEL)" bash scripts/make.sh COMMAND_OUTPUT_RUN=1 $@
+	+@bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" bash scripts/make/make.sh COMMAND_OUTPUT_RUN=1 $@
 endif
 $(filter-out $(WRAPPED_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@
@@ -248,37 +248,37 @@ ANSI_FLAG := $(if $(filter always,$(NATIVE_COLOR)),--ansi,--no-ansi)
 COLORS_FLAG := $(if $(filter always,$(NATIVE_COLOR)),--colors,--no-colors)
 PSALM_COLOR_FLAG := $(if $(filter never,$(NATIVE_COLOR)),--monochrome)
 
-HOST_CONTEXT_FAILURE = @bash scripts/command-output.sh --status FAIL "Run this target on the Docker host, not inside a container"; exit 1
+HOST_CONTEXT_FAILURE = @bash scripts/output/command-output.sh --status FAIL "Run this target on the Docker host, not inside a container"; exit 1
 
 define MUTATION_WARNING
-	@bash scripts/command-output.sh --status WARN "$(1)"
+	@bash scripts/output/command-output.sh --status WARN "$(1)"
 endef
 
 define STREAM_COMMAND
-	@bash scripts/command-output.sh --stream "$(1)" $(2)
+	@bash scripts/output/command-output.sh --stream "$(1)" $(2)
 endef
 
 define REPORT_PATHS
-	@bash scripts/report-output.sh "$(1)" $(2)
+	@bash scripts/output/report-output.sh "$(1)" $(2)
 endef
 
 define COMPOSE_CONTEXT
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/compose-context.sh $(1) $(2)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/make/compose-context.sh $(1) $(2)
 endef
 
 # COMPOSE_RUN label, command, success message[, extra environment]
 define COMPOSE_RUN
-	@$(4) HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="$(3)" bash scripts/command-output.sh --run "$(1)" $(2)
+	@$(4) HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="$(3)" bash scripts/output/command-output.sh --run "$(1)" $(2)
 endef
 
 # Help entrypoints (not listed in help).
 info_msg := Message
 
 help:
-	@PROGRESS=never bash scripts/command-output.sh --run "Command help" bash scripts/make-help.sh "$(GROUP)"
+	@PROGRESS=never bash scripts/output/command-output.sh --run "Command help" bash scripts/make/make-help.sh "$(GROUP)"
 
 info:
-	@PROGRESS=never bash scripts/command-output.sh --run "Command information" bash scripts/command-output.sh --status INFO '$(subst ','"'"',$(info_msg))'
+	@PROGRESS=never bash scripts/output/command-output.sh --run "Command information" bash scripts/output/command-output.sh --status INFO '$(subst ','"'"',$(info_msg))'
 
 # Configuration and information
 
@@ -286,16 +286,16 @@ application-info: ## Display Symfony application information
 	@bin/console about $(ANSI_FLAG)
 
 ci-detect-changes: ## Preview CI selection for committed changes (BASE_SHA=HEAD^ HEAD_SHA=HEAD)
-	@bash -eu -c 'output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; COLOR=$(NATIVE_COLOR) GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci-detect-changes.sh'
+	@bash -eu -c 'output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; COLOR=$(NATIVE_COLOR) GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci/ci-detect-changes.sh'
 
 configuration: ## Prints out application current configuration
 	@echo | jq -r . ${APPLICATION_CONFIG}
 
 project-stats: ## Create simple project stats
-	@./scripts/project-stats.sh
+	@./scripts/reports/project-stats.sh
 
 tool-versions: ## Display PHP development-container runtimes, dependencies, and tools
-	@ANSI_FLAG=$(ANSI_FLAG) bash scripts/tool-versions.sh
+	@ANSI_FLAG=$(ANSI_FLAG) bash scripts/reports/tool-versions.sh
 
 # Application tests and tooling regressions
 
@@ -303,7 +303,7 @@ infection: ## Runs Infection to codebase
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test $(ANSI_FLAG)
 	@./vendor/bin/infection $(ANSI_FLAG) --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit --colors=$(NATIVE_COLOR)"
-	@bash scripts/command-output.sh --status INFO "Mutation report directory: build/infection; see native output for generated files"
+	@bash scripts/output/command-output.sh --status INFO "Mutation report directory: build/infection; see native output for generated files"
 
 run-tests: ## Runs all tests via phpunit (Uses phpdbg if that is installed)
 ifndef PHPDBG
@@ -334,19 +334,19 @@ test-command-output: ## Run offline command-output contract regression suites
 	@env -u NATIVE_COLOR bash scripts/tests/command-output-contract-test.sh
 
 test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-pins to check actual Dockerfile pins
-	@bash scripts/tests/docker-images-test.sh
+	@bash scripts/docker/tests/docker-images-test.sh
 
 test-make-routing: ## Test host and CI container command routing
-	@bash scripts/command-output.sh "Make container routing (offline mocked tests)" bash scripts/tests/make-container-test.sh
+	@bash scripts/output/command-output.sh "Make container routing (offline mocked tests)" bash scripts/make/tests/make-container-test.sh
 
 # Linting and static analysis
 
 check-requirements: ## Check application runtime requirements
-	@bash scripts/command-output.sh "Application runtime requirements" \
-		bash scripts/native-output.sh env TERM_PROGRAM=$(if $(filter always,$(NATIVE_COLOR)),Hyper,) XDEBUG_MODE=off php ./vendor/bin/requirements-checker
+	@bash scripts/output/command-output.sh "Application runtime requirements" \
+		bash scripts/output/native-output.sh env TERM_PROGRAM=$(if $(filter always,$(NATIVE_COLOR)),Hyper,) XDEBUG_MODE=off php ./vendor/bin/requirements-checker
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
-	@bash scripts/command-output.sh "Skill metadata and documentation links" python3 scripts/check-skills.py
+	@bash scripts/output/command-output.sh "Skill metadata and documentation links" python3 scripts/checks/check-skills.py
 
 composer-require-checker: ## Check the defined dependencies against your code
 	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker $(ANSI_FLAG)
@@ -359,20 +359,20 @@ composer-validate: ## Validate `composer.json` file content
 
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 	@php ./vendor/bin/ecs --version
-	@bash scripts/native-output.sh php ./vendor/bin/ecs $(ANSI_FLAG) --clear-cache src tests
+	@bash scripts/output/native-output.sh php ./vendor/bin/ecs $(ANSI_FLAG) --clear-cache src tests
 
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
 	@if php -r 'exit(json_decode(file_get_contents($$argv[1])) ? 0 : 1);' "$(APPLICATION_CONFIG)"; then \
-		bash scripts/command-output.sh --status INFO "No errors in configuration file '$(APPLICATION_CONFIG)'"; \
+		bash scripts/output/command-output.sh --status INFO "No errors in configuration file '$(APPLICATION_CONFIG)'"; \
 	else \
-		status=$$?; bash scripts/command-output.sh --status FAIL "Could not validate JSON in configuration file '$(APPLICATION_CONFIG)'"; exit $$status; \
+		status=$$?; bash scripts/output/command-output.sh --status FAIL "Could not validate JSON in configuration file '$(APPLICATION_CONFIG)'"; exit $$status; \
 	fi
 
 lint-markdown: ## Lint Markdown files
-	@bash scripts/markdown-output.sh bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
+	@bash scripts/output/markdown-output.sh bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
 
 lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
-	@bash scripts/command-output.sh "GitHub workflows and local action metadata" bash scripts/lint-workflows.sh
+	@bash scripts/output/command-output.sh "GitHub workflows and local action metadata" bash scripts/checks/lint-workflows.sh
 
 lint-yaml: ## Lint config YAML files
 	@@bin/console lint:yaml config --parse-tags $(ANSI_FLAG)
@@ -432,21 +432,21 @@ composer-normalize: ## Normalizes `composer.json` file content
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 	$(call MUTATION_WARNING,Applying coding-standard fixes to files under src and tests)
 	@php ./vendor/bin/ecs --version
-	@bash scripts/native-output.sh php ./vendor/bin/ecs $(ANSI_FLAG) src tests --clear-cache --fix
+	@bash scripts/output/native-output.sh php ./vendor/bin/ecs $(ANSI_FLAG) src tests --clear-cache --fix
 
 # Dependency, security and license checks
 
 check-action-updates: ## Check pinned GitHub Actions and available updates
-	@bash scripts/command-output.sh --progress "GitHub Action pins and available updates" bash scripts/action-update-output.sh ./scripts/check-action-updates.sh
+	@bash scripts/output/command-output.sh --progress "GitHub Action pins and available updates" bash scripts/output/action-update-output.sh ./scripts/checks/check-action-updates.sh
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
-	@bash scripts/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies $(ANSI_FLAG)
+	@bash scripts/output/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies $(ANSI_FLAG)
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
-	@bash scripts/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor $(ANSI_FLAG)
+	@bash scripts/output/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor $(ANSI_FLAG)
 
 check-dependencies-patch: ## Checks if any vendor dependency can be updated (only patch versions)
-	@bash scripts/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch $(ANSI_FLAG)
+	@bash scripts/output/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch $(ANSI_FLAG)
 
 check-licenses: ## Check vendor licenses
 	@bash -o pipefail -c 'XDEBUG_MODE=off composer license --format=json | \
@@ -459,7 +459,7 @@ check-licenses: ## Check vendor licenses
 		}'"'"''
 
 check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
-	@bash scripts/check-security.sh
+	@bash scripts/checks/check-security.sh
 
 # Reports and uploads
 
@@ -483,16 +483,16 @@ phpmetrics: ## Generates PhpMetrics static analysis
 	@mkdir -p build/phpmetrics
 	$(call MUTATION_WARNING,Writing the HTML report to build/phpmetrics; existing report files may be replaced)
 	@if [ ! -f build/logs/junit.xml ] ; then \
-		bash scripts/command-output.sh --status WARN "build/logs/junit.xml not found; running application tests to generate it" ; \
+		bash scripts/output/command-output.sh --status WARN "build/logs/junit.xml not found; running application tests to generate it" ; \
 		$(MAKE) -s run-tests XDEBUG_MODE=coverage || exit $$?; \
 	fi;
-	@test -f build/logs/junit.xml || { bash scripts/command-output.sh --status FAIL "Required report build/logs/junit.xml was not generated"; exit 1; }
+	@test -f build/logs/junit.xml || { bash scripts/output/command-output.sh --status FAIL "Required report build/logs/junit.xml was not generated"; exit 1; }
 	@XDEBUG_MODE=off php ./vendor/bin/phpmetrics --version
 	@if [ "$(NATIVE_COLOR)" = always ] && [ -z "$$NO_COLOR" ]; then \
-		bash -o pipefail -c 'XDEBUG_MODE=off bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics . | \
-			python3 scripts/phpmetrics-output.py'; \
+		bash -o pipefail -c 'XDEBUG_MODE=off bash scripts/output/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics . | \
+			python3 scripts/output/phpmetrics-output.py'; \
 	else \
-		XDEBUG_MODE=off bash scripts/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .; \
+		XDEBUG_MODE=off bash scripts/output/native-output.sh ./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .; \
 	fi
 	$(call REPORT_PATHS,HTML report: build/phpmetrics,build/phpmetrics/index.html)
 
@@ -500,7 +500,7 @@ report-coveralls: ## Upload coverage to Coveralls
 	@php ./vendor/bin/php-coveralls -v $(ANSI_FLAG)
 
 prepare-sonar-reports: ## Copy test reports with relative paths for the host-side Sonar action
-	@bash scripts/prepare-sonar-reports.sh
+	@bash scripts/reports/prepare-sonar-reports.sh
 
 # Setup, dependencies and application maintenance
 
@@ -521,7 +521,7 @@ update-tools: ## Update composer tools dependencies
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader $(ANSI_FLAG)
 
 configure-ci: ## Configure the application and JWT keys for CI only
-	@test "$$GITHUB_ACTIONS" = true || { bash scripts/command-output.sh --status FAIL "configure-ci is restricted to GitHub Actions."; exit 1; }
+	@test "$$GITHUB_ACTIONS" = true || { bash scripts/output/command-output.sh --status FAIL "configure-ci is restricted to GitHub Actions."; exit 1; }
 	$(call MUTATION_WARNING,Overwriting .env and .env.test from CI templates and replacing configured JWT keys)
 	@cp .env.gh-actions .env
 	@cp .env.gh-actions .env.test
@@ -546,7 +546,7 @@ local-configuration: ## Create local configuration files
 	@cp /app/.env /app/.env.local
 	@cp /app/secrets/application.json /app/secrets/application.local.json
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
-	@bash scripts/command-output.sh --status INFO "Edit secrets/application.local.json for your local requirements"
+	@bash scripts/output/command-output.sh --status INFO "Edit secrets/application.local.json for your local requirements"
 
 cache-clear: ## Clears the cache
 	$(call MUTATION_WARNING,Removing application cache; it will be regenerated as needed)
@@ -560,7 +560,7 @@ cache-warmup: cache-clear ## Warms up an empty cache
 ifdef CONSOLE
 	@bin/console cache:warmup $(ANSI_FLAG)
 else
-	@bash scripts/command-output.sh --status SKIP "Cache warmup skipped: bin/console is unavailable; cache cleanup completed"
+	@bash scripts/output/command-output.sh --status SKIP "Cache warmup skipped: bin/console is unavailable; cache cleanup completed"
 endif
 
 clear: ## Clean vendor and tool dependencies
@@ -571,7 +571,7 @@ clear: ## Clean vendor and tool dependencies
 clear-tools: ## Clears all tools dependencies
 	$(call MUTATION_WARNING,Deleting vendor directories under tools; tool dependencies must be reinstalled)
 	@find tools -type d -name vendor -prune -exec rm -rf -- {} +
-	@bash scripts/command-output.sh --status INFO "Restart development containers after reinstalling dependencies"
+	@bash scripts/output/command-output.sh --status INFO "Restart development containers after reinstalling dependencies"
 
 # Docker lifecycle and interactive sessions (host)
 
@@ -580,7 +580,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	$(call COMPOSE_CONTEXT,php,$(COMPOSE_EXEC))
-	$(call STREAM_COMMAND,Opening Bash in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec php bash --rcfile /app/scripts/bashrc.sh -i)
+	$(call STREAM_COMMAND,Opening Bash in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec php bash --rcfile /app/scripts/make/bashrc.sh -i)
 endif
 
 ci-start: ## Build and start the Compose PHP development service for CI (host only)
@@ -627,7 +627,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	$(call COMPOSE_CONTEXT,php,$(COMPOSE_EXEC))
-	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec php fish --init-command 'source /app/scripts/make-shell.fish')
+	$(call STREAM_COMMAND,Opening Fish in the PHP container,env HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec php fish --init-command 'source /app/scripts/make/make-shell.fish')
 endif
 
 logs: ## Show logs from all containers
@@ -689,84 +689,84 @@ docker-builder-platforms: ## Show platforms supported by current buildx builder
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@./scripts/docker-images.sh platforms
+	@./scripts/docker/docker-images.sh platforms
 endif
 
 docker-image-check-updates: ## Report newer stable Docker Hub image versions
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image version checks" ./scripts/docker-images.sh check-updates
+	@IMAGE="$(IMAGE)" bash scripts/output/command-output.sh --progress "Docker image version checks" ./scripts/docker/docker-images.sh check-updates
 endif
 
 docker-image-digest: ## Show multi-platform index digest for image (asks IMAGE)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@IMAGE="$(IMAGE)" bash scripts/command-output.sh --progress "Docker image digest inspection" ./scripts/docker-images.sh digest
+	@IMAGE="$(IMAGE)" bash scripts/output/command-output.sh --progress "Docker image digest inspection" ./scripts/docker/docker-images.sh digest
 endif
 
 docker-image-verify-pins: ## Verify external FROM and COPY image pins are multi-platform and match their tags
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@bash scripts/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker-images.sh verify
+	@bash scripts/output/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker/docker-images.sh verify
 endif
 
 docker-setup-qemu: ## Install QEMU emulators for cross-platform builds (asks PLATFORMS)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@PLATFORMS="$(PLATFORMS)" ./scripts/docker-images.sh setup-qemu
+	@PLATFORMS="$(PLATFORMS)" ./scripts/docker/docker-images.sh setup-qemu
 endif
 
 docker-build-multi-platform: ## Build and push multi-platform image (asks PLATFORMS, DOCKERFILE, TARGET, TAG, BUILDER)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker-images.sh push
+	@PLATFORMS="$(PLATFORMS)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" BUILDER="$(BUILDER)" ./scripts/docker/docker-images.sh push
 endif
 
 docker-build-platform: ## Build image for single platform (asks PLATFORM, DOCKERFILE, TARGET, TAG)
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" ./scripts/docker-images.sh build
+	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" ./scripts/docker/docker-images.sh build
 endif
 
 docker-image-update-pins: ## Apply same-major minor/patch updates and refresh Dockerfile image digests
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@bash scripts/command-output.sh --progress "Update Dockerfile image pins" ./scripts/docker-images.sh update-pins
+	@bash scripts/output/command-output.sh --progress "Update Dockerfile image pins" ./scripts/docker/docker-images.sh update-pins
 endif
 
 docker-kill-containers: ## Kill all running docker containers
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker-maintenance.sh kill
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker/docker-maintenance.sh kill
 endif
 
 docker-prune: ## Kill all running containers and prune all docker stuff
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@bash scripts/docker-maintenance.sh prune
+	@bash scripts/docker/docker-maintenance.sh prune
 endif
 
 docker-remove-containers: ## Remove all docker containers
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker-maintenance.sh containers
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker/docker-maintenance.sh containers
 endif
 
 docker-remove-images: ## Remove all docker images
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker-maintenance.sh images
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) bash scripts/docker/docker-maintenance.sh images
 endif
 endif # Wrapped recipe dispatch
 endif # Host forwarding dispatch

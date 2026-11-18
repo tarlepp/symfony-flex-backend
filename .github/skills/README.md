@@ -174,7 +174,7 @@ references only for layers the task actually changes:
   extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
   exactly once, and local links and anchors resolve across repository Markdown
-  files. Run `python3 scripts/check-skills.py` from the repository root inside
+  files. Run `python3 scripts/checks/check-skills.py` from the repository root inside
   the PHP development container (`make bash`, `make fish`, or an IDE Dev
   Container terminal), never directly on the host; Markdown lint alone does not
   verify those relationships.

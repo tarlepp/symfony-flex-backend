@@ -35,7 +35,7 @@ jobs:
         run: |
           status=0
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
-            bash scripts/check-action-updates.sh || status=$?
+            bash scripts/checks/check-action-updates.sh || status=$?
           case "$status" in
             0)
               echo "Action and workflow tool pins are current." >> "$GITHUB_STEP_SUMMARY"
@@ -53,11 +53,11 @@ jobs:
       - name: Diagnose PHP container failure
         if: ${{ failure() }}
         timeout-minutes: 2
-        run: bash scripts/ci-failure-diagnostics.sh
+        run: bash scripts/ci/ci-failure-diagnostics.sh
 
       - name: Stop PHP development container
         if: ${{ always() }}
-        run: bash scripts/make.sh ci-stop
+        run: bash scripts/make/make.sh ci-stop
 
       - name: Publish workflow run overview
         if: ${{ !cancelled() }}
@@ -67,6 +67,6 @@ jobs:
           PRIOR_STATUS: ${{ job.status }}
           UPDATES: ${{ steps.updates.outcome || 'skipped' }}
         run: |
-          bash scripts/ci-workflow-overview.sh \
+          bash scripts/ci/ci-workflow-overview.sh \
             'Updates are advisory; incomplete checks fail the workflow. See the step log for details.' \
             'Action and workflow tool update check' "$UPDATES" >> "$GITHUB_STEP_SUMMARY"

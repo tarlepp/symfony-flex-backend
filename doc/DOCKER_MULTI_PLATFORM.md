@@ -287,7 +287,7 @@ make daemon
 <a id="make-commands"></a>
 
 The commands in this document are wrapped as Make targets backed by
-`scripts/docker-images.sh`. They use Docker on the host machine, so run them
+`scripts/docker/docker-images.sh`. They use Docker on the host machine, so run them
 from the host, not inside the `php` container. They require Docker with the
 `buildx` plugin (included in Docker Desktop and current Docker Engine packages)
 and `jq`. The read-only update checker additionally requires `curl`.
@@ -362,7 +362,7 @@ For advisory maintenance checks, run from the repository root on the Docker
 host:
 
 ```bash
-bash scripts/docker-images.sh check-updates --advisory
+bash scripts/docker/docker-images.sh check-updates --advisory
 ```
 
 This mode returns `0` for confirmed updates, retaining yellow diagnostics and
@@ -571,7 +571,7 @@ The `Check Docker image versions` job (`docker-image-check-updates` in
 pull request, scheduled and manual runs. It is one of the two periodic jobs that
 run on the daily schedule, together with `security-check`. It runs
 `make test-docker-images` inside the PHP development container and
-`bash scripts/docker-images.sh check-updates --advisory` on the Docker host.
+`bash scripts/docker/docker-images.sh check-updates --advisory` on the Docker host.
 
 The `ci-summary` prerequisite gate requires this job to succeed. Confirmed
 updates alone are advisory on every event; lookup, pin-validation and regression

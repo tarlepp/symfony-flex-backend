@@ -45,7 +45,7 @@ Trace the package to its owning input:
 
 | Finding | Repository evidence | Update mechanics |
 | --- | --- | --- |
-| Application Composer package | Root manifests/locks, installed metadata, `symfony.lock`, `scripts/check-security.sh` | [update-dependencies](../update-dependencies/SKILL.md) |
+| Application Composer package | Root manifests/locks, installed metadata, `symfony.lock`, `scripts/checks/check-security.sh` | [update-dependencies](../update-dependencies/SKILL.md) |
 | Composer tool package | Affected `tools/*/composer.json` and lock, bin-plugin forwarding | [update-dependencies](../update-dependencies/SKILL.md) |
 | OS package or bundled library | Pinned upstream, Docker stages, package sources, effective image contents | [update-docker-environment](../update-docker-environment/SKILL.md), [update-docker-images](../update-docker-images/SKILL.md) |
 | Node/Python developer dependency | Docker toolchain install, `requirements.txt`, nested installed metadata | [update-docker-environment](../update-docker-environment/SKILL.md) |

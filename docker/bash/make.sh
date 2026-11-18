@@ -13,6 +13,6 @@
 #     - `Dockerfile` adds this file to the development user's `.bashrc`.
 #
 
-if [ -f /app/scripts/make-shell.sh ]; then
-    source /app/scripts/make-shell.sh
+if [ -f /app/scripts/make/make-shell.sh ]; then
+    source /app/scripts/make/make-shell.sh
 fi
