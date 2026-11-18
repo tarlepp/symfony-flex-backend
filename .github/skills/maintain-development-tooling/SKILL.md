@@ -14,7 +14,7 @@ application features. Use
 [document-shell-scripts](../document-shell-scripts/SKILL.md) for shell-script
 file headers and explanatory comments. Use
 [maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for
-adding, moving, or reorganizing scripts under `scripts/`. Use
+adding or changing scripts under `scripts/`, including tests and callers. Use
 [update-github-workflows](../update-github-workflows/SKILL.md) for CI job
 behavior, [update-github-actions](../update-github-actions/SKILL.md) for action
 pins, and [update-docker-images](../update-docker-images/SKILL.md) for image

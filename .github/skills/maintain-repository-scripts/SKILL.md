@@ -1,20 +1,21 @@
 ---
 name: maintain-repository-scripts
-description: Add, move, or reorganize scripts under scripts/ with responsibility-based placement, colocated regression tests, and complete caller and path updates.
+description: Add or change scripts under scripts/ with correct responsibility-based placement, group-local tests, and complete caller and path updates.
 ---
 
 # What is this?
 
 <a id="what-is-this"></a>
 
-Use this skill when adding, moving, or reorganizing scripts under `scripts/`,
-or when changing their directory ownership and focused test placement. It
-covers the repository's script layout and the path/caller updates required to
-keep moves complete. Use
+Use this skill when adding or changing scripts under `scripts/`, including
+shell and Python helpers, regression tests, test runners, and their callers. It
+covers placement, path integrity, and focused behavior validation. Use
 [maintain-development-tooling](../maintain-development-tooling/SKILL.md) for
-command behavior, Make routing, checker contracts, and tooling regressions. Use
+tooling contracts, Make routing, checker behavior, and shell readability
+reviews. Use
 [document-shell-scripts](../document-shell-scripts/SKILL.md) for `.sh` headers
-and explanatory comments.
+and explanatory comments. For CI behavior or dependency pins, also use the
+relevant workflow or dependency skill.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and
@@ -26,75 +27,112 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-    * [Layout and ownership](#layout-and-ownership)
-    * [Move and add workflow](#move-and-add-workflow)
-    * [Regression tests](#regression-tests)
-    * [Validation](#validation)
+    * [Script tree and ownership](#script-tree-and-ownership)
+    * [Workflow](#workflow)
+    * [Callers and path integrity](#callers-and-path-integrity)
+    * [Tests and validation](#tests-and-validation)
 
-## Layout and ownership [ᐞ](#table-of-contents)
+## Script tree and ownership [ᐞ](#table-of-contents)
 
-<a id="layout-and-ownership"></a>
+<a id="script-tree-and-ownership"></a>
 
-Use [the scripts guide](../../../scripts/README.md) as the canonical map:
+Use the [scripts guide](../../../scripts/README.md#directory-layout) as the
+current source for group responsibilities. Existing groups include `ci/`,
+`checks/`, `docker/`, `make/`, `output/`, and `reports/`. Put a script in the
+group that owns its primary responsibility; extend an existing group rather
+than creating a new group or leaving an ordinary script at the `scripts/` root
+without a clear reason.
 
-* Place each script in the existing group that owns its responsibility. Extend
-  an existing group rather than creating a parallel directory or framework.
-* Keep focused tests in that group's `tests/` directory. Reserve
-  `scripts/tests/` for runners and suites that span multiple groups.
-* Keep shared helpers with their owning responsibility. If several groups rely
-  on a helper, place it in the existing shared group rather than copying it.
-* Update the scripts guide when directory ownership, test placement, or
-  documented invocation paths change.
+Keep focused regression tests in the owning group's `tests/` directory.
+Reserve `scripts/tests/` for cross-group runners and shared test orchestration.
+When a test exercises several groups, decide from its main responsibility
+whether it is a focused group test or a cross-group runner; do not relocate it
+solely to make paths shorter.
 
-## Move and add workflow [ᐞ](#table-of-contents)
+Follow the existing implementation for interpreter, naming, executable mode,
+and test style. A directory move changes `__file__` and `BASH_SOURCE`-relative
+paths: update root and sibling discovery deliberately, including isolated test
+fixtures. Update the scripts guide when group responsibilities or test
+ownership changes.
 
-<a id="move-and-add-workflow"></a>
+## Workflow [ᐞ](#table-of-contents)
 
-1. Inspect the scripts guide, neighboring scripts and tests, and existing
-   callers before choosing a location. Trace references from Make targets,
-   GitHub workflows/actions, Docker configuration, and other scripts.
-2. When moving or renaming a script or helper, search for both literal paths
-   and path-derived lookups. Inspect `__file__`/`dirname` parent calculations,
-   sibling assumptions, and fixture setup that copies or invokes helpers;
-   update those references to match the production directory tree.
-3. Preserve command behavior and execution boundaries, including shebang,
-   executable mode, working-directory assumptions, arguments, environment,
-   output, exit status, and container/host execution. For behavior changes,
-   follow [maintain-development-tooling](../maintain-development-tooling/SKILL.md).
-4. Update every affected caller and its regression fixture. Keep test fixtures
-   aligned with real script/helper relationships rather than making moved files
-   appear to be siblings. Update documentation and test-runner inventories when
-   the supported paths or commands change.
+<a id="workflow"></a>
 
-## Regression tests [ᐞ](#table-of-contents)
+1. Read the scripts guide, the owning script or nearest equivalent, its focused
+   tests, and relevant callers before editing. Check both direct invocation and
+   indirect routes through Make, CI, Docker, actions, or another script.
+2. Place new scripts and tests according to the ownership rules above. Extend
+   existing helpers and test mechanisms where appropriate; do not create
+   parallel wrappers or a new testing framework for a localized change.
+3. Preserve the script's observable contract: interpreter, sourced-versus-run
+   behavior, working-directory assumptions, argument boundaries, environment,
+   output streams and formats, exit statuses, side effects, and network access.
+   Ask before changing a public command, destructive behavior, supported
+   platform, or failure policy.
+4. Update every affected caller and path consumer, including CI path filters,
+   ShellCheck inputs, Make recipes, documentation, test-runner inventories,
+   and fixture copies when applicable. Distinguish runtime callers from static
+   references and tests that only inspect source.
+5. Add or update focused tests at the owning behavior boundary. Cover relevant
+   success and failure paths, missing prerequisites, and subprocess errors.
+   Mock Docker, GitHub, registries, and other external commands using existing
+   fixture patterns; unexpected external calls should fail.
+6. Review the complete diff for stale paths, executable modes, accidental
+   behavior changes, and generated artifacts. Keep unrelated work untouched.
 
-<a id="regression-tests"></a>
+## Callers and path integrity [ᐞ](#table-of-contents)
 
-Add or update a focused test in the owning group's `tests/` directory when
-script behavior or path resolution changes. Exercise the moved script/helper
-through its actual path and verify relevant success and failure behavior.
-Include the owning suite in the relevant runner or CI command where applicable;
-run both the focused test and that aggregate entry point when the move affects
-its fixture inventory. For checks and Make/CI behavior details, use
-[maintain-development-tooling](../maintain-development-tooling/SKILL.md).
+<a id="callers-and-path-integrity"></a>
 
-## Validation [ᐞ](#validation)
+Trace references from the implementation outward. Depending on the script,
+inspect:
 
-<a id="validation"></a>
+* `Makefile` and `scripts/make/` for Make dispatch, recipes, and shell
+  integration.
+* `.github/workflows/` and `.github/actions/` for job invocations, path
+  filters, cache keys, and embedded shell consumers.
+* `Dockerfile`, `docker/`, and `.devcontainer/` for entrypoints and sourced
+  integrations.
+* The owning group's `tests/`, `scripts/tests/` cross-group runners, and
+  `scripts/README.md` for test discovery and documented commands.
 
-Run relevant commands from the repository root on the Docker host; project
-tooling runs through the Compose PHP development container using existing Make
-targets. For documentation or skill changes, run:
+For paths derived from a script's own location, verify the expected repository
+root and sibling paths after the move. For path-sensitive fixtures, reproduce
+the new directory layout rather than placing files at the old flat paths.
+Search for old references after updates and inspect each match; avoid blind
+global replacements that can alter unrelated names or behavior.
+
+When script behavior is part of Make, workflow, or container execution, use
+[maintain-development-tooling](../maintain-development-tooling/SKILL.md) and,
+as applicable,
+[update-github-workflows](../update-github-workflows/SKILL.md) or
+[update-docker-environment](../update-docker-environment/SKILL.md). For shell
+documentation only, use
+[document-shell-scripts](../document-shell-scripts/SKILL.md).
+
+## Tests and validation [ᐞ](#tests-and-validation)
+
+<a id="tests-and-validation"></a>
+
+Select validation for changed behavior, not only changed file extensions.
+Follow the [testing guide](../../../doc/TESTING.md#selecting-validation) and
+the validation section of
+[maintain-development-tooling](../maintain-development-tooling/SKILL.md#validation)
+for the exact affected targets and execution boundaries.
+
+From the repository root on the Docker host with the PHP development service
+running, documentation-only changes require:
 
 ```bash
 make lint-markdown
 make check-skills
 ```
 
-For changed Bash scripts, run `bash -n` on each changed path inside the PHP
-development container. Run the focused regression suite and affected aggregate
-or CI entry point for script moves; do not treat documentation checks or a
-mocked fixture as proof that a live workflow or external service ran.
+For changed Bash scripts, check syntax for each exact changed path inside the
+PHP development container. Run the focused suite for the changed group and
+affected aggregate or CI entry point when relevant. Do not treat documentation
+checks or an offline mock as proof that a live workflow or external service ran.
 
 ---
 
