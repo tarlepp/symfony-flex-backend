@@ -162,6 +162,13 @@ changeset as CI-ready while that failure remains unresolved. See
 for color controls, multiple-goal behavior, troubleshooting, and coverage
 limits.
 
+The `Test development tooling contracts` step in
+[the main CI workflow](../.github/workflows/main.yml) also runs
+`check-workflow-tool-updates-test.py`, which is not part of
+`make test-command-output`. If a change affects the Action/tool update checker,
+its output wrapper, or their fixture paths, run the
+[standalone regression suite](../scripts/README.md#github-actions-update-checker).
+
 Streaming fixtures must prove output arrives while the child is still running,
 then terminate their isolated process group with SIGTERM and bounded cleanup.
 Background runners can inherit ignored SIGINT, which survives `exec` and can
