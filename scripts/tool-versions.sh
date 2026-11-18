@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Report installed development or production tool versions from inside PHP.
+# Default and --production modes inspect the current PHP container; --stack
+# instead inspects Docker and running services from the host using the supplied
+# Compose command. The inventory is read-only and disables Xdebug connections.
+
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
