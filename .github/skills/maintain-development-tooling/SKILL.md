@@ -11,6 +11,8 @@ Use this skill when reviewing or changing repository development scripts, shell
 readability, Make targets, checker behavior, command routing, or script
 regression tests. It owns tooling behavior, not dependency upgrades or
 application features. Use
+[document-shell-scripts](../document-shell-scripts/SKILL.md) for shell-script
+file headers and explanatory comments. Use
 [update-github-workflows](../update-github-workflows/SKILL.md) for CI job
 behavior, [update-github-actions](../update-github-actions/SKILL.md) for action
 pins, and [update-docker-images](../update-docker-images/SKILL.md) for image
