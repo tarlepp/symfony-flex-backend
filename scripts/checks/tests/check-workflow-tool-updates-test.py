@@ -95,7 +95,8 @@ class ToolUpdatesTest(unittest.TestCase):
             )
             command = ["bash", str(CHECKER), mode]
             if wrapped:
-                command = ["bash", str(CHECKER.parent / "action-update-output.sh"), *command]
+                output_wrapper = CHECKER.parents[1] / "output" / "action-update-output.sh"
+                command = ["bash", str(output_wrapper), *command]
             return subprocess.run(
                 command,
                 env=environment, text=True, capture_output=True, check=False,
