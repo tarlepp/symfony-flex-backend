@@ -10,6 +10,12 @@
 #   The launcher filters Make recipe-error diagnostics; outside the repository
 #   root, the normal Make command remains unchanged.
 #
+# Callers:
+#   Scripts:
+#     - `scripts/bashrc.sh` sources the interactive shell integration.
+#   Docker:
+#     - `docker/bash/make.sh` sources it when the repository mount is present.
+#
 SYMFONY_MAKE_LAUNCHER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/make.sh"
 
 make() {

@@ -11,6 +11,10 @@
 #   Boolean values must be exactly true or false; maintenance builds must
 #   disable dependency installation, caching, and version reporting.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/actions/php-bootstrap/action.yml` validates action inputs.
+#
 
 set -euo pipefail
 

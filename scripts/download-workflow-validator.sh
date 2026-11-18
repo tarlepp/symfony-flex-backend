@@ -10,6 +10,10 @@
 #   Network downloads use bounded retries; cached and downloaded files are
 #   checksum-verified before use.
 #
+# Callers:
+#   Scripts:
+#     - `scripts/lint-workflows.sh` downloads and verifies pinned validators.
+#
 
 set -euo pipefail
 

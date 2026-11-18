@@ -11,6 +11,12 @@
 #   and no uploads occur. Aggregates eight Python suites and host/CI forwarding
 #   regressions.
 #
+# Callers:
+#   Makefile:
+#     - `test-command-output` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` tooling regression job runs the target.
+#
 
 set -euo pipefail
 

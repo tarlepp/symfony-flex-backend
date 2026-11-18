@@ -11,6 +11,13 @@
 #   repository pins are not checked. Use make docker-image-verify-pins to
 #   inspect actual project pins.
 #
+# Callers:
+#   Makefile:
+#     - `test-docker-images` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` and
+#       `.github/workflows/docker-image-updates.yml` run the target through Make.
+#
 
 set -Eeuo pipefail
 

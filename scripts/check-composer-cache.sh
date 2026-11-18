@@ -10,6 +10,10 @@
 #   The path must match Composer's configured cache directory and be writable
 #   by the container user; the directory is created when necessary.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/actions/php-bootstrap/action.yml` runs this in the CI PHP service.
+#
 
 set -euo pipefail
 

@@ -9,6 +9,10 @@
 # Details:
 #   Reads registrations and descriptions from Makefile without invoking Docker.
 #
+# Callers:
+#   Makefile:
+#     - `help` target.
+#
 
 set -euo pipefail
 

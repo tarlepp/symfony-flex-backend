@@ -10,6 +10,12 @@
 #   Keeps stdout and stderr separate and returns the wrapped command's exit
 #   status unchanged.
 #
+# Callers:
+#   Makefile:
+#     - `lint-markdown` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` documentation validation job (via Make).
+#
 
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 

@@ -11,6 +11,10 @@
 #   Writes an optional summary; skipped selected checks and unexpected report
 #   skips fail the gate.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` final CI result job.
+#
 
 set -euo pipefail
 

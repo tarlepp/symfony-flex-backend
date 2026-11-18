@@ -10,6 +10,12 @@
 #   Inspects at most five containers in the CI Compose project with per-command
 #   timeouts. No PHP containers is reported without adding a failure.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` failure cleanup steps.
+#     - `.github/workflows/action-updates.yml` failure cleanup step.
+#     - `.github/workflows/docker-image-updates.yml` failure cleanup step.
+#
 
 set -euo pipefail
 

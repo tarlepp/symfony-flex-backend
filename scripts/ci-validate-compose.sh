@@ -10,6 +10,10 @@
 #   Compose configurations are checked on the host; JSON validation uses Python
 #   in the CI PHP service.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` configuration validation job.
+#
 
 set -euo pipefail
 

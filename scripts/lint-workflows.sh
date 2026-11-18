@@ -11,6 +11,12 @@
 #   Downloads can use the local validator cache; the zizmor audit runs offline
 #   and does not require a GitHub token.
 #
+# Callers:
+#   Makefile:
+#     - `lint-workflows` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` workflow and local action validation job.
+#
 
 set -euo pipefail
 

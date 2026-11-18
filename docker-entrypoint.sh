@@ -11,6 +11,10 @@
 #   assets, then refreshes the shared Nginx application copy. Other commands
 #   bypass initialization and are executed directly.
 #
+# Callers:
+#   Docker:
+#     - `Dockerfile` production image `ENTRYPOINT`.
+#
 
 set -e
 

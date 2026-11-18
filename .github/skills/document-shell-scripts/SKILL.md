@@ -24,6 +24,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Shell documentation conventions](#shell-documentation-conventions)
+    * [Caller context](#caller-context)
     * [Workflow](#workflow)
     * [Code comments](#code-comments)
     * [Validation](#validation)
@@ -86,6 +87,44 @@ limitations when they affect how maintainers should use the script. Do not
 repeat the implementation, describe hypothetical behavior, or copy a lengthy
 manual into a header when a focused reference is more useful.
 
+## Caller context [ᐞ](#table-of-contents)
+
+<a id="caller-context"></a>
+
+When repository-owned callers help explain where a script fits, add a `Callers:`
+section. Group exact caller details under applicable headings such as `Makefile:`,
+`GitHub Actions:`, `Docker:`, or `Scripts:`. The category headings provide the
+high-level integration summary; list the actual target names, workflow files,
+image entrypoints, or script paths beneath them. For example:
+
+```bash
+#
+# Summarize analyzer output in a GitHub Actions job.
+#
+# Callers:
+#   Makefile:
+#     - `lint-workflows` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` (`lint-workflows` job, via Make).
+#
+```
+
+Trace direct invocations, sourcing, and relevant Make-to-workflow call chains
+from current files such as `Makefile`, `.github/workflows/`,
+`.github/actions/`, `Dockerfile`, and neighboring scripts. Identify the relation
+when it is not apparent, such as “sources,” “invokes,” or “via Make target.”
+Include only real repository-owned runtime or development callers. Do not treat
+static-analysis file lists, path filters, mentions in documentation, or tests
+that only inspect source text as runtime callers. If a script has no useful
+repository caller to document, omit this optional section rather than guessing
+or listing the script's author as its caller.
+
+Keep the list concise and maintainable: group related targets under their
+shared Make macro or dispatcher when appropriate, and avoid enumerating every
+transitive consumer of a generic helper. Do not add a caller list to general
+documentation as a substitute for documenting the script's supported
+invocation in `Usage:`.
+
 ## Workflow [ᐞ](#table-of-contents)
 
 <a id="workflow"></a>
@@ -101,10 +140,14 @@ manual into a header when a focused reference is more useful.
 3. Add or refine the header using the conventions above. Include a section only
    when it clarifies a real contract. For usage examples, preserve argument
    boundaries and show meaningful alternatives as separate commands.
-4. Add code comments only where they explain non-obvious intent, shell
+4. Add a `Callers:` section when the repository integration is useful context.
+   Verify every target and path against its actual invocation or source
+   relationship; distinguish direct callers from callers that route through
+   Make or another script.
+5. Add code comments only where they explain non-obvious intent, shell
    semantics, a safety constraint, or a meaningful phase boundary. Prefer a
    focused comment at the relevant code over expanding the file header.
-5. Review the diff to confirm that executable lines, quoting, ordering,
+6. Review the diff to confirm that executable lines, quoting, ordering,
    shebangs, executable modes, and sourced-versus-executed behavior did not
    change. Do not run scripts whose documented behavior could mutate files,
    contact external services, or affect shared containers merely to validate

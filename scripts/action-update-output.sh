@@ -10,6 +10,10 @@
 #   Update and lookup findings are informational; cancellation and unexpected
 #   failure statuses are preserved.
 #
+# Callers:
+#   Makefile:
+#     - `check-action-updates` target.
+#
 
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 

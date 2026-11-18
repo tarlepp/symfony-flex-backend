@@ -10,6 +10,10 @@
 #   When native color is disabled, filters SGR escapes from live output without
 #   changing the command status.
 #
+# Callers:
+#   Makefile:
+#     - `check-requirements`, `ecs`, `ecs-fix`, and `phpmetrics` targets.
+#
 
 script_dir=${BASH_SOURCE[0]%/*}
 source "$script_dir/command-output.sh"

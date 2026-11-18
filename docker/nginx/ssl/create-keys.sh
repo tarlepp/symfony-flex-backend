@@ -10,6 +10,10 @@
 #   Writes the CA and server certificate files here, replacing existing files
 #   with the same names. Use these materials only for local development.
 #
+# Callers:
+#   Makefile:
+#     - `generate-ssl-cert` target.
+#
 
 set -euo pipefail
 

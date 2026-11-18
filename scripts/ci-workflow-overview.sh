@@ -11,6 +11,16 @@
 #   Optional TARGET and OVERVIEW_TITLE customize the heading. Writes Markdown to
 #   stdout for the calling workflow step to append to its summary.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml`
+#     - `.github/workflows/action-updates.yml`
+#     - `.github/workflows/dependency-review.yml`
+#     - `.github/workflows/docker-image-updates.yml`
+#     - `.github/workflows/scorecard.yml`
+#     - `.github/workflows/codeql.yml`
+#     - `.github/workflows/vulnerability-scan.yml`
+#
 
 set -euo pipefail
 
