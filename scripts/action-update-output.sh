@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Informational wrapper for the GitHub Action and workflow-tool update checker.
+# Run with the checker command and arguments; it translates update and lookup
+# findings into decorated output while preserving cancellation and unexpected
+# failure statuses.
+
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 
 output_status RUN 'GitHub Action pins and available updates (informational)'

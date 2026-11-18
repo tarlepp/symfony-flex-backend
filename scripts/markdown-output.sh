@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Run a Markdown linter while marking its file/line diagnostics as failures.
+# Invoke with the linter command and arguments; stdout and stderr stay separate,
+# and the wrapped command's exit status is returned unchanged.
+
 source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 
 decorate_diagnostics() {
