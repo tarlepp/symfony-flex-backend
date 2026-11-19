@@ -138,10 +138,16 @@ trait RepositoryMethodsTrait
             return $results;
         }
 
+        $offset ??= 0;
+
+        if ($offset < 0) {
+            throw new InvalidArgumentException('firstResult must be greater than or equal to 0.');
+        }
+
         $paginator = new OffsetPaginator(fetchJoinCollection: true);
 
         /** @var array<int, TEntity> $results */
-        $results = $paginator->paginate($queryBuilder, new Window($offset ?? 0, $limit))->getItems();
+        $results = $paginator->paginate($queryBuilder, new Window($offset, $limit))->getItems();
 
         return $results;
     }
