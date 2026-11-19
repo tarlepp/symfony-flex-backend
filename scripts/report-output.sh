@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Validate generated report files before announcing their availability.
+# Usage: <message> <report-file> [report-file...]; every path must exist and be
+# nonempty. This reports local outputs and performs no upload.
+
 set -euo pipefail
 
 source "$(dirname "$0")/command-output.sh"

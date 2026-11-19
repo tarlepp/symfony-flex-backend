@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Run a native command with the repository's color policy.
+# Pass the command and its arguments; when native color is disabled, filter
+# SGR escape sequences from the live output without changing the command status.
+
 script_dir=${BASH_SOURCE[0]%/*}
 source "$script_dir/command-output.sh"
 

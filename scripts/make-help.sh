@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Render registered Make targets and their help metadata.
+# Run from the repository root with an optional group name; reads target
+# registration and descriptions from Makefile without invoking Docker.
+
 set -euo pipefail
 
 source "$(dirname "$0")/command-output.sh"

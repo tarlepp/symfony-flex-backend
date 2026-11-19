@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Read-only Docker Compose context guard for Make targets.
+# Usage: <php|logs|idle> <docker compose command...>; checks Docker access,
+# Compose availability, and the relevant service states before the caller acts.
+# Uses the supplied Compose prefix so local and CI projects are checked consistently.
+
 set -euo pipefail
 
 source "$(dirname "$0")/command-output.sh"
