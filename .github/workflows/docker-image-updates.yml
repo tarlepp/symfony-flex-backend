@@ -9,6 +9,28 @@ concurrency:
   group: docker-image-updates-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  php-minor-readiness:
+    name: Check PHP minor upgrade readiness
+    if: ${{ github.ref_type == 'branch' }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the readiness runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
+      - name: Check out the selected branch for PHP readiness
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref_name }}
+          persist-credentials: false
+
+      - name: Check the next PHP minor against locked platform requirements
+        run: bash scripts/docker-images.sh check-php-minor
+
   update:
     name: Update Docker image versions and digests
     if: ${{ github.ref_type == 'branch' }}

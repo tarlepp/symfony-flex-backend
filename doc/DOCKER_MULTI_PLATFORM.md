@@ -531,6 +531,21 @@ An empty automatic update diff can still have major upgrades available. See the
 [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
 for dispatch, repository permissions and CI-triggering token setup.
 
+The same maintenance run has an independent PHP minor readiness job. It
+reports the next stable PHP minor without changing the current pin or
+lockfiles. With Docker, buildx, `jq` and `curl`, run the same check from the
+repository root on the Docker host:
+
+```bash
+bash scripts/docker-images.sh check-php-minor
+```
+
+The check builds a temporary development image only when there is a candidate.
+It checks the existing lockfiles against the real PHP runtime, not Composer's
+simulated `config.platform.php`. An unavailable candidate or compatibility
+blocker is advisory; registry and incomplete check errors exit nonzero. A
+passing result is a signal to prepare a migration PR, not to skip normal CI.
+
 To apply the image pin changes locally, run from the repository root on the
 Docker host, review the diff, then verify the pins:
 

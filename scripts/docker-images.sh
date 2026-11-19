@@ -11,6 +11,7 @@
 #
 # Commands:
 #   check-updates  Report newer stable image versions (Docker Hub)
+#   check-php-minor Check the next stable PHP minor against locked dependencies
 #   update-pins    Apply same-major stable updates and refresh pinned digests
 #   digest      Show multi-platform index digest and pin reference for image
 #   verify      Verify that external FROM and COPY --from Dockerfile pins are
@@ -35,7 +36,7 @@
 # Requirements:
 #   - docker with buildx plugin (host machine)
 #   - jq
-#   - curl (check-updates only)
+#   - curl (version discovery and pin updates)
 #
 ################################################################################
 
@@ -76,6 +77,7 @@ Usage:
 
 Commands:
   check-updates  Report newer stable image versions (Docker Hub)
+  check-php-minor Check the next stable PHP minor against locked dependencies
   update-pins    Apply minor/patch updates and digest refreshes to Dockerfiles
   digest         Show multi-platform index digest and pin reference for image
   verify         Verify that external FROM and COPY --from Dockerfile pins are
@@ -95,6 +97,8 @@ changes no files. Exit status: 0 = no updates or errors, 1 = updates or errors,
 69 = missing tools. Floating and prerelease tags are skipped explicitly.
 With check-updates --advisory, confirmed updates produce warnings and exit 0;
 lookup or pin-validation errors still fail. Other commands do not use this flag.
+check-php-minor builds the next stable PHP minor's development image locally
+and checks the root and tool lockfiles without changing tracked files.
 update-pins changes only existing tagged digest pins in project Dockerfiles.
 It preserves the major version, variant, and all currently supported platforms.
 Floating tags receive digest refreshes only. All lookups must succeed before
@@ -305,19 +309,22 @@ latest_image_tag() {
             --arg prefix "$prefix" \
             --arg scope "$scope" \
             --arg current "$current" '
+            ($current | split(".") | map(tonumber)) as $installed |
             [
                 split("\n")[] |
                 capture("^(?<prefix>v?)(?<version>(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*))(?<suffix>-[a-zA-Z0-9_.-]+)?$") |
                 select(.prefix == $prefix and (.suffix // "") == $suffix) |
                 {version: .version, parts: (.version | split(".") | map(tonumber))} |
-                select($scope == "all" or .parts[0] == ($current | split(".")[0] | tonumber)) |
-                select($scope != "patch" or .parts[1] == ($current | split(".")[1] | tonumber))
+                select($scope == "all" or .parts[0] == $installed[0]) |
+                select($scope != "patch" or .parts[1] == $installed[1]) |
+                select($scope != "next-minor" or .parts[1] == $installed[1] or .parts[1] == ($installed[1] + 1))
             ]
             | sort_by(.parts)
             | last
-            | .version // empty
+            | if $scope == "next-minor" and .parts[1] == $installed[1]
+                then $current else .version // empty end
         ' <<< "$tags"
-    )"
+    )" || return 1
 
     if [ -z "$latest" ]; then
         error "${image}: no matching stable version tags found" >&2
@@ -356,7 +363,7 @@ check_image_update() {
 # Resolve one candidate while preserving every runnable platform of the old pin.
 # Publishes RESOLVED_PIN and RESOLVED_PLATFORMS through resolve_image_pin.
 resolve_pin_update() {
-    local ref=$1 image candidate status=0 raw platforms platform scope=minor
+    local ref=$1 image candidate status=0 scope=minor
 
     image="${ref%@*}"
     case "${image%:*}" in
@@ -378,6 +385,11 @@ resolve_pin_update() {
     esac
 
     resolve_image_pin "$candidate" || return 1
+    require_preserved_platforms "$ref" "$candidate"
+}
+
+require_preserved_platforms() {
+    local ref=$1 candidate=$2 raw platforms platform
 
     if ! raw="$(raw_manifest "$ref")" || ! platforms="$(image_platforms "$raw")"; then
         error "Could not inspect current platforms for ${ref}"
@@ -396,6 +408,123 @@ resolve_pin_update() {
         fi
     done
 }
+
+php_minor_result() {
+    printf 'PHP minor readiness: %s\n' "$1"
+    github_summary "" "**Result: $1**" ""
+}
+
+check_candidate_composer() {
+    local image=$1 manifest project report status blocked=0 incomplete=0
+    local -a manifests=(composer.json)
+
+    shopt -s nullglob
+    manifests+=(tools/*/composer.json)
+    if [ "${#manifests[@]}" -lt 2 ]; then
+        error "No Composer tool manifests found"
+        return 2
+    fi
+
+    github_summary '| Composer project | Platform requirements |' '| --- | --- |'
+    for manifest in "${manifests[@]}"; do
+        project="$(dirname "$manifest")"
+
+        if [ ! -f "$manifest" ] || [ ! -f "${manifest%.json}.lock" ]; then
+            error "Missing manifest or lockfile for ${project}"
+            github_summary "| \`${project}\` | Check failed: missing manifest or lockfile |"
+            incomplete=1
+            continue
+        fi
+
+        status=0
+        printf '\nChecking locked platform requirements for %s\n' "$project"
+        report="$(docker run --rm --pull=never --network none \
+            -e XDEBUG_MODE=off -e COMPOSER_ALLOW_XDEBUG=1 --entrypoint composer \
+            "$image" --working-dir="/app/$project" --no-interaction --no-plugins --no-scripts \
+            check-platform-reqs --lock --format=json)" || status=$?
+        printf '%s\n' "$report"
+
+        if [ "$status" -eq 0 ] &&
+            jq -e 'type == "array" and any(.[]; .name == "php") and all(.[]; .status == "success")' \
+                > /dev/null <<< "$report"; then
+            github_summary "| \`${project}\` | Passed |"
+        elif [[ "$status" == 1 || "$status" == 2 ]] &&
+            jq -e 'any(.[]; .status == "failed" or .status == "missing")' > /dev/null <<< "$report"; then
+            github_summary "| \`${project}\` | Blocked: see package and extension details in the job log |"
+            blocked=1
+        else
+            error "Composer platform check for ${project} did not complete (exit ${status})"
+            github_summary "| \`${project}\` | Check failed: see the job log |"
+            incomplete=1
+        fi
+    done
+
+    [ "$incomplete" -eq 0 ] || return 2
+    return "$blocked"
+}
+
+command_check_php_minor() (
+    local current candidate work image status=0
+    local php_pin_pattern='^FROM (php:[0-9]+\.[0-9]+\.[0-9]+-[a-zA-Z0-9_.-]+@sha256:[a-f0-9]{64}) AS php-upstream$'
+
+    github_summary '## PHP minor readiness' ''
+    trap 'if [ "$?" -ne 0 ]; then php_minor_result "Check failed"; fi' EXIT
+    if [ "$#" -ne 0 ] || [ -n "${IMAGE:-}" ]; then
+        error "check-php-minor accepts neither options nor IMAGE"
+        return 64
+    fi
+
+    require_docker
+    if ! command -v curl > /dev/null 2>&1; then
+        error "curl command not found, install it first"
+        return 69
+    fi
+
+    current="$(sed -nE "s/${php_pin_pattern}/\1/p" Dockerfile)"
+    if [[ -z "$current" || "$current" == *$'\n'* ]]; then
+        error "Expected exactly one pinned php-upstream image in Dockerfile"
+        return 1
+    fi
+
+    github_summary "Current: \`${current%@*}\`" ""
+    candidate="$(latest_image_tag "$current" next-minor)"
+    if [ "$candidate" = "${current%@*}" ]; then
+        php_minor_result "Not available"
+        return 0
+    fi
+
+    github_summary "Candidate: \`${candidate}\`" ""
+    resolve_image_pin "$candidate"
+    github_summary "Pin: \`${RESOLVED_PIN}\`" "" "Platforms: \`${RESOLVED_PLATFORMS}\`" ""
+    require_preserved_platforms "$current" "$candidate"
+
+    docker info --format '{{.ServerVersion}}' > /dev/null
+    work="$(mktemp -d)"
+    image="symfony-php-minor-readiness:${work##*/}"
+    trap 'status=$?
+        if [ "$status" -ne 0 ]; then php_minor_result "Check failed"; fi
+        if docker image inspect "$image" > /dev/null 2>&1; then docker image rm "$image"; fi
+        rm -f "$work/Dockerfile"
+        rmdir "$work"' EXIT
+
+    # Use the project build context without rewriting the checked-out PHP pin.
+    sed -E "s|${php_pin_pattern}|FROM ${RESOLVED_PIN} AS php-upstream|" Dockerfile > "$work/Dockerfile"
+    if ! docker buildx build --file - --target development --load --tag "$image" . < "$work/Dockerfile"; then
+        php_minor_result "Blocked: candidate development image did not build (see job log)"
+        github_summary "Composer checks did not run."
+        return 0
+    fi
+
+    check_candidate_composer "$image" || status=$?
+    case "$status" in
+        0)
+            php_minor_result "Ready for a migration PR"
+            github_summary "Locked platform requirements passed. Application tests and the production build still need PR CI."
+            ;;
+        1) php_minor_result "Blocked: locked platform requirements are not satisfied" ;;
+        *) return 1 ;;
+    esac
+)
 
 # Populate command_update_pins' dynamically scoped pin_update_plans array.
 plan_pin_updates() {
@@ -1308,6 +1437,10 @@ case "${1:-}" in
     check-updates )
         shift
         command_check_updates "$@"
+        ;;
+    check-php-minor )
+        shift
+        command_check_php_minor "$@"
         ;;
     update-pins )
         shift

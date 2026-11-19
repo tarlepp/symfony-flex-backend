@@ -3,6 +3,7 @@
 
 import hashlib
 import itertools
+import json
 import os
 from pathlib import Path
 import re
@@ -87,6 +88,141 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn(
             "if: ${{ always() }}", step(WORKFLOW, "Stop PHP development container"),
         )
+
+    def test_php_minor_readiness_is_independent_and_read_only(self):
+        jobs = yaml.safe_load(WORKFLOW)["jobs"]
+        readiness = jobs["php-minor-readiness"]
+        self.assertNotIn("needs", readiness)
+        self.assertNotIn("needs", jobs["update"])
+        self.assertEqual(readiness["permissions"], {"contents": "read"})
+        self.assertEqual(readiness["if"], jobs["update"]["if"])
+        self.assertEqual(readiness["steps"][1]["with"], {
+            "ref": "${{ github.ref_name }}", "persist-credentials": False,
+        })
+        self.assertEqual(
+            readiness["steps"][2]["run"],
+            "bash scripts/docker-images.sh check-php-minor",
+        )
+
+    def php_minor_fixture(self):
+        for name in ("docker-images.sh", "command-output.sh"):
+            (self.root / "scripts" / name).write_bytes((ROOT / "scripts" / name).read_bytes())
+
+        for directory in (self.root, self.root / "tools/analyzer", self.root / "tools/linter"):
+            directory.mkdir(parents=True, exist_ok=True)
+            for name in ("composer.json", "composer.lock"):
+                (directory / name).write_text("{}\n")
+        dockerfile = self.root / "Dockerfile"
+        dockerfile.write_text(f"FROM php:8.5.13-fpm-bookworm@sha256:{'b' * 64} AS php-upstream\n")
+
+        tags = [
+            "8.5.14-fpm-bookworm", "8.6.1-fpm-bookworm", "8.6.2-fpm-bookworm",
+            "8.6.99-fpm-alpine", "8.6.99RC1-fpm-bookworm",
+            "8.7.0-fpm-bookworm", "9.0.0-fpm-bookworm",
+        ]
+        (self.root / "tags").write_text(json.dumps({
+            "next": None, "results": [{"name": tag} for tag in tags],
+        }))
+        bin_dir = self.root / "bin"
+        bin_dir.mkdir()
+        curl = bin_dir / "curl"
+        curl.write_text("#!/bin/bash\ncat tags\n")
+        curl.chmod(0o755)
+        docker = bin_dir / "docker"
+        docker.write_text(textwrap.dedent("""\
+            #!/bin/bash
+            set -eu
+            printf '%s\\n' "$*" >> docker-calls
+            case "$*" in
+                "buildx version"|"info --format "*|"image inspect "*|"image rm "*) ;;
+                "buildx imagetools inspect php:8.6.2-fpm-bookworm --format "*)
+                    printf 'sha256:%064d\\n' 0
+                    ;;
+                "buildx imagetools inspect --raw "*)
+                    extra='{"platform":{"os":"linux","architecture":"arm64"}}'
+                    if [[ "$MODE" == platform-loss && "$*" == *"php:8.6.2"* ]]; then
+                        extra='{"platform":{"os":"linux","architecture":"386"}}'
+                    fi
+                    printf '%s\\n' '{"mediaType":"application/vnd.oci.image.index.v1+json",
+                         "manifests":[{"platform":{"os":"linux","architecture":"amd64"}},
+                                      '"$extra"']}'
+                    ;;
+                "buildx build --file - --target development --load --tag "*. )
+                    cat > candidate-Dockerfile
+                    if [[ "$MODE" == build-failure ]]; then exit 1; fi
+                    ;;
+                "run --rm --pull=never --network none "*)
+                    [[ "$*" == *" --no-interaction --no-plugins --no-scripts check-platform-reqs --lock --format=json" ]]
+                    if [[ "$*" == *" --working-dir=/app/tools/analyzer "* ]]; then
+                        case "$MODE" in
+                            blocked)
+                                printf '%s\\n' '[{"status":"failed","failed_requirement":{"source":"tool/analyzer"}}]'
+                                exit 1 ;;
+                            incomplete) exit 125 ;;
+                        esac
+                    fi
+                    printf '%s\\n' '[{"name":"php","status":"success"}]'
+                    ;;
+                *) echo "Unexpected Docker invocation: $*" >&2; exit 99 ;;
+            esac
+            """))
+        docker.chmod(0o755)
+        return dockerfile, f"{bin_dir}:{os.environ['PATH']}"
+
+    def test_php_minor_readiness_reports_results_without_updating_files(self):
+        dockerfile, path = self.php_minor_fixture()
+        original = dockerfile.read_text()
+        cases = {
+            "ready": (0, "Ready for a migration PR"),
+            "blocked": (0, "Blocked: locked platform requirements"),
+            "incomplete": (1, "Check failed"),
+            "platform-loss": (1, "Check failed"),
+            "build-failure": (0, "Blocked: candidate development image did not build"),
+            "absent": (0, "Not available"),
+            "registry-error": (1, "Check failed"),
+        }
+        name = "Check the next PHP minor against locked platform requirements"
+        for mode, (status, result_text) in cases.items():
+            with self.subTest(mode=mode):
+                (self.root / "docker-calls").write_text("")
+                self.summary.write_text("")
+                if mode == "absent":
+                    (self.root / "tags").write_text(json.dumps({
+                        "next": None, "results": [
+                            {"name": "8.5.20-fpm-bookworm"}, {"name": "8.7.0-fpm-bookworm"},
+                        ],
+                    }))
+                elif mode == "registry-error":
+                    (self.root / "tags").write_text("invalid JSON")
+                result = self.run_script(WORKFLOW, name, PATH=path, MODE=mode)
+                self.assertEqual(result.returncode, status, result.stdout + result.stderr)
+                self.assertIn(f"**Result: {result_text}", self.summary.read_text())
+                self.assertEqual(dockerfile.read_text(), original)
+                calls = (self.root / "docker-calls").read_text()
+
+                if mode in {"absent", "registry-error"}:
+                    self.assertNotIn("imagetools inspect", calls)
+                    self.assertNotIn("buildx build", calls)
+                    continue
+                self.assertIn("Candidate: `php:8.6.2-fpm-bookworm`", self.summary.read_text())
+                if mode == "platform-loss":
+                    self.assertIn("would remove platform linux/arm64", result.stdout + result.stderr)
+                    self.assertNotIn("buildx build", calls)
+                    continue
+                self.assertEqual(
+                    (self.root / "candidate-Dockerfile").read_text(),
+                    f"FROM php:8.6.2-fpm-bookworm@sha256:{'0' * 64} AS php-upstream\n",
+                )
+                self.assertIn("image rm symfony-php-minor-readiness:", calls)
+                if mode == "build-failure":
+                    self.assertNotIn("check-platform-reqs", calls)
+                    self.assertIn("Composer checks did not run.", self.summary.read_text())
+                    continue
+                for project in (".", "tools/analyzer", "tools/linter"):
+                    self.assertIn(f"--working-dir=/app/{project} ", calls)
+                if mode == "blocked":
+                    self.assertIn("tool/analyzer", result.stdout)
+                    self.assertIn("| `tools/analyzer` | Blocked:", self.summary.read_text())
 
     def test_all_bootstrap_consumers_diagnose_failure_before_cleanup(self):
         consumers = set()
