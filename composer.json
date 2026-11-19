@@ -19,23 +19,23 @@
 		}
 	],
 	"require": {
-		"php": "^8.5.12",
+		"php": "^8.5.13",
 		"ext-apcu": "*",
 		"ext-iconv": "*",
 		"ext-json": "*",
 		"ext-mbstring": "*",
 		"ext-pdo": "*",
 		"ext-random": "*",
-		"doctrine/dbal": "4.5.1",
-		"doctrine/doctrine-bundle": "3.3.4",
+		"doctrine/dbal": "4.6.0",
+		"doctrine/doctrine-bundle": "3.4.2",
 		"doctrine/doctrine-migrations-bundle": "4.0.1",
-		"doctrine/orm": "3.7.6",
+		"doctrine/orm": "3.8.0",
 		"gedmo/doctrine-extensions": "3.22.2",
 		"lexik/jwt-authentication-bundle": "3.2.0",
 		"mark-gerarts/automapper-plus-bundle": "1.6.0",
 		"matomo/device-detector": "6.5.2",
 		"matthiasnoback/symfony-console-form": "7.0.0",
-		"nelmio/api-doc-bundle": "5.13.2",
+		"nelmio/api-doc-bundle": "5.14.0",
 		"nelmio/cors-bundle": "2.6.1",
 		"phpdocumentor/reflection-docblock": "6.0.3",
 		"ramsey/uuid-doctrine": "2.1.0",
@@ -73,7 +73,7 @@
 		"bamarni/composer-bin-plugin": "1.9.1",
 		"doctrine/doctrine-fixtures-bundle": "4.3.1",
 		"phpunit/php-code-coverage": "14.5.2",
-		"phpunit/phpunit": "13.4.6",
+		"phpunit/phpunit": "13.4.8",
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "8.1.11",
 		"symfony/debug-bundle": "8.1.0",
@@ -94,7 +94,7 @@
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.5.12"
+			"php": "8.5.13"
 		},
 		"sort-packages": true
 	},

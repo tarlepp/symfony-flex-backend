@@ -12,6 +12,7 @@ use App\DTO\Command\OutdatedPackage;
 use App\Tests\Utils\PhpUnitUtil;
 use JsonException;
 use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -250,6 +251,7 @@ final class CheckDependenciesTest extends TestCase
     #[TestWith(['', ''])]
     public function testFailedProcessesAreReported(string $errorOutput, string $output): void
     {
+        /** @var Process&Stub $process */
         $process = self::createStub(Process::class);
         $process->method('isSuccessful')->willReturn(false);
         $process->method('getCommandLine')->willReturn('composer outdated -D -f json');

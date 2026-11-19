@@ -10,6 +10,7 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Utils\PhpUnitUtil;
+use InvalidArgumentException;
 use Override;
 use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -69,6 +70,17 @@ final class UserRepositoryTest extends KernelTestCase
             ->findByAdvanced([], limit: 2, offset: 1);
 
         self::assertCount(2, $users);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatFindByAdvancedRejectsNegativeOffsetWithPositiveLimit(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/^firstResult must be greater than or equal to 0\.$/');
+
+        $this->getRepository()->findByAdvanced([], limit: 2, offset: -1);
     }
 
     /**

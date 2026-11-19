@@ -18,8 +18,8 @@ use function array_key_exists;
 use function compact;
 use function file_get_contents;
 use function file_put_contents;
+use function hash;
 use function property_exists;
-use function sha1;
 use function sprintf;
 use function str_pad;
 use function sys_get_temp_dir;
@@ -107,7 +107,7 @@ final class Auth
         $cache = (array)JSON::decode((string)file_get_contents($filename), true);
 
         // Create hash for username + password
-        $hash = sha1($username . $password);
+        $hash = hash('sha256', $username . $password);
 
         // User + password doesn't exist on cache - so we need to make real login
         if (!array_key_exists($hash, $cache)) {

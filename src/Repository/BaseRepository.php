@@ -17,10 +17,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use Override;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use function array_unshift;
+use function hash;
 use function implode;
 use function in_array;
 use function serialize;
-use function sha1;
 use function spl_object_hash;
 
 /**
@@ -166,7 +166,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function addCallback(callable $callable, ?array $args = null): self
     {
         $args ??= [];
-        $hash = sha1(serialize([spl_object_hash((object)$callable), ...$args]));
+        $hash = hash('sha256', serialize([spl_object_hash((object)$callable), ...$args]));
 
         if (!in_array($hash, self::$processedCallbacks, true)) {
             self::$callbacks[] = [$callable, $args];

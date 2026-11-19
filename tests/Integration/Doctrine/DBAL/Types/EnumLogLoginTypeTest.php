@@ -8,9 +8,9 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -96,11 +96,10 @@ final class EnumLogLoginTypeTest extends KernelTestCase
      */
     private function getType(): EnumLogLoginType
     {
-        Type::hasType('EnumLogLogin')
-            ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
-            : Type::addType('EnumLogLogin', EnumLogLoginType::class);
+        /** @var Connection $connection */
+        $connection = self::getContainer()->get(Connection::class);
 
-        $type = Type::getType('EnumLogLogin');
+        $type = $connection->getConfiguration()->getTypeProvider()->get('EnumLogLogin');
 
         self::assertInstanceOf(EnumLogLoginType::class, $type);
 

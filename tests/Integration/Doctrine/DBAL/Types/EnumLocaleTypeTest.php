@@ -9,9 +9,9 @@ namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\Enum\Locale;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -121,11 +121,10 @@ final class EnumLocaleTypeTest extends KernelTestCase
      */
     private function getType(): EnumLocaleType
     {
-        Type::hasType('EnumLocale')
-            ? Type::overrideType('EnumLocale', EnumLocaleType::class)
-            : Type::addType('EnumLocale', EnumLocaleType::class);
+        /** @var Connection $connection */
+        $connection = self::getContainer()->get(Connection::class);
 
-        $type = Type::getType('EnumLocale');
+        $type = $connection->getConfiguration()->getTypeProvider()->get('EnumLocale');
 
         self::assertInstanceOf(EnumLocaleType::class, $type);
 

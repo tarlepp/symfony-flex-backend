@@ -3,16 +3,16 @@
 	"description": "",
 	"version": "1.0.0",
 	"require": {
-		"php": "^8.5.12"
+		"php": "^8.5.13"
 	},
 	"require-dev": {
-		"rector/rector": "2.8.4",
+		"rector/rector": "2.8.5",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"allow-plugins": true,
 		"platform": {
-			"php": "8.5.12"
+			"php": "8.5.13"
 		},
 		"preferred-install": {
 			"*": "dist"

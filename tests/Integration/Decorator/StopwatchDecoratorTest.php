@@ -18,11 +18,13 @@ use App\Validator\Constraints\EntityReferenceExists;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Generator;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Log\NullLogger;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -31,6 +33,19 @@ use Throwable;
 
 final class StopwatchDecoratorTest extends KernelTestCase
 {
+    /**
+     * @param array<array-key, mixed> $options
+     */
+    #[Override]
+    protected static function createKernel(array $options = []): KernelInterface
+    {
+        if (($options['environment'] ?? null) === 'dev') {
+            return new DevelopmentKernel('dev', true);
+        }
+
+        return parent::createKernel($options);
+    }
+
     /**
      * @param class-string $expected
      */

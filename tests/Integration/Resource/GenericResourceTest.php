@@ -27,6 +27,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
+use function array_values;
 
 final class GenericResourceTest extends KernelTestCase
 {
@@ -180,7 +181,7 @@ final class GenericResourceTest extends KernelTestCase
         $repositoryMock
             ->expects($this->once())
             ->method('findByAdvanced')
-            ->with(...$expectedArguments->getArrayCopy())
+            ->with(...array_values($expectedArguments->getArrayCopy()))
             ->willReturn($results);
 
         self::assertSame($results, $resource->find(...$arguments->getArrayCopy()));
@@ -264,7 +265,7 @@ final class GenericResourceTest extends KernelTestCase
         $repositoryMock
             ->expects($this->once())
             ->method('findOneBy')
-            ->with(...$expectedArguments->getArrayCopy())
+            ->with(...array_values($expectedArguments->getArrayCopy()))
             ->willReturn($entity);
 
         self::assertSame($entity, $resource->findOneBy(...$arguments->getArrayCopy()));
@@ -350,7 +351,7 @@ final class GenericResourceTest extends KernelTestCase
         $repositoryMock
             ->expects($this->once())
             ->method('countAdvanced')
-            ->with(...$expectedArguments->getArrayCopy())
+            ->with(...array_values($expectedArguments->getArrayCopy()))
             ->willReturn(10);
 
         self::assertSame(10, $resource->count(...$arguments->getArrayCopy()));
@@ -576,7 +577,7 @@ final class GenericResourceTest extends KernelTestCase
         $repositoryMock
             ->expects($this->once())
             ->method('findIds')
-            ->with(...$expectedArguments->getArrayCopy());
+            ->with(...array_values($expectedArguments->getArrayCopy()));
 
         $resource->getIds(...$arguments->getArrayCopy());
     }
