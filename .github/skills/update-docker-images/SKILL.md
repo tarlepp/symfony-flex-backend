@@ -76,6 +76,13 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    warnings as well as failures: unpinned references can warn without failing
    verification. Confirm each updated tag resolves to its recorded digest;
    multi-platform verification alone does not prove tag/digest parity.
+   Run this live check for changes to Dockerfile stages or pin-maintenance
+   workflows even when the diff does not change a tag or digest. Registry tags
+   can move without a version change; offline tests and cached builds do not
+   detect that drift. If parity fails, resolve the exact tag again rather than
+   copying a digest from an older CI log. Confirm that the current index
+   retains the old runnable platforms and rerun the blocking check after any
+   authorized refresh.
 6. Validate affected Compose configuration with `docker compose config --quiet`
    and include `compose.prod.yaml` when production configuration is affected.
    Build affected images; for PHP base or copied-tool updates, build both

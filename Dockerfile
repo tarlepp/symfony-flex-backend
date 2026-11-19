@@ -5,7 +5,7 @@ ARG NODE_VERSION=26.12.1
 
 FROM php:8.5.13-fpm-bookworm@sha256:bad1d3498eaa489efe88c1d532e47e2f4111304c3f0b19fbc428842c39ec155c AS php-upstream
 FROM mlocati/php-extension-installer:2.13.2@sha256:4fd45396c16685266d32bf147a24ecd5e81029d3820295895bf4a90131190ac9 AS extension-installer-upstream
-FROM composer:2.11.2@sha256:0c8e663f14c94d07b3c45b175c51f5a14718508f21fe4dd7e54f09488dd0ed71 AS composer-upstream
+FROM composer:2.11.2@sha256:511d2a96fce74de098b54224d59146fb8b6a7735d4e301f16c87c062e511900d AS composer-upstream
 
 FROM php-upstream AS maintenance
 
