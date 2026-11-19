@@ -9,10 +9,10 @@ namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Enum\Language;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Type;
 use Generator;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -174,11 +174,10 @@ final class EnumLanguageTypeTest extends KernelTestCase
      */
     private function getType(): EnumLanguageType
     {
-        Type::hasType('EnumLanguage')
-            ? Type::overrideType('EnumLanguage', EnumLanguageType::class)
-            : Type::addType('EnumLanguage', EnumLanguageType::class);
+        /** @var Connection $connection */
+        $connection = self::getContainer()->get(Connection::class);
 
-        $type = Type::getType('EnumLanguage');
+        $type = $connection->getConfiguration()->getTypeProvider()->get('EnumLanguage');
 
         self::assertInstanceOf(EnumLanguageType::class, $type);
 

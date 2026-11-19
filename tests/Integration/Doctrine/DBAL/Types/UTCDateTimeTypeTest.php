@@ -11,10 +11,10 @@ use App\Doctrine\DBAL\Types\UTCDateTimeType;
 use App\Tests\Utils\PhpUnitUtil;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Type;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -148,11 +148,10 @@ final class UTCDateTimeTypeTest extends KernelTestCase
      */
     private function getType(): UTCDateTimeType
     {
-        Type::hasType('datetime')
-            ? Type::overrideType('datetime', UTCDateTimeType::class)
-            : Type::addType('datetime', UTCDateTimeType::class);
+        /** @var Connection $connection */
+        $connection = self::getContainer()->get(Connection::class);
 
-        $type = Type::getType('datetime');
+        $type = $connection->getConfiguration()->getTypeProvider()->get('datetime');
 
         self::assertInstanceOf(UTCDateTimeType::class, $type);
 
