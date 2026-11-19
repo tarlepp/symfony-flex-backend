@@ -423,6 +423,59 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotIn("branch-suffix:", pr)
         # Always invoke the action: it owns existing-PR reconciliation on no diff.
         self.assertNotIn("if:", pr)
+        for path in ("composer.json", "composer.lock", "tools/*/composer.json", "tools/*/composer.lock"):
+            self.assertIn(f"            {path}\n", pr)
+
+    def test_composer_sync_only_for_patch_changes_and_fails_closed(self):
+        helper = ROOT / "scripts/sync-composer-php.sh"
+        mock = self.root / "composer"
+        mock.write_text('#!/bin/bash\nprintf "%s\\n" "$*" >> calls\n[[ "$*" != *"${FAIL_COMMAND:-never-match}"* ]]\n')
+        mock.chmod(0o755)
+        calls = self.root / "calls"
+        tool = self.root / "tools/example"
+        tool.mkdir(parents=True)
+        for directory in (self.root, tool):
+            for name in ("composer.json", "composer.lock"):
+                (directory / name).touch()
+
+        def dockerfile(version, digest="a"):
+            return f"FROM php:{version}-fpm-bookworm@sha256:{digest * 64} AS php-upstream\n"
+
+        def run(new, old=dockerfile("8.5.12"), **overrides):
+            (self.root / "Dockerfile").write_text(new)
+            calls.unlink(missing_ok=True)
+            return subprocess.run(
+                ["bash", str(helper)], input=old, cwd=self.root, text=True, capture_output=True,
+                env={**self.environment, "PATH": f"{self.root}:{os.environ['PATH']}", **overrides},
+                check=False, timeout=10,
+            )
+
+        for candidate, status in (
+            (dockerfile("8.5.12", "b"), 0), (dockerfile("8.6.1"), 1),
+            ("FROM scratch\n", 1), (dockerfile("8.5.13") * 2, 1),
+        ):
+            result = run(candidate)
+            self.assertEqual(result.returncode, status, result.stderr)
+            self.assertFalse(calls.exists())
+
+        result = run(dockerfile("8.5.13"))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(calls.read_text().splitlines(), [
+            f"--working-dir={directory} --no-interaction --no-plugins --no-scripts {command}"
+            for directory in ("tools/example", ".")
+            for command in (
+                "config platform.php 8.5.13", "require php:^8.5.13 --no-update",
+                "update --lock --no-install --ignore-platform-req=ext-*", "validate --no-check-version",
+            )
+        ])
+        result = run(dockerfile("8.5.13"), FAIL_COMMAND="update --lock")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(len(calls.read_text().splitlines()), 3)
+        (tool / "composer.lock").unlink()
+        result = run(dockerfile("8.5.13"))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Missing Composer manifest or lockfile", result.stderr)
+        self.assertFalse(calls.exists())
 
     def test_pr_and_no_change_summaries(self):
         for url in ("", "https://github.com/example/repo/pull/1"):

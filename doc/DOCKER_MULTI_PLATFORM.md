@@ -517,8 +517,10 @@ against `master` after the workflow is merged there. Manual runs remain
 available for a selected branch. It updates existing tagged digest pins in
 external `FROM` and `COPY --from` references, preserving the major version,
 exact variant and existing platforms. Tags without full stable semantic
-versions receive digest refreshes only. All registry lookups must succeed
-before files are changed; unpinned references  are reported and left untouched.
+versions receive digest refreshes only. Official PHP images stay on their
+current minor line; PHP minor upgrades require manual review. All registry
+lookups must succeed before files are changed; unpinned references are reported
+and left untouched.
 It creates or updates a PR against the branch selected for the run, or reports
 no changes without opening a new PR. Core CI's separate **Check Docker image
 versions** job reports newer major versions in its run summary with verified
@@ -529,8 +531,8 @@ An empty automatic update diff can still have major upgrades available. See the
 [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
 for dispatch, repository permissions and CI-triggering token setup.
 
-To apply the same updates locally, run from the repository root on the Docker
-host, review the diff, then verify the pins:
+To apply the image pin changes locally, run from the repository root on the
+Docker host, review the diff, then verify the pins:
 
 ```bash
 make docker-image-update-pins
@@ -538,7 +540,10 @@ git diff -- Dockerfile 'docker/*/Dockerfile*'
 make docker-image-verify-pins
 ```
 
-This changes files but does not commit, push, build images or recreate services.
+This changes Dockerfiles only; the Actions workflow also synchronizes the root
+and tool Composer manifests and lockfiles when the PHP tag changes. For manual
+PHP updates, follow [Composer PHP platform guidance](DEVELOPMENT.md#composer-php-platform).
+The command does not commit, push, build images or recreate services.
 Review upgrade compatibility and run affected image builds and application
 checks before merging. Registry or pin-validation failures return nonzero;
 unlike the read-only checker, available updates are applied and return zero.

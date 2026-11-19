@@ -62,6 +62,14 @@ jobs:
         id: verify
         run: bash scripts/make.sh docker-image-verify-pins
 
+      - name: Synchronize Composer with the PHP image
+        id: composer
+        shell: bash
+        run: |
+          git show HEAD:Dockerfile |
+            docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T \
+              -e COMPOSER_HOME=/tmp/composer php bash scripts/sync-composer-php.sh
+
       - name: Prepare pull request details
         id: details
         env:
@@ -76,6 +84,8 @@ jobs:
             without changing their major versions.
           * Refresh multi-platform digests while preserving image variants and
             supported platforms; floating tags receive digest refreshes only.
+          * Limit PHP to patch updates and synchronize the root and tool Composer
+            PHP requirements, platform settings and lockfiles without upgrading packages.
           * Major-version upgrades remain a manual review so compatibility changes
             are not applied automatically.
 
@@ -95,6 +105,7 @@ jobs:
           * `bash scripts/make.sh test-docker-images` — passed (offline regression tests).
           * `bash scripts/make.sh docker-image-update-pins` — passed (live registry resolution).
           * `bash scripts/make.sh docker-image-verify-pins` — passed (live pin verification).
+          * Composer PHP synchronization and lockfile validation passed when the PHP tag changed.
           * Application tests and builds are not run by this Docker maintenance workflow.
           EOF
 
@@ -138,6 +149,10 @@ jobs:
           add-paths: |
             Dockerfile
             docker/*/Dockerfile*
+            composer.json
+            composer.lock
+            tools/*/composer.json
+            tools/*/composer.lock
           commit-message: |
             Chore(docker): update image versions and digest pins
 

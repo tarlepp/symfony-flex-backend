@@ -9,6 +9,8 @@ FROM composer:2.11.2@sha256:0c8e663f14c94d07b3c45b175c51f5a14718508f21fe4dd7e54f
 
 FROM php-upstream AS maintenance
 
+COPY --from=composer-upstream /usr/bin/composer /usr/bin/composer
+
 RUN apt-get update \
     && apt-get install --no-install-recommends -y jq make \
     && rm -rf /var/lib/apt/lists/*

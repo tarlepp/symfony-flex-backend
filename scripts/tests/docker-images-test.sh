@@ -935,6 +935,13 @@ done
 update_pins 'idempotent updates make no changes' 0 '0 Dockerfile(s) changed'
 
 write_scratch_auxiliary_dockerfiles
+write_tags 8.5.12-fpm-bookworm 8.5.13-fpm-bookworm 8.6.1-fpm-bookworm 9.0.0-fpm-bookworm
+printf 'FROM php:8.5.12-fpm-bookworm@%s AS php-upstream\n' "${old_pin##*@}" > Dockerfile
+
+update_pins 'PHP patch is selected even when newer minor and major lines are available' 0 '1 Dockerfile(s) changed'
+grep -Fxq "FROM php:8.5.13-fpm-bookworm@${new_pin##*@} AS php-upstream" Dockerfile
+
+write_scratch_auxiliary_dockerfiles
 write_tags 1.0.0 2.0.0
 printf 'FROM %s\n' "$old_pin" > Dockerfile
 

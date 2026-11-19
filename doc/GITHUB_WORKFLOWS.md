@@ -526,8 +526,11 @@ Scheduled runs target `master`, the default branch, after the workflow is merged
 there. They create or update the same maintenance PR when updates are available,
 without creating duplicate PRs on each run. It applies stable minor/patch
 updates within each image's current major version and refreshes digests,
-preserving variants and existing platforms. It updates existing tagged digest
-pins in Dockerfile `FROM` and external `COPY --from` instructions; Compose
+preserving variants and existing platforms. PHP is patch-only: when the PHP
+tag changes, the workflow refreshes PHP requirements, platform settings, and
+lockfiles for the root and every tool without upgrading packages. It updates
+existing tagged digest pins in Dockerfile `FROM` and external `COPY --from`
+instructions; Compose
 images and GitHub Actions references are outside its scope. It verifies the
 resulting pins before creating or updating one PR per selected base branch. No
 changes means no new PR. Existing core CI gates are unchanged; this workflow
