@@ -70,6 +70,36 @@ jobs:
             docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T \
               -e COMPOSER_HOME=/tmp/composer php bash scripts/sync-composer-php.sh
 
+      - name: Synchronize Doctrine with the MariaDB image
+        id: doctrine
+        shell: bash
+        run: |
+          dockerfile=docker/mariadb/Dockerfile
+          directive='s/^FROM mariadb:([0-9]+\.[0-9]+\.[0-9]+)@sha256:[a-f0-9]{64}$/\1/p'
+          previous=$(git show "HEAD:$dockerfile" | sed -nE "$directive")
+          candidate=$(sed -nE "$directive" "$dockerfile")
+          version_pattern='^[0-9]+\.[0-9]+\.[0-9]+$'
+          if ! [[ "$previous" =~ $version_pattern && "$candidate" =~ $version_pattern ]]; then
+            echo '::error::Expected exactly one pinned MariaDB version in each Dockerfile.'
+            exit 1
+          fi
+          if [[ "$previous" == "$candidate" ]]; then
+            echo "MariaDB tag unchanged ($candidate); no Doctrine update needed."
+            exit 0
+          fi
+          if [[ "${previous%%.*}" != "${candidate%%.*}" ]]; then
+            echo '::error::MariaDB major upgrades require manual review.'
+            exit 1
+          fi
+          config=config/packages/doctrine.yaml
+          if [[ $(grep -Ec '^[[:space:]]*server_version:' "$config") != 1 ]] ||
+            ! grep -Eq "^        server_version: 'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$" "$config"; then
+            echo '::error::Expected exactly one explicit MariaDB server_version in Doctrine configuration.'
+            exit 1
+          fi
+          sed -i -E "s/^(        server_version: )'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$/\1'mariadb-$candidate'/" "$config"
+          echo "Doctrine server_version synchronized to mariadb-$candidate."
+
       - name: Prepare pull request details
         id: details
         env:
@@ -86,6 +116,7 @@ jobs:
             supported platforms; floating tags receive digest refreshes only.
           * Limit PHP to patch updates and synchronize the root and tool Composer
             PHP requirements, platform settings and lockfiles without upgrading packages.
+          * Synchronize Doctrine's configured server version when the MariaDB tag changes.
           * Major-version upgrades remain a manual review so compatibility changes
             are not applied automatically.
 
@@ -106,6 +137,7 @@ jobs:
           * `bash scripts/make.sh docker-image-update-pins` — passed (live registry resolution).
           * `bash scripts/make.sh docker-image-verify-pins` — passed (live pin verification).
           * Composer PHP synchronization and lockfile validation passed when the PHP tag changed.
+          * Doctrine server version synchronization passed when the MariaDB tag changed.
           * Application tests and builds are not run by this Docker maintenance workflow.
           EOF
 
@@ -151,6 +183,7 @@ jobs:
             docker/*/Dockerfile*
             composer.json
             composer.lock
+            config/packages/doctrine.yaml
             tools/*/composer.json
             tools/*/composer.lock
           commit-message: |

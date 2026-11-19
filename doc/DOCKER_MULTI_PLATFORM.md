@@ -541,8 +541,9 @@ make docker-image-verify-pins
 ```
 
 This changes Dockerfiles only; the Actions workflow also synchronizes the root
-and tool Composer manifests and lockfiles when the PHP tag changes. For manual
-PHP updates, follow [Composer PHP platform guidance](DEVELOPMENT.md#composer-php-platform).
+and tool Composer manifests and lockfiles when the PHP tag changes and
+Doctrine's `server_version` when the MariaDB tag changes. For manual PHP
+updates, follow [Composer PHP platform guidance](DEVELOPMENT.md#composer-php-platform).
 The command does not commit, push, build images or recreate services.
 Review upgrade compatibility and run affected image builds and application
 checks before merging. Registry or pin-validation failures return nonzero;

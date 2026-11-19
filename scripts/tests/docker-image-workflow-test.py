@@ -425,6 +425,39 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotIn("if:", pr)
         for path in ("composer.json", "composer.lock", "tools/*/composer.json", "tools/*/composer.lock"):
             self.assertIn(f"            {path}\n", pr)
+        self.assertIn("            config/packages/doctrine.yaml\n", pr)
+
+    def test_doctrine_sync_updates_only_server_version_on_a_same_major_tag_change(self):
+        dockerfile = self.root / "docker/mariadb/Dockerfile"
+        dockerfile.parent.mkdir(parents=True)
+        config = self.root / "config/packages/doctrine.yaml"
+        config.parent.mkdir(parents=True)
+        mock_git = self.root / "git"
+        mock_git.write_text('#!/bin/bash\n[[ "$*" == "show HEAD:docker/mariadb/Dockerfile" ]] || exit 64\ncat old-pin\n')
+        mock_git.chmod(0o755)
+        original = (ROOT / "config/packages/doctrine.yaml").read_text()
+
+        def pin(version, digest="a"):
+            return f"FROM mariadb:{version}@sha256:{digest * 64}\n"
+
+        (self.root / "old-pin").write_text(pin("13.0.2"))
+        for candidate, source, status, expected in (
+            (pin("13.1.1"), original, 0, original.replace("mariadb-13.0.2", "mariadb-13.1.1")),
+            (pin("13.0.2", "b"), original, 0, original),
+            (pin("14.0.0"), original, 1, original),
+            (pin("13.1.1") * 2, original, 1, original),
+            (pin("13.1.1"), original.replace("server_version:", "other:"), 1,
+             original.replace("server_version:", "other:")),
+        ):
+            with self.subTest(candidate=candidate, status=status):
+                dockerfile.write_text(candidate)
+                config.write_text(source)
+                result = self.run_script(
+                    WORKFLOW, "Synchronize Doctrine with the MariaDB image",
+                    PATH=f"{self.root}:{os.environ['PATH']}",
+                )
+                self.assertEqual(result.returncode, status, result.stdout + result.stderr)
+                self.assertEqual(config.read_text(), expected)
 
     def test_composer_sync_only_for_patch_changes_and_fails_closed(self):
         helper = ROOT / "scripts/sync-composer-php.sh"
