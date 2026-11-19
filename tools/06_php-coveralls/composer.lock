@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7b772ef70cd4d9612564c642b7d635c",
+    "content-hash": "800b779d54a56ff725b9451489ab4f09",
     "packages": [],
     "packages-dev": [
         {
@@ -744,12 +744,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "9ca11cd1098a5cf36dd8be9de62d5c57d571a582"
+                "reference": "93245209f34084d6f47ab5c072d540e4ce412a1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9ca11cd1098a5cf36dd8be9de62d5c57d571a582",
-                "reference": "9ca11cd1098a5cf36dd8be9de62d5c57d571a582",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/93245209f34084d6f47ab5c072d540e4ce412a1b",
+                "reference": "93245209f34084d6f47ab5c072d540e4ce412a1b",
                 "shasum": ""
             },
             "conflict": {
@@ -1177,6 +1177,7 @@
                 "jambagecom/div2007": "<0.10.2",
                 "james-heinrich/getid3": "<1.9.21",
                 "james-heinrich/phpthumb": "<=1.7.23",
+                "jane-php/open-api-3": "<7.12",
                 "jasig/phpcas": "<1.3.3",
                 "jayanta/laravel-threat-detection": "<1.9",
                 "jbartels/wec-map": "<3.0.3",
@@ -1421,7 +1422,7 @@
                 "phanan/koel": "<=9.7",
                 "pheditor/pheditor": "<2.0.8",
                 "phenx/php-svg-lib": "<0.5.2",
-                "php": "<8.2.35|>=8.3,<8.3.36|>=8.4,<8.4.27|>=8.5,<8.5.12",
+                "php": "<8.2.36|>=8.3,<8.3.37|>=8.4,<8.4.28|>=8.5,<8.5.13",
                 "php-censor/php-censor": "<2.0.13|>=2.1,<2.1.5",
                 "php-mod/curl": "<2.3.2",
                 "php-standard-library/h2": ">=6.1,<6.1.2|>=6.2,<6.2.1",
@@ -1918,8 +1919,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-18T23:16:43+00:00",
-            "published-time": "2026-11-18T23:16:48+00:00"
+            "time": "2026-11-19T16:19:57+00:00",
+            "published-time": "2026-11-19T16:20:02+00:00"
         },
         {
             "name": "symfony/config",
@@ -3082,11 +3083,11 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.5.12"
+        "php": "^8.5.13"
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.5.12"
+        "php": "8.5.13"
     },
     "plugin-api-version": "2.11.0"
 }
