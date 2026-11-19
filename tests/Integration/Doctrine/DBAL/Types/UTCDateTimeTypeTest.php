@@ -10,11 +10,13 @@ namespace App\Tests\Integration\Doctrine\DBAL\Types;
 use App\Doctrine\DBAL\Types\UTCDateTimeType;
 use App\Tests\Utils\PhpUnitUtil;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -40,6 +42,67 @@ final class UTCDateTimeTypeTest extends KernelTestCase
             ->format($platform->getDateTimeTzFormatString());
 
         self::assertSame($expected, $type->convertToDatabaseValue($dateInput, $platform));
+        self::assertSame('UTC', $dateInput->getTimezone()->getName());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatGetSQLDeclarationReturnsPlatformDateTimeDeclaration(): void
+    {
+        $platform = $this->getPlatform();
+
+        self::assertSame(
+            $platform->getDateTimeTypeDeclarationSQL([]),
+            $this->getType()->getSQLDeclaration([], $platform),
+        );
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatNullConversionPreservesExistingBehavior(): void
+    {
+        $type = $this->getType();
+        $platform = $this->getPlatform();
+
+        self::assertSame('', $type->convertToDatabaseValue(null, $platform));
+        self::assertNull($type->convertToPHPValue(null, $platform));
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[DataProvider('dataProviderInvalidDatabaseValues')]
+    public function testThatConvertToDatabaseValueRejectsInvalidTypes(mixed $value): void
+    {
+        $this->expectException(InvalidType::class);
+
+        $this->getType()->convertToDatabaseValue($value, $this->getPlatform());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatConvertToPHPValuePreservesMutableDateTimeIdentity(): void
+    {
+        $date = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
+
+        self::assertSame($date, $this->getType()->convertToPHPValue($date, $this->getPlatform()));
+        self::assertSame('UTC', $date->getTimezone()->getName());
+        self::assertSame('1981-04-07 07:00:00', $date->format('Y-m-d H:i:s'));
+    }
+
+    /**
+     * @return Generator<int, array{0: mixed}>
+     */
+    public static function dataProviderInvalidDatabaseValues(): Generator
+    {
+        yield ['1981-04-07 10:00:00'];
+        yield [false];
+        yield [42];
+        yield [[]];
+        yield [new DateTimeImmutable()];
     }
 
     /**
@@ -77,6 +140,8 @@ final class UTCDateTimeTypeTest extends KernelTestCase
 
         $date = $type->convertToPHPValue($value, $platform);
 
+        self::assertInstanceOf(DateTime::class, $date);
+        self::assertSame('UTC', $date->getTimezone()->getName());
         self::assertSame($expected, $date->format('Y-m-d H:i:s'));
     }
 

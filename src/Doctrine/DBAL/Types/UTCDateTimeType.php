@@ -9,35 +9,45 @@ namespace App\Doctrine\DBAL\Types;
 
 use DateTime;
 use DateTimeZone;
-use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\DateTimeType;
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Type;
 use Override;
 
 /**
  * @see http://doctrine-orm.readthedocs.org/en/latest/cookbook/working-with-datetime.html
  */
-class UTCDateTimeType extends DateTimeType
+class UTCDateTimeType extends Type
 {
     private static ?DateTimeZone $utc = null;
 
+    #[Override]
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getDateTimeTypeDeclarationSQL($column);
+    }
+
     /**
-     * @throws InvalidFormat
+     * @throws InvalidType
      */
     #[Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): string
     {
-        if ($value instanceof DateTime) {
-            $value->setTimezone($this->getUtcDateTimeZone());
+        if ($value === null) {
+            return '';
         }
 
-        return (string)parent::convertToDatabaseValue($value, $platform);
+        if ($value instanceof DateTime) {
+            return $value->setTimezone($this->getUtcDateTimeZone())
+                ->format($platform->getDateTimeFormatString());
+        }
+
+        throw InvalidType::new($value, static::class, ['null', DateTime::class]);
     }
 
     /**
      * @throws InvalidFormat
-     * @throws Exception
      */
     #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DateTime
@@ -54,7 +64,7 @@ class UTCDateTimeType extends DateTimeType
             $value = $this->checkConvertedValue((string)$value, $platform, $converted !== false ? $converted : null);
         }
 
-        return parent::convertToPHPValue($value, $platform);
+        return $value;
     }
 
     /**
@@ -69,7 +79,6 @@ class UTCDateTimeType extends DateTimeType
      * Method to check if conversion was successfully or not.
      *
      * @throws InvalidFormat
-     * @throws Exception
      */
     private function checkConvertedValue(string $value, AbstractPlatform $platform, ?DateTime $converted): DateTime
     {
@@ -79,7 +88,7 @@ class UTCDateTimeType extends DateTimeType
 
         throw InvalidFormat::new(
             $value,
-            self::lookupName($this),
+            'datetime',
             $platform->getDateTimeFormatString(),
         );
     }
