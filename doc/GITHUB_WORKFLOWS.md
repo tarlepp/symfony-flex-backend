@@ -539,7 +539,7 @@ summary shows the base branch, step and PR outcomes, a changed-file summary
 core CI gates are unchanged; the updater does not build its proposed images
 or run application tests.
 
-The independent, read-only **Check PHP minor upgrade readiness** job uses the
+The independent **Check PHP minor upgrade readiness** job uses the
 same schedule and manual dispatch. The run summary reports the newest stable
 patch of the next PHP minor for the current variant, or that no candidate is
 available. It verifies the candidate pin and platform coverage, builds the
@@ -547,8 +547,15 @@ candidate development image, and checks PHP and extension requirements from
 the application and tool Composer lockfiles against the actual candidate
 runtime. A build or platform requirement blocker is advisory; failed lookups
 and incomplete checks fail the readiness job without stopping the updater.
-Passing is not proof of application compatibility: migrate in a separate PR
-and let normal PR CI run the tests and both image builds.
+When the development build and lockfile checks pass, the job updates the PHP
+pin, Composer PHP requirements and platform settings, and refreshes the
+lockfiles without changing package versions or references. It then opens or
+updates a separate PHP migration PR for the selected base branch. The summary
+links the PR or explains why one was not submitted. This PR requires the
+Docker image update App or PAT; it never falls back to `GITHUB_TOKEN` because
+PR CI must run. The job does not auto-merge or close an existing migration
+PR when a later readiness check is blocked. Normal PR CI still runs the
+application tests and both image builds before merge.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only

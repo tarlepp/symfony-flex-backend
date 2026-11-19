@@ -99,6 +99,8 @@ With check-updates --advisory, confirmed updates produce warnings and exit 0;
 lookup or pin-validation errors still fail. Other commands do not use this flag.
 check-php-minor builds the next stable PHP minor's development image locally
 and checks the root and tool lockfiles without changing tracked files.
+With --prepare, it uses the passing image to update the PHP pin and refresh
+Composer metadata in the current checkout for a separate migration PR.
 update-pins changes only existing tagged digest pins in project Dockerfiles.
 It preserves the major version, variant, and all currently supported platforms.
 Floating tags receive digest refreshes only. All lookups must succeed before
@@ -415,7 +417,7 @@ php_minor_result() {
 }
 
 check_candidate_composer() {
-    local image=$1 manifest project report status blocked=0 incomplete=0
+    local image=$1 manifest project report status reason blocked=0 incomplete=0
     local -a manifests=(composer.json)
 
     shopt -s nullglob
@@ -450,7 +452,13 @@ check_candidate_composer() {
             github_summary "| \`${project}\` | Passed |"
         elif [[ "$status" == 1 || "$status" == 2 ]] &&
             jq -e 'any(.[]; .status == "failed" or .status == "missing")' > /dev/null <<< "$report"; then
-            github_summary "| \`${project}\` | Blocked: see package and extension details in the job log |"
+            reason="$(jq -r '
+                [.[] | select(.status == "failed" or .status == "missing") |
+                    "\(.name // "platform requirement") (\(.status))" +
+                    (if .failed_requirement.source then ": \(.failed_requirement.source) requires \(.failed_requirement.constraint)" else "" end)
+                ] | join("; ") | .[0:400] | @html | gsub("[|]"; "&#124;") | gsub("[\r\n]"; " ")
+            ' <<< "$report")"
+            github_summary "| \`${project}\` | Blocked: <code>${reason}</code> (see job log) |"
             blocked=1
         else
             error "Composer platform check for ${project} did not complete (exit ${status})"
@@ -463,14 +471,49 @@ check_candidate_composer() {
     return "$blocked"
 }
 
+prepare_php_minor() {
+    local work=$1 image=$2 manifest parity_result
+    local -a manifests=(composer.json tools/*/composer.json)
+
+    cp Dockerfile "$work/original"
+    mkdir "$work/proposal"
+    cp "$work/Dockerfile" "$work/proposal/Dockerfile"
+    for manifest in "${manifests[@]}"; do
+        mkdir -p "$work/proposal/$(dirname "$manifest")"
+        cp "$manifest" "${manifest%.json}.lock" "$work/proposal/$(dirname "$manifest")/"
+    done
+    if ! docker run --rm --pull=never -i --user "$(id -u):$(id -g)" \
+        -e COMPOSER_HOME=/tmp/composer -e XDEBUG_MODE=off -e COMPOSER_ALLOW_XDEBUG=1 \
+        --mount "type=bind,source=${work}/proposal,target=/proposal" --workdir /proposal \
+        --entrypoint bash "$image" /app/scripts/sync-composer-php.sh --next-minor < "$work/original"; then
+        github_summary "Composer could not refresh or validate the lockfiles without changing packages. No PHP migration PR will be submitted."
+        return 1
+    fi
+    if ! verify_tag_parity Dockerfile "" "$RESOLVED_PIN"; then
+        github_summary "The tested PHP pin no longer verifies: ${parity_result}."
+        return 1
+    fi
+
+    cp "$work/proposal/Dockerfile" Dockerfile
+    for manifest in "${manifests[@]}"; do
+        cp "$work/proposal/$manifest" "$work/proposal/${manifest%.json}.lock" "$(dirname "$manifest")/"
+    done
+}
+
 command_check_php_minor() (
-    local current candidate work image status=0
+    local current candidate work image status=0 prepare=false summary_error
     local php_pin_pattern='^FROM (php:[0-9]+\.[0-9]+\.[0-9]+-[a-zA-Z0-9_.-]+@sha256:[a-f0-9]{64}) AS php-upstream$'
 
     github_summary '## PHP minor readiness' ''
     trap 'if [ "$?" -ne 0 ]; then php_minor_result "Check failed"; fi' EXIT
-    if [ "$#" -ne 0 ] || [ -n "${IMAGE:-}" ]; then
-        error "check-php-minor accepts neither options nor IMAGE"
+    if [[ "$#" == 1 && "$1" == --prepare ]]; then
+        prepare=true
+    elif [ "$#" -ne 0 ]; then
+        error "check-php-minor accepts only --prepare"
+        return 64
+    fi
+    if [ -n "${IMAGE:-}" ]; then
+        error "check-php-minor does not accept IMAGE"
         return 64
     fi
 
@@ -504,13 +547,17 @@ command_check_php_minor() (
     trap 'status=$?
         if [ "$status" -ne 0 ]; then php_minor_result "Check failed"; fi
         if docker image inspect "$image" > /dev/null 2>&1; then docker image rm "$image"; fi
-        rm -f "$work/Dockerfile"
-        rmdir "$work"' EXIT
+        find "$work" -depth -delete' EXIT
 
     # Use the project build context without rewriting the checked-out PHP pin.
     sed -E "s|${php_pin_pattern}|FROM ${RESOLVED_PIN} AS php-upstream|" Dockerfile > "$work/Dockerfile"
-    if ! docker buildx build --file - --target development --load --tag "$image" . < "$work/Dockerfile"; then
+    if ! docker buildx build --file - --target development --load --tag "$image" . \
+        < "$work/Dockerfile" 2>&1 | tee "$work/build.log"; then
         php_minor_result "Blocked: candidate development image did not build (see job log)"
+        summary_error="$(awk '/(^ERROR:|^#[0-9]+ ERROR:)/ { last = $0 } END { print substr(last, 1, 500) }' "$work/build.log")"
+        if [ -n "$summary_error" ]; then
+            github_summary "<pre>$(jq -Rr '@html' <<< "$summary_error")</pre>" ""
+        fi
         github_summary "Composer checks did not run."
         return 0
     fi
@@ -518,7 +565,15 @@ command_check_php_minor() (
     check_candidate_composer "$image" || status=$?
     case "$status" in
         0)
-            php_minor_result "Ready for a migration PR"
+            if [ "$prepare" = true ]; then
+                prepare_php_minor "$work" "$image"
+                if [ -n "${GITHUB_OUTPUT:-}" ]; then
+                    printf 'prepared=true\ncandidate=%s\n' "$candidate" >> "$GITHUB_OUTPUT"
+                fi
+                php_minor_result "Prepared for a migration PR"
+            else
+                php_minor_result "Ready for a migration PR"
+            fi
             github_summary "Locked platform requirements passed. Application tests and the production build still need PR CI."
             ;;
         1) php_minor_result "Blocked: locked platform requirements are not satisfied" ;;

@@ -101,8 +101,14 @@ class DockerImageWorkflowTest(unittest.TestCase):
         })
         self.assertEqual(
             readiness["steps"][2]["run"],
-            "bash scripts/docker-images.sh check-php-minor",
+            "bash scripts/docker-images.sh check-php-minor --prepare",
         )
+        steps = {item.get("id"): item for item in readiness["steps"]}
+        self.assertIn("steps.php-minor.outputs.prepared == 'true'", steps["minor-auth"]["if"])
+        self.assertIn("steps.minor-auth.outputs.method != ''", steps["minor-details"]["if"])
+        self.assertIn("steps.minor-details.outcome == 'success'", steps["minor-pr"]["if"])
+        self.assertNotIn("github.token", steps["minor-pr"]["with"]["token"])
+        self.assertNotIn("docker/mariadb", steps["minor-pr"]["with"]["add-paths"])
 
     def php_minor_fixture(self):
         for name in ("docker-images.sh", "command-output.sh"):
@@ -136,7 +142,11 @@ class DockerImageWorkflowTest(unittest.TestCase):
             case "$*" in
                 "buildx version"|"info --format "*|"image inspect "*|"image rm "*) ;;
                 "buildx imagetools inspect php:8.6.2-fpm-bookworm --format "*)
-                    printf 'sha256:%064d\\n' 0
+                    if [[ "$MODE" == drift && -f refreshed ]]; then
+                        printf 'sha256:%064d\\n' 1
+                    else
+                        printf 'sha256:%064d\\n' 0
+                    fi
                     ;;
                 "buildx imagetools inspect --raw "*)
                     extra='{"platform":{"os":"linux","architecture":"arm64"}}'
@@ -163,19 +173,34 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     fi
                     printf '%s\\n' '[{"name":"php","status":"success"}]'
                     ;;
+                "run --rm --pull=never -i "*)
+                    [[ "$*" == *" /app/scripts/sync-composer-php.sh --next-minor" ]]
+                    for arg in "$@"; do
+                        if [[ "$arg" == type=bind,source=*,target=/proposal ]]; then
+                            proposal="${arg#type=bind,source=}"
+                            proposal="${proposal%,target=/proposal}"
+                        fi
+                    done
+                    grep -q 'php:8.5.13' /dev/stdin
+                    printf 'updated\\n' > "$proposal/tools/analyzer/composer.lock"
+                    touch refreshed
+                    if [[ "$MODE" == sync-failure ]]; then exit 1; fi
+                    ;;
                 *) echo "Unexpected Docker invocation: $*" >&2; exit 99 ;;
             esac
             """))
         docker.chmod(0o755)
         return dockerfile, f"{bin_dir}:{os.environ['PATH']}"
 
-    def test_php_minor_readiness_reports_results_without_updating_files(self):
+    def test_php_minor_readiness_prepares_files_only_when_all_checks_pass(self):
         dockerfile, path = self.php_minor_fixture()
         original = dockerfile.read_text()
         cases = {
-            "ready": (0, "Ready for a migration PR"),
+            "ready": (0, "Prepared for a migration PR"),
             "blocked": (0, "Blocked: locked platform requirements"),
             "incomplete": (1, "Check failed"),
+            "sync-failure": (1, "Check failed"),
+            "drift": (1, "Check failed"),
             "platform-loss": (1, "Check failed"),
             "build-failure": (0, "Blocked: candidate development image did not build"),
             "absent": (0, "Not available"),
@@ -185,6 +210,11 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for mode, (status, result_text) in cases.items():
             with self.subTest(mode=mode):
                 (self.root / "docker-calls").write_text("")
+                (self.root / "refreshed").unlink(missing_ok=True)
+                dockerfile.write_text(original)
+                lockfile = self.root / "tools/analyzer/composer.lock"
+                lockfile.write_text("{}\n")
+                self.output.write_text("")
                 self.summary.write_text("")
                 if mode == "absent":
                     (self.root / "tags").write_text(json.dumps({
@@ -197,8 +227,15 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 result = self.run_script(WORKFLOW, name, PATH=path, MODE=mode)
                 self.assertEqual(result.returncode, status, result.stdout + result.stderr)
                 self.assertIn(f"**Result: {result_text}", self.summary.read_text())
-                self.assertEqual(dockerfile.read_text(), original)
                 calls = (self.root / "docker-calls").read_text()
+                if mode == "ready":
+                    self.assertEqual(self.output.read_text(), "prepared=true\ncandidate=php:8.6.2-fpm-bookworm\n")
+                    self.assertIn("php:8.6.2-fpm-bookworm", dockerfile.read_text())
+                    self.assertEqual(lockfile.read_text(), "updated\n")
+                else:
+                    self.assertEqual(self.output.read_text(), "")
+                    self.assertEqual(dockerfile.read_text(), original)
+                    self.assertEqual(lockfile.read_text(), "{}\n")
 
                 if mode in {"absent", "registry-error"}:
                     self.assertNotIn("imagetools inspect", calls)
@@ -223,6 +260,45 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 if mode == "blocked":
                     self.assertIn("tool/analyzer", result.stdout)
                     self.assertIn("| `tools/analyzer` | Blocked:", self.summary.read_text())
+                if mode in {"ready", "sync-failure", "drift"}:
+                    self.assertIn("sync-composer-php.sh --next-minor", calls)
+                else:
+                    self.assertNotIn("sync-composer-php.sh --next-minor", calls)
+
+    def test_php_minor_pr_authentication_requires_ci_capable_credentials(self):
+        for app_id, key, pat, exit_code, output in (
+            ("id", "key", "pat", 0, "method=app\n"),
+            ("", "", "pat", 0, "method=pat\n"),
+            ("", "", "", 0, ""),
+            ("id", "", "pat", 1, ""),
+        ):
+            self.output.write_text("")
+            self.summary.write_text("")
+            result = self.run_script(
+                WORKFLOW, "Select PHP minor PR authentication",
+                APP_CLIENT_ID=app_id, APP_PRIVATE_KEY=key, UPDATE_TOKEN=pat,
+            )
+            self.assertEqual(result.returncode, exit_code, result.stderr)
+            self.assertEqual(self.output.read_text(), output)
+            if not output:
+                self.assertIn("No PHP migration PR:", self.summary.read_text())
+
+    def test_php_minor_pr_details_use_template_and_separate_branch(self):
+        (self.root / ".github").mkdir()
+        template = ROOT / ".github/pull_request_template.md"
+        (self.root / ".github/pull_request_template.md").write_bytes(template.read_bytes())
+        result = self.run_script(
+            WORKFLOW, "Prepare PHP minor PR details",
+            BASE_BRANCH="master", PHP_CANDIDATE="php:8.6.2-fpm-bookworm",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.output.read_text(),
+                         f"branch=chore(docker)/php-minor-{hashlib.sha256(b'master').hexdigest()[:16]}\n")
+        body = (self.root / "php-minor-pr.md").read_text()
+        self.assertIn("Update PHP to `php:8.6.2-fpm-bookworm`", body)
+        for line in template.read_text().splitlines():
+            if line.startswith(("#", "* [ ]")):
+                self.assertIn(line, body)
 
     def test_all_bootstrap_consumers_diagnose_failure_before_cleanup(self):
         consumers = set()
@@ -275,8 +351,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotIn("example-key", result.stdout + result.stderr)
         action = step(WORKFLOW, "Create repository-scoped GitHub App token")
         self.assertIn("if: ${{ steps.authentication.outputs.app == 'true' }}", action)
-        self.assertIn("permission-contents: write", action)
-        self.assertIn("permission-pull-requests: write", action)
+        app_step = next(item for item in yaml.safe_load(WORKFLOW)["jobs"]["update"]["steps"]
+                        if item.get("id") == "app-token")
+        self.assertEqual(app_step["with"]["permission-contents"], "write")
+        self.assertEqual(app_step["with"]["permission-pull-requests"], "write")
         self.assertNotIn("owner:", action)
         self.assertNotIn("skip-token-revoke:", action)
         self.assertRegex(action, r"actions/create-github-app-token@[a-f0-9]{40}")
@@ -628,11 +706,11 @@ class DockerImageWorkflowTest(unittest.TestCase):
         def dockerfile(version, digest="a"):
             return f"FROM php:{version}-fpm-bookworm@sha256:{digest * 64} AS php-upstream\n"
 
-        def run(new, old=dockerfile("8.5.12"), **overrides):
+        def run(new, old=dockerfile("8.5.12"), *args, **overrides):
             (self.root / "Dockerfile").write_text(new)
             calls.unlink(missing_ok=True)
             return subprocess.run(
-                ["bash", str(helper)], input=old, cwd=self.root, text=True, capture_output=True,
+                ["bash", str(helper), *args], input=old, cwd=self.root, text=True, capture_output=True,
                 env={**self.environment, "PATH": f"{self.root}:{os.environ['PATH']}", **overrides},
                 check=False, timeout=10,
             )
@@ -663,6 +741,29 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Missing Composer manifest or lockfile", result.stderr)
         self.assertFalse(calls.exists())
+
+        for directory in (self.root, tool):
+            (directory / "composer.lock").write_text('{"packages":[],"packages-dev":[]}\n')
+        for version in ("8.5.13", "8.7.0", "9.0.0"):
+            result = run(dockerfile(version), dockerfile("8.5.12"), "--next-minor")
+            self.assertEqual(result.returncode, 1, result.stderr)
+            self.assertFalse(calls.exists())
+        result = run(dockerfile("8.6.2"), dockerfile("8.5.12"), "--next-minor")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("require php:^8.6.2 --no-update", calls.read_text())
+        self.assertIn("update --lock --no-install\n", calls.read_text())
+        self.assertNotIn("--ignore-platform-req", calls.read_text())
+
+        with mock.open("a") as script_file:
+            script_file.write(
+                'if [[ "$*" == *" update --lock "* ]]; then\n'
+                '    printf \'%s\\n\' \'{"packages":[{"name":"example/tool","version":"2.0"}],"packages-dev":[]}\''
+                ' > "${1#--working-dir=}/composer.lock"\n'
+                'fi\n'
+            )
+        result = run(dockerfile("8.6.2"), dockerfile("8.5.12"), "--next-minor")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("Package versions or references changed", result.stderr)
 
     def test_pr_and_no_change_summaries(self):
         url = "https://github.com/example/repo/pull/1"
@@ -699,7 +800,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
             "      - name: Publish workflow run overview\n"
             + step(WORKFLOW, "Publish workflow run overview"), "",
         )
-        self.assertNotIn("continue-on-error:", without_overview)
+        informational_step = step(WORKFLOW, "Publish PHP minor PR outcome")
+        self.assertNotIn("continue-on-error:", without_overview.replace(informational_step, "", 1))
         self.assertIn("run: bash scripts/make.sh docker-image-update-pins", WORKFLOW)
         core = (ROOT / ".github/workflows/main.yml").read_text()
         report = re.search(
