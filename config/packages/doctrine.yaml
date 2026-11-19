@@ -14,20 +14,20 @@ doctrine:
         profiling_collect_backtrace: '%kernel.debug%'
         #use_savepoints: true
         # Server version is detected automatically unless explicitly configured.
-        #server_version: '16'
+        server_version: 'mariadb-13.0.2'
     orm:
         use_schema_editor_api: true
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         #identity_generation_preferences:
-        #    Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
+        #    Doctrine\\DBAL\\Platforms\\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
             App:
                 type: attribute
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
+                prefix: 'App\\Entity'
 
 when@test:
     doctrine:
