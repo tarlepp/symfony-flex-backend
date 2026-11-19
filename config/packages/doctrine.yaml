@@ -13,10 +13,10 @@ doctrine:
             EnumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
         profiling_collect_backtrace: '%kernel.debug%'
         #use_savepoints: true
-        # IMPORTANT: You MUST configure your server version,
-        # either here or in the DATABASE_URL env var (see .env file)
+        # Server version is detected automatically unless explicitly configured.
         #server_version: '16'
     orm:
+        use_schema_editor_api: true
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         #identity_generation_preferences:

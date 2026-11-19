@@ -86,7 +86,11 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
 Doctrine connections default to `utf8mb4` in `config/packages/doctrine.yaml`,
 independently of the table charset default. This avoids provisional platform
 detection during charset inference when `DATABASE_URL` does not specify a server
-version. No local configuration update is required.
+version. The tracked database URLs omit `serverVersion`, letting Doctrine detect
+the connected server's actual version. If a local or deployment URL sets
+`serverVersion`, remove an outdated hint or update it to match that server.
+
+Doctrine ORM uses its schema editor API for schema generation and comparison.
 
 ## External links / resources [ᐞ](#table-of-contents)
 
