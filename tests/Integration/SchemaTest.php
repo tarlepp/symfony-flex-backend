@@ -7,10 +7,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration;
 
-use App\Doctrine\DBAL\Types\EnumLanguageType;
-use App\Doctrine\DBAL\Types\EnumLocaleType;
-use App\Doctrine\DBAL\Types\EnumLogLoginType;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -80,18 +76,6 @@ final class SchemaTest extends KernelTestCase
 
         if ($kernel === null) {
             throw new RuntimeException('Kernel is not booting.');
-        }
-
-        if (!Type::hasType('EnumLanguage')) {
-            Type::addType('EnumLanguage', EnumLanguageType::class);
-        }
-
-        if (!Type::hasType('EnumLocale')) {
-            Type::addType('EnumLocale', EnumLocaleType::class);
-        }
-
-        if (!Type::hasType('EnumLogLogin')) {
-            Type::addType('EnumLogLogin', EnumLogLoginType::class);
         }
 
         $managerRegistry = $kernel->getContainer()
