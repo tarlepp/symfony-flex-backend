@@ -50,6 +50,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / "scripts/ci-validate-bootstrap.sh").write_text(
             (ROOT / "scripts/ci-validate-bootstrap.sh").read_text(),
         )
+        (self.root / "scripts/ci-workflow-overview.sh").write_text(
+            (ROOT / "scripts/ci-workflow-overview.sh").read_text(),
+        )
         self.output = self.root / "output"
         self.summary = self.root / "summary"
         self.environment = dict(
@@ -382,7 +385,12 @@ class DockerImageWorkflowTest(unittest.TestCase):
             '#!/bin/bash\n'
             '[ "$1" = diff ] || exit 64\n'
             '[ "$2" = --no-ext-diff ] || exit 64\n'
+            'if [ "$3" = --stat=160,120 ]; then\n'
+            '  [ "${NO_CHANGES:-}" = true ] || printf "%s\\n" " composer.lock | 2 +-" " Dockerfile | 2 +-"\n'
+            '  exit 0\n'
+            'fi\n'
             '[ "$3" = --unified=0 ] || exit 64\n'
+            '[ "${NO_CHANGES:-}" != true ] || exit 0\n'
             'printf "%s\\n" '
             '"diff --git a/Dockerfile b/Dockerfile" '
             '"--- a/Dockerfile" "+++ b/Dockerfile" '
@@ -417,6 +425,16 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("```diff\n", body)
         self.assertIn("-FROM php:8.3-cli", body)
         self.assertIn("+FROM php:8.3.1-cli", body)
+        report = self.root / "docker-image-changes.md"
+        self.assertIn("composer.lock | 2 +-", report.read_text())
+        self.assertIn("+FROM php:8.3.1-cli", report.read_text())
+        result = self.run_script(
+            WORKFLOW, "Prepare pull request details", BASE_BRANCH=branch, NO_CHANGES="true",
+            PATH=f"{self.root}:{os.environ['PATH']}",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("No eligible tag or digest changes.", report.read_text())
+        self.assertNotIn("```diff", report.read_text())
         pr = step(WORKFLOW, "Create or update the Docker image pull request")
         self.assertIn("base: ${{ github.ref_name }}", pr)
         self.assertIn("branch: ${{ steps.details.outputs.branch }}", pr)
@@ -511,16 +529,33 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertFalse(calls.exists())
 
     def test_pr_and_no_change_summaries(self):
-        for url in ("", "https://github.com/example/repo/pull/1"):
-            result = self.run_script(
-                WORKFLOW, "Summarize pull request result",
-                PR_URL=url, PR_OPERATION="created" if url else "",
-            )
-            self.assertEqual(result.returncode, 0, result.stderr)
-            summary = self.summary.read_text()
-            self.assertIn(url if url else "no update PR was needed", summary)
-            if not url:
-                self.assertIn("core CI's Docker image version report", summary)
+        url = "https://github.com/example/repo/pull/1"
+        (self.root / "docker-image-changes.md").write_text("## Proposed changes\n\nSaved before the PR action.\n")
+        for outcome, operation, link, details, message in (
+            ("success", "created", url, "success", f"(created): {url}"),
+            ("success", "closed", "", "success", "reported: closed."),
+            ("success", "none", "", "success", "No pull request changes."),
+            ("failure", "", "", "success", "action outcome: failure"),
+            ("skipped", "", "", "skipped", "action outcome: skipped"),
+        ):
+            with self.subTest(outcome=outcome, operation=operation):
+                self.summary.unlink(missing_ok=True)
+                result = self.run_script(
+                    WORKFLOW, "Publish workflow run overview", EVENT_NAME="workflow_dispatch",
+                    PRIOR_STATUS="success" if outcome == "success" else "failure", BASE_BRANCH="master",
+                    BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
+                    COMPOSER="success", DOCTRINE="success", DETAILS=details, PULL_REQUEST=outcome,
+                    PR_URL=link, PR_OPERATION=operation,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                summary = self.summary.read_text()
+                self.assertIn("Base branch: `master`", summary)
+                self.assertIn(message, summary)
+                self.assertIn("Core CI's Docker image version report", summary)
+                self.assertIn(
+                    "Saved before the PR action." if details == "success" else "No verified change report",
+                    summary,
+                )
 
     def test_major_reporting_is_independent_of_automatic_updates(self):
         self.assertNotIn("check-updates", WORKFLOW)

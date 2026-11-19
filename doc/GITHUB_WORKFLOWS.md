@@ -532,10 +532,12 @@ lockfiles for the root and every tool without upgrading packages. When the
 MariaDB tag changes, the workflow updates Doctrine's `server_version` to match.
 It updates existing tagged digest pins in Dockerfile `FROM` and external
 `COPY --from` instructions; Compose images and GitHub Actions references are
-outside its scope. It verifies the
-resulting pins before creating or updating one PR per selected base branch. No
-changes means no new PR. Existing core CI gates are unchanged; this workflow
-does not build the updated images or run application tests.
+outside its scope. It verifies the resulting pins before creating or updating
+one PR per selected base branch. No changes means no new PR. The Actions run
+summary shows the base branch, step and PR outcomes, a changed-file summary
+(including lockfiles), and the exact image pin and Doctrine diffs. Existing
+core CI gates are unchanged; this workflow does not build the updated images
+or run application tests.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only

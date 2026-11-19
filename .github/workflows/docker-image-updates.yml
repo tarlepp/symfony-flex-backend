@@ -44,6 +44,7 @@ jobs:
           fi
 
       - name: Bootstrap maintenance container
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           build-target: maintenance
@@ -107,6 +108,22 @@ jobs:
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           echo "branch=chore(docker)/image-updates-${branch_id}" >> "$GITHUB_OUTPUT"
+
+          stat=$(git diff --no-ext-diff --stat=160,120 -- Dockerfile 'docker/*/Dockerfile*' \
+            composer.json composer.lock 'tools/*/composer.json' 'tools/*/composer.lock' config/packages/doctrine.yaml)
+          # The PR action can restore the working tree; capture the verified changes first.
+          {
+            printf '## Proposed changes\n\n'
+            if [ -n "$stat" ]; then
+              printf '%s\n%s\n%s\n\n' '```text' "$stat" '```'
+              printf '### Image pins and Doctrine server version\n\n%s\n' '```diff'
+              git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' config/packages/doctrine.yaml
+              printf '%s\n' '```'
+            else
+              echo 'No eligible tag or digest changes.'
+            fi
+          } > "$RUNNER_TEMP/docker-image-changes.md"
+
           cat > "$RUNNER_TEMP/docker-image-pr.md" << 'EOF'
           # Summary
 
@@ -193,17 +210,6 @@ jobs:
           title: Chore(docker) - Update image versions and digest pins
           body-path: ${{ runner.temp }}/docker-image-pr.md
 
-      - name: Summarize pull request result
-        env:
-          PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
-          PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
-        run: |
-          if [ -n "$PR_URL" ]; then
-            printf 'Docker image update PR (%s): %s\n' "$PR_OPERATION" "$PR_URL" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "No eligible minor/patch or digest changes; no update PR was needed. Check core CI's Docker image version report for major upgrades requiring manual review." >> "$GITHUB_STEP_SUMMARY"
-          fi
-
       - name: Diagnose PHP container failure
         if: ${{ failure() }}
         timeout-minutes: 2
@@ -223,14 +229,45 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
+          BASE_BRANCH: ${{ github.ref_name }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
           TESTS: ${{ steps.tests.outcome || 'skipped' }}
           UPDATE: ${{ steps.update.outcome || 'skipped' }}
           VERIFY: ${{ steps.verify.outcome || 'skipped' }}
+          COMPOSER: ${{ steps.composer.outcome || 'skipped' }}
+          DOCTRINE: ${{ steps.doctrine.outcome || 'skipped' }}
+          DETAILS: ${{ steps.details.outcome || 'skipped' }}
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
+          PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
+          PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
         run: |
-          bash scripts/ci-workflow-overview.sh \
-            'See the pull request result above and step logs for details; a successful action may have no changes.' \
-            'Helper regression tests' "$TESTS" \
-            'Image pin updates' "$UPDATE" \
-            'Pin verification' "$VERIFY" \
-            'Pull request action' "$PULL_REQUEST" >> "$GITHUB_STEP_SUMMARY"
+          {
+            bash scripts/ci-workflow-overview.sh \
+              "Core CI's Docker image version report lists major upgrades for manual review." \
+              'Maintenance container' "$BOOTSTRAP" \
+              'Helper regression tests' "$TESTS" \
+              'Image pin updates' "$UPDATE" \
+              'Pin verification' "$VERIFY" \
+              'Composer synchronization' "$COMPOSER" \
+              'Doctrine synchronization' "$DOCTRINE" \
+              'Change report preparation' "$DETAILS" \
+              'Pull request action' "$PULL_REQUEST"
+
+            printf "\n## Pull request\n\nBase branch: \`%s\`\n\n" "$BASE_BRANCH"
+            if [ "$PULL_REQUEST" != success ]; then
+              printf 'No confirmed pull request result (action outcome: %s).\n' "$PULL_REQUEST"
+            elif [ -n "$PR_URL" ]; then
+              printf 'Docker image update PR (%s): %s\n' "${PR_OPERATION:-unchanged}" "$PR_URL"
+            elif [ -n "$PR_OPERATION" ] && [ "$PR_OPERATION" != none ]; then
+              printf 'Pull request action reported: %s.\n' "$PR_OPERATION"
+            else
+              echo 'No pull request changes.'
+            fi
+
+            printf '\n'
+            if [ "$DETAILS" = success ]; then
+              cat "$RUNNER_TEMP/docker-image-changes.md"
+            else
+              echo 'No verified change report was prepared. See the step outcomes and logs above.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
