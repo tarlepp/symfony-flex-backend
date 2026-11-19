@@ -109,7 +109,7 @@ default branch and may be delayed; they are not exact-time guarantees.
 | Workflow | Schedule | Work performed |
 | --- | --- | --- |
 | CI | Daily, 00:00 (`0 0 * * *`) | Dependency advisories, image updates |
-| Update Docker image pins | Daily, 04:17 (`17 4 * * *`) | Image update PR |
+| Update Docker image pins | Daily, 04:17 (`17 4 * * *`) | Image PR, PHP check |
 | Vulnerability Scan | Daily, 12:00 (`0 12 * * *`) | Both image builds/scans |
 | CodeQL | Monday, 03:30 (`30 3 * * 1`) | GitHub Actions analysis |
 | Scorecard | Friday, 09:29 (`29 9 * * 5`) | Supply-chain assessment |
@@ -536,8 +536,26 @@ outside its scope. It verifies the resulting pins before creating or updating
 one PR per selected base branch. No changes means no new PR. The Actions run
 summary shows the base branch, step and PR outcomes, a changed-file summary
 (including lockfiles), and the exact image pin and Doctrine diffs. Existing
-core CI gates are unchanged; this workflow does not build the updated images
+core CI gates are unchanged; the updater does not build its proposed images
 or run application tests.
+
+The independent **Check PHP minor upgrade readiness** job uses the
+same schedule and manual dispatch. The run summary reports the newest stable
+patch of the next PHP minor for the current variant, or that no candidate is
+available. It verifies the candidate pin and platform coverage, builds the
+candidate development image, and checks PHP and extension requirements from
+the application and tool Composer lockfiles against the actual candidate
+runtime. A build or platform requirement blocker is advisory; failed lookups
+and incomplete checks fail the readiness job without stopping the updater.
+When the development build and lockfile checks pass, the job updates the PHP
+pin, Composer PHP requirements and platform settings, and refreshes the
+lockfiles without changing package versions or references. It then opens or
+updates a separate PHP migration PR for the selected base branch. The summary
+links the PR or explains why one was not submitted. This PR requires the
+Docker image update App or PAT; it never falls back to `GITHUB_TOKEN` because
+PR CI must run. The job does not auto-merge or close an existing migration
+PR when a later readiness check is blocked. Normal PR CI still runs the
+application tests and both image builds before merge.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only
@@ -548,9 +566,9 @@ by `update-pins` or included in its automatic PR. A no-change PR result
 therefore does not mean there are no newer major versions. Reporting runs daily
 at 00:00 UTC and on manually dispatched core CI runs (which also run the other
 core checks). Confirmed updates are advisory; lookup and pin-validation errors
-still fail core CI, but cannot block the independently running updater. No extra
-workflow, job or required-check context is added, and the updater does not
-repeat the broad version lookup.
+still fail core CI, but cannot block the independently running updater. No
+required-check context is added, and the updater does not repeat the broad
+version lookup.
 
 The workflow must exist on `master` before GitHub enables manual dispatch, even
 when selecting another branch. In **Actions > Update Docker image pins > Run

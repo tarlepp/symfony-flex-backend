@@ -518,7 +518,7 @@ available for a selected branch. It updates existing tagged digest pins in
 external `FROM` and `COPY --from` references, preserving the major version,
 exact variant and existing platforms. Tags without full stable semantic
 versions receive digest refreshes only. Official PHP images stay on their
-current minor line; PHP minor upgrades require manual review. All registry
+current minor line in the routine PR; PHP minor PRs require review. All registry
 lookups must succeed before files are changed; unpinned references are reported
 and left untouched.
 It creates or updates a PR against the branch selected for the run, or reports
@@ -530,6 +530,23 @@ Those major upgrades are for manual review only, not automatic PR changes.
 An empty automatic update diff can still have major upgrades available. See the
 [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
 for dispatch, repository permissions and CI-triggering token setup.
+
+The same maintenance run has an independent PHP minor readiness job. It
+reports blockers or opens a separate migration PR if the candidate is ready
+and PR credentials are configured. With Docker, buildx, `jq` and `curl`, run
+the read-only check from the repository root on the Docker host:
+
+```bash
+bash scripts/docker-images.sh check-php-minor
+```
+
+The check builds a temporary development image only when there is a candidate.
+It checks the existing lockfiles against the real PHP runtime, not Composer's
+simulated `config.platform.php`. An unavailable candidate or compatibility
+blocker is advisory; registry and incomplete check errors exit nonzero. A
+passing result is a signal to prepare a migration PR, not to skip normal CI.
+The workflow uses `--prepare` to update the PHP pin and Composer metadata in
+its checkout before submitting the PR.
 
 To apply the image pin changes locally, run from the repository root on the
 Docker host, review the diff, then verify the pins:

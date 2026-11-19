@@ -1343,6 +1343,15 @@ PRs. Lookup and invalid update-pin errors remain nonzero, even alongside
 confirmed updates. Unknown or repeated update-check options return `64`. The
 default script and Make policy is unchanged.
 
+`bash scripts/docker-images.sh check-php-minor` runs the read-only part of the
+PHP readiness job from the repository root on the Docker host. It checks the next
+stable minor against the project's existing Composer lockfiles in a temporary
+development image. No candidate and compatibility blockers return zero;
+registry or incomplete checks return nonzero. The workflow adds `--prepare`
+to write the PHP pin and Composer metadata only after the checks pass; the
+script itself never opens a PR. See the
+[workflow guide][image-maintenance] for what the result means.
+
 Registry inspection retries transient errors up to three attempts, with 10 and
 20 second delays. The first `429` error prints a notification to authenticate
 with `docker login docker.io` or wait for the quota to reset, before retrying.
