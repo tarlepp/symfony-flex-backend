@@ -526,12 +526,18 @@ Scheduled runs target `master`, the default branch, after the workflow is merged
 there. They create or update the same maintenance PR when updates are available,
 without creating duplicate PRs on each run. It applies stable minor/patch
 updates within each image's current major version and refreshes digests,
-preserving variants and existing platforms. It updates existing tagged digest
-pins in Dockerfile `FROM` and external `COPY --from` instructions; Compose
-images and GitHub Actions references are outside its scope. It verifies the
-resulting pins before creating or updating one PR per selected base branch. No
-changes means no new PR. Existing core CI gates are unchanged; this workflow
-does not build the updated images or run application tests.
+preserving variants and existing platforms. PHP is patch-only: when the PHP
+tag changes, the workflow refreshes PHP requirements, platform settings, and
+lockfiles for the root and every tool without upgrading packages. When the
+MariaDB tag changes, the workflow updates Doctrine's `server_version` to match.
+It updates existing tagged digest pins in Dockerfile `FROM` and external
+`COPY --from` instructions; Compose images and GitHub Actions references are
+outside its scope. It verifies the resulting pins before creating or updating
+one PR per selected base branch. No changes means no new PR. The Actions run
+summary shows the base branch, step and PR outcomes, a changed-file summary
+(including lockfiles), and the exact image pin and Doctrine diffs. Existing
+core CI gates are unchanged; this workflow does not build the updated images
+or run application tests.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only

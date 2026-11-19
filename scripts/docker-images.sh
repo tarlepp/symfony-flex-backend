@@ -310,7 +310,8 @@ latest_image_tag() {
                 capture("^(?<prefix>v?)(?<version>(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*))(?<suffix>-[a-zA-Z0-9_.-]+)?$") |
                 select(.prefix == $prefix and (.suffix // "") == $suffix) |
                 {version: .version, parts: (.version | split(".") | map(tonumber))} |
-                select($scope == "all" or .parts[0] == ($current | split(".")[0] | tonumber))
+                select($scope == "all" or .parts[0] == ($current | split(".")[0] | tonumber)) |
+                select($scope != "patch" or .parts[1] == ($current | split(".")[1] | tonumber))
             ]
             | sort_by(.parts)
             | last
@@ -355,10 +356,16 @@ check_image_update() {
 # Resolve one candidate while preserving every runnable platform of the old pin.
 # Publishes RESOLVED_PIN and RESOLVED_PLATFORMS through resolve_image_pin.
 resolve_pin_update() {
-    local ref=$1 image candidate status=0 raw platforms platform
+    local ref=$1 image candidate status=0 raw platforms platform scope=minor
 
     image="${ref%@*}"
-    candidate="$(latest_image_tag "$image" minor)" || status=$?
+    case "${image%:*}" in
+        php|library/php|docker.io/php|docker.io/library/php|index.docker.io/php|index.docker.io/library/php)
+            scope='patch'
+            ;;
+    esac
+
+    candidate="$(latest_image_tag "$image" "$scope")" || status=$?
 
     case "$status" in
         0) ;;

@@ -44,6 +44,7 @@ jobs:
           fi
 
       - name: Bootstrap maintenance container
+        id: bootstrap
         uses: ./.github/actions/php-bootstrap
         with:
           build-target: maintenance
@@ -62,6 +63,44 @@ jobs:
         id: verify
         run: bash scripts/make.sh docker-image-verify-pins
 
+      - name: Synchronize Composer with the PHP image
+        id: composer
+        shell: bash
+        run: |
+          git show HEAD:Dockerfile |
+            docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T \
+              -e COMPOSER_HOME=/tmp/composer php bash scripts/sync-composer-php.sh
+
+      - name: Synchronize Doctrine with the MariaDB image
+        id: doctrine
+        shell: bash
+        run: |
+          dockerfile=docker/mariadb/Dockerfile
+          directive='s/^FROM mariadb:([0-9]+\.[0-9]+\.[0-9]+)@sha256:[a-f0-9]{64}$/\1/p'
+          previous=$(git show "HEAD:$dockerfile" | sed -nE "$directive")
+          candidate=$(sed -nE "$directive" "$dockerfile")
+          version_pattern='^[0-9]+\.[0-9]+\.[0-9]+$'
+          if ! [[ "$previous" =~ $version_pattern && "$candidate" =~ $version_pattern ]]; then
+            echo '::error::Expected exactly one pinned MariaDB version in each Dockerfile.'
+            exit 1
+          fi
+          if [[ "$previous" == "$candidate" ]]; then
+            echo "MariaDB tag unchanged ($candidate); no Doctrine update needed."
+            exit 0
+          fi
+          if [[ "${previous%%.*}" != "${candidate%%.*}" ]]; then
+            echo '::error::MariaDB major upgrades require manual review.'
+            exit 1
+          fi
+          config=config/packages/doctrine.yaml
+          if [[ $(grep -Ec '^[[:space:]]*server_version:' "$config") != 1 ]] ||
+            ! grep -Eq "^        server_version: 'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$" "$config"; then
+            echo '::error::Expected exactly one explicit MariaDB server_version in Doctrine configuration.'
+            exit 1
+          fi
+          sed -i -E "s/^(        server_version: )'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$/\1'mariadb-$candidate'/" "$config"
+          echo "Doctrine server_version synchronized to mariadb-$candidate."
+
       - name: Prepare pull request details
         id: details
         env:
@@ -69,6 +108,22 @@ jobs:
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           echo "branch=chore(docker)/image-updates-${branch_id}" >> "$GITHUB_OUTPUT"
+
+          stat=$(git diff --no-ext-diff --stat=160,120 -- Dockerfile 'docker/*/Dockerfile*' \
+            composer.json composer.lock 'tools/*/composer.json' 'tools/*/composer.lock' config/packages/doctrine.yaml)
+          # The PR action can restore the working tree; capture the verified changes first.
+          {
+            printf '## Proposed changes\n\n'
+            if [ -n "$stat" ]; then
+              printf '%s\n%s\n%s\n\n' '```text' "$stat" '```'
+              printf '### Image pins and Doctrine server version\n\n%s\n' '```diff'
+              git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' config/packages/doctrine.yaml
+              printf '%s\n' '```'
+            else
+              echo 'No eligible tag or digest changes.'
+            fi
+          } > "$RUNNER_TEMP/docker-image-changes.md"
+
           cat > "$RUNNER_TEMP/docker-image-pr.md" << 'EOF'
           # Summary
 
@@ -76,6 +131,9 @@ jobs:
             without changing their major versions.
           * Refresh multi-platform digests while preserving image variants and
             supported platforms; floating tags receive digest refreshes only.
+          * Limit PHP to patch updates and synchronize the root and tool Composer
+            PHP requirements, platform settings and lockfiles without upgrading packages.
+          * Synchronize Doctrine's configured server version when the MariaDB tag changes.
           * Major-version upgrades remain a manual review so compatibility changes
             are not applied automatically.
 
@@ -95,6 +153,8 @@ jobs:
           * `bash scripts/make.sh test-docker-images` — passed (offline regression tests).
           * `bash scripts/make.sh docker-image-update-pins` — passed (live registry resolution).
           * `bash scripts/make.sh docker-image-verify-pins` — passed (live pin verification).
+          * Composer PHP synchronization and lockfile validation passed when the PHP tag changed.
+          * Doctrine server version synchronization passed when the MariaDB tag changed.
           * Application tests and builds are not run by this Docker maintenance workflow.
           EOF
 
@@ -138,23 +198,17 @@ jobs:
           add-paths: |
             Dockerfile
             docker/*/Dockerfile*
+            composer.json
+            composer.lock
+            config/packages/doctrine.yaml
+            tools/*/composer.json
+            tools/*/composer.lock
           commit-message: |
             Chore(docker): update image versions and digest pins
 
             Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
           title: Chore(docker) - Update image versions and digest pins
           body-path: ${{ runner.temp }}/docker-image-pr.md
-
-      - name: Summarize pull request result
-        env:
-          PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
-          PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
-        run: |
-          if [ -n "$PR_URL" ]; then
-            printf 'Docker image update PR (%s): %s\n' "$PR_OPERATION" "$PR_URL" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "No eligible minor/patch or digest changes; no update PR was needed. Check core CI's Docker image version report for major upgrades requiring manual review." >> "$GITHUB_STEP_SUMMARY"
-          fi
 
       - name: Diagnose PHP container failure
         if: ${{ failure() }}
@@ -175,14 +229,45 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
+          BASE_BRANCH: ${{ github.ref_name }}
+          BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
           TESTS: ${{ steps.tests.outcome || 'skipped' }}
           UPDATE: ${{ steps.update.outcome || 'skipped' }}
           VERIFY: ${{ steps.verify.outcome || 'skipped' }}
+          COMPOSER: ${{ steps.composer.outcome || 'skipped' }}
+          DOCTRINE: ${{ steps.doctrine.outcome || 'skipped' }}
+          DETAILS: ${{ steps.details.outcome || 'skipped' }}
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
+          PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
+          PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
         run: |
-          bash scripts/ci-workflow-overview.sh \
-            'See the pull request result above and step logs for details; a successful action may have no changes.' \
-            'Helper regression tests' "$TESTS" \
-            'Image pin updates' "$UPDATE" \
-            'Pin verification' "$VERIFY" \
-            'Pull request action' "$PULL_REQUEST" >> "$GITHUB_STEP_SUMMARY"
+          {
+            bash scripts/ci-workflow-overview.sh \
+              "Core CI's Docker image version report lists major upgrades for manual review." \
+              'Maintenance container' "$BOOTSTRAP" \
+              'Helper regression tests' "$TESTS" \
+              'Image pin updates' "$UPDATE" \
+              'Pin verification' "$VERIFY" \
+              'Composer synchronization' "$COMPOSER" \
+              'Doctrine synchronization' "$DOCTRINE" \
+              'Change report preparation' "$DETAILS" \
+              'Pull request action' "$PULL_REQUEST"
+
+            printf "\n## Pull request\n\nBase branch: \`%s\`\n\n" "$BASE_BRANCH"
+            if [ "$PULL_REQUEST" != success ]; then
+              printf 'No confirmed pull request result (action outcome: %s).\n' "$PULL_REQUEST"
+            elif [ -n "$PR_URL" ]; then
+              printf 'Docker image update PR (%s): %s\n' "${PR_OPERATION:-unchanged}" "$PR_URL"
+            elif [ -n "$PR_OPERATION" ] && [ "$PR_OPERATION" != none ]; then
+              printf 'Pull request action reported: %s.\n' "$PR_OPERATION"
+            else
+              echo 'No pull request changes.'
+            fi
+
+            printf '\n'
+            if [ "$DETAILS" = success ]; then
+              cat "$RUNNER_TEMP/docker-image-changes.md"
+            else
+              echo 'No verified change report was prepared. See the step outcomes and logs above.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

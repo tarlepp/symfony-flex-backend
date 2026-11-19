@@ -162,7 +162,7 @@ esac
             "scripts/ci-prerequisite-gate.sh scripts/ci-result-gate.sh "
             "scripts/ci-gate-common.sh scripts/ci-workflow-overview.sh scripts/ci-statistics-summary.sh scripts/ci-validate-compose.sh "
             "scripts/ci-failure-diagnostics.sh scripts/ci-validate-bootstrap.sh "
-            "scripts/check-action-updates.sh scripts/docker-images.sh scripts/make.sh "
+            "scripts/check-action-updates.sh scripts/docker-images.sh scripts/sync-composer-php.sh scripts/make.sh "
             "scripts/check-security.sh scripts/prepare-sonar-reports.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
@@ -282,7 +282,7 @@ esac
     def test_ci_entrypoint_shell_findings_block_validation(self):
         for script in (
             "download-workflow-validator.sh",
-            "check-action-updates.sh", "docker-images.sh", "make.sh",
+            "check-action-updates.sh", "docker-images.sh", "sync-composer-php.sh", "make.sh",
             "check-security.sh", "prepare-sonar-reports.sh",
         ):
             with self.subTest(script=script):

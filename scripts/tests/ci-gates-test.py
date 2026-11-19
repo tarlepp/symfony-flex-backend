@@ -261,8 +261,12 @@ class CiGatesTest(unittest.TestCase):
                 "UPLOAD": ("upload", "Code scanning upload"), "SCAN": ("scan", "Blocking Trivy scan"),
             },
             "docker-image-updates.yml": {
+                "BOOTSTRAP": ("bootstrap", "Maintenance container"),
                 "TESTS": ("tests", "Helper regression tests"), "UPDATE": ("update", "Image pin updates"),
                 "VERIFY": ("verify", "Pin verification"),
+                "COMPOSER": ("composer", "Composer synchronization"),
+                "DOCTRINE": ("doctrine", "Doctrine synchronization"),
+                "DETAILS": ("details", "Change report preparation"),
                 "PULL_REQUEST": ("pull-request", "Pull request action"),
             },
             "action-updates.yml": {
@@ -289,6 +293,8 @@ class CiGatesTest(unittest.TestCase):
                 shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
                 self.assertIn("bash scripts/ci-workflow-overview.sh", shell)
                 summary = Path(directory) / "summary"
+                (Path(directory) / "docker-image-changes.md").write_text("## Proposed changes\n")
+                extra = dict(RUNNER_TEMP=directory, BASE_BRANCH="master", PR_URL="", PR_OPERATION="")
                 scenarios = [("success", None)] + [
                     ("failure", variable) for variable in outcomes
                 ]
@@ -304,7 +310,7 @@ class CiGatesTest(unittest.TestCase):
                         env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
                              "EVENT_NAME": "workflow_dispatch", "PRIOR_STATUS": status,
                              "TARGET": "production" if filename == "vulnerability-scan.yml" else "",
-                             **values},
+                             **extra, **values},
                         cwd=WORKFLOW.parents[2],
                         capture_output=True, text=True, check=False,
                     )
@@ -323,7 +329,7 @@ class CiGatesTest(unittest.TestCase):
                     ["bash", "-euo", "pipefail", "-c", shell], cwd=directory,
                     env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
                          "EVENT_NAME": "push", "PRIOR_STATUS": "failure",
-                         "TARGET": "", **dict.fromkeys(outcomes, "skipped")},
+                         "TARGET": "", **extra, **dict.fromkeys(outcomes, "skipped")},
                     text=True, capture_output=True, check=False,
                 )
                 self.assertNotEqual(unavailable.returncode, 0)

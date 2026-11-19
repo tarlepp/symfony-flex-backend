@@ -151,6 +151,7 @@ output_run 'CI tooling scripts (ShellCheck)' \
     scripts/ci-validate-bootstrap.sh \
     scripts/check-action-updates.sh \
     scripts/docker-images.sh \
+    scripts/sync-composer-php.sh \
     scripts/make.sh \
     scripts/check-security.sh \
     scripts/prepare-sonar-reports.sh

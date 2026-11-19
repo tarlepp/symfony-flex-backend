@@ -32,9 +32,9 @@ this is a Docker-based local workflow, not a production deployment guide.
 
 <a id="requirements"></a>
 
-The current Composer configuration requires PHP `^8.5.13`. The Docker
-development and production environments provide the application runtime and
-extensions. The bundled MariaDB image is defined in
+See `require.php` in [`composer.json`](../composer.json) for the minimum PHP
+version. The Docker development and production environments provide the runtime
+and extensions. The bundled MariaDB image is defined in
 [`docker/mariadb/Dockerfile`](../docker/mariadb/Dockerfile).
 
 These details do not constitute a supported standalone installation procedure.

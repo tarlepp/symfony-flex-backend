@@ -134,6 +134,9 @@ and the actual code, dependency manifests, and CI workflows.
   Markdown lint and documentation checks, not PHPUnit or PHP static analysis.
   Apply the same scope before commit; a documentation example mentioning a test
   command does not require executing that command.
+* Treat any confirmed failure in a required CI check selected by the task as a
+  delivery blocker, even if it predates the branch. Fix it within scope or
+  report the blocker and seek approval for out-of-scope remediation.
 * For application changes requiring broad regression coverage, run the local
   pre-commit suite below from the repository root in the development container.
   Use the selection guide for targeted changes and non-application tooling. This

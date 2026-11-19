@@ -50,6 +50,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / "scripts/ci-validate-bootstrap.sh").write_text(
             (ROOT / "scripts/ci-validate-bootstrap.sh").read_text(),
         )
+        (self.root / "scripts/ci-workflow-overview.sh").write_text(
+            (ROOT / "scripts/ci-workflow-overview.sh").read_text(),
+        )
         self.output = self.root / "output"
         self.summary = self.root / "summary"
         self.environment = dict(
@@ -382,7 +385,12 @@ class DockerImageWorkflowTest(unittest.TestCase):
             '#!/bin/bash\n'
             '[ "$1" = diff ] || exit 64\n'
             '[ "$2" = --no-ext-diff ] || exit 64\n'
+            'if [ "$3" = --stat=160,120 ]; then\n'
+            '  [ "${NO_CHANGES:-}" = true ] || printf "%s\\n" " composer.lock | 2 +-" " Dockerfile | 2 +-"\n'
+            '  exit 0\n'
+            'fi\n'
             '[ "$3" = --unified=0 ] || exit 64\n'
+            '[ "${NO_CHANGES:-}" != true ] || exit 0\n'
             'printf "%s\\n" '
             '"diff --git a/Dockerfile b/Dockerfile" '
             '"--- a/Dockerfile" "+++ b/Dockerfile" '
@@ -417,24 +425,137 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("```diff\n", body)
         self.assertIn("-FROM php:8.3-cli", body)
         self.assertIn("+FROM php:8.3.1-cli", body)
+        report = self.root / "docker-image-changes.md"
+        self.assertIn("composer.lock | 2 +-", report.read_text())
+        self.assertIn("+FROM php:8.3.1-cli", report.read_text())
+        result = self.run_script(
+            WORKFLOW, "Prepare pull request details", BASE_BRANCH=branch, NO_CHANGES="true",
+            PATH=f"{self.root}:{os.environ['PATH']}",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("No eligible tag or digest changes.", report.read_text())
+        self.assertNotIn("```diff", report.read_text())
         pr = step(WORKFLOW, "Create or update the Docker image pull request")
         self.assertIn("base: ${{ github.ref_name }}", pr)
         self.assertIn("branch: ${{ steps.details.outputs.branch }}", pr)
         self.assertNotIn("branch-suffix:", pr)
         # Always invoke the action: it owns existing-PR reconciliation on no diff.
         self.assertNotIn("if:", pr)
+        for path in ("composer.json", "composer.lock", "tools/*/composer.json", "tools/*/composer.lock"):
+            self.assertIn(f"            {path}\n", pr)
+        self.assertIn("            config/packages/doctrine.yaml\n", pr)
+
+    def test_doctrine_sync_updates_only_server_version_on_a_same_major_tag_change(self):
+        dockerfile = self.root / "docker/mariadb/Dockerfile"
+        dockerfile.parent.mkdir(parents=True)
+        config = self.root / "config/packages/doctrine.yaml"
+        config.parent.mkdir(parents=True)
+        mock_git = self.root / "git"
+        mock_git.write_text('#!/bin/bash\n[[ "$*" == "show HEAD:docker/mariadb/Dockerfile" ]] || exit 64\ncat old-pin\n')
+        mock_git.chmod(0o755)
+        original = (ROOT / "config/packages/doctrine.yaml").read_text()
+
+        def pin(version, digest="a"):
+            return f"FROM mariadb:{version}@sha256:{digest * 64}\n"
+
+        (self.root / "old-pin").write_text(pin("13.0.2"))
+        for candidate, source, status, expected in (
+            (pin("13.1.1"), original, 0, original.replace("mariadb-13.0.2", "mariadb-13.1.1")),
+            (pin("13.0.2", "b"), original, 0, original),
+            (pin("14.0.0"), original, 1, original),
+            (pin("13.1.1") * 2, original, 1, original),
+            (pin("13.1.1"), original.replace("server_version:", "other:"), 1,
+             original.replace("server_version:", "other:")),
+        ):
+            with self.subTest(candidate=candidate, status=status):
+                dockerfile.write_text(candidate)
+                config.write_text(source)
+                result = self.run_script(
+                    WORKFLOW, "Synchronize Doctrine with the MariaDB image",
+                    PATH=f"{self.root}:{os.environ['PATH']}",
+                )
+                self.assertEqual(result.returncode, status, result.stdout + result.stderr)
+                self.assertEqual(config.read_text(), expected)
+
+    def test_composer_sync_only_for_patch_changes_and_fails_closed(self):
+        helper = ROOT / "scripts/sync-composer-php.sh"
+        mock = self.root / "composer"
+        mock.write_text('#!/bin/bash\nprintf "%s\\n" "$*" >> calls\n[[ "$*" != *"${FAIL_COMMAND:-never-match}"* ]]\n')
+        mock.chmod(0o755)
+        calls = self.root / "calls"
+        tool = self.root / "tools/example"
+        tool.mkdir(parents=True)
+        for directory in (self.root, tool):
+            for name in ("composer.json", "composer.lock"):
+                (directory / name).touch()
+
+        def dockerfile(version, digest="a"):
+            return f"FROM php:{version}-fpm-bookworm@sha256:{digest * 64} AS php-upstream\n"
+
+        def run(new, old=dockerfile("8.5.12"), **overrides):
+            (self.root / "Dockerfile").write_text(new)
+            calls.unlink(missing_ok=True)
+            return subprocess.run(
+                ["bash", str(helper)], input=old, cwd=self.root, text=True, capture_output=True,
+                env={**self.environment, "PATH": f"{self.root}:{os.environ['PATH']}", **overrides},
+                check=False, timeout=10,
+            )
+
+        for candidate, status in (
+            (dockerfile("8.5.12", "b"), 0), (dockerfile("8.6.1"), 1),
+            ("FROM scratch\n", 1), (dockerfile("8.5.13") * 2, 1),
+        ):
+            result = run(candidate)
+            self.assertEqual(result.returncode, status, result.stderr)
+            self.assertFalse(calls.exists())
+
+        result = run(dockerfile("8.5.13"))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(calls.read_text().splitlines(), [
+            f"--working-dir={directory} --no-interaction --no-plugins --no-scripts {command}"
+            for directory in ("tools/example", ".")
+            for command in (
+                "config platform.php 8.5.13", "require php:^8.5.13 --no-update",
+                "update --lock --no-install --ignore-platform-req=ext-*", "validate --no-check-version",
+            )
+        ])
+        result = run(dockerfile("8.5.13"), FAIL_COMMAND="update --lock")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(len(calls.read_text().splitlines()), 3)
+        (tool / "composer.lock").unlink()
+        result = run(dockerfile("8.5.13"))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Missing Composer manifest or lockfile", result.stderr)
+        self.assertFalse(calls.exists())
 
     def test_pr_and_no_change_summaries(self):
-        for url in ("", "https://github.com/example/repo/pull/1"):
-            result = self.run_script(
-                WORKFLOW, "Summarize pull request result",
-                PR_URL=url, PR_OPERATION="created" if url else "",
-            )
-            self.assertEqual(result.returncode, 0, result.stderr)
-            summary = self.summary.read_text()
-            self.assertIn(url if url else "no update PR was needed", summary)
-            if not url:
-                self.assertIn("core CI's Docker image version report", summary)
+        url = "https://github.com/example/repo/pull/1"
+        (self.root / "docker-image-changes.md").write_text("## Proposed changes\n\nSaved before the PR action.\n")
+        for outcome, operation, link, details, message in (
+            ("success", "created", url, "success", f"(created): {url}"),
+            ("success", "closed", "", "success", "reported: closed."),
+            ("success", "none", "", "success", "No pull request changes."),
+            ("failure", "", "", "success", "action outcome: failure"),
+            ("skipped", "", "", "skipped", "action outcome: skipped"),
+        ):
+            with self.subTest(outcome=outcome, operation=operation):
+                self.summary.unlink(missing_ok=True)
+                result = self.run_script(
+                    WORKFLOW, "Publish workflow run overview", EVENT_NAME="workflow_dispatch",
+                    PRIOR_STATUS="success" if outcome == "success" else "failure", BASE_BRANCH="master",
+                    BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
+                    COMPOSER="success", DOCTRINE="success", DETAILS=details, PULL_REQUEST=outcome,
+                    PR_URL=link, PR_OPERATION=operation,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                summary = self.summary.read_text()
+                self.assertIn("Base branch: `master`", summary)
+                self.assertIn(message, summary)
+                self.assertIn("Core CI's Docker image version report", summary)
+                self.assertIn(
+                    "Saved before the PR action." if details == "success" else "No verified change report",
+                    summary,
+                )
 
     def test_major_reporting_is_independent_of_automatic_updates(self):
         self.assertNotIn("check-updates", WORKFLOW)
