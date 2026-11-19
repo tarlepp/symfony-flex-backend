@@ -46,7 +46,11 @@ final class ApiKeyTest extends EntityTestCase
         self::bootKernel();
 
         $repository = static::getContainer()->get(ApiKeyRepository::class);
-        $apiKey = $repository->findOneBy($criteria->getArrayCopy());
+
+        /** @var array<string, string> $criteriaValues */
+        $criteriaValues = $criteria->getArrayCopy();
+
+        $apiKey = $repository->findOneBy($criteriaValues);
 
         self::assertInstanceOf(ApiKey::class, $apiKey);
         self::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());

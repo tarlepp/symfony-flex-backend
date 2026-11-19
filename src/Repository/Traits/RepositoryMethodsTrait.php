@@ -31,7 +31,6 @@ trait RepositoryMethodsTrait
     {
         $lockMode ??= LockMode::NONE;
 
-        /** @psalm-suppress InvalidArgument ORM 3 EntityManager::find() accepts LockMode|int|null */
         $output = $this->getEntityManager()
             ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
