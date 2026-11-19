@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Validate the GitHub Actions PHP-bootstrap action inputs.
+# Requires exact boolean strings for dependency installation, caching, and
+# version reporting; maintenance builds must disable all three operations.
+
 set -euo pipefail
 
 validate_boolean() {

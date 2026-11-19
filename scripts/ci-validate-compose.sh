@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Validate repository Compose variants and the Dev Container JSON configuration.
+# Run from any directory; Compose checks execute on the Docker host, while JSON
+# validation uses Python in the CI PHP service.
+
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."

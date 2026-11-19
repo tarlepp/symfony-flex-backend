@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Validate workflow YAML, embedded shell, local action metadata, and tooling
+# regressions using SHA-pinned temporary validators. Run from the repository root
+# in the Linux PHP development container; downloads may use the local validator
+# cache, and the zizmor audit runs offline without a GitHub token.
+
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."

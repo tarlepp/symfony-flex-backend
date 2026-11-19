@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Verify the Composer cache mount from inside the CI PHP container.
+# Requires COMPOSER_CACHE_DIR to match Composer's configured cache path and be
+# writable by the container user; creates the cache directory when necessary.
+
 set -euo pipefail
 
 if [ -z "${COMPOSER_CACHE_DIR:-}" ]; then
