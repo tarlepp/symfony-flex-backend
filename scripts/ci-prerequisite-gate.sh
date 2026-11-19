@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Enforce expected outcomes for CI prerequisite jobs and report skip reasons.
+# Requires event, change-selection flags, and prerequisite job results from the
+# workflow environment. Writes an optional job summary and exits nonzero when a
+# required check failed or was unexpectedly skipped.
+
 set -euo pipefail
 
 # shellcheck source=scripts/ci-gate-common.sh

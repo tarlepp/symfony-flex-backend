@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Render a reusable GitHub Actions job-summary overview.
+# Requires EVENT_NAME, PRIOR_STATUS, a footer, and CHECK/RESULT argument pairs;
+# optional TARGET and OVERVIEW_TITLE customize the heading. Writes Markdown to
+# stdout for the calling workflow step to append to its summary.
+
 set -euo pipefail
 
 if (( $# < 3 || $# % 2 == 0 )); then

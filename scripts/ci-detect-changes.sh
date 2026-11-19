@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Select CI validation categories from the event's Git change range.
+# Requires EVENT_NAME, BASE_SHA, HEAD_SHA and GITHUB_OUTPUT; manual runs or
+# uncertain comparisons conservatively retain full validation. Writes selection
+# flags and eligibility previews, not job results, plus an optional step summary.
+
 set -euo pipefail
 
 if [ "${GITHUB_ACTIONS:-}" = "true" ] && [ -z "${COLOR+x}" ]; then
