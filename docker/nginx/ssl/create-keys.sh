@@ -1,6 +1,13 @@
 #!/bin/bash
+
+# Generate local development TLS materials for the Nginx configuration.
+# Run from this directory so openssl.cnf is found; outputs are written here and
+# existing files with the same names are replaced. Use these files only for
+# local development, never in production.
+
 set -euo pipefail
 
+# Create a local CA, then issue the Nginx certificate from that CA.
 openssl genrsa -passout pass: -des3 -out rootCA.key 2048
 openssl req -x509 -new -nodes -passin pass: -key rootCA.key \
     -sha256 -days 10000 -out rootCA.pem

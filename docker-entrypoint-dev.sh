@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Development PHP container entrypoint.
+# Validates configuration, prepares development dependencies and the database,
+# then replaces this process with the container command.
+# Runs in the application directory; a failed setup step prevents the command
+# from starting.
+
 set -e
 
 # Validate application configuration before development setup.
@@ -28,6 +34,7 @@ make generate-jwt-keys
 ./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
 
 # Enable Symfony console completion for development shells.
+# Append to the development user's shell configuration before command handoff.
 ./bin/console completion bash >> /home/dev/.bashrc
 
 exec "$@"

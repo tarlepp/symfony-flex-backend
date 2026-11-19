@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Production PHP container entrypoint.
+# For the php-fpm command, prepares runtime configuration, storage, database,
+# assets, and the shared application copy before starting the requested process.
+# Other commands bypass initialization and are executed directly.
+
 set -e
 
 # Note that in production environment we cannot use `symfony` binary to wrap
@@ -28,6 +33,7 @@ if [[ "$1" = 'php-fpm' ]]; then
     chown -R www-data:www-data /app/var
 
     mkdir -p /shared/app
+    # Replace the shared Nginx copy with the initialized application tree.
     find /shared/app -mindepth 1 -delete
     cp -a /app/. /shared/app/
 fi
