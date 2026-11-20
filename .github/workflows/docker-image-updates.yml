@@ -221,6 +221,7 @@ jobs:
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           echo "branch=chore(docker)/image-updates-${branch_id}" >> "$GITHUB_OUTPUT"
 
+          python3 scripts/docker/docker-image-digest-summary.py > "$RUNNER_TEMP/docker-image-digests.md"
           stat=$(git diff --no-ext-diff --stat=160,120 -- Dockerfile 'docker/*/Dockerfile*' \
             composer.json composer.lock 'tools/*/composer.json' 'tools/*/composer.lock' config/packages/doctrine.yaml)
           # The PR action can restore the working tree; capture the verified changes first.
@@ -234,6 +235,8 @@ jobs:
             else
               echo 'No eligible tag or digest changes.'
             fi
+            printf '\n'
+            cat "$RUNNER_TEMP/docker-image-digests.md"
           } > "$RUNNER_TEMP/docker-image-changes.md"
 
           sed \
@@ -251,7 +254,7 @@ jobs:
           without upgrading packages. Doctrine's configured server version is
           synchronized when the MariaDB tag changes.
           EOF
-          python3 scripts/docker/docker-image-digest-summary.py
+          cat "$RUNNER_TEMP/docker-image-digests.md"
           cat << 'EOF'
 
           ## Dockerfile image changes

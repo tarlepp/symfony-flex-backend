@@ -532,13 +532,13 @@ summary shows the base branch, step and PR outcomes, a changed-file summary
 CI gates are unchanged; the updater does not build its proposed images or run
 application tests.
 
-For digest-only updates, the PR summarizes runnable platform changes and
-available base-image and source-revision metadata. Expand the details to compare
-the old and new indexes, platform annotations and non-runnable descriptors such
-as attestations. Missing or inaccessible indexes are reported as unavailable.
-Registry metadata does not explain the publisher's intent or identify exact
-package changes, so reviewers must consult upstream sources when those details
-matter.
+For digest-only updates, the PR and Actions run summary share the same report of
+runnable platform changes and available base-image and source-revision metadata.
+Expand the details to compare the old and new indexes, platform annotations and
+non-runnable descriptors such as attestations. Missing or inaccessible indexes
+are reported as unavailable. Registry metadata does not explain the publisher's
+intent or identify exact package changes, so reviewers must consult upstream
+sources when those details matter.
 
 The independent **Check PHP minor upgrade readiness** job uses the same schedule
 and manual dispatch. The run summary reports the newest stable patch of the next

@@ -756,6 +756,21 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("org.opencontainers.image.revision", body)
         self.assertIn("<details>\n<summary>Show index and platform details</summary>", body)
         self.assertLess(body.index("Runnable platform manifests:"), body.index("<details>"))
+        digest_report = (self.root / "docker-image-digests.md").read_text()
+        change_report = (self.root / "docker-image-changes.md").read_text()
+        self.assertIn(digest_report, body)
+        self.assertIn(digest_report, change_report)
+        # Two calls for the direct report above, and two for the shared workflow report.
+        self.assertEqual(len((self.root / "calls").read_text().splitlines()), 4)
+        result = self.run_script(
+            WORKFLOW, "Publish workflow run overview", EVENT_NAME="workflow_dispatch",
+            PRIOR_STATUS="success", BASE_BRANCH="master", BOOTSTRAP="success",
+            TESTS="success", UPDATE="success", VERIFY="success", COMPOSER="success",
+            DOCTRINE="success", DETAILS="success", PULL_REQUEST="success",
+            PR_URL="", PR_OPERATION="none",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(digest_report, self.summary.read_text())
 
         unchanged = {"manifests": [descriptor("amd64", "c")]}
         metadata_only = {"manifests": [
