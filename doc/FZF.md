@@ -16,6 +16,7 @@ not installed in the production image.
   * [Table of Contents](#table-of-contents)
     * [Setup](#setup)
     * [Shell shortcuts](#shell-shortcuts)
+    * [Make target selection](#make-target-selection)
     * [Usage examples](#usage-examples)
     * [Troubleshooting](#troubleshooting)
 
@@ -82,6 +83,33 @@ Type part of a name to narrow the results. Use the arrow keys to move, `Enter`
 to select, and `Esc` or `Ctrl-C` to cancel. History search uses the current
 shell's history; it does not combine host, Bash, and Fish histories. Bash also
 supports fuzzy path completion, for example typing `vim **` and pressing `Tab`.
+
+## Make target selection [ᐞ](#table-of-contents)
+
+<a id="make-target-selection"></a>
+
+After rebuilding the development image, open a one-off Bash shell from the
+repository root on the Docker host. This mounts your checkout without replacing
+the running PHP service or running the application entrypoint:
+
+```bash
+docker compose run --rm --no-deps --entrypoint bash php \
+    --rcfile /app/scripts/make/bashrc.sh -i
+```
+
+In the shell at `/app`, type `make ec` and pause without pressing Tab. The Bash
+line editor (`ble.sh`) shows `ecs` and `ecs-fix`. Nothing runs until you submit
+the command. Once the PHP service has been recreated with the new image, the
+same feature is available through `make bash`. Fish uses Tab completion.
+
+To browse registered targets by name, description, or risk marker, run
+`make-pick` from `/app` in Bash or Fish. **Enter** runs the selected target;
+**Esc** cancels. To use standard Readline instead of `ble.sh`, run the
+following inside the PHP development container:
+
+```bash
+SYMFONY_BASH_LIVE_COMPLETION=0 bash --rcfile /app/scripts/make/bashrc.sh -i
+```
 
 ## Usage examples [ᐞ](#table-of-contents)
 

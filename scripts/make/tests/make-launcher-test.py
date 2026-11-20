@@ -11,6 +11,8 @@ import signal
 import subprocess
 import sys
 import tempfile
+import termios
+import time
 import unittest
 
 
@@ -20,6 +22,53 @@ OUTPUT = ROOT / "scripts/output/command-output.sh"
 
 
 class MakeLauncherTest(unittest.TestCase):
+    def test_completion_inventory(self):
+        result = subprocess.run(
+            ["bash", "scripts/make/make-help.sh", "--targets"],
+            cwd=ROOT, capture_output=True, text=True, check=True,
+        )
+        entries = dict(line.split("\t", 1) for line in result.stdout.splitlines())
+        self.assertIn("ecs", entries)
+        self.assertTrue(entries["ecs-fix"].startswith("[OVERWRITE] "))
+        self.assertNotIn("help", entries)
+
+    @unittest.skipUnless(Path("/usr/local/share/blesh/ble.sh").is_file(), "Requires rebuilt dev image")
+    def test_bash_displays_make_matches_without_tab(self):
+        pid, terminal = pty.fork()
+        if pid == 0:
+            termios.tcsetwinsize(0, (24, 80))
+            os.chdir(ROOT)
+            os.execvpe("bash", ["bash", "--rcfile", "scripts/make/bashrc.sh", "-i"],
+                       dict(self.environment, TERM="xterm-256color", INPUTRC="/dev/null",
+                            HISTFILE="/dev/null", XDG_CACHE_HOME=str(self.root),
+                            SYMFONY_BASH_LIVE_COMPLETION="1"))
+
+        def expect(pattern, timeout=10):
+            output = b""
+            deadline = time.monotonic() + timeout
+            while time.monotonic() < deadline:
+                if not select.select([terminal], [], [], max(0, deadline - time.monotonic()))[0]:
+                    break
+                output += os.read(terminal, 8192)
+                plain = re.sub(rb"\x1b(?:\[[0-9;]*m|\(B)", b"", output)
+                if re.search(pattern, plain):
+                    return
+            self.fail(f"Expected {pattern!r} in terminal output: {output!r}")
+
+        try:
+            # A command round trip avoids depending on the user's prompt format.
+            os.write(terminal, b"printf 'ready:%s\\n' MENU\n")
+            expect(rb"ready:MENU\r?\n")
+            os.write(terminal, b"make ec")
+            expect(rb"ecs +ecs-fix")
+        finally:
+            try:
+                os.killpg(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            os.close(terminal)
+            os.waitpid(pid, 0)
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="make-launcher-")
         self.addCleanup(self.temporary.cleanup)

@@ -5,6 +5,7 @@
 #
 # Usage:
 #   Run from the repository root with an optional group name.
+#   Pass --targets as the sole argument for tab-separated completion entries.
 #
 # Details:
 #   Reads registrations and descriptions from Makefile without invoking Docker.
@@ -12,6 +13,8 @@
 # Callers:
 #   Makefile:
 #     - `help` target.
+#   Scripts:
+#     - `scripts/make/make-shell.sh` and `scripts/make/make-shell.fish`.
 #
 
 set -euo pipefail
@@ -19,18 +22,20 @@ set -euo pipefail
 source "$(dirname "$0")/../output/command-output.sh"
 
 group=${1:-all}
-if [ "$#" -gt 1 ] || [[ ! "$group" =~ ^(all|information|tests|quality|checks|reports|setup|lifecycle|docker)$ ]]; then
+if [ "$#" -gt 1 ] || [[ ! "$group" =~ ^(all|information|tests|quality|checks|reports|setup|lifecycle|docker|--targets)$ ]]; then
     output_status FAIL "Unknown help group: $group"
     output_status INFO 'Use GROUP=all|information|tests|quality|checks|reports|setup|lifecycle|docker'
     exit 64
 fi
 
-printf '%sAvailable commands%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
-printf 'Run from the repository root. Application tooling forwards to the PHP container.\n'
-printf 'Filter: make help GROUP=<group> (default: all)\n'
-printf 'Groups: information, tests, quality, checks, reports, setup, lifecycle, docker\n'
-printf 'Routine commands first; overwrite and destructive commands last in each group.\n'
-printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
+if [ "$group" != --targets ]; then
+    printf '%sAvailable commands%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
+    printf 'Run from the repository root. Application tooling forwards to the PHP container.\n'
+    printf 'Filter: make help GROUP=<group> (default: all)\n'
+    printf 'Groups: information, tests, quality, checks, reports, setup, lifecycle, docker\n'
+    printf 'Routine commands first; overwrite and destructive commands last in each group.\n'
+    printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
+fi
 
 # REGISTER_TARGET fields are name, group, execution, risk and label. Help uses
 # name, group and risk, then joins them with the adjacent recipe descriptions.
@@ -113,6 +118,12 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         }
 
         group = groups[$3]
+        if (selected == "--targets") {
+            marker = $4 == "" ? "" : "[" $4 "] "
+            records = records $1 "\t" marker $2 "\n"
+            next
+        }
+
         if (selected != "all" && selected != $3) {
             next
         }
@@ -126,6 +137,11 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     END {
         if (invalid) {
             exit 1
+        }
+
+        if (selected == "--targets") {
+            printf "%s", records
+            exit
         }
 
         titles[1] = "Docker lifecycle and interactive sessions (host)"
