@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
-"""Verify lifecycle output using isolated fixtures and mocked Docker only."""
+"""Test Docker entrypoint startup and Make lifecycle command contracts offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/make/tests/make-lifecycle-output-test.py
+
+Requirements:
+  Python 3, GNU Make, Bash, awk, and Linux pseudo-terminal support.
+
+Details:
+  The suite runs copied entrypoints against command stubs and runs Make against
+  a temporary project with a fake Docker executable. Tests check command order,
+  arguments, diagnostics, and failures without starting services, pushing
+  images, or pruning real Docker resources.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -76,6 +97,7 @@ esac
         (self.root / "bin/awk").symlink_to(awk)
 
     def run_entrypoint(self, script, *arguments, **overrides):
+        """Return the exit status, output streams, call log, and original PID."""
         self.calls.write_text("")
         environment = dict(os.environ, PATH=str(self.root / "bin"), CALLS=str(self.calls))
         for name in ("DOCKER_IP", "XDEBUG_SESSION", "COMPOSER_MEMORY_LIMIT", "FAIL_CALL", "PAYLOAD_EXIT"):
@@ -123,6 +145,7 @@ esac
         )
         self.assertEqual(status, 23, stderr)
         self.assertEqual(calls, self.development_calls() + ["payload <argument with spaces> <>"])
+        # A matching PID proves the entrypoint replaced itself with the payload.
         self.assertEqual(stdout, f"payload pid={pid}\n")
         self.assertEqual(self.bashrc.read_text(), "existing shell configuration\nfixture completion\n")
 
@@ -224,6 +247,7 @@ exit "${DOCKER_EXIT:-0}"
         self.calls = self.root / "calls"
 
     def environment(self, **overrides):
+        """Reset inherited Make flags and color settings before applying overrides."""
         environment = dict(os.environ)
         for name in ("NATIVE_COLOR", "MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKE_TERMOUT", "MAKE_TERMERR"):
             environment.pop(name, None)
@@ -237,6 +261,7 @@ exit "${DOCKER_EXIT:-0}"
         return environment
 
     def run_command(self, command, answer=None, **overrides):
+        """Capture both streams and the call log, using a TTY for prompt answers."""
         self.calls.write_text("")
         environment = self.environment(**overrides)
         master = slave = None
@@ -257,6 +282,7 @@ exit "${DOCKER_EXIT:-0}"
         return result, self.calls.read_text()
 
     def run_with_stdout_terminal(self, command, **overrides):
+        """Give only stdout a terminal so automatic color can be tested independently."""
         self.calls.write_text("")
         environment = self.environment(COLOR="auto", **overrides)
         master, slave = pty.openpty()
@@ -274,6 +300,7 @@ exit "${DOCKER_EXIT:-0}"
         return result, self.calls.read_text()
 
     def make(self, target, *arguments, **overrides):
+        """Force host-side Make routing even when the suite runs in a container."""
         return self.run_command([
             "bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
             "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", target, *arguments,
