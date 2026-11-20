@@ -1,14 +1,32 @@
 #!/usr/bin/env python3
 """Relay a command's output and draw an idle progress indicator on stderr.
 
-Usage: command-progress.py <label> <color|plain> <command> [arguments...]
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    PROGRESS=always make lint-markdown
+  Direct invocation from the repository root inside the container:
+    python3 scripts/output/command-progress.py "Example" plain sleep 2
+  Pass color instead of plain to color the spinner frame.
 
-Terminal descriptors are relayed through a pseudo-terminal, and other
-descriptors through pipes, so the command sees the same descriptor kinds as
-when it runs directly. The indicator is drawn only while the command is
-silent with the cursor at the start of a line, and is cleared before any
-relayed output. With OUTPUT_PROGRESS_SHARED=1 (stdout and stderr were the same
-terminal before redirection), stdout joins stderr's pipe to keep them ordered.
+Environment:
+  OUTPUT_PROGRESS_DELAY sets the idle delay in seconds (default: 1).
+  OUTPUT_PROGRESS_SHARED=1 tells the pipe relay that both streams originally
+  shared a terminal, so it merges them to preserve ordering.
+
+Details:
+  The relay uses pseudo-terminals or pipes to preserve the descriptor types the
+  child sees where possible. It draws on stderr only after silence at a line
+  boundary and clears the indicator before forwarding output.
+
+Exit Status:
+  Returns the command's status, using 128 plus the signal number when it
+  terminates by signal. Invalid arguments return 64; command lookup and
+  permission failures return 127 and 126, respectively.
+
+Callers:
+  Scripts:
+    - `scripts/output/command-output.sh` invokes the relay for external commands
+      when progress is enabled.
 """
 
 import errno
@@ -83,7 +101,7 @@ class Relay:
         self.child = None
 
     def descriptors(self):
-        """Return the child's stdout and stderr, registering relayed sources."""
+        """Return child output descriptors, or None for distinct output terminals."""
         stdout_tty, stderr_tty = os.isatty(1), os.isatty(2)
         if stderr_tty:
             if stdout_tty and not os.path.samestat(os.fstat(1), os.fstat(2)):
@@ -149,6 +167,7 @@ class Relay:
         stdout, stderr = descriptors
         environment = dict(os.environ, PROGRESS="never")
         environment.pop("OUTPUT_PROGRESS_SHARED", None)
+        # Restore the caller's locale-coercion setting for the child.
         coerce = environment.pop("OUTPUT_PROGRESS_COERCE", "")
         if coerce.startswith("set:"):
             environment["PYTHONCOERCECLOCALE"] = coerce[4:]
@@ -195,6 +214,7 @@ class Relay:
                 try:
                     data = os.read(source, 65536)
                 except OSError as error:
+                    # A PTY master may report EIO when the slave closes.
                     if error.errno != errno.EIO:
                         raise
                     data = b""
@@ -208,6 +228,7 @@ class Relay:
                 last_output = now
             if child.poll() is not None:
                 finished = finished or now
+                # Stop after a quiet period if a descendant still holds a descriptor open.
                 if now - max(finished, last_output) >= DRAIN_IDLE:
                     break
                 continue
