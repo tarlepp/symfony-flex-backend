@@ -16,6 +16,9 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+    outputs:
+      report: ${{ steps.readiness-report.outputs.report }}
+      actions-report: ${{ steps.readiness-report.outputs.actions-report }}
     steps:
       - name: Harden the readiness runner (Audit all outbound calls)
         uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
@@ -30,7 +33,21 @@ jobs:
 
       - name: Check the next PHP minor against locked platform requirements
         id: php-minor
-        run: bash scripts/docker/docker-images.sh check-php-minor --prepare
+        shell: bash
+        run: |
+          GITHUB_STEP_SUMMARY="$RUNNER_TEMP/php-minor-readiness.md" \
+            bash scripts/docker/docker-images.sh check-php-minor --prepare 2>&1 |
+            tee "$RUNNER_TEMP/php-minor-readiness.log"
+
+      - name: Publish PHP readiness evidence
+        id: readiness-report
+        if: ${{ !cancelled() && steps.php-minor.outcome != 'skipped' }}
+        env:
+          CHECK_OUTCOME: ${{ steps.php-minor.outcome }}
+        run: |
+          python3 scripts/docker/php-minor-readiness-report.py \
+            --source "$RUNNER_TEMP/php-minor-readiness.md" \
+            --log "$RUNNER_TEMP/php-minor-readiness.log" --outcome "$CHECK_OUTCOME"
 
       - name: Select PHP minor PR authentication
         id: minor-auth
@@ -57,6 +74,7 @@ jobs:
         env:
           BASE_BRANCH: ${{ github.ref_name }}
           PHP_CANDIDATE: ${{ steps.php-minor.outputs.candidate }}
+          PHP_READINESS_REPORT: ${{ steps.readiness-report.outputs.report }}
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           printf 'branch=chore(docker)/php-minor-%s\n' "$branch_id" >> "$GITHUB_OUTPUT"
@@ -74,6 +92,7 @@ jobs:
           * Application tests and the production build were not run before opening
             this PR. Normal PR CI must pass before merging.
           EOF
+          printf '\n%s\n' "$PHP_READINESS_REPORT" >> "$RUNNER_TEMP/php-minor-pr.md"
 
       - name: Create repository-scoped GitHub App token for PHP migration
         id: minor-token
@@ -123,7 +142,8 @@ jobs:
 
   update:
     name: Update Docker image versions and digests
-    if: ${{ github.ref_type == 'branch' }}
+    needs: php-minor-readiness
+    if: ${{ !cancelled() && github.ref_type == 'branch' }}
     runs-on: ubuntu-26.04
     timeout-minutes: 30
     permissions:
@@ -217,10 +237,13 @@ jobs:
         id: details
         env:
           BASE_BRANCH: ${{ github.ref_name }}
+          PHP_READINESS_REPORT: ${{ needs.php-minor-readiness.outputs.report }}
+          PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           echo "branch=chore(docker)/image-updates-${branch_id}" >> "$GITHUB_OUTPUT"
 
+          python3 scripts/docker/docker-image-digest-summary.py > "$RUNNER_TEMP/docker-image-digests.md"
           stat=$(git diff --no-ext-diff --stat=160,120 -- Dockerfile 'docker/*/Dockerfile*' \
             composer.json composer.lock 'tools/*/composer.json' 'tools/*/composer.lock' config/packages/doctrine.yaml)
           # The PR action can restore the working tree; capture the verified changes first.
@@ -234,33 +257,45 @@ jobs:
             else
               echo 'No eligible tag or digest changes.'
             fi
+            printf '\n'
+            cat "$RUNNER_TEMP/docker-image-digests.md"
           } > "$RUNNER_TEMP/docker-image-changes.md"
 
-          cat > "$RUNNER_TEMP/docker-image-pr.md" << 'EOF'
-          # Summary
+          sed \
+            -e 's|^\* Describe the change$|* Refresh Docker image pins with available stable minor/patch versions or digest-only updates, without changing their major versions; floating tags receive digest refreshes only.|' \
+            -e 's|^\* Explain why it is needed$|* Keep image pins aligned with upstream while preserving variants and supported platforms. Major-version upgrades remain a manual review.|' \
+            .github/pull_request_template.md > "$RUNNER_TEMP/docker-image-pr.md"
 
-          * Refresh tagged Docker image pins to available stable minor/patch versions,
-            without changing their major versions.
-          * Refresh multi-platform digests while preserving image variants and
-            supported platforms; floating tags receive digest refreshes only.
-          * Limit PHP to patch updates and synchronize the root and tool Composer
-            PHP requirements, platform settings and lockfiles without upgrading packages.
-          * Synchronize Doctrine's configured server version when the MariaDB tag changes.
-          * Major-version upgrades remain a manual review so compatibility changes
-            are not applied automatically.
+          {
+          cat << 'EOF'
 
-          # Dockerfile image changes
+          ## Automated update details
+
+          PHP is limited to patch updates. When its tag changes, the root and tool
+          Composer requirements, platform settings and lockfiles are synchronized
+          without upgrading packages. Doctrine's configured server version is
+          synchronized when the MariaDB tag changes.
+          EOF
+          if [ -n "$PHP_READINESS_REPORT" ]; then
+            printf '\n%s\n' "$PHP_READINESS_REPORT"
+          else
+            printf '\n## PHP minor upgrade readiness\n\n**Result: Unavailable**\n\nReason: No readiness evidence was received (readiness job: %s). No compatibility conclusion can be drawn; see the readiness job logs.\n' "$PHP_READINESS_RESULT"
+          fi
+          cat "$RUNNER_TEMP/docker-image-digests.md"
+          cat << 'EOF'
+
+          ## Dockerfile image changes
 
           The diff lists each changed Dockerfile and the exact old and new image
           references:
 
           ```diff
           EOF
-          git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' >> "$RUNNER_TEMP/docker-image-pr.md"
-          cat << 'EOF' >> "$RUNNER_TEMP/docker-image-pr.md"
+          git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*'
+          cat << 'EOF'
           ```
 
-          # Validation
+          ## Automated validation evidence
 
           * `bash scripts/make/make.sh test-docker-images` — passed (offline regression tests).
           * `bash scripts/make/make.sh docker-image-update-pins` — passed (live registry resolution).
@@ -269,6 +304,7 @@ jobs:
           * Doctrine server version synchronization passed when the MariaDB tag changed.
           * Application tests and builds are not run by this Docker maintenance workflow.
           EOF
+          } >> "$RUNNER_TEMP/docker-image-pr.md"
 
       - name: Select pull request authentication
         id: authentication
@@ -345,8 +381,15 @@ jobs:
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
           PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
           PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
+          PHP_READINESS_ACTIONS: ${{ needs.php-minor-readiness.outputs.actions-report }}
+          PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}
         run: |
           {
+            if [ -n "$PHP_READINESS_ACTIONS" ]; then
+              printf '%s\n\n' "$PHP_READINESS_ACTIONS"
+            else
+              printf '## PHP minor upgrade readiness\n\n> [!WARNING]\n> PHP minor upgrade needs attention; routine image updates remain separate.\n\n**Result: Unavailable**\n\nReason: No readiness evidence was received (readiness job: %s). No compatibility conclusion can be drawn; see the readiness job logs.\n\n' "$PHP_READINESS_RESULT"
+            fi
             bash scripts/ci/ci-workflow-overview.sh \
               "Core CI's Docker image version report lists major upgrades for manual review." \
               'Maintenance container' "$BOOTSTRAP" \

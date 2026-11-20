@@ -575,11 +575,20 @@ command_check_php_minor() (
 
     # Use the project build context without rewriting the checked-out PHP pin.
     sed -E "s|${php_pin_pattern}|FROM ${RESOLVED_PIN} AS php-upstream|" Dockerfile > "$work/Dockerfile"
-    if ! docker buildx build --file - --target development --load --tag "$image" . \
+    if ! docker buildx build --progress plain --file - --target development --load --tag "$image" . \
         < "$work/Dockerfile" 2>&1 | tee "$work/build.log"; then
         php_minor_result "Blocked: candidate development image did not build (see job log)"
-        summary_error="$(awk '/(^ERROR:|^#[0-9]+ ERROR:)/ { last = $0 } END { print substr(last, 1, 500) }' "$work/build.log")"
+        summary_error="$(awk '
+            /(^|[[:space:]])(fatal )?error:/ {
+                line = $0
+                sub(/^#[0-9]+ [0-9.]+ /, "", line)
+                if (!seen[line]++ && count++ < 5) print substr(line, 1, 500)
+            }
+            /(^ERROR:|^#[0-9]+ ERROR:)/ { last = $0 }
+            END { if (!count && last != "") print substr(last, 1, 500) }
+        ' "$work/build.log")"
         if [ -n "$summary_error" ]; then
+            github_summary "Reason: <code>$(head -n 1 <<< "$summary_error" | jq -Rr '@html')</code>" ""
             github_summary "<pre>$(jq -Rr '@html' <<< "$summary_error")</pre>" ""
         fi
         github_summary "Composer checks did not run."
