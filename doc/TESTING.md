@@ -13,6 +13,7 @@ application.
   * [Table of Contents](#table-of-contents)
     * [Testing](#testing)
       * [Selecting validation](#selecting-validation)
+      * [Comparing Make commands](#comparing-make-commands)
       * [Command output contracts](#command-output-contracts)
       * [Commands to run tests](#commands-to-run-tests)
       * [Own environment for testing](#own-environment-for-testing)
@@ -128,6 +129,55 @@ applicable or could not run. Missing containers, dependencies, credentials, or
 services are blockers, not exemptions: do not claim blocked checks passed. Use
 the development container for PHP tooling and the documented command for each
 other check; do not replace a required runtime check with a YAML parse.
+
+### Comparing Make commands [ᐞ](#table-of-contents)
+
+<a id="comparing-make-commands"></a>
+
+Before editing the Makefile or code that may change a target's behavior, list
+the exact Make invocations affected. Follow the changed recipe, helper, or
+configuration to its Make callers, including targets reached through shared
+wrappers. Note why each command is affected, which inputs it needs, and whether
+it is safe to run. This comparison complements scoped validation; it does not
+require running every target listed in help.
+
+**Command inventory.** If the change affects names, descriptions, groups,
+execution labels, or risk markers, snapshot the full help inventory. From the
+repository root on the Docker host, before editing:
+
+```bash
+make_comparison=$(mktemp -d) &&
+  bash scripts/make/make.sh help GROUP=all COLOR=never > "$make_comparison/help.before"
+```
+
+After the final edit, from the same directory and Bash session, with both help
+commands succeeding:
+
+```bash
+bash scripts/make/make.sh help GROUP=all COLOR=never > "$make_comparison/help.after" &&
+  diff -u "$make_comparison/help.before" "$make_comparison/help.after"
+```
+
+This needs no running containers. `diff` exits with status `1` when it finds
+differences. Identical help only means the displayed inventory did not change.
+
+**Command behavior.** Run each affected safe command before editing and after
+the final edit, using the same arguments, fixtures, and execution context unless
+that context is the change under test. Record the baseline revision and both
+outcomes: exit status, relevant stdout and stderr, and artifacts that are part of
+the command contract. Keep captures outside the checkout and redact secrets
+before sharing. Compare meaningful differences, not timing or temporary paths.
+Use the project's container routing for live checks and existing offline
+fixtures for side-effecting or destructive targets. A dry run can show routing or
+recipe expansion but does not validate normal execution. Recursive Make recipes
+can still run under `make -n`, so do not treat it as a sandbox.
+
+At handoff, list each affected command (or fixture that covers it), the before
+and after outcomes, and whether the difference was expected, unchanged, or
+blocked. A newly added or removed target may be absent on one side. If the
+baseline was not captured or a prerequisite is missing, report that gap rather
+than claiming a comparison. Do not switch a dirty checkout or create another
+worktree or clone just to recover the baseline without approval.
 
 ### Command output contracts [ᐞ](#table-of-contents)
 
