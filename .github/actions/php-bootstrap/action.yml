@@ -27,7 +27,7 @@ runs:
         INSTALL_DEPENDENCIES: ${{ inputs.install-dependencies }}
         CACHE_DEPENDENCIES: ${{ inputs.cache-dependencies }}
         PRINT_VERSIONS: ${{ inputs.print-versions }}
-      run: bash scripts/ci-validate-bootstrap.sh
+      run: bash scripts/ci/ci-validate-bootstrap.sh
 
     - name: Set Composer cache location
       shell: bash
@@ -75,19 +75,19 @@ runs:
 
     - name: Start PHP development container
       shell: bash
-      run: bash scripts/make.sh ci-start CI_PREBUILT=true
+      run: bash scripts/make/make.sh ci-start CI_PREBUILT=true
 
     - name: Verify Composer cache mount
       if: ${{ inputs.install-dependencies == 'true' || inputs.cache-dependencies == 'true' }}
       shell: bash
-      run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php bash scripts/check-composer-cache.sh
+      run: docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php bash scripts/ci/check-composer-cache.sh
 
     - name: Install Composer dependencies
       if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
-      run: bash scripts/make.sh install
+      run: bash scripts/make/make.sh install
 
     - name: Check which versions we are using
       if: ${{ inputs.print-versions == 'true' }}
       shell: bash
-      run: bash scripts/make.sh tool-versions
+      run: bash scripts/make/make.sh tool-versions

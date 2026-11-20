@@ -8,7 +8,7 @@
 #
 # Details:
 #   Docker, registries, and uploaders are mocked; no application data is mutated
-#   and no uploads occur. Aggregates eight Python suites and host/CI forwarding
+#   and no uploads occur. Aggregates eight focused suites and host/CI forwarding
 #   regressions.
 #
 # Callers:
@@ -21,20 +21,29 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."
-source scripts/command-output.sh
+source scripts/output/command-output.sh
 OUTPUT_RUN_GROUPED=1
 
 output_status RUN 'Command output contracts (offline fixtures)'
 output_status INFO 'Docker, registries and uploaders are mocked; no application mutation or upload is performed'
 
 OUTPUT_STATUS_INDENT='  '
-for suite in command-output make-launcher make-check-output make-quality-output \
-    make-lifecycle-output make-information-output check-outcomes lint-workflows-output; do
-    output_run "$suite regression suite" \
-        python3 scripts/run-workflow-tests.py "scripts/tests/$suite-test.py"
+for suite in \
+    scripts/output/tests/command-output-test.py \
+    scripts/make/tests/make-launcher-test.py \
+    scripts/make/tests/make-check-output-test.py \
+    scripts/make/tests/make-quality-output-test.py \
+    scripts/make/tests/make-lifecycle-output-test.py \
+    scripts/make/tests/make-information-output-test.py \
+    scripts/checks/tests/check-outcomes-test.py \
+    scripts/checks/tests/lint-workflows-output-test.py; do
+    suite_name=${suite##*/}
+    suite_name=${suite_name%-test.py}
+    output_run "$suite_name regression suite" \
+        python3 scripts/tests/run-workflow-tests.py "$suite"
 done
 output_run 'Host and CI forwarding regression suite' \
-    python3 scripts/native-output.py --indent bash scripts/tests/make-container-test.sh
+    python3 scripts/output/native-output.py --indent bash scripts/make/tests/make-container-test.sh
 
 printf '\n' >&2
 OUTPUT_STATUS_INDENT='' output_status OK 'Command output contracts: 9 regression suites passed'

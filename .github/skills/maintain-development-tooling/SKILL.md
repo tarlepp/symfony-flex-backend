@@ -47,10 +47,13 @@ Inspect the implementation and its actual callers:
 * [Scripts guide](../../../scripts/README.md) and scripts in `scripts/`:
   documentation checking, action/tool update discovery, workflow validation,
   Docker image helpers, and project statistics.
-* `scripts/tests/make-container-test.sh`, `scripts/tests/docker-images-test.sh`,
-  and `scripts/tests/check-workflow-tool-updates-test.py`: existing offline
-  fixtures, command mocks, failure assertions, and temporary-file handling. Do
-  not assume every script already has a regression suite.
+* `scripts/make/tests/make-container-test.sh`,
+  `scripts/docker/tests/docker-images-test.sh`, and
+  `scripts/checks/tests/check-workflow-tool-updates-test.py`: representative
+  offline fixtures, command mocks, failure assertions, and temporary-file
+  handling. Focused tests live in their owning script group's `tests/`
+  directory; `scripts/tests/` is reserved for cross-group runners. Do not assume
+  every script already has a regression suite.
 * `.github/workflows/` and `.github/actions/`: direct and Make-mediated callers,
   inputs, invocation environment, and consumers of output and exit status.
 * `Dockerfile`, `docker/ci-compose.yaml`, `.devcontainer/`, and tool manifests
@@ -79,7 +82,7 @@ Inspect the implementation and its actual callers:
    host-safe Make targets. Docker orchestration, registry inspection, and GitHub
    platform operations remain host-side. In the Makefile, `HOST_TARGETS`
    excludes host-only commands from forwarding; other explicit goals forward
-   through `COMPOSE_EXEC` with `exec -T` to `php bash scripts/make.sh`,
+   through `COMPOSE_EXEC` with `exec -T` to `php bash scripts/make/make.sh`,
    filtering container-side Make recipe errors. Application recipes must not add
    a second host-forwarding path; keep native commands in the recipe and routing
    in the central dispatch. Add target metadata through `REGISTER_TARGET` (name,
@@ -90,7 +93,7 @@ Inspect the implementation and its actual callers:
    `COMMAND_TARGETS`; preserve execution despite same-named files, including raw
    recursive recipes. Help accepts `GROUP` filtering without Docker access;
    preserve the full default inventory and routine/overwrite/destructive
-   ordering within groups. `scripts/compose-context.sh` performs on-demand
+   ordering within groups. `scripts/make/compose-context.sh` performs on-demand
    project/service checks: running PHP is required for forwarding/shells;
    unhealthy PHP warns but remains accessible, and stopped containers remain
    eligible for logs. Preserve mixed goals, default/help behavior, recursive
@@ -108,11 +111,11 @@ Inspect the implementation and its actual callers:
    success using the owning tool's existing contract. `check-action-updates.sh`
    distinguishes updates from discovery failures, while its Make target
    deliberately decorates handled statuses 1 and 2 through
-   `scripts/action-update-output.sh`. A Make success is therefore not proof that
-   direct checker output reported no issues. Do not copy that informational
-   behavior into blocking checks or silently change its callers. Verify script
-   and wrapper outcomes separately; Make may translate a failing recipe's exit
-   status into its own nonzero status.
+   `scripts/output/action-update-output.sh`. A Make success is therefore not
+   proof that direct checker output reported no issues. Do not copy that
+   informational behavior into blocking checks or silently change its callers.
+   Verify script and wrapper outcomes separately; Make may translate a failing
+   recipe's exit status into its own nonzero status.
 6. Preserve useful diagnostics and output consumers. Keep stdout/stderr,
    noninteractive behavior, color/`NO_COLOR`, summaries, and machine-readable
    inventories compatible where used. Do not let pipelines, subshells, command
@@ -262,14 +265,15 @@ entry points include:
 ```bash
 make test-make-routing
 make test-docker-images
-docker compose exec -T php python3 scripts/tests/check-workflow-tool-updates-test.py
+docker compose exec -T php python3 scripts/checks/tests/check-workflow-tool-updates-test.py
 ```
 
 These are offline mocked checks. Run the affected one, not every suite for an
 unrelated script change. The routing suite explicitly emulates host execution;
 its passed mocks do not prove a real Docker daemon or application is healthy. If
-a checker has no suite, add focused fixtures in `scripts/tests/` using existing
-test mechanisms instead of installing a new framework.
+a checker has no suite, add focused fixtures in its owning
+`scripts/<group>/tests/` directory using existing test mechanisms instead of
+installing a new framework.
 
 Run the consolidated output-contract checks when changing Make target
 registrations or recipe ordering, composing regression runners, or changing
@@ -281,9 +285,9 @@ running:
 make test-command-output
 ```
 
-Trace these changes into `scripts/tests/command-output-test.py`,
-`scripts/tests/make-information-output-test.py`, and
-`scripts/tests/lint-workflows-output-test.py` as applicable. Preserve Make
+Trace these changes into `scripts/output/tests/command-output-test.py`,
+`scripts/make/tests/make-information-output-test.py`, and
+`scripts/checks/tests/lint-workflows-output-test.py` as applicable. Preserve Make
 registration, recipe, and help ordering; update expected suite output and
 isolated runner fixtures together. A newly invoked regression script must be
 represented in affected fixtures, with failures still propagated. Focused
@@ -293,7 +297,7 @@ for coverage and limits.
 
 For changed Bash scripts, check syntax inside the container with `bash -n`
 against each exact changed path. Inspect the ShellCheck invocation in
-`scripts/lint-workflows.sh` and run `make lint-workflows` when any changed
+`scripts/checks/lint-workflows.sh` and run `make lint-workflows` when any changed
 script is listed there. That validator also checks workflow and composite action
 shell, but does not check every shell script in the repository. Use other
 relevant lint commands for scripts outside that list; syntax checks and behavior

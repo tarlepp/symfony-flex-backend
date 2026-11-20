@@ -30,7 +30,7 @@ jobs:
 
       - name: Check the next PHP minor against locked platform requirements
         id: php-minor
-        run: bash scripts/docker-images.sh check-php-minor --prepare
+        run: bash scripts/docker/docker-images.sh check-php-minor --prepare
 
       - name: Select PHP minor PR authentication
         id: minor-auth
@@ -68,7 +68,7 @@ jobs:
 
           ## Automated readiness evidence
 
-          * `bash scripts/docker-images.sh check-php-minor --prepare` passed:
+          * `bash scripts/docker/docker-images.sh check-php-minor --prepare` passed:
             verified PHP pin, development build, Composer lockfile platform checks,
             and lockfile refresh and validation with unchanged package versions and references.
           * Application tests and the production build were not run before opening
@@ -165,15 +165,15 @@ jobs:
 
       - name: Run Docker image helper regression tests
         id: tests
-        run: bash scripts/make.sh test-docker-images
+        run: bash scripts/make/make.sh test-docker-images
 
       - name: Apply minor/patch updates and digest refreshes
         id: update
-        run: bash scripts/make.sh docker-image-update-pins
+        run: bash scripts/make/make.sh docker-image-update-pins
 
       - name: Verify updated multi-platform pins and tag parity
         id: verify
-        run: bash scripts/make.sh docker-image-verify-pins
+        run: bash scripts/make/make.sh docker-image-verify-pins
 
       - name: Synchronize Composer with the PHP image
         id: composer
@@ -262,9 +262,9 @@ jobs:
 
           # Validation
 
-          * `bash scripts/make.sh test-docker-images` — passed (offline regression tests).
-          * `bash scripts/make.sh docker-image-update-pins` — passed (live registry resolution).
-          * `bash scripts/make.sh docker-image-verify-pins` — passed (live pin verification).
+          * `bash scripts/make/make.sh test-docker-images` — passed (offline regression tests).
+          * `bash scripts/make/make.sh docker-image-update-pins` — passed (live registry resolution).
+          * `bash scripts/make/make.sh docker-image-verify-pins` — passed (live pin verification).
           * Composer PHP synchronization and lockfile validation passed when the PHP tag changed.
           * Doctrine server version synchronization passed when the MariaDB tag changed.
           * Application tests and builds are not run by this Docker maintenance workflow.
@@ -318,7 +318,7 @@ jobs:
       - name: Diagnose PHP container failure
         if: ${{ failure() }}
         timeout-minutes: 2
-        run: bash scripts/ci-failure-diagnostics.sh
+        run: bash scripts/ci/ci-failure-diagnostics.sh
 
       - name: Log out of Docker Hub
         if: ${{ always() }}
@@ -326,7 +326,7 @@ jobs:
 
       - name: Stop PHP development container
         if: ${{ always() }}
-        run: bash scripts/make.sh ci-stop
+        run: bash scripts/make/make.sh ci-stop
 
       - name: Publish workflow run overview
         if: ${{ !cancelled() }}
@@ -347,7 +347,7 @@ jobs:
           PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
         run: |
           {
-            bash scripts/ci-workflow-overview.sh \
+            bash scripts/ci/ci-workflow-overview.sh \
               "Core CI's Docker image version report lists major upgrades for manual review." \
               'Maintenance container' "$BOOTSTRAP" \
               'Helper regression tests' "$TESTS" \

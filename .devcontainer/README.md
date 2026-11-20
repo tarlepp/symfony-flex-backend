@@ -70,14 +70,14 @@ run the repository's standard-library documentation checker from `/app`:
 ```bash
 python3 --version
 python3 -c 'import sys; print(sys.executable); print(sys.prefix)'
-python3 scripts/check-skills.py
+python3 scripts/checks/check-skills.py
 ```
 
 The interpreter and prefix should point to `/home/dev/.venv`. To run the checker
 from the host without an interactive shell, use Docker explicitly:
 
 ```bash
-docker compose exec -T php python3 scripts/check-skills.py
+docker compose exec -T php python3 scripts/checks/check-skills.py
 ```
 
 Alternatively, run `make check-skills` from either the host or the container.

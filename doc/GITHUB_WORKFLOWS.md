@@ -49,7 +49,7 @@ including skips after a failure; later cleanup failures are not included.
 Consult step logs, annotations and artifacts for findings and detailed
 results. A skipped or cancelled job may not publish an overview. Publishing an
 overview is informational and does not change validation results. Job
-overviews use `scripts/ci-workflow-overview.sh` from the checkout; if checkout
+overviews use `scripts/ci/ci-workflow-overview.sh` from the checkout; if checkout
 fails, they cannot be rendered. External reporting instead writes its skip
 reason when neither upload token is available.
 
@@ -193,7 +193,7 @@ the gate scripts, overview/statistics helpers, composite shell checker and
 `ci-gates-test.py`. Ordinary workflow-only changes retain workflow validation
 without selecting application tests or builds.
 The Compose category runs
-[`ci-validate-compose.sh`](../scripts/ci-validate-compose.sh) on the runner to
+[`ci-validate-compose.sh`](../scripts/ci/ci-validate-compose.sh) on the runner to
 validate development, local production, CI and Dev Container overrides. It also
 parses `.devcontainer/devcontainer.json` inside the PHP container using Python's
 standard JSON parser. Keep that file strict JSON (without comments or trailing
@@ -203,10 +203,10 @@ The script stops at the first failing command and preserves its exit status;
 changes to it select Compose validation and workflow regressions.
 
 Shared inputs include `Makefile`, the root `Dockerfile`, `.dockerignore`,
-`main.yml`, `scripts/ci-detect-changes.sh`, local composite actions, and shared
+`main.yml`, `scripts/ci/ci-detect-changes.sh`, local composite actions, and shared
 command/routing/report wrappers. Changes there can affect many job contracts, so
 they deliberately retain full coverage. The `changes` job calls
-[`scripts/ci-detect-changes.sh`](../scripts/ci-detect-changes.sh), whose case
+[`scripts/ci/ci-detect-changes.sh`](../scripts/ci/ci-detect-changes.sh), whose case
 list is authoritative; new paths must be classified before they can safely skip
 checks.
 
@@ -318,8 +318,8 @@ application, analyzer, security and image jobs skip.
 local composite-action schema validation and offline tooling regressions.
 Explicit ShellCheck inputs also cover the Action update checker, Docker image
 helper, Make launcher, dependency security script and Sonar report preparation.
-The maintained script list lives in `scripts/lint-workflows.sh`; this is not a
-repository-wide shell lint.
+The maintained script list lives in `scripts/checks/lint-workflows.sh`; this is
+not a repository-wide shell lint.
 Composite Bash/sh steps are also parsed with PyYAML and checked individually
 using the pinned ShellCheck, with action/step diagnostics. These checks do not
 execute scripts; GitHub expressions become inert placeholders for shell
@@ -348,7 +348,7 @@ credential persistence.
 Before cleanup, all PHP-bootstrap consumers in core CI, the standalone Action
 update checker and Docker image PR maintenance run failure-only container
 diagnostics. The reporting job omits these when bootstrap was skipped.
-[`ci-failure-diagnostics.sh`](../scripts/ci-failure-diagnostics.sh) lists only
+[`ci-failure-diagnostics.sh`](../scripts/ci/ci-failure-diagnostics.sh) lists only
 the current CI Compose project's PHP containers and prints allowlisted status,
 exit code, OOM flag and health status. It limits output to five containers, uses
 ten-second Docker-command timeouts and has a two-minute step timeout. Raw logs,
@@ -364,7 +364,7 @@ container cleanup still runs unconditionally. Commands within a single check
 retain fail-fast behavior. Analyzer, image-build and image-scan matrices use
 `fail-fast: false`, so one failing variant does not cancel the others. The
 analyzer matrix declares Make targets, not shell commands. Its fixed
-`scripts/make.sh` invocation receives the target through a quoted environment
+`scripts/make/make.sh` invocation receives the target through a quoted environment
 variable, preserving one argument and the analyzer's failure status.
 
 Image scans wait for the build matrix to succeed and download its per-target
@@ -408,9 +408,9 @@ and received flag, including empty values. Gates remain fail-fast; diagnostic
 messages do not relax any acceptance rule.
 
 Both jobs check out the workflow revision before running their Bash gate:
-[`ci-prerequisite-gate.sh`](../scripts/ci-prerequisite-gate.sh) and
-[`ci-result-gate.sh`](../scripts/ci-result-gate.sh). They share the strict
-selection predicate in [`ci-gate-common.sh`](../scripts/ci-gate-common.sh),
+[`ci-prerequisite-gate.sh`](../scripts/ci/ci-prerequisite-gate.sh) and
+[`ci-result-gate.sh`](../scripts/ci/ci-result-gate.sh). They share the strict
+selection predicate in [`ci-gate-common.sh`](../scripts/ci/ci-gate-common.sh),
 while event-specific policies remain in the individual scripts. Checkout and
 validation steps are not conditional on successful prerequisites.
 
@@ -479,7 +479,7 @@ lockfiles.
 
 The `install-dependencies`, `cache-dependencies`, and `print-versions` inputs
 accept only the exact strings `'true'` and `'false'`. Bootstrap calls
-[`ci-validate-bootstrap.sh`](../scripts/ci-validate-bootstrap.sh) to validate
+[`ci-validate-bootstrap.sh`](../scripts/ci/ci-validate-bootstrap.sh) to validate
 these and the build target before any cache, environment, or container setup.
 Malformed or empty boolean values fail explicitly instead of silently disabling
 steps; diagnostics name the input without printing its value.
@@ -696,7 +696,7 @@ vulnerability enforcement remain blocking. See
 
 Test reports originate in `build/logs/`, `build/report/` and
 `build/phpmetrics/`. The container-side
-[`ci-test-reports.py`](../scripts/ci-test-reports.py) helper validates JUnit
+[`ci-test-reports.py`](../scripts/ci/ci-test-reports.py) helper validates JUnit
 before PhpMetrics, checks required files and XML contents, and prints the
 test/coverage summary in three separate steps. The runner appends the summary's
 stdout to its own `GITHUB_STEP_SUMMARY`; Python does not run on the runner.

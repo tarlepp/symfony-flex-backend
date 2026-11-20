@@ -11,8 +11,8 @@ Use this skill when reviewing or updating external GitHub Action versions and
 commit pins. It covers workflow references and dependencies inside local
 composite actions, not arbitrary CI redesign or Composer and Docker upgrades. It
 also covers release tag/commit declarations for standalone workflow tools in
-`scripts/lint-workflows.sh`; preserve their separate binary checksum pins. For
-job, trigger, or shared bootstrap behavior changes, use
+`scripts/checks/lint-workflows.sh`; preserve their separate binary checksum
+pins. For job, trigger, or shared bootstrap behavior changes, use
 [update-github-workflows](../update-github-workflows/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
@@ -34,14 +34,14 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="inspecting-current-pins"></a>
 
-Use the existing `scripts/check-action-updates.sh`; it reports findings but does
-not edit files. From the host, `make check-action-updates` delegates to the PHP
-development container. Inside that container, run:
+Use the existing `scripts/checks/check-action-updates.sh`; it reports findings
+but does not edit files. From the host, `make check-action-updates` delegates to
+the PHP development container. Inside that container, run:
 
 ```bash
-bash scripts/check-action-updates.sh --current-pins-md
-bash scripts/check-action-updates.sh
-bash scripts/check-action-updates.sh --tools-only
+bash scripts/checks/check-action-updates.sh --current-pins-md
+bash scripts/checks/check-action-updates.sh
+bash scripts/checks/check-action-updates.sh --tools-only
 ```
 
 The inventory mode needs no upstream lookup. The check mode needs network access

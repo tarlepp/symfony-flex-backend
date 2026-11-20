@@ -316,7 +316,7 @@ the job. Existing base-pin and vulnerability checks remain blocking. To
 reproduce this policy from the repository root on the Docker host:
 
 ```bash
-bash scripts/docker-images.sh check-updates --advisory
+bash scripts/docker/docker-images.sh check-updates --advisory
 ```
 
 The local `make docker-image-check-updates` command retains its strict policy,
@@ -376,7 +376,7 @@ generating keys or running migrations:
 ```bash
 make ci-start
 docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
-    bash scripts/check-composer-cache.sh
+    bash scripts/ci/check-composer-cache.sh
 ```
 
 The check verifies configuration and write access, not GitHub cache restoration

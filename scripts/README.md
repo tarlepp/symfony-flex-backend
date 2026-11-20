@@ -2,7 +2,10 @@
 
 <a id="what-is-this"></a>
 
-This directory contains different scripts that are used during development.
+This directory contains development and CI scripts grouped by responsibility.
+Each group keeps its focused regression tests in a local `tests/` directory.
+The top-level `tests/` directory is reserved for suites that span multiple
+groups.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -11,6 +14,7 @@ This directory contains different scripts that are used during development.
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
     * [Resources](#resources)
+      * [Directory layout](#directory-layout)
       * [Command status output](#command-status-output)
         * [Progress indicator](#progress-indicator)
       * [Output contract regressions](#output-contract-regressions)
@@ -27,19 +31,33 @@ This directory contains different scripts that are used during development.
 
 <a id="resources"></a>
 
-* [Project stats script](project-stats.sh)
+### Directory layout
+
+<a id="directory-layout"></a>
+
+| Directory | Responsibility |
+| --- | --- |
+| `ci/` | CI setup, validation, reporting, and job gates |
+| `checks/` | Repository checks, workflow validation, and their tests |
+| `docker/` | Docker image and maintenance tooling, with Docker tests |
+| `make/` | Make dispatch, shell integration, Compose context, and Make tests |
+| `output/` | Shared output helpers and output-contract tests |
+| `reports/` | Project/tool inventories and report preparation |
+| `tests/` | Cross-group test runners |
+
+* [Project stats script](reports/project-stats.sh)
   * This script is used to generate simple project stats. It will generate
     output with some basic stats about project.
-* [Skill documentation checker](check-skills.py)
+* [Skill documentation checker](checks/check-skills.py)
   * Validates skill front matter, exact skills-index coverage, and relative
     Markdown links and anchors across repository Markdown files. Dependency and
     generated directories are excluded.
-* [GitHub Actions update checker](check-action-updates.sh)
+* [GitHub Actions update checker](checks/check-action-updates.sh)
   * Checks pinned GitHub Actions and workflow-tool release declarations, reports
     discovery issues (unpinned refs/conflicting versions), and checks for
     available version updates across major lines. Review compatibility and get
     approval before applying a major-version upgrade suggestion.
-* [GitHub workflow validator](lint-workflows.sh)
+* [GitHub workflow validator](checks/lint-workflows.sh)
   * Validates all workflows and their supported shell steps, and separately
     validates local action metadata. Offline analyzer regressions exercise the
     actual prerequisite/final gate shell predicates, grouped steps and fail-safe
@@ -47,10 +65,10 @@ This directory contains different scripts that are used during development.
     repositories. The path matrix covers independent lint, analyzer, test, build
     and dependency/image-check selection, mixed changes, renames, unknown inputs
     and strict acceptance of expected skipped jobs.
-* [Composer cache mount check](check-composer-cache.sh)
+* [Composer cache mount check](ci/check-composer-cache.sh)
   * Runs inside the CI PHP container to check Composer's effective cache path
     and write access. Offline regressions run through `make lint-workflows`.
-* [Docker multi-platform image helper](docker-images.sh)
+* [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
 
@@ -58,7 +76,7 @@ This directory contains different scripts that are used during development.
 
 <a id="command-status-output"></a>
 
-`scripts/command-output.sh` owns three command execution modes, all preserving
+`scripts/output/command-output.sh` owns three command execution modes, all preserving
 native stdout/stderr and the command's exit status:
 
 | Mode | Use | Status |
@@ -102,9 +120,9 @@ Read-only examples, from the repository root inside the PHP container (enter
 with `make bash` from the Docker host first):
 
 ```bash
-bash scripts/command-output.sh --run "Read JSON" printf '{"ready":true}\n'
-bash scripts/command-output.sh --stream "Native output" printf 'payload\n'
-bash scripts/command-output.sh --status INFO "Report path: build/phploc.json"
+bash scripts/output/command-output.sh --run "Read JSON" printf '{"ready":true}\n'
+bash scripts/output/command-output.sh --stream "Native output" printf 'payload\n'
+bash scripts/output/command-output.sh --status INFO "Report path: build/phploc.json"
 ```
 
 Shared output is used by `test-docker-images`, `check-skills`, `lint-workflows`,
@@ -134,7 +152,7 @@ Docker host:
 
 ```bash
 docker compose -f compose.yaml -f compose.prod.yaml exec -T -w /app php \
-    bash scripts/tool-versions.sh --production
+    bash scripts/reports/tool-versions.sh --production
 ```
 
 The production image must contain the updated script. This command does not
@@ -175,7 +193,7 @@ without changing the checker's diagnostics or exit status. Xdebug is disabled
 for the checker process to avoid debugger connection attempts.
 
 The installed ECS renderer does not reliably honor `--no-ansi`, and PhpMetrics
-hardcodes colors without a disable option. `scripts/native-output.sh` removes
+hardcodes colors without a disable option. `scripts/output/native-output.sh` removes
 only SGR decoration from their plain-mode output. PhpMetrics additionally
 highlights metric headings and values in color mode and disables Xdebug for its
 version and analysis processes. If JUnit is missing, its test fallback uses
@@ -232,10 +250,10 @@ or `[FAIL] phpstan (exit 1, took 12.0s)`.
   forwarding resolves this before `exec -T` and passes it into the container.
   `PROGRESS=always` forces it; `PROGRESS=never` (or any other value) disables
   it, including the duration.
-* `scripts/command-progress.py` relays output: terminal descriptors through a
-  pseudo-terminal and other descriptors through pipes, so commands see the same
-  descriptor kinds, colors, and progress bars as a direct run. Stdout stays
-  separate from stderr when they differ, and exit codes and cancellation
+* `scripts/output/command-progress.py` relays output: terminal descriptors
+  through a pseudo-terminal and other descriptors through pipes, so commands
+  see the same descriptor kinds, colors, and progress bars as a direct run.
+  Stdout stays separate from stderr when they differ, and exit codes and cancellation
   statuses are unchanged.
 * The spinner is drawn on stderr only after a second of silence while the cursor
   is at the start of a line; it is cleared before any output, so prompts and
@@ -248,7 +266,7 @@ or `[FAIL] phpstan (exit 1, took 12.0s)`.
   start time, and the script ends with `output_outcome <status> <message>` to
   append the duration. `docker-image-check-updates`, `docker-image-digest`, and
   `check-action-updates` use this mode.
-* `scripts/make.sh` forwards partial stderr lines, such as prompts and spinner
+* `scripts/make/make.sh` forwards partial stderr lines, such as prompts and spinner
   frames, after a short pause instead of waiting for a newline; only text that
   can still become a Make recipe-error line is held back.
 * When stdout and stderr are the same terminal, the outermost launcher (or host
@@ -278,12 +296,12 @@ Native-tool examples use the same controls, from the repository root on the
 Docker host with development services running:
 
 ```bash
-bash scripts/make.sh phpcs COLOR=always
-bash scripts/make.sh phpcs COLOR=never
-bash scripts/make.sh phpcs COLOR=always NO_COLOR=1
+bash scripts/make/make.sh phpcs COLOR=always
+bash scripts/make/make.sh phpcs COLOR=never
+bash scripts/make/make.sh phpcs COLOR=always NO_COLOR=1
 ```
 
-For cleaner failure output, use `bash scripts/make.sh` instead of `make`.
+For cleaner failure output, use `bash scripts/make/make.sh` instead of `make`.
 Development-image Bash and Fish startup automatically load the repository's Make
 function, including ordinary Docker and IDE terminal sessions. The function
 filters every target at the repository root and uses normal Make elsewhere. Bash
@@ -296,8 +314,8 @@ shared services are rebuilt or restarted automatically. From the repository root
 on the Docker host, when it is safe to recreate your development services:
 
 ```bash
-bash scripts/make.sh stop
-bash scripts/make.sh daemon-build
+bash scripts/make/make.sh stop
+bash scripts/make/make.sh daemon-build
 ```
 
 For immediate use without recreating services, enter with `make bash`
@@ -316,8 +334,8 @@ to filter them too. Run from the repository root, inside the PHP development
 container or on the Docker host with development services running:
 
 ```bash
-bash scripts/make.sh check-skills
-bash scripts/make.sh lint-workflows COLOR=always
+bash scripts/make/make.sh check-skills
+bash scripts/make/make.sh lint-workflows COLOR=always
 ```
 
 The launcher does not add result messages to unmigrated targets or change their
@@ -334,7 +352,7 @@ From the repository root, inside the PHP development container or on the Docker
 host with development services running:
 
 ```bash
-source scripts/make-shell.sh
+source scripts/make/make-shell.sh
 make check-skills
 ```
 
@@ -352,7 +370,7 @@ For Fish sessions opened directly on the host, through Docker, or in the IDE,
 opt in from the repository root with development services running:
 
 ```fish
-source scripts/make-shell.fish
+source scripts/make/make-shell.fish
 make check-skills
 ```
 
@@ -363,7 +381,7 @@ functions --erase make
 command make check-skills
 ```
 
-Central host forwarding invokes `php bash scripts/make.sh`, so container-side
+Central host forwarding invokes `php bash scripts/make/make.sh`, so container-side
 Make recipe-error lines are filtered even when the host uses raw Make. Filtering
 the host's outer line still requires the launcher or a shell function. CI Make
 commands in `main.yml` and the shared PHP bootstrap use the launcher explicitly
@@ -404,8 +422,8 @@ Application recipes rely exclusively on that central forwarding layer rather
 than repeating host/container branches. Native commands, preparation, reports,
 and informational exit policies remain in their owning recipes. Docker lifecycle
 and interactive commands retain host-side guards and are not forwarded.
-`scripts/compose-context.sh` checks Docker access and Compose service state only
-when a target needs it; Make parsing and help do not query running containers.
+`scripts/make/compose-context.sh` checks Docker access and Compose service state
+only when a target needs it; Make parsing and help do not query running containers.
 Forwarded commands and Bash/Fish access require only a running PHP service, not
 all optional development services. Running PHP with `starting` or `unhealthy`
 health emits a yellow warning but remains accessible for troubleshooting.
@@ -450,12 +468,12 @@ Run the output-contract and forwarding regression checks from the same host
 directory with development services running:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/command-output-test.py
-docker compose exec -T php python3 scripts/tests/make-check-output-test.py
-docker compose exec -T php python3 scripts/tests/lint-workflows-output-test.py
-docker compose exec -T php python3 scripts/tests/make-launcher-test.py
-docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
-docker compose exec -T php python3 scripts/tests/check-outcomes-test.py
+docker compose exec -T php python3 scripts/output/tests/command-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-check-output-test.py
+docker compose exec -T php python3 scripts/checks/tests/lint-workflows-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-launcher-test.py
+docker compose exec -T php python3 scripts/make/tests/make-quality-output-test.py
+docker compose exec -T php python3 scripts/checks/tests/check-outcomes-test.py
 make test-make-routing
 ```
 
@@ -536,7 +554,7 @@ Run setup/mutation regression checks from the repository root on the Docker host
 with development services running:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-quality-output-test.py
 make test-make-routing
 ```
 
@@ -559,14 +577,14 @@ routing.
 From the repository root on the Docker host (no running services required):
 
 ```bash
-bash scripts/make.sh help
-bash scripts/make.sh help GROUP=quality
-bash scripts/make.sh help GROUP=docker COLOR=never
+bash scripts/make/make.sh help
+bash scripts/make/make.sh help GROUP=quality
+bash scripts/make/make.sh help GROUP=docker COLOR=never
 ```
 
 Available groups, in display order, are `information`, `tests`, `quality`,
 `checks`, `reports`, `setup`, `lifecycle`, and `docker`. Direct script callers
-can use `bash scripts/make-help.sh quality` from the same working directory.
+can use `bash scripts/make/make-help.sh quality` from the same working directory.
 
 Information commands keep their native stdout: configuration JSON, statistics
 tables, license counts, application/version information, and digest/platform
@@ -583,7 +601,7 @@ Successful report generators identify `build/logs/clover.xml`,
 `build/logs/junit.xml`, `build/phpmetrics`, `build/phploc.json`, and
 `build/psalm.json` as applicable. Infection identifies `build/infection`; its
 native output owns the exact generated file inventory.
-`scripts/report-output.sh` verifies every declared local report is a nonempty
+`scripts/output/report-output.sh` verifies every declared local report is a nonempty
 file before printing its `[INFO]` path message. Test XML, Psalm/PHPLOC JSON,
 PhpMetrics `index.html`, and prepared Sonar copies use this shared check.
 Missing or empty outputs fail the target even if the generator returned zero.
@@ -614,8 +632,8 @@ Run the information/reporting regression checks from the repository root on the
 Docker host with the PHP development service already running:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/make-information-output-test.py
-docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-information-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-quality-output-test.py
 ```
 
 These checks use temporary report fixtures and mocked generators/uploaders; they
@@ -657,7 +675,7 @@ Run offline lifecycle regression tests from the repository root on the Docker
 host, with the PHP development service already running:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/make-lifecycle-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-lifecycle-output-test.py
 make test-make-routing
 make test-docker-images
 ```
@@ -751,7 +769,7 @@ To run only this integration suite from the repository root on the Docker host,
 with the PHP development service running:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/make-launcher-test.py
+docker compose exec -T php python3 scripts/make/tests/make-launcher-test.py
 ```
 
 Without `--keep-going`, Make stops before later goals after a blocking failure.
@@ -771,28 +789,28 @@ inside the PHP development container. For example, from the repository root on
 the Docker host with the development service running:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/make-quality-output-test.py
+docker compose exec -T php python3 scripts/make/tests/make-quality-output-test.py
 ```
 
 For filtered GNU Make recipe error lines, use the existing launcher from the
 same host directory:
 
 ```bash
-bash scripts/make.sh test-command-output
+bash scripts/make/make.sh test-command-output
 ```
 
 ### Project stats script [ᐞ](#table-of-contents)
 
 <a id="project-stats-script"></a>
 
-File: `scripts/project-stats.sh`
+File: `scripts/reports/project-stats.sh`
 
 ```bash
 make project-stats
 ```
 
 If you are already inside the container, you can still run
-`bash scripts/project-stats.sh` directly.
+`bash scripts/reports/project-stats.sh` directly.
 
 The table covers Git-tracked working-tree files across the repository, including
 extensionless files and dotfiles, except recognized generated artifacts.
@@ -832,7 +850,7 @@ redirected output is plain by default.
 
 <a id="skill-documentation-checker"></a>
 
-File: `scripts/check-skills.py`
+File: `scripts/checks/check-skills.py`
 
 Run from the repository root **inside the PHP development container**, not on
 the host. Open it with `make bash` or `make fish`, or use an IDE Dev Container
@@ -840,7 +858,7 @@ terminal. Python automatically uses `/home/dev/.venv`. See
 [Python tooling](../.devcontainer/README.md#python-tooling) for details.
 
 ```bash
-python3 scripts/check-skills.py
+python3 scripts/checks/check-skills.py
 ```
 
 Alternatively, use `make check-skills` from either the host or the container;
@@ -856,19 +874,19 @@ skill metadata and index coverage.
 
 <a id="github-actions-update-checker"></a>
 
-File: `scripts/check-action-updates.sh`
+File: `scripts/checks/check-action-updates.sh`
 
 ```bash
 make check-action-updates
 ```
 
 If you are already inside the container, you can still run
-`bash scripts/check-action-updates.sh` directly.
+`bash scripts/checks/check-action-updates.sh` directly.
 
 Print current pins as markdown:
 
 ```bash
-bash scripts/check-action-updates.sh --current-pins-md
+bash scripts/checks/check-action-updates.sh --current-pins-md
 ```
 
 Exit codes:
@@ -911,16 +929,16 @@ Run the offline Action/tool regressions from the repository root inside the PHP
 development container (enter with `make bash` from the Docker host):
 
 ```bash
-python3 scripts/tests/check-workflow-tool-updates-test.py
+python3 scripts/checks/tests/check-workflow-tool-updates-test.py
 ```
 
 ### GitHub workflow validator [ᐞ](#table-of-contents)
 
 <a id="github-workflow-validator"></a>
 
-File: `scripts/lint-workflows.sh`
+File: `scripts/checks/lint-workflows.sh`
 
-`scripts/ci-failure-diagnostics.sh` runs on the Docker host before cleanup when
+`scripts/ci/ci-failure-diagnostics.sh` runs on the Docker host before cleanup when
 a PHP-bootstrap job fails, including standalone Action and Docker image update
 jobs. It prints only PHP container status, exit code, OOM flag and health enum,
 never raw logs, environment or full inspect data. It queries only the CI Compose
@@ -934,10 +952,10 @@ From the repository root on the Docker host, inspect existing CI container state
 without modifying it:
 
 ```bash
-bash scripts/ci-failure-diagnostics.sh
+bash scripts/ci/ci-failure-diagnostics.sh
 ```
 
-The configuration job's separate `scripts/ci-validate-compose.sh` runs on the
+The configuration job's separate `scripts/ci/ci-validate-compose.sh` runs on the
 Docker host. It checks development, production, CI and Dev Container Compose
 variants with `config --quiet`, then invokes Python's strict JSON parser in the
 existing CI PHP service for `.devcontainer/devcontainer.json`. It resolves the
@@ -951,10 +969,10 @@ From the repository root on the Docker host with the CI PHP service already
 running:
 
 ```bash
-bash scripts/ci-validate-compose.sh
+bash scripts/ci/ci-validate-compose.sh
 ```
 
-The validator first runs `scripts/tests/ci-gates-test.py` offline. It checks
+The validator first runs `scripts/ci/tests/ci-gates-test.py` offline. It checks
 that both aggregate CI gates stop on workflow cancellation, container cleanup
 remains unconditional, and the actual Bash result checks still reject failed,
 cancelled and unexpected skipped prerequisites. These regressions do not execute
@@ -966,14 +984,16 @@ Every regression suite has a named start and outcome, while native test output,
 warnings and errors remain visible. Each check keeps its `[RUN]`, native output
 and outcome together, with a blank line before the next check rather than before
 the outcome. Inner status lines are indented two spaces beneath their numbered
-stage. `scripts/run-workflow-tests.py` indents unittest diagnostics four spaces
+stage. `scripts/tests/run-workflow-tests.py` indents unittest diagnostics four
+spaces
 and omits its standalone `OK` footer and trailing blank lines, leaving `[OK]` as
 the success indicator. Counts, timings, skips and failure details remain visible;
 direct suite invocations retain unittest's usual output. Other validator
-diagnostics use `scripts/native-output.py --indent` to stream both output
-channels with four-space indentation, preserving colors and exit status. The
-download/cache helper, `scripts/download-workflow-validator.sh`, uses the same
-relay, so curl and checksum errors align with other native diagnostics without
+diagnostics use `scripts/output/native-output.py --indent` to stream both
+output channels with four-space indentation, preserving colors and exit status.
+The download/cache helper,
+`scripts/checks/download-workflow-validator.sh`, uses the same relay, so curl
+and checksum errors align with other native diagnostics without
 changing download limits, cache verification or failure statuses. The
 validator opts into grouped status lines with non-exported
 `OUTPUT_RUN_GROUPED=1` and `OUTPUT_STATUS_INDENT='  '`; other commands retain their
@@ -986,7 +1006,7 @@ make lint-workflows
 
 The target runs in the PHP development container both locally and in CI. It
 prepares the actionlint, ShellCheck, action-validator and zizmor releases pinned
-in `scripts/lint-workflows.sh` in a temporary directory, verifies their pinned
+in `scripts/checks/lint-workflows.sh` in a temporary directory, verifies their pinned
 SHA-256 checksums before execution, and removes extracted tools on exit.
 Downloaded archives/binaries persist in the ignored
 `build/cache/workflow-validators/linux-<architecture>/<sha256>` directory. Every
@@ -1008,8 +1028,9 @@ available inside the PHP container; no extra mounts or environment forwarding
 are needed. Unlike `var/`, `build/` is not hidden by the PHP container's tmpfs.
 Warm local `make lint-workflows` runs reuse the same verified files.
 
-After metadata validation, `scripts/check-composite-action-shell.py` parses all
-local composite actions with PyYAML and sends each Bash/sh `run` body to the
+After metadata validation,
+`scripts/checks/check-composite-action-shell.py` parses all local composite
+actions with PyYAML and sends each Bash/sh `run` body to the
 same pinned ShellCheck. Diagnostics identify the action and step; scripts are
 never executed. GitHub expressions are replaced with inert placeholders before
 shell analysis, so this does not validate their runtime values. Unsupported
@@ -1031,8 +1052,8 @@ all action/tool checks with `make check-action-updates`, or only these tools
 inside the development container:
 
 ```bash
-bash scripts/check-action-updates.sh --tools-only
-python3 scripts/tests/check-workflow-tool-updates-test.py
+bash scripts/checks/check-action-updates.sh --tools-only
+python3 scripts/checks/tests/check-workflow-tool-updates-test.py
 ```
 
 Tool-only check exit codes are `0` for verified current pins, `1` for updates,
@@ -1060,7 +1081,7 @@ checker (`check-action-updates.sh`), Docker image helper (`docker-images.sh`),
 Make launcher (`make.sh`), dependency security checks (`check-security.sh`) and
 Sonar report preparation (`prepare-sonar-reports.sh`). These scripts are linted,
 not executed by ShellCheck; coverage is limited to the explicit input list in
-`scripts/lint-workflows.sh`, not every shell script in the repository.
+`scripts/checks/lint-workflows.sh`, not every shell script in the repository.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
 cancellations, or unexpected skips fail that gate and the final merge gate.
@@ -1074,7 +1095,7 @@ validation does not replace testing actual GitHub workflow execution.
 
 <a id="ci-change-detection"></a>
 
-File: [scripts/ci-detect-changes.sh](ci-detect-changes.sh)
+File: [scripts/ci/ci-detect-changes.sh](ci/ci-detect-changes.sh)
 
 The `changes` job invokes this Bash script on the GitHub runner after checkout.
 For a local preview, run from the repository root on the Docker host with the
@@ -1147,7 +1168,7 @@ From the repository root on the Docker host with the PHP development service
 running, run the isolated detector and gate regressions:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/analyzer-workflow-test.py
+docker compose exec -T php python3 scripts/ci/tests/analyzer-workflow-test.py
 ```
 
 `make lint-workflows` also runs these regressions and explicitly ShellChecks the
@@ -1158,8 +1179,8 @@ detector. Workflow wiring checks cover event inputs and declared output names.
 <a id="ci-result-gates"></a>
 
 The `ci-summary` job calls
-[`scripts/ci-prerequisite-gate.sh`](ci-prerequisite-gate.sh), and `ci-result`
-calls [`scripts/ci-result-gate.sh`](ci-result-gate.sh). Both run on the GitHub
+[`scripts/ci/ci-prerequisite-gate.sh`](ci/ci-prerequisite-gate.sh), and `ci-result`
+calls [`scripts/ci/ci-result-gate.sh`](ci/ci-result-gate.sh). Both run on the GitHub
 runner after an unconditional checkout, including on schedules and after failed
 prerequisites. They do not start a PHP container. Job conditions, dependencies
 and environment bindings remain in `main.yml`.
@@ -1167,7 +1188,7 @@ and environment bindings remain in `main.yml`.
 Each script requires the event, change flags and dependency results declared in
 its workflow step's `env` mapping. The final gate also requires `REF` for
 reporting eligibility. Empty or unknown selection flags cannot authorize skips.
-The scripts source [`ci-gate-common.sh`](ci-gate-common.sh) relative to their
+The scripts source [`ci-gate-common.sh`](ci/ci-gate-common.sh) relative to their
 own location, so they do not depend on the caller's working directory. The
 helper shares strict result comparisons, the `true`/success and `false`/skipped
 predicate, and error annotation formatting; scheduled-job rules and summary
@@ -1189,9 +1210,9 @@ From the repository root on the Docker host with the PHP development service
 running, run the focused offline gate and workflow-output regressions:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/ci-gates-test.py
-docker compose exec -T php python3 scripts/tests/analyzer-workflow-test.py
-docker compose exec -T php python3 scripts/tests/lint-workflows-output-test.py
+docker compose exec -T php python3 scripts/ci/tests/ci-gates-test.py
+docker compose exec -T php python3 scripts/ci/tests/analyzer-workflow-test.py
+docker compose exec -T php python3 scripts/checks/tests/lint-workflows-output-test.py
 ```
 
 `make lint-workflows` runs the gate regressions and explicitly ShellChecks all
@@ -1201,7 +1222,7 @@ three scripts. These checks do not execute hosted GitHub jobs.
 
 <a id="ci-test-report-processing"></a>
 
-File: [scripts/ci-test-reports.py](ci-test-reports.py)
+File: [scripts/ci/ci-test-reports.py](ci/ci-test-reports.py)
 
 The test job runs this Python standard-library helper inside the PHP development
 container, from the repository root. Three subcommands preserve separate CI
@@ -1229,16 +1250,16 @@ running and reports already generated by `make run-tests-php` and
 `make phpmetrics`, inspect the real reports:
 
 ```bash
-docker compose exec -T php python3 scripts/ci-test-reports.py validate-junit
-docker compose exec -T php python3 scripts/ci-test-reports.py verify
-docker compose exec -T php python3 scripts/ci-test-reports.py summary
+docker compose exec -T php python3 scripts/ci/ci-test-reports.py validate-junit
+docker compose exec -T php python3 scripts/ci/ci-test-reports.py verify
+docker compose exec -T php python3 scripts/ci/ci-test-reports.py summary
 ```
 
 For isolated report fixtures and workflow wiring regressions, without generating
 application reports:
 
 ```bash
-docker compose exec -T php python3 scripts/tests/analyzer-workflow-test.py
+docker compose exec -T php python3 scripts/ci/tests/analyzer-workflow-test.py
 ```
 
 `make lint-workflows` includes these regressions. Helper changes select workflow
@@ -1249,7 +1270,7 @@ production.
 
 <a id="docker-multi-platform-image-helper"></a>
 
-File: `scripts/docker-images.sh`
+File: `scripts/docker/docker-images.sh`
 
 This script uses Docker on the host machine, so run it from the host (not inside
 the `php` container). Use these Make targets:
@@ -1280,7 +1301,7 @@ being accepted as multi-platform.
 
 Check a single image with
 `make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm`, or run
-`./scripts/docker-images.sh check-updates` to check external `FROM` and
+`./scripts/docker/docker-images.sh check-updates` to check external `FROM` and
 `COPY --from` images in the root and `docker/*/Dockerfile*` Dockerfiles. The
 checker uses public Docker Hub tags via `curl` and `jq`, and Docker with buildx
 to resolve update digests. It reports the latest stable full semantic version,
@@ -1317,12 +1338,12 @@ and runs helper regressions in the lightweight `maintenance` PHP target through
 Compose. PR authentication prefers a short-lived repository-scoped App token,
 then a configured PAT, with an explicit CI-trigger warning on `GITHUB_TOKEN`
 fallback. `make lint-workflows` runs
-`scripts/tests/docker-image-workflow-test.py` for offline authentication,
+`scripts/docker/tests/docker-image-workflow-test.py` for offline authentication,
 schedule, bootstrap and PR-output contracts.
 
 [image-maintenance]: ../doc/GITHUB_WORKFLOWS.md#security-and-maintenance-workflows
 
-Use `./scripts/docker-images.sh check-updates` for a strict check that fails
+Use `./scripts/docker/docker-images.sh check-updates` for a strict check that fails
 when an update is available or a check fails. All image results are reported
 before exiting. `make docker-image-check-updates` also fails in these cases, but
 Make uses its own non-zero exit status rather than preserving the script's code.
@@ -1330,7 +1351,7 @@ To reproduce CI's advisory policy, run from the repository root on the Docker
 host:
 
 ```bash
-bash scripts/docker-images.sh check-updates --advisory
+bash scripts/docker/docker-images.sh check-updates --advisory
 ```
 
 Confirmed updates return zero with warnings; GitHub Actions also receives

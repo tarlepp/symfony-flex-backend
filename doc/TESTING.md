@@ -66,7 +66,7 @@ verification must still obtain its own scoped evidence.
 
 * **Documentation only:** for Markdown, AI instructions, skill text, comments,
   or non-executable examples, run `make lint-markdown` and
-  `python3 scripts/check-skills.py` when Markdown changes. Review example
+  `python3 scripts/checks/check-skills.py` when Markdown changes. Review example
   commands, links, and claims against the implementation. Do not run PHPUnit,
   PHP static analysis, report producers, or commands described by a skill just
   because their documentation changed. For comments in code, use relevant
@@ -118,8 +118,9 @@ affected application tests even when no PHP file changed; a workflow YAML file
 needs `make lint-workflows`, not `make lint-yaml`. An ECS/PHPStan/Psalm
 configuration-only edit needs the affected analyzer, not PHPUnit. A shell helper
 needs syntax checks, relevant lint, and its regression suite, not PHP static
-analysis. Inspect the ShellCheck invocation in `scripts/lint-workflows.sh` and
-run `make lint-workflows` when a changed script is listed; it does not lint
+analysis. Inspect the ShellCheck invocation in
+`scripts/checks/lint-workflows.sh` and run `make lint-workflows` when a changed
+script is listed; it does not lint
 every shell script. Container and dependency changes can invalidate several
 categories at once. The
 [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path) documents
@@ -151,8 +152,9 @@ The suites use temporary fixtures and mocked Docker/registry/upload operations.
 They do not replace PHPUnit or verify live service health or real uploads. Use
 focused suites while iterating; run the consolidated target when changing the
 shared output contract. When adding Docker-helper test scenarios or groups,
-update `DOCKER_IMAGE_TEST_GROUPS` in `scripts/tests/command-output-test.py` and
-run this target, not only `make test-docker-images`. CI selects these consumer
+update `DOCKER_IMAGE_TEST_GROUPS` in
+`scripts/output/tests/command-output-test.py` and run this target, not only
+`make test-docker-images`. CI selects these consumer
 checks for changes to either the helper or its regression suite. A failing
 baseline check remains a blocker to a green CI result; do not report the
 changeset as CI-ready while that failure remains unresolved. See

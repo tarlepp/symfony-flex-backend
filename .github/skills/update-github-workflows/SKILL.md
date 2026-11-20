@@ -158,7 +158,7 @@ replacement for their actual event filters and conditions:
    required. Do not upload JWT keys, environment secrets, or unrelated workspace
    contents. Keep vulnerability thresholds and scan failure behavior unless a
    policy change is explicitly requested. Reuse
-   `scripts/ci-workflow-overview.sh` for standalone workflow overview tables
+   `scripts/ci/ci-workflow-overview.sh` for standalone workflow overview tables
    rather than duplicating their rendering. Pass step outcomes and
    workflow-specific labels through quoted arguments, and keep the overview
    informational with `!cancelled()` and `continue-on-error`. The helper needs a
