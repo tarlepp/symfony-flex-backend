@@ -11,6 +11,12 @@
 #   Writes normalized copies under build/sonar, replacing prior copies without
 #   uploading.
 #
+# Callers:
+#   Makefile:
+#     - `prepare-sonar-reports` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` report job runs the target through Make.
+#
 
 set -euo pipefail
 

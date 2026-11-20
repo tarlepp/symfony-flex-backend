@@ -10,6 +10,13 @@
 #   Every path must exist and be nonempty. Reports local outputs only; performs
 #   no upload.
 #
+# Callers:
+#   Makefile:
+#     - The `REPORT_PATHS` helper used by test, Psalm, PHPLoc, and PhpMetrics
+#       report targets.
+#   Scripts:
+#     - `scripts/prepare-sonar-reports.sh` verifies the generated copies.
+#
 
 set -euo pipefail
 

@@ -11,6 +11,21 @@
 #   Status messages use stderr; wrapped command streams and exit statuses
 #   retain their caller-facing contract.
 #
+# Callers:
+#   Makefile:
+#     - Shared target dispatch and `COMPOSE_RUN`, `STREAM_COMMAND`,
+#       `REPORT_PATHS`, and status-message helpers.
+#   Scripts:
+#     - `scripts/action-update-output.sh`, `scripts/check-action-updates.sh`,
+#       `scripts/check-security.sh`, `scripts/ci-detect-changes.sh`,
+#       `scripts/compose-context.sh`, `scripts/docker-images.sh`,
+#       `scripts/docker-maintenance.sh`, `scripts/lint-workflows.sh`,
+#       `scripts/make-help.sh`, `scripts/markdown-output.sh`,
+#       `scripts/native-output.sh`, `scripts/prepare-sonar-reports.sh`,
+#       `scripts/report-output.sh`, and `scripts/tool-versions.sh` source it.
+#     - `scripts/tests/command-output-contract-test.sh` and
+#       `scripts/tests/docker-images-test.sh` source it.
+#
 
 OUTPUT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 

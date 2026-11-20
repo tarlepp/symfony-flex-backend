@@ -12,6 +12,12 @@
 #   selection flags and eligibility previews, not job results, plus an optional
 #   step summary.
 #
+# Callers:
+#   Makefile:
+#     - `ci-detect-changes` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` change-detection job.
+#
 
 set -euo pipefail
 

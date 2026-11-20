@@ -11,6 +11,10 @@
 #   Writes an optional job summary and exits nonzero for failed checks or
 #   unexpected skips.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` prerequisite summary job.
+#
 
 set -euo pipefail
 

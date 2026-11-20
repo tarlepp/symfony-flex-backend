@@ -10,6 +10,15 @@
 #   Resolves output preferences, filters recipe-error diagnostics, and returns
 #   Make's exit status.
 #
+# Callers:
+#   Makefile:
+#     - Host-side forwarding and wrapped-target dispatch.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml`, `.github/workflows/action-updates.yml`,
+#       and `.github/workflows/docker-image-updates.yml` invoke Make through it.
+#     - `.github/actions/php-bootstrap/action.yml` starts the PHP service and
+#       runs setup targets through it.
+#
 
 # Resolve native and status colors, and progress, before stderr redirection.
 if [ -z "${NATIVE_COLOR+x}" ]; then

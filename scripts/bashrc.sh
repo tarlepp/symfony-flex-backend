@@ -10,6 +10,10 @@
 #   Loads the user's Bash configuration first, then installs the repository
 #   Make wrapper for commands run from the project root.
 #
+# Callers:
+#   Makefile:
+#     - `bash` target starts the PHP container shell with this rcfile.
+#
 
 if [ -f "$HOME/.bashrc" ]; then
     source "$HOME/.bashrc"

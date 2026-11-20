@@ -11,6 +11,11 @@
 #   project. Prune requires interactive confirmation; all operations are
 #   destructive.
 #
+# Callers:
+#   Makefile:
+#     - `docker-kill-containers`, `docker-prune`, `docker-remove-containers`,
+#       and `docker-remove-images` targets.
+#
 
 set -euo pipefail
 

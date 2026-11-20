@@ -10,6 +10,11 @@
 #   Callers compare expected selections and actual job results; failures are
 #   reported as GitHub Actions error annotations.
 #
+# Callers:
+#   Scripts:
+#     - `scripts/ci-prerequisite-gate.sh` sources the shared predicates.
+#     - `scripts/ci-result-gate.sh` sources the shared predicates.
+#
 
 gate_error() {
     local message=$1

@@ -10,6 +10,12 @@
 #   Covers forwarding, forbidden commands, dry runs, environment-name isolation,
 #   color propagation, and failure handling without contacting Docker.
 #
+# Callers:
+#   Makefile:
+#     - `test-make-routing` target.
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` runs this fixture.
+#
 
 set -euo pipefail
 

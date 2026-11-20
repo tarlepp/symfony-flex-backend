@@ -10,6 +10,10 @@
 #   Requires GITHUB_STEP_SUMMARY. Run mode preserves the command status and
 #   marks captured output incomplete on failure.
 #
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` statistics, analyzer, and report jobs.
+#
 
 set -euo pipefail
 

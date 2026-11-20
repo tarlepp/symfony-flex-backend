@@ -10,6 +10,13 @@
 #   Delegates collection and formatting to the adjacent Python implementation,
 #   preserving its exit status and command-line behavior.
 #
+# Callers:
+#   Makefile:
+#     - `project-stats` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` statistics job invokes the target through
+#       `ci-statistics-summary.sh`.
+#
 
 set -euo pipefail
 

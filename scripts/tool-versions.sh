@@ -12,6 +12,13 @@
 #   inspects Docker and running services on the host. Read-only and disables
 #   Xdebug connections.
 #
+# Callers:
+#   Makefile:
+#     - `tool-versions` target; host forwarding also uses `--stack`.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` statistics job.
+#     - `.github/actions/php-bootstrap/action.yml` bootstrap version report.
+#
 
 set -euo pipefail
 

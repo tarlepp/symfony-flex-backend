@@ -10,6 +10,12 @@
 #   Read-only checks cover Docker access, Compose availability, and relevant
 #   services. The supplied Compose prefix supports local and CI projects.
 #
+# Callers:
+#   Makefile:
+#     - Host target forwarding checks the PHP service before dispatch.
+#     - `bash`, `fish`, `logs`, `start`, `start-build`, `start-prod`, `daemon`,
+#       `daemon-build`, and `daemon-prod` use the `COMPOSE_CONTEXT` helper.
+#
 
 set -euo pipefail
 

@@ -27,6 +27,12 @@
 #   This script helps identify updates but does NOT automatically apply them.
 #   Always review changelogs and test updates before merging.
 #
+# Callers:
+#   Makefile:
+#     - `check-action-updates` target, through `action-update-output.sh`.
+#   GitHub Actions:
+#     - `.github/workflows/action-updates.yml`.
+#
 
 # Collect discovery and lookup failures so remaining checks still run.
 set +e

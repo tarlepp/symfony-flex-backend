@@ -11,6 +11,10 @@
 # database, then replaces itself with the requested command. A failed setup
 # step prevents command startup.
 #
+# Callers:
+#   Docker:
+#     - `Dockerfile` development image `ENTRYPOINT`.
+#
 
 set -e
 

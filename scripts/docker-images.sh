@@ -37,6 +37,19 @@
 #   - jq
 #   - curl (version discovery and pin updates)
 #
+# Callers:
+#   Makefile:
+#     - `docker-builder-platforms`, `docker-image-check-updates`,
+#       `docker-image-digest`, `docker-image-verify-pins`, `docker-setup-qemu`,
+#       `docker-build-multi-platform`, `docker-build-platform`, and
+#       `docker-image-update-pins` targets.
+#     - `test-docker-images` runs its offline regression fixture.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` runs `check-updates --advisory`.
+#     - `.github/workflows/docker-image-updates.yml` runs
+#       `docker-image-update-pins`, `docker-image-verify-pins`, and
+#       `test-docker-images` through Make.
+#
 
 set -euo pipefail
 # shellcheck source=scripts/command-output.sh

@@ -10,6 +10,12 @@
 #   Validates Composer advisory constraints without changing the lock file,
 #   then refreshes and runs the local checker when it is installed.
 #
+# Callers:
+#   Makefile:
+#     - `check-security` target.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` runs the target in its security check.
+#
 
 set -euo pipefail
 
