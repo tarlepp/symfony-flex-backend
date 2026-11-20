@@ -127,6 +127,7 @@ class CiGatesTest(unittest.TestCase):
                 "COMPOSER": ("composer", "Composer validation"), "REQUIREMENTS": ("requirements", "Runtime requirements"),
                 "YAML": ("yaml", "Symfony YAML"),
                 "TOOLING": ("tooling", "Development tooling checks"),
+                "PYRIGHT": ("pyright", "Pyright (non-blocking)"),
                 "COMPOSE": ("compose", "Compose and Dev Container"),
             },
             "lint-documentation": {

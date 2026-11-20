@@ -141,7 +141,7 @@ fi
 
 # Registered application targets forward to the PHP container.
 for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
-    lint-markdown lint-python composer-validate install application-info check-requirements \
+    lint-markdown lint-python typecheck-python composer-validate install application-info check-requirements \
     tool-versions report-coveralls generate-ssl-cert prepare-sonar-reports test-command-output \
     configuration generate-jwt-keys run-tests-php run-tests-phpdbg infection phpmetrics phpcs \
     ecs ecs-fix phpinsights phplint php-parallel-lint psalm psalm-shepherd psalm-github \
