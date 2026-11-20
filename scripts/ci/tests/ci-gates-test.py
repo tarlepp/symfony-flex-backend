@@ -127,7 +127,7 @@ class CiGatesTest(unittest.TestCase):
                 "COMPOSER": ("composer", "Composer validation"), "REQUIREMENTS": ("requirements", "Runtime requirements"),
                 "YAML": ("yaml", "Symfony YAML"),
                 "TOOLING": ("tooling", "Development tooling checks"),
-                "PYRIGHT": ("pyright", "Pyright (non-blocking)"),
+                "PYRIGHT": ("pyright", "Pyright"),
                 "COMPOSE": ("compose", "Compose and Dev Container"),
             },
             "lint-documentation": {
@@ -206,7 +206,11 @@ class CiGatesTest(unittest.TestCase):
                 self.assertIn(f"if: ${{{{ {condition} }}}}", step)
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
-                title = re.search(r"^          OVERVIEW_TITLE: (.+)$", step, re.MULTILINE).group(1)
+                title_match = re.search(
+                    r"^          OVERVIEW_TITLE: (.+)$", step, re.MULTILINE,
+                )
+                assert title_match is not None
+                title = title_match.group(1)
                 for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step)
@@ -216,7 +220,9 @@ class CiGatesTest(unittest.TestCase):
                     else ("Psalm", "PHPStan", "PHP Insights") if job == "static-analyzers"
                     else ("",)
                 )
-                scenarios = [(None, variant) for variant in variants]
+                scenarios: list[tuple[str | None, str]] = [
+                    (None, variant) for variant in variants
+                ]
                 scenarios.extend((failed, variants[0]) for failed in outcomes)
                 for failed, variant in scenarios:
                     values = dict.fromkeys(outcomes, "success" if failed is None else "skipped")
@@ -282,7 +288,7 @@ class CiGatesTest(unittest.TestCase):
                     r"^      - name: Publish workflow run overview\n"
                     r"(.*?)(?=^      - |\Z)", content, re.MULTILINE | re.DOTALL,
                 )
-                self.assertIsNotNone(match)
+                assert match is not None
                 step = match.group(1)
                 self.assertIn("if: ${{ !cancelled() }}", step)
                 self.assertIn("continue-on-error: true", step)
@@ -372,7 +378,7 @@ class CiGatesTest(unittest.TestCase):
         self.assertLess(workflow.index("name: Upload Trivy SARIF report"),
                         workflow.index("name: Scan image with Trivy"))
         condition = re.search(r"^        if: \$\{\{ (.+) \}\}$", scan, re.MULTILINE)
-        self.assertIsNotNone(condition)
+        assert condition is not None
         self.assertEqual(condition.group(1),
                          "!cancelled() && steps.build.outcome == 'success'")
         for build_result in ("success", "failure", "skipped"):
@@ -408,7 +414,7 @@ class CiGatesTest(unittest.TestCase):
             r".*?^        run: \|\n(.*?)(?=^      - |\Z)",
             workflow, re.MULTILINE | re.DOTALL,
         )
-        self.assertIsNotNone(match)
+        assert match is not None
         shell = textwrap.dedent(match.group(1))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -633,7 +639,7 @@ class CiGatesTest(unittest.TestCase):
                         scan.index("name: Generate PR image scan SARIF"))
         self.assertIn("        id: sarif\n", sarif)
         condition = re.search(r"^        if: \$\{\{ (.+) \}\}$", sarif, re.MULTILINE)
-        self.assertIsNotNone(condition)
+        assert condition is not None
         self.assertEqual(
             condition.group(1),
             "!cancelled() && steps.image.outcome == 'success' && "
@@ -704,7 +710,7 @@ class CiGatesTest(unittest.TestCase):
                         r"^        uses: (aquasecurity/trivy-action@[a-f0-9]{40})",
                         step, re.MULTILINE,
                     )
-                    self.assertIsNotNone(action)
+                    assert action is not None
                     trivy_actions.add(action.group(1))
                     self.assertRegex(step, r"(?m)^          ignore-unfixed: '?true'?$")
                     self.assertIn("          vuln-type: 'os,library'\n", step)
@@ -746,7 +752,7 @@ class CiGatesTest(unittest.TestCase):
             r"^        run: bash (scripts/ci/ci-[\w-]+\.sh)$",
             self.jobs[job], re.MULTILINE,
         )
-        self.assertIsNotNone(script, f"Missing result script for {job}")
+        assert script is not None, f"Missing result script for {job}"
         return subprocess.run(
             ["bash", str(WORKFLOW.parents[2] / script.group(1))],
             cwd=WORKFLOW.parent,

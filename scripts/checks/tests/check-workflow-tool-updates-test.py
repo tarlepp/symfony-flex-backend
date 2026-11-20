@@ -571,10 +571,15 @@ class ToolUpdatesTest(unittest.TestCase):
         )
         for source in ("workflow_content", "composite_content"):
             with self.subTest(source=source):
-                result = self.run_checker(
-                    "", mode="--current-pins-md",
-                    **{source: ignored + f"  - uses: example/action@{SHA} # v1.0.0\n"},
-                )
+                content = ignored + f"  - uses: example/action@{SHA} # v1.0.0\n"
+                if source == "workflow_content":
+                    result = self.run_checker(
+                        "", mode="--current-pins-md", workflow_content=content,
+                    )
+                else:
+                    result = self.run_checker(
+                        "", mode="--current-pins-md", composite_content=content,
+                    )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stdout.count("| example/action@v1.0.0 |"), 1)
                 self.assertNotIn("local/action", result.stdout)
@@ -596,13 +601,18 @@ class ToolUpdatesTest(unittest.TestCase):
     def test_both_discovery_sources_preserve_unpinned_and_missing_version_warnings(self):
         for source in ("workflow_content", "composite_content"):
             with self.subTest(source=source):
-                result = self.run_checker(
-                    "", mode="--current-pins-md",
-                    **{source: (
-                        "  - uses: example/action@v1.0.0\n"
-                        f"  - uses: example/unknown@{'a' * 40}\n"
-                    )},
+                content = (
+                    "  - uses: example/action@v1.0.0\n"
+                    f"  - uses: example/unknown@{'a' * 40}\n"
                 )
+                if source == "workflow_content":
+                    result = self.run_checker(
+                        "", mode="--current-pins-md", workflow_content=content,
+                    )
+                else:
+                    result = self.run_checker(
+                        "", mode="--current-pins-md", composite_content=content,
+                    )
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn("Unpinned action reference", result.stderr)
                 self.assertIn("Cannot determine version for example/unknown", result.stderr)

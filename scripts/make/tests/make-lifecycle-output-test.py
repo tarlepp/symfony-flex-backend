@@ -71,7 +71,9 @@ esac
             command = self.root / "bin" / name
             command.write_text(mock)
             command.chmod(0o755)
-        (self.root / "bin/awk").symlink_to(shutil.which("awk"))
+        awk = shutil.which("awk")
+        assert awk is not None, "awk is required for this test"
+        (self.root / "bin/awk").symlink_to(awk)
 
     def run_entrypoint(self, script, *arguments, **overrides):
         self.calls.write_text("")
@@ -250,6 +252,7 @@ exit "${DOCKER_EXIT:-0}"
         finally:
             if master is not None:
                 os.close(master)
+            if slave is not None:
                 os.close(slave)
         return result, self.calls.read_text()
 
@@ -670,7 +673,9 @@ exit "${DOCKER_EXIT:-0}"
         environment_path = self.root / "only-bash"
         environment_path.mkdir()
         for tool in ("dirname", "bash"):
-            (environment_path / tool).symlink_to(shutil.which(tool))
+            executable = shutil.which(tool)
+            assert executable is not None, f"{tool} is required for this test"
+            (environment_path / tool).symlink_to(executable)
         result, _ = self.run_command(
             ["/bin/bash", "scripts/make/compose-context.sh", "php", "docker", "compose"],
             PATH=str(environment_path),

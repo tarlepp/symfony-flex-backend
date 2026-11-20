@@ -522,6 +522,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
         dockerfile = (ROOT / "Dockerfile").read_text()
         maintenance_pin = re.search(r"^FROM (\S+) AS maintenance$", dockerfile, re.MULTILINE)
         application_pin = re.search(r"^FROM (\S+) AS base$", dockerfile, re.MULTILINE)
+        assert maintenance_pin is not None
+        assert application_pin is not None
         self.assertEqual(maintenance_pin.group(1), application_pin.group(1))
         maintenance = dockerfile.split(" AS maintenance\n", 1)[1].split("\nFROM ", 1)[0]
         self.assertIn("jq make", maintenance)
@@ -811,7 +813,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             r"^  docker-image-check-updates:\n(.*?)(?=^  [a-z][a-z-]*:\n|\Z)",
             core, re.MULTILINE | re.DOTALL,
         )
-        self.assertIsNotNone(report)
+        assert report is not None
         self.assertIn("github.event_name == 'schedule'", report.group(1))
         self.assertIn(
             "run: bash scripts/docker/docker-images.sh check-updates --advisory",

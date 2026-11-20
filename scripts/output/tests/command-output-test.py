@@ -42,8 +42,13 @@ class CommandOutputTest(unittest.TestCase):
         environment.update(overrides)
         return environment
 
-    def run_terminal(self, command, stdout_terminal=True, **environment):
+    def run_terminal(
+        self, command, stdout_terminal=True, extra_environment=None, **environment,
+    ):
         """Run with stderr (and optionally stdout) on a pseudo-terminal; return status, terminal and stdout bytes."""
+        if extra_environment is not None:
+            environment.update(extra_environment)
+
         master, slave = pty.openpty()
         process = subprocess.Popen(
             command, env=self.environment(**environment), cwd=ROOT,
@@ -60,7 +65,11 @@ class CommandOutputTest(unittest.TestCase):
                 break
             output += chunk
         os.close(master)
-        stdout = b"" if stdout_terminal else process.stdout.read()
+        if stdout_terminal:
+            stdout = b""
+        else:
+            assert process.stdout is not None
+            stdout = process.stdout.read()
         return process.wait(timeout=10), output, stdout
 
     def run_command(self, command, **environment):
@@ -176,6 +185,7 @@ class CommandOutputTest(unittest.TestCase):
         ], cwd=ROOT, env=self.environment(), stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         try:
+            assert process.stdout is not None
             ready, _, _ = select.select([process.stdout], [], [], 0.8)
             self.assertTrue(ready, "Partial output must stream before the command exits")
             self.assertEqual(os.read(process.stdout.fileno(), 4096), b"    partial")
@@ -224,6 +234,8 @@ class CommandOutputTest(unittest.TestCase):
             stderr=subprocess.PIPE, start_new_session=True,
         )
         try:
+            assert process.stdout is not None
+            assert process.stderr is not None
             self.assertTrue(select.select([process.stdout, process.stderr], [], [], 5)[0])
             self.assertEqual(process.stdout.read(5), b"ready")
             self.assertTrue(select.select([process.stderr], [], [], 5)[0])
@@ -447,6 +459,7 @@ class CommandOutputTest(unittest.TestCase):
                     stderr=subprocess.PIPE, start_new_session=True,
                 )
                 try:
+                    assert process.stdout is not None
                     self.assertTrue(select.select([process.stdout], [], [], 5)[0])
                     self.assertEqual(process.stdout.read(5), b"ready")
                     os.killpg(process.pid, interruption)
@@ -476,6 +489,8 @@ class CommandOutputTest(unittest.TestCase):
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                     start_new_session=True,
                 )
+                assert process.stdout is not None
+                assert process.stderr is not None
                 observed = {process.stdout: bytearray(), process.stderr: bytearray()}
                 expected = {
                     process.stdout: b"ready",
@@ -547,7 +562,7 @@ class CommandOutputTest(unittest.TestCase):
         ):
             with self.subTest(environment=environment):
                 status, output, _ = self.run_terminal(
-                    command, OUTPUT_PROGRESS_DELAY="0.1", **environment,
+                    command, OUTPUT_PROGRESS_DELAY="0.1", extra_environment=environment,
                 )
                 self.assertEqual(status, 0)
                 self.assertNotIn(b"\033[K", output)
@@ -600,6 +615,7 @@ class CommandOutputTest(unittest.TestCase):
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True,
                 )
                 try:
+                    assert process.stdout is not None
                     self.assertTrue(select.select([process.stdout], [], [], 5)[0])
                     self.assertEqual(process.stdout.read(5), b"ready")
                     os.killpg(process.pid, interruption)
@@ -808,7 +824,9 @@ class CommandOutputTest(unittest.TestCase):
                     self.assertEqual(len(calls.read_text().splitlines()), 9)
                     self.assertIn("[OK] Command output contracts: 9 regression suites passed", result.stderr)
             python.unlink()
-            (root / "bin/dirname").symlink_to(shutil.which("dirname"))
+            dirname = shutil.which("dirname")
+            assert dirname is not None, "dirname is required for this test"
+            (root / "bin/dirname").symlink_to(dirname)
             result = self.run_command(
                 ["/bin/bash", str(root / "scripts/tests/command-output-contract-test.sh")],
                 PATH=str(root / "bin"),

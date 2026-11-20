@@ -511,11 +511,11 @@ install-tools               # Install composer tools dependencies
 install                     # Install project Composer dependencies
 lint-configuration          # Lint current defined `application.json` that it
                             # contains valid JSON
-lint-markdown              # Lint Markdown files
+lint-markdown               # Lint Markdown files
 lint-python                 # Lint Python files with Ruff
 lint-workflows              # Validate GitHub workflows, shell, and action metadata
 lint-yaml                   # Lint config YAML files
-local-configuration        # Create local configuration files
+local-configuration         # Create local configuration files
 logs                        # Show logs from all containers
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
@@ -545,7 +545,7 @@ stop                        # Stop application containers
 test-make-routing           # Test local and CI Make command forwarding
 test-docker-images          # Test Docker helpers inside the development container
 tool-versions               # Display installed runtimes and development tool versions
-typecheck-python            # Report Python type diagnostics with Pyright
+typecheck-python            # Check Python types with Pyright
 update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
 ```

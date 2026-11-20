@@ -158,7 +158,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertNotIn("pull_request_target:", review)
         self.assertIn("          persist-credentials: false\n", review)
         action = re.search(r"        uses: actions/dependency-review-action@\S+.*\n", review)
-        self.assertIsNotNone(action)
+        assert action is not None
         self.assertRegex(action.group(), r"@[a-f0-9]{40}")
         review_step = review.split("      - name: 'Dependency Review'\n", 1)[1].split(
             "\n      - ", 1,
@@ -289,7 +289,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def test_ci_database_matches_pinned_development_baseline(self):
         dockerfile = WORKFLOW.parents[2] / "docker/mariadb/Dockerfile"
         image = re.search(r"^FROM (mariadb:\S+)$", dockerfile.read_text(), re.MULTILINE)
-        self.assertIsNotNone(image)
+        assert image is not None
         self.assertRegex(image.group(1), r"^mariadb:\d+\.\d+\.\d+@sha256:[a-f0-9]{64}$")
         section = job("test")
         self.assertIn(f"        image: {image.group(1)}\n", section)
@@ -306,7 +306,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         for name, output in (("test", "tests"), ("docker-build", "docker")):
             section = job(name)
             needs = re.search(r"^    needs:\n((?:      - .+\n)+)", section, re.MULTILINE)
-            self.assertIsNotNone(needs)
+            assert needs is not None
             self.assertEqual(needs.group(1), "      - changes\n")
             self.assertIn(
                 "    if: ${{ github.event_name != 'schedule' && "
@@ -316,7 +316,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def test_image_scans_survive_sibling_build_failure_without_weakening_gates(self):
         section = job("docker-scan")
         condition = re.search(r"^    if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
-        self.assertIsNotNone(condition)
+        assert condition is not None
         self.assertEqual(
             condition.group(1),
             "!cancelled() && github.event_name != 'schedule' && "
@@ -359,7 +359,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             r"^      - name: Download Docker image for scanning\n(.*?)(?=^      - )",
             section, re.MULTILINE | re.DOTALL,
         )
-        self.assertIsNotNone(download)
+        assert download is not None
         self.assertNotIn("        if:", download.group(1))
         self.assertIn(
             "        if: ${{ !cancelled() && steps.image.outcome == 'success' && "
@@ -377,7 +377,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         section = job("report")
         self.assertEqual(dependencies("report"), {"ci-summary", "test"})
         condition = re.search(r"^    if: \$\{\{ (.+) \}\}$", section, re.MULTILINE)
-        self.assertIsNotNone(condition)
+        assert condition is not None
         self.assertEqual(
             condition.group(1),
             "!cancelled() && needs.ci-summary.result == 'success' && "
@@ -436,7 +436,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 rf"^      - name: {re.escape(name)}[^\n]*\n(.*?)(?=^      - |\Z)",
                 section, re.MULTILINE | re.DOTALL,
             )
-            self.assertIsNotNone(step)
+            assert step is not None
             self.assertNotIn("continue-on-error", step.group(1))
             if token == "COVERALLS_REPO_TOKEN":
                 self.assertIn("        if: ${{ env." + token + " != '' }}\n", step.group(1))
@@ -474,10 +474,10 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 rf"^      - name: {re.escape(name)}[^\n]*\n(.*?)(?=^      - |\Z)",
                 section, re.MULTILINE | re.DOTALL,
             )
-            self.assertIsNotNone(step)
+            assert step is not None
             condition = re.search(r"^        if: \$\{\{ (.+) \}\}$",
                                   step.group(1), re.MULTILINE)
-            self.assertIsNotNone(condition)
+            assert condition is not None
             self.assertEqual(condition.group(1), expected)
             conditions[name] = condition.group(1)
 
@@ -530,7 +530,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             r"^      - name: Select external reporting\n"
             r"(.*?)(?=^      - )", section, re.MULTILINE | re.DOTALL,
         )
-        self.assertIsNotNone(selection)
+        assert selection is not None
         self.assertIn("        id: reporting\n", selection.group(1))
         for token in ("COVERALLS_REPO_TOKEN", "SONAR_TOKEN"):
             self.assertIn(token + ": ${{ secrets." + token + " }}\n", selection.group(1))
@@ -564,7 +564,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                 rf"^      - name: {name}\n(.*?)(?=^      - )",
                 section, re.MULTILINE | re.DOTALL,
             )
-            self.assertIsNotNone(step)
+            assert step is not None
             self.assertIn(
                 "        if: ${{ steps.reporting.outputs.enabled == 'true' }}\n",
                 step.group(1),
@@ -585,7 +585,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             r"^      - name: Stop PHP development container\n"
             r"        if: \$\{\{ (.+) \}\}$", section, re.MULTILINE,
         )
-        self.assertIsNotNone(cleanup)
+        assert cleanup is not None
         self.assertEqual(
             cleanup.group(1), "always() && steps.bootstrap.outcome != 'skipped'",
         )
@@ -609,7 +609,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             r"^      - name: Report results to Coveralls[^\n]*\n"
             r"(.*?)(?=^      - |\Z)", section, re.MULTILINE | re.DOTALL,
         )
-        self.assertIsNotNone(upload)
+        assert upload is not None
         script = textwrap.dedent(upload.group(1).split("        run: |\n", 1)[1]
                                  .split("        env:\n", 1)[0])
         command = shlex.split(script.replace("\\\n", ""))
@@ -767,7 +767,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def run_gate(self, name, event="pull_request", lightweight="success", **overrides):
         section = job(name)
         script = re.search(r"^        run: bash (scripts/ci/ci-[\w-]+\.sh)$", section, re.MULTILINE)
-        self.assertIsNotNone(script, f"Missing gate script for {name}")
+        assert script is not None, f"Missing gate script for {name}"
         variables = re.findall(r"^          ([A-Z_]+):", section, re.MULTILINE)
         environment = dict(os.environ, **dict.fromkeys(variables, "success"))
         environment.update(EVENT_NAME=event,
@@ -857,7 +857,9 @@ class AnalyzerWorkflowTest(unittest.TestCase):
     def test_phploc_pipeline_preserves_analyzer_failure(self):
         section = job("lightweight-analyzers")
         step = section.split("      - name: Run PHPLoc\n", 1)[1].split("\n      - ", 1)[0]
-        command = re.search(r"^        run: (.+)$", step, re.MULTILINE).group(1)
+        command_match = re.search(r"^        run: (.+)$", step, re.MULTILINE)
+        assert command_match is not None
+        command = command_match.group(1)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "scripts/make").mkdir(parents=True)
@@ -916,13 +918,18 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             ("Check installed dependencies for known vulnerabilities",
              "run: bash scripts/make/make.sh check-security"),
         ):
-            step = re.search(
+            step_match = re.search(
                 rf"^      - name: {name}\n(.*?)(?=^      - |\Z)",
                 section, re.MULTILINE | re.DOTALL,
-            ).group(1)
+            )
+            assert step_match is not None
+            step = step_match.group(1)
             self.assertIn(command, step)
-            condition = re.search(r"^        if: \$\{\{ (.+) \}\}$",
-                                  step, re.MULTILINE).group(1)
+            condition_match = re.search(
+                r"^        if: \$\{\{ (.+) \}\}$", step, re.MULTILINE,
+            )
+            assert condition_match is not None
+            condition = condition_match.group(1)
             self.assertEqual(
                 condition, "!cancelled() && steps.bootstrap.outcome == 'success'",
             )
@@ -967,10 +974,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             ("PHP Insights", "phpinsights"),
         ])
         self.assertNotIn("            command:", section)
-        step = re.search(
+        step_match = re.search(
             r"^      - name: Run static analyzer[^\n]*\n(.*?)(?=^      - |\Z)",
             section, re.MULTILINE | re.DOTALL,
-        ).group(1)
+        )
+        assert step_match is not None
+        step = step_match.group(1)
         self.assertIn("          ANALYZER_TARGET: ${{ matrix.analyzer.target }}\n", step)
         self.assertIn("        shell: bash\n", step)
         command = textwrap.dedent(step.split("        run: |\n", 1)[1])
@@ -1025,7 +1034,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "DOCKER_SCAN", "REPORT",
             "LINT_WORKFLOWS",
         )
-        environment = dict.fromkeys(variables, "skipped")
+        environment: dict[str, str] = dict.fromkeys(variables, "skipped")
         environment.update(dict.fromkeys((
             "CONFIGURATION_CHANGED", "SECURITY_CHANGED", "IMAGES_CHANGED", "PHP_CHANGED",
             "TESTS_CHANGED", "DOCKER_CHANGED", "WORKFLOWS_CHANGED",
@@ -1208,23 +1217,17 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             section,
         )
         self.assertIn(
-            "      - name: Report Python type diagnostics (non-blocking)\n"
+            "      - name: Check Python types with Pyright\n"
             "        id: pyright\n"
             "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
             "needs.changes.outputs.tooling == 'true' }}\n"
-            "        continue-on-error: true\n"
             "        run: bash scripts/make/make.sh typecheck-python\n",
             section,
         )
 
     def test_configuration_checks_continue_after_failure_but_require_successful_setup(self):
         section = job("lint-configuration")
-        blocking_checks = re.sub(
-            r"^      - name: Report Python type diagnostics \(non-blocking\)\n.*?(?=^      - |\Z)",
-            "",
-            without_overview(section),
-            flags=re.MULTILINE | re.DOTALL,
-        )
+        blocking_checks = without_overview(section)
         self.assertIn(
             "      - name: Bootstrap PHP project\n"
             "        id: bootstrap\n"
@@ -1237,12 +1240,13 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertEqual(conditions[-1], "always()")
         self.assertEqual(conditions[-2], "failure()")
         self.assertEqual(
-            [re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
-             for condition in conditions[:-2]],
+            re.findall(r"needs.changes.outputs.(\w+)", "\n".join(conditions[:-2])),
             ["runtime", "composer", "runtime", "yaml", "tooling", "tooling", "compose"],
         )
         for condition in conditions[:-2]:
-            output = re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
+            output_match = re.search(r"needs.changes.outputs.(\w+)", condition)
+            assert output_match is not None
+            output = output_match.group(1)
             self.assertEqual(
                 condition,
                 "!cancelled() && steps.bootstrap.outcome == 'success' && "
@@ -1279,11 +1283,13 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         self.assertNotIn("continue-on-error", without_overview(section))
         self.assertNotIn("|| true", section)
         for target in ("lint-markdown", "check-skills"):
-            condition = re.search(
+            condition_match = re.search(
                 r"^        if: \$\{\{ (.+) \}\}\n"
                 rf"        run: bash scripts/make/make.sh {target}\n",
                 section, re.MULTILINE,
-            ).group(1)
+            )
+            assert condition_match is not None
+            condition = condition_match.group(1)
             expected = "!cancelled() && steps.bootstrap.outcome == 'success'"
             if target == "lint-markdown":
                 expected += " && needs.changes.outputs.markdown == 'true'"
@@ -1317,7 +1323,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             r"        run: bash scripts/ci/ci-validate-compose.sh\n",
             section, re.MULTILINE,
         )
-        self.assertIsNotNone(step)
+        assert step is not None
         with tempfile.TemporaryDirectory(prefix="ci-devcontainer-") as directory:
             root = Path(directory)
             (root / "scripts/ci").mkdir(parents=True)
@@ -1410,10 +1416,12 @@ class TestReportProcessingTest(unittest.TestCase):
             ("Publish test and coverage summary", "summary",
              " && hashFiles('build/logs/junit.xml', 'build/logs/clover.xml') != '' }}"),
         ):
-            step = re.search(
+            step_match = re.search(
                 rf"^      - name: {name}\n(.*?)(?=^      - |\Z)",
                 section, re.MULTILINE | re.DOTALL,
-            ).group(1)
+            )
+            assert step_match is not None
+            step = step_match.group(1)
             self.assertIn(f"        if: {condition}{suffix}\n", step)
             command = (
                 "docker compose -f compose.yaml -f docker/ci-compose.yaml "
@@ -1888,7 +1896,7 @@ class ChangeDetectionTest(unittest.TestCase):
         (self.root / "source.php").write_text("<?php echo 1;\n")
         self.commit()
         git = shutil.which("git")
-        self.assertIsNotNone(git)
+        assert git is not None
         bin_path = self.root / "bin"
         bin_path.mkdir()
         mock = bin_path / "git"
