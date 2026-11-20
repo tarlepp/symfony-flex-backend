@@ -137,8 +137,8 @@ migrated separately.
 Quality targets include `run-tests*`, `infection`, `phpcs`, `ecs*`,
 `phpinsights`, `phplint`, `php-parallel-lint`, `psalm*`, `phpstan*`,
 `lint-configuration`, `lint-yaml`, `lint-markdown`, `lint-python`,
-`composer-normalize`, `composer-validate`, `composer-require-checker`, and
-`composer-unused`.
+`typecheck-python`, `composer-normalize`, `composer-validate`,
+`composer-require-checker`, and `composer-unused`.
 
 Information and reporting targets also use the same wrapper: `configuration`,
 `project-stats`, `application-info`, `tool-versions`, `check-licenses`,

@@ -1207,24 +1207,39 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "          bash scripts/make/make.sh lint-python\n",
             section,
         )
+        self.assertIn(
+            "      - name: Report Python type diagnostics (non-blocking)\n"
+            "        id: pyright\n"
+            "        if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && "
+            "needs.changes.outputs.tooling == 'true' }}\n"
+            "        continue-on-error: true\n"
+            "        run: bash scripts/make/make.sh typecheck-python\n",
+            section,
+        )
 
     def test_configuration_checks_continue_after_failure_but_require_successful_setup(self):
         section = job("lint-configuration")
+        blocking_checks = re.sub(
+            r"^      - name: Report Python type diagnostics \(non-blocking\)\n.*?(?=^      - |\Z)",
+            "",
+            without_overview(section),
+            flags=re.MULTILINE | re.DOTALL,
+        )
         self.assertIn(
             "      - name: Bootstrap PHP project\n"
             "        id: bootstrap\n"
             "        uses: ./.github/actions/php-bootstrap\n", section,
         )
-        self.assertNotIn("continue-on-error", without_overview(section))
-        self.assertNotIn("|| true", section)
+        self.assertNotIn("continue-on-error", blocking_checks)
+        self.assertNotIn("|| true", blocking_checks)
         conditions = re.findall(r"^        if: \$\{\{ (.+) \}\}$", without_overview(section), re.MULTILINE)
-        self.assertEqual(len(conditions), 8)
+        self.assertEqual(len(conditions), 9)
         self.assertEqual(conditions[-1], "always()")
         self.assertEqual(conditions[-2], "failure()")
         self.assertEqual(
             [re.search(r"needs.changes.outputs.(\w+)", condition).group(1)
              for condition in conditions[:-2]],
-            ["runtime", "composer", "runtime", "yaml", "tooling", "compose"],
+            ["runtime", "composer", "runtime", "yaml", "tooling", "tooling", "compose"],
         )
         for condition in conditions[:-2]:
             output = re.search(r"needs.changes.outputs.(\w+)", condition).group(1)

@@ -18,7 +18,8 @@ TARGETS = (
     "run-tests", "run-tests-php", "run-tests-phpdbg", "infection", "phpcs", "ecs",
     "ecs-fix", "phpinsights", "phplint", "php-parallel-lint", "psalm",
     "psalm-shepherd", "psalm-github", "phpstan", "phpstan-github",
-    "lint-configuration", "lint-yaml", "lint-markdown", "lint-python", "composer-normalize",
+    "lint-configuration", "lint-yaml", "lint-markdown", "lint-python",
+    "typecheck-python", "composer-normalize",
     "composer-validate", "composer-require-checker", "composer-unused",
 )
 
@@ -33,6 +34,9 @@ class QualityOutputTest(unittest.TestCase):
             "tools/02_phpstan/vendor/phpstan/phpstan",
         ):
             (self.root / directory).mkdir(parents=True)
+        nvm_directory = self.root / "home/.nvm"
+        nvm_directory.mkdir(parents=True)
+        (nvm_directory / "nvm.sh").write_text(":")
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         shutil.copyfile(ROOT / "scripts/output/command-output.sh", self.root / "scripts/output/command-output.sh")
         shutil.copyfile(ROOT / "scripts/output/native-output.sh", self.root / "scripts/output/native-output.sh")
@@ -96,6 +100,7 @@ done
 """
         for name in (
             "bin/php", "bin/phpdbg", "bin/python3", "bin/composer", "bin/npx", "bin/ruff", "bin/sleep", "bin/console",
+            "bin/pyright",
             "vendor/bin/phpunit", "vendor/bin/infection", "vendor/bin/parallel-lint",
             "vendor/bin/phpstan", "tools/02_phpstan/vendor/phpstan/phpstan/phpstan",
         ):
@@ -116,7 +121,7 @@ done
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(calls), COLOR="never", NO_COLOR="", FAIL_COMMAND="",
-            REAL_PYTHON=sys.executable,
+            REAL_PYTHON=sys.executable, HOME=str(self.root / "home"),
         )
         environment.update(overrides)
         result = subprocess.run(
@@ -149,6 +154,7 @@ done
             ("php-parallel-lint", "parallel-lint"), ("psalm-github", "console"),
             ("phpstan-github", "phpstan"), ("lint-yaml", "console"),
             ("lint-markdown", "npx"), ("lint-python", "ruff"),
+            ("typecheck-python", "pyright"),
             ("composer-validate", "composer"),
         ):
             with self.subTest(target=target, command=command):
@@ -330,6 +336,12 @@ done
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("ruff check .", calls)
         self.assertNotIn("--fix", calls)
+
+    def test_python_type_check_is_read_only_and_uses_pyright(self):
+        result, calls = self.run_target("typecheck-python")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("pyright", calls)
+        self.assertNotIn("--createstub", calls)
 
     def test_application_recipes_do_not_own_container_forwarding(self):
         makefile = (ROOT / "Makefile").read_text()

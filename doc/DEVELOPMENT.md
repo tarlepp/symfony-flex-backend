@@ -87,7 +87,8 @@ and log interfaces.
 * **Node.js/npm/nvm**: run JavaScript-based tooling; inspect versions with
   `node --version`, `npm --version`, and, in Bash, `nvm --version`.
 * **Python/pip**: use Python for offline script fixtures; inspect installed
-  packages with `python3 -m pip list`. Run Ruff with `make lint-python`.
+  packages with `python3 -m pip list`. Run Ruff with `make lint-python` and
+  Pyright with `make typecheck-python`.
 
 For interactive use, open Fish from the repository root on the Docker host:
 
@@ -419,6 +420,7 @@ docker buildx build --load --target production --no-cache-filter production \
 | Validate GitHub workflows | `make lint-workflows` |
 | Lint documentation files | `make lint-markdown` |
 | Lint Python files | `make lint-python` |
+| Pyright type report (non-blocking in CI) | `make typecheck-python` |
 | PHPUnit tests | `make run-tests-php` |
 | Static analyzers | `make phpstan`, `make psalm`, `make phpcs` |
 | Code style | `make ecs` |
@@ -433,6 +435,16 @@ repository root:
 ```bash
 ruff check .
 ```
+
+For a direct Pyright report, run inside the PHP development container from the
+repository root:
+
+```bash
+bash -c 'source "$HOME/.nvm/nvm.sh" && pyright'
+```
+
+Pyright diagnostics are visible in CI but do not currently block the job while
+existing findings are assessed.
 
 #### Job timeouts [ᐞ](#table-of-contents)
 

@@ -129,6 +129,7 @@ $(call REGISTER_TARGET,phpstan-github,quality,wrapped)
 $(call REGISTER_TARGET,psalm,quality,wrapped)
 $(call REGISTER_TARGET,psalm-github,quality,wrapped)
 $(call REGISTER_TARGET,psalm-shepherd,quality,wrapped)
+$(call REGISTER_TARGET,typecheck-python,quality,wrapped)
 $(call REGISTER_TARGET,composer-normalize,quality,wrapped,OVERWRITE)
 $(call REGISTER_TARGET,ecs-fix,quality,wrapped,OVERWRITE)
 
@@ -428,6 +429,10 @@ psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --show-info=true --report=./build/psalm.json $(PSALM_COLOR_FLAG)
 	$(call REPORT_PATHS,Local JSON report: build/psalm.json; Shepherd submission status is reported by Psalm; upload success is not verified,build/psalm.json)
+
+typecheck-python: ## Report Python type diagnostics with Pyright
+	@bash scripts/output/command-output.sh "Python type analysis" \
+		bash -c '. "$$HOME/.nvm/nvm.sh" && pyright'
 
 composer-normalize: ## Normalizes `composer.json` file content
 	$(call MUTATION_WARNING,Rewriting composer.json into normalized formatting)
