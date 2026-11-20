@@ -13,6 +13,8 @@ regression tests. It owns tooling behavior, not dependency upgrades or
 application features. Use
 [document-shell-scripts](../document-shell-scripts/SKILL.md) for shell-script
 file headers and explanatory comments. Use
+[maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for
+adding or changing scripts under `scripts/`, including tests and callers. Use
 [update-github-workflows](../update-github-workflows/SKILL.md) for CI job
 behavior, [update-github-actions](../update-github-actions/SKILL.md) for action
 pins, and [update-docker-images](../update-docker-images/SKILL.md) for image
@@ -52,7 +54,9 @@ Inspect the implementation and its actual callers:
   `scripts/checks/tests/check-workflow-tool-updates-test.py`: representative
   offline fixtures, command mocks, failure assertions, and temporary-file
   handling. Focused tests live in their owning script group's `tests/`
-  directory; `scripts/tests/` is reserved for cross-group runners. Do not assume
+  directory; `scripts/tests/` is reserved for cross-group runners. Some tests
+  derive helper paths from the script under test or construct fixture layouts;
+  inspect those path assumptions when moving scripts or helpers. Do not assume
   every script already has a regression suite.
 * `.github/workflows/` and `.github/actions/`: direct and Make-mediated callers,
   inputs, invocation environment, and consumers of output and exit status.
@@ -77,7 +81,10 @@ Inspect the implementation and its actual callers:
    parallel checker or wrapper. Inspect the shebang and actual interpreter; Bash
    arrays and process substitution are not portable `sh`. Preserve executable
    modes when a caller invokes a script directly, and verify repository-relative
-   paths from the supported working directory.
+   paths from the supported working directory. When moving or renaming a script
+   or helper, audit path-derived references in callers and tests, including
+   sibling lookups, `__file__`/`dirname` parent calculations, and copied fixture
+   layouts; update them to match the new production tree.
 3. Keep project tooling inside the Compose PHP development container, using
    host-safe Make targets. Docker orchestration, registry inspection, and GitHub
    platform operations remain host-side. In the Makefile, `HOST_TARGETS`
@@ -149,12 +156,15 @@ Inspect the implementation and its actual callers:
    missing tools/files, malformed upstream data, subprocess failure, and
    affected output/exit behavior. For discovery changes, cover relevant
    duplicates, ignored paths, file variants, anchors, or index relationships.
-   For routing changes, cover local/CI forwarding, mixed goals, dry runs,
-   environment isolation, and failure propagation. Reuse fixtures without
-   duplicating the production algorithm in test expectations. For streaming
-   fixtures, separate the output assertion from teardown and cover inherited
-   ignored SIGINT. Use isolated process groups and bounded cleanup of all
-   descendants, not just the group leader; see the
+   For script/helper moves, make fixtures preserve or explicitly resolve the
+   real directory relationships instead of assuming moved files remain
+   siblings. Run the owning regression suite and any aggregate/CI entry point
+   that includes it. For routing changes, cover local/CI forwarding, mixed
+   goals, dry runs, environment isolation, and failure propagation. Reuse
+   fixtures without duplicating the production algorithm in test expectations.
+   For streaming fixtures, separate the output assertion from teardown and
+   cover inherited ignored SIGINT. Use isolated process groups and bounded
+   cleanup of all descendants, not just the group leader; see the
    [streaming fixture guidance](../../../doc/TESTING.md#command-output-contracts).
 9. Exercise actual report or test-runner outputs when those contracts change. A
    mocked invocation does not prove PHPUnit discovery, coverage generation,

@@ -97,6 +97,10 @@ references only for layers the task actually changes:
   behavior, container forwarding, or script regression tests, use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md). Use the
   workflow and dependency skills for those separate contracts.
+* For adding or changing scripts under `scripts/`, including responsibility
+  placement, group-local tests, and caller/path updates, use
+  [maintain-repository-scripts](maintain-repository-scripts/SKILL.md). Use
+  maintain-development-tooling for behavior and tooling contracts.
 * For `.sh` file headers and explanatory comments, use
   [document-shell-scripts](document-shell-scripts/SKILL.md). Use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md) when
@@ -132,6 +136,7 @@ references only for layers the task actually changes:
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
 | [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Reviewing shell readability or changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
+| [maintain-repository-scripts](maintain-repository-scripts/SKILL.md) | Adding or changing scripts under `scripts/`, their tests, or callers. |
 | [resolve-git-conflicts](resolve-git-conflicts/SKILL.md) | Resolving authorized Git rebase conflicts, including rewritten stacked PR parents. |
 | [update-api-documentation](update-api-documentation/SKILL.md) | Changing OpenAPI metadata, schemas, reusable responses, security descriptions, or documentation areas. |
 | [update-api-response-contract](update-api-response-contract/SKILL.md) | Changing shared response serialization, population groups, formats, headers, or error envelopes. |

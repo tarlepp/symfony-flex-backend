@@ -45,6 +45,11 @@ groups.
 | `reports/` | Project/tool inventories and report preparation |
 | `tests/` | Cross-group test runners |
 
+When moving or renaming a script or helper, update references in callers and
+tests, including paths derived from a script's location and fixture setup that
+copies or invokes helpers. Keep those fixtures aligned with the production
+directory relationships so they do not depend on files remaining siblings.
+
 * [Project stats script](reports/project-stats.sh)
   * This script is used to generate simple project stats. It will generate
     output with some basic stats about project.
