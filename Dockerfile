@@ -97,6 +97,18 @@ RUN echo 'path-include /usr/share/doc/fzf/examples/key-bindings.bash' > /etc/dpk
     && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
+ARG BLESH_VERSION=0.4.0-devel3
+ARG BLESH_ARCHIVE_REVISION=2
+ARG BLESH_SHA256=bdcdcfff216495403adf82a701fe41675f64b64644dc77caabd3e015871ebd61
+
+RUN curl --fail --silent --show-error --location \
+        --output /tmp/blesh.tar.xz \
+        "https://github.com/akinomyoga/ble.sh/releases/download/v${BLESH_VERSION}/ble-${BLESH_VERSION}-${BLESH_ARCHIVE_REVISION}.tar.xz" \
+    && printf '%s  /tmp/blesh.tar.xz\n' "$BLESH_SHA256" | sha256sum --check --strict \
+    && mkdir -p /usr/local/share/blesh \
+    && tar -xJf /tmp/blesh.tar.xz --strip-components=1 -C /usr/local/share/blesh \
+    && rm /tmp/blesh.tar.xz
+
 RUN echo 'deb http://download.opensuse.org/repositories/shells:/fish/Debian_12/ /' | \
         tee /etc/apt/sources.list.d/shells:fish.list \
     && curl -fsSL https://download.opensuse.org/repositories/shells:fish/Debian_12/Release.key | \
