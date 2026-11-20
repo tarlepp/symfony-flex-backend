@@ -58,6 +58,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
             (ROOT / "scripts/docker/docker-image-digest-summary.py").read_text(),
         )
+        (self.root / "scripts/docker/php-minor-readiness-report.py").write_text(
+            (ROOT / "scripts/docker/php-minor-readiness-report.py").read_text(),
+        )
         (self.root / ".github").mkdir(exist_ok=True)
         (self.root / ".github/pull_request_template.md").write_text(
             (ROOT / ".github/pull_request_template.md").read_text(),
@@ -67,6 +70,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.environment = dict(
             os.environ, GITHUB_OUTPUT=str(self.output),
             GITHUB_STEP_SUMMARY=str(self.summary), RUNNER_TEMP=str(self.root),
+            PHP_READINESS_REPORT="", PHP_READINESS_ACTIONS="", PHP_READINESS_RESULT="success",
         )
 
     def run_script(self, content, name, **overrides):
@@ -97,21 +101,26 @@ class DockerImageWorkflowTest(unittest.TestCase):
             "if: ${{ always() }}", step(WORKFLOW, "Stop PHP development container"),
         )
 
-    def test_php_minor_readiness_is_independent_and_read_only(self):
+    def test_php_minor_readiness_is_separate_and_update_waits_without_failure_gating(self):
         jobs = yaml.safe_load(WORKFLOW)["jobs"]
         readiness = jobs["php-minor-readiness"]
         self.assertNotIn("needs", readiness)
-        self.assertNotIn("needs", jobs["update"])
+        self.assertEqual(jobs["update"]["needs"], "php-minor-readiness")
         self.assertEqual(readiness["permissions"], {"contents": "read"})
-        self.assertEqual(readiness["if"], jobs["update"]["if"])
+        self.assertIn("!cancelled() && github.ref_type == 'branch'", jobs["update"]["if"])
         self.assertEqual(readiness["steps"][1]["with"], {
             "ref": "${{ github.ref_name }}", "persist-credentials": False,
         })
-        self.assertEqual(
-            readiness["steps"][2]["run"],
-            "bash scripts/docker/docker-images.sh check-php-minor --prepare",
-        )
+        self.assertIn("bash scripts/docker/docker-images.sh check-php-minor --prepare", readiness["steps"][2]["run"])
         steps = {item.get("id"): item for item in readiness["steps"]}
+        self.assertEqual(steps["php-minor"]["shell"], "bash")
+        self.assertNotIn("continue-on-error", steps["php-minor"])
+        self.assertIn("!cancelled()", steps["readiness-report"]["if"])
+        self.assertIn("steps.php-minor.outcome != 'skipped'", steps["readiness-report"]["if"])
+        self.assertEqual(readiness["outputs"]["report"], "${{ steps.readiness-report.outputs.report }}")
+        self.assertEqual(
+            steps["php-minor"]["env"]["GITHUB_STEP_SUMMARY"], "${{ runner.temp }}/php-minor-readiness.md",
+        )
         self.assertIn("steps.php-minor.outputs.prepared == 'true'", steps["minor-auth"]["if"])
         self.assertIn("steps.minor-auth.outputs.method != ''", steps["minor-details"]["if"])
         self.assertIn("steps.minor-details.outcome == 'success'", steps["minor-pr"]["if"])
@@ -168,9 +177,13 @@ class DockerImageWorkflowTest(unittest.TestCase):
                          "manifests":[{"platform":{"os":"linux","architecture":"amd64"}},
                                       '"$extra"']}'
                     ;;
-                "buildx build --file - --target development --load --tag "*. )
+                "buildx build --progress plain --file - --target development --load --tag "*. )
                     cat > candidate-Dockerfile
-                    if [[ "$MODE" == build-failure ]]; then exit 1; fi
+                    if [[ "$MODE" == build-failure ]]; then
+                        printf '%s\\n' "#18 15.63 /tmp/pear/temp/apcu/apc.c:44:17: error: too many arguments to function 'php_verror'"
+                        printf '%s\\n' 'ERROR: failed to build: process install-php-extensions exited 1'
+                        exit 1
+                    fi
                     ;;
                 "run --rm --pull=never --network none "*)
                     [[ "$*" == *" --no-interaction --no-plugins --no-scripts check-platform-reqs --lock --format=json" ]]
@@ -265,6 +278,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 if mode == "build-failure":
                     self.assertNotIn("check-platform-reqs", calls)
                     self.assertIn("Composer checks did not run.", self.summary.read_text())
+                    self.assertIn("Reason: <code>/tmp/pear/temp/apcu/apc.c", self.summary.read_text())
+                    self.assertIn("too many arguments to function", self.summary.read_text())
                     continue
                 for project in (".", "tools/analyzer", "tools/linter"):
                     self.assertIn(f"--working-dir=/app/{project} ", calls)
@@ -294,6 +309,93 @@ class DockerImageWorkflowTest(unittest.TestCase):
             if not output:
                 self.assertIn("No PHP migration PR:", self.summary.read_text())
 
+    def test_readiness_publication_shares_evidence_with_different_prominence(self):
+        source = self.root / "php-minor-readiness.md"
+        log = self.root / "php-minor-readiness.log"
+        cases = (
+            ("Blocked: candidate development image did not build", "success", True),
+            ("Blocked: locked platform requirements are not satisfied", "success", True),
+            ("Prepared for a migration PR", "success", False),
+            ("Not available", "success", False),
+            ("Check failed", "failure", True),
+            ("Prepared for a migration PR", "failure", True),
+            ("", "success", True),
+        )
+        for result_text, outcome, attention in cases:
+            with self.subTest(result=result_text, outcome=outcome):
+                source.unlink(missing_ok=True)
+                log.unlink(missing_ok=True)
+                self.output.write_text("")
+                self.summary.write_text("")
+                if result_text:
+                    source.write_text(
+                        "## PHP minor readiness\n\nCurrent: `php:8.5.13-fpm-bookworm`\n\n"
+                        "Candidate: `php:8.6.2-fpm-bookworm`\n\n"
+                        "| Composer project | Platform requirements |\n| --- | --- |\n"
+                        "| `tools/analyzer` | Blocked: package/tool requires php <8.6 |\n\n"
+                        f"**Result: {result_text}**\n",
+                    )
+                    log.write_text("ERROR: <upstream> failed </details>\n" * 10)
+                published = self.run_script(
+                    WORKFLOW, "Publish PHP readiness evidence", CHECK_OUTCOME=outcome,
+                )
+                self.assertEqual(published.returncode, 0, published.stdout + published.stderr)
+                matches = re.findall(
+                    r"(?m)^(report|actions-report)<<([^\n]+)\n(.*?)\n\2\n",
+                    self.output.read_text(), re.DOTALL,
+                )
+                outputs = {name: value for name, _, value in matches}
+                compact = outputs["report"]
+                actions = outputs["actions-report"]
+                self.assertEqual(self.summary.read_text(), actions)
+                self.assertNotIn("<details open>", compact)
+                self.assertEqual("> [!WARNING]" in actions, attention)
+                self.assertEqual("<details open>" in actions, attention)
+                normalized_actions = re.sub(r"> \[!WARNING\]\n> [^\n]+\n\n", "", actions)
+                self.assertEqual(normalized_actions.replace("<details open>", "<details>"), compact)
+                self.assertIn("## PHP minor upgrade readiness", compact)
+                if result_text:
+                    self.assertIn("Candidate: `php:8.6.2-fpm-bookworm`", compact)
+                    self.assertIn("package/tool requires php <8.6", compact)
+                    self.assertIn("&lt;upstream&gt; failed &lt;/details&gt;", compact)
+                    self.assertNotIn("ERROR: <upstream>", compact)
+                    self.assertIn("Reason: Composer project `tools/analyzer`", compact)
+                else:
+                    self.assertIn("Unavailable; no readiness result was produced", compact)
+                if outcome == "failure":
+                    self.assertIn("Check failed; PHP minor readiness is incomplete", compact)
+
+    def test_readiness_fallback_is_explicit_in_pr_and_actions(self):
+        git = self.root / "git"
+        git.write_text("#!/bin/bash\n[ \"$1\" = diff ] || exit 64\n")
+        git.chmod(0o755)
+        for job_result in ("failure", "skipped", "success"):
+            result = self.run_script(
+                WORKFLOW, "Prepare pull request details", BASE_BRANCH="master",
+                PATH=f"{self.root}:{os.environ['PATH']}", PHP_READINESS_RESULT=job_result,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            body = (self.root / "docker-image-pr.md").read_text()
+            self.assertIn("**Result: Unavailable**", body)
+            self.assertIn(f"readiness job: {job_result}", body)
+            self.assertIn("No compatibility conclusion can be drawn", body)
+
+    def test_build_blocker_without_diagnostics_is_explicit(self):
+        source = self.root / "php-minor-readiness.md"
+        source.write_text("**Result: Blocked: candidate development image did not build**\n")
+        for log_text, expected in (
+            ("", "No detailed diagnostic was captured"),
+            ("ERROR: generic build wrapper failed", "generic build wrapper failed"),
+        ):
+            with self.subTest(log=log_text):
+                (self.root / "php-minor-readiness.log").write_text(log_text)
+                self.output.write_text("")
+                result = self.run_script(
+                    WORKFLOW, "Publish PHP readiness evidence", CHECK_OUTCOME="success",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(expected, self.output.read_text())
+
     def test_php_minor_pr_details_use_template_and_separate_branch(self):
         (self.root / ".github").mkdir(exist_ok=True)
         template = ROOT / ".github/pull_request_template.md"
@@ -301,12 +403,14 @@ class DockerImageWorkflowTest(unittest.TestCase):
         result = self.run_script(
             WORKFLOW, "Prepare PHP minor PR details",
             BASE_BRANCH="master", PHP_CANDIDATE="php:8.6.2-fpm-bookworm",
+            PHP_READINESS_REPORT="## PHP minor upgrade readiness\n\nPrepared evidence",
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.output.read_text(),
                          f"branch=chore(docker)/php-minor-{hashlib.sha256(b'master').hexdigest()[:16]}\n")
         body = (self.root / "php-minor-pr.md").read_text()
         self.assertIn("Update PHP to `php:8.6.2-fpm-bookworm`", body)
+        self.assertIn("## PHP minor upgrade readiness\n\nPrepared evidence", body)
         for line in template.read_text().splitlines():
             if line.startswith(("#", "* [ ]")):
                 self.assertIn(line, body)
@@ -625,9 +729,15 @@ class DockerImageWorkflowTest(unittest.TestCase):
         )
         binary.chmod(0o755)
         branch = "feat(ci)/parent-branch"
+        readiness_report = (
+            "## PHP minor upgrade readiness\n\n**Result: Blocked: PHP extension build failed**\n\n"
+            "<details>\n<summary>Readiness evidence and diagnostics</summary>\n\n"
+            "APCu: too many arguments to function php_verror\n\n</details>\n"
+        )
         result = self.run_script(
             WORKFLOW, "Prepare pull request details", BASE_BRANCH=branch,
             PATH=f"{self.root}:{os.environ['PATH']}",
+            PHP_READINESS_REPORT=readiness_report,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         suffix = hashlib.sha256(branch.encode()).hexdigest()[:16]
@@ -650,6 +760,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("Application tests and builds are not run", body)
         self.assertIn("Repository architecture checklist", body)
         self.assertIn("* [ ]", body)
+        self.assertIn(readiness_report, body)
         self.assertIn("Dockerfile", body)
         self.assertIn("```diff\n", body)
         self.assertIn("-FROM php:8.3-cli", body)
@@ -934,12 +1045,14 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
                     COMPOSER="success", DOCTRINE="success", DETAILS=details, PULL_REQUEST=outcome,
                     PR_URL=link, PR_OPERATION=operation,
+                    PHP_READINESS_ACTIONS="## PHP minor upgrade readiness\n\n> [!WARNING]\n> Blocked: APCu build failed.\n",
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 summary = self.summary.read_text()
                 self.assertIn("Base branch: `master`", summary)
                 self.assertIn(message, summary)
                 self.assertIn("Core CI's Docker image version report", summary)
+                self.assertIn("> Blocked: APCu build failed.", summary)
                 self.assertIn(
                     "Saved before the PR action." if details == "success" else "No verified change report",
                     summary,

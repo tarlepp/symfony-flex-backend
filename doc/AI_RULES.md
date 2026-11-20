@@ -211,6 +211,12 @@ context. Reporting failures cannot block the independent automatic updater. See
 [maintenance setup](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows) for
 token permissions, dispatch prerequisites and runtime evidence limits.
 
+PHP minor readiness remains a separate job and migration PR. The routine updater
+waits for its evidence but runs after readiness failures or skips, unless
+cancelled. It includes the same readiness structure in its PR and run summary, with
+blockers highlighted and expanded in Actions and collapsed in PRs. Missing
+evidence is explicitly unavailable and does not prove compatibility.
+
 For application tests, the workflow runs `make run-tests-php`. The local
 `make run-tests` target may instead select phpdbg when it is installed. Use
 `make run-tests-php` locally when reproducing the CI test runner.

@@ -16,6 +16,9 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+    outputs:
+      report: ${{ steps.readiness-report.outputs.report }}
+      actions-report: ${{ steps.readiness-report.outputs.actions-report }}
     steps:
       - name: Harden the readiness runner (Audit all outbound calls)
         uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
@@ -30,7 +33,20 @@ jobs:
 
       - name: Check the next PHP minor against locked platform requirements
         id: php-minor
-        run: bash scripts/docker/docker-images.sh check-php-minor --prepare
+        shell: bash
+        env:
+          GITHUB_STEP_SUMMARY: ${{ runner.temp }}/php-minor-readiness.md
+        run: bash scripts/docker/docker-images.sh check-php-minor --prepare 2>&1 | tee "$RUNNER_TEMP/php-minor-readiness.log"
+
+      - name: Publish PHP readiness evidence
+        id: readiness-report
+        if: ${{ !cancelled() && steps.php-minor.outcome != 'skipped' }}
+        env:
+          CHECK_OUTCOME: ${{ steps.php-minor.outcome }}
+        run: |
+          python3 scripts/docker/php-minor-readiness-report.py \
+            --source "$RUNNER_TEMP/php-minor-readiness.md" \
+            --log "$RUNNER_TEMP/php-minor-readiness.log" --outcome "$CHECK_OUTCOME"
 
       - name: Select PHP minor PR authentication
         id: minor-auth
@@ -57,6 +73,7 @@ jobs:
         env:
           BASE_BRANCH: ${{ github.ref_name }}
           PHP_CANDIDATE: ${{ steps.php-minor.outputs.candidate }}
+          PHP_READINESS_REPORT: ${{ steps.readiness-report.outputs.report }}
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           printf 'branch=chore(docker)/php-minor-%s\n' "$branch_id" >> "$GITHUB_OUTPUT"
@@ -74,6 +91,7 @@ jobs:
           * Application tests and the production build were not run before opening
             this PR. Normal PR CI must pass before merging.
           EOF
+          printf '\n%s\n' "$PHP_READINESS_REPORT" >> "$RUNNER_TEMP/php-minor-pr.md"
 
       - name: Create repository-scoped GitHub App token for PHP migration
         id: minor-token
@@ -123,7 +141,8 @@ jobs:
 
   update:
     name: Update Docker image versions and digests
-    if: ${{ github.ref_type == 'branch' }}
+    needs: php-minor-readiness
+    if: ${{ !cancelled() && github.ref_type == 'branch' }}
     runs-on: ubuntu-26.04
     timeout-minutes: 30
     permissions:
@@ -217,6 +236,8 @@ jobs:
         id: details
         env:
           BASE_BRANCH: ${{ github.ref_name }}
+          PHP_READINESS_REPORT: ${{ needs.php-minor-readiness.outputs.report }}
+          PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           echo "branch=chore(docker)/image-updates-${branch_id}" >> "$GITHUB_OUTPUT"
@@ -254,6 +275,11 @@ jobs:
           without upgrading packages. Doctrine's configured server version is
           synchronized when the MariaDB tag changes.
           EOF
+          if [ -n "$PHP_READINESS_REPORT" ]; then
+            printf '\n%s\n' "$PHP_READINESS_REPORT"
+          else
+            printf '\n## PHP minor upgrade readiness\n\n**Result: Unavailable**\n\nReason: No readiness evidence was received (readiness job: %s). No compatibility conclusion can be drawn; see the readiness job logs.\n' "$PHP_READINESS_RESULT"
+          fi
           cat "$RUNNER_TEMP/docker-image-digests.md"
           cat << 'EOF'
 
@@ -354,8 +380,15 @@ jobs:
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
           PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
           PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
+          PHP_READINESS_ACTIONS: ${{ needs.php-minor-readiness.outputs.actions-report }}
+          PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}
         run: |
           {
+            if [ -n "$PHP_READINESS_ACTIONS" ]; then
+              printf '%s\n\n' "$PHP_READINESS_ACTIONS"
+            else
+              printf '## PHP minor upgrade readiness\n\n> [!WARNING]\n> PHP minor upgrade needs attention; routine image updates remain separate.\n\n**Result: Unavailable**\n\nReason: No readiness evidence was received (readiness job: %s). No compatibility conclusion can be drawn; see the readiness job logs.\n\n' "$PHP_READINESS_RESULT"
+            fi
             bash scripts/ci/ci-workflow-overview.sh \
               "Core CI's Docker image version report lists major upgrades for manual review." \
               'Maintenance container' "$BOOTSTRAP" \

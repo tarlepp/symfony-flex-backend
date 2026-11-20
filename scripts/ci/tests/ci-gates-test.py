@@ -302,7 +302,10 @@ class CiGatesTest(unittest.TestCase):
                 self.assertIn("bash scripts/ci/ci-workflow-overview.sh", shell)
                 summary = Path(directory) / "summary"
                 (Path(directory) / "docker-image-changes.md").write_text("## Proposed changes\n")
-                extra = dict(RUNNER_TEMP=directory, BASE_BRANCH="master", PR_URL="", PR_OPERATION="")
+                extra = dict(
+                    RUNNER_TEMP=directory, BASE_BRANCH="master", PR_URL="", PR_OPERATION="",
+                    PHP_READINESS_ACTIONS="", PHP_READINESS_RESULT="failure",
+                )
                 scenarios = [("success", None)] + [
                     ("failure", variable) for variable in outcomes
                 ]
@@ -332,6 +335,10 @@ class CiGatesTest(unittest.TestCase):
                         self.assertIn("Image: production", output)
                     else:
                         self.assertNotIn("Image:", output)
+                    if filename == "docker-image-updates.yml":
+                        self.assertIn("> [!WARNING]", output)
+                        self.assertIn("**Result: Unavailable**", output)
+                        self.assertIn("readiness job: failure", output)
                     summary.unlink()
                 unavailable = subprocess.run(
                     ["bash", "-euo", "pipefail", "-c", shell], cwd=directory,

@@ -540,7 +540,7 @@ are reported as unavailable. Registry metadata does not explain the publisher's
 intent or identify exact package changes, so reviewers must consult upstream
 sources when those details matter.
 
-The independent **Check PHP minor upgrade readiness** job uses the same schedule
+The separate **Check PHP minor upgrade readiness** job uses the same schedule
 and manual dispatch. The run summary reports the newest stable patch of the next
 PHP minor for the current variant, or that no candidate is available. It
 verifies the candidate pin and platform coverage, builds the candidate
@@ -557,6 +557,18 @@ it never falls back to `GITHUB_TOKEN` because PR CI must run. The job does not
 auto-merge or close an existing migration PR when a later readiness check is
 blocked. Normal PR CI still runs the application tests and both image builds
 before merge.
+
+The image-update job waits for readiness evidence, but still runs after a failed
+or skipped readiness job unless the workflow is cancelled. Both summaries and
+the image-update PR show the same current image, candidate, result, reason and
+diagnostic structure. Actions highlights blockers with a warning and expanded
+evidence; PRs keep the evidence collapsed. Compiler errors, including extension
+source paths, are preferred over Docker's generic final build error. Composer
+blockers name the project and reported package constraint. Missing reports and
+failed checks are explicitly unavailable or incomplete, not compatibility
+conclusions. This reporting covers PHP minor readiness only; it does not infer
+compatibility blockers for other images or change the patch-only PHP policy of
+the routine update PR.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only
