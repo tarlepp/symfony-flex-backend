@@ -37,11 +37,8 @@ def reports(raw, log, outcome):
         line = re.sub(r"\x1b\[[0-9;]*m", "", line)
         line = re.sub(r"^#\d+ [\d.]+ ", "", line)
         if re.search(r"\berror:|^ERROR:|^\[FAIL\]|^::error::", line, re.IGNORECASE):
-            line = line[:500]
             if line not in errors:
                 errors.append(line)
-            if len(errors) == 5:
-                break
     if not reason and errors:
         reason = f"Reason: <code>{html.escape(errors[0])}</code>"
     if not reason and outcome != "success":
@@ -52,33 +49,59 @@ def reports(raw, log, outcome):
         reason = "Reason: No detailed diagnostic was captured. See the job log."
 
     explanation = ""
+    extension_summary = ""
     if "Blocked: candidate development image did not build" in result:
         explanation = "**Build error:** The candidate PHP development image could not be built."
-        diagnostics = html.unescape(reason + "\n" + "\n".join(errors))
-        extension = re.search(r"/pear/temp/([A-Za-z0-9_-]+)/", diagnostics)
-        if extension:
-            explanation += (
-                f" PHP extension `{extension[1]}` failed to compile against the candidate PHP runtime."
+        failures = {}
+        for diagnostic in errors or [html.unescape(reason)]:
+            extension = re.search(
+                r"/(?:pear/temp|usr/src/php/ext)/([A-Za-z0-9_-]+)/", diagnostic,
             )
+            if extension:
+                failures.setdefault(extension[1], []).append(diagnostic)
+        if len(failures) == 1:
+            name = next(iter(failures))
+            explanation += (
+                f" PHP extension `{name}` failed to compile against the candidate PHP runtime."
+            )
+        elif failures:
+            explanation += " PHP extensions " + ", ".join(f"`{name}`" for name in failures)
+            explanation += " have compiler errors against the candidate PHP runtime."
+        diagnostics = html.unescape(reason + "\n" + "\n".join(errors))
         if "too many arguments to function 'php_verror'" in diagnostics:
             explanation += (
                 " `php_verror` is called with more arguments than the candidate PHP API accepts."
             )
         explanation += " Composer compatibility checks did not run; the upgrade remains blocked."
+        if failures:
+            extension_summary = "**Failing extensions observed in the build log**\n\n"
+            extension_summary += "| Extension | First compiler error |\n| --- | --- |\n"
+            for name, extension_errors in failures.items():
+                message = re.split(r"\b(?:fatal )?error:\s*", extension_errors[0], maxsplit=1)[-1]
+                message = html.escape(message[:200]).replace("|", "&#124;")
+                extension_summary += f"| `{name}` | <code>{message}</code> |\n"
+            extension_summary += (
+                "\nOther extensions are not confirmed compatible: installation can stop at the first failure."
+            )
+        else:
+            extension_summary = (
+                "The failing extension could not be identified from compiler error source paths."
+            )
 
     headline = "\n\n".join(
-        [*identity, result, *([explanation] if explanation else []), *([reason] if reason else [])],
+        [*identity, result, *([explanation, extension_summary] if explanation else []),
+         *([reason] if reason else [])],
     )
     evidence = raw.strip() or "No readiness report was produced."
     if errors:
-        evidence += "\n\n### Diagnostic excerpts\n\n<pre>" + html.escape("\n".join(errors)) + "</pre>"
+        evidence += "\n\n### Full captured error lines\n\n<pre>" + html.escape("\n".join(errors)) + "</pre>"
     attention = "Blocked:" in result or "Check failed" in result or "Unavailable;" in result
     heading = "## PHP minor upgrade readiness\n\n"
     notice = "> [!WARNING]\n> PHP minor upgrade needs attention; routine image updates remain separate.\n\n"
-    details = "\n\n<details{state}>\n<summary>Readiness evidence and diagnostics</summary>\n\n"
-    compact = heading + headline + details.format(state="") + evidence + "\n\n</details>\n"
+    details = "\n\n<details>\n<summary>Readiness evidence and full errors</summary>\n\n"
+    compact = heading + headline + details + evidence + "\n\n</details>\n"
     highlighted = heading + (notice if attention else "") + headline
-    highlighted += details.format(state=" open" if attention else "") + evidence + "\n\n</details>\n"
+    highlighted += details + evidence + "\n\n</details>\n"
     return compact, highlighted
 
 

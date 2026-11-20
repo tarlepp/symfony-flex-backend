@@ -534,9 +534,9 @@ The same maintenance run has a separate PHP minor readiness job. It reports
 blockers or opens a separate migration PR if the candidate is ready and PR
 credentials are configured. The routine updater waits for its report, but a
 failed readiness check does not block unrelated updates. Actions highlights
-blockers with expanded evidence; update PRs include the same evidence collapsed.
-With Docker, buildx, `jq` and `curl`, run the read-only check from the repository
-root on the Docker host:
+blockers; both reports keep full error evidence collapsed by default. With
+Docker, buildx, `jq` and `curl`, run the read-only check from the repository root
+on the Docker host:
 
 ```bash
 bash scripts/docker/docker-images.sh check-php-minor

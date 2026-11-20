@@ -561,8 +561,8 @@ before merge.
 The image-update job waits for readiness evidence, but still runs after a failed
 or skipped readiness job unless the workflow is cancelled. Both summaries and
 the image-update PR show the same current image, candidate, result, reason and
-diagnostic structure. Actions highlights blockers with a warning and expanded
-evidence; PRs keep the evidence collapsed. A bold build-error explanation remains
+diagnostic structure. Actions highlights blockers with a warning. Both reports
+keep full errors collapsed by default. A bold build-error explanation remains
 visible in both reports and identifies the failing extension when its compiler
 source path is available. The check writes evidence to a shared temporary file
 using a command-local summary override, not a workflow override of GitHub's
@@ -573,6 +573,13 @@ checks are explicitly unavailable or incomplete, not compatibility conclusions.
 This reporting covers PHP minor readiness only; it does not infer compatibility
 blockers for other images or change the patch-only PHP policy of the routine
 update PR.
+
+Compiler error source paths identify failing PECL and bundled PHP extensions.
+The visible extension table shows each observed failure's first error; expanding
+the evidence reveals all captured error lines without per-line truncation.
+Extensions mentioned only in the install command are not marked as failing.
+Since installation can stop at the first failure, missing errors do not establish
+compatibility for the remaining extensions.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only

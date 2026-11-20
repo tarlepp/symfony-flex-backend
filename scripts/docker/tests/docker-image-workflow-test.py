@@ -352,7 +352,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 self.assertEqual(self.summary.read_text(), actions)
                 self.assertNotIn("<details open>", compact)
                 self.assertEqual("> [!WARNING]" in actions, attention)
-                self.assertEqual("<details open>" in actions, attention)
+                self.assertNotIn("<details open>", actions)
                 normalized_actions = re.sub(r"> \[!WARNING\]\n> [^\n]+\n\n", "", actions)
                 self.assertEqual(normalized_actions.replace("<details open>", "<details>"), compact)
                 self.assertIn("## PHP minor upgrade readiness", compact)
@@ -397,6 +397,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(expected, self.output.read_text())
+                self.assertIn(
+                    "The failing extension could not be identified from compiler error source paths",
+                    self.summary.read_text(),
+                )
 
     def test_build_error_survives_runner_summary_handoff_into_pr(self):
         _, path = self.php_minor_fixture()
@@ -442,7 +446,39 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn(outputs["report"], body)
         self.assertIn("**Build error:**", body.split("<details>", 1)[0])
         self.assertNotIn("<details open>", body)
-        self.assertIn("<details open>", self.summary.read_text())
+        self.assertNotIn("<details open>", self.summary.read_text())
+
+    def test_extension_errors_are_grouped_without_truncating_full_diagnostics(self):
+        source = self.root / "php-minor-readiness.md"
+        source.write_text("**Result: Blocked: candidate development image did not build**\n")
+        errors = [
+            f"#18 15.63 /tmp/pear/temp/apcu/apc.c:44:17: error: failure {number}"
+            for number in range(7)
+        ]
+        long_error = "/usr/src/php/ext/intl/intl.c:10:2: fatal error: " + "x" * 650 + " <end>"
+        log = "\n".join([
+            "Installing zip and bcmath",
+            "/tmp/pear/temp/igbinary/test.c:1: note: not a compiler error",
+            *errors, errors[0], long_error,
+            "ERROR: process install-php-extensions apcu zip bcmath failed",
+        ])
+        (self.root / "php-minor-readiness.log").write_text(log)
+        result = self.run_script(
+            WORKFLOW, "Publish PHP readiness evidence", CHECK_OUTCOME="success",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = self.summary.read_text()
+        headline, details = report.split("<details>", 1)
+        self.assertIn("| `apcu` |", headline)
+        self.assertIn("| `intl` |", headline)
+        self.assertNotIn("| `zip` |", headline)
+        self.assertNotIn("| `bcmath` |", headline)
+        self.assertNotIn("| `igbinary` |", headline)
+        self.assertIn("Other extensions are not confirmed compatible", headline)
+        self.assertIn("failure 6", details)
+        self.assertIn("x" * 650 + " &lt;end&gt;", details)
+        self.assertEqual(details.count("apc.c:44:17: error: failure 0"), 1)
+        self.assertNotIn("<details open>", report)
 
     def test_php_minor_pr_details_use_template_and_separate_branch(self):
         (self.root / ".github").mkdir(exist_ok=True)
