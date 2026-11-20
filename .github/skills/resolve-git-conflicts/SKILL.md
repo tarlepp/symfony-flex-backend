@@ -167,6 +167,10 @@ dependency inputs changed without a conflict in their source files. Include
 caller-boundary tests for behavior-bearing resolutions and documentation checks
 for Markdown changes. Missing tooling or checks stay explicit blockers.
 
+Apply the [shared validation rules](../shared-guidance.md#running-and-validating-changes)
+to Markdown and lint inputs brought in by the new base, not just files changed
+by conflict resolution.
+
 In the feature workflow, resolved changes return for independent verification.
 No remaining Git conflicts does not imply a verifier `PASS`; post-verification
 resolutions invalidate affected verification evidence.

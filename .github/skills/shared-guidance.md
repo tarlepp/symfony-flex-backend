@@ -185,6 +185,12 @@ safeguards; do not replace them with generic assumptions.
   its own scoped checks.  Inspect staged and unstaged diffs before handoff or
   commit, including first-line headings and the 80-character Markdown line
   limit.
+* Markdown lint checks the whole repository. After a rebase or restack, rerun
+  `make lint-markdown` on the final checkout if the task or the new base changed
+  Markdown or lint inputs. Run it before handoff or an approved push, even after
+  a conflict-free rebase or when affected files are outside the PR diff. A pass
+  before rebasing does not cover the new checkout. Fix findings within scope and
+  report out-of-scope failures as blockers.
 * Before a commit, follow the change-scoped validation requirements in
   [`AGENTS.md`](../../AGENTS.md#testing-and-validation). The broader application
   suite is not mandatory for changes that do not affect application behavior.

@@ -104,8 +104,8 @@ same feature is available through `make bash`. Fish uses Tab completion.
 
 To browse registered targets by name, description, or risk marker, run
 `make-pick` from `/app` in Bash or Fish. **Enter** runs the selected target;
-**Esc** cancels. To use standard Readline instead of `ble.sh`, run the
-following inside the PHP development container:
+**Esc** cancels. To use standard Readline instead of `ble.sh`, run the following
+inside the PHP development container:
 
 ```bash
 SYMFONY_BASH_LIVE_COMPLETION=0 bash --rcfile /app/scripts/make/bashrc.sh -i
