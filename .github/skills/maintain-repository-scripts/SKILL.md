@@ -13,8 +13,9 @@ placement, path integrity, and focused behavior validation. Use
 [maintain-development-tooling](../maintain-development-tooling/SKILL.md) for tooling
 contracts, Make routing, checker behavior, and shell readability reviews. Use
 [document-shell-scripts](../document-shell-scripts/SKILL.md) for `.sh` headers and
-explanatory comments. For CI behavior or dependency pins, also use the relevant
-workflow or dependency skill.
+explanatory comments and [document-python-scripts](../document-python-scripts/SKILL.md)
+for Python module docstrings and explanatory comments. For CI behavior or
+dependency pins, also use the relevant workflow or dependency skill.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
@@ -105,6 +106,7 @@ When script behavior is part of Make, workflow, or container execution, use
 [maintain-development-tooling](../maintain-development-tooling/SKILL.md) and, as
 applicable, [update-github-workflows](../update-github-workflows/SKILL.md) or [update-docker-environment](../update-docker-environment/SKILL.md).
 For shell documentation only, use [document-shell-scripts](../document-shell-scripts/SKILL.md).
+For Python documentation only, use [document-python-scripts](../document-python-scripts/SKILL.md).
 
 ## Tests and validation [ᐞ](#tests-and-validation)
 

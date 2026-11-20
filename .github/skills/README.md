@@ -94,6 +94,9 @@ references only for layers the task actually changes:
 * For `.sh` file headers and explanatory comments, use [document-shell-scripts](document-shell-scripts/SKILL.md).
   Use [maintain-development-tooling](maintain-development-tooling/SKILL.md) when
   script behavior or tooling contracts change.
+* For `.py` module docstrings and explanatory comments, use
+  [document-python-scripts](document-python-scripts/SKILL.md). Use [maintain-development-tooling](maintain-development-tooling/SKILL.md)
+  when script behavior or tooling contracts change.
 * For Docker build behavior, Compose services, entrypoints, runtime mounts, or
   Dev Container setup, use [update-docker-environment](update-docker-environment/SKILL.md).
   Image tag/digest-only changes remain in the image-update skill.
@@ -118,6 +121,7 @@ references only for layers the task actually changes:
 | [add-security-voter](add-security-voter/SKILL.md) | Changing voters, subject-based permissions, or authorization call sites. |
 | [add-validation-constraint](add-validation-constraint/SKILL.md) | Adding or changing a project-specific Symfony Validator constraint and validator. |
 | [debug](debug/SKILL.md) | Diagnosing unexpected application behavior, runtime errors, or failing tests. |
+| [document-python-scripts](document-python-scripts/SKILL.md) | Adding or revising Python module docstrings and explanatory comments. |
 | [document-shell-scripts](document-shell-scripts/SKILL.md) | Adding or revising shell-script file headers and explanatory comments. |
 | [fix-cve](fix-cve/SKILL.md) | Remediating reported CVEs or failing vulnerability gates with artifact evidence and original-scanner verification. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
