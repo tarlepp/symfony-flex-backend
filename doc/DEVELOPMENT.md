@@ -86,8 +86,8 @@ and log interfaces.
 * **GNU Make**: run registered project commands; start with `make help`.
 * **Node.js/npm/nvm**: run JavaScript-based tooling; inspect versions with
   `node --version`, `npm --version`, and, in Bash, `nvm --version`.
-* **Python/pip**: run offline script regression fixtures; inspect installed
-  packages with `python3 -m pip list`.
+* **Python/pip**: use Python for offline script fixtures; inspect installed
+  packages with `python3 -m pip list`. Run Ruff with `make lint-python`.
 
 For interactive use, open Fish from the repository root on the Docker host:
 
@@ -418,6 +418,7 @@ docker buildx build --load --target production --no-cache-filter production \
 | --- | --- |
 | Validate GitHub workflows | `make lint-workflows` |
 | Lint documentation files | `make lint-markdown` |
+| Lint Python files | `make lint-python` |
 | PHPUnit tests | `make run-tests-php` |
 | Static analyzers | `make phpstan`, `make psalm`, `make phpcs` |
 | Code style | `make ecs` |
@@ -425,6 +426,13 @@ docker buildx build --load --target production --no-cache-filter production \
 
 Run PHP tooling inside the development container; see [COMMANDS.md](COMMANDS.md#makefile)
 for all targets.
+
+For a direct Ruff invocation, run inside the PHP development container from the
+repository root:
+
+```bash
+ruff check .
+```
 
 #### Job timeouts [ᐞ](#table-of-contents)
 

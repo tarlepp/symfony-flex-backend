@@ -117,6 +117,7 @@ $(call REGISTER_TARGET,composer-validate,quality,wrapped)
 $(call REGISTER_TARGET,ecs,quality,wrapped)
 $(call REGISTER_TARGET,lint-configuration,quality,wrapped)
 $(call REGISTER_TARGET,lint-markdown,quality,wrapped,,Markdown documentation)
+$(call REGISTER_TARGET,lint-python,quality,wrapped)
 $(call REGISTER_TARGET,lint-workflows,quality,direct)
 $(call REGISTER_TARGET,lint-yaml,quality,wrapped)
 $(call REGISTER_TARGET,php-parallel-lint,quality,wrapped)
@@ -370,6 +371,9 @@ lint-configuration: ## Lint current defined `application.json` that it contains 
 
 lint-markdown: ## Lint Markdown files
 	@bash scripts/output/markdown-output.sh bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
+
+lint-python: ## Lint Python files with Ruff
+	@bash scripts/output/command-output.sh "Python correctness checks" ruff check .
 
 lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
 	@bash scripts/output/command-output.sh "GitHub workflows and local action metadata" bash scripts/checks/lint-workflows.sh

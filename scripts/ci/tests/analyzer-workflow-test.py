@@ -1201,6 +1201,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             "needs.changes.outputs.tooling == 'true' }}\n"
             "        run: |\n          bash scripts/make/make.sh test-command-output\n", section,
         )
+        self.assertIn(
+            "          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php "
+            "python3 scripts/checks/tests/check-workflow-tool-updates-test.py\n"
+            "          bash scripts/make/make.sh lint-python\n",
+            section,
+        )
 
     def test_configuration_checks_continue_after_failure_but_require_successful_setup(self):
         section = job("lint-configuration")
@@ -1572,7 +1578,7 @@ class ChangeDetectionTest(unittest.TestCase):
         "composer": "Root Composer validation",
         "yaml": "Symfony YAML lint",
         "compose": "Compose and Dev Container configuration",
-        "tooling": "Development tooling regression tests",
+        "tooling": "Development tooling checks",
         "workflows": "GitHub workflow validation",
         "security": "PHP dependency security checks",
         "images": "Docker image pins and update checks",
@@ -1966,6 +1972,8 @@ class ChangeDetectionTest(unittest.TestCase):
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text("Updated fixture\n")
                 self.commit()
+                if path.endswith(".py"):
+                    expected = expected | {"tooling"}
                 if expected & {"runtime", "composer", "yaml", "compose", "tooling"}:
                     expected = expected | {"configuration"}
                 for event in ("pull_request", "push", "merge_group"):

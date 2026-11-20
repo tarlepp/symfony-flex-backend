@@ -52,7 +52,7 @@ declare -A category_labels=(
     [composer]='Root Composer validation'
     [yaml]='Symfony YAML lint'
     [compose]='Compose and Dev Container configuration'
-    [tooling]='Development tooling regression tests'
+    [tooling]='Development tooling checks'
     [workflows]='GitHub workflow validation'
     [security]='PHP dependency security checks'
     [images]='Docker image pins and update checks'
@@ -200,6 +200,10 @@ classify_path() {
             echo "Unclassified path: $file; retaining full validation"
             retain_full_validation "Unclassified file: $file; full validation"
             ;;
+    esac
+
+    case "$file" in
+        *.py) enable_checks tooling ;;
     esac
 
     # Tool locks include audit inputs even for report/test tools.

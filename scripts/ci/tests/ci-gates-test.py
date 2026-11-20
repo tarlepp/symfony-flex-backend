@@ -125,7 +125,8 @@ class CiGatesTest(unittest.TestCase):
             "lint-configuration": {
                 "BOOTSTRAP": ("bootstrap", "Bootstrap"), "INFO": ("application-info", "Application information"),
                 "COMPOSER": ("composer", "Composer validation"), "REQUIREMENTS": ("requirements", "Runtime requirements"),
-                "YAML": ("yaml", "Symfony YAML"), "TOOLING": ("tooling", "Tooling contracts"),
+                "YAML": ("yaml", "Symfony YAML"),
+                "TOOLING": ("tooling", "Development tooling checks"),
                 "COMPOSE": ("compose", "Compose and Dev Container"),
             },
             "lint-documentation": {

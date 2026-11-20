@@ -112,12 +112,13 @@ jobs:
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.yaml == 'true' }}
         run: bash scripts/make/make.sh lint-yaml
 
-      - name: Test development tooling contracts
+      - name: Check development tooling
         id: tooling
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.tooling == 'true' }}
         run: |
           bash scripts/make/make.sh test-command-output
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/checks/tests/check-workflow-tool-updates-test.py
+          bash scripts/make/make.sh lint-python
 
       - name: Validate Compose and Dev Container configurations
         id: compose
@@ -143,7 +144,7 @@ jobs:
             'Checks are selected by changed paths; see step logs for details.' \
             'Bootstrap' "$BOOTSTRAP" 'Application information' "$INFO" \
             'Composer validation' "$COMPOSER" 'Runtime requirements' "$REQUIREMENTS" \
-            'Symfony YAML' "$YAML" 'Tooling contracts' "$TOOLING" \
+            'Symfony YAML' "$YAML" 'Development tooling checks' "$TOOLING" \
             'Compose and Dev Container' "$COMPOSE" >> "$GITHUB_STEP_SUMMARY"
 
       - &failure_diagnostics_step
