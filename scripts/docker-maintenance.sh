@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-# Host-side Docker resource maintenance invoked by registered Make targets.
-# Usage: <kill|containers|images|prune>; actions affect this Docker host globally,
-# not just this Compose project. Prune requires an interactive confirmation;
-# container, image, and system-prune operations are destructive.
+#
+# Maintain Docker resources on the host through registered Make targets.
+#
+# Usage:
+#   <kill|containers|images|prune>.
+#
+# Details:
+#   Actions affect all Docker resources on the host, not only this Compose
+#   project. Prune requires interactive confirmation; all operations are
+#   destructive.
+#
 
 set -euo pipefail
 

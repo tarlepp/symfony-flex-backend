@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
-# Append selected CI command output or saved analyzer reports to the job summary.
-# Usage: run TITLE COMMAND [ARG ...] | {file|versions|insights} TITLE PATH;
-# GITHUB_STEP_SUMMARY is required. Run mode preserves the command status and
-# marks captured output incomplete on failure.
+#
+# Append CI command output or analyzer reports to the job summary.
+#
+# Usage:
+#   run TITLE COMMAND [ARG ...] | {file|versions|insights} TITLE PATH.
+#
+# Details:
+#   Requires GITHUB_STEP_SUMMARY. Run mode preserves the command status and
+#   marks captured output incomplete on failure.
+#
 
 set -euo pipefail
 

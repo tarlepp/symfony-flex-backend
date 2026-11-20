@@ -1,10 +1,7 @@
 #!/bin/bash
 
-################################################################################
-# GitHub Actions Update Checker
 #
-# This script checks all pinned GitHub Actions in this repository for available
-# updates and displays the new SHA for each outdated action.
+# Check pinned GitHub Actions and workflow tools for available updates.
 #
 # It discovers actions and workflow tool pins from:
 #   - .github/workflows/*.yml and *.yaml files
@@ -17,13 +14,19 @@
 #   ./scripts/check-action-updates.sh --tools-only
 #
 # Requirements:
-#   - git (for git ls-remote)
+#   - git and timeout (for bounded git ls-remote lookups)
 #
-# Security Note:
+# Optional environment overrides:
+#   - GIT_BIN
+#   - TIMEOUT_BIN
+#   - WORKFLOW_DIR
+#   - ACTIONS_DIR
+#   - TOOL_PINS_FILE
+#
+# Security note:
 #   This script helps identify updates but does NOT automatically apply them.
-#   Always review changelog and test updates before merging.
+#   Always review changelogs and test updates before merging.
 #
-################################################################################
 
 # Collect discovery and lookup failures so remaining checks still run.
 set +e

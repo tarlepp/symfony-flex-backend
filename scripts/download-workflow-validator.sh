@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-# Download or reuse a pinned workflow validator after SHA-256 verification.
-# Usage: <url> <expected-sha256> <destination> <cache-file>; network downloads
-# use bounded retries, and verified cache entries are copied to the destination.
+#
+# Download or reuse a SHA-256-pinned workflow validator.
+#
+# Usage:
+#   <url> <expected-sha256> <destination> <cache-file>.
+#
+# Details:
+#   Network downloads use bounded retries; cached and downloaded files are
+#   checksum-verified before use.
+#
 
 set -euo pipefail
 

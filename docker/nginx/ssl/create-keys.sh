@@ -1,9 +1,15 @@
 #!/bin/bash
 
+#
 # Generate local development TLS materials for the Nginx configuration.
-# Run from this directory so openssl.cnf is found; outputs are written here and
-# existing files with the same names are replaced. Use these files only for
-# local development, never in production.
+#
+# Usage:
+#   Run from this directory so openssl.cnf is found.
+#
+# Details:
+#   Writes the CA and server certificate files here, replacing existing files
+#   with the same names. Use these materials only for local development.
+#
 
 set -euo pipefail
 

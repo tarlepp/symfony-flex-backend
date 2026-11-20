@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-# Shared Bash command-output helpers. Source this file to use the output_*
-# functions, or execute it with --run, --stream, --progress, or --status to
-# wrap a command. Status messages use stderr; wrapped command streams and exit
-# statuses retain their caller-facing contract.
+#
+# Provide shared Bash command-output and status helpers.
+#
+# Usage:
+#   Source for output_* functions, or run with --run, --stream, --progress, or
+#   --status to wrap a command.
+#
+# Details:
+#   Status messages use stderr; wrapped command streams and exit statuses
+#   retain their caller-facing contract.
+#
 
 OUTPUT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 

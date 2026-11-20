@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 
-# Run the offline command-output and Make contract regression suites.
-# Docker, registries, and uploaders are mocked; this does not mutate application
-# data or perform uploads. Run from the repository root with Make target
-# test-command-output; the fixture aggregates eight Python suites and the
-# separate host/CI forwarding regression.
+#
+# Run offline command-output and Make contract regression suites.
+#
+# Usage:
+#   Run from the repository root with make test-command-output.
+#
+# Details:
+#   Docker, registries, and uploaders are mocked; no application data is mutated
+#   and no uploads occur. Aggregates eight Python suites and host/CI forwarding
+#   regressions.
+#
 
 set -euo pipefail
 
