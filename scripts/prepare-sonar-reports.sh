@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# Prepare local Sonar copies of PHPUnit Clover and JUnit reports.
+# Requires nonempty build/logs/clover.xml and build/logs/junit.xml; writes
+# normalized copies under build/sonar, replacing prior copies without uploading.
+
 set -euo pipefail
 
 # shellcheck source=scripts/command-output.sh
