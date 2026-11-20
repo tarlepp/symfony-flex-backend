@@ -14,12 +14,10 @@ and storage timezone are separate contracts; changing one does not implicitly
 change the others.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Use
-[update-application-configuration](../update-application-configuration/SKILL.md)
-for settings and wiring, and
-[add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) when preference inputs or
-request mappings change.
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Use [update-application-configuration](../update-application-configuration/SKILL.md)
+for settings and wiring, and [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
+when preference inputs or request mappings change.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -105,9 +103,8 @@ Inspect the affected source, configuration, and consumers:
    semantics through the DTO and mapper. Verify language/locale enum conversion
    and timezone validation separately. Trace security-user values and newly
    issued JWT localization claims; do not assume editing a preference updates an
-   already issued token. Use
-   [implement-api-authentication](../implement-api-authentication/SKILL.md) when
-   token or authentication behavior changes.
+   already issued token. Use [implement-api-authentication](../implement-api-authentication/SKILL.md)
+   when token or authentication behavior changes.
 7. For timezones, retain identifiers as stable machine values and distinguish
    them from display labels and offsets. `getFormattedTimezones()` builds
    `timezone`, `identifier`, `offset`, and `value` using PHP timezone data and
@@ -124,11 +121,9 @@ Inspect the affected source, configuration, and consumers:
    storage timezone to fix a display issue.
 9. Keep localization endpoint status, array shapes, allowed methods, and API
    examples aligned with actual lists. Do not introduce frontend assets or a
-   parallel translation service. Follow
-   [add-event-subscriber](../add-event-subscriber/SKILL.md) when locale event
-   registration changes and
-   [update-api-response-contract](../update-api-response-contract/SKILL.md) when
-   shared output behavior changes.
+   parallel translation service. Follow [add-event-subscriber](../add-event-subscriber/SKILL.md)
+   when locale event registration changes and [update-api-response-contract](../update-api-response-contract/SKILL.md)
+   when shared output behavior changes.
 
 ## Validation [ᐞ](#table-of-contents)
 

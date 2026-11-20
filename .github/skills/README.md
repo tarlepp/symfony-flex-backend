@@ -28,11 +28,9 @@ diagrams and practical starting points.
 Skills are additional references agents can consult when useful, not required
 workflow gates. No matching skill, unavailable supporting references, or missing
 skill-selection/loading records alone should block work. Repository instructions
-and required checks still apply, including the
-[shared guidance](shared-guidance.md),
-[repository instructions](../copilot-instructions.md) and
-[AI rules](../../doc/AI_RULES.md). For the canonical AI documentation inventory
-and reading order, see the
+and required checks still apply, including the [shared guidance](shared-guidance.md),
+[repository instructions](../copilot-instructions.md) and [AI rules](../../doc/AI_RULES.md).
+For the canonical AI documentation inventory and reading order, see the
 [README's AI-assisted development section](../../README.md#ai-assisted-development).
 Use related skills together when a task spans multiple concerns. Keep common
 execution, validation, and handoff rules in the shared guidance rather than
@@ -41,78 +39,67 @@ duplicating them in every skill.
 When consulting skills, start with the requested outcome and use additional
 references only for layers the task actually changes:
 
-* For a complete CRUD feature, start with
-  [add-rest-resource](add-rest-resource/SKILL.md); use the entity, DTO, query,
-  and testing skills for the affected parts. A DTO-only or query-only change
-  does not require scaffolding a new resource.
-* For a custom non-CRUD API operation, use
-  [add-custom-api-endpoint](add-custom-api-endpoint/SKILL.md). Do not apply the
-  generic CRUD workflow unless the endpoint actually needs those layers.
-* For a project-specific Symfony validation rule, use
-  [add-validation-constraint](add-validation-constraint/SKILL.md). When the
-  constraint is used for API input, also follow the DTO mapping skill.
+* For a complete CRUD feature, start with [add-rest-resource](add-rest-resource/SKILL.md);
+  use the entity, DTO, query, and testing skills for the affected parts. A
+  DTO-only or query-only change does not require scaffolding a new resource.
+* For a custom non-CRUD API operation, use [add-custom-api-endpoint](add-custom-api-endpoint/SKILL.md).
+  Do not apply the generic CRUD workflow unless the endpoint actually needs
+  those layers.
+* For a project-specific Symfony validation rule, use [add-validation-constraint](add-validation-constraint/SKILL.md).
+  When the constraint is used for API input, also follow the DTO mapping skill.
 * For authentication flows or broad access policy, use
-  [implement-api-authentication](implement-api-authentication/SKILL.md). For
-  subject-based permissions, start with
-  [add-security-voter](add-security-voter/SKILL.md).
+  [implement-api-authentication](implement-api-authentication/SKILL.md). For subject-based
+  permissions, start with [add-security-voter](add-security-voter/SKILL.md).
 * For diagnosing unexpected application behavior, runtime errors, or failing
-  tests, use [debug](debug/SKILL.md). Use [write-tests](write-tests/SKILL.md)
-  whenever tests change.
-* For a reported CVE or failing vulnerability gate, start with
-  [fix-cve](fix-cve/SKILL.md) to identify the affected artifact, choose the owning
-  update workflow, and repeat the original scanner. Routine upgrades remain in
-  the dependency and image skills; a general security review is a separate task.
-* For the supported PHP runtime baseline, start with
-  [update-php-runtime](update-php-runtime/SKILL.md). For other package versions,
-  use [update-dependencies](update-dependencies/SKILL.md); for installed recipe
-  scaffolding, use [update-symfony-recipes](update-symfony-recipes/SKILL.md);
-  for settings and service wiring, use
-  [update-application-configuration](update-application-configuration/SKILL.md).
-  Docker image-only changes use
-  [update-docker-images](update-docker-images/SKILL.md). GitHub Action pins use
-  [update-github-actions](update-github-actions/SKILL.md). CI behavior and
-  shared jobs use [update-github-workflows](update-github-workflows/SKILL.md).
-* Use [write-tests](write-tests/SKILL.md) whenever tests change. For event
-  handlers, use the [event-handling guide](../../doc/EVENT_HANDLING.md) to
-  choose the listener or subscriber skill.
+  tests, use [debug](debug/SKILL.md). Use [write-tests](write-tests/SKILL.md) whenever
+  tests change.
+* For a reported CVE or failing vulnerability gate, start with [fix-cve](fix-cve/SKILL.md)
+  to identify the affected artifact, choose the owning update workflow, and
+  repeat the original scanner. Routine upgrades remain in the dependency and
+  image skills; a general security review is a separate task.
+* For the supported PHP runtime baseline, start with [update-php-runtime](update-php-runtime/SKILL.md).
+  For other package versions, use [update-dependencies](update-dependencies/SKILL.md);
+  for installed recipe scaffolding, use [update-symfony-recipes](update-symfony-recipes/SKILL.md);
+  for settings and service wiring, use [update-application-configuration](update-application-configuration/SKILL.md).
+  Docker image-only changes use [update-docker-images](update-docker-images/SKILL.md).
+  GitHub Action pins use [update-github-actions](update-github-actions/SKILL.md).
+  CI behavior and shared jobs use [update-github-workflows](update-github-workflows/SKILL.md).
+* Use [write-tests](write-tests/SKILL.md) whenever tests change. For event handlers,
+  use the [event-handling guide](../../doc/EVENT_HANDLING.md) to choose the listener
+  or subscriber skill.
 * For AI instructions, custom agent profiles, skill contracts, and their
-  indexes, use [maintain-ai-guidance](maintain-ai-guidance/SKILL.md).
-  Documentation checks do not prove live-client discovery or delegation.
+  indexes, use [maintain-ai-guidance](maintain-ai-guidance/SKILL.md). Documentation
+  checks do not prove live-client discovery or delegation.
 * For authorized Git rebase conflicts or stacked PR restacking, use
-  [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). It does not grant
-  permission to start, continue, or publish a rebase.
+  [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). It does not grant permission
+  to start, continue, or publish a rebase.
 * For shared output serialization, population groups, response formats, headers,
-  or error envelopes, use
-  [update-api-response-contract](update-api-response-contract/SKILL.md). Request
-  DTO mapping alone does not establish the response contract.
+  or error envelopes, use [update-api-response-contract](update-api-response-contract/SKILL.md).
+  Request DTO mapping alone does not establish the response contract.
 * For request/login audit records, redaction, ignored paths, or their
-  interaction with Monolog, use
-  [update-request-logging](update-request-logging/SKILL.md). Database audit
-  capture and diagnostic logs are separate sinks.
+  interaction with Monolog, use [update-request-logging](update-request-logging/SKILL.md).
+  Database audit capture and diagnostic logs are separate sinks.
 * For supported languages/locales, request locale selection, translation
-  catalogs, or timezone behavior, use
-  [update-localization](update-localization/SKILL.md). User preferences,
-  translator fallback, and storage timezone are distinct contracts.
+  catalogs, or timezone behavior, use [update-localization](update-localization/SKILL.md).
+  User preferences, translator fallback, and storage timezone are distinct
+  contracts.
 * For shell readability reviews, repository scripts, Make targets, checker
   behavior, container forwarding, or script regression tests, use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md). Use the
   workflow and dependency skills for those separate contracts.
 * For adding or changing scripts under `scripts/`, including responsibility
   placement, group-local tests, and caller/path updates, use
-  [maintain-repository-scripts](maintain-repository-scripts/SKILL.md). Use
-  maintain-development-tooling for behavior and tooling contracts.
-* For `.sh` file headers and explanatory comments, use
-  [document-shell-scripts](document-shell-scripts/SKILL.md). Use
-  [maintain-development-tooling](maintain-development-tooling/SKILL.md) when
+  [maintain-repository-scripts](maintain-repository-scripts/SKILL.md). Use maintain-development-tooling
+  for behavior and tooling contracts.
+* For `.sh` file headers and explanatory comments, use [document-shell-scripts](document-shell-scripts/SKILL.md).
+  Use [maintain-development-tooling](maintain-development-tooling/SKILL.md) when
   script behavior or tooling contracts change.
 * For Docker build behavior, Compose services, entrypoints, runtime mounts, or
-  Dev Container setup, use
-  [update-docker-environment](update-docker-environment/SKILL.md). Image
-  tag/digest-only changes remain in the image-update skill.
+  Dev Container setup, use [update-docker-environment](update-docker-environment/SKILL.md).
+  Image tag/digest-only changes remain in the image-update skill.
 * For OpenAPI metadata, model schemas, reusable responses, security
-  descriptions, or generated documentation areas, use
-  [update-api-documentation](update-api-documentation/SKILL.md). Documentation
-  availability alone does not establish contract accuracy.
+  descriptions, or generated documentation areas, use [update-api-documentation](update-api-documentation/SKILL.md).
+  Documentation availability alone does not establish contract accuracy.
 
 ## Available skills [ᐞ](#table-of-contents)
 
@@ -169,14 +156,13 @@ references only for layers the task actually changes:
   `Back to main README.md` linking to the repository README.
 * Put common preparation, contract clarification, test-selection rules,
   configuration linting, and documentation/handoff requirements in
-  [shared guidance](shared-guidance.md). Keep concrete inspection targets,
-  domain decisions, safety checks, and verification details in each skill.
+  [shared guidance](shared-guidance.md). Keep concrete inspection targets, domain
+  decisions, safety checks, and verification details in each skill.
 * Preserve task-specific safety checks and behavior when harmonizing format.
   Update this index whenever skills are added, removed, or renamed.
 * Before adding a skill or shared policy, follow the recurrence and non-overlap
-  criteria in
-  [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills); prefer
-  extending an existing skill or shared guidance.
+  criteria in [AI rules](../../doc/AI_RULES.md#maintaining-task-specific-skills);
+  prefer extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
   exactly once, and local links and anchors resolve across repository Markdown
   files. Run `python3 scripts/checks/check-skills.py` from the repository root inside

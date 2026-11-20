@@ -86,8 +86,8 @@ and the actual code, dependency manifests, and CI workflows.
   Dev Container for Composer, Symfony console, lint, test, and static-analysis
   commands. Start containers with `make start` or `make daemon`; use `make bash`
   or `make fish` for an interactive container shell.
-* Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for
-  task branch setup, handling pre-existing work, and commit-message proposals.
+* Follow [shared AI workflow guidance](.github/skills/shared-guidance.md) for task
+  branch setup, handling pre-existing work, and commit-message proposals.
   Documentation-only changes use a `chore(docs)/...` branch and a
   `Chore(docs) - ...` pull request title; AI-guidance-only changes use
   `chore(ai)/...` and `Chore(ai) - ...`. State the base branch for every task;
@@ -111,8 +111,7 @@ and the actual code, dependency manifests, and CI workflows.
 * Scope checks to the full task diff and affected behavior, not all commands
   listed in an agent or skill. Markdown additions, edits, renames, and deletions
   require `make lint-markdown`; skip it when neither Markdown nor its lint
-  tooling/configuration changed. Follow the
-  [shared selection rules](.github/skills/shared-guidance.md#running-and-validating-changes)
+  tooling/configuration changed. Follow the [shared selection rules](.github/skills/shared-guidance.md#running-and-validating-changes)
   for other linters, tests, builds, documentation links, final-content checks,
   and result reuse. Application configuration and dependency/runtime changes can
   require PHP checks and tests without any changed PHP source.
@@ -129,11 +128,11 @@ and the actual code, dependency manifests, and CI workflows.
   See `.github/skills/write-tests/SKILL.md` for test selection and conventions.
 * Run the smallest relevant existing test or quality command while iterating.
   Select validation by the behavior changed, not merely the file extension,
-  using [the validation selection guide](doc/TESTING.md#selecting-validation).
-  Documentation-only changes, including AI instructions and skill text, require
-  Markdown lint and documentation checks, not PHPUnit or PHP static analysis.
-  Apply the same scope before commit; a documentation example mentioning a test
-  command does not require executing that command.
+  using [the validation selection guide](doc/TESTING.md#selecting-validation). Documentation-only
+  changes, including AI instructions and skill text, require Markdown lint and
+  documentation checks, not PHPUnit or PHP static analysis. Apply the same scope
+  before commit; a documentation example mentioning a test command does not
+  require executing that command.
 * Treat any confirmed failure in a required CI check selected by the task as a
   delivery blocker, even if it predates the branch. Fix it within scope or
   report the blocker and seek approval for out-of-scope remediation.
@@ -200,8 +199,7 @@ and the actual code, dependency manifests, and CI workflows.
 
 <a id="reference-guidance"></a>
 
-Use the
-[README's canonical AI documentation inventory](README.md#ai-assisted-development)
+Use the [README's canonical AI documentation inventory](README.md#ai-assisted-development)
 to find project context, AI-guidance maintenance policy, task-specific skills,
 and the pull request review checklist. The reading order is not precedence:
 platform instructions apply first, and the implementation, tests, configuration,

@@ -10,13 +10,12 @@ description: Update the supported PHP runtime baseline consistently across Compo
 Use this skill when changing the PHP version supported by the application or the
 PHP runtime version used by the development, production, and CI workflows. For
 Composer package updates that do not change the PHP baseline, use
-[update-dependencies](../update-dependencies/SKILL.md). For PHP image tag or
-digest refreshes that keep the supported PHP version unchanged, use
+[update-dependencies](../update-dependencies/SKILL.md). For PHP image tag or digest
+refreshes that keep the supported PHP version unchanged, use
 [update-docker-images](../update-docker-images/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -84,9 +83,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
   reproduce CI's application test runner.
 * When the PHP base image changes, run `make docker-image-verify-pins`, validate
   affected Compose files with `docker compose config --quiet`, and build both
-  PHP `development` and `production` targets. Follow
-  [update-docker-images](../update-docker-images/SKILL.md) for platform,
-  tag/digest parity, and build details.
+  PHP `development` and `production` targets. Follow [update-docker-images](../update-docker-images/SKILL.md)
+  for platform, tag/digest parity, and build details.
 * Report unavailable platform builds or other validation blockers explicitly.
 
 ---

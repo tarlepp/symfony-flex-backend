@@ -12,8 +12,7 @@ its behavior. It covers Symfony EventDispatcher listeners and Doctrine lifecycle
 listeners; these are separate event systems.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -32,11 +31,10 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    tests. Identify the event system, exact event name, payload type, dispatch
    timing, and any dispatcher-specific registration. Do not infer these from a
    class name alone.
-2. Read [the event-handling guide](../../../doc/EVENT_HANDLING.md) before
-   choosing a listener over a subscriber. Extend an existing handler when the
+2. Read [the event-handling guide](../../../doc/EVENT_HANDLING.md) before choosing
+   a listener over a subscriber. Extend an existing handler when the
    responsibility matches; preserve its registration style unless a conversion
-   is part of the task. For a Symfony subscriber, follow
-   [add-event-subscriber](../add-event-subscriber/SKILL.md).
+   is part of the task. For a Symfony subscriber, follow [add-event-subscriber](../add-event-subscriber/SKILL.md).
 3. Put listener classes in `src/EventListener/`. Keep handlers focused on event
    adaptation and delegate business logic to an existing resource or service.
    Use constructor injection, explicit parameter and return types, and the event

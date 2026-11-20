@@ -10,16 +10,14 @@ description: Change Docker build stages, Compose services, entrypoints, PHP/ngin
 Use this skill when changing container behavior rather than only image versions:
 Dockerfile stages, installed tools/extensions, Compose services and overrides,
 entrypoints, mounts, runtime configuration, or IDE Dev Container setup. For
-image tags and digests alone, use
-[update-docker-images](../update-docker-images/SKILL.md). For a PHP baseline
-change, use [update-php-runtime](../update-php-runtime/SKILL.md).
+image tags and digests alone, use [update-docker-images](../update-docker-images/SKILL.md).
+For a PHP baseline change, use [update-php-runtime](../update-php-runtime/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Use
-[maintain-development-tooling](../maintain-development-tooling/SKILL.md) for
-Make/script contracts and
-[update-github-workflows](../update-github-workflows/SKILL.md) for CI consumers.
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Use [maintain-development-tooling](../maintain-development-tooling/SKILL.md) for
+Make/script contracts and [update-github-workflows](../update-github-workflows/SKILL.md)
+for CI consumers.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -56,10 +54,8 @@ Inspect every affected variant, including effective override behavior:
 * `docker/php/`, `docker/nginx/`, and `docker/mariadb/`: image builds,
   development/production PHP and FPM settings, nginx upstream/TLS, and database
   configuration. Inspect safe configuration, never private TLS/JWT key contents.
-* `Makefile`, CI bootstrap,
-  [Dev Container guide](../../../.devcontainer/README.md),
-  [Docker guide](../../../docker/README.md), and
-  [local production guide](../../../doc/DOCKER_MULTI_PLATFORM.md#running-production-locally):
+* `Makefile`, CI bootstrap, [Dev Container guide](../../../.devcontainer/README.md),
+  [Docker guide](../../../docker/README.md), and [local production guide](../../../doc/DOCKER_MULTI_PLATFORM.md#running-production-locally):
   build/start commands, routing, variant selection, and operator instructions.
 
 ## Workflow [ᐞ](#table-of-contents)

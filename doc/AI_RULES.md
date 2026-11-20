@@ -32,9 +32,9 @@ This document has a narrower role: keep the AI documentation system
 maintainable, and guide decisions about whether recurring review feedback should
 become a documented rule, a task-specific skill, or an automated check.
 
-The canonical AI documentation inventory and reading order is in the
-[README](../README.md#ai-assisted-development). Keep that inventory current when
-AI guidance files are added, removed, or renamed.
+The canonical AI documentation inventory and reading order is in the [README](../README.md#ai-assisted-development).
+Keep that inventory current when AI guidance files are added, removed, or
+renamed.
 
 ## Guidance roles and precedence [ᐞ](#table-of-contents)
 
@@ -46,19 +46,18 @@ Use the following precedence when instructions conflict:
 2. Repository-wide actionable requirements in [`AGENTS.md`](../AGENTS.md).
    [Copilot instructions](../.github/copilot-instructions.md) direct Copilot to
    that source rather than maintaining a second policy list.
-3. Matching task-specific workflows in the
-   [skills index](../.github/skills/README.md), which supplement repository-wide
-   instructions.
+3. Matching task-specific workflows in the [skills index](../.github/skills/README.md),
+   which supplement repository-wide instructions.
 4. Existing implementation, configuration, tests, lint rules, and CI as the
    source of truth for current behavior.
 
 [`CLAUDE.md`](../CLAUDE.md) provides project architecture and workflow context.
-The [pull request template](../.github/pull_request_template.md) is a review
-checklist, not an instruction hierarchy layer.
+The [pull request template](../.github/pull_request_template.md) is a review checklist,
+not an instruction hierarchy layer.
 
-The [project agent profiles](FEATURE_AGENTS.md) define feature-delivery roles,
-approval gates, and specialist handoffs. They supplement repository instructions
-and skills, not override them. Keep their routing, tool access, and client
+The [project agent profiles](FEATURE_AGENTS.md) define feature-delivery roles, approval
+gates, and specialist handoffs. They supplement repository instructions and
+skills, not override them. Keep their routing, tool access, and client
 limitations aligned when changing the workflow; only the feature lead is
 user-facing. The implementer may delegate bounded, explicitly authorized rebase
 conflict work to the hidden conflict resolver while paused, or approved bounded
@@ -75,15 +74,14 @@ rule that the project no longer follows.
 
 <a id="maintaining-task-specific-skills"></a>
 
-Use the [skills index](../.github/skills/README.md) for the skill format,
-cross-linking, shared-guidance boundaries, and skill inventory requirements.
-Keep common execution and handoff instructions in
-[shared guidance](../.github/skills/shared-guidance.md); write domain workflows
-and safeguards in their specific skills.
+Use the [skills index](../.github/skills/README.md) for the skill format, cross-linking,
+shared-guidance boundaries, and skill inventory requirements. Keep common
+execution and handoff instructions in [shared guidance](../.github/skills/shared-guidance.md);
+write domain workflows and safeguards in their specific skills.
 
 For changes to instructions, agent profiles, or skill contracts, use
-[maintain-ai-guidance](../.github/skills/maintain-ai-guidance/SKILL.md) for
-inspection targets, routing safeguards, and static versus live-client validation
+[maintain-ai-guidance](../.github/skills/maintain-ai-guidance/SKILL.md) for inspection
+targets, routing safeguards, and static versus live-client validation
 boundaries.
 
 Add a skill or expand shared policy only when a recurring need justifies it.
@@ -166,21 +164,20 @@ superseded runs release their concurrency slot. Container cleanup steps retain
 regressions of the actual gate result scripts; it does not execute GitHub jobs.
 The gate jobs check out source before invoking
 `scripts/ci/ci-prerequisite-gate.sh` and `scripts/ci/ci-result-gate.sh`; both
-source `scripts/ci/ci-gate-common.sh`. Keep their workflow environment
-bindings and strict result rules aligned.
+source `scripts/ci/ci-gate-common.sh`. Keep their workflow environment bindings
+and strict result rules aligned.
 
 The workflow also runs on `merge_group` events. Scheduled runs execute the
 periodic `security-check` and `docker-image-check-updates` jobs and both
 aggregate gates; other check jobs are skipped. Markdown-only changes retain
 documentation checks and Gitleaks, plus informational statistics and separate
-Dependency Review and CodeQL.
-On non-scheduled validation events both gates accept a category's skip only
-after successful detection explicitly reports its flag as `false`; unknown or
-empty outputs cannot authorize skips. Gitleaks remains required. External
-reporting additionally skips manual runs, merge groups and changes that did not
-select tests. See the
-[selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path) for the
-owning path policy; CI skips are not decided by local focused-test advice.
+Dependency Review and CodeQL. On non-scheduled validation events both gates
+accept a category's skip only after successful detection explicitly reports its
+flag as `false`; unknown or empty outputs cannot authorize skips. Gitleaks
+remains required. External reporting additionally skips manual runs, merge
+groups and changes that did not select tests. See the [selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path)
+for the owning path policy; CI skips are not decided by local focused-test
+advice.
 
 Docker update availability uses the checker's explicit advisory mode on every
 event: confirmed newer stable multi-platform images produce warnings rather than
@@ -240,14 +237,14 @@ BuildKit layer caches are imported for ordinary builds and exported only by
 `master` pushes. Bootstrap loads an explicitly tagged development image before
 `make ci-start CI_PREBUILT=true`; the ordinary local target still builds.
 Scheduled builds bypass layer caches, and the production stage always reruns
-dependency installation and auditing. See the
-[CI guide](DEVELOPMENT.md#continuous-integration) for scopes and reproduction.
+dependency installation and auditing. See the [CI guide](DEVELOPMENT.md#continuous-integration)
+for scopes and reproduction.
 
 This CI coverage map is distinct from the broader local pre-commit suite in
-[`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a
-command-for-command description of CI. The workflow defines the exact commands,
-conditions, matrices, artifacts, and failure behavior. Update this summary when
-the workflow's structure changes, without duplicating the full local checklist.
+[`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a command-for-command
+description of CI. The workflow defines the exact commands, conditions,
+matrices, artifacts, and failure behavior. Update this summary when the
+workflow's structure changes, without duplicating the full local checklist.
 
 ## Maintenance workflow [ᐞ](#table-of-contents)
 
@@ -273,9 +270,8 @@ When AI-assisted work produces recurring review feedback:
 For a repeated, machine-detectable mistake, document the expected behavior in
 the relevant instructions or skill, then assess whether a test, linter, or CI
 check can prevent its recurrence. Keep enforcement near the code or tool that
-owns the behavior, and extend an existing job in
-[`.github/workflows/main.yml`](../.github/workflows/main.yml) unless a distinct
-lifecycle justifies a separate workflow.
+owns the behavior, and extend an existing job in [`.github/workflows/main.yml`](../.github/workflows/main.yml)
+unless a distinct lifecycle justifies a separate workflow.
 
 Before adding a check, confirm that it is:
 
@@ -317,17 +313,13 @@ checks.
 
 <a id="related-files"></a>
 
-* [README](../README.md#ai-assisted-development) - canonical AI guidance
-  inventory
+* [README](../README.md#ai-assisted-development) - canonical AI guidance inventory
 * [AGENTS.md](../AGENTS.md) - actionable repository-wide instructions
 * [CLAUDE.md](../CLAUDE.md) - project architecture and workflow context
-* [Copilot instructions](../.github/copilot-instructions.md) - Copilot entry
-  point
+* [Copilot instructions](../.github/copilot-instructions.md) - Copilot entry point
 * [Skills index](../.github/skills/README.md) - task-specific workflows
-* [Shared skill guidance](../.github/skills/shared-guidance.md) - common skill
-  workflow
-* [Pull request template](../.github/pull_request_template.md) - review
-  checklist
+* [Shared skill guidance](../.github/skills/shared-guidance.md) - common skill workflow
+* [Pull request template](../.github/pull_request_template.md) - review checklist
 * [Main CI workflow](../.github/workflows/main.yml) - actual CI behavior
 
 ---

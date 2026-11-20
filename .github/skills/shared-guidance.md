@@ -23,21 +23,19 @@ task-specific workflow and checks.
 
 <a id="using-repository-instructions"></a>
 
-Before applying a skill, read the
-[repository instructions](../copilot-instructions.md) and
-[AI rules](../../doc/AI_RULES.md), following the canonical inventory and reading
-order in the [README](../../README.md#ai-assisted-development). Follow those
-repository-wide rules alongside the task-specific workflow in the skill.
+Before applying a skill, read the [repository instructions](../copilot-instructions.md)
+and [AI rules](../../doc/AI_RULES.md), following the canonical inventory and reading
+order in the [README](../../README.md#ai-assisted-development). Follow those repository-wide
+rules alongside the task-specific workflow in the skill.
 
 ## Preparing a change [ᐞ](#table-of-contents)
 
 <a id="preparing-a-change"></a>
 
-* Work in the user's existing checkout, including when preparing stacked PRs.
-  Do not create a separate Git worktree or clone unless the user explicitly
-  requests one. If existing work prevents a safe branch switch, stop and ask
-  how to proceed in that checkout; do not create another directory as a
-  workaround.
+* Work in the user's existing checkout, including when preparing stacked PRs. Do
+  not create a separate Git worktree or clone unless the user explicitly
+  requests one. If existing work prevents a safe branch switch, stop and ask how
+  to proceed in that checkout; do not create another directory as a workaround.
 * Inspect staged, unstaged, and untracked changes before editing. Preserve
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.
@@ -55,8 +53,7 @@ repository-wide rules alongside the task-specific workflow in the skill.
   stricter role restrictions and the explicit authorization required for rebase
   continuation still apply.
 * Before making task changes, propose the pull request title and create a new
-  task branch following the
-  [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
+  task branch following the [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
   The branch and title use the same type, scope, and change summary in their
   respective formats. Do not stage pre-existing work.
 * When a change touches only documentation (Markdown files and docs-only
@@ -91,8 +88,8 @@ repository-wide rules alongside the task-specific workflow in the skill.
   force-pushing and use `git push --force-with-lease`, never `--force`. This
   rule does not change the repository's pull request merge settings. For
   conflict inspection, semantic resolution, and restacking safeguards, use
-  [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). That skill does not
-  authorize Git mutations or expand an agent's role.
+  [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). That skill does not authorize
+  Git mutations or expand an agent's role.
 * Apply the new-branch rule to separate follow-up enhancements too, even when
   they concern the same files or topic as the previous task. Reserve branch
   reuse for corrections to the same PR or an explicit user request to reuse it
@@ -140,11 +137,11 @@ safeguards; do not replace them with generic assumptions.
   `docker compose exec -T php <command>`. Never silently run project tooling on
   the host when Docker is unavailable. Docker inspection, Compose validation,
   and image builds run from the host, as described by the relevant skill.
-* Add or update tests for behavior changes. Use
-  [write-tests](write-tests/SKILL.md) as the single source for test selection,
-  fixtures, test doubles, runner commands, and test-writing practice whenever
-  adding or changing tests. Other skills should state only task-specific
-  behaviors, references, and boundaries that tests must cover.
+* Add or update tests for behavior changes. Use [write-tests](write-tests/SKILL.md)
+  as the single source for test selection, fixtures, test doubles, runner
+  commands, and test-writing practice whenever adding or changing tests. Other
+  skills should state only task-specific behaviors, references, and boundaries
+  that tests must cover.
 * Run the smallest relevant tests first. For wiring or registration changes,
   verify behavior through the real caller or configured component: direct method
   calls alone do not prove that wiring works. Preserve domain-specific
@@ -174,21 +171,20 @@ safeguards; do not replace them with generic assumptions.
   affected tooling. Application tests are required for PHP behavior,
   dependency/runtime changes, or executable application configuration even
   without a changed `.php` file; they are not required for isolated lint
-  configuration or unrelated developer scripts. CI's conservative
-  [path selection](../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path)
+  configuration or unrelated developer scripts. CI's conservative [path selection](../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path)
   keeps whole suites when selected; do not turn local focused-test advice into
   changed-file-only CI testing.
-* Run checks against the final affected file contents. Run
-  `make lint-markdown` whenever task Markdown is added, modified, renamed, or
-  deleted, including agent profiles and skill text. Also run `make check-skills`
-  for those changes and for removed/renamed link targets or checker changes.
-  Without Markdown or Markdown-linter/configuration changes, skip Markdown
-  lint; without documentation/checker impact, skip `check-skills`.
-  Reuse successful results on unchanged inputs during the same agent's work;
-  rerun only checks invalidated by later edits, not the entire checklist.
-  Independent verification still runs its own scoped checks.  Inspect staged
-  and unstaged diffs before handoff or commit, including first-line headings
-  and the 80-character Markdown line limit.
+* Run checks against the final affected file contents. Run `make lint-markdown`
+  whenever task Markdown is added, modified, renamed, or deleted, including
+  agent profiles and skill text. Also run `make check-skills` for those changes
+  and for removed/renamed link targets or checker changes. Without Markdown or
+  Markdown-linter/configuration changes, skip Markdown lint; without
+  documentation/checker impact, skip `check-skills`. Reuse successful results on
+  unchanged inputs during the same agent's work; rerun only checks invalidated
+  by later edits, not the entire checklist. Independent verification still runs
+  its own scoped checks.  Inspect staged and unstaged diffs before handoff or
+  commit, including first-line headings and the 80-character Markdown line
+  limit.
 * Before a commit, follow the change-scoped validation requirements in
   [`AGENTS.md`](../../AGENTS.md#testing-and-validation). The broader application
   suite is not mandatory for changes that do not affect application behavior.
@@ -198,18 +194,12 @@ safeguards; do not replace them with generic assumptions.
 
 <a id="updating-documentation"></a>
 
-Aim for at most 80 characters per source line in Markdown, including skill text.
-Reflow each changed prose paragraph and list item at word boundaries, filling
-each line as close to 80 characters as practical before starting the next line.
-The final line may be short; do not join separate paragraphs or list items.
-Review surrounding continuations after edits to remove avoidable short lines.
-Do not rely on editor soft wrapping or a passing lint result: Markdown lint
-checks the maximum, not whether prose is filled. Preserve list indentation,
-intentional hard breaks, and rendered meaning. Keep commands, code, URLs, link
-destinations, tables, and metadata intact when wrapping would change their
-behavior or structure. Review lines over 80 characters explicitly: Markdown
-lint permits some long lines and excludes fenced code, so it is not a complete
-line-width audit.
+Reflow prose at word boundaries. `make lint-markdown` rejects a soft wrap when
+the next word fits within 80 characters without violating the existing
+source-width rule. Count only the label of a Markdown link for this check. Keep
+the final line of a paragraph short when needed. Preserve separate paragraphs
+and list items, indentation, intentional hard breaks, and rendered meaning. Do
+not wrap commands, fenced code, tables, or metadata as prose.
 
 Update existing documentation when behavior, architecture, configuration, or
 contributor/deployment commands change. Keep public API metadata and CLI help
@@ -222,14 +212,12 @@ aligned with the implemented contract where affected. Before editing:
   verify referenced paths and examples against files that exist in the
   repository.
 * Use relative links to existing Markdown files and valid heading or explicit
-  anchors. Run `python3 scripts/checks/check-skills.py` from the repository
-  root inside the PHP development container (`make bash`, `make fish`, or an
-  IDE Dev Container terminal), never directly on the host, to check local
-  links and anchors across repository Markdown files, as well as
-  `make lint-markdown` for
+  anchors. Run `python3 scripts/checks/check-skills.py` from the repository root
+  inside the PHP development container (`make bash`, `make fish`, or an IDE Dev
+  Container terminal), never directly on the host, to check local links and
+  anchors across repository Markdown files, as well as `make lint-markdown` for
   Markdown style.
-* Follow
-  [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
+* Follow [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
   for every use case, including troubleshooting and CI reproduction. Label the
   execution environment, show setup separately from subsequent commands, and
   keep fenced command blocks directly runnable without shell prompt prefixes.
@@ -257,10 +245,9 @@ again in the final handoff; do not defer them until the entire task ends.
 Read-only answers and in-progress updates do not need proposals.
 
 Use `Type(scope): short description`. These are proposals only; follow the
-[commit and push approval rules](#preparing-a-change) before taking either
-action. Never insert proposed commit messages into source or documentation
-files. Place this section after any copyable Markdown version and follow these
-rules:
+[commit and push approval rules](#preparing-a-change) before taking either action.
+Never insert proposed commit messages into source or documentation files. Place
+this section after any copyable Markdown version and follow these rules:
 
 * Provide an individual proposal for each logical change and explicitly list the
   changed file paths it covers.

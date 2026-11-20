@@ -8,8 +8,7 @@ project.
 All actions are pinned to commit SHAs (not version tags) to reduce supply-chain
 risk.
 
-For AI-assisted updates, follow the
-[GitHub Actions update skill](../.github/skills/update-github-actions/SKILL.md).
+For AI-assisted updates, follow the [GitHub Actions update skill](../.github/skills/update-github-actions/SKILL.md).
 For CI jobs, triggers, and shared bootstrap behavior, use the
 [workflow maintenance skill](../.github/skills/update-github-workflows/SKILL.md).
 
@@ -114,12 +113,12 @@ and report the newest full stable version tag and commit, excluding prerelease
 and floating tags. Missing pins, lookup failures, and moved/missing tags fail
 with exit code `2`; updates return `1`. This stricter parity/error behavior is
 specific to tool pins. Action version/SHA lookup failures also return exit 2;
-same-version Action pin differences are reported as updates (exit `1`).
-For Actions pinned to major-only versions that publish no stable dotted tags,
-the checker compares major-only tags and reports moved pins without updating
-them automatically. Review compatibility and update the release tag, commit
-comment, and both platforms' binary checksums together. Do not substitute a
-commit SHA for a binary checksum or automatically install the suggested version.
+same-version Action pin differences are reported as updates (exit `1`). For
+Actions pinned to major-only versions that publish no stable dotted tags, the
+checker compares major-only tags and reports moved pins without updating them
+automatically. Review compatibility and update the release tag, commit comment,
+and both platforms' binary checksums together. Do not substitute a commit SHA
+for a binary checksum or automatically install the suggested version.
 
 ---
 
@@ -338,13 +337,12 @@ Successful lookups with no usable stable tags or missing/invalid candidate SHAs
 are reported separately. For timeouts, check network and DNS connectivity from
 the PHP development container before retrying; the time limits are unchanged.
 
-For CI, use the existing
-[`action-updates.yml`](../.github/workflows/action-updates.yml) workflow rather
-than adding a second checker workflow. It runs weekly and on manual dispatch,
-bootstraps the development container without Composer installation, and runs
-the checker inside that container. Updates (exit 1) are advisory; incomplete
-checks (exit 2) and unexpected failures fail the workflow. See the
-[workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows).
+For CI, use the existing [`action-updates.yml`](../.github/workflows/action-updates.yml)
+workflow rather than adding a second checker workflow. It runs weekly and on
+manual dispatch, bootstraps the development container without Composer
+installation, and runs the checker inside that container. Updates
+(exit 1) are advisory; incomplete checks
+(exit 2) and unexpected failures fail the workflow. See the [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows).
 
 To reproduce the direct checker's exit status, run from the repository root on
 the Docker host with the development PHP service running:
@@ -578,8 +576,8 @@ recommended.
 ---
 
 Review this workflow inventory against `.github/workflows/` whenever workflows
-are added, removed, or renamed. See also [`doc/README.md`](README.md) and the
-workflow files themselves.
+are added, removed, or renamed. See also [`doc/README.md`](README.md) and the workflow
+files themselves.
 
 ---
 

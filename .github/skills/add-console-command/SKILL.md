@@ -11,8 +11,7 @@ Use this skill when adding a command under `src/Command/` or changing a
 command's arguments, options, execution, or output.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 

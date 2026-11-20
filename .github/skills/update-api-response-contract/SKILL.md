@@ -10,14 +10,12 @@ description: Change shared API response serialization, population groups, format
 Use this skill when changing response behavior shared across endpoints:
 serialization contexts and population groups, output formats, response headers,
 status handling, or error envelopes. For endpoint-specific behavior, also use
-[add-custom-api-endpoint](../add-custom-api-endpoint/SKILL.md) or
-[add-rest-resource](../add-rest-resource/SKILL.md). For request DTOs and input
-mapping, use [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); an input
-DTO change does not automatically change response exposure.
+[add-custom-api-endpoint](../add-custom-api-endpoint/SKILL.md) or [add-rest-resource](../add-rest-resource/SKILL.md).
+For request DTOs and input mapping, use [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md);
+an input DTO change does not automatically change response exposure.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -125,10 +123,9 @@ Inspect the affected producers and consumers before editing:
    configured documentation area so the affected routes are actually included.
    Reuse existing metadata rather than creating a parallel specification. Use
    [update-api-documentation](../update-api-documentation/SKILL.md) for schema,
-   security-description, and generated-area verification. Follow
-   [write-tests](../write-tests/SKILL.md) for all test changes and
-   [add-event-subscriber](../add-event-subscriber/SKILL.md) when event
-   registration or ordering changes.
+   security-description, and generated-area verification. Follow [write-tests](../write-tests/SKILL.md)
+   for all test changes and [add-event-subscriber](../add-event-subscriber/SKILL.md)
+   when event registration or ordering changes.
 
 ## Validation [ᐞ](#table-of-contents)
 

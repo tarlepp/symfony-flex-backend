@@ -13,9 +13,8 @@ to credentials, authentication flows, firewalls, or broader role policy, also
 follow [implement-api-authentication](../implement-api-authentication/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Read
-[SECURITY.md](../../../doc/SECURITY.md) for the repository security policy.
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Read [SECURITY.md](../../../doc/SECURITY.md) for the repository security policy.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 

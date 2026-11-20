@@ -36,18 +36,15 @@ issue because of these selfsigned certificates. To solve this issue you've
 basically two choices:
 
 1. Just ignore that security issue (easy way)
-2. Import that [rootCA.pem](rootCA.pem) to your browser as a trusted root
-certificate (proper way)
+2. Import that [rootCA.pem](rootCA.pem) to your browser as a trusted root certificate
+(proper way)
 
-For that second option see eg.
-[this](https://dgu2000.medium.com/working-with-self-signed-certificates-in-chrome-walkthrough-edition-a238486e6858)
+For that second option see eg. [this](https://dgu2000.medium.com/working-with-self-signed-certificates-in-chrome-walkthrough-edition-a238486e6858)
 article - Specially that `Step 4: Adding CA as trusted to Chrome` part.
 
-Also
-[this](https://www.pico.net/kb/how-do-you-get-chrome-to-accept-a-self-signed-certificate/)
+Also [this](https://www.pico.net/kb/how-do-you-get-chrome-to-accept-a-self-signed-certificate/)
 article should help you with that process.
 
 ---
 
-[Back to previous](../../README.md) -
-[Back to main README.md](../../../README.md)
+[Back to previous](../../README.md) - [Back to main README.md](../../../README.md)

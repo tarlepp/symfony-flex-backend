@@ -14,8 +14,7 @@ AutoMapper configuration are separate concerns and should be added when the
 requested behavior needs them.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -60,19 +59,17 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 7. Add tests for entity behavior, ORM mapping, persistence, and relationships as
    applicable.
 8. Add a corresponding repository under `src/Repository/`, extending or
-    following `BaseRepository` and its entity-specific typing conventions.
-    Reuse the existing repository methods and traits; add custom queries only
-    when the entity requires them. Follow
-    [add-doctrine-query](../add-doctrine-query/SKILL.md) for query-specific behavior
-    and validation.
-9. Add a corresponding resource under `src/Resource/`, extending
-    `RestResource` with the entity and repository types. Keep orchestration and
-    business behavior in the resource, and use the existing resource lifecycle
-    patterns where relevant. An entity's repository and resource are required
-    even when it has no CRUD controller.
+    following `BaseRepository` and its entity-specific typing conventions. Reuse
+    the existing repository methods and traits; add custom queries only when the
+    entity requires them. Follow [add-doctrine-query](../add-doctrine-query/SKILL.md)
+    for query-specific behavior and validation.
+9. Add a corresponding resource under `src/Resource/`, extending `RestResource`
+    with the entity and repository types. Keep orchestration and business
+    behavior in the resource, and use the existing resource lifecycle patterns
+    where relevant. An entity's repository and resource are required even when
+    it has no CRUD controller.
 10. If the request needs DTOs, request mapping, or a CRUD REST endpoint, follow
-     [add-rest-resource](../add-rest-resource/SKILL.md) for those parts. Add
-     these
+     [add-rest-resource](../add-rest-resource/SKILL.md) for those parts. Add these
      layers only when required by the requested behavior.
 
 ## Validation [ᐞ](#table-of-contents)

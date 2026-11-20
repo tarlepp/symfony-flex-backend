@@ -2,13 +2,11 @@
 
 <a id="what-is-this"></a>
 
-This document contains information how you can setup your
-[PhpStorm](https://www.jetbrains.com/phpstorm/) for this application _"correct"_
-way.
+This document contains information how you can setup your [PhpStorm](https://www.jetbrains.com/phpstorm/)
+for this application _"correct"_ way.
 
-For recommend plugins see
-[External links / resources](#external-links-resources) section of this
-documentation.
+For recommend plugins see [External links / resources](#external-links-resources)
+section of this documentation.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -37,8 +35,8 @@ PhpStorm. Selection should be available on
 
 Just choose the `Docker-PHP` from dropdown, if that does not exist there you
 need to click that `...` and follow the instructions found in
-[External links / resources](#external-links-resources) section - Configuring
-Remote PHP Interpreters.
+[External links / resources](#external-links-resources) section - Configuring Remote
+PHP Interpreters.
 
 ![Path mappings](images/phpstorm_01.png)
 
@@ -57,9 +55,9 @@ docker container.
 
 <a id="test-frameworks"></a>
 
-Application itself contains quite lot of tests as you know from that
-[testing](TESTING.md) documentation. To get support to run tests directly from
-your IDE you need to do following configuration in
+Application itself contains quite lot of tests as you know from that [testing](TESTING.md)
+documentation. To get support to run tests directly from your IDE you need to do
+following configuration in
 `Settings -> Languages & Frameworks -> PHP -> Test Frameworks`.
 
 By default settings should be set correctly but just ensure that  those are set

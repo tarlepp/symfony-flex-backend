@@ -146,11 +146,11 @@ security updates, working directory and PHP-FPM port from `base`.
 
 Both application targets update only the explicitly named CVE-affected Debian
 package `linux-libc-dev` in their own stages, using
-`apt-get install --only-upgrade`.
-This fixes the reported header-package CVEs, including CVE-2026-99083 (fixed in
-Debian version `6.1.192-1`), without adding a blanket package upgrade. The
-command selects the available distribution candidate rather than freezing an
-exact version, allowing later security fixes for the same package.
+`apt-get install --only-upgrade`. This fixes the reported header-package CVEs,
+including CVE-2026-99083 (fixed in Debian version `6.1.192-1`), without adding a
+blanket package upgrade. The command selects the available distribution
+candidate rather than freezing an exact version, allowing later security fixes
+for the same package.
 
 Keep future CVE fixes scoped to explicitly identified packages and necessary
 dependencies; do not replace this list with `apt-get upgrade`. Verify the
@@ -516,25 +516,24 @@ For PR-based maintenance, **Update Docker image pins** runs daily at 04:17 UTC
 against `master` after the workflow is merged there. Manual runs remain
 available for a selected branch. It updates existing tagged digest pins in
 external `FROM` and `COPY --from` references, preserving the major version,
-exact variant and existing platforms. Tags without full stable semantic
-versions receive digest refreshes only. Official PHP images stay on their
-current minor line in the routine PR; PHP minor PRs require review. All registry
-lookups must succeed before files are changed; unpinned references are reported
-and left untouched.
-It creates or updates a PR against the branch selected for the run, or reports
-no changes without opening a new PR. Core CI's separate **Check Docker image
-versions** job reports newer major versions in its run summary with verified
-pins and supported platforms. It runs daily and on manual core CI runs;
-reporting failures do not block the independent automatic updater.
-Those major upgrades are for manual review only, not automatic PR changes.
-An empty automatic update diff can still have major upgrades available. See the
-[workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
-for dispatch, repository permissions and CI-triggering token setup.
+exact variant and existing platforms. Tags without full stable semantic versions
+receive digest refreshes only. Official PHP images stay on their current minor
+line in the routine PR; PHP minor PRs require review. All registry lookups must
+succeed before files are changed; unpinned references are reported and left
+untouched. It creates or updates a PR against the branch selected for the run,
+or reports no changes without opening a new PR. Core CI's separate **Check
+Docker image versions** job reports newer major versions in its run summary with
+verified pins and supported platforms. It runs daily and on manual core CI runs;
+reporting failures do not block the independent automatic updater. Those major
+upgrades are for manual review only, not automatic PR changes. An empty
+automatic update diff can still have major upgrades available. See the
+[workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows) for dispatch,
+repository permissions and CI-triggering token setup.
 
-The same maintenance run has an independent PHP minor readiness job. It
-reports blockers or opens a separate migration PR if the candidate is ready
-and PR credentials are configured. With Docker, buildx, `jq` and `curl`, run
-the read-only check from the repository root on the Docker host:
+The same maintenance run has an independent PHP minor readiness job. It reports
+blockers or opens a separate migration PR if the candidate is ready and PR
+credentials are configured. With Docker, buildx, `jq` and `curl`, run the
+read-only check from the repository root on the Docker host:
 
 ```bash
 bash scripts/docker-images.sh check-php-minor
@@ -544,9 +543,9 @@ The check builds a temporary development image only when there is a candidate.
 It checks the existing lockfiles against the real PHP runtime, not Composer's
 simulated `config.platform.php`. An unavailable candidate or compatibility
 blocker is advisory; registry and incomplete check errors exit nonzero. A
-passing result is a signal to prepare a migration PR, not to skip normal CI.
-The workflow uses `--prepare` to update the PHP pin and Composer metadata in
-its checkout before submitting the PR.
+passing result is a signal to prepare a migration PR, not to skip normal CI. The
+workflow uses `--prepare` to update the PHP pin and Composer metadata in its
+checkout before submitting the PR.
 
 To apply the image pin changes locally, run from the repository root on the
 Docker host, review the diff, then verify the pins:
@@ -561,10 +560,10 @@ This changes Dockerfiles only; the Actions workflow also synchronizes the root
 and tool Composer manifests and lockfiles when the PHP tag changes and
 Doctrine's `server_version` when the MariaDB tag changes. For manual PHP
 updates, follow [Composer PHP platform guidance](DEVELOPMENT.md#composer-php-platform).
-The command does not commit, push, build images or recreate services.
-Review upgrade compatibility and run affected image builds and application
-checks before merging. Registry or pin-validation failures return nonzero;
-unlike the read-only checker, available updates are applied and return zero.
+The command does not commit, push, build images or recreate services. Review
+upgrade compatibility and run affected image builds and application checks
+before merging. Registry or pin-validation failures return nonzero; unlike the
+read-only checker, available updates are applied and return zero.
 
 The `Check Docker image versions` job (`docker-image-check-updates` in
 `.github/workflows/main.yml`) starts alongside linting on the workflow's push,
@@ -579,8 +578,8 @@ errors still fail the gate. Tests and Docker builds run independently after
 change detection. The final `ci-result` gate still requires the prerequisite
 gate, analyzers, tests and both image builds, with skips accepted only for the
 documented schedule and Markdown-only PR cases. It is the check that branch
-protection requires (see [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)). Explicitly
-skipped tags remain non-failing.
+protection requires (see [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)). Explicitly skipped
+tags remain non-failing.
 
 For authenticated registry requests, configure both `DOCKERHUB_USERNAME` and
 `DOCKERHUB_TOKEN` repository secrets; use a read-only Docker Hub access token.
@@ -707,9 +706,8 @@ Dockerfile, build target, image tag including registry (for example
 does not exist yet and builds and pushes the image. Your default builder is not
 changed. Log in to the registry first with `docker login`.
 
-Alternatively, enable the
-[containerd image store](https://docs.docker.com/engine/storage/containerd/) to
-be able to `--load` multi-platform images locally.
+Alternatively, enable the [containerd image store](https://docs.docker.com/engine/storage/containerd/)
+to be able to `--load` multi-platform images locally.
 
 In GitHub Actions, the same can be done with the `docker/setup-qemu-action`,
 `docker/setup-buildx-action` and `docker/build-push-action` actions (remember to

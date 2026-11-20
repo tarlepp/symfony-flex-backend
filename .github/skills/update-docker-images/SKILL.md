@@ -10,16 +10,14 @@ description: Update Docker image tags and multi-platform digest pins in Dockerfi
 Use this skill when updating Docker base images, images copied from external
 build stages, Compose service images, or CI container images. For Composer
 updates, use [update-dependencies](../update-dependencies/SKILL.md); for action
-pins, use [update-github-actions](../update-github-actions/SKILL.md). For
-changes to the supported PHP runtime baseline, use
-[update-php-runtime](../update-php-runtime/SKILL.md). For build behavior,
-Compose services, entrypoints, runtime configuration, or Dev Container setup,
-also use [update-docker-environment](../update-docker-environment/SKILL.md).
+pins, use [update-github-actions](../update-github-actions/SKILL.md). For changes
+to the supported PHP runtime baseline, use [update-php-runtime](../update-php-runtime/SKILL.md).
+For build behavior, Compose services, entrypoints, runtime configuration, or Dev
+Container setup, also use [update-docker-environment](../update-docker-environment/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md), and the image-pinning procedure in
-[DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKER_MULTI_PLATFORM.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md),
+and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKER_MULTI_PLATFORM.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -75,14 +73,13 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    frontend images separately with `make docker-image-digest IMAGE=...`. Review
    warnings as well as failures: unpinned references can warn without failing
    verification. Confirm each updated tag resolves to its recorded digest;
-   multi-platform verification alone does not prove tag/digest parity.
-   Run this live check for changes to Dockerfile stages or pin-maintenance
-   workflows even when the diff does not change a tag or digest. Registry tags
-   can move without a version change; offline tests and cached builds do not
-   detect that drift. If parity fails, resolve the exact tag again rather than
-   copying a digest from an older CI log. Confirm that the current index
-   retains the old runnable platforms and rerun the blocking check after any
-   authorized refresh.
+   multi-platform verification alone does not prove tag/digest parity. Run this
+   live check for changes to Dockerfile stages or pin-maintenance workflows even
+   when the diff does not change a tag or digest. Registry tags can move without
+   a version change; offline tests and cached builds do not detect that drift.
+   If parity fails, resolve the exact tag again rather than copying a digest
+   from an older CI log. Confirm that the current index retains the old runnable
+   platforms and rerun the blocking check after any authorized refresh.
 6. Validate affected Compose configuration with `docker compose config --quiet`
    and include `compose.prod.yaml` when production configuration is affected.
    Build affected images; for PHP base or copied-tool updates, build both

@@ -58,8 +58,7 @@ not disable or change required GitHub CI checks.
 
 Use the complete task diff from its original baseline, including new files, not
 just the last repair or latest commit. Exclude unrelated pre-existing work.
-Apply the
-[shared selection rules](../.github/skills/shared-guidance.md#running-and-validating-changes):
+Apply the [shared selection rules](../.github/skills/shared-guidance.md#running-and-validating-changes):
 skill checklists are conditional, changed Markdown must be linted, and checks
 with unchanged inputs need not be repeated during one agent's work. Independent
 verification must still obtain its own scoped evidence.
@@ -76,8 +75,8 @@ verification must still obtain its own scoped evidence.
   authentication, serialization, or persistence changes, add or update tests at
   the affected boundary and run the smallest relevant class or directory. Run
   relevant PHP quality checks and expand to the broader application suite in
-  [AGENTS.md](../AGENTS.md#testing-and-validation) for cross-cutting changes,
-  shared infrastructure, or uncertain regression impact.
+  [AGENTS.md](../AGENTS.md#testing-and-validation) for cross-cutting changes, shared
+  infrastructure, or uncertain regression impact.
 * **Tests only:** run changed tests and affected consumers of shared fixtures,
   test helpers, or bootstrap code, plus relevant PHP quality checks. Changes to
   PHPUnit configuration, suite discovery, coverage configuration, or test
@@ -120,12 +119,10 @@ configuration-only edit needs the affected analyzer, not PHPUnit. A shell helper
 needs syntax checks, relevant lint, and its regression suite, not PHP static
 analysis. Inspect the ShellCheck invocation in
 `scripts/checks/lint-workflows.sh` and run `make lint-workflows` when a changed
-script is listed; it does not lint
-every shell script. Container and dependency changes can invalidate several
-categories at once. The
-[CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path) documents
-the conservative automated counterpart; local checks can be more focused with
-caller/behavior evidence. Unknown impact expands validation.
+script is listed; it does not lint every shell script. Container and dependency
+changes can invalidate several categories at once. The [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path)
+documents the conservative automated counterpart; local checks can be more
+focused with caller/behavior evidence. Unknown impact expands validation.
 
 At handoff, state which checks ran, their results, and why PHPUnit was not
 applicable or could not run. Missing containers, dependencies, credentials, or
@@ -154,20 +151,17 @@ focused suites while iterating; run the consolidated target when changing the
 shared output contract. When adding Docker-helper test scenarios or groups,
 update `DOCKER_IMAGE_TEST_GROUPS` in
 `scripts/output/tests/command-output-test.py` and run this target, not only
-`make test-docker-images`. CI selects these consumer
-checks for changes to either the helper or its regression suite. A failing
-baseline check remains a blocker to a green CI result; do not report the
-changeset as CI-ready while that failure remains unresolved. See
-[output contract regressions](../scripts/README.md#output-contract-regressions)
+`make test-docker-images`. CI selects these consumer checks for changes to
+either the helper or its regression suite. A failing baseline check remains a
+blocker to a green CI result; do not report the changeset as CI-ready while that
+failure remains unresolved. See [output contract regressions](../scripts/README.md#output-contract-regressions)
 for color controls, multiple-goal behavior, troubleshooting, and coverage
 limits.
 
-The `Test development tooling contracts` step in
-[the main CI workflow](../.github/workflows/main.yml) also runs
-`check-workflow-tool-updates-test.py`, which is not part of
+The `Test development tooling contracts` step in [the main CI workflow](../.github/workflows/main.yml)
+also runs `check-workflow-tool-updates-test.py`, which is not part of
 `make test-command-output`. If a change affects the Action/tool update checker,
-its output wrapper, or their fixture paths, run the
-[standalone regression suite](../scripts/README.md#github-actions-update-checker).
+its output wrapper, or their fixture paths, run the [standalone regression suite](../scripts/README.md#github-actions-update-checker).
 
 Streaming fixtures must prove output arrives while the child is still running,
 then terminate their isolated process group with SIGTERM and bounded cleanup.

@@ -3,9 +3,8 @@
 <a id="what-is-this"></a>
 
 This directory contains development and CI scripts grouped by responsibility.
-Each group keeps its focused regression tests in a local `tests/` directory.
-The top-level `tests/` directory is reserved for suites that span multiple
-groups.
+Each group keeps its focused regression tests in a local `tests/` directory. The
+top-level `tests/` directory is reserved for suites that span multiple groups.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -164,12 +163,12 @@ The production image must contain the updated script. This command does not
 start services; use the actual deployed PHP container, not the development
 container with `APP_ENV=prod`.
 
-See the [command reference](../doc/COMMANDS.md#commands) for scope and
-execution. Each complete recipe, including preparation, prints one `[RUN]` and a
-separated final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg
-selection without duplicate summaries. A failed preparation step cannot produce
-a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents
-recursive decoration; callers should not set it.
+See the [command reference](../doc/COMMANDS.md#commands) for scope and execution.
+Each complete recipe, including preparation, prints one `[RUN]` and a separated
+final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg selection
+without duplicate summaries. A failed preparation step cannot produce a success
+summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents recursive
+decoration; callers should not set it.
 
 Native progress, diagnostics, GitHub annotations, analyzer options and report
 paths remain unchanged. Quality summaries report the nested Make exit status
@@ -181,16 +180,16 @@ gain a red `[FAIL]` prefix, retaining their original file/line, rule, and
 message. The prefix respects the shared color controls and remains readable
 without ANSI colors. Make derives native color flags from the same shared
 policy: Symfony/Composer commands use `--ansi` or `--no-ansi`, CodeSniffer and
-parallel-lint use
-`--colors` or `--no-colors`, PHPUnit uses `--colors=always|never`, and plain
-Psalm uses `--monochrome`. Infection passes the color choice to its test runner.
-Compose receives the resolved native choice through `COMPOSE_ANSI`, without
-changing lifecycle commands or service selection. The security check's Composer
-dry run also uses the shared native choice. PHPLoc colors console section
-headings and values when native color is enabled; its JSON report is unchanged.
-It disables Xdebug for the PHPLoc process to avoid debugger connection attempts.
-GitHub-format Psalm/PHPStan analysis always stays plain, independent of status
-colors, preserving annotations and JSON report formats.
+parallel-lint use `--colors` or `--no-colors`, PHPUnit uses
+`--colors=always|never`, and plain Psalm uses `--monochrome`. Infection passes
+the color choice to its test runner. Compose receives the resolved native choice
+through `COMPOSE_ANSI`, without changing lifecycle commands or service
+selection. The security check's Composer dry run also uses the shared native
+choice. PHPLoc colors console section headings and values when native color is
+enabled; its JSON report is unchanged. It disables Xdebug for the PHPLoc process
+to avoid debugger connection attempts. GitHub-format Psalm/PHPStan analysis
+always stays plain, independent of status colors, preserving annotations and
+JSON report formats.
 
 The Symfony requirements checker follows the same native color policy. Forced
 color uses its terminal support detection; plain mode filters ANSI decoration
@@ -203,10 +202,10 @@ only SGR decoration from their plain-mode output. PhpMetrics additionally
 highlights metric headings and values in color mode and disables Xdebug for its
 version and analysis processes. If JUnit is missing, its test fallback uses
 Xdebug coverage mode without step debugging. Configuration lint uses the shared
-blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors. The
-filter streams ordinary bytes, including partial lines, immediately; preserves
-separate stdout/stderr and the child's TTY detection; and returns the command's
-status. Filtering failures also fail the target. It never rewrites report files,
+blue `[INFO]` and red `[FAIL]` labels instead of embedded PHP colors. The filter
+streams ordinary bytes, including partial lines, immediately; preserves separate
+stdout/stderr and the child's TTY detection; and returns the command's status.
+Filtering failures also fail the target. It never rewrites report files,
 annotations, or other terminal controls. Enabled color executes the native
 command unchanged. Tools with no force-color support (including ECS's TTY-only
 renderer and parallel-lint installations lacking optional color libraries)
@@ -256,9 +255,9 @@ or `[FAIL] phpstan (exit 1, took 12.0s)`.
   `PROGRESS=always` forces it; `PROGRESS=never` (or any other value) disables
   it, including the duration.
 * `scripts/output/command-progress.py` relays output: terminal descriptors
-  through a pseudo-terminal and other descriptors through pipes, so commands
-  see the same descriptor kinds, colors, and progress bars as a direct run.
-  Stdout stays separate from stderr when they differ, and exit codes and cancellation
+  through a pseudo-terminal and other descriptors through pipes, so commands see
+  the same descriptor kinds, colors, and progress bars as a direct run. Stdout
+  stays separate from stderr when they differ, and exit codes and cancellation
   statuses are unchanged.
 * The spinner is drawn on stderr only after a second of silence while the cursor
   is at the start of a line; it is cleared before any output, so prompts and
@@ -445,8 +444,8 @@ is introduced.
 Rejected startup attempts name the running service and explain how to restart
 with `make stop` followed by the original command, or keep services running and
 follow application logs with `make logs`. Both options run on the Docker host;
-Ctrl-C in the log follower leaves services running. See the
-[command reference](../doc/COMMANDS.md#commands) for examples.
+Ctrl-C in the log follower leaves services running. See the [command reference](../doc/COMMANDS.md#commands)
+for examples.
 
 `make test-docker-images` runs offline regression tests of the helper itself,
 using temporary Dockerfiles and mocked registry/Docker commands. It does **not**
@@ -742,10 +741,9 @@ counts, timings and skips remain visible. Forwarding diagnostics use the same
 four-space indentation while preserving stdout/stderr and exit status.
 
 The Docker scenario suite is exercised by the shared-status tests. All Docker,
-registry,
-configuration, dependency, key, and upload mutations use isolated fixtures or
-mocks. This does not prove live service health, registry availability,
-successful uploads, or real application-test report generation.
+registry, configuration, dependency, key, and upload mutations use isolated
+fixtures or mocks. This does not prove live service health, registry
+availability, successful uploads, or real application-test report generation.
 
 Coverage includes forced/plain/auto color, `NO_COLOR`, stdout/stderr
 preservation, progress indicator policy and terminal relaying, missing
@@ -842,14 +840,14 @@ On pull requests, CI additionally compares the merge base with the PR head,
 grouping added, deleted and modified files and added/deleted Git diff lines by
 the same areas and exclusions. Renames count as deletions and additions; binary
 files are counted separately without line totals. The comparison requires both
-full commit IDs and is omitted for non-PR events. If it cannot be computed,
-the informational summary step fails visibly without blocking CI.
+full commit IDs and is omitted for non-PR events. If it cannot be computed, the
+informational summary step fails visibly without blocking CI.
 
 Symlinks and files containing NUL bytes count as files but contribute no text
 lines; binary detection is based on NUL bytes and may not recognize every binary
-format. Text lines count newline characters, as with `wc -l`.
-Headings and totals follow the shared native `COLOR` and `NO_COLOR` policy;
-redirected output is plain by default.
+format. Text lines count newline characters, as with `wc -l`. Headings and
+totals follow the shared native `COLOR` and `NO_COLOR` policy; redirected output
+is plain by default.
 
 ### Skill documentation checker [ᐞ](#table-of-contents)
 
@@ -859,8 +857,8 @@ File: `scripts/checks/check-skills.py`
 
 Run from the repository root **inside the PHP development container**, not on
 the host. Open it with `make bash` or `make fish`, or use an IDE Dev Container
-terminal. Python automatically uses `/home/dev/.venv`. See
-[Python tooling](../.devcontainer/README.md#python-tooling) for details.
+terminal. Python automatically uses `/home/dev/.venv`. See [Python tooling](../.devcontainer/README.md#python-tooling)
+for details.
 
 ```bash
 python3 scripts/checks/check-skills.py
@@ -922,8 +920,8 @@ For maintenance, `discover_actions_in_file` owns parsing for both workflows and
 composite actions. Discovery includes top-level `.yml`/`.yaml` workflows and
 recursive `action.yml`/`action.yaml` metadata under `.github/actions/`, matching
 the workflow validator's file coverage. Missing directories, inventory failures,
-and unreadable files return discovery errors while other sources continue;
-empty directories are allowed. `--tools-only` skips action discovery.
+and unreadable files return discovery errors while other sources continue; empty
+directories are allowed. `--tools-only` skips action discovery.
 
 Action checks store named outcomes, candidate versions, and commits by
 action/version key; rendering reads those results and the original source
@@ -990,20 +988,19 @@ warnings and errors remain visible. Each check keeps its `[RUN]`, native output
 and outcome together, with a blank line before the next check rather than before
 the outcome. Inner status lines are indented two spaces beneath their numbered
 stage. `scripts/tests/run-workflow-tests.py` indents unittest diagnostics four
-spaces
-and omits its standalone `OK` footer and trailing blank lines, leaving `[OK]` as
-the success indicator. Counts, timings, skips and failure details remain visible;
-direct suite invocations retain unittest's usual output. Other validator
-diagnostics use `scripts/output/native-output.py --indent` to stream both
-output channels with four-space indentation, preserving colors and exit status.
-The download/cache helper,
+spaces and omits its standalone `OK` footer and trailing blank lines, leaving
+`[OK]` as the success indicator. Counts, timings, skips and failure details
+remain visible; direct suite invocations retain unittest's usual output. Other
+validator diagnostics use `scripts/output/native-output.py --indent` to stream
+both output channels with four-space indentation, preserving colors and exit
+status. The download/cache helper,
 `scripts/checks/download-workflow-validator.sh`, uses the same relay, so curl
-and checksum errors align with other native diagnostics without
-changing download limits, cache verification or failure statuses. The
-validator opts into grouped status lines with non-exported
-`OUTPUT_RUN_GROUPED=1` and `OUTPUT_STATUS_INDENT='  '`; other commands retain their
-existing spacing. ShellCheck's script pass is labeled
-`CI tooling scripts (ShellCheck)` to reflect its full explicit input list.
+and checksum errors align with other native diagnostics without changing
+download limits, cache verification or failure statuses. The validator opts into
+grouped status lines with non-exported `OUTPUT_RUN_GROUPED=1` and
+`OUTPUT_STATUS_INDENT='  '`; other commands retain their existing spacing.
+ShellCheck's script pass is labeled `CI tooling scripts (ShellCheck)` to reflect
+its full explicit input list.
 
 ```bash
 make lint-workflows
@@ -1033,15 +1030,15 @@ available inside the PHP container; no extra mounts or environment forwarding
 are needed. Unlike `var/`, `build/` is not hidden by the PHP container's tmpfs.
 Warm local `make lint-workflows` runs reuse the same verified files.
 
-After metadata validation,
-`scripts/checks/check-composite-action-shell.py` parses all local composite
-actions with PyYAML and sends each Bash/sh `run` body to the
-same pinned ShellCheck. Diagnostics identify the action and step; scripts are
-never executed. GitHub expressions are replaced with inert placeholders before
-shell analysis, so this does not validate their runtime values. Unsupported
-shells fail explicitly. Non-composite actions are left to metadata validation.
-Real ShellCheck regression fixtures cover syntax, quoting, expressions and
-failure propagation. Changes to the checker or fixtures select workflow checks.
+After metadata validation, `scripts/checks/check-composite-action-shell.py`
+parses all local composite actions with PyYAML and sends each Bash/sh `run` body
+to the same pinned ShellCheck. Diagnostics identify the action and step; scripts
+are never executed. GitHub expressions are replaced with inert placeholders
+before shell analysis, so this does not validate their runtime values.
+Unsupported shells fail explicitly. Non-composite actions are left to metadata
+validation. Real ShellCheck regression fixtures cover syntax, quoting,
+expressions and failure propagation. Changes to the checker or fixtures select
+workflow checks.
 
 The development image installs pinned PyYAML in `/home/dev/.venv`; existing
 development containers need rebuilding to acquire it. Run the existing
@@ -1081,20 +1078,20 @@ currently disables only the `self-repository` rule, because local actions use
 `./` rather than `$/`. Disable or configure a rule there only with a comment
 explaining why. ShellCheck also checks the validator, shared command-output and
 Composer-cache helpers, the CI change detector, and both result gates and their
-shared helper. Its explicit script inputs also include the Action update
-checker (`check-action-updates.sh`), Docker image helper (`docker-images.sh`),
-Make launcher (`make.sh`), dependency security checks (`check-security.sh`) and
-Sonar report preparation (`prepare-sonar-reports.sh`). These scripts are linted,
-not executed by ShellCheck; coverage is limited to the explicit input list in
+shared helper. Its explicit script inputs also include the Action update checker
+(`check-action-updates.sh`), Docker image helper (`docker-images.sh`), Make
+launcher (`make.sh`), dependency security checks (`check-security.sh`) and Sonar
+report preparation (`prepare-sonar-reports.sh`). These scripts are linted, not
+executed by ShellCheck; coverage is limited to the explicit input list in
 `scripts/checks/lint-workflows.sh`, not every shell script in the repository.
 
 The `Validate GitHub workflows` job is a prerequisite of `ci-summary`; failures,
-cancellations, or unexpected skips fail that gate and the final merge gate.
-An explicit unaffected-category skip is accepted after successful change
-detection. Selected tests and Docker builds depend only on change detection,
-so they can start without waiting for workflow validation.
-`make lint-yaml` remains the separate Symfony configuration check. Static
-validation does not replace testing actual GitHub workflow execution.
+cancellations, or unexpected skips fail that gate and the final merge gate. An
+explicit unaffected-category skip is accepted after successful change detection.
+Selected tests and Docker builds depend only on change detection, so they can
+start without waiting for workflow validation. `make lint-yaml` remains the
+separate Symfony configuration check. Static validation does not replace testing
+actual GitHub workflow execution.
 
 ### CI change detection [ᐞ](#table-of-contents)
 
@@ -1153,17 +1150,16 @@ and upload tokens still apply. Other workflows and individual job steps are not
 enumerated. Manual runs and unavailable, failed, empty or quoted-path
 comparisons include an explanation for full validation. Git errors remain on
 stderr. The script appends the workflow's category flags and aggregate
-`configuration` flag
-as `name=true|false` lines to `GITHUB_OUTPUT`. There is no aggregate application
-code flag: each job consumes its own category so unrelated work can skip. A
-failed comparison deliberately returns success with full validation; script
-execution or output-write failures fail the step. It does not modify tracked
-files or contact external services.
+`configuration` flag as `name=true|false` lines to `GITHUB_OUTPUT`. There is no
+aggregate application code flag: each job consumes its own category so unrelated
+work can skip. A failed comparison deliberately returns success with full
+validation; script execution or output-write failures fail the step. It does not
+modify tracked files or contact external services.
 
-Enabled statuses are green and disabled statuses yellow when color is
-enabled. The shared `COLOR=auto|always|never` and `NO_COLOR` policy applies;
-GitHub Actions defaults to color when `COLOR` is unset. Noninteractive local
-runs can set `COLOR=always` explicitly. Machine-readable flags stay plain. When
+Enabled statuses are green and disabled statuses yellow when color is enabled.
+The shared `COLOR=auto|always|never` and `NO_COLOR` policy applies; GitHub
+Actions defaults to color when `COLOR` is unset. Noninteractive local runs can
+set `COLOR=always` explicitly. Machine-readable flags stay plain. When
 `GITHUB_STEP_SUMMARY` is set, the script also appends a Markdown table with
 green/neutral status icons, not ANSI escape codes. These icons indicate
 selection, not passing checks. Summary-write errors warn without changing
@@ -1183,12 +1179,11 @@ detector. Workflow wiring checks cover event inputs and declared output names.
 
 <a id="ci-result-gates"></a>
 
-The `ci-summary` job calls
-[`scripts/ci/ci-prerequisite-gate.sh`](ci/ci-prerequisite-gate.sh), and `ci-result`
-calls [`scripts/ci/ci-result-gate.sh`](ci/ci-result-gate.sh). Both run on the GitHub
-runner after an unconditional checkout, including on schedules and after failed
-prerequisites. They do not start a PHP container. Job conditions, dependencies
-and environment bindings remain in `main.yml`.
+The `ci-summary` job calls [`scripts/ci/ci-prerequisite-gate.sh`](ci/ci-prerequisite-gate.sh),
+and `ci-result` calls [`scripts/ci/ci-result-gate.sh`](ci/ci-result-gate.sh). Both
+run on the GitHub runner after an unconditional checkout, including on schedules
+and after failed prerequisites. They do not start a PHP container. Job
+conditions, dependencies and environment bindings remain in `main.yml`.
 
 Each script requires the event, change flags and dependency results declared in
 its workflow step's `env` mapping. The final gate also requires `REF` for
@@ -1372,11 +1367,11 @@ default script and Make policy is unchanged.
 `bash scripts/docker-images.sh check-php-minor` runs the read-only part of the
 PHP readiness job from the repository root on the Docker host. It checks the next
 stable minor against the project's existing Composer lockfiles in a temporary
-development image. No candidate and compatibility blockers return zero;
-registry or incomplete checks return nonzero. The workflow adds `--prepare`
-to write the PHP pin and Composer metadata only after the checks pass; the
-script itself never opens a PR. See the
-[workflow guide][image-maintenance] for what the result means.
+development image. No candidate and compatibility blockers return zero; registry
+or incomplete checks return nonzero. The workflow adds `--prepare` to write the
+PHP pin and Composer metadata only after the checks pass; the script itself
+never opens a PR. See the [workflow guide][image-maintenance] for what the result
+means.
 
 Registry inspection retries transient errors up to three attempts, with 10 and
 20 second delays. The first `429` error prints a notification to authenticate

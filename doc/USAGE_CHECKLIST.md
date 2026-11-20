@@ -20,79 +20,71 @@ use this template as in base of your own application.
 Below you have _basic_ checklist that **_you need to go through_** after you
 have started to use this template.
 
-* [ ] Check that [LICENSE](../LICENSE) matches to your needs and change it if
-      needed.
+* [ ] Check that [LICENSE](../LICENSE) matches to your needs and change it if needed.
 * [ ] Check that [README.md](../README.md) contains only things related to your
       application.
-* [ ] Update [composer.json](../composer.json) to match with your application.
-      Below you see the parts that you should check/update;
+* [ ] Update [composer.json](../composer.json) to match with your application. Below
+      you see the parts that you should check/update;
   * [ ] Common properties; `name`, `description`, `keywords`, `homepage`,
         `version`, `license`, `authors`, `support.issues` and
         `extra.projectTitle`
 * [ ] Application configuration / setup
-  * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use
-        eg. [this](http://nux.net/secret) tool for that. Also remember to
-        change that `APP_SECRET` value in [.env.test](../.env.test) and in
-        [.env.gh-actions](../.env.gh-actions) files.
-  * [ ] [application.json](../secrets/application.json) Change file contents
-        to match your application configuration - specially you need to
-        generate new `JWT_PASSPHRASE` value. Also remember to do those
-        changes to [application_test.json](../secrets/application_test.json)
+  * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use eg.
+        [this](http://nux.net/secret) tool for that. Also remember to change that
+        `APP_SECRET` value in [.env.test](../.env.test) and in [.env.gh-actions](../.env.gh-actions)
         files.
+  * [ ] [application.json](../secrets/application.json) Change file contents to
+        match your application configuration - specially you need to generate
+        new `JWT_PASSPHRASE` value. Also remember to do those changes to
+        [application_test.json](../secrets/application_test.json) files.
   * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
         contents -
-        [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
+        [information](https://developer.mozilla.org/en-US/docs/Web/Manifest) * and
+        made necessary changes.
+  * [ ] [robots.txt](../public/robots.txt) - check that file contents - [information](https://developers.google.com/search/docs/advanced/robots/intro)
         * and made necessary changes.
-  * [ ] [robots.txt](../public/robots.txt) - check that file contents -
-        [information](https://developers.google.com/search/docs/advanced/robots/intro)
-        * and made necessary changes.
-  * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
-        to match your brand.
-  * [ ] [compose.yaml](../compose.yaml) Change `container_name` to
-        match your application.
-  * [ ] [mysql_custom.cnf](../docker/mariadb/mysql_custom.cnf) Check that
-        MariaDB has custom configuration that your application needs. Also
-        check that [Dockerfile](../docker/mariadb/Dockerfile) matches your
-        production setup.
-  * [ ] [nginx.conf](../docker/nginx/nginx.conf) Check that Nginx has proper
-        configuration for your application needs. Also check that its
-        [Dockerfile](../docker/nginx/Dockerfile) matches your production setup.
-  * [ ] [Dockerfile](../Dockerfile) Check that the PHP image matches your
-        production setup.
-  * [ ] [php.ini](../docker/php/php.ini) Check that PHP has proper production
-        configuration. Also check [php-dev.ini](../docker/php/php-dev.ini) for
-        development environment setup.
+  * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon to
+        match your brand.
+  * [ ] [compose.yaml](../compose.yaml) Change `container_name` to match your application.
+  * [ ] [mysql_custom.cnf](../docker/mariadb/mysql_custom.cnf) Check that MariaDB
+        has custom configuration that your application needs. Also check that
+        [Dockerfile](../docker/mariadb/Dockerfile) matches your production setup.
+  * [ ] [nginx.conf](../docker/nginx/nginx.conf) Check that Nginx has proper configuration
+        for your application needs. Also check that its [Dockerfile](../docker/nginx/Dockerfile)
+        matches your production setup.
+  * [ ] [Dockerfile](../Dockerfile) Check that the PHP image matches your production
+        setup.
+  * [ ] [php.ini](../docker/php/php.ini) Check that PHP has proper production configuration.
+        Also check [php-dev.ini](../docker/php/php-dev.ini) for development environment
+        setup.
 * [ ] 3rd party services that you might not need _or_ you need to change those
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.
-  * [ ] [.codeclimate.yml](../.codeclimate.yml) -
-    [https://codeclimate.com/](https://codeclimate.com/)
-  * [ ] [sonar-project.properties](../sonar-project.properties) -
-    [https://sonarcloud.io/](https://sonarcloud.io/)
+  * [ ] [.codeclimate.yml](../.codeclimate.yml) - [https://codeclimate.com/](https://codeclimate.com/)
+  * [ ] [sonar-project.properties](../sonar-project.properties) - [https://sonarcloud.io/](https://sonarcloud.io/)
 * [ ] Github Actions - This application is using GitHub Actions to run multiple
       jobs to check application code.
-  * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and
-        modify it for your needs.
+  * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and modify
+        it for your needs.
   * [ ] [vulnerability-scan.yml](../.github/workflows/vulnerability-scan.yml) -
         Check file contents and modify it for your needs.
-  * [ ] [codeql.yml](../.github/workflows/codeql.yml) - Disable it if you
-        use CodeQL default setup, because the two conflict.
-  * [ ] [dependency-review.yml](../.github/workflows/dependency-review.yml) -
-        Reviews dependency changes in pull requests; it needs the
-        dependency graph enabled in the repository settings.
-  * [ ] [scorecard.yml](../.github/workflows/scorecard.yml) - Check file
-        contents and modify or delete it for your needs.
-  * [ ] Configure branch protection as described in
-        [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) so that only
-        `Validate CI result` and `dependency-review` are required.
-  * [ ] [ACTIONS_UPDATE.md](ACTIONS_UPDATE.md) - Review the GitHub
-        Actions pinning/update process and adapt it for your project.
+  * [ ] [codeql.yml](../.github/workflows/codeql.yml) - Disable it if you use CodeQL
+        default setup, because the two conflict.
+  * [ ] [dependency-review.yml](../.github/workflows/dependency-review.yml) - Reviews
+        dependency changes in pull requests; it needs the dependency graph
+        enabled in the repository settings.
+  * [ ] [scorecard.yml](../.github/workflows/scorecard.yml) - Check file contents
+        and modify or delete it for your needs.
+  * [ ] Configure branch protection as described in [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)
+        so that only `Validate CI result` and `dependency-review` are required.
+  * [ ] [ACTIONS_UPDATE.md](ACTIONS_UPDATE.md) - Review the GitHub Actions pinning/update
+        process and adapt it for your project.
   * [ ] Run `make check-action-updates` after workflow changes to verify pins,
         version consistency, and available updates.
 * [ ] Review the AI-assisted change policy files:
-  `.github/copilot-instructions.md`,
-      `CLAUDE.md`, and [AI_RULES.md](AI_RULES.md). Update or replace them so
-      they match your own architecture, workflow, and review expectations.
+  `.github/copilot-instructions.md`, `CLAUDE.md`, and [AI_RULES.md](AI_RULES.md).
+      Update or replace them so they match your own architecture, workflow, and
+      review expectations.
 * [ ] Last step when all above is done - just delete this file.
 
 ---

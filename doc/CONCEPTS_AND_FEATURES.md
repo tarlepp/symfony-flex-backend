@@ -263,8 +263,7 @@ can easily use within your application;
   null): EntityInterface
 
 Methods itself should be quite self-explanatory, but you can read detailed
-information about those from
-[this interface](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RestResourceInterface.php).
+information about those from [this interface](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RestResourceInterface.php).
 
 These resource services are the main backbone of your application.
 
@@ -290,8 +289,7 @@ attached to following resource methods;
 
 Each of these you can use `before` and `after` methods within your resource
 service to control your request and response as you like. For more information
-about these see
-[this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
+about these see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
 
 ## Event listeners and subscribers [ᐞ](#table-of-contents)
 
@@ -302,8 +300,8 @@ own subscriptions, and listeners when event bindings belong in configuration or
 attributes. Doctrine lifecycle events use separate registration. Event count
 alone does not decide which to use.
 
-See [the event-handling guide](EVENT_HANDLING.md) for repository examples,
-registration requirements, ordering, and testing guidance.
+See [the event-handling guide](EVENT_HANDLING.md) for repository examples, registration
+requirements, ordering, and testing guidance.
 
 ## Repositories [ᐞ](#table-of-contents)
 
@@ -322,8 +320,7 @@ _all_ Advanced `find/findBy/count/ids` methods (some of these are replacements
 for what doctrine itself is providing)
 
 * Handling for `where` parameter, within this you can easily create quite
-  complex custom queries - see
-  [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L63)
+  complex custom queries - see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L63)
   for examples. Simple filters map field names to scalar values or lists of
   scalar values. Advanced `and`/`or` groups contain comparison tuples with
   exactly three values: field name, Doctrine expression method name, and
@@ -338,18 +335,14 @@ for what doctrine itself is providing)
   endpoints return HTTP 400 with the usual `message`, `code`, and `status` error
   fields.
 * Handling for `order` parameter, which you can use to order results easily -
-  see
-  [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L104)
+  see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L104)
   for examples.
 * Handling for `limit/offset` parameters, which you can use for paginator
-  features within your application - see
-  [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L128)
-  and
-  [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L145)
+  features within your application - see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L128)
+  and [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L145)
   for examples.
 * Handling for `search` parameter, which you can use to make generic search for
-  your data out of the box - see
-  [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L169)
+  your data out of the box - see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L169)
   for examples.
 * Handling for `populate` parameter, which you can use to change the context of
   serialization groups.
@@ -366,8 +359,8 @@ specified query that is going to be executed and this application provides you
 necessary tools to do that and within these custom callbacks you usually need
 some joins attached to query itself.
 
-These are usually attached to via [lifecycle callbacks](#lifecycle-callbacks)
-where you do eg. something like this;
+These are usually attached to via [lifecycle callbacks](#lifecycle-callbacks) where
+you do eg. something like this;
 
 ```php
 $callback = static function (QueryBuilder $queryBuilder): void {
@@ -410,8 +403,7 @@ your own application.
 <a id="entity-value-resolver"></a>
 
 This provides automatic entity resolution for controller arguments, similar to
-the use case covered by SensioFrameworkExtraBundle's
-[`@ParamConverter`](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle).
+the use case covered by SensioFrameworkExtraBundle's [`@ParamConverter`](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle).
 The argument must be an entity with a registered resource, and its name must
 match the entity's camel-case name (for example, `UserGroup $userGroup`) and the
 corresponding request parameter. The resolver uses the entity resource's
@@ -447,8 +439,7 @@ create/update/patch controller actions:
 The purpose of this resolver is to convert user `request` to corresponding DTO
 object so that resource service can process those requests correctly.
 
-It uses
-[AutoMapperPlusBundle](https://github.com/mark-gerarts/automapper-plus-bundle)
+It uses [AutoMapperPlusBundle](https://github.com/mark-gerarts/automapper-plus-bundle)
 to map the request to the DTO configured for the corresponding controller
 action.
 

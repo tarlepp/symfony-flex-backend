@@ -8,8 +8,8 @@ repository settings. The settings live in GitHub, not in the repository, so this
 document is the source for what they should be.
 
 For workflow triggers, execution graphs, job details, reports and local
-reproduction, see the [GitHub workflow guide](GITHUB_WORKFLOWS.md). This
-document stays focused on merge protection and repository settings.
+reproduction, see the [GitHub workflow guide](GITHUB_WORKFLOWS.md). This document
+stays focused on merge protection and repository settings.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -30,18 +30,16 @@ document stays focused on merge protection and repository settings.
 
 <a id="workflow-overview"></a>
 
-Core CI in [`main.yml`](../.github/workflows/main.yml) aggregates its checks
-through `Validate CI result`. The separate
-[`dependency-review.yml`](../.github/workflows/dependency-review.yml) reports
-`dependency-review`. Require both; the core aggregate cannot cover a separate
-workflow.
+Core CI in [`main.yml`](../.github/workflows/main.yml) aggregates its checks through
+`Validate CI result`. The separate [`dependency-review.yml`](../.github/workflows/dependency-review.yml)
+reports `dependency-review`. Require both; the core aggregate cannot cover a
+separate workflow.
 
-The [event tables](GITHUB_WORKFLOWS.md#when-workflows-run) and
-[job dependency graph](GITHUB_WORKFLOWS.md#job-dependency-graph) explain which
-jobs run and how they reach the gate. Eligible external reporting is enforced
-through `Validate CI result`, not a separate required context. Scheduled
-maintenance, Scorecard and CodeQL are not additional required checks under the
-current policy.
+The [event tables](GITHUB_WORKFLOWS.md#when-workflows-run) and [job dependency graph](GITHUB_WORKFLOWS.md#job-dependency-graph)
+explain which jobs run and how they reach the gate. Eligible external reporting
+is enforced through `Validate CI result`, not a separate required context.
+Scheduled maintenance, Scorecard and CodeQL are not additional required checks
+under the current policy.
 
 PR title/body edits do not trigger CI or replace existing required validation.
 The final job always uses `Validate CI result`; a metadata edit does not repair
@@ -99,8 +97,8 @@ branch-protection entry.
 Rules for this set:
 
 * PRs, pushes and merge groups select independent validation categories using
-  the [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path).
-  Both gates accept a job's skip only after `Detect changed files` succeeded and
+  the [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path). Both
+  gates accept a job's skip only after `Detect changed files` succeeded and
   emitted the exact category's `false` flag. Missing/unknown flags fail.
   Markdown-only changes run documentation checks and Gitleaks; analyzer-only
   changes run PHP checks without PHPUnit or image builds. Other selected PHP
@@ -183,8 +181,7 @@ action natively compares the payload's `merge_group.base_sha` and
 `merge_group.head_sha`; it does not require a PR payload or custom ref
 overrides. Its vulnerability policy and read-only permissions remain unchanged.
 
-Native merge-group support was verified in the
-[pinned action's ref selection](https://github.com/actions/dependency-review-action/blob/a1d282b36b6f3519aa1f3fc636f609c47dddb294/src/git-refs.ts).
+Native merge-group support was verified in the [pinned action's ref selection](https://github.com/actions/dependency-review-action/blob/a1d282b36b6f3519aa1f3fc636f609c47dddb294/src/git-refs.ts).
 Offline workflow regressions protect both triggers and the required-check
 contracts; they do not verify GitHub's dependency-graph comparison API.
 
@@ -230,9 +227,8 @@ that live test is completed.
   accepted on ordinary validation events. Inspect detection outputs and the
   first failed or cancelled prerequisite.
 * A required check stays pending forever: the context no longer reports, usually
-  after renaming a job or workflow. Follow the order in
-  [Changing required checks](#changing-required-checks) and remove the old
-  context from branch protection.
+  after renaming a job or workflow. Follow the order in [Changing required checks](#changing-required-checks)
+  and remove the old context from branch protection.
 * `CodeQL` fails with a default-setup conflict: `codeql.yml` and GitHub's CodeQL
   default setup cannot both be enabled. Disable one of them.
 

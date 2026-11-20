@@ -10,22 +10,19 @@ description: Review and improve shell script readability, repository scripts, Ma
 Use this skill when reviewing or changing repository development scripts, shell
 readability, Make targets, checker behavior, command routing, or script
 regression tests. It owns tooling behavior, not dependency upgrades or
-application features. Use
-[document-shell-scripts](../document-shell-scripts/SKILL.md) for shell-script
-file headers and explanatory comments. Use
-[maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for
-adding or changing scripts under `scripts/`, including tests and callers. Use
-[update-github-workflows](../update-github-workflows/SKILL.md) for CI job
-behavior, [update-github-actions](../update-github-actions/SKILL.md) for action
-pins, and [update-docker-images](../update-docker-images/SKILL.md) for image
-inspection and pins. Use
-[maintain-ai-guidance](../maintain-ai-guidance/SKILL.md) for skill and
+application features. Use [document-shell-scripts](../document-shell-scripts/SKILL.md)
+for shell-script file headers and explanatory comments. Use
+[maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for adding
+or changing scripts under `scripts/`, including tests and callers. Use
+[update-github-workflows](../update-github-workflows/SKILL.md) for CI job behavior,
+[update-github-actions](../update-github-actions/SKILL.md) for action pins, and
+[update-docker-images](../update-docker-images/SKILL.md) for image inspection and
+pins. Use [maintain-ai-guidance](../maintain-ai-guidance/SKILL.md) for skill and
 instruction contracts rather than expanding a checker to impose new policy
 implicitly.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -46,9 +43,9 @@ Inspect the implementation and its actual callers:
 
 * `Makefile`: host-target allowlist, forwarding, Compose selection, environment
   propagation, help, task recipes, runner/report paths, and exit decoration.
-* [Scripts guide](../../../scripts/README.md) and scripts in `scripts/`:
-  documentation checking, action/tool update discovery, workflow validation,
-  Docker image helpers, and project statistics.
+* [Scripts guide](../../../scripts/README.md) and scripts in `scripts/`: documentation
+  checking, action/tool update discovery, workflow validation, Docker image
+  helpers, and project statistics.
 * `scripts/make/tests/make-container-test.sh`,
   `scripts/docker/tests/docker-images-test.sh`, and
   `scripts/checks/tests/check-workflow-tool-updates-test.py`: representative
@@ -62,9 +59,8 @@ Inspect the implementation and its actual callers:
   inputs, invocation environment, and consumers of output and exit status.
 * `Dockerfile`, `docker/ci-compose.yaml`, `.devcontainer/`, and tool manifests
   when affected: available interpreters, executables, paths, and mounts.
-* [Command reference](../../../doc/COMMANDS.md),
-  [testing guide](../../../doc/TESTING.md#selecting-validation), and
-  [CI guide](../../../doc/DEVELOPMENT.md#continuous-integration): documented
+* [Command reference](../../../doc/COMMANDS.md), [testing guide](../../../doc/TESTING.md#selecting-validation),
+  and [CI guide](../../../doc/DEVELOPMENT.md#continuous-integration): documented
   commands, validation scope, and reproduction instructions.
 
 ## Workflow [ᐞ](#table-of-contents)
@@ -157,28 +153,27 @@ Inspect the implementation and its actual callers:
    affected output/exit behavior. For discovery changes, cover relevant
    duplicates, ignored paths, file variants, anchors, or index relationships.
    For script/helper moves, make fixtures preserve or explicitly resolve the
-   real directory relationships instead of assuming moved files remain
-   siblings. Run the owning regression suite and any aggregate/CI entry point
-   that includes it. For routing changes, cover local/CI forwarding, mixed
-   goals, dry runs, environment isolation, and failure propagation. Reuse
-   fixtures without duplicating the production algorithm in test expectations.
-   For streaming fixtures, separate the output assertion from teardown and
-   cover inherited ignored SIGINT. Use isolated process groups and bounded
-   cleanup of all descendants, not just the group leader; see the
-   [streaming fixture guidance](../../../doc/TESTING.md#command-output-contracts).
+   real directory relationships instead of assuming moved files remain siblings.
+   Run the owning regression suite and any aggregate/CI entry point that
+   includes it. For routing changes, cover local/CI forwarding, mixed goals, dry
+   runs, environment isolation, and failure propagation. Reuse fixtures without
+   duplicating the production algorithm in test expectations. For streaming
+   fixtures, separate the output assertion from teardown and cover inherited
+   ignored SIGINT. Use isolated process groups and bounded cleanup of all
+   descendants, not just the group leader; see the [streaming fixture guidance](../../../doc/TESTING.md#command-output-contracts).
 9. Exercise actual report or test-runner outputs when those contracts change. A
    mocked invocation does not prove PHPUnit discovery, coverage generation,
-   report paths, or uploader compatibility. Use
-   [write-tests](../write-tests/SKILL.md) for PHPUnit behavior and the workflow
-   skill for CI consumers. A shell/Python checker change alone does not require
-   application PHPUnit or PHP static analysis.
+   report paths, or uploader compatibility. Use [write-tests](../write-tests/SKILL.md)
+   for PHPUnit behavior and the workflow skill for CI consumers. A shell/Python
+   checker change alone does not require application PHPUnit or PHP static
+   analysis.
 10. Update help, relevant Make descriptions, the scripts guide, command
     reference, and CI documentation where their contracts change. Verify
     examples against current code; documentation can lag actual container
     routing. Label host/container execution and distinguish local checks from
-    hosted CI runs. Use [update-dependencies](../update-dependencies/SKILL.md)
-    for justified tool dependency changes rather than downloading an alternative
-    ad hoc.
+    hosted CI runs. Use [update-dependencies](../update-dependencies/SKILL.md) for
+    justified tool dependency changes rather than downloading an alternative ad
+    hoc.
 
 ## Shell readability reviews [ᐞ](#table-of-contents)
 
@@ -218,13 +213,12 @@ Use this readability rubric when assessing each finding:
   restating syntax?
 
 Label each proposed improvement as a **quick win** when it is a localized
-readability change that preserves the script's structure, or **structural**
-when it requires materially reorganizing control flow, state, or helper
-boundaries. Give the reason and a concrete improvement for each label; keep
-priority and validation separate. Report correctness or safety issues as such,
-not as readability findings. Prefer actionable, behavior-preserving proposals
-and do not treat shorter source or mechanical reformatting as improvement by
-itself.
+readability change that preserves the script's structure, or **structural** when
+it requires materially reorganizing control flow, state, or helper boundaries.
+Give the reason and a concrete improvement for each label; keep priority and
+validation separate. Report correctness or safety issues as such, not as
+readability findings. Prefer actionable, behavior-preserving proposals and do
+not treat shorter source or mechanical reformatting as improvement by itself.
 
 Assess these concerns against the actual code:
 

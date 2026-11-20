@@ -72,8 +72,8 @@ and log interfaces.
   the host.
 * **Fish**: alternative interactive shell with suggestions and completions; open
   it with `make fish` from the host.
-* **fzf**: fuzzy selection of files and shell history; see the
-  [fzf guide](FZF.md) for shortcuts and examples.
+* **fzf**: fuzzy selection of files and shell history; see the [fzf guide](FZF.md)
+  for shortcuts and examples.
 * **thefuck**: suggests corrections for the previous failed command using the
   `fuck` shell function. Review the suggestion before confirming; it may execute
   a modifying command.
@@ -154,9 +154,8 @@ assisted work:
 * A pull request whose base is not `master` is a stacked pull request: its
   branch is based on the parent pull request's branch. State the base branch and
   the parent pull request in the description. Merge the parent first, retarget
-  the child to `master`, then rebase it. See
-  [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md#stacked-pull-requests) for the
-  procedure.
+  the child to `master`, then rebase it. See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md#stacked-pull-requests)
+  for the procedure.
 
 ### Composer PHP platform [ᐞ](#table-of-contents)
 
@@ -219,10 +218,9 @@ make ecs
 
 <a id="ide"></a>
 
-I highly recommend that you use "proper"
-[IDE](https://en.wikipedia.org/wiki/Integrated_development_environment) to
-development your application. Below is short list of some popular IDEs that you
-could use.
+I highly recommend that you use "proper" [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
+to development your application. Below is short list of some popular IDEs that
+you could use.
 
 * [PhpStorm](https://www.jetbrains.com/phpstorm/)
 * [NetBeans](https://netbeans.org/)
@@ -236,17 +234,17 @@ Just choose one which is the best for you. Also note that project contains
 
 <a id="php-code-sniffer"></a>
 
-It's highly recommended that you use this tool while doing actual development
-to application. PHP Code Sniffer is added to project ```dev``` dependencies, so
-all you need to do is just configure it to your favorite IDE. So the `phpcs`
-command is available via following example command.
+It's highly recommended that you use this tool while doing actual development to
+application. PHP Code Sniffer is added to project ```dev``` dependencies, so all
+you need to do is just configure it to your favorite IDE. So the `phpcs` command
+is available via following example command.
 
 ```bash
 ./vendor/bin/phpcs -i
 ```
 
-If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) this following
-link will help you to get things rolling.
+If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) this following link
+will help you to get things rolling.
 
 * [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html)
 
@@ -287,10 +285,9 @@ you really don't want.
 Pull request validation normally runs linting, security checks, static
 analyzers, PHPUnit and both Docker image builds, with the skip rules below.
 `Validate CI result` is the single required core gate, together with the
-separate `dependency-review` check. The
-[GitHub workflow guide](GITHUB_WORKFLOWS.md) explains events, job dependencies,
-reports and troubleshooting with execution graphs.
-[REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch protection.
+separate `dependency-review` check. The [GitHub workflow guide](GITHUB_WORKFLOWS.md)
+explains events, job dependencies, reports and troubleshooting with execution
+graphs. [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) covers branch protection.
 
 PR edits do not trigger core CI, so changing a title or body does not create
 duplicate skipped checks or cancel validation. Existing validation remains
@@ -299,8 +296,7 @@ push a new commit or close and reopen the PR to validate against the new base
 before merging. Rerunning an old run reuses its original event rather than the
 new base. Other workflows keep their own event filters.
 
-PRs, pushes and merge groups select checks using the
-[CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path).
+PRs, pushes and merge groups select checks using the [CI selection table](GITHUB_WORKFLOWS.md#choosing-the-validation-path).
 Markdown-only changes run documentation checks and Gitleaks; analyzer-only
 changes run PHP checks without PHPUnit or image builds. Both gates accept skips
 only after successful detection emits the exact category's `false` flag. Renames
@@ -427,8 +423,8 @@ docker buildx build --load --target production --no-cache-filter production \
 | Code style | `make ecs` |
 | PHP Security Checker | `make check-security` |
 
-Run PHP tooling inside the development container; see
-[COMMANDS.md](COMMANDS.md#makefile) for all targets.
+Run PHP tooling inside the development container; see [COMMANDS.md](COMMANDS.md#makefile)
+for all targets.
 
 #### Job timeouts [ᐞ](#table-of-contents)
 

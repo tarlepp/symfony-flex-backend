@@ -12,20 +12,18 @@ configuration, dependency-injection wiring, or environment-specific overrides.
 It covers configuration changes, not dependency upgrades or Docker image
 updates; use the corresponding repository skills for those tasks.
 
-For updates to installed Symfony Flex recipes, follow
-[update-symfony-recipes](../update-symfony-recipes/SKILL.md) for the Composer
-update workflow, then use this skill to integrate generated configuration
-changes.
+For updates to installed Symfony Flex recipes, follow [update-symfony-recipes](../update-symfony-recipes/SKILL.md)
+for the Composer update workflow, then use this skill to integrate generated
+configuration changes.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Read
-[CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) for the existing
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Read [CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) for the existing
 local-configuration workflow.
 
 For request/login capture, redaction, ignored paths, or logging sink behavior,
-also use [update-request-logging](../update-request-logging/SKILL.md). For
-locale defaults, translator fallback, or timezone behavior, also use
+also use [update-request-logging](../update-request-logging/SKILL.md). For locale
+defaults, translator fallback, or timezone behavior, also use
 [update-localization](../update-localization/SKILL.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -108,11 +106,11 @@ locale defaults, translator fallback, or timezone behavior, also use
     `tests/Integration/Utils/RequestLoggerTest.php` and
     `tests/Integration/EventSubscriber/RequestLogSubscriberTest.php` where
     relevant; do not weaken redaction or authorization coverage.
-11. Update [CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) and
-    other affected setup or command documentation when keys, types, defaults,
-    file locations, or deployment steps change. State any required operator
-    action without applying production changes, restarting services, or
-    overwriting local files without explicit approval.
+11. Update [CUSTOM_CONFIGURATION.md](../../../doc/CUSTOM_CONFIGURATION.md) and other
+    affected setup or command documentation when keys, types, defaults, file
+    locations, or deployment steps change. State any required operator action
+    without applying production changes, restarting services, or overwriting
+    local files without explicit approval.
 
 ## Validation [ᐞ](#table-of-contents)
 

@@ -137,9 +137,9 @@ Its name does not make it a Doctrine event subscriber.
 
 <a id="testing-and-inspection"></a>
 
-Follow [the testing guide](TESTING.md) and run commands inside the PHP
-development container. Match the existing unit and integration test layout, but
-do not rely only on calling a callback directly.
+Follow [the testing guide](TESTING.md) and run commands inside the PHP development
+container. Match the existing unit and integration test layout, but do not rely
+only on calling a callback directly.
 
 * Assert subscriber event maps, callback names, and priorities, as in
   `tests/Unit/EventSubscriber/AcceptLanguageSubscriberTest.php`.

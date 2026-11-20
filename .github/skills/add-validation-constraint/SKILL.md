@@ -9,12 +9,11 @@ description: Add or change a Symfony Validator constraint and validator in this 
 
 Use this skill when adding or changing a project-specific Symfony validation
 rule under `src/Validator/Constraints/`. For using constraints on API DTOs, also
-follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); a custom
-constraint does not require changing a DTO if its validation scope is elsewhere.
+follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md); a custom constraint
+does not require changing a DTO if its validation scope is elsewhere.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -73,10 +72,10 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    alone do not prove framework wiring.
 8. For DTO usage, place the constraint on the correct field or class and
    preserve operation-specific validation groups and create/update/patch
-   behavior. Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) for
-   request mapping, DTO validation, and HTTP-boundary coverage when the API
-   contract changes. Keep entity validation separate from request DTO validation
-   unless the existing domain behavior requires both.
+   behavior. Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) for request
+   mapping, DTO validation, and HTTP-boundary coverage when the API contract
+   changes. Keep entity validation separate from request DTO validation unless
+   the existing domain behavior requires both.
 9. Update API error documentation or other existing documentation when the
    externally observable validation contract changes. Do not add a migration
    unless persisted entity structure changes; follow the entity skill when it

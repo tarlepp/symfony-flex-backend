@@ -11,13 +11,11 @@ Use this skill whenever adding or changing tests. Select the test category that
 matches the behavior boundary and dependencies under test.
 
 Editing documentation about PHPUnit, AI instructions, or skill text does not
-itself require running PHPUnit. Use
-[the validation selection guide](../../../doc/TESTING.md#selecting-validation)
+itself require running PHPUnit. Use [the validation selection guide](../../../doc/TESTING.md#selecting-validation)
 to decide whether tests, report producers, or non-PHP checks are relevant.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -120,9 +118,9 @@ phpunit tests/Unit/Rest/SearchTermTest.php
 ```
 
 Run the smallest relevant class or directory first, then `make run-tests` when
-broader regression coverage is warranted. Use
-[TESTING.md](../../../doc/TESTING.md) and the Makefile for current runner
-details; do not add a new test framework or runner.
+broader regression coverage is warranted. Use [TESTING.md](../../../doc/TESTING.md)
+and the Makefile for current runner details; do not add a new test framework or
+runner.
 
 ---
 

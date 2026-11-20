@@ -10,12 +10,11 @@ description: Add or update API DTOs, validation constraints, AutoMapper request 
 Use this skill when adding or changing an API DTO, its validation, request
 mapping, or argument resolution without necessarily adding a complete CRUD
 resource. For a full resource or persistence change, also follow
-[add-rest-resource](../add-rest-resource/SKILL.md) or
-[add-doctrine-entity](../add-doctrine-entity/SKILL.md) as appropriate.
+[add-rest-resource](../add-rest-resource/SKILL.md) or [add-doctrine-entity](../add-doctrine-entity/SKILL.md)
+as appropriate.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -52,12 +51,11 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    classes, preserving operation-specific requirements such as create-only
    password constraints. Reuse existing custom constraints in `src/Validator/`
    when appropriate. When creating or changing a project-specific constraint,
-   also follow
-   [add-validation-constraint](../add-validation-constraint/SKILL.md). Inspect
-   `RestResource::getDtoForEntity()` and `RestResourceBaseMethods`: patch loads
-   existing state before merging visited input and validating, whereas update
-   starts from a fresh DTO. Do not weaken required-field validation to make
-   partial requests pass.
+   also follow [add-validation-constraint](../add-validation-constraint/SKILL.md).
+   Inspect `RestResource::getDtoForEntity()` and `RestResourceBaseMethods`:
+   patch loads existing state before merging visited input and validating,
+   whereas update starts from a fresh DTO. Do not weaken required-field
+   validation to make partial requests pass.
 5. Update the feature's `RequestMapper` under `src/AutoMapper/`, extending
    `RestRequestMapper`. Its `$properties` list is the writable-field allowlist;
    expose only intended inputs. The base mapper reads present fields from
@@ -90,8 +88,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    privileged fields incidentally. Preserve the endpoint's established output
    contract rather than adding a new response-mapping architecture as part of an
    input-only change. For shared serialization, population, or error output
-   changes, use
-   [update-api-response-contract](../update-api-response-contract/SKILL.md).
+   changes, use [update-api-response-contract](../update-api-response-contract/SKILL.md).
 9. Inspect `tests/Integration/DTO/`, `tests/Integration/AutoMapper/`, and
    `tests/Integration/ValueResolver/RestDtoValueResolverTest.php` for existing
    helpers. Cover setters and visited fields, transformations, registered DTO

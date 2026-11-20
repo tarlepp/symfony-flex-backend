@@ -13,8 +13,7 @@ use the relevant feature skill when implementing a broader feature, and use
 [write-tests](../write-tests/SKILL.md) when adding or changing tests.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -38,17 +37,16 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    than inferring behavior from documentation alone.
 3. Form a specific root-cause hypothesis and gather evidence that can confirm or
    reject it. Change one diagnostic variable at a time. Use an IDE debugger when
-   it will clarify control flow; see the repository's
-   [Xdebug guide](../../../doc/XDEBUG.md) and
-   [PhpStorm guide](../../../doc/PHPSTORM.md) for setup.
+   it will clarify control flow; see the repository's [Xdebug guide](../../../doc/XDEBUG.md)
+   and [PhpStorm guide](../../../doc/PHPSTORM.md) for setup.
 4. Separate application defects from test-fixture, database, container,
    environment, and local IDE configuration problems. Do not mask failures by
    weakening assertions, disabling security checks, swallowing exceptions, or
    introducing success-shaped fallbacks.
 5. If fixing the defect is in scope, make the smallest change that addresses the
    verified cause and add or update a regression test at the affected boundary.
-   Follow [write-tests](../write-tests/SKILL.md) for test selection and
-   conventions. Avoid unrelated cleanup.
+   Follow [write-tests](../write-tests/SKILL.md) for test selection and conventions.
+   Avoid unrelated cleanup.
 6. If the behavior cannot be reproduced or evidence is incomplete, report what
    was observed, what was checked, and what remains uncertain. Do not present a
    hypothesis as a confirmed root cause or claim a fix is verified without
@@ -64,8 +62,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 * Run the smallest existing reproducer first and rerun it after any fix. For
   PHPUnit, run the selected test from the repository root inside the PHP
   development container; follow the [testing guide](../../../doc/TESTING.md) and
-  [write-tests](../write-tests/SKILL.md) for supported test selection and
-  commands.
+  [write-tests](../write-tests/SKILL.md) for supported test selection and commands.
 * Run relevant PHP quality checks for PHP changes and expand regression coverage
   when the change affects shared behavior, following the
   [validation selection guide](../../../doc/TESTING.md#selecting-validation).

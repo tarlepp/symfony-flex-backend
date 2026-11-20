@@ -13,13 +13,12 @@ follow the feature-specific skill and repository rules when a feature requires a
 new package. For coordinated changes to the supported PHP runtime baseline, use
 [update-php-runtime](../update-php-runtime/SKILL.md).
 
-For a reported CVE or failing vulnerability gate, start with
-[fix-cve](../fix-cve/SKILL.md) for artifact evidence and remediation proof, then
-use this skill for the affected package update mechanics.
+For a reported CVE or failing vulnerability gate, start with [fix-cve](../fix-cve/SKILL.md)
+for artifact evidence and remediation proof, then use this skill for the
+affected package update mechanics.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -45,8 +44,8 @@ that and proceed without an empty commit.
 
 Standalone Symfony Flex recipe updates are configuration/scaffolding updates,
 not Composer package upgrades; this tool-first ordering does not apply to them.
-Follow [update-symfony-recipes](../update-symfony-recipes/SKILL.md) without
-upgrading packages.
+Follow [update-symfony-recipes](../update-symfony-recipes/SKILL.md) without upgrading
+packages.
 
 ## Workflow [ᐞ](#table-of-contents)
 
@@ -78,18 +77,15 @@ upgrading packages.
    * Composer tool dependencies: inspect the relevant `tools/*/composer.json`
      and lockfile, and use `make update-tools` only when the requested scope
      includes those tools.
-   * Symfony Flex recipes: follow
-     [update-symfony-recipes](../update-symfony-recipes/SKILL.md) for inspection
-     with `composer recipes`, targeted updates, conflict handling, and
-     validation. Do not assume a package upgrade also updates its installed
-     recipe.
-   * Docker images: follow
-     [update-docker-images](../update-docker-images/SKILL.md) for image
-     selection, multi-platform digest pinning, and validation.
-   * GitHub Actions: follow
-     [update-github-actions](../update-github-actions/SKILL.md) for the existing
-     update-check script, verified SHA pins, composite-action coverage, and
-     workflow-specific validation.
+   * Symfony Flex recipes: follow [update-symfony-recipes](../update-symfony-recipes/SKILL.md)
+     for inspection with `composer recipes`, targeted updates, conflict
+     handling, and validation. Do not assume a package upgrade also updates its
+     installed recipe.
+   * Docker images: follow [update-docker-images](../update-docker-images/SKILL.md)
+     for image selection, multi-platform digest pinning, and validation.
+   * GitHub Actions: follow [update-github-actions](../update-github-actions/SKILL.md)
+     for the existing update-check script, verified SHA pins, composite-action
+     coverage, and workflow-specific validation.
 3. Review the proposed version changes against the current constraints and
    supported PHP/Symfony versions in `composer.json`, package compatibility,
    security advisories, and relevant upstream changelogs. Do not widen

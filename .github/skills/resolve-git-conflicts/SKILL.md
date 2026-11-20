@@ -21,10 +21,9 @@ synchronize branches or resolve conflicts; do not introduce merge commits. An
 already active merge is a blocker requiring an authorized recovery decision, not
 permission to finish the merge.
 
-Follow [shared guidance](../shared-guidance.md) for branch selection,
-pre-existing work, rebase-only synchronization, container execution, and
-publishing safeguards. Follow the
-[stacked PR procedure](../../../doc/REQUIRED_CHECKS.md#stacked-pull-requests)
+Follow [shared guidance](../shared-guidance.md) for branch selection, pre-existing
+work, rebase-only synchronization, container execution, and publishing
+safeguards. Follow the [stacked PR procedure](../../../doc/REQUIRED_CHECKS.md#stacked-pull-requests)
 when the parent merges.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -162,11 +161,11 @@ conflict markers, and unrelated changes. Marker detection and `git diff --check`
 alone are not semantic verification.
 
 Select existing checks from the complete accumulated task diff and behavior
-using [the validation guide](../../../doc/TESTING.md#selecting-validation).
-Rerun evidence invalidated by the new base or resolutions, including checks
-whose dependency inputs changed without a conflict in their source files.
-Include caller-boundary tests for behavior-bearing resolutions and documentation
-checks for Markdown changes. Missing tooling or checks stay explicit blockers.
+using [the validation guide](../../../doc/TESTING.md#selecting-validation). Rerun
+evidence invalidated by the new base or resolutions, including checks whose
+dependency inputs changed without a conflict in their source files. Include
+caller-boundary tests for behavior-bearing resolutions and documentation checks
+for Markdown changes. Missing tooling or checks stay explicit blockers.
 
 In the feature workflow, resolved changes return for independent verification.
 No remaining Git conflicts does not imply a verifier `PASS`; post-verification

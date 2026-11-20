@@ -53,8 +53,8 @@ frontend applications or other backend services.
 
 <a id="ai-documentation-map"></a>
 
-Use the [README AI guidance inventory](README.md#ai-assisted-development) for
-the canonical document list and reading order.
+Use the [README AI guidance inventory](README.md#ai-assisted-development) for the
+canonical document list and reading order.
 
 This order is for navigation, not precedence. Platform instructions apply first,
 and the actual code, scripts, tests, configuration, and CI are the source of
@@ -218,21 +218,19 @@ copying it into long-form documentation.
 
 <a id="adding-new-rest-endpoints"></a>
 
-For CRUD resources, follow the
-[add-rest-resource skill](.github/skills/add-rest-resource/SKILL.md), which
-covers this repository's entity, migration, DTO, resource, controller, and test
-conventions. For non-CRUD endpoints, use the
-[custom API endpoint skill](.github/skills/add-custom-api-endpoint/SKILL.md).
-The [skills index](.github/skills/README.md) routes other task types to their
-specific workflows.
+For CRUD resources, follow the [add-rest-resource skill](.github/skills/add-rest-resource/SKILL.md),
+which covers this repository's entity, migration, DTO, resource, controller, and
+test conventions. For non-CRUD endpoints, use the [custom API endpoint skill](.github/skills/add-custom-api-endpoint/SKILL.md).
+The [skills index](.github/skills/README.md) routes other task types to their specific
+workflows.
 
 ### Before Committing [⇩](#table-of-contents)
 
 <a id="before-committing"></a>
 
-Before committing, follow the validation checklist in
-[`AGENTS.md`](AGENTS.md#testing-and-validation). This file's command sections
-are a reference; the agent instructions own the required validation workflow.
+Before committing, follow the validation checklist in [`AGENTS.md`](AGENTS.md#testing-and-validation).
+This file's command sections are a reference; the agent instructions own the
+required validation workflow.
 
 ## Testing [⇩](#table-of-contents)
 
@@ -310,9 +308,8 @@ authentication details, see [`doc/SECURITY.md`](doc/SECURITY.md).
 
 <a id="security-best-practices"></a>
 
-Follow [`doc/SECURITY.md`](doc/SECURITY.md) for security policy and
-[`AGENTS.md`](AGENTS.md) for the actionable repository-wide security and
-validation requirements.
+Follow [`doc/SECURITY.md`](doc/SECURITY.md) for security policy and [`AGENTS.md`](AGENTS.md)
+for the actionable repository-wide security and validation requirements.
 
 ## Configuration [⇩](#table-of-contents)
 
@@ -373,9 +370,9 @@ Use `make configuration` to view current application configuration.
 <a id="practical-guidance-for-ai-assistants"></a>
 
 For actionable repository-wide instructions, including architecture, change
-scope, validation, and handoff expectations, follow [`AGENTS.md`](AGENTS.md).
-This guide focuses on project context and command references; task-specific
-workflows live in the [skills index](.github/skills/README.md).
+scope, validation, and handoff expectations, follow [`AGENTS.md`](AGENTS.md). This
+guide focuses on project context and command references; task-specific workflows
+live in the [skills index](.github/skills/README.md).
 
 ### Documentation drift [⇩](#table-of-contents)
 
@@ -383,8 +380,8 @@ workflows live in the [skills index](.github/skills/README.md).
 
 Keep project architecture, command, and setup descriptions aligned with the
 implementation and workflows. The canonical AI-document inventory is in
-[`README.md`](README.md#ai-assisted-development); AI-specific policy and CI
-maintenance guidance belongs in [`doc/AI_RULES.md`](doc/AI_RULES.md).
+[`README.md`](README.md#ai-assisted-development); AI-specific policy and CI maintenance
+guidance belongs in [`doc/AI_RULES.md`](doc/AI_RULES.md).
 
 ---
 

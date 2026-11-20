@@ -13,13 +13,12 @@
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tarlepp/symfony-flex-backend/badge)](https://securityscorecards.dev/viewer/?platform=github.com&org=tarlepp&repo=symfony-flex-backend)
 
-JSON REST API which is built on top of [Symfony](https://symfony.com/)
-framework.
+JSON REST API which is built on top of [Symfony](https://symfony.com/) framework.
 
 This application is meant to be used as an `API` that frontend applications or
 different backend applications can use as needed. One example frontend is
-[this Angular template](https://github.com/tarlepp/angular-ngrx-frontend),
-though you can use any frontend solution.
+[this Angular template](https://github.com/tarlepp/angular-ngrx-frontend), though
+you can use any frontend solution.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -65,12 +64,12 @@ Then open `https://localhost:8000` in your browser. For more details, see
 <a id="requirements"></a>
 
 * [Docker Engine](https://docs.docker.com/engine/install/)
-* [Docker Compose v2](https://docs.docker.com/compose/install/) (included with
-  Docker Desktop)
+* [Docker Compose v2](https://docs.docker.com/compose/install/) (included with Docker
+  Desktop)
 
 Standalone installation is not currently maintained; see the
-[standalone installation status](doc/INSTALLATION_WITHOUT_DOCKER.md) before
-attempting to run without Docker.
+[standalone installation status](doc/INSTALLATION_WITHOUT_DOCKER.md) before attempting
+to run without Docker.
 
 Docker images are multi-platform, so the same setup works natively on x86-64
 (`linux/amd64`) and ARM (`linux/arm64`, e.g. Apple Silicon) hosts. See
@@ -114,8 +113,8 @@ You can run this project either with Dev Containers (for example in VS Code or
 JetBrains IDEs) or with Make commands.
 
 For Dev Containers, open this repository in your IDE and use its Dev Container
-workflow to reopen/start the project in a container (see
-[Dev Containers](#dev-containers) section for details).
+workflow to reopen/start the project in a container (see [Dev Containers](#dev-containers)
+section for details).
 
 If you want to use Make commands instead, run the following command, which will
 start all the containers:
@@ -170,21 +169,16 @@ workflows.
 When containers are running (either via Make commands or Dev Containers),
 following ports are exposed on `localhost` on your host machine:
 
-* symfony-backend-nginx - [https://localhost:8000](https://localhost:8000)
-  (nginx)
-  * PHP-FPM status page -
-    [https://localhost:8000/status](https://localhost:8000/status)
+* symfony-backend-nginx - [https://localhost:8000](https://localhost:8000) (nginx)
+  * PHP-FPM status page - [https://localhost:8000/status](https://localhost:8000/status)
   * SSL with self-signed certificates
 * symfony-backend-nginx - [http://localhost:8080](http://localhost:8080) (nginx)
-  * PHP-FPM status page -
-    [http://localhost:8080/status](http://localhost:8080/status)
+  * PHP-FPM status page - [http://localhost:8080/status](http://localhost:8080/status)
   * Normal HTTP
 * symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
 * symfony-backend-mariadb - `localhost:33060` (mariadb)
-* symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100)
-  (dozzle)
-* symfony-backend-adminer - [http://localhost:8200](http://localhost:8200)
-  (adminer)
+* symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
+* symfony-backend-adminer - [http://localhost:8200](http://localhost:8200) (adminer)
 
 And this application is usable in your browser at `https://localhost:8000`. When
 you open that site for the first time, you will see a "Your connection is not
@@ -257,8 +251,7 @@ docker compose -f compose.yaml -f .devcontainer/docker-compose.devcontainer.yml 
 
 Containers are built for your host platform automatically. For building images
 for another platform (for example `linux/arm64` on an x86-64 host) or updating
-pinned base image digests, see
-[Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md).
+pinned base image digests, see [Docker multi-platform images](doc/DOCKER_MULTI_PLATFORM.md).
 
 ### Health check [ᐞ](#table-of-contents)
 
@@ -310,24 +303,24 @@ For detailed usage, UID/GID notes, and port mappings, see
 
 <a id="ai-assisted-development"></a>
 
-New to the project agents and skills? Start with the
-[visual introduction](doc/AI_AGENTS_AND_SKILLS.md) for roles, approval steps,
-repair, conflict and CVE flows, and practical skill selection.
+New to the project agents and skills? Start with the [visual introduction](doc/AI_AGENTS_AND_SKILLS.md)
+for roles, approval steps, repair, conflict and CVE flows, and practical skill
+selection.
 
 If you use AI assistance in this repository, use this canonical inventory and
 reading order for its guidance:
 
-* [`doc/AI_AGENTS_AND_SKILLS.md`](doc/AI_AGENTS_AND_SKILLS.md) for a
-  contributor-friendly overview with interaction diagrams
+* [`doc/AI_AGENTS_AND_SKILLS.md`](doc/AI_AGENTS_AND_SKILLS.md) for a contributor-friendly
+  overview with interaction diagrams
 * [`AGENTS.md`](AGENTS.md) for agent-specific instructions
-* [`.github/copilot-instructions.md`](.github/copilot-instructions.md) as the
-  Copilot entry point to actionable repository instructions
+* [`.github/copilot-instructions.md`](.github/copilot-instructions.md) as the Copilot
+  entry point to actionable repository instructions
 * [`CLAUDE.md`](CLAUDE.md) for architecture and workflow context
 * [`doc/AI_RULES.md`](doc/AI_RULES.md) for AI guidance maintenance
 * [`.github/skills/README.md`](.github/skills/README.md) for task workflows
-* [`doc/FEATURE_AGENTS.md`](doc/FEATURE_AGENTS.md) for the feature lead,
-  architect, implementer, verifier, conflict-resolver, and cve-fixer workflow and
-  client requirements
+* [`doc/FEATURE_AGENTS.md`](doc/FEATURE_AGENTS.md) for the feature lead, architect,
+  implementer, verifier, conflict-resolver, and cve-fixer workflow and client
+  requirements
 * [`.github/pull_request_template.md`](.github/pull_request_template.md) for the
   human review checklist when preparing pull requests
 
@@ -370,8 +363,7 @@ locally when reproducing CI's test runner.
 GitHub Actions runs linting, static analysis, PHPUnit and Docker builds, with
 reduced checks for Markdown-only PRs and no repeat core validation for
 title/body-only PR edits. `Validate CI result` and `dependency-review` are the
-required checks. See the
-[workflow guide and execution graphs](doc/GITHUB_WORKFLOWS.md),
+required checks. See the [workflow guide and execution graphs](doc/GITHUB_WORKFLOWS.md),
 [required checks and branch protection](doc/REQUIRED_CHECKS.md), and the
 [contributor CI guide](doc/DEVELOPMENT.md#continuous-integration).
 

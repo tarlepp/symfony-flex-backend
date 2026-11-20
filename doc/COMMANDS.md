@@ -161,8 +161,7 @@ production inventory. Inspect the deployed container to obtain its versions. An
 older production image must include the updated script before using it.
 
 For the purpose and basic usage of Fish, fzf, thefuck, and other bundled
-utilities, see
-[bundled development tools](DEVELOPMENT.md#bundled-development-tools).
+utilities, see [bundled development tools](DEVELOPMENT.md#bundled-development-tools).
 
 The inventory includes PHP, Symfony, PHPUnit, Composer, PHP development tools
 and analyzer plugins, Python/pip and installed Python packages, Node.js/npm/nvm
@@ -239,12 +238,12 @@ make docker-builder-platforms
 
 `project-stats` counts tracked working-tree files and text lines by file type,
 and by project area; it compares source and test sizes and counts excluded
-lockfiles and recognized generated artifacts. CI publishes these
-three outputs and selected `make tool-versions` entries as informational
-summaries on non-scheduled runs. `make phploc` analyzes `src` and writes
-`build/phploc.json`; its output and PHP Insights scores are summarized when PHP
-analyzers run. PhpMetrics output is summarized when its test job runs.
-PR runs also summarize changes by area from the merge base to the PR head.
+lockfiles and recognized generated artifacts. CI publishes these three outputs
+and selected `make tool-versions` entries as informational summaries on
+non-scheduled runs. `make phploc` analyzes `src` and writes `build/phploc.json`;
+its output and PHP Insights scores are summarized when PHP analyzers run.
+PhpMetrics output is summarized when its test job runs. PR runs also summarize
+changes by area from the merge base to the PR head.
 
 Target groups, risk markers, execution routing, and wrapped labels share the
 Makefile's `REGISTER_TARGET` metadata. Recipe descriptions remain beside their
@@ -272,12 +271,10 @@ and PhpMetrics use a streaming SGR-only filter in plain mode where native
 disable flags are unavailable or unreliable. Configuration lint uses the shared
 status helper directly. Tools without force-color support retain their native
 detection. Blocking failures stay nonzero. Compose receives the resolved native
-choice via `COMPOSE_ANSI`.
-`PROGRESS=auto|always|never` controls the spinner and elapsed time shown for
-silent finite commands on an interactive terminal; it is disabled in CI and with
-`NO_COLOR`. See
-[the progress indicator notes](../scripts/README.md#progress-indicator). See
-[the regression guide](../scripts/README.md#output-contract-regressions) for
+choice via `COMPOSE_ANSI`. `PROGRESS=auto|always|never` controls the spinner and
+elapsed time shown for silent finite commands on an interactive terminal; it is
+disabled in CI and with `NO_COLOR`. See [the progress indicator notes](../scripts/README.md#progress-indicator).
+See [the regression guide](../scripts/README.md#output-contract-regressions) for
 individual suites and the informational action-update exception.
 
 Report generators identify their output paths after successful execution and
@@ -425,8 +422,7 @@ so failed checks do not skip cleanup. Keep CI setup separate from a running
 local development stack; both use the same Compose PHP service.
 
 The host Make targets pass your UID and GID to Compose. For IDE Dev Container
-UID/GID configuration, see
-[UID/GID mapping](../.devcontainer/README.md#uidgid-mapping).
+UID/GID configuration, see [UID/GID mapping](../.devcontainer/README.md#uidgid-mapping).
 
 For a targeted test, run `phpunit <test-file-or-directory>` from the repository
 root inside the PHP development container; no explicit runner path is needed.
@@ -605,16 +601,16 @@ make check-action-updates
 
 `make lint-workflows` runs actionlint (with ShellCheck), action-validator and
 zizmor. Zizmor audits workflows for template injection, credential persistence
-and excessive permissions using [`.github/zizmor.yml`](../.github/zizmor.yml).
-Fix findings where possible. For a deliberate exception, add an inline comment
-on the reported line with the reason:
+and excessive permissions using [`.github/zizmor.yml`](../.github/zizmor.yml). Fix
+findings where possible. For a deliberate exception, add an inline comment on
+the reported line with the reason:
 
 ```yaml
 run: echo "$VALUE" >> "$GITHUB_ENV" # zizmor: ignore[github-env] reason
 ```
 
-Rule-wide changes belong in `.github/zizmor.yml`; see
-[`scripts/README.md`](../scripts/README.md) for the full validator behavior.
+Rule-wide changes belong in `.github/zizmor.yml`; see [`scripts/README.md`](../scripts/README.md)
+for the full validator behavior.
 
 To print current GitHub Action pins as Markdown, first open a container shell
 from the host:
@@ -664,8 +660,7 @@ successful command can still report conflicts or skipped files; resolve and
 validate these before considering the update complete. Do not substitute a
 forced `recipes:install` for an update without reviewing its overwrite risk.
 
-Follow the
-[Symfony Flex recipe skill](../.github/skills/update-symfony-recipes/SKILL.md)
+Follow the [Symfony Flex recipe skill](../.github/skills/update-symfony-recipes/SKILL.md)
 for the detailed workflow, preservation of project customizations, and
 change-specific validation.
 
