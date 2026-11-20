@@ -51,7 +51,24 @@ def reports(raw, log, outcome):
     if not reason and "Blocked:" in result:
         reason = "Reason: No detailed diagnostic was captured. See the job log."
 
-    headline = "\n\n".join([*identity, result, *([reason] if reason else [])])
+    explanation = ""
+    if "Blocked: candidate development image did not build" in result:
+        explanation = "**Build error:** The candidate PHP development image could not be built."
+        diagnostics = html.unescape(reason + "\n" + "\n".join(errors))
+        extension = re.search(r"/pear/temp/([A-Za-z0-9_-]+)/", diagnostics)
+        if extension:
+            explanation += (
+                f" PHP extension `{extension[1]}` failed to compile against the candidate PHP runtime."
+            )
+        if "too many arguments to function 'php_verror'" in diagnostics:
+            explanation += (
+                " `php_verror` is called with more arguments than the candidate PHP API accepts."
+            )
+        explanation += " Composer compatibility checks did not run; the upgrade remains blocked."
+
+    headline = "\n\n".join(
+        [*identity, result, *([explanation] if explanation else []), *([reason] if reason else [])],
+    )
     evidence = raw.strip() or "No readiness report was produced."
     if errors:
         evidence += "\n\n### Diagnostic excerpts\n\n<pre>" + html.escape("\n".join(errors)) + "</pre>"

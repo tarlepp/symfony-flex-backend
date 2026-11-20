@@ -34,9 +34,10 @@ jobs:
       - name: Check the next PHP minor against locked platform requirements
         id: php-minor
         shell: bash
-        env:
-          GITHUB_STEP_SUMMARY: ${{ runner.temp }}/php-minor-readiness.md
-        run: bash scripts/docker/docker-images.sh check-php-minor --prepare 2>&1 | tee "$RUNNER_TEMP/php-minor-readiness.log"
+        run: |
+          GITHUB_STEP_SUMMARY="$RUNNER_TEMP/php-minor-readiness.md" \
+            bash scripts/docker/docker-images.sh check-php-minor --prepare 2>&1 |
+            tee "$RUNNER_TEMP/php-minor-readiness.log"
 
       - name: Publish PHP readiness evidence
         id: readiness-report

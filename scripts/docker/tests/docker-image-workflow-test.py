@@ -118,8 +118,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("!cancelled()", steps["readiness-report"]["if"])
         self.assertIn("steps.php-minor.outcome != 'skipped'", steps["readiness-report"]["if"])
         self.assertEqual(readiness["outputs"]["report"], "${{ steps.readiness-report.outputs.report }}")
-        self.assertEqual(
-            steps["php-minor"]["env"]["GITHUB_STEP_SUMMARY"], "${{ runner.temp }}/php-minor-readiness.md",
+        self.assertNotIn("GITHUB_STEP_SUMMARY", steps["php-minor"].get("env", {}))
+        self.assertIn(
+            'GITHUB_STEP_SUMMARY="$RUNNER_TEMP/php-minor-readiness.md"', steps["php-minor"]["run"],
         )
         self.assertIn("steps.php-minor.outputs.prepared == 'true'", steps["minor-auth"]["if"])
         self.assertIn("steps.minor-auth.outputs.method != ''", steps["minor-details"]["if"])
@@ -218,6 +219,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
 
     def test_php_minor_readiness_prepares_files_only_when_all_checks_pass(self):
         dockerfile, path = self.php_minor_fixture()
+        self.summary = self.root / "php-minor-readiness.md"
         original = dockerfile.read_text()
         cases = {
             "ready": (0, "Prepared for a migration PR"),
@@ -395,6 +397,52 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(expected, self.output.read_text())
+
+    def test_build_error_survives_runner_summary_handoff_into_pr(self):
+        _, path = self.php_minor_fixture()
+        check = self.run_script(
+            WORKFLOW, "Check the next PHP minor against locked platform requirements",
+            PATH=path, MODE="build-failure",
+        )
+        self.assertEqual(check.returncode, 0, check.stdout + check.stderr)
+        raw = self.root / "php-minor-readiness.md"
+        self.assertTrue(raw.is_file(), "Readiness evidence must not use the runner-owned summary path")
+        self.assertFalse(self.summary.exists(), "Only the publisher should write the Actions summary")
+        published = self.run_script(
+            WORKFLOW, "Publish PHP readiness evidence", CHECK_OUTCOME="success",
+        )
+        self.assertEqual(published.returncode, 0, published.stderr)
+        outputs = {
+            name: value for name, _, value in re.findall(
+                r"(?m)^(report|actions-report)<<([^\n]+)\n(.*?)\n\2\n",
+                self.output.read_text(), re.DOTALL,
+            )
+        }
+        git = self.root / "git"
+        git.write_text("#!/bin/bash\n[ \"$1\" = diff ] || exit 64\n")
+        git.chmod(0o755)
+        details = self.run_script(
+            WORKFLOW, "Prepare pull request details", BASE_BRANCH="master",
+            PATH=f"{self.root}:{os.environ['PATH']}", PHP_READINESS_REPORT=outputs["report"],
+        )
+        self.assertEqual(details.returncode, 0, details.stderr)
+        body = (self.root / "docker-image-pr.md").read_text()
+        for content in (body, self.summary.read_text()):
+            self.assertNotIn("Unavailable", content)
+            self.assertIn("Candidate: `php:8.6.2-fpm-bookworm`", content)
+            self.assertIn("**Build error:**", content)
+            self.assertIn("PHP extension `apcu` failed to compile", content)
+            self.assertIn(
+                "`php_verror` is called with more arguments than the candidate PHP API accepts",
+                content,
+            )
+            self.assertIn("Composer compatibility checks did not run", content)
+            self.assertIn("too many arguments to function", content)
+            self.assertIn("php_verror", content)
+        self.assertIn(outputs["report"], body)
+        self.assertIn("**Build error:**", body.split("<details>", 1)[0])
+        self.assertNotIn("<details open>", body)
+        self.assertIn("<details open>", self.summary.read_text())
 
     def test_php_minor_pr_details_use_template_and_separate_branch(self):
         (self.root / ".github").mkdir(exist_ok=True)
