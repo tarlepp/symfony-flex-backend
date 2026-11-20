@@ -121,8 +121,8 @@ returning implementer summarizes the final repaired state, not just its initial
 changes. Any subsequent implementation edit requires affected verification to
 run again.
 
-The feature lead's final handoff includes proposed commit messages in the
-readable and copyable format specified by [shared guidance](../.github/skills/shared-guidance.md#handoff).
+The feature lead follows the [shared handoff guidance](../.github/skills/shared-guidance.md#handoff)
+for when to include commit-message proposals and how to format them.
 
 ## Conflict resolution [ᐞ](#table-of-contents)
 

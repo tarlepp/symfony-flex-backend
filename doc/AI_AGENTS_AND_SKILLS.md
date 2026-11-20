@@ -105,7 +105,7 @@ sequenceDiagram
     Check-->>Writer: Independent report, including any repairs
     Writer-->>Architect: Final changes and unchanged verification report
     Architect-->>Lead: Implementation and verification reports
-    Lead-->>User: Outcome, checks, remaining gaps, commit proposals
+    Lead-->>User: Outcome, checks, remaining gaps, commit proposals if applicable
 ```
 
 The architect is called first to design, then again to deliver the approved

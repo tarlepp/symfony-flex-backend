@@ -191,6 +191,10 @@ repair history. Identify checks invalidated and rerun, checks still needed, and
 whether independent verification must resume. Never conceal partial edits: when
 blocked, report the exact current index and rebase state for safe recovery.
 
+For user-facing reports, apply the [shared handoff guidance](../shared-guidance.md#handoff)
+to the final Git state. Report rewritten commits as part of the rebase outcome,
+not as work needing a new commit message.
+
 ---
 
 [Back to previous](../README.md)

@@ -53,10 +53,9 @@ evidence and any access gaps in specialist handoffs. For IDE context, follow the
    task baseline, existing changes, findings, and repair rounds used; resuming
    does not authorize resetting the baseline or repair budget.
 7. Report implemented behavior, changed paths, exact checks and results,
-   verification findings and repairs, and remaining unverified criteria. Include
-   commit-message proposals in the readable and copyable format required by
-   [shared guidance](../skills/shared-guidance.md#handoff). Never describe blocked
-   or partial verification as complete.
+   verification findings and repairs, and remaining unverified criteria. Never
+   describe blocked or partial verification as complete. Follow the
+   [shared rules for when and how to propose commit messages](../skills/shared-guidance.md#handoff).
 
 ## Boundaries and handoffs
 
