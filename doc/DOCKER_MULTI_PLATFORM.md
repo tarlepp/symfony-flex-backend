@@ -536,16 +536,18 @@ credentials are configured. With Docker, buildx, `jq` and `curl`, run the
 read-only check from the repository root on the Docker host:
 
 ```bash
-bash scripts/docker-images.sh check-php-minor
+bash scripts/docker/docker-images.sh check-php-minor
 ```
 
 The check builds a temporary development image only when there is a candidate.
 It checks the existing lockfiles against the real PHP runtime, not Composer's
 simulated `config.platform.php`. An unavailable candidate or compatibility
-blocker is advisory; registry and incomplete check errors exit nonzero. A
-passing result is a signal to prepare a migration PR, not to skip normal CI. The
-workflow uses `--prepare` to update the PHP pin and Composer metadata in its
-checkout before submitting the PR.
+blocker is advisory; registry and incomplete check errors exit nonzero. If the
+candidate build fails, the workflow summary includes up to 20 matching error
+lines (500 characters each); the job log has the complete output. A passing
+result is a signal to prepare a migration PR, not to skip normal CI. The workflow
+uses `--prepare` to update the PHP pin and Composer metadata in its checkout
+before submitting the PR.
 
 To apply the image pin changes locally, run from the repository root on the
 Docker host, review the diff, then verify the pins:

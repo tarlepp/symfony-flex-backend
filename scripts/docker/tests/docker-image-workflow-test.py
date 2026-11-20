@@ -162,7 +162,18 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     ;;
                 "buildx build --file - --target development --load --tag "*. )
                     cat > candidate-Dockerfile
-                    if [[ "$MODE" == build-failure ]]; then exit 1; fi
+                    if [[ "$MODE" == build-failure ]]; then
+                        echo "#18 13.12 /tmp/apcu/apc.c:44:17: error: incompatible <php_verror> & arguments"
+                        printf 'error: %0600d\\n' 0
+                        for ((i = 1; i <= 25; i++)); do
+                            echo "#18 13.13 compiler error: diagnostic $i"
+                        done
+                        echo 'ERROR: failed to build'
+                        exit 1
+                    elif [[ "$MODE" == build-failure-no-diagnostics ]]; then
+                        echo 'Build ended unexpectedly'
+                        exit 1
+                    fi
                     ;;
                 "run --rm --pull=never --network none "*)
                     [[ "$*" == *" --no-interaction --no-plugins --no-scripts check-platform-reqs --lock --format=json" ]]
@@ -206,6 +217,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             "drift": (1, "Check failed"),
             "platform-loss": (1, "Check failed"),
             "build-failure": (0, "Blocked: candidate development image did not build"),
+            "build-failure-no-diagnostics": (0, "Blocked: candidate development image did not build"),
             "absent": (0, "Not available"),
             "registry-error": (1, "Check failed"),
         }
@@ -254,9 +266,17 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     f"FROM php:8.6.2-fpm-bookworm@sha256:{'0' * 64} AS php-upstream\n",
                 )
                 self.assertIn("image rm symfony-php-minor-readiness:", calls)
-                if mode == "build-failure":
+                if mode in {"build-failure", "build-failure-no-diagnostics"}:
                     self.assertNotIn("check-platform-reqs", calls)
                     self.assertIn("Composer checks did not run.", self.summary.read_text())
+                    if mode == "build-failure":
+                        summary = self.summary.read_text()
+                        self.assertIn("/tmp/apcu/apc.c:44:17: error: incompatible &lt;php_verror&gt; &amp; arguments", summary)
+                        self.assertIn("error: " + "0" * 493 + "\n", summary)
+                        self.assertIn("compiler error: diagnostic 18", summary)
+                        self.assertNotIn("compiler error: diagnostic 19", summary)
+                    else:
+                        self.assertIn("No matching build diagnostics were found", self.summary.read_text())
                     continue
                 for project in (".", "tools/analyzer", "tools/linter"):
                     self.assertIn(f"--working-dir=/app/{project} ", calls)

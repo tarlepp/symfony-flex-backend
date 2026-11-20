@@ -1366,9 +1366,9 @@ PRs. Lookup and invalid update-pin errors remain nonzero, even alongside
 confirmed updates. Unknown or repeated update-check options return `64`. The
 default script and Make policy is unchanged.
 
-`bash scripts/docker-images.sh check-php-minor` runs the read-only part of the
-PHP readiness job from the repository root on the Docker host. It checks the next
-stable minor against the project's existing Composer lockfiles in a temporary
+`bash scripts/docker/docker-images.sh check-php-minor` runs the read-only part of
+the PHP readiness job from the repository root on the Docker host. It checks the
+next stable minor against the project's existing Composer lockfiles in a temporary
 development image. No candidate and compatibility blockers return zero; registry
 or incomplete checks return nonzero. The workflow adds `--prepare` to write the
 PHP pin and Composer metadata only after the checks pass; the script itself

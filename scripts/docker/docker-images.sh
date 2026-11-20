@@ -578,9 +578,21 @@ command_check_php_minor() (
     if ! docker buildx build --file - --target development --load --tag "$image" . \
         < "$work/Dockerfile" 2>&1 | tee "$work/build.log"; then
         php_minor_result "Blocked: candidate development image did not build (see job log)"
-        summary_error="$(awk '/(^ERROR:|^#[0-9]+ ERROR:)/ { last = $0 } END { print substr(last, 1, 500) }' "$work/build.log")"
+        summary_error="$(awk '
+            {
+                line = $0
+                sub(/^#[0-9]+[[:space:]]+[0-9.]+[[:space:]]+/, "", line)
+                if (tolower(line) ~ /error:|failed/ && count < 20) {
+                    print substr(line, 1, 500)
+                    count++
+                }
+            }
+        ' "$work/build.log")"
         if [ -n "$summary_error" ]; then
-            github_summary "<pre>$(jq -Rr '@html' <<< "$summary_error")</pre>" ""
+            github_summary "Build diagnostics (up to 20 matching lines, 500 characters each):" \
+                "<pre>$(jq -Rs -r '@html' <<< "$summary_error")</pre>" ""
+        else
+            github_summary "No matching build diagnostics were found; see the job log." ""
         fi
         github_summary "Composer checks did not run."
         return 0
