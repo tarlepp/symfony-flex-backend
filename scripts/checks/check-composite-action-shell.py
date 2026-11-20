@@ -1,6 +1,35 @@
 #!/usr/bin/env python3
 """ShellCheck Bash/sh steps in local composite actions without executing them."""
 
+# The module docstring is also the CLI help summary; keep maintainer details
+# in comments so they do not change the help output.
+#
+# Usage:
+#   From the repository root on the Docker host:
+#     make lint-workflows
+#   Direct invocation inside the PHP development container takes
+#   --shellcheck PATH followed by one or more local action metadata paths.
+#
+# Requirements:
+#   PyYAML and a ShellCheck executable supplied via --shellcheck.
+#
+# Details:
+#   Skips non-composite actions and steps without a run body. Replaces GitHub
+#   expressions with placeholders before analysis; their values are not checked.
+#
+# Exit Status:
+#   Returns zero if all checks pass or are skipped. Otherwise returns the
+#   first failure status; metadata and tool-launch errors count as status 1.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` invokes it after metadata validation.
+#     - `scripts/checks/tests/composite-action-shell-test.py` checks fixtures.
+#   Makefile:
+#     - `lint-workflows` runs the validator in the PHP development container.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` (`lint-workflows` job, via Make).
+
 import argparse
 from pathlib import Path
 import re
