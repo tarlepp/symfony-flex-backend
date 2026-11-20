@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
-"""Exercise composite action parsing and real ShellCheck failure propagation."""
+"""Test composite action shell validation with real ShellCheck diagnostics.
+
+Usage:
+  From the repository root on the Docker host or in the development container:
+    make lint-workflows
+  To run only this suite from the repository root inside the container, with
+  ShellCheck on PATH:
+    python3 scripts/checks/tests/composite-action-shell-test.py "$(command -v shellcheck)"
+
+Requirements:
+  Python 3, PyYAML, and a ShellCheck executable supplied as the first argument.
+  The full workflow validator prepares the pinned ShellCheck version for you.
+
+Details:
+  Tests use temporary action metadata, not repository action files. They
+  verify that shell findings fail validation without executing the step bodies.
+
+Callers:
+  Scripts:
+    - `scripts/checks/lint-workflows.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py` and passes the pinned ShellCheck.
+"""
 
 from pathlib import Path
 import subprocess
@@ -11,6 +32,7 @@ import yaml
 
 
 CHECKER = Path(__file__).resolve().parents[1] / "check-composite-action-shell.py"
+# Both entry points load the module before unittest parses the remaining args.
 SHELLCHECK = sys.argv.pop(1)
 
 
@@ -26,6 +48,7 @@ class CompositeShellTest(unittest.TestCase):
         return self.run_checker(action)
 
     def run_checker(self, *actions, shellcheck=SHELLCHECK):
+        """Capture both output streams and the exit code for assertions."""
         return subprocess.run(
             [sys.executable, str(CHECKER), "--shellcheck", shellcheck,
              *(str(path) for path in actions)],
@@ -89,6 +112,7 @@ class CompositeShellTest(unittest.TestCase):
         self.assertIn("Composite action shell validation failed", result.stderr)
 
     def test_scripts_are_never_executed_and_multiple_actions_are_checked(self):
+        # A harmless write would leave a marker if a step ran instead of being linted.
         marker = self.root / "must-not-exist"
         result = self.check([{"shell": "bash", "run": f"touch '{marker}'"}])
         self.assertEqual(result.returncode, 0, result.stderr)
