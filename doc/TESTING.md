@@ -64,13 +64,12 @@ with unchanged inputs need not be repeated during one agent's work. Independent
 verification must still obtain its own scoped evidence.
 
 * **Documentation only:** for Markdown, AI instructions, skill text, comments,
-  or non-executable examples, run `make lint-markdown` and
-  `python3 scripts/checks/check-skills.py` when Markdown changes. Review example
-  commands, links, and claims against the implementation. Do not run PHPUnit,
-  PHP static analysis, report producers, or commands described by a skill just
-  because their documentation changed. For comments in code, use relevant
-  syntax/style checks; annotations or metadata that tools execute are not
-  comments-only changes.
+  or non-executable examples, run `make lint-markdown` and `make check-skills`
+  when Markdown changes. Check examples, links, and claims for accuracy.
+  Documentation changes alone do not require PHPUnit, PHP static analysis,
+  report producers, or running commands described by a skill. Use relevant
+  syntax and style checks for code comments. Metadata that tools execute is not
+  a comments-only change.
 * **Application behavior:** for PHP logic, API contracts, validation,
   authentication, serialization, or persistence changes, add or update tests at
   the affected boundary and run the smallest relevant class or directory. Run

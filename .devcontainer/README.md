@@ -62,10 +62,16 @@ and `python -m pip` use this environment automatically in `make bash`,
 `make fish`, IDE Dev Container terminals, and `docker compose exec php`. No
 shell-specific activation or host Python installation is needed.
 
-Run all repository Python commands **inside the PHP development container**, not
-in a host terminal. From the host, first open a shell with `make bash` or
-`make fish`; an IDE Dev Container terminal is already inside the container. Then
-run the repository's standard-library documentation checker from `/app`:
+Use the Make target for the documentation checker. Run it from the repository
+root on the Docker host or inside the PHP development container:
+
+```bash
+make check-skills
+```
+
+Run Python directly **inside the PHP development container**, not on the host.
+Open a container shell with `make bash` or `make fish`, or use an IDE Dev
+Container terminal. From the repository root inside the container:
 
 ```bash
 python3 --version
@@ -79,9 +85,6 @@ from the host without an interactive shell, use Docker explicitly:
 ```bash
 docker compose exec -T php python3 scripts/checks/check-skills.py
 ```
-
-Alternatively, run `make check-skills` from either the host or the container.
-The Make target always executes the checker inside Docker.
 
 For third-party packages, run `python -m pip install <package>` inside the
 container to install into the default development venv. These installations are

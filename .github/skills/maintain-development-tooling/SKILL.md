@@ -1,19 +1,22 @@
 ---
 name: maintain-development-tooling
-description: Review and improve shell script readability, repository scripts, Make targets, checker contracts, container forwarding, and offline regressions while preserving behavior and execution boundaries.
+description: Review and improve shell and Python script readability, repository scripts, Make targets, checker contracts, container forwarding, and offline regressions while preserving behavior and execution boundaries.
 ---
 
 # What is this?
 
 <a id="what-is-this"></a>
 
-Use this skill when reviewing or changing repository development scripts, shell
-readability, Make targets, checker behavior, command routing, or script
-regression tests. It owns tooling behavior, not dependency upgrades or
-application features. Use [document-shell-scripts](../document-shell-scripts/SKILL.md)
-for shell-script file headers and explanatory comments. Use
-[document-python-scripts](../document-python-scripts/SKILL.md) for `.py` docs. Use
-[maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for adding
+Use this skill for shell and Python readability reviews, development scripts,
+Make targets, checker behavior, command routing, or script regression tests.
+Dependency upgrades and application features are outside its scope.
+
+Use [document-shell-scripts](../document-shell-scripts/SKILL.md) for shell-script
+file headers and explanatory comments.
+
+For `.py` docs, use [document-python-scripts](../document-python-scripts/SKILL.md).
+
+Use [maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for adding
 or changing scripts under `scripts/`, including tests and callers. Use
 [update-github-workflows](../update-github-workflows/SKILL.md) for CI job behavior,
 [update-github-actions](../update-github-actions/SKILL.md) for action pins, and
@@ -33,7 +36,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
   * [Table of Contents](#table-of-contents)
     * [Tooling path map](#tooling-path-map)
     * [Workflow](#workflow)
-    * [Shell readability reviews](#shell-readability-reviews)
+    * [Script readability reviews](#script-readability-reviews)
+      * [Shell review checks](#shell-readability-reviews)
+      * [Python review checks](#python-readability-reviews)
     * [Validation](#validation)
 
 ## Tooling path map [ᐞ](#table-of-contents)
@@ -176,22 +181,22 @@ Inspect the implementation and its actual callers:
     justified tool dependency changes rather than downloading an alternative ad
     hoc.
 
-## Shell readability reviews [ᐞ](#table-of-contents)
+## Script readability reviews [ᐞ](#table-of-contents)
 
-<a id="shell-readability-reviews"></a>
+<a id="script-readability-reviews"></a>
 
-For repository-wide reviews, inventory tracked shell files from the repository
-root on the Docker host:
+For repository-wide reviews, inventory tracked files for the requested language
+from the repository root on the Docker host:
 
 ```bash
 git ls-files '*.sh'
+git ls-files '*.py'
 ```
 
-Read every inventoried file, including root entrypoints, files under `docker/`,
-sourced shell integrations, shared libraries, and regression fixtures. Inspect
-their Make, CI, Docker, and shell callers as relevant. Do not execute a script
-merely to review it: entrypoints, certificate generation, dependency updates,
-uploads, and Docker maintenance can mutate shared state.
+Read every inventoried file, including entrypoints, helpers, runners, and
+regression fixtures. Inspect actual callers in Make, CI, Docker, and other
+scripts as relevant. Do not execute or import a script merely to review it:
+entrypoints, imports, and tests can have side effects.
 
 Return a backlog grouped by exact file path. For each file, give concrete
 observations with function names or line references, proposed improvements,
@@ -210,8 +215,8 @@ Use this readability rubric when assessing each finding:
 * **Commands and data flow:** Are quoting, optional arguments, pipelines,
   subprocesses, and input/output boundaries legible without hiding behavior?
 * **Abstraction and explanation:** Do functions and comments clarify meaningful
-  units and non-obvious shell behavior without fragmenting simple flows or
-  restating syntax?
+  units and non-obvious behavior without fragmenting simple flows or restating
+  syntax?
 
 Label each proposed improvement as a **quick win** when it is a localized
 readability change that preserves the script's structure, or **structural** when
@@ -233,21 +238,17 @@ Assess these concerns against the actual code:
 * Prefer descriptive names, explicit phases, readable multiline commands, and
   focused functions for substantial parsing, validation, execution, or reporting
   blocks. Keep short linear wrappers simple; do not extract every command,
-  impose arbitrary function/file limits, or split scripts by size alone. Use
-  argument arrays where they clarify quoting and optional flags.
+  impose arbitrary function/file limits, or split scripts by size alone.
 * Remove repeated algorithms through the closest existing owner. Extract a
   helper only when it has a clear responsibility and reduces cognitive load;
   avoid extra files or generic dispatch frameworks for single-use logic.
-* Make state and data flow visible: declare function-local variables, identify
-  intentional shared arrays and side effects, and name internal outcome codes.
-  Explain non-obvious delimiters, regexes, and embedded awk/jq programs. Prefer
-  replacing misleading comments and redundant steps over adding prose that
-  merely repeats each command.
-* Preserve interpreter and sourced-versus-executed behavior, working-directory
-  assumptions, argument boundaries, pipeline/subshell status handling, traps,
-  signals, cleanup, output streams, color controls, and machine-readable data.
-  Do not add blanket `set -euo pipefail` to sourced helpers or status-collecting
-  wrappers; Bash conditional execution can also disable `errexit` in functions.
+* Make state and data flow visible: keep state local where possible, identify
+  intentional shared state and side effects, and name internal outcome codes.
+  Explain non-obvious delimiters and regexes. Replace misleading comments and
+  redundant steps rather than narrating each operation.
+* Preserve interpreter, working-directory assumptions, argument boundaries,
+  failure propagation, signals, cleanup, output streams, color controls, and
+  machine-readable data.
 * Keep test setup, action, and assertions distinguishable. Use named scenarios
   and reusable fixture builders where they remove repetition; unexpected mock
   calls must still fail. Preserve coverage and failure diagnostics, including
@@ -256,8 +257,29 @@ Assess these concerns against the actual code:
 Implement approved items in bounded changesets, preserving the
 [shared branch and publication rules](../shared-guidance.md#preparing-a-change).
 Establish focused behavior coverage before restructuring a complex script. Use
-the validation section below; documentation checks alone do not prove shell
+the validation section below; documentation checks alone do not prove script
 behavior or live CI execution.
+
+### Shell review checks [ᐞ](#table-of-contents)
+
+<a id="shell-readability-reviews"></a>
+
+Include root entrypoints, `docker/` scripts, and sourced integrations. Preserve
+sourced-versus-executed behavior, pipeline and subshell statuses, and traps. Use
+argument arrays where they clarify quoting and optional flags. Explain
+non-obvious embedded awk or jq. Do not add blanket `set -euo pipefail` to
+sourced helpers or status-collecting wrappers; Bash conditional execution can
+also disable `errexit` in functions.
+
+### Python review checks [ᐞ](#table-of-contents)
+
+<a id="python-readability-reviews"></a>
+
+Trace direct execution, imports, and runner-loaded tests. Preserve import-time
+behavior, exception handling, subprocess arguments and status handling, and
+fixture cleanup. Check that fixture paths and mocks still match real callers.
+Use [document-python-scripts](../document-python-scripts/SKILL.md) for headers,
+function contracts, and explanatory comments.
 
 ## Validation [ᐞ](#table-of-contents)
 
@@ -308,6 +330,24 @@ shell, but does not check every shell script in the repository. Use other
 relevant lint commands for scripts outside that list; syntax checks and behavior
 tests do not replace lint. Exercise the real read-only caller where feasible,
 and distinguish network-dependent checks from offline tests.
+
+For executable Python changes, compile each changed file in memory inside the
+PHP development container without importing it or writing bytecode. For example,
+from the repository root on the Docker host:
+
+```bash
+docker compose exec -T php python3 -c '
+from pathlib import Path
+import sys
+
+for filename in sys.argv[1:]:
+    compile(Path(filename).read_bytes(), filename, "exec")
+' scripts/checks/check-skills.py
+```
+
+Replace the example path with the exact changed paths. Run the affected
+regression suite or real read-only caller as appropriate; compilation alone does
+not check imports, runtime behavior, or output contracts.
 
 For this skill's Markdown alone, run from the repository root on the Docker host
 with development services running:

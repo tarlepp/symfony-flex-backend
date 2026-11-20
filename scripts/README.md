@@ -863,17 +863,23 @@ is plain by default.
 
 File: `scripts/checks/check-skills.py`
 
-Run from the repository root **inside the PHP development container**, not on
-the host. Open it with `make bash` or `make fish`, or use an IDE Dev Container
-terminal. Python automatically uses `/home/dev/.venv`. See [Python tooling](../.devcontainer/README.md#python-tooling)
-for details.
+From the repository root on the Docker host or inside the PHP development
+container, use the Make target:
+
+```bash
+make check-skills
+```
+
+To run the script directly, open a container shell with `make bash` or
+`make fish` from the host, or use an IDE Dev Container terminal. From the
+repository root inside the container:
 
 ```bash
 python3 scripts/checks/check-skills.py
 ```
 
-Alternatively, use `make check-skills` from either the host or the container;
-the target always runs the checker inside Docker.
+Python automatically uses `/home/dev/.venv` in the container. See [Python tooling](../.devcontainer/README.md#python-tooling)
+for details.
 
 This standard-library Python check also runs via `make check-skills` in the
 documentation CI job, using the existing Compose `php` development service

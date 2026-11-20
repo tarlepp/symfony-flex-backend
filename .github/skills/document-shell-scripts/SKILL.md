@@ -57,9 +57,10 @@ the script, such as `Usage:`, `Inputs:`, `Environment:`, `Requirements:`,
 `Details:`, `Effects:`, `Exit Status:`, or `Security Note:`. Do not create empty
 sections or force every script into an identical list of headings.
 
-Keep invocations readable and copyable. When a script has multiple modes,
-options, or common invocations, show them as a short list under `Usage:` rather
-than compressing them into one line. For example:
+Follow the [shared command guidance](../shared-guidance.md#updating-documentation):
+show the existing Make target first, then the direct invocation. Keep
+invocations readable and copyable. List meaningful modes or options separately
+under `Usage:`. For example:
 
 ```bash
 #!/usr/bin/env bash
@@ -68,6 +69,7 @@ than compressing them into one line. For example:
 # Check pinned GitHub Actions and workflow tools for available updates.
 #
 # Usage:
+#   make check-action-updates
 #   ./scripts/checks/check-action-updates.sh
 #   ./scripts/checks/check-action-updates.sh --current-pins-md
 #   ./scripts/checks/check-action-updates.sh --tools-only
