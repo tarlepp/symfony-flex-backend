@@ -1,6 +1,42 @@
 #!/usr/bin/env python3
 """Validate skill metadata, index coverage, and repository Markdown links."""
 
+# argparse uses the module docstring as its help summary. Keep these details
+# in comments so the CLI help stays unchanged.
+#
+# Usage:
+#   From the repository root on the Docker host:
+#     make check-skills
+#   From the repository root inside the PHP development container:
+#     python3 scripts/checks/check-skills.py
+#
+# Inputs:
+#   --root selects another checkout or fixture directory. By default, the
+#   repository root is resolved from the script's location, not the cwd.
+#
+# Environment:
+#   COLOR accepts auto (default), always, or never for failure labels.
+#   A nonempty NO_COLOR disables color. Auto requires a stderr terminal
+#   and is disabled by TERM=dumb.
+#
+# Details:
+#   Checks skill front matter, index entries, canonical AI documents, and
+#   local Markdown links and anchors. It does not fetch external links.
+#
+# Exit Status:
+#   0: validation passed; the summary is written to stdout.
+#   1: documentation issues were found and reported to stderr.
+#   2: invalid command-line arguments.
+#
+# Callers:
+#   Makefile:
+#     - `check-skills` runs the checker inside the PHP development container.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` (`lint-documentation` job, via Make).
+#   Scripts:
+#     - `scripts/make/tests/make-check-output-test.py` checks color behavior
+#       against a fixture root.
+
 from __future__ import annotations
 
 import argparse
@@ -44,6 +80,8 @@ def relative_path(path: Path, root: Path) -> str:
     return path.relative_to(root).as_posix()
 
 
+# Skip examples when looking for links and headings, but keep line numbers
+# aligned with the original Markdown for diagnostics.
 def strip_fenced_code(content: str) -> str:
     output = []
     fence_char = None
@@ -70,6 +108,7 @@ def strip_fenced_code(content: str) -> str:
     return "".join(output)
 
 
+# Read only the flat metadata fields this checker needs, not arbitrary YAML.
 def parse_front_matter(skill_file: Path, root: Path, errors: list[str]) -> dict[str, str]:
     display_path = relative_path(skill_file, root)
     content = skill_file.read_text(encoding="utf-8")
@@ -146,6 +185,7 @@ def markdown_anchors(markdown_file: Path) -> set[str]:
         base_slug = markdown_slug(match.group(1))
         if not base_slug:
             continue
+        # Repeated headings get numbered anchors; the first stays unsuffixed.
         duplicate_count = slug_counts[base_slug]
         slug_counts[base_slug] += 1
         anchors.add(base_slug if duplicate_count == 0 else f"{base_slug}-{duplicate_count}")
@@ -153,6 +193,8 @@ def markdown_anchors(markdown_file: Path) -> set[str]:
     return anchors
 
 
+# Leading slashes refer to the checkout root; a fragment alone stays on the
+# current page. Leave repository-containment checks to the caller.
 def resolve_link(source: Path, destination: str, root: Path) -> tuple[Path, str]:
     parsed = urlsplit(destination)
     link_path = unquote(parsed.path)
@@ -169,10 +211,12 @@ def resolve_link(source: Path, destination: str, root: Path) -> tuple[Path, str]
 
 
 def check_markdown_links(markdown_files: list[Path], root: Path, errors: list[str]) -> None:
+    # Several links can target the same page; parse its anchors only once.
     anchor_cache: dict[Path, set[str]] = {}
 
     for markdown_file in markdown_files:
         content = strip_fenced_code(markdown_file.read_text(encoding="utf-8"))
+        # Link-like text in inline code is an example, not a document link.
         content = re.sub(r"`+[^`\n]*`+", "", content)
         for line_number, line in enumerate(content.splitlines(), start=1):
             for match in LINK_PATTERN.finditer(line):
@@ -226,6 +270,7 @@ def repository_markdown_files(root: Path) -> list[Path]:
     return sorted(markdown_files)
 
 
+# Limit coverage counts to the inventory, not links elsewhere in the index.
 def available_skills_section(index_file: Path) -> tuple[str | None, int]:
     lines = index_file.read_text(encoding="utf-8").splitlines()
     start = None
@@ -312,6 +357,7 @@ def check_documentation(root: Path) -> list[str]:
         if not markdown_file.is_file():
             errors.append(f"{relative_doc}: missing canonical AI documentation file")
 
+    # Scan beyond the skills directory to catch stale links in other docs.
     check_markdown_links(repository_markdown_files(root), root, errors)
     return errors
 
