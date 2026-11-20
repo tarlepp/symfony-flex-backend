@@ -1,15 +1,14 @@
 ---
 name: document-python-scripts
-description: Add or revise Python module docstrings and explanatory comments while preserving script behavior.
+description: Document Python script headers, function contracts, and non-obvious logic while preserving script behavior.
 ---
 
 # What is this?
 
 <a id="what-is-this"></a>
 
-Use this skill when adding or revising file-level documentation or code comments
-in tracked Python files (`*.py`). It defines a concise module-docstring layout
-and comment-writing conventions; it does not authorize changing executable
+Use this skill when documenting headers, function contracts, or non-obvious
+logic in tracked Python files (`*.py`). It does not authorize changing executable
 behavior. Use [maintain-development-tooling](../maintain-development-tooling/SKILL.md)
 for behavior changes and [maintain-repository-scripts](../maintain-repository-scripts/SKILL.md)
 for script placement, paths, tests, and callers.
@@ -26,7 +25,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
     * [Python documentation conventions](#python-documentation-conventions)
     * [Caller context](#caller-context)
     * [Workflow](#workflow)
-    * [Code comments](#code-comments)
+    * [Function documentation and code comments](#function-documentation-and-code-comments)
     * [Validation](#validation)
 
 ## Python documentation conventions [ᐞ](#table-of-contents)
@@ -79,6 +78,9 @@ non-obvious defaults, safety boundaries, and important limitations. Avoid
 repeating implementation, describing hypothetical behavior, or copying a lengthy
 manual when a focused reference is more useful.
 
+If the module docstring supplies CLI help or another runtime output, preserve
+its text and put additional maintainer details in a nearby comment block.
+
 ## Caller context [ᐞ](#table-of-contents)
 
 <a id="caller-context"></a>
@@ -118,19 +120,25 @@ helper.
 3. Add or refine the module docstring using the conventions above. Include a
    section only when it clarifies a real contract. Preserve the shebang,
    encoding declaration, imports, and executable statements.
-4. Add code comments only where they explain non-obvious intent, Python
-   semantics, a safety constraint, or a meaningful phase boundary. Prefer a
-   focused comment at the relevant code over expanding the module docstring.
+4. Review function definitions and their bodies as well as the header. Add
+   function documentation or inline comments where they clarify a contract,
+   explain a non-obvious choice, or mark a meaningful phase boundary.
 5. Review the diff for unchanged executable statements, import order, shebangs,
    encoding declarations, and file modes. Do not run scripts if documenting them
    could mutate files, contact services, or affect shared containers.
 
-## Code comments [ᐞ](#table-of-contents)
+## Function documentation and code comments [ᐞ](#table-of-contents)
 
-<a id="code-comments"></a>
+<a id="function-documentation-and-code-comments"></a>
 
+* Prefer a short function docstring for a contract that the name and signature
+  do not convey. Cover relevant assumptions, return or failure behavior, and
+  side effects. Leave self-explanatory helpers alone.
+* Use a comment above the definition instead if changing `__doc__` would alter
+  an observable output or contract.
 * Explain why a non-obvious operation or constraint exists, not what the next
-  statement visibly does.
+  statement visibly does. For example, explain why a parser preserves blank
+  lines for diagnostic offsets or why a check deliberately skips some inputs.
 * Keep comments next to the code they clarify. Update or remove comments made
   inaccurate by a documentation change.
 * Describe actual behavior, including failure handling and side effects; do not
