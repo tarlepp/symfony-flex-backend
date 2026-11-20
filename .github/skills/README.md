@@ -97,6 +97,10 @@ references only for layers the task actually changes:
   behavior, container forwarding, or script regression tests, use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md). Use the
   workflow and dependency skills for those separate contracts.
+* For `.sh` file headers and explanatory comments, use
+  [document-shell-scripts](document-shell-scripts/SKILL.md). Use
+  [maintain-development-tooling](maintain-development-tooling/SKILL.md) when
+  script behavior or tooling contracts change.
 * For Docker build behavior, Compose services, entrypoints, runtime mounts, or
   Dev Container setup, use
   [update-docker-environment](update-docker-environment/SKILL.md). Image
@@ -123,6 +127,7 @@ references only for layers the task actually changes:
 | [add-security-voter](add-security-voter/SKILL.md) | Changing voters, subject-based permissions, or authorization call sites. |
 | [add-validation-constraint](add-validation-constraint/SKILL.md) | Adding or changing a project-specific Symfony Validator constraint and validator. |
 | [debug](debug/SKILL.md) | Diagnosing unexpected application behavior, runtime errors, or failing tests. |
+| [document-shell-scripts](document-shell-scripts/SKILL.md) | Adding or revising shell-script file headers and explanatory comments. |
 | [fix-cve](fix-cve/SKILL.md) | Remediating reported CVEs or failing vulnerability gates with artifact evidence and original-scanner verification. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
