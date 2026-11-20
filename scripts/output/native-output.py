@@ -91,7 +91,7 @@ def _write_all(fd, data):
         data = data[written:]
 
 
-def run(command, filter_type=SgrFilter):
+def run(command, filter_type: type[SgrFilter] | type[IndentFilter] = SgrFilter):
     readers = {}
     child_streams = {}
     terminal_masters = []
@@ -123,6 +123,8 @@ def run(command, filter_type=SgrFilter):
     for destination in (1, 2):
         if child_streams[destination] == subprocess.PIPE:
             stream = process.stdout if destination == 1 else process.stderr
+            if stream is None:
+                raise RuntimeError(f"Child process stream {destination} was not captured")
             readers[stream.fileno()] = (destination, filter_type())
 
     def forward_signal(signum, _frame):
@@ -157,7 +159,12 @@ def run(command, filter_type=SgrFilter):
                 if fd in terminal_masters:
                     os.close(fd)
                 else:
-                    (process.stdout if destination == 1 else process.stderr).close()
+                    stream = process.stdout if destination == 1 else process.stderr
+                    if stream is None:
+                        raise RuntimeError(
+                            f"Child process stream {destination} was not captured",
+                        )
+                    stream.close()
 
     returncode = process.wait()
     return 128 - returncode if returncode < 0 else returncode

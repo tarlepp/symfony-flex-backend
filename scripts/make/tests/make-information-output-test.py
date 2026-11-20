@@ -249,7 +249,9 @@ exit 0
     def test_configuration_lint_uses_shared_statuses_and_real_php(self):
         php = self.root / "bin/php"
         php.unlink()
-        php.symlink_to(shutil.which("php"))
+        php_binary = shutil.which("php")
+        assert php_binary is not None, "php is required for this test"
+        php.symlink_to(php_binary)
         configuration = self.root / "fixture.json"
         for content, status in (('{"valid":true}', 0), ("{broken", 1), (None, 1)):
             for color, no_color, enabled in (
@@ -941,7 +943,9 @@ esac
         for name in ("node", "npm"):
             (self.root / "bin" / name).unlink()
         for name in ("bash", "basename", "dirname", "sed", "awk", "uname"):
-            (self.root / "bin" / name).symlink_to(shutil.which(name))
+            executable = shutil.which(name)
+            assert executable is not None, f"{name} is required for this test"
+            (self.root / "bin" / name).symlink_to(executable)
 
         result = subprocess.run(
             ["/bin/bash", "scripts/reports/tool-versions.sh"],
@@ -982,7 +986,9 @@ esac
         for name in ("node", "npm"):
             (self.root / "bin" / name).rename(runtime / name)
         for name in ("bash", "basename", "dirname", "sed", "awk", "uname"):
-            (self.root / "bin" / name).symlink_to(shutil.which(name))
+            executable = shutil.which(name)
+            assert executable is not None, f"{name} is required for this test"
+            (self.root / "bin" / name).symlink_to(executable)
         nvm = self.root / "nvm"
         nvm.mkdir()
         (nvm / "nvm.sh").write_text(

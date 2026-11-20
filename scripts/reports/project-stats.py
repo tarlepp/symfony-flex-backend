@@ -137,7 +137,7 @@ def main():
         check=True, stdout=subprocess.PIPE,
     ).stdout.split(b"\0")
 
-    statistics = {}
+    statistics: dict[str, tuple[int, int]] = {}
     areas = {name: [0, 0] for name in AREAS}
     exclusions = {"lockfiles": 0, "generated artifacts": 0}
     for name in sorted(set(files) - {b""}):
@@ -205,12 +205,15 @@ def main():
         ("Most files", 1, "files"),
         ("Most text lines", 2, "lines"),
     ):
-        leaders = sorted((row for row in rows if row[index] > 0), key=lambda row: -row[index])[:3]
+        leaders = sorted(
+            (row for row in rows if (row[1] if index == 1 else row[2]) > 0),
+            key=lambda row: -(row[1] if index == 1 else row[2]),
+        )[:3]
         print(f"\n  {highlight(f'{heading}:', '1')}")
         if not leaders:
             print("    None")
         for extension, files_count, lines_count in leaders:
-            value = (files_count, lines_count)[index - 1]
+            value = files_count if index == 1 else lines_count
             print(f"    {extension}: {value:,} {unit if value != 1 else unit[:-1]}")
 
 

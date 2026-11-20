@@ -2,6 +2,8 @@
 """Color PhpMetrics console output without buffering partial lines."""
 
 import sys
+from io import BufferedReader
+from typing import cast
 
 
 def main():
@@ -13,7 +15,8 @@ def main():
     csi = False
     output = sys.stdout.buffer
 
-    while chunk := sys.stdin.buffer.read1(4096):
+    input_stream = cast(BufferedReader, sys.stdin.buffer)
+    while chunk := input_stream.read1(4096):
         rendered = bytearray()
         for byte in chunk:
             if escape:

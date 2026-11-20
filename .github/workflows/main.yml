@@ -120,10 +120,9 @@ jobs:
           docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php python3 scripts/checks/tests/check-workflow-tool-updates-test.py
           bash scripts/make/make.sh lint-python
 
-      - name: Report Python type diagnostics (non-blocking)
+      - name: Check Python types with Pyright
         id: pyright
         if: ${{ !cancelled() && steps.bootstrap.outcome == 'success' && needs.changes.outputs.tooling == 'true' }}
-        continue-on-error: true
         run: bash scripts/make/make.sh typecheck-python
 
       - name: Validate Compose and Dev Container configurations
@@ -152,7 +151,7 @@ jobs:
             'Bootstrap' "$BOOTSTRAP" 'Application information' "$INFO" \
             'Composer validation' "$COMPOSER" 'Runtime requirements' "$REQUIREMENTS" \
             'Symfony YAML' "$YAML" 'Development tooling checks' "$TOOLING" \
-            'Pyright (non-blocking)' "$PYRIGHT" \
+            'Pyright' "$PYRIGHT" \
             'Compose and Dev Container' "$COMPOSE" >> "$GITHUB_STEP_SUMMARY"
 
       - &failure_diagnostics_step

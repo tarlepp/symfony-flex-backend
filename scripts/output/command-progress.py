@@ -179,6 +179,10 @@ class Relay:
         return 128 - status if status < 0 else status
 
     def relay(self):
+        child = self.child
+        if child is None:
+            raise RuntimeError("Cannot relay output before starting the child process")
+
         started = last_output = time.monotonic()
         finished = None
         while self.sources:
@@ -202,7 +206,7 @@ class Relay:
                 self.forward(self.sources[source], data)
                 self.line_start = data.endswith(b"\n")
                 last_output = now
-            if self.child.poll() is not None:
+            if child.poll() is not None:
                 finished = finished or now
                 if now - max(finished, last_output) >= DRAIN_IDLE:
                     break

@@ -545,7 +545,7 @@ stop                        # Stop application containers
 test-make-routing           # Test local and CI Make command forwarding
 test-docker-images          # Test Docker helpers inside the development container
 tool-versions               # Display installed runtimes and development tool versions
-typecheck-python            # Report Python type diagnostics with Pyright
+typecheck-python            # Check Python types with Pyright
 update                      # Update composer dependencies
 update-tools                # Update composer tools dependencies
 ```

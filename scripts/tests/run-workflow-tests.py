@@ -41,6 +41,8 @@ def main():
     path = sys.argv.pop(1)
     sys.argv[0] = path
     spec = importlib.util.spec_from_file_location("workflow_regressions", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load workflow test module: {path}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)

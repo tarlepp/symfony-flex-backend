@@ -497,6 +497,7 @@ class MakeLauncherTest(unittest.TestCase):
             stderr=subprocess.PIPE, start_new_session=True,
         )
         try:
+            assert process.stderr is not None
             self.assertTrue(select.select([process.stderr], [], [], 5)[0])
             self.assertEqual(os.read(process.stderr.fileno(), 64), b"Answer: ")
         finally:
