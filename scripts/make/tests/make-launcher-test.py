@@ -458,7 +458,6 @@ class MakeLauncherTest(unittest.TestCase):
         self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\* \[")
 
     def test_default_development_shell_configs_load_repository_filter(self):
-        scripts = self.root / "scripts"
         self.copy_scripts("make/make.sh", "make/make-shell.sh", "make/make-shell.fish")
         self.makefile.write_text('all:\n\t@printf "[FAIL] native diagnostic\\n" >&2; exit 64\n')
         home = self.root / "home"

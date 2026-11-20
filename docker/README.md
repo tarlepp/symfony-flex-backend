@@ -20,9 +20,9 @@ the [fzf guide](../doc/FZF.md).
 <a id="python-development-dependencies"></a>
 
 The root [`requirements.txt`](../requirements.txt) declares the development container's
-Python dependencies. PyYAML, setuptools, and thefuck share the `/home/dev/.venv`
-virtual environment, which is on `PATH` for both interactive shells and
-noninteractive tooling. System Python remains unchanged.
+Python dependencies. PyYAML, Ruff, setuptools, and thefuck share the
+`/home/dev/.venv` virtual environment, which is on `PATH` for both interactive
+shells and noninteractive tooling. System Python remains unchanged.
 
 Update package pins in `requirements.txt`; dependency updates do not require
 editing `Dockerfile`. The manifest is copied before installation so changes

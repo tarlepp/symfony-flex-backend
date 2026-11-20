@@ -18,7 +18,7 @@ TARGETS = (
     "run-tests", "run-tests-php", "run-tests-phpdbg", "infection", "phpcs", "ecs",
     "ecs-fix", "phpinsights", "phplint", "php-parallel-lint", "psalm",
     "psalm-shepherd", "psalm-github", "phpstan", "phpstan-github",
-    "lint-configuration", "lint-yaml", "lint-markdown", "composer-normalize",
+    "lint-configuration", "lint-yaml", "lint-markdown", "lint-python", "composer-normalize",
     "composer-validate", "composer-require-checker", "composer-unused",
 )
 
@@ -95,7 +95,7 @@ for argument in "$@"; do
 done
 """
         for name in (
-            "bin/php", "bin/phpdbg", "bin/python3", "bin/composer", "bin/npx", "bin/sleep", "bin/console",
+            "bin/php", "bin/phpdbg", "bin/python3", "bin/composer", "bin/npx", "bin/ruff", "bin/sleep", "bin/console",
             "vendor/bin/phpunit", "vendor/bin/infection", "vendor/bin/parallel-lint",
             "vendor/bin/phpstan", "tools/02_phpstan/vendor/phpstan/phpstan/phpstan",
         ):
@@ -148,7 +148,8 @@ done
             ("infection", "console"), ("phpcs", "php"), ("ecs", "php"),
             ("php-parallel-lint", "parallel-lint"), ("psalm-github", "console"),
             ("phpstan-github", "phpstan"), ("lint-yaml", "console"),
-            ("lint-markdown", "npx"), ("composer-validate", "composer"),
+            ("lint-markdown", "npx"), ("lint-python", "ruff"),
+            ("composer-validate", "composer"),
         ):
             with self.subTest(target=target, command=command):
                 result, _ = self.run_target(target, FAIL_COMMAND=command)
@@ -323,6 +324,12 @@ done
             self.assertIn("[FAIL]", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
             self.assertTrue(calls)
+
+    def test_python_lint_is_read_only_and_uses_ruff_defaults(self):
+        result, calls = self.run_target("lint-python")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("ruff check .", calls)
+        self.assertNotIn("--fix", calls)
 
     def test_application_recipes_do_not_own_container_forwarding(self):
         makefile = (ROOT / "Makefile").read_text()
