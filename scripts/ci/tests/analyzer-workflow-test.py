@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Exercise change detection, job contracts and merge gates from the workflow."""
+"""Test CI job wiring, merge gates, report processing, and change selection.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make lint-workflows
+  To run only this suite from the repository root inside the container:
+    python3 scripts/ci/tests/analyzer-workflow-test.py
+
+Requirements:
+  Python 3, Bash, Git, and standard Linux command-line tools.
+
+Details:
+  The suite reads the checked-out workflow and exercises its helpers offline.
+  It uses temporary Git history and report fixtures, and stubs Docker calls
+  rather than starting containers or running hosted CI jobs.
+
+Callers:
+  Scripts:
+    - `scripts/checks/lint-workflows.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -17,6 +37,7 @@ CONTENT = WORKFLOW.read_text()
 
 
 def job(name):
+    """Extract the named job's raw YAML block for source-level assertions."""
     match = re.search(
         rf"^  {re.escape(name)}:\n(.*?)(?=^  [a-z][a-z-]*:\n|\Z)",
         CONTENT, re.MULTILINE | re.DOTALL,
@@ -27,6 +48,7 @@ def job(name):
 
 
 def without_overview(section):
+    """Exclude the advisory overview when testing validation failure policy."""
     result, count = re.subn(
         r"^      - name: Publish job overview\n.*?(?=^      - |\Z)",
         "", section, flags=re.MULTILINE | re.DOTALL,
@@ -37,6 +59,7 @@ def without_overview(section):
 
 
 def dependencies(name):
+    """Read the scalar or block-list needs forms used by this workflow."""
     section = job(name)
     match = re.search(r"^    needs:([^\n]*)\n((?:      - [^\n]+\n)*)", section, re.MULTILINE)
     if match is None:
@@ -765,10 +788,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         )
 
     def run_gate(self, name, event="pull_request", lightweight="success", **overrides):
+        """Run the gate script wired into the job with simulated CI results."""
         section = job(name)
         script = re.search(r"^        run: bash (scripts/ci/ci-[\w-]+\.sh)$", section, re.MULTILINE)
         assert script is not None, f"Missing gate script for {name}"
         variables = re.findall(r"^          ([A-Z_]+):", section, re.MULTILINE)
+        # Derive the inputs from the job so the fixture follows new gate bindings.
         environment = dict(os.environ, **dict.fromkeys(variables, "success"))
         environment.update(EVENT_NAME=event,
                            DOCUMENTATION_CHANGED="true", REF="refs/heads/master")
@@ -1398,6 +1423,7 @@ class TestReportProcessingTest(unittest.TestCase):
         path.write_text(content)
 
     def run_report(self, operation):
+        """Run the real report helper with paths relative to the fixture root."""
         return subprocess.run(
             ["python3", str(WORKFLOW.parents[2] / "scripts/ci/ci-test-reports.py"), operation],
             cwd=self.root, text=True, capture_output=True, check=False, timeout=10,
@@ -1651,6 +1677,7 @@ class ChangeDetectionTest(unittest.TestCase):
         self.git("commit", "--quiet", "-m", "Fixture")
 
     def detect(self, event="pull_request", base=None, head=None, **overrides):
+        """Run change detection and capture its flags, reasons, and job preview."""
         output = self.root / ".git/detection-output"
         output.unlink(missing_ok=True)
         environment = dict(
