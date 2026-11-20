@@ -1,0 +1,167 @@
+---
+name: document-python-scripts
+description: Add or revise Python module docstrings and explanatory comments while preserving script behavior.
+---
+
+# What is this?
+
+<a id="what-is-this"></a>
+
+Use this skill when adding or revising file-level documentation or code comments
+in tracked Python files (`*.py`). It defines a concise module-docstring layout
+and comment-writing conventions; it does not authorize changing executable
+behavior. Use [maintain-development-tooling](../maintain-development-tooling/SKILL.md)
+for behavior changes and [maintain-repository-scripts](../maintain-repository-scripts/SKILL.md)
+for script placement, paths, tests, and callers.
+
+Follow the [shared skill guidance](../shared-guidance.md), including
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+
+## Table of Contents [ᐞ](#table-of-contents)
+
+<a id="table-of-contents"></a>
+
+* [What is this](#what-is-this)
+  * [Table of Contents](#table-of-contents)
+    * [Python documentation conventions](#python-documentation-conventions)
+    * [Caller context](#caller-context)
+    * [Workflow](#workflow)
+    * [Code comments](#code-comments)
+    * [Validation](#validation)
+
+## Python documentation conventions [ᐞ](#table-of-contents)
+
+<a id="python-documentation-conventions"></a>
+
+Inspect the module and its callers before writing its docstring:
+
+* Inventory tracked Python files from the repository root with
+  `git ls-files '*.py'`. This includes entrypoints, helpers, tests, and
+  cross-group runners.
+* Read the complete target and relevant Make, CI, Docker, or Python callers.
+  Verify invocation, working directory, inputs, environment variables,
+  prerequisites, outputs, exit behavior, side effects, and execution host
+  against the implementation.
+* Use the module docstring to explain the file's purpose. Place it after a
+  shebang and encoding declaration and before imports such as `__future__`.
+  Preserve both declarations.
+
+Use a triple-quoted module docstring with an opening sentence that explains the
+module's purpose. Do not prefix it with `Purpose:`. Separate the opening
+sentence and each applicable section with a blank line. Put each section label
+on its own line and indent its content by two spaces. Use only supported
+sections, such as `Usage:`, `Inputs:`, `Environment:`, `Requirements:`,
+`Details:`, `Effects:`, `Exit Status:`, or `Security Note:`. Do not create empty
+sections or force every module into an identical list of headings.
+
+Keep invocations readable and copyable. When a module has multiple modes,
+options, or common invocations, show them as a short list under `Usage:`.
+Describe supported commands rather than inventing examples. For example:
+
+```python
+#!/usr/bin/env python3
+"""Validate skill metadata, index coverage, and repository Markdown links.
+
+Usage:
+  python3 scripts/checks/check-skills.py
+  make check-skills
+
+Requirements:
+  Python 3.
+
+Security Note:
+  Reads repository Markdown and does not execute scripts.
+"""
+```
+
+Keep sections accurate, concise, and specific to the module. Document
+non-obvious defaults, safety boundaries, and important limitations. Avoid
+repeating implementation, describing hypothetical behavior, or copying a lengthy
+manual when a focused reference is more useful.
+
+## Caller context [ᐞ](#table-of-contents)
+
+<a id="caller-context"></a>
+
+When repository callers add useful context, include a `Callers:` section. Group
+details under headings such as `Makefile:`, `GitHub Actions:`, `Docker:`, or
+`Scripts:` and list actual targets, workflow files, or script paths. For example:
+
+```python
+"""Validate skill metadata and repository documentation links.
+
+Callers:
+  Makefile:
+    - `check-skills` target invokes this checker inside Docker.
+"""
+```
+
+Trace direct invocations and Make-to-workflow calls from current files,
+including `Makefile`, `.github/workflows/`, `.github/actions/`, `Dockerfile`,
+and neighboring scripts. Identify relations such as “invokes” or “via Make
+target” when not apparent. Include only repository-owned runtime or development
+callers. Static-analysis lists, path filters, documentation, and
+source-inspection tests are not runtime callers. Omit the section when no useful
+caller exists. Keep lists concise; do not enumerate every consumer of a generic
+helper.
+
+## Workflow [ᐞ](#table-of-contents)
+
+<a id="workflow"></a>
+
+1. Establish whether the request is documentation-only. If it also changes
+   script behavior, follow [maintain-development-tooling](../maintain-development-tooling/SKILL.md)
+   for the behavior contract, callers, tests, and tooling validation.
+2. Read the module and callers. Document supported invocations, inputs, outputs,
+   status, side effects, and execution context. Distinguish host from container
+   execution and tests from runtime entrypoints.
+3. Add or refine the module docstring using the conventions above. Include a
+   section only when it clarifies a real contract. Preserve the shebang,
+   encoding declaration, imports, and executable statements.
+4. Add code comments only where they explain non-obvious intent, Python
+   semantics, a safety constraint, or a meaningful phase boundary. Prefer a
+   focused comment at the relevant code over expanding the module docstring.
+5. Review the diff for unchanged executable statements, import order, shebangs,
+   encoding declarations, and file modes. Do not run scripts if documenting them
+   could mutate files, contact services, or affect shared containers.
+
+## Code comments [ᐞ](#table-of-contents)
+
+<a id="code-comments"></a>
+
+* Explain why a non-obvious operation or constraint exists, not what the next
+  statement visibly does.
+* Keep comments next to the code they clarify. Update or remove comments made
+  inaccurate by a documentation change.
+* Describe actual behavior, including failure handling and side effects; do not
+  promise safety, validation, cleanup, portability, or read-only behavior unless
+  the implementation and its callers establish it.
+* Avoid narrating statements or adding comments only to increase coverage. Do
+  not turn a documentation-only change into a refactor.
+
+## Validation [ᐞ](#table-of-contents)
+
+<a id="validation"></a>
+
+For docstring- or comment-only changes, inspect the diff to confirm executable
+statements and file modes are unchanged. Tests and static analysis apply when
+executable code changes, not merely because a file ends in `.py`. For code
+changes, follow [maintain-development-tooling](../maintain-development-tooling/SKILL.md#validation).
+
+Run the documentation checks from the repository root on the Docker host with
+development services running:
+
+```bash
+make lint-markdown
+make check-skills
+```
+
+`check-skills` verifies skill metadata, index coverage, and local Markdown links
+and anchors; it does not enforce whether a module's documented contract matches
+its implementation. Report exact checks and any remaining blockers.
+
+---
+
+[Back to previous](../README.md)
+
+[Back to main README.md](../../../README.md)

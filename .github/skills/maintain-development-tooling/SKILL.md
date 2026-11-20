@@ -12,6 +12,7 @@ readability, Make targets, checker behavior, command routing, or script
 regression tests. It owns tooling behavior, not dependency upgrades or
 application features. Use [document-shell-scripts](../document-shell-scripts/SKILL.md)
 for shell-script file headers and explanatory comments. Use
+[document-python-scripts](../document-python-scripts/SKILL.md) for `.py` docs. Use
 [maintain-repository-scripts](../maintain-repository-scripts/SKILL.md) for adding
 or changing scripts under `scripts/`, including tests and callers. Use
 [update-github-workflows](../update-github-workflows/SKILL.md) for CI job behavior,
