@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
-"""Offline regression checks for informational and blocking check outcomes."""
+"""Verify that informational and blocking checks report and propagate outcomes.
+
+Usage:
+  From the repository root inside the PHP development container:
+    python3 scripts/checks/tests/check-outcomes-test.py
+
+Requirements:
+  Python 3, Bash, and Make. Composer and the security checker are stubbed.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` runs this offline suite.
+  Makefile:
+    - `test-command-output` runs the aggregate suite.
+  GitHub Actions:
+    - `.github/workflows/main.yml` (`lint-configuration` job, via Make).
+"""
 
 import os
 from pathlib import Path
@@ -13,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 class CheckOutcomesTest(unittest.TestCase):
+    # Handled advisory outcomes can print WARN or FAIL without failing Make.
     def test_action_wrapper_preserves_informational_policy(self):
         for status, label in ((0, "OK"), (1, "WARN"), (2, "FAIL"), (7, "FAIL"),
                               (64, "FAIL"), (130, "WARN"), (143, "WARN")):
@@ -56,7 +73,8 @@ class CheckOutcomesTest(unittest.TestCase):
                 os.environ, PATH=str(root), COLOR="never", NO_COLOR="",
                 CALLS=str(root / "calls"), COMPOSER_STATUS="0",
             )
-            # The production scripts resolve their helper relative to their own path.
+            # Keep PATH isolated from real tools while letting the copied
+            # security script resolve its sibling output helper.
             (root / "dirname").write_text(
                 "#!/bin/bash\nprintf '%s\\n' \"$FIXTURE_ROOT/scripts/checks\"\n",
             )
@@ -142,6 +160,7 @@ class CheckOutcomesTest(unittest.TestCase):
                         cwd=root, env=dict(os.environ, CHECKER_STATUS=str(status), COLOR="never"),
                         text=True, capture_output=True, check=False,
                     )
+                    # Make reports a recipe failure as 2, not the checker status.
                     self.assertEqual(result.returncode, 0 if status < 3 else 2, result.stderr)
                     self.assertIn(f"[{label}]", result.stderr)
                     self.assertEqual(result.stderr.count("[RUN]"), 1)

@@ -11,7 +11,7 @@ Use this skill when adding or changing scripts under `scripts/`, including shell
 and Python helpers, regression tests, test runners, and their callers. It covers
 placement, path integrity, and focused behavior validation. Use
 [maintain-development-tooling](../maintain-development-tooling/SKILL.md) for tooling
-contracts, Make routing, checker behavior, and shell readability reviews. Use
+contracts, Make routing, checker behavior, and script readability reviews. Use
 [document-shell-scripts](../document-shell-scripts/SKILL.md) for `.sh` headers and
 explanatory comments and [document-python-scripts](../document-python-scripts/SKILL.md)
 for Python module docstrings and explanatory comments. For CI behavior or
@@ -125,10 +125,12 @@ make lint-markdown
 make check-skills
 ```
 
-For changed Bash scripts, check syntax for each exact changed path inside the
-PHP development container. Run the focused suite for the changed group and
-affected aggregate or CI entry point when relevant. Do not treat documentation
-checks or an offline mock as proof that a live workflow or external service ran.
+For executable Bash or Python changes, follow the tooling skill's syntax check
+for each exact changed path inside the PHP development container. Run the
+focused suite and any affected aggregate or CI entry point when relevant.
+
+Documentation checks and offline mocks do not prove that a live workflow or
+external service ran.
 
 ---
 

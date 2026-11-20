@@ -83,8 +83,8 @@ references only for layers the task actually changes:
   catalogs, or timezone behavior, use [update-localization](update-localization/SKILL.md).
   User preferences, translator fallback, and storage timezone are distinct
   contracts.
-* For shell readability reviews, repository scripts, Make targets, checker
-  behavior, container forwarding, or script regression tests, use
+* For shell or Python readability reviews, repository scripts, Make targets,
+  checker behavior, container forwarding, or script regression tests, use
   [maintain-development-tooling](maintain-development-tooling/SKILL.md). Use the
   workflow and dependency skills for those separate contracts.
 * For adding or changing scripts under `scripts/`, including responsibility
@@ -126,7 +126,7 @@ references only for layers the task actually changes:
 | [fix-cve](fix-cve/SKILL.md) | Remediating reported CVEs or failing vulnerability gates with artifact evidence and original-scanner verification. |
 | [implement-api-authentication](implement-api-authentication/SKILL.md) | Changing JWT/API-key authentication or broader access policy. |
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
-| [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Reviewing shell readability or changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
+| [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Reviewing shell or Python readability or changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
 | [maintain-repository-scripts](maintain-repository-scripts/SKILL.md) | Adding or changing scripts under `scripts/`, their tests, or callers. |
 | [resolve-git-conflicts](resolve-git-conflicts/SKILL.md) | Resolving authorized Git rebase conflicts, including rewritten stacked PR parents. |
 | [update-api-documentation](update-api-documentation/SKILL.md) | Changing OpenAPI metadata, schemas, reusable responses, security descriptions, or documentation areas. |
@@ -169,10 +169,9 @@ references only for layers the task actually changes:
   prefer extending an existing skill or shared guidance.
 * Check that front-matter names match directory names, every skill is listed
   exactly once, and local links and anchors resolve across repository Markdown
-  files. Run `python3 scripts/checks/check-skills.py` from the repository root inside
-  the PHP development container (`make bash`, `make fish`, or an IDE Dev
-  Container terminal), never directly on the host; Markdown lint alone does not
-  verify those relationships.
+  files. Run `make check-skills` from the repository root on the Docker host or
+  inside the PHP development container. See the [scripts guide](../../scripts/README.md#skill-documentation-checker)
+  for direct invocation. Markdown lint alone does not verify these relationships.
 * Verify referenced classes, commands, flags, and example files against the
   current repository. Distinguish required policy from illustrative examples; do
   not turn one implementation detail into an unconditional rule.

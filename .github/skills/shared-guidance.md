@@ -217,12 +217,13 @@ aligned with the implemented contract where affected. Before editing:
 * Verify commands against the Makefile, scripts, or current tool help, and
   verify referenced paths and examples against files that exist in the
   repository.
+* Document an existing Make target first. For container-routed targets, show
+  that Make works from the repository root on the host or inside the PHP
+  development container. Then show the supported direct script invocation,
+  labeled with its execution environment. Keep host-only targets on the host.
 * Use relative links to existing Markdown files and valid heading or explicit
-  anchors. Run `python3 scripts/checks/check-skills.py` from the repository root
-  inside the PHP development container (`make bash`, `make fish`, or an IDE Dev
-  Container terminal), never directly on the host, to check local links and
-  anchors across repository Markdown files, as well as `make lint-markdown` for
-  Markdown style.
+  anchors. Run `make check-skills` to check local links and anchors and
+  `make lint-markdown` for Markdown style.
 * Follow [the copy-paste instruction requirements](../../AGENTS.md#clarification-and-documentation)
   for every use case, including troubleshooting and CI reproduction. Label the
   execution environment, show setup separately from subsequent commands, and

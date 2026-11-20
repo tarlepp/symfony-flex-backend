@@ -44,6 +44,9 @@ Inspect the module and its callers before writing its docstring:
 * Use the module docstring to explain the file's purpose. Place it after a
   shebang and encoding declaration and before imports such as `__future__`.
   Preserve both declarations.
+* Distinguish direct execution, imports, and tests loaded by a runner. Do not
+  show a standalone command for an import-only module. Note import-time behavior
+  or runner-supplied arguments when they affect use.
 
 Use a triple-quoted module docstring with an opening sentence that explains the
 module's purpose. Do not prefix it with `Purpose:`. Separate the opening
@@ -53,17 +56,19 @@ sections, such as `Usage:`, `Inputs:`, `Environment:`, `Requirements:`,
 `Details:`, `Effects:`, `Exit Status:`, or `Security Note:`. Do not create empty
 sections or force every module into an identical list of headings.
 
-Keep invocations readable and copyable. When a module has multiple modes,
-options, or common invocations, show them as a short list under `Usage:`.
-Describe supported commands rather than inventing examples. For example:
+Keep invocations readable and copyable. Follow the [shared command guidance](../shared-guidance.md#updating-documentation):
+show the existing Make target first, then the direct invocation. List meaningful
+modes or options separately under `Usage:`. For example:
 
 ```python
 #!/usr/bin/env python3
 """Validate skill metadata, index coverage, and repository Markdown links.
 
 Usage:
-  python3 scripts/checks/check-skills.py
-  make check-skills
+  From the repository root on the Docker host or in the PHP development container:
+    make check-skills
+  Direct invocation from the repository root inside the container:
+    python3 scripts/checks/check-skills.py
 
 Requirements:
   Python 3.
@@ -106,6 +111,10 @@ callers. Static-analysis lists, path filters, documentation, and
 source-inspection tests are not runtime callers. Omit the section when no useful
 caller exists. Keep lists concise; do not enumerate every consumer of a generic
 helper.
+
+For runner-loaded tests, verify how the runner loads the module and passes
+arguments. For example, [the workflow test runner](../../../scripts/tests/run-workflow-tests.py)
+loads the supplied test file as a module before running `unittest`.
 
 ## Workflow [ᐞ](#table-of-contents)
 
@@ -152,9 +161,8 @@ helper.
 <a id="validation"></a>
 
 For docstring- or comment-only changes, inspect the diff to confirm executable
-statements and file modes are unchanged. Tests and static analysis apply when
-executable code changes, not merely because a file ends in `.py`. For code
-changes, follow [maintain-development-tooling](../maintain-development-tooling/SKILL.md#validation).
+statements and file modes are unchanged. For executable changes, follow the
+[Python syntax and regression guidance](../maintain-development-tooling/SKILL.md#validation).
 
 Run the documentation checks from the repository root on the Docker host with
 development services running:
