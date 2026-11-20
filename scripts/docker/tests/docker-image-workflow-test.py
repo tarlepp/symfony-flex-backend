@@ -705,11 +705,17 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 "annotations": annotations or {},
             }
         old = {"manifests": [
-            descriptor("amd64", "c", {"org.opencontainers.image.revision": "old"}),
+            descriptor("amd64", "c", {
+                "org.opencontainers.image.revision": "old",
+                "org.opencontainers.image.base.name": "php:8-alpine",
+            }),
             descriptor("arm64", "d"),
         ]}
         new = {"manifests": [
-            descriptor("amd64", "e", {"org.opencontainers.image.revision": "<new>"}),
+            descriptor("amd64", "e", {
+                "org.opencontainers.image.revision": "<new>",
+                "org.opencontainers.image.base.name": "php:8.5-alpine",
+            }),
             descriptor("386", "f"),
             {"digest": "sha256:" + "1" * 64, "platform": {"os": "unknown", "architecture": "unknown"}},
         ]}
@@ -728,6 +734,16 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("&lt;new&gt;", result.stdout)
         self.assertIn("Non-runnable descriptors", result.stdout)
         self.assertIn("not the publisher's reason or exact package changes", result.stdout)
+        overview, details = result.stdout.split("<details>\n<summary>Show index and platform details</summary>\n", 1)
+        self.assertIn("1 changed, 0 unchanged, 1 added, 1 removed", overview)
+        self.assertIn("Base image metadata (1 platform(s)):", overview)
+        self.assertIn("php:8-alpine", overview)
+        self.assertIn("php:8.5-alpine", overview)
+        self.assertIn("Source revision metadata (1 platform(s)):", overview)
+        self.assertIn("&lt;new&gt;", overview)
+        self.assertNotIn("linux/amd64", overview)
+        self.assertIn("<code>linux/amd64</code>: manifest changed", details)
+        self.assertIn("</details>", details)
         self.assertEqual(len((self.root / "calls").read_text().splitlines()), 2)
 
         result = self.run_script(
@@ -738,6 +754,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
         body = (self.root / "docker-image-pr.md").read_text()
         self.assertIn("<code>linux/amd64</code>: manifest changed", body)
         self.assertIn("org.opencontainers.image.revision", body)
+        self.assertIn("<details>\n<summary>Show index and platform details</summary>", body)
+        self.assertLess(body.index("Runnable platform manifests:"), body.index("<details>"))
 
         unchanged = {"manifests": [descriptor("amd64", "c")]}
         metadata_only = {"manifests": [
@@ -750,6 +768,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("manifest unchanged", result.stdout)
         self.assertIn("org.opencontainers.image.created", result.stdout)
         self.assertIn("Platform descriptor metadata changed", result.stdout)
+        self.assertIn("index changed without a confirmed runnable manifest change", result.stdout)
 
         (self.root / "diff").write_text(
             diff + f"-COPY --from=example:1@sha256:{'c' * 64} /x /x\n",
@@ -763,6 +782,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
         result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("the old index could not be retrieved or parsed", result.stdout)
+        self.assertIn(old_digest, result.stdout)
+        self.assertNotIn("<details>", result.stdout)
 
         (self.root / "old.json").unlink()
         result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)

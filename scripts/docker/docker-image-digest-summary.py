@@ -87,12 +87,12 @@ def render(value):
 
 def report(tag, old_digest, new_digest):
     print(f"\n### <code>{html.escape(tag)}</code>\n")
-    print(f"Old index: <code>{html.escape(old_digest)}</code>  ")
-    print(f"New index: <code>{html.escape(new_digest)}</code>\n")
     old, new = inspect(f"{tag}@{old_digest}"), inspect(f"{tag}@{new_digest}")
     if old is None or new is None:
         missing = "old and new" if old is None and new is None else "old" if old is None else "new"
         print(f"Comparison unavailable: the {missing} index could not be retrieved or parsed.")
+        print(f"Old index: <code>{html.escape(old_digest)}</code>  ")
+        print(f"New index: <code>{html.escape(new_digest)}</code>")
         return
 
     def descriptors(index):
@@ -104,6 +104,38 @@ def report(tag, old_digest, new_digest):
         return result
 
     before, after = descriptors(old), descriptors(new)
+    added = sorted(after.keys() - before.keys())
+    removed = sorted(before.keys() - after.keys())
+    common = before.keys() & after.keys()
+    comparable = [name for name in common if len(before[name]) == len(after[name]) == 1]
+    changed = [name for name in comparable if before[name][0]["digest"] != after[name][0]["digest"]]
+    ambiguous = sorted(common - set(comparable))
+    print(f"* Runnable platform manifests: {len(changed)} changed, "
+          f"{len(comparable) - len(changed)} unchanged, {len(added)} added, {len(removed)} removed.")
+    if ambiguous:
+        print(f"* {len(ambiguous)} platform(s) have multiple descriptors and require manual comparison.")
+    for label, key in (
+        ("Base image", "org.opencontainers.image.base.name"),
+        ("Source revision", "org.opencontainers.image.revision"),
+    ):
+        transitions = defaultdict(int)
+        for name in comparable:
+            first = before[name][0].get("annotations") or {}
+            second = after[name][0].get("annotations") or {}
+            if not isinstance(first, dict) or not isinstance(second, dict):
+                continue
+            previous, current = first.get(key), second.get(key)
+            if previous != current:
+                transitions[(render(previous), render(current))] += 1
+        for (previous, current), count in sorted(transitions.items()):
+            print(f"* {label} metadata ({count} platform(s)): "
+                  f"<code>{previous}</code> → <code>{current}</code>.")
+    if old != new and not changed and not added and not removed:
+        print("* The index changed without a confirmed runnable manifest change; see details.")
+
+    print("\n<details>\n<summary>Show index and platform details</summary>\n")
+    print(f"Old index: <code>{html.escape(old_digest)}</code>  ")
+    print(f"New index: <code>{html.escape(new_digest)}</code>\n")
     if not before and not after:
         print("* No runnable platform descriptors were available for comparison.")
     for name in sorted(before.keys() | after.keys()):
@@ -142,6 +174,7 @@ def report(tag, old_digest, new_digest):
         print("* Index ordering or metadata changed; runnable platform descriptors are unchanged.")
     if old == new:
         print("* Retrieved index contents are identical despite different index digests.")
+    print("\n</details>")
 
 
 def main():
