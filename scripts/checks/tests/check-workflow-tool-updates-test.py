@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Offline regression checks for GitHub Action and workflow-tool updates."""
+"""Test action and workflow-tool pin discovery, updates, and reporting offline.
+
+Usage:
+  From the repository root inside the PHP development container:
+    python3 scripts/checks/tests/check-workflow-tool-updates-test.py
+
+Requirements:
+  Python 3, Bash, and standard Linux command-line tools. GitHub lookups use
+  fixture data instead of the network. The unreadable-file case requires a
+  non-root user.
+
+Details:
+  Each checker invocation uses temporary workflows, action metadata, and tool
+  pins. Tests compare direct checker outcomes with the informational output
+  wrapper, which can report updates or lookup errors without failing Make.
+
+Callers:
+  GitHub Actions:
+    - `.github/workflows/main.yml` runs this suite directly in the
+      `lint-configuration` job, separately from `make test-command-output`.
+"""
 
 import os
 from pathlib import Path
@@ -22,6 +42,12 @@ class ToolUpdatesTest(unittest.TestCase):
                     sha_failure_status=1, workflow_content=None,
                     composite_content=None, files=None, missing_directory=None,
                     find_status=None, unreadable_file=None):
+        """Run the real checker against isolated inputs and capture its result.
+
+        By default, only tool pins are checked. Pass an empty mode to check
+        actions too, or enable wrapping to exercise Make's advisory policy.
+        Nonzero exit codes are returned for assertions rather than raised.
+        """
         with tempfile.TemporaryDirectory(prefix="tool-update-test-") as directory:
             root = Path(directory)
             (root / "workflows").mkdir()
@@ -64,6 +90,8 @@ class ToolUpdatesTest(unittest.TestCase):
             )
             git = root / "git"
             (root / "git-error").write_text(git_error)
+            # Tag discovery omits peeled refs; exact lookups can return them.
+            # Reject unexpected calls instead of falling back to real Git.
             git.write_text(
                 '#!/bin/bash\n'
                 + f'cat "{root}/git-error" >&2\n'
@@ -400,6 +428,8 @@ class ToolUpdatesTest(unittest.TestCase):
                 for wrapped in (False, True):
                     with self.subTest(older=older, newer=newer, current=current, wrapped=wrapped):
                         current_sha = SHA if current == older else NEW_SHA
+                        # The tag listing exposes the tag object; the exact
+                        # lookup must supply the commit used for the pin.
                         result = self.run_checker(
                             f"{SHA}\trefs/tags/v1.0.0", mode="", wrapped=wrapped,
                             workflow_content=(
