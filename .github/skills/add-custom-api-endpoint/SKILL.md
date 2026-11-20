@@ -14,8 +14,7 @@ controller unless the requested behavior actually needs those layers. For a
 complete CRUD feature, use [add-rest-resource](../add-rest-resource/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -64,17 +63,15 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    unintentionally. Inspect request-body handling before choosing how JSON is
    mapped. `RestDtoValueResolver` is for registered generic REST controller
    create/update/patch actions; do not assume it binds DTOs to custom `__invoke`
-   controllers. Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
-   when request mapping, DTO validation, or AutoMapper configuration changes.
+   controllers. Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) when
+   request mapping, DTO validation, or AutoMapper configuration changes.
 6. Apply authorization explicitly at the endpoint or relevant service boundary
    using the established security attributes and voter patterns. Trace the
    actual caller identity, subject, and route argument binding; do not assume
    authentication alone permits the operation. Preserve existing firewall, role,
-   voter, and access-control behavior. Follow
-   [implement-api-authentication](../implement-api-authentication/SKILL.md) for
-   authentication or broad access-policy changes, and
-   [add-security-voter](../add-security-voter/SKILL.md) for subject-based
-   permissions.
+   voter, and access-control behavior. Follow [implement-api-authentication](../implement-api-authentication/SKILL.md)
+   for authentication or broad access-policy changes, and [add-security-voter](../add-security-voter/SKILL.md)
+   for subject-based permissions.
 7. Document the public API with the project's OpenAPI attributes where
    applicable: operation or tag, inputs, request body, success response shape,
    and relevant validation or authorization errors. Keep the documented contract
@@ -91,11 +88,10 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    part of the contract. Follow [write-tests](../write-tests/SKILL.md) for test
    structure, fixtures, and runner conventions.
 9. If the endpoint changes persisted entity structure, follow
-   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for repository,
-   resource, migration, and schema work. If it adds repository filtering or
-   search behavior, also follow
-   [add-doctrine-query](../add-doctrine-query/SKILL.md). Avoid those layers for
-   endpoint-only behavior that does not require them.
+   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for repository, resource,
+   migration, and schema work. If it adds repository filtering or search
+   behavior, also follow [add-doctrine-query](../add-doctrine-query/SKILL.md). Avoid
+   those layers for endpoint-only behavior that does not require them.
 
 ## Validation [ᐞ](#table-of-contents)
 

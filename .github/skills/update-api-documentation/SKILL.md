@@ -11,14 +11,12 @@ Use this skill when updating or repairing API documentation without necessarily
 adding an endpoint: OpenAPI attributes, model schemas, response components,
 security descriptions, examples, or documentation areas. It owns documentation
 accuracy, not permission to change runtime contracts to match a specification.
-For endpoint changes, also use
-[add-custom-api-endpoint](../add-custom-api-endpoint/SKILL.md) or
-[add-rest-resource](../add-rest-resource/SKILL.md). For shared output changes,
+For endpoint changes, also use [add-custom-api-endpoint](../add-custom-api-endpoint/SKILL.md)
+or [add-rest-resource](../add-rest-resource/SKILL.md). For shared output changes,
 use [update-api-response-contract](../update-api-response-contract/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -74,9 +72,9 @@ Inspect the actual generation inputs and runtime evidence:
 3. Keep operation metadata aligned with the real caller boundary. Verify path
    versus query/header inputs, requiredness, types, enum values, defaults,
    nullability, and request-body media types. Distinguish omitted fields from
-   explicit null and create/update/patch behavior using
-   [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md). Check operation IDs
-   for uniqueness and avoid duplicate operations from overlapping attributes.
+   explicit null and create/update/patch behavior using [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md).
+   Check operation IDs for uniqueness and avoid duplicate operations from
+   overlapping attributes.
 4. Describe responses from actual serializer contexts, not request DTO shape or
    entity properties alone. Match Nelmio `Model` groups to runtime groups,
    including `Set.*` and nested associations. Preserve sensitive-field
@@ -135,8 +133,8 @@ generation/help is blocked, report the failure rather than substituting an empty
 document or claiming validation. Store any temporary output outside the tracked
 specification and review it for sensitive examples before sharing.
 
-Use [write-tests](../write-tests/SKILL.md) for changed tests. Assert affected
-generated-document fields and relevant HTTP contracts, not only status 200.
+Use [write-tests](../write-tests/SKILL.md) for changed tests. Assert affected generated-document
+fields and relevant HTTP contracts, not only status 200.
 `tests/E2E/DocumentationTest.php` currently checks UI/JSON availability, not
 schema accuracy or the internal area. A successful dump does not prove that
 examples match runtime output, security requirements resolve correctly, or every
@@ -144,9 +142,9 @@ documented operation is included in the intended area.
 
 OpenAPI PHP attributes are executable metadata, not Markdown-only prose: run
 affected syntax/style checks, generation, and focused regression checks using
-[the validation guide](../../../doc/TESTING.md#selecting-validation). Apply
-shared configuration/container checks when wiring changes. Do not add a new
-validator dependency when existing tooling and focused assertions suffice.
+[the validation guide](../../../doc/TESTING.md#selecting-validation). Apply shared
+configuration/container checks when wiring changes. Do not add a new validator
+dependency when existing tooling and focused assertions suffice.
 
 For this skill's Markdown alone, run from the repository root on the Docker host
 with development services running:

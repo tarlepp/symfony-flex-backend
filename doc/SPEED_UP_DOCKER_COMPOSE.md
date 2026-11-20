@@ -40,30 +40,27 @@ Basically Windows and Mac; with linux you should not have these problems at all.
 <a id="windows"></a>
 
 The "most" clean solution to solve this atm is to run eg. Ubuntu desktop within
-[VMware](https://www.vmware.com/) / [VirtualBox](https://www.virtualbox.org/)
-machines. And this means that you actually run your favorite IDE inside that
-virtual machine.
+[VMware](https://www.vmware.com/) / [VirtualBox](https://www.virtualbox.org/) machines.
+And this means that you actually run your favorite IDE inside that virtual
+machine.
 
-Another way is to use [docker-sync](#installation-of-docker-sync).
-Application itself already contains necessary
-[docker-sync.yml](../docker-sync.yml)
-configuration  file to help with this.
+Another way is to use [docker-sync](#installation-of-docker-sync). Application itself
+already contains necessary [docker-sync.yml](../docker-sync.yml) configuration file
+to help with this.
 
 ### Mac [ᐞ](#table-of-contents)
 
 <a id="mac"></a>
 
 With Mac there is a bit speed difference versus pure _*inux_ installation, but
-you could try to speed that up by using
-[Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
+you could try to speed that up by using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
 
 Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`:
 [Docker for Mac performance benchmark](https://medium.com/@somwhatparanoid/tweaking-docker-for-mac-performance-for-php-and-symfony-b63f3395a1da)
 
-And if that
-[Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
-isn't fast enough for you, you could also setup that
-[docker-sync](#installation-of-docker-sync) for your environment.
+And if that [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
+isn't fast enough for you, you could also setup that [docker-sync](#installation-of-docker-sync)
+for your environment.
 
 ### Linux [ᐞ](#table-of-contents)
 
@@ -112,8 +109,7 @@ To start application you just need to use command `docker-sync-stack start`
 
 <a id="notes"></a>
 
-If / when you want to use Xdebug, you should read this document:
-[Using Xdebug](XDEBUG.md)
+If / when you want to use Xdebug, you should read this document: [Using Xdebug](XDEBUG.md)
 
 ---
 

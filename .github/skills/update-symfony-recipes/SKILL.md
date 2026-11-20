@@ -13,8 +13,7 @@ Symfony Flex recipes. Recipe updates change application scaffolding and
 not perform dependency upgrades unless separately requested.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -71,10 +70,10 @@ particular, do not invent a dry-run option for `recipes:update`.
 3. Read the recipe's affected files and the current application customizations
    before applying it. Recipe-managed files can include `.env`, package
    configuration, service wiring, routes, entry points, test configuration,
-   Docker files, and AI instruction files such as
-   [AGENTS.md](../../../AGENTS.md) and [CLAUDE.md](../../../CLAUDE.md). Upstream
-   template changes are proposed scaffolding, not permission to overwrite
-   project architecture, security policy, or repository instructions.
+   Docker files, and AI instruction files such as [AGENTS.md](../../../AGENTS.md)
+   and [CLAUDE.md](../../../CLAUDE.md). Upstream template changes are proposed scaffolding,
+   not permission to overwrite project architecture, security policy, or
+   repository instructions.
 4. Run `composer recipes:update vendor/package` inside the PHP development
    container. With no package argument the command selects a recipe
    interactively; do not use that as an unattended bulk update. The command

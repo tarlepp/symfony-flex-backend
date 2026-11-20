@@ -2,13 +2,12 @@
 
 <a id="what-is-this"></a>
 
-This document contains basic information how you can use
-[Xdebug](https://xdebug.org/) and
-[PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
+This document contains basic information how you can use [Xdebug](https://xdebug.org/)
+and [PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
 
 And before you start with this section off documentation you really should read
-[PhpStorm configuration](PHPSTORM.md) documentation first - that way you will
-have all basic configuration ready.
+[PhpStorm configuration](PHPSTORM.md) documentation first - that way you will have
+all basic configuration ready.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -88,16 +87,16 @@ By default this application assumes that you're using `app.localhost` as your
 PHP server that you've configured to your IDE. If you need to change that, just
 override that in your local `compose.override.yaml` file.
 
-See those [External links / resources](#external-links-resources) on this
-documentation to get more information.
+See those [External links / resources](#external-links-resources) on this documentation
+to get more information.
 
 ## Debug Postman requests [ᐞ](#table-of-contents)
 
 <a id="debug-postman-requests"></a>
 
-~~If you're using [Postman](https://www.getpostman.com/) to test / debug your
-application you need to add `?XDEBUG_SESSION_START=PHPSTORM` to each URL that
-you use with Postman.~~
+~~If you're using [Postman](https://www.getpostman.com/) to test / debug your application
+you need to add `?XDEBUG_SESSION_START=PHPSTORM` to each URL that you use with
+Postman.~~
 
 ## External links / resources [ᐞ](#table-of-contents)
 

@@ -25,8 +25,8 @@ This project includes a Dev Container definition in `.devcontainer/`.
 * The `development` target in the root `Dockerfile`, selected by `compose.yaml`
 * A small Compose override: `.devcontainer/docker-compose.devcontainer.yml`
 
-The shared development image also includes [fzf](../doc/FZF.md), with Bash and
-Fish key bindings for fuzzy file selection, history search, and navigation.
+The shared development image also includes [fzf](../doc/FZF.md), with Bash and Fish
+key bindings for fuzzy file selection, history search, and navigation.
 
 CI validates the merged Compose override and parses `devcontainer.json` when the
 Compose validation category is selected. Keep `devcontainer.json` strict JSON,
@@ -95,14 +95,13 @@ with its command linked into `/home/dev/.local/bin` for Bash and Fish.
 
 CI also uses the existing Compose `php` development service for project tools.
 The shared bootstrap calls `make ci-start`, then commands such as
-`make check-skills` execute in that container. The
-[CI Compose override](../docker/ci-compose.yaml) skips the application
-entrypoint, keeps PHP available for commands, and mounts the Composer cache.
-`make ci-stop` cleans up after the job; no separate documentation image is used.
+`make check-skills` execute in that container. The [CI Compose override](../docker/ci-compose.yaml)
+skips the application entrypoint, keeps PHP available for commands, and mounts
+the Composer cache. `make ci-stop` cleans up after the job; no separate
+documentation image is used.
 
 Rebuild the development image after pulling this change. Use your IDE's Dev
-Container rebuild action, or follow the root
-[container rebuild instructions](../README.md#building-containers).
+Container rebuild action, or follow the root [container rebuild instructions](../README.md#building-containers).
 
 ## UID/GID mapping [ᐞ](#table-of-contents)
 
@@ -145,8 +144,7 @@ code /home/wnd/PhpstormProjects/symfony-flex-backend
 
 Project Make targets run inside the container terminal. Docker lifecycle and
 image-management targets, including `make ci-start` and `make ci-stop`, require
-a separate host terminal. See
-[command execution contexts](../doc/COMMANDS.md#commands).
+a separate host terminal. See [command execution contexts](../doc/COMMANDS.md#commands).
 
 ---
 

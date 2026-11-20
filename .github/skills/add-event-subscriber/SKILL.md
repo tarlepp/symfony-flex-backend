@@ -11,8 +11,7 @@ Use this skill when creating or updating a Symfony event subscriber, its
 subscriptions, or its behavior.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -29,9 +28,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 1. Read the event dispatch sites or framework contracts, and nearby subscribers
    and tests. Confirm exact event names, argument types, timing, and the
-   dispatcher used. Read
-   [the event-handling guide](../../../doc/EVENT_HANDLING.md) for the
-   listener/subscriber decision.
+   dispatcher used. Read [the event-handling guide](../../../doc/EVENT_HANDLING.md)
+   for the listener/subscriber decision.
 2. Extend an existing subscriber when the responsibility matches. For a new
    Symfony subscriber, place it in `src/EventSubscriber/` and implement
    `Symfony\Component\EventDispatcher\EventSubscriberInterface`. Follow
@@ -65,9 +63,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 7. Do not confuse Symfony subscribers with Doctrine lifecycle subscriptions.
    `DoctrineExtensionSubscriber` reacts to a Symfony request event; its name
    does not make it a Doctrine subscriber. For ORM events, use
-   [add-event-listener](../add-event-listener/SKILL.md) and the installed
-   DoctrineBundle's supported listener registration instead of introducing
-   legacy Doctrine subscribers.
+   [add-event-listener](../add-event-listener/SKILL.md) and the installed DoctrineBundle's
+   supported listener registration instead of introducing legacy Doctrine
+   subscribers.
 8. Cover the exact subscription map, including priorities, as in
    `tests/Unit/EventSubscriber/AcceptLanguageSubscriberTest.php`, and observable
    handler behavior as in its integration tests. Also exercise the actual caller

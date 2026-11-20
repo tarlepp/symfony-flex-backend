@@ -7,8 +7,8 @@ how work moves between them, and where you stay in control. Start here if the
 agent profiles and skill files feel too detailed.
 
 This is a visual explanation, not a new workflow or permission grant. The
-[agent workflow reference](FEATURE_AGENTS.md) defines the detailed contracts,
-and the [skills index](../.github/skills/README.md) lists available workflows.
+[agent workflow reference](FEATURE_AGENTS.md) defines the detailed contracts, and
+the [skills index](../.github/skills/README.md) lists available workflows.
 [Repository instructions](../AGENTS.md) still apply.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -50,10 +50,10 @@ approve changes. Using a skill does not automatically start the feature-agent
 chain. The diagrams below describe the intended workflow, not a guarantee that
 every Copilot client supports it.
 
-Diagrams use Mermaid, as in the
-[CI execution guide](GITHUB_WORKFLOWS.md#core-ci-execution). View this page on
-GitHub or in a Mermaid-capable Markdown preview. Each diagram has a prose
-explanation so the guide also works when diagrams appear as source text.
+Diagrams use Mermaid, as in the [CI execution guide](GITHUB_WORKFLOWS.md#core-ci-execution).
+View this page on GitHub or in a Mermaid-capable Markdown preview. Each diagram
+has a prose explanation so the guide also works when diagrams appear as source
+text.
 
 ## Meet the agents [ᐞ](#table-of-contents)
 
@@ -178,11 +178,10 @@ does not reset the repair budget, and `RESOLVED` does not mean verifier `PASS`.
 
 For stacked PRs, preserve the old parent tip and replay only the child's commits
 onto the new target. Merge the parent PR first, then retarget/restack the child
-as described in the
-[stacked PR procedure](REQUIRED_CHECKS.md#stacked-pull-requests). Merging a
-parent PR is distinct from merging a base branch into a conflicted task branch.
-See the [conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md) for
-safeguards.
+as described in the [stacked PR procedure](REQUIRED_CHECKS.md#stacked-pull-requests).
+Merging a parent PR is distinct from merging a base branch into a conflicted
+task branch. See the [conflict skill](../.github/skills/resolve-git-conflicts/SKILL.md)
+for safeguards.
 
 ## When a CVE blocks CI [ᐞ](#table-of-contents)
 
@@ -211,13 +210,13 @@ implementer, which may call the fixer while the verifier waits. The fixer never
 calls another agent, publishes changes, weakens scanner gates, or resets the
 two-round repair budget. Its `FIXED` result is not verifier `PASS`. Missing
 evidence, unavailable compatible fixes, or unsupported routing remain `BLOCKED`.
-See the [CVE contract](FEATURE_AGENTS.md#cve-remediation) for the complete
-handoff and client limits.
+See the [CVE contract](FEATURE_AGENTS.md#cve-remediation) for the complete handoff
+and client limits.
 
-The plan names only CVE-affected package updates and necessary dependencies,
-not blanket upgrades. For packages shared by development and production, both
-images need installed-version and blocking-scan evidence. Cached-build checks
-must also prove the fix actually executes; one clean image is not enough.
+The plan names only CVE-affected package updates and necessary dependencies, not
+blanket upgrades. For packages shared by development and production, both images
+need installed-version and blocking-scan evidence. Cached-build checks must also
+prove the fix actually executes; one clean image is not enough.
 
 ## How skills support the agents [ᐞ](#table-of-contents)
 
@@ -281,8 +280,8 @@ migration, or a full unrelated test suite.
 <a id="your-first-request"></a>
 
 Open the repository in a supported Copilot client and select `feature-lead`.
-Check the [client setup and limitations](FEATURE_AGENTS.md#using-the-agents)
-first if agents or tools are missing. Paste a concrete request such as:
+Check the [client setup and limitations](FEATURE_AGENTS.md#using-the-agents) first
+if agents or tools are missing. Paste a concrete request such as:
 
 ```text
 Add an authenticated endpoint that returns the current user's timezone.
@@ -335,14 +334,13 @@ lead instead of asking another specialist to start over.
 
 <a id="where-to-go-next"></a>
 
-* [Agent workflow reference](FEATURE_AGENTS.md): permissions, handoffs, client
-  setup, tool diagnostics, and validation details.
-* [Skills index](../.github/skills/README.md): all playbooks and when to use
-  them.
+* [Agent workflow reference](FEATURE_AGENTS.md): permissions, handoffs, client setup,
+  tool diagnostics, and validation details.
+* [Skills index](../.github/skills/README.md): all playbooks and when to use them.
 * [Shared guidance](../.github/skills/shared-guidance.md): branches, worktrees,
   checks, and final handoffs.
-* [AI maintenance policy](AI_RULES.md): where new guidance belongs and how to
-  avoid duplicate rules.
+* [AI maintenance policy](AI_RULES.md): where new guidance belongs and how to avoid
+  duplicate rules.
 * [Validation selection](TESTING.md#selecting-validation): choose checks for the
   behavior and files actually affected.
 

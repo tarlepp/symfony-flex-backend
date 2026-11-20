@@ -24,18 +24,16 @@ current application dependencies, configure the database, or generate JWT keys
 outside the PHP development container.
 
 Use the Docker Compose setup in the [main README](../README.md) for development.
-For a local production-mode check, see
-[Running production locally](DOCKER_MULTI_PLATFORM.md#running-production-locally);
+For a local production-mode check, see [Running production locally](DOCKER_MULTI_PLATFORM.md#running-production-locally);
 this is a Docker-based local workflow, not a production deployment guide.
 
 ## Requirements [ᐞ](#requirements)
 
 <a id="requirements"></a>
 
-See `require.php` in [`composer.json`](../composer.json) for the minimum PHP
-version. The Docker development and production environments provide the runtime
-and extensions. The bundled MariaDB image is defined in
-[`docker/mariadb/Dockerfile`](../docker/mariadb/Dockerfile).
+See `require.php` in [`composer.json`](../composer.json) for the minimum PHP version.
+The Docker development and production environments provide the runtime and
+extensions. The bundled MariaDB image is defined in [`docker/mariadb/Dockerfile`](../docker/mariadb/Dockerfile).
 
 These details do not constitute a supported standalone installation procedure.
 If a non-Docker setup is needed, it must be developed and validated against the

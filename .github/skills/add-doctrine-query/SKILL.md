@@ -9,13 +9,11 @@ description: Add or update Doctrine repository queries, filtering, search, sorti
 
 Use this skill when adding or changing repository queries, query criteria,
 searchable fields, joins, sorting, pagination, counts, or ID lookups. For entity
-mapping or index changes, also follow
-[add-doctrine-entity](../add-doctrine-entity/SKILL.md). For a full endpoint
-change, also follow [add-rest-resource](../add-rest-resource/SKILL.md).
+mapping or index changes, also follow [add-doctrine-entity](../add-doctrine-entity/SKILL.md).
+For a full endpoint change, also follow [add-rest-resource](../add-rest-resource/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 

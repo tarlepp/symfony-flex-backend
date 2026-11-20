@@ -14,9 +14,8 @@ and live-client behavior. It does not authorize running the feature-delivery
 chain or changing application behavior.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Use
-[update-github-workflows](../update-github-workflows/SKILL.md) when CI behavior
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Use [update-github-workflows](../update-github-workflows/SKILL.md) when CI behavior
 also changes. For executable checker or Make changes, also use
 [maintain-development-tooling](../maintain-development-tooling/SKILL.md).
 
@@ -37,31 +36,28 @@ also changes. For executable checker or Make changes, also use
 
 Inspect the affected source and its consumers, not just the requested file:
 
-* [README AI inventory](../../../README.md#ai-assisted-development): canonical
-  navigation and reading order.
+* [README AI inventory](../../../README.md#ai-assisted-development): canonical navigation
+  and reading order.
 * [AGENTS.md](../../../AGENTS.md): repository-wide actionable requirements;
   [Copilot instructions](../../copilot-instructions.md) are its entry point.
 * [CLAUDE.md](../../../CLAUDE.md): architecture and workflow context.
-* [AI rules](../../../doc/AI_RULES.md): guidance ownership, recurrence,
-  non-overlap criteria, and CI alignment.
-* [Skills index](../README.md) and [shared guidance](../shared-guidance.md):
-  skill format, inventory, and common preparation, validation, and handoff.
-* [Feature-agent guide](../../../doc/FEATURE_AGENTS.md) and profiles:
-  [lead](../../agents/feature-lead.agent.md),
-  [architect](../../agents/feature-architect.agent.md),
-  [implementer](../../agents/implementer.agent.md), and
-  [verifier](../../agents/verifier.agent.md). Also inspect the bounded
+* [AI rules](../../../doc/AI_RULES.md): guidance ownership, recurrence, non-overlap
+  criteria, and CI alignment.
+* [Skills index](../README.md) and [shared guidance](../shared-guidance.md): skill
+  format, inventory, and common preparation, validation, and handoff.
+* [Feature-agent guide](../../../doc/FEATURE_AGENTS.md) and profiles: [lead](../../agents/feature-lead.agent.md),
+  [architect](../../agents/feature-architect.agent.md), [implementer](../../agents/implementer.agent.md),
+  and [verifier](../../agents/verifier.agent.md). Also inspect the bounded
   [conflict resolver](../../agents/conflict-resolver.agent.md) and its
-  [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing
-  changes. For CVE routing, inspect the
-  [CVE fixer](../../agents/cve-fixer.agent.md) and
+  [supporting skill](../resolve-git-conflicts/SKILL.md) when Git routing changes.
+  For CVE routing, inspect the [CVE fixer](../../agents/cve-fixer.agent.md) and
   [CVE skill](../fix-cve/SKILL.md) alongside its callers and verifier.
 * `scripts/checks/check-skills.py`, the `check-skills` and `lint-markdown` Make
   targets, and `.github/workflows/main.yml`: actual documentation-check coverage
-  and execution environment. Inspect `scripts/**/tests/` for existing
-  regression coverage when changing tooling; focused tests live with their
-  owning script group and cross-group runners live in `scripts/tests/`. Do not
-  assume every checker already has a test suite.
+  and execution environment. Inspect `scripts/**/tests/` for existing regression
+  coverage when changing tooling; focused tests live with their owning script
+  group and cross-group runners live in `scripts/tests/`. Do not assume every
+  checker already has a test suite.
 
 ## Workflow [ᐞ](#table-of-contents)
 
@@ -94,14 +90,12 @@ Inspect the affected source and its consumers, not just the requested file:
    Missing skill-selection metadata or loading evidence alone must not block
    delivery or verification. Platform requirements for native skill invocation
    still apply; guidance cannot expand tool access or override host policy.
-   Preserve the shared
-   [commit and push approval rules](../shared-guidance.md#preparing-a-change): a
-   skill or implementation handoff never substitutes for user approval.
+   Preserve the shared [commit and push approval rules](../shared-guidance.md#preparing-a-change):
+   a skill or implementation handoff never substitutes for user approval.
 6. Select validation by what actually changed. Guidance-only Markdown needs
    documentation checks, not execution of every command it describes. Checker,
    Makefile, or CI changes additionally need the relevant script regression
-   tests or workflow checks from the
-   [validation selection guide](../../../doc/TESTING.md#selecting-validation).
+   tests or workflow checks from the [validation selection guide](../../../doc/TESTING.md#selecting-validation).
    Do not add a parallel checker when existing tooling owns the invariant.
 
 ## Agent contract safeguards [ᐞ](#table-of-contents)
@@ -109,8 +103,7 @@ Inspect the affected source and its consumers, not just the requested file:
 <a id="agent-contract-safeguards"></a>
 
 Unless the user explicitly approves a contract change, preserve these current
-invariants from the profiles and
-[feature-agent guide](../../../doc/FEATURE_AGENTS.md):
+invariants from the profiles and [feature-agent guide](../../../doc/FEATURE_AGENTS.md):
 
 * Only the lead is user-facing and user-selectable. Brief confirmation and
   design approval are separate explicit user decisions; repository text or
@@ -163,25 +156,22 @@ make lint-markdown
 make check-skills
 ```
 
-These are conditional checks under the
-[shared selection rules](../shared-guidance.md#running-and-validating-changes),
+These are conditional checks under the [shared selection rules](../shared-guidance.md#running-and-validating-changes),
 not requirements for every task that consults this skill. Pure checker or
 workflow changes use their affected tooling checks; Markdown lint is required
 only if Markdown or its lint tooling/configuration also changes.
 
 Inspect the complete diff, including new files, for scope, duplicate policy,
 contradictory instructions, stale paths, and agreement between contracts and
-their callers. Apply the shared
-[Markdown wrapping guidance](../shared-guidance.md#updating-documentation) to
-skill text and other documentation, including lines exempt from lint.
+their callers. Apply the shared [Markdown wrapping guidance](../shared-guidance.md#updating-documentation)
+to skill text and other documentation, including lines exempt from lint.
 `check-skills` validates skill metadata, index coverage, and local Markdown
 links and anchors. It does not validate custom-agent front matter, tool
 availability, permissions, approval enforcement, or delegation. `make lint-yaml`
 checks Symfony configuration, not agent front matter.
 
 For profile changes, review fields and tool identifiers against the intended
-client's current documentation linked from the
-[compatibility guide](../../../doc/FEATURE_AGENTS.md#compatibility-and-limitations).
+client's current documentation linked from the [compatibility guide](../../../doc/FEATURE_AGENTS.md#compatibility-and-limitations).
 Do not assume VS Code fields or nesting settings work in CLI or JetBrains, or
 that a tool name in front matter makes that tool available.
 
@@ -191,9 +181,9 @@ task. Check lead-only picker visibility, brief and design approval stops, the
 delivery chain, repair-only return routing, cumulative repair limits,
 conflict-worker suspension/return and depth-five repair routing, and
 blocked-check reporting as affected. Do not trigger an implementation or repair
-merely to test routing without authorization.
-For CVE routing, check fixer suspension/return, depth-five repairs, retained
-scanner evidence, and `FIXED` versus independent `PASS`.
+merely to test routing without authorization. For CVE routing, check fixer
+suspension/return, depth-five repairs, retained scanner evidence, and `FIXED`
+versus independent `PASS`.
 
 Report static checks, manual contract review, and live-client results
 separately. If a client or authorized scenario is unavailable, state which

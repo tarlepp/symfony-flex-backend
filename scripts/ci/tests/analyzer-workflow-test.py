@@ -1950,6 +1950,13 @@ class ChangeDetectionTest(unittest.TestCase):
             "README.md": {"markdown", "documentation"},
             ".github/agents/implementer.agent.md": {"markdown", "documentation"},
             ".markdownlint.yml": {"markdown", "documentation", "tooling"},
+            ".markdownlint-cli2.jsonc": {"markdown", "documentation", "tooling"},
+            "scripts/checks/markdown-prose-wrap.cjs": {
+                "markdown", "documentation", "tooling",
+            },
+            "scripts/checks/tests/markdown-prose-wrap-test.cjs": {
+                "markdown", "documentation", "tooling",
+            },
             "doc/images/new.png": {"documentation"},
         }
         for number, (path, expected) in enumerate(cases.items()):

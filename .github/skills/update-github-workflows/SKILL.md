@@ -9,12 +9,11 @@ description: Add or change GitHub Actions workflows, CI jobs, triggers, matrices
 
 Use this skill when changing CI behavior in `.github/workflows/` or shared steps
 in `.github/actions/`. For action-version and SHA-pin updates alone, use
-[update-github-actions](../update-github-actions/SKILL.md). For Docker image
-changes, also follow [update-docker-images](../update-docker-images/SKILL.md).
+[update-github-actions](../update-github-actions/SKILL.md). For Docker image changes,
+also follow [update-docker-images](../update-docker-images/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -54,8 +53,8 @@ replacement for their actual event filters and conditions:
   image version and digest updates, pin verification, and maintenance PR
   creation against the selected branch.
 * `.github/workflows/action-updates.yml`: weekly/manual Action and workflow-tool
-  update discovery inside the development container; updates are advisory,
-  while incomplete checks fail the workflow.
+  update discovery inside the development container; updates are advisory, while
+  incomplete checks fail the workflow.
 * `.github/actions/php-bootstrap/action.yml`: shared Compose development
   container setup, Composer download cache, optional installation, and version
   reporting.
@@ -90,13 +89,12 @@ replacement for their actual event filters and conditions:
    the gate, analyzers, tests, Docker builds and reporting. It uses
    `!cancelled()` so superseded workflows release their concurrency slot, while
    failed prerequisites still reach the result checks. It is the required merge
-   gate, so add every new blocking job to its `needs` and result checks.
-   The informational `statistics` job is deliberately independent: retain its
-   own summaries without making either gate wait for or consume its result.
-   The `changes` job selects configuration, dependency security, Docker
-   pins/updates, PHP
-   analyzers, tests, builds, documentation and workflow validation independently
-   on PRs, pushes and merge groups, using the
+   gate, so add every new blocking job to its `needs` and result checks. The
+   informational `statistics` job is deliberately independent: retain its own
+   summaries without making either gate wait for or consume its result. The
+   `changes` job selects configuration, dependency security, Docker
+   pins/updates, PHP analyzers, tests, builds, documentation and workflow
+   validation independently on PRs, pushes and merge groups, using the
    [CI selection table](../../../doc/GITHUB_WORKFLOWS.md#choosing-the-validation-path).
    Both gates accept skips only after successful detection emits the exact
    category's `false` output. Empty/unknown flags are errors; Gitleaks remains
@@ -180,9 +178,9 @@ replacement for their actual event filters and conditions:
   for success, failure, skipped prerequisites, and events without secrets.
 * Run the smallest relevant existing commands locally. For analyzer behavior,
   use `make phpstan` or `make psalm` instead of GitHub-formatted targets. For
-  test behavior, use the [testing skill](../write-tests/SKILL.md); a targeted
-  test does not verify coverage artifact generation. Exercise the report
-  producer when changing its paths or upload contract.
+  test behavior, use the [testing skill](../write-tests/SKILL.md); a targeted test
+  does not verify coverage artifact generation. Exercise the report producer
+  when changing its paths or upload contract.
 * For Compose validation changes, run these commands from the host:
 
   ```bash

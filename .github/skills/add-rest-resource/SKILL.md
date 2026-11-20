@@ -11,8 +11,7 @@ Use this skill when adding a CRUD API resource or extending an existing
 resource's input, output, or behavior.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -40,20 +39,20 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    Validator constraints consistent with the field's API exposure and validation
    needs. Generate and review a Doctrine migration; do not use
    `doctrine:schema:update` or hand-write schema changes. Follow
-   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for entity changes;
-   every entity requires a corresponding repository and resource.
+   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for entity changes; every
+   entity requires a corresponding repository and resource.
 4. Define API input/output through DTOs in `src/DTO/`. Follow the existing
    `RestDto` patterns, validation constraints, and patch/visited-field behavior.
    Update `src/AutoMapper/` request mapping and configuration when request
    values need conversion (for example, resolving related entity IDs to entity
-   references). Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md)
-   for the detailed DTO, validation, mapping, and argument-resolution workflow.
-   Do not expose entities directly in responses.
+   references). Follow [add-api-dto-mapping](../add-api-dto-mapping/SKILL.md) for
+   the detailed DTO, validation, mapping, and argument-resolution workflow. Do
+   not expose entities directly in responses.
 5. Add or update the repository in `src/Repository/`, following `BaseRepository`
    conventions and entity generics. Keep query/data-access behavior there; put
    orchestration and business rules in a resource or service. Follow
-   [add-doctrine-query](../add-doctrine-query/SKILL.md) for custom queries,
-   filtering, search, sorting, pagination, and database tests.
+   [add-doctrine-query](../add-doctrine-query/SKILL.md) for custom queries, filtering,
+   search, sorting, pagination, and database tests.
 6. Add or update the resource in `src/Resource/`, extending `RestResource` and
    preserving its entity/repository types. Reuse lifecycle callbacks and
    repository helpers where they fit instead of duplicating generic CRUD

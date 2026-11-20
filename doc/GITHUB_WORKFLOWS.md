@@ -7,8 +7,8 @@ where to look when a run fails. Start with the event tables; use the graphs and
 job reference when maintaining CI.
 
 Workflow YAML in `.github/workflows/` is the source of truth for execution.
-[Required checks and branch protection](REQUIRED_CHECKS.md) owns merge policy
-and GitHub settings; this guide does not replace it. Nothing here deploys the
+[Required checks and branch protection](REQUIRED_CHECKS.md) owns merge policy and
+GitHub settings; this guide does not replace it. Nothing here deploys the
 application or publishes application images.
 
 ## Table of Contents [ᐞ](#table-of-contents)
@@ -43,15 +43,15 @@ results are also available under **Security > Code scanning**.
 Each workflow publishes a run overview with its relevant checks and outcomes.
 Core CI also publishes job-specific tables for its checks, analyzers, tests,
 image builds and scans, and external reporting. The daily vulnerability scan
-publishes one overview per image target. These overviews describe their own
-run, not the status of other workflows. Job tables report prior step outcomes,
+publishes one overview per image target. These overviews describe their own run,
+not the status of other workflows. Job tables report prior step outcomes,
 including skips after a failure; later cleanup failures are not included.
-Consult step logs, annotations and artifacts for findings and detailed
-results. A skipped or cancelled job may not publish an overview. Publishing an
-overview is informational and does not change validation results. Job
-overviews use `scripts/ci/ci-workflow-overview.sh` from the checkout; if checkout
-fails, they cannot be rendered. External reporting instead writes its skip
-reason when neither upload token is available.
+Consult step logs, annotations and artifacts for findings and detailed results.
+A skipped or cancelled job may not publish an overview. Publishing an overview
+is informational and does not change validation results. Job overviews use
+`scripts/ci/ci-workflow-overview.sh` from the checkout; if checkout fails, they
+cannot be rendered. External reporting instead writes its skip reason when
+neither upload token is available.
 
 For pull requests, start with the **Checks** tab:
 
@@ -128,8 +128,8 @@ the selected branch changes only Markdown, but skips external reporting.
 
 <a id="choosing-the-validation-path"></a>
 
-This decision graph applies only to [core CI](../.github/workflows/main.yml).
-Other workflows retain their own triggers.
+This decision graph applies only to [core CI](../.github/workflows/main.yml). Other
+workflows retain their own triggers.
 
 ```mermaid
 flowchart TD
@@ -187,12 +187,11 @@ and helper-test changes select tooling checks as well as image checks, so
 `make test-command-output` validates their output consumers. Passing the helper
 suite alone does not verify group headings or scenario-count expectations in the
 output-contract tests. Workflow validator changes, its nested test runner and
-the real helpers copied into its output fixtures also select `tooling`, so
-their isolated output contracts run through the configuration job. This includes
-the gate scripts, overview/statistics helpers, composite shell checker and
+the real helpers copied into its output fixtures also select `tooling`, so their
+isolated output contracts run through the configuration job. This includes the
+gate scripts, overview/statistics helpers, composite shell checker and
 `ci-gates-test.py`. Ordinary workflow-only changes retain workflow validation
-without selecting application tests or builds.
-The Compose category runs
+without selecting application tests or builds. The Compose category runs
 [`ci-validate-compose.sh`](../scripts/ci/ci-validate-compose.sh) on the runner to
 validate development, local production, CI and Dev Container overrides. It also
 parses `.devcontainer/devcontainer.json` inside the PHP container using Python's
@@ -308,28 +307,26 @@ Display names appear in GitHub's run graph and logs.
 | `report` | Coveralls/SonarCloud uploads; eligible job must succeed |
 | `ci-result` | Validate the combined core CI result |
 
-Gitleaks and informational statistics run independently of change detection.
-All other check jobs depend on successful selection (except the two periodic
-checks on schedules).
-Markdown-only changes run documentation checks and Gitleaks; unrelated workflow,
-application, analyzer, security and image jobs skip.
+Gitleaks and informational statistics run independently of change detection. All
+other check jobs depend on successful selection (except the two periodic checks
+on schedules). Markdown-only changes run documentation checks and Gitleaks;
+unrelated workflow, application, analyzer, security and image jobs skip.
 
 `lint-workflows` runs actionlint with ShellCheck, zizmor security auditing,
 local composite-action schema validation and offline tooling regressions.
 Explicit ShellCheck inputs also cover the Action update checker, Docker image
 helper, Make launcher, dependency security script and Sonar report preparation.
 The maintained script list lives in `scripts/checks/lint-workflows.sh`; this is
-not a repository-wide shell lint.
-Composite Bash/sh steps are also parsed with PyYAML and checked individually
-using the pinned ShellCheck, with action/step diagnostics. These checks do not
-execute scripts; GitHub expressions become inert placeholders for shell
-analysis. Unsupported shells fail explicitly, and metadata validation still
-covers non-composite actions. Validator downloads are cached under
-`build/cache/workflow-validators`, shared through the repository mount. GitHub
-cache keys include OS, architecture and the validator script hash; individual
-files use platform/checksum keys and are reverified on every hit before
-extraction or execution. Corrupt cached files fail validation explicitly; failed
-downloads never populate the cache. `make lint-yaml` checks Symfony
+not a repository-wide shell lint. Composite Bash/sh steps are also parsed with
+PyYAML and checked individually using the pinned ShellCheck, with action/step
+diagnostics. These checks do not execute scripts; GitHub expressions become
+inert placeholders for shell analysis. Unsupported shells fail explicitly, and
+metadata validation still covers non-composite actions. Validator downloads are
+cached under `build/cache/workflow-validators`, shared through the repository
+mount. GitHub cache keys include OS, architecture and the validator script hash;
+individual files use platform/checksum keys and are reverified on every hit
+before extraction or execution. Corrupt cached files fail validation explicitly;
+failed downloads never populate the cache. `make lint-yaml` checks Symfony
 configuration, not GitHub workflows.
 
 Cold validator downloads allow ten seconds to connect and sixty seconds per
@@ -378,16 +375,15 @@ from vulnerability findings. Trivy still rejects fixable `CRITICAL` and `HIGH`
 OS and library vulnerabilities. The scheduled/manual `vulnerability-scan.yml`
 workflow keeps its existing build-and-scan jobs.
 
-On same-repository PRs, each core image scan also generates and uploads SARIF
-to Code scanning using the corresponding `trivy-development` or
-`trivy-production` category. The scan job has `security-events: write` for
-this upload; fork PRs and other events do not upload SARIF. The blocking scan
-runs first and retains its existing policy. SARIF generation and upload still
-run after a failed blocking scan when the image download succeeded and the run
-was not cancelled. A generation or upload failure fails the scan job and final
-gate; SARIF generation itself does not fail merely because findings exist.
-The PR report is restricted to the same fixable `CRITICAL,HIGH` findings as the
-blocking scan.
+On same-repository PRs, each core image scan also generates and uploads SARIF to
+Code scanning using the corresponding `trivy-development` or `trivy-production`
+category. The scan job has `security-events: write` for this upload; fork PRs
+and other events do not upload SARIF. The blocking scan runs first and retains
+its existing policy. SARIF generation and upload still run after a failed
+blocking scan when the image download succeeded and the run was not cancelled. A
+generation or upload failure fails the scan job and final gate; SARIF generation
+itself does not fail merely because findings exist. The PR report is restricted
+to the same fixable `CRITICAL,HIGH` findings as the blocking scan.
 
 ### Gates and cancellation [ᐞ](#table-of-contents)
 
@@ -408,9 +404,8 @@ and received flag, including empty values. Gates remain fail-fast; diagnostic
 messages do not relax any acceptance rule.
 
 Both jobs check out the workflow revision before running their Bash gate:
-[`ci-prerequisite-gate.sh`](../scripts/ci/ci-prerequisite-gate.sh) and
-[`ci-result-gate.sh`](../scripts/ci/ci-result-gate.sh). They share the strict
-selection predicate in [`ci-gate-common.sh`](../scripts/ci/ci-gate-common.sh),
+[`ci-prerequisite-gate.sh`](../scripts/ci/ci-prerequisite-gate.sh) and [`ci-result-gate.sh`](../scripts/ci/ci-result-gate.sh).
+They share the strict selection predicate in [`ci-gate-common.sh`](../scripts/ci/ci-gate-common.sh),
 while event-specific policies remain in the individual scripts. Checkout and
 validation steps are not conditional on successful prerequisites.
 
@@ -458,11 +453,10 @@ runner label once in the `changes` job and reuses it through the `ubuntu_runner`
 YAML anchor. Standalone workflows specify their own labels because YAML anchors
 are local to each file.
 
-Most PHP/tooling jobs share
-[`php-bootstrap`](../.github/actions/php-bootstrap/action.yml), which builds the
-development Docker target and starts the Compose PHP service without the
-application entrypoint. PHP, extensions and coverage tooling come from the
-development image, not a separate runner PHP installation.
+Most PHP/tooling jobs share [`php-bootstrap`](../.github/actions/php-bootstrap/action.yml),
+which builds the development Docker target and starts the Compose PHP service
+without the application entrypoint. PHP, extensions and coverage tooling come
+from the development image, not a separate runner PHP installation.
 
 By default, bootstrap installs Composer dependencies and prints tool versions.
 Documentation/workflow checks and image-update checks disable both. Docker PR
@@ -486,9 +480,8 @@ steps; diagnostics name the input without printing its value.
 
 Project Make targets execute in the Compose PHP development container.
 Docker/Buildx, registry authentication, GitHub actions and artifact operations
-run on the runner host. See the
-[development guide](DEVELOPMENT.md#continuous-integration) for cache boundaries
-and container-routing details.
+run on the runner host. See the [development guide](DEVELOPMENT.md#continuous-integration)
+for cache boundaries and container-routing details.
 
 The PHPUnit job starts a health-checked MariaDB service, copies CI environment
 templates, generates JWT keys, installs dependencies and runs
@@ -514,8 +507,8 @@ analyzer jobs and optional SonarCloud reporting.
 OpenSSF for this public repository, and uploads SARIF to artifacts and code
 scanning. It does not run on ordinary PRs and is not required for merging.
 
-**Check GitHub Action updates** runs weekly and on manual dispatch. It uses
-the existing Action and workflow-tool checker inside the development container.
+**Check GitHub Action updates** runs weekly and on manual dispatch. It uses the
+existing Action and workflow-tool checker inside the development container.
 Available updates are advisory; discovery, pin and lookup failures fail this
 standalone workflow. Its run summary distinguishes current pins, updates and
 incomplete checks; the step log contains candidates and error details. It does
@@ -526,8 +519,8 @@ Scheduled runs target `master`, the default branch, after the workflow is merged
 there. They create or update the same maintenance PR when updates are available,
 without creating duplicate PRs on each run. It applies stable minor/patch
 updates within each image's current major version and refreshes digests,
-preserving variants and existing platforms. PHP is patch-only: when the PHP
-tag changes, the workflow refreshes PHP requirements, platform settings, and
+preserving variants and existing platforms. PHP is patch-only: when the PHP tag
+changes, the workflow refreshes PHP requirements, platform settings, and
 lockfiles for the root and every tool without upgrading packages. When the
 MariaDB tag changes, the workflow updates Doctrine's `server_version` to match.
 It updates existing tagged digest pins in Dockerfile `FROM` and external
@@ -535,27 +528,27 @@ It updates existing tagged digest pins in Dockerfile `FROM` and external
 outside its scope. It verifies the resulting pins before creating or updating
 one PR per selected base branch. No changes means no new PR. The Actions run
 summary shows the base branch, step and PR outcomes, a changed-file summary
-(including lockfiles), and the exact image pin and Doctrine diffs. Existing
-core CI gates are unchanged; the updater does not build its proposed images
-or run application tests.
+(including lockfiles), and the exact image pin and Doctrine diffs. Existing core
+CI gates are unchanged; the updater does not build its proposed images or run
+application tests.
 
-The independent **Check PHP minor upgrade readiness** job uses the
-same schedule and manual dispatch. The run summary reports the newest stable
-patch of the next PHP minor for the current variant, or that no candidate is
-available. It verifies the candidate pin and platform coverage, builds the
-candidate development image, and checks PHP and extension requirements from
-the application and tool Composer lockfiles against the actual candidate
-runtime. A build or platform requirement blocker is advisory; failed lookups
-and incomplete checks fail the readiness job without stopping the updater.
-When the development build and lockfile checks pass, the job updates the PHP
-pin, Composer PHP requirements and platform settings, and refreshes the
-lockfiles without changing package versions or references. It then opens or
-updates a separate PHP migration PR for the selected base branch. The summary
-links the PR or explains why one was not submitted. This PR requires the
-Docker image update App or PAT; it never falls back to `GITHUB_TOKEN` because
-PR CI must run. The job does not auto-merge or close an existing migration
-PR when a later readiness check is blocked. Normal PR CI still runs the
-application tests and both image builds before merge.
+The independent **Check PHP minor upgrade readiness** job uses the same schedule
+and manual dispatch. The run summary reports the newest stable patch of the next
+PHP minor for the current variant, or that no candidate is available. It
+verifies the candidate pin and platform coverage, builds the candidate
+development image, and checks PHP and extension requirements from the
+application and tool Composer lockfiles against the actual candidate runtime. A
+build or platform requirement blocker is advisory; failed lookups and incomplete
+checks fail the readiness job without stopping the updater. When the development
+build and lockfile checks pass, the job updates the PHP pin, Composer PHP
+requirements and platform settings, and refreshes the lockfiles without changing
+package versions or references. It then opens or updates a separate PHP
+migration PR for the selected base branch. The summary links the PR or explains
+why one was not submitted. This PR requires the Docker image update App or PAT;
+it never falls back to `GITHUB_TOKEN` because PR CI must run. The job does not
+auto-merge or close an existing migration PR when a later readiness check is
+blocked. Normal PR CI still runs the application tests and both image builds
+before merge.
 
 Major-version reporting belongs to core CI's existing **Check Docker image
 versions** job, not this automatic updater. Its read-only
@@ -648,13 +641,12 @@ flowchart LR
 Both this workflow and core image builds enforce fixable `CRITICAL,HIGH`
 OS/library vulnerabilities with Trivy; unfixed findings are ignored. The
 separate SARIF generation step does not enforce the threshold: the later scan
-does. Image-scan reports can therefore be available even when enforcement
-fails. After a successful build, the blocking scan also runs if SARIF
-generation or upload fails, unless the run is cancelled. Report and upload
-failures still fail the job; a failed or skipped build prevents the scan.
-The scheduled/manual SARIF report includes all severities by default, while
-the blocking scan and core PR SARIF report use only `CRITICAL,HIGH`. Both
-reports ignore unfixed findings.
+does. Image-scan reports can therefore be available even when enforcement fails.
+After a successful build, the blocking scan also runs if SARIF generation or
+upload fails, unless the run is cancelled. Report and upload failures still fail
+the job; a failed or skipped build prevents the scan. The scheduled/manual SARIF
+report includes all severities by default, while the blocking scan and core PR
+SARIF report use only `CRITICAL,HIGH`. Both reports ignore unfixed findings.
 
 Neither workflow pushes images to a registry (`push: false`). Core CI exports
 image archives for the separate scan jobs; scheduled/manual vulnerability scans
@@ -678,8 +670,8 @@ pushes and schedules, optional Docker Hub login runs before bootstrap so its
 image pulls also use the supplied credentials. PRs and other events remain
 anonymous; logout runs even after a failure. Registry/checker errors, invalid
 pins and helper regression failures still fail. Pin verification and
-vulnerability enforcement remain blocking. See
-[Docker image maintenance](DOCKER_MULTI_PLATFORM.md) for update procedures.
+vulnerability enforcement remain blocking. See [Docker image maintenance](DOCKER_MULTI_PLATFORM.md)
+for update procedures.
 
 ## Reports and artifacts [ᐞ](#table-of-contents)
 
@@ -695,41 +687,40 @@ vulnerability enforcement remain blocking. See
 | CodeQL, Scorecard, image scan | Code scanning results | GitHub-managed |
 
 Test reports originate in `build/logs/`, `build/report/` and
-`build/phpmetrics/`. The container-side
-[`ci-test-reports.py`](../scripts/ci/ci-test-reports.py) helper validates JUnit
-before PhpMetrics, checks required files and XML contents, and prints the
-test/coverage summary in three separate steps. The runner appends the summary's
-stdout to its own `GITHUB_STEP_SUMMARY`; Python does not run on the runner.
-On non-scheduled CI runs, the informational statistics job first publishes
-selected PHP, Symfony, Composer and PHPUnit versions from `make tool-versions`,
-then the outputs of `make project-stats`, `make check-licenses` and
-`make docker-builder-platforms`. These describe the checked-out files,
-installed dependencies and the GitHub runner's current builder respectively;
-the builder platforms do not prove that application images were built for them.
-For pull requests, a separate summary compares the merge base and PR head by
-project area, excluding the same lockfiles and recognized generated artifacts.
-Renames are counted as additions and deletions; binary files have no line counts.
-Collection failures are shown in the job overview and do not block or delay the
-merge gate. The workflow run itself can remain in progress while statistics
-finish; the statistics job's 15-minute timeout is unchanged. Setup failures can
-leave some summaries unavailable. When PHP analyzers are selected, the
-lightweight analyzer job also publishes its existing PHPLoc
-output and the PHP Insights matrix job publishes its four score lines. When
-tests produce usable JUnit results, the test job also publishes its existing
-PhpMetrics output. Summary publication does not change analyzer or test
-results; these job summaries may appear in any order because jobs run in parallel.
-Changes to `ci-test-reports.py` select workflow regressions and full PHP/test
-validation; changes to `ci-statistics-summary.sh` select workflow validation.
-After PHPUnit succeeds or fails (unless cancelled), CI checks required report
-files and attempts artifact uploads. Missing required reports fail the job, as
-do malformed or structurally invalid JUnit/Clover XML and missing or invalid
-nonnegative count metrics. JUnit suite counts must be integers; Clover project
-metrics must include statement and covered-statement counts, with coverage no
-greater than the total. Zero counts and reports recording failed tests remain
-valid inputs. HTML reports are checked only for nonempty files. The
-test/coverage job summary is informational and may fail without failing the job;
-it does not replace the required artifacts. PhpMetrics needs a usable JUnit
-report.
+`build/phpmetrics/`. The container-side [`ci-test-reports.py`](../scripts/ci/ci-test-reports.py)
+helper validates JUnit before PhpMetrics, checks required files and XML
+contents, and prints the test/coverage summary in three separate steps. The
+runner appends the summary's stdout to its own `GITHUB_STEP_SUMMARY`; Python
+does not run on the runner. On non-scheduled CI runs, the informational
+statistics job first publishes selected PHP, Symfony, Composer and PHPUnit
+versions from `make tool-versions`, then the outputs of `make project-stats`,
+`make check-licenses` and `make docker-builder-platforms`. These describe the
+checked-out files, installed dependencies and the GitHub runner's current
+builder respectively; the builder platforms do not prove that application images
+were built for them. For pull requests, a separate summary compares the merge
+base and PR head by project area, excluding the same lockfiles and recognized
+generated artifacts. Renames are counted as additions and deletions; binary
+files have no line counts. Collection failures are shown in the job overview and
+do not block or delay the merge gate. The workflow run itself can remain in
+progress while statistics finish; the statistics job's 15-minute timeout is
+unchanged. Setup failures can leave some summaries unavailable. When PHP
+analyzers are selected, the lightweight analyzer job also publishes its existing
+PHPLoc output and the PHP Insights matrix job publishes its four score lines.
+When tests produce usable JUnit results, the test job also publishes its
+existing PhpMetrics output. Summary publication does not change analyzer or test
+results; these job summaries may appear in any order because jobs run in
+parallel. Changes to `ci-test-reports.py` select workflow regressions and full
+PHP/test validation; changes to `ci-statistics-summary.sh` select workflow
+validation. After PHPUnit succeeds or fails (unless cancelled), CI checks
+required report files and attempts artifact uploads. Missing required reports
+fail the job, as do malformed or structurally invalid JUnit/Clover XML and
+missing or invalid nonnegative count metrics. JUnit suite counts must be
+integers; Clover project metrics must include statement and covered-statement
+counts, with coverage no greater than the total. Zero counts and reports
+recording failed tests remain valid inputs. HTML reports are checked only for
+nonempty files. The test/coverage job summary is informational and may fail
+without failing the job; it does not replace the required artifacts. PhpMetrics
+needs a usable JUnit report.
 
 `External reporting` runs on PRs and `master` pushes after both tests and
 `ci-summary` succeed. Before checkout, the job checks whether either optional
@@ -742,8 +733,8 @@ require its token. A failed Coveralls installation or upload does not suppress
 SonarCloud: preparation explicitly requires successful checkout, both artifact
 downloads and bootstrap, and scanning requires successful preparation. Both
 Sonar steps stop on cancellation. Coveralls upload still requires successful
-installation. Each reporter error remains blocking; independent attempts do
-not make the job or merge gate green. Cleanup runs even after failure or
+installation. Each reporter error remains blocking; independent attempts do not
+make the job or merge gate green. Cleanup runs even after failure or
 cancellation when bootstrap was attempted. Test-unaffected changes skip the job
 because tests and artifacts skip; schedules, manual runs and merge groups also
 skip reporting.
@@ -786,10 +777,9 @@ make run-tests-php
 
 These are real checks, not a simulation of GitHub scheduling, permissions or
 required contexts. `make lint-workflows` includes offline gate regressions but
-does not execute hosted jobs. See
-[validation selection](TESTING.md#selecting-validation) for narrower tests and
-[branch protection](REQUIRED_CHECKS.md) for settings verification. Never set CI
-environment flags locally to bypass setup guards.
+does not execute hosted jobs. See [validation selection](TESTING.md#selecting-validation)
+for narrower tests and [branch protection](REQUIRED_CHECKS.md) for settings verification.
+Never set CI environment flags locally to bypass setup guards.
 
 ## Troubleshooting [ᐞ](#table-of-contents)
 
@@ -814,8 +804,7 @@ repairs a failed validation.
 To retry a transient failure, open the run under **Actions** and use **Re-run
 failed jobs**. If the failure is reproducible, fix its cause and push the
 change; do not make a required job optional just to turn CI green. For stale
-required contexts, follow
-[Changing required checks](REQUIRED_CHECKS.md#changing-required-checks).
+required contexts, follow [Changing required checks](REQUIRED_CHECKS.md#changing-required-checks).
 Merge-queue trigger support does not mean the queue is enabled or live-tested;
 see the [merge queue checklist](REQUIRED_CHECKS.md#merge-queue).
 
@@ -824,9 +813,8 @@ see the [merge queue checklist](REQUIRED_CHECKS.md#merge-queue).
 <a id="maintaining-this-guide"></a>
 
 When changing workflow triggers, conditions, `needs`, matrices or artifacts,
-update the matching tables and graphs here. Update
-[REQUIRED_CHECKS.md](REQUIRED_CHECKS.md) only when merge-policy guidance
-changes. Keep action pin updates in the
+update the matching tables and graphs here. Update [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md)
+only when merge-policy guidance changes. Keep action pin updates in the
 [Actions update guide](ACTIONS_UPDATE.md).
 
 This guide describes checked-in configuration, not evidence that every hosted

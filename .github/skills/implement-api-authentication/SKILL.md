@@ -11,8 +11,7 @@ Use this skill when changing how API callers authenticate, which credentials are
 accepted, or which authenticated callers may access an endpoint or resource.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -44,10 +43,9 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    voters. Use the project's established route/controller authorization
    patterns, including `#[IsGranted]` where appropriate. Keep authorization
    decisions scoped to the right endpoint or voter rather than embedding them in
-   unrelated controller logic. Follow
-   [add-security-voter](../add-security-voter/SKILL.md) for voter
-   implementation, subject binding, decision-strategy interactions, and
-   authorization tests.
+   unrelated controller logic. Follow [add-security-voter](../add-security-voter/SKILL.md)
+   for voter implementation, subject binding, decision-strategy interactions,
+   and authorization tests.
 5. Handle credentials as secrets. Do not expose tokens, passwords, private JWT
    keys, or sensitive authentication details in API responses, DTOs, logs,
    fixtures, or documentation. Follow the existing credential creation,
@@ -58,9 +56,8 @@ Follow the [shared skill guidance](../shared-guidance.md), including
    API-key authentication when shared firewall or policy behavior changes.
 7. Update OpenAPI security metadata or relevant documentation when the
    documented authentication requirements or endpoint access contract changes.
-   If the work changes persisted security data, follow
-   [add-doctrine-entity](../add-doctrine-entity/SKILL.md) for the entity and
-   migration.
+   If the work changes persisted security data, follow [add-doctrine-entity](../add-doctrine-entity/SKILL.md)
+   for the entity and migration.
 
 ## Validation [ᐞ](#table-of-contents)
 

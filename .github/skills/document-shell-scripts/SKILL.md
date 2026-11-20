@@ -8,14 +8,13 @@ description: Add or revise file headers and explanatory comments in shell script
 <a id="what-is-this"></a>
 
 Use this skill when adding or revising file-level documentation or code comments
-in tracked shell scripts (`*.sh`). It defines the repository's header layout
-and comment-writing conventions; it does not authorize changing executable
-behavior. For script logic, Make targets, tooling contracts, or behavior tests,
-use [maintain-development-tooling](../maintain-development-tooling/SKILL.md).
+in tracked shell scripts (`*.sh`). It defines the repository's header layout and
+comment-writing conventions; it does not authorize changing executable behavior.
+For script logic, Make targets, tooling contracts, or behavior tests, use
+[maintain-development-tooling](../maintain-development-tooling/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md).
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -47,8 +46,8 @@ Inspect the script and its callers before writing its header:
   that a host-side script runs in the PHP container.
 
 Place the header immediately after the shebang. For a sourceable file without a
-shebang, place it at the beginning of the file. Use a comment-only block with
-an unlabeled opening sentence that explains the script's purpose. Do not prefix
+shebang, place it at the beginning of the file. Use a comment-only block with an
+unlabeled opening sentence that explains the script's purpose. Do not prefix
 that sentence with `Purpose:`.
 
 Separate the opening sentence and each section with a blank comment line. Put
@@ -110,29 +109,28 @@ image entrypoints, or script paths beneath them. For example:
 ```
 
 Trace direct invocations, sourcing, and relevant Make-to-workflow call chains
-from current files such as `Makefile`, `.github/workflows/`,
-`.github/actions/`, `Dockerfile`, and neighboring scripts. Identify the relation
-when it is not apparent, such as “sources,” “invokes,” or “via Make target.”
-Include only real repository-owned runtime or development callers. Do not treat
-static-analysis file lists, path filters, mentions in documentation, or tests
-that only inspect source text as runtime callers. If a script has no useful
-repository caller to document, omit this optional section rather than guessing
-or listing the script's author as its caller.
+from current files such as `Makefile`, `.github/workflows/`, `.github/actions/`,
+`Dockerfile`, and neighboring scripts. Identify the relation when it is not
+apparent, such as “sources,” “invokes,” or “via Make target.” Include only real
+repository-owned runtime or development callers. Do not treat static-analysis
+file lists, path filters, mentions in documentation, or tests that only inspect
+source text as runtime callers. If a script has no useful repository caller to
+document, omit this optional section rather than guessing or listing the
+script's author as its caller.
 
-Keep the list concise and maintainable: group related targets under their
-shared Make macro or dispatcher when appropriate, and avoid enumerating every
+Keep the list concise and maintainable: group related targets under their shared
+Make macro or dispatcher when appropriate, and avoid enumerating every
 transitive consumer of a generic helper. Do not add a caller list to general
-documentation as a substitute for documenting the script's supported
-invocation in `Usage:`.
+documentation as a substitute for documenting the script's supported invocation
+in `Usage:`.
 
 ## Workflow [ᐞ](#table-of-contents)
 
 <a id="workflow"></a>
 
 1. Establish whether the request is documentation-only. If it also changes
-   script behavior, follow
-   [maintain-development-tooling](../maintain-development-tooling/SKILL.md) for
-   the behavior contract, callers, tests, and tooling validation.
+   script behavior, follow [maintain-development-tooling](../maintain-development-tooling/SKILL.md)
+   for the behavior contract, callers, tests, and tooling validation.
 2. Read the script and relevant callers. Record only facts necessary to document
    its supported invocation, execution context, inputs, outputs, status, and
    side effects. Preserve distinctions such as interactive versus noninteractive
@@ -142,8 +140,8 @@ invocation in `Usage:`.
    boundaries and show meaningful alternatives as separate commands.
 4. Add a `Callers:` section when the repository integration is useful context.
    Verify every target and path against its actual invocation or source
-   relationship; distinguish direct callers from callers that route through
-   Make or another script.
+   relationship; distinguish direct callers from callers that route through Make
+   or another script.
 5. Add code comments only where they explain non-obvious intent, shell
    semantics, a safety constraint, or a meaningful phase boundary. Prefer a
    focused comment at the relevant code over expanding the file header.
@@ -159,8 +157,8 @@ invocation in `Usage:`.
 
 * Explain why a non-obvious operation or constraint exists, not what the next
   command visibly does.
-* Keep comments next to the code they clarify and update or remove comments
-  made inaccurate by a documentation change.
+* Keep comments next to the code they clarify and update or remove comments made
+  inaccurate by a documentation change.
 * Describe actual behavior, including failure handling and side effects. Do not
   promise safety, validation, cleanup, portability, or read-only behavior unless
   the implementation and its callers establish it.
@@ -176,8 +174,7 @@ confirm executable code and file modes are unchanged. Run Markdown checks when
 this skill or other Markdown files change. Shell syntax and behavior checks are
 needed when executable shell code changes, not merely because the changed file
 has a `.sh` extension. For shell behavior changes, follow the validation
-selection in
-[maintain-development-tooling](../maintain-development-tooling/SKILL.md#validation).
+selection in [maintain-development-tooling](../maintain-development-tooling/SKILL.md#validation).
 
 Run the documentation checks from the repository root on the Docker host with
 development services running:

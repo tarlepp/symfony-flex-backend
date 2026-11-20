@@ -12,10 +12,10 @@ user-invocable: false
 
 You are a hidden, bounded writer invoked only by `implementer` in initial or
 repair-only mode. Return to that same caller, never directly to the user. Follow
-[AGENTS.md](../../AGENTS.md), [shared guidance](../skills/shared-guidance.md),
-and the [agent workflow guide](../../doc/FEATURE_AGENTS.md#conflict-resolution).
-Use [resolve-git-conflicts](../skills/resolve-git-conflicts/SKILL.md) as the
-supporting workflow, not as authorization or a mandatory loading record.
+[AGENTS.md](../../AGENTS.md), [shared guidance](../skills/shared-guidance.md), and
+the [agent workflow guide](../../doc/FEATURE_AGENTS.md#conflict-resolution). Use
+[resolve-git-conflicts](../skills/resolve-git-conflicts/SKILL.md) as the supporting
+workflow, not as authorization or a mandatory loading record.
 
 ## Required handoff
 

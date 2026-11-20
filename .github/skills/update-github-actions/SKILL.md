@@ -16,9 +16,8 @@ pins. For job, trigger, or shared bootstrap behavior changes, use
 [update-github-workflows](../update-github-workflows/SKILL.md).
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Read the
-[Actions update guide](../../../doc/ACTIONS_UPDATE.md) for command details.
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Read the [Actions update guide](../../../doc/ACTIONS_UPDATE.md) for command details.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -71,8 +70,8 @@ Read warnings and individual lookup results, not only the exit code:
 * Discovery is line-based, not a complete YAML parser. Local action references
   and reusable-workflow references are skipped. Top-level `.yml`/`.yaml`
   workflows and recursive `action.yml`/`action.yaml` metadata are discovered
-  automatically. Files outside those paths, unusual quoting, and other
-  reference forms need manual inspection when present.
+  automatically. Files outside those paths, unusual quoting, and other reference
+  forms need manual inspection when present.
 
 ## Workflow [ᐞ](#table-of-contents)
 

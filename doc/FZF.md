@@ -2,11 +2,11 @@
 
 <a id="what-is-this"></a>
 
-[fzf](https://github.com/junegunn/fzf) is a command-line fuzzy finder. The PHP
-development image includes Debian's `fzf` package for selecting files, searching
-shell history, and navigating directories in Bash and Fish. It is available in
-regular Compose shells, IDE Dev Containers, and the CI development image, but is
-not installed in the production image.
+[fzf](https://github.com/junegunn/fzf) is a command-line fuzzy finder. The PHP development
+image includes Debian's `fzf` package for selecting files, searching shell
+history, and navigating directories in Bash and Fish. It is available in regular
+Compose shells, IDE Dev Containers, and the CI development image, but is not
+installed in the production image.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -104,8 +104,8 @@ same feature is available through `make bash`. Fish uses Tab completion.
 
 To browse registered targets by name, description, or risk marker, run
 `make-pick` from `/app` in Bash or Fish. **Enter** runs the selected target;
-**Esc** cancels. To use standard Readline instead of `ble.sh`, run the
-following inside the PHP development container:
+**Esc** cancels. To use standard Readline instead of `ble.sh`, run the following
+inside the PHP development container:
 
 ```bash
 SYMFONY_BASH_LIVE_COMPLETION=0 bash --rcfile /app/scripts/make/bashrc.sh -i
@@ -149,8 +149,8 @@ docker compose exec -T php bash -c \
 <a id="troubleshooting"></a>
 
 If `fzf` is missing, rebuild and recreate the PHP container using the
-[setup instructions](#setup). Rebuilding an image alone does not update an
-already running container.
+[setup instructions](#setup). Rebuilding an image alone does not update an already
+running container.
 
 If shortcuts do not work, open a fresh interactive shell with `make bash` or
 `make fish` on the Docker host. Ensure the terminal or IDE is not intercepting

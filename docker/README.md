@@ -19,10 +19,10 @@ the [fzf guide](../doc/FZF.md).
 
 <a id="python-development-dependencies"></a>
 
-The root [`requirements.txt`](../requirements.txt) declares the development
-container's Python dependencies. PyYAML, setuptools, and thefuck share the
-`/home/dev/.venv` virtual environment, which is on `PATH` for both interactive
-shells and noninteractive tooling. System Python remains unchanged.
+The root [`requirements.txt`](../requirements.txt) declares the development container's
+Python dependencies. PyYAML, setuptools, and thefuck share the `/home/dev/.venv`
+virtual environment, which is on `PATH` for both interactive shells and
+noninteractive tooling. System Python remains unchanged.
 
 Update package pins in `requirements.txt`; dependency updates do not require
 editing `Dockerfile`. The manifest is copied before installation so changes
@@ -48,8 +48,7 @@ environments.
 The root `Dockerfile` declares `NVM_VERSION`, `NVM_INSTALLER_SHA256`, and
 `NODE_VERSION` together at the top. Their pinned defaults can be overridden with
 build arguments. Only the development stage imports them; maintenance and
-production do not install this toolchain. See
-[toolchain versions and checksums](../doc/DOCKER_MULTI_PLATFORM.md#development-toolchain-versions-and-checksums)
+production do not install this toolchain. See [toolchain versions and checksums](../doc/DOCKER_MULTI_PLATFORM.md#development-toolchain-versions-and-checksums)
 for how these settings differ from Docker image pins and the scope of the image
 update commands.
 

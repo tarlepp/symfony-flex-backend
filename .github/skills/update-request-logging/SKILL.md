@@ -15,12 +15,10 @@ authorize collecting more sensitive data or changing authentication, account
 lockout, or retention policy.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
-[repository instructions](../../copilot-instructions.md) and
-[AI rules](../../../doc/AI_RULES.md). Use
-[update-application-configuration](../update-application-configuration/SKILL.md)
-for settings and wiring, and
-[implement-api-authentication](../implement-api-authentication/SKILL.md) when
-authentication behavior changes.
+[repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).
+Use [update-application-configuration](../update-application-configuration/SKILL.md)
+for settings and wiring, and [implement-api-authentication](../implement-api-authentication/SKILL.md)
+when authentication behavior changes.
 
 ## Table of Contents [ᐞ](#table-of-contents)
 
@@ -59,8 +57,8 @@ Trace the affected data from its source to every stored or emitted copy:
 * `REQUEST_LOG_SENSITIVE_PROPERTIES` and `REQUEST_LOG_IGNORED_ROUTES` in tracked
   application JSON defaults and test configuration, their direct `#[Autowire]`
   consumers, and the `APPLICATION_CONFIG` selection. Follow the
-  [configuration guide](../../../doc/CUSTOM_CONFIGURATION.md) without printing
-  resolved secrets or reading private configuration unnecessarily.
+  [configuration guide](../../../doc/CUSTOM_CONFIGURATION.md) without printing resolved
+  secrets or reading private configuration unnecessarily.
 
 ## Workflow [ᐞ](#table-of-contents)
 
@@ -134,9 +132,9 @@ Trace the affected data from its source to every stored or emitted copy:
     operator action without overwriting local files. For changed persisted
     mappings, use [add-doctrine-entity](../add-doctrine-entity/SKILL.md). Review
     serializer groups and nested log associations for exposure, using
-    [update-api-response-contract](../update-api-response-contract/SKILL.md)
-    when output changes. New redaction does not sanitize historical rows;
-    surface any required cleanup or backfill as separate approved work.
+    [update-api-response-contract](../update-api-response-contract/SKILL.md) when
+    output changes. New redaction does not sanitize historical rows; surface any
+    required cleanup or backfill as separate approved work.
 
 ## Validation [ᐞ](#table-of-contents)
 

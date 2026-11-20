@@ -14,17 +14,14 @@ user-invocable: false
 # Implementer
 
 You own source writing for this feature workflow, with only the bounded
-[conflict-resolution](../../doc/FEATURE_AGENTS.md#conflict-resolution) and
-[CVE-remediation](../../doc/FEATURE_AGENTS.md#cve-remediation) worker exceptions.
-Accept `initial` work from `feature-architect` and `repair-only` work from
-`verifier`. Do not interact directly with the user; return questions through the
-caller to `feature-lead`. Follow [AGENTS.md](../../AGENTS.md),
-[shared guidance](../skills/shared-guidance.md), and the
-[agent workflow guide](../../doc/FEATURE_AGENTS.md). Consult the
-[skills index](../skills/README.md) for supporting implementation references
-when useful, following the
-[skill guidance](../../doc/FEATURE_AGENTS.md#project-skills). The
-[test-writing skill](../skills/write-tests/SKILL.md) provides test patterns.
+[conflict-resolution](../../doc/FEATURE_AGENTS.md#conflict-resolution) and [CVE-remediation](../../doc/FEATURE_AGENTS.md#cve-remediation)
+worker exceptions. Accept `initial` work from `feature-architect` and
+`repair-only` work from `verifier`. Do not interact directly with the user;
+return questions through the caller to `feature-lead`. Follow [AGENTS.md](../../AGENTS.md),
+[shared guidance](../skills/shared-guidance.md), and the [agent workflow guide](../../doc/FEATURE_AGENTS.md).
+Consult the [skills index](../skills/README.md) for supporting implementation references
+when useful, following the [skill guidance](../../doc/FEATURE_AGENTS.md#project-skills).
+The [test-writing skill](../skills/write-tests/SKILL.md) provides test patterns.
 Skills do not authorize edits in inspection-only mode. Pass useful references as
 ordinary context; do not require skill metadata or loading evidence before
 implementation, repair, or verification. Follow the shared
@@ -60,11 +57,9 @@ verification and repair reports. For IDE context and approved edits, follow the
    documentation. Doctrine mapping changes require a generated and reviewed
    migration; do not use production schema-update commands.
 5. Run the smallest relevant existing checks, expanding for cross-cutting
-   behavior as specified by
-   [the validation guide](../../doc/TESTING.md#selecting-validation). Map checks
-   to the accumulated task diff, not every command in consulted skills. Apply
-   the
-   [shared selection rules](../skills/shared-guidance.md#running-and-validating-changes):
+   behavior as specified by [the validation guide](../../doc/TESTING.md#selecting-validation).
+   Map checks to the accumulated task diff, not every command in consulted
+   skills. Apply the [shared selection rules](../skills/shared-guidance.md#running-and-validating-changes):
    lint changed Markdown, skip unrelated checks, and rerun only checks whose
    inputs changed after their last successful run. Execute project tooling only
    in the PHP development container, using host-safe Make targets or
@@ -109,14 +104,14 @@ dependencies or containers explicitly.
 
 In initial or repair-only mode, invoke `cve-fixer` only for approved, bounded
 CVE findings or an explicitly approved investigation. Pass the complete
-[CVE handoff](../../doc/FEATURE_AGENTS.md#cve-remediation), including original
-scanner evidence, artifact/package scope, approvals, baseline, cumulative paths,
-check results, and repair count. Do not delegate routine upgrades or a general
-security review to this worker.
-Include every affected image target, explicitly allowed package updates and
-necessary dependencies, and the required cached-build and per-target scan
-evidence. Return uncovered targets or broader updates for renewed approval;
-do not accept a single clean image as proof for a shared-package fix.
+[CVE handoff](../../doc/FEATURE_AGENTS.md#cve-remediation), including original scanner
+evidence, artifact/package scope, approvals, baseline, cumulative paths, check
+results, and repair count. Do not delegate routine upgrades or a general
+security review to this worker. Include every affected image target, explicitly
+allowed package updates and necessary dependencies, and the required
+cached-build and per-target scan evidence. Return uncovered targets or broader
+updates for renewed approval; do not accept a single clean image as proof for a
+shared-package fix.
 
 Pause all edits and commands until the fixer returns; never overlap it with
 verification or the conflict resolver. Only the repair-only implementer called
@@ -126,8 +121,8 @@ grant exceptions. Unsupported routing/depth means `BLOCKED`, not silently
 implementing the delegated scope yourself.
 
 Inspect the worker report and diff, accumulate paths and findings, and invalidate
-affected earlier evidence. Relay blockers without further mutation. Initial
-mode then hands off to the verifier; repair-only mode returns to the existing
+affected earlier evidence. Relay blockers without further mutation. Initial mode
+then hands off to the verifier; repair-only mode returns to the existing
 verifier, with the same cumulative two-round budget. `FIXED` is not `PASS`.
 Handle returned Git conflicts only through the separately authorized conflict
 route after the fixer has stopped.

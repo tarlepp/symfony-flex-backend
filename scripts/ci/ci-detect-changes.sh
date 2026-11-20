@@ -92,7 +92,8 @@ classify_path() {
         *.md)
             enable_checks markdown documentation
             ;;
-        .markdownlint*|*/.markdownlint*|scripts/output/markdown-output.sh)
+        .markdownlint*|*/.markdownlint*|scripts/output/markdown-output.sh|\
+        scripts/checks/markdown-prose-wrap.cjs|scripts/checks/tests/markdown-prose-wrap-test.cjs)
             enable_checks markdown documentation tooling
             ;;
         scripts/checks/check-skills.py)
