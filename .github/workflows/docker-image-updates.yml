@@ -236,31 +236,36 @@ jobs:
             fi
           } > "$RUNNER_TEMP/docker-image-changes.md"
 
-          cat > "$RUNNER_TEMP/docker-image-pr.md" << 'EOF'
-          # Summary
+          sed \
+            -e 's|^\* Describe the change$|* Refresh Docker image pins with available stable minor/patch versions or digest-only updates, without changing their major versions; floating tags receive digest refreshes only.|' \
+            -e 's|^\* Explain why it is needed$|* Keep image pins aligned with upstream while preserving variants and supported platforms. Major-version upgrades remain a manual review.|' \
+            .github/pull_request_template.md > "$RUNNER_TEMP/docker-image-pr.md"
 
-          * Refresh tagged Docker image pins to available stable minor/patch versions,
-            without changing their major versions.
-          * Refresh multi-platform digests while preserving image variants and
-            supported platforms; floating tags receive digest refreshes only.
-          * Limit PHP to patch updates and synchronize the root and tool Composer
-            PHP requirements, platform settings and lockfiles without upgrading packages.
-          * Synchronize Doctrine's configured server version when the MariaDB tag changes.
-          * Major-version upgrades remain a manual review so compatibility changes
-            are not applied automatically.
+          {
+          cat << 'EOF'
 
-          # Dockerfile image changes
+          ## Automated update details
+
+          PHP is limited to patch updates. When its tag changes, the root and tool
+          Composer requirements, platform settings and lockfiles are synchronized
+          without upgrading packages. Doctrine's configured server version is
+          synchronized when the MariaDB tag changes.
+          EOF
+          python3 scripts/docker/docker-image-digest-summary.py
+          cat << 'EOF'
+
+          ## Dockerfile image changes
 
           The diff lists each changed Dockerfile and the exact old and new image
           references:
 
           ```diff
           EOF
-          git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' >> "$RUNNER_TEMP/docker-image-pr.md"
-          cat << 'EOF' >> "$RUNNER_TEMP/docker-image-pr.md"
+          git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*'
+          cat << 'EOF'
           ```
 
-          # Validation
+          ## Automated validation evidence
 
           * `bash scripts/make/make.sh test-docker-images` — passed (offline regression tests).
           * `bash scripts/make/make.sh docker-image-update-pins` — passed (live registry resolution).
@@ -269,6 +274,7 @@ jobs:
           * Doctrine server version synchronization passed when the MariaDB tag changed.
           * Application tests and builds are not run by this Docker maintenance workflow.
           EOF
+          } >> "$RUNNER_TEMP/docker-image-pr.md"
 
       - name: Select pull request authentication
         id: authentication

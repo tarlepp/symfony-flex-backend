@@ -54,6 +54,14 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / "scripts/ci/ci-workflow-overview.sh").write_text(
             (ROOT / "scripts/ci/ci-workflow-overview.sh").read_text(),
         )
+        (self.root / "scripts/docker").mkdir(parents=True)
+        (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
+            (ROOT / "scripts/docker/docker-image-digest-summary.py").read_text(),
+        )
+        (self.root / ".github").mkdir(exist_ok=True)
+        (self.root / ".github/pull_request_template.md").write_text(
+            (ROOT / ".github/pull_request_template.md").read_text(),
+        )
         self.output = self.root / "output"
         self.summary = self.root / "summary"
         self.environment = dict(
@@ -287,7 +295,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 self.assertIn("No PHP migration PR:", self.summary.read_text())
 
     def test_php_minor_pr_details_use_template_and_separate_branch(self):
-        (self.root / ".github").mkdir()
+        (self.root / ".github").mkdir(exist_ok=True)
         template = ROOT / ".github/pull_request_template.md"
         (self.root / ".github/pull_request_template.md").write_bytes(template.read_bytes())
         result = self.run_script(
@@ -632,14 +640,16 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("without changing their major versions", body)
         self.assertIn("supported platforms", body)
         self.assertIn("Major-version upgrades remain a manual review", body)
-        self.assertIn("# Dockerfile image changes\n", body)
-        self.assertIn("# Validation\n", body)
+        self.assertIn("## Digest-only image comparisons\n", body)
+        self.assertIn("No digest-only image updates.", body)
+        self.assertIn("## Dockerfile image changes\n", body)
+        self.assertIn("## Validation\n", body)
         self.assertIn("`bash scripts/make/make.sh test-docker-images` — passed", body)
         self.assertIn("`bash scripts/make/make.sh docker-image-update-pins` — passed", body)
         self.assertIn("`bash scripts/make/make.sh docker-image-verify-pins` — passed", body)
         self.assertIn("Application tests and builds are not run", body)
-        self.assertNotIn("Repository architecture checklist", body)
-        self.assertNotIn("* [ ]", body)
+        self.assertIn("Repository architecture checklist", body)
+        self.assertIn("* [ ]", body)
         self.assertIn("Dockerfile", body)
         self.assertIn("```diff\n", body)
         self.assertIn("-FROM php:8.3-cli", body)
@@ -663,6 +673,106 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for path in ("composer.json", "composer.lock", "tools/*/composer.json", "tools/*/composer.lock"):
             self.assertIn(f"            {path}\n", pr)
         self.assertIn("            config/packages/doctrine.yaml\n", pr)
+
+    def test_digest_comparison_reports_registry_evidence_and_unavailable_data(self):
+        old_digest, new_digest = "a" * 64, "b" * 64
+        diff = (
+            f"-FROM example:1@sha256:{old_digest}\n"
+            f"+FROM example:1@sha256:{new_digest}\n"
+            f"-FROM other:1@sha256:{old_digest}\n"
+            f"+FROM other:2@sha256:{new_digest}\n"
+        )
+        (self.root / "diff").write_text(diff)
+        git = self.root / "git"
+        git.write_text('#!/bin/bash\n[ "$1" = diff ] || exit 64\ncat diff\n')
+        git.chmod(0o755)
+        docker = self.root / "docker"
+        docker.write_text(textwrap.dedent("""\
+            #!/bin/bash
+            [ "$1 $2 $3 $4" = "buildx imagetools inspect --raw" ] || exit 64
+            printf '%s\\n' "$5" >> calls
+            case "$5" in
+                *sha256:aaaaaaaa*) cat old.json ;;
+                *sha256:bbbbbbbb*) cat new.json ;;
+                *) exit 64 ;;
+            esac
+            """))
+        docker.chmod(0o755)
+        def descriptor(arch, digest, annotations=None):
+            return {
+                "digest": "sha256:" + digest * 64,
+                "platform": {"os": "linux", "architecture": arch},
+                "annotations": annotations or {},
+            }
+        old = {"manifests": [
+            descriptor("amd64", "c", {"org.opencontainers.image.revision": "old"}),
+            descriptor("arm64", "d"),
+        ]}
+        new = {"manifests": [
+            descriptor("amd64", "e", {"org.opencontainers.image.revision": "<new>"}),
+            descriptor("386", "f"),
+            {"digest": "sha256:" + "1" * 64, "platform": {"os": "unknown", "architecture": "unknown"}},
+        ]}
+        (self.root / "old.json").write_text(json.dumps(old))
+        (self.root / "new.json").write_text(json.dumps(new))
+        env = dict(self.environment, PATH=f"{self.root}:{os.environ['PATH']}")
+        command = ["python3", "scripts/docker/docker-image-digest-summary.py"]
+        result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("<code>example:1</code>", result.stdout)
+        self.assertNotIn("other:", result.stdout)
+        self.assertIn("<code>linux/amd64</code>: manifest changed", result.stdout)
+        self.assertIn("<code>linux/arm64</code>: removed", result.stdout)
+        self.assertIn("<code>linux/386</code>: added", result.stdout)
+        self.assertIn("org.opencontainers.image.revision", result.stdout)
+        self.assertIn("&lt;new&gt;", result.stdout)
+        self.assertIn("Non-runnable descriptors", result.stdout)
+        self.assertIn("not the publisher's reason or exact package changes", result.stdout)
+        self.assertEqual(len((self.root / "calls").read_text().splitlines()), 2)
+
+        result = self.run_script(
+            WORKFLOW, "Prepare pull request details", BASE_BRANCH="master",
+            PATH=f"{self.root}:{os.environ['PATH']}",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        body = (self.root / "docker-image-pr.md").read_text()
+        self.assertIn("<code>linux/amd64</code>: manifest changed", body)
+        self.assertIn("org.opencontainers.image.revision", body)
+
+        unchanged = {"manifests": [descriptor("amd64", "c")]}
+        metadata_only = {"manifests": [
+            descriptor("amd64", "c", {"org.opencontainers.image.created": "2026-01-01"}),
+        ]}
+        (self.root / "old.json").write_text(json.dumps(unchanged))
+        (self.root / "new.json").write_text(json.dumps(metadata_only))
+        result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("manifest unchanged", result.stdout)
+        self.assertIn("org.opencontainers.image.created", result.stdout)
+        self.assertIn("Platform descriptor metadata changed", result.stdout)
+
+        (self.root / "diff").write_text(
+            diff + f"-COPY --from=example:1@sha256:{'c' * 64} /x /x\n",
+        )
+        result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Multiple old or new digests", result.stdout)
+        (self.root / "diff").write_text(diff)
+
+        (self.root / "old.json").write_text("not JSON")
+        result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("the old index could not be retrieved or parsed", result.stdout)
+
+        (self.root / "old.json").unlink()
+        result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("the old index could not be retrieved or parsed", result.stdout)
+
+        git.write_text("#!/bin/bash\nexit 1\n")
+        result = subprocess.run(command, cwd=self.root, env=env, text=True, capture_output=True, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Could not read the Dockerfile diff", result.stderr)
 
     def test_doctrine_sync_updates_only_server_version_on_a_same_major_tag_change(self):
         dockerfile = self.root / "docker/mariadb/Dockerfile"

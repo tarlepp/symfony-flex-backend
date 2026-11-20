@@ -75,6 +75,9 @@ directory relationships so they do not depend on files remaining siblings.
 * [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
+* [Docker digest comparison](docker/docker-image-digest-summary.py)
+  * Compares digest-only updates using registry index metadata for maintenance
+    pull requests. It is called by the Docker image update workflow on the host.
 
 ### Command status output [ᐞ](#table-of-contents)
 
