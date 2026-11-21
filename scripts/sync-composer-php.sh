@@ -1,6 +1,39 @@
 #!/usr/bin/env bash
-# Run in the PHP container with the original Dockerfile on stdin.
-# --next-minor requires the candidate development image with its extensions.
+
+#
+# Synchronize Composer's PHP platform requirement with the pinned PHP image.
+#
+# Usage:
+#   From the repository root on the Docker host, for patch synchronization:
+#     git show HEAD:Dockerfile |
+#       docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T \
+#         -e COMPOSER_HOME=/tmp/composer php bash scripts/sync-composer-php.sh
+#   Candidate minor readiness invokes it internally through:
+#     bash scripts/docker/docker-images.sh check-php-minor --prepare
+#   That flow passes --next-minor in the candidate development image.
+#
+# Inputs:
+#   Reads the old Dockerfile from stdin and the proposed Dockerfile from the
+#   current project directory.
+#
+# Details:
+#   Default mode accepts patch updates; --next-minor accepts only the
+#   immediately following minor in the same major. Both modes update the root
+#   and tool Composer manifests and lockfiles. Next-minor mode also verifies
+#   that locked package versions and source/dist references remain unchanged.
+#
+# Requirements:
+#   Bash, Composer, jq, and valid Composer manifests and lockfiles.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/docker/docker-images.sh` runs --next-minor in the candidate
+#       image when preparing PHP minor readiness.
+#   GitHub Actions:
+#     - `.github/workflows/docker-image-updates.yml` runs patch mode in the
+#       maintenance container.
+#
+
 set -euo pipefail
 
 mode=${1:-patch}
@@ -13,6 +46,7 @@ php_version() {
     sed -nE 's/^FROM php:([0-9]+\.[0-9]+\.[0-9]+)-[^[:space:]@]+@sha256:[a-f0-9]{64} AS php-upstream$/\1/p' "$@"
 }
 
+# Read the old pin from stdin and the proposed pin from the current Dockerfile.
 old_version=$(php_version)
 new_version=$(php_version Dockerfile)
 version_pattern='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
@@ -58,6 +92,8 @@ for manifest in "${manifests[@]}"; do
     fi
 done
 
+# Compare only package identity and source/dist references; platform metadata
+# may legitimately change when the PHP runtime requirement is synchronized.
 locked_packages() {
     jq -ce 'if (.packages | type) != "array" or (.["packages-dev"] | type) != "array" then
         error("Missing locked packages")

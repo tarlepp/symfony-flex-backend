@@ -5,18 +5,21 @@
 # platforms. See doc/DOCKER_MULTI_PLATFORM.md.
 #
 # Usage:
-#   ./scripts/docker/docker-images.sh <command>
+#   From the repository root on the Docker host, use the matching Make target
+#   listed below (for example: make docker-image-check-updates).
+#   Direct invocation from the repository root on the Docker host:
+#     ./scripts/docker/docker-images.sh <command>
 #
 # Commands:
-#   check-updates  Report newer stable image versions (Docker Hub)
-#   check-php-minor Check the next stable PHP minor against locked dependencies
-#   update-pins    Apply same-major stable updates and refresh pinned digests
-#   digest         Show multi-platform index digest and pin reference for image
-#   verify         Verify external FROM and COPY --from Dockerfile pins
-#   platforms      Show platforms supported by the current buildx builder
-#   setup-qemu     Install QEMU emulators for cross-platform builds
-#   build          Build an image for a single platform and load it locally
-#   push           Build a multi-platform image and push it to a registry
+#   check-updates    Report newer stable image versions (Docker Hub)
+#   check-php-minor  Check the next stable PHP minor against locked dependencies
+#   update-pins      Apply same-major stable updates and refresh pinned digests
+#   digest           Show multi-platform index digest and pin reference for image
+#   verify           Verify external FROM and COPY --from Dockerfile pins
+#   platforms        Show platforms supported by the current buildx builder
+#   setup-qemu       Install QEMU emulators for cross-platform builds
+#   build            Build an image for a single platform and load it locally
+#   push             Build a multi-platform image and push it to a registry
 #
 # Inputs:
 #   IMAGE       Image reference (digest), or optional single image (check-updates)
@@ -50,21 +53,9 @@
 #       `docker-image-update-pins`, `docker-image-verify-pins`, and
 #       `test-docker-images` through Make.
 #
-# Callers:
-#   Makefile:
-#     - `docker-builder-platforms`, `docker-image-check-updates`,
-#       `docker-image-digest`, `docker-image-verify-pins`, `docker-setup-qemu`,
-#       `docker-build-multi-platform`, `docker-build-platform`, and
-#       `docker-image-update-pins` targets.
-#     - `test-docker-images` runs its offline regression fixture.
-#   GitHub Actions:
-#     - `.github/workflows/main.yml` runs `check-updates --advisory`.
-#     - `.github/workflows/docker-image-updates.yml` runs
-#       `docker-image-update-pins`, `docker-image-verify-pins`, and
-#       `test-docker-images` through Make.
-#
 
 set -euo pipefail
+
 # shellcheck source=scripts/output/command-output.sh
 source "$(dirname "$0")/../output/command-output.sh"
 

@@ -146,7 +146,9 @@ in `Usage:`.
    or another script.
 5. Add code comments only where they explain non-obvious intent, shell
    semantics, a safety constraint, or a meaningful phase boundary. Prefer a
-   focused comment at the relevant code over expanding the file header.
+   focused comment at the relevant code over expanding the file header. Separate
+   logical phases with blank lines when useful; keep related commands together
+   and avoid mechanical spacing.
 6. Review the diff to confirm that executable lines, quoting, ordering,
    shebangs, executable modes, and sourced-versus-executed behavior did not
    change. Do not run scripts whose documented behavior could mutate files,
@@ -159,6 +161,9 @@ in `Usage:`.
 
 * Explain why a non-obvious operation or constraint exists, not what the next
   command visibly does.
+* Add comments at meaningful phase boundaries when intent or transitions are
+  unclear. Use blank lines between setup, validation, execution, and reporting
+  phases where useful; do not separate every command.
 * Keep comments next to the code they clarify and update or remove comments made
   inaccurate by a documentation change.
 * Describe actual behavior, including failure handling and side effects. Do not

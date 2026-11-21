@@ -35,6 +35,7 @@ curl --fail --silent --show-error --location \
 printf '%s  %s\n' "$checksum" "$destination" | sha256sum --check --quiet
 
 mkdir -p "$(dirname "$cache_file")"
+# Stage beside the cache entry so a failed copy cannot publish a partial cache.
 staging=$(mktemp "${cache_file}.XXXXXX")
 
 if cp "$destination" "$staging" && mv "$staging" "$cache_file"; then

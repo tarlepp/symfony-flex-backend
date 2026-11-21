@@ -141,7 +141,9 @@ loads the supplied test file as a module before running `unittest`.
    executable statements.
 4. Review function definitions and their bodies as well as the header. Add
    function documentation or inline comments where they clarify a contract,
-   explain a non-obvious choice, or mark a meaningful phase boundary.
+   explain a non-obvious choice, or mark a meaningful phase boundary. Separate
+   logical phases with blank lines when useful; keep related statements together
+   and avoid mechanical spacing.
 5. Review the diff for unchanged executable statements, import order, shebangs,
    encoding declarations, and file modes. Do not run scripts if documenting them
    could mutate files, contact services, or affect shared containers.
@@ -158,6 +160,9 @@ loads the supplied test file as a module before running `unittest`.
 * Explain why a non-obvious operation or constraint exists, not what the next
   statement visibly does. For example, explain why a parser preserves blank
   lines for diagnostic offsets or why a check deliberately skips some inputs.
+* Add comments at meaningful phase boundaries when intent or transitions are
+  unclear. Use blank lines between setup, validation, execution, and reporting
+  phases where useful; do not separate every statement.
 * Keep comments next to the code they clarify. Update or remove comments made
   inaccurate by a documentation change.
 * Describe actual behavior, including failure handling and side effects; do not

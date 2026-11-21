@@ -4,7 +4,10 @@
 # Provide the entry point for the read-only project statistics report.
 #
 # Usage:
-#   Run through the project Make target or invoke this script directly.
+#   From the repository root on the Docker host or in the PHP development container:
+#     make project-stats
+#   Direct invocation from the repository root inside the container:
+#     bash scripts/reports/project-stats.sh
 #
 # Details:
 #   Delegates collection and formatting to the adjacent Python implementation,

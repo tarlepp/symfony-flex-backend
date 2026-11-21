@@ -46,6 +46,7 @@ def reports(raw, log, outcome):
     """Return compact and highlighted reports with the same readiness evidence."""
     lines = raw.splitlines()
     result = next((line for line in reversed(lines) if line.startswith("**Result: ")), "")
+
     if outcome != "success":
         result = "**Result: Check failed; PHP minor readiness is incomplete**"
     elif not result:
@@ -53,6 +54,8 @@ def reports(raw, log, outcome):
 
     identity = [line for line in lines if line.startswith(("Current: ", "Candidate: "))]
     reason = next((line for line in lines if line.startswith("Reason: ")), "")
+
+    # Fall back to the structured Composer table when no explicit reason exists.
     if not reason:
         constraint = next((
             match for line in lines
@@ -68,17 +71,23 @@ def reports(raw, log, outcome):
         if re.search(r"\berror:|^ERROR:|^\[FAIL\]|^::error::", line, re.IGNORECASE):
             if line not in errors:
                 errors.append(line)
+
     if not reason and errors:
         reason = f"Reason: <code>{html.escape(errors[0])}</code>"
+
     if not reason and outcome != "success":
         reason = "Reason: The check did not complete; compatibility has not been established. See the job log."
+
     if not reason and not raw:
         reason = "Reason: No readiness evidence is available. See the job log."
+
     if not reason and "Blocked:" in result:
         reason = "Reason: No detailed diagnostic was captured. See the job log."
 
     explanation = ""
     extension_summary = ""
+
+    # Add compiler-specific detail only when the candidate image build failed.
     if "Blocked: candidate development image did not build" in result:
         explanation = "**Build error:** The candidate PHP development image could not be built."
         failures = {}
@@ -117,6 +126,7 @@ def reports(raw, log, outcome):
                 "The failing extension could not be identified from compiler error source paths."
             )
 
+    # Keep the headline concise; full source evidence remains in the details block.
     headline = "\n\n".join(
         [*identity, result, *([explanation, extension_summary] if explanation else []),
          *([reason] if reason else [])],

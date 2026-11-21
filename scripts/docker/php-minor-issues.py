@@ -74,16 +74,20 @@ def main():
     parser.add_argument("--log", type=Path, required=True)
     parser.add_argument("--outcome", required=True)
     args = parser.parse_args()
+
     if args.outcome != "success":
         return
 
     raw = args.source.read_text()
     result = next((line for line in reversed(raw.splitlines()) if line.startswith("**Result: ")), "")
+
     if not result:
         raise ValueError("PHP readiness evidence has no result")
+
     composer_blocked = result.startswith("**Result: Blocked: locked platform requirements")
     build_blocked = result.startswith("**Result: Blocked: candidate development image did not build")
     ready = result == "**Result: Prepared for a migration PR**"
+
     if build_blocked:
         log = args.log.read_text(errors="replace")
         build_blocked = bool(re.search(
@@ -94,14 +98,17 @@ def main():
         return
 
     candidate = re.search(r"^Candidate: `php:(\d+)\.(\d+)\.\d+(-[A-Za-z0-9_.-]+)`$", raw, re.MULTILINE)
+
     if not candidate:
         raise ValueError("PHP readiness evidence has no valid candidate image")
+
     branch = os.environ["BASE_BRANCH"]
     branch_id = hashlib.sha256(branch.encode()).hexdigest()
     version = f"{candidate[1]}.{candidate[2]}{candidate[3]}"
     # Patch versions are excluded so repeated checks reuse the same minor issue.
     marker = f"<!-- php-minor-blocker:{branch_id}:{version} -->"
     endpoint = "repos/{owner}/{repo}/issues"
+
     pages = github_api(f"{endpoint}?state=open&per_page=100")
     if not isinstance(pages, list) or not all(isinstance(page, list) for page in pages):
         raise ValueError("Unexpected GitHub issue listing")
@@ -130,6 +137,7 @@ def main():
     for issue in matches:
         if not isinstance(issue.get("number"), int) or issue["number"] <= 0:
             raise ValueError("GitHub returned an issue without a valid number")
+
     if ready and matches:
         closing = "\n".join(f"Closes #{issue['number']}" for issue in matches)
         delimiter = f"issues-{uuid.uuid4()}"
