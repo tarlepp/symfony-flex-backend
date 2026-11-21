@@ -1,34 +1,34 @@
 #!/usr/bin/env python3
-"""Filter SGR decoration or indent command output while preserving streaming.
+"""Filter SGR decoration or indent command output while preserving streaming."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  Direct invocation from the repository root inside the container:
-    python3 scripts/output/native-output.py printf example
-    python3 scripts/output/native-output.py --indent printf example
-
-Requirements:
-  Python 3.10 or later and pseudo-terminal support.
-
-Details:
-  The default mode removes SGR color and style sequences, leaving other escape
-  sequences intact. Indent mode adds four spaces to nonempty lines and a final
-  newline to unterminated output. Both modes relay stdout and stderr separately,
-  using a pseudo-terminal for each terminal destination and a pipe otherwise.
-  The supplied command is executed; its side effects are not restricted.
-
-Exit Status:
-  Returns the command status, or 128 plus its terminating signal number.
-  Missing commands return 127 and missing arguments return 64.
-
-Callers:
-  Scripts:
-    - `scripts/output/native-output.sh` uses the default filter when native
-      color is disabled.
-    - `scripts/checks/lint-workflows.sh` and
-      `scripts/tests/command-output-contract-test.sh` use indent mode.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   Direct invocation from the repository root inside the container:
+#     python3 scripts/output/native-output.py printf example
+#     python3 scripts/output/native-output.py --indent printf example
+#
+# Requirements:
+#   Python 3.10 or later and pseudo-terminal support.
+#
+# Details:
+#   The default mode removes SGR color and style sequences, leaving other escape
+#   sequences intact. Indent mode adds four spaces to nonempty lines and a final
+#   newline to unterminated output. Both modes relay stdout and stderr separately,
+#   using a pseudo-terminal for each terminal destination and a pipe otherwise.
+#   The supplied command is executed; its side effects are not restricted.
+#
+# Exit Status:
+#   Returns the command status, or 128 plus its terminating signal number.
+#   Missing commands return 127 and missing arguments return 64.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/output/native-output.sh` uses the default filter when native
+#       color is disabled.
+#     - `scripts/checks/lint-workflows.sh` and
+#       `scripts/tests/command-output-contract-test.sh` use indent mode.
 
 import errno
 import fcntl
