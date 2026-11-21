@@ -1,5 +1,24 @@
 #!/usr/bin/env python3
-"""Offline checks of CI gate cancellation guards and actual result scripts."""
+"""Test CI gate decisions, workflow wiring, and job summaries offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make lint-workflows
+  To run only this suite from the repository root inside the container:
+    python3 scripts/ci/tests/ci-gates-test.py
+
+Requirements:
+  Python 3, Bash, and standard Linux command-line tools.
+
+Details:
+  The suite reads the checked-out workflow definitions and runs local helper
+  scripts with simulated CI results. It does not run hosted jobs or build images.
+
+Callers:
+  Scripts:
+    - `scripts/checks/lint-workflows.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py` before preparing validator binaries.
+"""
 
 import os
 from pathlib import Path
@@ -18,6 +37,7 @@ WORKFLOWS = WORKFLOW.parent
 class CiGatesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        """Keep the original job text for assertions about workflow wiring."""
         cls.workflow = WORKFLOW.read_text()
         cls.jobs = dict(re.findall(
             r"^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)",
@@ -755,6 +775,7 @@ class CiGatesTest(unittest.TestCase):
                     self.assertEqual(tag, f"ci-{sha}-{target}")
 
     def run_gate(self, job, environment):
+        """Run the Bash gate named in the workflow with the fixture's CI inputs."""
         script = re.search(
             r"^        run: bash (scripts/ci/ci-[\w-]+\.sh)$",
             self.jobs[job], re.MULTILINE,
@@ -812,6 +833,7 @@ class CiGatesTest(unittest.TestCase):
                     result = self.run_gate(job, environment)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertNotIn("::error::", result.stderr)
+                # Vary one result at a time so each rejection identifies its own dependency.
                 for name in result_names:
                     for status in ("success", "failure", "cancelled", "skipped", "", "unknown"):
                         if status == environment[name]:
