@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
-"""Offline regression checks for command status output and the Docker test pilot."""
+"""Test command output, streaming, and regression-suite reporting contracts.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/output/tests/command-output-test.py
+
+Requirements:
+  Python 3, Bash, and Linux pseudo-terminal support.
+
+Details:
+  Exercises real output helpers and an offline Docker image test suite, using
+  temporary fixtures and mocked Docker and registry responses. Checks cover
+  color, stream separation, partial lines, signals, progress, and nested test
+  reporting. The mocked Docker suite does not verify actual image pins.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -35,6 +56,7 @@ DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
 
 class CommandOutputTest(unittest.TestCase):
     def environment(self, **overrides):
+        """Isolate color, locale, and progress settings before applying overrides."""
         environment = dict(os.environ, COLOR="auto", TERM="xterm", PROGRESS="never", LANG="C")
         for name in ("NO_COLOR", "NATIVE_COLOR", "CI", "LC_ALL", "LC_CTYPE", "OUTPUT_PROGRESS_DELAY", "OUTPUT_PROGRESS_STARTED",
                      "OUTPUT_PROGRESS_SHARED"):
@@ -73,6 +95,7 @@ class CommandOutputTest(unittest.TestCase):
         return process.wait(timeout=10), output, stdout
 
     def run_command(self, command, **environment):
+        """Capture stdout, stderr, and status under the controlled test environment."""
         return subprocess.run(
             command, env=self.environment(**environment), cwd=ROOT,
             text=True, capture_output=True, check=False,
@@ -226,6 +249,7 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("command not found", result.stderr)
 
     def test_native_decoration_filter_streams_before_command_completion(self):
+        # A separate process group lets cleanup stop the whole long-running fixture.
         process = subprocess.Popen(
             ["bash", str(NATIVE), "bash", "-c",
              "printf '\\033['; sleep 0.1; printf '32mready'; "
@@ -792,6 +816,7 @@ class CommandOutputTest(unittest.TestCase):
                 ROOT / "scripts/tests/run-workflow-tests.py",
                 root / "scripts/tests/run-workflow-tests.py",
             )
+            # Run the real output relay while recording or failing suite invocations.
             python.write_text(
                 '#!/bin/bash\n'
                 f'if [[ "$1" == scripts/output/native-output.py ]]; then exec {shutil.which("python3")} "$@"; fi\n'
