@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
-"""Relay a command's output and draw an idle progress indicator on stderr.
+"""Relay a command's output and draw an idle progress indicator on stderr."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    PROGRESS=always make lint-markdown
-  Direct invocation from the repository root inside the container:
-    python3 scripts/output/command-progress.py "Example" plain sleep 2
-  Pass color instead of plain to color the spinner frame.
-
-Environment:
-  OUTPUT_PROGRESS_DELAY sets the idle delay in seconds (default: 1).
-  OUTPUT_PROGRESS_SHARED=1 tells the pipe relay that both streams originally
-  shared a terminal, so it merges them to preserve ordering.
-
-Details:
-  The relay uses pseudo-terminals or pipes to preserve the descriptor types the
-  child sees where possible. It draws on stderr only after silence at a line
-  boundary and clears the indicator before forwarding output.
-
-Exit Status:
-  Returns the command's status, using 128 plus the signal number when it
-  terminates by signal. Invalid arguments return 64; command lookup and
-  permission failures return 127 and 126, respectively.
-
-Callers:
-  Scripts:
-    - `scripts/output/command-output.sh` invokes the relay for external commands
-      when progress is enabled.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     PROGRESS=always make lint-markdown
+#   Direct invocation from the repository root inside the container:
+#     python3 scripts/output/command-progress.py "Example" plain sleep 2
+#   Pass color instead of plain to color the spinner frame.
+#
+# Environment:
+#   OUTPUT_PROGRESS_DELAY sets the idle delay in seconds (default: 1).
+#   OUTPUT_PROGRESS_SHARED=1 tells the pipe relay that both streams originally
+#   shared a terminal, so it merges them to preserve ordering.
+#
+# Details:
+#   The relay uses pseudo-terminals or pipes to preserve the descriptor types the
+#   child sees where possible. It draws on stderr only after silence at a line
+#   boundary and clears the indicator before forwarding output.
+#
+# Exit Status:
+#   Returns the command's status, using 128 plus the signal number when it
+#   terminates by signal. Invalid arguments return 64; command lookup and
+#   permission failures return 127 and 126, respectively.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/output/command-output.sh` invokes the relay for external commands
+#       when progress is enabled.
 
 import errno
 import fcntl
