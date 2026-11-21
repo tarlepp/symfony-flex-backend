@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test Docker image maintenance workflow wiring and selected steps offline.
+"""Test Docker image maintenance workflow wiring and selected steps offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make lint-workflows
-  To run only this suite from the repository root inside the container:
-    python3 scripts/docker/tests/docker-image-workflow-test.py
-
-Requirements:
-  Python 3, PyYAML, Bash, jq, and standard Linux command-line tools.
-
-Details:
-  The suite inspects checked-out workflow and action definitions. It runs
-  selected shell steps in temporary directories with fixture credentials and
-  stubbed external commands, without running hosted jobs or contacting registries.
-
-Callers:
-  Scripts:
-    - `scripts/checks/lint-workflows.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make lint-workflows
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/docker/tests/docker-image-workflow-test.py
+#
+# Requirements:
+#   Python 3, PyYAML, Bash, jq, and standard Linux command-line tools.
+#
+# Details:
+#   The suite inspects checked-out workflow and action definitions. It runs
+#   selected shell steps in temporary directories with fixture credentials and
+#   stubbed external commands, without running hosted jobs or contacting registries.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import hashlib
 import itertools

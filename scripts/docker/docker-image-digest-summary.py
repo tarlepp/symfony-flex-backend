@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Compare digest-only Dockerfile updates using registry index metadata.
+"""Compare digest-only Dockerfile updates using registry index metadata."""
 
-Usage:
-  From the repository root on the Docker host, after updating image pins:
-    python3 scripts/docker/docker-image-digest-summary.py
-
-Requirements:
-  Python 3, Git, and Docker Buildx with access to the relevant registries.
-
-Details:
-  Reads unstaged Dockerfile diffs and compares old and new index digests only
-  for unchanged image tags. Multiple digests for a tag require manual review.
-  Writes a Markdown report to stdout; unavailable or invalid index data is
-  reported without guessing why an image was rebuilt. No images are pulled or
-  run. A failed Git diff exits nonzero; unavailable indexes do not.
-
-Callers:
-  GitHub Actions:
-    - `.github/workflows/docker-image-updates.yml` captures the report for the
-      image-update pull request and workflow summary.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host, after updating image pins:
+#     python3 scripts/docker/docker-image-digest-summary.py
+#
+# Requirements:
+#   Python 3, Git, and Docker Buildx with access to the relevant registries.
+#
+# Details:
+#   Reads unstaged Dockerfile diffs and compares old and new index digests only
+#   for unchanged image tags. Multiple digests for a tag require manual review.
+#   Writes a Markdown report to stdout; unavailable or invalid index data is
+#   reported without guessing why an image was rebuilt. No images are pulled or
+#   run. A failed Git diff exits nonzero; unavailable indexes do not.
+#
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/docker-image-updates.yml` captures the report for the
+#       image-update pull request and workflow summary.
 
 from collections import defaultdict
 import html
