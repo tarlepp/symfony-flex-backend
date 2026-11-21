@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
-"""Check the Make launcher's filtering against real GNU Make invocations."""
+"""Test Make launcher diagnostics, streaming, shell hooks, and forwarding.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/make/tests/make-launcher-test.py
+
+Requirements:
+  Python 3, GNU Make, Bash, Fish, and Linux pseudo-terminal support.
+  The live Bash completion test requires ble.sh and is skipped if it is absent.
+
+Details:
+  The suite runs real Make against temporary recipes or a copied Makefile.
+  Forwarding cases stub Docker so both launcher layers run locally without
+  starting another container.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -75,10 +96,12 @@ class MakeLauncherTest(unittest.TestCase):
         self.root = Path(self.temporary.name)
         self.makefile = self.root / "fixture.mk"
         self.environment = dict(os.environ, COLOR="never", NO_COLOR="")
+        # Do not let an outer Make invocation change the fixture's options.
         self.environment.pop("MAKEFLAGS", None)
         self.environment.pop("MFLAGS", None)
 
     def run_make(self, recipe, *arguments):
+        """Run the real launcher against a scratch Makefile and capture both streams."""
         self.makefile.write_text(recipe)
         return subprocess.run(
             ["bash", str(LAUNCHER), "--no-print-directory", "-f",
@@ -490,6 +513,7 @@ class MakeLauncherTest(unittest.TestCase):
             self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")
 
     def test_partial_stderr_lines_are_streamed_before_completion(self):
+        # Keep the recipe alive after writing so the read proves output is streamed.
         self.makefile.write_text('all:\n\t@printf "Answer: " >&2; sleep 30\n')
         process = subprocess.Popen(
             ["bash", str(LAUNCHER), "--no-print-directory", "-f", str(self.makefile)],
