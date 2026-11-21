@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Verify the CI Composer cache boundary without downloading dependencies."""
+"""Test the CI Composer cache path and writability checks offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make lint-workflows
+  To run only this suite from the repository root inside the container:
+    python3 scripts/ci/tests/composer-cache-test.py
+
+Requirements:
+  Python 3, Bash, and standard Linux command-line tools. The suite stubs
+  Composer and skips the unwritable-directory case when run as root.
+
+Details:
+  The checker uses a temporary cache path. The suite does not install
+  dependencies or exercise a real Docker cache mount.
+
+Callers:
+  Scripts:
+    - `scripts/checks/lint-workflows.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -28,6 +48,7 @@ class ComposerCacheTest(unittest.TestCase):
         composer.chmod(0o755)
 
     def run_check(self, **overrides):
+        """Run the real checker with independently overridable cache paths."""
         environment = dict(
             os.environ,
             PATH=f"{self.root}:{os.environ['PATH']}",
@@ -84,6 +105,7 @@ class ComposerCacheTest(unittest.TestCase):
     def test_rejects_unwritable_cache(self):
         self.cache.mkdir()
         self.cache.chmod(0o555)
+        # Restore permissions before unittest removes the temporary directory.
         self.addCleanup(self.cache.chmod, 0o755)
         result = self.run_check()
         self.assertNotEqual(result.returncode, 0)
