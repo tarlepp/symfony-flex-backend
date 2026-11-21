@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
-"""Verify that informational and blocking checks report and propagate outcomes.
+"""Verify that informational and blocking checks report and propagate outcomes."""
 
-Usage:
-  From the repository root inside the PHP development container:
-    python3 scripts/checks/tests/check-outcomes-test.py
-
-Requirements:
-  Python 3, Bash, and Make. Composer and the security checker are stubbed.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` runs this offline suite.
-  Makefile:
-    - `test-command-output` runs the aggregate suite.
-  GitHub Actions:
-    - `.github/workflows/main.yml` (`lint-configuration` job, via Make).
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/checks/tests/check-outcomes-test.py
+#
+# Requirements:
+#   Python 3, Bash, and Make. Composer and the security checker are stubbed.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
+#   Makefile:
+#     - `test-command-output` runs the aggregate suite.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` (`lint-configuration` job, via Make).
 
 import os
 from pathlib import Path

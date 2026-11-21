@@ -14,8 +14,8 @@ placement, path integrity, and focused behavior validation. Use
 contracts, Make routing, checker behavior, and script readability reviews. Use
 [document-shell-scripts](../document-shell-scripts/SKILL.md) for `.sh` headers and
 explanatory comments and [document-python-scripts](../document-python-scripts/SKILL.md)
-for Python module docstrings and explanatory comments. For CI behavior or
-dependency pins, also use the relevant workflow or dependency skill.
+for Python headers and explanatory comments. For CI behavior or dependency pins,
+also use the relevant workflow or dependency skill.
 
 Follow the [shared skill guidance](../shared-guidance.md), including
 [repository instructions](../../copilot-instructions.md) and [AI rules](../../../doc/AI_RULES.md).

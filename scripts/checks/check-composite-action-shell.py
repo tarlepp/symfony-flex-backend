@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """ShellCheck Bash/sh steps in local composite actions without executing them."""
 
-# The module docstring is also the CLI help summary; keep maintainer details
-# in comments so they do not change the help output.
 #
 # Usage:
-#   From the repository root on the Docker host:
+#   From the repository root on the Docker host or in the PHP development container:
 #     make lint-workflows
-#   Direct invocation inside the PHP development container takes
-#   --shellcheck PATH followed by one or more local action metadata paths.
+#   Direct invocation from the repository root inside the container, with
+#   ShellCheck on PATH:
+#     python3 scripts/checks/check-composite-action-shell.py --shellcheck "$(command -v shellcheck)" .github/actions/php-bootstrap/action.yml
 #
 # Requirements:
 #   PyYAML and a ShellCheck executable supplied via --shellcheck.
@@ -41,6 +40,7 @@ import yaml
 
 
 def check_action(path, shellcheck):
+    """Check all Bash/sh run steps, returning the first ShellCheck failure."""
     action = yaml.safe_load(path.read_text())
     if action["runs"]["using"] != "composite":
         return 0

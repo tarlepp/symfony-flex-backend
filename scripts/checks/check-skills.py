@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Validate skill metadata, index coverage, and repository Markdown links."""
 
-# argparse uses the module docstring as its help summary. Keep these details
-# in comments so the CLI help stays unchanged.
 #
 # Usage:
 #   From the repository root on the Docker host:
