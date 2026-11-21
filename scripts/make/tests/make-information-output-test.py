@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test Make help, information output, and report preparation offline.
+"""Test Make help, information output, and report preparation offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/make/tests/make-information-output-test.py
-
-Requirements:
-  Python 3, Bash, Make, Git, jq, and Linux pseudo-terminal support.
-
-Details:
-  Tests run copied Make recipes and helpers in a temporary project. Stubs
-  replace external tools and uploaders, while local formatters process
-  fixture data. The suite does not upload reports or query a live registry.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/make/tests/make-information-output-test.py
+#
+# Requirements:
+#   Python 3, PHP, Bash, Make, Git, jq, and Linux pseudo-terminal support.
+#
+# Details:
+#   Tests run copied Make recipes and helpers in a temporary project. Stubs
+#   replace external tools and uploaders, while local formatters process
+#   fixture data. The suite does not upload reports or query a live registry.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import json
 import os
