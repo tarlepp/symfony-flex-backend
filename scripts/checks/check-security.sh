@@ -4,7 +4,10 @@
 # Run dependency advisory checks in the PHP development container.
 #
 # Usage:
-#   Invoke through the repository's security-check Make target.
+#   From the repository root on the Docker host or in the PHP development container:
+#     make check-security
+#   Direct invocation from the repository root inside the container:
+#     bash scripts/checks/check-security.sh
 #
 # Details:
 #   Validates Composer advisory constraints without changing the lock file,

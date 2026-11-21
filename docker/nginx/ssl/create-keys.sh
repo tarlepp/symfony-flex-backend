@@ -4,7 +4,10 @@
 # Generate local development TLS materials for the Nginx configuration.
 #
 # Usage:
-#   Run from this directory so openssl.cnf is found.
+#   From the repository root on the Docker host:
+#     make generate-ssl-cert
+#   Direct invocation from the repository root inside the PHP container:
+#     cd docker/nginx/ssl && ./create-keys.sh
 #
 # Details:
 #   Writes the CA and server certificate files here, replacing existing files

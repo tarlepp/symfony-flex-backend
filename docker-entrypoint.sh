@@ -18,9 +18,8 @@
 
 set -e
 
-# Note that in production environment we cannot use `symfony` binary to wrap
-# these commands because for some reason current environment variables from
-# docker context won't be passed to php process.
+# Run Symfony Console directly: the Symfony CLI wrapper does not pass Docker
+# context environment variables through to the PHP process in production.
 
 if [[ "$1" = 'php-fpm' ]]; then
     # Validate application configuration before production setup.

@@ -3,29 +3,31 @@
 #
 # Check pinned GitHub Actions and workflow tools for available updates.
 #
-# It discovers actions and workflow tool pins from:
-#   - .github/workflows/*.yml and *.yaml files
-#   - action.yml and action.yaml files recursively under .github/actions/
-#   - scripts/checks/lint-workflows.sh tool-pin declarations
-#
 # Usage:
-#   ./scripts/checks/check-action-updates.sh
-#   ./scripts/checks/check-action-updates.sh --current-pins-md
-#   ./scripts/checks/check-action-updates.sh --tools-only
+#   From the repository root on the Docker host or in the PHP development container:
+#     make check-action-updates
+#   Direct invocation from the repository root inside the container:
+#     ./scripts/checks/check-action-updates.sh
+#     ./scripts/checks/check-action-updates.sh --current-pins-md
+#     ./scripts/checks/check-action-updates.sh --tools-only
+#
+# Details:
+#   Discovers pins in workflow YAML, local action metadata, and the workflow
+#   validator declarations in `scripts/checks/lint-workflows.sh`.
 #
 # Requirements:
 #   - git and timeout (for bounded git ls-remote lookups)
 #
-# Optional environment overrides:
+# Environment:
 #   - GIT_BIN
 #   - TIMEOUT_BIN
 #   - WORKFLOW_DIR
 #   - ACTIONS_DIR
 #   - TOOL_PINS_FILE
 #
-# Security note:
-#   This script helps identify updates but does NOT automatically apply them.
-#   Always review changelogs and test updates before merging.
+# Security Note:
+#   Reports available updates but never applies them. Review changelogs and
+#   test updates before merging.
 #
 # Callers:
 #   Makefile:
@@ -46,13 +48,14 @@ checker_outcome() {
     fi
 }
 
-# Command overrides
+# Resolve optional command and inventory path overrides.
 GIT_BIN="${GIT_BIN:-git}"
 TIMEOUT_BIN="${TIMEOUT_BIN:-timeout}"
 WORKFLOW_DIR="${WORKFLOW_DIR:-.github/workflows}"
 ACTIONS_DIR="${ACTIONS_DIR:-.github/actions}"
 TOOL_PINS_FILE="${TOOL_PINS_FILE:-scripts/checks/lint-workflows.sh}"
 
+# Select the requested inventory or update-check mode.
 MODE="check"
 
 case "${1:-}" in

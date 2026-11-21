@@ -5,7 +5,10 @@
 # tooling regressions using SHA-pinned validators.
 #
 # Usage:
-#   Run from the repository root in the Linux PHP development container.
+#   From the repository root on the Docker host or in the PHP development container:
+#     make lint-workflows
+#   Direct invocation from the repository root inside the container:
+#     bash scripts/checks/lint-workflows.sh
 #
 # Details:
 #   Downloads can use the local validator cache; the zizmor audit runs offline

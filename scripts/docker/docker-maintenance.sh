@@ -4,7 +4,13 @@
 # Maintain Docker resources on the host through registered Make targets.
 #
 # Usage:
-#   <kill|containers|images|prune>.
+#   From the repository root on the Docker host:
+#     make docker-kill-containers
+#     make docker-remove-containers
+#     make docker-remove-images
+#     make docker-prune
+#   Direct invocation from the repository root on the Docker host:
+#     ./scripts/docker/docker-maintenance.sh <kill|containers|images|prune>
 #
 # Details:
 #   Actions affect all Docker resources on the host, not only this Compose

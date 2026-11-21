@@ -16,6 +16,7 @@
 #   Docker:
 #     - `docker/bash/make.sh` sources it when the repository mount is present.
 #
+
 SYMFONY_MAKE_LAUNCHER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/make.sh"
 SYMFONY_MAKE_ROOT="${SYMFONY_MAKE_LAUNCHER%/scripts/make/make.sh}"
 SYMFONY_MAKE_HELP="${SYMFONY_MAKE_LAUNCHER%/*}/make-help.sh"
