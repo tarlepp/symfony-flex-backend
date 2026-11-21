@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Test Docker entrypoint startup and Make lifecycle command contracts offline.
+"""Test Docker entrypoint startup and Make lifecycle command contracts offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/make/tests/make-lifecycle-output-test.py
-
-Requirements:
-  Python 3, GNU Make, Bash, awk, and Linux pseudo-terminal support.
-
-Details:
-  The suite runs copied entrypoints against command stubs and runs Make against
-  a temporary project with a fake Docker executable. Tests check command order,
-  arguments, diagnostics, and failures without starting services, pushing
-  images, or pruning real Docker resources.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/make/tests/make-lifecycle-output-test.py
+#
+# Requirements:
+#   Python 3, GNU Make, Bash, awk, and Linux pseudo-terminal support.
+#
+# Details:
+#   The suite runs copied entrypoints against command stubs and runs Make against
+#   a temporary project with a fake Docker executable. Tests check command order,
+#   arguments, diagnostics, and failures without starting services, pushing
+#   images, or pruning real Docker resources.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path
