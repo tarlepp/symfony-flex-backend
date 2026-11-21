@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
 """Compare digest-only Dockerfile updates using registry index metadata.
 
-Run on the Docker host from the repository root after updating pins. The report
-is written to stdout; unavailable registry data is reported without guessing why
-an image was rebuilt. No images are pulled or run.
+Usage:
+  From the repository root on the Docker host, after updating image pins:
+    python3 scripts/docker/docker-image-digest-summary.py
+
+Requirements:
+  Python 3, Git, and Docker Buildx with access to the relevant registries.
+
+Details:
+  Reads unstaged Dockerfile diffs and compares old and new index digests only
+  for unchanged image tags. Multiple digests for a tag require manual review.
+  Writes a Markdown report to stdout; unavailable or invalid index data is
+  reported without guessing why an image was rebuilt. No images are pulled or
+  run. A failed Git diff exits nonzero; unavailable indexes do not.
+
+Callers:
+  GitHub Actions:
+    - `.github/workflows/docker-image-updates.yml` captures the report for the
+      image-update pull request and workflow summary.
 """
 
 from collections import defaultdict
@@ -30,7 +45,7 @@ METADATA = (
 
 
 def changed_pins(diff):
-    """Find unambiguous old/new pins with an unchanged image tag."""
+    """Group changed digests by unchanged tag, retaining ambiguity for reporting."""
     removed, added = defaultdict(set), defaultdict(set)
     for line in diff.splitlines():
         if line.startswith(("---", "+++")) or not line.startswith(("-", "+")):
@@ -46,7 +61,7 @@ def changed_pins(diff):
 
 
 def inspect(reference):
-    """Fetch an immutable index; return an explicit failure instead of empty data."""
+    """Fetch and validate an index, returning None when comparison is unavailable."""
     try:
         result = subprocess.run(
             ["docker", "buildx", "imagetools", "inspect", "--raw", reference],
@@ -66,6 +81,7 @@ def inspect(reference):
 
 
 def platform(descriptor):
+    """Return a runnable platform key, or None for unknown or invalid platforms."""
     value = descriptor.get("platform", {})
     if (not isinstance(value.get("os"), str) or value["os"] in ("", "unknown")
             or not isinstance(value.get("architecture"), str)
@@ -78,7 +94,7 @@ def platform(descriptor):
 
 
 def render(value):
-    """Escape registry-controlled values so they cannot inject PR markup."""
+    """Serialize and bound registry-controlled values before escaping PR markup."""
     if value is None:
         return "(not supplied)"
     text = json.dumps(value, ensure_ascii=True, sort_keys=True)
@@ -86,6 +102,7 @@ def render(value):
 
 
 def report(tag, old_digest, new_digest):
+    """Print an overview and detailed index comparison, or an unavailable notice."""
     print(f"\n### <code>{html.escape(tag)}</code>\n")
     old, new = inspect(f"{tag}@{old_digest}"), inspect(f"{tag}@{new_digest}")
     if old is None or new is None:
@@ -107,6 +124,7 @@ def report(tag, old_digest, new_digest):
     added = sorted(after.keys() - before.keys())
     removed = sorted(before.keys() - after.keys())
     common = before.keys() & after.keys()
+    # Duplicate platform descriptors cannot be paired without guessing.
     comparable = [name for name in common if len(before[name]) == len(after[name]) == 1]
     changed = [name for name in comparable if before[name][0]["digest"] != after[name][0]["digest"]]
     ambiguous = sorted(common - set(comparable))
@@ -178,6 +196,7 @@ def report(tag, old_digest, new_digest):
 
 
 def main():
+    """Summarize unstaged pin changes, inspecting registries only when needed."""
     result = subprocess.run(
         ["git", "diff", "--no-ext-diff", "--unified=0", "--", "Dockerfile", "docker/*/Dockerfile*"],
         text=True, capture_output=True, check=True,
