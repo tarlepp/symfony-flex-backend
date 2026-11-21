@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Summarize tracked working-tree files by extension."""
 
-# The module docstring is also argparse's description; keep it unchanged.
 #
 # Usage:
 #   From the repository root on the Docker host or in the PHP development container:
@@ -10,6 +9,9 @@
 #     python3 scripts/reports/project-stats.py
 #   To summarize committed changes inside the container, supply both full IDs:
 #     python3 scripts/reports/project-stats.py --base "$(git rev-parse HEAD^)" --head "$(git rev-parse HEAD)"
+#
+# Requirements:
+#   Python 3.10 or later and Git.
 #
 # Details:
 #   Default mode reads tracked working-tree files, excluding lockfiles and
