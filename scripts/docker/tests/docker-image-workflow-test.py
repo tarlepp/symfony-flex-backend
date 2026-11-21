@@ -394,9 +394,11 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 WORKFLOW, "Publish PHP readiness evidence", CHECK_OUTCOME=overrides.get("CHECK_OUTCOME", "success"),
             )
             self.assertEqual(published.returncode, 0, published.stderr)
-            report = re.search(
+            report_match = re.search(
                 r"(?ms)^report<<([^\n]+)\n(.*?)\n\1$", self.output.read_text(),
-            ).group(2)
+            )
+            assert report_match is not None, "Readiness publisher must emit a report output"
+            report = report_match.group(2)
             self.output.write_text("")
             self.summary.write_text("")
             return self.run_script(

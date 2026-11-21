@@ -200,7 +200,10 @@ replacement for their actual event filters and conditions:
 * When changing validator regression runners or their suite output, follow the
   [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
   for output-contract consumers and isolated fixtures. A passing
-  `make lint-workflows` does not replace those checks.
+  `make lint-workflows` does not replace those checks or the existing Python
+  type check when scripts or Python regression tests change. Inspect the
+  selected `main.yml` configuration steps, not only the workflow validator's
+  commands, before concluding that local validation covers CI.
 * When an authorized push or PR produces a run, inspect affected job logs,
   matrix results, prerequisite gating, and expected artifacts. Separate runtime
   evidence from static review and local command results. Scheduled or
