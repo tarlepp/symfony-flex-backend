@@ -1,5 +1,28 @@
 #!/usr/bin/env python3
-"""Offline stage-output and failure regression tests for workflow validation."""
+"""Test workflow lint output, failure propagation, and validator caching offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/checks/tests/lint-workflows-output-test.py
+
+Requirements:
+  Python 3, PyYAML, Bash, and standard Linux command-line tools. The suite
+  substitutes fixtures for downloads and validator binaries.
+
+Details:
+  Each test runs in a temporary copy of the relevant repository files.
+  Repeated runs within a test share that fixture's cache so cold and warm
+  behavior can be compared without touching the repository cache.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+  Makefile:
+    - `test-command-output` runs the aggregate suite.
+"""
 
 import os
 from pathlib import Path
@@ -15,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 class WorkflowOutputTest(unittest.TestCase):
     def setUp(self):
+        """Build a throwaway checkout around the real validator entrypoint."""
         self.temporary = tempfile.TemporaryDirectory(prefix="workflow-output-")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
@@ -49,6 +73,7 @@ class WorkflowOutputTest(unittest.TestCase):
         )
         for workflow in (ROOT / ".github/workflows").glob("*.yml"):
             shutil.copyfile(workflow, self.root / ".github/workflows" / workflow.name)
+        # Stand-ins let each nested suite fail without running unrelated tests.
         (self.root / "scripts/ci/tests/composer-cache-test.py").write_text(
             "import os\n"
             "import sys\n"
@@ -131,6 +156,7 @@ esac
             (self.root / "bin" / name).chmod(0o755)
 
     def run_script(self, **overrides):
+        """Return the process result and tool calls for this run, keeping the cache."""
         (self.root / "calls").unlink(missing_ok=True)
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
@@ -284,6 +310,7 @@ esac
     def test_failures_stop_the_stage_and_preserve_exit_code(self):
         for tool in ("curl", "sha256sum", "actionlint", "zizmor", "action-validator", "shellcheck"):
             with self.subTest(tool=tool):
+                # The download and checksum failure cases need a cold cache.
                 for cached in self.root.glob("build/cache/workflow-validators/**/*"):
                     if cached.is_file():
                         cached.unlink()
