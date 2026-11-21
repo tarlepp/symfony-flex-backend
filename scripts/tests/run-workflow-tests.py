@@ -1,27 +1,30 @@
 #!/usr/bin/env python3
-"""Run one workflow regression suite with nested unittest diagnostics.
+"""Run one workflow regression suite with nested unittest diagnostics."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run one suite from the repository root inside the container:
-    python3 scripts/tests/run-workflow-tests.py scripts/ci/tests/ci-gates-test.py
-  Additional arguments are passed to the loaded suite through sys.argv.
-
-Details:
-  Loads the supplied Python file as a module and runs its unittest tests.
-  Runner diagnostics go to stderr with four-space indentation; the standalone
-  OK footer and trailing blank lines are omitted. Test stdout is not filtered.
-
-Exit Status:
-  Returns 0 for a successful unittest result, 1 for an unsuccessful result,
-  and 64 when no test file is supplied. Import and execution errors propagate.
-
-Callers:
-  Scripts:
-    - `scripts/checks/lint-workflows.sh` runs workflow regression suites.
-    - `scripts/tests/command-output-contract-test.sh` runs output contract suites.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run one suite from the repository root inside the container:
+#     python3 scripts/tests/run-workflow-tests.py scripts/ci/tests/ci-gates-test.py
+#   Additional arguments are passed to the loaded suite through sys.argv.
+#
+# Requirements:
+#   Python 3 and the dependencies required by the selected suite.
+#
+# Details:
+#   Loads the supplied Python file as a module and runs its unittest tests.
+#   Runner diagnostics go to stderr with four-space indentation; the standalone
+#   OK footer and trailing blank lines are omitted. Test stdout is not filtered.
+#
+# Exit Status:
+#   Returns 0 for a successful unittest result, 1 for an unsuccessful result,
+#   and 64 when no test file is supplied. Import and execution errors propagate.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` runs workflow regression suites.
+#     - `scripts/tests/command-output-contract-test.sh` runs output contract suites.
 
 import importlib.util
 import sys
