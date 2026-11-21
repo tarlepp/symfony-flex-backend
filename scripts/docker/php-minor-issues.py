@@ -6,6 +6,40 @@ Open issues are identified by a branch, PHP minor and image variant marker;
 registry failures and builds without extension compiler errors are not tracked.
 """
 
+# The module docstring is also the CLI help description; keep it unchanged.
+#
+# Usage:
+#   From the repository root in the GitHub Actions runner, with the workflow's
+#   readiness files and environment available:
+#     python3 scripts/docker/php-minor-issues.py \
+#       --source "$RUNNER_TEMP/php-minor-readiness.md" \
+#       --log "$RUNNER_TEMP/php-minor-readiness.log" --outcome "$CHECK_OUTCOME"
+#
+# Requirements:
+#   Python 3 and an authenticated GitHub CLI with access to the repository.
+#   Issue creation requires issues: write permission.
+#
+# Details:
+#   A successful outcome and a recognized readiness result are required before
+#   querying GitHub. Build failures are tracked only when the log contains an
+#   extension compiler error. The marker identifies the base branch, PHP
+#   minor version and image variant, so patch releases share an issue.
+#   Existing open issues are reused; a confirmed blocker creates an issue only
+#   when none matches. A prepared migration emits closing references rather
+#   than closing issues directly. Errors are reported to stderr and exit nonzero.
+#
+# Environment:
+#   BASE_BRANCH identifies the branch. GitHub CLI authentication and repository
+#   selection use GH_TOKEN and GH_REPO in the workflow. Issue creation uses
+#   GITHUB_SERVER_URL, GITHUB_REPOSITORY and GITHUB_RUN_ID. Matching issues are
+#   appended to GITHUB_STEP_SUMMARY; a prepared migration also writes
+#   closing-issues to GITHUB_OUTPUT.
+#
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/docker-image-updates.yml` tracks blockers and adds
+#       closing references to the PHP minor migration PR details.
+
 import argparse
 import hashlib
 import html
@@ -19,7 +53,7 @@ import uuid
 
 
 def github_api(endpoint, payload=None):
-    """Call the GitHub CLI, failing explicitly on API or malformed responses."""
+    """Read all API pages or create an issue; propagate CLI and JSON failures."""
     command = ["gh", "api"]
     if payload is None:
         command.extend(["--paginate", "--slurp"])
@@ -34,6 +68,7 @@ def github_api(endpoint, payload=None):
 
 
 def main():
+    """Track eligible blockers or expose closing references for a ready upgrade."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--log", type=Path, required=True)
@@ -64,6 +99,7 @@ def main():
     branch = os.environ["BASE_BRANCH"]
     branch_id = hashlib.sha256(branch.encode()).hexdigest()
     version = f"{candidate[1]}.{candidate[2]}{candidate[3]}"
+    # Patch versions are excluded so repeated checks reuse the same minor issue.
     marker = f"<!-- php-minor-blocker:{branch_id}:{version} -->"
     endpoint = "repos/{owner}/{repo}/issues"
     pages = github_api(f"{endpoint}?state=open&per_page=100")
