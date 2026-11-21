@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
-"""Test workflow lint output, failure propagation, and validator caching offline.
+"""Test workflow lint output, failure propagation, and validator caching offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/checks/tests/lint-workflows-output-test.py
-
-Requirements:
-  Python 3, PyYAML, Bash, and standard Linux command-line tools. The suite
-  substitutes fixtures for downloads and validator binaries.
-
-Details:
-  Each test runs in a temporary copy of the relevant repository files.
-  Repeated runs within a test share that fixture's cache so cold and warm
-  behavior can be compared without touching the repository cache.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-  Makefile:
-    - `test-command-output` runs the aggregate suite.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/checks/tests/lint-workflows-output-test.py
+#
+# Requirements:
+#   Python 3, PyYAML, Bash, and standard Linux command-line tools. The suite
+#   substitutes fixtures for downloads and validator binaries.
+#
+# Details:
+#   Each test runs in a temporary copy of the relevant repository files.
+#   Repeated runs within a test share that fixture's cache so cold and warm
+#   behavior can be compared without touching the repository cache.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
+#   Makefile:
+#     - `test-command-output` runs the aggregate suite.
 
 import os
 from pathlib import Path
