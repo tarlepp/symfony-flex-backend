@@ -74,7 +74,8 @@ rules alongside the task-specific workflow in the skill.
   treat the change as a stacked PR: confirm the intended parent branch with the
   user instead of guessing, and report it at handoff with the PR base to use
   (the parent branch, retargeted to `master` once the parent merges). Never base
-  a task on a branch just because it is checked out.
+  a task on a branch just because it is checked out. For advice on PR structure,
+  see [plan-pull-requests](plan-pull-requests/SKILL.md).
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
   fresh branch for each step, based on its intended parent branch. Do not
   continue a later step on a branch already used for an earlier PR. When the
