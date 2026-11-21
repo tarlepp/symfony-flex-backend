@@ -40,11 +40,12 @@ rules alongside the task-specific workflow in the skill.
   unrelated work; ask if it conflicts with the task. Tool-specific clean-tree
   requirements and generated-file handling belong in the relevant skill.
 * Skills do not authorize Git commits or pushes. By default, leave completed
-  changes uncommitted and unpushed, and provide commit-message proposals. Before
-  creating or amending a commit, ask the user for explicit approval unless they
-  already authorized that operation for the current changes. Before pushing,
-  separately confirm authorization for the intended remote and branch;
-  permission to commit does not imply permission to push. An explicit user
+  changes uncommitted and unpushed. Before creating or amending a commit, ask the
+  user for explicit approval unless they already authorized that operation for
+  the current changes. Before pushing, separately confirm authorization for the
+  intended remote and branch.
+
+  Permission to commit does not imply permission to push. An explicit user
   request covering both operations authorizes both within its stated scope; do
   not ask again for an already authorized operation. Approval of implementation,
   a plan, branch creation, a PR title, or a proposed commit message alone is not
@@ -244,12 +245,16 @@ skill, for example, does not imply that recipes were updated.
 For database changes, state whether a migration was generated, reviewed, or
 applied to a non-production database.
 
-For every completed changeset, follow the
-[repository commit-proposal requirement](../../AGENTS.md#clarification-and-documentation).
-A changeset is a logical set of file changes reported as complete, even when the
-larger task continues. Include proposals in each such user-facing response and
-again in the final handoff; do not defer them until the entire task ends.
-Read-only answers and in-progress updates do not need proposals.
+Follow the [repository commit-proposal requirement](../../AGENTS.md#clarification-and-documentation)
+for each logical set of file changes reported as complete, even when the larger
+task continues. Before each such response and again at final handoff, inspect
+Git status and the staged and unstaged diffs to identify uncommitted task
+changes, including any new task files. Exclude unrelated work.
+
+If no uncommitted task changes remain, omit the entire proposal section. A
+branch can still differ from its base after a rebase, but resolutions recorded
+in rewritten commits are already committed. Read-only answers and in-progress
+updates do not need proposals.
 
 Use `Type(scope): short description`. These are proposals only; follow the
 [commit and push approval rules](#preparing-a-change) before taking either action.
