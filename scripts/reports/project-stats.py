@@ -1,6 +1,29 @@
 #!/usr/bin/env python3
 """Summarize tracked working-tree files by extension."""
 
+# The module docstring is also argparse's description; keep it unchanged.
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make project-stats
+#   Direct invocation from the repository root inside the container:
+#     python3 scripts/reports/project-stats.py
+#   To summarize committed changes inside the container, supply both full IDs:
+#     python3 scripts/reports/project-stats.py --base "$(git rev-parse HEAD^)" --head "$(git rev-parse HEAD)"
+#
+# Details:
+#   Default mode reads tracked working-tree files, excluding lockfiles and
+#   recognized generated artifacts. Symlinks and files containing NUL bytes
+#   contribute no text lines; text lines are counted by newline characters.
+#   PR mode compares the merge base to the head, counts renames as additions
+#   and deletions, and reports binary files without line counts.
+#
+# Callers:
+#   Makefile:
+#     - `project-stats` invokes this script via `scripts/reports/project-stats.sh`.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` invokes PR mode with the event's commit IDs.
+
 import argparse
 import os
 from pathlib import Path
@@ -41,6 +64,7 @@ def area(path):
 
 
 def changes(base, head):
+    """Print per-area changes from the merge base to head using full commit IDs."""
     if not all(re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", revision) for revision in (base, head)):
         raise ValueError("Both revisions must be full commit IDs.")
     merge_base = subprocess.run(
@@ -54,6 +78,7 @@ def changes(base, head):
         [*command, "--numstat", "-z", merge_base, head, "--"], check=True, stdout=subprocess.PIPE,
     ).stdout.split(b"\0")
     totals = {name: [0, 0, 0, 0, 0, 0] for name in AREAS}
+    # With rename detection disabled, NUL-delimited name-status records are pairs.
     for kind, raw_path in zip(status[0:-1:2], status[1:-1:2], strict=True):
         path = Path(os.fsdecode(raw_path))
         if exclusion_reason(path):
@@ -95,6 +120,7 @@ def file_type(path):
 
 
 def text_line_count(path):
+    """Count newline bytes in non-binary files; symlinks contribute zero."""
     if path.is_symlink():
         return 0
     count = 0
@@ -107,6 +133,7 @@ def text_line_count(path):
 
 
 def color_enabled():
+    """Apply NO_COLOR, native color, and terminal-based color precedence."""
     if os.environ.get("NO_COLOR"):
         return False
     native_color = os.environ.get("NATIVE_COLOR")
