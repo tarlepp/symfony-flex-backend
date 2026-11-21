@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test CI job wiring, merge gates, report processing, and change selection.
+"""Test CI job wiring, merge gates, report processing, and change selection."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make lint-workflows
-  To run only this suite from the repository root inside the container:
-    python3 scripts/ci/tests/analyzer-workflow-test.py
-
-Requirements:
-  Python 3, Bash, Git, and standard Linux command-line tools.
-
-Details:
-  The suite reads the checked-out workflow and exercises its helpers offline.
-  It uses temporary Git history and report fixtures, and stubs Docker calls
-  rather than starting containers or running hosted CI jobs.
-
-Callers:
-  Scripts:
-    - `scripts/checks/lint-workflows.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make lint-workflows
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/ci/tests/analyzer-workflow-test.py
+#
+# Requirements:
+#   Python 3, Bash, Git, and standard Linux command-line tools.
+#
+# Details:
+#   The suite reads the checked-out workflow and exercises its helpers offline.
+#   It uses temporary Git history and report fixtures, and stubs Docker calls
+#   rather than starting containers or running hosted CI jobs.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path

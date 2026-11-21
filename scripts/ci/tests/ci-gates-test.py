@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
-"""Test CI gate decisions, workflow wiring, and job summaries offline.
+"""Test CI gate decisions, workflow wiring, and job summaries offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make lint-workflows
-  To run only this suite from the repository root inside the container:
-    python3 scripts/ci/tests/ci-gates-test.py
-
-Requirements:
-  Python 3, Bash, and standard Linux command-line tools.
-
-Details:
-  The suite reads the checked-out workflow definitions and runs local helper
-  scripts with simulated CI results. It does not run hosted jobs or build images.
-
-Callers:
-  Scripts:
-    - `scripts/checks/lint-workflows.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py` before preparing validator binaries.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make lint-workflows
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/ci/tests/ci-gates-test.py
+#
+# Requirements:
+#   Python 3, Bash, and standard Linux command-line tools.
+#
+# Details:
+#   The suite reads the checked-out workflow definitions and runs local helper
+#   scripts with simulated CI results. It does not run hosted jobs or build images.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py` before preparing validator binaries.
 
 import os
 from pathlib import Path
