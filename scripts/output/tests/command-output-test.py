@@ -606,6 +606,61 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("diagnostic", result.stderr)
         self.assertRegex(result.stderr, r"\n\[OK\] piped \(took [0-9]+\.[0-9]s\)\n$")
 
+    def test_progress_launch_errors_match_for_pipes_and_distinct_terminals(self):
+        with tempfile.TemporaryDirectory(prefix="progress-launch-test-") as directory:
+            missing = Path(directory) / "missing"
+            denied = Path(directory) / "denied"
+            denied.write_text("not executable")
+            denied.chmod(0o644)
+            for command, status, message in (
+                (missing, 127, "command not found"),
+                (denied, 126, "Permission denied"),
+            ):
+                arguments = ["python3", str(ROOT / "scripts/output/command-progress.py"),
+                             "example", "plain", str(command)]
+                with self.subTest(command=command, streams="pipes"):
+                    result = self.run_command(arguments)
+                    self.assertEqual(result.returncode, status, result.stderr)
+                    self.assertEqual(result.stderr, f"{command}: {message}\n")
+                with self.subTest(command=command, streams="distinct terminals"):
+                    stdout_master, stdout_slave = pty.openpty()
+                    stderr_master, stderr_slave = pty.openpty()
+                    try:
+                        result = subprocess.run(
+                            arguments, env=self.environment(), cwd=ROOT, stdin=subprocess.DEVNULL,
+                            stdout=stdout_slave, stderr=stderr_slave, timeout=5, check=False,
+                        )
+                        self.assertEqual(result.returncode, status)
+                        self.assertTrue(select.select([stderr_master], [], [], 5)[0])
+                        self.assertEqual(os.read(stderr_master, 4096), f"{command}: {message}\r\n".encode())
+                    finally:
+                        for descriptor in (stdout_master, stdout_slave, stderr_master, stderr_slave):
+                            os.close(descriptor)
+
+    def test_progress_distinct_terminals_execute_in_place(self):
+        stdout_master, stdout_slave = pty.openpty()
+        stderr_master, stderr_slave = pty.openpty()
+        process = None
+        try:
+            process = subprocess.Popen(
+                ["python3", str(ROOT / "scripts/output/command-progress.py"), "example", "plain",
+                 "bash", "-c", 'test -t 1 && test -t 2 || exit 1; '
+                 'printf "%s:%s" "$$" "$PROGRESS"; printf diagnostic >&2'],
+                env=self.environment(PROGRESS="always"), cwd=ROOT, stdin=subprocess.DEVNULL,
+                stdout=stdout_slave, stderr=stderr_slave,
+            )
+            self.assertEqual(process.wait(timeout=5), 0)
+            self.assertTrue(select.select([stdout_master], [], [], 5)[0])
+            self.assertEqual(os.read(stdout_master, 4096), f"{process.pid}:always".encode())
+            self.assertTrue(select.select([stderr_master], [], [], 5)[0])
+            self.assertEqual(os.read(stderr_master, 4096), b"diagnostic")
+        finally:
+            if process is not None and process.poll() is None:
+                process.kill()
+                process.wait(timeout=5)
+            for descriptor in (stdout_master, stdout_slave, stderr_master, stderr_slave):
+                os.close(descriptor)
+
     def test_shared_terminal_progress_orders_stdout_with_spinner_clears(self):
         result = self.run_command([
             "bash", str(HELPER), "--progress", "shared", "bash", "-c",
