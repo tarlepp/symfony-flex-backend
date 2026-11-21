@@ -6,7 +6,6 @@ Open issues are identified by a branch, PHP minor and image variant marker;
 registry failures and builds without extension compiler errors are not tracked.
 """
 
-# The module docstring is also the CLI help description; keep it unchanged.
 #
 # Usage:
 #   From the repository root in the GitHub Actions runner, with the workflow's
