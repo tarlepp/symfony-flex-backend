@@ -9,7 +9,8 @@
 #     python3 scripts/output/tests/command-output-test.py
 #
 # Requirements:
-#   Python 3, Bash, and Linux pseudo-terminal support.
+#   Python 3, Bash, jq, and Linux pseudo-terminal support. The nested Docker
+#   image suite uses jq even though Docker and registry responses are mocked.
 #
 # Details:
 #   Exercises real output helpers and an offline Docker image test suite, using
