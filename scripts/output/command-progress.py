@@ -162,28 +162,29 @@ class Relay:
 
     def run(self):
         descriptors = self.descriptors()
-        if descriptors is None:
-            os.execvp(self.command[0], self.command)
-        stdout, stderr = descriptors
-        environment = dict(os.environ, PROGRESS="never")
-        environment.pop("OUTPUT_PROGRESS_SHARED", None)
-        # Restore the caller's locale-coercion setting for the child.
-        coerce = environment.pop("OUTPUT_PROGRESS_COERCE", "")
-        if coerce.startswith("set:"):
-            environment["PYTHONCOERCECLOCALE"] = coerce[4:]
-        else:
-            environment.pop("PYTHONCOERCECLOCALE", None)
         try:
-            self.child = subprocess.Popen(self.command, stdout=stdout, stderr=stderr, env=environment)
+            if descriptors is None:
+                os.execvp(self.command[0], self.command)
+            stdout, stderr = descriptors
+            environment = dict(os.environ, PROGRESS="never")
+            environment.pop("OUTPUT_PROGRESS_SHARED", None)
+            # Restore the caller's locale-coercion setting for the child.
+            coerce = environment.pop("OUTPUT_PROGRESS_COERCE", "")
+            if coerce.startswith("set:"):
+                environment["PYTHONCOERCECLOCALE"] = coerce[4:]
+            else:
+                environment.pop("PYTHONCOERCECLOCALE", None)
+            try:
+                self.child = subprocess.Popen(self.command, stdout=stdout, stderr=stderr, env=environment)
+            finally:
+                for descriptor in {stdout, stderr} - {None}:
+                    os.close(descriptor)
         except FileNotFoundError:
             sys.stderr.write(f"{self.command[0]}: command not found\n")
             return 127
         except PermissionError:
             sys.stderr.write(f"{self.command[0]}: Permission denied\n")
             return 126
-        finally:
-            for descriptor in {stdout, stderr} - {None}:
-                os.close(descriptor)
         # Terminal interrupts reach the command's process group directly; wait for its outcome.
         signal.signal(signal.SIGINT, signal.SIG_IGN)
         for number in (signal.SIGTERM, signal.SIGHUP):
