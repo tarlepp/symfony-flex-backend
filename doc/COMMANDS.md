@@ -68,6 +68,9 @@ bash scripts/make/make.sh help GROUP=docker COLOR=never
 `checks`, `reports`, `setup`, `lifecycle`, and `docker`. Invalid groups fail
 explicitly and list supported choices.
 
+When changing target metadata or behavior, see [comparing Make commands](TESTING.md#comparing-make-commands)
+for help snapshots and targeted before-and-after checks.
+
 The Makefile target registry and recipes use the same order as help: group, then
 routine/overwrite/destructive risk, then alphabetical target name. Group
 comments mark both sections; keep registrations and recipes aligned when adding

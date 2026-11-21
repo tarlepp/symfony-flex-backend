@@ -78,7 +78,9 @@ Inspect the implementation and its actual callers:
    effects, network needs, and supported execution environments. Trace direct
    script, Make, and CI callers before changing it. Ask before altering failure
    policy, destructive behavior, supported platforms, interactive defaults, or
-   public command names.
+   public command names. For changes that may affect Make commands, list the
+   affected invocations and capture their baseline before editing. Rerun them
+   after the final edit and report the differences using the [Make comparison guide](../../../doc/TESTING.md#comparing-make-commands).
 2. Extend the existing owning script or target rather than introducing a
    parallel checker or wrapper. Inspect the shebang and actual interpreter; Bash
    arrays and process substitution are not portable `sh`. Preserve executable
