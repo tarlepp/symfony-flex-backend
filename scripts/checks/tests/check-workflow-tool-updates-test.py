@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test action and workflow-tool pin discovery, updates, and reporting offline.
+"""Test action and workflow-tool pin discovery, updates, and reporting offline."""
 
-Usage:
-  From the repository root inside the PHP development container:
-    python3 scripts/checks/tests/check-workflow-tool-updates-test.py
-
-Requirements:
-  Python 3, Bash, and standard Linux command-line tools. GitHub lookups use
-  fixture data instead of the network. The unreadable-file case requires a
-  non-root user.
-
-Details:
-  Each checker invocation uses temporary workflows, action metadata, and tool
-  pins. Tests compare direct checker outcomes with the informational output
-  wrapper, which can report updates or lookup errors without failing Make.
-
-Callers:
-  GitHub Actions:
-    - `.github/workflows/main.yml` runs this suite directly in the
-      `lint-configuration` job, separately from `make test-command-output`.
-"""
+#
+# Usage:
+#   From the repository root inside the PHP development container:
+#     python3 scripts/checks/tests/check-workflow-tool-updates-test.py
+#
+# Requirements:
+#   Python 3, Bash, and standard Linux command-line tools. GitHub lookups use
+#   fixture data instead of the network. The unreadable-file case requires a
+#   non-root user.
+#
+# Details:
+#   Each checker invocation uses temporary workflows, action metadata, and tool
+#   pins. Tests compare direct checker outcomes with the informational output
+#   wrapper, which can report updates or lookup errors without failing Make.
+#
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` runs this suite directly in the
+#       `lint-configuration` job, separately from `make test-command-output`.
 
 import os
 from pathlib import Path
