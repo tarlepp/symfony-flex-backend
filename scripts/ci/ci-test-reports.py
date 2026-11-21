@@ -1,6 +1,25 @@
 #!/usr/bin/env python3
 """Validate PHPUnit report inputs and print the informational CI summary."""
 
+# The module docstring is also the CLI help description; keep it short.
+#
+# Usage:
+#   From the repository root inside the PHP development container, with
+#   reports already generated:
+#     python3 scripts/ci/ci-test-reports.py validate-junit
+#     python3 scripts/ci/ci-test-reports.py verify
+#     python3 scripts/ci/ci-test-reports.py summary
+#
+# Details:
+#   validate-junit checks the input for PhpMetrics. verify checks the JUnit
+#   and Clover XML and requires nonempty coverage and PhpMetrics HTML indexes.
+#   summary prints PHPUnit totals and coverage (when available) as Markdown.
+#   The helper only reads reports; it does not generate or modify them.
+#
+# Callers:
+#   .github/workflows/main.yml runs these operations in separate test-job steps
+#   and redirects summary stdout to GITHUB_STEP_SUMMARY on the runner.
+
 import argparse
 from pathlib import Path
 import sys
@@ -15,6 +34,7 @@ REQUIRED_REPORTS = (
 
 
 def count_metric(node, name):
+    """Read a required metric as an unsigned ASCII decimal count."""
     value = node.get(name, "")
     if not value.isascii() or not value.isdecimal():
         raise ValueError(f"{node.tag} requires a nonnegative integer {name} metric.")
@@ -44,6 +64,7 @@ def validate_clover():
 
 
 def verify_reports():
+    """Annotate every unusable required report and return a single status."""
     invalid = False
     validators = {JUNIT: validate_junit, CLOVER: validate_clover}
     for report in REQUIRED_REPORTS:
@@ -66,6 +87,7 @@ def print_summary():
     while suite.tag == "testsuites" and len(suite) == 1:
         suite = suite[0]
     totals = {key: 0 for key in ("tests", "assertions", "failures", "errors", "skipped")}
+    # Read aggregate counts without also adding their nested suite counts.
     for node in ([suite] if suite.tag == "testsuite" else list(suite)):
         for key in totals:
             totals[key] += int(node.get(key, 0))
