@@ -73,6 +73,9 @@ references only for layers the task actually changes:
 * For authorized Git rebase conflicts or stacked PR restacking, use
   [resolve-git-conflicts](resolve-git-conflicts/SKILL.md). It does not grant permission
   to start, continue, or publish a rebase.
+* For recommending a direct PR, independent PRs, or a stack, use
+  [plan-pull-requests](plan-pull-requests/SKILL.md). It does not authorize Git changes
+  or publishing.
 * For shared output serialization, population groups, response formats, headers,
   or error envelopes, use [update-api-response-contract](update-api-response-contract/SKILL.md).
   Request DTO mapping alone does not establish the response contract.
@@ -128,6 +131,7 @@ references only for layers the task actually changes:
 | [maintain-ai-guidance](maintain-ai-guidance/SKILL.md) | Changing AI instructions, agent profiles, skill contracts, indexes, or approval and repair routing. |
 | [maintain-development-tooling](maintain-development-tooling/SKILL.md) | Reviewing shell or Python readability or changing repository scripts, Make targets, checkers, container forwarding, or script regression tests. |
 | [maintain-repository-scripts](maintain-repository-scripts/SKILL.md) | Adding or changing scripts under `scripts/`, their tests, or callers. |
+| [plan-pull-requests](plan-pull-requests/SKILL.md) | Recommending direct, independent, or stacked PRs based on dependencies and reviewability. |
 | [resolve-git-conflicts](resolve-git-conflicts/SKILL.md) | Resolving authorized Git rebase conflicts, including rewritten stacked PR parents. |
 | [update-api-documentation](update-api-documentation/SKILL.md) | Changing OpenAPI metadata, schemas, reusable responses, security descriptions, or documentation areas. |
 | [update-api-response-contract](update-api-response-contract/SKILL.md) | Changing shared response serialization, population groups, formats, headers, or error envelopes. |
