@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Exercise Docker maintenance workflow contracts without GitHub or registries."""
+"""Test Docker image maintenance workflow wiring and selected steps offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make lint-workflows
+  To run only this suite from the repository root inside the container:
+    python3 scripts/docker/tests/docker-image-workflow-test.py
+
+Requirements:
+  Python 3, PyYAML, Bash, jq, and standard Linux command-line tools.
+
+Details:
+  The suite inspects checked-out workflow and action definitions. It runs
+  selected shell steps in temporary directories with fixture credentials and
+  stubbed external commands, without running hosted jobs or contacting registries.
+
+Callers:
+  Scripts:
+    - `scripts/checks/lint-workflows.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import hashlib
 import itertools
@@ -22,6 +42,7 @@ CORE_WORKFLOW = (ROOT / ".github/workflows/main.yml").read_text()
 
 
 def step(content, name):
+    """Extract a named step up to the next step at the same indentation."""
     match = re.search(
         rf"^( +)- name: {re.escape(name)}\n(.*?)(?=^\1- |\Z)",
         content, re.MULTILINE | re.DOTALL,
@@ -32,6 +53,7 @@ def step(content, name):
 
 
 def script(content, name):
+    """Read an inline command or dedent a literal run block for Bash."""
     section = step(content, name)
     inline = re.search(r"^ +run: ([^|\n].*)$", section, re.MULTILINE)
     if inline is not None:
@@ -78,6 +100,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         )
 
     def run_script(self, content, name, **overrides):
+        """Run one checked-out step body with fixture paths and inputs."""
         environment = dict(self.environment, **overrides)
         return subprocess.run(
             ["bash", "-euo", "pipefail", "-c", script(content, name)],
@@ -86,6 +109,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         )
 
     def authentication(self, **overrides):
+        """Start with empty credentials so each case controls the auth method."""
         values = dict(APP_CLIENT_ID="", APP_PRIVATE_KEY="", UPDATE_TOKEN="")
         values.update(overrides)
         return self.run_script(
@@ -134,6 +158,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotIn("docker/mariadb", steps["minor-pr"]["with"]["add-paths"])
 
     def php_minor_fixture(self):
+        """Prepare local registry and Docker stand-ins for the readiness check."""
         for path in ("docker/docker-images.sh", "output/command-output.sh"):
             source = ROOT / "scripts" / path
             destination = self.root / "scripts" / path
@@ -245,6 +270,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 dockerfile.write_text(original)
                 lockfile = self.root / "tools/analyzer/composer.lock"
                 lockfile.write_text("{}\n")
+                # Each scenario must earn its own prepared output and summary.
                 self.output.write_text("")
                 self.summary.write_text("")
                 if mode == "absent":
