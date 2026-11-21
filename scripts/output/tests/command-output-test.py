@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Test command output, streaming, and regression-suite reporting contracts.
+"""Test command output, streaming, and regression-suite reporting contracts."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/output/tests/command-output-test.py
-
-Requirements:
-  Python 3, Bash, and Linux pseudo-terminal support.
-
-Details:
-  Exercises real output helpers and an offline Docker image test suite, using
-  temporary fixtures and mocked Docker and registry responses. Checks cover
-  color, stream separation, partial lines, signals, progress, and nested test
-  reporting. The mocked Docker suite does not verify actual image pins.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/output/tests/command-output-test.py
+#
+# Requirements:
+#   Python 3, Bash, and Linux pseudo-terminal support.
+#
+# Details:
+#   Exercises real output helpers and an offline Docker image test suite, using
+#   temporary fixtures and mocked Docker and registry responses. Checks cover
+#   color, stream separation, partial lines, signals, progress, and nested test
+#   reporting. The mocked Docker suite does not verify actual image pins.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path
