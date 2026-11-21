@@ -81,6 +81,9 @@ directory relationships so they do not depend on files remaining siblings.
 * [PHP readiness report](docker/php-minor-readiness-report.py)
   * Publishes shared PHP minor readiness evidence for the separate maintenance
     jobs and PRs, highlighting blockers in Actions and collapsing PR details.
+* [PHP minor issue tracking](docker/php-minor-issues.py)
+  * Uses readiness evidence and the GitHub CLI to track confirmed blockers and
+    link matching issues from the migration PR.
 
 ### Command status output [ᐞ](#table-of-contents)
 

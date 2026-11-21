@@ -1985,6 +1985,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/docker/tests/docker-image-workflow-test.py": {"workflows"},
             "scripts/docker/docker-image-digest-summary.py": {"workflows", "tooling"},
             "scripts/docker/php-minor-readiness-report.py": {"workflows", "tooling"},
+            "scripts/docker/php-minor-issues.py": {"workflows", "tooling"},
             "scripts/checks/lint-workflows.sh": {"workflows", "tooling"},
             "scripts/checks/download-workflow-validator.sh": {"workflows", "tooling"},
             "scripts/tests/run-workflow-tests.py": {"workflows", "tooling"},

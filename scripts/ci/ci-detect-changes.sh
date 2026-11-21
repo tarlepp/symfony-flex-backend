@@ -174,7 +174,8 @@ classify_path() {
         scripts/ci/ci-prerequisite-gate.sh|scripts/ci/ci-result-gate.sh|\
         scripts/ci/ci-gate-common.sh|scripts/ci/ci-workflow-overview.sh|\
         scripts/ci/ci-statistics-summary.sh|scripts/ci/tests/ci-gates-test.py|\
-        scripts/docker/docker-image-digest-summary.py|scripts/docker/php-minor-readiness-report.py)
+        scripts/docker/docker-image-digest-summary.py|scripts/docker/php-minor-readiness-report.py|\
+        scripts/docker/php-minor-issues.py)
             enable_checks workflows tooling
             ;;
         .github/workflows/*|.github/actionlint.yaml|.github/zizmor.yml|\

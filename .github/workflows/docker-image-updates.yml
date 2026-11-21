@@ -16,6 +16,7 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+      issues: write
     outputs:
       report: ${{ steps.readiness-report.outputs.report }}
       actions-report: ${{ steps.readiness-report.outputs.actions-report }}
@@ -49,6 +50,19 @@ jobs:
             --source "$RUNNER_TEMP/php-minor-readiness.md" \
             --log "$RUNNER_TEMP/php-minor-readiness.log" --outcome "$CHECK_OUTCOME"
 
+      - name: Track confirmed PHP minor blockers
+        id: minor-issues
+        if: ${{ steps.php-minor.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BASE_BRANCH: ${{ github.ref_name }}
+          CHECK_OUTCOME: ${{ steps.php-minor.outcome }}
+        run: |
+          python3 scripts/docker/php-minor-issues.py \
+            --source "$RUNNER_TEMP/php-minor-readiness.md" \
+            --log "$RUNNER_TEMP/php-minor-readiness.log" --outcome "$CHECK_OUTCOME"
+
       - name: Select PHP minor PR authentication
         id: minor-auth
         if: ${{ steps.php-minor.outputs.prepared == 'true' }}
@@ -75,6 +89,7 @@ jobs:
           BASE_BRANCH: ${{ github.ref_name }}
           PHP_CANDIDATE: ${{ steps.php-minor.outputs.candidate }}
           PHP_READINESS_REPORT: ${{ steps.readiness-report.outputs.report }}
+          PHP_CLOSING_ISSUES: ${{ steps.minor-issues.outputs.closing-issues }}
         run: |
           branch_id=$(printf '%s' "$BASE_BRANCH" | sha256sum | cut -c1-16)
           printf 'branch=chore(docker)/php-minor-%s\n' "$branch_id" >> "$GITHUB_OUTPUT"
@@ -93,6 +108,9 @@ jobs:
             this PR. Normal PR CI must pass before merging.
           EOF
           printf '\n%s\n' "$PHP_READINESS_REPORT" >> "$RUNNER_TEMP/php-minor-pr.md"
+          if [ -n "$PHP_CLOSING_ISSUES" ]; then
+            printf '\n%s\n' "$PHP_CLOSING_ISSUES" >> "$RUNNER_TEMP/php-minor-pr.md"
+          fi
 
       - name: Create repository-scoped GitHub App token for PHP migration
         id: minor-token

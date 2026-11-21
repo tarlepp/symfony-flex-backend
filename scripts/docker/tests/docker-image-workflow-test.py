@@ -61,6 +61,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / "scripts/docker/php-minor-readiness-report.py").write_text(
             (ROOT / "scripts/docker/php-minor-readiness-report.py").read_text(),
         )
+        (self.root / "scripts/docker/php-minor-issues.py").write_text(
+            (ROOT / "scripts/docker/php-minor-issues.py").read_text(),
+        )
         (self.root / ".github").mkdir(exist_ok=True)
         (self.root / ".github/pull_request_template.md").write_text(
             (ROOT / ".github/pull_request_template.md").read_text(),
@@ -71,6 +74,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             os.environ, GITHUB_OUTPUT=str(self.output),
             GITHUB_STEP_SUMMARY=str(self.summary), RUNNER_TEMP=str(self.root),
             PHP_READINESS_REPORT="", PHP_READINESS_ACTIONS="", PHP_READINESS_RESULT="success",
+            PHP_CLOSING_ISSUES="",
         )
 
     def run_script(self, content, name, **overrides):
@@ -106,7 +110,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         readiness = jobs["php-minor-readiness"]
         self.assertNotIn("needs", readiness)
         self.assertEqual(jobs["update"]["needs"], "php-minor-readiness")
-        self.assertEqual(readiness["permissions"], {"contents": "read"})
+        self.assertEqual(readiness["permissions"], {"contents": "read", "issues": "write"})
         self.assertIn("!cancelled() && github.ref_type == 'branch'", jobs["update"]["if"])
         self.assertEqual(readiness["steps"][1]["with"], {
             "ref": "${{ github.ref_name }}", "persist-credentials": False,
@@ -123,6 +127,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             'GITHUB_STEP_SUMMARY="$RUNNER_TEMP/php-minor-readiness.md"', steps["php-minor"]["run"],
         )
         self.assertIn("steps.php-minor.outputs.prepared == 'true'", steps["minor-auth"]["if"])
+        self.assertIn("steps.php-minor.outcome == 'success'", steps["minor-issues"]["if"])
         self.assertIn("steps.minor-auth.outputs.method != ''", steps["minor-details"]["if"])
         self.assertIn("steps.minor-details.outcome == 'success'", steps["minor-pr"]["if"])
         self.assertNotIn("github.token", steps["minor-pr"]["with"]["token"])
@@ -311,6 +316,112 @@ class DockerImageWorkflowTest(unittest.TestCase):
             if not output:
                 self.assertIn("No PHP migration PR:", self.summary.read_text())
 
+    def test_php_minor_issue_tracking_uses_real_workflow_step(self):
+        gh = self.root / "gh"
+        gh.write_text(textwrap.dedent("""\
+            #!/usr/bin/env python3
+            import json, os, sys
+            from pathlib import Path
+            calls = Path("gh-calls")
+            with calls.open("a") as out:
+                out.write(json.dumps(sys.argv[1:]) + "\\n")
+            if os.environ.get("GH_FAIL") == "1":
+                print("API unavailable", file=sys.stderr)
+                sys.exit(1)
+            if "--paginate" in sys.argv:
+                print(Path("issue-pages").read_text())
+            elif "--method" in sys.argv:
+                Path("created-issue").write_text(sys.stdin.read())
+                print('{"number": 42}')
+            else:
+                sys.exit(2)
+        """))
+        gh.chmod(0o755)
+        marker = (
+            f"<!-- php-minor-blocker:{hashlib.sha256(b'master').hexdigest()}:"
+            "8.6-fpm-bookworm -->"
+        )
+        source = self.root / "php-minor-readiness.md"
+        log = self.root / "php-minor-readiness.log"
+        calls = self.root / "gh-calls"
+        pages = self.root / "issue-pages"
+        created = self.root / "created-issue"
+        env = dict(
+            PATH=f"{self.root}:{os.environ['PATH']}", BASE_BRANCH="master",
+            CHECK_OUTCOME="success", GITHUB_SERVER_URL="https://github.com",
+            GITHUB_REPOSITORY="owner/repo", GITHUB_RUN_ID="123",
+        )
+
+        def run(result_text, existing, error="", **overrides):
+            source.write_text(
+                "Candidate: `php:8.6.2-fpm-bookworm`\n\n"
+                f"**Result: {result_text}**\n"
+            )
+            log.write_text(error)
+            pages.write_text(json.dumps(existing))
+            calls.unlink(missing_ok=True)
+            created.unlink(missing_ok=True)
+            self.output.write_text("")
+            self.summary.write_text("")
+            return self.run_script(
+                WORKFLOW, "Track confirmed PHP minor blockers", **dict(env, **overrides),
+            )
+
+        blocked = "Blocked: locked platform requirements are not satisfied"
+        result = run(blocked, [[], [{"number": 90, "body": "unrelated"}]])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json.loads(created.read_text())
+        self.assertIn(marker, payload["body"])
+        self.assertIn("owner/repo/actions/runs/123", payload["body"])
+        self.assertIn("<code>master</code>", payload["body"])
+        self.assertIn(blocked, payload["body"])
+        self.assertIn("#42", self.summary.read_text())
+        result = run(blocked, [[{"number": 42, "body": marker}]])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(created.exists())
+        self.assertEqual(len(calls.read_text().splitlines()), 1)
+        source.write_text(source.read_text().replace("8.6.2", "8.6.9"))
+        patch_release = self.run_script(WORKFLOW, "Track confirmed PHP minor blockers", **env)
+        self.assertEqual(patch_release.returncode, 0, patch_release.stderr)
+        self.assertFalse(created.exists())
+        result = run(blocked, [[{"number": 42, "body": marker}]], BASE_BRANCH="other")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(created.exists())
+
+        result = run("Prepared for a migration PR", [
+            [{"number": 100, "body": marker, "pull_request": {}}],
+            [{"number": 42, "body": marker}, {"number": 43, "body": marker}],
+        ])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Closes #42\nCloses #43", self.output.read_text())
+        self.assertNotIn("#100", self.output.read_text())
+        self.assertFalse(created.exists())
+
+        for result_text, error, outcome in (
+            ("Blocked: candidate development image did not build", "ERROR: registry timeout", "success"),
+            ("Check failed", "", "failure"),
+            ("Not available", "", "success"),
+        ):
+            result = run(result_text, [[]], error, CHECK_OUTCOME=outcome)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse(calls.exists())
+        result = run(
+            "Blocked: candidate development image did not build", [[]],
+            "/tmp/pear/temp/apcu/apc.c:44: error: incompatible PHP API",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(created.exists())
+        result = run(blocked, [[]], GH_FAIL="1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("API unavailable", result.stderr)
+        result = run(blocked, [{"unexpected": "page"}])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Unexpected GitHub issue listing", result.stderr)
+        source.unlink()
+        result = self.run_script(WORKFLOW, "Track confirmed PHP minor blockers", **env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("PHP minor issue tracking failed", result.stderr)
+
     def test_readiness_publication_shares_evidence_with_different_prominence(self):
         source = self.root / "php-minor-readiness.md"
         log = self.root / "php-minor-readiness.log"
@@ -488,6 +599,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             WORKFLOW, "Prepare PHP minor PR details",
             BASE_BRANCH="master", PHP_CANDIDATE="php:8.6.2-fpm-bookworm",
             PHP_READINESS_REPORT="## PHP minor upgrade readiness\n\nPrepared evidence",
+            PHP_CLOSING_ISSUES="Closes #42\nCloses #43",
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.output.read_text(),
@@ -495,6 +607,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         body = (self.root / "php-minor-pr.md").read_text()
         self.assertIn("Update PHP to `php:8.6.2-fpm-bookworm`", body)
         self.assertIn("## PHP minor upgrade readiness\n\nPrepared evidence", body)
+        self.assertIn("Closes #42\nCloses #43", body)
         for line in template.read_text().splitlines():
             if line.startswith(("#", "* [ ]")):
                 self.assertIn(line, body)

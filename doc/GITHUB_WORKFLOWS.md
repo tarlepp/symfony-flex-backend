@@ -558,6 +558,17 @@ auto-merge or close an existing migration PR when a later readiness check is
 blocked. Normal PR CI still runs the application tests and both image builds
 before merge.
 
+Confirmed Composer platform blockers and extension compiler errors create a
+repository issue for the PHP minor and image variant, scoped to the selected base
+branch. Subsequent runs reuse open issues across patch releases; transient
+registry failures and unclassified build failures do not create issues. Once
+readiness passes, the PHP migration PR links matching open issues with closing
+keywords. GitHub closes them when the PR reaches the default branch, not when a
+stacked PR is merged into a different branch. Issue lookup or creation failures
+fail the readiness job; the separate routine image updater still runs. The
+readiness job uses `GITHUB_TOKEN` with repository Issues write permission, while
+the migration PR still uses the configured App or PAT.
+
 The image-update job waits for readiness evidence, but still runs after a failed
 or skipped readiness job unless the workflow is cancelled. Both summaries and
 the image-update PR show the same current image, candidate, result, reason and

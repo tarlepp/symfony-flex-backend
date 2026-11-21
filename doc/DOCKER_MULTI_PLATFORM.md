@@ -535,8 +535,12 @@ blockers or opens a separate migration PR if the candidate is ready and PR
 credentials are configured. The routine updater waits for its report, but a
 failed readiness check does not block unrelated updates. Actions highlights
 blockers; both reports keep full error evidence collapsed by default. With
-Docker, buildx, `jq` and `curl`, run the read-only check from the repository root
-on the Docker host:
+confirmed Composer platform or extension compiler blockers, the workflow tracks
+an open issue per base branch and PHP minor/variant and links it from the
+eventual migration PR. GitHub closes the issue only when the PR reaches the
+default branch. See the [workflow guide](GITHUB_WORKFLOWS.md#security-and-maintenance-workflows)
+for details. With Docker, buildx, `jq` and `curl`, run the read-only check from
+the repository root on the Docker host:
 
 ```bash
 bash scripts/docker/docker-images.sh check-php-minor
