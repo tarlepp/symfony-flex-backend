@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Exercise quality recipes without mutating the application or running analyzers."""
+"""Test output and failure handling for Make quality and maintenance recipes.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/make/tests/make-quality-output-test.py
+
+Requirements:
+  Python 3, GNU Make, Bash, and Linux pseudo-terminal support.
+
+Details:
+  Make runs against a temporary project. Stubs stand in for analyzers,
+  application test runners, and dependency tools, while the real output
+  helpers handle diagnostics and fixture reports. No upload is performed.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -45,6 +65,7 @@ class QualityOutputTest(unittest.TestCase):
         shutil.copyfile(ROOT / "scripts/output/report-output.sh", self.root / "scripts/output/report-output.sh")
         shutil.copyfile(ROOT / "scripts/make/make.sh", self.root / "scripts/make/make.sh")
         shutil.copyfile(ROOT / "scripts/output/markdown-output.sh", self.root / "scripts/output/markdown-output.sh")
+        # Keep the real formatters in the output path while stubbing tool calls.
         fixture = """#!/usr/bin/env bash
 if [ "$(basename "$0")" = python3 ] && [[ "${1:-}" = scripts/output/native-output.py || "${1:-}" = scripts/output/phpmetrics-output.py ]]; then
     if [ "${1:-}" = scripts/output/phpmetrics-output.py ] && [ "${FAIL_FORMATTER:-0}" = 1 ]; then
@@ -116,6 +137,7 @@ done
         bash.chmod(0o755)
 
     def run_target(self, target, *arguments, **overrides):
+        """Return the captured Make result and tool call log for one fixture run."""
         calls = self.root / "calls"
         calls.write_text("")
         environment = dict(
@@ -375,6 +397,7 @@ done
                 self.assertEqual(result.stderr, "\n" + prefix + diagnostic + "\n")
 
     def prepare_mutation_fixtures(self):
+        """Stub write-heavy tools and seed inputs for maintenance recipe tests."""
         fixture = (self.root / "bin/php").read_text()
         for name in ("cp", "sed", "chmod", "openssl", "rm"):
             file = self.root / "bin" / name
@@ -565,6 +588,7 @@ done
             assert process.stderr is not None
             process.stdin.write(b"Complex")
             process.stdin.flush()
+            # Check delivery before sending a newline or closing stdin.
             self.assertTrue(select.select([process.stdout], [], [], 5)[0], "partial output was buffered")
             first = os.read(process.stdout.fileno(), 4096)
             self.assertEqual(first, b"\x1b[1;34mComplex")
