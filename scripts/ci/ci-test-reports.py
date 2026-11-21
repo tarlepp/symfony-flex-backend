@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Validate PHPUnit report inputs and print the informational CI summary."""
 
-# The module docstring is also the CLI help description; keep it short.
 #
 # Usage:
 #   From the repository root inside the PHP development container, with
@@ -17,8 +16,9 @@
 #   The helper only reads reports; it does not generate or modify them.
 #
 # Callers:
-#   .github/workflows/main.yml runs these operations in separate test-job steps
-#   and redirects summary stdout to GITHUB_STEP_SUMMARY on the runner.
+#   GitHub Actions:
+#     - `.github/workflows/main.yml` runs these operations in separate test-job
+#       steps and redirects summary stdout to GITHUB_STEP_SUMMARY on the runner.
 
 import argparse
 from pathlib import Path

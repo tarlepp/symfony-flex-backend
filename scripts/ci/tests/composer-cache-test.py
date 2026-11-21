@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test the CI Composer cache path and writability checks offline.
+"""Test the CI Composer cache path and writability checks offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make lint-workflows
-  To run only this suite from the repository root inside the container:
-    python3 scripts/ci/tests/composer-cache-test.py
-
-Requirements:
-  Python 3, Bash, and standard Linux command-line tools. The suite stubs
-  Composer and skips the unwritable-directory case when run as root.
-
-Details:
-  The checker uses a temporary cache path. The suite does not install
-  dependencies or exercise a real Docker cache mount.
-
-Callers:
-  Scripts:
-    - `scripts/checks/lint-workflows.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make lint-workflows
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/ci/tests/composer-cache-test.py
+#
+# Requirements:
+#   Python 3, Bash, and standard Linux command-line tools. The suite stubs
+#   Composer and skips the unwritable-directory case when run as root.
+#
+# Details:
+#   The checker uses a temporary cache path. The suite does not install
+#   dependencies or exercise a real Docker cache mount.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path
