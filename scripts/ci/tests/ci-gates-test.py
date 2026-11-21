@@ -294,6 +294,7 @@ class CiGatesTest(unittest.TestCase):
                 "VERIFY": ("verify", "Pin verification"),
                 "COMPOSER": ("composer", "Composer synchronization"),
                 "DOCTRINE": ("doctrine", "Doctrine synchronization"),
+                "CI_MARIADB": ("ci-mariadb", "CI MariaDB synchronization"),
                 "DETAILS": ("details", "Change report preparation"),
                 "PULL_REQUEST": ("pull-request", "Pull request action"),
             },
