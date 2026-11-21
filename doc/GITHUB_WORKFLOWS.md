@@ -523,14 +523,16 @@ preserving variants and existing platforms. PHP is patch-only: when the PHP tag
 changes, the workflow refreshes PHP requirements, platform settings, and
 lockfiles for the root and every tool without upgrading packages. When the
 MariaDB tag changes, the workflow updates Doctrine's `server_version` to match.
-It updates existing tagged digest pins in Dockerfile `FROM` and external
-`COPY --from` instructions; Compose images and GitHub Actions references are
-outside its scope. It verifies the resulting pins before creating or updating
-one PR per selected base branch. No changes means no new PR. The Actions run
-summary shows the base branch, step and PR outcomes, a changed-file summary
-(including lockfiles), and the exact image pin and Doctrine diffs. Existing core
-CI gates are unchanged; the updater does not build its proposed images or run
-application tests.
+It also synchronizes the core CI MariaDB service tag and digest with the MariaDB
+Dockerfile, including digest-only changes and existing drift. CI's PHP runtime
+comes from the shared PHP Dockerfile. It updates existing tagged digest pins in
+Dockerfile `FROM` and external `COPY --from` instructions; other Compose and
+workflow image references are outside its scope. It verifies the Dockerfile pins
+before creating or updating one PR per selected base branch. No changes means no
+new PR. The Actions run summary shows the base branch, step and PR outcomes, a
+changed-file summary (including lockfiles), and the exact image pin, CI service
+and Doctrine diffs. Existing core CI gates are unchanged; the updater does not
+build its proposed images or run application tests.
 
 For digest-only updates, the PR and Actions run summary share the same report of
 runnable platform changes and available base-image and source-revision metadata.
@@ -560,14 +562,15 @@ before merge.
 
 Confirmed Composer platform blockers and extension compiler errors create a
 repository issue for the PHP minor and image variant, scoped to the selected base
-branch. Subsequent runs reuse open issues across patch releases; transient
-registry failures and unclassified build failures do not create issues. Once
-readiness passes, the PHP migration PR links matching open issues with closing
-keywords. GitHub closes them when the PR reaches the default branch, not when a
-stacked PR is merged into a different branch. Issue lookup or creation failures
-fail the readiness job; the separate routine image updater still runs. The
-readiness job uses `GITHUB_TOKEN` with repository Issues write permission, while
-the migration PR still uses the configured App or PAT.
+branch. New issues include the readable result, specific compiler or Composer
+reason, and a link to the full run diagnostics. Subsequent runs reuse open issues
+across patch releases; transient registry failures and unclassified build failures
+do not create issues. Once readiness passes, the PHP migration PR links matching
+open issues with closing keywords. GitHub closes them when the PR reaches the
+default branch, not when a stacked PR is merged into a different branch. Issue
+lookup or creation failures fail the readiness job; the separate routine image
+updater still runs. The readiness job uses `GITHUB_TOKEN` with repository Issues
+write permission, while the migration PR still uses the configured App or PAT.
 
 The image-update job waits for readiness evidence, but still runs after a failed
 or skipped readiness job unless the workflow is cancelled. Both summaries and
@@ -613,18 +616,21 @@ includes the new helper and workflow.
 
 Enable **Settings > Actions > General > Workflow permissions > Allow GitHub
 Actions to create and approve pull requests** when using `GITHUB_TOKEN`. Prefer
-a GitHub App installed on this repository with **Contents: Read and write** and
-**Pull requests: Read and write**. Configure its client ID as the
-`DOCKER_IMAGE_UPDATE_APP_CLIENT_ID` repository variable and its private key as
-the `DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY` repository secret. The workflow mints
-a short-lived token scoped to this repository with those two permissions; the
-token action revokes it during job cleanup.
+a GitHub App installed on this repository with **Contents: Read and write**,
+**Pull requests: Read and write**, and **Workflows: Read and write**. Configure
+its client ID as the `DOCKER_IMAGE_UPDATE_APP_CLIENT_ID` repository variable and
+its private key as the `DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY` repository secret.
+The workflow mints a short-lived token scoped to this repository. The routine
+updater requests all three permissions because its PR can change the CI workflow;
+the PHP minor updater requests only Contents and Pull requests. The token action
+revokes it during job cleanup.
 
 Authentication precedence is App, then `DOCKER_IMAGE_UPDATE_TOKEN` (a
-fine-grained PAT with the same permissions), then `GITHUB_TOKEN`. Generated PRs
-trigger CI automatically with the App or PAT. A partial App configuration fails
-explicitly, even if a PAT exists. Failed App authentication does not silently
-fall back.
+fine-grained PAT with the same permissions), then `GITHUB_TOKEN`. Update
+existing App or PAT permissions before enabling workflow-file synchronization.
+Generated PRs trigger CI automatically with the App or PAT. A partial App
+configuration fails explicitly, even if a PAT exists. Failed App authentication
+does not silently fall back.
 
 From a Docker host checkout with GitHub CLI installed and authenticated, set the
 App configuration interactively; the private-key file stays outside Git:

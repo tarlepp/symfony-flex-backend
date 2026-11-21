@@ -127,7 +127,10 @@ make check-skills
 
 For executable Bash or Python changes, follow the tooling skill's syntax check
 for each exact changed path inside the PHP development container. Run the
-focused suite and any affected aggregate or CI entry point when relevant.
+focused suite and any affected aggregate or CI entry point when relevant. Python
+scripts, regression tests, and runners also require the tooling skill's
+[Python type check](../maintain-development-tooling/SKILL.md#validation); compilation
+and passing runtime tests are not substitutes.
 
 Documentation checks and offline mocks do not prove that a live workflow or
 external service ran.

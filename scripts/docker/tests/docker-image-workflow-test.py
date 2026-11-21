@@ -381,6 +381,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         def run(result_text, existing, error="", **overrides):
             source.write_text(
                 "Candidate: `php:8.6.2-fpm-bookworm`\n\n"
+                "| `tools/analyzer` | Blocked: package/tool requires php <8.6 |\n\n"
                 f"**Result: {result_text}**\n"
             )
             log.write_text(error)
@@ -389,8 +390,20 @@ class DockerImageWorkflowTest(unittest.TestCase):
             created.unlink(missing_ok=True)
             self.output.write_text("")
             self.summary.write_text("")
+            published = self.run_script(
+                WORKFLOW, "Publish PHP readiness evidence", CHECK_OUTCOME=overrides.get("CHECK_OUTCOME", "success"),
+            )
+            self.assertEqual(published.returncode, 0, published.stderr)
+            report_match = re.search(
+                r"(?ms)^report<<([^\n]+)\n(.*?)\n\1$", self.output.read_text(),
+            )
+            assert report_match is not None, "Readiness publisher must emit a report output"
+            report = report_match.group(2)
+            self.output.write_text("")
+            self.summary.write_text("")
             return self.run_script(
-                WORKFLOW, "Track confirmed PHP minor blockers", **dict(env, **overrides),
+                WORKFLOW, "Track confirmed PHP minor blockers",
+                **dict(env, PHP_READINESS_REPORT=report, **overrides),
             )
 
         blocked = "Blocked: locked platform requirements are not satisfied"
@@ -401,6 +414,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("owner/repo/actions/runs/123", payload["body"])
         self.assertIn("<code>master</code>", payload["body"])
         self.assertIn(blocked, payload["body"])
+        self.assertIn("Composer project `tools/analyzer`", payload["body"])
+        self.assertIn("package/tool requires php <8.6", payload["body"])
         self.assertIn("#42", self.summary.read_text())
         result = run(blocked, [[{"number": 42, "body": marker}]])
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -437,6 +452,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(created.exists())
+        payload = json.loads(created.read_text())
+        self.assertIn("PHP extension `apcu` failed to compile", payload["body"])
+        self.assertIn("incompatible PHP API", payload["body"])
+        self.assertIn("Composer compatibility checks did not run", payload["body"])
         result = run(blocked, [[]], GH_FAIL="1")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("API unavailable", result.stderr)
@@ -693,6 +712,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
                         if item.get("id") == "app-token")
         self.assertEqual(app_step["with"]["permission-contents"], "write")
         self.assertEqual(app_step["with"]["permission-pull-requests"], "write")
+        self.assertEqual(app_step["with"]["permission-workflows"], "write")
+        minor_token = next(item for item in yaml.safe_load(WORKFLOW)["jobs"]["php-minor-readiness"]["steps"]
+                           if item.get("id") == "minor-token")
+        self.assertNotIn("permission-workflows", minor_token["with"])
         self.assertNotIn("owner:", action)
         self.assertNotIn("skip-token-revoke:", action)
         self.assertRegex(action, r"actions/create-github-app-token@[a-f0-9]{40}")
@@ -975,7 +998,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("Major-version upgrades remain a manual review", body)
         self.assertIn("## Digest-only image comparisons\n", body)
         self.assertIn("No digest-only image updates.", body)
-        self.assertIn("## Dockerfile image changes\n", body)
+        self.assertIn("## Dockerfile and CI image changes\n", body)
         self.assertIn("## Validation\n", body)
         self.assertIn("`bash scripts/make/make.sh test-docker-images` — passed", body)
         self.assertIn("`bash scripts/make/make.sh docker-image-update-pins` — passed", body)
@@ -1007,6 +1030,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for path in ("composer.json", "composer.lock", "tools/*/composer.json", "tools/*/composer.lock"):
             self.assertIn(f"            {path}\n", pr)
         self.assertIn("            config/packages/doctrine.yaml\n", pr)
+        self.assertIn("            .github/workflows/main.yml\n", pr)
 
     def test_digest_comparison_reports_registry_evidence_and_unavailable_data(self):
         old_digest, new_digest = "a" * 64, "b" * 64
@@ -1100,7 +1124,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             WORKFLOW, "Publish workflow run overview", EVENT_NAME="workflow_dispatch",
             PRIOR_STATUS="success", BASE_BRANCH="master", BOOTSTRAP="success",
             TESTS="success", UPDATE="success", VERIFY="success", COMPOSER="success",
-            DOCTRINE="success", DETAILS="success", PULL_REQUEST="success",
+            DOCTRINE="success", CI_MARIADB="success", DETAILS="success", PULL_REQUEST="success",
             PR_URL="", PR_OPERATION="none",
         )
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -1175,6 +1199,37 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, status, result.stdout + result.stderr)
                 self.assertEqual(config.read_text(), expected)
+
+    def test_ci_mariadb_pin_sync_handles_tags_digests_drift_and_invalid_inputs(self):
+        dockerfile = self.root / "docker/mariadb/Dockerfile"
+        dockerfile.parent.mkdir(parents=True)
+        workflow = self.root / ".github/workflows/main.yml"
+        workflow.parent.mkdir(parents=True)
+        old = f"mariadb:13.0.2@sha256:{'a' * 64}"
+        for candidate in (old, f"mariadb:13.1.1@sha256:{'b' * 64}",
+                          f"mariadb:13.0.2@sha256:{'b' * 64}"):
+            with self.subTest(candidate=candidate):
+                dockerfile.write_text(f"FROM {candidate}\n")
+                workflow.write_text(f"services:\n  mariadb:\n        image: {old}\n")
+                result = self.run_script(WORKFLOW, "Synchronize CI MariaDB image pin")
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertEqual(workflow.read_text(), f"services:\n  mariadb:\n        image: {candidate}\n")
+                again = self.run_script(WORKFLOW, "Synchronize CI MariaDB image pin")
+                self.assertEqual(again.returncode, 0, again.stdout + again.stderr)
+
+        for docker_source, workflow_source in (
+            (f"FROM {old}\nFROM {old}\n", f"        image: {old}\n"),
+            ("FROM mariadb:13.0.2\n", f"        image: {old}\n"),
+            (f"FROM {old}\n", f"        image: {old}\n        image: {old}\n"),
+            (f"FROM {old}\n", "        image: mariadb:13.0.2\n"),
+        ):
+            with self.subTest(docker_source=docker_source, workflow_source=workflow_source):
+                dockerfile.write_text(docker_source)
+                workflow.write_text(workflow_source)
+                result = self.run_script(WORKFLOW, "Synchronize CI MariaDB image pin")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("::error::", result.stdout)
+                self.assertEqual(workflow.read_text(), workflow_source)
 
     def test_composer_sync_only_for_patch_changes_and_fails_closed(self):
         helper = ROOT / "scripts/sync-composer-php.sh"
@@ -1266,7 +1321,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     WORKFLOW, "Publish workflow run overview", EVENT_NAME="workflow_dispatch",
                     PRIOR_STATUS="success" if outcome == "success" else "failure", BASE_BRANCH="master",
                     BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
-                    COMPOSER="success", DOCTRINE="success", DETAILS=details, PULL_REQUEST=outcome,
+                    COMPOSER="success", DOCTRINE="success", CI_MARIADB="success", DETAILS=details, PULL_REQUEST=outcome,
                     PR_URL=link, PR_OPERATION=operation,
                     PHP_READINESS_ACTIONS="## PHP minor upgrade readiness\n\n> [!WARNING]\n> Blocked: APCu build failed.\n",
                 )

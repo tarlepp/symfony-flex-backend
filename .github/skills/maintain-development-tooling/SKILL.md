@@ -280,6 +280,9 @@ also disable `errexit` in functions.
 Trace direct execution, imports, and runner-loaded tests. Preserve import-time
 behavior, exception handling, subprocess arguments and status handling, and
 fixture cleanup. Check that fixture paths and mocks still match real callers.
+Narrow optional values before use, including regex matches before `.group()`.
+Use an explicit guard or assertion that Pyright can recognize; do not suppress
+the diagnostic or assume a passing fixture proves the value cannot be `None`.
 Use [document-python-scripts](../document-python-scripts/SKILL.md) for headers,
 function contracts, and explanatory comments.
 
@@ -350,6 +353,25 @@ for filename in sys.argv[1:]:
 Replace the example path with the exact changed paths. Run the affected
 regression suite or real read-only caller as appropriate; compilation alone does
 not check imports, runtime behavior, or output contracts.
+
+For any executable Python change under `scripts/`, including regression tests
+and test runners, also run the existing CI lint and type checks after the final
+edit. From the repository root on the Docker host with the PHP development
+service running:
+
+```bash
+make lint-python
+make typecheck-python
+```
+
+These targets run Ruff and Pyright inside the container. `pyrightconfig.json`
+includes all of `scripts/`. Syntax compilation and passing regression tests,
+including `make lint-workflows`, do not replace lint or type analysis. Preserve
+the configured scope and diagnostics; do not add casts, ignores, or exclusions
+to hide errors. Inspect the selected configuration-check steps in
+`.github/workflows/main.yml` before choosing local validation, and retain
+separate outcomes for syntax, regressions, and type checking. A missing tool or
+failed required check is a blocker, not evidence that validation passed.
 
 For this skill's Markdown alone, run from the repository root on the Docker host
 with development services running:

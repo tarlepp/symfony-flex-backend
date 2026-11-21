@@ -30,7 +30,8 @@ registry failures and builds without extension compiler errors are not tracked.
 # Environment:
 #   BASE_BRANCH identifies the branch. GitHub CLI authentication and repository
 #   selection use GH_TOKEN and GH_REPO in the workflow. Issue creation uses
-#   GITHUB_SERVER_URL, GITHUB_REPOSITORY and GITHUB_RUN_ID. Matching issues are
+#   GITHUB_SERVER_URL, GITHUB_REPOSITORY, GITHUB_RUN_ID and PHP_READINESS_REPORT.
+#   Matching issues are
 #   appended to GITHUB_STEP_SUMMARY; a prepared migration also writes
 #   closing-issues to GITHUB_OUTPUT.
 #
@@ -110,13 +111,18 @@ def main():
     ]
 
     if (composer_blocked or build_blocked) and not matches:
+        report = os.environ["PHP_READINESS_REPORT"].split("\n\n<details>", 1)[0].strip()
+        if not report or "**Result:" not in report:
+            raise ValueError("PHP readiness report has no readable result")
+        if len(report) > 12000:
+            report = report[:12000] + "\n\nReadiness summary truncated; see the run for full evidence."
         run_url = f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
         body = (
             f"{marker}\n\nThe PHP `{version}` image cannot yet be adopted for the "
             f"base branch <code>{html.escape(branch)}</code>. "
             f"See the [readiness run]({run_url}) for the "
             "candidate, blocker and full diagnostics.\n\n"
-            f"### Readiness evidence\n\n{raw[:50000]}\n"
+            f"{report}\n"
         )
         issue = github_api(endpoint, {"title": f"PHP {version} upgrade is blocked", "body": body})
         matches = [issue]

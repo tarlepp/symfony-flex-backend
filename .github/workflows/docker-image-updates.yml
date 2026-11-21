@@ -58,6 +58,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           BASE_BRANCH: ${{ github.ref_name }}
           CHECK_OUTCOME: ${{ steps.php-minor.outcome }}
+          PHP_READINESS_REPORT: ${{ steps.readiness-report.outputs.report }}
         run: |
           python3 scripts/docker/php-minor-issues.py \
             --source "$RUNNER_TEMP/php-minor-readiness.md" \
@@ -116,7 +117,7 @@ jobs:
         id: minor-token
         if: ${{ steps.minor-auth.outputs.method == 'app' }}
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with: &maintenance_pr_app
+        with:
           client-id: ${{ vars.DOCKER_IMAGE_UPDATE_APP_CLIENT_ID }}
           private-key: ${{ secrets.DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY }}
           permission-contents: write
@@ -251,6 +252,25 @@ jobs:
           sed -i -E "s/^(        server_version: )'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$/\1'mariadb-$candidate'/" "$config"
           echo "Doctrine server_version synchronized to mariadb-$candidate."
 
+      - name: Synchronize CI MariaDB image pin
+        id: ci-mariadb
+        shell: bash
+        run: |
+          dockerfile=docker/mariadb/Dockerfile
+          workflow=.github/workflows/main.yml
+          pin=$(sed -nE 's/^FROM (mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64})$/\1/p' "$dockerfile")
+          if ! [[ "$pin" =~ ^mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64}$ ]]; then
+            echo '::error::Expected exactly one pinned MariaDB image in the Dockerfile.'
+            exit 1
+          fi
+          if [[ $(grep -Ec '^[[:space:]]*image:[[:space:]]*mariadb:' "$workflow") != 1 ]] ||
+            ! grep -Eq '^        image: mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64}$' "$workflow"; then
+            echo '::error::Expected exactly one pinned MariaDB service image in the CI workflow.'
+            exit 1
+          fi
+          sed -i -E "s|^(        image: )mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64}$|\1${pin}|" "$workflow"
+          echo "CI MariaDB service synchronized to $pin."
+
       - name: Prepare pull request details
         id: details
         env:
@@ -263,14 +283,14 @@ jobs:
 
           python3 scripts/docker/docker-image-digest-summary.py > "$RUNNER_TEMP/docker-image-digests.md"
           stat=$(git diff --no-ext-diff --stat=160,120 -- Dockerfile 'docker/*/Dockerfile*' \
-            composer.json composer.lock 'tools/*/composer.json' 'tools/*/composer.lock' config/packages/doctrine.yaml)
+            composer.json composer.lock 'tools/*/composer.json' 'tools/*/composer.lock' config/packages/doctrine.yaml .github/workflows/main.yml)
           # The PR action can restore the working tree; capture the verified changes first.
           {
             printf '## Proposed changes\n\n'
             if [ -n "$stat" ]; then
               printf '%s\n%s\n%s\n\n' '```text' "$stat" '```'
               printf '### Image pins and Doctrine server version\n\n%s\n' '```diff'
-              git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' config/packages/doctrine.yaml
+              git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' config/packages/doctrine.yaml .github/workflows/main.yml
               printf '%s\n' '```'
             else
               echo 'No eligible tag or digest changes.'
@@ -292,7 +312,8 @@ jobs:
           PHP is limited to patch updates. When its tag changes, the root and tool
           Composer requirements, platform settings and lockfiles are synchronized
           without upgrading packages. Doctrine's configured server version is
-          synchronized when the MariaDB tag changes.
+          synchronized when the MariaDB tag changes. The CI MariaDB service pin
+          is synchronized with the Dockerfile, including digest-only updates.
           EOF
           if [ -n "$PHP_READINESS_REPORT" ]; then
             printf '\n%s\n' "$PHP_READINESS_REPORT"
@@ -302,14 +323,14 @@ jobs:
           cat "$RUNNER_TEMP/docker-image-digests.md"
           cat << 'EOF'
 
-          ## Dockerfile image changes
+          ## Dockerfile and CI image changes
 
           The diff lists each changed Dockerfile and the exact old and new image
-          references:
+          references, including the CI MariaDB service:
 
           ```diff
           EOF
-          git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*'
+          git diff --no-ext-diff --unified=0 -- Dockerfile 'docker/*/Dockerfile*' .github/workflows/main.yml
           cat << 'EOF'
           ```
 
@@ -320,6 +341,7 @@ jobs:
           * `bash scripts/make/make.sh docker-image-verify-pins` — passed (live pin verification).
           * Composer PHP synchronization and lockfile validation passed when the PHP tag changed.
           * Doctrine server version synchronization passed when the MariaDB tag changed.
+          * CI MariaDB service pin synchronization passed.
           * Application tests and builds are not run by this Docker maintenance workflow.
           EOF
           } >> "$RUNNER_TEMP/docker-image-pr.md"
@@ -345,7 +367,12 @@ jobs:
         id: app-token
         if: ${{ steps.authentication.outputs.app == 'true' }}
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with: *maintenance_pr_app
+        with:
+          client-id: ${{ vars.DOCKER_IMAGE_UPDATE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
 
       - name: Create or update the Docker image pull request
         id: pull-request
@@ -360,6 +387,7 @@ jobs:
             composer.json
             composer.lock
             config/packages/doctrine.yaml
+            .github/workflows/main.yml
             tools/*/composer.json
             tools/*/composer.lock
           commit-message: |
@@ -395,6 +423,7 @@ jobs:
           VERIFY: ${{ steps.verify.outcome || 'skipped' }}
           COMPOSER: ${{ steps.composer.outcome || 'skipped' }}
           DOCTRINE: ${{ steps.doctrine.outcome || 'skipped' }}
+          CI_MARIADB: ${{ steps.ci-mariadb.outcome || 'skipped' }}
           DETAILS: ${{ steps.details.outcome || 'skipped' }}
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
           PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
@@ -416,6 +445,7 @@ jobs:
               'Pin verification' "$VERIFY" \
               'Composer synchronization' "$COMPOSER" \
               'Doctrine synchronization' "$DOCTRINE" \
+              'CI MariaDB synchronization' "$CI_MARIADB" \
               'Change report preparation' "$DETAILS" \
               'Pull request action' "$PULL_REQUEST"
 
