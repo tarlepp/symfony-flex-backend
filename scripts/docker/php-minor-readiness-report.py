@@ -6,6 +6,35 @@ GitHub job outputs carry the same evidence in compact PR and highlighted Actions
 forms. Missing evidence is explicitly unavailable, never a successful check.
 """
 
+# The module docstring is also the CLI help description; keep it unchanged.
+#
+# Usage:
+#   From the repository root in the GitHub Actions runner, with the workflow's
+#   environment available:
+#     python3 scripts/docker/php-minor-readiness-report.py \
+#       --source "$RUNNER_TEMP/php-minor-readiness.md" \
+#       --log "$RUNNER_TEMP/php-minor-readiness.log" --outcome "$CHECK_OUTCOME"
+#
+# Requirements:
+#   Python 3. The outcome must be success, failure, cancelled, or skipped.
+#   Missing source or log files are treated as empty evidence.
+#
+# Details:
+#   Produces compact and highlighted Markdown from the readiness report and
+#   captured error lines. A non-success outcome overrides any reported result;
+#   a successful outcome without a result is marked unavailable. Diagnostics
+#   extracted from the log are escaped before inclusion in Markdown.
+#
+# Environment:
+#   Appends multiline `report` and `actions-report` outputs to GITHUB_OUTPUT and
+#   the highlighted report to GITHUB_STEP_SUMMARY. Both paths must be writable.
+#
+# Callers:
+#   GitHub Actions:
+#     - `.github/workflows/docker-image-updates.yml` uses the compact report in
+#       PHP migration and image-update PRs, and the highlighted report in the
+#       workflow run overview.
+
 import argparse
 import html
 import os
@@ -15,7 +44,7 @@ import uuid
 
 
 def reports(raw, log, outcome):
-    """Keep verified evidence shared; change only prominence and disclosure state."""
+    """Return compact and highlighted reports with the same readiness evidence."""
     lines = raw.splitlines()
     result = next((line for line in reversed(lines) if line.startswith("**Result: ")), "")
     if outcome != "success":
@@ -34,6 +63,7 @@ def reports(raw, log, outcome):
             reason = f"Reason: Composer project {constraint[1]} is blocked: {constraint[2]}"
     errors = []
     for line in log.splitlines():
+        # Normalize BuildKit prefixes and ANSI color before deduplicating errors.
         line = re.sub(r"\x1b\[[0-9;]*m", "", line)
         line = re.sub(r"^#\d+ [\d.]+ ", "", line)
         if re.search(r"\berror:|^ERROR:|^\[FAIL\]|^::error::", line, re.IGNORECASE):
@@ -106,6 +136,7 @@ def reports(raw, log, outcome):
 
 
 def main():
+    """Read available evidence and append reports to GitHub Actions files."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--log", type=Path, required=True)
