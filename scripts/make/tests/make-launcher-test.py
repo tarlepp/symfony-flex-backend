@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Test Make launcher diagnostics, streaming, shell hooks, and forwarding.
+"""Test Make launcher diagnostics, streaming, shell hooks, and forwarding."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/make/tests/make-launcher-test.py
-
-Requirements:
-  Python 3, GNU Make, Bash, Fish, and Linux pseudo-terminal support.
-  The live Bash completion test requires ble.sh and is skipped if it is absent.
-
-Details:
-  The suite runs real Make against temporary recipes or a copied Makefile.
-  Forwarding cases stub Docker so both launcher layers run locally without
-  starting another container.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/make/tests/make-launcher-test.py
+#
+# Requirements:
+#   Python 3, GNU Make, Bash, Fish, and Linux pseudo-terminal support.
+#   The live Bash completion test requires ble.sh and is skipped if it is absent.
+#
+# Details:
+#   The suite runs real Make against temporary recipes or a copied Makefile.
+#   Forwarding cases stub Docker so both launcher layers run locally without
+#   starting another container.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path

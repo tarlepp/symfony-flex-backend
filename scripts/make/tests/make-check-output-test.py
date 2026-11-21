@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test how Make check targets report output and command failures offline.
+"""Test how Make check targets report output and command failures offline."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/make/tests/make-check-output-test.py
-
-Requirements:
-  Python 3, Bash, Make, and Linux pseudo-terminal support.
-
-Details:
-  Tests run copied Make recipes and output helpers in a temporary directory.
-  Stubs replace the underlying check commands; a separate case runs the real
-  documentation checker against the fixture root to verify error colors.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/make/tests/make-check-output-test.py
+#
+# Requirements:
+#   Python 3, Bash, Make, and Linux pseudo-terminal support.
+#
+# Details:
+#   Tests run copied Make recipes and output helpers in a temporary directory.
+#   Stubs replace the underlying check commands; a separate case runs the real
+#   documentation checker against the fixture root to verify error colors.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path
