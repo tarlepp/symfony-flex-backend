@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Test output and failure handling for Make quality and maintenance recipes.
+"""Test output and failure handling for Make quality and maintenance recipes."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make test-command-output
-  To run only this suite from the repository root inside the container:
-    python3 scripts/make/tests/make-quality-output-test.py
-
-Requirements:
-  Python 3, GNU Make, Bash, and Linux pseudo-terminal support.
-
-Details:
-  Make runs against a temporary project. Stubs stand in for analyzers,
-  application test runners, and dependency tools, while the real output
-  helpers handle diagnostics and fixture reports. No upload is performed.
-
-Callers:
-  Scripts:
-    - `scripts/tests/command-output-contract-test.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py`.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make test-command-output
+#   To run only this suite from the repository root inside the container:
+#     python3 scripts/make/tests/make-quality-output-test.py
+#
+# Requirements:
+#   Python 3, GNU Make, Bash, and Linux pseudo-terminal support.
+#
+# Details:
+#   Make runs against a temporary project. Stubs stand in for analyzers,
+#   application test runners, and dependency tools, while the real output
+#   helpers handle diagnostics and fixture reports. No upload is performed.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/tests/command-output-contract-test.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py`.
 
 import os
 from pathlib import Path
