@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Test composite action shell validation with real ShellCheck diagnostics.
+"""Test composite action shell validation with real ShellCheck diagnostics."""
 
-Usage:
-  From the repository root on the Docker host or in the development container:
-    make lint-workflows
-  To run only this suite from the repository root inside the container, with
-  ShellCheck on PATH:
-    python3 scripts/checks/tests/composite-action-shell-test.py "$(command -v shellcheck)"
-
-Requirements:
-  Python 3, PyYAML, and a ShellCheck executable supplied as the first argument.
-  The full workflow validator prepares the pinned ShellCheck version for you.
-
-Details:
-  Tests use temporary action metadata, not repository action files. They
-  verify that shell findings fail validation without executing the step bodies.
-
-Callers:
-  Scripts:
-    - `scripts/checks/lint-workflows.sh` loads this suite through
-      `scripts/tests/run-workflow-tests.py` and passes the pinned ShellCheck.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the development container:
+#     make lint-workflows
+#   To run only this suite from the repository root inside the container, with
+#   ShellCheck on PATH:
+#     python3 scripts/checks/tests/composite-action-shell-test.py "$(command -v shellcheck)"
+#
+# Requirements:
+#   Python 3, PyYAML, and a ShellCheck executable supplied as the first argument.
+#   The full workflow validator prepares the pinned ShellCheck version for you.
+#
+# Details:
+#   Tests use temporary action metadata, not repository action files. They
+#   verify that shell findings fail validation without executing the step bodies.
+#
+# Callers:
+#   Scripts:
+#     - `scripts/checks/lint-workflows.sh` loads this suite through
+#       `scripts/tests/run-workflow-tests.py` and passes the pinned ShellCheck.
 
 from pathlib import Path
 import subprocess

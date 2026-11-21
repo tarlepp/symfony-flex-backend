@@ -32,7 +32,7 @@ Follow the [shared skill guidance](../shared-guidance.md), including
 
 <a id="python-documentation-conventions"></a>
 
-Inspect the module and its callers before writing its docstring:
+Inspect the module and its callers before writing its header:
 
 * Inventory tracked Python files from the repository root with
   `git ls-files '*.py'`. This includes entrypoints, helpers, tests, and
@@ -41,20 +41,28 @@ Inspect the module and its callers before writing its docstring:
   Verify invocation, working directory, inputs, environment variables,
   prerequisites, outputs, exit behavior, side effects, and execution host
   against the implementation.
-* Use the module docstring to explain the file's purpose. Place it after a
-  shebang and encoding declaration and before imports such as `__future__`.
-  Preserve both declarations.
+* Place the module docstring after a shebang and encoding declaration and before
+  imports such as `__future__`. Preserve both declarations. Use a short purpose
+  sentence for new docstrings, and preserve existing docstrings when they supply
+  CLI help or another observable runtime output.
 * Distinguish direct execution, imports, and tests loaded by a runner. Do not
   show a standalone command for an import-only module. Note import-time behavior
   or runner-supplied arguments when they affect use.
 
-Use a triple-quoted module docstring with an opening sentence that explains the
-module's purpose. Do not prefix it with `Purpose:`. Separate the opening
-sentence and each applicable section with a blank line. Put each section label
-on its own line and indent its content by two spaces. Use only supported
-sections, such as `Usage:`, `Inputs:`, `Environment:`, `Requirements:`,
-`Details:`, `Effects:`, `Exit Status:`, or `Security Note:`. Do not create empty
-sections or force every module into an identical list of headings.
+Use a triple-quoted module docstring for the purpose, followed by a comment-only
+header for all detailed maintainer documentation. This keeps the same visible
+layout across Python scripts while preserving any CLI-visible docstring. For
+non-observable existing docstrings, move detailed sections into the comment
+header and retain the purpose sentence in the docstring. Do not prefix the
+purpose with `Purpose:`.
+
+Separate the docstring and comment header with a blank line. Start the comment
+block with `#`, separate sections with a blank comment line, and put each
+section label on its own comment line. Indent its content by two spaces after
+the comment marker. Use only supported sections, such as `Usage:`, `Inputs:`,
+`Environment:`, `Requirements:`, `Details:`, `Effects:`, `Exit Status:`, or
+`Security Note:`. Do not create empty sections or force every module into an
+identical list of headings.
 
 Keep invocations readable and copyable. Follow the [shared command guidance](../shared-guidance.md#updating-documentation):
 show the existing Make target first, then the direct invocation. List meaningful
@@ -62,20 +70,20 @@ modes or options separately under `Usage:`. For example:
 
 ```python
 #!/usr/bin/env python3
-"""Validate skill metadata, index coverage, and repository Markdown links.
+"""Validate skill metadata, index coverage, and repository Markdown links."""
 
-Usage:
-  From the repository root on the Docker host or in the PHP development container:
-    make check-skills
-  Direct invocation from the repository root inside the container:
-    python3 scripts/checks/check-skills.py
-
-Requirements:
-  Python 3.
-
-Security Note:
-  Reads repository Markdown and does not execute scripts.
-"""
+#
+# Usage:
+#   From the repository root on the Docker host or in the PHP development container:
+#     make check-skills
+#   Direct invocation from the repository root inside the container:
+#     python3 scripts/checks/check-skills.py
+#
+# Requirements:
+#   Python 3.
+#
+# Security Note:
+#   Reads repository Markdown and does not execute scripts.
 ```
 
 Keep sections accurate, concise, and specific to the module. Document
@@ -83,8 +91,9 @@ non-obvious defaults, safety boundaries, and important limitations. Avoid
 repeating implementation, describing hypothetical behavior, or copying a lengthy
 manual when a focused reference is more useful.
 
-If the module docstring supplies CLI help or another runtime output, preserve
-its text and put additional maintainer details in a nearby comment block.
+Preserve CLI-visible docstring text exactly, even when it contains more than a
+purpose sentence. Do not change the help implementation merely to normalize the
+header.
 
 ## Caller context [ᐞ](#table-of-contents)
 
@@ -95,12 +104,12 @@ details under headings such as `Makefile:`, `GitHub Actions:`, `Docker:`, or
 `Scripts:` and list actual targets, workflow files, or script paths. For example:
 
 ```python
-"""Validate skill metadata and repository documentation links.
+"""Validate skill metadata and repository documentation links."""
 
-Callers:
-  Makefile:
-    - `check-skills` target invokes this checker inside Docker.
-"""
+#
+# Callers:
+#   Makefile:
+#     - `check-skills` target invokes this checker inside Docker.
 ```
 
 Trace direct invocations and Make-to-workflow calls from current files,
@@ -126,9 +135,10 @@ loads the supplied test file as a module before running `unittest`.
 2. Read the module and callers. Document supported invocations, inputs, outputs,
    status, side effects, and execution context. Distinguish host from container
    execution and tests from runtime entrypoints.
-3. Add or refine the module docstring using the conventions above. Include a
-   section only when it clarifies a real contract. Preserve the shebang,
-   encoding declaration, imports, and executable statements.
+3. Add or refine the purpose docstring and comment header using the conventions
+   above. Include a section only when it clarifies a real contract. Preserve
+   observable docstrings, the shebang, encoding declaration, imports, and
+   executable statements.
 4. Review function definitions and their bodies as well as the header. Add
    function documentation or inline comments where they clarify a contract,
    explain a non-obvious choice, or mark a meaningful phase boundary.
