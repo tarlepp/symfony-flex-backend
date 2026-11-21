@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Exercise Make check recipes with offline command fixtures."""
+"""Test how Make check targets report output and command failures offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/make/tests/make-check-output-test.py
+
+Requirements:
+  Python 3, Bash, Make, and Linux pseudo-terminal support.
+
+Details:
+  Tests run copied Make recipes and output helpers in a temporary directory.
+  Stubs replace the underlying check commands; a separate case runs the real
+  documentation checker against the fixture root to verify error colors.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import os
 from pathlib import Path
@@ -25,6 +45,7 @@ CHECKS = (
 
 class MakeCheckOutputTest(unittest.TestCase):
     def setUp(self):
+        """Copy the Make and output helpers, replacing the commands they wrap."""
         self.temporary = tempfile.TemporaryDirectory(prefix="make-check-output-")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
@@ -45,6 +66,7 @@ class MakeCheckOutputTest(unittest.TestCase):
             "make/make.sh",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
+        # Let the Python output filter run for real even though checks are stubs.
         fixture = (
             "#!/usr/bin/env bash\n"
             "if [[ \"$0\" == */python3 && \"${1:-}\" == scripts/output/native-output.py ]]; then exec /usr/bin/python3 \"$@\"; fi\n"
@@ -75,6 +97,7 @@ class MakeCheckOutputTest(unittest.TestCase):
         docker.chmod(0o755)
 
     def run_check(self, target, status=0, color="never", no_color=""):
+        """Return the Make result and the fresh command log for one invocation."""
         calls = self.root / "calls"
         calls.write_text("")
         environment = dict(
@@ -147,6 +170,7 @@ class MakeCheckOutputTest(unittest.TestCase):
                 self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain)
                 self.assertIn("checker diagnostic", result.stderr)
 
+        # Auto color needs a terminal on stdout; keep stderr separate.
         for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
             with self.subTest(term=term, no_color=no_color):
                 master, slave = pty.openpty()
