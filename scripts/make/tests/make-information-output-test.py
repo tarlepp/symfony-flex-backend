@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Check information streams, help inventory and local report preparation offline."""
+"""Test Make help, information output, and report preparation offline.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  To run only this suite from the repository root inside the container:
+    python3 scripts/make/tests/make-information-output-test.py
+
+Requirements:
+  Python 3, Bash, Make, Git, jq, and Linux pseudo-terminal support.
+
+Details:
+  Tests run copied Make recipes and helpers in a temporary project. Stubs
+  replace external tools and uploaders, while local formatters process
+  fixture data. The suite does not upload reports or query a live registry.
+
+Callers:
+  Scripts:
+    - `scripts/tests/command-output-contract-test.sh` loads this suite through
+      `scripts/tests/run-workflow-tests.py`.
+"""
 
 import json
 import os
@@ -38,6 +58,8 @@ class InformationOutputTest(unittest.TestCase):
             destination = self.root / "scripts" / path
             shutil.copyfile(ROOT / "scripts" / path, destination)
             destination.chmod(0o755)
+        # Keep local parsing and formatting real while stubbing tool inventory
+        # and report generation.
         fixture = """#!/usr/bin/env bash
 printf '%s %s\\n' "$0" "$*" >> "$CALLS"
 if [ "${CHECK_VERSION_XDEBUG:-0}" = 1 ]; then
@@ -153,6 +175,7 @@ exit 0
         (self.root / "src/Example.php").write_text("<?php\n")
 
     def make(self, target, *arguments, **overrides):
+        """Run the container-side launcher in the fixture with a fresh call log."""
         self.calls.write_text("")
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
@@ -168,6 +191,7 @@ exit 0
         return result
 
     def init_stats_repository(self):
+        """Track the sample source so statistics can discover it in Git's index."""
         subprocess.run(["git", "init", "-q"], cwd=self.root, check=True, capture_output=True)
         subprocess.run(
             ["git", "add", "--", "src/Example.php"],
