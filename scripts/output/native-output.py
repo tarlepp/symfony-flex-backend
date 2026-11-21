@@ -1,5 +1,34 @@
 #!/usr/bin/env python3
-"""Filter SGR decoration or indent output without hiding TTYs or partial lines."""
+"""Filter SGR decoration or indent command output while preserving streaming.
+
+Usage:
+  From the repository root on the Docker host or in the PHP development container:
+    make test-command-output
+  Direct invocation from the repository root inside the container:
+    python3 scripts/output/native-output.py printf example
+    python3 scripts/output/native-output.py --indent printf example
+
+Requirements:
+  Python 3.10 or later and pseudo-terminal support.
+
+Details:
+  The default mode removes SGR color and style sequences, leaving other escape
+  sequences intact. Indent mode adds four spaces to nonempty lines and a final
+  newline to unterminated output. Both modes relay stdout and stderr separately,
+  using a pseudo-terminal for each terminal destination and a pipe otherwise.
+  The supplied command is executed; its side effects are not restricted.
+
+Exit Status:
+  Returns the command status, or 128 plus its terminating signal number.
+  Missing commands return 127 and missing arguments return 64.
+
+Callers:
+  Scripts:
+    - `scripts/output/native-output.sh` uses the default filter when native
+      color is disabled.
+    - `scripts/checks/lint-workflows.sh` and
+      `scripts/tests/command-output-contract-test.sh` use indent mode.
+"""
 
 import errno
 import fcntl
@@ -17,6 +46,7 @@ class SgrFilter:
         self.pending = b""
 
     def feed(self, data, final=False):
+        """Remove complete SGR sequences, buffering a possible split sequence."""
         data = self.pending + data
         self.pending = b""
         output = bytearray()
@@ -60,6 +90,7 @@ class IndentFilter:
         self.line_start = True
 
     def feed(self, data, final=False):
+        """Indent nonempty lines across chunks and finish a partial final line."""
         output = bytearray()
         for value in data:
             if self.line_start and value not in (10, 13):
@@ -75,6 +106,7 @@ class IndentFilter:
 def _terminal_pair(fd):
     master, slave = pty.openpty()
     settings = termios.tcgetattr(slave)
+    # The outer terminal handles output processing; avoid translating newlines twice.
     settings[1] &= ~termios.OPOST
     termios.tcsetattr(slave, termios.TCSANOW, settings)
     try:
@@ -92,6 +124,7 @@ def _write_all(fd, data):
 
 
 def run(command, filter_type: type[SgrFilter] | type[IndentFilter] = SgrFilter):
+    """Run a command and relay each output stream through its own filter."""
     readers = {}
     child_streams = {}
     terminal_masters = []
@@ -144,6 +177,7 @@ def run(command, filter_type: type[SgrFilter] | type[IndentFilter] = SgrFilter):
                 try:
                     data = os.read(fd, 4096)
                 except OSError as error:
+                    # PTY masters can report EIO when their slave closes.
                     if error.errno != errno.EIO:
                         raise
                     data = b""
