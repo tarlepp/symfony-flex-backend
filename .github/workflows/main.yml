@@ -135,6 +135,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Configuration validation
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -199,6 +200,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Documentation validation
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -246,6 +248,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Workflow validation
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -288,6 +291,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Dependency security
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -323,6 +327,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Secret scanning
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           SCAN: ${{ steps.scan.outcome || 'skipped' }}
@@ -360,6 +365,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Docker base image pins
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           VERIFY: ${{ steps.verify.outcome || 'skipped' }}
@@ -424,6 +430,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Docker image updates
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           AUTHENTICATION: ${{ steps.authentication.outcome || 'skipped' }}
@@ -508,6 +515,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Project statistics collection
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -591,6 +599,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Lightweight static analyzers
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -666,7 +675,8 @@ jobs:
         if: ${{ !cancelled() }}
         continue-on-error: true
         env:
-          OVERVIEW_TITLE: Static analyzer
+          OVERVIEW_TITLE: Static analyzer (${{ matrix.analyzer.name }})
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           ANALYZER: ${{ matrix.analyzer.name }}
@@ -843,6 +853,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: PHPUnit and reports
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -973,6 +984,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: External reporting
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           REPORTING: ${{ steps.reporting.outcome || 'skipped' }}
@@ -1055,6 +1067,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Docker image build
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           TARGET: ${{ matrix.target }}
@@ -1133,6 +1146,7 @@ jobs:
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Docker image vulnerability scan
+          OVERVIEW_COLLAPSED: 'true'
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           TARGET: ${{ matrix.target }}

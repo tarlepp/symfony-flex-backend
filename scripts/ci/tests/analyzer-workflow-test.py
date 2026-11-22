@@ -720,10 +720,15 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     self.assertIn(explanation, summary.read_text())
                     self.assertIn("| Check | Result | Explanation |", summary.read_text())
                     if gate == "ci-result":
-                        self.assertIn("## Workflow run overview", summary.read_text())
+                        self.assertIn("## Core CI result", summary.read_text())
                         self.assertIn("| Change detection | success |", summary.read_text())
                         self.assertIn("| Project statistics | independent |", summary.read_text())
                         self.assertIn("this gate does not wait for collection", summary.read_text())
+                    else:
+                        self.assertTrue(summary.read_text().startswith(
+                            "<details>\n<summary>CI prerequisite details</summary>\n",
+                        ))
+                        self.assertTrue(summary.read_text().endswith("</details>\n"))
 
     def test_summaries_explain_failures_without_relaxing_gates(self):
         scenarios = [
@@ -1833,6 +1838,10 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertIn("\x1b[32m", result.stdout)
         content = summary.read_text()
         self.assertNotIn("\x1b", content)
+        self.assertTrue(content.startswith(
+            "<details>\n<summary>CI validation preview (selection, not results)</summary>\n",
+        ))
+        self.assertTrue(content.endswith("</details>\n"))
         self.assertIn("not a pass/fail result", content)
         for category, selected in self.outputs.items():
             status = "🟢 Enabled" if selected == "true" else "⚪ Not enabled"

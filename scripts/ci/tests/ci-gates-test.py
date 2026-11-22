@@ -231,6 +231,7 @@ class CiGatesTest(unittest.TestCase):
                 )
                 assert title_match is not None
                 title = title_match.group(1)
+                self.assertIn("OVERVIEW_COLLAPSED: 'true'", step)
                 for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step)
@@ -245,6 +246,7 @@ class CiGatesTest(unittest.TestCase):
                 ]
                 scenarios.extend((failed, variants[0]) for failed in outcomes)
                 for failed, variant in scenarios:
+                    rendered_title = title.replace("${{ matrix.analyzer.name }}", variant)
                     values = dict.fromkeys(outcomes, "success" if failed is None else "skipped")
                     if failed is not None:
                         values[failed] = "failure"
@@ -252,7 +254,8 @@ class CiGatesTest(unittest.TestCase):
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
                         env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
-                             "OVERVIEW_TITLE": title, "EVENT_NAME": "pull_request",
+                             "OVERVIEW_TITLE": rendered_title, "OVERVIEW_COLLAPSED": "true",
+                             "EVENT_NAME": "pull_request",
                              "PRIOR_STATUS": "success" if failed is None else "failure",
                              "ANALYZER": variant if job == "static-analyzers" else "",
                              "TARGET": variant if job in (
@@ -262,7 +265,9 @@ class CiGatesTest(unittest.TestCase):
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
                     output = summary.read_text()
-                    self.assertIn(f"## {title}", output)
+                    self.assertTrue(output.startswith("<details>\n" if failed is None else "<details open>\n"))
+                    self.assertIn(f"<summary>{rendered_title}", output)
+                    self.assertTrue(output.endswith("\n</details>\n"))
                     self.assertIn(f"Prior steps: **{'success' if failed is None else 'failure'}**", output)
                     for variable, (_, label) in outcomes.items():
                         self.assertIn(f"| {label} | {values[variable]} |", output)

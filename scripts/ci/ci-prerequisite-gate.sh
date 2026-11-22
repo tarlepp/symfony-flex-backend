@@ -48,7 +48,8 @@ summary_row() {
 }
 
 write_summary() {
-    echo "## CI prerequisite results"
+    echo "<details>"
+    echo "<summary>CI prerequisite details</summary>"
     echo
     echo "Skipped does not mean passed. The gate accepts only skips allowed by event and change selection."
     echo
@@ -64,6 +65,8 @@ write_summary() {
     summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
     summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
     summary_row "Gitleaks" "$GITLEAKS" true ""
+    echo
+    echo "</details>"
 }
 
 echo "Event: $EVENT_NAME"
