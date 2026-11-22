@@ -48,6 +48,7 @@ output_init() {
     fi
 
     OUTPUT_PROGRESS=0
+
     if [ "${PROGRESS:-auto}" = always ] || {
         [ "${PROGRESS:-auto}" = auto ] && [ -t 2 ] && [ "${TERM:-}" != dumb ] &&
         [ -z "${CI:-}" ] && [ -z "${NO_COLOR:-}" ]
@@ -220,6 +221,7 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
     fi
 
     mode=run
+
     case "${1:-}" in
         --run|--stream|--progress)
             mode=${1#--}

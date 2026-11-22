@@ -28,6 +28,7 @@ set -euo pipefail
 source "$(dirname "$0")/../output/command-output.sh"
 
 action=${1:-}
+
 case "$action" in
     kill|prune)
         query=(ps -q)
@@ -51,9 +52,11 @@ case "$action" in
 esac
 
 output_status WARN 'This operation affects ALL Docker resources on this host, including unrelated projects'
+
 if [ "$action" = prune ]; then
     output_status WARN 'Killing running containers and pruning unused images, networks, build cache and eligible volumes; data may be lost'
     printf 'Kill ALL running containers and prune Docker data? [y/N] ' >&2
+
     if ! read -r answer || [ "$answer" != y ]; then
         output_result SKIP 'Docker system prune cancelled; nothing changed'
         exit 0
@@ -62,6 +65,7 @@ fi
 
 if ids=$(docker "${query[@]}"); then
     resources=()
+
     while IFS= read -r id; do
         [ -z "$id" ] || resources+=("$id")
     done <<< "$ids"

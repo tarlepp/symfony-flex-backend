@@ -22,6 +22,7 @@ set -e
 status=0
 docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
   bash scripts/checks/check-action-updates.sh || status=$?
+
 case "$status" in
   0)
     echo "result=current" >> "$GITHUB_OUTPUT"

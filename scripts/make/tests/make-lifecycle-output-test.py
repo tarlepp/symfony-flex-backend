@@ -38,16 +38,20 @@ ROOT = Path(__file__).resolve().parents[3]
 class EntrypointTest(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="entrypoint-")
+
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+
         (self.root / "bin").mkdir()
         self.bashrc = self.root / "bashrc"
+
         self.bashrc.write_text("existing shell configuration\n")
         self.calls = self.root / "calls"
 
         # Rewrite absolute runtime paths only in isolated copies, never the originals.
         for name in ("docker-entrypoint-dev.sh", "docker-entrypoint.sh"):
             content = (ROOT / name).read_text()
+
             for original, replacement in (
                 ("/sbin/ip", str(self.root / "bin/ip")),
                 ("/home/dev/.bashrc", str(self.bashrc)),
@@ -55,6 +59,7 @@ class EntrypointTest(unittest.TestCase):
                 ("/app", str(self.root / "app")),
             ):
                 content = content.replace(original, replacement)
+
             (self.root / name).write_text(content)
 
         mock = """#!/bin/bash
@@ -87,12 +92,16 @@ case "$name" in
     *) printf 'Unexpected startup command: %s\\n' "$name" >&2; exit 64 ;;
 esac
 """
+
         for name in ("make", "composer", "console", "mkdir", "chmod", "chown",
                      "find", "cp", "ip", "php-fpm", "payload"):
             command = self.root / "bin" / name
+
             command.write_text(mock)
             command.chmod(0o755)
+
         awk = shutil.which("awk")
+
         assert awk is not None, "awk is required for this test"
         (self.root / "bin/awk").symlink_to(awk)
 
@@ -100,14 +109,17 @@ esac
         """Return the exit status, output streams, call log, and original PID."""
         self.calls.write_text("")
         environment = dict(os.environ, PATH=str(self.root / "bin"), CALLS=str(self.calls))
+
         for name in ("DOCKER_IP", "XDEBUG_SESSION", "COMPOSER_MEMORY_LIMIT", "FAIL_CALL", "PAYLOAD_EXIT"):
             environment.pop(name, None)
+
         environment.update(overrides)
         process = subprocess.Popen(
             ["/bin/bash", script, *arguments], cwd=self.root, env=environment,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
         )
         stdout, stderr = process.communicate(timeout=10)
+
         return process.returncode, stdout, stderr, self.calls.read_text().splitlines(), process.pid
 
     def development_calls(self):
@@ -143,6 +155,7 @@ esac
         status, stdout, stderr, calls, pid = self.run_entrypoint(
             "docker-entrypoint-dev.sh", "payload", "argument with spaces", "", PAYLOAD_EXIT="23",
         )
+
         self.assertEqual(status, 23, stderr)
         self.assertEqual(calls, self.development_calls() + ["payload <argument with spaces> <>"])
         # A matching PID proves the entrypoint replaced itself with the payload.
@@ -153,6 +166,7 @@ esac
         status, stdout, stderr, calls, pid = self.run_entrypoint(
             "docker-entrypoint.sh", "php-fpm", "-F", PAYLOAD_EXIT="23",
         )
+
         self.assertEqual(status, 23, stderr)
         self.assertEqual(calls, self.production_calls() + ["php-fpm <-F>"])
         self.assertEqual(stdout, f"payload pid={pid}\n")
@@ -162,6 +176,7 @@ esac
         status, stdout, stderr, calls, pid = self.run_entrypoint(
             "docker-entrypoint.sh", "payload", "argument with spaces", "",
         )
+
         self.assertEqual(status, 0, stderr)
         self.assertEqual(calls, ["payload <argument with spaces> <>"])
         self.assertEqual(stdout, f"payload pid={pid}\n")
@@ -174,11 +189,13 @@ esac
             for index, call in enumerate(expected):
                 if call.startswith(("environment ", "ip ")):
                     continue
+
                 with self.subTest(script=script, call=call):
                     failure = call.replace(" <", " ").replace(">", "")
                     status, _, stderr, calls, _ = self.run_entrypoint(
                         script, "php-fpm", FAIL_CALL=failure,
                     )
+
                     self.assertEqual(status, 7, stderr)
                     self.assertIn("fixture startup failure", stderr)
                     self.assertEqual(calls, expected[:index + 1])
@@ -187,24 +204,30 @@ esac
 class LifecycleOutputTest(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="make-lifecycle-")
+
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+
         for directory in ("scripts/make", "scripts/docker", "scripts/output"):
             (self.root / directory).mkdir(parents=True)
+
         (self.root / "bin").mkdir()
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
+
         for path in (
             "output/command-output.sh", "make/make.sh", "docker/docker-maintenance.sh",
             "docker/docker-images.sh", "make/compose-context.sh",
         ):
             shutil.copyfile(ROOT / "scripts" / path, self.root / "scripts" / path)
             (self.root / "scripts" / path).chmod(0o755)
+
         shutil.copyfile(
             ROOT / "scripts/output/command-progress.py",
             self.root / "scripts/output/command-progress.py",
         )
         (self.root / "Dockerfile").write_text("FROM scratch AS production\n")
         docker = self.root / "bin/docker"
+
         docker.write_text("""#!/usr/bin/env bash
 printf '%s\\n' "$*" >> "$CALLS"
 if [ -n "${COLOR_CALLS:-}" ]; then printf '%s\\n' "$COMPOSE_ANSI" >> "$COLOR_CALLS"; fi
@@ -249,8 +272,10 @@ exit "${DOCKER_EXIT:-0}"
     def environment(self, **overrides):
         """Reset inherited Make flags and color settings before applying overrides."""
         environment = dict(os.environ)
+
         for name in ("NATIVE_COLOR", "MAKEFLAGS", "MFLAGS", "MAKELEVEL", "MAKE_TERMOUT", "MAKE_TERMERR"):
             environment.pop(name, None)
+
         environment.update(
             PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(self.calls), COLOR="never", NO_COLOR="", RUNNING="0",
@@ -258,6 +283,7 @@ exit "${DOCKER_EXIT:-0}"
             COMPOSER_CACHE_DIR=str(self.root / "composer-cache"),
         )
         environment.update(overrides)
+
         return environment
 
     def run_command(self, command, answer=None, **overrides):
@@ -265,9 +291,12 @@ exit "${DOCKER_EXIT:-0}"
         self.calls.write_text("")
         environment = self.environment(**overrides)
         master = slave = None
+
         if answer is not None:
             master, slave = pty.openpty()
+
             os.write(master, answer.encode())
+
         try:
             result = subprocess.run(
                 command, cwd=self.root, env=environment, text=True,
@@ -277,8 +306,10 @@ exit "${DOCKER_EXIT:-0}"
         finally:
             if master is not None:
                 os.close(master)
+
             if slave is not None:
                 os.close(slave)
+
         return result, self.calls.read_text()
 
     def run_with_stdout_terminal(self, command, **overrides):
@@ -286,21 +317,26 @@ exit "${DOCKER_EXIT:-0}"
         self.calls.write_text("")
         environment = self.environment(COLOR="auto", **overrides)
         master, slave = pty.openpty()
+
         try:
             process = subprocess.Popen(
                 command, cwd=self.root, env=environment, stdin=subprocess.DEVNULL,
                 stdout=slave, stderr=subprocess.PIPE, text=True,
             )
+
             os.close(slave)
             _, stderr = process.communicate(timeout=15)
             stdout = os.read(master, 4096).decode()
         finally:
             os.close(master)
+
         result = subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+
         return result, self.calls.read_text()
 
     def make(self, target, *arguments, **overrides):
         """Force host-side Make routing even when the suite runs in a container."""
+
         return self.run_command([
             "bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
             "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", target, *arguments,
@@ -308,6 +344,7 @@ exit "${DOCKER_EXIT:-0}"
 
     def test_compose_color_environment_follows_shared_controls(self):
         color_calls = self.root / "color-calls"
+
         for color, no_color, expected in (
             ("always", "", "always"), ("never", "", "never"),
             ("always", "1", "never"), ("auto", "", "never"),
@@ -315,13 +352,16 @@ exit "${DOCKER_EXIT:-0}"
             color_calls.write_text("")
             result, _ = self.make("daemon", COLOR=color, NO_COLOR=no_color,
                                   COLOR_CALLS=str(color_calls))
+
             self.assertEqual(result.returncode, 0, result.stderr)
             values = color_calls.read_text().splitlines()
+
             self.assertTrue(values)
             self.assertEqual(set(values), {expected})
 
     def test_make_color_overrides_reach_native_policy(self):
         color_calls = self.root / "color-calls"
+
         for arguments, environment, expected in (
             (("NO_COLOR=1",), {"COLOR": "always", "NO_COLOR": ""}, "never"),
             (("COLOR=never",), {"COLOR": "always", "NO_COLOR": ""}, "never"),
@@ -331,22 +371,26 @@ exit "${DOCKER_EXIT:-0}"
             result, _ = self.make(
                 "daemon", *arguments, COLOR_CALLS=str(color_calls), **environment,
             )
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(set(color_calls.read_text().splitlines()), {expected})
 
     def test_auto_native_color_uses_make_stdout_terminal(self):
         color_calls = self.root / "color-calls"
+
         color_calls.write_text("")
         result, _ = self.run_with_stdout_terminal(
             ["bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
              "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "daemon"],
             COLOR_CALLS=str(color_calls), TERM="xterm",
         )
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(set(color_calls.read_text().splitlines()), {"always"})
 
         color_calls.write_text("")
         master, slave = pty.openpty()
+
         try:
             result = subprocess.run(
                 ["bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
@@ -356,10 +400,12 @@ exit "${DOCKER_EXIT:-0}"
                 stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=slave,
                 text=True, capture_output=False, check=False, timeout=15,
             )
+
             os.close(slave)
             os.read(master, 4096)
         finally:
             os.close(master)
+
         self.assertEqual(result.returncode, 0)
         self.assertEqual(set(color_calls.read_text().splitlines()), {"never"})
 
@@ -386,9 +432,11 @@ exit "${DOCKER_EXIT:-0}"
             "ci-start": "CI PHP service started; application initialization and readiness were not verified",
             "ci-stop": "CI containers stopped and removed; named volumes retained",
         }
+
         for target, invocation in targets.items():
             with self.subTest(target=target):
                 result, calls = self.make(target)
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(invocation + "\n", calls)
                 self.assertEqual(result.stderr.count("[OK]"), 1)
@@ -396,11 +444,15 @@ exit "${DOCKER_EXIT:-0}"
                 self.assertLess(result.stderr.index("native Docker diagnostic"), result.stderr.index("[OK]"))
                 self.assertLess(result.stderr.index("[WARN]"), result.stderr.index("native Docker diagnostic"))
                 self.assertIn("native progress", result.stdout)
+
                 if target in ("daemon", "daemon-build", "ci-start"):
                     self.assertIn("not verified", result.stderr)
+
                 if target == "daemon-prod":
                     self.assertIn("HTTP was not verified", result.stderr)
+
                 result, _ = self.make(target, DOCKER_EXIT="7")
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("[FAIL]", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
@@ -411,6 +463,7 @@ exit "${DOCKER_EXIT:-0}"
                        "stop", "ci-start", "ci-stop"):
             for status in ("130", "143"):
                 result, _ = self.make(target, DOCKER_EXIT=status)
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(f"cancelled (exit {status})", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
@@ -420,6 +473,7 @@ exit "${DOCKER_EXIT:-0}"
         for status in ("0", "7"):
             with self.subTest(status=status):
                 result, calls = self.make("ci-start", "CI_PREBUILT=true", DOCKER_EXIT=status)
+
                 self.assertIn(
                     "compose -f compose.yaml -f docker/ci-compose.yaml up "
                     "--no-build --pull never --detach --no-deps php\n", calls,
@@ -430,6 +484,7 @@ exit "${DOCKER_EXIT:-0}"
 
     def test_ci_prebuilt_invalid_value_fails_before_docker(self):
         result, calls = self.make("ci-start", "CI_PREBUILT=false")
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("CI_PREBUILT must be empty or true", result.stderr)
         self.assertEqual(calls, "")
@@ -444,16 +499,20 @@ exit "${DOCKER_EXIT:-0}"
             "docker-builder-platforms", "docker-build-platform", "docker-build-multi-platform",
             "docker-setup-qemu",
         )
+
         for target in targets:
             with self.subTest(target=target):
                 result, calls = self.make(target, "INSIDE_DOCKER_CONTAINER=1", "INSIDE_CONTAINER_RUNTIME=1")
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("Docker host", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
                 self.assertNotIn("compose ", calls)
                 self.assertNotIn("buildx ", calls)
+
         for target in ("start", "start-build", "start-prod", "daemon", "daemon-build", "daemon-prod"):
             result, calls = self.make(target, RUNNING="1")
+
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("already running; startup cancelled", result.stderr)
             self.assertIn(
@@ -474,9 +533,11 @@ exit "${DOCKER_EXIT:-0}"
             "fish": ("Opening Fish in the PHP container", "compose exec php fish --init-command source /app/scripts/make/make-shell.fish"),
             "logs": ("Following PHP nginx and MariaDB logs; Ctrl-C stops following", "compose logs --follow php nginx mariadb"),
         }
+
         for target, (label, invocation) in streams.items():
             with self.subTest(target=target):
                 result, calls = self.make(target, RUNNING="5")
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(invocation + "\n", calls)
                 self.assertNotIn("exec -T", calls)
@@ -487,8 +548,10 @@ exit "${DOCKER_EXIT:-0}"
                 )
                 self.assertNotIn("[OK]", result.stderr)
                 self.assertIn("native progress", result.stdout)
+
                 for status in ("7", "130", "143"):
                     result, calls = self.make(target, RUNNING="5", DOCKER_EXIT=status)
+
                     self.assertNotEqual(result.returncode, 0)
                     self.assertIn(invocation + "\n", calls)
                     self.assertIn(f"[RUN] {label}\n", result.stderr)
@@ -496,7 +559,9 @@ exit "${DOCKER_EXIT:-0}"
                     self.assertNotIn("[OK]", result.stderr)
                     self.assertNotIn("[FAIL]", result.stderr)
                     self.assertNotIn("[WARN]", result.stderr)
+
             result, calls = self.make(target, RUNNING="0")
+
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("[FAIL]", result.stderr)
             self.assertNotIn("compose exec", calls)
@@ -509,38 +574,47 @@ exit "${DOCKER_EXIT:-0}"
             ("docker-remove-images", "rmi"),
         ):
             result, _ = self.make(target)
+
             self.assertEqual(result.returncode, 0)
             self.assertIn("[SKIP]", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
             result, calls = self.make(target, RESOURCES="id-one\nid-two\n")
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn(f"{operation} id-one id-two\n", calls)
             self.assertIn("unrelated projects", result.stderr)
             self.assertEqual(result.stderr.count("[OK]"), 1)
             result, _ = self.make(target, FAIL_QUERY="7")
+
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("Could not list", result.stderr)
             result, _ = self.make(target, RESOURCES="id-one\n", DOCKER_EXIT="7")
+
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("[FAIL]", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
+
         result, calls = self.run_command(["bash", "scripts/docker/docker-maintenance.sh", "prune"], answer="n\n")
+
         self.assertEqual(result.returncode, 0)
         self.assertIn("[SKIP]", result.stderr)
         self.assertEqual(calls, "")
         result, calls = self.run_command(["bash", "scripts/docker/docker-maintenance.sh", "prune"], answer="y\n")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("system prune --all --volumes --force", calls)
         result, calls = self.run_command(
             ["bash", "scripts/docker/docker-maintenance.sh", "prune"],
             answer="y\n", RESOURCES="id-one\n", DOCKER_EXIT="7",
         )
+
         self.assertNotEqual(result.returncode, 0)
         self.assertNotIn("system prune", calls)
         self.assertNotIn("[OK]", result.stderr)
 
     def test_builder_platform_colors_preserve_output_and_failure(self):
         plain, _ = self.make("docker-builder-platforms", COLOR="never")
+
         self.assertEqual(plain.returncode, 0, plain.stderr)
         self.assertEqual(
             plain.stdout,
@@ -551,12 +625,14 @@ exit "${DOCKER_EXIT:-0}"
             "  Driver     Backend used to run the builder.\n"
             "  Platforms  Build targets reported for the first builder node.\n",
         )
+
         for color, no_color, expected in (
             ("always", "", True), ("never", "", False),
             ("always", "1", False), ("auto", "", False),
         ):
             with self.subTest(color=color, no_color=no_color):
                 result, calls = self.make("docker-builder-platforms", COLOR=color, NO_COLOR=no_color, TERM="xterm")
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual("\x1b[34mPlatforms:\x1b[0m" in result.stdout, expected)
                 self.assertEqual("\x1b[1;34mBuildx builder\x1b[0m" in result.stdout, expected)
@@ -566,9 +642,11 @@ exit "${DOCKER_EXIT:-0}"
 
         command = ["bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
                    "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", "docker-builder-platforms"]
+
         for term, no_color, expected in (("xterm", "", True), ("dumb", "", False), ("xterm", "1", False)):
             with self.subTest(term=term, no_color=no_color):
                 result, _ = self.run_with_stdout_terminal(command, TERM=term, NO_COLOR=no_color)
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual("\x1b[34mPlatforms:\x1b[0m" in result.stdout, expected)
                 self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout).replace("\r\n", "\n"), plain.stdout)
@@ -580,11 +658,13 @@ exit "${DOCKER_EXIT:-0}"
         ):
             with self.subTest(direct=overrides):
                 result, _ = self.run_command(["bash", "scripts/docker/docker-images.sh", "platforms"], **overrides)
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual("\x1b[34mPlatforms:\x1b[0m" in result.stdout, expected)
                 self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
 
         result, _ = self.make("docker-builder-platforms", COLOR="always", DOCKER_EXIT="7")
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("native builder failure", result.stderr)
         self.assertIn("[FAIL]", result.stderr)
@@ -595,6 +675,7 @@ exit "${DOCKER_EXIT:-0}"
         result, calls = self.make(
             "docker-build-platform", "PLATFORM=linux/amd64", "TAG=fixture:local", "TARGET=production",
         )
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("--load", calls)
         self.assertIn("runtime was not verified", result.stderr)
@@ -602,12 +683,15 @@ exit "${DOCKER_EXIT:-0}"
         result, _ = self.make(
             "docker-build-platform", "PLATFORM=linux/amd64", "TAG=fixture:local", DOCKER_EXIT="7",
         )
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("[FAIL]", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
         result, _ = self.make("docker-builder-platforms", DOCKER_EXIT="7")
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("[FAIL]", result.stderr)
+
         for action in ("setup-qemu", "push"):
             result, calls = self.run_command(
                 ["bash", "scripts/docker/docker-images.sh", action], answer="n\n",
@@ -615,11 +699,13 @@ exit "${DOCKER_EXIT:-0}"
                 BUILDER="fixture", PLATFORMS="linux/amd64,linux/arm64"
                 if action == "push" else "arm64",
             )
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("[SKIP]", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
             self.assertNotIn("buildx build", calls)
             self.assertNotIn("run --privileged", calls)
+
             for status in ("0", "7"):
                 result, calls = self.run_command(
                     ["bash", "scripts/docker/docker-images.sh", action], answer="y\n",
@@ -627,19 +713,23 @@ exit "${DOCKER_EXIT:-0}"
                     BUILDER="fixture", PLATFORMS="linux/amd64,linux/arm64"
                     if action == "push" else "arm64", DOCKER_EXIT=status,
                 )
+
                 self.assertEqual(result.returncode, int(status), result.stderr)
                 self.assertIn("--push" if action == "push" else "run --privileged --rm", calls)
                 self.assertIn("[OK]" if status == "0" else "[FAIL]", result.stderr)
+
                 if status == "7":
                     self.assertNotIn("[OK]", result.stderr)
                 else:
                     self.assertLess(result.stderr.index("native Docker diagnostic"), result.stderr.index("[OK]"))
+
         result, calls = self.run_command(
             ["bash", "scripts/docker/docker-images.sh", "push"], answer="y\n",
             DOCKERFILE="Dockerfile", TARGET="production", TAG="fixture:remote",
             BUILDER="fixture", PLATFORMS="linux/amd64,linux/arm64",
             BUILDER_MISSING="1", FAIL_MATCH="buildx create",
         )
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("[FAIL] Create buildx builder", result.stderr)
         self.assertNotIn("buildx build", calls)
@@ -648,6 +738,7 @@ exit "${DOCKER_EXIT:-0}"
     def test_dry_run_does_not_execute_lifecycle_commands(self):
         for target in ("daemon", "start", "stop", "ci-start", "docker-prune", "bash", "logs"):
             result, calls = self.make("--dry-run", target, RUNNING="5" if target in ("bash", "logs") else "0")
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertNotIn("compose ", calls)
             self.assertNotIn("system prune", calls)
@@ -656,26 +747,36 @@ exit "${DOCKER_EXIT:-0}"
     def test_targeted_service_checks_keep_troubleshooting_available(self):
         for health in ("", "healthy", "starting", "unhealthy"):
             result, calls = self.make("bash", SERVICE_STATUS=f"php|running|{health}")
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("compose exec php bash", calls)
             self.assertIn("ps --all --format {{.Service}}|{{.State}}|{{.Health}} php\n", calls)
+
             if health in ("starting", "unhealthy"):
                 self.assertIn("[WARN] PHP service health", result.stderr)
+
         result, calls = self.make("logs", SERVICE_STATUS="php|exited|\nnginx|exited|")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("logs --follow php nginx mariadb", calls)
+
         for state in ("exited", "paused", "restarting"):
             result, calls = self.make("fish", SERVICE_STATUS=f"php|{state}|")
+
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("stopped or not running", result.stderr)
             self.assertNotIn("compose exec php fish", calls)
+
         result, _ = self.make("bash", SERVICE_STATUS="nginx|running|")
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("PHP Compose service is absent", result.stderr)
         result, calls = self.make("daemon", SERVICE_STATUS="php|exited|\nnginx|exited|")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("compose up --detach", calls)
         result, calls = self.make("start", SERVICE_STATUS="adminer|running|")
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("service 'adminer' is already running", result.stderr)
         self.assertIn("run 'make stop'", result.stderr)
@@ -690,23 +791,30 @@ exit "${DOCKER_EXIT:-0}"
         ):
             for target in ("bash", "logs", "daemon"):
                 result, calls = self.make(target, **{variable: "7"})
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
                 self.assertNotIn("compose up", calls)
                 self.assertNotIn("compose exec php", calls)
                 self.assertNotIn("logs --follow", calls)
+
         (self.root / "bin/docker").unlink()
         environment_path = self.root / "only-bash"
+
         environment_path.mkdir()
+
         for tool in ("dirname", "bash"):
             executable = shutil.which(tool)
+
             assert executable is not None, f"{tool} is required for this test"
             (environment_path / tool).symlink_to(executable)
+
         result, _ = self.run_command(
             ["/bin/bash", "scripts/make/compose-context.sh", "php", "docker", "compose"],
             PATH=str(environment_path),
         )
+
         self.assertEqual(result.returncode, 127)
         self.assertIn("Docker command is unavailable", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
@@ -714,14 +822,17 @@ exit "${DOCKER_EXIT:-0}"
     def test_help_and_dry_run_do_not_probe_docker(self):
         shutil.copyfile(ROOT / "scripts/make/make-help.sh", self.root / "scripts/make/make-help.sh")
         result, calls = self.make("help")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(calls, "")
         result, calls = self.make("--dry-run", "bash", "daemon")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(calls, "")
 
     def test_shell_context_and_execution_use_same_ci_compose(self):
         result, calls = self.make("fish", SERVICE_STATUS="php|running|", GITHUB_WORKFLOW="CI")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("compose -f compose.yaml -f docker/ci-compose.yaml ps", calls)
         self.assertIn("compose -f compose.yaml -f docker/ci-compose.yaml exec php fish", calls)

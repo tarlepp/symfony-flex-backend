@@ -28,6 +28,7 @@ output_status RUN 'Command output contracts (offline fixtures)'
 output_status INFO 'Docker, registries and uploaders are mocked; no application mutation or upload is performed'
 
 OUTPUT_STATUS_INDENT='  '
+
 for suite in \
     scripts/output/tests/command-output-test.py \
     scripts/make/tests/make-launcher-test.py \

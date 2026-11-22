@@ -137,6 +137,7 @@ classify_path() {
             ;;
         config/*)
             enable_checks runtime php tests docker
+
             case "$file" in
                 *.yaml|*.yml) enable_checks yaml ;;
             esac
@@ -149,6 +150,7 @@ classify_path() {
             ;;
         .env*|docker-entrypoint*.sh|docker/php/*|docker/mariadb/*)
             enable_checks runtime php tests compose docker
+
             case "$file" in
                 *Dockerfile*) enable_checks images ;;
             esac
@@ -161,6 +163,7 @@ classify_path() {
             ;;
         docker/*|.devcontainer/*)
             enable_checks compose docker tooling
+
             case "$file" in
                 *Dockerfile*) enable_checks images ;;
             esac
@@ -242,6 +245,7 @@ detect_changes() {
     fi
 
     comparison="$BASE_SHA..$HEAD_SHA"
+
     if [ "$EVENT_NAME" = "pull_request" ]; then
         comparison="$BASE_SHA...$HEAD_SHA"
     fi
@@ -405,6 +409,7 @@ write_outputs() {
     done
 
     selected_checks[configuration]=$configuration_changed
+
     if [ "$configuration_changed" = true ]; then
         check_reasons[configuration]="Enabled configuration categories: $configuration_inputs"
     else
@@ -433,6 +438,7 @@ write_outputs() {
     done
 
     printf '\n%sReasons%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
+
     for ((index = 1; index < ${#reason_list[@]}; index++)); do
         printf '  %s[%s]%s %s\n' "$OUTPUT_BLUE" "$index" "$OUTPUT_RESET" "${reason_list[$index]}"
     done
@@ -515,6 +521,7 @@ write_summary() {
     done
 
     printf '\n**Reasons**\n\n'
+
     for ((index = 1; index < ${#reason_list[@]}; index++)); do
         reason=$(escape_summary_reason "${reason_list[$index]}")
         printf -- '- [%s] %s\n' "$index" "$reason"

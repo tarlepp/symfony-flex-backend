@@ -39,16 +39,20 @@ SHELLCHECK = sys.argv.pop(1)
 class CompositeShellTest(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="composite-shell-")
+
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
 
     def check(self, steps, using="composite"):
         action = self.root / "action.yml"
+
         action.write_text(yaml.safe_dump({"runs": {"using": using, "steps": steps}}))
+
         return self.run_checker(action)
 
     def run_checker(self, *actions, shellcheck=SHELLCHECK):
         """Capture both output streams and the exit code for assertions."""
+
         return subprocess.run(
             [sys.executable, str(CHECKER), "--shellcheck", shellcheck,
              *(str(path) for path in actions)],
@@ -62,6 +66,7 @@ class CompositeShellTest(unittest.TestCase):
             {"shell": "sh", "run": 'printf "%s\\n" "${{ inputs.value }}"'},
             {"shell": "bash --noprofile --norc -euo pipefail {0}", "run": "true"},
         ])
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("step 2 (Bash block)", result.stderr)
         self.assertIn("step 4 (run)", result.stderr)
@@ -75,6 +80,7 @@ class CompositeShellTest(unittest.TestCase):
                     {"id": "broken", "shell": "bash", "run": script},
                     {"shell": "sh", "run": "true"},
                 ])
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(code, result.stdout)
                 self.assertIn("step 2 (broken)", result.stderr)
@@ -82,6 +88,7 @@ class CompositeShellTest(unittest.TestCase):
 
     def test_noncomposite_actions_are_not_shell_checked(self):
         result = self.check([], using="node24")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout + result.stderr, "")
 
@@ -90,17 +97,21 @@ class CompositeShellTest(unittest.TestCase):
                                ("", "shell must not be empty")):
             with self.subTest(shell=shell):
                 result = self.check([{"shell": shell, "run": "true"}])
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
 
     def test_invalid_or_missing_metadata_fails(self):
         action = self.root / "invalid.yaml"
+
         for content in ("runs: [", "runs: {}", "null"):
             with self.subTest(content=content):
                 action.write_text(content)
                 result = self.run_checker(action)
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(f"::error file={action}::", result.stderr)
+
         action.unlink()
         self.assertNotEqual(self.run_checker(action).returncode, 0)
 
@@ -108,6 +119,7 @@ class CompositeShellTest(unittest.TestCase):
         self.check([{"shell": "bash", "run": "true"}])
         result = self.run_checker(self.root / "action.yml",
                                   shellcheck=str(self.root / "missing-shellcheck"))
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Composite action shell validation failed", result.stderr)
 
@@ -115,12 +127,15 @@ class CompositeShellTest(unittest.TestCase):
         # A harmless write would leave a marker if a step ran instead of being linted.
         marker = self.root / "must-not-exist"
         result = self.check([{"shell": "bash", "run": f"touch '{marker}'"}])
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(marker.exists())
         invalid = self.root / "second action.yaml"
+
         invalid.write_text("runs:\n  using: composite\n  steps:\n"
                            "    - shell: sh\n      run: echo $undefined\n")
         result = self.run_checker(self.root / "action.yml", invalid)
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn(str(invalid), result.stderr)
 

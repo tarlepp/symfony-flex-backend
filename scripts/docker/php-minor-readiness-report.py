@@ -61,13 +61,17 @@ def reports(raw, log, outcome):
             match for line in lines
             if (match := re.fullmatch(r"\| (`[^`]+`) \| Blocked: (.+) \|", line))
         ), None)
+
         if constraint:
             reason = f"Reason: Composer project {constraint[1]} is blocked: {constraint[2]}"
+
     errors = []
+
     for line in log.splitlines():
         # Normalize BuildKit prefixes and ANSI color before deduplicating errors.
         line = re.sub(r"\x1b\[[0-9;]*m", "", line)
         line = re.sub(r"^#\d+ [\d.]+ ", "", line)
+
         if re.search(r"\berror:|^ERROR:|^\[FAIL\]|^::error::", line, re.IGNORECASE):
             if line not in errors:
                 errors.append(line)
@@ -91,12 +95,15 @@ def reports(raw, log, outcome):
     if "Blocked: candidate development image did not build" in result:
         explanation = "**Build error:** The candidate PHP development image could not be built."
         failures = {}
+
         for diagnostic in errors or [html.unescape(reason)]:
             extension = re.search(
                 r"/(?:pear/temp|usr/src/php/ext)/([A-Za-z0-9_-]+)/", diagnostic,
             )
+
             if extension:
                 failures.setdefault(extension[1], []).append(diagnostic)
+
         if len(failures) == 1:
             name = next(iter(failures))
             explanation += (
@@ -105,19 +112,25 @@ def reports(raw, log, outcome):
         elif failures:
             explanation += " PHP extensions " + ", ".join(f"`{name}`" for name in failures)
             explanation += " have compiler errors against the candidate PHP runtime."
+
         diagnostics = html.unescape(reason + "\n" + "\n".join(errors))
+
         if "too many arguments to function 'php_verror'" in diagnostics:
             explanation += (
                 " `php_verror` is called with more arguments than the candidate PHP API accepts."
             )
+
         explanation += " Composer compatibility checks did not run; the upgrade remains blocked."
+
         if failures:
             extension_summary = "**Failing extensions observed in the build log**\n\n"
             extension_summary += "| Extension | First compiler error |\n| --- | --- |\n"
+
             for name, extension_errors in failures.items():
                 message = re.split(r"\b(?:fatal )?error:\s*", extension_errors[0], maxsplit=1)[-1]
                 message = html.escape(message[:200]).replace("|", "&#124;")
                 extension_summary += f"| `{name}` | <code>{message}</code> |\n"
+
             extension_summary += (
                 "\nOther extensions are not confirmed compatible: installation can stop at the first failure."
             )
@@ -132,8 +145,10 @@ def reports(raw, log, outcome):
          *([reason] if reason else [])],
     )
     evidence = raw.strip() or "No readiness report was produced."
+
     if errors:
         evidence += "\n\n### Full captured error lines\n\n<pre>" + html.escape("\n".join(errors)) + "</pre>"
+
     attention = "Blocked:" in result or "Check failed" in result or "Unavailable;" in result
     heading = "## PHP minor upgrade readiness\n\n"
     notice = "> [!WARNING]\n> PHP minor upgrade needs attention; routine image updates remain separate.\n\n"
@@ -141,12 +156,14 @@ def reports(raw, log, outcome):
     compact = heading + headline + details + evidence + "\n\n</details>\n"
     highlighted = heading + (notice if attention else "") + headline
     highlighted += details + evidence + "\n\n</details>\n"
+
     return compact, highlighted
 
 
 def main():
     """Read available evidence and append reports to GitHub Actions files."""
     parser = argparse.ArgumentParser(description=__doc__)
+
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--log", type=Path, required=True)
     parser.add_argument("--outcome", choices=("success", "failure", "cancelled", "skipped"), required=True)
@@ -158,7 +175,9 @@ def main():
     with Path(os.environ["GITHUB_OUTPUT"]).open("a") as output:
         for name, value in (("report", compact), ("actions-report", highlighted)):
             delimiter = f"readiness-{uuid.uuid4()}"
+
             output.write(f"{name}<<{delimiter}\n{value}\n{delimiter}\n")
+
     with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as summary:
         summary.write(highlighted)
 

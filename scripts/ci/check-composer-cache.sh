@@ -23,6 +23,7 @@ if [ -z "${COMPOSER_CACHE_DIR:-}" ]; then
 fi
 
 cache=$(composer config cache-dir)
+
 if [ "$cache" != "$COMPOSER_CACHE_DIR" ]; then
     echo "Composer cache directory does not match the mounted container cache." >&2
     exit 1

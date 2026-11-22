@@ -22,6 +22,7 @@ set -euo pipefail
 source "$(dirname "$0")/../output/command-output.sh"
 
 mode=${1:-}
+
 if [ "$#" -lt 2 ] || [[ ! "$mode" =~ ^(php|logs|idle)$ ]]; then
     output_status FAIL 'Usage: compose-context.sh <php|logs|idle> <docker compose command...>'
     exit 64
@@ -44,6 +45,7 @@ if ! "$@" version >/dev/null; then
 fi
 
 services=()
+
 case "$mode" in
     php) services=(php) ;;
     logs) services=(php nginx mariadb) ;;
@@ -69,6 +71,7 @@ while IFS='|' read -r service state health; do
     esac
 
     matching_service_found=true
+
     if [ "$state" = running ]; then
         matching_service_running=true
     fi

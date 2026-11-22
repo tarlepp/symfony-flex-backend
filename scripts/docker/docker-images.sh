@@ -64,6 +64,7 @@ GREEN=$OUTPUT_GREEN
 YELLOW=$OUTPUT_YELLOW
 NC=$OUTPUT_RESET
 BOLD=''
+
 if [ -n "$NC" ]; then BOLD=$'\033[1m'; fi
 
 PINNED_DOCKERFILES=(Dockerfile docker/*/Dockerfile*)
@@ -399,6 +400,7 @@ resolve_pin_update() {
     local ref=$1 image candidate status=0 scope=minor
 
     image="${ref%@*}"
+
     case "${image%:*}" in
         php|library/php|docker.io/php|docker.io/library/php|index.docker.io/php|index.docker.io/library/php)
             scope='patch'
@@ -453,12 +455,14 @@ check_candidate_composer() {
 
     shopt -s nullglob
     manifests+=(tools/*/composer.json)
+
     if [ "${#manifests[@]}" -lt 2 ]; then
         error "No Composer tool manifests found"
         return 2
     fi
 
     github_summary '| Composer project | Platform requirements |' '| --- | --- |'
+
     for manifest in "${manifests[@]}"; do
         project="$(dirname "$manifest")"
 
@@ -509,10 +513,12 @@ prepare_php_minor() {
     cp Dockerfile "$work/original"
     mkdir "$work/proposal"
     cp "$work/Dockerfile" "$work/proposal/Dockerfile"
+
     for manifest in "${manifests[@]}"; do
         mkdir -p "$work/proposal/$(dirname "$manifest")"
         cp "$manifest" "${manifest%.json}.lock" "$work/proposal/$(dirname "$manifest")/"
     done
+
     if ! docker run --rm --pull=never -i --user "$(id -u):$(id -g)" \
         -e COMPOSER_HOME=/tmp/composer -e XDEBUG_MODE=off -e COMPOSER_ALLOW_XDEBUG=1 \
         --mount "type=bind,source=${work}/proposal,target=/proposal" --workdir /proposal \
@@ -520,12 +526,14 @@ prepare_php_minor() {
         github_summary "Composer could not refresh or validate the lockfiles without changing packages. No PHP migration PR will be submitted."
         return 1
     fi
+
     if ! verify_tag_parity Dockerfile "" "$RESOLVED_PIN"; then
         github_summary "The tested PHP pin no longer verifies: ${parity_result}."
         return 1
     fi
 
     cp "$work/proposal/Dockerfile" Dockerfile
+
     for manifest in "${manifests[@]}"; do
         cp "$work/proposal/$manifest" "$work/proposal/${manifest%.json}.lock" "$(dirname "$manifest")/"
     done
@@ -537,24 +545,28 @@ command_check_php_minor() (
 
     github_summary '## PHP minor readiness' ''
     trap 'if [ "$?" -ne 0 ]; then php_minor_result "Check failed"; fi' EXIT
+
     if [[ "$#" == 1 && "$1" == --prepare ]]; then
         prepare=true
     elif [ "$#" -ne 0 ]; then
         error "check-php-minor accepts only --prepare"
         return 64
     fi
+
     if [ -n "${IMAGE:-}" ]; then
         error "check-php-minor does not accept IMAGE"
         return 64
     fi
 
     require_docker
+
     if ! command -v curl > /dev/null 2>&1; then
         error "curl command not found, install it first"
         return 69
     fi
 
     current="$(sed -nE "s/${php_pin_pattern}/\1/p" Dockerfile)"
+
     if [[ -z "$current" || "$current" == *$'\n'* ]]; then
         error "Expected exactly one pinned php-upstream image in Dockerfile"
         return 1
@@ -562,6 +574,7 @@ command_check_php_minor() (
 
     github_summary "Current: \`${current%@*}\`" ""
     candidate="$(latest_image_tag "$current" next-minor)"
+
     if [ "$candidate" = "${current%@*}" ]; then
         php_minor_result "Not available"
         return 0
@@ -582,6 +595,7 @@ command_check_php_minor() (
 
     # Use the project build context without rewriting the checked-out PHP pin.
     sed -E "s|${php_pin_pattern}|FROM ${RESOLVED_PIN} AS php-upstream|" Dockerfile > "$work/Dockerfile"
+
     if ! docker buildx build --progress plain --file - --target development --load --tag "$image" . \
         < "$work/Dockerfile" 2>&1 | tee "$work/build.log"; then
         php_minor_result "Blocked: candidate development image did not build (see job log)"
@@ -594,6 +608,7 @@ command_check_php_minor() (
             /(^ERROR:|^#[0-9]+ ERROR:)/ { last = $0 }
             END { if (!count && last != "") print substr(last, 1, 500) }
         ' "$work/build.log")"
+
         if [ -n "$summary_error" ]; then
             github_summary "Reason: <code>$(head -n 1 <<< "$summary_error" | jq -Rr '@html')</code>" ""
             github_summary "<pre>$(jq -Rr '@html' <<< "$summary_error")</pre>" ""
@@ -603,10 +618,12 @@ command_check_php_minor() (
     fi
 
     check_candidate_composer "$image" || status=$?
+
     case "$status" in
         0)
             if [ "$prepare" = true ]; then
                 prepare_php_minor "$work" "$image"
+
                 if [ -n "${GITHUB_OUTPUT:-}" ]; then
                     printf 'prepared=true\ncandidate=%s\n' "$candidate" >> "$GITHUB_OUTPUT"
                 fi
@@ -883,7 +900,9 @@ info() {
 
 warning() {
     local status=$1
+
     case "$status" in SKIP) ;; *) status=WARN ;; esac
+
     printf '%s[%s]%s %s\n' "$YELLOW" "$status" "$NC" "$2"
 }
 
@@ -990,9 +1009,11 @@ inspect_image() {
 
         delay=$((attempt * 10))
         hint=""
+
         if [ "$rate_limit_notified" -eq 1 ]; then
             hint=" Press Ctrl+C to stop, then run 'docker login docker.io'."
         fi
+
         for ((remaining = delay; remaining > 0; remaining -= 5)); do
             printf '  %sRETRY%s Registry request failed; attempt %s/3 in %ss.%s\n' \
                 "$YELLOW" "$NC" "$((attempt + 1))" "$remaining" "$hint" >&2
@@ -1103,6 +1124,7 @@ command_digest() {
 
     type="$(media_type "$raw")"
     platforms="$(image_platforms "$raw")"
+
     if ! digest="$(inspect_image "$IMAGE" --format '{{.Manifest.Digest}}')"; then
         error "Could not resolve index digest for ${IMAGE}: $(tail -n 1 <<< "$digest")"
         exit 1

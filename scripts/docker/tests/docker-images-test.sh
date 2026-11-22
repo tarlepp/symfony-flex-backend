@@ -808,6 +808,7 @@ if grep -q 'tools/installer' "$WORK/output"; then
 fi
 
 start_group 'Registry lookup failures and retries'
+
 for failure in digest manifest; do
     export TEST_DOCKER_FAILURE="$failure"
 
@@ -1001,6 +1002,7 @@ write_base_dockerfiles "$old_pin"
 
 update_pins 'minor/patch updates preserve major and deduplicate lookups' 0 '3 Dockerfile(s) changed'
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 1 ]
+
 for file in Dockerfile docker/nginx/Dockerfile docker/mariadb/Dockerfile; do
     grep -Fxq "FROM $new_pin AS base" "$file"
     grep -Fxq 'FROM base AS final' "$file"

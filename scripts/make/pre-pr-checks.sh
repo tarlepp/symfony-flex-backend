@@ -35,6 +35,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/../.."
 
 mode=selected
+
 case "$#" in
     0) ;;
     1)
@@ -54,6 +55,7 @@ esac
 # The target is host-only; do not let Make's dry-run execute Docker or tests.
 read -r -a make_flags <<< "${MAKEFLAGS:-}"
 make_dry_run=false
+
 for make_flag in "${make_flags[@]}"; do
     case "$make_flag" in
         --*) ;;
@@ -128,6 +130,7 @@ run_grouped_host_command() {
 }
 
 compose=(docker compose)
+
 if [ -n "${GITHUB_WORKFLOW:-}" ]; then
     compose+=(-f compose.yaml -f docker/ci-compose.yaml)
 fi

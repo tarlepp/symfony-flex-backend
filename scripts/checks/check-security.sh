@@ -26,6 +26,7 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/../output/command-output.sh"
 
 ansi_flag=--no-ansi
+
 if [ -n "$OUTPUT_RESET" ]; then
     ansi_flag=--ansi
 fi

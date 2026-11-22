@@ -22,6 +22,7 @@ set -euo pipefail
 source "$(dirname "$0")/../output/command-output.sh"
 
 group=${1:-all}
+
 if [ "$#" -gt 1 ] || [[ ! "$group" =~ ^(all|information|tests|quality|checks|reports|setup|lifecycle|docker|--targets)$ ]]; then
     output_status FAIL "Unknown help group: $group"
     output_status INFO 'Use GROUP=all|information|tests|quality|checks|reports|setup|lifecycle|docker'

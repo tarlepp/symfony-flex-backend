@@ -55,21 +55,25 @@ import uuid
 def github_api(endpoint, payload=None):
     """Read all API pages or create an issue; propagate CLI and JSON failures."""
     command = ["gh", "api"]
+
     if payload is None:
         command.extend(["--paginate", "--slurp"])
     else:
         command.extend(["--method", "POST", "--input", "-"])
+
     command.append(endpoint)
     result = subprocess.run(
         command, input=json.dumps(payload) if payload is not None else None,
         text=True, capture_output=True, check=True, timeout=120,
     )
+
     return json.loads(result.stdout)
 
 
 def main():
     """Track eligible blockers or expose closing references for a ready upgrade."""
     parser = argparse.ArgumentParser(description=__doc__)
+
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--log", type=Path, required=True)
     parser.add_argument("--outcome", required=True)
@@ -94,6 +98,7 @@ def main():
             r"/(?:pear/temp|usr/src/php/ext)/[A-Za-z0-9_-]+/[^\n]*\b(?:fatal )?error:",
             log, re.IGNORECASE,
         ))
+
     if not (composer_blocked or build_blocked or ready):
         return
 
@@ -110,8 +115,10 @@ def main():
     endpoint = "repos/{owner}/{repo}/issues"
 
     pages = github_api(f"{endpoint}?state=open&per_page=100")
+
     if not isinstance(pages, list) or not all(isinstance(page, list) for page in pages):
         raise ValueError("Unexpected GitHub issue listing")
+
     matches = [
         issue for page in pages for issue in page
         if "pull_request" not in issue and marker in (issue.get("body") or "")
@@ -119,10 +126,13 @@ def main():
 
     if (composer_blocked or build_blocked) and not matches:
         report = os.environ["PHP_READINESS_REPORT"].split("\n\n<details>", 1)[0].strip()
+
         if not report or "**Result:" not in report:
             raise ValueError("PHP readiness report has no readable result")
+
         if len(report) > 12000:
             report = report[:12000] + "\n\nReadiness summary truncated; see the run for full evidence."
+
         run_url = f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
         body = (
             f"{marker}\n\nThe PHP `{version}` image cannot yet be adopted for the "
@@ -141,8 +151,10 @@ def main():
     if ready and matches:
         closing = "\n".join(f"Closes #{issue['number']}" for issue in matches)
         delimiter = f"issues-{uuid.uuid4()}"
+
         with Path(os.environ["GITHUB_OUTPUT"]).open("a") as output:
             output.write(f"closing-issues<<{delimiter}\n{closing}\n{delimiter}\n")
+
     if matches:
         with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as summary:
             summary.write("\nPHP minor tracking issues: " + ", ".join(
@@ -155,6 +167,8 @@ if __name__ == "__main__":
         main()
     except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
         print(f"PHP minor issue tracking failed: {error}", file=sys.stderr)
+
         if isinstance(error, subprocess.CalledProcessError) and error.stderr:
             print(error.stderr, file=sys.stderr)
+
         sys.exit(1)
