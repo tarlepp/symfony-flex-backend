@@ -436,10 +436,14 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           AUTHENTICATION: ${{ steps.authentication.outcome || 'skipped' }}
+          AUTHENTICATION_ELIGIBLE: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule' }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
           TESTS: ${{ steps.tests.outcome || 'skipped' }}
           UPDATES: ${{ steps.updates.outcome || 'skipped' }}
         run: |
+          if [[ "$AUTHENTICATION_ELIGIBLE" == false && "$AUTHENTICATION" == skipped ]]; then
+            AUTHENTICATION='skipped (expected)'
+          fi
           bash scripts/ci/ci-workflow-overview.sh \
             'Version updates are advisory; see the update check log for candidates.' \
             'Docker Hub credential check' "$AUTHENTICATION" 'Bootstrap' "$BOOTSTRAP" \

@@ -67,6 +67,11 @@ results. Job overviews use `scripts/ci/ci-workflow-overview.sh` from the
 checkout; if checkout fails, they cannot be rendered. External reporting instead
 writes its skip reason when neither upload token is available.
 
+The Docker image-update overview marks the credential check as an expected skip
+when its event is ineligible for authentication. A successful check indicator
+does not mean all images are current; the separate update report identifies
+advisory findings.
+
 Gitleaks normally publishes its own success or findings summary. Its separate
 job overview is omitted on success to avoid duplication, but remains available
 for failed or skipped scans when the checkout and summary step can run. Some

@@ -331,6 +331,24 @@ class CiGatesTest(unittest.TestCase):
                         "github.event.pull_request.head.repo.full_name == github.repository && "
                         "'eligible' || 'not eligible' }}", step,
                     )
+                if job == "docker-image-check-updates":
+                    condition = "(github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule'"
+                    self.assertIn(f"if: ${{{{ {condition} }}}}", content)
+                    self.assertIn(f"AUTHENTICATION_ELIGIBLE: ${{{{ {condition} }}}}", step)
+                    for event, ref, eligible in (
+                        ("pull_request", "refs/pull/1/merge", False),
+                        ("merge_group", "refs/heads/queue", False),
+                        ("workflow_dispatch", "refs/heads/master", False),
+                        ("push", "refs/heads/feature", False),
+                        ("push", "refs/heads/master", True),
+                        ("schedule", "refs/heads/master", True),
+                    ):
+                        expression = (
+                            condition.replace("github.event_name", repr(event))
+                            .replace("github.ref", repr(ref))
+                            .replace("&&", "and").replace("||", "or")
+                        )
+                        self.assertEqual(eval(expression, {"__builtins__": {}}), eligible)
                 shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
                 variants = (
                     ("development", "production") if job in ("docker-build", "docker-scan")
@@ -360,7 +378,7 @@ class CiGatesTest(unittest.TestCase):
                                  "docker-build", "docker-scan",
                              ) else "", "COVERALLS_TOKEN": "available",
                              "SONAR_TOKEN_STATUS": "not available",
-                             "SARIF_ELIGIBILITY": "eligible", **values},
+                             "SARIF_ELIGIBILITY": "eligible", "AUTHENTICATION_ELIGIBLE": "true", **values},
                         capture_output=True, text=True, check=False,
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
@@ -423,8 +441,22 @@ class CiGatesTest(unittest.TestCase):
                         for row in expected:
                             self.assertIn(row, summary.read_text())
                         summary.unlink()
-                if job in ("static-analyzers", "report", "docker-scan"):
+                if job in ("static-analyzers", "report", "docker-scan", "docker-image-check-updates"):
                     status_scenarios = {
+                        "docker-image-check-updates": [
+                            ({"AUTHENTICATION_ELIGIBLE": "false", "AUTHENTICATION": "skipped"},
+                             "✅", "Docker Hub credential check", "skipped (expected)"),
+                            ({"AUTHENTICATION_ELIGIBLE": "true", "AUTHENTICATION": "skipped"},
+                             "➖", "Docker Hub credential check", "skipped"),
+                            ({"AUTHENTICATION_ELIGIBLE": "", "AUTHENTICATION": "skipped"},
+                             "➖", "Docker Hub credential check", "skipped"),
+                            ({"AUTHENTICATION_ELIGIBLE": "false", "AUTHENTICATION": "failure"},
+                             "⚠️", "Docker Hub credential check", "failure"),
+                            ({"AUTHENTICATION_ELIGIBLE": "false", "AUTHENTICATION": "skipped", "UPDATES": "failure"},
+                             "⚠️", "Image version check", "failure"),
+                            ({"AUTHENTICATION_ELIGIBLE": "true", "AUTHENTICATION": "success"},
+                             "✅", "Docker Hub credential check", "success"),
+                        ],
                         "static-analyzers": [
                             ({"ANALYZER": "PHPStan", "ARTIFACT": "skipped"}, "✅", "Psalm artifact", "skipped (expected)"),
                             ({"ANALYZER": "PHP Insights", "ARTIFACT": "skipped"}, "✅", "Psalm artifact", "skipped (expected)"),
@@ -470,7 +502,8 @@ class CiGatesTest(unittest.TestCase):
                                 "OVERVIEW_COLLAPSED": "true", "EVENT_NAME": "pull_request",
                                 "PRIOR_STATUS": "success", "TARGET": "production", "ANALYZER": "Psalm",
                                 "COVERALLS_TOKEN": "available", "SONAR_TOKEN_STATUS": "available",
-                                "SARIF_ELIGIBILITY": "eligible", **dict.fromkeys(outcomes, "success"), **overrides,
+                                "SARIF_ELIGIBILITY": "eligible", "AUTHENTICATION_ELIGIBLE": "true",
+                                **dict.fromkeys(outcomes, "success"), **overrides,
                             }
                             result = subprocess.run(
                                 ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
@@ -480,6 +513,8 @@ class CiGatesTest(unittest.TestCase):
                             output = summary.read_text()
                             self.assertIn(f" · {icon} ", output)
                             self.assertIn(f"| {label} | {expected} |", output)
+                            if job == "docker-image-check-updates":
+                                self.assertIn("Version updates are advisory", output)
                             summary.unlink()
                 if job == "statistics":
                     result = subprocess.run(
