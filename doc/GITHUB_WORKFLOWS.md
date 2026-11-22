@@ -434,6 +434,11 @@ failed; later cleanup failures are not included. **CI validation preview** is a
 collapsed selection forecast, not a result. GitHub may display these summaries
 in a different order because jobs finish independently.
 
+The change-detection summary points to **Core CI result** and to the **Validate
+CI result** job logs in the jobs list or graph. This signpost is unavailable
+when change detection is skipped, including scheduled runs, or when its summary
+cannot be written.
+
 The gate tables distinguish unaffected paths, scheduled scope, reporting
 eligibility, unsuccessful prerequisites and unexpected skips. They are written
 before gate validation, so failures still have context. A skipped job cannot
