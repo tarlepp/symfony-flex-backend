@@ -264,6 +264,21 @@ class CiGatesTest(unittest.TestCase):
                 condition = "!cancelled()"
                 if job == "report":
                     condition += " && steps.checkout-report.outcome == 'success'"
+                if job == "gitleaks":
+                    condition += " && (job.status != 'success' || steps.scan.outcome != 'success')"
+                    for cancelled in (False, True):
+                        for status in ("success", "failure"):
+                            for outcome in ("success", "failure", "skipped", ""):
+                                expression = (
+                                    condition.replace("!cancelled()", repr(not cancelled))
+                                    .replace("job.status", repr(status))
+                                    .replace("steps.scan.outcome", repr(outcome))
+                                    .replace("&&", "and").replace("||", "or")
+                                )
+                                self.assertEqual(
+                                    eval(expression, {"__builtins__": {}}),
+                                    not cancelled and (status != "success" or outcome != "success"),
+                                )
                 self.assertIn(f"if: ${{{{ {condition} }}}}", step)
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
@@ -295,10 +310,12 @@ class CiGatesTest(unittest.TestCase):
                     (None, variant) for variant in variants
                 ]
                 scenarios.extend((failed, variants[0]) for failed in outcomes)
+                if job == "gitleaks":
+                    scenarios.append(("skipped", ""))
                 for failed, variant in scenarios:
                     rendered_title = title.replace("${{ matrix.analyzer.name }}", variant)
                     values = dict.fromkeys(outcomes, "success" if failed is None else "skipped")
-                    if failed is not None:
+                    if failed is not None and failed != "skipped":
                         values[failed] = "failure"
                     summary = Path(directory) / "summary"
                     result = subprocess.run(
