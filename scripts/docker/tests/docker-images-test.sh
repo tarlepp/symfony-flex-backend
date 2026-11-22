@@ -407,6 +407,15 @@ verify_pin_parity 'matching tag digest' \
     'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
     'Tag digest matches'
 
+OUTPUT_RUN_GROUPED=1 verify_pin_parity 'grouped pin verification status' \
+    'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
+    'Tag digest matches'
+if [ "$(head -n 2 "$WORK/output")" != $'\n[RUN] Verifying base images of 3 Dockerfiles' ]; then
+    printf 'FAIL: grouped pin verification status did not start after a blank line\n'
+    cat "$WORK/output"
+    exit 1
+fi
+
 verify_pin_parity 'mismatched tag digest fails verification' \
     'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' 1 \
     'Tag digest mismatch: tag resolves to sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
@@ -603,6 +612,13 @@ fi
 
 check_updates 'advisory updates succeed with warning annotation and summary' 'test:1.9.9' 0 \
     '[WARN] 1 image(s)' --advisory
+OUTPUT_RUN_GROUPED=1 check_updates 'grouped version check status' 'test:2.0.0' 0 \
+    '[OK] test:2.0.0: no newer stable version'
+if [ "$(head -n 2 "$WORK/output")" != $'\n[RUN] Docker image version checks' ]; then
+    printf 'FAIL: grouped version check status did not start after a blank line\n'
+    cat "$WORK/output"
+    exit 1
+fi
 
 GITHUB_ACTIONS=true GITHUB_STEP_SUMMARY="$WORK/advisory-summary" \
     check_updates 'hosted advisory warning is visible' 'test:1.9.9' 0 \

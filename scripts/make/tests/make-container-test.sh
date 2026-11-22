@@ -139,6 +139,37 @@ if make --no-print-directory INSIDE_DOCKER_CONTAINER=1 INSIDE_CONTAINER_RUNTIME=
     exit 1
 fi
 
+# Pre-PR checks orchestrate host and container commands and reject container use.
+: > "$DOCKER_CALLS"
+if make --no-print-directory INSIDE_DOCKER_CONTAINER=1 INSIDE_CONTAINER_RUNTIME=1 \
+    pre-pr-checks > "$temporary/pre-pr-checks-container" 2>&1; then
+    echo "Pre-PR checks must reject execution inside the container." >&2
+    exit 1
+fi
+
+if make --no-print-directory INSIDE_DOCKER_CONTAINER=1 INSIDE_CONTAINER_RUNTIME=1 \
+    pre-pr-checks-all > "$temporary/pre-pr-checks-all-container" 2>&1; then
+    echo "All pre-PR checks must reject execution inside the container." >&2
+    exit 1
+fi
+
+grep -q 'Run this target on the Docker host' "$temporary/pre-pr-checks-container"
+grep -q 'Run this target on the Docker host' "$temporary/pre-pr-checks-all-container"
+
+if [ -s "$DOCKER_CALLS" ]; then
+    echo "Pre-PR checks must not be forwarded into the container." >&2
+    exit 1
+fi
+
+# Make dry runs must not invoke the selector or any nested checks.
+: > "$DOCKER_CALLS"
+host_make -n pre-pr-checks > "$temporary/pre-pr-checks-dry-run" 2>&1
+grep -Fq 'Skipping pre-PR checks in Make dry-run mode.' "$temporary/pre-pr-checks-dry-run"
+if [ -s "$DOCKER_CALLS" ]; then
+    echo "Pre-PR check dry runs must not invoke Docker." >&2
+    exit 1
+fi
+
 # Registered application targets forward to the PHP container.
 for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-tests check-skills lint-workflows \
     lint-markdown lint-python typecheck-python composer-validate install application-info check-requirements \

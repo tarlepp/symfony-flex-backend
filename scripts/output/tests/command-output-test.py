@@ -41,9 +41,9 @@ SUITE = ROOT / "scripts/docker/tests/docker-images-test.sh"
 NATIVE = ROOT / "scripts/output/native-output.sh"
 DOCKER_IMAGE_TEST_GROUPS = (
     ("Manifest validation", 8),
-    ("Pinned tag/digest parity", 5),
+    ("Pinned tag/digest parity", 6),
     ("External COPY pin verification", 8),
-    ("Version discovery and output formatting", 18),
+    ("Version discovery and output formatting", 19),
     ("Registry responses and pagination", 7),
     ("Dockerfile discovery", 4),
     ("Registry lookup failures and retries", 8),
@@ -885,7 +885,15 @@ class CommandOutputTest(unittest.TestCase):
                 '#!/bin/bash\nprintf "routing\\n" >> "$CALLS"\n'
                 'if [ "$FAIL_SUITE" = routing ]; then exit 7; fi\n'
             )
-            for failed in ("", "command-output-test.py", "make-information-output-test.py", "routing"):
+            pre_pr_test = root / "scripts/make/tests/pre-pr-checks-test.sh"
+            pre_pr_test.write_text(
+                '#!/bin/bash\nprintf "pre-pr\\n" >> "$CALLS"\n'
+                'if [ "$FAIL_SUITE" = pre-pr ]; then exit 7; fi\n'
+            )
+            for failed in (
+                "", "command-output-test.py", "make-information-output-test.py",
+                "routing", "pre-pr",
+            ):
                 calls = root / "calls"
                 calls.write_text("")
                 result = self.run_command(
@@ -896,14 +904,16 @@ class CommandOutputTest(unittest.TestCase):
                 if failed:
                     self.assertIn("[FAIL]", result.stderr)
                     self.assertNotIn("[OK]", result.stderr.split("[FAIL]", 1)[1])
-                    self.assertNotIn("9 regression suites passed", result.stderr)
+                    self.assertNotIn("10 regression suites passed", result.stderr)
                     if failed == "routing":
                         self.assertEqual(len(calls.read_text().splitlines()), 9)
+                    elif failed == "pre-pr":
+                        self.assertEqual(len(calls.read_text().splitlines()), 10)
                     else:
                         self.assertNotIn("routing", calls.read_text())
                 else:
-                    self.assertEqual(len(calls.read_text().splitlines()), 9)
-                    self.assertIn("[OK] Command output contracts: 9 regression suites passed", result.stderr)
+                    self.assertEqual(len(calls.read_text().splitlines()), 10)
+                    self.assertIn("[OK] Command output contracts: 10 regression suites passed", result.stderr)
             python.unlink()
             dirname = shutil.which("dirname")
             assert dirname is not None, "dirname is required for this test"
@@ -956,6 +966,9 @@ class CommandOutputTest(unittest.TestCase):
             (root / "scripts/make/tests/make-container-test.sh").write_text(
                 "printf 'routing detail\\n'\nprintf 'routing warning\\n' >&2\n"
             )
+            (root / "scripts/make/tests/pre-pr-checks-test.sh").write_text(
+                "printf 'pre-PR detail\\n'\n"
+            )
             for failed in ("0", "1"):
                 with self.subTest(failed=failed):
                     result = self.run_command(
@@ -974,12 +987,14 @@ class CommandOutputTest(unittest.TestCase):
                     else:
                         self.assertIn("    routing detail\n", result.stdout)
                         self.assertIn("    routing warning\n", result.stderr)
+                        self.assertIn("  [RUN] Pre-PR check selection regression suite\n", result.stderr)
+                        self.assertIn("pre-PR detail\n", result.stdout)
                         self.assertIn(
                             "\n  [OK] command-output regression suite\n\n"
                             "  [RUN] make-launcher regression suite\n", result.stderr,
                         )
                         self.assertTrue(result.stderr.endswith(
-                            "\n[OK] Command output contracts: 9 regression suites passed\n",
+                            "\n[OK] Command output contracts: 10 regression suites passed\n",
                         ))
 
 

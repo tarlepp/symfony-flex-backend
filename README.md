@@ -332,29 +332,36 @@ As a simple rule of thumb, update the AI guidance when the same review comment,
 architectural correction, or project convention appears repeatedly and should
 become a repository default.
 
-Before committing, run the broader local pre-commit validation suite from the
-project root inside the running development container. This suite is not a
-command-for-command mirror of CI:
+For local pre-PR validation, run this from the repository root on the Docker
+host with the development services running:
 
 ```bash
-make phpcs
-make ecs
-make phplint
-make php-parallel-lint
-make phpstan
-make psalm
-make phploc
-make phpinsights
-make check-security
-make lint-markdown
-make run-tests
+make pre-pr-checks
 ```
 
-In the documented local development workflow, run those commands inside the
-running `php` development container where the pinned PHP toolchain is available.
-`make run-tests` selects phpdbg when it is installed and otherwise uses pure
-PHP. CI's application test job uses `make run-tests-php`; run that command
-locally when reproducing CI's test runner.
+This selects checks from the committed `BASE_SHA...HEAD_SHA` range, defaulting
+to `HEAD^` and `HEAD`; uncommitted changes are excluded. Empty or uncertain
+comparisons run all local checks. Use `make pre-pr-checks-all` to always run
+every locally reproducible check.
+
+Run the all-checks target from the same host terminal:
+
+```bash
+make pre-pr-checks-all
+```
+
+Either target can overwrite generated test/report files. The all-checks target
+always builds both image targets; selected mode builds them when the Docker
+category is selected. Image builds overwrite the local
+`symfony-flex-backend:pre-pr-development` and
+`symfony-flex-backend:pre-pr-production` tags and require Docker Buildx and
+registry access.
+
+GitHub-hosted checks, including Dependency Review, the Symfony Security Checker
+action, Gitleaks, Trivy scans/SARIF uploads, and optional external reporting,
+remain part of hosted CI. Scheduled and informational jobs are excluded. For
+task-scoped validation, follow [AGENTS.md](AGENTS.md#testing-and-validation) and
+the [testing guide](doc/TESTING.md).
 
 ## Continuous integration [ᐞ](#table-of-contents)
 

@@ -246,11 +246,13 @@ Scheduled builds bypass layer caches, and the production stage always reruns
 dependency installation and auditing. See the [CI guide](DEVELOPMENT.md#continuous-integration)
 for scopes and reproduction.
 
-This CI coverage map is distinct from the broader local pre-commit suite in
-[`AGENTS.md`](../AGENTS.md#testing-and-validation); that suite is not a command-for-command
-description of CI. The workflow defines the exact commands, conditions,
-matrices, artifacts, and failure behavior. Update this summary when the
-workflow's structure changes, without duplicating the full local checklist.
+[`AGENTS.md`](../AGENTS.md#testing-and-validation) documents `make pre-pr-checks`
+for local checks selected from the committed `BASE_SHA...HEAD_SHA` range and
+`make pre-pr-checks-all` for every locally reproducible check. Neither target
+reproduces GitHub-hosted checks, scheduled jobs, or informational jobs. The
+workflow still defines the exact commands, conditions, matrices, artifacts, and
+failure behavior. Update this summary when the workflow's structure changes,
+without duplicating the full local checklist.
 
 ## Maintenance workflow [ᐞ](#table-of-contents)
 

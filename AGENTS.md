@@ -136,30 +136,37 @@ and the actual code, dependency manifests, and CI workflows.
 * Treat any confirmed failure in a required CI check selected by the task as a
   delivery blocker, even if it predates the branch. Fix it within scope or
   report the blocker and seek approval for out-of-scope remediation.
-* For application changes requiring broad regression coverage, run the local
-  pre-commit suite below from the repository root in the development container.
-  Use the selection guide for targeted changes and non-application tooling. This
-  suite is not a command-for-command mirror of CI; see `doc/AI_RULES.md` for CI
-  job coverage. Merge gates and branch protection are described in
-  `doc/REQUIRED_CHECKS.md`; every new `main.yml` job must be added to the
-  `needs` of `ci-result`.
+* For local pre-PR validation, run the CI-selected target from the repository
+  root on the Docker host with development services running:
 
   ```bash
-  make phpcs
-  make ecs
-  make phplint
-  make php-parallel-lint
-  make psalm
-  make phpstan
-  make phploc
-  make phpinsights
-  make check-security
-  make run-tests
+  make pre-pr-checks
   ```
 
-  CI's application test job runs `make run-tests-php`. Locally, `make
-  run-tests` selects phpdbg when it is installed and otherwise uses pure PHP;
-  run `make run-tests-php` to match the CI test runner.
+  It applies the CI selector to the committed `BASE_SHA...HEAD_SHA` range
+  (defaults: `HEAD^` and `HEAD`); uncommitted changes do not affect selection.
+  Empty or uncertain comparisons conservatively select all local checks. Set
+  `BASE_SHA` and `HEAD_SHA` to inspect another committed range.
+* To always run every locally reproducible check regardless of changed files or
+  commit range, run this from the same directory and host:
+
+  ```bash
+  make pre-pr-checks-all
+  ```
+
+  Either target can overwrite generated test/report files. The all-checks target
+  always builds both image targets; selected mode builds them when the Docker
+  category is selected. Image builds overwrite local tags
+  `symfony-flex-backend:pre-pr-development` and
+  `symfony-flex-backend:pre-pr-production`. They require Docker Buildx and
+  registry access.
+* Neither target reproduces GitHub-hosted checks, including Dependency Review,
+  the Symfony Security Checker action, Gitleaks, Trivy scans/SARIF uploads, or
+  optional external reporting. Scheduled and informational jobs are excluded.
+  For normal task work, use the [validation selection guide](doc/TESTING.md#selecting-validation)
+  instead. Merge gates and branch protection are described in
+  `doc/REQUIRED_CHECKS.md`; every new `main.yml` job must be added to the
+  `needs` of `ci-result`.
 
 * If `make ecs` reports fixable style issues, run `make ecs-fix` and rerun
   `make ecs`.
