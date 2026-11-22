@@ -2131,6 +2131,8 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/ci/ci-docker-hub-auth.sh": {"images", "workflows", "tooling"},
             "scripts/docker/sync-doctrine-mariadb.sh": {"images", "workflows", "tooling"},
             "scripts/docker/sync-ci-mariadb.sh": {"images", "workflows", "tooling"},
+            "scripts/docker/prepare-php-minor-pr.sh": {"images", "workflows", "tooling"},
+            "scripts/docker/prepare-image-update-pr.sh": {"images", "workflows", "tooling"},
             "scripts/ci/ci-statistics-summary.sh": {"workflows", "tooling"},
             "scripts/docker/docker-images.sh": {"images", "tooling"},
             "scripts/docker/tests/docker-images-test.sh": {"images", "tooling"},

@@ -170,6 +170,8 @@ output_run 'CI tooling scripts (ShellCheck)' \
     scripts/docker/docker-images.sh \
     scripts/docker/sync-doctrine-mariadb.sh \
     scripts/docker/sync-ci-mariadb.sh \
+    scripts/docker/prepare-php-minor-pr.sh \
+    scripts/docker/prepare-image-update-pr.sh \
     scripts/sync-composer-php.sh \
     scripts/make/make.sh \
     scripts/checks/check-security.sh \

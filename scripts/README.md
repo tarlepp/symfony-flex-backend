@@ -83,6 +83,10 @@ directory relationships so they do not depend on files remaining siblings.
   [CI MariaDB pin synchronization](docker/sync-ci-mariadb.sh)
   * Run as separate Docker image update workflow steps on the GitHub runner.
     Offline regressions run through `make lint-workflows`.
+* [PHP minor PR preparation](docker/prepare-php-minor-pr.sh) and
+  [image update PR preparation](docker/prepare-image-update-pr.sh)
+  * Prepare branch outputs, template-based PR bodies and saved update evidence
+    on the GitHub runner. Offline regressions run through `make lint-workflows`.
 * [Docker digest comparison](docker/docker-image-digest-summary.py)
   * Compares digest-only updates using registry index metadata for maintenance
     pull requests. It is called by the Docker image update workflow on the host.
