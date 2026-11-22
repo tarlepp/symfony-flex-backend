@@ -61,6 +61,7 @@ jobs:
         if: ${{ !cancelled() }}
         continue-on-error: true
         env:
+          OVERVIEW_TITLE: CodeQL workflow analysis
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           INITIALIZE: ${{ steps.initialize.outcome || 'skipped' }}

@@ -55,6 +55,7 @@ jobs:
         if: ${{ !cancelled() && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
         continue-on-error: true
         env:
+          OVERVIEW_TITLE: Dependency review
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           REVIEW: ${{ steps.review.outcome || 'skipped' }}

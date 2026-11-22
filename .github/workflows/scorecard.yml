@@ -87,6 +87,7 @@ jobs:
         if: ${{ !cancelled() }}
         continue-on-error: true
         env:
+          OVERVIEW_TITLE: OpenSSF Scorecard analysis
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           ANALYSIS: ${{ steps.analysis.outcome || 'skipped' }}

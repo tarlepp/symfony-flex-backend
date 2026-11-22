@@ -63,6 +63,7 @@ jobs:
         if: ${{ !cancelled() }}
         continue-on-error: true
         env:
+          OVERVIEW_TITLE: Action and workflow tool updates
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           UPDATES: ${{ steps.updates.outcome || 'skipped' }}
