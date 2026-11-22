@@ -1131,14 +1131,22 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         step = step_match.group(1)
         self.assertIn("          ANALYZER_TARGET: ${{ matrix.analyzer.target }}\n", step)
         self.assertIn("        shell: bash\n", step)
-        command = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        command = re.search(r"^        run: (.+)$", step, re.MULTILINE)
+        assert command is not None
+        command = command.group(1)
+        self.assertEqual(command, "bash scripts/ci/ci-run-analyzer.sh")
         self.assertNotIn("${{", command)
 
         with tempfile.TemporaryDirectory(prefix="ci-analyzer-target-") as directory:
             root = Path(directory)
             (root / "scripts/make").mkdir(parents=True)
+            (root / "scripts/ci").mkdir()
+            shutil.copyfile(WORKFLOW.parents[2] / "scripts/ci/ci-run-analyzer.sh",
+                            root / "scripts/ci/ci-run-analyzer.sh")
             (root / "scripts/make/make.sh").write_text(
-                'printf "%s\\n" "$#" "$@"\nexit "$FIXTURE_EXIT"\n',
+                'printf "%s\\n" "$#" "$@"\n'
+                'printf "color=%s no_color=%s native=%s\\n" "$COLOR" "$NO_COLOR" "$NATIVE_COLOR" >&2\n'
+                'exit "$FIXTURE_EXIT"\n',
             )
             for target in [value for _, value in entries] + [
                 "target with spaces", "$(touch injected); echo unexpected", "",
@@ -1148,14 +1156,35 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         result = subprocess.run(
                             ["bash", "-eo", "pipefail", "-c", command], cwd=root,
                             env=dict(os.environ, ANALYZER_TARGET=target, RUNNER_TEMP=str(root),
-                                     FIXTURE_EXIT=str(status)),
+                                     FIXTURE_EXIT=str(status), COLOR="always", NO_COLOR="",
+                                     NATIVE_COLOR="always"),
                             text=True, capture_output=True, check=False, timeout=10,
                         )
                         self.assertEqual(result.returncode, status, result.stderr)
                         self.assertEqual(result.stdout, f"1\n{target}\n")
+                        self.assertEqual(
+                            result.stderr, "color=never no_color=1 native=never\n"
+                            if target == "phpinsights" else "color=always no_color= native=always\n",
+                        )
                         self.assertFalse((root / "injected").exists())
                         if target == "phpinsights":
                             self.assertEqual((root / "phpinsights-output.txt").read_text(), f"1\n{target}\n")
+            result = subprocess.run(
+                ["bash", "-eo", "pipefail", "-c", command], cwd=root,
+                env=dict(os.environ, ANALYZER_TARGET="phpinsights",
+                         RUNNER_TEMP=str(root / "missing"), FIXTURE_EXIT="0"),
+                text=True, capture_output=True, check=False, timeout=10,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("phpinsights-output.txt", result.stderr)
+            (root / "scripts/make/make.sh").unlink()
+            result = subprocess.run(
+                ["bash", "-eo", "pipefail", "-c", command], cwd=root,
+                env=dict(os.environ, ANALYZER_TARGET="phpinsights", RUNNER_TEMP=str(root)),
+                text=True, capture_output=True, check=False, timeout=10,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("scripts/make/make.sh", result.stderr)
 
     def test_gates_require_lightweight_job_and_reject_failures(self):
         for name in ("ci-summary", "ci-result"):
@@ -2091,6 +2120,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "tests/Unit/ExampleTest.php": {"php", "tests"},
             "phpunit.xml.dist": {"php", "tests"},
             "scripts/ci/ci-test-reports.py": {"php", "tests", "workflows"},
+            "scripts/ci/ci-run-analyzer.sh": {"php", "workflows", "tooling"},
             "ecs.php": {"php"},
             "phpstan.neon.dist": {"php"},
             ".phplint.yml": {"php"},

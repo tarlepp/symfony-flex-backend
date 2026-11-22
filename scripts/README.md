@@ -79,6 +79,9 @@ directory relationships so they do not depend on files remaining siblings.
 * [Action update status](ci/ci-action-update-status.sh)
   * Runs on the GitHub runner and maps the containerized checker's exit status
     to the standalone workflow's advisory or failure result.
+* [CI analyzer runner](ci/ci-run-analyzer.sh)
+  * Runs the selected analyzer on the GitHub runner and captures PHP Insights
+    output for its separate job summary.
 * [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
