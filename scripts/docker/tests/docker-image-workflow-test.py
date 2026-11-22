@@ -83,6 +83,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for name in (
             "sync-doctrine-mariadb.sh", "sync-ci-mariadb.sh",
             "prepare-php-minor-pr.sh", "prepare-image-update-pr.sh",
+            "select-maintenance-pr-auth.sh",
         ):
             (self.root / "scripts/docker" / name).write_bytes((ROOT / "scripts/docker" / name).read_bytes())
         (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
@@ -350,6 +351,84 @@ class DockerImageWorkflowTest(unittest.TestCase):
             self.assertEqual(self.output.read_text(), output)
             if not output:
                 self.assertIn("No PHP migration PR:", self.summary.read_text())
+
+    def test_maintenance_authentication_matrix_and_output_failures(self):
+        workflows = yaml.safe_load(WORKFLOW)["jobs"]
+        minor = {item.get("id"): item for item in workflows["php-minor-readiness"]["steps"]}
+        update = {item.get("id"): item for item in workflows["update"]["steps"]}
+        self.assertEqual(minor["minor-auth"]["run"], "bash scripts/docker/select-maintenance-pr-auth.sh php-minor")
+        self.assertEqual(update["authentication"]["run"], "bash scripts/docker/select-maintenance-pr-auth.sh image-update")
+        self.assertEqual(minor["minor-auth"]["env"], update["authentication"]["env"])
+        self.assertEqual(minor["minor-auth"]["if"], "${{ steps.php-minor.outputs.prepared == 'true' }}")
+        self.assertEqual(minor["minor-token"]["if"], "${{ steps.minor-auth.outputs.method == 'app' }}")
+        self.assertEqual(minor["minor-details"]["if"], "${{ steps.minor-auth.outputs.method != '' }}")
+        self.assertEqual(update["app-token"]["if"], "${{ steps.authentication.outputs.app == 'true' }}")
+        self.assertEqual(
+            minor["minor-pr"]["with"]["token"],
+            "${{ steps.minor-token.outputs.token || secrets.DOCKER_IMAGE_UPDATE_TOKEN }}",
+        )
+        self.assertEqual(
+            update["pull-request"]["with"]["token"],
+            "${{ steps.app-token.outputs.token || secrets.DOCKER_IMAGE_UPDATE_TOKEN || github.token }}",
+        )
+
+        for mode, name in (
+            ("php-minor", "Select PHP minor PR authentication"),
+            ("image-update", "Select pull request authentication"),
+        ):
+            for has_id, has_key, has_pat in itertools.product((False, True), repeat=3):
+                with self.subTest(mode=mode, has_id=has_id, has_key=has_key, has_pat=has_pat):
+                    self.output.unlink(missing_ok=True)
+                    self.summary.unlink(missing_ok=True)
+                    credentials = {
+                        "APP_CLIENT_ID": "fixture-client" if has_id else "",
+                        "APP_PRIVATE_KEY": "fixture-private-key" if has_key else "",
+                        "UPDATE_TOKEN": "fixture-pat" if has_pat else "",
+                    }
+                    result = self.run_script(WORKFLOW, name, **credentials)
+                    output = self.output.read_text() if self.output.exists() else ""
+                    summary = self.summary.read_text() if self.summary.exists() else ""
+                    partial = has_id != has_key
+                    self.assertEqual(result.returncode, 1 if partial else 0, result.stderr)
+                    expected = ""
+                    if not partial and has_id:
+                        expected = "method=app\n" if mode == "php-minor" else "app=true\n"
+                    elif not partial and has_pat:
+                        expected = "method=pat\n" if mode == "php-minor" else "app=false\n"
+                    elif not partial and mode == "image-update":
+                        expected = "app=false\n"
+                    self.assertEqual(output, expected)
+                    if partial:
+                        self.assertIn("configure both", (summary + result.stdout).lower())
+                    elif not has_id and not has_pat:
+                        self.assertIn(
+                            "No PHP migration PR:" if mode == "php-minor" else "does not trigger PR CI",
+                            summary,
+                        )
+                    else:
+                        self.assertEqual(summary, "")
+                    for secret in ("fixture-client", "fixture-private-key", "fixture-pat"):
+                        self.assertNotIn(secret, result.stdout + result.stderr + output + summary)
+
+            for overrides in (
+                {"APP_CLIENT_ID": "fixture-client", "APP_PRIVATE_KEY": "fixture-private-key",
+                 "GITHUB_OUTPUT": str(self.root)},
+                {"GITHUB_STEP_SUMMARY": str(self.root)},
+            ):
+                values = {"APP_CLIENT_ID": "", "APP_PRIVATE_KEY": "", "UPDATE_TOKEN": ""}
+                values.update(overrides)
+                result = self.run_script(WORKFLOW, name, **values)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertTrue(result.stderr)
+
+        helper = self.root / "scripts/docker/select-maintenance-pr-auth.sh"
+        for arguments in ([], ["unknown"], ["php-minor", "extra"]):
+            result = subprocess.run(
+                ["bash", str(helper), *arguments], cwd=self.root, env=self.environment,
+                text=True, capture_output=True, check=False, timeout=10,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("Usage:", result.stderr)
 
     def test_php_minor_issue_tracking_uses_real_workflow_step(self):
         gh = self.root / "gh"

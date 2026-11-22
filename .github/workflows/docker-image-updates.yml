@@ -71,17 +71,7 @@ jobs:
           APP_CLIENT_ID: ${{ vars.DOCKER_IMAGE_UPDATE_APP_CLIENT_ID }}
           APP_PRIVATE_KEY: ${{ secrets.DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY }}
           UPDATE_TOKEN: ${{ secrets.DOCKER_IMAGE_UPDATE_TOKEN }}
-        run: |
-          if [ -n "$APP_CLIENT_ID" ] && [ -n "$APP_PRIVATE_KEY" ]; then
-            echo 'method=app' >> "$GITHUB_OUTPUT"
-          elif [ -n "$APP_CLIENT_ID" ] || [ -n "$APP_PRIVATE_KEY" ]; then
-            echo 'No PHP migration PR: configure both Docker image update App credentials, or neither.' >> "$GITHUB_STEP_SUMMARY"
-            exit 1
-          elif [ -n "$UPDATE_TOKEN" ]; then
-            echo 'method=pat' >> "$GITHUB_OUTPUT"
-          else
-            echo 'No PHP migration PR: configure the Docker image update App or PAT so that the PR triggers CI.' >> "$GITHUB_STEP_SUMMARY"
-          fi
+        run: bash scripts/docker/select-maintenance-pr-auth.sh php-minor
 
       - name: Prepare PHP minor PR details
         id: minor-details
@@ -215,19 +205,7 @@ jobs:
       - name: Select pull request authentication
         id: authentication
         env: *maintenance_pr_credentials
-        run: |
-          if [ -n "$APP_CLIENT_ID" ] && [ -n "$APP_PRIVATE_KEY" ]; then
-            echo "app=true" >> "$GITHUB_OUTPUT"
-          elif [ -n "$APP_CLIENT_ID" ] || [ -n "$APP_PRIVATE_KEY" ]; then
-            echo "::error::Configure both DOCKER_IMAGE_UPDATE_APP_CLIENT_ID and DOCKER_IMAGE_UPDATE_APP_PRIVATE_KEY, or neither."
-            exit 1
-          elif [ -n "$UPDATE_TOKEN" ]; then
-            echo "app=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "app=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Using GITHUB_TOKEN: generated PRs will not trigger CI. Configure the update App or PAT, or close and reopen the PR as a maintainer before merging."
-            echo "Warning: GITHUB_TOKEN fallback does not trigger PR CI; maintainer action is required." >> "$GITHUB_STEP_SUMMARY"
-          fi
+        run: bash scripts/docker/select-maintenance-pr-auth.sh image-update
 
       - name: Create repository-scoped GitHub App token
         id: app-token

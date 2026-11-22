@@ -87,6 +87,9 @@ directory relationships so they do not depend on files remaining siblings.
   [image update PR preparation](docker/prepare-image-update-pr.sh)
   * Prepare branch outputs, template-based PR bodies and saved update evidence
     on the GitHub runner. Offline regressions run through `make lint-workflows`.
+* [Maintenance PR authentication](docker/select-maintenance-pr-auth.sh)
+  * Selects App or token authentication on the GitHub runner, preserving the
+    distinct PHP minor and image update fallback policies.
 * [Docker digest comparison](docker/docker-image-digest-summary.py)
   * Compares digest-only updates using registry index metadata for maintenance
     pull requests. It is called by the Docker image update workflow on the host.

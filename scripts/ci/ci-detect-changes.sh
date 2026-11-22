@@ -170,7 +170,8 @@ classify_path() {
             ;;
         scripts/ci/ci-docker-hub-auth.sh|\
         scripts/docker/sync-doctrine-mariadb.sh|scripts/docker/sync-ci-mariadb.sh|\
-        scripts/docker/prepare-php-minor-pr.sh|scripts/docker/prepare-image-update-pr.sh)
+        scripts/docker/prepare-php-minor-pr.sh|scripts/docker/prepare-image-update-pr.sh|\
+        scripts/docker/select-maintenance-pr-auth.sh)
             enable_checks images workflows tooling
             ;;
         scripts/checks/lint-workflows.sh|scripts/tests/run-workflow-tests.py|\

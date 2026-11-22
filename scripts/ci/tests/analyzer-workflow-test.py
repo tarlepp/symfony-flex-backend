@@ -2133,6 +2133,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/docker/sync-ci-mariadb.sh": {"images", "workflows", "tooling"},
             "scripts/docker/prepare-php-minor-pr.sh": {"images", "workflows", "tooling"},
             "scripts/docker/prepare-image-update-pr.sh": {"images", "workflows", "tooling"},
+            "scripts/docker/select-maintenance-pr-auth.sh": {"images", "workflows", "tooling"},
             "scripts/ci/ci-statistics-summary.sh": {"workflows", "tooling"},
             "scripts/docker/docker-images.sh": {"images", "tooling"},
             "scripts/docker/tests/docker-images-test.sh": {"images", "tooling"},
