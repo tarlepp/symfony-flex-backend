@@ -57,6 +57,13 @@ rules alongside the task-specific workflow in the skill.
   task branch following the [repository naming conventions](../../doc/DEVELOPMENT.md#branch-names-and-pull-request-titles).
   The branch and title use the same type, scope, and change summary in their
   respective formats. Do not stage pre-existing work.
+* Inspect the current branch and relevant local and remote-tracking branches
+  before creating a task branch. If the proposed task branch already exists, or
+  a new task starts on a non-`master` branch, stop and ask the user whether to
+  create a fresh branch with a different name, explicitly reuse an existing
+  branch, or stop. Explain the current branch, proposed base, and relevant
+  existing work; never silently reuse or overwrite a branch. An explicit reuse
+  decision applies only to that task and does not authorize commits or pushes.
 * When a change touches only documentation (Markdown files and docs-only
   guidance text, with no code, workflow, configuration, or script changes), the
   branch must be named `chore(docs)/<short-kebab-case-description>` and the pull
@@ -230,6 +237,15 @@ aligned with the implemented contract where affected. Before editing:
   for every use case, including troubleshooting and CI reproduction. Label the
   execution environment, show setup separately from subsequent commands, and
   keep fenced command blocks directly runnable without shell prompt prefixes.
+
+For every task that adds, modifies, removes, or renames repository content,
+inspect the [skills index](README.md) and relevant skill guidance for the affected
+paths and behavior. Compare them with the complete task diff and final
+implementation, including changed commands, examples, links, callers, and
+validation. Update skills and their indexes or shared guidance when the change
+makes them inaccurate; do not edit unrelated skills merely to record a review.
+If no skill update is needed, say so at handoff. Skill consultation and loading
+metadata are not additional approval gates.
 
 Individual skills identify domain-specific documents or metadata; avoid creating
 parallel guidance or duplicating fast-changing versions from manifests.

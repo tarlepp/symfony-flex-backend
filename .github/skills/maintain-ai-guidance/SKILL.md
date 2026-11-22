@@ -85,7 +85,9 @@ Inspect the affected source and its consumers, not just the requested file:
    consistent. For skills, preserve front-matter name/directory agreement,
    required structure, anchors, and footer links; list each skill exactly once
    in the available-skills table. Update the canonical README inventory when its
-   document inventory changes, not for every skill entry.
+   document inventory changes, not for every skill entry. For any repository
+   change, apply the shared [skill impact review](../shared-guidance.md#updating-documentation)
+   to affected skills, even when the task is not primarily AI guidance.
 5. Preserve skills as supporting references rather than new approval gates.
    Missing skill-selection metadata or loading evidence alone must not block
    delivery or verification. Platform requirements for native skill invocation
