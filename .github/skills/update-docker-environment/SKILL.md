@@ -155,16 +155,31 @@ entrypoint edits, check Bash syntax inside the development container and add
 focused regression coverage using the tooling skill without executing
 destructive initialization.
 
-For distribution or interpreter upgrades affecting development tools, exercise
-interactive Bash and Fish startup using the same initialization paths as
-`make bash` and `make fish` in a fresh development image as the intended user.
-Check for startup errors, loaded completion functions and correction helpers,
-and working terminal help and topic navigation without a graphical browser.
-Check affected noninteractive callers, such as `make tool-versions`, separately.
-Use a pseudo-terminal where needed and bypass mutating entrypoints; do not
-recreate a shared service without approval. Report any interactive or offline
-checks that could not be performed rather than treating a successful build or
-alias generation as proof of shell behavior.
+For changes affecting the PHP development image, including image-only updates,
+exercise interactive Bash and Fish in the freshly built image as the intended
+user. Use a pseudo-terminal and the actual `make bash` and `make fish` entry
+points when the running Compose service has been explicitly authorized to use
+that image. From the repository root on the Docker host, open each shell
+separately and exit it after checking:
+
+```bash
+make bash
+make fish
+```
+
+In each shell, check for startup errors, run `make help` from `/app`, and
+exercise Make completion, fzf bindings, the correction helper, and terminal help
+and topic navigation without a graphical browser. Do not execute a suggested
+correction without reviewing its effects. Check affected noninteractive callers,
+such as `make tool-versions`, separately.
+
+Do not recreate a shared service without approval or run mutating entrypoints
+just to test shells. If the running service still uses an older image, use an
+isolated container with the fresh image, intended user, repository mount, and
+the same shell initialization paths as the Make targets. This checks shell
+startup but does not prove the actual Make entry points or Compose service work.
+Report those as unverified, along with any unavailable interactive or offline
+checks; a successful build or alias generation is not shell verification.
 
 For approved runtime verification, use a non-production environment with
 explicitly authorized data and lifecycle actions. Check effective PHP

@@ -91,7 +91,12 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
    `make docker-build-platform` with explicit `PLATFORM`, `DOCKERFILE`,
    `TARGET`, and `TAG` values when a cross-platform build is needed. Run
    relevant application checks inside the PHP development container when runtime
-   behavior could change.
+   behavior could change. If an updated image contributes to the PHP
+   `development` target, including a base or copied-tool image, verify
+   interactive shells and affected noninteractive tooling in the freshly built
+   image using [update-docker-environment](../update-docker-environment/SKILL.md#validation).
+   Do this for image-only updates too, not just distribution or interpreter
+   upgrades. A build or an existing container alone is not shell verification.
 7. Do not recreate running services, migrate databases, remove volumes, push
    images, or install privileged QEMU emulators without explicit approval.
    Registry inspection and builds do not require these operations. Update
@@ -105,6 +110,10 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
 
 * Complete the pin verification, tag/digest parity checks, Compose validation,
   and affected image builds described in the workflow.
+* For updates affecting the PHP development image, verify Bash and Fish shell
+  behavior and affected noninteractive callers as described above. Report checks
+  that could not be performed, including actual Make entry points if only
+  equivalent isolated shell paths were exercised.
 * Run relevant application checks inside the PHP development container when
   runtime behavior could change, following shared guidance. Report any
   unavailable platform builds or other validation blockers explicitly.
