@@ -25,56 +25,117 @@ summary_row() {
     local name=$1 result=$2 selected=$3 scope=$4
     local reason="Job completed with result: $result."
 
-    if [ "$result" = "skipped" ]; then
-        if [ "$EVENT_NAME" = "schedule" ]; then
+    if [ -z "$result" ] || { [ "$result" != "success" ] && [ "$result" != "failure" ] &&
+        [ "$result" != "cancelled" ] && [ "$result" != "skipped" ]; }; then
+        reason="Result is unavailable or unrecognized; inspect the job and gate logs."
+    elif [ "$result" = "failure" ] || [ "$result" = "cancelled" ]; then
+        reason="Job $result; inspect its logs and annotations."
+    elif [ "$result" = "skipped" ]; then
+        if [ "$EVENT_NAME" = "schedule" ] && [ "$name" = "Prerequisite gate" ]; then
+            reason="Unexpected skip: the prerequisite gate is required. Inspect its job logs."
+        elif [ "$EVENT_NAME" = "schedule" ]; then
             reason="Not part of scheduled dependency-security and image-update validation."
         elif [ "$CHANGES" != "success" ]; then
             reason="Change detection did not succeed; validation selection is unavailable."
         elif [ "$selected" = "false" ]; then
             reason="Changed files do not affect $scope."
+        elif [ "$selected" != "true" ]; then
+            reason="Validation selection is unavailable or invalid; inspect the change detection and gate logs."
         else
             reason="Unexpected skip: validation was selected. The merge gate rejects this result."
         fi
+    elif [ "$selected" = "false" ]; then
+        reason="Unexpected result: validation was not selected. Inspect change detection and job logs."
+    elif [ "$selected" != "true" ]; then
+        reason="Validation selection is unavailable or invalid; inspect the change detection and gate logs."
     fi
 
     printf '| %s | %s | %s |\n' "$name" "$result" "$reason"
 }
 
+queue_summary_row() {
+    local row=$1 mode=$2 expected=$3 result=$4
+
+    if [ "$mode" = independent ] ||
+        { [ "$mode" = result ] && expect_result "summary" "$expected" "$result" 2>/dev/null; } ||
+        { [ "$mode" = selected ] && expect_selected "summary" "$expected" "$result" 2>/dev/null; }; then
+        other_rows+=("$row")
+    else
+        attention_rows+=("$row")
+    fi
+}
+
 write_summary() {
+    local -a attention_rows=() other_rows=()
+    local change_expected=success php_selection=$PHP_CHANGED tests_selection=$TESTS_CHANGED
+    local docker_selection=$DOCKER_CHANGED report_expected=skipped report_row row
+
+    if [ "$EVENT_NAME" = "schedule" ]; then
+        change_expected=skipped
+        php_selection=false
+        tests_selection=false
+        docker_selection=false
+    elif [ "$CHANGES" != "success" ]; then
+        php_selection=unavailable
+        tests_selection=unavailable
+        docker_selection=unavailable
+    fi
+
+    if [ "$TESTS_CHANGED" = "true" ] && {
+        [ "$EVENT_NAME" = "pull_request" ] ||
+        { [ "$EVENT_NAME" = "push" ] && [ "$REF" = "refs/heads/master" ]; }
+    }; then
+        report_expected=success
+    fi
+
+    local change_selection=true
+    [ "$EVENT_NAME" != "schedule" ] || change_selection=false
+    queue_summary_row "$(summary_row "Change detection" "$CHANGES" "$change_selection" "")" result "$change_expected" "$CHANGES"
+    queue_summary_row "$(summary_row "Prerequisite gate" "$CI_SUMMARY" true "")" result success "$CI_SUMMARY"
+    queue_summary_row "$(summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$php_selection" "PHP validation inputs")" selected "$php_selection" "$STATIC_ANALYZERS"
+    queue_summary_row "$(summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$php_selection" "PHP validation inputs")" selected "$php_selection" "$LIGHTWEIGHT_ANALYZERS"
+    queue_summary_row "$(summary_row "PHPUnit" "$TEST" "$tests_selection" "application tests")" selected "$tests_selection" "$TEST"
+    queue_summary_row "$(summary_row "Docker builds" "$DOCKER_BUILD" "$docker_selection" "application images")" selected "$docker_selection" "$DOCKER_BUILD"
+    queue_summary_row "$(summary_row "Trivy image scans" "$DOCKER_SCAN" "$docker_selection" "application images")" selected "$docker_selection" "$DOCKER_SCAN"
+    if [ "$EVENT_NAME" = "schedule" ]; then
+        queue_summary_row "| Project statistics | skipped | Not collected on scheduled runs. |" independent "" ""
+    else
+        queue_summary_row "| Project statistics | independent | Informational only; this gate does not wait for collection. See the Project statistics job summary for outcomes when available. |" independent "" ""
+    fi
+
+    if [ "$REPORT" = "success" ] && [ "$report_expected" = "skipped" ]; then
+        report_row="| External reporting | success | Unexpected result: reporting was not expected. Inspect the reporting and gate logs. |"
+    elif [ "$REPORT" != "skipped" ]; then
+        report_row=$(summary_row "External reporting" "$REPORT" true "")
+    elif [ "$EVENT_NAME" != "pull_request" ] && {
+        [ "$EVENT_NAME" != "push" ] || [ "$REF" != "refs/heads/master" ];
+    }; then
+        report_row="| External reporting | skipped | Uploads run only on PRs and master pushes with selected, successful tests and prerequisites. |"
+    elif [ "$TESTS_CHANGED" = "false" ] && [ "$CHANGES" = "success" ]; then
+        report_row="| External reporting | skipped | Tests were not selected, so no coverage artifacts were produced. |"
+    elif [ "$CHANGES" = "success" ] && [ "$TESTS_CHANGED" != "true" ]; then
+        report_row="| External reporting | skipped | Test selection is unavailable or invalid; inspect the change detection and gate logs. |"
+    elif [ "$TEST" != "success" ] || [ "$CI_SUMMARY" != "success" ]; then
+        report_row="| External reporting | skipped | Tests or prerequisite checks did not succeed; uploads require both. |"
+    else
+        report_row="| External reporting | skipped | Unexpected skip: uploads were expected. The merge gate rejects this result. |"
+    fi
+    queue_summary_row "$report_row" result "$report_expected" "$REPORT"
+
     echo "## Core CI result"
     echo
     printf 'Event: %s\n' "$EVENT_NAME"
     echo
     echo "Start here for the final gate's inputs. Expand CI prerequisite and job details for individual checks and skip reasons."
+    if ((${#attention_rows[@]})); then
+        printf '**Needs attention: %s result(s).** These appear first; inspect the named job logs and annotations.\n' "${#attention_rows[@]}"
+    fi
     echo
     echo "| Check | Result | Explanation |"
     echo "| --- | --- | --- |"
-    summary_row "Change detection" "$CHANGES" true ""
-    summary_row "Prerequisite gate" "$CI_SUMMARY" true ""
-    summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-    summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-    summary_row "PHPUnit" "$TEST" "$TESTS_CHANGED" "application tests"
-    summary_row "Docker builds" "$DOCKER_BUILD" "$DOCKER_CHANGED" "application images"
-    summary_row "Trivy image scans" "$DOCKER_SCAN" "$DOCKER_CHANGED" "application images"
-    if [ "$EVENT_NAME" = "schedule" ]; then
-        echo "| Project statistics | skipped | Not collected on scheduled runs. |"
-    else
-        echo "| Project statistics | independent | Informational only; this gate does not wait for collection. See the Project statistics job summary for outcomes when available. |"
-    fi
-
-    if [ "$REPORT" != "skipped" ]; then
-        summary_row "External reporting" "$REPORT" true ""
-    elif [ "$EVENT_NAME" != "pull_request" ] && {
-        [ "$EVENT_NAME" != "push" ] || [ "$REF" != "refs/heads/master" ];
-    }; then
-        echo "| External reporting | skipped | Uploads run only on PRs and master pushes with selected, successful tests and prerequisites. |"
-    elif [ "$TESTS_CHANGED" = "false" ] && [ "$CHANGES" = "success" ]; then
-        echo "| External reporting | skipped | Tests were not selected, so no coverage artifacts were produced. |"
-    elif [ "$TEST" != "success" ] || [ "$CI_SUMMARY" != "success" ]; then
-        echo "| External reporting | skipped | Tests or prerequisite checks did not succeed; uploads require both. |"
-    else
-        echo "| External reporting | skipped | Unexpected skip: uploads were expected. The merge gate rejects this result. |"
-    fi
+    for row in "${attention_rows[@]}" "${other_rows[@]}"; do
+        printf '%s\n' "$row"
+    done
 }
 
 echo "Event: $EVENT_NAME"

@@ -739,7 +739,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             }, "skipped", "Changed files do not affect PHP validation inputs.", True),
             ("pull_request", {
                 "STATIC_ANALYZERS": "failure", "LIGHTWEIGHT_ANALYZERS": "failure",
-            }, "failure", "Job completed with result: failure.", False),
+            }, "failure", "Job failure; inspect its logs and annotations.", False),
             ("pull_request", {
                 "STATIC_ANALYZERS": "skipped", "LIGHTWEIGHT_ANALYZERS": "skipped",
             }, "skipped", "Unexpected skip: validation was selected. The merge gate rejects this result.", False),
@@ -770,6 +770,54 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         self.assertNotIn(f"| {label} |", prerequisite_text)
                         self.assertEqual(final_text.count(f"| {label} |"), 1)
                         self.assertIn(f"| {label} | {outcome} | {explanation} |", final_text)
+
+    def test_final_summary_prioritizes_actionable_results_without_duplicate_rows(self):
+        cases = (
+            ("pull_request", {"TEST": "failure"}, "PHPUnit", "Job failure; inspect its logs"),
+            ("pull_request", {"TEST": "skipped"}, "PHPUnit", "Unexpected skip"),
+            ("pull_request", {"TEST": ""}, "PHPUnit", "Result is unavailable or unrecognized"),
+            ("pull_request", {"TESTS_CHANGED": "", "TEST": "skipped"}, "PHPUnit",
+             "Validation selection is unavailable or invalid"),
+            ("pull_request", {"REPORT": "skipped"}, "External reporting", "Unexpected skip"),
+            ("workflow_dispatch", {"REPORT": "success"}, "External reporting",
+             "Unexpected result: reporting was not expected"),
+            ("schedule", {"CI_SUMMARY": "skipped", "LIGHTWEIGHT_ANALYZERS": "skipped"},
+             "Prerequisite gate", "Unexpected skip: the prerequisite gate is required"),
+        )
+        for event, overrides, first, explanation in cases:
+            with self.subTest(event=event, first=first, overrides=overrides):
+                with tempfile.TemporaryDirectory() as directory:
+                    summary = Path(directory) / "summary.md"
+                    result = self.run_gate("ci-result", event, GITHUB_STEP_SUMMARY=str(summary), **overrides)
+                    self.assertNotEqual(result.returncode, 0)
+                    rows = re.findall(r"^\| ([^|\n]+) \|.*$", summary.read_text(), re.MULTILINE)[2:]
+                    self.assertEqual(rows[0], first)
+                    self.assertEqual(len(rows), len(set(rows)))
+                    self.assertIn("**Needs attention:", summary.read_text())
+                    self.assertIn(explanation, summary.read_text())
+
+    def test_final_summary_keeps_expected_skips_out_of_attention(self):
+        with tempfile.TemporaryDirectory() as directory:
+            summary = Path(directory) / "summary.md"
+            result = self.documentation_gate(
+                "ci-result", GITHUB_STEP_SUMMARY=str(summary),
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            rows = re.findall(r"^\| ([^|\n]+) \|.*$", summary.read_text(), re.MULTILINE)[2:]
+            self.assertEqual(rows[0], "Change detection")
+            self.assertNotIn("**Needs attention:", summary.read_text())
+            self.assertIn("Changed files do not affect PHP validation inputs.", summary.read_text())
+
+    def test_final_summary_does_not_call_missing_test_selection_an_unexpected_report_skip(self):
+        with tempfile.TemporaryDirectory() as directory:
+            summary = Path(directory) / "summary.md"
+            result = self.run_gate(
+                "ci-result", TESTS_CHANGED="", TEST="skipped", REPORT="skipped",
+                GITHUB_STEP_SUMMARY=str(summary),
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Test selection is unavailable or invalid", summary.read_text())
+            self.assertNotIn("Unexpected skip: uploads were expected", summary.read_text())
 
     def test_summaries_explain_failures_without_relaxing_gates(self):
         scenarios = [
