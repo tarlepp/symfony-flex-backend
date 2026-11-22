@@ -73,7 +73,11 @@ Inspect every affected variant, including effective override behavior:
    stage so a build without `--target` does not ship developer tooling. Check
    extensions and packages against Composer requirements and actual callers; do
    not install dependencies speculatively. Use the image skill when external
-   `FROM` or `COPY --from` pins also change.
+   `FROM` or `COPY --from` pins also change. For an explicit Debian distribution
+   change, align the base's codename with package sources, signing keys, and
+   security-scanner configuration. Check distro-specific package availability,
+   docs, tests, and image-update automation. Keep this separate from a PHP
+   version change unless the PHP baseline is also changing.
 3. Distinguish built files from runtime mounts. Development bind mounts can
    conceal image contents, while production relies on copied files and installed
    non-development dependencies. Keep `.dockerignore`, `COPY` exclusions,

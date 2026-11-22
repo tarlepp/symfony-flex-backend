@@ -47,6 +47,10 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
 2. Inspect the current tags and pins and review candidate tags, upstream release
    notes, supported platforms, and upgrade instructions. Preserve the existing
    runtime variant and distribution unless a change is explicitly approved.
+
+   For explicit distribution changes, review package sources, security-scanner
+   suites, runtime configuration, docs, tests, and image-update automation.
+
    Check PHP compatibility against `composer.json` and `composer.lock`,
    extension installation and OS packages in `Dockerfile`, and affected service
    configuration. Ask before crossing major versions or making database

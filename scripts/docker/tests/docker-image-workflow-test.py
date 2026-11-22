@@ -170,12 +170,12 @@ class DockerImageWorkflowTest(unittest.TestCase):
             for name in ("composer.json", "composer.lock"):
                 (directory / name).write_text("{}\n")
         dockerfile = self.root / "Dockerfile"
-        dockerfile.write_text(f"FROM php:8.5.13-fpm-bookworm@sha256:{'b' * 64} AS php-upstream\n")
+        dockerfile.write_text(f"FROM php:8.5.13-fpm-trixie@sha256:{'b' * 64} AS php-upstream\n")
 
         tags = [
-            "8.5.14-fpm-bookworm", "8.6.1-fpm-bookworm", "8.6.2-fpm-bookworm",
-            "8.6.99-fpm-alpine", "8.6.99RC1-fpm-bookworm",
-            "8.7.0-fpm-bookworm", "9.0.0-fpm-bookworm",
+            "8.5.14-fpm-trixie", "8.6.1-fpm-trixie", "8.6.2-fpm-trixie",
+            "8.6.99-fpm-alpine", "8.6.99RC1-fpm-trixie",
+            "8.7.0-fpm-trixie", "9.0.0-fpm-trixie",
         ]
         (self.root / "tags").write_text(json.dumps({
             "next": None, "results": [{"name": tag} for tag in tags],
@@ -192,7 +192,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             printf '%s\\n' "$*" >> docker-calls
             case "$*" in
                 "buildx version"|"info --format "*|"image inspect "*|"image rm "*) ;;
-                "buildx imagetools inspect php:8.6.2-fpm-bookworm --format "*)
+                "buildx imagetools inspect php:8.6.2-fpm-trixie --format "*)
                     if [[ "$MODE" == drift && -f refreshed ]]; then
                         printf 'sha256:%064d\\n' 1
                     else
@@ -276,7 +276,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 if mode == "absent":
                     (self.root / "tags").write_text(json.dumps({
                         "next": None, "results": [
-                            {"name": "8.5.20-fpm-bookworm"}, {"name": "8.7.0-fpm-bookworm"},
+                            {"name": "8.5.20-fpm-trixie"}, {"name": "8.7.0-fpm-trixie"},
                         ],
                     }))
                 elif mode == "registry-error":
@@ -286,8 +286,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 self.assertIn(f"**Result: {result_text}", self.summary.read_text())
                 calls = (self.root / "docker-calls").read_text()
                 if mode == "ready":
-                    self.assertEqual(self.output.read_text(), "prepared=true\ncandidate=php:8.6.2-fpm-bookworm\n")
-                    self.assertIn("php:8.6.2-fpm-bookworm", dockerfile.read_text())
+                    self.assertEqual(self.output.read_text(), "prepared=true\ncandidate=php:8.6.2-fpm-trixie\n")
+                    self.assertIn("php:8.6.2-fpm-trixie", dockerfile.read_text())
                     self.assertEqual(lockfile.read_text(), "updated\n")
                 else:
                     self.assertEqual(self.output.read_text(), "")
@@ -298,14 +298,14 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     self.assertNotIn("imagetools inspect", calls)
                     self.assertNotIn("buildx build", calls)
                     continue
-                self.assertIn("Candidate: `php:8.6.2-fpm-bookworm`", self.summary.read_text())
+                self.assertIn("Candidate: `php:8.6.2-fpm-trixie`", self.summary.read_text())
                 if mode == "platform-loss":
                     self.assertIn("would remove platform linux/arm64", result.stdout + result.stderr)
                     self.assertNotIn("buildx build", calls)
                     continue
                 self.assertEqual(
                     (self.root / "candidate-Dockerfile").read_text(),
-                    f"FROM php:8.6.2-fpm-bookworm@sha256:{'0' * 64} AS php-upstream\n",
+                    f"FROM php:8.6.2-fpm-trixie@sha256:{'0' * 64} AS php-upstream\n",
                 )
                 self.assertIn("image rm symfony-php-minor-readiness:", calls)
                 if mode == "build-failure":
@@ -365,7 +365,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         gh.chmod(0o755)
         marker = (
             f"<!-- php-minor-blocker:{hashlib.sha256(b'master').hexdigest()}:"
-            "8.6-fpm-bookworm -->"
+            "8.6-fpm-trixie -->"
         )
         source = self.root / "php-minor-readiness.md"
         log = self.root / "php-minor-readiness.log"
@@ -380,7 +380,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
 
         def run(result_text, existing, error="", **overrides):
             source.write_text(
-                "Candidate: `php:8.6.2-fpm-bookworm`\n\n"
+                "Candidate: `php:8.6.2-fpm-trixie`\n\n"
                 "| `tools/analyzer` | Blocked: package/tool requires php <8.6 |\n\n"
                 f"**Result: {result_text}**\n"
             )
@@ -487,8 +487,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 self.summary.write_text("")
                 if result_text:
                     source.write_text(
-                        "## PHP minor readiness\n\nCurrent: `php:8.5.13-fpm-bookworm`\n\n"
-                        "Candidate: `php:8.6.2-fpm-bookworm`\n\n"
+                        "## PHP minor readiness\n\nCurrent: `php:8.5.13-fpm-trixie`\n\n"
+                        "Candidate: `php:8.6.2-fpm-trixie`\n\n"
                         "| Composer project | Platform requirements |\n| --- | --- |\n"
                         "| `tools/analyzer` | Blocked: package/tool requires php <8.6 |\n\n"
                         f"**Result: {result_text}**\n",
@@ -513,7 +513,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 self.assertEqual(normalized_actions.replace("<details open>", "<details>"), compact)
                 self.assertIn("## PHP minor upgrade readiness", compact)
                 if result_text:
-                    self.assertIn("Candidate: `php:8.6.2-fpm-bookworm`", compact)
+                    self.assertIn("Candidate: `php:8.6.2-fpm-trixie`", compact)
                     self.assertIn("package/tool requires php <8.6", compact)
                     self.assertIn("&lt;upstream&gt; failed &lt;/details&gt;", compact)
                     self.assertNotIn("ERROR: <upstream>", compact)
@@ -589,7 +589,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         body = (self.root / "docker-image-pr.md").read_text()
         for content in (body, self.summary.read_text()):
             self.assertNotIn("Unavailable", content)
-            self.assertIn("Candidate: `php:8.6.2-fpm-bookworm`", content)
+            self.assertIn("Candidate: `php:8.6.2-fpm-trixie`", content)
             self.assertIn("**Build error:**", content)
             self.assertIn("PHP extension `apcu` failed to compile", content)
             self.assertIn(
@@ -642,7 +642,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / ".github/pull_request_template.md").write_bytes(template.read_bytes())
         result = self.run_script(
             WORKFLOW, "Prepare PHP minor PR details",
-            BASE_BRANCH="master", PHP_CANDIDATE="php:8.6.2-fpm-bookworm",
+            BASE_BRANCH="master", PHP_CANDIDATE="php:8.6.2-fpm-trixie",
             PHP_READINESS_REPORT="## PHP minor upgrade readiness\n\nPrepared evidence",
             PHP_CLOSING_ISSUES="Closes #42\nCloses #43",
         )
@@ -650,7 +650,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertEqual(self.output.read_text(),
                          f"branch=chore(docker)/php-minor-{hashlib.sha256(b'master').hexdigest()[:16]}\n")
         body = (self.root / "php-minor-pr.md").read_text()
-        self.assertIn("Update PHP to `php:8.6.2-fpm-bookworm`", body)
+        self.assertIn("Update PHP to `php:8.6.2-fpm-trixie`", body)
         self.assertIn("## PHP minor upgrade readiness\n\nPrepared evidence", body)
         self.assertIn("Closes #42\nCloses #43", body)
         for line in template.read_text().splitlines():
@@ -1244,7 +1244,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 (directory / name).touch()
 
         def dockerfile(version, digest="a"):
-            return f"FROM php:{version}-fpm-bookworm@sha256:{digest * 64} AS php-upstream\n"
+            return f"FROM php:{version}-fpm-trixie@sha256:{digest * 64} AS php-upstream\n"
 
         def run(new, old=dockerfile("8.5.12"), *args, **overrides):
             (self.root / "Dockerfile").write_text(new)

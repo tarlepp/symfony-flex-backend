@@ -1076,7 +1076,7 @@ command_digest() {
         reset=$'\033[0m'
     fi
 
-    ask IMAGE "Image name and tag (e.g. php:8.5.11-fpm-bookworm)"
+    ask IMAGE "Image name and tag (e.g. php:8.5.13-fpm-trixie)"
 
     output_status RUN "Inspecting ${IMAGE}"
 

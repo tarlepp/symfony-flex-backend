@@ -1334,7 +1334,7 @@ make docker-build-multi-platform  # asks PLATFORMS, DOCKERFILE, TARGET, TAG, BUI
 ```
 
 Missing values are asked interactively. Values can also be given as Make
-variables, for example `make docker-image-digest IMAGE=php:8.5.11-fpm-bookworm`.
+variables, for example `make docker-image-digest IMAGE=php:8.5.13-fpm-trixie`.
 In a non-interactive shell, required values without defaults must be given as
 variables.
 
@@ -1348,7 +1348,7 @@ Empty and single-platform indexes fail with an explicit diagnostic instead of
 being accepted as multi-platform.
 
 Check a single image with
-`make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm`, or run
+`make docker-image-check-updates IMAGE=php:8.5.13-fpm-trixie`, or run
 `./scripts/docker/docker-images.sh check-updates` to check external `FROM` and
 `COPY --from` images in the root and `docker/*/Dockerfile*` Dockerfiles. The
 checker uses public Docker Hub tags via `curl` and `jq`, and Docker with buildx
