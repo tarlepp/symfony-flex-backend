@@ -65,7 +65,7 @@ export COMPOSE_ANSI := $(NATIVE_COLOR)
 # Progress indicator policy: auto (interactive terminal outside CI), always or never
 export PROGRESS ?= auto
 CONTAINER_ENV = --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED $(foreach name,\
-	CI DATABASE_URL XDEBUG_MODE COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY \
+	CI DATABASE_URL XDEBUG_MODE OUTPUT_RUN_GROUPED COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY \
 	BASE_SHA HEAD_SHA EVENT_NAME \
 	GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB \
 	GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME \
@@ -140,6 +140,8 @@ $(call REGISTER_TARGET,check-dependencies-minor,checks,direct)
 $(call REGISTER_TARGET,check-dependencies-patch,checks,direct)
 $(call REGISTER_TARGET,check-licenses,checks,wrapped,,Read dependency license summary)
 $(call REGISTER_TARGET,check-security,checks,direct)
+$(call REGISTER_TARGET,pre-pr-checks,checks,host,OVERWRITE,Run CI-selected local PR checks)
+$(call REGISTER_TARGET,pre-pr-checks-all,checks,host,OVERWRITE,Run all local PR checks)
 
 # Reports and uploads
 $(call REGISTER_TARGET,phploc,reports,wrapped,,Generate PHPLOC report)
@@ -469,6 +471,21 @@ check-licenses: ## Check vendor licenses
 
 check-security: ## Checks that application doesn't have installed dependencies with known security vulnerabilities
 	@bash scripts/checks/check-security.sh
+
+pre-pr-checks: ## Run locally reproducible checks selected for the PR commit range
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(HOST_CONTEXT_FAILURE)
+else
+	+@bash scripts/make/pre-pr-checks.sh
+endif
+
+pre-pr-checks-all: ## Run every locally reproducible core PR check
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(HOST_CONTEXT_FAILURE)
+else
+	+@bash scripts/make/pre-pr-checks.sh --all
+endif
+pre-pr-checks pre-pr-checks-all: export XDEBUG_MODE := coverage
 
 # Reports and uploads
 

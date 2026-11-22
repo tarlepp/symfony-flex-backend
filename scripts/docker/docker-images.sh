@@ -744,6 +744,9 @@ command_check_updates() {
             ;;
     esac
 
+    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
+        printf '\n' >&2
+    fi
     output_status RUN 'Docker image version checks'
 
     require_docker
@@ -1301,6 +1304,9 @@ command_verify() {
     declare -ga IMAGE_ROWS=()
     local -A plain=()
 
+    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
+        printf '\n' >&2
+    fi
     output_status RUN "Verifying base images of ${#VERIFY_DOCKERFILES[@]} Dockerfiles"
     printf '\n'
 

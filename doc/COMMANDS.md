@@ -343,8 +343,16 @@ exit
 
 Host-only Make targets are `bash`, `fish`, `logs`, `start`, `start-build`,
 `start-prod`, `daemon`, `daemon-build`, `daemon-prod`, `stop`, `ci-start`,
-`ci-stop`, and all `docker-*` targets. Do not run these from an IDE Dev
-Container terminal either; use a separate host terminal.
+`ci-stop`, `pre-pr-checks`, `pre-pr-checks-all`, and all `docker-*` targets.
+
+The `pre-pr-checks` target selects local checks from the committed
+`BASE_SHA...HEAD_SHA` range (defaults: `HEAD^` and `HEAD`); uncommitted changes
+are excluded. Empty or uncertain comparisons select all local checks. Use
+`make pre-pr-checks-all` to always run every locally reproducible check,
+regardless of the range. These targets combine host-side checks with project
+checks forwarded to the PHP container. Run them from a host terminal with
+development services running. Do not run host-only targets from an IDE Dev
+Container terminal; use a separate host terminal.
 
 Lifecycle commands report completion only after Compose succeeds. Development
 `daemon` and `daemon-build` mean containers were started, not that the
@@ -463,6 +471,8 @@ check-dependencies-patch    # Checks if any vendor dependency can be updated
 check-licenses              # Check vendor licenses
 check-security              # Checks that application doesn't have installed
                             # dependencies with known security vulnerabilities
+pre-pr-checks               # [OVERWRITE] Run CI-selected local PR checks
+pre-pr-checks-all           # [OVERWRITE] Run all locally reproducible PR checks
 check-action-updates        # Check pinned GitHub Actions and available updates
 check-skills                # Validate skills and Markdown links inside Docker
 check-requirements          # Check application runtime requirements

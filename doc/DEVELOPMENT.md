@@ -415,8 +415,10 @@ docker buildx build --load --target production --no-cache-filter production \
 
 <a id="reproducing-ci-jobs-locally"></a>
 
-| CI job | Local command |
+| CI job or validation scope | Local command |
 | --- | --- |
+| CI-selected local PR checks | `make pre-pr-checks` |
+| All locally reproducible PR checks | `make pre-pr-checks-all` |
 | Validate GitHub workflows | `make lint-workflows` |
 | Lint documentation files | `make lint-markdown` |
 | Lint Python files | `make lint-python` |
@@ -428,6 +430,25 @@ docker buildx build --load --target production --no-cache-filter production \
 
 Run PHP tooling inside the development container; see [COMMANDS.md](COMMANDS.md#makefile)
 for all targets.
+
+Run either pre-PR target from the repository root on the Docker host with
+development services running. `make pre-pr-checks` selects local checks from the
+committed `BASE_SHA...HEAD_SHA` range (defaults: `HEAD^` and `HEAD`); local
+uncommitted changes do not affect selection. If the comparison is empty or
+uncertain, all local checks are selected. Override `BASE_SHA` and `HEAD_SHA` to
+select another committed range. Use `make pre-pr-checks-all` to always run every
+locally reproducible check.
+
+Either target can overwrite generated test/report files. The all-checks target
+always builds both image targets; selected mode builds them when the Docker
+category is selected. Those builds overwrite local image tags:
+`symfony-flex-backend:pre-pr-development` and
+`symfony-flex-backend:pre-pr-production`. Docker Buildx and registry access are
+required when image builds are selected.
+
+It omits GitHub-hosted checks, including Dependency Review, the Symfony Security
+Checker action, Gitleaks, Trivy scans/SARIF uploads, and optional external
+reporting. Scheduled and informational jobs are also excluded.
 
 For a direct Ruff invocation, run inside the PHP development container from the
 repository root:

@@ -197,6 +197,21 @@ replacement for their actual event filters and conditions:
   checked using the pinned ShellCheck; GitHub expressions become placeholders.
   Unsupported shells fail explicitly. Do not report static validation as a
   successful workflow execution.
+* For CI-selected local pre-PR checks, run `make pre-pr-checks` on the Docker
+  host with development services running. It applies the CI change selector to
+  the committed `BASE_SHA...HEAD_SHA` range (defaults: `HEAD^` and `HEAD`); it
+  does not include uncommitted changes. Empty or uncertain comparisons retain
+  full local validation.
+* Run `make pre-pr-checks-all` to run every locally reproducible check
+  irrespective of the selected range. It always includes both image builds;
+  selected mode includes them when the Docker category is selected. Either
+  target may overwrite generated reports. Image builds overwrite local image
+  tags and require Docker Buildx and registry access.
+
+  Neither target reproduces GitHub-hosted checks, including Dependency Review,
+  the Symfony Security Checker action, Gitleaks, Trivy scans/SARIF uploads, and
+  optional reporting. Scheduled and informational jobs are also excluded; the
+  targets do not prove that a hosted workflow passed.
 * When changing validator regression runners or their suite output, follow the
   [tooling validation rules](../maintain-development-tooling/SKILL.md#validation)
   for output-contract consumers and isolated fixtures. A passing

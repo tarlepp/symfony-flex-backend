@@ -44,6 +44,7 @@ for suite in \
 done
 output_run 'Host and CI forwarding regression suite' \
     python3 scripts/output/native-output.py --indent bash scripts/make/tests/make-container-test.sh
+output_run 'Pre-PR check selection regression suite' bash scripts/make/tests/pre-pr-checks-test.sh
 
 printf '\n' >&2
-OUTPUT_STATUS_INDENT='' output_status OK 'Command output contracts: 9 regression suites passed'
+OUTPUT_STATUS_INDENT='' output_status OK 'Command output contracts: 10 regression suites passed'

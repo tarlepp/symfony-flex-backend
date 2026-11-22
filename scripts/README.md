@@ -22,6 +22,7 @@ top-level `tests/` directory is reserved for suites that span multiple groups.
       * [GitHub Actions update checker](#github-actions-update-checker)
       * [GitHub workflow validator](#github-workflow-validator)
       * [CI change detection](#ci-change-detection)
+      * [Local pre-PR check orchestration](#local-pre-pr-check-orchestration)
       * [CI result gates](#ci-result-gates)
       * [CI test report processing](#ci-test-report-processing)
       * [Docker multi-platform image helper](#docker-multi-platform-image-helper)
@@ -39,7 +40,7 @@ top-level `tests/` directory is reserved for suites that span multiple groups.
 | `ci/` | CI setup, validation, reporting, and job gates |
 | `checks/` | Repository checks, workflow validation, and their tests |
 | `docker/` | Docker image and maintenance tooling, with Docker tests |
-| `make/` | Make dispatch, shell integration, Compose context, and Make tests |
+| `make/` | Make dispatch, shell integration, Compose, and pre-PR checks |
 | `output/` | Shared output helpers and output-contract tests |
 | `reports/` | Project/tool inventories and report preparation |
 | `tests/` | Cross-group test runners |
@@ -1129,6 +1130,36 @@ The Make target defaults to `BASE_SHA=HEAD^`, `HEAD_SHA=HEAD` and
 `EVENT_NAME=pull_request`. It uses container forwarding, removes its temporary
 output file, and does not write a GitHub Summary. Only committed changes are
 compared; uncommitted edits are excluded. Colors follow the shared Make policy.
+
+### Local pre-PR check orchestration [ᐞ](#table-of-contents)
+
+<a id="local-pre-pr-check-orchestration"></a>
+
+File: [scripts/make/pre-pr-checks.sh](make/pre-pr-checks.sh)
+
+From the repository root on the Docker host, use `make pre-pr-checks` for the
+CI-selected checks:
+
+```bash
+make pre-pr-checks
+```
+
+Use `make pre-pr-checks-all` for every locally reproducible check:
+
+```bash
+make pre-pr-checks-all
+```
+
+The selected target uses the CI change selector for the committed
+`BASE_SHA...HEAD_SHA` range. Defaults are `HEAD^` and `HEAD`; uncommitted changes
+do not affect selection. Empty or uncertain comparisons select all local checks.
+
+The orchestrator sends project checks through existing Make targets to the PHP
+development container and keeps Docker/Compose checks on the host. It does not
+reproduce GitHub-hosted security scans, dependency review, external reporting,
+scheduled maintenance, or informational jobs. The all-checks target always
+builds both image targets; the selected target builds them when the Docker
+category is selected.
 
 It reads the current working directory's Git repository; it must not change to
 the script directory, because offline tests use isolated repositories.

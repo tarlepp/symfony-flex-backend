@@ -381,6 +381,35 @@ make lint-markdown
 make check-skills
 ```
 
+When requested, run either target from the repository root on the Docker host
+with development services running. The CI-selected target is:
+
+```bash
+make pre-pr-checks
+```
+
+It applies CI's changed-file selection to the committed `BASE_SHA...HEAD_SHA`
+range (defaults: `HEAD^` and `HEAD`). Uncommitted changes do not affect
+selection. Empty or uncertain comparisons select all local checks; set both
+variables to inspect another committed range.
+
+To run every locally reproducible check regardless of changed paths or commit
+range, use:
+
+```bash
+make pre-pr-checks-all
+```
+
+The all-checks target always builds both image targets; selected mode builds
+them when the Docker category is selected. Either target can overwrite generated
+reports; image builds overwrite local tags and require Docker Buildx and
+registry access.
+
+It omits GitHub-hosted checks, including Dependency Review, the Symfony Security
+Checker action, Gitleaks, Trivy scans/SARIF uploads, and optional external
+reporting. Scheduled and informational jobs are also excluded. It is not
+required for ordinary scoped tooling changes and does not prove hosted CI passed.
+
 Review final diffs, new files, executable modes, and generated artifacts. Report
 exact checks and blockers; do not claim a mocked command executed real builds,
 registry requests, or application tests. Adding this skill does not change

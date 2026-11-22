@@ -815,6 +815,33 @@ make check-skills
 make lint-workflows
 ```
 
+For locally reproducible checks selected from the committed PR range, run:
+
+```bash
+make pre-pr-checks
+```
+
+This host-only target uses the CI selector for `BASE_SHA...HEAD_SHA` (defaults:
+`HEAD^` and `HEAD`); uncommitted changes are excluded. Empty or uncertain
+comparisons select all local checks. To always run every locally reproducible
+check, use:
+
+```bash
+make pre-pr-checks-all
+```
+
+The all-checks target always builds both application image targets; selected
+mode builds them when the Docker category is selected. Either target can
+overwrite generated test/report files. Image builds overwrite the local
+`symfony-flex-backend:pre-pr-development` and
+`symfony-flex-backend:pre-pr-production` tags and require Docker Buildx and
+registry access.
+
+Neither target reproduces GitHub-hosted checks such as Dependency Review, the
+Symfony Security Checker action, Gitleaks, or Trivy scans/SARIF uploads. Optional
+external reporting, scheduled and informational jobs are excluded. These targets
+are not a substitute for checking the actual required PR contexts.
+
 For an application failure, run the matching tool instead:
 
 ```bash
