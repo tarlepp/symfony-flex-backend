@@ -31,8 +31,8 @@ forms. Missing evidence is explicitly unavailable, never a successful check.
 # Callers:
 #   GitHub Actions:
 #     - `.github/workflows/docker-image-updates.yml` uses the compact report in
-#       PHP migration and image-update PRs, and the highlighted report in the
-#       workflow run overview.
+#       PHP migration and image-update PRs; the highlighted report is published
+#       in the readiness job summary.
 
 import argparse
 import html

@@ -95,7 +95,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.environment = dict(
             os.environ, GITHUB_OUTPUT=str(self.output),
             GITHUB_STEP_SUMMARY=str(self.summary), RUNNER_TEMP=str(self.root),
-            PHP_READINESS_REPORT="", PHP_READINESS_ACTIONS="", PHP_READINESS_RESULT="success",
+            PHP_READINESS_REPORT="", PHP_READINESS_SUMMARY="", PHP_READINESS_RESULT="success",
             PHP_CLOSING_ISSUES="",
         )
 
@@ -146,6 +146,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("!cancelled()", steps["readiness-report"]["if"])
         self.assertIn("steps.php-minor.outcome != 'skipped'", steps["readiness-report"]["if"])
         self.assertEqual(readiness["outputs"]["report"], "${{ steps.readiness-report.outputs.report }}")
+        self.assertEqual(readiness["outputs"]["summary-outcome"], "${{ steps.readiness-report.outcome }}")
         self.assertNotIn("GITHUB_STEP_SUMMARY", steps["php-minor"].get("env", {}))
         self.assertIn(
             'GITHUB_STEP_SUMMARY="$RUNNER_TEMP/php-minor-readiness.md"', steps["php-minor"]["run"],
@@ -1323,18 +1324,47 @@ class DockerImageWorkflowTest(unittest.TestCase):
                     BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
                     COMPOSER="success", DOCTRINE="success", CI_MARIADB="success", DETAILS=details, PULL_REQUEST=outcome,
                     PR_URL=link, PR_OPERATION=operation,
-                    PHP_READINESS_ACTIONS="## PHP minor upgrade readiness\n\n> [!WARNING]\n> Blocked: APCu build failed.\n",
+                    PHP_READINESS_SUMMARY="success",
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 summary = self.summary.read_text()
                 self.assertIn("Base branch: `master`", summary)
                 self.assertIn(message, summary)
                 self.assertIn("Core CI's Docker image version report", summary)
-                self.assertIn("> Blocked: APCu build failed.", summary)
+                self.assertIn("evidence is in the **Check PHP minor upgrade readiness** job summary", summary)
+                self.assertNotIn("## PHP minor upgrade readiness", summary)
                 self.assertIn(
                     "Saved before the PR action." if details == "success" else "No verified change report",
                     summary,
                 )
+
+    def test_readiness_summary_reference_and_unavailable_fallback(self):
+        (self.root / "docker-image-changes.md").write_text("## Proposed changes\n")
+        for publication, job_result in (
+            ("success", "success"), ("success", "failure"), ("failure", "failure"),
+            ("skipped", "skipped"), ("", "success"),
+        ):
+            with self.subTest(publication=publication, job_result=job_result):
+                self.summary.unlink(missing_ok=True)
+                result = self.run_script(
+                    WORKFLOW, "Publish workflow run overview", EVENT_NAME="workflow_dispatch",
+                    PRIOR_STATUS="success", BASE_BRANCH="master",
+                    BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
+                    COMPOSER="success", DOCTRINE="success", CI_MARIADB="success", DETAILS="success",
+                    PULL_REQUEST="success", PR_URL="", PR_OPERATION="none",
+                    PHP_READINESS_SUMMARY=publication, PHP_READINESS_RESULT=job_result,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                summary = self.summary.read_text()
+                if publication == "success":
+                    self.assertIn("evidence is in the **Check PHP minor upgrade readiness** job summary", summary)
+                    self.assertNotIn("**Result: Unavailable**", summary)
+                else:
+                    self.assertIn("**Result: Unavailable**", summary)
+                    self.assertIn(f"summary step: {publication or 'unavailable'}", summary)
+                    self.assertIn("No compatibility conclusion can be drawn", summary)
+                self.assertIn(f"readiness job: {job_result}" if publication != "success"
+                              else f"job result: {job_result}", summary)
 
     def test_major_reporting_is_independent_of_automatic_updates(self):
         self.assertNotIn("check-updates", WORKFLOW)

@@ -330,7 +330,7 @@ class CiGatesTest(unittest.TestCase):
                 (Path(directory) / "docker-image-changes.md").write_text("## Proposed changes\n")
                 extra = dict(
                     RUNNER_TEMP=directory, BASE_BRANCH="master", PR_URL="", PR_OPERATION="",
-                    PHP_READINESS_ACTIONS="", PHP_READINESS_RESULT="failure",
+                    PHP_READINESS_SUMMARY="", PHP_READINESS_RESULT="failure",
                 )
                 scenarios = [("success", None)] + [
                     ("failure", variable) for variable in outcomes
