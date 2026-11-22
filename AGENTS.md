@@ -93,6 +93,11 @@ and the actual code, dependency manifests, and CI workflows.
   `chore(ai)/...` and `Chore(ai) - ...`. State the base branch for every task;
   anything other than `master` is a stacked PR, so confirm the parent branch
   with the user.
+* For every addition, modification, removal, or rename, review the skills that
+  cover the affected behavior and paths. Update any skill made inaccurate by the
+  complete task changes, including references and validation guidance, or report
+  why no skill update is needed. Follow the [shared impact review](.github/skills/shared-guidance.md#updating-documentation);
+  skill loading or selection metadata is not a delivery gate.
 * Do not commit or push changes by default. Follow the
   [commit and push approval rules](.github/skills/shared-guidance.md#preparing-a-change):
   ask the user before either operation unless they explicitly authorized that
