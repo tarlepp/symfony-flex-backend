@@ -76,6 +76,9 @@ directory relationships so they do not depend on files remaining siblings.
 * [Docker Hub authentication](ci/ci-docker-hub-auth.sh)
   * Runs on the GitHub runner for image update jobs, using optional credentials
     or anonymous registry requests. Offline regressions mock Docker.
+* [Action update status](ci/ci-action-update-status.sh)
+  * Runs on the GitHub runner and maps the containerized checker's exit status
+    to the standalone workflow's advisory or failure result.
 * [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.

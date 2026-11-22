@@ -2137,6 +2137,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/docker/php-minor-pr-outcome.sh": {"images", "workflows", "tooling"},
             "scripts/docker/image-update-overview.sh": {"images", "workflows", "tooling"},
             "scripts/ci/ci-statistics-summary.sh": {"workflows", "tooling"},
+            "scripts/ci/ci-action-update-status.sh": {"workflows", "tooling"},
             "scripts/docker/docker-images.sh": {"images", "tooling"},
             "scripts/docker/tests/docker-images-test.sh": {"images", "tooling"},
             "scripts/output/tests/command-output-test.py": {"tooling"},

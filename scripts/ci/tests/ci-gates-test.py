@@ -837,13 +837,22 @@ class CiGatesTest(unittest.TestCase):
         self.assertIn("        if: ${{ always() }}\n", workflow)
         match = re.search(
             r"^      - name: Check Action and workflow tool updates\n"
-            r".*?^        run: \|\n(.*?)(?=^      - |\Z)",
+            r"(.*?)(?=^      - |\Z)",
             workflow, re.MULTILINE | re.DOTALL,
         )
         assert match is not None
-        shell = textwrap.dedent(match.group(1))
+        step = match.group(1)
+        self.assertIn("id: updates", step)
+        self.assertIn("run: bash scripts/ci/ci-action-update-status.sh", step)
+        self.assertNotIn("continue-on-error:", step)
+        shell = "bash scripts/ci/ci-action-update-status.sh"
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            (root / "scripts/ci").mkdir(parents=True)
+            shutil.copyfile(
+                WORKFLOW.parents[2] / "scripts/ci/ci-action-update-status.sh",
+                root / "scripts/ci/ci-action-update-status.sh",
+            )
             docker = root / "docker"
             docker.write_text(
                 '#!/bin/sh\nprintf "%s\\n" "$*" > "$DOCKER_ARGS"\nexit "$CHECKER_STATUS"\n'
@@ -854,6 +863,7 @@ class CiGatesTest(unittest.TestCase):
                 (1, 0, "updates available"),
                 (2, 2, "incomplete"),
                 (17, 17, "incomplete"),
+                (127, 127, "incomplete"),
             ):
                 with self.subTest(checker_status=status):
                     output = root / "output"
@@ -875,7 +885,31 @@ class CiGatesTest(unittest.TestCase):
                     if status > 1:
                         self.assertIn(f"::error::Action and workflow tool update checks failed "
                                       f"(exit {status}).", result.stdout)
+                    else:
+                        self.assertNotIn("::error::", result.stdout)
                     output.unlink()
+
+            result = subprocess.run(
+                ["bash", "-euo", "pipefail", "-c", shell], cwd=root,
+                env={**os.environ, "PATH": f"{root}:{os.environ['PATH']}",
+                     "DOCKER_ARGS": str(root / "args"), "CHECKER_STATUS": "0",
+                     "GITHUB_OUTPUT": str(root)},
+                text=True, capture_output=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertTrue(result.stderr)
+
+            docker.unlink()
+            (root / "bash").symlink_to("/bin/bash")
+            result = subprocess.run(
+                ["/bin/bash", "-euo", "pipefail", "-c", shell], cwd=root,
+                env={**os.environ, "PATH": str(root), "GITHUB_OUTPUT": str(root / "output")},
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 127)
+            self.assertEqual((root / "output").read_text(), "result=incomplete\n")
+            self.assertIn("exit 127", result.stdout)
+            self.assertIn("docker", result.stderr)
 
     def test_action_update_overview_displays_finding_and_step_outcome(self):
         workflow = (WORKFLOWS / "action-updates.yml").read_text()

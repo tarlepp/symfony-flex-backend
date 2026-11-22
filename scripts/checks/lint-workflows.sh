@@ -157,6 +157,7 @@ output_run 'CI tooling scripts (ShellCheck)' \
     scripts/output/command-output.sh \
     scripts/ci/check-composer-cache.sh \
     scripts/ci/ci-docker-hub-auth.sh \
+    scripts/ci/ci-action-update-status.sh \
     scripts/ci/ci-detect-changes.sh \
     scripts/ci/ci-prerequisite-gate.sh \
     scripts/ci/ci-result-gate.sh \

@@ -32,23 +32,7 @@ jobs:
 
       - name: Check Action and workflow tool updates
         id: updates
-        run: |
-          status=0
-          docker compose -f compose.yaml -f docker/ci-compose.yaml exec -T php \
-            bash scripts/checks/check-action-updates.sh || status=$?
-          case "$status" in
-            0)
-              echo "result=current" >> "$GITHUB_OUTPUT"
-              ;;
-            1)
-              echo "result=updates available" >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              echo "result=incomplete" >> "$GITHUB_OUTPUT"
-              echo "::error::Action and workflow tool update checks failed (exit $status)."
-              exit "$status"
-              ;;
-          esac
+        run: bash scripts/ci/ci-action-update-status.sh
 
       - name: Diagnose PHP container failure
         if: ${{ failure() }}
