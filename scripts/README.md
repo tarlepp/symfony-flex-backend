@@ -73,6 +73,9 @@ directory relationships so they do not depend on files remaining siblings.
 * [Composer cache mount check](ci/check-composer-cache.sh)
   * Runs inside the CI PHP container to check Composer's effective cache path
     and write access. Offline regressions run through `make lint-workflows`.
+* [Docker Hub authentication](ci/ci-docker-hub-auth.sh)
+  * Runs on the GitHub runner for image update jobs, using optional credentials
+    or anonymous registry requests. Offline regressions mock Docker.
 * [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.

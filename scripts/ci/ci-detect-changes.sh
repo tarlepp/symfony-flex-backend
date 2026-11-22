@@ -168,6 +168,9 @@ classify_path() {
         scripts/ci/ci-validate-compose.sh)
             enable_checks compose workflows
             ;;
+        scripts/ci/ci-docker-hub-auth.sh)
+            enable_checks images workflows tooling
+            ;;
         scripts/checks/lint-workflows.sh|scripts/tests/run-workflow-tests.py|\
         scripts/checks/download-workflow-validator.sh|\
         scripts/checks/check-composite-action-shell.py|\

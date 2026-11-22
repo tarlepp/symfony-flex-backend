@@ -184,15 +184,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
-            printf '%s' "$DOCKERHUB_TOKEN" | docker login docker.io --username "$DOCKERHUB_USERNAME" --password-stdin
-          elif [ -n "$DOCKERHUB_USERNAME" ] || [ -n "$DOCKERHUB_TOKEN" ]; then
-            echo "::error::Configure both DOCKERHUB_USERNAME and DOCKERHUB_TOKEN, or neither."
-            exit 1
-          else
-            echo "::notice::Using anonymous Docker Hub requests (rate limits apply)."
-          fi
+        run: bash scripts/ci/ci-docker-hub-auth.sh 'Using anonymous Docker Hub requests (rate limits apply).'
 
       - name: Bootstrap maintenance container
         id: bootstrap
