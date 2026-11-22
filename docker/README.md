@@ -12,8 +12,19 @@ the [fzf guide](../doc/FZF.md).
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
+    * [Fish help](#fish-help)
     * [Python development dependencies](#python-development-dependencies)
     * [Node toolchain build arguments](#node-toolchain-build-arguments)
+
+## Fish help [ᐞ](#table-of-contents)
+
+<a id="fish-help"></a>
+
+The development image includes Fish's local HTML documentation and the `w3m`
+terminal browser. In a Fish session started with `make fish` on the Docker host,
+run `help` or `help string` to browse the documentation without a graphical
+browser or network connection. Press `q` and confirm with `y` to exit `w3m`.
+Fish respects an explicitly configured `BROWSER` or `fish_help_browser`.
 
 ## Python development dependencies [ᐞ](#table-of-contents)
 

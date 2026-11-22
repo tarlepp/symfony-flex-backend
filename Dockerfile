@@ -79,8 +79,12 @@ ENV PATH="$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin"
 ENV NVM_VERSION=${NVM_VERSION}
 ENV NODE_VERSION=${NODE_VERSION}
 
-# Debian slim otherwise excludes fzf's Bash integration as documentation.
-RUN echo 'path-include /usr/share/doc/fzf/examples/key-bindings.bash' > /etc/dpkg/dpkg.cfg.d/zz-fzf \
+# Debian slim otherwise excludes fzf integration and Fish's HTML help.
+RUN printf '%s\n' \
+        'path-include /usr/share/doc/fzf/examples/completion.bash' \
+        'path-include /usr/share/doc/fzf/examples/key-bindings.bash' \
+        'path-include /usr/share/doc/fish/*' \
+        > /etc/dpkg/dpkg.cfg.d/zz-fzf \
     && apt-get update \
     && apt-get install -y \
         bash-completion \
@@ -94,6 +98,7 @@ RUN echo 'path-include /usr/share/doc/fzf/examples/key-bindings.bash' > /etc/dpk
         python3-venv \
         sudo \
         vim \
+        w3m \
     && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -117,6 +122,8 @@ RUN echo 'deb http://download.opensuse.org/repositories/shells:/fish/Debian_13/ 
     && apt-get update \
     && apt-get install -y \
         fish \
+    && test -s /usr/share/doc/fish/index.html \
+    && test -s /usr/share/doc/fish/cmds/string.html \
     && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
@@ -158,6 +165,60 @@ COPY --chown=dev:dev requirements.txt /home/dev/requirements.txt
 RUN python3 -m venv /home/dev/.venv \
     && /home/dev/.venv/bin/python -m pip install --no-cache-dir -r /home/dev/requirements.txt
 
+# thefuck 3.32 still imports imp, which Python 3.13 removed.
+RUN /home/dev/.venv/bin/python - <<'PY'
+import pathlib
+import site
+
+package = next(
+    (pathlib.Path(directory) / "thefuck" for directory in site.getsitepackages()
+     if (pathlib.Path(directory) / "thefuck" / "conf.py").is_file()),
+    None,
+)
+if package is None:
+    raise SystemExit("thefuck package was not installed")
+
+conf = package / "conf.py"
+source = conf.read_text()
+legacy_import = "from imp import load_source\n"
+loader = """from importlib.util import module_from_spec, spec_from_file_location
+
+
+def load_source(name, pathname, _file=None):
+    module_spec = spec_from_file_location(name, pathname)
+    if module_spec is None or module_spec.loader is None:
+        raise ImportError(f"Cannot load {pathname}")
+    module = module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    return module
+"""
+if source.count(legacy_import) != 1:
+    raise SystemExit("Unexpected thefuck/conf.py; compatibility patch not applied")
+conf.write_text(source.replace(legacy_import, loader, 1))
+
+types = package / "types.py"
+source = types.read_text()
+if source.count(legacy_import) != 1:
+    raise SystemExit("Unexpected thefuck/types.py; compatibility patch not applied")
+types.write_text(source.replace(legacy_import, "from .conf import load_source\n", 1))
+PY
+RUN /home/dev/.venv/bin/python - <<'PY'
+import importlib
+import pathlib
+import tempfile
+
+with tempfile.TemporaryDirectory() as directory:
+    module_path = pathlib.Path(directory) / "thefuck_compatibility_test.py"
+    module_path.write_text("answer = 42\n")
+    module = importlib.import_module("thefuck.conf").load_source(
+        "thefuck_compatibility_test", str(module_path),
+    )
+    if module.answer != 42:
+        raise SystemExit("thefuck compatibility loader returned an unexpected module")
+PY
+RUN /home/dev/.venv/bin/thefuck --alias bash > /dev/null \
+    && /home/dev/.venv/bin/thefuck --alias fish > /dev/null
+
 ENV VIRTUAL_ENV=/home/dev/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH:/home/dev/.local/bin"
 
@@ -198,7 +259,7 @@ RUN chmod +x /app/bin/console \
 USER dev
 
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
-    && echo 'source /usr/share/bash-completion/completions/fzf' >> /home/dev/.bashrc \
+    && echo 'source /usr/share/doc/fzf/examples/completion.bash' >> /home/dev/.bashrc \
     && echo 'source /usr/share/doc/fzf/examples/key-bindings.bash' >> /home/dev/.bashrc \
     && echo 'alias console="/app/bin/console"' >> /home/dev/.bashrc \
     && echo 'source /app/docker/bash/make.sh' >> /home/dev/.bashrc
