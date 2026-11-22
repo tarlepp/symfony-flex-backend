@@ -235,6 +235,15 @@ class CiGatesTest(unittest.TestCase):
                 for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step)
+                if job == "report":
+                    self.assertIn("COVERALLS_TOKEN: ${{ steps.reporting.outputs.coveralls || 'unavailable' }}", step)
+                    self.assertIn("SONAR_TOKEN_STATUS: ${{ steps.reporting.outputs.sonar || 'unavailable' }}", step)
+                if job == "docker-scan":
+                    self.assertIn(
+                        "SARIF_ELIGIBILITY: ${{ github.event_name == 'pull_request' && "
+                        "github.event.pull_request.head.repo.full_name == github.repository && "
+                        "'eligible' || 'not eligible' }}", step,
+                    )
                 shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
                 variants = (
                     ("development", "production") if job in ("docker-build", "docker-scan")
@@ -260,7 +269,9 @@ class CiGatesTest(unittest.TestCase):
                              "ANALYZER": variant if job == "static-analyzers" else "",
                              "TARGET": variant if job in (
                                  "docker-build", "docker-scan",
-                             ) else "", **values},
+                             ) else "", "COVERALLS_TOKEN": "available",
+                             "SONAR_TOKEN_STATUS": "not available",
+                             "SARIF_ELIGIBILITY": "eligible", **values},
                         capture_output=True, text=True, check=False,
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
@@ -275,7 +286,51 @@ class CiGatesTest(unittest.TestCase):
                         self.assertIn(f"Image: {variant}", output)
                     if job == "static-analyzers":
                         self.assertIn(f"| Analyzer | {variant} |", output)
+                    if job == "report":
+                        self.assertIn("| Coveralls token | available |", output)
+                        self.assertIn("| Sonar token | not available |", output)
+                    if job == "docker-scan":
+                        self.assertIn("| PR SARIF eligibility (same-repository PRs only) | eligible |", output)
+                        self.assertIn("Failure can indicate findings or an error", output)
+                        self.assertIn("SARIF generation does not imply upload success", output)
                     summary.unlink()
+                if job in ("report", "docker-scan"):
+                    cases = (
+                        [
+                            ({"COVERALLS_TOKEN": "not available", "SONAR_TOKEN_STATUS": "available",
+                              "COVERALLS": "skipped", "SONAR": "success"},
+                             ("| Coveralls token | not available |", "| Sonar token | available |",
+                              "| Coveralls upload | skipped |", "| SonarQube scan | success |")),
+                            ({"COVERALLS_TOKEN": "available", "SONAR_TOKEN_STATUS": "available",
+                              "COVERALLS": "failure", "SONAR": "success"},
+                             ("| Coveralls upload | failure |", "| SonarQube scan | success |")),
+                        ] if job == "report" else [
+                            ({"SARIF_ELIGIBILITY": "not eligible", "SARIF": "skipped", "UPLOAD": "skipped",
+                              "SCAN": "success"},
+                             ("| PR SARIF eligibility (same-repository PRs only) | not eligible |",
+                              "| PR SARIF generation | skipped |", "| Blocking Trivy scan | success |")),
+                            ({"SARIF_ELIGIBILITY": "eligible", "SARIF": "failure", "UPLOAD": "skipped",
+                              "SCAN": "failure"},
+                             ("| PR SARIF eligibility (same-repository PRs only) | eligible |",
+                              "| PR SARIF generation | failure |", "| Blocking Trivy scan | failure |")),
+                        ]
+                    )
+                    for overrides, expected in cases:
+                        environment = {
+                            **os.environ, "GITHUB_STEP_SUMMARY": str(summary), "OVERVIEW_TITLE": title,
+                            "OVERVIEW_COLLAPSED": "true", "EVENT_NAME": "pull_request",
+                            "PRIOR_STATUS": "failure", "TARGET": "production",
+                            "COVERALLS_TOKEN": "available", "SONAR_TOKEN_STATUS": "not available",
+                            "SARIF_ELIGIBILITY": "eligible", **dict.fromkeys(outcomes, "success"), **overrides,
+                        }
+                        result = subprocess.run(
+                            ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
+                            env=environment, capture_output=True, text=True, check=False,
+                        )
+                        self.assertEqual(result.returncode, 0, result.stderr)
+                        for row in expected:
+                            self.assertIn(row, summary.read_text())
+                        summary.unlink()
 
     def test_standalone_workflow_overviews_report_actual_step_outcomes(self):
         workflows = {
@@ -366,6 +421,8 @@ class CiGatesTest(unittest.TestCase):
                         self.assertIn(f"| {label} | {values[variable]} |", output)
                     if filename == "vulnerability-scan.yml":
                         self.assertIn("Image: production", output)
+                        self.assertIn("Failure can indicate findings or an error", output)
+                        self.assertIn("SARIF generation does not imply upload success", output)
                     else:
                         self.assertNotIn("Image:", output)
                     if filename == "docker-image-updates.yml":

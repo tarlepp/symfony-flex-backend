@@ -597,7 +597,12 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
                     enabled = bool(coveralls or sonar)
-                    self.assertEqual(output.read_text(), f"enabled={str(enabled).lower()}\n")
+                    self.assertEqual(
+                        output.read_text(),
+                        f"coveralls={'available' if coveralls else 'not available'}\n"
+                        f"sonar={'available' if sonar else 'not available'}\n"
+                        f"enabled={str(enabled).lower()}\n",
+                    )
                     self.assertEqual(
                         summary.read_text() if summary.exists() else "",
                         "" if enabled else

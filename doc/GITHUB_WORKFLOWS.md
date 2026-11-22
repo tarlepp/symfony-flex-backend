@@ -46,6 +46,8 @@ image builds and scans, and external reporting. The daily vulnerability scan
 publishes one overview per image target. These overviews describe their own run,
 not the status of other workflows. Job tables report prior step outcomes,
 including skips after a failure; later cleanup failures are not included.
+Reporting shows token availability separately from upload outcomes, and core
+image scans show PR SARIF eligibility separately from generation and upload.
 Consult step logs, annotations and artifacts for findings and detailed results.
 A skipped or cancelled job may not publish an overview. Publishing an overview
 is informational and does not change validation results. Job overviews use
@@ -710,6 +712,8 @@ Both this workflow and core image builds enforce fixable `CRITICAL,HIGH`
 OS/library vulnerabilities with Trivy; unfixed findings are ignored. The
 separate SARIF generation step does not enforce the threshold: the later scan
 does. Image-scan reports can therefore be available even when enforcement fails.
+Scan failures may also be operational errors; inspect the scan logs. Successful
+SARIF generation alone does not establish upload success or absence of findings.
 After a successful build, the blocking scan also runs if SARIF generation or
 upload fails, unless the run is cancelled. Report and upload failures still fail
 the job; a failed or skipped build prevents the scan. The scheduled/manual SARIF
@@ -797,15 +801,16 @@ writes an explicit skip explanation to the job summary and succeeds without
 checkout, artifact downloads, PHP bootstrap or container cleanup. Otherwise, it
 downloads Clover/JUnit artifacts and starts the PHP container. Coveralls
 installation and upload require its token; SonarCloud preparation and upload
-require its token. A failed Coveralls installation or upload does not suppress
-SonarCloud: preparation explicitly requires successful checkout, both artifact
-downloads and bootstrap, and scanning requires successful preparation. Both
-Sonar steps stop on cancellation. Coveralls upload still requires successful
-installation. Each reporter error remains blocking; independent attempts do not
-make the job or merge gate green. Cleanup runs even after failure or
-cancellation when bootstrap was attempted. Test-unaffected changes skip the job
-because tests and artifacts skip; schedules, manual runs and merge groups also
-skip reporting.
+require its token. The job overview shows each token's availability and the
+separate step outcomes, without exposing token values. A failed Coveralls
+installation or upload does not suppress SonarCloud: preparation explicitly
+requires successful checkout, both artifact downloads and bootstrap, and
+scanning requires successful preparation. Both Sonar steps stop on cancellation.
+Coveralls upload still requires successful installation. Each reporter error
+remains blocking; independent attempts do not make the job or merge gate green.
+Cleanup runs even after failure or cancellation when bootstrap was attempted.
+Test-unaffected changes skip the job because tests and artifacts skip; schedules,
+manual runs and merge groups also skip reporting.
 
 The job installs and runs the isolated Coveralls tool in the Compose PHP
 development container, forwarding its tokens and required GitHub CI metadata.
