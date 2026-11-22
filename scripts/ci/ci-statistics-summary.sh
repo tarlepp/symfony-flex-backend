@@ -8,7 +8,8 @@
 #
 # Details:
 #   Requires GITHUB_STEP_SUMMARY. Run mode preserves the command status and
-#   marks captured output incomplete on failure.
+#   marks captured output incomplete on failure. Set STATISTICS_COLLAPSED=true
+#   to collapse successful output and expand failed commands.
 #
 # Callers:
 #   GitHub Actions:
@@ -101,7 +102,15 @@ case "$mode" in
 esac
 
 {
-    printf '## %s\n\n' "$title"
+    if [ "${STATISTICS_COLLAPSED:-false}" = true ]; then
+        if (( status != 0 )); then
+            printf '<details open>\n<summary>%s · failed</summary>\n\n' "$title"
+        else
+            printf '<details>\n<summary>%s</summary>\n\n' "$title"
+        fi
+    else
+        printf '## %s\n\n' "$title"
+    fi
 
     if (( status != 0 )); then
         printf '**Command failed (exit %s); output may be incomplete.**\n\n' "$status"
@@ -109,6 +118,9 @@ esac
 
     sed 's/^/    /' "$output"
     printf '\n\n'
+    if [ "${STATISTICS_COLLAPSED:-false}" = true ]; then
+        printf '</details>\n'
+    fi
 } >> "$GITHUB_STEP_SUMMARY"
 
 exit "$status"

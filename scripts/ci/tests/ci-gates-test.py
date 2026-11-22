@@ -66,6 +66,23 @@ class CiGatesTest(unittest.TestCase):
                 self.assertEqual(result.stderr, "diagnostic\n")
                 self.assertIn("    color=never native=never no_color=1\n    ```\n", summary.read_text())
                 self.assertEqual("Command failed" in summary.read_text(), status != 0)
+                summary.write_text("")
+                result = subprocess.run(
+                    ["bash", str(helper), "run", "Example", "bash", "-c", command, "_", str(status)],
+                    env={**environment, "STATISTICS_COLLAPSED": "true"},
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stdout, "color=never native=never no_color=1\n```\n")
+                self.assertEqual(result.stderr, "diagnostic\n")
+                expected_heading = (
+                    "<details>\n<summary>Example</summary>\n\n" if status == 0 else
+                    "<details open>\n<summary>Example · failed</summary>\n\n"
+                )
+                self.assertTrue(summary.read_text().startswith(expected_heading))
+                self.assertIn("    color=never native=never no_color=1\n    ```\n", summary.read_text())
+                self.assertEqual("Command failed" in summary.read_text(), status != 0)
+                self.assertTrue(summary.read_text().endswith("\n</details>\n"))
             output = root / "output"
             output.write_text("first\nsecond\n")
             result = subprocess.run(
@@ -74,6 +91,17 @@ class CiGatesTest(unittest.TestCase):
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("## Existing\n\n    first\n    second\n", summary.read_text())
+            summary.write_text("")
+            result = subprocess.run(
+                ["bash", str(helper), "file", "Existing", str(output)],
+                env={**environment, "STATISTICS_COLLAPSED": "true"},
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(
+                summary.read_text(),
+                "<details>\n<summary>Existing</summary>\n\n    first\n    second\n\n\n</details>\n",
+            )
             output.unlink()
             result = subprocess.run(
                 ["bash", str(helper), "file", "Missing", str(output)],
@@ -133,6 +161,16 @@ class CiGatesTest(unittest.TestCase):
                     for text in excluded:
                         self.assertNotIn(text, summary.read_text())
                     summary.write_text("")
+                    result = subprocess.run(
+                        command, env={**environment, "STATISTICS_COLLAPSED": "true"},
+                        text=True, capture_output=True,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertTrue(summary.read_text().startswith("<details>\n<summary>Summary</summary>\n\n"))
+                    self.assertTrue(summary.read_text().endswith("\n</details>\n"))
+                    for text in expected:
+                        self.assertIn(text, summary.read_text())
+                    summary.write_text("")
                     source.write_text(fixture.replace(next(line for line in fixture.splitlines()
                                                           if expected[-1] in line), ""))
                     result = subprocess.run(command, env=environment, text=True, capture_output=True)
@@ -141,6 +179,9 @@ class CiGatesTest(unittest.TestCase):
                     self.assertEqual(summary.read_text(), "")
 
     def test_core_job_overviews_report_actual_outcomes(self):
+        self.assertIn("    env:\n      STATISTICS_COLLAPSED: 'true'\n", self.jobs["statistics"])
+        for job in ("lightweight-analyzers", "static-analyzers", "test"):
+            self.assertNotIn("STATISTICS_COLLAPSED", self.jobs[job])
         jobs = {
             "lint-configuration": {
                 "BOOTSTRAP": ("bootstrap", "Bootstrap"), "INFO": ("application-info", "Application information"),
