@@ -101,8 +101,13 @@ Inspect every affected variant, including effective override behavior:
    callers. The development image configures Python in `/home/dev/.venv`; Node
    uses nvm, and Bash/Fish initialization differ from `exec -T`. Check the
    actual invocation path rather than assuming a login-shell test proves Make,
-   IDE, or CI execution. Do not install into system Python or add a separate
-   documentation image when the shared development image owns the capability.
+   IDE, or CI execution. For distribution or interpreter upgrades, inspect shell
+   startup dependencies and their compatibility, including Python-backed helpers,
+   package-provided completion paths, and documentation files excluded by
+   slim-image package rules. Preserve interactive terminal help in headless
+   containers as well as configured browser overrides. Do not install into
+   system Python or add a separate documentation image when the shared
+   development image owns the capability.
 7. Treat entrypoints as mutating operations. The development entrypoint installs
    dependencies, generates JWT keys, creates the database, and runs migrations
    before `exec`. Production initialization runs when the command is `php-fpm`,
@@ -149,6 +154,17 @@ Build success does not prove startup, mounted configuration, or permissions. For
 entrypoint edits, check Bash syntax inside the development container and add
 focused regression coverage using the tooling skill without executing
 destructive initialization.
+
+For distribution or interpreter upgrades affecting development tools, exercise
+interactive Bash and Fish startup using the same initialization paths as
+`make bash` and `make fish` in a fresh development image as the intended user.
+Check for startup errors, loaded completion functions and correction helpers,
+and working terminal help and topic navigation without a graphical browser.
+Check affected noninteractive callers, such as `make tool-versions`, separately.
+Use a pseudo-terminal where needed and bypass mutating entrypoints; do not
+recreate a shared service without approval. Report any interactive or offline
+checks that could not be performed rather than treating a successful build or
+alias generation as proof of shell behavior.
 
 For approved runtime verification, use a non-production environment with
 explicitly authorized data and lifecycle actions. Check effective PHP
