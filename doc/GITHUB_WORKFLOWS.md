@@ -96,12 +96,21 @@ cross-workflow dependency on core CI.
 [docker-image-updates]: ../.github/workflows/docker-image-updates.yml
 [action-updates]: ../.github/workflows/action-updates.yml
 
-Core CI explicitly handles PR `opened`, `synchronize` (new commits) and
-`reopened` events. Dependency Review and CodeQL use the same default PR activity
-types. These workflows do not run on title, body or base edits, avoiding
-duplicate skipped checks for unchanged commits. Both core CI and Dependency
-Review handle `merge_group: checks_requested` for merge-queue validation.
-Scorecard also handles `branch_protection_rule` events.
+Core CI, Dependency Review and CodeQL handle PR `opened`, `synchronize` (new commits),
+`reopened`, `ready_for_review` and `converted_to_draft` events. Drafts skip
+substantive checks, but both required jobs run briefly and fail deliberately to
+prevent skipped checks from satisfying branch protection. Marking a PR ready
+triggers fresh validation; conversion to draft cancels superseded runs within
+each workflow's concurrency group. Runs triggered before the updated workflow
+reaches the PR's base may still use the old behavior. These workflows do not run
+on title, body or base edits, avoiding duplicate checks for unchanged commits.
+Both core CI and Dependency Review handle `merge_group: checks_requested` for
+merge-queue validation. Scorecard also handles `branch_protection_rule` events.
+
+Draft status alone does not disable GitHub Actions, and there is no documented
+repository-wide draft-PR switch. This behavior is configured in the workflows;
+see [GitHub's event documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)
+and [required-check guidance](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks#handling-skipped-but-required-checks).
 
 All cron times below are **UTC**, not local time. GitHub schedules run on the
 default branch and may be delayed; they are not exact-time guarantees.

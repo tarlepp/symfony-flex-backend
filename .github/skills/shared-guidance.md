@@ -84,10 +84,13 @@ rules alongside the task-specific workflow in the skill.
   a task on a branch just because it is checked out. For advice on PR structure,
   see [plan-pull-requests](plan-pull-requests/SKILL.md).
 * For a sequence of stacked PRs, treat each PR as a separate task: create a
-  fresh branch for each step, based on its intended parent branch. Do not
-  continue a later step on a branch already used for an earlier PR. When the
-  parent is rebased or amended, rebase the children with
-  `git rebase --onto <new-parent> <old-parent-tip>`.
+  fresh branch for each step, based on its intended parent branch. Do not continue
+  a later step on a branch already used for an earlier PR. Open later PRs as
+  drafts while they await earlier PRs, or ask the user to mark them draft if the
+  user creates them. Mark each ready only when it is the next PR for review and
+  validation. Follow the [stacked PR procedure](../../doc/REQUIRED_CHECKS.md#stacked-pull-requests)
+  for required checks and retargeting. When the parent is rebased or amended, rebase
+  the children with `git rebase --onto <new-parent> <old-parent-tip>`.
 * Always use rebase instead of merge when updating or synchronizing task
   branches with their base, parent, or remote branch. Use `git fetch` followed
   by `git rebase <upstream>`, or `git pull --rebase`; never kuse `git merge` or

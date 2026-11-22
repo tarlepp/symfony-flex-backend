@@ -6,6 +6,12 @@ on:
     branches:
       - master
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - converted_to_draft
   schedule:
     - cron: '30 3 * * 1'
   workflow_dispatch:
@@ -20,6 +26,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze GitHub Actions workflows
+    if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.draft }}
     runs-on: ubuntu-26.04
     timeout-minutes: 15
     permissions:

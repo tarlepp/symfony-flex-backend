@@ -43,7 +43,9 @@ under the current policy.
 
 PR title/body edits do not trigger CI or replace existing required validation.
 The final job always uses `Validate CI result`; a metadata edit does not repair
-failed CI. After changing the base branch, push a new commit or close and reopen
+failed CI. Draft PRs deliberately fail both required jobs rather than letting
+GitHub treat skipped jobs as successful. Marking a draft ready triggers fresh
+checks. After changing the base branch, push a new commit or close and reopen
 the PR to validate against its new base before merging. Rerunning an old run
 does not refresh the original event's base.
 
@@ -140,10 +142,10 @@ Rules for this set:
   migrate, create the ruleset for `master` in `Settings > Rules`, set it to
   `Evaluate` first, check the insights for unexpected blocks, switch it to
   `Active`, and only then delete the classic rule.
-* Do not protect feature branches. Pull request CI runs for any base branch
-  (`pull_request` has no branch filter), so stacked pull requests are tested
-  without protecting their bases. Protecting them would also block the force
-  pushes needed to rebase a stack.
+* Do not protect feature branches. Pull request CI covers any base branch
+  (`pull_request` has no branch filter), so ready stacked pull requests are
+  tested without protecting their bases. Protecting them would also block the
+  force pushes needed to rebase a stack.
 * Do not use broad patterns such as `chore/*` or `chore(ci)/*` for stack bases.
   If one is ever needed, allow force pushes and deletion for it, and verify that
   ordinary pushes, rebases, and Dependabot or other automation still work on a
@@ -157,14 +159,23 @@ Rules for this set:
 
 <a id="stacked-pull-requests"></a>
 
-1. Merge the parent pull request first, into `master`.
-2. Retarget each child pull request to `master`. GitHub does this automatically
+1. Keep later pull requests in the stack draft while their parents are pending;
+   ask the user to mark them draft if the user creates them. Draft status alone
+   does not stop Actions. The workflows skip substantive draft checks and run
+   brief failing required gates. Already-running checks may continue until
+   superseded; this behavior requires the updated workflows in the PR.
+2. Merge the parent pull request first, into `master`.
+3. Retarget its child pull request to `master`. GitHub does this automatically
    when the parent branch is deleted on merge.
-3. Rebase the child onto the updated `master` and force push with
+4. Rebase the child onto the updated `master` and force push with
    `--force-with-lease`. With a squash or rebase merge of the parent, use
    `git rebase --onto master <old-parent-tip>` so the parent commits are not
    replayed.
-4. Wait for the full CI run on the rebased child before merging it.
+5. Mark the child ready for review when it is next in line. Wait for fresh
+   successful `Validate CI result` and `dependency-review` runs on the rebased
+   child and current base before merging it. Do not rely on skipped checks,
+   earlier runs, or the absence of a pending check.
+6. Repeat for the next child, keeping later PRs draft until their turn.
 
 Never merge a child into its parent's branch as a substitute for retargeting.
 

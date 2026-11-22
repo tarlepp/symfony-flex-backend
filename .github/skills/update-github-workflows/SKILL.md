@@ -73,13 +73,16 @@ replacement for their actual event filters and conditions:
    expressions, and concurrency groups/cancellation. Do not assume the default
    branch is named `main`. Consider same-repository PRs, fork PRs, pushes, and
    non-PR events explicitly; not every event supplies a pull-request payload.
-   Core CI handles PR opens, new commits and reopens, not `edited` events;
-   title/body edits must not create duplicate skipped checks. Keep the final job
-   named `Validate CI result`. After a PR base change, require a new commit or
-   close/reopen event to validate against the new base before merging; rerunning
-   an old run reuses its original event. Path filters or job renames can affect
-   required checks; confirm repository rules when relevant rather than assuming
-   they are defined in YAML.
+   Core CI, Dependency Review and CodeQL handle PR opens, new commits, reopens,
+   ready-for-review and conversion-to-draft events, not `edited` events;
+   title/body edits must not create duplicate skipped checks. Draft PRs skip
+   substantive checks but both required jobs fail explicitly, since GitHub
+   accepts skipped required jobs as successful. Ready PRs must run fresh checks.
+   Keep the final job named `Validate CI result`. After a PR base change,
+   require a new commit or close/reopen event to validate against the new base
+   before merging; rerunning an old run reuses its original event. Path filters
+   or job renames can affect required checks; confirm repository rules when
+   relevant rather than assuming they are defined in YAML.
 3. Maintain the job dependency graph. In `main.yml`, `ci-summary` runs with
    `!cancelled()` and explicitly requires successful prerequisite results
    (skipped only for non-periodic jobs on `schedule` or explicit successful
@@ -88,7 +91,8 @@ replacement for their actual event filters and conditions:
    needs both tests and the prerequisite gate. The final `ci-result` job needs
    the gate, analyzers, tests, Docker builds and reporting. It uses
    `!cancelled()` so superseded workflows release their concurrency slot, while
-   failed prerequisites still reach the result checks. It is the required merge
+   failed prerequisites still reach the result checks. On draft PRs it fails
+   before checkout; the prerequisite gate is skipped. It is the required merge
    gate, so add every new blocking job to its `needs` and result checks. The
    informational `statistics` job is deliberately independent: retain its own
    summaries without making either gate wait for or consume its result. The
