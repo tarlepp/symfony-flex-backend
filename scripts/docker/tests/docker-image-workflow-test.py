@@ -849,6 +849,16 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("    default: development", BOOTSTRAP)
         self.assertIn("target: ${{ inputs.build-target }}", BOOTSTRAP)
         self.assertIn("build-target: maintenance", WORKFLOW)
+        bootstrap_action = yaml.safe_load(BOOTSTRAP)
+        build = next(
+            item for item in bootstrap_action["runs"]["steps"]
+            if item.get("name") == "Build PHP CI image"
+        )
+        self.assertTrue(build["uses"].startswith("docker/build-push-action@"))
+        self.assertEqual(build["env"]["DOCKER_BUILD_SUMMARY"], "false")
+        self.assertEqual(build["env"]["DOCKER_BUILD_RECORD_UPLOAD"], "false")
+        for workflow in (CORE_WORKFLOW, (ROOT / ".github/workflows/vulnerability-scan.yml").read_text()):
+            self.assertNotIn("DOCKER_BUILD_SUMMARY", step(workflow, "Build the Docker image"))
         self.assertIn(
             "inputs.build-target == 'development' && github.event_name != 'schedule'",
             BOOTSTRAP,
