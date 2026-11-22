@@ -41,11 +41,11 @@ summary_row() {
 }
 
 write_summary() {
-    echo "## Workflow run overview"
+    echo "## Core CI result"
     echo
     printf 'Event: %s\n' "$EVENT_NAME"
     echo
-    echo "See the CI prerequisite results summary for lint, security and image-check skip reasons."
+    echo "Start here for the final gate's inputs. Expand CI prerequisite and job details for individual checks and skip reasons."
     echo
     echo "| Check | Result | Explanation |"
     echo "| --- | --- | --- |"

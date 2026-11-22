@@ -8,8 +8,9 @@
 #   in the environment.
 #
 # Details:
-#   Optional TARGET and OVERVIEW_TITLE customize the heading. Writes Markdown to
-#   stdout for the calling workflow step to append to its summary.
+#   Optional TARGET and OVERVIEW_TITLE customize the heading. Set
+#   OVERVIEW_COLLAPSED=true for expandable job details, opened on prior failure.
+#   Writes Markdown to stdout for the calling workflow step to append.
 #
 # Callers:
 #   GitHub Actions:
@@ -35,7 +36,20 @@ shift
 : "${EVENT_NAME:?EVENT_NAME is required}"
 : "${PRIOR_STATUS:?PRIOR_STATUS is required}"
 
-printf '## %s\n' "${OVERVIEW_TITLE:-Workflow run overview}"
+if [ "${OVERVIEW_COLLAPSED:-false}" = true ]; then
+    if [ "$PRIOR_STATUS" = success ]; then
+        echo '<details>'
+    else
+        echo '<details open>'
+    fi
+    printf '<summary>%s' "${OVERVIEW_TITLE:-Workflow run overview}"
+    if [ -n "${TARGET:-}" ]; then
+        printf ' · %s' "$TARGET"
+    fi
+    printf ' · %s</summary>\n' "$PRIOR_STATUS"
+else
+    printf '## %s\n' "${OVERVIEW_TITLE:-Workflow run overview}"
+fi
 echo
 printf 'Event: %s' "$EVENT_NAME"
 if [ -n "${TARGET:-}" ]; then
@@ -52,3 +66,6 @@ done
 
 echo
 printf '%s\n' "$footer"
+if [ "${OVERVIEW_COLLAPSED:-false}" = true ]; then
+    printf '\n</details>\n'
+fi

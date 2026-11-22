@@ -484,7 +484,7 @@ escape_summary_reason() {
 write_summary() {
     local category index reason
 
-    printf '## CI validation preview\n\n'
+    printf '<details>\n<summary>CI validation preview (selection, not results)</summary>\n\n'
     printf 'Enabled means eligible to run; event rules and prerequisites still apply.\n'
     printf 'This is not a pass/fail result or a list of changed-file categories. '
     printf 'Conservative fallbacks can enable checks without matching changes.\n\n'
@@ -516,6 +516,7 @@ write_summary() {
             "${job_labels[$category]}" "$category" \
             "${job_states[$category]}" "${job_notes[$category]}"
     done
+    printf '\n</details>\n'
 }
 
 detect_changes

@@ -409,12 +409,18 @@ They share the strict selection predicate in [`ci-gate-common.sh`](../scripts/ci
 while event-specific policies remain in the individual scripts. Checkout and
 validation steps are not conditional on successful prerequisites.
 
-On the Actions run's **Summary** page, `Validate CI prerequisites` and
-`Validate CI result` publish tables listing job results and skip explanations.
-These distinguish unaffected paths, scheduled scope, reporting eligibility,
-unsuccessful prerequisites and unexpected skips. Tables are written before gate
-validation, so failures still show their context. A skipped job cannot publish
-its own summary; these explanations appear on the gate summaries, not directly
+On the Actions run's **Summary** page, start with **Core CI result** for the
+final gate's inputs and skip explanations. Expand **CI prerequisite details**
+for lint, security and image-check results, and expand individual job details
+for step outcomes. Job details open automatically when prior steps failed; later
+cleanup failures are not included. **CI validation preview** is a collapsed
+selection forecast, not a result. GitHub may display these summaries in a
+different order because jobs finish independently.
+
+The gate tables distinguish unaffected paths, scheduled scope, reporting
+eligibility, unsuccessful prerequisites and unexpected skips. They are written
+before gate validation, so failures still have context. A skipped job cannot
+publish its own summary; explanations appear on the gate summaries, not directly
 on GitHub's skipped check badge. Cancelled runs may not reach the gates and
 therefore may have no summary. Summary output does not change the gate's
 acceptance rules.
