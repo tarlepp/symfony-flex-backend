@@ -586,6 +586,9 @@ jobs:
       - name: Publish PHPLoc statistics
         if: ${{ !cancelled() && (steps.phploc.outcome == 'success' || steps.phploc.outcome == 'failure') }}
         continue-on-error: true
+        env:
+          STATISTICS_COLLAPSED: 'true'
+          STATISTICS_SOURCE_STATUS: ${{ steps.phploc.outcome }}
         run: bash scripts/ci/ci-statistics-summary.sh file 'PHPLoc statistics' "$RUNNER_TEMP/phploc-output.txt"
 
       - name: Archive `phploc` results (phploc.json)
@@ -799,6 +802,9 @@ jobs:
       - name: Publish PhpMetrics statistics
         if: ${{ !cancelled() && (steps.metrics.outcome == 'success' || steps.metrics.outcome == 'failure') }}
         continue-on-error: true
+        env:
+          STATISTICS_COLLAPSED: 'true'
+          STATISTICS_SOURCE_STATUS: ${{ steps.metrics.outcome }}
         run: bash scripts/ci/ci-statistics-summary.sh file 'PhpMetrics statistics' "$RUNNER_TEMP/phpmetrics-output.txt"
 
       - name: Verify required report files

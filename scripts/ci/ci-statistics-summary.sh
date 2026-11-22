@@ -9,7 +9,8 @@
 # Details:
 #   Requires GITHUB_STEP_SUMMARY. Run mode preserves the command status and
 #   marks captured output incomplete on failure. Set STATISTICS_COLLAPSED=true
-#   to collapse successful output and expand failed commands.
+#   to collapse successful output and expand failed commands. For file mode,
+#   STATISTICS_SOURCE_STATUS records the producing step's outcome.
 #
 # Callers:
 #   GitHub Actions:
@@ -57,6 +58,14 @@ filter_insights_scores() {
 }
 
 status=0
+source_status=${STATISTICS_SOURCE_STATUS:-}
+if [ -n "$source_status" ] && {
+    [ "$mode" != file ] || { [ "$source_status" != success ] && [ "$source_status" != failure ]; }
+}; then
+    echo "Invalid statistics source status." >&2
+    exit 2
+fi
+
 case "$mode" in
     run)
         output=$(mktemp)
@@ -75,7 +84,6 @@ case "$mode" in
         fi
 
         output=$1
-
         if [ "$mode" != file ]; then
             filtered=$(mktemp)
             trap 'rm -f "$filtered"' EXIT
@@ -103,7 +111,7 @@ esac
 
 {
     if [ "${STATISTICS_COLLAPSED:-false}" = true ]; then
-        if (( status != 0 )); then
+        if (( status != 0 )) || [ "$source_status" = failure ]; then
             printf '<details open>\n<summary>%s · failed</summary>\n\n' "$title"
         else
             printf '<details>\n<summary>%s</summary>\n\n' "$title"
@@ -114,6 +122,8 @@ esac
 
     if (( status != 0 )); then
         printf '**Command failed (exit %s); output may be incomplete.**\n\n' "$status"
+    elif [ "$source_status" = failure ]; then
+        printf '**Producing step failed; output may be incomplete.**\n\n'
     fi
 
     sed 's/^/    /' "$output"
