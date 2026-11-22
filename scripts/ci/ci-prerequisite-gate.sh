@@ -52,6 +52,7 @@ write_summary() {
     echo "<summary>CI prerequisite details</summary>"
     echo
     echo "Skipped does not mean passed. The gate accepts only skips allowed by event and change selection."
+    echo "Analyzer results and their skip reasons appear in Core CI result."
     echo
     echo "| Check | Result | Explanation |"
     echo "| --- | --- | --- |"
@@ -62,8 +63,6 @@ write_summary() {
     summary_row "Dependency security" "$SECURITY_CHECK" "$SECURITY_CHANGED" "dependency audit inputs"
     summary_row "Docker image updates" "$DOCKER_UPDATES" "$IMAGES_CHANGED" "Docker image pins or their tooling"
     summary_row "Docker pin verification" "$DOCKER_PINS" "$IMAGES_CHANGED" "Docker image pins or their tooling"
-    summary_row "Static analyzer matrix" "$STATIC_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
-    summary_row "Lightweight analyzers" "$LIGHTWEIGHT_ANALYZERS" "$PHP_CHANGED" "PHP validation inputs"
     summary_row "Gitleaks" "$GITLEAKS" true ""
     echo
     echo "</details>"
