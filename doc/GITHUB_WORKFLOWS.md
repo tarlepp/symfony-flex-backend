@@ -580,20 +580,21 @@ updater still runs. The readiness job uses `GITHUB_TOKEN` with repository Issues
 write permission, while the migration PR still uses the configured App or PAT.
 
 The image-update job waits for readiness evidence, but still runs after a failed
-or skipped readiness job unless the workflow is cancelled. Both summaries and
-the image-update PR show the same current image, candidate, result, reason and
-diagnostic structure. Actions highlights blockers with a warning. Both reports
-keep full errors collapsed by default. A bold build-error explanation remains
-visible in both reports and identifies the failing extension when its compiler
-source path is available. The check writes evidence to a shared temporary file
-using a command-local summary override, not a workflow override of GitHub's
-reserved per-step summary variable. Compiler errors, including extension source
-paths, are preferred over Docker's generic final build error. Composer blockers
-name the project and reported package constraint. Missing reports and failed
-checks are explicitly unavailable or incomplete, not compatibility conclusions.
-This reporting covers PHP minor readiness only; it does not infer compatibility
-blockers for other images or change the patch-only PHP policy of the routine
-update PR.
+or skipped readiness job unless the workflow is cancelled. The readiness job
+summary and image-update PR show the same current image, candidate, result, reason
+and diagnostic structure. The update overview points to the readiness summary,
+or explicitly reports when its publication was unavailable. Actions highlights
+blockers with a warning. Both reports keep full errors collapsed by default. A
+bold build-error explanation remains visible in both reports and identifies the
+failing extension when its compiler source path is available. The check writes
+evidence to a shared temporary file using a command-local summary override, not
+a workflow override of GitHub's reserved per-step summary variable. Compiler
+errors, including extension source paths, are preferred over Docker's generic
+final build error. Composer blockers name the project and reported package
+constraint. Missing reports and failed checks are explicitly unavailable or
+incomplete, not compatibility conclusions. This reporting covers PHP minor
+readiness only; it does not infer compatibility blockers for other images or
+change the patch-only PHP policy of the routine update PR.
 
 Compiler error source paths identify failing PECL and bundled PHP extensions.
 The visible extension table shows each observed failure's first error; expanding

@@ -19,7 +19,7 @@ jobs:
       issues: write
     outputs:
       report: ${{ steps.readiness-report.outputs.report }}
-      actions-report: ${{ steps.readiness-report.outputs.actions-report }}
+      summary-outcome: ${{ steps.readiness-report.outcome }}
     steps:
       - name: Harden the readiness runner (Audit all outbound calls)
         uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
@@ -428,14 +428,14 @@ jobs:
           PULL_REQUEST: ${{ steps.pull-request.outcome || 'skipped' }}
           PR_URL: ${{ steps.pull-request.outputs.pull-request-url }}
           PR_OPERATION: ${{ steps.pull-request.outputs.pull-request-operation }}
-          PHP_READINESS_ACTIONS: ${{ needs.php-minor-readiness.outputs.actions-report }}
+          PHP_READINESS_SUMMARY: ${{ needs.php-minor-readiness.outputs.summary-outcome }}
           PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}
         run: |
           {
-            if [ -n "$PHP_READINESS_ACTIONS" ]; then
-              printf '%s\n\n' "$PHP_READINESS_ACTIONS"
+            if [ "$PHP_READINESS_SUMMARY" = success ]; then
+              printf 'PHP minor readiness evidence is in the **Check PHP minor upgrade readiness** job summary (job result: %s).\n\n' "$PHP_READINESS_RESULT"
             else
-              printf '## PHP minor upgrade readiness\n\n> [!WARNING]\n> PHP minor upgrade needs attention; routine image updates remain separate.\n\n**Result: Unavailable**\n\nReason: No readiness evidence was received (readiness job: %s). No compatibility conclusion can be drawn; see the readiness job logs.\n\n' "$PHP_READINESS_RESULT"
+              printf '## PHP minor upgrade readiness\n\n> [!WARNING]\n> PHP minor readiness summary was not confirmed; routine image updates remain separate.\n\n**Result: Unavailable**\n\nReason: Readiness summary publication did not succeed (summary step: %s; readiness job: %s). No compatibility conclusion can be drawn; see the readiness job logs.\n\n' "${PHP_READINESS_SUMMARY:-unavailable}" "$PHP_READINESS_RESULT"
             fi
             bash scripts/ci/ci-workflow-overview.sh \
               "Core CI's Docker image version report lists major upgrades for manual review." \
