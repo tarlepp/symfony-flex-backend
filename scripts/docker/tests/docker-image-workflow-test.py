@@ -84,6 +84,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
             "sync-doctrine-mariadb.sh", "sync-ci-mariadb.sh",
             "prepare-php-minor-pr.sh", "prepare-image-update-pr.sh",
             "select-maintenance-pr-auth.sh",
+            "php-minor-pr-outcome.sh", "image-update-overview.sh",
         ):
             (self.root / "scripts/docker" / name).write_bytes((ROOT / "scripts/docker" / name).read_bytes())
         (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
@@ -1588,6 +1589,58 @@ class DockerImageWorkflowTest(unittest.TestCase):
         result = run(dockerfile("8.6.2"), dockerfile("8.5.12"), "--next-minor")
         self.assertEqual(result.returncode, 1)
         self.assertIn("Package versions or references changed", result.stderr)
+
+    def test_php_minor_pr_outcome_summary_and_failures(self):
+        steps = yaml.safe_load(WORKFLOW)["jobs"]["php-minor-readiness"]["steps"]
+        outcome_step = next(item for item in steps if item.get("name") == "Publish PHP minor PR outcome")
+        self.assertEqual(outcome_step["run"], "bash scripts/docker/php-minor-pr-outcome.sh")
+        self.assertEqual(outcome_step["if"], "${{ !cancelled() && steps.php-minor.outputs.prepared == 'true' }}")
+        self.assertTrue(outcome_step["continue-on-error"])
+        url = "https://github.com/example/repo/pull/1"
+        for outcome, link, expected in (
+            ("success", url, f"\nPHP minor migration PR: {url}\n"),
+            ("success", "", "\nNo PHP minor PR changes.\n"),
+            ("failure", "", "\nNo PHP minor PR was confirmed (PR step: failure).\n"),
+            ("skipped", "", "\nNo PHP minor PR was confirmed (PR step: skipped).\n"),
+            ("", "", "\nNo PHP minor PR was confirmed (PR step: ).\n"),
+        ):
+            with self.subTest(outcome=outcome, link=link):
+                self.summary.write_text("Earlier summary\n")
+                result = self.run_script(
+                    WORKFLOW, "Publish PHP minor PR outcome", PR_OUTCOME=outcome, PR_URL=link,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(self.summary.read_text(), "Earlier summary\n" + expected)
+
+        result = self.run_script(
+            WORKFLOW, "Publish PHP minor PR outcome", PR_OUTCOME="success", PR_URL=url,
+            GITHUB_STEP_SUMMARY=str(self.root),
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertTrue(result.stderr)
+
+    def test_maintenance_overview_propagates_missing_evidence_and_helper_failures(self):
+        environment = dict(
+            EVENT_NAME="workflow_dispatch", PRIOR_STATUS="success", BASE_BRANCH="master",
+            BOOTSTRAP="success", TESTS="success", UPDATE="success", VERIFY="success",
+            COMPOSER="success", DOCTRINE="success", CI_MARIADB="success", DETAILS="success",
+            PULL_REQUEST="success", PR_URL="", PR_OPERATION="none", PHP_READINESS_SUMMARY="success",
+        )
+        result = self.run_script(WORKFLOW, "Publish workflow run overview", **environment)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("docker-image-changes.md", result.stderr)
+
+        (self.root / "docker-image-changes.md").write_text("Saved changes\n")
+        (self.root / "scripts/ci/ci-workflow-overview.sh").unlink()
+        result = self.run_script(WORKFLOW, "Publish workflow run overview", **environment)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("ci-workflow-overview.sh", result.stderr)
+
+        result = self.run_script(
+            WORKFLOW, "Publish workflow run overview", **environment, GITHUB_STEP_SUMMARY=str(self.root),
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertTrue(result.stderr)
 
     def test_pr_and_no_change_summaries(self):
         url = "https://github.com/example/repo/pull/1"
