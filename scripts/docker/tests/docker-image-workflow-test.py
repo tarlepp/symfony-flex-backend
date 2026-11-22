@@ -80,6 +80,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
             (ROOT / "scripts/ci/ci-docker-hub-auth.sh").read_text(),
         )
         (self.root / "scripts/docker").mkdir(parents=True)
+        for name in ("sync-doctrine-mariadb.sh", "sync-ci-mariadb.sh"):
+            (self.root / "scripts/docker" / name).write_bytes((ROOT / "scripts/docker" / name).read_bytes())
         (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
             (ROOT / "scripts/docker/docker-image-digest-summary.py").read_text(),
         )
@@ -1233,6 +1235,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
             (pin("13.1.1") * 2, original, 1, original),
             (pin("13.1.1"), original.replace("server_version:", "other:"), 1,
              original.replace("server_version:", "other:")),
+            (pin("13.1.1"), original + "        server_version: 'mariadb-13.0.2'\n", 1,
+             original + "        server_version: 'mariadb-13.0.2'\n"),
+            (pin("13.1.1"), original.replace("'mariadb-13.0.2'", "'13.0.2'"), 1,
+             original.replace("'mariadb-13.0.2'", "'13.0.2'")),
         ):
             with self.subTest(candidate=candidate, status=status):
                 dockerfile.write_text(candidate)
@@ -1243,6 +1249,90 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, status, result.stdout + result.stderr)
                 self.assertEqual(config.read_text(), expected)
+
+    def test_mariadb_sync_steps_fail_closed_on_missing_inputs_and_command_failures(self):
+        steps = yaml.safe_load(WORKFLOW)["jobs"]["update"]["steps"]
+        doctrine = next(item for item in steps if item.get("id") == "doctrine")
+        ci = next(item for item in steps if item.get("id") == "ci-mariadb")
+        self.assertLess(steps.index(doctrine), steps.index(ci))
+        self.assertEqual(doctrine["run"], "bash scripts/docker/sync-doctrine-mariadb.sh")
+        self.assertEqual(ci["run"], "bash scripts/docker/sync-ci-mariadb.sh")
+        self.assertEqual(doctrine["shell"], "bash")
+        self.assertEqual(ci["shell"], "bash")
+
+        dockerfile = self.root / "docker/mariadb/Dockerfile"
+        dockerfile.parent.mkdir(parents=True)
+        config = self.root / "config/packages/doctrine.yaml"
+        config.parent.mkdir(parents=True)
+        workflow = self.root / ".github/workflows/main.yml"
+        workflow.parent.mkdir(parents=True)
+        old = f"mariadb:13.0.2@sha256:{'a' * 64}"
+        new = f"mariadb:13.1.1@sha256:{'b' * 64}"
+        original_config = "        server_version: 'mariadb-13.0.2'\n"
+        original_workflow = f"        image: {old}\n"
+        config.write_text(original_config)
+        workflow.write_text(original_workflow)
+        git = self.root / "git"
+        git.write_text(
+            '#!/bin/bash\n[[ "$*" == "show HEAD:docker/mariadb/Dockerfile" ]] || exit 64\n'
+            f"printf 'FROM {old}\\n'\n",
+        )
+        git.chmod(0o755)
+        env = {"PATH": f"{self.root}:{os.environ['PATH']}"}
+
+        for name in ("Synchronize Doctrine with the MariaDB image", "Synchronize CI MariaDB image pin"):
+            result = self.run_script(WORKFLOW, name, **env)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertNotIn("synchronized to", result.stdout)
+        self.assertEqual(config.read_text(), original_config)
+        self.assertEqual(workflow.read_text(), original_workflow)
+
+        dockerfile.write_text(f"FROM {new}\n")
+        for old_content in ("", "FROM mariadb:13.0.2\n", f"FROM {old}\nFROM {old}\n"):
+            git.write_text(
+                '#!/bin/bash\n[[ "$*" == "show HEAD:docker/mariadb/Dockerfile" ]] || exit 64\n'
+                f"printf '%s' '{old_content}'\n",
+            )
+            result = self.run_script(WORKFLOW, "Synchronize Doctrine with the MariaDB image", **env)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("::error::", result.stdout)
+            self.assertEqual(config.read_text(), original_config)
+
+        git.write_text(
+            '#!/bin/bash\n[[ "$*" == "show HEAD:docker/mariadb/Dockerfile" ]] || exit 64\n'
+            f"printf 'FROM {old}\\n'\nexit 7\n",
+        )
+        result = self.run_script(WORKFLOW, "Synchronize Doctrine with the MariaDB image", **env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn("synchronized to", result.stdout)
+        self.assertEqual(config.read_text(), original_config)
+
+        git.write_text(
+            '#!/bin/bash\n[[ "$*" == "show HEAD:docker/mariadb/Dockerfile" ]] || exit 64\n'
+            f"printf 'FROM {old}\\n'\n",
+        )
+        for name, target, original in (
+            ("Synchronize Doctrine with the MariaDB image", config, original_config),
+            ("Synchronize CI MariaDB image pin", workflow, original_workflow),
+        ):
+            target.unlink()
+            result = self.run_script(WORKFLOW, name, **env)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertNotIn("synchronized to", result.stdout)
+            self.assertFalse(target.exists())
+            target.write_text(original)
+
+        sed = self.root / "sed"
+        sed.write_text('#!/bin/bash\nif [[ "$1" == -i ]]; then exit 7; fi\nexec /bin/sed "$@"\n')
+        sed.chmod(0o755)
+        for name, target, original in (
+            ("Synchronize Doctrine with the MariaDB image", config, original_config),
+            ("Synchronize CI MariaDB image pin", workflow, original_workflow),
+        ):
+            result = self.run_script(WORKFLOW, name, **env)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertNotIn("synchronized to", result.stdout)
+            self.assertEqual(target.read_text(), original)
 
     def test_ci_mariadb_pin_sync_handles_tags_digests_drift_and_invalid_inputs(self):
         dockerfile = self.root / "docker/mariadb/Dockerfile"
@@ -1264,8 +1354,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for docker_source, workflow_source in (
             (f"FROM {old}\nFROM {old}\n", f"        image: {old}\n"),
             ("FROM mariadb:13.0.2\n", f"        image: {old}\n"),
+            ("", f"        image: {old}\n"),
             (f"FROM {old}\n", f"        image: {old}\n        image: {old}\n"),
             (f"FROM {old}\n", "        image: mariadb:13.0.2\n"),
+            (f"FROM {old}\n", ""),
         ):
             with self.subTest(docker_source=docker_source, workflow_source=workflow_source):
                 dockerfile.write_text(docker_source)

@@ -79,6 +79,10 @@ directory relationships so they do not depend on files remaining siblings.
 * [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
     verifies pinned base images and builds images for other platforms.
+* [Doctrine MariaDB synchronization](docker/sync-doctrine-mariadb.sh) and
+  [CI MariaDB pin synchronization](docker/sync-ci-mariadb.sh)
+  * Run as separate Docker image update workflow steps on the GitHub runner.
+    Offline regressions run through `make lint-workflows`.
 * [Docker digest comparison](docker/docker-image-digest-summary.py)
   * Compares digest-only updates using registry index metadata for maintenance
     pull requests. It is called by the Docker image update workflow on the host.

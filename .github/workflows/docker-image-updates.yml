@@ -217,51 +217,12 @@ jobs:
       - name: Synchronize Doctrine with the MariaDB image
         id: doctrine
         shell: bash
-        run: |
-          dockerfile=docker/mariadb/Dockerfile
-          directive='s/^FROM mariadb:([0-9]+\.[0-9]+\.[0-9]+)@sha256:[a-f0-9]{64}$/\1/p'
-          previous=$(git show "HEAD:$dockerfile" | sed -nE "$directive")
-          candidate=$(sed -nE "$directive" "$dockerfile")
-          version_pattern='^[0-9]+\.[0-9]+\.[0-9]+$'
-          if ! [[ "$previous" =~ $version_pattern && "$candidate" =~ $version_pattern ]]; then
-            echo '::error::Expected exactly one pinned MariaDB version in each Dockerfile.'
-            exit 1
-          fi
-          if [[ "$previous" == "$candidate" ]]; then
-            echo "MariaDB tag unchanged ($candidate); no Doctrine update needed."
-            exit 0
-          fi
-          if [[ "${previous%%.*}" != "${candidate%%.*}" ]]; then
-            echo '::error::MariaDB major upgrades require manual review.'
-            exit 1
-          fi
-          config=config/packages/doctrine.yaml
-          if [[ $(grep -Ec '^[[:space:]]*server_version:' "$config") != 1 ]] ||
-            ! grep -Eq "^        server_version: 'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$" "$config"; then
-            echo '::error::Expected exactly one explicit MariaDB server_version in Doctrine configuration.'
-            exit 1
-          fi
-          sed -i -E "s/^(        server_version: )'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$/\1'mariadb-$candidate'/" "$config"
-          echo "Doctrine server_version synchronized to mariadb-$candidate."
+        run: bash scripts/docker/sync-doctrine-mariadb.sh
 
       - name: Synchronize CI MariaDB image pin
         id: ci-mariadb
         shell: bash
-        run: |
-          dockerfile=docker/mariadb/Dockerfile
-          workflow=.github/workflows/main.yml
-          pin=$(sed -nE 's/^FROM (mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64})$/\1/p' "$dockerfile")
-          if ! [[ "$pin" =~ ^mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64}$ ]]; then
-            echo '::error::Expected exactly one pinned MariaDB image in the Dockerfile.'
-            exit 1
-          fi
-          if [[ $(grep -Ec '^[[:space:]]*image:[[:space:]]*mariadb:' "$workflow") != 1 ]] ||
-            ! grep -Eq '^        image: mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64}$' "$workflow"; then
-            echo '::error::Expected exactly one pinned MariaDB service image in the CI workflow.'
-            exit 1
-          fi
-          sed -i -E "s|^(        image: )mariadb:[0-9]+\.[0-9]+\.[0-9]+@sha256:[a-f0-9]{64}$|\1${pin}|" "$workflow"
-          echo "CI MariaDB service synchronized to $pin."
+        run: bash scripts/docker/sync-ci-mariadb.sh
 
       - name: Prepare pull request details
         id: details
