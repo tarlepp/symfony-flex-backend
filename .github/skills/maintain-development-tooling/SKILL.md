@@ -237,6 +237,20 @@ Assess these concerns against the actual code:
   related assignments together; do not insert blank lines mechanically between
   every statement. Review the final source for visual breathing room as well as
   behavior preservation.
+* For a whitespace-focused review, inspect complete function bodies and test
+  scenarios for crowded transitions. Prefer an empty line before a distinct
+  guard or independent branch, after a group of setup statements, and between
+  test setup, execution, and assertions when they are separate phases. Keep a
+  short assignment directly beside its immediate use when that is clearer.
+  Record precise locations and the intended separation in the review backlog,
+  even when no structural refactor is needed. Mark already readable files as
+  reviewed without action.
+* Blank lines in shell heredocs, quoted strings, and Python multiline strings
+  are data, not visual spacing. Do not insert lines there or inside continued
+  shell commands, pipelines, or Python expressions without verifying their
+  semantics. Preserve fixture output, indentation, and surrounding control flow;
+  review whitespace-only diffs against the original executable content rather
+  than assuming all whitespace is harmless.
 * Prefer descriptive names, explicit phases, readable multiline commands, and
   focused functions for substantial parsing, validation, execution, or reporting
   blocks. Keep short linear wrappers simple; do not extract every command,
