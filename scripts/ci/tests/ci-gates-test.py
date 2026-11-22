@@ -331,6 +331,7 @@ class CiGatesTest(unittest.TestCase):
                 extra = dict(
                     RUNNER_TEMP=directory, BASE_BRANCH="master", PR_URL="", PR_OPERATION="",
                     PHP_READINESS_SUMMARY="", PHP_READINESS_RESULT="failure",
+                    UPDATE_RESULT="unavailable",
                 )
                 scenarios = [("success", None)] + [
                     ("failure", variable) for variable in outcomes
@@ -457,23 +458,23 @@ class CiGatesTest(unittest.TestCase):
             )
             docker.chmod(0o755)
             for status, expected, message in (
-                (0, 0, "pins are current"),
-                (1, 0, "updates are available"),
-                (2, 2, "checks were incomplete"),
-                (17, 17, "checks were incomplete"),
+                (0, 0, "current"),
+                (1, 0, "updates available"),
+                (2, 2, "incomplete"),
+                (17, 17, "incomplete"),
             ):
                 with self.subTest(checker_status=status):
-                    summary = root / "summary"
+                    output = root / "output"
                     args = root / "args"
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell], cwd=root,
                         env={**os.environ, "PATH": f"{root}:{os.environ['PATH']}",
                              "DOCKER_ARGS": str(args), "CHECKER_STATUS": str(status),
-                             "GITHUB_STEP_SUMMARY": str(summary)},
+                             "GITHUB_OUTPUT": str(output)},
                         text=True, capture_output=True, check=False,
                     )
                     self.assertEqual(result.returncode, expected, result.stderr)
-                    self.assertIn(message, summary.read_text())
+                    self.assertEqual(output.read_text(), f"result={message}\n")
                     self.assertEqual(
                         args.read_text().strip(),
                         "compose -f compose.yaml -f docker/ci-compose.yaml exec -T php "
@@ -482,7 +483,35 @@ class CiGatesTest(unittest.TestCase):
                     if status > 1:
                         self.assertIn(f"::error::Action and workflow tool update checks failed "
                                       f"(exit {status}).", result.stdout)
-                    summary.unlink()
+                    output.unlink()
+
+    def test_action_update_overview_displays_finding_and_step_outcome(self):
+        workflow = (WORKFLOWS / "action-updates.yml").read_text()
+        match = re.search(
+            r"^      - name: Publish workflow run overview\n"
+            r"(.*?)(?=^      - |\Z)", workflow, re.MULTILINE | re.DOTALL,
+        )
+        assert match is not None
+        step = match.group(1)
+        self.assertIn("UPDATE_RESULT: ${{ steps.updates.outputs.result || 'unavailable' }}", step)
+        shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        for outcome, finding in (
+            ("success", "current"), ("success", "updates available"),
+            ("failure", "incomplete"), ("failure", "unavailable"),
+            ("skipped", "unavailable"),
+        ):
+            with self.subTest(outcome=outcome, finding=finding), tempfile.TemporaryDirectory() as directory:
+                summary = Path(directory) / "summary"
+                result = subprocess.run(
+                    ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
+                    env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary), "EVENT_NAME": "schedule",
+                         "PRIOR_STATUS": "success" if outcome == "success" else "failure",
+                         "UPDATES": outcome, "UPDATE_RESULT": finding},
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(f"| Action and workflow tool update check | {outcome} |", summary.read_text())
+                self.assertIn(f"| Update finding | {finding} |", summary.read_text())
 
     def test_gates_run_after_failed_dependencies_but_not_cancelled_workflows(self):
         for job in ("ci-summary", "ci-result"):

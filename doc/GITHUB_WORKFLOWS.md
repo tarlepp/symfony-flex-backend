@@ -520,8 +520,9 @@ scanning. It does not run on ordinary PRs and is not required for merging.
 existing Action and workflow-tool checker inside the development container.
 Available updates are advisory; discovery, pin and lookup failures fail this
 standalone workflow. Its run summary distinguishes current pins, updates and
-incomplete checks; the step log contains candidates and error details. It does
-not update pins or alter the required core CI gate.
+incomplete checks separately from the step outcome; unavailable means no finding
+was produced. The step log contains candidates and error details. It does not
+update pins or alter the required core CI gate.
 
 **Update Docker image pins** runs daily at 04:17 UTC and on manual dispatch.
 Scheduled runs target `master`, the default branch, after the workflow is merged
