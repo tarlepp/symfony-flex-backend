@@ -484,7 +484,7 @@ escape_summary_reason() {
 write_summary() {
     local category index reason
 
-    printf 'Find **Core CI result** among the job summaries on this page for the final gate results. '
+    printf 'Use your browser Find to search for **Core CI result** on this page for the final gate results. '
     printf 'For gate logs, select **Validate CI result** in the jobs list or graph. '
     printf 'A cancelled run may not reach the final gate.\n\n'
     printf '<details>\n<summary>CI validation preview (selection, not results)</summary>\n\n'

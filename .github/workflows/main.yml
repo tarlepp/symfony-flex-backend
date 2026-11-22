@@ -691,6 +691,9 @@ jobs:
           ANALYSIS: ${{ steps.analyzer.outcome || 'skipped' }}
           ARTIFACT: ${{ steps.artifact.outcome || 'skipped' }}
         run: |
+          if [[ "$ARTIFACT" == skipped && ( "$ANALYZER" == PHPStan || "$ANALYZER" == 'PHP Insights' ) ]]; then
+            ARTIFACT='skipped (expected)'
+          fi
           bash scripts/ci/ci-workflow-overview.sh \
             'See the analyzer log and annotations for findings; only Psalm uploads a JSON artifact.' \
             'Analyzer' "$ANALYZER" 'Bootstrap' "$BOOTSTRAP" \
@@ -1018,6 +1021,14 @@ jobs:
           PREPARE: ${{ steps.prepare-sonar.outcome || 'skipped' }}
           SONAR: ${{ steps.sonar.outcome || 'skipped' }}
         run: |
+          if [[ "$COVERALLS_TOKEN" == 'not available' ]]; then
+            [[ "$INSTALL" != skipped ]] || INSTALL='skipped (expected)'
+            [[ "$COVERALLS" != skipped ]] || COVERALLS='skipped (expected)'
+          fi
+          if [[ "$SONAR_TOKEN_STATUS" == 'not available' ]]; then
+            [[ "$PREPARE" != skipped ]] || PREPARE='skipped (expected)'
+            [[ "$SONAR" != skipped ]] || SONAR='skipped (expected)'
+          fi
           bash scripts/ci/ci-workflow-overview.sh \
             'Uploads require their respective tokens; see step logs for reporting details.' \
             'Reporting selection' "$REPORTING" 'Clover download' "$CLOVER" \
@@ -1179,6 +1190,10 @@ jobs:
           SARIF: ${{ steps.sarif.outcome || 'skipped' }}
           UPLOAD: ${{ steps.upload.outcome || 'skipped' }}
         run: |
+          if [[ "$SARIF_ELIGIBILITY" == 'not eligible' ]]; then
+            [[ "$SARIF" != skipped ]] || SARIF='skipped (expected)'
+            [[ "$UPLOAD" != skipped ]] || UPLOAD='skipped (expected)'
+          fi
           bash scripts/ci/ci-workflow-overview.sh \
             'The blocking scan checks fixable HIGH and CRITICAL OS and library vulnerabilities. Failure can indicate findings or an error; see scan logs. SARIF generation does not imply upload success or absence of findings.' \
             'Image artifact download' "$IMAGE" 'Blocking Trivy scan' "$SCAN" \
