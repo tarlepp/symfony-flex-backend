@@ -64,8 +64,8 @@ fzf --version
 The version follows the Debian package available to the image, not necessarily
 the latest upstream release. Bash loads the packaged key-binding and completion
 scripts. Fish loads the package's `fzf_key_bindings` function in interactive
-shells. Do not add upstream `fzf --bash` or `fzf --fish` initialization: those
-options require newer versions than Debian Bookworm provides.
+shells. Check `fzf --help` before using upstream `fzf --bash` or `fzf --fish`
+initialization, since their availability depends on the Debian package version.
 
 ## Shell shortcuts [ᐞ](#table-of-contents)
 

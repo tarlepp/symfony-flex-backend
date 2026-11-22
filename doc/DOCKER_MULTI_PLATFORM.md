@@ -46,14 +46,14 @@ images.
 
 <a id="tags-image-indexes-and-platform-manifests"></a>
 
-A multi-platform image reference such as `php:8.5.11-fpm-bookworm` points to an
+A multi-platform image reference such as `php:8.5.13-fpm-trixie` points to an
 **image index** (OCI `application/vnd.oci.image.index.v1+json`, or the older
 Docker `application/vnd.docker.distribution.manifest.list.v2+json`). The index
 lists one **image manifest** per platform:
 
 ```text
-php:8.5.11-fpm-bookworm
-└── image index        sha256:dd198c82...   <-- pin this one
+php:8.5.13-fpm-trixie
+└── image index        sha256:7fd2766b...   <-- pin this one
     ├── linux/amd64    sha256:9583ff1e...
     ├── linux/arm64/v8 sha256:58405d3f...
     ├── linux/arm/v7   sha256:29dc32d8...
@@ -89,7 +89,7 @@ pulled local image. Always use the index digest.
 These files contain pinned base images:
 
 * `Dockerfile` - shared PHP base for development and production targets
-  (`php:*-fpm-bookworm`)
+  (`php:*-fpm-trixie`)
 * `docker/nginx/Dockerfile` - shared production and development nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
 
@@ -318,7 +318,7 @@ Missing values are asked interactively, and the suggested default is shown in
 brackets. Values can also be given as Make variables to skip the questions:
 
 ```bash
-make docker-image-digest IMAGE=php:8.5.11-fpm-bookworm
+make docker-image-digest IMAGE=php:8.5.13-fpm-trixie
 ```
 
 In a non-interactive shell (for example CI), required values without defaults
@@ -337,12 +337,12 @@ Check available versions from Docker Hub:
 
 ```bash
 make docker-image-check-updates
-make docker-image-check-updates IMAGE=php:8.5.11-fpm-bookworm
+make docker-image-check-updates IMAGE=php:8.5.13-fpm-trixie
 ```
 
 The checker requires `curl`, `jq` and Docker with buildx. It checks full stable
 semantic-version tags, including major upgrades, preserving the current variant
-(for example `-fpm-bookworm`). It follows all tag pages and compares versions
+(for example `-fpm-trixie`). It follows all tag pages and compares versions
 numerically, not by publication date. Floating and prerelease tags are skipped
 with a diagnostic; registries other than Docker Hub are unsupported. Results are
 grouped by source Dockerfile. Shared images appear in each relevant group but
@@ -388,18 +388,18 @@ use the same image. Digest labels follow the shared color policy; the `FROM`
 line remains uncolored for copying, and redirected output is plain by default:
 
 ```text
-Image name and tag (e.g. php:8.5.11-fpm-bookworm): php:8.5.11-fpm-bookworm
-[OK] Inspecting php:8.5.11-fpm-bookworm
+Image name and tag (e.g. php:8.5.13-fpm-trixie): php:8.5.13-fpm-trixie
+[OK] Inspecting php:8.5.13-fpm-trixie
 
 Media type: application/vnd.oci.image.index.v1+json
-Digest:     sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
-Platforms:  linux/amd64 linux/arm/v7 linux/arm64/v8 linux/386 linux/ppc64le
+Digest:     sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
+Platforms:  linux/386 linux/amd64 linux/arm/v5 linux/arm/v7 linux/arm64/v8 linux/ppc64le linux/riscv64 linux/s390x
 
 Pin reference:
 
-    FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
+    FROM php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
 
-Dockerfile:2:FROM php:8.5.10-fpm-bookworm@sha256:... AS base
+Dockerfile:6:FROM php:8.5.13-fpm-bookworm@sha256:bad1d3498eaa489efe88c1d532e47e2f4111304c3f0b19fbc428842c39ec155c AS php-upstream
 ```
 
 The media type **must** be an index (`...image.index...` or
@@ -417,7 +417,7 @@ tag points to a populated index.
 Manual equivalent:
 
 ```bash
-docker buildx imagetools inspect php:8.5.11-fpm-bookworm \
+docker buildx imagetools inspect php:8.5.13-fpm-trixie \
   --format '{{.Manifest.MediaType}} {{.Manifest.Digest}}'
 ```
 
@@ -432,7 +432,7 @@ Update installer and Composer pins in their adjacent upstream stages. For
 example, the PHP declaration has this form:
 
 ```dockerfile
-FROM php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef AS php-upstream
+FROM php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f AS php-upstream
 ```
 
 For nginx, update `docker/nginx/Dockerfile`.
@@ -461,7 +461,7 @@ It checks every external `FROM` and `COPY --from` image in these files:
 [OK] Verifying base images of 3 Dockerfiles
 
 Dockerfile
-  line 2: php:8.5.11-fpm-bookworm@sha256:dd198c828c224e479bdaa184cdcf04a28c73d186bf5a885493bf9cc78d7196ef
+  line 6: php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
   OK    Tag digest matches
   OK    Multi-platform: linux/amd64 linux/arm/v7 linux/arm64/v8 linux/386 linux/ppc64le
 
