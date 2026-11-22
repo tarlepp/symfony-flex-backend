@@ -510,6 +510,78 @@ class CiGatesTest(unittest.TestCase):
                 self.assertNotEqual(unavailable.returncode, 0)
                 self.assertIn("ci-workflow-overview.sh", unavailable.stderr)
 
+    def test_overview_helper_renders_complete_status_and_target_formats(self):
+        helper = WORKFLOW.parents[2] / "scripts/ci/ci-workflow-overview.sh"
+        cases = (
+            ("false", "success", "", "## Example\n", ""),
+            ("false", "failure", "production", "## Example · production\n", ""),
+            ("true", "success", "development", "<details>\n<summary>Example · development · success</summary>\n",
+             "\n</details>\n"),
+            ("true", "failure", "", "<details open>\n<summary>Example · failure</summary>\n", "\n</details>\n"),
+        )
+        for collapsed, status, target, heading, closing in cases:
+            with self.subTest(collapsed=collapsed, status=status, target=target):
+                result = subprocess.run(
+                    ["bash", str(helper), "See logs.", "Scan", "failure", "Upload", "skipped"],
+                    env={**os.environ, "EVENT_NAME": "pull_request", "PRIOR_STATUS": status,
+                         "OVERVIEW_TITLE": "Example", "OVERVIEW_COLLAPSED": collapsed, "TARGET": target},
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                target_text = f" · Image: {target}" if target else ""
+                self.assertEqual(
+                    result.stdout,
+                    f"{heading}\nEvent: pull_request{target_text} · Job status before overview: **{status}**\n\n"
+                    "| Check | Result |\n| --- | --- |\n| Scan | failure |\n| Upload | skipped |\n\n"
+                    f"See logs.\n{closing}",
+                )
+
+    def test_image_update_overview_references_readiness_only_when_published(self):
+        workflow = (WORKFLOWS / "docker-image-updates.yml").read_text()
+        match = re.search(
+            r"^      - name: Publish workflow run overview\n"
+            r"(.*?)(?=^      - |\Z)", workflow, re.MULTILINE | re.DOTALL,
+        )
+        assert match is not None
+        step = match.group(1)
+        self.assertIn("PHP_READINESS_SUMMARY: ${{ needs.php-minor-readiness.outputs.summary-outcome }}", step)
+        self.assertIn("PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}", step)
+        shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        for publication, job_result in (("success", "success"), ("success", "failure"),
+                                        ("failure", "failure"), ("", "skipped")):
+            with self.subTest(publication=publication, job_result=job_result), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                summary = root / "summary"
+                (root / "docker-image-changes.md").write_text("## Change report\n")
+                outcomes = dict.fromkeys(
+                    ("BOOTSTRAP", "TESTS", "UPDATE", "VERIFY", "COMPOSER", "DOCTRINE",
+                     "CI_MARIADB", "DETAILS", "PULL_REQUEST"), "success",
+                )
+                result = subprocess.run(
+                    ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
+                    env={**os.environ, **outcomes, "GITHUB_STEP_SUMMARY": str(summary),
+                         "EVENT_NAME": "schedule", "PRIOR_STATUS": "success",
+                         "OVERVIEW_TITLE": "Docker image pin maintenance", "TARGET": "",
+                         "RUNNER_TEMP": directory, "BASE_BRANCH": "master",
+                         "PR_URL": "", "PR_OPERATION": "", "PHP_READINESS_SUMMARY": publication,
+                         "PHP_READINESS_RESULT": job_result},
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                output = summary.read_text()
+                self.assertIn("## Docker image pin maintenance\n", output)
+                self.assertIn("## Change report\n", output)
+                if publication == "success":
+                    self.assertIn("PHP minor readiness evidence is in the **Check PHP minor upgrade readiness** job summary", output)
+                    self.assertIn(f"(job result: {job_result})", output)
+                    self.assertNotIn("## PHP minor upgrade readiness", output)
+                    self.assertNotIn("**Result: Unavailable**", output)
+                else:
+                    self.assertEqual(output.count("## PHP minor upgrade readiness"), 1)
+                    self.assertIn("**Result: Unavailable**", output)
+                    self.assertIn(f"summary step: {publication or 'unavailable'}; readiness job: {job_result}", output)
+                    self.assertIn("No compatibility conclusion can be drawn", output)
+
     def test_overview_helper_rejects_invalid_inputs_and_write_errors(self):
         helper = WORKFLOW.parents[2] / "scripts/ci/ci-workflow-overview.sh"
         environment = {**os.environ, "EVENT_NAME": "push", "PRIOR_STATUS": "success", "TARGET": ""}

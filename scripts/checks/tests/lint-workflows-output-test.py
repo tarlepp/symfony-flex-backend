@@ -226,14 +226,14 @@ esac
         self.assertEqual(positions, sorted(positions))
         gate_start = result.stderr.index("[RUN] CI gate regressions (offline)\n")
         gate_end = result.stderr.index("[OK] CI gate regressions (offline)\n")
-        self.assertIn("Ran 20 tests", result.stderr[gate_start:gate_end])
+        self.assertIn("Ran 22 tests", result.stderr[gate_start:gate_end])
         self.assertIn(
             "\n[RUN] 1/5 - Validate CI gate contracts\n\n"
             "  [RUN] CI gate regressions (offline)\n", result.stderr,
         )
         self.assertRegex(
             result.stderr,
-            r"\n    Ran 20 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
+            r"\n    Ran 22 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
         )
         self.assertNotIn("\nOK\n", result.stderr)
         self.assertNotIn("\n    OK\n", result.stderr)
