@@ -730,6 +730,47 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                         ))
                         self.assertTrue(summary.read_text().endswith("</details>\n"))
 
+    def test_gate_summaries_do_not_repeat_analyzers(self):
+        scenarios = (
+            ("pull_request", {}, "success", "Job completed with result: success.", True),
+            ("pull_request", {
+                "PHP_CHANGED": "false", "STATIC_ANALYZERS": "skipped",
+                "LIGHTWEIGHT_ANALYZERS": "skipped",
+            }, "skipped", "Changed files do not affect PHP validation inputs.", True),
+            ("pull_request", {
+                "STATIC_ANALYZERS": "failure", "LIGHTWEIGHT_ANALYZERS": "failure",
+            }, "failure", "Job completed with result: failure.", False),
+            ("pull_request", {
+                "STATIC_ANALYZERS": "skipped", "LIGHTWEIGHT_ANALYZERS": "skipped",
+            }, "skipped", "Unexpected skip: validation was selected. The merge gate rejects this result.", False),
+            ("pull_request", {
+                "CHANGES": "failure", "STATIC_ANALYZERS": "skipped",
+                "LIGHTWEIGHT_ANALYZERS": "skipped",
+            }, "skipped", "Change detection did not succeed; validation selection is unavailable.", False),
+            ("schedule", {"LIGHTWEIGHT_ANALYZERS": "skipped"}, "skipped",
+             "Not part of scheduled dependency-security and image-update validation.", True),
+        )
+        for event, overrides, outcome, explanation, valid in scenarios:
+            with self.subTest(event=event, outcome=outcome, explanation=explanation):
+                with tempfile.TemporaryDirectory() as directory:
+                    prerequisite = Path(directory) / "prerequisite.md"
+                    final = Path(directory) / "final.md"
+                    prerequisite_result = self.run_gate(
+                        "ci-summary", event, GITHUB_STEP_SUMMARY=str(prerequisite), **overrides,
+                    )
+                    final_result = self.run_gate(
+                        "ci-result", event, GITHUB_STEP_SUMMARY=str(final), **overrides,
+                    )
+                    self.assertEqual(prerequisite_result.returncode == 0, valid)
+                    self.assertEqual(final_result.returncode == 0, valid)
+                    prerequisite_text = prerequisite.read_text()
+                    final_text = final.read_text()
+                    self.assertIn("Analyzer results and their skip reasons appear in Core CI result.", prerequisite_text)
+                    for label in ("Static analyzer matrix", "Lightweight analyzers"):
+                        self.assertNotIn(f"| {label} |", prerequisite_text)
+                        self.assertEqual(final_text.count(f"| {label} |"), 1)
+                        self.assertIn(f"| {label} | {outcome} | {explanation} |", final_text)
+
     def test_summaries_explain_failures_without_relaxing_gates(self):
         scenarios = [
             ("ci-summary", {"SECURITY_CHECK": "skipped"}, "Unexpected skip: validation was selected."),

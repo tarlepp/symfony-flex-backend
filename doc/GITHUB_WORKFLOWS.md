@@ -411,11 +411,12 @@ validation steps are not conditional on successful prerequisites.
 
 On the Actions run's **Summary** page, start with **Core CI result** for the
 final gate's inputs and skip explanations. Expand **CI prerequisite details**
-for lint, security and image-check results, and expand individual job details
-for step outcomes. Job details open automatically when prior steps failed; later
-cleanup failures are not included. **CI validation preview** is a collapsed
-selection forecast, not a result. GitHub may display these summaries in a
-different order because jobs finish independently.
+for lint, security and image-check results. Analyzer results and skip reasons
+appear only in the final table, although both gates still validate them. Expand
+individual job details for step outcomes. Job details open automatically when
+prior steps failed; later cleanup failures are not included. **CI validation
+preview** is a collapsed selection forecast, not a result. GitHub may display
+these summaries in a different order because jobs finish independently.
 
 The gate tables distinguish unaffected paths, scheduled scope, reporting
 eligibility, unsuccessful prerequisites and unexpected skips. They are written
