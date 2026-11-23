@@ -414,6 +414,7 @@ jobs:
         if: ${{ !cancelled() }}
         continue-on-error: true
         env:
+          OVERVIEW_TITLE: Docker image pin maintenance
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           BASE_BRANCH: ${{ github.ref_name }}

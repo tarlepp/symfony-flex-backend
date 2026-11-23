@@ -10,6 +10,7 @@
 # Details:
 #   Optional TARGET and OVERVIEW_TITLE customize the heading. Set
 #   OVERVIEW_COLLAPSED=true for expandable job details, opened on prior failure.
+#   PRIOR_STATUS is the job status before the overview, not each step outcome.
 #   Writes Markdown to stdout for the calling workflow step to append.
 #
 # Callers:
@@ -48,14 +49,18 @@ if [ "${OVERVIEW_COLLAPSED:-false}" = true ]; then
     fi
     printf ' · %s</summary>\n' "$PRIOR_STATUS"
 else
-    printf '## %s\n' "${OVERVIEW_TITLE:-Workflow run overview}"
+    printf '## %s' "${OVERVIEW_TITLE:-Workflow run overview}"
+    if [ -n "${TARGET:-}" ]; then
+        printf ' · %s' "$TARGET"
+    fi
+    printf '\n'
 fi
 echo
 printf 'Event: %s' "$EVENT_NAME"
 if [ -n "${TARGET:-}" ]; then
     printf ' · Image: %s' "$TARGET"
 fi
-printf ' · Prior steps: **%s**\n\n' "$PRIOR_STATUS"
+printf ' · Job status before overview: **%s**\n\n' "$PRIOR_STATUS"
 echo '| Check | Result |'
 echo '| --- | --- |'
 

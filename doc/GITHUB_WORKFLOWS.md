@@ -45,15 +45,18 @@ Core CI also publishes job-specific tables for its checks, analyzers, tests,
 image builds and scans, and external reporting. The daily vulnerability scan
 publishes one overview per image target. These overviews describe their own run,
 not the status of other workflows. Job tables report prior step outcomes,
-including skips after a failure; later cleanup failures are not included.
-Reporting shows token availability separately from upload outcomes, and core
-image scans show PR SARIF eligibility separately from generation and upload.
-Consult step logs, annotations and artifacts for findings and detailed results.
-A skipped or cancelled job may not publish an overview. Publishing an overview
-is informational and does not change validation results. Job overviews use
-`scripts/ci/ci-workflow-overview.sh` from the checkout; if checkout fails, they
-cannot be rendered. External reporting instead writes its skip reason when
-neither upload token is available.
+including skips after a failure. Their headings identify the workflow or job and,
+for image scans, the target. "Job status before overview" is the status at
+publication time, not a claim that every step passed; steps with
+`continue-on-error` can fail while it remains successful. Later cleanup failures
+are not included. Reporting shows token availability separately from upload
+outcomes, and core image scans show PR SARIF eligibility separately from
+generation and upload. Consult step logs, annotations and artifacts for findings
+and detailed results. A skipped or cancelled job may not publish an overview.
+Publishing an overview is informational and does not change validation results.
+Job overviews use `scripts/ci/ci-workflow-overview.sh` from the checkout; if
+checkout fails, they cannot be rendered. External reporting instead writes its
+skip reason when neither upload token is available.
 
 For pull requests, start with the **Checks** tab:
 

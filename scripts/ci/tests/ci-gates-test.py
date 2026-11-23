@@ -320,7 +320,7 @@ class CiGatesTest(unittest.TestCase):
                     self.assertTrue(output.startswith("<details>\n" if failed is None else "<details open>\n"))
                     self.assertIn(f"<summary>{rendered_title}", output)
                     self.assertTrue(output.endswith("\n</details>\n"))
-                    self.assertIn(f"Prior steps: **{'success' if failed is None else 'failure'}**", output)
+                    self.assertIn(f"Job status before overview: **{'success' if failed is None else 'failure'}**", output)
                     for variable, (_, label) in outcomes.items():
                         self.assertIn(f"| {label} | {values[variable]} |", output)
                     if job in ("docker-build", "docker-scan"):
@@ -372,8 +372,29 @@ class CiGatesTest(unittest.TestCase):
                         for row in expected:
                             self.assertIn(row, summary.read_text())
                         summary.unlink()
+                if job == "statistics":
+                    result = subprocess.run(
+                        ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
+                        env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
+                             "OVERVIEW_TITLE": title, "OVERVIEW_COLLAPSED": "true",
+                             "EVENT_NAME": "push", "PRIOR_STATUS": "success",
+                             **dict.fromkeys(outcomes, "success"), "LICENSES": "failure"},
+                        capture_output=True, text=True, check=False,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertIn("Job status before overview: **success**", summary.read_text())
+                    self.assertIn("| Dependency licenses | failure |", summary.read_text())
+                    summary.unlink()
 
     def test_standalone_workflow_overviews_report_actual_step_outcomes(self):
+        titles = {
+            "dependency-review.yml": "Dependency review",
+            "codeql.yml": "CodeQL workflow analysis",
+            "scorecard.yml": "OpenSSF Scorecard analysis",
+            "vulnerability-scan.yml": "Docker image vulnerability scan",
+            "docker-image-updates.yml": "Docker image pin maintenance",
+            "action-updates.yml": "Action and workflow tool updates",
+        }
         workflows = {
             "dependency-review.yml": {"REVIEW": ("review", "Dependency review")},
             "codeql.yml": {
@@ -421,6 +442,7 @@ class CiGatesTest(unittest.TestCase):
                     self.assertIn("if: ${{ !cancelled() }}", step)
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
+                self.assertIn(f"OVERVIEW_TITLE: {titles[filename]}", step)
                 for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(
@@ -435,10 +457,13 @@ class CiGatesTest(unittest.TestCase):
                     PHP_READINESS_SUMMARY="", PHP_READINESS_RESULT="failure",
                     UPDATE_RESULT="unavailable",
                 )
-                scenarios = [("success", None)] + [
-                    ("failure", variable) for variable in outcomes
+                scenarios = [("success", None, "")] + [
+                    ("failure", variable, "") for variable in outcomes
                 ]
-                for status, failed in scenarios:
+                if filename == "vulnerability-scan.yml":
+                    scenarios = [(status, failed, "production") for status, failed, _ in scenarios]
+                    scenarios.append(("success", None, "development"))
+                for status, failed, target in scenarios:
                     values = {
                         variable: "skipped" if status == "failure" else "success"
                         for variable in outcomes
@@ -449,19 +474,23 @@ class CiGatesTest(unittest.TestCase):
                         ["bash", "-euo", "pipefail", "-c", shell],
                         env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
                              "EVENT_NAME": "workflow_dispatch", "PRIOR_STATUS": status,
-                             "TARGET": "production" if filename == "vulnerability-scan.yml" else "",
+                             "OVERVIEW_TITLE": titles[filename],
+                             "TARGET": target,
                              **extra, **values},
                         cwd=WORKFLOW.parents[2],
                         capture_output=True, text=True, check=False,
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
                     output = summary.read_text()
-                    self.assertIn("## Workflow run overview", output)
-                    self.assertIn(f"Prior steps: **{status}**", output)
+                    heading = f"## {titles[filename]}"
+                    if filename == "vulnerability-scan.yml":
+                        heading += f" · {target}"
+                    self.assertIn(f"{heading}\n", output)
+                    self.assertIn(f"Job status before overview: **{status}**", output)
                     for variable, (_, label) in outcomes.items():
                         self.assertIn(f"| {label} | {values[variable]} |", output)
                     if filename == "vulnerability-scan.yml":
-                        self.assertIn("Image: production", output)
+                        self.assertIn(f"Image: {target}", output)
                         self.assertIn("Failure can indicate findings or an error", output)
                         self.assertIn("SARIF generation does not imply upload success", output)
                     else:
