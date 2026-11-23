@@ -38,13 +38,13 @@ jobs:
             bash scripts/checks/check-action-updates.sh || status=$?
           case "$status" in
             0)
-              echo "Action and workflow tool pins are current." >> "$GITHUB_STEP_SUMMARY"
+              echo "result=current" >> "$GITHUB_OUTPUT"
               ;;
             1)
-              echo "Action or workflow tool updates are available. See the step log for candidates." >> "$GITHUB_STEP_SUMMARY"
+              echo "result=updates available" >> "$GITHUB_OUTPUT"
               ;;
             *)
-              echo "Action and workflow tool checks were incomplete. See the step log for errors." >> "$GITHUB_STEP_SUMMARY"
+              echo "result=incomplete" >> "$GITHUB_OUTPUT"
               echo "::error::Action and workflow tool update checks failed (exit $status)."
               exit "$status"
               ;;
@@ -66,7 +66,9 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           UPDATES: ${{ steps.updates.outcome || 'skipped' }}
+          UPDATE_RESULT: ${{ steps.updates.outputs.result || 'unavailable' }}
         run: |
           bash scripts/ci/ci-workflow-overview.sh \
             'Updates are advisory; incomplete checks fail the workflow. See the step log for details.' \
-            'Action and workflow tool update check' "$UPDATES" >> "$GITHUB_STEP_SUMMARY"
+            'Action and workflow tool update check' "$UPDATES" \
+            'Update finding' "$UPDATE_RESULT" >> "$GITHUB_STEP_SUMMARY"
