@@ -149,6 +149,14 @@ Inspect the implementation and its actual callers:
    outputs before announcing paths. Distinguish analyzer/client completion from
    upload confirmation; preserve Shepherd's non-blocking upload behavior and
    native diagnostics.
+
+   The Make dispatcher adds two spaces to ordinary wrapped-target output lines
+   on stdout and stderr. GitHub workflow commands stay at column zero so
+   annotations remain active. The opening `[RUN]` and final outcome stay at the
+   same level. Self-reporting direct targets own their hierarchy: indent nested
+   sections and scenario statuses consistently, and close completed sections
+   with an outcome. Test both stream indentation and outcome levels; direct
+   command helper callers retain child output.
 7. Keep checks read-only unless mutation is explicitly part of the approved
    command. Use isolated temporary fixtures and cleanup limited to their
    resolved paths. Mock Docker, registry, Git, and other external commands

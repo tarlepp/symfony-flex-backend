@@ -241,7 +241,9 @@ $(WRAPPED_GOALS):
 ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
 	@$(MAKE) COMMAND_OUTPUT_RUN=1 $@
 else
-	+@bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" bash scripts/make/make.sh COMMAND_OUTPUT_RUN=1 $@
+	+@bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" \
+		python3 scripts/output/native-output.py --indent \
+		bash scripts/make/make.sh COMMAND_OUTPUT_RUN=1 $@
 endif
 $(filter-out $(WRAPPED_TARGETS),$(MAKECMDGOALS)):
 	@$(MAKE) $@

@@ -209,16 +209,15 @@ class CommandOutputTest(unittest.TestCase):
                 ])
 
                 self.assertEqual(result.returncode, status)
-                self.assertEqual(result.stdout, "    \033[32mfirst\033[0m\n\n    partial\n")
-                self.assertEqual(result.stderr, "    warning\n")
-
+                self.assertEqual(result.stdout, "  \033[32mfirst\033[0m\n\n  partial\n")
+                self.assertEqual(result.stderr, "  warning\n")
         status, terminal, stdout = self.run_terminal([
             "python3", str(ROOT / "scripts/output/native-output.py"), "--indent",
             "bash", "-c", 'test -t 1 && test -t 2 && printf "terminal\\n"',
         ])
 
         self.assertEqual(status, 0)
-        self.assertIn(b"    terminal\r\n", terminal)
+        self.assertIn(b"  terminal\r\n", terminal)
         self.assertEqual(stdout, b"")
         result = self.run_command([
             "python3", str(ROOT / "scripts/output/native-output.py"), "--indent",
@@ -227,6 +226,25 @@ class CommandOutputTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 127)
         self.assertIn("command not found", result.stderr)
+
+    def test_native_indentation_preserves_github_commands_at_column_zero(self):
+        result = self.run_command([
+            "python3", str(ROOT / "scripts/output/native-output.py"), "--indent",
+            "bash", "-c",
+            "printf ':'; sleep 0.1; "
+            "printf ':notice file=src/Example.php::annotation\\nordinary output\\n'; "
+            "printf ':' >&2; sleep 0.1; "
+            "printf ':warning::annotation\\nordinary diagnostic\\n' >&2",
+        ])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(
+            result.stdout,
+            "::notice file=src/Example.php::annotation\n  ordinary output\n",
+        )
+        self.assertEqual(
+            result.stderr,
+            "::warning::annotation\n  ordinary diagnostic\n",
+        )
 
     def test_native_indentation_keeps_partial_lines_visible(self):
         process = subprocess.Popen([
@@ -240,7 +258,7 @@ class CommandOutputTest(unittest.TestCase):
             ready, _, _ = select.select([process.stdout], [], [], 0.8)
 
             self.assertTrue(ready, "Partial output must stream before the command exits")
-            self.assertEqual(os.read(process.stdout.fileno(), 4096), b"    partial")
+            self.assertEqual(os.read(process.stdout.fileno(), 4096), b"  partial")
             stdout, stderr = process.communicate(timeout=5)
 
             self.assertEqual(process.returncode, 0)
@@ -910,25 +928,24 @@ class CommandOutputTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         groups = DOCKER_IMAGE_TEST_GROUPS
-        headings = [line for line in result.stderr.splitlines() if line.startswith("[RUN]")]
-
+        lines = result.stderr.splitlines()
+        headings = [line.strip() for line in lines if line.lstrip().startswith("[RUN]")]
         self.assertEqual(headings, ["[RUN] Docker image tests"] + [
             f"[RUN] {name}" for name, _ in groups
         ])
-
-        for index, (name, count) in enumerate(groups):
-            section = result.stderr.split(f"[RUN] {name}\n", 1)[1]
-            section = section.split("\n[RUN]", 1)[0]
-            results = [line for line in section.splitlines() if line.startswith("[OK]")]
-
-            if index == len(groups) - 1:
-                self.assertEqual(
-                    results.pop(),
-                    f"[OK] Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed",
-                )
-
-            self.assertEqual(len(results), count, section)
-
+        for name, count in groups:
+            with self.subTest(group=name):
+                start = lines.index(f"  [RUN] {name}")
+                end = lines.index(f"  [OK] {name}", start + 1)
+                scenarios = [
+                    line.strip() for line in lines[start + 1:end]
+                    if line.startswith("    [OK]")
+                ]
+                self.assertEqual(len(scenarios), count)
+        self.assertEqual(
+            lines[-1],
+            f"[OK] Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed",
+        )
         self.assertNotIn("\033", result.stderr)
 
     def test_suite_assertion_failure_has_context_and_captured_output(self):
@@ -1130,18 +1147,18 @@ class CommandOutputTest(unittest.TestCase):
 
                     self.assertEqual(result.returncode, int(failed), result.stderr)
                     self.assertIn("\n  [RUN] command-output regression suite\n", result.stderr)
-                    self.assertIn("    Ran 1 test", result.stderr)
+                    self.assertIn("  Ran 1 test", result.stderr)
                     self.assertNotIn("\nOK\n", result.stderr)
                     self.assertNotIn("\n    OK\n", result.stderr)
 
                     if failed == "1":
-                        self.assertIn("    FAILED (failures=1)\n", result.stderr)
+                        self.assertIn("  FAILED (failures=1)\n", result.stderr)
                         self.assertIn("fixture assertion", result.stderr)
                         self.assertIn("  [FAIL] command-output regression suite (exit 1)", result.stderr)
                         self.assertNotIn("make-launcher regression suite", result.stderr)
                     else:
-                        self.assertIn("    routing detail\n", result.stdout)
-                        self.assertIn("    routing warning\n", result.stderr)
+                        self.assertIn("  routing detail\n", result.stdout)
+                        self.assertIn("  routing warning\n", result.stderr)
                         self.assertIn("  [RUN] Pre-PR check selection regression suite\n", result.stderr)
                         self.assertIn("pre-PR detail\n", result.stdout)
                         self.assertIn(

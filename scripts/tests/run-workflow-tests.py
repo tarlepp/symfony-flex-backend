@@ -14,7 +14,7 @@
 #
 # Details:
 #   Loads the supplied Python file as a module and runs its unittest tests.
-#   Runner diagnostics go to stderr with four-space indentation; the standalone
+#   Runner diagnostics go to stderr with two-space indentation; the standalone
 #   OK footer and trailing blank lines are omitted. Test stdout is not filtered.
 #
 # Exit Status:
@@ -51,8 +51,7 @@ class NestedTestOutput:
             elif line != "OK":
                 self.stream.write("\n" * self.blank_lines)
                 self.blank_lines = 0
-
-                self.stream.write(f"    {line}\n")
+                self.stream.write(f"  {line}\n")
 
     def flush(self):
         self.stream.flush()
@@ -61,7 +60,7 @@ class NestedTestOutput:
         """Forward a final partial diagnostic and flush the underlying stream."""
 
         if self.pending:
-            self.stream.write(f"    {self.pending}\n")
+            self.stream.write(f"  {self.pending}\n")
             self.pending = ""
 
         self.stream.flush()

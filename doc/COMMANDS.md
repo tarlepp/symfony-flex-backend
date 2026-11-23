@@ -212,10 +212,12 @@ it. From the repository root on the Docker host:
 bash scripts/make/make.sh info info_msg="Local command information"
 ```
 
-Help marks destructive and overwrite targets. Information commands keep native
-stdout, with status messages on stderr. For example, from the repository root on
-the Docker host with development services running, redirect the license summary
-without including status banners:
+Help marks destructive and overwrite targets. Information commands retain their
+native stdout content, with shared status messages on stderr. Wrapped Make
+targets indent ordinary nonempty output lines by two spaces on both streams,
+including redirected stdout; GitHub workflow commands remain at column zero.
+From the repository root on the Docker host with development services running,
+redirect the license summary without status banners:
 
 ```bash
 mkdir -p build
@@ -366,8 +368,11 @@ no premature or final success banner. The shared command helper's
 `COMMAND_OUTPUT_MODE=stream` mode executes these sessions in place, preserving
 terminal descriptors and native exit/signal behavior. Its default run mode
 handles finite commands, complete multi-step recipes, and information commands;
-statuses stay on stderr so structured stdout remains usable. Foreground `start*`
-uses the default run mode to retain session-ended and cancellation reporting.
+statuses stay on stderr. Wrapped Make targets indent ordinary recipe output on
+both streams, while GitHub commands stay at column zero and the initial `[RUN]`
+and final outcome stay level. Foreground `start*` retains session-ended and
+cancellation reporting.
+
 Invalid host/container contexts and rejected startup attempts return failure.
 `stop` and `ci-stop` remove containers and networks while retaining named
 volumes.

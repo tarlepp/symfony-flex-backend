@@ -28,14 +28,30 @@ WORK="$(mktemp -d)"
 passed=0
 current_case='fixture setup'
 case_active=false
+group_active=false
+current_group=''
 failed_command=''
 failed_line=''
 
+status_at_indent() {
+    local indent=$1
+    shift
+
+    OUTPUT_STATUS_INDENT="$indent" output_status "$@"
+}
+
 finish_case() {
     if [ "$case_active" = true ]; then
-        output_status OK "$current_case"
+        status_at_indent '    ' OK "$current_case"
         passed=$((passed + 1))
         case_active=false
+    fi
+}
+
+finish_group() {
+    if [ "$group_active" = true ]; then
+        status_at_indent '  ' OK "$current_group"
+        group_active=false
     fi
 }
 
@@ -50,10 +66,13 @@ start_case() {
 
 start_group() {
     finish_case
+    finish_group
 
+    current_group=$1
+    group_active=true
     current_case="$1 setup"
     printf '\n' >&2
-    output_status RUN "$1"
+    status_at_indent '  ' RUN "$current_group"
 }
 
 cleanup() {
@@ -72,12 +91,28 @@ finish() {
 
     if [ "$status" -eq 0 ]; then
         finish_case
+        finish_group
         printf '\n' >&2
         output_status OK "Docker image tests: $passed scenarios passed"
     elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then
+        if [ "$case_active" = true ]; then
+            status_at_indent '    ' WARN "$current_case (exit $status)"
+            case_active=false
+        fi
+        if [ "$group_active" = true ]; then
+            status_at_indent '  ' WARN "$current_group (incomplete)"
+            group_active=false
+        fi
         output_status WARN "Docker image tests: interrupted during $current_case (exit $status)"
     else
-        output_status FAIL "$current_case (exit $status)"
+        if [ "$case_active" = true ]; then
+            status_at_indent '    ' FAIL "$current_case (exit $status)"
+            case_active=false
+        fi
+        if [ "$group_active" = true ]; then
+            status_at_indent '  ' FAIL "$current_group (incomplete)"
+            group_active=false
+        fi
         if [ -n "$failed_command" ]; then
             printf 'Assertion at line %s failed: %s\n' "$failed_line" "$failed_command" >&2
             printf 'Expected the assertion to succeed; actual exit: %s\n' "$status" >&2
@@ -158,8 +193,8 @@ write_tags() {
 
 output_status RUN 'Docker image tests'
 printf '%s\n' \
-    'Offline regression tests using temporary Dockerfiles and mocked Docker/registry responses.' \
-    'Actual repository Dockerfile pins are NOT checked. To validate them, run: make docker-image-verify-pins' >&2
+    '  Offline regression tests using temporary Dockerfiles and mocked Docker/registry responses.' \
+    '  Actual repository Dockerfile pins are NOT checked. To validate them, run: make docker-image-verify-pins' >&2
 
 mkdir -p "$WORK/bin" "$WORK/docker/nginx" "$WORK/docker/mariadb"
 cat > "$WORK/bin/docker" << 'EOF'
