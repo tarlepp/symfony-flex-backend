@@ -270,7 +270,9 @@ USER root
 
 # Keep the targeted fix after source copies so task rebuilds refresh cached tools.
 RUN apt-get update \
-    && apt-get install --only-upgrade --no-install-recommends -y linux-libc-dev \
+    && apt-get install --only-upgrade --no-install-recommends -y \
+        libgssapi-krb5-2 \
+        linux-libc-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN chmod 777 -R /home/dev /tmp \
@@ -288,9 +290,11 @@ ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Update only the CVE-affected headers, including when the shared base is cached.
+# Update only CVE-affected packages, including when the shared base is cached.
 RUN apt-get update \
-    && apt-get install --only-upgrade --no-install-recommends -y linux-libc-dev \
+    && apt-get install --only-upgrade --no-install-recommends -y \
+        libgssapi-krb5-2 \
+        linux-libc-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --exclude=./docker/* . /app
