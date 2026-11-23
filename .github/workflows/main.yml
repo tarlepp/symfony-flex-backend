@@ -901,6 +901,16 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          if [[ -n "$COVERALLS_REPO_TOKEN" ]]; then
+            echo "coveralls=available" >> "$GITHUB_OUTPUT"
+          else
+            echo "coveralls=not available" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "$SONAR_TOKEN" ]]; then
+            echo "sonar=available" >> "$GITHUB_OUTPUT"
+          else
+            echo "sonar=not available" >> "$GITHUB_OUTPUT"
+          fi
           if [[ -n "$COVERALLS_REPO_TOKEN" || -n "$SONAR_TOKEN" ]]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           else
@@ -990,6 +1000,8 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           PRIOR_STATUS: ${{ job.status }}
           REPORTING: ${{ steps.reporting.outcome || 'skipped' }}
+          COVERALLS_TOKEN: ${{ steps.reporting.outputs.coveralls || 'unavailable' }}
+          SONAR_TOKEN_STATUS: ${{ steps.reporting.outputs.sonar || 'unavailable' }}
           CLOVER: ${{ steps.clover.outcome || 'skipped' }}
           JUNIT: ${{ steps.junit.outcome || 'skipped' }}
           BOOTSTRAP: ${{ steps.bootstrap.outcome || 'skipped' }}
@@ -1002,6 +1014,7 @@ jobs:
             'Uploads require their respective tokens; see step logs for reporting details.' \
             'Reporting selection' "$REPORTING" 'Clover download' "$CLOVER" \
             'JUnit download' "$JUNIT" 'Bootstrap' "$BOOTSTRAP" \
+            'Coveralls token' "$COVERALLS_TOKEN" 'Sonar token' "$SONAR_TOKEN_STATUS" \
             'Coveralls installation' "$INSTALL" 'Coveralls upload' "$COVERALLS" \
             'Sonar report preparation' "$PREPARE" 'SonarQube scan' "$SONAR" >> "$GITHUB_STEP_SUMMARY"
 
@@ -1154,12 +1167,14 @@ jobs:
           TARGET: ${{ matrix.target }}
           IMAGE: ${{ steps.image.outcome || 'skipped' }}
           SCAN: ${{ steps.scan.outcome || 'skipped' }}
+          SARIF_ELIGIBILITY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && 'eligible' || 'not eligible' }}
           SARIF: ${{ steps.sarif.outcome || 'skipped' }}
           UPLOAD: ${{ steps.upload.outcome || 'skipped' }}
         run: |
           bash scripts/ci/ci-workflow-overview.sh \
-            'The blocking scan checks fixable HIGH and CRITICAL OS and library vulnerabilities. SARIF is published for same-repository PRs only; see scan logs for findings.' \
+            'The blocking scan checks fixable HIGH and CRITICAL OS and library vulnerabilities. Failure can indicate findings or an error; see scan logs. SARIF generation does not imply upload success or absence of findings.' \
             'Image artifact download' "$IMAGE" 'Blocking Trivy scan' "$SCAN" \
+            'PR SARIF eligibility (same-repository PRs only)' "$SARIF_ELIGIBILITY" \
             'PR SARIF generation' "$SARIF" 'Code scanning upload' "$UPLOAD" >> "$GITHUB_STEP_SUMMARY"
 
   ci-result:
