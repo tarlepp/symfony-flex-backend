@@ -154,9 +154,10 @@ assisted work:
   a specific reason to target another branch.
 * A pull request whose base is not `master` is a stacked pull request: its
   branch is based on the parent pull request's branch. State the base branch and
-  the parent pull request in the description. Merge the parent first, retarget
-  the child to `master`, then rebase it. See [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md#stacked-pull-requests)
-  for the procedure.
+  the parent pull request in the description. Keep later PRs draft while they
+  await their parents. Merge the parent first, retarget the child to `master`,
+  then rebase it and mark it ready when it is next in line. See
+  [REQUIRED_CHECKS.md](REQUIRED_CHECKS.md#stacked-pull-requests) for the procedure.
 
 ### Composer PHP platform [ᐞ](#table-of-contents)
 

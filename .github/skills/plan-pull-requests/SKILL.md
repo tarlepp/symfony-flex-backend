@@ -107,10 +107,13 @@ does not authorize executing every step, publishing, or rewriting history.
 
 For each proposed PR, state its purpose, intended base and dependency, expected
 grouped changes, review and validation boundary, and proposed merge order. For a
-stack, explain the parent-child relationship and intended retargeting after the
-parent merges. Flag proposed branches that do not yet exist separately from
-verified branches. Summarize why the recommended structure is preferable, a
-reasonable alternative, and any open decisions or missing evidence.
+stack, explain the parent-child relationship, recommend later PRs stay draft
+until they are next for review, and describe retargeting after the parent
+merges. Follow the [stacked PR procedure](../../../doc/REQUIRED_CHECKS.md#stacked-pull-requests)
+for draft CI behavior and required checks. Flag proposed branches that do not
+yet exist separately from verified branches. Summarize why the recommended
+structure is preferable, a reasonable alternative, and any open decisions or
+missing evidence.
 
 Examples:
 

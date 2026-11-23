@@ -34,6 +34,11 @@ import unittest
 
 WORKFLOW = Path(__file__).resolve().parents[3] / ".github/workflows/main.yml"
 CONTENT = WORKFLOW.read_text()
+DRAFT_GUARD = "(github.event_name != 'pull_request' || !github.event.pull_request.draft)"
+PR_TYPES = (
+    "    types:\n      - opened\n      - synchronize\n      - reopened\n"
+    "      - ready_for_review\n      - converted_to_draft\n"
+)
 
 
 def job(name):
@@ -171,7 +176,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         review = (WORKFLOW.parent / "dependency-review.yml").read_text()
         self.assertEqual(
             review.split("on:\n", 1)[1].split("\npermissions:", 1)[0],
-            "  pull_request:\n  merge_group:\n    types:\n      - checks_requested\n",
+            f"  pull_request:\n{PR_TYPES}  merge_group:\n    types:\n      - checks_requested\n",
         )
         self.assertIn("  merge_group:\n    types:\n      - checks_requested\n", CONTENT)
         self.assertIn("\npermissions:\n  contents: read\n", review)
@@ -273,21 +278,39 @@ class AnalyzerWorkflowTest(unittest.TestCase):
         events = CONTENT.split("  pull_request:\n", 1)[1].split("  merge_group:", 1)[0]
         self.assertEqual(
             events,
-            "    types:\n      - opened\n      - synchronize\n      - reopened\n",
+            PR_TYPES,
         )
         self.assertNotIn("github.event.action", CONTENT)
         self.assertNotIn("github.event.changes", CONTENT)
         self.assertIn("    name: Validate CI result\n", job("ci-result"))
 
-    def test_roots_and_gates_preserve_validation_without_metadata_guards(self):
-        for name in ("changes", "gitleaks"):
+    def test_draft_guards_preserve_validation_for_other_events(self):
+        for name in ("changes", "gitleaks", "statistics"):
             self.assertIn(
-                "    if: ${{ github.event_name != 'schedule' }}\n", job(name),
+                f"    if: ${{{{ github.event_name != 'schedule' && {DRAFT_GUARD} }}}}\n",
+                job(name),
             )
-        for name in ("ci-summary", "ci-result"):
+        self.assertIn(f"    if: ${{{{ !cancelled() && {DRAFT_GUARD} }}}}\n", job("ci-summary"))
+        self.assertIn("    if: ${{ !cancelled() }}\n", job("ci-result"))
+        codeql = (WORKFLOW.parent / "codeql.yml").read_text()
+        self.assertIn(f"  pull_request:\n{PR_TYPES}", codeql)
+        self.assertIn(f"    if: ${{{{ {DRAFT_GUARD[1:-1]} }}}}\n", codeql)
+        for workflow in (CONTENT, (WORKFLOW.parent / "dependency-review.yml").read_text()):
+            self.assertIn("  cancel-in-progress: true\n", workflow)
+            block = workflow.split("      - name: Block draft pull requests\n", 1)[1].split(
+                "\n      - ", 1,
+            )[0]
             self.assertIn(
-                "    if: ${{ !cancelled() }}\n", job(name),
+                "        if: ${{ github.event_name == 'pull_request' && "
+                "github.event.pull_request.draft }}\n", block,
             )
+            command = block.split("        run: |\n", 1)[1]
+            result = subprocess.run(
+                ["bash", "-c", textwrap.dedent(command)],
+                text=True, capture_output=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("::error::", result.stdout)
         for name in ("lint-configuration", "docker-image-verify-pins",
                      "lightweight-analyzers", "static-analyzers", "test", "docker-build"):
             self.assertRegex(job(name), r"    needs:(?: changes\n|\n      - changes\n)")
@@ -937,7 +960,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
 
     def test_statistics_job_is_informational_and_runs_on_non_scheduled_events(self):
         section = job("statistics")
-        self.assertIn("    if: ${{ github.event_name != 'schedule' }}\n", section)
+        self.assertIn(f"    if: ${{{{ github.event_name != 'schedule' && {DRAFT_GUARD} }}}}\n", section)
         self.assertIn("      - *checkout_full_history_step\n", section)
         for gate in ("ci-summary", "ci-result"):
             self.assertNotIn("statistics", dependencies(gate))
@@ -1216,14 +1239,14 @@ class AnalyzerWorkflowTest(unittest.TestCase):
             )
         for name in ("gitleaks",):
             self.assertIn(
-                "    if: ${{ github.event_name != 'schedule' }}\n", job(name),
+                f"    if: ${{{{ github.event_name != 'schedule' && {DRAFT_GUARD} }}}}\n",
+                job(name),
             )
             self.assertNotIn("needs.changes", job(name))
         for name in ("ci-summary", "ci-result"):
             self.assertIn("      - changes\n", job(name))
-            self.assertIn(
-                "    if: ${{ !cancelled() }}\n", job(name),
-            )
+        self.assertIn(f"    if: ${{{{ !cancelled() && {DRAFT_GUARD} }}}}\n", job("ci-summary"))
+        self.assertIn("    if: ${{ !cancelled() }}\n", job("ci-result"))
 
     def test_documentation_job_and_step_follow_detected_inputs(self):
         section = job("lint-documentation")
@@ -1855,8 +1878,8 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertIn("github.ref == 'refs/heads/master'", job("report"))
         for job_id in ("changes", "gitleaks"):
             self.assertIn("github.event_name != 'schedule'", job(job_id))
-        for job_id in ("ci-summary", "ci-result"):
-            self.assertIn("if: ${{ !cancelled() }}", job(job_id))
+        self.assertIn(f"if: ${{{{ !cancelled() && {DRAFT_GUARD} }}}}", job("ci-summary"))
+        self.assertIn("if: ${{ !cancelled() }}", job("ci-result"))
 
     def test_job_preview_for_changed_files_and_event_types(self):
         (self.root / "README.md").write_text("Updated documentation\n")

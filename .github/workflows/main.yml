@@ -13,6 +13,8 @@ on:
       - opened
       - synchronize
       - reopened
+      - ready_for_review
+      - converted_to_draft
   merge_group:
     types:
       - checks_requested
@@ -30,7 +32,7 @@ jobs:
   changes:
     name: Detect changed files
     runs-on: &ubuntu_runner ubuntu-26.04
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
     timeout-minutes: 5
     outputs:
       markdown: ${{ steps.detect.outputs.markdown }}
@@ -309,7 +311,7 @@ jobs:
   gitleaks:
     name: Gitleaks scan
     runs-on: *ubuntu_runner
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
     timeout-minutes: 5
     steps:
       - *harden_runner_step
@@ -453,7 +455,7 @@ jobs:
   statistics:
     name: Project statistics
     runs-on: *ubuntu_runner
-    if: ${{ github.event_name != 'schedule' }}
+    if: ${{ github.event_name != 'schedule' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
     timeout-minutes: 15
     steps:
       - *harden_runner_step
@@ -707,7 +709,7 @@ jobs:
       - security-check
       - lightweight-analyzers
       - static-analyzers
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
     steps:
       - *harden_runner_step
 
@@ -1176,6 +1178,12 @@ jobs:
     if: ${{ !cancelled() }}
     steps:
       - *harden_runner_step
+
+      - name: Block draft pull requests
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft }}
+        run: |
+          echo "::error::Draft pull requests require fresh CI after being marked ready for review."
+          exit 1
 
       - *checkout_step
 

@@ -316,7 +316,13 @@ class CiGatesTest(unittest.TestCase):
                 )
                 assert match is not None
                 step = match.group(1)
-                self.assertIn("if: ${{ !cancelled() }}", step)
+                if filename == "dependency-review.yml":
+                    self.assertIn(
+                        "if: ${{ !cancelled() && (github.event_name != 'pull_request' || "
+                        "!github.event.pull_request.draft) }}", step,
+                    )
+                else:
+                    self.assertIn("if: ${{ !cancelled() }}", step)
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
                 for variable, (step_id, _) in outcomes.items():
@@ -520,7 +526,13 @@ class CiGatesTest(unittest.TestCase):
                     r"^    if: (.+)$", self.jobs[job], re.MULTILINE,
                 )
                 # Keep failed prerequisites visible and release cancelled runs.
-                self.assertEqual(conditions, ["${{ !cancelled() }}"])
+                condition = "${{ !cancelled() }}"
+                if job == "ci-summary":
+                    condition = (
+                        "${{ !cancelled() && (github.event_name != 'pull_request' || "
+                        "!github.event.pull_request.draft) }}"
+                    )
+                self.assertEqual(conditions, [condition])
 
     def test_container_cleanup_remains_unconditional(self):
         cleanup = re.findall(
@@ -558,6 +570,12 @@ class CiGatesTest(unittest.TestCase):
         ):
             with self.subTest(job=job):
                 steps = self.jobs[job].split("    steps:\n", 1)[1]
+                if job == "ci-result":
+                    steps, count = re.subn(
+                        r"\n      - name: Block draft pull requests\n.*?(?=\n      - )",
+                        "", steps, flags=re.DOTALL,
+                    )
+                    self.assertEqual(count, 1)
                 self.assertEqual(
                     steps.split("        env:\n", 1)[0],
                     "      - *harden_runner_step\n\n"
