@@ -885,6 +885,20 @@ does not execute hosted jobs. See [validation selection](TESTING.md#selecting-va
 for narrower tests and [branch protection](REQUIRED_CHECKS.md) for settings verification.
 Never set CI environment flags locally to bypass setup guards.
 
+For summary changes, run the workflow validator and output-contract suite from
+the repository root on the Docker host with the PHP development service running:
+
+```bash
+make lint-workflows
+make test-command-output
+```
+
+The offline fixtures exercise gate decisions, overview formatting, summary
+publication and unavailable results. They do not render GitHub's UI or execute
+scheduled jobs, uploads, scans or external services. Inspect the corresponding
+hosted run and job logs after an authorized push or dispatch to verify those
+surfaces; a skipped or cancelled job may not publish a summary.
+
 ## Troubleshooting [ᐞ](#table-of-contents)
 
 <a id="troubleshooting"></a>
