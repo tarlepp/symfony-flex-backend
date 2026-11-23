@@ -773,20 +773,21 @@ were built for them. For pull requests, a separate summary compares the merge
 base and PR head by project area, excluding the same lockfiles and recognized
 generated artifacts. Renames are counted as additions and deletions; binary
 files have no line counts. Collection failures are shown in the job overview and
-do not block or delay the merge gate. The workflow run itself can remain in
-progress while statistics finish; the statistics job's 15-minute timeout is
-unchanged. Setup failures can leave some summaries unavailable. When PHP
-analyzers are selected, the lightweight analyzer job also publishes its existing
-PHPLoc output and the PHP Insights matrix job publishes its four score lines.
-When tests produce usable JUnit results, the test job also publishes its
-existing PhpMetrics output. Summary publication does not change analyzer or test
-results; these job summaries may appear in any order because jobs run in
-parallel. Changes to `ci-test-reports.py` select workflow regressions and full
-PHP/test validation; changes to `ci-statistics-summary.sh` select workflow
-validation. After PHPUnit succeeds or fails (unless cancelled), CI checks
-required report files and attempts artifact uploads. Missing required reports
-fail the job, as do malformed or structurally invalid JUnit/Clover XML and
-missing or invalid nonnegative count metrics. JUnit suite counts must be
+do not block or delay the merge gate. Successful statistics output is collapsed;
+failed commands expand with their incomplete output and exit status visible. The
+workflow run itself can remain in progress while statistics finish; the
+statistics job's 15-minute timeout is unchanged. Setup failures can leave some
+summaries unavailable. When PHP analyzers are selected, the lightweight analyzer
+job also publishes its existing PHPLoc output and the PHP Insights matrix job
+publishes its four score lines. When tests produce usable JUnit results, the test
+job also publishes its existing PhpMetrics output. Summary publication does not
+change analyzer or test results; these job summaries may appear in any order
+because jobs run in parallel. Changes to `ci-test-reports.py` select workflow
+regressions and full PHP/test validation; changes to `ci-statistics-summary.sh`
+select workflow validation. After PHPUnit succeeds or fails (unless cancelled),
+CI checks required report files and attempts artifact uploads. Missing required
+reports fail the job, as do malformed or structurally invalid JUnit/Clover XML
+and missing or invalid nonnegative count metrics. JUnit suite counts must be
 integers; Clover project metrics must include statement and covered-statement
 counts, with coverage no greater than the total. Zero counts and reports
 recording failed tests remain valid inputs. HTML reports are checked only for

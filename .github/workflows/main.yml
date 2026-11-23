@@ -457,6 +457,8 @@ jobs:
     runs-on: *ubuntu_runner
     if: ${{ github.event_name != 'schedule' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
     timeout-minutes: 15
+    env:
+      STATISTICS_COLLAPSED: 'true'
     steps:
       - *harden_runner_step
 
