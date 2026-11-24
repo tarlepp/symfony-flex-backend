@@ -9,7 +9,7 @@
 #
 # Details:
 #   Optional TARGET and OVERVIEW_TITLE customize the heading. Set
-#   OVERVIEW_COLLAPSED=true for expandable job details, opened on prior failure.
+#   OVERVIEW_COLLAPSED=true for expandable job details, opened on attention.
 #   PRIOR_STATUS is the job status before the overview, not each step outcome.
 #   Writes Markdown to stdout for the calling workflow step to append.
 #
@@ -37,23 +37,66 @@ shift
 : "${EVENT_NAME:?EVENT_NAME is required}"
 : "${PRIOR_STATUS:?PRIOR_STATUS is required}"
 
+overview="✅ Reported checks successful before overview"
+attention=false
+incomplete=false
+if [ "$PRIOR_STATUS" != success ]; then
+    attention=true
+fi
+
+overview_args=("$@")
+for ((index = 0; index < ${#overview_args[@]}; index += 2)); do
+    label=${overview_args[index]}
+    result=${overview_args[index + 1]}
+    case "$label" in
+        Analyzer)
+            case "$result" in
+                Psalm|PHPStan|"PHP Insights") ;;
+                *) attention=true ;;
+            esac
+            ;;
+        "Update finding")
+            [ "$result" = current ] || attention=true
+            ;;
+        "Coveralls token"|"Sonar token"|"PR SARIF eligibility (same-repository PRs only)")
+            case "$result" in
+                available|"not available"|eligible|"not eligible") incomplete=true ;;
+                *) attention=true ;;
+            esac
+            ;;
+        *)
+            case "$result" in
+                success) ;;
+                skipped) incomplete=true ;;
+                *) attention=true ;;
+            esac
+            ;;
+    esac
+done
+
+if [ "$attention" = true ]; then
+    overview="⚠️ Reported results need attention before overview"
+elif [ "$incomplete" = true ]; then
+    overview="➖ Skipped or informational results before overview"
+fi
+
 if [ "${OVERVIEW_COLLAPSED:-false}" = true ]; then
-    if [ "$PRIOR_STATUS" = success ]; then
-        echo '<details>'
-    else
+    if [ "$attention" = true ]; then
         echo '<details open>'
+    else
+        echo '<details>'
     fi
     printf '<summary>%s' "${OVERVIEW_TITLE:-Workflow run overview}"
     if [ -n "${TARGET:-}" ]; then
         printf ' · %s' "$TARGET"
     fi
-    printf ' · %s</summary>\n' "$PRIOR_STATUS"
+    printf ' · %s</summary>\n' "$overview"
 else
     printf '## %s' "${OVERVIEW_TITLE:-Workflow run overview}"
     if [ -n "${TARGET:-}" ]; then
         printf ' · %s' "$TARGET"
     fi
-    printf '\n'
+    printf '\n\n%s\n' "$overview"
 fi
 echo
 printf 'Event: %s' "$EVENT_NAME"

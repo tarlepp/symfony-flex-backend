@@ -102,6 +102,28 @@ class CiGatesTest(unittest.TestCase):
                 summary.read_text(),
                 "<details>\n<summary>Existing</summary>\n\n    first\n    second\n\n\n</details>\n",
             )
+            for source_status in ("success", "failure", "unknown"):
+                with self.subTest(source_status=source_status):
+                    summary.write_text("")
+                    result = subprocess.run(
+                        ["bash", str(helper), "file", "Existing", str(output)],
+                        env={**environment, "STATISTICS_COLLAPSED": "true",
+                             "STATISTICS_SOURCE_STATUS": source_status},
+                        text=True, capture_output=True, check=False,
+                    )
+                    if source_status == "unknown":
+                        self.assertNotEqual(result.returncode, 0)
+                        self.assertIn("Invalid statistics source status", result.stderr)
+                        self.assertEqual(summary.read_text(), "")
+                    else:
+                        self.assertEqual(result.returncode, 0, result.stderr)
+                        self.assertTrue(summary.read_text().startswith(
+                            "<details open>\n<summary>Existing · failed</summary>\n"
+                            if source_status == "failure" else "<details>\n<summary>Existing</summary>\n"
+                        ))
+                        self.assertEqual("Producing step failed" in summary.read_text(),
+                                         source_status == "failure")
+                        self.assertIn("    first\n    second\n", summary.read_text())
             output.unlink()
             result = subprocess.run(
                 ["bash", str(helper), "file", "Missing", str(output)],
@@ -180,8 +202,17 @@ class CiGatesTest(unittest.TestCase):
 
     def test_core_job_overviews_report_actual_outcomes(self):
         self.assertIn("    env:\n      STATISTICS_COLLAPSED: 'true'\n", self.jobs["statistics"])
-        for job in ("lightweight-analyzers", "static-analyzers", "test"):
-            self.assertNotIn("STATISTICS_COLLAPSED", self.jobs[job])
+        for job, step, producer in (
+            ("lightweight-analyzers", "PHPLoc", "phploc"),
+            ("test", "PhpMetrics", "metrics"),
+        ):
+            content = self.jobs[job]
+            match = re.search(rf"^      - name: Publish {step} statistics\n(.*?)(?=^      - |\Z)",
+                              content, re.MULTILINE | re.DOTALL)
+            assert match is not None
+            self.assertIn("STATISTICS_COLLAPSED: 'true'", match[1])
+            self.assertIn(f"STATISTICS_SOURCE_STATUS: ${{{{ steps.{producer}.outcome }}}}", match[1])
+        self.assertNotIn("STATISTICS_COLLAPSED", self.jobs["static-analyzers"])
         jobs = {
             "lint-configuration": {
                 "BOOTSTRAP": ("bootstrap", "Bootstrap"), "INFO": ("application-info", "Application information"),
@@ -399,6 +430,8 @@ class CiGatesTest(unittest.TestCase):
                         capture_output=True, text=True, check=False,
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertTrue(summary.read_text().startswith("<details open>\n"))
+                    self.assertIn("⚠️ Reported results need attention before overview", summary.read_text())
                     self.assertIn("Job status before overview: **success**", summary.read_text())
                     self.assertIn("| Dependency licenses | failure |", summary.read_text())
                     summary.unlink()
@@ -530,28 +563,57 @@ class CiGatesTest(unittest.TestCase):
     def test_overview_helper_renders_complete_status_and_target_formats(self):
         helper = WORKFLOW.parents[2] / "scripts/ci/ci-workflow-overview.sh"
         cases = (
-            ("false", "success", "", "## Example\n", ""),
-            ("false", "failure", "production", "## Example · production\n", ""),
-            ("true", "success", "development", "<details>\n<summary>Example · development · success</summary>\n",
-             "\n</details>\n"),
-            ("true", "failure", "", "<details open>\n<summary>Example · failure</summary>\n", "\n</details>\n"),
+            ("false", "success", "", "success", "success", "✅ Reported checks successful before overview"),
+            ("false", "failure", "production", "success", "skipped", "⚠️ Reported results need attention before overview"),
+            ("true", "success", "development", "success", "skipped", "➖ Skipped or informational results before overview"),
+            ("true", "success", "", "failure", "skipped", "⚠️ Reported results need attention before overview"),
+            ("true", "success", "", "unavailable", "success", "⚠️ Reported results need attention before overview"),
+            ("true", "success", "", "success", "success", "✅ Reported checks successful before overview"),
+            ("true", "failure", "", "failure", "skipped", "⚠️ Reported results need attention before overview"),
         )
-        for collapsed, status, target, heading, closing in cases:
-            with self.subTest(collapsed=collapsed, status=status, target=target):
+        for collapsed, status, target, scan, upload, overview in cases:
+            with self.subTest(collapsed=collapsed, status=status, target=target, scan=scan, upload=upload):
                 result = subprocess.run(
-                    ["bash", str(helper), "See logs.", "Scan", "failure", "Upload", "skipped"],
+                    ["bash", str(helper), "See logs.", "Scan", scan, "Upload", upload],
                     env={**os.environ, "EVENT_NAME": "pull_request", "PRIOR_STATUS": status,
                          "OVERVIEW_TITLE": "Example", "OVERVIEW_COLLAPSED": collapsed, "TARGET": target},
                     text=True, capture_output=True, check=False,
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 target_text = f" · Image: {target}" if target else ""
+                heading_target = f" · {target}" if target else ""
+                if collapsed == "true":
+                    details = "<details open>" if "⚠️" in overview else "<details>"
+                    heading = f"{details}\n<summary>Example{heading_target} · {overview}</summary>\n"
+                    closing = "\n</details>\n"
+                else:
+                    heading = f"## Example{heading_target}\n\n{overview}\n"
+                    closing = ""
                 self.assertEqual(
                     result.stdout,
                     f"{heading}\nEvent: pull_request{target_text} · Job status before overview: **{status}**\n\n"
-                    "| Check | Result |\n| --- | --- |\n| Scan | failure |\n| Upload | skipped |\n\n"
+                    f"| Check | Result |\n| --- | --- |\n| Scan | {scan} |\n| Upload | {upload} |\n\n"
                     f"See logs.\n{closing}",
                 )
+        for label, finding, expected in (
+            ("Update finding", "current", "✅ Reported checks successful before overview"),
+            ("Update finding", "updates available", "⚠️ Reported results need attention before overview"),
+            ("Update finding", "success", "⚠️ Reported results need attention before overview"),
+            ("Update finding", "unavailable", "⚠️ Reported results need attention before overview"),
+            ("Analyzer", "PHPStan", "✅ Reported checks successful before overview"),
+            ("Analyzer", "", "⚠️ Reported results need attention before overview"),
+            ("Sonar token", "not available", "➖ Skipped or informational results before overview"),
+        ):
+            with self.subTest(label=label, finding=finding):
+                result = subprocess.run(
+                    ["bash", str(helper), "See logs.", "Update check", "success", label, finding],
+                    env={**os.environ, "EVENT_NAME": "schedule", "PRIOR_STATUS": "success",
+                         "OVERVIEW_COLLAPSED": "true", "TARGET": ""},
+                    text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(expected, result.stdout)
+                self.assertEqual(result.stdout.startswith("<details open>"), "⚠️" in expected)
 
     def test_image_update_overview_references_readiness_only_when_published(self):
         workflow = (WORKFLOWS / "docker-image-updates.yml").read_text()

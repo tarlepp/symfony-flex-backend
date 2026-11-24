@@ -749,6 +749,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     self.assertIn("| Check | Result | Explanation |", summary.read_text())
                     if gate == "ci-result":
                         self.assertIn("## Core CI result", summary.read_text())
+                        self.assertIn("✅ Required gate inputs match expected results.", summary.read_text())
                         self.assertIn("| Change detection | success |", summary.read_text())
                         self.assertIn("| Project statistics | independent |", summary.read_text())
                         self.assertIn("this gate does not wait for collection", summary.read_text())
@@ -822,6 +823,7 @@ class AnalyzerWorkflowTest(unittest.TestCase):
                     self.assertEqual(rows[0], first)
                     self.assertEqual(len(rows), len(set(rows)))
                     self.assertIn("**Needs attention:", summary.read_text())
+                    self.assertIn("⚠️ **Needs attention:", summary.read_text())
                     self.assertIn(explanation, summary.read_text())
 
     def test_final_summary_keeps_expected_skips_out_of_attention(self):

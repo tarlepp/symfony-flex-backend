@@ -49,14 +49,22 @@ including skips after a failure. Their headings identify the workflow or job and
 for image scans, the target. "Job status before overview" is the status at
 publication time, not a claim that every step passed; steps with
 `continue-on-error` can fail while it remains successful. Later cleanup failures
-are not included. Reporting shows token availability separately from upload
-outcomes, and core image scans show PR SARIF eligibility separately from
-generation and upload. Consult step logs, annotations and artifacts for findings
-and detailed results. A skipped or cancelled job may not publish an overview.
-Publishing an overview is informational and does not change validation results.
-Job overviews use `scripts/ci/ci-workflow-overview.sh` from the checkout; if
-checkout fails, they cannot be rendered. External reporting instead writes its
-skip reason when neither upload token is available.
+are not included. Shared overviews use ✅ when the reported checks so far are
+successful, ⚠️ for failed, unrecognized or advisory results needing attention,
+and ➖ for skips or informational availability. A skip is not assumed to be
+intentional; inspect the table and gate explanations. Attention opens a
+collapsed overview even if the prior job status is successful. These indicators
+describe only the reported inputs, not the final job status or third-party
+findings. The Core CI result separately marks whether required gate inputs match
+their expected outcomes, including approved skips. Reporting shows token
+availability separately from upload outcomes, and core image scans show PR SARIF
+eligibility separately from generation and upload. Consult step logs,
+annotations and artifacts for findings and detailed results. A skipped or
+cancelled job may not publish an overview. Publishing an overview is
+informational and does not change validation results. Job overviews use
+`scripts/ci/ci-workflow-overview.sh` from the checkout; if checkout fails, they
+cannot be rendered. External reporting instead writes its skip reason when
+neither upload token is available.
 
 Gitleaks normally publishes its own success or findings summary. Its separate
 job overview is omitted on success to avoid duplication, but remains available
@@ -798,20 +806,23 @@ statistics job's 15-minute timeout is unchanged. Setup failures can leave some
 summaries unavailable. When PHP analyzers are selected, the lightweight analyzer
 job also publishes its existing PHPLoc output and the PHP Insights matrix job
 publishes its four score lines. When tests produce usable JUnit results, the test
-job also publishes its existing PhpMetrics output. Summary publication does not
-change analyzer or test results; these job summaries may appear in any order
-because jobs run in parallel. Changes to `ci-test-reports.py` select workflow
-regressions and full PHP/test validation; changes to `ci-statistics-summary.sh`
-select workflow validation. After PHPUnit succeeds or fails (unless cancelled),
-CI checks required report files and attempts artifact uploads. Missing required
-reports fail the job, as do malformed or structurally invalid JUnit/Clover XML
-and missing or invalid nonnegative count metrics. JUnit suite counts must be
-integers; Clover project metrics must include statement and covered-statement
-counts, with coverage no greater than the total. Zero counts and reports
-recording failed tests remain valid inputs. HTML reports are checked only for
-nonempty files. The test/coverage job summary is informational and may fail
-without failing the job; it does not replace the required artifacts. PhpMetrics
-needs a usable JUnit report.
+job also publishes its existing PhpMetrics output. PHPLoc and PhpMetrics output
+is collapsed on producer success and expanded with an incomplete-output warning
+on producer failure; test totals and coverage remain visible. Summary
+publication does not change analyzer or test results; these job summaries may
+appear in any order because jobs run in parallel. Changes to
+`ci-test-reports.py` select workflow regressions and full PHP/test validation;
+changes to `ci-statistics-summary.sh` select workflow validation. After PHPUnit
+succeeds or fails (unless cancelled), CI checks required report files and
+attempts artifact uploads. Missing required reports fail the job, as do
+malformed or structurally invalid JUnit/Clover XML and missing or invalid
+nonnegative count metrics. JUnit suite counts must be integers; Clover project
+metrics must include statement and covered-statement counts, with coverage no
+greater than the total. Zero counts and reports recording failed tests remain
+valid inputs. HTML reports are checked only for nonempty files. The
+test/coverage job summary is informational and may fail without failing the job;
+it does not replace the required artifacts. PhpMetrics needs a usable JUnit
+report.
 
 `External reporting` runs on PRs and `master` pushes after both tests and
 `ci-summary` succeed. Before checkout, the job checks whether either optional

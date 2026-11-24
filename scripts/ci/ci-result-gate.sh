@@ -128,7 +128,9 @@ write_summary() {
     echo
     echo "Start here for the final gate's inputs. Expand CI prerequisite and job details for individual checks and skip reasons."
     if ((${#attention_rows[@]})); then
-        printf '**Needs attention: %s result(s).** These appear first; inspect the named job logs and annotations.\n' "${#attention_rows[@]}"
+        printf '⚠️ **Needs attention: %s result(s).** These appear first; inspect the named job logs and annotations.\n' "${#attention_rows[@]}"
+    else
+        echo '✅ Required gate inputs match expected results.'
     fi
     echo
     echo "| Check | Result | Explanation |"
