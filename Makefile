@@ -283,7 +283,8 @@ define COMPOSE_RUN
 	@$(4) HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) OUTPUT_SUCCESS_MESSAGE="$(3)" bash scripts/output/command-output.sh --run "$(1)" $(2)
 endef
 
-# Help entrypoints (not listed in help).
+# Manual, documented helper: keep the INFO line unindented for compatibility.
+# Pass info_msg as message data; never evaluate it as a shell command.
 info_msg := Message
 
 help:
