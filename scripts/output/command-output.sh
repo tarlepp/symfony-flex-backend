@@ -115,7 +115,11 @@ output_status() {
 }
 
 output_result() {
-    if [ "${OUTPUT_RUN_GROUPED:-0}" != 1 ]; then
+    if [ "${OUTPUT_RUN_GROUPED:-0}" != 1 ] && ! {
+        [ "${OUTPUT_COMPACT_TOP_LEVEL:-0}" = 1 ] &&
+        [ -z "${OUTPUT_STATUS_INDENT:-}" ] &&
+        { [ "$1" = OK ] || [ "$1" = FAIL ]; }
+    }; then
         printf '\n' >&2
     fi
 
@@ -162,9 +166,9 @@ output_run() {
     ' TERM
 
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
-        OUTPUT_PROGRESS_STARTED='' output_relay "$label" "${command[@]}" || status=$?
+        OUTPUT_COMPACT_TOP_LEVEL=0 OUTPUT_PROGRESS_STARTED='' output_relay "$label" "${command[@]}" || status=$?
     else
-        OUTPUT_PROGRESS_STARTED='' "${command[@]}" || status=$?
+        OUTPUT_COMPACT_TOP_LEVEL=0 OUTPUT_PROGRESS_STARTED='' "${command[@]}" || status=$?
     fi
 
     trap - INT TERM

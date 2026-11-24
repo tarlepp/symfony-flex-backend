@@ -154,16 +154,23 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         titles[7] = "Configuration and information"
         titles[8] = "Reports and uploads"
 
+        first = 1
         for (i = 1; i <= 8; i++) {
             group = order[i]
             if (populated[group]) {
+                if (!first) {
+                    printf "\n"
+                }
+                first = 0
                 printf "%s%s%s\n", blue, titles[group], reset
                 for (risk = 0; risk <= 2; risk++) {
                     printf "%s", entries[group, risk]
                 }
 
-                printf "\n"
             }
+        }
+        if (!first && ENVIRON["OUTPUT_COMPACT_TOP_LEVEL"] != "1") {
+            printf "\n"
         }
     }
 '

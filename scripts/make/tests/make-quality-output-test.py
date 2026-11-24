@@ -220,7 +220,7 @@ done
                 )
                 self.assertEqual(result.stderr.count(f"[OK] {completion_label}\n"), 1)
                 self.assertTrue(
-                    result.stderr.endswith(f"\n\n[OK] {completion_label}\n")
+                    result.stderr.endswith(f"\n[OK] {completion_label}\n")
                 )
                 self.assertIn("  native progress\n", result.stdout)
                 self.assertIn("::notice file=src/Example.php", result.stderr)
@@ -242,7 +242,7 @@ done
         )
         self.assertTrue(
             result.stderr.endswith(
-                "\n\n[OK] Lint PHP files parallel (make php-parallel-lint)\n"
+                "\n[OK] Lint PHP files parallel (make php-parallel-lint)\n"
             ),
             result.stderr,
         )
@@ -610,7 +610,7 @@ done
 
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn("[WARN]", result.stderr)
-                self.assertTrue(result.stderr.endswith(f"\n\n[OK] {label}\n"), result.stderr)
+                self.assertTrue(result.stderr.endswith(f"\n[OK] {label}\n"), result.stderr)
                 self.assertLess(result.stderr.index("[WARN]"), result.stderr.index("native annotation"))
                 result, calls = self.run_target(target, FAIL_COMMAND=command)
 
@@ -831,7 +831,7 @@ done
         self.assertTrue(unrelated.exists())
         self.assertTrue((self.root / "vendor").exists())
         self.assertIn("[WARN]", result.stderr)
-        self.assertTrue(result.stderr.endswith("\n\n[OK] Remove tool dependencies\n"))
+        self.assertTrue(result.stderr.endswith("\n[OK] Remove tool dependencies\n"))
 
     def test_ci_configuration_guard_precedes_mutation(self):
         self.prepare_mutation_fixtures()

@@ -104,7 +104,8 @@ class MakeCheckOutputTest(unittest.TestCase):
         docker.write_text("#!/usr/bin/env bash\nexit 0\n")
         docker.chmod(0o755)
 
-    def run_check(self, target, status=0, color="never", no_color="", run_target="", grouped="0"):
+    def run_check(self, target, status=0, color="never", no_color="", run_target="", grouped="0",
+                  merged=False):
         """Return the Make result and the fresh command log for one invocation."""
         calls = self.root / "calls"
 
@@ -120,7 +121,8 @@ class MakeCheckOutputTest(unittest.TestCase):
             ["make", "--no-print-directory", "APPLICATION_CONFIG=unused",
              "INSIDE_DOCKER_CONTAINER=1", "INSIDE_CONTAINER_RUNTIME=0",
              f"COLOR={color}", target],
-            cwd=self.root, env=environment, text=True, capture_output=True, check=False,
+            cwd=self.root, env=environment, text=True, stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT if merged else subprocess.PIPE, check=False,
         )
 
         return result, calls.read_text()
@@ -143,11 +145,11 @@ class MakeCheckOutputTest(unittest.TestCase):
                     if status == 0:
                         self.assertEqual(result.returncode, 0, result.stderr)
                         self.assertEqual(result.stderr.count("[OK] " + label), 1)
-                        self.assertIn(f"{indent}fixture diagnostic\n\n[OK] {label}", result.stderr)
+                        self.assertIn(f"{indent}fixture diagnostic\n[OK] {label}", result.stderr)
                     else:
                         self.assertNotEqual(result.returncode, 0)
                         self.assertIn(f"[FAIL] {label} (exit {status})", result.stderr)
-                        self.assertIn(f"{indent}fixture diagnostic\n\n[FAIL] {label}", result.stderr)
+                        self.assertIn(f"{indent}fixture diagnostic\n[FAIL] {label}", result.stderr)
                         self.assertIn(f"Error {status}", result.stderr)
                         self.assertNotIn("[OK]", result.stderr)
 
@@ -161,10 +163,25 @@ class MakeCheckOutputTest(unittest.TestCase):
                     grouped, _ = self.run_check(target, status=status, run_target=target, grouped="1")
                     self.assertEqual(direct.returncode, grouped.returncode)
                     self.assertEqual(direct.stdout, grouped.stdout)
-                    direct_stderr = direct.stderr.replace("\n\n[OK]", "\n[OK]").replace("\n\n[FAIL]", "\n[FAIL]")
+                    direct_stderr = direct.stderr
                     grouped_stderr = grouped.stderr.replace(f" (make {target})", "")
                     # Make's recipe error includes a line number, not part of the target output.
                     self.assertEqual(direct_stderr, grouped_stderr)
+
+    def test_combined_streams_keep_main_outcome_adjacent_to_output(self):
+        for status in (0, 7):
+            for grouped in ("0", "1"):
+                with self.subTest(status=status, grouped=grouped):
+                    result, _ = self.run_check(
+                        "test-make-routing", status=status, grouped=grouped, merged=True,
+                        run_target="test-make-routing" if grouped == "1" else "",
+                    )
+                    label = "Make container routing (offline mocked tests)"
+                    if grouped == "1":
+                        label += " (make test-make-routing)"
+                    outcome = f"[OK] {label}" if status == 0 else f"[FAIL] {label} (exit 7)"
+                    self.assertIn(f"  fixture diagnostic\n{outcome}\n", result.stdout)
+                    self.assertNotIn(f"\n\n{outcome}", result.stdout)
 
     def test_dependency_checks_indent_their_native_output(self):
         for level in ("latest", "minor", "patch"):

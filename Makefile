@@ -62,6 +62,7 @@ NATIVE_COLOR := $(native_color)
 endif
 export NATIVE_COLOR
 export COMPOSE_ANSI := $(NATIVE_COLOR)
+export OUTPUT_COMPACT_TOP_LEVEL := 1
 INDENT_OUTPUT := python3 scripts/output/native-output.py --indent --compact-status-spacing
 # Progress indicator policy: auto (interactive terminal outside CI), always or never
 export PROGRESS ?= auto
@@ -286,7 +287,8 @@ endef
 info_msg := Message
 
 help:
-	@PROGRESS=never bash scripts/output/command-output.sh --run "Command help" bash scripts/make/make-help.sh "$(GROUP)"
+	@PROGRESS=never bash scripts/output/command-output.sh --run "Command help" \
+		env OUTPUT_COMPACT_TOP_LEVEL=1 bash scripts/make/make-help.sh "$(GROUP)"
 
 info:
 	@PROGRESS=never bash scripts/output/command-output.sh --run "Command information" bash scripts/output/command-output.sh --status INFO '$(subst ','"'"',$(info_msg))'

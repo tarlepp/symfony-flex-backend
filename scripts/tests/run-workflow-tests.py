@@ -76,6 +76,7 @@ def main():
         return 64
 
     os.environ.pop("OUTPUT_RUN_GROUPED", None)
+    os.environ.pop("OUTPUT_COMPACT_TOP_LEVEL", None)
     os.environ.pop("OUTPUT_STATUS_INDENT", None)
     test_indent = os.environ.pop("OUTPUT_TEST_INDENT", "  ")
 

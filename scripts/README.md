@@ -213,13 +213,14 @@ start services; use the actual deployed PHP container, not the development
 container with `APP_ENV=prod`.
 
 See the [command reference](../doc/COMMANDS.md#commands) for scope and execution.
-Each complete recipe, including preparation, prints one `[RUN]` and a separated
-final `[OK]` or `[FAIL]`. Ordinary recipe output is indented two spaces on both
-streams, while GitHub workflow commands remain unindented and boundary statuses
-share the same indentation level. `run-tests` retains automatic PHP/phpdbg
-selection without duplicate summaries. A failed preparation step cannot produce
-a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents
-recursive decoration; callers should not set it.
+Each complete recipe, including preparation, prints one `[RUN]` and a final
+`[OK]` or `[FAIL]` without an intervening blank line. Ordinary recipe output is
+indented two spaces on both streams, while GitHub workflow commands remain
+unindented and boundary statuses share the same indentation level. `run-tests`
+retains automatic PHP/phpdbg selection without duplicate summaries. A failed
+preparation step cannot produce a success summary. The internal
+`COMMAND_OUTPUT_RUN` Make variable prevents recursive decoration; callers should
+not set it.
 
 Native progress, diagnostics, GitHub annotations, analyzer options and report
 paths remain unchanged apart from indentation of ordinary recipe output.
@@ -288,8 +289,8 @@ or bypass tool-specific agent safeguards.
 * The wrapper preserves command exit status, including failures and
   interruptions; Make itself may translate a failed recipe into exit 2. Existing
   informational update-check policies are unchanged.
-* Finite commands separate the final outcome from details with a blank line.
-  Sourced helpers use `output_result <status> <message>` for this separation.
+* Top-level Make `[OK]` and `[FAIL]` outcomes follow details without a blank
+  line. Nested results and direct helper calls keep their existing separation.
   Docker verification groups details by Dockerfile; action/tool checks group
   findings by repository and show aggregate counts. Warning outcomes never imply
   that updates were installed or that an upload succeeded.

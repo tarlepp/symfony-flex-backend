@@ -226,7 +226,11 @@ exit 0
         result = self.make("help")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stderr, "[RUN] Command help\n\n[OK] Command help\n")
+        self.assertEqual(result.stderr, "[RUN] Command help\n[OK] Command help\n")
+        combined = self.make("help", merged_output=True)
+        self.assertEqual(combined.returncode, 0, combined.stdout)
+        self.assertTrue(combined.stdout.endswith("\n[OK] Command help\n"), combined.stdout)
+        self.assertNotIn("\n\n[OK] Command help\n", combined.stdout)
         expected = re.findall(r"^([a-zA-Z0-9-]+):.*## ", (ROOT / "Makefile").read_text(), re.M)
         actual = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
 
@@ -334,7 +338,7 @@ exit 0
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stdout, "")
                 self.assertIn(f"{prefix} exit 7\n", result.stderr)
-                self.assertRegex(result.stderr, r"\n\n(?:\x1b\[32m)?\[OK\]")
+                self.assertRegex(result.stderr, r"\n(?:\x1b\[32m)?\[OK\]")
                 self.assertEqual(self.calls.read_text(), "")
 
         message = """Say "hello"; `exit 7`; 'single quotes' *"""
@@ -1454,7 +1458,7 @@ esac
 
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual("\x1b[34mDigest:\x1b[0m" in result.stdout, expected)
-                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout + "\n")
 
         failed = self.make("docker-image-digest", *arguments, COLOR="always", DOCKER_FAIL="1")
 

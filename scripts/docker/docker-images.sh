@@ -1163,7 +1163,10 @@ command_digest() {
         exit 1
     fi
 
-    printf '%sPin reference:%s\n\n    FROM %s@%s\n\n' "$heading" "$reset" "$name" "$digest"
+    printf '%sPin reference:%s\n\n    FROM %s@%s\n' "$heading" "$reset" "$name" "$digest"
+    if [ "${OUTPUT_COMPACT_TOP_LEVEL:-0}" != 1 ]; then
+        printf '\n'
+    fi
 
     repository="${name%%:*}"
 
