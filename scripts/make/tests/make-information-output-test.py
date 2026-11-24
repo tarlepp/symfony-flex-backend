@@ -185,7 +185,7 @@ exit 0
         self.junit.write_text('<testsuites><testcase file="/app/tests/ExampleTest.php"/></testsuites>\n')
         (self.root / "src/Example.php").write_text("<?php\n")
 
-    def make(self, target, *arguments, **overrides):
+    def make(self, target, *arguments, merged_output=False, **overrides):
         """Run the container-side launcher in the fixture with a fresh call log."""
         self.calls.write_text("")
         environment = dict(
@@ -198,7 +198,9 @@ exit 0
         result = subprocess.run(
             ["bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
              "INSIDE_DOCKER_CONTAINER=1", target, *arguments],
-            cwd=self.root, env=environment, capture_output=True, text=True, check=False,
+            cwd=self.root, env=environment, stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT if merged_output else subprocess.PIPE,
+            text=True, check=False,
         )
 
         return result
@@ -263,6 +265,7 @@ exit 0
             '#!/bin/bash\n'
             'printf "%s|%s|%s|%s|%s\\n" "$BASE_SHA" "$HEAD_SHA" "$EVENT_NAME" '
             '"$COLOR" "$GITHUB_OUTPUT"\n'
+            '[ "$CI_JOB_PREVIEW_INDENT" = "  " ] || exit 9\n'
             'printf "php=true\\n" >> "$GITHUB_OUTPUT"\n'
             'exit "${DETECT_EXIT:-0}"\n'
         )
@@ -287,6 +290,37 @@ exit 0
 
                 if exit_code:
                     self.assertIn("[FAIL] Preview CI validation selection (exit 2)", result.stderr)
+
+    def test_change_preview_has_no_blank_line_before_outcome(self):
+        detector = self.root / "scripts/ci/ci-detect-changes.sh"
+        detector.write_text(
+            '#!/bin/bash\n'
+            'printf "Core CI jobs\\n  External reporting requires tokens.\\n\\n"\n'
+            'exit "${DETECT_EXIT:-0}"\n'
+        )
+        for grouped, target, color, exit_code in (
+            ("0", "", "never", 0),
+            ("1", "ci-detect-changes", "never", 0),
+            ("0", "ci-detect-changes", "always", 0),
+            ("0", "ci-detect-changes", "never", 7),
+        ):
+            with self.subTest(grouped=grouped, target=target, color=color, exit_code=exit_code):
+                result = self.make(
+                    "ci-detect-changes", merged_output=True,
+                    OUTPUT_RUN_GROUPED=grouped, OUTPUT_RUN_TARGET=target,
+                    OUTPUT_RUN_GROUPED_STARTED="0", COLOR=color, DETECT_EXIT=str(exit_code),
+                )
+                self.assertEqual(result.returncode == 0, exit_code == 0, result.stdout)
+                output = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+                label = "Preview CI validation selection"
+                if target:
+                    label += " (make ci-detect-changes)"
+                outcome = f"[FAIL] {label} (exit 2)" if exit_code else f"[OK] {label}"
+                self.assertIn(
+                    "  Core CI jobs\n    External reporting requires tokens.\n" + outcome + "\n",
+                    output,
+                )
+                self.assertIn(f"[RUN] {label}\n", output)
 
     def test_info_displays_message_without_executing_it(self):
         for color, no_color, prefix in (

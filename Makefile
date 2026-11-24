@@ -99,6 +99,7 @@ $(call REGISTER_TARGET,tool-versions,information,wrapped,,Read development envir
 ci-detect-changes: export BASE_SHA ?= HEAD^
 ci-detect-changes: export HEAD_SHA ?= HEAD
 ci-detect-changes: export EVENT_NAME ?= pull_request
+ci-detect-changes: export OUTPUT_RUN_GROUPED := 1
 
 # Application tests and tooling regressions
 $(call REGISTER_TARGET,infection,tests,wrapped)
@@ -293,7 +294,7 @@ application-info: ## Display Symfony application information
 	@bin/console about $(ANSI_FLAG)
 
 ci-detect-changes: ## Preview CI selection for committed changes (BASE_SHA=HEAD^ HEAD_SHA=HEAD)
-	@bash -eu -c 'output=$${GITHUB_OUTPUT:-}; if [ -z "$$output" ]; then output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; fi; COLOR=$(NATIVE_COLOR) GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci/ci-detect-changes.sh'
+	@bash -eu -c 'output=$${GITHUB_OUTPUT:-}; if [ -z "$$output" ]; then output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; fi; COLOR=$(NATIVE_COLOR) CI_JOB_PREVIEW_INDENT="  " GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci/ci-detect-changes.sh'
 
 configuration: ## Prints out application current configuration
 	@echo | jq -r . ${APPLICATION_CONFIG}

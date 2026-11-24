@@ -2218,6 +2218,31 @@ class ChangeDetectionTest(unittest.TestCase):
         self.assertIn(f"if: ${{{{ !cancelled() && {DRAFT_GUARD} }}}}", job("ci-summary"))
         self.assertIn("if: ${{ !cancelled() }}", job("ci-result"))
 
+    def test_job_preview_indentation_changes_only_requested_section(self):
+        baseline = self.detect().stdout
+        output = self.root / ".git/detection-output"
+        environment = dict(
+            os.environ, EVENT_NAME="pull_request", BASE_SHA=self.base,
+            HEAD_SHA=self.git("rev-parse", "HEAD"), GITHUB_OUTPUT=str(output),
+            COLOR="never", NO_COLOR="", GITHUB_ACTIONS="false",
+            GITHUB_STEP_SUMMARY="", CI_JOB_PREVIEW_INDENT="  ",
+        )
+        result = subprocess.run(
+            ["bash", str(WORKFLOW.parents[2] / "scripts/ci/ci-detect-changes.sh")],
+            cwd=self.root, capture_output=True, text=True, check=False,
+            timeout=10, env=environment,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        prefix, section = baseline.split("\nCore CI jobs\n", 1)
+        expected = section.replace(
+            "Eligibility assumes core CI starts; dependencies and cancellation still apply.\n"
+            "Conditional jobs depend on results or event details unavailable here.\n",
+            "  Eligibility assumes core CI starts; dependencies and cancellation still apply.\n"
+            "  Conditional jobs depend on results or event details unavailable here.\n",
+            1,
+        )
+        self.assertEqual(result.stdout, f"{prefix}\nCore CI jobs\n{expected}")
+
     def test_job_preview_for_changed_files_and_event_types(self):
         (self.root / "README.md").write_text("Updated documentation\n")
         self.commit()
