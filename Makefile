@@ -744,7 +744,7 @@ docker-image-verify-pins: ## Verify external FROM and COPY image pins are multi-
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@bash scripts/output/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker/docker-images.sh verify
+	@DOCKER_VERIFY_WRAPPED=1 bash scripts/output/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker/docker-images.sh verify
 endif
 
 docker-setup-qemu: ## Install QEMU emulators for cross-platform builds (asks PLATFORMS)
