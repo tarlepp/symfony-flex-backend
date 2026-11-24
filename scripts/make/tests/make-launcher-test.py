@@ -404,7 +404,7 @@ class MakeLauncherTest(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 2, result.stderr)
-            self.assertEqual(result.stdout, "payload\n")
+            self.assertEqual(result.stdout, "  payload\n")
             self.assertIn("native failure", result.stderr)
             self.assertIn("[FAIL] Application runtime requirements (exit 7)", result.stderr)
             self.assertNotIn("[OK]", result.stderr)

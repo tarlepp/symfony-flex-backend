@@ -128,6 +128,17 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("[OK] example", result.stderr)
         self.assertNotIn("\033", result.stderr)
 
+    def test_make_target_label_does_not_change_child_stream_indentation(self):
+        command = ["bash", str(HELPER), "example", "bash", "-c",
+                   "printf '  payload\\n::notice::fixture\\n'; printf '  diagnostic\\n' >&2"]
+        direct = self.run_command(command, OUTPUT_RUN_TARGET="", OUTPUT_RUN_GROUPED="1")
+        grouped = self.run_command(command, OUTPUT_RUN_TARGET="example", OUTPUT_RUN_GROUPED="1")
+        self.assertEqual(direct.returncode, 0)
+        self.assertEqual(grouped.returncode, 0)
+        self.assertEqual(direct.stdout, "  payload\n::notice::fixture\n")
+        self.assertEqual(grouped.stdout, direct.stdout)
+        self.assertEqual(grouped.stderr.replace(" (make example)", ""), direct.stderr)
+
     def test_grouped_runs_keep_outcomes_with_their_checks(self):
         for status, outcome in ((0, "OK"), (7, "FAIL"), (130, "WARN"), (143, "WARN")):
             with self.subTest(status=status):

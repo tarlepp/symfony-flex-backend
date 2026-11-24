@@ -54,25 +54,14 @@ for suite in \
         OUTPUT_TEST_INDENT='    ' output_run "$suite_name regression suite" \
         python3 scripts/tests/run-workflow-tests.py "$suite"
 done
-if [ -n "$command_suffix" ]; then
-    output_run 'Host and CI forwarding regression suite' \
-        python3 scripts/output/native-output.py --indent \
-        python3 scripts/output/native-output.py --indent \
-        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/make-container-test.sh
-    output_run 'Pre-PR check selection regression suite' \
-        python3 scripts/output/native-output.py --indent \
-        python3 scripts/output/native-output.py --indent \
-        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/pre-pr-checks-test.sh
-else
-    output_run 'Host and CI forwarding regression suite' \
-        python3 scripts/output/native-output.py --indent \
-        python3 scripts/output/native-output.py --indent \
-        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/make-container-test.sh
-    output_run 'Pre-PR check selection regression suite' \
-        python3 scripts/output/native-output.py --indent \
-        python3 scripts/output/native-output.py --indent \
-        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/pre-pr-checks-test.sh
-fi
+output_run 'Host and CI forwarding regression suite' \
+    python3 scripts/output/native-output.py --indent \
+    python3 scripts/output/native-output.py --indent \
+    env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/make-container-test.sh
+output_run 'Pre-PR check selection regression suite' \
+    python3 scripts/output/native-output.py --indent \
+    python3 scripts/output/native-output.py --indent \
+    env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/pre-pr-checks-test.sh
 
 elapsed=$(output_elapsed "$started")
 OUTPUT_STATUS_INDENT=$base_status_indent \
