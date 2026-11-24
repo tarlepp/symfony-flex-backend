@@ -464,8 +464,9 @@ It checks every external `FROM` and `COPY --from` image in these files:
 
 The output groups each image and its checks beneath its Dockerfile. Separate
 image entries make multiple pins in the same file easier to distinguish; the
-closing summary reports one result per file. GitHub annotations and job summary
-details still identify the individual instruction lines.
+closing summary reports one result per file. Console paths use the `./` prefix
+to identify them as repository-relative files. GitHub annotations and job
+summary details still identify the individual instruction lines.
 
 Statuses for each external image reference:
 

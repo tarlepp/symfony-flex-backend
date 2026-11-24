@@ -30,6 +30,7 @@
 #   TAG         Image tag to create (build, push)
 #   BUILDER     buildx builder name for multi-platform builds (push)
 #   DOCKER_VERIFY_WRAPPED  Set by Make to suppress the duplicate success outcome
+#   DOCKER_VERIFY_PARENT_INDENTS  Set by Make when the output wrapper indents
 #
 # Input values are prompted for only when running in an interactive terminal.
 # check-updates defaults to external FROM and COPY --from images in project
@@ -1222,10 +1223,10 @@ verify_dockerfile() {
     local line_number ref raw type platforms status=0 warnings=0 first=1
     local parity_result parity_status
 
-    printf '  %s%s%s\n' "$BOLD" "$file" "$NC"
+    printf '%s%s./%s%s\n' "$verify_indent" "$BOLD" "$file" "$NC"
 
     if [ ! -f "$file" ]; then
-        printf '    %s[FAIL]%s File not found\n\n' "$RED" "$NC"
+        printf '%s  %s[FAIL]%s File not found\n\n' "$verify_indent" "$RED" "$NC"
         github_annotation error "$file" "" "Dockerfile not found" "${file} is listed for base image verification but does not exist"
         IMAGE_ROWS+=("| \`${file}\` | - | - | :x: File not found |")
         return 1
@@ -1236,10 +1237,10 @@ verify_dockerfile() {
             printf '\n'
         fi
         first=0
-        printf '    line %s: %s\n' "$line_number" "$ref"
+        printf '%s  line %s: %s\n' "$verify_indent" "$line_number" "$ref"
 
         if ! [[ "$ref" =~ @sha256:[a-f0-9]{64}$ ]]; then
-            printf '      %s[WARN]%s Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$YELLOW" "$NC"
+            printf '%s    %s[WARN]%s Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$verify_indent" "$YELLOW" "$NC"
             github_annotation warning "$file" "$line_number" "Base image not pinned" "${ref} is not pinned with a digest. Use: make docker-image-digest IMAGE=${ref}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :warning: Not pinned with digest |")
             warnings=$((warnings + 1))
@@ -1248,7 +1249,7 @@ verify_dockerfile() {
 
         if [ -z "${MANIFEST_CACHE[$ref]+set}" ]; then
             if ! raw="$(raw_manifest "$ref")"; then
-                printf '      %s[FAIL]%s Could not inspect image: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
+                printf '%s    %s[FAIL]%s Could not inspect image: %s\n' "$verify_indent" "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
                 github_annotation error "$file" "$line_number" "Base image could not be inspected" "${ref}: $(tail -n 1 <<< "$raw")"
                 IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Could not inspect image |")
                 status=1
@@ -1265,7 +1266,7 @@ verify_dockerfile() {
         parity_result=''
         parity_status=0
 
-        verify_tag_parity "$file" "$line_number" "$ref" '      ' || parity_status=$?
+        verify_tag_parity "$file" "$line_number" "$ref" "${verify_indent}    " || parity_status=$?
 
         case "$parity_status" in
             0) ;;
@@ -1278,26 +1279,26 @@ verify_dockerfile() {
         esac
 
         if ! is_index "$type"; then
-            printf '      %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
+            printf '%s    %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$verify_indent" "$RED" "$NC"
             github_annotation error "$file" "$line_number" "Single platform base image digest" "${ref} points to a single platform manifest. Replace it with the multi-platform index digest from: make docker-image-digest IMAGE=${ref%@*}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest; ${parity_result} |")
             status=1
         elif [[ "$platforms" != *" "* ]]; then
-            printf '      %s[FAIL]%s Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
+            printf '%s    %s[FAIL]%s Image index contains fewer than two distinct runnable platforms (%s)\n' "$verify_indent" "$RED" "$NC" "${platforms:-none}"
             github_annotation error "$file" "$line_number" "Insufficient base image platforms" "${ref} contains fewer than two distinct runnable platforms (${platforms:-none}). Wait for upstream platform images or choose another tag and digest."
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}); ${parity_result} |")
             status=1
         elif [ "$parity_status" -eq 1 ]; then
-            printf '      %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            printf '%s    %s[OK]%s Multi-platform: %s\n' "$verify_indent" "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Multi-platform: ${platforms}; ${parity_result} |")
         else
-            printf '      %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            printf '%s    %s[OK]%s Multi-platform: %s\n' "$verify_indent" "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms}; ${parity_result} |")
         fi
     done < <(dockerfile_images "$file" locations)
 
     if ! grep -qiE '^[[:space:]]*FROM([[:space:]]|$)' "$file"; then
-        printf '    %s[FAIL]%s No FROM instruction found\n' "$RED" "$NC"
+        printf '%s  %s[FAIL]%s No FROM instruction found\n' "$verify_indent" "$RED" "$NC"
         github_annotation error "$file" "" "No FROM instruction" "${file} does not contain any FROM instruction"
         status=1
     fi
@@ -1355,12 +1356,17 @@ write_verify_summary() {
 
 command_verify() {
     local file width=0 failures=0 warnings=0 result
+    local verify_indent='  '
     local -A results=()
     declare -gA MANIFEST_CACHE=()
     declare -ga IMAGE_ROWS=()
     local -A plain=()
 
-    printf '  Verifying external image pins in %s Dockerfiles:\n\n' "${#VERIFY_DOCKERFILES[@]}"
+    if [ "${DOCKER_VERIFY_PARENT_INDENTS:-0}" = 1 ]; then
+        verify_indent=''
+    fi
+
+    printf '%sVerifying external image pins in %s Dockerfiles:\n\n' "$verify_indent" "${#VERIFY_DOCKERFILES[@]}"
 
     for file in "${VERIFY_DOCKERFILES[@]}"; do
         [ "${#file}" -gt "$width" ] && width="${#file}"
@@ -1386,11 +1392,11 @@ command_verify() {
         esac
     done
 
-    printf '  %sSummary%s\n' "$BOLD" "$NC"
-    printf '    Multi-platform base images:\n'
+    printf '%s%sSummary%s\n' "$verify_indent" "$BOLD" "$NC"
+    printf '%s  Multi-platform base images:\n' "$verify_indent"
 
     for file in "${VERIFY_DOCKERFILES[@]}"; do
-        printf '      %-*s  %s\n' "$width" "$file" "${results[$file]}"
+        printf '%s    ./%-*s  %s\n' "$verify_indent" "$width" "$file" "${results[$file]}"
     done
 
     write_verify_summary "$failures" "$warnings"
