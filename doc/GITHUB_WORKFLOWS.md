@@ -58,6 +58,12 @@ Job overviews use `scripts/ci/ci-workflow-overview.sh` from the checkout; if
 checkout fails, they cannot be rendered. External reporting instead writes its
 skip reason when neither upload token is available.
 
+Gitleaks normally publishes its own success or findings summary. Its separate
+job overview is omitted on success to avoid duplication, but remains available
+for failed or skipped scans when the checkout and summary step can run. Some
+successful no-commit push events do not produce an action summary; inspect the
+job status and logs in that case.
+
 For pull requests, start with the **Checks** tab:
 
 * Wait for `Validate CI result` and `dependency-review`, the two required

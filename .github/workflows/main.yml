@@ -325,7 +325,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish job overview
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && (job.status != 'success' || steps.scan.outcome != 'success') }}
         continue-on-error: true
         env:
           OVERVIEW_TITLE: Secret scanning
