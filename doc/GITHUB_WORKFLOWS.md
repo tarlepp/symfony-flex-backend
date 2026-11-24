@@ -481,6 +481,10 @@ which builds the development Docker target and starts the Compose PHP service
 without the application entrypoint. PHP, extensions and coverage tooling come
 from the development image, not a separate runner PHP installation.
 
+Bootstrap image builds do not publish Docker's build summary, avoiding repeated
+setup details across jobs; inspect the bootstrap step logs for build failures.
+Application image builds retain their Docker build summaries.
+
 By default, bootstrap installs Composer dependencies and prints tool versions.
 Documentation/workflow checks and image-update checks disable both. Docker PR
 maintenance and core image-update checks opt into `build-target: maintenance`, a
