@@ -193,6 +193,12 @@ jobs:
           BASE_BRANCH: ${{ github.ref_name }}
           PHP_READINESS_REPORT: ${{ needs.php-minor-readiness.outputs.report }}
           PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+          UPDATE_OUTCOME: ${{ steps.update.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          COMPOSER_OUTCOME: ${{ steps.composer.outcome }}
+          DOCTRINE_OUTCOME: ${{ steps.doctrine.outcome }}
+          CI_MARIADB_OUTCOME: ${{ steps.ci-mariadb.outcome }}
         run: bash scripts/docker/prepare-image-update-pr.sh
 
       - name: Select pull request authentication

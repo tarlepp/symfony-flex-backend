@@ -117,6 +117,8 @@ class DockerImageWorkflowTest(unittest.TestCase):
             GITHUB_STEP_SUMMARY=str(self.summary), RUNNER_TEMP=str(self.root),
             PHP_READINESS_REPORT="", PHP_READINESS_SUMMARY="", PHP_READINESS_RESULT="success",
             PHP_CLOSING_ISSUES="",
+            TESTS_OUTCOME="success", UPDATE_OUTCOME="success", VERIFY_OUTCOME="success",
+            COMPOSER_OUTCOME="success", DOCTRINE_OUTCOME="success", CI_MARIADB_OUTCOME="success",
         )
 
     def run_script(self, content, name, **overrides):
@@ -871,6 +873,12 @@ class DockerImageWorkflowTest(unittest.TestCase):
 
         self.assertEqual(minor["minor-details"]["run"], "bash scripts/docker/prepare-php-minor-pr.sh")
         self.assertEqual(update["details"]["run"], "bash scripts/docker/prepare-image-update-pr.sh")
+        for variable, step_id in (
+            ("TESTS_OUTCOME", "tests"), ("UPDATE_OUTCOME", "update"),
+            ("VERIFY_OUTCOME", "verify"), ("COMPOSER_OUTCOME", "composer"),
+            ("DOCTRINE_OUTCOME", "doctrine"), ("CI_MARIADB_OUTCOME", "ci-mariadb"),
+        ):
+            self.assertEqual(update["details"]["env"][variable], f"${{{{ steps.{step_id}.outcome }}}}")
         self.assertEqual(minor["minor-pr"]["with"]["body-path"], "${{ runner.temp }}/php-minor-pr.md")
         self.assertEqual(update["pull-request"]["with"]["body-path"], "${{ runner.temp }}/docker-image-pr.md")
 
@@ -885,10 +893,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
             elif [[ "$3" == --unified=0 && "$4" == -- ]]; then
                 if [[ "$#" == 6 ]]; then
                     [[ "${FAIL_AT:-}" != digest ]] || exit 7
+                elif [[ "$*" == *composer.json* ]]; then
+                    [[ "${FAIL_AT:-}" != body ]] || exit 7
                 elif [[ "$*" == *config/packages/doctrine.yaml* ]]; then
                     [[ "${FAIL_AT:-}" != saved ]] || exit 7
-                elif [[ "$*" == *.github/workflows/main.yml* ]]; then
-                    [[ "${FAIL_AT:-}" != body ]] || exit 7
                 else
                     exit 64
                 fi
@@ -1361,18 +1369,16 @@ class DockerImageWorkflowTest(unittest.TestCase):
         body = (self.root / "docker-image-pr.md").read_text()
 
         self.assertIn("# Summary\n", body)
-        self.assertIn("stable minor/patch versions", body)
-        self.assertIn("without changing their major versions", body)
+        self.assertIn("eligible Docker image versions and digest pins", body)
+        self.assertIn("preserving major versions", body)
         self.assertIn("supported platforms", body)
-        self.assertIn("Major-version upgrades remain a manual review", body)
         self.assertIn("## Digest-only image comparisons\n", body)
         self.assertIn("No digest-only image updates.", body)
-        self.assertIn("## Dockerfile and CI image changes\n", body)
         self.assertIn("## Validation\n", body)
-        self.assertIn("`bash scripts/make/make.sh test-docker-images` — passed", body)
-        self.assertIn("`bash scripts/make/make.sh docker-image-update-pins` — passed", body)
-        self.assertIn("`bash scripts/make/make.sh docker-image-verify-pins` — passed", body)
-        self.assertIn("Application tests and builds are not run", body)
+        self.assertIn("`bash scripts/make/make.sh test-docker-images`: **passed**", body)
+        self.assertIn("`bash scripts/make/make.sh docker-image-update-pins`: **passed**", body)
+        self.assertIn("`bash scripts/make/make.sh docker-image-verify-pins`: **passed**", body)
+        self.assertIn("Application tests and builds of the proposed images are not run", body)
         self.assertIn("Repository architecture checklist", body)
         self.assertIn("* [ ]", body)
         self.assertIn(readiness_report, body)
@@ -1390,8 +1396,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("No eligible tag or digest changes.", report.read_text())
+        self.assertIn("No eligible file changes.", report.read_text())
         self.assertNotIn("```diff", report.read_text())
+        self.assertIn("No eligible file changes were produced.", (self.root / "docker-image-pr.md").read_text())
         pr = step(WORKFLOW, "Create or update the Docker image pull request")
 
         self.assertIn("base: ${{ github.ref_name }}", pr)
@@ -1405,6 +1412,74 @@ class DockerImageWorkflowTest(unittest.TestCase):
 
         self.assertIn("            config/packages/doctrine.yaml\n", pr)
         self.assertIn("            .github/workflows/main.yml\n", pr)
+
+    def test_pr_summary_reports_actual_changes_and_step_outcomes(self):
+        baseline = {
+            "Dockerfile": f"FROM php:8.5.1@sha256:{'a' * 64}\n",
+            "composer.json": '{"config":{"platform":{"php":"8.5.1"}}}\n',
+            "composer.lock": '{"content-hash":"old"}\n',
+            "config/packages/doctrine.yaml": 'server_version: "11.4.1-MariaDB"\n',
+            ".github/workflows/main.yml": "image: mariadb:11.4.1\n",
+        }
+        for name, content in baseline.items():
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content)
+        for command in (["git", "init", "-q"], ["git", "add", *baseline]):
+            subprocess.run(command, cwd=self.root, capture_output=True, check=True)
+        mock_bin = self.root / "mock-bin"
+        mock_bin.mkdir()
+        (mock_bin / "docker").write_text("#!/bin/bash\nexit 1\n")
+        (mock_bin / "docker").chmod(0o755)
+        path = f"{mock_bin}:{os.environ['PATH']}"
+        scenarios = (
+            ("none", {}, "No eligible file changes were produced."),
+            ("version", {
+                "Dockerfile": f"FROM php:8.5.2@sha256:{'b' * 64}\n",
+                "composer.json": '{"config":{"platform":{"php":"8.5.2"}}}\n',
+                "composer.lock": '{"content-hash":"new"}\n',
+            }, "+FROM php:8.5.2@sha256:" + "b" * 64),
+            ("digest", {"Dockerfile": f"FROM php:8.5.1@sha256:{'b' * 64}\n"},
+             "Comparison unavailable: the old and new index"),
+            ("lockfile-only", {"composer.lock": '{"content-hash":"new"}\n'},
+             "Only Composer lockfiles changed; their full diffs are omitted."),
+            ("configuration-only", {
+                "config/packages/doctrine.yaml": 'server_version: "11.4.2-MariaDB"\n',
+                ".github/workflows/main.yml": "image: mariadb:11.4.2\n",
+            }, '+server_version: "11.4.2-MariaDB"'),
+        )
+        for label, changes, expected in scenarios:
+            with self.subTest(scenario=label):
+                for name, content in baseline.items():
+                    (self.root / name).write_text(changes.get(name, content))
+                result = self.run_script(
+                    WORKFLOW, "Prepare pull request details", BASE_BRANCH="master", PATH=path,
+                    TESTS_OUTCOME="skipped", UPDATE_OUTCOME="failure", VERIFY_OUTCOME="",
+                    COMPOSER_OUTCOME="cancelled",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                body = (self.root / "docker-image-pr.md").read_text()
+                self.assertIn(expected, body)
+                self.assertIn("`bash scripts/make/make.sh test-docker-images`: **skipped**", body)
+                self.assertIn("`bash scripts/make/make.sh docker-image-update-pins`: **failed**", body)
+                self.assertIn("`bash scripts/make/make.sh docker-image-verify-pins`: **unavailable**", body)
+                self.assertIn("lockfile verification: **cancelled**", body)
+                self.assertIn("`bash scripts/docker/sync-doctrine-mariadb.sh`: **passed**", body)
+                self.assertLess(body.index("# Summary"), body.index("## Validation"))
+                self.assertLess(body.index("## Validation"), body.index("## Repository architecture checklist"))
+                if label == "version":
+                    self.assertIn("composer.lock", body)
+                    self.assertIn('-FROM php:8.5.1@sha256:' + 'a' * 64, body)
+                    self.assertIn('{"config":{"platform":{"php":"8.5.2"}}}', body)
+                if label == "configuration-only":
+                    self.assertIn("-image: mariadb:11.4.1", body)
+                    self.assertIn("+image: mariadb:11.4.2", body)
+        invalid = self.run_script(
+            WORKFLOW, "Prepare pull request details", BASE_BRANCH="master",
+            PATH=path, TESTS_OUTCOME="unknown",
+        )
+        self.assertNotEqual(invalid.returncode, 0)
+        self.assertIn("Invalid workflow step outcome: unknown", invalid.stderr)
 
     def test_digest_comparison_reports_registry_evidence_and_unavailable_data(self):
         old_digest, new_digest = "a" * 64, "b" * 64
