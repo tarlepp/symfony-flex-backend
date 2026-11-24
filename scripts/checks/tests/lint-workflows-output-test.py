@@ -26,6 +26,7 @@
 
 import os
 from pathlib import Path
+import re
 import shlex
 import shutil
 import subprocess
@@ -83,25 +84,20 @@ class WorkflowOutputTest(unittest.TestCase):
         for workflow in (ROOT / ".github/workflows").glob("*.yml"):
             shutil.copyfile(workflow, self.root / ".github/workflows" / workflow.name)
         # Stand-ins let each nested suite fail without running unrelated tests.
-        (self.root / "scripts/ci/tests/composer-cache-test.py").write_text(
-            "import os\n"
-            "import sys\n"
-            "sys.exit(int(os.environ.get('CACHE_TEST_EXIT', '0')))\n"
-        )
-        (self.root / "scripts/ci/tests/analyzer-workflow-test.py").write_text(
-            "import os\n"
-            "import sys\n"
-            "sys.exit(int(os.environ.get('ANALYZER_TEST_EXIT', '0')))\n"
-        )
-        (self.root / "scripts/docker/tests/docker-image-workflow-test.py").write_text(
-            "import os\n"
-            "import sys\n"
-            "sys.exit(int(os.environ.get('DOCKER_WORKFLOW_TEST_EXIT', '0')))\n"
-        )
-        (self.root / "scripts/checks/tests/composite-action-shell-test.py").write_text(
-            "import os\nimport sys\n"
-            "sys.exit(int(os.environ.get('COMPOSITE_TEST_EXIT', '0')))\n"
-        )
+        for path, variable in (
+            ("scripts/ci/tests/composer-cache-test.py", "CACHE_TEST_EXIT"),
+            ("scripts/ci/tests/analyzer-workflow-test.py", "ANALYZER_TEST_EXIT"),
+            ("scripts/docker/tests/docker-image-workflow-test.py", "DOCKER_WORKFLOW_TEST_EXIT"),
+            ("scripts/checks/tests/composite-action-shell-test.py", "COMPOSITE_TEST_EXIT"),
+        ):
+            (self.root / path).write_text(
+                "import os\nimport sys\nimport unittest\n"
+                f"status = int(os.environ.get('{variable}', '0'))\n"
+                "if status: sys.exit(status)\n"
+                "sys.argv = sys.argv[:1]\n"
+                "class Example(unittest.TestCase):\n"
+                "    def test_example(self): pass\n"
+            )
         (self.root / ".github/actions/example/action.yml").write_text(
             "name: fixture\nruns:\n  using: composite\n  steps:\n"
             "    - name: Fixture shell\n      shell: bash\n      run: echo fixture\n"
@@ -226,7 +222,8 @@ esac
             "scripts/docker/prepare-php-minor-pr.sh scripts/docker/prepare-image-update-pr.sh "
             "scripts/docker/select-maintenance-pr-auth.sh scripts/docker/php-minor-pr-outcome.sh "
             "scripts/docker/image-update-overview.sh scripts/sync-composer-php.sh "
-            "scripts/make/make.sh "
+            "scripts/make/make.sh scripts/make/pre-pr-checks.sh "
+            "scripts/make/tests/pre-pr-checks-test.sh "
             "scripts/checks/check-security.sh scripts/reports/prepare-sonar-reports.sh", calls,
         )
         self.assertNotIn("\033", result.stderr)
@@ -242,8 +239,7 @@ esac
         positions = []
 
         for heading in groups:
-            marker = f"\n[RUN] {heading}\n"
-
+            marker = f"[RUN] {heading}\n"
             self.assertEqual(result.stderr.count(marker), 1)
             positions.append(result.stderr.index(marker))
 
@@ -252,20 +248,45 @@ esac
         gate_end = result.stderr.index("[OK] CI gate regressions (offline)\n")
 
         self.assertIn("Ran 22 tests", result.stderr[gate_start:gate_end])
+        self.assertTrue(result.stderr.startswith(
+            "[RUN] 1/5 - Validate CI gate contracts\n"
+            "  [RUN] CI gate regressions (offline)\n",
+        ))
         self.assertIn(
-            "\n[RUN] 1/5 - Validate CI gate contracts\n\n"
-            "  [RUN] CI gate regressions (offline)\n", result.stderr,
+            "  [OK] CI gate regressions (offline)\n"
+            "[OK] 1/5 - Validate CI gate contracts\n\n"
+            "[RUN] 2/5 - Prepare pinned workflow validators\n",
+            result.stderr,
         )
+        for stage in (
+            "1/5 - Validate CI gate contracts",
+            "2/5 - Prepare pinned workflow validators",
+            "3/5 - Validate workflows",
+            "4/5 - Validate local actions",
+            "5/5 - Validate tooling scripts",
+        ):
+            self.assertIn(f"[OK] {stage}\n", result.stderr)
         self.assertRegex(
             result.stderr,
-            r"\n  Ran 22 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
+            r"\n    Ran 22 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
         )
         self.assertNotIn("\nOK\n", result.stderr)
         self.assertNotIn("\n  OK\n", result.stderr)
-        self.assertIn("\n  WARN: fixture warning remains visible\n", result.stderr)
-        self.assertIn("\n  No findings to report.", "\n" + result.stdout)
+        self.assertIn("\n    WARN: fixture warning remains visible\n", result.stderr)
+        self.assertIn("\n    No findings to report.", "\n" + result.stdout)
+        for label in (
+            "Composite action shell regressions (offline)",
+            "Composer cache mount regressions (offline)",
+            "Analyzer job and gate regressions (offline)",
+            "Docker maintenance workflow regressions (offline)",
+        ):
+            self.assertRegex(
+                result.stderr,
+                rf"\[RUN\] {re.escape(label)}\n    \.\n    Ran 1 test in [^\n]+\n"
+                rf"  \[OK\] {re.escape(label)}\n",
+            )
         self.assertIn(
-            "\n  .github/actions/example/action.yml: step 1 (Fixture shell)\n",
+            "\n    .github/actions/example/action.yml: step 1 (Fixture shell)\n",
             result.stdout + result.stderr,
         )
         self.assertIn(
@@ -277,7 +298,7 @@ esac
         )
         self.assertNotIn("\n\n\n", result.stderr)
         self.assertTrue(result.stderr.endswith(
-            "[OK] Docker maintenance workflow regressions (offline)\n",
+            "[OK] 5/5 - Validate tooling scripts\n",
         ))
 
     def test_gate_regression_failure_is_labeled_and_stops_before_downloads(self):
@@ -290,9 +311,9 @@ esac
 
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[RUN] CI gate regressions (offline)\n", result.stderr)
-        self.assertIn("fixture gate diagnostic\n", result.stderr)
+        self.assertIn("  fixture gate diagnostic\n", result.stderr)
         self.assertIn(
-            "fixture gate diagnostic\n  [FAIL] CI gate regressions (offline)",
+            "  fixture gate diagnostic\n  [FAIL] CI gate regressions (offline)",
             result.stderr,
         )
         self.assertIn("[FAIL] CI gate regressions (offline) (exit 7)\n", result.stderr)
@@ -430,7 +451,7 @@ esac
         result, calls = self.run_script(CURL_TIMEOUT="1", TMPDIR=str(temporary))
 
         self.assertEqual(result.returncode, 28, result.stderr)
-        self.assertIn("\n  curl: (28) fixture transfer timed out\n", result.stderr)
+        self.assertIn("\n    curl: (28) fixture transfer timed out\n", result.stderr)
         self.assertNotIn("\ncurl:", result.stderr)
         self.assertIn("[FAIL] Prepare and verify actionlint", result.stderr)
         self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
@@ -452,7 +473,7 @@ esac
         result, calls = self.run_script()
 
         self.assertEqual(result.returncode, 9, result.stderr)
-        self.assertIn("\n  fixture checksum mismatch\n", result.stderr)
+        self.assertIn("\n    fixture checksum mismatch\n", result.stderr)
         self.assertNotIn("curl ", calls)
         self.assertNotIn("tar ", calls)
         self.assertNotIn("actionlint -shellcheck", calls)

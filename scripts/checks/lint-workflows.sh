@@ -29,11 +29,12 @@ source scripts/output/command-output.sh
 OUTPUT_RUN_GROUPED=1
 OUTPUT_STATUS_INDENT='  '
 
-printf '\n' >&2
 OUTPUT_STATUS_INDENT='' output_status RUN '1/5 - Validate CI gate contracts'
 
 output_run 'CI gate regressions (offline)' \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/tests/run-workflow-tests.py scripts/ci/tests/ci-gates-test.py
+OUTPUT_STATUS_INDENT='' output_status OK '1/5 - Validate CI gate contracts'
 
 ACTIONLINT_TAG=v1.7.12 # tool-pin: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca
 SHELLCHECK_TAG=v0.11.0 # tool-pin: koalaman/shellcheck@aac0823e6b58f8a499e856e93738082691cbf212
@@ -77,6 +78,7 @@ trap 'rm -rf "$tools"' EXIT
 
 download() {
     python3 scripts/output/native-output.py --indent \
+        python3 scripts/output/native-output.py --indent \
         bash scripts/checks/download-workflow-validator.sh "$1" "$2" "$3" \
         "build/cache/workflow-validators/linux-${arch}/$2"
 }
@@ -103,6 +105,7 @@ output_run "Prepare and verify zizmor $ZIZMOR_TAG" download \
     "https://github.com/zizmorcore/zizmor/releases/download/${ZIZMOR_TAG}/zizmor-${zizmor_target}.tar.gz" \
     "$zizmor_sha" "$tools/zizmor.tar.gz"
 tar -xzf "$tools/zizmor.tar.gz" -C "$tools" zizmor
+OUTPUT_STATUS_INDENT='' output_status OK '2/5 - Prepare pinned workflow validators'
 
 mapfile -d '' workflows < <(
     find .github/workflows -maxdepth 1 -type f \
@@ -124,33 +127,41 @@ OUTPUT_STATUS_INDENT='' output_status RUN '3/5 - Validate workflows'
 
 output_run "Workflow syntax and embedded shell (${#workflows[@]} files)" \
     python3 scripts/output/native-output.py --indent \
+    python3 scripts/output/native-output.py --indent \
     "$tools/actionlint" -shellcheck "$tools/shellcheck" "${workflows[@]}"
 
 # Offline mode skips audits that need the GitHub API, so no token is needed.
 output_run 'Workflow and action security audit (zizmor)' \
     python3 scripts/output/native-output.py --indent \
+    python3 scripts/output/native-output.py --indent \
     env RUST_LOG="${RUST_LOG:-warn}" "$tools/zizmor" --no-progress \
     --offline --min-severity low "${workflows[@]}" "${actions[@]}"
+OUTPUT_STATUS_INDENT='' output_status OK '3/5 - Validate workflows'
 
 printf '\n' >&2
 OUTPUT_STATUS_INDENT='' output_status RUN '4/5 - Validate local actions'
 
 for action in "${actions[@]}"; do
     output_run "Local action metadata: $action" \
+        python3 scripts/output/native-output.py --indent \
         python3 scripts/output/native-output.py --indent "$tools/action-validator" "$action"
 done
 
 output_run 'Local composite action shell (ShellCheck)' \
     python3 scripts/output/native-output.py --indent \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/checks/check-composite-action-shell.py --shellcheck "$tools/shellcheck" "${actions[@]}"
 
 output_run 'Composite action shell regressions (offline)' \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/tests/run-workflow-tests.py scripts/checks/tests/composite-action-shell-test.py "$tools/shellcheck"
+OUTPUT_STATUS_INDENT='' output_status OK '4/5 - Validate local actions'
 
 printf '\n' >&2
 OUTPUT_STATUS_INDENT='' output_status RUN '5/5 - Validate tooling scripts'
 
 output_run 'CI tooling scripts (ShellCheck)' \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/output/native-output.py --indent "$tools/shellcheck" \
     scripts/checks/lint-workflows.sh \
     scripts/checks/download-workflow-validator.sh \
@@ -179,14 +190,20 @@ output_run 'CI tooling scripts (ShellCheck)' \
     scripts/docker/image-update-overview.sh \
     scripts/sync-composer-php.sh \
     scripts/make/make.sh \
+    scripts/make/pre-pr-checks.sh \
+    scripts/make/tests/pre-pr-checks-test.sh \
     scripts/checks/check-security.sh \
     scripts/reports/prepare-sonar-reports.sh
 
 output_run 'Composer cache mount regressions (offline)' \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/tests/run-workflow-tests.py scripts/ci/tests/composer-cache-test.py
 
 output_run 'Analyzer job and gate regressions (offline)' \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/tests/run-workflow-tests.py scripts/ci/tests/analyzer-workflow-test.py
 
 output_run 'Docker maintenance workflow regressions (offline)' \
+    python3 scripts/output/native-output.py --indent \
     python3 scripts/tests/run-workflow-tests.py scripts/docker/tests/docker-image-workflow-test.py
+OUTPUT_STATUS_INDENT='' output_status OK '5/5 - Validate tooling scripts'

@@ -35,13 +35,32 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
 TARGETS = (
-    "run-tests", "run-tests-php", "run-tests-phpdbg", "infection", "phpcs", "ecs",
+    "application-info", "run-tests", "run-tests-php", "run-tests-phpdbg", "infection", "phpcs", "ecs",
     "ecs-fix", "phpinsights", "phplint", "php-parallel-lint", "psalm",
     "psalm-shepherd", "psalm-github", "phpstan", "phpstan-github",
     "lint-configuration", "lint-yaml", "lint-markdown", "lint-python",
     "typecheck-python", "composer-normalize",
     "composer-validate", "composer-require-checker", "composer-unused",
 )
+PRE_PR_TARGET_LABELS = {
+    "application-info": "Read application information",
+    "run-tests-php": "Run PHPUnit tests",
+    "phpcs": "Check PHP coding standards",
+    "ecs": "Check PHP coding style",
+    "phpinsights": "Analyze PHP code quality",
+    "phplint": "Lint PHP files",
+    "psalm": "Analyze PHP with Psalm",
+    "phpstan": "Analyze PHP with PHPStan",
+    "lint-yaml": "Lint Symfony YAML",
+    "lint-python": "Lint Python files",
+    "typecheck-python": "Check Python types",
+    "composer-validate": "Validate composer.json",
+}
+READABLE_LABELS = {
+    "lint-markdown": "Markdown documentation",
+    "php-parallel-lint": "Lint PHP files parallel",
+    **PRE_PR_TARGET_LABELS,
+}
 
 
 class QualityOutputTest(unittest.TestCase):
@@ -54,6 +73,7 @@ class QualityOutputTest(unittest.TestCase):
         for directory in (
             "scripts/output", "scripts/make", "bin", "vendor/bin",
             "tools/02_phpstan/vendor/phpstan/phpstan", "scripts/docker/tests",
+            "scripts/ci",
         ):
             (self.root / directory).mkdir(parents=True)
 
@@ -68,7 +88,11 @@ class QualityOutputTest(unittest.TestCase):
         shutil.copyfile(ROOT / "scripts/output/phpmetrics-output.py", self.root / "scripts/output/phpmetrics-output.py")
         shutil.copyfile(ROOT / "scripts/output/report-output.sh", self.root / "scripts/output/report-output.sh")
         shutil.copyfile(ROOT / "scripts/make/make.sh", self.root / "scripts/make/make.sh")
+        shutil.copyfile(ROOT / "scripts/make/pre-pr-checks.sh", self.root / "scripts/make/pre-pr-checks.sh")
         shutil.copyfile(ROOT / "scripts/output/markdown-output.sh", self.root / "scripts/output/markdown-output.sh")
+        (self.root / "scripts/ci/ci-detect-changes.sh").write_text(
+            '#!/usr/bin/env bash\nprintf "markdown=true\\n" >> "$GITHUB_OUTPUT"\n'
+        )
         docker_test = self.root / "scripts/docker/tests/docker-images-test.sh"
         docker_test.write_text(
             """#!/usr/bin/env bash
@@ -166,6 +190,7 @@ done
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(calls), COLOR="never", NO_COLOR="", FAIL_COMMAND="",
             REAL_PYTHON=sys.executable, HOME=str(self.root / "home"),
+            OUTPUT_RUN_TARGET_ACTIVE="",
         )
 
         environment.update(overrides)
@@ -180,27 +205,64 @@ done
     def test_every_target_has_one_final_success_after_native_output(self):
         for target in TARGETS:
             with self.subTest(target=target):
-                label = "Markdown documentation" if target == "lint-markdown" else target
-                result, calls = self.run_target(target)
-
+                label = READABLE_LABELS.get(target, target)
+                make_label = f"{label} (make {target})"
+                result, calls = self.run_target(
+                    target, OUTPUT_RUN_TARGET=target
+                )
                 self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual(result.stderr.count(f"[RUN] {label}\n"), 1)
+                self.assertEqual(result.stderr.count(f"[RUN] {make_label}\n"), 1)
                 completion = ("Psalm analysis completed; local report: build/psalm.json; Shepherd upload success is not verified"
                               if target in ("psalm-shepherd", "psalm-github") else label)
-
-                self.assertEqual(result.stderr.count(f"[OK] {completion}\n"), 1)
-                self.assertTrue(result.stderr.endswith(f"\n\n[OK] {completion}\n"))
+                completion_label = (
+                    completion if target in ("psalm-shepherd", "psalm-github")
+                    else make_label
+                )
+                self.assertEqual(result.stderr.count(f"[OK] {completion_label}\n"), 1)
+                self.assertTrue(
+                    result.stderr.endswith(f"\n\n[OK] {completion_label}\n")
+                )
                 self.assertIn("  native progress\n", result.stdout)
                 self.assertIn("::notice file=src/Example.php", result.stderr)
                 self.assertNotIn("  ::notice file=src/Example.php", result.stderr)
-                self.assertTrue(result.stderr.startswith(f"[RUN] {label}\n"))
+                self.assertTrue(result.stderr.startswith(f"[RUN] {make_label}\n"))
                 self.assertNotIn("\033", result.stderr)
                 self.assertTrue(calls)
 
-    def test_docker_image_test_has_nested_section_statuses_without_duplicate_target_run(self):
-        result, _ = self.run_target("test-docker-images")
+    def test_pre_pr_make_target_is_included_in_wrapped_label(self):
+        result, _ = self.run_target(
+            "php-parallel-lint", OUTPUT_RUN_TARGET="php-parallel-lint"
+        )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertTrue(result.stderr.startswith("[RUN] Docker image tests\n"))
+        self.assertTrue(
+            result.stderr.startswith(
+                "[RUN] Lint PHP files parallel (make php-parallel-lint)\n"
+            ),
+            result.stderr,
+        )
+        self.assertTrue(
+            result.stderr.endswith(
+                "\n\n[OK] Lint PHP files parallel (make php-parallel-lint)\n"
+            ),
+            result.stderr,
+        )
+
+    def test_ci_change_selector_writes_to_caller_output_file(self):
+        output = self.root / "selection"
+        result, _ = self.run_target("ci-detect-changes", GITHUB_OUTPUT=str(output))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(output.read_text(), "markdown=true\n")
+
+    def test_docker_image_test_has_nested_section_statuses_without_duplicate_target_run(self):
+        result, _ = self.run_target(
+            "test-docker-images", OUTPUT_RUN_TARGET="test-docker-images"
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(
+            result.stderr.startswith(
+                "[RUN] Docker image tests (make test-docker-images)\n"
+            )
+        )
         self.assertNotIn("[RUN] test-docker-images", result.stderr)
         self.assertIn("  [RUN] Manifest validation\n", result.stderr)
         self.assertIn("    [OK] OCI multi-platform index (digest and verify)\n", result.stderr)
@@ -222,8 +284,7 @@ done
 
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("native failure diagnostic", result.stderr)
-                label = "Markdown documentation" if target == "lint-markdown" else target
-
+                label = READABLE_LABELS.get(target, target)
                 self.assertIn(f"[FAIL] {label}", result.stderr)
                 self.assertIn("  native failure diagnostic\n", result.stderr)
                 self.assertNotIn("make[1]: ***", result.stderr)
@@ -305,13 +366,16 @@ done
         result, _ = self.run_target("psalm-shepherd", "ecs")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertTrue(result.stderr.endswith("[OK] ecs\n"), result.stderr)
+        self.assertTrue(
+            result.stderr.endswith("[OK] Check PHP coding style\n"),
+            result.stderr,
+        )
 
     def test_mixed_goals_and_color_preferences(self):
         result, _ = self.run_target("ecs", "check-skills", COLOR="always")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("\033[32m[OK]\033[0m ecs", result.stderr)
+        self.assertIn("\033[32m[OK]\033[0m Check PHP coding style", result.stderr)
         self.assertIn("[OK]\033[0m Skill metadata and documentation links", result.stderr)
         result, _ = self.run_target("ecs", COLOR="always", NO_COLOR="1")
 
@@ -380,22 +444,28 @@ done
         result, calls = self.run_target("composer-validate", "ecs", FAIL_COMMAND="composer")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("[FAIL] composer-validate", result.stderr)
+        self.assertIn("[FAIL] Validate composer.json", result.stderr)
         self.assertNotIn("[OK]", result.stderr)
         self.assertNotIn("vendor/bin/ecs", calls)
         result, calls = self.run_target("composer-validate", "ecs", "--keep-going", FAIL_COMMAND="composer")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("[FAIL] composer-validate", result.stderr)
-        self.assertNotIn("[OK] composer-validate", result.stderr)
-        self.assertIn("[OK] ecs", result.stderr)
+        self.assertIn("[FAIL] Validate composer.json", result.stderr)
+        self.assertNotIn("[OK] Validate composer.json", result.stderr)
+        self.assertIn("[OK] Check PHP coding style", result.stderr)
         self.assertIn("vendor/bin/ecs", calls)
-        self.assertLess(result.stderr.index("[FAIL] composer-validate"), result.stderr.index("[RUN] ecs"))
+        self.assertLess(
+            result.stderr.index("[FAIL] Validate composer.json"),
+            result.stderr.index("[RUN] Check PHP coding style"),
+        )
         result, _ = self.run_target("ecs", "composer-validate", FAIL_COMMAND="composer")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("[OK] ecs", result.stderr)
-        self.assertNotIn("[OK]", result.stderr.split("[FAIL] composer-validate", 1)[1])
+        self.assertIn("[OK] Check PHP coding style", result.stderr)
+        self.assertNotIn(
+            "[OK]",
+            result.stderr.split("[FAIL] Validate composer.json", 1)[1],
+        )
 
     def test_dry_run_executes_no_fixture_commands(self):
         result, calls = self.run_target("run-tests-php", "-n")

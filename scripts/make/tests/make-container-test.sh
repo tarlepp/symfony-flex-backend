@@ -182,7 +182,14 @@ for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-t
     phploc check-security check-action-updates project-stats configure-ci; do
     : > "$DOCKER_CALLS"
 
-    host_make "$target"
+    if [ "$target" = tool-versions ]; then
+        if ! host_make "$target" > "$temporary/forwarded-versions" 2>&1; then
+            cat "$temporary/forwarded-versions" >&2
+            exit 1
+        fi
+    else
+        host_make "$target"
+    fi
 
     if [ "$target" = ci-detect-changes ]; then
         grep -Eq 'compose exec -T .*--env BASE_SHA --env HEAD_SHA --env EVENT_NAME .*php bash scripts/make/make.sh ci-detect-changes$' "$DOCKER_CALLS"
@@ -190,6 +197,11 @@ for target in ci-detect-changes cache-clear cache-warmup clear clear-tools run-t
         grep -Eq "compose exec -T --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED +php bash scripts/make/make.sh $target$" "$DOCKER_CALLS"
     fi
 done
+
+# Pre-PR labels pass the Make target name through container forwarding.
+: > "$DOCKER_CALLS"
+OUTPUT_RUN_TARGET=php-parallel-lint host_make php-parallel-lint
+grep -Eq 'compose exec -T .*--env OUTPUT_RUN_TARGET .*php bash scripts/make/make.sh php-parallel-lint$' "$DOCKER_CALLS"
 
 # Host-side stack inventory honors color controls.
 host_make tool-versions COLOR=always > "$temporary/stack-output" 2>&1

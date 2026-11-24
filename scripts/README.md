@@ -84,7 +84,10 @@ directory relationships so they do not depend on files remaining siblings.
     output for its separate job summary.
 * [Docker multi-platform image helper](docker/docker-images.sh)
   * Checks image version updates, resolves multi-platform image digests,
-    verifies pinned base images and builds images for other platforms.
+    verifies pinned base images and builds images for other platforms. Version
+    update checks warn and skip newer candidates with no runnable platforms
+    without failing the check; explicit digest resolution and pin verification
+    remain strict.
 * [Doctrine MariaDB synchronization](docker/sync-doctrine-mariadb.sh) and
   [CI MariaDB pin synchronization](docker/sync-ci-mariadb.sh)
   * Run as separate Docker image update workflow steps on the GitHub runner.
@@ -128,11 +131,13 @@ Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
 messages stay on stderr. The Make dispatcher indents ordinary nonempty output
 from both streams by two spaces, leaving GitHub workflow commands at column
-zero. The opening `[RUN]` and final `[OK]` or `[FAIL]` stay level; direct uses
-of the shared helper preserve child output unchanged. Multi-step commands must
-pass a fail-fast executable or the complete nested Make recipe, not a shell
-function whose intermediate failures could be hidden by Bash conditional
-execution.
+zero. It removes whitespace-only padding adjacent to native `[OK]` lines and
+trailing whitespace-only output so native success messages sit directly beside
+the wrapper outcome. The opening `[RUN]` and final `[OK]` or `[FAIL]` stay level;
+direct uses of the shared helper preserve child output unchanged. Multi-step
+commands must pass a fail-fast executable or the complete nested Make recipe,
+not a shell function whose intermediate failures could be hidden by Bash
+conditional execution.
 
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
@@ -460,6 +465,13 @@ leaves decoration to the owning script. Make derives `HOST_TARGETS` and
 `QUALITY_TARGETS` name is replaced because wrapped recipes also cover setup,
 information, and reports. `COMMAND_LABEL` and `COMMAND_OUTPUT_RUN` replace the
 quality-specific internal names; callers should not override them.
+
+The local pre-PR runner sets `OUTPUT_RUN_TARGET` for each nested Make command.
+Make forwards it into PHP and appends `(make <target>)` to wrapped labels.
+Direct targets that use `command-output.sh` automatically add the same suffix
+and indent child output. Pre-PR targets use concise, human-readable labels
+before the suffix, such as `Lint PHP files parallel (make php-parallel-lint)`;
+self-reporting direct targets use descriptive top-level labels too.
 
 Help reads the same records for categories and markers. Everyday information,
 tests, quality checks, dependencies, and reports precede setup and host Docker
@@ -1043,23 +1055,30 @@ cancelled and unexpected skipped prerequisites. These regressions do not execute
 GitHub jobs or simulate its scheduler.
 
 Output uses five numbered stages: CI gate contracts, validator preparation,
-workflow validation, local action validation and tooling script validation.
-Every regression suite has a named start and outcome, while native test output,
-warnings and errors remain visible. Each check keeps its `[RUN]`, native output
-and outcome together, with a blank line before the next check rather than before
-the outcome. Inner status lines are indented two spaces beneath their numbered
-stage. `scripts/tests/run-workflow-tests.py` indents unittest diagnostics two
-spaces and omits its standalone `OK` footer and trailing blank lines, leaving
-`[OK]` as the success indicator. Counts, timings, skips and failure details
-remain visible; direct suite invocations retain unittest's usual output. Other
-validator diagnostics use `scripts/output/native-output.py --indent` to stream
-both output channels with two-space indentation, preserving colors and exit
-status. The download/cache helper,
-`scripts/checks/download-workflow-validator.sh`, uses the same relay, so curl
-and checksum errors align with other native diagnostics without changing
-download limits, cache verification or failure statuses. The validator opts into
-grouped status lines with non-exported `OUTPUT_RUN_GROUPED=1` and
-`OUTPUT_STATUS_INDENT='  '`; other commands retain their existing spacing.
+workflow validation, local action validation and tooling script validation. Each
+completed stage has an `[OK]` outcome at the same level as its `[RUN]`. Every
+regression suite has a named start and outcome, and native test output, warnings
+and errors remain visible. Each check keeps its `[RUN]`, native output and
+outcome together; one blank line separates it from the next check. The first
+nested `[RUN]` follows its parent heading without a blank line. Inner status
+lines are indented two spaces beneath their numbered stage. The test runner
+indents unittest diagnostics two spaces by default. It omits separator lines,
+its standalone `OK` footer, and trailing blank lines, leaving `[OK]` as the
+success indicator. Nested callers can increase the diagnostic indentation.
+Counts, timings, skips, and failure details remain visible; direct suite
+invocations retain unittest's usual output. Composite-shell diagnostics are
+indented one level below their `[RUN]`. Other validator diagnostics use
+`scripts/output/native-output.py --indent` to stream both output channels with
+two-space indentation, preserving colors and exit status. The download/cache
+helper uses the same relay; its path is
+`scripts/checks/download-workflow-validator.sh`. Curl and checksum errors align
+with other native diagnostics without changing download limits, cache
+verification or failure statuses.
+
+The validator uses non-exported `OUTPUT_RUN_GROUPED=1` and
+`OUTPUT_STATUS_INDENT='  '`; other commands retain their existing spacing. The
+aggregate success status follows the final suite outcome with no blank line.
+
 ShellCheck's script pass is labeled `CI tooling scripts (ShellCheck)` to reflect
 its full explicit input list.
 
@@ -1198,8 +1217,10 @@ The selected target uses the CI change selector for the committed
 do not affect selection. Empty or uncertain comparisons select all local checks.
 
 The orchestrator sends project checks through existing Make targets to the PHP
-development container and keeps Docker/Compose checks on the host. It does not
-reproduce GitHub-hosted security scans, dependency review, external reporting,
+development container and keeps Docker/Compose checks on the host. For these
+local checks it suppresses timestamped Monolog `deprecation.INFO` records on
+stderr; other diagnostics and direct Make target output remain unchanged. It
+does not reproduce GitHub-hosted security scans, dependency review, external reporting,
 scheduled maintenance, or informational jobs. The all-checks target always
 builds both image targets; the selected target builds them when the Docker
 category is selected.

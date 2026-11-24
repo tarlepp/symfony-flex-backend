@@ -65,7 +65,8 @@ export COMPOSE_ANSI := $(NATIVE_COLOR)
 # Progress indicator policy: auto (interactive terminal outside CI), always or never
 export PROGRESS ?= auto
 CONTAINER_ENV = --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED $(foreach name,\
-	CI DATABASE_URL XDEBUG_MODE OUTPUT_RUN_GROUPED COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY \
+	CI DATABASE_URL XDEBUG_MODE OUTPUT_RUN_GROUPED OUTPUT_RUN_TARGET OUTPUT_RUN_TARGET_ACTIVE GITHUB_OUTPUT \
+	COVERALLS_REPO_TOKEN COVERALLS_RUN_LOCALLY \
 	BASE_SHA HEAD_SHA EVENT_NAME \
 	GITHUB_TOKEN GITHUB_ACTIONS GITHUB_RUN_ID GITHUB_RUN_NUMBER GITHUB_JOB \
 	GITHUB_REF GITHUB_SHA GITHUB_HEAD_REF GITHUB_REPOSITORY GITHUB_EVENT_NAME \
@@ -81,7 +82,7 @@ $(if $(filter host wrapped direct,$(3)),,$(error Invalid execution metadata: $(1
 $(eval COMMAND_TARGETS += $(1))
 $(if $(filter host,$(3)),$(eval HOST_TARGETS += $(1)))
 $(if $(filter wrapped,$(3)),$(eval WRAPPED_TARGETS += $(1)))
-$(eval $(1): COMMAND_LABEL := $(or $(5),$(1)))
+$(eval $(1): COMMAND_LABEL := $(or $(5),$(1))$(if $(filter $(1),$(OUTPUT_RUN_TARGET)), (make $(1))))
 endef
 
 # Help entrypoints (not listed in help).
@@ -102,7 +103,7 @@ ci-detect-changes: export EVENT_NAME ?= pull_request
 # Application tests and tooling regressions
 $(call REGISTER_TARGET,infection,tests,wrapped)
 $(call REGISTER_TARGET,run-tests,tests,wrapped)
-$(call REGISTER_TARGET,run-tests-php,tests,wrapped)
+$(call REGISTER_TARGET,run-tests-php,tests,wrapped,,Run PHPUnit tests)
 $(call REGISTER_TARGET,run-tests-phpdbg,tests,wrapped)
 $(call REGISTER_TARGET,test-command-output,tests,direct)
 $(call REGISTER_TARGET,test-docker-images,tests,direct)
@@ -113,23 +114,23 @@ $(call REGISTER_TARGET,check-requirements,quality,direct)
 $(call REGISTER_TARGET,check-skills,quality,direct)
 $(call REGISTER_TARGET,composer-require-checker,quality,wrapped)
 $(call REGISTER_TARGET,composer-unused,quality,wrapped)
-$(call REGISTER_TARGET,composer-validate,quality,wrapped)
-$(call REGISTER_TARGET,ecs,quality,wrapped)
+$(call REGISTER_TARGET,composer-validate,quality,wrapped,,Validate composer.json)
+$(call REGISTER_TARGET,ecs,quality,wrapped,,Check PHP coding style)
 $(call REGISTER_TARGET,lint-configuration,quality,wrapped)
 $(call REGISTER_TARGET,lint-markdown,quality,wrapped,,Markdown documentation)
-$(call REGISTER_TARGET,lint-python,quality,wrapped)
+$(call REGISTER_TARGET,lint-python,quality,wrapped,,Lint Python files)
 $(call REGISTER_TARGET,lint-workflows,quality,direct)
-$(call REGISTER_TARGET,lint-yaml,quality,wrapped)
-$(call REGISTER_TARGET,php-parallel-lint,quality,wrapped)
-$(call REGISTER_TARGET,phpcs,quality,wrapped)
-$(call REGISTER_TARGET,phpinsights,quality,wrapped)
-$(call REGISTER_TARGET,phplint,quality,wrapped)
-$(call REGISTER_TARGET,phpstan,quality,wrapped)
+$(call REGISTER_TARGET,lint-yaml,quality,wrapped,,Lint Symfony YAML)
+$(call REGISTER_TARGET,php-parallel-lint,quality,wrapped,,Lint PHP files parallel)
+$(call REGISTER_TARGET,phpcs,quality,wrapped,,Check PHP coding standards)
+$(call REGISTER_TARGET,phpinsights,quality,wrapped,,Analyze PHP code quality)
+$(call REGISTER_TARGET,phplint,quality,wrapped,,Lint PHP files)
+$(call REGISTER_TARGET,phpstan,quality,wrapped,,Analyze PHP with PHPStan)
 $(call REGISTER_TARGET,phpstan-github,quality,wrapped)
-$(call REGISTER_TARGET,psalm,quality,wrapped)
+$(call REGISTER_TARGET,psalm,quality,wrapped,,Analyze PHP with Psalm)
 $(call REGISTER_TARGET,psalm-github,quality,wrapped)
 $(call REGISTER_TARGET,psalm-shepherd,quality,wrapped)
-$(call REGISTER_TARGET,typecheck-python,quality,wrapped)
+$(call REGISTER_TARGET,typecheck-python,quality,wrapped,,Check Python types)
 $(call REGISTER_TARGET,composer-normalize,quality,wrapped,OVERWRITE)
 $(call REGISTER_TARGET,ecs-fix,quality,wrapped,OVERWRITE)
 
@@ -219,7 +220,7 @@ $(FORWARD_TARGETS):
 		if [ -t 1 ] && [ -t 2 ]; then OUTPUT_PROGRESS_SHARED=1; else OUTPUT_PROGRESS_SHARED=0; fi; \
 		export OUTPUT_PROGRESS_SHARED; \
 	fi; \
-	$(if $(filter tool-versions,$@),bash scripts/output/command-output.sh --run "Read Docker and stack service versions" bash scripts/reports/tool-versions.sh --stack $(COMPOSE_EXEC) || exit $$?; printf '\n' >&2;,) \
+	$(if $(filter tool-versions,$@),bash scripts/output/command-output.sh --run "Read Docker and stack service versions" bash scripts/reports/tool-versions.sh --stack $(COMPOSE_EXEC) || exit $$?;,) \
 	HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) $(COMPOSE_EXEC) exec -T $(CONTAINER_ENV) php bash scripts/make/make.sh $@
 ifneq ($(filter $(HOST_TARGETS),$(MAKECMDGOALS)),)
 $(filter $(HOST_TARGETS),$(MAKECMDGOALS)):
@@ -241,8 +242,8 @@ $(WRAPPED_GOALS):
 ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
 	@$(MAKE) COMMAND_OUTPUT_RUN=1 $@
 else
-	+@bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" \
-		python3 scripts/output/native-output.py --indent \
+	+@OUTPUT_RUN_TARGET_ACTIVE=1 bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" \
+		python3 scripts/output/native-output.py --indent --compact-status-spacing \
 		bash scripts/make/make.sh COMMAND_OUTPUT_RUN=1 $@
 endif
 $(filter-out $(WRAPPED_TARGETS),$(MAKECMDGOALS)):
@@ -292,7 +293,7 @@ application-info: ## Display Symfony application information
 	@bin/console about $(ANSI_FLAG)
 
 ci-detect-changes: ## Preview CI selection for committed changes (BASE_SHA=HEAD^ HEAD_SHA=HEAD)
-	@bash -eu -c 'output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; COLOR=$(NATIVE_COLOR) GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci/ci-detect-changes.sh'
+	@bash -eu -c 'output=$${GITHUB_OUTPUT:-}; if [ -z "$$output" ]; then output=$$(mktemp); trap '\''rm -f "$$output"'\'' EXIT; fi; COLOR=$(NATIVE_COLOR) GITHUB_OUTPUT="$$output" GITHUB_STEP_SUMMARY= bash scripts/ci/ci-detect-changes.sh'
 
 configuration: ## Prints out application current configuration
 	@echo | jq -r . ${APPLICATION_CONFIG}
@@ -348,7 +349,8 @@ test-make-routing: ## Test host and CI container command routing
 # Linting and static analysis
 
 check-requirements: ## Check application runtime requirements
-	@bash scripts/output/command-output.sh "Application runtime requirements" \
+	@bash scripts/output/command-output.sh --run \
+		"Application runtime requirements" \
 		bash scripts/output/native-output.sh env TERM_PROGRAM=$(if $(filter always,$(NATIVE_COLOR)),Hyper,) XDEBUG_MODE=off php ./vendor/bin/requirements-checker
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
@@ -378,7 +380,8 @@ lint-markdown: ## Lint Markdown files
 	@bash scripts/output/markdown-output.sh bash -lc 'if command -v npx >/dev/null 2>&1; then npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; elif [ -f "$${HOME}/.nvm/nvm.sh" ]; then . "$${HOME}/.nvm/nvm.sh" && nvm use --silent default >/dev/null && npx --yes markdownlint-cli2 "**/*.md" "!vendor/**" "!var/**" "!node_modules/**" "!tools/**/vendor/**" "!.git/**"; else echo "npx is not available. Install Node.js/npm (or nvm with a default Node version)."; exit 127; fi'
 
 lint-python: ## Lint Python files with Ruff
-	@bash scripts/output/command-output.sh "Python correctness checks" ruff check .
+	@bash scripts/output/command-output.sh "Python correctness checks" \
+		python3 scripts/output/native-output.py --indent ruff check .
 
 lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
 	@bash scripts/output/command-output.sh "GitHub workflows and local action metadata" bash scripts/checks/lint-workflows.sh
@@ -397,7 +400,7 @@ phpinsights: ## Runs PHP Insights
 	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse $(ANSI_FLAG) --no-interaction --min-quality=95 --min-complexity=85 --min-architecture=100 --min-style=100
 
 phplint: ## Runs PHPLint
-	@php ./vendor/bin/phplint --no-cache $(ANSI_FLAG)
+	@XDEBUG_MODE=off php ./vendor/bin/phplint lint --no-cache $(ANSI_FLAG)
 
 phpstan: ## Runs PHPStan static analysis tool
 	@@bin/console cache:clear $(ANSI_FLAG)
@@ -436,7 +439,7 @@ psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 
 typecheck-python: ## Check Python types with Pyright
 	@bash scripts/output/command-output.sh "Python type analysis" \
-		bash -c '. "$$HOME/.nvm/nvm.sh" && pyright'
+		bash -c '. "$$HOME/.nvm/nvm.sh" && python3 scripts/output/native-output.py --indent pyright'
 
 composer-normalize: ## Normalizes `composer.json` file content
 	$(call MUTATION_WARNING,Rewriting composer.json into normalized formatting)

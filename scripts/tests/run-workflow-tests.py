@@ -14,8 +14,9 @@
 #
 # Details:
 #   Loads the supplied Python file as a module and runs its unittest tests.
-#   Runner diagnostics go to stderr with two-space indentation; the standalone
-#   OK footer and trailing blank lines are omitted. Test stdout is not filtered.
+#   Runner diagnostics go to stderr with indentation from OUTPUT_TEST_INDENT
+#   (two spaces by default); unittest separators, the standalone OK footer, and
+#   trailing blank lines are omitted. Test stdout is not filtered.
 #
 # Exit Status:
 #   Returns 0 for a successful unittest result, 1 for an unsuccessful result,
@@ -27,6 +28,7 @@
 #     - `scripts/tests/command-output-contract-test.sh` runs output contract suites.
 
 import importlib.util
+import os
 import sys
 import unittest
 
@@ -34,10 +36,11 @@ import unittest
 class NestedTestOutput:
     """Indent unittest diagnostics while suppressing the standalone OK footer."""
 
-    def __init__(self, stream):
+    def __init__(self, stream, indent):
         self.stream = stream
         self.pending = ""
         self.blank_lines = 0
+        self.indent = indent
 
     def write(self, text):
         # Buffer incomplete lines and blank lines so a trailing footer is omitted.
@@ -48,10 +51,10 @@ class NestedTestOutput:
 
             if not line:
                 self.blank_lines += 1
-            elif line != "OK":
+            elif line != "OK" and not (set(line) == {"-"}):
                 self.stream.write("\n" * self.blank_lines)
                 self.blank_lines = 0
-                self.stream.write(f"  {line}\n")
+                self.stream.write(f"{self.indent}{line}\n")
 
     def flush(self):
         self.stream.flush()
@@ -60,7 +63,7 @@ class NestedTestOutput:
         """Forward a final partial diagnostic and flush the underlying stream."""
 
         if self.pending:
-            self.stream.write(f"  {self.pending}\n")
+            self.stream.write(f"{self.indent}{self.pending}\n")
             self.pending = ""
 
         self.stream.flush()
@@ -71,6 +74,10 @@ def main():
         sys.stderr.write("Usage: run-workflow-tests.py <test-file> [arguments...]\n")
 
         return 64
+
+    os.environ.pop("OUTPUT_RUN_GROUPED", None)
+    os.environ.pop("OUTPUT_STATUS_INDENT", None)
+    test_indent = os.environ.pop("OUTPUT_TEST_INDENT", "  ")
 
     # Leave suite-specific arguments available to the imported module and unittest.
     path = sys.argv.pop(1)
@@ -85,7 +92,7 @@ def main():
 
     spec.loader.exec_module(module)
 
-    output = NestedTestOutput(sys.stderr)
+    output = NestedTestOutput(sys.stderr, test_indent)
     runner = unittest.TextTestRunner(stream=output)
 
     try:
