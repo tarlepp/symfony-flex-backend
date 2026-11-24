@@ -34,6 +34,8 @@
 #   Scripts:
 #     - `scripts/output/native-output.sh` uses the default filter when native
 #       color is disabled.
+#     - `scripts/output/action-update-output.sh` uses indent mode for nested
+#       Make output.
 #     - `scripts/checks/lint-workflows.sh` and
 #       `scripts/tests/command-output-contract-test.sh` use indent mode.
 

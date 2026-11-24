@@ -1277,6 +1277,49 @@ esac
                 self.assertIn("Platforms:  linux/amd64, linux/arm64", result.stdout)
                 self.assertIn("Build targets reported for the first builder node.", result.stdout)
 
+    def test_docker_reports_indent_details_beneath_top_level_statuses(self):
+        result = self.make(
+            "docker-builder-platforms", "INSIDE_DOCKER_CONTAINER=0",
+            "INSIDE_CONTAINER_RUNTIME=0", merged_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertRegex(result.stdout, r"\A\[RUN\] Inspect buildx builder platforms\n")
+        self.assertIn("\n  Buildx builder\n  Current builder and first node\n", result.stdout)
+        self.assertIn("\n  Field descriptions\n    Name       Current buildx builder.\n", result.stdout)
+        self.assertRegex(result.stdout, r"\n\[OK\] Inspect buildx builder platforms\n$")
+        self.assertNotIn("\nBuildx builder\n", result.stdout)
+
+        jq = self.root / "bin/jq"
+        jq.write_text('#!/bin/sh\nexec /usr/bin/jq "$@"\n')
+        jq.chmod(0o755)
+        (self.root / "Dockerfile").write_text("FROM fixture:latest\n")
+        (self.root / "docker/example").mkdir(parents=True)
+        (self.root / "docker/example/Dockerfile").write_text("FROM fixture:latest\n")
+        result = self.make(
+            "docker-image-digest", "INSIDE_DOCKER_CONTAINER=0",
+            "INSIDE_CONTAINER_RUNTIME=0", "IMAGE=fixture:latest", merged_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertRegex(result.stdout, r"\A\[RUN\] Inspecting fixture:latest\n")
+        self.assertIn("\n  Media type: application/vnd.oci.image.index.v1+json\n", result.stdout)
+        self.assertIn("\n  Digest:     sha256:fixture\n", result.stdout)
+        self.assertIn("\n  Platforms:  linux/amd64 linux/arm64\n", result.stdout)
+        self.assertIn(
+            "\n  Pin reference:\n\n      FROM fixture:latest@sha256:fixture\n",
+            result.stdout,
+        )
+        self.assertIn("\n  Dockerfile:1:FROM fixture:latest\n", result.stdout)
+        self.assertIn("\n  docker/example/Dockerfile:1:FROM fixture:latest\n", result.stdout)
+        self.assertIn(
+            "\n  [INFO] Lines above use the same image; update those to the new pin reference\n",
+            result.stdout,
+        )
+        self.assertRegex(
+            result.stdout,
+            r"\n\[OK\] Inspected fixture:latest; multi-platform pin reference shown above\n$",
+        )
+        self.assertNotIn("\nMedia type:", result.stdout)
+
     def write_builder_fixture(self):
         docker = self.root / "bin/docker"
 
@@ -1300,13 +1343,13 @@ esac
     def test_builder_platforms_keep_first_fields_and_color_policy(self):
         self.write_builder_fixture()
         expected = (
-            "Buildx builder\nCurrent builder and first node\n\n"
-            "Name:       fixture\nDriver:     docker\n"
-            "Platforms:  linux/amd64, linux/arm64\n\n"
-            "Field descriptions\n"
-            "  Name       Current buildx builder.\n"
-            "  Driver     Backend used to run the builder.\n"
-            "  Platforms  Build targets reported for the first builder node.\n"
+            "  Buildx builder\n  Current builder and first node\n\n"
+            "  Name:       fixture\n  Driver:     docker\n"
+            "  Platforms:  linux/amd64, linux/arm64\n\n"
+            "  Field descriptions\n"
+            "    Name       Current buildx builder.\n"
+            "    Driver     Backend used to run the builder.\n"
+            "    Platforms  Build targets reported for the first builder node.\n"
         )
 
         for color, no_color, native_color, progress, colored in (

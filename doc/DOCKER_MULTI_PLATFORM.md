@@ -394,17 +394,21 @@ line remains uncolored for copying, and redirected output is plain by default:
 
 ```text
 Image name and tag (e.g. php:8.5.13-fpm-trixie): php:8.5.13-fpm-trixie
-[OK] Inspecting php:8.5.13-fpm-trixie
+[RUN] Inspecting php:8.5.13-fpm-trixie
 
-Media type: application/vnd.oci.image.index.v1+json
-Digest:     sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
-Platforms:  linux/386 linux/amd64 linux/arm/v5 linux/arm/v7 linux/arm64/v8 linux/ppc64le linux/riscv64 linux/s390x
+  Media type: application/vnd.oci.image.index.v1+json
+  Digest:     sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
+  Platforms:  linux/386 linux/amd64 linux/arm/v5 linux/arm/v7 linux/arm64/v8 linux/ppc64le linux/riscv64 linux/s390x
 
-Pin reference:
+  Pin reference:
 
-    FROM php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
+      FROM php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
 
-Dockerfile:6:FROM php:8.5.13-fpm-bookworm@sha256:bad1d3498eaa489efe88c1d532e47e2f4111304c3f0b19fbc428842c39ec155c AS php-upstream
+  Dockerfile:6:FROM php:8.5.13-fpm-bookworm@sha256:bad1d3498eaa489efe88c1d532e47e2f4111304c3f0b19fbc428842c39ec155c AS php-upstream
+
+  [INFO] Lines above use the same image; update those to the new pin reference
+
+[OK] Inspected php:8.5.13-fpm-trixie; multi-platform pin reference shown above
 ```
 
 The media type **must** be an index (`...image.index...` or

@@ -996,6 +996,10 @@ tools) from Git errors, retaining Git's stderr diagnostics. Successful lookups
 without usable stable tags or a valid candidate SHA report those data problems
 separately rather than suggesting network failure.
 
+The Make wrapper indents checker details two spaces beneath the top-level status
+and outcome. Direct checker invocations, including scheduled CI, retain their
+existing output.
+
 For maintenance, `discover_actions_in_file` owns parsing for both workflows and
 composite actions. Discovery includes top-level `.yml`/`.yaml` workflows and
 recursive `action.yml`/`action.yaml` metadata under `.github/actions/`, matching

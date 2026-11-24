@@ -621,12 +621,12 @@ exit "${DOCKER_EXIT:-0}"
         self.assertEqual(plain.returncode, 0, plain.stderr)
         self.assertEqual(
             plain.stdout,
-            "Buildx builder\nCurrent builder and first node\n\n"
-            "Name:       fixture\nDriver:     docker\nPlatforms:  linux/amd64, linux/arm64\n"
-            "\nField descriptions\n"
-            "  Name       Current buildx builder.\n"
-            "  Driver     Backend used to run the builder.\n"
-            "  Platforms  Build targets reported for the first builder node.\n",
+            "  Buildx builder\n  Current builder and first node\n\n"
+            "  Name:       fixture\n  Driver:     docker\n  Platforms:  linux/amd64, linux/arm64\n"
+            "\n  Field descriptions\n"
+            "    Name       Current buildx builder.\n"
+            "    Driver     Backend used to run the builder.\n"
+            "    Platforms  Build targets reported for the first builder node.\n",
         )
 
         for color, no_color, expected in (

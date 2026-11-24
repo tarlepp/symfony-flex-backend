@@ -46,7 +46,7 @@ class CheckOutcomesTest(unittest.TestCase):
                 )
 
                 self.assertEqual(result.returncode, 0 if status in (0, 1, 2) else status)
-                self.assertEqual(result.stdout, "native findings\n")
+                self.assertEqual(result.stdout, "  native findings\n")
                 color = 32 if label == "OK" else 33 if label == "WARN" else 31
 
                 self.assertIn(f"\033[{color}m[{label}]\033[0m", result.stderr)
@@ -185,6 +185,7 @@ class CheckOutcomesTest(unittest.TestCase):
 
             for path in (
                 "output/command-output.sh", "output/action-update-output.sh",
+                "output/native-output.py",
             ):
                 shutil.copyfile(ROOT / "scripts" / path, root / "scripts" / path)
 

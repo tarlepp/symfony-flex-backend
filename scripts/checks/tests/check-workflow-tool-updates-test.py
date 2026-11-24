@@ -322,7 +322,36 @@ class ToolUpdatesTest(unittest.TestCase):
                     self.assertIn("review the failed entries above", wrapped.stderr)
                     self.assertIn("retry failed GitHub lookups", wrapped.stderr)
                     self.assertIn("informational Make target remains successful", wrapped.stderr)
-                    self.assertIn("[FAIL] Unable to fetch tool tags:", wrapped.stderr)
+                    self.assertIn("  [FAIL] Unable to fetch tool tags:", wrapped.stderr)
+
+    def test_wrapped_checker_nests_child_output_and_leaves_direct_output_unchanged(self):
+        refs = f"{SHA}\trefs/tags/v1.0.0"
+        direct = self.run_checker(refs)
+        wrapped = self.run_checker(refs, wrapped=True, merged=True)
+
+        self.assertEqual(direct.returncode, 0, direct.stderr)
+        self.assertIn("[RUN] GitHub Actions and workflow tool updates\n", direct.stderr)
+        self.assertIn("[INFO] Action/tool update summary\n", direct.stderr)
+        self.assertTrue(direct.stdout.startswith("Checking 1 GitHub Actions"))
+        self.assertNotIn("\n  [INFO] Action/tool update summary\n", direct.stderr)
+
+        self.assertEqual(wrapped.returncode, 0, wrapped.stdout)
+        self.assertRegex(
+            wrapped.stdout,
+            r"\A\[RUN\] GitHub Action pins and available updates \(informational\)\n",
+        )
+        self.assertIn(
+            "\n  Checking 1 GitHub Actions and workflow tools for updates...\n",
+            wrapped.stdout,
+        )
+        self.assertIn("\n  [OK] Tool up-to-date: example/tool", wrapped.stdout)
+        self.assertIn("\n  [INFO] Action/tool update summary\n", wrapped.stdout)
+        self.assertIn("\n  Actions/tools checked:", wrapped.stdout)
+        self.assertRegex(
+            wrapped.stdout,
+            r"\n\n\[OK\] Action and tool update checks completed\n$",
+        )
+        self.assertNotIn("\n[INFO] Action/tool update summary\n", wrapped.stdout)
 
     def test_compact_wrapped_outcome_has_no_trailing_summary_padding(self):
         for refs, status, pin, outcome in (
