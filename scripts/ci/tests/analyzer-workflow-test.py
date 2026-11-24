@@ -2128,6 +2128,7 @@ class ChangeDetectionTest(unittest.TestCase):
             "scripts/ci/ci-result-gate.sh": {"workflows", "tooling"},
             "scripts/ci/ci-gate-common.sh": {"workflows", "tooling"},
             "scripts/ci/ci-workflow-overview.sh": {"workflows", "tooling"},
+            "scripts/ci/ci-docker-hub-auth.sh": {"images", "workflows", "tooling"},
             "scripts/ci/ci-statistics-summary.sh": {"workflows", "tooling"},
             "scripts/docker/docker-images.sh": {"images", "tooling"},
             "scripts/docker/tests/docker-images-test.sh": {"images", "tooling"},

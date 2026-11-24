@@ -76,6 +76,9 @@ class DockerImageWorkflowTest(unittest.TestCase):
         (self.root / "scripts/ci/ci-workflow-overview.sh").write_text(
             (ROOT / "scripts/ci/ci-workflow-overview.sh").read_text(),
         )
+        (self.root / "scripts/ci/ci-docker-hub-auth.sh").write_text(
+            (ROOT / "scripts/ci/ci-docker-hub-auth.sh").read_text(),
+        )
         (self.root / "scripts/docker").mkdir(parents=True)
         (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
             (ROOT / "scripts/docker/docker-image-digest-summary.py").read_text(),
@@ -770,6 +773,36 @@ class DockerImageWorkflowTest(unittest.TestCase):
             DOCKERHUB_USERNAME="example", DOCKERHUB_TOKEN="",
         )
         self.assertNotEqual(result.returncode, 0)
+        for username, token, notice in (
+            ("", "", "::notice::Using anonymous Docker Hub requests (rate limits apply)."),
+            ("", "example-token", "::error::Configure both DOCKERHUB_USERNAME and DOCKERHUB_TOKEN, or neither."),
+        ):
+            result = self.run_script(
+                WORKFLOW, "Authenticate to Docker Hub when credentials are available",
+                DOCKERHUB_USERNAME=username, DOCKERHUB_TOKEN=token,
+            )
+            self.assertEqual(result.returncode, 0 if not token else 1)
+            self.assertIn(notice, result.stdout)
+            self.assertNotIn("example-token", result.stdout + result.stderr)
+        helper = self.root / "scripts/ci/ci-docker-hub-auth.sh"
+        for args in ([], [""], ["notice", "extra"]):
+            result = subprocess.run(
+                ["bash", str(helper), *args], env=self.environment,
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("Usage:", result.stderr)
+        empty_bin = self.root / "empty-bin"
+        empty_bin.mkdir()
+        result = subprocess.run(
+            ["/bin/bash", str(helper), "notice"],
+            env={**self.environment, "PATH": str(empty_bin),
+                 "DOCKERHUB_USERNAME": "example", "DOCKERHUB_TOKEN": "example-token"},
+            text=True, capture_output=True, check=False,
+        )
+        self.assertEqual(result.returncode, 127)
+        self.assertIn("docker: command not found", result.stderr)
+        self.assertNotIn("example-token", result.stdout + result.stderr)
 
     def test_core_registry_login_precedes_bootstrap_and_preserves_policy(self):
         job = CORE_WORKFLOW.split("  docker-image-check-updates:\n", 1)[1].split(
