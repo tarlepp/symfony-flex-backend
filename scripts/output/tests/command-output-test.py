@@ -47,9 +47,9 @@ DOCKER_IMAGE_TEST_GROUPS = (
     ("Registry responses and pagination", 7),
     ("Dockerfile discovery", 4),
     ("Registry lookup failures and retries", 8),
-    ("Update-pin validation", 10),
+    ("Update-pin validation", 11),
     ("Aggregate results and empty discovery", 4),
-    ("Applying minor/patch updates and digest refreshes", 20),
+    ("Applying minor/patch updates and digest refreshes", 21),
     ("Major reporting stays separate from automatic pin updates", 5),
 )
 DOCKER_IMAGE_TEST_COUNT = sum(count for _, count in DOCKER_IMAGE_TEST_GROUPS)
@@ -769,13 +769,17 @@ class CommandOutputTest(unittest.TestCase):
         for scenario in (
             "single-platform image manifest",
             "index with only one supported platform",
-            "empty image index",
             "malformed manifest JSON",
         ):
             self.assertEqual(
                 result.stderr.count(f"[OK]\033[0m reject update: {scenario}\n"), 1,
                 result.stderr,
             )
+        self.assertIn("[OK]\033[0m empty candidate index is skipped\n", result.stderr)
+        self.assertIn(
+            "[OK]\033[0m empty candidate index is rejected without editing files\n",
+            result.stderr,
+        )
         self.assertNotIn("[PASS]", result.stderr)
         self.assertIn("scenarios passed", result.stderr)
         self.assertTrue(

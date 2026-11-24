@@ -83,7 +83,9 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
    a version change; offline tests and cached builds do not detect that drift.
    If parity fails, resolve the exact tag again rather than copying a digest
    from an older CI log. Confirm that the current index retains the old runnable
-   platforms and rerun the blocking check after any authorized refresh.
+   platforms and rerun the blocking check after any authorized refresh. The
+   update checker warns and skips a newer index with no runnable platforms;
+   digest resolution, pin updates, and pin verification remain strict.
 6. Validate affected Compose configuration with `docker compose config --quiet`
    and include `compose.prod.yaml` when production configuration is affected.
    Build affected images; for PHP base or copied-tool updates, build both

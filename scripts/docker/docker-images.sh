@@ -110,8 +110,9 @@ preserving the tag variant. It groups results by Dockerfile with verified multi-
 pin references for updates. It requires curl, jq and Docker with buildx, and
 changes no files. Exit status: 0 = no updates or errors, 1 = updates or errors,
 69 = missing tools. Floating and prerelease tags are skipped explicitly.
+Candidates with no runnable platforms are skipped with a warning.
 With check-updates --advisory, confirmed updates produce warnings and exit 0;
-lookup or pin-validation errors still fail. Other commands do not use this flag.
+lookup or other pin-validation errors still fail. Other commands do not use this flag.
 check-php-minor builds the next stable PHP minor's development image locally
 and checks the root and tool lockfiles without changing tracked files.
 With --prepare, it uses the passing image to update the PHP pin and refresh
@@ -224,7 +225,7 @@ hub_tags() {
 }
 
 resolve_image_pin() {
-    local image="$1" digest raw type platforms
+    local image="$1" empty_index="${2:-fail}" digest raw type platforms
 
     if ! digest="$(inspect_image "$image" --format '{{.Manifest.Digest}}')"; then
         error "Could not resolve index digest for ${image}: $(tail -n 1 <<< "$digest")"
@@ -253,6 +254,10 @@ resolve_image_pin() {
     fi
 
     if [[ "$platforms" != *" "* ]]; then
+        if [ "$empty_index" = skip ] && [ -z "$platforms" ]; then
+            return "$IMAGE_UPDATE_SKIPPED"
+        fi
+
         error "${image}: index contains fewer than two distinct runnable platforms (${platforms:-none})"
         return 1
     fi
@@ -262,7 +267,10 @@ resolve_image_pin() {
 }
 
 update_pin_reference() {
-    resolve_image_pin "$1" || return 1
+    local status=0
+
+    resolve_image_pin "$1" "${2:-fail}" || status=$?
+    [ "$status" -eq 0 ] || return "$status"
 
     printf '  Multi-platform pin: %s\n' "$RESOLVED_PIN"
     printf '  Platforms: %s\n' "$RESOLVED_PLATFORMS"
@@ -358,7 +366,7 @@ latest_image_tag() {
 
 # Returns 0 for current, 1 for lookup failure, or a named IMAGE_UPDATE_* outcome.
 check_image_update() {
-    local image="${1%@*}" latest status=0
+    local image="${1%@*}" latest pin_output status=0
 
     latest="$(latest_image_tag "$image" 2>&1)" || status=$?
 
@@ -368,8 +376,16 @@ check_image_update() {
     fi
 
     if [ "$latest" != "$image" ]; then
+        pin_output="$(update_pin_reference "$latest" skip)" || status=$?
+
+        if [ "$status" -eq "$IMAGE_UPDATE_SKIPPED" ]; then
+            warning "WARN" "${latest}: index contains no runnable platforms; update skipped"
+            return "$IMAGE_UPDATE_SKIPPED"
+        fi
+
         warning "WARN" "${image} -> ${latest}"
-        update_pin_reference "$latest" || return "$IMAGE_UPDATE_PIN_FAILED"
+        printf '%s\n' "$pin_output"
+        [ "$status" -eq 0 ] || return "$IMAGE_UPDATE_PIN_FAILED"
 
         return "$IMAGE_UPDATE_AVAILABLE"
     else

@@ -210,7 +210,9 @@ case "$*" in
 
         ref="${@: -3:1}"
 
-        if [[ -n "${TEST_VERIFY_TAG_DIGEST+x}" ]] && [[ "$ref" != *@* ]]; then
+        if [ -n "${TEST_EMPTY_IMAGE:-}" ] && [ "$ref" = "$TEST_EMPTY_IMAGE" ]; then
+            printf 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n'
+        elif [[ -n "${TEST_VERIFY_TAG_DIGEST+x}" ]] && [[ "$ref" != *@* ]]; then
             if [ "${TEST_VERIFY_TAG_FAILURE:-}" = 1 ]; then
                 printf 'Tag digest lookup failed\n' >&2
                 exit 1
@@ -873,10 +875,48 @@ check_updates 'invalid update digest' 'test:1.0.0' 1 'Invalid index digest'
 
 unset TEST_DIGEST
 
+printf '%s\n' "$empty_index_manifest" > "$TEST_MANIFEST"
+
+check_updates 'empty candidate index is skipped' 'test:1.0.0' 0 \
+    '[WARN] test:2.0.0: index contains no runnable platforms; update skipped'
+grep -Fq '[SKIP] 1 image version check(s) skipped' "$WORK/output"
+if grep -Eq '\[FAIL\]|Multi-platform pin:|test:1.0.0 -> test:2.0.0' "$WORK/output"; then
+    printf 'FAIL: empty candidate index was reported as a failure or valid update\n'
+    exit 1
+fi
+
+: > "$WORK/advisory-summary"
+GITHUB_ACTIONS=true GITHUB_STEP_SUMMARY="$WORK/advisory-summary" \
+    check_updates 'advisory empty candidate index is skipped' 'test:1.0.0' 0 \
+    'index contains no runnable platforms; update skipped' --advisory
+grep -Fq '0 update(s), 0 failed check(s), 1 skipped check(s)' "$WORK/advisory-summary"
+if grep -Eq '\[FAIL\]|::warning|Multi-platform pin:' "$WORK/output"; then
+    printf 'FAIL: empty candidate produced a failure, update annotation, or pin\n'
+    exit 1
+fi
+
+printf '%s\n' "$oci_multi_platform_manifest" > "$TEST_MANIFEST"
+export TEST_EMPTY_IMAGE='test:2.0.0' TEST_CURRENT_MANIFEST="$empty_index_manifest"
+printf 'FROM test:1.0.0\nCOPY --from=tools/installer:1.0.0 /bin/tool /bin/tool\n' > "$WORK/Dockerfile"
+write_scratch_auxiliary_dockerfiles
+: > "$WORK/advisory-summary"
+
+GITHUB_ACTIONS=true GITHUB_STEP_SUMMARY="$WORK/advisory-summary" \
+    check_updates 'advisory combines empty candidate with a valid update' '' 0 \
+    'test:2.0.0: index contains no runnable platforms; update skipped' --advisory
+grep -Fq 'tools/installer:1.0.0 -> tools/installer:2.0.0' "$WORK/output"
+grep -Fq '1 update(s), 0 failed check(s), 1 skipped check(s)' "$WORK/advisory-summary"
+grep -Fq '::warning file=Dockerfile' "$WORK/output"
+if grep -Fq '[FAIL]' "$WORK/output"; then
+    printf 'FAIL: empty candidate failed an advisory check with a valid update\n'
+    exit 1
+fi
+
+unset TEST_EMPTY_IMAGE TEST_CURRENT_MANIFEST
+
 rejected_update_names=(
     'single-platform image manifest'
     'index with only one supported platform'
-    'empty image index'
     'malformed manifest JSON'
 )
 rejected_update_manifests=(
@@ -888,7 +928,6 @@ rejected_update_manifests=(
             {"platform": {"os": "unknown", "architecture": "unknown"}}
         ]
     }'
-    "$empty_index_manifest"
     'invalid-json'
 )
 
@@ -1085,6 +1124,11 @@ unset TEST_DIGEST
 printf '%s\n' "$single_platform_manifest" > "$TEST_MANIFEST"
 
 update_pins 'single-platform candidate is rejected without editing files' 1 'single platform manifest'
+[ "$before" = "$(sha256sum Dockerfile)" ]
+
+printf '%s\n' "$empty_index_manifest" > "$TEST_MANIFEST"
+
+update_pins 'empty candidate index is rejected without editing files' 1 'fewer than two distinct runnable platforms (none)'
 [ "$before" = "$(sha256sum Dockerfile)" ]
 
 update_pins 'unknown mutation option is rejected' 64 'accepts neither options nor IMAGE' --unknown

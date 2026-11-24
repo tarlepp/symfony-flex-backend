@@ -348,15 +348,17 @@ with a diagnostic; registries other than Docker Hub are unsupported. Results are
 grouped by source Dockerfile. Shared images appear in each relevant group but
 are checked only once. Each update includes a copyable `tag@sha256:digest`
 reference and its supported platforms, verified by inspecting the resolved
-digest as an index with at least two distinct runnable platforms. Failed digest
-lookups or single-platform updates fail explicitly. It reports updates without
-modifying files or checking upgrade compatibility. It does not check whether an
-existing `tag@digest` pin still matches its tag; `make docker-image-verify-pins`
-performs that check for the repository's base images. The update checker exits
-`0` only when there are no updates or errors (explicit skips are allowed).
-Available updates or lookup errors exit `1`; missing tools exit `69`. All images
-are checked before reporting failure, so the command can be used as a CI gate.
-Make also fails, but does not preserve the script's exact non-zero exit code.
+digest as an index with at least two distinct runnable platforms. A newer index
+with no runnable platforms is skipped with a warning; failed digest lookups,
+single-platform manifests and indexes with only one runnable platform fail
+explicitly. It reports updates without modifying files or checking upgrade
+compatibility. It does not check whether an existing `tag@digest` pin still
+matches its tag; `make docker-image-verify-pins` performs that check for the
+repository's base images. The update checker exits `0` only when there are no
+updates or errors (explicit skips are allowed). Available updates or lookup
+errors exit `1`; missing tools exit `69`. All images are checked before reporting
+failure, so the command can be used as a CI gate. Make also fails, but does not
+preserve the script's exact non-zero exit code.
 
 For advisory maintenance checks, run from the repository root on the Docker
 host:
@@ -367,9 +369,11 @@ bash scripts/docker/docker-images.sh check-updates --advisory
 
 This mode returns `0` for confirmed updates, retaining yellow diagnostics and
 adding GitHub warning annotations and a maintenance summary in Actions. Lookup
-and update-pin validation errors still return nonzero, including when other
-images have confirmed updates. The default script and Make policy remain strict;
-unknown update-check options return `64`.
+and other update-pin validation errors still return nonzero, including when other
+images have confirmed updates. Empty candidate indexes are skipped in both
+modes, but digest inspection, pin updates and pin verification remain strict.
+The default script and Make policy remain strict for available updates; unknown
+update-check options return `64`.
 
 Review compatibility before choosing the new tag, especially for major upgrades.
 Use the following steps to inspect and update its digest.
