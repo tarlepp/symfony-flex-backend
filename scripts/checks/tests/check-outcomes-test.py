@@ -24,6 +24,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -72,11 +73,15 @@ class CheckOutcomesTest(unittest.TestCase):
                 ROOT / "scripts/output/command-output.sh",
                 output_dir / "command-output.sh",
             )
+            shutil.copyfile(ROOT / "scripts/output/native-output.py", output_dir / "native-output.py")
+            (root / "python3").symlink_to(sys.executable)
             security_script = script_dir / "check-security.sh"
 
             shutil.copyfile(ROOT / "scripts/checks/check-security.sh", security_script)
             (root / "composer").write_text(
-                "#!/bin/bash\nprintf '%s\\n' \"$*\" >> \"$CALLS\"\nexit \"$COMPOSER_STATUS\"\n"
+                "#!/bin/bash\nprintf '%s\\n' \"$*\" >> \"$CALLS\"\n"
+                "printf 'composer output\\n::notice::fixture\\n'\n"
+                "printf 'composer diagnostic\\n' >&2\nexit \"$COMPOSER_STATUS\"\n"
             )
             (root / "composer").chmod(0o755)
             environment = dict(
@@ -92,16 +97,27 @@ class CheckOutcomesTest(unittest.TestCase):
             environment["FIXTURE_ROOT"] = str(root)
             result = subprocess.run(
                 ["/bin/bash", str(security_script)],
-                env=environment, text=True, capture_output=True, check=False,
+                cwd=root, env=environment, text=True, capture_output=True, check=False,
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("[SKIP] Installed dependency security audit", result.stderr)
+            self.assertEqual(result.stdout, "  composer output\n::notice::fixture\n")
+            self.assertIn("  composer diagnostic\n", result.stderr)
+            grouped = subprocess.run(
+                ["/bin/bash", str(security_script)], cwd=root,
+                env=dict(environment, OUTPUT_RUN_TARGET="check-security", OUTPUT_RUN_GROUPED="1",
+                         OUTPUT_RUN_TARGET_ACTIVE="0"),
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(grouped.returncode, 0, grouped.stderr)
+            self.assertEqual(grouped.stdout, result.stdout)
+            self.assertIn("  composer diagnostic\n", grouped.stderr)
             self.assertIn("update --dry-run --no-plugins roave/security-advisories", (root / "calls").read_text())
             environment["COMPOSER_STATUS"] = "7"
             result = subprocess.run(
                 ["/bin/bash", str(security_script)],
-                env=environment, text=True, capture_output=True, check=False,
+                cwd=root, env=environment, text=True, capture_output=True, check=False,
             )
 
             self.assertEqual(result.returncode, 7, result.stderr)
@@ -125,6 +141,7 @@ class CheckOutcomesTest(unittest.TestCase):
                 with self.subTest(cache=cache, audit=audit):
                     result = subprocess.run(
                         ["/bin/bash", str(security_script)],
+                        cwd=root,
                         env=dict(environment, CACHE_STATUS=cache, AUDIT_STATUS=audit),
                         text=True, capture_output=True, check=False,
                     )
@@ -140,11 +157,11 @@ class CheckOutcomesTest(unittest.TestCase):
             (root / "composer").unlink()
             result = subprocess.run(
                 ["/bin/bash", str(security_script)],
-                env=environment, text=True, capture_output=True, check=False,
+                cwd=root, env=environment, text=True, capture_output=True, check=False,
             )
 
             self.assertEqual(result.returncode, 127)
-            self.assertIn("composer: command not found", result.stderr)
+            self.assertIn("composer", result.stderr)
             self.assertNotIn("[OK]", result.stderr)
             (root / "bash").symlink_to("/bin/bash")
             result = subprocess.run(
