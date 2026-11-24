@@ -172,6 +172,13 @@ Inspect the implementation and its actual callers:
    Monolog `deprecation.INFO` records from nested Make stderr only; preserve
    other diagnostics and direct Make behavior.
 
+   The pre-PR development and production image builds use host-only
+   `docker-build-pre-pr-development` and `docker-build-pre-pr-production`
+   targets. Preserve their local tags, Buildx flags, production cache policy,
+   plain progress output, grouped output, and fail-fast order when changing the
+   runner or targets. Plain Buildx progress avoids broken interactive redraws
+   through the output wrapper without hiding build diagnostics.
+
    For `make ci-detect-changes`, the dispatcher indents the section title two spaces,
    its introductory lines, group headings and notes four spaces, and job entries
    six spaces. The final note is immediately followed by the wrapper outcome.

@@ -216,7 +216,7 @@ class LifecycleOutputTest(unittest.TestCase):
 
         for path in (
             "output/command-output.sh", "make/make.sh", "docker/docker-maintenance.sh",
-            "docker/docker-images.sh", "make/compose-context.sh",
+            "docker/docker-images.sh", "make/compose-context.sh", "output/native-output.py",
         ):
             shutil.copyfile(ROOT / "scripts" / path, self.root / "scripts" / path)
             (self.root / "scripts" / path).chmod(0o755)
@@ -260,6 +260,9 @@ if [ "$1 $2" = 'buildx inspect' ]; then
     fi
     if [ "${3:-}" = --bootstrap ]; then exit "${DOCKER_EXIT:-0}"; fi
     exit 0
+fi
+if [ "$1 $2 $3 $4" = 'buildx build --progress plain' ]; then
+    printf '#1 [internal] load build definition\\n#1 DONE 0.1s\\n' >&2
 fi
 printf 'native progress\\n'
 printf 'native Docker diagnostic\\n' >&2
@@ -497,7 +500,7 @@ exit "${DOCKER_EXIT:-0}"
             "docker-kill-containers", "docker-remove-containers", "docker-remove-images",
             "docker-image-digest", "docker-image-verify-pins", "docker-image-check-updates",
             "docker-builder-platforms", "docker-build-platform", "docker-build-multi-platform",
-            "docker-setup-qemu",
+            "docker-build-pre-pr-development", "docker-build-pre-pr-production", "docker-setup-qemu",
         )
 
         for target in targets:
@@ -734,6 +737,57 @@ exit "${DOCKER_EXIT:-0}"
         self.assertIn("[FAIL] Create buildx builder", result.stderr)
         self.assertNotIn("buildx build", calls)
         self.assertNotIn("[OK]", result.stderr)
+
+    def test_pre_pr_build_targets_preserve_arguments_output_and_failure(self):
+        for variant, options in (
+            ("development", ""),
+            ("production", "--no-cache-filter production "),
+        ):
+            target = f"docker-build-pre-pr-{variant}"
+            label = f"Build {variant} Docker image"
+            command = (
+                f"buildx build --progress plain --pull --load --target {variant} {options}"
+                f"--tag symfony-flex-backend:pre-pr-{variant} .\n"
+            )
+            for grouped, failure in (("0", "0"), ("1", "0"), ("1", "7")):
+                with self.subTest(target=target, grouped=grouped, failure=failure):
+                    result, calls = self.make(
+                        target, OUTPUT_RUN_GROUPED=grouped, OUTPUT_RUN_TARGET=target,
+                        DOCKER_EXIT=failure,
+                    )
+                    self.assertEqual(calls, command)
+                    self.assertEqual(result.returncode == 0, failure == "0", result.stderr)
+                    self.assertEqual(result.stdout, "  native progress\n")
+                    self.assertIn("  #1 [internal] load build definition\n  #1 DONE 0.1s\n", result.stderr)
+                    self.assertIn("  native Docker diagnostic\n", result.stderr)
+                    self.assertIn(f"[RUN] {label} (make {target})", result.stderr)
+                    status = "[OK]" if failure == "0" else "[FAIL]"
+                    self.assertIn(f"{status} {label} (make {target})", result.stderr)
+                    if failure != "0":
+                        self.assertNotIn("[OK]", result.stderr)
+
+            result, calls = self.make(target, "-n")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(calls, "")
+
+            self.calls.write_text("")
+            environment = self.environment(
+                COLOR="always", OUTPUT_RUN_GROUPED="1", OUTPUT_RUN_TARGET=target,
+            )
+            result = subprocess.run(
+                ["bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
+                 "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0", target],
+                cwd=self.root, env=environment, stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT, text=True, check=False, timeout=15,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout)
+            output = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+            self.assertTrue(output.startswith(f"[RUN] {label} (make {target})\n"), output)
+            self.assertIn("  native progress\n", output)
+            self.assertIn("  #1 [internal] load build definition\n  #1 DONE 0.1s\n", output)
+            self.assertIn("  native Docker diagnostic\n", output)
+            self.assertTrue(output.endswith(f"[OK] {label} (make {target})\n"), output)
+            self.assertNotIn(f"\n\n[OK] {label}", output)
 
     def test_dry_run_does_not_execute_lifecycle_commands(self):
         for target in ("daemon", "start", "stop", "ci-start", "docker-prune", "bash", "logs"):
