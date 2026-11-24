@@ -3,9 +3,9 @@ ARG NVM_VERSION=v0.40.8
 ARG NVM_INSTALLER_SHA256=48a0eee9a60e07422dce0eb5774754c83889570ca1ee2566c516acbe8af03a9e
 ARG NODE_VERSION=26.12.1
 
-FROM php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f AS php-upstream
+FROM php:8.5.13-fpm-trixie@sha256:048781ef8a0fc83b294d5285c8ca0d12aea64816a1ed60999e1567db12567da6 AS php-upstream
 FROM mlocati/php-extension-installer:2.13.3@sha256:edda5f9d936fba9b495bdc96ecd19cc8fda7c2574f85db4574795644ae57b456 AS extension-installer-upstream
-FROM composer:2.11.2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93 AS composer-upstream
+FROM composer:2.11.2@sha256:cd3a90dc5624c59a2f9ddf80dad08569f06416db31de519024f249d63bca554b AS composer-upstream
 
 FROM php-upstream AS maintenance
 
