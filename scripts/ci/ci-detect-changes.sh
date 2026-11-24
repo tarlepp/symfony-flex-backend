@@ -10,7 +10,8 @@
 # Details:
 #   Manual runs or uncertain comparisons retain full validation. Writes
 #   selection flags and eligibility previews, not job results, plus an optional
-#   step summary.
+#   step summary. The Make caller sets CI_JOB_PREVIEW_INDENT to indent the job
+#   preview's introductory lines without changing the GitHub Actions output.
 #
 # Callers:
 #   Makefile:
@@ -445,11 +446,11 @@ write_outputs() {
 }
 
 write_job_preview() {
-    local id state color count
+    local id state color count indent=${CI_JOB_PREVIEW_INDENT:-}
 
     printf '\n%sCore CI jobs%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
-    printf 'Eligibility assumes core CI starts; dependencies and cancellation still apply.\n'
-    printf 'Conditional jobs depend on results or event details unavailable here.\n'
+    printf '%sEligibility assumes core CI starts; dependencies and cancellation still apply.\n' "$indent"
+    printf '%sConditional jobs depend on results or event details unavailable here.\n' "$indent"
 
     for state in eligible conditional 'not enabled'; do
         case "$state" in
