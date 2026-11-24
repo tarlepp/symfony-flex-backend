@@ -70,7 +70,10 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
    all references to the same image within the requested scope, preserving stage
    aliases, build targets, and build arguments. The root PHP `base` stage is
    shared by `development` and `production`; nginx also has one shared
-   Dockerfile.
+   Dockerfile. The maintenance workflow synchronizes Doctrine and the CI MariaDB
+   pin even when the image tag is unchanged. For unchanged PHP tags, it verifies
+   Composer baselines and lockfiles and fails on drift for review rather than
+   silently changing the supported PHP requirement.
 5. Run `make docker-image-verify-pins`. It covers external `FROM` and
    `COPY --from` references in the root PHP, nginx, and MariaDB Dockerfiles, not
    every image reference in the repository. Inspect changed Compose, CI, or

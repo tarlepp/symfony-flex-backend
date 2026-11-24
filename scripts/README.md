@@ -90,8 +90,9 @@ directory relationships so they do not depend on files remaining siblings.
     remain strict.
 * [Doctrine MariaDB synchronization](docker/sync-doctrine-mariadb.sh) and
   [CI MariaDB pin synchronization](docker/sync-ci-mariadb.sh)
-  * Run as separate Docker image update workflow steps on the GitHub runner.
-    Offline regressions run through `make lint-workflows`.
+  * Run as separate Docker image update workflow steps on the GitHub runner,
+    correcting existing drift even when the image tag is unchanged. Offline
+    regressions run through `make lint-workflows`.
 * [PHP minor PR preparation](docker/prepare-php-minor-pr.sh) and
   [image update PR preparation](docker/prepare-image-update-pr.sh)
   * Prepare branch outputs, template-based PR bodies and saved update evidence
