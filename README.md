@@ -147,8 +147,8 @@ These commands will create following containers to run this backend application:
 
 * [php](https://www.php.net/) (this is for actual application)
 * [nginx](https://www.nginx.com/) (this will serve application)
-* [mariadb](https://mariadb.org/) (MariaDB 13.0.2 which will store all the data
-  of application)
+* [mariadb](https://mariadb.org/) (stores application data; see the pinned version
+  in [its Dockerfile](docker/mariadb/Dockerfile))
 * [dozzle](https://dozzle.dev/) (to see your docker container logs)
 * [adminer](https://www.adminer.org/) (to manage your database via browser)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Synchronize Doctrine's MariaDB server version after a same-major tag update.
+# Synchronize Doctrine's MariaDB server version with the image tag.
 #
 # Usage:
 #   From the repository root on the GitHub runner:
@@ -29,11 +29,6 @@ if ! [[ "$previous" =~ $version_pattern && "$candidate" =~ $version_pattern ]]; 
     exit 1
 fi
 
-if [[ "$previous" == "$candidate" ]]; then
-    echo "MariaDB tag unchanged ($candidate); no Doctrine update needed."
-    exit 0
-fi
-
 if [[ "${previous%%.*}" != "${candidate%%.*}" ]]; then
     echo '::error::MariaDB major upgrades require manual review.'
     exit 1
@@ -45,6 +40,11 @@ if [[ $(grep -Ec '^[[:space:]]*server_version:' "$config") != 1 ]] ||
     ! grep -Eq "^        server_version: 'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$" "$config"; then
     echo '::error::Expected exactly one explicit MariaDB server_version in Doctrine configuration.'
     exit 1
+fi
+
+if grep -Fqx "        server_version: 'mariadb-$candidate'" "$config"; then
+    echo "Doctrine server_version already matches mariadb-$candidate."
+    exit 0
 fi
 
 sed -i -E "s/^(        server_version: )'mariadb-[0-9]+\.[0-9]+\.[0-9]+'$/\1'mariadb-$candidate'/" "$config"

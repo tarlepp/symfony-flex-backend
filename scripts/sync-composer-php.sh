@@ -17,10 +17,10 @@
 #   current project directory.
 #
 # Details:
-#   Default mode accepts patch updates; --next-minor accepts only the
-#   immediately following minor in the same major. Both modes update the root
-#   and tool Composer manifests and lockfiles. Next-minor mode also verifies
-#   that locked package versions and source/dist references remain unchanged.
+#   Default mode accepts patch updates and detects baseline drift when the tag
+#   is unchanged; --next-minor accepts only the immediately following minor in
+#   the same major. Updates verify locked package versions and source/dist
+#   references remain unchanged.
 #
 # Requirements:
 #   Bash, Composer, jq, and valid Composer manifests and lockfiles.
@@ -68,10 +68,6 @@ if [[ "$mode" == --next-minor ]]; then
         exit 1
     fi
 else
-    if [[ "$old_version" == "$new_version" ]]; then
-        echo "PHP tag unchanged ($new_version); no Composer refresh needed."
-        exit 0
-    fi
     if [[ "${old_version%.*}" != "${new_version%.*}" ]]; then
         echo '::error::The routine updater can only apply PHP patch updates.' >&2
         exit 1
@@ -96,6 +92,27 @@ for manifest in "${manifests[@]}"; do
     fi
 done
 
+if [[ "$mode" == patch && "$old_version" == "$new_version" ]]; then
+    for manifest in "${manifests[@]}"; do
+        lockfile="${manifest%.json}.lock"
+        if ! jq -e --arg version "$new_version" \
+            '.require.php == ("^" + $version) and .config.platform.php == $version' \
+            "$manifest" > /dev/null ||
+            ! jq -e --arg version "$new_version" \
+                '.platform.php == ("^" + $version) and .["platform-overrides"].php == $version' \
+                "$lockfile" > /dev/null; then
+            printf '::error::PHP baseline drift or invalid JSON in %s or %s; review before updating.\n' \
+                "$manifest" "$lockfile" >&2
+            exit 1
+        fi
+
+        composer --working-dir="$(dirname "$manifest")" --no-interaction --no-plugins --no-scripts \
+            validate --no-check-version
+    done
+    echo "PHP tag unchanged ($new_version); Composer baselines and lockfiles verified."
+    exit 0
+fi
+
 # Compare only package identity and source/dist references; platform metadata
 # may legitimately change when the PHP runtime requirement is synchronized.
 locked_packages() {
@@ -108,20 +125,14 @@ locked_packages() {
 for manifest in "${manifests[@]}"; do
     printf 'Synchronizing %s for PHP %s -> %s\n' "$manifest" "$old_version" "$new_version"
     composer_command=(composer --working-dir="$(dirname "$manifest")" --no-interaction --no-plugins --no-scripts)
-
-    if [[ "$mode" == --next-minor ]]; then
-        before="$(locked_packages "${manifest%.json}.lock")"
-    fi
+    before="$(locked_packages "${manifest%.json}.lock")"
     "${composer_command[@]}" config platform.php "$new_version"
     "${composer_command[@]}" require "php:^$new_version" --no-update
     "${composer_command[@]}" "${lock_args[@]}"
     "${composer_command[@]}" validate --no-check-version
-    if [[ "$mode" == --next-minor ]]; then
-        after="$(locked_packages "${manifest%.json}.lock")"
-
-        if [[ "$before" != "$after" ]]; then
-            printf '::error::Package versions or references changed in %s.\n' "${manifest%.json}.lock" >&2
-            exit 1
-        fi
+    after="$(locked_packages "${manifest%.json}.lock")"
+    if [[ "$before" != "$after" ]]; then
+        printf '::error::Package versions or references changed in %s.\n' "${manifest%.json}.lock" >&2
+        exit 1
     fi
 done

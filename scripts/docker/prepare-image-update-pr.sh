@@ -53,9 +53,10 @@ cat << 'EOF'
 
 PHP is limited to patch updates. When its tag changes, the root and tool
 Composer requirements, platform settings and lockfiles are synchronized
-without upgrading packages. Doctrine's configured server version is
-synchronized when the MariaDB tag changes. The CI MariaDB service pin
-is synchronized with the Dockerfile, including digest-only updates.
+without upgrading packages. When the tag is unchanged, baseline or lockfile
+drift fails the check for manual review. Doctrine's configured server version
+and the CI MariaDB service pin are synchronized with the MariaDB Dockerfile,
+including when its tag is unchanged.
 EOF
 if [ -n "$PHP_READINESS_REPORT" ]; then
   printf '\n%s\n' "$PHP_READINESS_REPORT"
@@ -81,8 +82,8 @@ cat << 'EOF'
 * `bash scripts/make/make.sh test-docker-images` — passed (offline regression tests).
 * `bash scripts/make/make.sh docker-image-update-pins` — passed (live registry resolution).
 * `bash scripts/make/make.sh docker-image-verify-pins` — passed (live pin verification).
-* Composer PHP synchronization and lockfile validation passed when the PHP tag changed.
-* Doctrine server version synchronization passed when the MariaDB tag changed.
+* Composer PHP synchronization or unchanged-baseline verification and lockfile validation passed.
+* Doctrine server version synchronization passed.
 * CI MariaDB service pin synchronization passed.
 * Application tests and builds are not run by this Docker maintenance workflow.
 EOF
