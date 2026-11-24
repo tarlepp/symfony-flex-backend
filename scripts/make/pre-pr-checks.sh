@@ -33,6 +33,7 @@
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+source scripts/output/command-output.sh
 
 mode=selected
 
@@ -77,7 +78,8 @@ if [ "$make_dry_run" = true ]; then
     exit 0
 fi
 
-selection_file=$(mktemp "${TMPDIR:-/tmp}/pre-pr-checks.XXXXXX")
+selection_file=$(mktemp "$PWD/.pre-pr-checks.XXXXXX")
+selection_output="/app/${selection_file#"$PWD/"}"
 trap 'rm -f -- "$selection_file"' EXIT
 
 if [ "$mode" = all ]; then
@@ -89,8 +91,9 @@ fi
 EVENT_NAME=$event_name \
     BASE_SHA="${BASE_SHA:-HEAD^}" \
     HEAD_SHA="${HEAD_SHA:-HEAD}" \
-    GITHUB_OUTPUT="$selection_file" \
-    bash scripts/ci/ci-detect-changes.sh
+    GITHUB_OUTPUT="$selection_output" \
+    OUTPUT_RUN_TARGET=ci-detect-changes \
+    make ci-detect-changes
 
 categories=(
     markdown documentation
@@ -110,23 +113,40 @@ selected() {
 }
 
 run_make() {
-    local target=$1 grouped=${2:-0}
+    local target=$1
 
-    if [ "$grouped" = 1 ]; then
-        OUTPUT_RUN_GROUPED=1 make "$target" || exit "$?"
-    else
-        printf '\n' >&2
+    printf '\n' >&2
+    OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_TARGET="$target" \
+        python3 scripts/output/native-output.py --suppress-deprecation-info \
         make "$target" || exit "$?"
-    fi
 }
 
 run_host_command() {
+    local label=$1
+    shift
+
     printf '\n' >&2
-    "$@" || exit "$?"
+    OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_GROUPED_SEPARATOR=0 output_run "$label" \
+        python3 scripts/output/native-output.py --indent "$@" || exit "$?"
+}
+
+run_host_regression_suite() {
+    local label=$1
+    shift
+
+    printf '\n' >&2
+    OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_GROUPED_SEPARATOR=0 output_run "$label" \
+        "${compose[@]}" exec -T php env -u OUTPUT_RUN_GROUPED \
+        python3 scripts/tests/run-workflow-tests.py "$@" || exit "$?"
 }
 
 run_grouped_host_command() {
-    OUTPUT_RUN_GROUPED=1 "$@" || exit "$?"
+    local label=$1
+    shift
+
+    printf '\n' >&2
+    OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_GROUPED_SEPARATOR=0 output_run "$label" \
+        python3 scripts/output/native-output.py --indent "$@" || exit "$?"
 }
 
 compose=(docker compose)
@@ -150,14 +170,14 @@ fi
 
 if selected tooling; then
     run_make test-command-output
-    run_host_command "${compose[@]}" exec -T php \
-        python3 scripts/checks/tests/check-workflow-tool-updates-test.py
-    run_make lint-python 1
-    run_make typecheck-python 1
+    run_host_regression_suite 'Workflow tool update regressions' \
+        scripts/checks/tests/check-workflow-tool-updates-test.py
+    run_make lint-python
+    run_make typecheck-python
 fi
 
 if selected compose; then
-    run_host_command bash scripts/ci/ci-validate-compose.sh
+    run_host_command 'Validate Compose configuration' bash scripts/ci/ci-validate-compose.sh
 fi
 
 if selected markdown; then
@@ -178,8 +198,9 @@ fi
 
 if selected images; then
     run_make test-docker-images
-    run_grouped_host_command bash scripts/docker/docker-images.sh check-updates --advisory
-    run_make docker-image-verify-pins 1
+    run_grouped_host_command 'Check Docker image updates' \
+        bash scripts/docker/docker-images.sh check-updates --advisory
+    run_make docker-image-verify-pins
 fi
 
 if selected php; then
@@ -195,17 +216,17 @@ fi
 
 if selected tests; then
     run_make run-tests-php
-    run_host_command "${compose[@]}" exec -T php \
+    run_host_command 'Validate JUnit test report' "${compose[@]}" exec -T php \
         python3 scripts/ci/ci-test-reports.py validate-junit
     run_make phpmetrics
-    run_host_command "${compose[@]}" exec -T php \
+    run_host_command 'Verify generated test reports' "${compose[@]}" exec -T php \
         python3 scripts/ci/ci-test-reports.py verify
 fi
 
 if selected docker; then
-    run_host_command docker buildx build --pull --load --target development \
+    run_host_command 'Build development Docker image' docker buildx build --pull --load --target development \
         --tag symfony-flex-backend:pre-pr-development .
-    run_host_command docker buildx build --pull --load --target production \
+    run_host_command 'Build production Docker image' docker buildx build --pull --load --target production \
         --no-cache-filter production --tag symfony-flex-backend:pre-pr-production .
 fi
 

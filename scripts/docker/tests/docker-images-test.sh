@@ -92,7 +92,6 @@ finish() {
     if [ "$status" -eq 0 ]; then
         finish_case
         finish_group
-        printf '\n' >&2
         output_status OK "Docker image tests: $passed scenarios passed"
     elif [ "$status" -eq 130 ] || [ "$status" -eq 143 ]; then
         if [ "$case_active" = true ]; then
@@ -192,6 +191,8 @@ write_tags() {
 }
 
 output_status RUN 'Docker image tests'
+unset OUTPUT_RUN_GROUPED OUTPUT_RUN_GROUPED_SEPARATOR OUTPUT_RUN_GROUPED_STARTED \
+    OUTPUT_RUN_TARGET OUTPUT_RUN_TARGET_ACTIVE
 printf '%s\n' \
     '  Offline regression tests using temporary Dockerfiles and mocked Docker/registry responses.' \
     '  Actual repository Dockerfile pins are NOT checked. To validate them, run: make docker-image-verify-pins' >&2
@@ -639,7 +640,9 @@ check_updates() {
 
 check_updates 'stable major upgrade, excluding variants and prereleases' 'test:1.9.9@sha256:aaaa' 1 \
     '[WARN] test:1.9.9 -> test:2.0.0'
-grep -Fxq 'IMAGE input (no matching Dockerfile)' "$WORK/output"
+grep -Fxq '  IMAGE input (no matching Dockerfile)' "$WORK/output"
+grep -Eq '^    \[WARN\] test:1\.9\.9 -> test:2\.0\.0$' "$WORK/output"
+grep -Eq '^      Multi-platform pin: test:2\.0\.0@sha256:' "$WORK/output"
 grep -Fq 'Multi-platform pin: test:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
 grep -Fq 'Platforms: linux/amd64 linux/arm64/v8' "$WORK/output"
 if grep -q $'\033' "$WORK/output"; then
@@ -784,9 +787,9 @@ awk '
 ' "$WORK/output"
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
 awk '
-    /^Dockerfile$/ { group = "root"; root++; next }
-    /^docker\/mariadb\/Dockerfile$/ { group = "mariadb"; mariadb++; next }
-    /^docker\/nginx\/Dockerfile$/ { group = "nginx"; nginx++; next }
+    /^  Dockerfile$/ { group = "root"; root++; next }
+    /^  docker\/mariadb\/Dockerfile$/ { group = "mariadb"; mariadb++; next }
+    /^  docker\/nginx\/Dockerfile$/ { group = "nginx"; nginx++; next }
     /test:1.0.0 -> test:2.0.0/ { updates[group]++ }
     /tools\/installer:1.0.0 -> tools\/installer:2.0.0/ {
         if (group != "root") exit 1
@@ -834,8 +837,8 @@ fi
 
 check_updates 'single image retains matching Dockerfiles' 'test:1.0.0' 1 \
     'docker/mariadb/Dockerfile'
-grep -Fxq 'Dockerfile' "$WORK/output"
-grep -Fxq 'docker/nginx/Dockerfile' "$WORK/output"
+grep -Fxq '  Dockerfile' "$WORK/output"
+grep -Fxq '  docker/nginx/Dockerfile' "$WORK/output"
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 1 ]
 if grep -q 'tools/installer' "$WORK/output"; then
     printf 'FAIL: single image filter included another image\n'

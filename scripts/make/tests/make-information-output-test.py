@@ -350,9 +350,11 @@ exit 0
     def test_metadata_drives_help_routing_and_completion_labels(self):
         makefile = self.root / "Makefile"
         original = makefile.read_text()
-
+        registration = (
+            "$(call REGISTER_TARGET,phpcs,quality,wrapped,,Check PHP coding standards)"
+        )
         makefile.write_text(original.replace(
-            "$(call REGISTER_TARGET,phpcs,quality,wrapped)",
+            registration,
             "$(call REGISTER_TARGET,phpcs,reports,wrapped,OVERWRITE)",
         ))
         result = self.make("help")
@@ -475,8 +477,9 @@ exit 0
     def test_incomplete_or_invalid_metadata_fails_explicitly(self):
         makefile = self.root / "Makefile"
         original = makefile.read_text()
-        registration = "$(call REGISTER_TARGET,phpcs,quality,wrapped)"
-
+        registration = (
+            "$(call REGISTER_TARGET,phpcs,quality,wrapped,,Check PHP coding standards)"
+        )
         for replacement, error in (
             ("", "Missing help metadata: phpcs"),
             ("$(call REGISTER_TARGET,phpcs,unknown,wrapped)", "Invalid help metadata: phpcs"),

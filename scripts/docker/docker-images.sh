@@ -225,32 +225,45 @@ hub_tags() {
     done
 }
 
+pin_resolution_error() {
+    local message=$1 insufficient_platforms=${2:-fail}
+
+    if [ "$insufficient_platforms" = skip ]; then
+        error "$message" 2>&1
+    else
+        error "$message"
+    fi
+}
+
 resolve_image_pin() {
     local image="$1" empty_index="${2:-fail}" digest raw type platforms
 
     if ! digest="$(inspect_image "$image" --format '{{.Manifest.Digest}}')"; then
-        error "Could not resolve index digest for ${image}: $(tail -n 1 <<< "$digest")"
+        pin_resolution_error "Could not resolve index digest for ${image}: $(tail -n 1 <<< "$digest")" \
+            "$empty_index"
         return 1
     fi
 
     if ! [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
-        error "Invalid index digest for ${image}: ${digest}"
+        pin_resolution_error "Invalid index digest for ${image}: ${digest}" "$empty_index"
         return 1
     fi
 
     # Inspect the resolved digest so a moving tag cannot mismatch the printed pin.
     if ! raw="$(raw_manifest "${image}@${digest}")"; then
-        error "Could not inspect ${image}@${digest}: $(tail -n 1 <<< "$raw")"
+        pin_resolution_error "Could not inspect ${image}@${digest}: $(tail -n 1 <<< "$raw")" \
+            "$empty_index"
         return 1
     fi
 
     if ! type="$(media_type "$raw")" || ! platforms="$(image_platforms "$raw")"; then
-        error "Invalid image manifest for ${image}@${digest}"
+        pin_resolution_error "Invalid image manifest for ${image}@${digest}" "$empty_index"
         return 1
     fi
 
     if ! is_index "$type"; then
-        error "${image}: single platform manifest, no multi-platform pin available"
+        pin_resolution_error "${image}: single platform manifest, no multi-platform pin available" \
+            "$empty_index"
         return 1
     fi
 
@@ -825,7 +838,7 @@ command_check_updates() {
 
         if [ "$heading" != "$file" ]; then
             [ -z "$heading" ] || printf '\n'
-            printf '%s%s%s\n' "$BOLD" "$file" "$NC"
+            printf '  %s%s%s\n' "$BOLD" "$file" "$NC"
             heading="$file"
         fi
 
@@ -856,7 +869,7 @@ command_check_updates() {
             esac
         fi
 
-        printf '%s\n' "${results[$image]}" | sed 's/^/  /'
+        printf '%s\n' "${results[$image]}" | sed 's/^/    /'
 
         if [ "$advisory" = true ]; then
             summary_details+="### ${file}: ${image}"$'\n\n```text\n'

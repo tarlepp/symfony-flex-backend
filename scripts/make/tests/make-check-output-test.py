@@ -73,7 +73,7 @@ class MakeCheckOutputTest(unittest.TestCase):
         # Let the Python output filter run for real even though checks are stubs.
         fixture = (
             "#!/usr/bin/env bash\n"
-            "if [[ \"$0\" == */python3 && \"${1:-}\" == scripts/output/native-output.py ]]; then exec /usr/bin/python3 \"$@\"; fi\n"
+            "if [[ \"$0\" == */python3 && ( \"${1:-}\" == scripts/output/native-output.py || \"${1:-}\" == */scripts/output/native-output.py ) ]]; then exec /usr/bin/python3 \"$@\"; fi\n"
             "printf '%s\\n' \"$0 $*\" >> \"$CALLS\"\n"
             "if [[ \"${1:-}\" == ./vendor/bin/requirements-checker && \"${CHECK_XDEBUG:-0}\" = 1 && \"${XDEBUG_MODE:-}\" != off ]]; then\n"
             "  echo 'Xdebug: [Step Debug] unexpected connection attempt' >&2; exit 8\n"
@@ -104,7 +104,7 @@ class MakeCheckOutputTest(unittest.TestCase):
         docker.write_text("#!/usr/bin/env bash\nexit 0\n")
         docker.chmod(0o755)
 
-    def run_check(self, target, status=0, color="never", no_color=""):
+    def run_check(self, target, status=0, color="never", no_color="", run_target=""):
         """Return the Make result and the fresh command log for one invocation."""
         calls = self.root / "calls"
 
@@ -112,6 +112,8 @@ class MakeCheckOutputTest(unittest.TestCase):
         environment = dict(
             os.environ, PATH=f"{self.root / 'bin'}:{os.environ['PATH']}",
             CALLS=str(calls), FIXTURE_STATUS=str(status), NO_COLOR=no_color,
+            OUTPUT_RUN_TARGET=run_target,
+            OUTPUT_RUN_TARGET_ACTIVE="",
         )
         result = subprocess.run(
             ["make", "--no-print-directory", "APPLICATION_CONFIG=unused",
@@ -251,6 +253,33 @@ class MakeCheckOutputTest(unittest.TestCase):
                     else:
                         self.assertIn("[FAIL] Application runtime requirements (exit 7)", stderr)
                         self.assertNotIn("[OK] Application runtime requirements", stderr)
+
+    def test_pre_pr_requirements_label_includes_make_command_and_indents_output(self):
+        result, _ = self.run_check(
+            "check-requirements", run_target="check-requirements"
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(
+            "[RUN] Application runtime requirements (make check-requirements)\n",
+            result.stderr,
+        )
+        self.assertEqual(result.stdout, "  fixture stdout\n")
+        self.assertIn("  fixture diagnostic\n", result.stderr)
+        self.assertNotIn("[OK] Application runtime requirements\n", result.stderr)
+        self.assertIn(
+            "[OK] Application runtime requirements (make check-requirements)\n",
+            result.stderr,
+        )
+
+        failed, _ = self.run_check(
+            "check-requirements", status=7, run_target="check-requirements"
+        )
+        self.assertNotEqual(failed.returncode, 0)
+        self.assertIn("  fixture diagnostic\n", failed.stderr)
+        self.assertIn(
+            "[FAIL] Application runtime requirements (make check-requirements) (exit 7)\n",
+            failed.stderr,
+        )
 
     def test_documentation_checker_error_label_respects_color_controls(self):
         for color, no_color, expected in (
