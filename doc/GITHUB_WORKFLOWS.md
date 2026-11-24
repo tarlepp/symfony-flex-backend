@@ -49,22 +49,23 @@ including skips after a failure. Their headings identify the workflow or job and
 for image scans, the target. "Job status before overview" is the status at
 publication time, not a claim that every step passed; steps with
 `continue-on-error` can fail while it remains successful. Later cleanup failures
-are not included. Shared overviews use ✅ when the reported checks so far are
-successful, ⚠️ for failed, unrecognized or advisory results needing attention,
-and ➖ for skips or informational availability. A skip is not assumed to be
-intentional; inspect the table and gate explanations. Attention opens a
-collapsed overview even if the prior job status is successful. These indicators
-describe only the reported inputs, not the final job status or third-party
-findings. The Core CI result separately marks whether required gate inputs match
-their expected outcomes, including approved skips. Reporting shows token
-availability separately from upload outcomes, and core image scans show PR SARIF
-eligibility separately from generation and upload. Consult step logs,
-annotations and artifacts for findings and detailed results. A skipped or
-cancelled job may not publish an overview. Publishing an overview is
-informational and does not change validation results. Job overviews use
-`scripts/ci/ci-workflow-overview.sh` from the checkout; if checkout fails, they
-cannot be rendered. External reporting instead writes its skip reason when
-neither upload token is available.
+are not included. Shared overviews use ✅ when reported checks succeeded or were
+explicitly marked `skipped (expected)`, ⚠️ for failed, unrecognized or advisory
+results needing attention, and ➖ for other skips. Valid token availability and
+SARIF eligibility are informational; their corresponding steps must still
+succeed or be explicitly marked as expected skips. A skip is not assumed to be
+intentional; inspect the table and gate explanations. Attention opens a collapsed
+overview even if the prior job status is successful. These indicators describe
+only the reported inputs, not the final job status or third-party findings. The
+Core CI result separately marks whether required gate inputs match their expected
+outcomes, including approved skips. Reporting shows token availability separately
+from upload outcomes, and core image scans show PR SARIF eligibility separately
+from generation and upload. Consult step logs, annotations and artifacts for
+findings and detailed results. A skipped or cancelled job may not publish an
+overview. Publishing an overview is informational and does not change validation
+results. Job overviews use `scripts/ci/ci-workflow-overview.sh` from the
+checkout; if checkout fails, they cannot be rendered. External reporting instead
+writes its skip reason when neither upload token is available.
 
 Gitleaks normally publishes its own success or findings summary. Its separate
 job overview is omitted on success to avoid duplication, but remains available
@@ -448,10 +449,10 @@ failed; later cleanup failures are not included. **CI validation preview** is a
 collapsed selection forecast, not a result. GitHub may display these summaries
 in a different order because jobs finish independently.
 
-The change-detection summary points to **Core CI result** and to the **Validate
-CI result** job logs in the jobs list or graph. This signpost is unavailable
-when change detection is skipped, including scheduled runs, or when its summary
-cannot be written.
+The change-detection summary suggests using browser Find to search for **Core CI
+result** and points to the **Validate CI result** job logs in the jobs list or
+graph. This signpost is unavailable when change detection is skipped, including
+scheduled runs, or when its summary cannot be written.
 
 The gate tables distinguish unaffected paths, scheduled scope, reporting
 eligibility, unsuccessful prerequisites and unexpected skips. They are written

@@ -370,7 +370,10 @@ class CiGatesTest(unittest.TestCase):
                     self.assertTrue(output.endswith("\n</details>\n"))
                     self.assertIn(f"Job status before overview: **{'success' if failed is None else 'failure'}**", output)
                     for variable, (_, label) in outcomes.items():
-                        self.assertIn(f"| {label} | {values[variable]} |", output)
+                        expected = values[variable]
+                        if job == "report" and variable in ("PREPARE", "SONAR") and expected == "skipped":
+                            expected = "skipped (expected)"
+                        self.assertIn(f"| {label} | {expected} |", output)
                     if job in ("docker-build", "docker-scan"):
                         self.assertIn(f"Image: {variant}", output)
                     if job == "static-analyzers":
@@ -389,7 +392,7 @@ class CiGatesTest(unittest.TestCase):
                             ({"COVERALLS_TOKEN": "not available", "SONAR_TOKEN_STATUS": "available",
                               "COVERALLS": "skipped", "SONAR": "success"},
                              ("| Coveralls token | not available |", "| Sonar token | available |",
-                              "| Coveralls upload | skipped |", "| SonarQube scan | success |")),
+                              "| Coveralls upload | skipped (expected) |", "| SonarQube scan | success |")),
                             ({"COVERALLS_TOKEN": "available", "SONAR_TOKEN_STATUS": "available",
                               "COVERALLS": "failure", "SONAR": "success"},
                              ("| Coveralls upload | failure |", "| SonarQube scan | success |")),
@@ -397,7 +400,7 @@ class CiGatesTest(unittest.TestCase):
                             ({"SARIF_ELIGIBILITY": "not eligible", "SARIF": "skipped", "UPLOAD": "skipped",
                               "SCAN": "success"},
                              ("| PR SARIF eligibility (same-repository PRs only) | not eligible |",
-                              "| PR SARIF generation | skipped |", "| Blocking Trivy scan | success |")),
+                              "| PR SARIF generation | skipped (expected) |", "| Blocking Trivy scan | success |")),
                             ({"SARIF_ELIGIBILITY": "eligible", "SARIF": "failure", "UPLOAD": "skipped",
                               "SCAN": "failure"},
                              ("| PR SARIF eligibility (same-repository PRs only) | eligible |",
@@ -420,6 +423,64 @@ class CiGatesTest(unittest.TestCase):
                         for row in expected:
                             self.assertIn(row, summary.read_text())
                         summary.unlink()
+                if job in ("static-analyzers", "report", "docker-scan"):
+                    status_scenarios = {
+                        "static-analyzers": [
+                            ({"ANALYZER": "PHPStan", "ARTIFACT": "skipped"}, "✅", "Psalm artifact", "skipped (expected)"),
+                            ({"ANALYZER": "PHP Insights", "ARTIFACT": "skipped"}, "✅", "Psalm artifact", "skipped (expected)"),
+                            ({"ANALYZER": "Psalm", "ARTIFACT": "skipped"}, "➖", "Psalm artifact", "skipped"),
+                            ({"ANALYZER": "unknown", "ARTIFACT": "skipped"}, "⚠️", "Psalm artifact", "skipped"),
+                            ({"ANALYZER": "PHPStan", "ARTIFACT": "failure"}, "⚠️", "Psalm artifact", "failure"),
+                        ],
+                        "report": [
+                            ({"SONAR_TOKEN_STATUS": "not available", "PREPARE": "skipped", "SONAR": "skipped"},
+                             "✅", "SonarQube scan", "skipped (expected)"),
+                            ({"COVERALLS_TOKEN": "not available", "SONAR_TOKEN_STATUS": "available",
+                              "INSTALL": "skipped", "COVERALLS": "skipped"},
+                             "✅", "Coveralls upload", "skipped (expected)"),
+                            ({"COVERALLS_TOKEN": "available", "INSTALL": "skipped"},
+                             "➖", "Coveralls installation", "skipped"),
+                            ({"SONAR_TOKEN_STATUS": "available", "SONAR": "skipped"},
+                             "➖", "SonarQube scan", "skipped"),
+                            ({"COVERALLS_TOKEN": "unavailable", "COVERALLS": "skipped"},
+                             "⚠️", "Coveralls upload", "skipped"),
+                            ({"SONAR_TOKEN_STATUS": "not available", "SONAR": "failure"},
+                             "⚠️", "SonarQube scan", "failure"),
+                        ],
+                        "docker-scan": [
+                            ({"SARIF_ELIGIBILITY": "not eligible", "SARIF": "skipped", "UPLOAD": "skipped"},
+                             "✅", "PR SARIF generation", "skipped (expected)"),
+                            ({"SARIF_ELIGIBILITY": "eligible", "SARIF": "skipped"},
+                             "➖", "PR SARIF generation", "skipped"),
+                            ({"SARIF_ELIGIBILITY": "eligible", "UPLOAD": "skipped"},
+                             "➖", "Code scanning upload", "skipped"),
+                            ({"SARIF_ELIGIBILITY": "unknown", "SARIF": "skipped"},
+                             "⚠️", "PR SARIF generation", "skipped"),
+                            ({"SARIF_ELIGIBILITY": "not eligible", "UPLOAD": "failure"},
+                             "⚠️", "Code scanning upload", "failure"),
+                            ({"SARIF_ELIGIBILITY": "not eligible", "SARIF": "skipped", "UPLOAD": "skipped",
+                              "SCAN": "failure"},
+                             "⚠️", "Blocking Trivy scan", "failure"),
+                        ],
+                    }
+                    for overrides, icon, label, expected in status_scenarios[job]:
+                        with self.subTest(job=job, overrides=overrides):
+                            environment = {
+                                **os.environ, "GITHUB_STEP_SUMMARY": str(summary), "OVERVIEW_TITLE": title,
+                                "OVERVIEW_COLLAPSED": "true", "EVENT_NAME": "pull_request",
+                                "PRIOR_STATUS": "success", "TARGET": "production", "ANALYZER": "Psalm",
+                                "COVERALLS_TOKEN": "available", "SONAR_TOKEN_STATUS": "available",
+                                "SARIF_ELIGIBILITY": "eligible", **dict.fromkeys(outcomes, "success"), **overrides,
+                            }
+                            result = subprocess.run(
+                                ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
+                                env=environment, capture_output=True, text=True, check=False,
+                            )
+                            self.assertEqual(result.returncode, 0, result.stderr)
+                            output = summary.read_text()
+                            self.assertIn(f" · {icon} ", output)
+                            self.assertIn(f"| {label} | {expected} |", output)
+                            summary.unlink()
                 if job == "statistics":
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
@@ -565,7 +626,7 @@ class CiGatesTest(unittest.TestCase):
         cases = (
             ("false", "success", "", "success", "success", "✅ Reported checks successful before overview"),
             ("false", "failure", "production", "success", "skipped", "⚠️ Reported results need attention before overview"),
-            ("true", "success", "development", "success", "skipped", "➖ Skipped or informational results before overview"),
+            ("true", "success", "development", "success", "skipped", "➖ Skipped results before overview"),
             ("true", "success", "", "failure", "skipped", "⚠️ Reported results need attention before overview"),
             ("true", "success", "", "unavailable", "success", "⚠️ Reported results need attention before overview"),
             ("true", "success", "", "success", "success", "✅ Reported checks successful before overview"),
@@ -602,7 +663,11 @@ class CiGatesTest(unittest.TestCase):
             ("Update finding", "unavailable", "⚠️ Reported results need attention before overview"),
             ("Analyzer", "PHPStan", "✅ Reported checks successful before overview"),
             ("Analyzer", "", "⚠️ Reported results need attention before overview"),
-            ("Sonar token", "not available", "➖ Skipped or informational results before overview"),
+            ("Sonar token", "not available", "✅ Reported checks successful before overview"),
+            ("Sonar token", "eligible", "⚠️ Reported results need attention before overview"),
+            ("PR SARIF eligibility (same-repository PRs only)", "available",
+             "⚠️ Reported results need attention before overview"),
+            ("Optional check", "skipped (expected)", "✅ Reported checks successful before overview"),
         ):
             with self.subTest(label=label, finding=finding):
                 result = subprocess.run(

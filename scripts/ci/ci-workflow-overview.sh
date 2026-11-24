@@ -5,7 +5,8 @@
 #
 # Usage:
 #   FOOTER CHECK RESULT [CHECK RESULT ...], with EVENT_NAME and PRIOR_STATUS set
-#   in the environment.
+#   in the environment. Callers may annotate a verified skip as
+#   "skipped (expected)".
 #
 # Details:
 #   Optional TARGET and OVERVIEW_TITLE customize the heading. Set
@@ -58,15 +59,21 @@ for ((index = 0; index < ${#overview_args[@]}; index += 2)); do
         "Update finding")
             [ "$result" = current ] || attention=true
             ;;
-        "Coveralls token"|"Sonar token"|"PR SARIF eligibility (same-repository PRs only)")
+        "Coveralls token"|"Sonar token")
             case "$result" in
-                available|"not available"|eligible|"not eligible") incomplete=true ;;
+                available|"not available") ;;
+                *) attention=true ;;
+            esac
+            ;;
+        "PR SARIF eligibility (same-repository PRs only)")
+            case "$result" in
+                eligible|"not eligible") ;;
                 *) attention=true ;;
             esac
             ;;
         *)
             case "$result" in
-                success) ;;
+                success|"skipped (expected)") ;;
                 skipped) incomplete=true ;;
                 *) attention=true ;;
             esac
@@ -77,7 +84,7 @@ done
 if [ "$attention" = true ]; then
     overview="⚠️ Reported results need attention before overview"
 elif [ "$incomplete" = true ]; then
-    overview="➖ Skipped or informational results before overview"
+    overview="➖ Skipped results before overview"
 fi
 
 if [ "${OVERVIEW_COLLAPSED:-false}" = true ]; then
