@@ -168,6 +168,8 @@ output_run 'CI tooling scripts (ShellCheck)' \
     scripts/ci/ci-validate-bootstrap.sh \
     scripts/checks/check-action-updates.sh \
     scripts/docker/docker-images.sh \
+    scripts/docker/sync-doctrine-mariadb.sh \
+    scripts/docker/sync-ci-mariadb.sh \
     scripts/sync-composer-php.sh \
     scripts/make/make.sh \
     scripts/checks/check-security.sh \

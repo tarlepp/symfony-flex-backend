@@ -168,7 +168,8 @@ classify_path() {
         scripts/ci/ci-validate-compose.sh)
             enable_checks compose workflows
             ;;
-        scripts/ci/ci-docker-hub-auth.sh)
+        scripts/ci/ci-docker-hub-auth.sh|\
+        scripts/docker/sync-doctrine-mariadb.sh|scripts/docker/sync-ci-mariadb.sh)
             enable_checks images workflows tooling
             ;;
         scripts/checks/lint-workflows.sh|scripts/tests/run-workflow-tests.py|\
