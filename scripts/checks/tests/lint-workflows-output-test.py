@@ -206,7 +206,8 @@ esac
             "scripts/ci/ci-gate-common.sh scripts/ci/ci-workflow-overview.sh scripts/ci/ci-statistics-summary.sh scripts/ci/ci-validate-compose.sh "
             "scripts/ci/ci-failure-diagnostics.sh scripts/ci/ci-validate-bootstrap.sh "
             "scripts/checks/check-action-updates.sh scripts/docker/docker-images.sh "
-            "scripts/docker/sync-doctrine-mariadb.sh scripts/docker/sync-ci-mariadb.sh scripts/sync-composer-php.sh "
+            "scripts/docker/sync-doctrine-mariadb.sh scripts/docker/sync-ci-mariadb.sh "
+            "scripts/docker/prepare-php-minor-pr.sh scripts/docker/prepare-image-update-pr.sh scripts/sync-composer-php.sh "
             "scripts/make/make.sh "
             "scripts/checks/check-security.sh scripts/reports/prepare-sonar-reports.sh", calls,
         )
@@ -333,6 +334,8 @@ esac
             "scripts/docker/docker-images.sh",
             "scripts/docker/sync-doctrine-mariadb.sh",
             "scripts/docker/sync-ci-mariadb.sh",
+            "scripts/docker/prepare-php-minor-pr.sh",
+            "scripts/docker/prepare-image-update-pr.sh",
             "scripts/sync-composer-php.sh",
             "scripts/make/make.sh",
             "scripts/checks/check-security.sh",

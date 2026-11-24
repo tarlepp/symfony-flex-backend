@@ -80,7 +80,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
             (ROOT / "scripts/ci/ci-docker-hub-auth.sh").read_text(),
         )
         (self.root / "scripts/docker").mkdir(parents=True)
-        for name in ("sync-doctrine-mariadb.sh", "sync-ci-mariadb.sh"):
+        for name in (
+            "sync-doctrine-mariadb.sh", "sync-ci-mariadb.sh",
+            "prepare-php-minor-pr.sh", "prepare-image-update-pr.sh",
+        ):
             (self.root / "scripts/docker" / name).write_bytes((ROOT / "scripts/docker" / name).read_bytes())
         (self.root / "scripts/docker/docker-image-digest-summary.py").write_text(
             (ROOT / "scripts/docker/docker-image-digest-summary.py").read_text(),
@@ -662,6 +665,72 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for line in template.read_text().splitlines():
             if line.startswith(("#", "* [ ]")):
                 self.assertIn(line, body)
+
+        self.output.write_text("")
+        result = self.run_script(
+            WORKFLOW, "Prepare PHP minor PR details",
+            BASE_BRANCH="feature/parent", PHP_CANDIDATE="php:8.6.2-fpm-trixie",
+            PHP_READINESS_REPORT="Readiness evidence", PHP_CLOSING_ISSUES="",
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        suffix = hashlib.sha256(b"feature/parent").hexdigest()[:16]
+        self.assertEqual(self.output.read_text(), f"branch=chore(docker)/php-minor-{suffix}\n")
+        body = (self.root / "php-minor-pr.md").read_text()
+        self.assertIn("Readiness evidence", body)
+        self.assertNotIn("Closes #", body)
+
+    def test_pr_preparation_wiring_and_failures(self):
+        jobs = yaml.safe_load(WORKFLOW)["jobs"]
+        minor = {item.get("id"): item for item in jobs["php-minor-readiness"]["steps"]}
+        update = {item.get("id"): item for item in jobs["update"]["steps"]}
+        self.assertEqual(minor["minor-details"]["run"], "bash scripts/docker/prepare-php-minor-pr.sh")
+        self.assertEqual(update["details"]["run"], "bash scripts/docker/prepare-image-update-pr.sh")
+        self.assertEqual(minor["minor-pr"]["with"]["body-path"], "${{ runner.temp }}/php-minor-pr.md")
+        self.assertEqual(update["pull-request"]["with"]["body-path"], "${{ runner.temp }}/docker-image-pr.md")
+
+        git = self.root / "git"
+        git.write_text(textwrap.dedent("""\
+            #!/bin/bash
+            [[ "$1" == diff && "$2" == --no-ext-diff ]] || exit 64
+            if [[ "$3" == --stat=160,120 ]]; then
+                [[ "${FAIL_AT:-}" != stat ]] || exit 7
+                echo ' Dockerfile | 2 +-'
+            elif [[ "$3" == --unified=0 && "$4" == -- ]]; then
+                if [[ "$#" == 6 ]]; then
+                    [[ "${FAIL_AT:-}" != digest ]] || exit 7
+                elif [[ "$*" == *config/packages/doctrine.yaml* ]]; then
+                    [[ "${FAIL_AT:-}" != saved ]] || exit 7
+                elif [[ "$*" == *.github/workflows/main.yml* ]]; then
+                    [[ "${FAIL_AT:-}" != body ]] || exit 7
+                else
+                    exit 64
+                fi
+            else
+                exit 64
+            fi
+            """))
+        git.chmod(0o755)
+        path = f"{self.root}:{os.environ['PATH']}"
+        for fail_at in ("digest", "stat", "saved", "body"):
+            with self.subTest(fail_at=fail_at):
+                result = self.run_script(
+                    WORKFLOW, "Prepare pull request details",
+                    BASE_BRANCH="master", PATH=path, FAIL_AT=fail_at,
+                )
+                self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+                if fail_at == "digest":
+                    self.assertIn("Could not read the Dockerfile diff", result.stderr)
+
+        template = self.root / ".github/pull_request_template.md"
+        template.unlink()
+        for name, overrides in (
+            ("Prepare PHP minor PR details", {"PHP_CANDIDATE": "php:8.6.2-fpm-trixie"}),
+            ("Prepare pull request details", {"PATH": path}),
+        ):
+            with self.subTest(step=name):
+                result = self.run_script(WORKFLOW, name, BASE_BRANCH="master", **overrides)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("pull_request_template.md", result.stderr)
 
     def test_all_bootstrap_consumers_diagnose_failure_before_cleanup(self):
         consumers = set()
