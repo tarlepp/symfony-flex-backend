@@ -839,7 +839,11 @@ command_check_updates() {
 
         if [ "$heading" != "$file" ]; then
             [ -z "$heading" ] || printf '\n'
-            printf '  %s%s%s\n' "$BOLD" "$file" "$NC"
+            if [ "$file" = 'IMAGE input (no matching Dockerfile)' ]; then
+                printf '  %s%s%s\n' "$BOLD" "$file" "$NC"
+            else
+                printf '  %s./%s%s\n' "$BOLD" "$file" "$NC"
+            fi
             heading="$file"
         fi
 
