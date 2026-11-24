@@ -174,7 +174,10 @@ Inspect the implementation and its actual callers:
    `(make <target>)` suffix. Self-reporting direct targets should use descriptive
    labels. The local pre-PR runner filters timestamped Monolog `deprecation.INFO`
    records from nested Make stderr only; preserve other diagnostics and direct
-   Make behavior.
+   Make behavior. `make help` uses the same two-space output indentation: its
+   section headings and introductory lines are indented two spaces, and target
+   entries are indented four spaces beneath them; shared top-level statuses stay
+   unindented.
 
    The pre-PR development and production image builds use host-only
    `docker-build-pre-pr-development` and `docker-build-pre-pr-production`

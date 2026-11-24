@@ -232,11 +232,13 @@ exit 0
         self.assertTrue(combined.stdout.endswith("\n[OK] Command help\n"), combined.stdout)
         self.assertNotIn("\n\n[OK] Command help\n", combined.stdout)
         expected = re.findall(r"^([a-zA-Z0-9-]+):.*## ", (ROOT / "Makefile").read_text(), re.M)
-        actual = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
-
+        actual = re.findall(r"^    ([a-zA-Z0-9-]+) +", result.stdout, re.M)
         self.assertCountEqual(actual, expected)
         self.assertEqual(len(actual), len(set(actual)))
-
+        self.assertTrue(all(
+            not line or line.startswith("  ")
+            for line in result.stdout.splitlines()
+        ), result.stdout)
         for title in (
             "Docker lifecycle", "Docker images", "Setup, dependencies", "Application tests",
             "Dependency, security", "Linting and static analysis", "Configuration and information",
@@ -260,7 +262,7 @@ exit 0
         result = self.make("help", "INSIDE_DOCKER_CONTAINER=0", "INSIDE_CONTAINER_RUNTIME=0")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertCountEqual(re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M), expected)
+        self.assertCountEqual(re.findall(r"^    ([a-zA-Z0-9-]+) +", result.stdout, re.M), expected)
 
     def test_change_preview_defaults_overrides_cleanup_and_failure(self):
         detector = self.root / "scripts/ci/ci-detect-changes.sh"
@@ -445,8 +447,7 @@ exit 0
 
             if index + 1 < len(titles):
                 section = section.split(titles[index + 1] + "\n", 1)[0]
-
-            entries = re.findall(r"^  ([a-zA-Z0-9-]+) +(.*)$", section, re.M)
+            entries = re.findall(r"^    ([a-zA-Z0-9-]+) +(.*)$", section, re.M)
             keys = [(2 if description.startswith("[DESTRUCTIVE]") else
                      1 if description.startswith("[OVERWRITE]") else 0, name)
                     for name, description in entries]
@@ -459,7 +460,7 @@ exit 0
         result = self.make("help")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        listed = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
+        listed = re.findall(r"^    ([a-zA-Z0-9-]+) +", result.stdout, re.M)
         makefile = (ROOT / "Makefile").read_text()
         registered = re.findall(r"^\$\(call REGISTER_TARGET,([^,]+),", makefile, re.M)
         recipes = re.findall(r"^([a-zA-Z0-9-]+):(?:.*## .*|)\n", makefile, re.M)
@@ -489,8 +490,7 @@ exit 0
                 result = self.make("help", f"GROUP={group}", "INSIDE_DOCKER_CONTAINER=0")
 
                 self.assertEqual(result.returncode, 0, result.stderr)
-                actual = re.findall(r"^  ([a-zA-Z0-9-]+) +", result.stdout, re.M)
-
+                actual = re.findall(r"^    ([a-zA-Z0-9-]+) +", result.stdout, re.M)
                 self.assertCountEqual(actual, [name for name, category in registrations
                                               if category == group])
                 self.assertEqual(self.calls.read_text(), "")
@@ -502,8 +502,13 @@ exit 0
         result = self.make("help", "GROUP=invalid")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("[FAIL] Unknown help group: invalid", result.stderr)
+        self.assertIn("  [FAIL] Unknown help group: invalid", result.stderr)
+        self.assertIn(
+            "  [INFO] Use GROUP=all|information|tests|quality|checks|reports|setup|lifecycle|docker",
+            result.stderr,
+        )
         self.assertIn("GROUP=all|information", result.stderr)
+        self.assertIn("[FAIL] Command help (exit 64)", result.stderr)
         self.assertNotIn("Available commands", result.stdout)
         self.assertNotIn("[OK]", result.stderr)
         result = self.make("help", "GROUP=quality", "-n")

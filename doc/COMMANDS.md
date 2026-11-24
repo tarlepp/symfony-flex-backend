@@ -205,8 +205,10 @@ downloads, and npx caches are outside this container inventory.
 Help reports a separated final outcome on stderr. Shared `[RUN]` and `[INFO]`
 labels are blue, `[OK]` is green, `[WARN]`/`[SKIP]` are yellow, and `[FAIL]` is
 red for diagnostics and outcomes; plain and `NO_COLOR` output retains the same
-labels. The legacy `info` target now displays `info_msg` rather than executing
-it. From the repository root on the Docker host:
+labels. Help headings and introductory lines are indented two spaces, with
+target entries indented four spaces beneath their group. The legacy `info`
+target now displays `info_msg` rather than executing it. From the repository
+root on the Docker host:
 
 ```bash
 bash scripts/make/make.sh info info_msg="Local command information"

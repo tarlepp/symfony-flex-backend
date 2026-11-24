@@ -643,7 +643,9 @@ help-only inventory. Help respects `COLOR` and `NO_COLOR` and remains usable
 without Docker. Use `GROUP` to show only one purpose; omitted or `GROUP=all`
 shows the full inventory. Unknown groups fail with the supported choices instead
 of an empty successful listing. Filtering changes only help output, not command
-routing.
+routing. The heading and introductory lines use the standard two-space Make
+output indentation, with target entries indented four spaces beneath their
+group.
 
 From the repository root on the Docker host (no running services required):
 

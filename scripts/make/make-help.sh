@@ -24,23 +24,23 @@ source "$(dirname "$0")/../output/command-output.sh"
 group=${1:-all}
 
 if [ "$#" -gt 1 ] || [[ ! "$group" =~ ^(all|information|tests|quality|checks|reports|setup|lifecycle|docker|--targets)$ ]]; then
-    output_status FAIL "Unknown help group: $group"
-    output_status INFO 'Use GROUP=all|information|tests|quality|checks|reports|setup|lifecycle|docker'
+    OUTPUT_STATUS_INDENT='  ' output_status FAIL "Unknown help group: $group"
+    OUTPUT_STATUS_INDENT='  ' output_status INFO 'Use GROUP=all|information|tests|quality|checks|reports|setup|lifecycle|docker'
     exit 64
 fi
 
 if [ "$group" != --targets ]; then
-    printf '%sAvailable commands%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
-    printf 'Run from the repository root. Application tooling forwards to the PHP container.\n'
-    printf 'Filter: make help GROUP=<group> (default: all)\n'
-    printf 'Groups: information, tests, quality, checks, reports, setup, lifecycle, docker\n'
-    printf 'Routine commands first; overwrite and destructive commands last in each group.\n'
-    printf '[DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
+    printf '  %sAvailable commands%s\n' "$OUTPUT_BLUE" "$OUTPUT_RESET"
+    printf '  Run from the repository root. Application tooling forwards to the PHP container.\n'
+    printf '  Filter: make help GROUP=<group> (default: all)\n'
+    printf '  Groups: information, tests, quality, checks, reports, setup, lifecycle, docker\n'
+    printf '  Routine commands first; overwrite and destructive commands last in each group.\n'
+    printf '  [DESTRUCTIVE] deletes/stops resources; [OVERWRITE] replaces files or tags.\n\n'
 fi
 
 # REGISTER_TARGET fields are name, group, execution, risk and label. Help uses
 # name, group and risk, then joins them with the adjacent recipe descriptions.
-awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
+awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" -v indent='  ' '
     /^\$\(call REGISTER_TARGET,/ {
         record = $0
         sub(/^\$\(call REGISTER_TARGET,/, "", record)
@@ -49,7 +49,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
         name = fields[1]
 
         if (name in groups) {
-            print red "[FAIL]" reset " Duplicate target metadata: " name > "/dev/stderr"
+            print indent red "[FAIL]" reset " Duplicate target metadata: " name > "/dev/stderr"
             invalid = 1
         }
 
@@ -67,14 +67,14 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     END {
         for (name in descriptions) {
             if (!(name in groups) || groups[name] == "hidden") {
-                print red "[FAIL]" reset " Missing help metadata: " name > "/dev/stderr"
+                print indent red "[FAIL]" reset " Missing help metadata: " name > "/dev/stderr"
                 invalid = 1
             }
         }
 
         for (name in groups) {
             if (groups[name] != "hidden" && !(name in descriptions)) {
-                print red "[FAIL]" reset " Missing target description: " name > "/dev/stderr"
+                print indent red "[FAIL]" reset " Missing target description: " name > "/dev/stderr"
                 invalid = 1
             }
         }
@@ -89,7 +89,8 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     }
 ' Makefile | LC_ALL=C sort -t $'\t' -k1,1 | awk -F '\t' \
     -v blue="$OUTPUT_BLUE" -v green="$OUTPUT_GREEN" \
-    -v yellow="$OUTPUT_YELLOW" -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" -v selected="$group" '
+    -v yellow="$OUTPUT_YELLOW" -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" \
+    -v indent='  ' -v selected="$group" '
     BEGIN {
         # Group IDs index titles and entries; order maps display positions to IDs.
         groups["lifecycle"] = 1
@@ -113,7 +114,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
     {
         # Input columns: target, description, group, risk.
         if (!($3 in groups) || ($4 != "" && $4 != "DESTRUCTIVE" && $4 != "OVERWRITE")) {
-            print red "[FAIL]" reset " Invalid help metadata: " $1 > "/dev/stderr"
+            print indent red "[FAIL]" reset " Invalid help metadata: " $1 > "/dev/stderr"
             invalid = 1
             next
         }
@@ -131,7 +132,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
 
         risk = $4 == "DESTRUCTIVE" ? 2 : ($4 == "OVERWRITE" ? 1 : 0)
         marker = $4 == "" ? "" : "[" $4 "] "
-        entries[group, risk] = entries[group, risk] sprintf("  %s%-29s%s %s%s%s%s\n",
+        entries[group, risk] = entries[group, risk] sprintf("    %s%-29s%s %s%s%s%s\n",
             green, $1, reset, yellow, marker, reset, $2)
         populated[group] = 1
     }
@@ -162,7 +163,7 @@ awk -v red="$OUTPUT_RED" -v reset="$OUTPUT_RESET" '
                     printf "\n"
                 }
                 first = 0
-                printf "%s%s%s\n", blue, titles[group], reset
+                printf "  %s%s%s\n", blue, titles[group], reset
                 for (risk = 0; risk <= 2; risk++) {
                     printf "%s", entries[group, risk]
                 }
