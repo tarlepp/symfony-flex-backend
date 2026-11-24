@@ -29,6 +29,7 @@ images.
       * [Step 2: Get the multi-platform index digest](#step-2-get-the-multi-platform-index-digest)
       * [Step 3: Update the Dockerfiles](#step-3-update-the-dockerfiles)
       * [Step 4: Verify the pins](#step-4-verify-the-pins)
+      * [Automatic update coverage](#automatic-update-coverage)
       * [Continuous integration](#continuous-integration)
     * [Building multi-platform images](#building-multi-platform-images)
       * [Local development](#local-development)
@@ -511,6 +512,61 @@ the same `base` stage, and nginx also uses one shared Dockerfile.
 
 Warnings do not fail the command; it exits with code `1` if any check fails. Use
 `make docker-image-digest` to check any other image.
+
+### Automatic update coverage [ᐞ](#table-of-contents)
+
+<a id="automatic-update-coverage"></a>
+
+The routine maintenance PR and the read-only core CI update check have different
+scopes. Review the current references in the repository as well as the reports:
+
+* **Dockerfile tagged digest pins:** The updater covers external `FROM` and
+  `COPY --from` references in `Dockerfile` and `docker/*/Dockerfile*`. It selects
+  stable same-major versions, preserves variants and existing runnable platforms,
+  and keeps PHP on its current minor. Core CI reports newer stable Docker Hub
+  versions, including majors. Pin verification covers the root, nginx and MariaDB
+  Dockerfiles.
+* **Composer PHP settings:** Root and tool requirements, platform settings and
+  lockfiles are synchronized when the PHP tag changes. Otherwise the workflow
+  verifies them and fails on drift. Review the PR changes; the separate PHP
+  minor readiness job can prepare a migration PR.
+* **MariaDB settings:** Doctrine's server version and the core CI MariaDB
+  service pin are synchronized with the MariaDB Dockerfile, even on unchanged
+  tags. Major upgrades are not automatic; review database compatibility and
+  persistent-volume implications.
+* **Unpinned Dockerfile images:** The updater reports and leaves these unchanged.
+  Pinning policy and updates require manual review; pin verification can warn
+  without failing.
+* **Dockerfile frontend:** The `# syntax` directive is not covered by the image
+  updater or pin verifier. Review upstream releases and compatibility manually.
+* **Dozzle and Adminer:** The unpinned, unversioned Compose references are not
+  updated, and the workflow does not refresh running containers. Review upstream
+  releases and deployment requirements manually.
+* **Other references:** Other Compose images, Dev Container images/features and
+  workflow job/service images are not generally updated; core CI's MariaDB
+  service is the exception above. Inspect these separately. Images built locally
+  by Compose are not registry pins.
+
+For eligible tagged digest pins with non-semantic or floating tags, the routine
+updater refreshes the digest without selecting a new version; the read-only
+version checker skips floating and prerelease tags. The version checker supports
+Docker Hub, not arbitrary registries. A successful check or no-change PR does
+not establish that excluded references are current. Do not change their pinning
+policy or recreate services without separate approval.
+
+To inspect the current frontend declaration and Compose image references from
+the repository root on the Docker host without changing files or services:
+
+```bash
+sed -n '1p' Dockerfile
+docker compose config --images
+```
+
+Inspect upstream release notes and platforms for any intended manual change. For
+multi-platform candidates, use `make docker-image-digest IMAGE=<image>:<tag>` as
+described above; this helper requires a multi-platform index and is not a
+universal validator for single-platform images. Review compatibility and select
+validation for the affected image and its consumers before proposing a change.
 
 ### Continuous integration [ᐞ](#table-of-contents)
 
