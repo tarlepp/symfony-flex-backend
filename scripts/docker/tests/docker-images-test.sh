@@ -80,8 +80,11 @@ cleanup() {
         "$WORK/advisory-summary" \
         "$WORK/bin/curl" "$WORK/tags.json" "$WORK/requests" \
         "$WORK/bin/sleep" "$WORK/docker-attempts" "$WORK/retry-delays" \
-        "$WORK/Dockerfile" "$WORK/docker/nginx/Dockerfile" "$WORK/docker/mariadb/Dockerfile"
-    rmdir "$WORK/docker/nginx" "$WORK/docker/mariadb" "$WORK/docker" "$WORK/bin" "$WORK"
+        "$WORK/Dockerfile" "$WORK/docker/nginx/Dockerfile" "$WORK/docker/mariadb/Dockerfile" \
+        "$WORK/Makefile" "$WORK/scripts/docker/docker-images.sh" "$WORK/scripts/output/command-output.sh" \
+        "$WORK/scripts/output/native-output.py" "$WORK/stdout" "$WORK/stderr"
+    rmdir "$WORK/scripts/docker" "$WORK/scripts/output" "$WORK/scripts" \
+        "$WORK/docker/nginx" "$WORK/docker/mariadb" "$WORK/docker" "$WORK/bin" "$WORK"
 }
 
 finish() {
@@ -197,7 +200,10 @@ printf '%s\n' \
     '  Offline regression tests using temporary Dockerfiles and mocked Docker/registry responses.' \
     '  Actual repository Dockerfile pins are NOT checked. To validate them, run: make docker-image-verify-pins' >&2
 
-mkdir -p "$WORK/bin" "$WORK/docker/nginx" "$WORK/docker/mariadb"
+mkdir -p "$WORK/bin" "$WORK/docker/nginx" "$WORK/docker/mariadb" "$WORK/scripts/docker" "$WORK/scripts/output"
+cp "$SCRIPT" "$WORK/scripts/docker/docker-images.sh"
+cp "$(dirname "$SCRIPT")/../output/command-output.sh" "$(dirname "$SCRIPT")/../output/native-output.py" "$WORK/scripts/output/"
+cp "$(dirname "$SCRIPT")/../../Makefile" "$WORK/Makefile"
 cat > "$WORK/bin/docker" << 'EOF'
 #!/bin/bash
 set -euo pipefail
@@ -445,14 +451,76 @@ verify_pin_parity 'matching tag digest' \
     'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
     'Tag digest matches'
 
+grep -Fxq '[OK] All Dockerfiles use valid multi-platform image pins' "$WORK/output"
 OUTPUT_RUN_GROUPED=1 verify_pin_parity 'grouped pin verification status' \
     'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
     'Tag digest matches'
-if [ "$(head -n 2 "$WORK/output")" != $'\n[RUN] Verifying base images of 3 Dockerfiles' ]; then
-    printf 'FAIL: grouped pin verification status did not start after a blank line\n'
+if [ "$(head -n 1 "$WORK/output")" != '  Verifying external image pins in 3 Dockerfiles:' ]; then
+    printf 'FAIL: grouped pin verification introduction was not indented\n'
     cat "$WORK/output"
     exit 1
 fi
+
+# Exercise the real Make recipe and helper together, including combined streams.
+cat > "$WORK/Dockerfile" << 'EOF'
+FROM test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa AS base
+COPY --from=other:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa /tool /tool
+FROM base AS final
+EOF
+TEST_VERIFY_TAG_DIGEST='sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' \
+    make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 docker-image-verify-pins > "$WORK/output" 2>&1
+grep -Fxq '[RUN] Repository Dockerfile pins (live registry verification)' "$WORK/output"
+grep -Fxq '  Verifying external image pins in 3 Dockerfiles:' "$WORK/output"
+grep -Fxq '  Dockerfile' "$WORK/output"
+grep -Fxq '    line 1: test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
+grep -Fxq '    line 2: other:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
+grep -Fxq '      [OK] Tag digest matches' "$WORK/output"
+grep -Fxq '      [OK] Multi-platform: linux/amd64 linux/arm64/v8' "$WORK/output"
+grep -Fxq '  Summary' "$WORK/output"
+grep -Fxq '    Multi-platform base images:' "$WORK/output"
+grep -Fxq '[OK] Repository Dockerfile pins (live registry verification)' "$WORK/output"
+if grep -Fq '[OK] All Dockerfiles use valid multi-platform image pins' "$WORK/output"; then
+    printf 'FAIL: Make output contains a duplicate success outcome\n'
+    exit 1
+fi
+if grep -Fq '[RUN] Verifying' "$WORK/output"; then
+    printf 'FAIL: unexpected nested verification run status\n'
+    exit 1
+fi
+[[ $(< "$WORK/output") == *$'      [OK] Multi-platform: linux/amd64 linux/arm64/v8\n\n    line 2:'* ]]
+OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_TARGET=docker-image-verify-pins \
+    make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 docker-image-verify-pins > "$WORK/output" 2>&1
+grep -Fxq '    Verifying external image pins in 3 Dockerfiles:' "$WORK/output"
+grep -Fxq '    Dockerfile' "$WORK/output"
+grep -Fxq '      line 2: other:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
+grep -Fxq '        [OK] Tag digest matches' "$WORK/output"
+
+COLOR=always NO_COLOR='' make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
+    docker-image-verify-pins > "$WORK/stdout" 2> "$WORK/stderr"
+grep -Fq $'      \033[32m[OK]\033[0m Tag digest matches' "$WORK/stdout"
+grep -Fq $'\033[34m[RUN]\033[0m Repository Dockerfile pins' "$WORK/stderr"
+COLOR=always NO_COLOR=1 make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
+    docker-image-verify-pins > "$WORK/stdout" 2> "$WORK/stderr"
+if grep -q $'\033' "$WORK/stdout" "$WORK/stderr"; then
+    printf 'FAIL: NO_COLOR did not suppress verification colors\n'
+    exit 1
+fi
+
+status=0
+TEST_VERIFY_TAG_DIGEST='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' \
+    make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
+    docker-image-verify-pins > "$WORK/output" 2>&1 || status=$?
+[ "$status" -ne 0 ]
+grep -Fq '      [FAIL] Tag digest mismatch:' "$WORK/output"
+grep -Fq '::error file=Dockerfile,line=2,title=Tag and digest do not match::' "$WORK/output"
+grep -Fq '[FAIL] Repository Dockerfile pins (live registry verification)' "$WORK/output"
+printf 'FROM test:fixture\n' > "$WORK/Dockerfile"
+make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
+    docker-image-verify-pins > "$WORK/output" 2>&1
+grep -Fq '      [WARN] Not pinned with digest' "$WORK/output"
+grep -Fq '[WARN] Base image checks completed with 1 warning(s)' "$WORK/output"
+grep -Fq '::warning file=Dockerfile,line=1,title=Base image not pinned::' "$WORK/output"
+write_base_dockerfiles 'test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 
 verify_pin_parity 'mismatched tag digest fails verification' \
     'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' 1 \

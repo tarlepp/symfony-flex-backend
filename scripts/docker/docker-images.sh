@@ -29,6 +29,7 @@
 #   TARGET      Build stage, defaults to the last stage (build, push)
 #   TAG         Image tag to create (build, push)
 #   BUILDER     buildx builder name for multi-platform builds (push)
+#   DOCKER_VERIFY_WRAPPED  Set by Make to suppress the duplicate success outcome
 #
 # Input values are prompted for only when running in an interactive terminal.
 # check-updates defaults to external FROM and COPY --from images in project
@@ -1176,40 +1177,40 @@ command_digest() {
 # Set verify_dockerfile's parity_result for its platform report and summary row.
 # Returns: 0 = matching tag, 1 = parity failure, 2 = no explicit tag to compare.
 verify_tag_parity() {
-    local file=$1 line_number=$2 ref=$3 tag_ref pinned_digest tag_digest
+    local file=$1 line_number=$2 ref=$3 indent=${4:-'  '} tag_ref pinned_digest tag_digest
 
     tag_ref="${ref%@*}"
     pinned_digest="${ref##*@}"
 
     if [[ "${tag_ref##*/}" != *:* ]]; then
-        printf '  %s[WARN]%s Cannot verify tag/digest parity: reference has no explicit tag\n' "$YELLOW" "$NC"
+        printf '%s%s[WARN]%s Cannot verify tag/digest parity: reference has no explicit tag\n' "$indent" "$YELLOW" "$NC"
         github_annotation warning "$file" "$line_number" "Tag/digest parity not checked" "${ref} has no explicit tag to compare with its digest"
         parity_result='tag/digest parity not checked (no explicit tag)'
         return 2
     fi
 
     if ! tag_digest="$(inspect_image "$tag_ref" --format '{{.Manifest.Digest}}')"; then
-        printf '  %s[FAIL]%s Could not resolve current tag digest: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$tag_digest")"
+        printf '%s%s[FAIL]%s Could not resolve current tag digest: %s\n' "$indent" "$RED" "$NC" "$(tail -n 1 <<< "$tag_digest")"
         github_annotation error "$file" "$line_number" "Tag digest could not be resolved" "${tag_ref}: $(tail -n 1 <<< "$tag_digest")"
         parity_result='tag digest lookup failed'
         return 1
     fi
 
     if ! [[ "$tag_digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
-        printf '  %s[FAIL]%s Invalid digest for current tag: %s\n' "$RED" "$NC" "$tag_digest"
+        printf '%s%s[FAIL]%s Invalid digest for current tag: %s\n' "$indent" "$RED" "$NC" "$tag_digest"
         github_annotation error "$file" "$line_number" "Invalid tag digest" "${tag_ref} resolved to an invalid digest: ${tag_digest}"
         parity_result='invalid current tag digest'
         return 1
     fi
 
     if [ "$tag_digest" != "$pinned_digest" ]; then
-        printf '  %s[FAIL]%s Tag digest mismatch: tag resolves to %s, pinned digest is %s\n' "$RED" "$NC" "$tag_digest" "$pinned_digest"
+        printf '%s%s[FAIL]%s Tag digest mismatch: tag resolves to %s, pinned digest is %s\n' "$indent" "$RED" "$NC" "$tag_digest" "$pinned_digest"
         github_annotation error "$file" "$line_number" "Tag and digest do not match" "${tag_ref} resolves to ${tag_digest}, but the Dockerfile pins ${pinned_digest}"
         parity_result="tag digest mismatch (tag: ${tag_digest}; pinned: ${pinned_digest})"
         return 1
     fi
 
-    printf '  %s[OK]%s Tag digest matches\n' "$GREEN" "$NC"
+    printf '%s%s[OK]%s Tag digest matches\n' "$indent" "$GREEN" "$NC"
     parity_result='tag digest matches'
 }
 
@@ -1218,23 +1219,27 @@ verify_tag_parity() {
 # Returns: 0 = all OK, 1 = problems found, 2 = OK with warnings
 verify_dockerfile() {
     local file="$1"
-    local line_number ref raw type platforms status=0 warnings=0
+    local line_number ref raw type platforms status=0 warnings=0 first=1
     local parity_result parity_status
 
-    printf '%s%s%s\n' "$BOLD" "$file" "$NC"
+    printf '  %s%s%s\n' "$BOLD" "$file" "$NC"
 
     if [ ! -f "$file" ]; then
-        printf '  %s[FAIL]%s File not found\n\n' "$RED" "$NC"
+        printf '    %s[FAIL]%s File not found\n\n' "$RED" "$NC"
         github_annotation error "$file" "" "Dockerfile not found" "${file} is listed for base image verification but does not exist"
         IMAGE_ROWS+=("| \`${file}\` | - | - | :x: File not found |")
         return 1
     fi
 
     while IFS=: read -r line_number ref; do
-        printf '  line %s: %s\n' "$line_number" "$ref"
+        if [ "$first" -eq 0 ]; then
+            printf '\n'
+        fi
+        first=0
+        printf '    line %s: %s\n' "$line_number" "$ref"
 
         if ! [[ "$ref" =~ @sha256:[a-f0-9]{64}$ ]]; then
-            printf '  %s[WARN]%s Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$YELLOW" "$NC"
+            printf '      %s[WARN]%s Not pinned with digest, uses tag (multi-platform if upstream is)\n' "$YELLOW" "$NC"
             github_annotation warning "$file" "$line_number" "Base image not pinned" "${ref} is not pinned with a digest. Use: make docker-image-digest IMAGE=${ref}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :warning: Not pinned with digest |")
             warnings=$((warnings + 1))
@@ -1243,7 +1248,7 @@ verify_dockerfile() {
 
         if [ -z "${MANIFEST_CACHE[$ref]+set}" ]; then
             if ! raw="$(raw_manifest "$ref")"; then
-                printf '  %s[FAIL]%s Could not inspect image: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
+                printf '      %s[FAIL]%s Could not inspect image: %s\n' "$RED" "$NC" "$(tail -n 1 <<< "$raw")"
                 github_annotation error "$file" "$line_number" "Base image could not be inspected" "${ref}: $(tail -n 1 <<< "$raw")"
                 IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Could not inspect image |")
                 status=1
@@ -1260,7 +1265,7 @@ verify_dockerfile() {
         parity_result=''
         parity_status=0
 
-        verify_tag_parity "$file" "$line_number" "$ref" || parity_status=$?
+        verify_tag_parity "$file" "$line_number" "$ref" '      ' || parity_status=$?
 
         case "$parity_status" in
             0) ;;
@@ -1273,26 +1278,26 @@ verify_dockerfile() {
         esac
 
         if ! is_index "$type"; then
-            printf '  %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
+            printf '      %s[FAIL]%s Single platform digest, replace with index digest (make docker-image-digest)\n' "$RED" "$NC"
             github_annotation error "$file" "$line_number" "Single platform base image digest" "${ref} points to a single platform manifest. Replace it with the multi-platform index digest from: make docker-image-digest IMAGE=${ref%@*}"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Single platform digest; ${parity_result} |")
             status=1
         elif [[ "$platforms" != *" "* ]]; then
-            printf '  %s[FAIL]%s Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
+            printf '      %s[FAIL]%s Image index contains fewer than two distinct runnable platforms (%s)\n' "$RED" "$NC" "${platforms:-none}"
             github_annotation error "$file" "$line_number" "Insufficient base image platforms" "${ref} contains fewer than two distinct runnable platforms (${platforms:-none}). Wait for upstream platform images or choose another tag and digest."
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Fewer than two runnable platforms (${platforms:-none}); ${parity_result} |")
             status=1
         elif [ "$parity_status" -eq 1 ]; then
-            printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            printf '      %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :x: Multi-platform: ${platforms}; ${parity_result} |")
         else
-            printf '  %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
+            printf '      %s[OK]%s Multi-platform: %s\n' "$GREEN" "$NC" "$platforms"
             IMAGE_ROWS+=("| \`${file}\` | ${line_number} | \`${ref}\` | :white_check_mark: ${platforms}; ${parity_result} |")
         fi
     done < <(dockerfile_images "$file" locations)
 
     if ! grep -qiE '^[[:space:]]*FROM([[:space:]]|$)' "$file"; then
-        printf '  %s[FAIL]%s No FROM instruction found\n' "$RED" "$NC"
+        printf '    %s[FAIL]%s No FROM instruction found\n' "$RED" "$NC"
         github_annotation error "$file" "" "No FROM instruction" "${file} does not contain any FROM instruction"
         status=1
     fi
@@ -1355,11 +1360,7 @@ command_verify() {
     declare -ga IMAGE_ROWS=()
     local -A plain=()
 
-    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
-        printf '\n' >&2
-    fi
-    output_status RUN "Verifying base images of ${#VERIFY_DOCKERFILES[@]} Dockerfiles"
-    printf '\n'
+    printf '  Verifying external image pins in %s Dockerfiles:\n\n' "${#VERIFY_DOCKERFILES[@]}"
 
     for file in "${VERIFY_DOCKERFILES[@]}"; do
         [ "${#file}" -gt "$width" ] && width="${#file}"
@@ -1385,14 +1386,12 @@ command_verify() {
         esac
     done
 
-    printf '%sSummary%s\n' "$BOLD" "$NC"
-    printf '  Multi-platform base images:\n'
+    printf '  %sSummary%s\n' "$BOLD" "$NC"
+    printf '    Multi-platform base images:\n'
 
     for file in "${VERIFY_DOCKERFILES[@]}"; do
-        printf '    %-*s  %s\n' "$width" "$file" "${results[$file]}"
+        printf '      %-*s  %s\n' "$width" "$file" "${results[$file]}"
     done
-
-    printf '\n'
 
     write_verify_summary "$failures" "$warnings"
 
@@ -1406,7 +1405,9 @@ command_verify() {
         return 0
     fi
 
-    output_result OK 'All Dockerfiles use valid multi-platform image pins'
+    if [ "${DOCKER_VERIFY_WRAPPED:-0}" != 1 ]; then
+        output_result OK 'All Dockerfiles use valid multi-platform image pins'
+    fi
 }
 
 # The subshell keeps pipefail local; the guard also works under conditional calls.

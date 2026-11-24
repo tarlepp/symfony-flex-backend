@@ -1032,7 +1032,9 @@ class CommandOutputTest(unittest.TestCase):
             tests.mkdir(parents=True)
             (scripts / "output").mkdir()
             shutil.copyfile(HELPER, scripts / "output/command-output.sh")
-            shutil.copyfile(
+            shutil.copyfile(ROOT / "scripts/output/native-output.py", scripts / "output/native-output.py")
+            shutil.copyfile(ROOT / "Makefile", Path(directory) / "Makefile")
+            shutil.copy(
                 ROOT / "scripts/docker/docker-images.sh",
                 scripts / "docker/docker-images.sh",
             )
@@ -1062,7 +1064,9 @@ class CommandOutputTest(unittest.TestCase):
             tests.mkdir(parents=True)
             (scripts / "output").mkdir()
             shutil.copyfile(HELPER, scripts / "output/command-output.sh")
-            shutil.copyfile(
+            shutil.copyfile(ROOT / "scripts/output/native-output.py", scripts / "output/native-output.py")
+            shutil.copyfile(ROOT / "Makefile", Path(directory) / "Makefile")
+            shutil.copy(
                 ROOT / "scripts/docker/docker-images.sh",
                 scripts / "docker/docker-images.sh",
             )
