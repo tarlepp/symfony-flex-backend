@@ -167,6 +167,10 @@ replacement for their actual event filters and conditions:
    successful checkout; if checkout fails, the summary cannot be rendered. Test
    the real workflow call sites and shared helper for successful, failed,
    skipped and unavailable steps without changing the underlying job results.
+   When changing the shared CI change selector or its preview, preserve direct
+   GitHub Actions output separately from Make-specific presentation; follow the
+   [tooling output contract](../maintain-development-tooling/SKILL.md#workflow)
+   and test both caller boundaries.
 8. Update directly related contributor or AI guidance when CI commands or
    required checks change, including [AI rules](../../../doc/AI_RULES.md) and
    [required checks](../../../doc/REQUIRED_CHECKS.md) where applicable. Delegate
