@@ -187,6 +187,8 @@ $(call REGISTER_TARGET,docker-image-verify-pins,docker,host)
 $(call REGISTER_TARGET,docker-setup-qemu,docker,host)
 $(call REGISTER_TARGET,docker-build-multi-platform,docker,host,OVERWRITE)
 $(call REGISTER_TARGET,docker-build-platform,docker,host,OVERWRITE)
+$(call REGISTER_TARGET,docker-build-pre-pr-development,docker,host,OVERWRITE,Build development Docker image)
+$(call REGISTER_TARGET,docker-build-pre-pr-production,docker,host,OVERWRITE,Build production Docker image)
 $(call REGISTER_TARGET,docker-image-update-pins,docker,host,OVERWRITE)
 $(call REGISTER_TARGET,docker-kill-containers,docker,host,DESTRUCTIVE)
 $(call REGISTER_TARGET,docker-prune,docker,host,DESTRUCTIVE)
@@ -764,6 +766,24 @@ ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
 	@PLATFORM="$(PLATFORM)" DOCKERFILE="$(DOCKERFILE)" TARGET="$(TARGET)" TAG="$(TAG)" ./scripts/docker/docker-images.sh build
+endif
+
+docker-build-pre-pr-development: ## Build and load the pre-PR development image
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(HOST_CONTEXT_FAILURE)
+else
+	@OUTPUT_RUN_TARGET_ACTIVE=1 bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" \
+		python3 scripts/output/native-output.py --indent \
+		docker buildx build --progress plain --pull --load --target development --tag symfony-flex-backend:pre-pr-development .
+endif
+
+docker-build-pre-pr-production: ## Build and load the pre-PR production image
+ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
+	$(HOST_CONTEXT_FAILURE)
+else
+	@OUTPUT_RUN_TARGET_ACTIVE=1 bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" \
+		python3 scripts/output/native-output.py --indent \
+		docker buildx build --progress plain --pull --load --target production --no-cache-filter production --tag symfony-flex-backend:pre-pr-production .
 endif
 
 docker-image-update-pins: ## Apply same-major minor/patch updates and refresh Dockerfile image digests

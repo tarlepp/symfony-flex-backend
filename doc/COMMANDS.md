@@ -501,6 +501,10 @@ docker-build-multi-platform # Build and push multi-platform image (asks
                             # PLATFORMS, DOCKERFILE, TARGET, TAG, BUILDER)
 docker-build-platform       # Build image for single platform (asks
                             # PLATFORM, DOCKERFILE, TARGET, TAG)
+docker-build-pre-pr-development # OVERWRITE: build and load the pre-PR
+                                # development image
+docker-build-pre-pr-production  # OVERWRITE: build and load the pre-PR
+                                # production image, without production cache
 docker-builder-platforms    # Show platforms supported by current buildx
                             # builder
 docker-image-check-updates  # Report newer stable Docker Hub image versions

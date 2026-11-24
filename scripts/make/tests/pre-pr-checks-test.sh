@@ -69,6 +69,12 @@ if [ "${1:-}" = test-docker-images ]; then
     printf '  [OK] Major reporting stays separate from automatic pin updates\n' >&2
     printf '[OK] Docker image tests: 98 scenarios passed\n' >&2
 fi
+if [[ "${1:-}" = docker-build-pre-pr-* ]]; then
+    variant=${1#docker-build-pre-pr-}
+    printf '[RUN] Build %s Docker image (make %s)\n' "$variant" "$1" >&2
+    printf '  build output\n' >&2
+    printf '[OK] Build %s Docker image (make %s)\n' "$variant" "$1" >&2
+fi
 MOCK
 
 cat > "$temporary/bin/docker" <<'MOCK'
@@ -182,13 +188,27 @@ for target in \
     lint-python typecheck-python lint-markdown check-skills \
     lint-workflows check-security test-docker-images docker-image-verify-pins \
     phpcs ecs phplint php-parallel-lint phploc psalm phpstan phpinsights \
-    run-tests-php phpmetrics; do
+    run-tests-php phpmetrics docker-build-pre-pr-development docker-build-pre-pr-production; do
     grep -Eq "^make ${target} .*run_target=${target}$" "$PRE_PR_CALLS"
 done
 grep -Fqx 'make ci-detect-changes grouped= xdebug=coverage run_target=ci-detect-changes' "$PRE_PR_CALLS"
 grep -Fq 'script ci-validate-compose' "$PRE_PR_CALLS"
 grep -Fq 'script docker-images check-updates --advisory grouped=1' "$PRE_PR_CALLS"
-[ "$(grep -c '^docker buildx build ' "$PRE_PR_CALLS")" -eq 2 ]
+if grep -q '^docker buildx build ' "$PRE_PR_CALLS"; then
+    printf 'Pre-PR image builds must use their Make targets.\n' >&2
+    exit 1
+fi
+if ! awk '
+    $0 == "[OK] Build development Docker image (make docker-build-pre-pr-development)" {
+        if (getline <= 0 || $0 != "") exit 1
+        if (getline <= 0 || $0 != "[RUN] Build production Docker image (make docker-build-pre-pr-production)") exit 1
+        found = 1
+    }
+    END { if (!found) exit 1 }
+' "$temporary/output"; then
+    printf 'Expected one blank line between image builds.\n' >&2
+    exit 1
+fi
 if grep -Fq 'unwanted log' "$temporary/output"; then
     printf 'Pre-PR output included a suppressed deprecation log.\n' >&2
     exit 1
@@ -215,5 +235,24 @@ if grep -Fq 'unwanted log' "$temporary/output"; then
     exit 1
 fi
 grep -Fq 'deprecation.WARNING: visible warning' "$temporary/output"
+
+for failed in docker-build-pre-pr-development docker-build-pre-pr-production; do
+    status=0
+    : > "$PRE_PR_CALLS"
+    PRE_PR_CALLS="$temporary/calls" PRE_PR_FAIL_TARGET="$failed" \
+        MOCK_CHANGED_FILES=Dockerfile \
+        bash "$repository/scripts/make/pre-pr-checks.sh" > "$temporary/output" 2>&1 || status=$?
+    [ "$status" -eq 7 ]
+    grep -Fq "make $failed grouped=1 xdebug=coverage run_target=$failed" "$PRE_PR_CALLS"
+    if [ "$failed" = docker-build-pre-pr-development ] &&
+        grep -Fq 'make docker-build-pre-pr-production ' "$PRE_PR_CALLS"; then
+        printf 'Production build ran after the development build failed.\n' >&2
+        exit 1
+    fi
+    if grep -Fq 'Selected local pre-PR checks completed.' "$temporary/output"; then
+        printf 'A failed image build reported successful completion.\n' >&2
+        exit 1
+    fi
+done
 
 printf 'Pre-PR check selection tests passed.\n'
