@@ -585,8 +585,12 @@ are outside its scope. It verifies the Dockerfile pins before creating or
 updating one PR per selected base branch. No changes means no new PR. The Actions
 run summary shows the base branch, step and PR outcomes, a changed-file summary
 (including lockfiles), and the exact image pin, CI service and Doctrine diffs.
-Existing core CI gates are unchanged; the updater does not build its proposed
-images or run application tests.
+The generated PR starts with the actual changed-file summary and old/new image,
+Composer configuration and database configuration lines. Its validation section
+reports maintenance step outcomes, explains conditional verification, and
+distinguishes both from PR CI; lockfile changes are listed without embedding their
+full diffs. Existing core CI gates are unchanged; the updater does not build its
+proposed images or run application tests.
 
 For digest-only updates, the PR and Actions run summary share the same report of
 runnable platform changes and available base-image and source-revision metadata.
