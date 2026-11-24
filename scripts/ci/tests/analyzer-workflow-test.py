@@ -1956,6 +1956,9 @@ class ChangeDetectionTest(unittest.TestCase):
         content = summary.read_text()
         self.assertNotIn("\x1b", content)
         self.assertTrue(content.startswith(
+            "Find **Core CI result** among the job summaries on this page for the final gate results. "
+            "For gate logs, select **Validate CI result** in the jobs list or graph. "
+            "A cancelled run may not reach the final gate.\n\n"
             "<details>\n<summary>CI validation preview (selection, not results)</summary>\n",
         ))
         self.assertTrue(content.endswith("</details>\n"))
