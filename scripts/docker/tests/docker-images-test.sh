@@ -82,7 +82,8 @@ cleanup() {
         "$WORK/bin/sleep" "$WORK/docker-attempts" "$WORK/retry-delays" \
         "$WORK/Dockerfile" "$WORK/docker/nginx/Dockerfile" "$WORK/docker/mariadb/Dockerfile" \
         "$WORK/Makefile" "$WORK/scripts/docker/docker-images.sh" "$WORK/scripts/output/command-output.sh" \
-        "$WORK/scripts/output/native-output.py" "$WORK/stdout" "$WORK/stderr" \
+        "$WORK/scripts/output/native-output.py" "$WORK/scripts/output/command-progress.py" \
+        "$WORK/stdout" "$WORK/stderr" \
         "$WORK/scripts/docker/docker-images-real.sh" "$WORK/scripts/make/pre-pr-checks.sh" \
         "$WORK/bin/make"
     rmdir "$WORK/scripts/docker" "$WORK/scripts/make" "$WORK/scripts/output" "$WORK/scripts" \
@@ -198,13 +199,17 @@ write_tags() {
 output_status RUN 'Docker image tests'
 unset OUTPUT_RUN_GROUPED OUTPUT_RUN_GROUPED_SEPARATOR OUTPUT_RUN_GROUPED_STARTED \
     OUTPUT_RUN_TARGET OUTPUT_RUN_TARGET_ACTIVE
+# Keep fixture output deterministic; progress-enabled behavior is tested explicitly.
+export PROGRESS=never
 printf '%s\n' \
     '  Offline regression tests using temporary Dockerfiles and mocked Docker/registry responses.' \
     '  Actual repository Dockerfile pins are NOT checked. To validate them, run: make docker-image-verify-pins' >&2
 
 mkdir -p "$WORK/bin" "$WORK/docker/nginx" "$WORK/docker/mariadb" "$WORK/scripts/docker" "$WORK/scripts/make" "$WORK/scripts/output"
 cp "$SCRIPT" "$WORK/scripts/docker/docker-images.sh"
-cp "$(dirname "$SCRIPT")/../output/command-output.sh" "$(dirname "$SCRIPT")/../output/native-output.py" "$WORK/scripts/output/"
+cp "$(dirname "$SCRIPT")/../output/command-output.sh" \
+    "$(dirname "$SCRIPT")/../output/command-progress.py" \
+    "$(dirname "$SCRIPT")/../output/native-output.py" "$WORK/scripts/output/"
 cp "$(dirname "$SCRIPT")/../../Makefile" "$WORK/Makefile"
 cat > "$WORK/bin/docker" << 'EOF'
 #!/bin/bash
@@ -454,7 +459,7 @@ verify_pin_parity 'matching tag digest' \
     'Tag digest matches'
 
 grep -Fxq '[OK] All Dockerfiles use valid multi-platform image pins' "$WORK/output"
-IMAGE=unmatched:fixture make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
+PROGRESS=always IMAGE=unmatched:fixture make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
     docker-image-digest > "$WORK/output" 2>&1
 grep -q -B 1 '^\[OK\] Inspected unmatched:fixture' "$WORK/output"
 if grep -B 1 '^\[OK\] Inspected unmatched:fixture' "$WORK/output" | grep -q '^$'; then
