@@ -173,6 +173,8 @@ output_run 'CI tooling scripts (ShellCheck)' \
     scripts/docker/prepare-php-minor-pr.sh \
     scripts/docker/prepare-image-update-pr.sh \
     scripts/docker/select-maintenance-pr-auth.sh \
+    scripts/docker/php-minor-pr-outcome.sh \
+    scripts/docker/image-update-overview.sh \
     scripts/sync-composer-php.sh \
     scripts/make/make.sh \
     scripts/checks/check-security.sh \

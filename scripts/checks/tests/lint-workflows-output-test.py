@@ -63,6 +63,7 @@ class WorkflowOutputTest(unittest.TestCase):
             "ci/ci-workflow-overview.sh",
             "ci/ci-docker-hub-auth.sh",
             "ci/ci-statistics-summary.sh",
+            "docker/image-update-overview.sh",
             "output/command-output.sh",
             "output/native-output.py",
             "tests/run-workflow-tests.py",
@@ -208,7 +209,8 @@ esac
             "scripts/checks/check-action-updates.sh scripts/docker/docker-images.sh "
             "scripts/docker/sync-doctrine-mariadb.sh scripts/docker/sync-ci-mariadb.sh "
             "scripts/docker/prepare-php-minor-pr.sh scripts/docker/prepare-image-update-pr.sh "
-            "scripts/docker/select-maintenance-pr-auth.sh scripts/sync-composer-php.sh "
+            "scripts/docker/select-maintenance-pr-auth.sh scripts/docker/php-minor-pr-outcome.sh "
+            "scripts/docker/image-update-overview.sh scripts/sync-composer-php.sh "
             "scripts/make/make.sh "
             "scripts/checks/check-security.sh scripts/reports/prepare-sonar-reports.sh", calls,
         )
@@ -338,6 +340,8 @@ esac
             "scripts/docker/prepare-php-minor-pr.sh",
             "scripts/docker/prepare-image-update-pr.sh",
             "scripts/docker/select-maintenance-pr-auth.sh",
+            "scripts/docker/php-minor-pr-outcome.sh",
+            "scripts/docker/image-update-overview.sh",
             "scripts/sync-composer-php.sh",
             "scripts/make/make.sh",
             "scripts/checks/check-security.sh",

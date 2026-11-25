@@ -90,6 +90,11 @@ directory relationships so they do not depend on files remaining siblings.
 * [Maintenance PR authentication](docker/select-maintenance-pr-auth.sh)
   * Selects App or token authentication on the GitHub runner, preserving the
     distinct PHP minor and image update fallback policies.
+* [PHP minor PR outcome](docker/php-minor-pr-outcome.sh)
+  * Appends the migration PR outcome to the Actions job summary.
+* [Image update overview](docker/image-update-overview.sh)
+  * Appends maintenance outcomes and saved change evidence to the Actions job
+    summary on the GitHub runner.
 * [Docker digest comparison](docker/docker-image-digest-summary.py)
   * Compares digest-only updates using registry index metadata for maintenance
     pull requests. It is called by the Docker image update workflow on the host.

@@ -594,8 +594,14 @@ class CiGatesTest(unittest.TestCase):
                     self.assertIn(
                         f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step,
                     )
-                shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
-                self.assertIn("bash scripts/ci/ci-workflow-overview.sh", shell)
+                if filename == "docker-image-updates.yml":
+                    self.assertIn("run: bash scripts/docker/image-update-overview.sh", step)
+                    shell = "bash scripts/docker/image-update-overview.sh"
+                    helper = (WORKFLOW.parents[2] / "scripts/docker/image-update-overview.sh").read_text()
+                    self.assertIn("bash scripts/ci/ci-workflow-overview.sh", helper)
+                else:
+                    shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+                    self.assertIn("bash scripts/ci/ci-workflow-overview.sh", shell)
                 summary = Path(directory) / "summary"
                 (Path(directory) / "docker-image-changes.md").write_text("## Proposed changes\n")
                 extra = dict(
@@ -654,7 +660,8 @@ class CiGatesTest(unittest.TestCase):
                     text=True, capture_output=True, check=False,
                 )
                 self.assertNotEqual(unavailable.returncode, 0)
-                self.assertIn("ci-workflow-overview.sh", unavailable.stderr)
+                missing = "image-update-overview.sh" if filename == "docker-image-updates.yml" else "ci-workflow-overview.sh"
+                self.assertIn(missing, unavailable.stderr)
 
     def test_overview_helper_renders_complete_status_and_target_formats(self):
         helper = WORKFLOW.parents[2] / "scripts/ci/ci-workflow-overview.sh"
@@ -725,7 +732,8 @@ class CiGatesTest(unittest.TestCase):
         step = match.group(1)
         self.assertIn("PHP_READINESS_SUMMARY: ${{ needs.php-minor-readiness.outputs.summary-outcome }}", step)
         self.assertIn("PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}", step)
-        shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        self.assertIn("run: bash scripts/docker/image-update-overview.sh", step)
+        shell = "bash scripts/docker/image-update-overview.sh"
         for publication, job_result in (("success", "success"), ("success", "failure"),
                                         ("failure", "failure"), ("", "skipped")):
             with self.subTest(publication=publication, job_result=job_result), tempfile.TemporaryDirectory() as directory:
