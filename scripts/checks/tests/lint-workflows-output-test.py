@@ -62,6 +62,7 @@ class WorkflowOutputTest(unittest.TestCase):
             "ci/ci-gate-common.sh",
             "ci/ci-workflow-overview.sh",
             "ci/ci-docker-hub-auth.sh",
+            "ci/ci-action-update-status.sh",
             "ci/ci-statistics-summary.sh",
             "docker/image-update-overview.sh",
             "output/command-output.sh",
@@ -202,7 +203,8 @@ esac
         self.assertIn("RUST_LOG=warn", calls)
         self.assertIn(
             "shellcheck scripts/checks/lint-workflows.sh scripts/checks/download-workflow-validator.sh "
-            "scripts/output/command-output.sh scripts/ci/check-composer-cache.sh scripts/ci/ci-docker-hub-auth.sh scripts/ci/ci-detect-changes.sh "
+            "scripts/output/command-output.sh scripts/ci/check-composer-cache.sh scripts/ci/ci-docker-hub-auth.sh "
+            "scripts/ci/ci-action-update-status.sh scripts/ci/ci-detect-changes.sh "
             "scripts/ci/ci-prerequisite-gate.sh scripts/ci/ci-result-gate.sh "
             "scripts/ci/ci-gate-common.sh scripts/ci/ci-workflow-overview.sh scripts/ci/ci-statistics-summary.sh scripts/ci/ci-validate-compose.sh "
             "scripts/ci/ci-failure-diagnostics.sh scripts/ci/ci-validate-bootstrap.sh "
@@ -334,6 +336,7 @@ esac
             "scripts/checks/download-workflow-validator.sh",
             "scripts/checks/check-action-updates.sh",
             "scripts/ci/ci-docker-hub-auth.sh",
+            "scripts/ci/ci-action-update-status.sh",
             "scripts/docker/docker-images.sh",
             "scripts/docker/sync-doctrine-mariadb.sh",
             "scripts/docker/sync-ci-mariadb.sh",
