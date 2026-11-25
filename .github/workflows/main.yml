@@ -652,12 +652,7 @@ jobs:
         shell: bash
         env:
           ANALYZER_TARGET: ${{ matrix.analyzer.target }}
-        run: |
-          if [ "$ANALYZER_TARGET" = phpinsights ]; then
-            COLOR=never NO_COLOR=1 NATIVE_COLOR=never bash scripts/make/make.sh "$ANALYZER_TARGET" | tee "$RUNNER_TEMP/phpinsights-output.txt"
-          else
-            bash scripts/make/make.sh "$ANALYZER_TARGET"
-          fi
+        run: bash scripts/ci/ci-run-analyzer.sh
 
       - name: Publish PHP Insights scores
         if: ${{ !cancelled() && matrix.analyzer.name == 'PHP Insights' && (steps.analyzer.outcome == 'success' || steps.analyzer.outcome == 'failure') }}

@@ -122,6 +122,9 @@ classify_path() {
         scripts/ci/ci-test-reports.py)
             enable_checks php tests workflows
             ;;
+        scripts/ci/ci-run-analyzer.sh)
+            enable_checks php workflows tooling
+            ;;
         ecs.php|.php-cs-fixer*|.phplint*|phpstan*|psalm*|phpinsights*|\
         .phpinsights*|phpmd*|.phan/*|rector.php)
             enable_checks php
