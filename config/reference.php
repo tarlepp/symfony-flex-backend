@@ -259,7 +259,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         gc_divisor?: scalar|Param|null,
  *         gc_probability?: scalar|Param|null,
  *         gc_maxlifetime?: scalar|Param|null,
- *         save_path?: scalar|Param|null, // Defaults to "%kernel.cache_dir%/sessions" if the "handler_id" option is not null.
+ *         save_path?: scalar|Param|null, // Defaults to "%kernel.share_dir%/sessions" if the "handler_id" option is not null.
  *         metadata_update_threshold?: int|Param, // Seconds to wait between 2 session metadata updates. // Default: 0
  *     },
  *     request?: bool|array{ // Request configuration
@@ -522,7 +522,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         },
  *         mock_response_factory?: scalar|Param|null, // `true` to always return empty 200 responses, or the id of the service to use to generate mock responses - which should be either an invokable or an iterable.
  *         scoped_clients?: array<string, Param|string|array{ // Default: []
- *             scope?: scalar|Param|null, // The regular expression that the request URL must match before adding the other options. When none is provided, the base URI is used instead.
+ *             scope?: scalar|Param|null, // The regular expression that the request URL must match before adding the other options. When none is provided, the base URI is used instead. The regular expression should end with a "/", for example "https://api\.github\.com/", so that it doesn't match other hosts.
  *             base_uri?: scalar|Param|null, // The URI to resolve relative URLs, following rules in RFC 3985, section 2.
  *             auth_basic?: scalar|Param|null, // An HTTP Basic authentication "username:password".
  *             auth_bearer?: scalar|Param|null, // A token enabling HTTP Bearer authorization.
@@ -1184,7 +1184,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             limiter?: scalar|Param|null, // A service id implementing "Symfony\Component\HttpFoundation\RateLimiter\RequestRateLimiterInterface".
  *             max_attempts?: int|Param, // Default: 5
  *             interval?: scalar|Param|null, // Default: "1 minute"
- *             lock_factory?: scalar|Param|null, // The service ID of the lock factory used by the login rate limiter ("auto" to use the default one when the Lock component is configured, or null to disable locking). // Default: "auto"
+ *             lock_factory?: scalar|Param|null, // The service ID of the lock factory used by the login rate limiter (or null to disable locking). // Default: null
  *             cache_pool?: string|Param, // The cache pool to use for storing the limiter state // Default: "cache.rate_limiter"
  *             storage_service?: string|Param, // The service ID of a custom storage implementation, this precedes any configured "cache_pool" // Default: null
  *         },
@@ -1310,7 +1310,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             token_handler?: Param|string|array{
  *                 id?: scalar|Param|null,
  *                 oidc_user_info?: Param|string|array{
- *                     base_uri?: scalar|Param|null, // Base URI of the userinfo endpoint on the OIDC server, or the OIDC server URI to use the discovery (require "discovery" to be configured). The latter must end with a slash when it has a path, as the discovery path is resolved against it as a relative URL.
+ *                     base_uri?: scalar|Param|null, // Base URI of the userinfo endpoint on the OIDC server, or the OIDC server URI to use the discovery (require "discovery" to be configured).
  *                     discovery?: array{ // Enable the OIDC discovery.
  *                         cache?: array{
  *                             id?: scalar|Param|null, // Cache service id to use to cache the OIDC discovery configuration.
@@ -1378,9 +1378,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             lifetime?: int|Param, // Default: 31536000
  *             path?: scalar|Param|null, // Default: "/"
  *             domain?: scalar|Param|null, // Default: null
- *             secure?: true|false|"auto"|Param, // Defaults to the value of "framework.session.cookie_secure", or to "auto".
+ *             secure?: true|false|"auto"|Param, // Default: false
  *             httponly?: bool|Param, // Default: true
- *             samesite?: null|"lax"|"strict"|"none"|Param, // Defaults to the value of "framework.session.cookie_samesite", or to "lax".
+ *             samesite?: null|"lax"|"strict"|"none"|Param, // Default: null
  *             always_remember_me?: bool|Param, // Default: false
  *             remember_me_parameter?: scalar|Param|null, // Default: "_remember_me"
  *         },
