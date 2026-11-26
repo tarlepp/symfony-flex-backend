@@ -144,13 +144,14 @@ Docker Compose selects `development` explicitly, including when used by Dev
 Containers. Both targets inherit the same PHP extensions, Composer version,
 security updates, working directory and PHP-FPM port from `base`.
 
-Both application targets update only the explicitly named CVE-affected Debian
-package `linux-libc-dev` in their own stages, using
-`apt-get install --only-upgrade`. This fixes the reported header-package CVEs,
-including CVE-2026-99083 (fixed in Debian version `6.1.192-1`), without adding a
-blanket package upgrade. The command selects the available distribution
-candidate rather than freezing an exact version, allowing later security fixes
-for the same package.
+Both application targets update the explicitly named CVE-affected Debian
+packages `libgssapi-krb5-2`, `libzstd1`, and `linux-libc-dev` in their own
+stages, using `apt-get install --only-upgrade`. This includes the fix for
+CVE-2026-124851 in `libzstd1` version `1.5.7+dfsg-1+deb13u1` and the
+header-package fix for CVE-2026-99083 in Debian version `6.1.192-1`, without
+adding a blanket package upgrade. The command selects the available
+distribution candidate rather than freezing an exact version, allowing later
+security fixes for the same packages.
 
 Keep future CVE fixes scoped to explicitly identified packages and necessary
 dependencies; do not replace this list with `apt-get upgrade`. Verify the

@@ -272,6 +272,7 @@ USER root
 RUN apt-get update \
     && apt-get install --only-upgrade --no-install-recommends -y \
         libgssapi-krb5-2 \
+        libzstd1 \
         linux-libc-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -294,6 +295,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN apt-get update \
     && apt-get install --only-upgrade --no-install-recommends -y \
         libgssapi-krb5-2 \
+        libzstd1 \
         linux-libc-dev \
     && rm -rf /var/lib/apt/lists/*
 
