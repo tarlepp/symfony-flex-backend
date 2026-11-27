@@ -6,7 +6,7 @@
 		"php": "^8.5.13"
 	},
 	"require-dev": {
-		"overtrue/phplint": "9.8.2",
+		"overtrue/phplint": "9.8.3",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
