@@ -46,6 +46,7 @@ class CiGatesTest(unittest.TestCase):
 
     def test_statistics_summary_preserves_output_and_failure(self):
         helper = WORKFLOW.parents[2] / "scripts/ci/ci-statistics-summary.sh"
+
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             summary = root / "summary"
@@ -55,23 +56,27 @@ class CiGatesTest(unittest.TestCase):
                 "printf 'color=%s native=%s no_color=%s\\n```\\n' \"$COLOR\" \"$NATIVE_COLOR\" \"$NO_COLOR\"; "
                 "echo diagnostic >&2; exit \"$1\""
             )
+
             for status in (0, 7):
                 summary.write_text("")
                 result = subprocess.run(
                     ["bash", str(helper), "run", "Example", "bash", "-c", command, "_", str(status)],
                     env=environment, text=True, capture_output=True, check=False,
                 )
+
                 self.assertEqual(result.returncode, status)
                 self.assertEqual(result.stdout, "color=never native=never no_color=1\n```\n")
                 self.assertEqual(result.stderr, "diagnostic\n")
                 self.assertIn("    color=never native=never no_color=1\n    ```\n", summary.read_text())
                 self.assertEqual("Command failed" in summary.read_text(), status != 0)
+
                 summary.write_text("")
                 result = subprocess.run(
                     ["bash", str(helper), "run", "Example", "bash", "-c", command, "_", str(status)],
                     env={**environment, "STATISTICS_COLLAPSED": "true"},
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertEqual(result.returncode, status)
                 self.assertEqual(result.stdout, "color=never native=never no_color=1\n```\n")
                 self.assertEqual(result.stderr, "diagnostic\n")
@@ -79,29 +84,36 @@ class CiGatesTest(unittest.TestCase):
                     "<details>\n<summary>Example</summary>\n\n" if status == 0 else
                     "<details open>\n<summary>Example · failed</summary>\n\n"
                 )
+
                 self.assertTrue(summary.read_text().startswith(expected_heading))
                 self.assertIn("    color=never native=never no_color=1\n    ```\n", summary.read_text())
                 self.assertEqual("Command failed" in summary.read_text(), status != 0)
                 self.assertTrue(summary.read_text().endswith("\n</details>\n"))
+
             output = root / "output"
+
             output.write_text("first\nsecond\n")
             result = subprocess.run(
                 ["bash", str(helper), "file", "Existing", str(output)],
                 env=environment, text=True, capture_output=True, check=False,
             )
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("## Existing\n\n    first\n    second\n", summary.read_text())
+
             summary.write_text("")
             result = subprocess.run(
                 ["bash", str(helper), "file", "Existing", str(output)],
                 env={**environment, "STATISTICS_COLLAPSED": "true"},
                 text=True, capture_output=True, check=False,
             )
+
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(
                 summary.read_text(),
                 "<details>\n<summary>Existing</summary>\n\n    first\n    second\n\n\n</details>\n",
             )
+
             for source_status in ("success", "failure", "unknown"):
                 with self.subTest(source_status=source_status):
                     summary.write_text("")
@@ -111,6 +123,7 @@ class CiGatesTest(unittest.TestCase):
                              "STATISTICS_SOURCE_STATUS": source_status},
                         text=True, capture_output=True, check=False,
                     )
+
                     if source_status == "unknown":
                         self.assertNotEqual(result.returncode, 0)
                         self.assertIn("Invalid statistics source status", result.stderr)
@@ -124,11 +137,13 @@ class CiGatesTest(unittest.TestCase):
                         self.assertEqual("Producing step failed" in summary.read_text(),
                                          source_status == "failure")
                         self.assertIn("    first\n    second\n", summary.read_text())
+
             output.unlink()
             result = subprocess.run(
                 ["bash", str(helper), "file", "Missing", str(output)],
                 env=environment, text=True, capture_output=True, check=False,
             )
+
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("missing", result.stderr)
             result = subprocess.run(
@@ -136,6 +151,7 @@ class CiGatesTest(unittest.TestCase):
                 env={**environment, "GITHUB_STEP_SUMMARY": str(root)},
                 text=True, capture_output=True, check=False,
             )
+
             self.assertNotEqual(result.returncode, 0)
 
     def test_selected_statistics_require_complete_known_formats(self):
@@ -157,10 +173,12 @@ class CiGatesTest(unittest.TestCase):
                 ("detailed findings",),
             ),
         }
+
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = root / "input"
             summary = root / "summary"
+
             for mode, (fixture, expected, excluded) in fixtures.items():
                 with self.subTest(mode=mode):
                     source.write_text(fixture)
@@ -168,7 +186,9 @@ class CiGatesTest(unittest.TestCase):
                     command = ["bash", str(helper), mode, "Summary", str(source)]
                     environment = {**os.environ, "GITHUB_STEP_SUMMARY": str(summary)}
                     result = subprocess.run(command, env=environment, text=True, capture_output=True)
+
                     self.assertEqual(result.returncode, 0, result.stderr)
+
                     if mode == "versions":
                         self.assertEqual(
                             summary.read_text(),
@@ -178,30 +198,38 @@ class CiGatesTest(unittest.TestCase):
                             "    Composer version 2.11.1\n"
                             "    phpunit/phpunit: 13.4.6\n\n\n",
                         )
+
                     for text in expected:
                         self.assertIn(text, summary.read_text())
+
                     for text in excluded:
                         self.assertNotIn(text, summary.read_text())
+
                     summary.write_text("")
                     result = subprocess.run(
                         command, env={**environment, "STATISTICS_COLLAPSED": "true"},
                         text=True, capture_output=True,
                     )
+
                     self.assertEqual(result.returncode, 0, result.stderr)
                     self.assertTrue(summary.read_text().startswith("<details>\n<summary>Summary</summary>\n\n"))
                     self.assertTrue(summary.read_text().endswith("\n</details>\n"))
+
                     for text in expected:
                         self.assertIn(text, summary.read_text())
+
                     summary.write_text("")
                     source.write_text(fixture.replace(next(line for line in fixture.splitlines()
                                                           if expected[-1] in line), ""))
                     result = subprocess.run(command, env=environment, text=True, capture_output=True)
+
                     self.assertNotEqual(result.returncode, 0)
                     self.assertIn("Could not identify", result.stderr)
                     self.assertEqual(summary.read_text(), "")
 
     def test_core_job_overviews_report_actual_outcomes(self):
         self.assertIn("    env:\n      STATISTICS_COLLAPSED: 'true'\n", self.jobs["statistics"])
+
         for job, step, producer in (
             ("lightweight-analyzers", "PHPLoc", "phploc"),
             ("test", "PhpMetrics", "metrics"),
@@ -209,9 +237,11 @@ class CiGatesTest(unittest.TestCase):
             content = self.jobs[job]
             match = re.search(rf"^      - name: Publish {step} statistics\n(.*?)(?=^      - |\Z)",
                               content, re.MULTILINE | re.DOTALL)
+
             assert match is not None
             self.assertIn("STATISTICS_COLLAPSED: 'true'", match[1])
             self.assertIn(f"STATISTICS_SOURCE_STATUS: ${{{{ steps.{producer}.outcome }}}}", match[1])
+
         self.assertNotIn("STATISTICS_COLLAPSED", self.jobs["static-analyzers"])
         jobs = {
             "lint-configuration": {
@@ -283,6 +313,7 @@ class CiGatesTest(unittest.TestCase):
                 "SARIF": ("sarif", "PR SARIF generation"), "UPLOAD": ("upload", "Code scanning upload"),
             },
         }
+
         for job, outcomes in jobs.items():
             with self.subTest(job=job), tempfile.TemporaryDirectory() as directory:
                 content = self.jobs[job]
@@ -290,13 +321,17 @@ class CiGatesTest(unittest.TestCase):
                     r"^      - name: Publish job overview\n(.*?)(?=^      - |\Z)",
                     content, re.MULTILINE | re.DOTALL,
                 )
+
                 self.assertEqual(len(matches), 1)
                 step = matches[0]
                 condition = "!cancelled()"
+
                 if job == "report":
                     condition += " && steps.checkout-report.outcome == 'success'"
+
                 if job == "gitleaks":
                     condition += " && (job.status != 'success' || steps.scan.outcome != 'success')"
+
                     for cancelled in (False, True):
                         for status in ("success", "failure"):
                             for outcome in ("success", "failure", "skipped", ""):
@@ -306,35 +341,45 @@ class CiGatesTest(unittest.TestCase):
                                     .replace("steps.scan.outcome", repr(outcome))
                                     .replace("&&", "and").replace("||", "or")
                                 )
+
                                 self.assertEqual(
                                     eval(expression, {"__builtins__": {}}),
                                     not cancelled and (status != "success" or outcome != "success"),
                                 )
+
                 self.assertIn(f"if: ${{{{ {condition} }}}}", step)
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
                 title_match = re.search(
                     r"^          OVERVIEW_TITLE: (.+)$", step, re.MULTILINE,
                 )
+
                 assert title_match is not None
                 title = title_match.group(1)
+
                 self.assertIn("OVERVIEW_COLLAPSED: 'true'", step)
+
                 for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step)
+
                 if job == "report":
                     self.assertIn("COVERALLS_TOKEN: ${{ steps.reporting.outputs.coveralls || 'unavailable' }}", step)
                     self.assertIn("SONAR_TOKEN_STATUS: ${{ steps.reporting.outputs.sonar || 'unavailable' }}", step)
+
                 if job == "docker-scan":
                     self.assertIn(
                         "SARIF_ELIGIBILITY: ${{ github.event_name == 'pull_request' && "
                         "github.event.pull_request.head.repo.full_name == github.repository && "
                         "'eligible' || 'not eligible' }}", step,
                     )
+
                 if job == "docker-image-check-updates":
                     condition = "(github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'schedule'"
+
                     self.assertIn(f"if: ${{{{ {condition} }}}}", content)
                     self.assertIn(f"AUTHENTICATION_ELIGIBLE: ${{{{ {condition} }}}}", step)
+
                     for event, ref, eligible in (
                         ("pull_request", "refs/pull/1/merge", False),
                         ("merge_group", "refs/heads/queue", False),
@@ -348,7 +393,9 @@ class CiGatesTest(unittest.TestCase):
                             .replace("github.ref", repr(ref))
                             .replace("&&", "and").replace("||", "or")
                         )
+
                         self.assertEqual(eval(expression, {"__builtins__": {}}), eligible)
+
                 shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
                 variants = (
                     ("development", "production") if job in ("docker-build", "docker-scan")
@@ -358,14 +405,19 @@ class CiGatesTest(unittest.TestCase):
                 scenarios: list[tuple[str | None, str]] = [
                     (None, variant) for variant in variants
                 ]
+
                 scenarios.extend((failed, variants[0]) for failed in outcomes)
+
                 if job == "gitleaks":
                     scenarios.append(("skipped", ""))
+
                 for failed, variant in scenarios:
                     rendered_title = title.replace("${{ matrix.analyzer.name }}", variant)
                     values = dict.fromkeys(outcomes, "success" if failed is None else "skipped")
+
                     if failed is not None and failed != "skipped":
                         values[failed] = "failure"
+
                     summary = Path(directory) / "summary"
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
@@ -381,29 +433,40 @@ class CiGatesTest(unittest.TestCase):
                              "SARIF_ELIGIBILITY": "eligible", "AUTHENTICATION_ELIGIBLE": "true", **values},
                         capture_output=True, text=True, check=False,
                     )
+
                     self.assertEqual(result.returncode, 0, result.stderr)
                     output = summary.read_text()
+
                     self.assertTrue(output.startswith("<details>\n" if failed is None else "<details open>\n"))
                     self.assertIn(f"<summary>{rendered_title}", output)
                     self.assertTrue(output.endswith("\n</details>\n"))
                     self.assertIn(f"Job status before overview: **{'success' if failed is None else 'failure'}**", output)
+
                     for variable, (_, label) in outcomes.items():
                         expected = values[variable]
+
                         if job == "report" and variable in ("PREPARE", "SONAR") and expected == "skipped":
                             expected = "skipped (expected)"
+
                         self.assertIn(f"| {label} | {expected} |", output)
+
                     if job in ("docker-build", "docker-scan"):
                         self.assertIn(f"Image: {variant}", output)
+
                     if job == "static-analyzers":
                         self.assertIn(f"| Analyzer | {variant} |", output)
+
                     if job == "report":
                         self.assertIn("| Coveralls token | available |", output)
                         self.assertIn("| Sonar token | not available |", output)
+
                     if job == "docker-scan":
                         self.assertIn("| PR SARIF eligibility (same-repository PRs only) | eligible |", output)
                         self.assertIn("Failure can indicate findings or an error", output)
                         self.assertIn("SARIF generation does not imply upload success", output)
+
                     summary.unlink()
+
                 if job in ("report", "docker-scan"):
                     cases = (
                         [
@@ -425,6 +488,7 @@ class CiGatesTest(unittest.TestCase):
                               "| PR SARIF generation | failure |", "| Blocking Trivy scan | failure |")),
                         ]
                     )
+
                     for overrides, expected in cases:
                         environment = {
                             **os.environ, "GITHUB_STEP_SUMMARY": str(summary), "OVERVIEW_TITLE": title,
@@ -437,10 +501,14 @@ class CiGatesTest(unittest.TestCase):
                             ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
                             env=environment, capture_output=True, text=True, check=False,
                         )
+
                         self.assertEqual(result.returncode, 0, result.stderr)
+
                         for row in expected:
                             self.assertIn(row, summary.read_text())
+
                         summary.unlink()
+
                 if job in ("static-analyzers", "report", "docker-scan", "docker-image-check-updates"):
                     status_scenarios = {
                         "docker-image-check-updates": [
@@ -495,6 +563,7 @@ class CiGatesTest(unittest.TestCase):
                              "⚠️", "Blocking Trivy scan", "failure"),
                         ],
                     }
+
                     for overrides, icon, label, expected in status_scenarios[job]:
                         with self.subTest(job=job, overrides=overrides):
                             environment = {
@@ -509,13 +578,18 @@ class CiGatesTest(unittest.TestCase):
                                 ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
                                 env=environment, capture_output=True, text=True, check=False,
                             )
+
                             self.assertEqual(result.returncode, 0, result.stderr)
                             output = summary.read_text()
+
                             self.assertIn(f" · {icon} ", output)
                             self.assertIn(f"| {label} | {expected} |", output)
+
                             if job == "docker-image-check-updates":
                                 self.assertIn("Version updates are advisory", output)
+
                             summary.unlink()
+
                 if job == "statistics":
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell], cwd=WORKFLOW.parents[2],
@@ -525,6 +599,7 @@ class CiGatesTest(unittest.TestCase):
                              **dict.fromkeys(outcomes, "success"), "LICENSES": "failure"},
                         capture_output=True, text=True, check=False,
                     )
+
                     self.assertEqual(result.returncode, 0, result.stderr)
                     self.assertTrue(summary.read_text().startswith("<details open>\n"))
                     self.assertIn("⚠️ Reported results need attention before overview", summary.read_text())
@@ -570,6 +645,7 @@ class CiGatesTest(unittest.TestCase):
                 "UPDATES": ("updates", "Action and workflow tool update check"),
             },
         }
+
         for filename, outcomes in workflows.items():
             with self.subTest(workflow=filename), tempfile.TemporaryDirectory() as directory:
                 content = (WORKFLOWS / filename).read_text()
@@ -577,6 +653,7 @@ class CiGatesTest(unittest.TestCase):
                     r"^      - name: Publish workflow run overview\n"
                     r"(.*?)(?=^      - |\Z)", content, re.MULTILINE | re.DOTALL,
                 )
+
                 assert match is not None
                 step = match.group(1)
                 if filename == "dependency-review.yml":
@@ -589,20 +666,26 @@ class CiGatesTest(unittest.TestCase):
                 self.assertIn("continue-on-error: true", step)
                 self.assertIn("PRIOR_STATUS: ${{ job.status }}", step)
                 self.assertIn(f"OVERVIEW_TITLE: {titles[filename]}", step)
+
                 for variable, (step_id, _) in outcomes.items():
                     self.assertIn(f"        id: {step_id}\n", content)
                     self.assertIn(
                         f"{variable}: ${{{{ steps.{step_id}.outcome || 'skipped' }}}}", step,
                     )
+
                 if filename == "docker-image-updates.yml":
                     self.assertIn("run: bash scripts/docker/image-update-overview.sh", step)
                     shell = "bash scripts/docker/image-update-overview.sh"
                     helper = (WORKFLOW.parents[2] / "scripts/docker/image-update-overview.sh").read_text()
+
                     self.assertIn("bash scripts/ci/ci-workflow-overview.sh", helper)
                 else:
                     shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+
                     self.assertIn("bash scripts/ci/ci-workflow-overview.sh", shell)
+
                 summary = Path(directory) / "summary"
+
                 (Path(directory) / "docker-image-changes.md").write_text("## Proposed changes\n")
                 extra = dict(
                     RUNNER_TEMP=directory, BASE_BRANCH="master", PR_URL="", PR_OPERATION="",
@@ -612,16 +695,21 @@ class CiGatesTest(unittest.TestCase):
                 scenarios = [("success", None, "")] + [
                     ("failure", variable, "") for variable in outcomes
                 ]
+
                 if filename == "vulnerability-scan.yml":
                     scenarios = [(status, failed, "production") for status, failed, _ in scenarios]
+
                     scenarios.append(("success", None, "development"))
+
                 for status, failed, target in scenarios:
                     values = {
                         variable: "skipped" if status == "failure" else "success"
                         for variable in outcomes
                     }
+
                     if failed is not None:
                         values[failed] = status
+
                     result = subprocess.run(
                         ["bash", "-euo", "pipefail", "-c", shell],
                         env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
@@ -632,26 +720,34 @@ class CiGatesTest(unittest.TestCase):
                         cwd=WORKFLOW.parents[2],
                         capture_output=True, text=True, check=False,
                     )
+
                     self.assertEqual(result.returncode, 0, result.stderr)
                     output = summary.read_text()
                     heading = f"## {titles[filename]}"
+
                     if filename == "vulnerability-scan.yml":
                         heading += f" · {target}"
+
                     self.assertIn(f"{heading}\n", output)
                     self.assertIn(f"Job status before overview: **{status}**", output)
+
                     for variable, (_, label) in outcomes.items():
                         self.assertIn(f"| {label} | {values[variable]} |", output)
+
                     if filename == "vulnerability-scan.yml":
                         self.assertIn(f"Image: {target}", output)
                         self.assertIn("Failure can indicate findings or an error", output)
                         self.assertIn("SARIF generation does not imply upload success", output)
                     else:
                         self.assertNotIn("Image:", output)
+
                     if filename == "docker-image-updates.yml":
                         self.assertIn("> [!WARNING]", output)
                         self.assertIn("**Result: Unavailable**", output)
                         self.assertIn("readiness job: failure", output)
+
                     summary.unlink()
+
                 unavailable = subprocess.run(
                     ["bash", "-euo", "pipefail", "-c", shell], cwd=directory,
                     env={**os.environ, "GITHUB_STEP_SUMMARY": str(summary),
@@ -659,8 +755,10 @@ class CiGatesTest(unittest.TestCase):
                          "TARGET": "", **extra, **dict.fromkeys(outcomes, "skipped")},
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertNotEqual(unavailable.returncode, 0)
                 missing = "image-update-overview.sh" if filename == "docker-image-updates.yml" else "ci-workflow-overview.sh"
+
                 self.assertIn(missing, unavailable.stderr)
 
     def test_overview_helper_renders_complete_status_and_target_formats(self):
@@ -674,6 +772,7 @@ class CiGatesTest(unittest.TestCase):
             ("true", "success", "", "success", "success", "✅ Reported checks successful before overview"),
             ("true", "failure", "", "failure", "skipped", "⚠️ Reported results need attention before overview"),
         )
+
         for collapsed, status, target, scan, upload, overview in cases:
             with self.subTest(collapsed=collapsed, status=status, target=target, scan=scan, upload=upload):
                 result = subprocess.run(
@@ -682,9 +781,11 @@ class CiGatesTest(unittest.TestCase):
                          "OVERVIEW_TITLE": "Example", "OVERVIEW_COLLAPSED": collapsed, "TARGET": target},
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 target_text = f" · Image: {target}" if target else ""
                 heading_target = f" · {target}" if target else ""
+
                 if collapsed == "true":
                     details = "<details open>" if "⚠️" in overview else "<details>"
                     heading = f"{details}\n<summary>Example{heading_target} · {overview}</summary>\n"
@@ -692,12 +793,14 @@ class CiGatesTest(unittest.TestCase):
                 else:
                     heading = f"## Example{heading_target}\n\n{overview}\n"
                     closing = ""
+
                 self.assertEqual(
                     result.stdout,
                     f"{heading}\nEvent: pull_request{target_text} · Job status before overview: **{status}**\n\n"
                     f"| Check | Result |\n| --- | --- |\n| Scan | {scan} |\n| Upload | {upload} |\n\n"
                     f"See logs.\n{closing}",
                 )
+
         for label, finding, expected in (
             ("Update finding", "current", "✅ Reported checks successful before overview"),
             ("Update finding", "updates available", "⚠️ Reported results need attention before overview"),
@@ -718,6 +821,7 @@ class CiGatesTest(unittest.TestCase):
                          "OVERVIEW_COLLAPSED": "true", "TARGET": ""},
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(expected, result.stdout)
                 self.assertEqual(result.stdout.startswith("<details open>"), "⚠️" in expected)
@@ -728,17 +832,21 @@ class CiGatesTest(unittest.TestCase):
             r"^      - name: Publish workflow run overview\n"
             r"(.*?)(?=^      - |\Z)", workflow, re.MULTILINE | re.DOTALL,
         )
+
         assert match is not None
         step = match.group(1)
+
         self.assertIn("PHP_READINESS_SUMMARY: ${{ needs.php-minor-readiness.outputs.summary-outcome }}", step)
         self.assertIn("PHP_READINESS_RESULT: ${{ needs.php-minor-readiness.result }}", step)
         self.assertIn("run: bash scripts/docker/image-update-overview.sh", step)
         shell = "bash scripts/docker/image-update-overview.sh"
+
         for publication, job_result in (("success", "success"), ("success", "failure"),
                                         ("failure", "failure"), ("", "skipped")):
             with self.subTest(publication=publication, job_result=job_result), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 summary = root / "summary"
+
                 (root / "docker-image-changes.md").write_text("## Change report\n")
                 outcomes = dict.fromkeys(
                     ("BOOTSTRAP", "TESTS", "UPDATE", "VERIFY", "COMPOSER", "DOCTRINE",
@@ -754,10 +862,13 @@ class CiGatesTest(unittest.TestCase):
                          "PHP_READINESS_RESULT": job_result},
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 output = summary.read_text()
+
                 self.assertIn("## Docker image pin maintenance\n", output)
                 self.assertIn("## Change report\n", output)
+
                 if publication == "success":
                     self.assertIn("PHP minor readiness evidence is in the **Check PHP minor upgrade readiness** job summary", output)
                     self.assertIn(f"(job result: {job_result})", output)
@@ -772,19 +883,23 @@ class CiGatesTest(unittest.TestCase):
     def test_overview_helper_rejects_invalid_inputs_and_write_errors(self):
         helper = WORKFLOW.parents[2] / "scripts/ci/ci-workflow-overview.sh"
         environment = {**os.environ, "EVENT_NAME": "push", "PRIOR_STATUS": "success", "TARGET": ""}
+
         for arguments in ([], ["footer"], ["footer", "check"], ["footer", "check", "success", "extra"]):
             with self.subTest(arguments=arguments):
                 result = subprocess.run(
                     ["bash", str(helper), *arguments], env=environment,
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("Usage:", result.stderr)
+
         with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
                 ["bash", "-c", 'bash "$1" footer check success > "$2"', "_", str(helper), directory],
                 env=environment, text=True, capture_output=True, check=False,
             )
+
             self.assertNotEqual(result.returncode, 0)
 
     def test_scheduled_image_enforcement_is_independent_of_reporting(self):
@@ -797,6 +912,7 @@ class CiGatesTest(unittest.TestCase):
         sarif = steps["Create Trivy SARIF report"]
         upload = steps["Upload Trivy SARIF report"]
         scan = steps["Scan image with Trivy"]
+
         self.assertIn("        id: build\n", build)
         self.assertIn("        id: sarif\n", sarif)
         self.assertIn("        id: upload\n", upload)
@@ -804,9 +920,11 @@ class CiGatesTest(unittest.TestCase):
         self.assertLess(workflow.index("name: Upload Trivy SARIF report"),
                         workflow.index("name: Scan image with Trivy"))
         condition = re.search(r"^        if: \$\{\{ (.+) \}\}$", scan, re.MULTILINE)
+
         assert condition is not None
         self.assertEqual(condition.group(1),
                          "!cancelled() && steps.build.outcome == 'success'")
+
         for build_result in ("success", "failure", "skipped"):
             for sarif_result in ("success", "failure", "skipped"):
                 for upload_result in ("success", "failure", "skipped"):
@@ -819,13 +937,17 @@ class CiGatesTest(unittest.TestCase):
                                 "&&", "and",
                             )
                             result = eval(expression, {"__builtins__": {}})
+
                             self.assertEqual(result, not cancelled and build_result == "success")
+
         for step in (sarif, upload, scan):
             self.assertNotIn("continue-on-error", step)
+
         self.assertIn("exit-code: '1'", scan)
 
     def test_action_update_workflow_preserves_checker_outcomes(self):
         workflow = (WORKFLOWS / "action-updates.yml").read_text()
+
         self.assertIn("  schedule:\n", workflow)
         self.assertIn("    - cron: '17 6 * * 3'\n", workflow)
         self.assertIn("  workflow_dispatch:\n", workflow)
@@ -840,24 +962,30 @@ class CiGatesTest(unittest.TestCase):
             r"(.*?)(?=^      - |\Z)",
             workflow, re.MULTILINE | re.DOTALL,
         )
+
         assert match is not None
         step = match.group(1)
+
         self.assertIn("id: updates", step)
         self.assertIn("run: bash scripts/ci/ci-action-update-status.sh", step)
         self.assertNotIn("continue-on-error:", step)
         shell = "bash scripts/ci/ci-action-update-status.sh"
+
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+
             (root / "scripts/ci").mkdir(parents=True)
             shutil.copyfile(
                 WORKFLOW.parents[2] / "scripts/ci/ci-action-update-status.sh",
                 root / "scripts/ci/ci-action-update-status.sh",
             )
             docker = root / "docker"
+
             docker.write_text(
                 '#!/bin/sh\nprintf "%s\\n" "$*" > "$DOCKER_ARGS"\nexit "$CHECKER_STATUS"\n'
             )
             docker.chmod(0o755)
+
             for status, expected, message in (
                 (0, 0, "current"),
                 (1, 0, "updates available"),
@@ -875,6 +1003,7 @@ class CiGatesTest(unittest.TestCase):
                              "GITHUB_OUTPUT": str(output)},
                         text=True, capture_output=True, check=False,
                     )
+
                     self.assertEqual(result.returncode, expected, result.stderr)
                     self.assertEqual(output.read_text(), f"result={message}\n")
                     self.assertEqual(
@@ -882,11 +1011,13 @@ class CiGatesTest(unittest.TestCase):
                         "compose -f compose.yaml -f docker/ci-compose.yaml exec -T php "
                         "bash scripts/checks/check-action-updates.sh",
                     )
+
                     if status > 1:
                         self.assertIn(f"::error::Action and workflow tool update checks failed "
                                       f"(exit {status}).", result.stdout)
                     else:
                         self.assertNotIn("::error::", result.stdout)
+
                     output.unlink()
 
             result = subprocess.run(
@@ -896,6 +1027,7 @@ class CiGatesTest(unittest.TestCase):
                      "GITHUB_OUTPUT": str(root)},
                 text=True, capture_output=True, check=False,
             )
+
             self.assertNotEqual(result.returncode, 0)
             self.assertTrue(result.stderr)
 
@@ -906,6 +1038,7 @@ class CiGatesTest(unittest.TestCase):
                 env={**os.environ, "PATH": str(root), "GITHUB_OUTPUT": str(root / "output")},
                 text=True, capture_output=True, check=False,
             )
+
             self.assertEqual(result.returncode, 127)
             self.assertEqual((root / "output").read_text(), "result=incomplete\n")
             self.assertIn("exit 127", result.stdout)
@@ -917,10 +1050,13 @@ class CiGatesTest(unittest.TestCase):
             r"^      - name: Publish workflow run overview\n"
             r"(.*?)(?=^      - |\Z)", workflow, re.MULTILINE | re.DOTALL,
         )
+
         assert match is not None
         step = match.group(1)
+
         self.assertIn("UPDATE_RESULT: ${{ steps.updates.outputs.result || 'unavailable' }}", step)
         shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+
         for outcome, finding in (
             ("success", "current"), ("success", "updates available"),
             ("failure", "incomplete"), ("failure", "unavailable"),
@@ -935,6 +1071,7 @@ class CiGatesTest(unittest.TestCase):
                          "UPDATES": outcome, "UPDATE_RESULT": finding},
                     text=True, capture_output=True, check=False,
                 )
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(f"| Action and workflow tool update check | {outcome} |", summary.read_text())
                 self.assertIn(f"| Update finding | {finding} |", summary.read_text())
@@ -961,6 +1098,7 @@ class CiGatesTest(unittest.TestCase):
             r"        run: bash scripts/make/make\.sh ci-stop$",
             self.workflow, re.MULTILINE,
         )
+
         self.assertTrue(cleanup, "Expected unconditional container cleanup")
         self.assertTrue(all(condition == "${{ always() }}" for condition in cleanup))
 
@@ -969,7 +1107,9 @@ class CiGatesTest(unittest.TestCase):
             name: body for name, body in self.jobs.items()
             if "uses: ./.github/actions/php-bootstrap\n" in body
         }
+
         self.assertIn("test", consumers)
+
         for name, body in consumers.items():
             with self.subTest(job=name):
                 if name == "lint-configuration":
@@ -1012,6 +1152,7 @@ class CiGatesTest(unittest.TestCase):
         for name, body in self.jobs.items():
             if "uses: ./.github/actions/php-bootstrap\n" not in body:
                 continue
+
             with self.subTest(job=name):
                 if name in ("lint-configuration", "report"):
                     self.assertLess(body.index("name: Diagnose PHP container failure"),
@@ -1019,6 +1160,7 @@ class CiGatesTest(unittest.TestCase):
                     condition = "failure()" + (
                         " && steps.bootstrap.outcome != 'skipped'" if name == "report" else ""
                     )
+
                     self.assertIn(
                         f"        if: ${{{{ {condition} }}}}\n"
                         "        timeout-minutes: 2\n"
@@ -1034,28 +1176,37 @@ class CiGatesTest(unittest.TestCase):
             r"^      - &(checkout\w+)\n(.*?)(?=^      - |\Z)",
             self.workflow, re.MULTILINE | re.DOTALL,
         ))
+
         self.assertEqual(set(anchors), {"checkout_step", "checkout_full_history_step"})
         history_consumers = {"changes", "gitleaks", "lightweight-analyzers", "report", "statistics"}
+
         self.assertTrue(history_consumers <= self.jobs.keys())
         job_names = re.findall(
             r"^  ([\w-]+):$", self.workflow.split("jobs:\n", 1)[1], re.MULTILINE,
         )
+
         for name in job_names:
             body = self.jobs[name]
+
             with self.subTest(job=name):
                 checkouts = []
+
                 for step in re.findall(
                     r"^      - (.*?)(?=^      - |\Z)", body, re.MULTILINE | re.DOTALL,
                 ):
                     if step.strip().startswith("*checkout"):
                         step = anchors[step.strip()[1:]]
+
                     if "uses: actions/checkout@" in step:
                         checkouts.append(step)
+
                 self.assertEqual(len(checkouts), 1)
                 depth = "0" if name in history_consumers else "1"
+
                 self.assertIn(f"          fetch-depth: '{depth}'\n", checkouts[0])
                 self.assertIn("          persist-credentials: false\n", checkouts[0])
                 self.assertRegex(checkouts[0], r"uses: actions/checkout@[a-f0-9]{40}\b")
+
                 if name == "report":
                     self.assertIn("          ref: ${{ github.sha }}\n", checkouts[0])
                     self.assertIn(
@@ -1067,6 +1218,7 @@ class CiGatesTest(unittest.TestCase):
         for script in ("ci/ci-prerequisite-gate.sh", "ci/ci-result-gate.sh"):
             with self.subTest(script=script), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
+
                 (root / "ci").mkdir()
                 shutil.copyfile(WORKFLOW.parents[2] / "scripts" / script, root / script)
                 environment = {"PATH": os.environ["PATH"]}
@@ -1074,6 +1226,7 @@ class CiGatesTest(unittest.TestCase):
                     ["bash", str(root / script)], cwd=WORKFLOW.parent, env=environment,
                     text=True, capture_output=True, check=False, timeout=10,
                 )
+
                 self.assertNotEqual(missing_helper.returncode, 0)
                 self.assertIn("ci-gate-common.sh", missing_helper.stderr)
                 shutil.copyfile(
@@ -1084,12 +1237,14 @@ class CiGatesTest(unittest.TestCase):
                     ["bash", str(root / script)], cwd=WORKFLOW.parent, env=environment,
                     text=True, capture_output=True, check=False, timeout=10,
                 )
+
                 self.assertNotEqual(missing_inputs.returncode, 0)
                 self.assertIn("EVENT_NAME: unbound variable", missing_inputs.stderr)
 
     def test_image_scans_consume_build_artifacts_without_rebuilding(self):
         build = self.jobs["docker-build"]
         scan = self.jobs["docker-scan"]
+
         self.assertNotIn("aquasecurity/trivy-action@", build)
         self.assertIn("outputs: type=docker,dest=${{ runner.temp }}/docker-image.tar", build)
         self.assertIn("uses: actions/upload-artifact@", build)
@@ -1106,11 +1261,13 @@ class CiGatesTest(unittest.TestCase):
         self.assertIn("vuln-type: 'os,library'", scan)
         self.assertIn("    needs:\n      - changes\n      - docker-build\n", scan)
         self.assertIn("      - docker-scan\n", self.jobs["ci-result"])
+
         for job in (build, scan):
             self.assertIn("name: docker-image-${{ matrix.target }}", job)
             self.assertIn("target: [development, production]", job)
             self.assertIn("fail-fast: false", job)
             self.assertIn("needs.changes.outputs.docker == 'true'", job)
+
         self.assertIn(
             "if: ${{ github.event_name != 'schedule' && "
             "needs.changes.outputs.docker == 'true' }}", build,
@@ -1124,6 +1281,7 @@ class CiGatesTest(unittest.TestCase):
 
     def test_pr_image_sarif_is_scoped_and_independent_of_scan_result(self):
         scan = self.jobs["docker-scan"]
+
         self.assertIn("    permissions:\n      contents: read\n      security-events: write\n", scan)
         steps = dict(re.findall(
             r"^      - name: ([^\n]+)\n(.*?)(?=^      - |\Z)",
@@ -1133,12 +1291,14 @@ class CiGatesTest(unittest.TestCase):
         blocking = steps["Scan Docker image with Trivy vulnerability scanner"]
         sarif = steps["Generate PR image scan SARIF"]
         upload = steps["Upload PR image scan SARIF"]
+
         self.assertIn("        id: image\n", image)
         self.assertNotIn("        if:", blocking)
         self.assertLess(scan.index("name: Scan Docker image with Trivy vulnerability scanner"),
                         scan.index("name: Generate PR image scan SARIF"))
         self.assertIn("        id: sarif\n", sarif)
         condition = re.search(r"^        if: \$\{\{ (.+) \}\}$", sarif, re.MULTILINE)
+
         assert condition is not None
         self.assertEqual(
             condition.group(1),
@@ -1146,6 +1306,7 @@ class CiGatesTest(unittest.TestCase):
             "github.event_name == 'pull_request' && "
             "github.event.pull_request.head.repo.full_name == github.repository",
         )
+
         for event in ("pull_request", "push", "merge_group", "workflow_dispatch"):
             for same_repo in (False, True):
                 for image_result in ("success", "failure", "skipped"):
@@ -1161,13 +1322,16 @@ class CiGatesTest(unittest.TestCase):
                                 "github.repository", repr("owner/repo"),
                             ).replace("&&", "and")
                             result = eval(expression, {"__builtins__": {}})
+
                             self.assertEqual(result, not cancelled and image_result == "success"
                                              and event == "pull_request" and same_repo)
+
         for item in (blocking, sarif):
             self.assertIn("input: ${{ runner.temp }}/docker-image/docker-image.tar", item)
             self.assertIn("ignore-unfixed: true", item)
             self.assertIn("vuln-type: 'os,library'", item)
             self.assertIn("severity: 'CRITICAL,HIGH'", item)
+
         self.assertIn("exit-code: '1'", blocking)
         self.assertIn("exit-code: '0'", sarif)
         self.assertIn("uses: aquasecurity/trivy-action@", sarif)
@@ -1184,6 +1348,7 @@ class CiGatesTest(unittest.TestCase):
             r"^      - name: Publish job overview\n.*?(?=^      - |\Z)",
             "", scan, flags=re.MULTILINE | re.DOTALL,
         )
+
         self.assertNotIn("continue-on-error", without_overview)
 
     def test_trivy_policies_across_image_workflows(self):
@@ -1198,23 +1363,27 @@ class CiGatesTest(unittest.TestCase):
                          "Upload Trivy SARIF report"),
         }
         trivy_actions = set()
+
         for workflow_name, content in workflows.items():
             steps = dict(re.findall(
                 r"^      - name: ([^\n]+)\n(.*?)(?=^      - |\Z)",
                 content, re.MULTILINE | re.DOTALL,
             ))
             blocking, sarif, upload = (steps[name] for name in names[workflow_name])
+
             with self.subTest(workflow=workflow_name):
                 for step in (blocking, sarif):
                     action = re.search(
                         r"^        uses: (aquasecurity/trivy-action@[a-f0-9]{40})",
                         step, re.MULTILINE,
                     )
+
                     assert action is not None
                     trivy_actions.add(action.group(1))
                     self.assertRegex(step, r"(?m)^          ignore-unfixed: '?true'?$")
                     self.assertIn("          vuln-type: 'os,library'\n", step)
                     self.assertIn("          severity: 'CRITICAL,HIGH'\n", step)
+
                 self.assertIn("          exit-code: '1'\n", blocking)
                 self.assertIn("          exit-code: '0'\n", sarif)
                 self.assertIn("          format: sarif\n", sarif)
@@ -1222,21 +1391,25 @@ class CiGatesTest(unittest.TestCase):
                 self.assertIn("          sarif_file: trivy-${{ matrix.target }}.sarif\n", upload)
                 self.assertIn("          category: trivy-${{ matrix.target }}\n", upload)
                 self.assertNotIn("continue-on-error", blocking)
+
                 if workflow_name == "core":
                     self.assertIn("          limit-severities-for-sarif: 'true'\n", sarif)
                 else:
                     self.assertNotIn("limit-severities-for-sarif:", sarif)
+
         self.assertEqual(len(trivy_actions), 1)
 
     def test_image_tags_are_valid_and_independent_of_git_ref_names(self):
         build = self.jobs["docker-build"]
         tags = re.findall(r"^          tags: (.+)$", build, re.MULTILINE)
+
         self.assertEqual(tags, [
             "symfony-flex-backend:ci-${{ github.sha }}-${{ matrix.target }}",
         ])
         self.assertNotIn("github.ref_name", build)
         self.assertNotIn("DOCKER_TAG", build)
         self.assertNotIn("steps.vars", build)
+
         for sha in ("a" * 40, "0123456789abcdef" * 2 + "01234567"):
             for target in ("development", "production"):
                 with self.subTest(sha=sha, target=target):
@@ -1244,6 +1417,7 @@ class CiGatesTest(unittest.TestCase):
                         "${{ matrix.target }}", target,
                     )
                     tag = image.split(":", 1)[1]
+
                     self.assertRegex(tag, r"^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$")
                     self.assertEqual(tag, f"ci-{sha}-{target}")
 
@@ -1253,7 +1427,9 @@ class CiGatesTest(unittest.TestCase):
             r"^        run: bash (scripts/ci/ci-[\w-]+\.sh)$",
             self.jobs[job], re.MULTILINE,
         )
+
         assert script is not None, f"Missing result script for {job}"
+
         return subprocess.run(
             ["bash", str(WORKFLOW.parents[2] / script.group(1))],
             cwd=WORKFLOW.parent,
@@ -1279,31 +1455,41 @@ class CiGatesTest(unittest.TestCase):
             "DOCKER_SCAN": "Trivy image scans",
             "REPORT": "External reporting",
         }
+
         for job in ("ci-summary", "ci-result"):
             result_names = re.findall(
                 r"^          (\w+): \$\{\{ needs\.[\w-]+\.result \}\}$",
                 self.jobs[job], re.MULTILINE,
             )
+
             self.assertTrue(result_names, f"Missing result bindings for {job}")
+
             for event in ("pull_request", "push", "merge_group",
                           "workflow_dispatch", "schedule"):
                 environment = dict.fromkeys(result_names, "success")
+
                 environment.update(EVENT_NAME=event,
                                    DOCUMENTATION_CHANGED="true", REF="refs/heads/master")
                 flags = re.findall(
                     r"^          (\w+): \$\{\{ needs\.changes\.outputs\.\w+ \}\}$",
                     self.jobs[job], re.MULTILINE,
                 )
+
                 environment.update(dict.fromkeys(flags, "true"))
+
                 if job == "ci-result" and event in ("merge_group", "workflow_dispatch"):
                     environment["REPORT"] = "skipped"
+
                 if event == "schedule":
                     periodic = {"SECURITY_CHECK", "DOCKER_UPDATES", "CI_SUMMARY"}
+
                     for name in result_names:
                         if name not in periodic:
                             environment[name] = "skipped"
+
                 with self.subTest(job=job, event=event):
                     result = self.run_gate(job, environment)
+
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertNotIn("::error::", result.stderr)
                 # Vary one result at a time so each rejection identifies its own dependency.
@@ -1311,8 +1497,10 @@ class CiGatesTest(unittest.TestCase):
                     for status in ("success", "failure", "cancelled", "skipped", "", "unknown"):
                         if status == environment[name]:
                             continue
+
                         with self.subTest(job=job, event=event, name=name, status=status):
                             result = self.run_gate(job, dict(environment, **{name: status}))
+
                             self.assertNotEqual(result.returncode, 0, result.stdout)
                             self.assertEqual(
                                 result.stderr,

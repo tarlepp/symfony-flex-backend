@@ -59,6 +59,7 @@ filter_insights_scores() {
 
 status=0
 source_status=${STATISTICS_SOURCE_STATUS:-}
+
 if [ -n "$source_status" ] && {
     [ "$mode" != file ] || { [ "$source_status" != success ] && [ "$source_status" != failure ]; }
 }; then
@@ -84,6 +85,7 @@ case "$mode" in
         fi
 
         output=$1
+
         if [ "$mode" != file ]; then
             filtered=$(mktemp)
             trap 'rm -f "$filtered"' EXIT

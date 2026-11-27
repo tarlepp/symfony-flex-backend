@@ -231,20 +231,22 @@ not treat shorter source or mechanical reformatting as improvement by itself.
 Assess these concerns against the actual code:
 
 * Treat human readability as a primary acceptance criterion, not merely fewer
-  lines or extracted functions. Use blank lines to separate logical steps:
-  declarations and setup, assignments and the conditions that inspect them,
-  independent `if` blocks, and validation, execution, and reporting phases. Keep
-  related assignments together; do not insert blank lines mechanically between
-  every statement. Review the final source for visual breathing room as well as
-  behavior preservation.
+  lines or extracted functions. Use blank lines to separate logical steps across
+  all statement types, including setup, computations, calls, control flow, and
+  validation, execution, and reporting. Keep closely related statements together
+  when they form one step; do not insert blank lines mechanically between every
+  statement. Review the final source for visual breathing room and behavior preservation.
 * For a whitespace-focused review, inspect complete function bodies and test
-  scenarios for crowded transitions. Prefer an empty line before a distinct
-  guard or independent branch, after a group of setup statements, and between
-  test setup, execution, and assertions when they are separate phases. Keep a
-  short assignment directly beside its immediate use when that is clearer.
-  Record precise locations and the intended separation in the review backlog,
-  even when no structural refactor is needed. Mark already readable files as
-  reviewed without action.
+  scenarios for crowded transitions, considering each boundary rather than
+  matching only specific statement pairs. Separate a setup or computation from a
+  distinct subsequent action, even when the previous statement spans multiple
+  lines or the next immediately uses its value. For example, `status = 0` and a
+  following `for` loop need an empty line between them. Also inspect transitions
+  before and after control-flow blocks and between test setup, execution, and
+  assertions. Keep related assignments or calls together when they form one
+  logical step. Record precise locations and the intended separation in the
+  review backlog, even when no structural refactor is needed. Mark already
+  readable files as reviewed without action.
 * Blank lines in shell heredocs, quoted strings, and Python multiline strings
   are data, not visual spacing. Do not insert lines there or inside continued
   shell commands, pipelines, or Python expressions without verifying their

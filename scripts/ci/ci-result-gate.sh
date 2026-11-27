@@ -97,6 +97,7 @@ write_summary() {
     queue_summary_row "$(summary_row "PHPUnit" "$TEST" "$tests_selection" "application tests")" selected "$tests_selection" "$TEST"
     queue_summary_row "$(summary_row "Docker builds" "$DOCKER_BUILD" "$docker_selection" "application images")" selected "$docker_selection" "$DOCKER_BUILD"
     queue_summary_row "$(summary_row "Trivy image scans" "$DOCKER_SCAN" "$docker_selection" "application images")" selected "$docker_selection" "$DOCKER_SCAN"
+
     if [ "$EVENT_NAME" = "schedule" ]; then
         queue_summary_row "| Project statistics | skipped | Not collected on scheduled runs. |" independent "" ""
     else
@@ -127,6 +128,7 @@ write_summary() {
     printf 'Event: %s\n' "$EVENT_NAME"
     echo
     echo "Start here for the final gate's inputs. Expand CI prerequisite and job details for individual checks and skip reasons."
+
     if ((${#attention_rows[@]})); then
         printf '⚠️ **Needs attention: %s result(s).** These appear first; inspect the named job logs and annotations.\n' "${#attention_rows[@]}"
     else
@@ -135,6 +137,7 @@ write_summary() {
     echo
     echo "| Check | Result | Explanation |"
     echo "| --- | --- | --- |"
+
     for row in "${attention_rows[@]}" "${other_rows[@]}"; do
         printf '%s\n' "$row"
     done
@@ -164,6 +167,7 @@ else
 fi
 
 report_expected=skipped
+
 if [ "$TESTS_CHANGED" = "true" ] && {
     [ "$EVENT_NAME" = "pull_request" ] ||
     { [ "$EVENT_NAME" = "push" ] && [ "$REF" = "refs/heads/master" ]; }

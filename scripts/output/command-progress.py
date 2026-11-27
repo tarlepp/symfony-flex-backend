@@ -49,31 +49,39 @@ DRAIN_IDLE = 0.2
 
 def duration(seconds):
     tenths = int(seconds * 10 + 0.5)
+
     if tenths < 600:
         return f"{tenths // 10}.{tenths % 10}s"
+
     whole = int(seconds + 0.5)
     hours, rest = divmod(whole, 3600)
     minutes, seconds = divmod(rest, 60)
+
     if hours:
         return f"{hours}h {minutes:02d}m {seconds:02d}s"
+
     return f"{minutes}m {seconds:02d}s"
 
 
 def utf8_locale():
     for name in ("LC_ALL", "LC_CTYPE", "LANG"):
         value = os.environ.get(name)
+
         if value:
             return "utf-8" in value.lower() or "utf8" in value.lower()
+
     return False
 
 
 def terminal_width(descriptor):
     try:
         _, columns, _, _ = struct.unpack("HHHH", fcntl.ioctl(descriptor, termios.TIOCGWINSZ, b"\0" * 8))
+
         if columns:
             return columns
     except OSError:
         pass
+
     try:
         return max(int(os.environ.get("COLUMNS", "80")), 20)
     except ValueError:
@@ -103,29 +111,39 @@ class Relay:
     def descriptors(self):
         """Return child output descriptors, or None for distinct output terminals."""
         stdout_tty, stderr_tty = os.isatty(1), os.isatty(2)
+
         if stderr_tty:
             if stdout_tty and not os.path.samestat(os.fstat(1), os.fstat(2)):
                 return None
+
             master, slave = os.openpty()
+
             try:
                 attributes = termios.tcgetattr(2)
                 # The outer terminal already translates output; avoid doubling carriage returns.
                 attributes[1] &= ~termios.OPOST
+
                 termios.tcsetattr(slave, termios.TCSANOW, attributes)
                 fcntl.ioctl(slave, termios.TIOCSWINSZ, fcntl.ioctl(2, termios.TIOCGWINSZ, b"\0" * 8))
             except OSError:
                 pass
+
             self.sources[master] = 2
+
             return (slave if stdout_tty else None), slave
+
         error_read, error_write = os.pipe()
         self.sources[error_read] = 2
         output_write = None
+
         if os.environ.get("OUTPUT_PROGRESS_SHARED") == "1":
             # Both streams end on one terminal; separate pipes could reorder output and spinner clears.
             return error_write, error_write
+
         if not stdout_tty:
             output_read, output_write = os.pipe()
             self.sources[output_read] = 1
+
         return output_write, error_write
 
     def draw(self, elapsed):
@@ -133,10 +151,13 @@ class Relay:
         self.frame += 1
         text = f"{self.label} ({duration(elapsed)})"
         room = terminal_width(2) - 3
+
         if len(text) > room:
             text = text[: max(room - 3, 0)] + "..."
+
         if self.color:
             frame = f"\033[34m{frame}\033[0m"
+
         self.screen(CLEAR + f"{frame} {text}".encode())
         self.drawn = True
 
@@ -151,6 +172,7 @@ class Relay:
     def forward(self, target, data):
         if target in self.broken:
             return
+
         try:
             write_all(target, data)
         except BrokenPipeError:
@@ -162,18 +184,23 @@ class Relay:
 
     def run(self):
         descriptors = self.descriptors()
+
         try:
             if descriptors is None:
                 os.execvp(self.command[0], self.command)
+
             stdout, stderr = descriptors
             environment = dict(os.environ, PROGRESS="never")
+
             environment.pop("OUTPUT_PROGRESS_SHARED", None)
             # Restore the caller's locale-coercion setting for the child.
             coerce = environment.pop("OUTPUT_PROGRESS_COERCE", "")
+
             if coerce.startswith("set:"):
                 environment["PYTHONCOERCECLOCALE"] = coerce[4:]
             else:
                 environment.pop("PYTHONCOERCECLOCALE", None)
+
             try:
                 self.child = subprocess.Popen(self.command, stdout=stdout, stderr=stderr, env=environment)
             finally:
@@ -181,36 +208,47 @@ class Relay:
                     os.close(descriptor)
         except FileNotFoundError:
             sys.stderr.write(f"{self.command[0]}: command not found\n")
+
             return 127
         except PermissionError:
             sys.stderr.write(f"{self.command[0]}: Permission denied\n")
+
             return 126
         # Terminal interrupts reach the command's process group directly; wait for its outcome.
         signal.signal(signal.SIGINT, signal.SIG_IGN)
+
         for number in (signal.SIGTERM, signal.SIGHUP):
             signal.signal(number, self.forward_signal)
+
         try:
             self.relay()
         finally:
             self.clear()
+
             for descriptor in self.sources:
                 os.close(descriptor)
+
         status = self.child.wait()
+
         return 128 - status if status < 0 else status
 
     def relay(self):
         child = self.child
+
         if child is None:
             raise RuntimeError("Cannot relay output before starting the child process")
 
         started = last_output = time.monotonic()
         finished = None
+
         while self.sources:
             try:
                 ready, _, _ = select.select(list(self.sources), [], [], INTERVAL)
             except InterruptedError:
                 ready = []
+
             now = time.monotonic()
+
             for source in ready:
                 try:
                     data = os.read(source, 65536)
@@ -218,21 +256,28 @@ class Relay:
                     # A PTY master may report EIO when the slave closes.
                     if error.errno != errno.EIO:
                         raise
+
                     data = b""
+
                 if not data:
                     os.close(source)
                     del self.sources[source]
+
                     continue
+
                 self.clear()
                 self.forward(self.sources[source], data)
                 self.line_start = data.endswith(b"\n")
                 last_output = now
+
             if child.poll() is not None:
                 finished = finished or now
                 # Stop after a quiet period if a descendant still holds a descriptor open.
                 if now - max(finished, last_output) >= DRAIN_IDLE:
                     break
+
                 continue
+
             if self.line_start and now - last_output >= self.delay and 2 not in self.broken:
                 self.draw(now - started)
 
@@ -240,7 +285,9 @@ class Relay:
 def main(arguments):
     if len(arguments) < 3 or arguments[1] not in ("color", "plain"):
         sys.stderr.write("Usage: command-progress.py <label> <color|plain> <command> [arguments...]\n")
+
         return 64
+
     return Relay(arguments[0], arguments[1] == "color", arguments[2:]).run()
 
 

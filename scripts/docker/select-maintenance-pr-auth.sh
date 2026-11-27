@@ -27,6 +27,7 @@ if [ "$#" -ne 1 ] || { [ "$1" != php-minor ] && [ "$1" != image-update ]; }; the
 fi
 
 mode=$1
+
 if [ -n "$APP_CLIENT_ID" ] && [ -n "$APP_PRIVATE_KEY" ]; then
     if [ "$mode" = php-minor ]; then
         echo 'method=app' >> "$GITHUB_OUTPUT"

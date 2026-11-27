@@ -48,34 +48,46 @@ class ToolUpdatesTest(unittest.TestCase):
         actions too, or enable wrapping to exercise Make's advisory policy.
         Nonzero exit codes are returned for assertions rather than raised.
         """
+
         with tempfile.TemporaryDirectory(prefix="tool-update-test-") as directory:
             root = Path(directory)
+
             (root / "workflows").mkdir()
             (root / "actions").mkdir()
+
             if action or workflow_content is not None:
                 (root / "workflows/check.yml").write_text(
                     workflow_content if workflow_content is not None
                     else f"steps:\n  - uses: {action_path}@{SHA} # v1.0.0\n"
                 )
+
             if composite or composite_content is not None:
                 (root / "actions/bootstrap").mkdir()
                 (root / "actions/bootstrap/action.yml").write_text(
                     composite_content if composite_content is not None
                     else f"runs:\n  steps:\n    - uses: {action_path}@{SHA} # v1.0.0\n"
                 )
+
             for name, content in (files or {}).items():
                 path = root / name
+
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(content)
+
             if unreadable_file is not None:
                 (root / unreadable_file).chmod(0)
+
             if missing_directory is not None:
                 (root / missing_directory).rmdir()
+
             if find_status is not None:
                 find = root / "find"
+
                 find.write_text(f"#!/bin/bash\nexit {find_status}\n")
                 find.chmod(0o755)
+
             pins = root / "pins.sh"
+
             pins.write_text(
                 pin if pin is not None
                 else f"FIXTURE_TAG=v1.0.0 # tool-pin: example/tool@{SHA}\n"
@@ -89,6 +101,7 @@ class ToolUpdatesTest(unittest.TestCase):
                 if action_sha_refs is None else action_sha_refs
             )
             git = root / "git"
+
             (root / "git-error").write_text(git_error)
             # Tag discovery omits peeled refs; exact lookups can return them.
             # Reject unexpected calls instead of falling back to real Git.
@@ -122,9 +135,11 @@ class ToolUpdatesTest(unittest.TestCase):
                 PATH=f"{root}:{os.environ['PATH']}",
             )
             command = ["bash", str(CHECKER), mode]
+
             if wrapped:
                 output_wrapper = CHECKER.parents[1] / "output" / "action-update-output.sh"
                 command = ["bash", str(output_wrapper), *command]
+
             return subprocess.run(
                 command,
                 env=environment, text=True, capture_output=True, check=False,
@@ -133,6 +148,7 @@ class ToolUpdatesTest(unittest.TestCase):
 
     def test_inventory_is_offline_and_includes_full_pin(self):
         result = self.run_checker("", "--current-pins-md", git_status=1)
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("example/tool@v1.0.0", result.stdout)
         self.assertIn(SHA[:8], result.stdout)
@@ -154,10 +170,13 @@ class ToolUpdatesTest(unittest.TestCase):
         result = self.run_checker(
             "", mode="--current-pins-md", git_status=99, files={**files, **ignored},
         )
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.count("| example/action@v1.0.0 |"), 1)
+
         for path in files:
             self.assertIn(f"{path}:1", result.stdout)
+
         self.assertNotIn("ignored/", result.stdout)
 
     def test_nested_yaml_conflicts_preserve_first_pin_and_source_diagnostics(self):
@@ -166,6 +185,7 @@ class ToolUpdatesTest(unittest.TestCase):
             files={"actions/nested/bootstrap/action.yaml":
                    f"  - uses: example/action@{NEW_SHA} # v1.0.0\n"},
         )
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("workflows/check.yml:2", result.stderr)
         self.assertIn("actions/nested/bootstrap/action.yaml:1", result.stderr)
@@ -178,6 +198,7 @@ class ToolUpdatesTest(unittest.TestCase):
                 "actions/local/action.yaml" if directory == "workflows"
                 else "workflows/check.yaml"
             )
+
             for wrapped in (False, True):
                 with self.subTest(directory=directory, wrapped=wrapped):
                     result = self.run_checker(
@@ -186,6 +207,7 @@ class ToolUpdatesTest(unittest.TestCase):
                         files={remaining_source:
                                f"  - uses: example/action@{SHA} # v1.0.0\n"},
                     )
+
                     self.assertEqual(result.returncode, 0 if wrapped else 2, result.stdout)
                     self.assertIn("directory not found", result.stderr)
                     self.assertIn("example/action", result.stdout)
@@ -198,6 +220,7 @@ class ToolUpdatesTest(unittest.TestCase):
             files={path: f"  - uses: example/action@{SHA} # v1.0.0\n"},
             unreadable_file=path,
         )
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("Cannot read action references:", result.stderr)
         self.assertIn(path, result.stderr)
@@ -206,6 +229,7 @@ class ToolUpdatesTest(unittest.TestCase):
 
     def test_failed_inventory_is_an_error_and_tools_only_skips_action_discovery(self):
         result = self.run_checker("", mode="--current-pins-md", find_status=7)
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("Cannot discover Workflow files", result.stderr)
         self.assertIn("Cannot discover Actions files", result.stderr)
@@ -213,6 +237,7 @@ class ToolUpdatesTest(unittest.TestCase):
         result = self.run_checker(
             f"{SHA}\trefs/tags/v1.0.0", missing_directory="workflows", find_status=7,
         )
+
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_lightweight_and_annotated_tags(self):
@@ -222,6 +247,7 @@ class ToolUpdatesTest(unittest.TestCase):
         ):
             with self.subTest(refs=refs):
                 result = self.run_checker(refs)
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn("tag verified", result.stdout)
 
@@ -233,6 +259,7 @@ class ToolUpdatesTest(unittest.TestCase):
             f"{TAG_SHA}\trefs/tags/v3.0.0-rc1"
         )
         result = self.run_checker(refs)
+
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("v1.0.0 -> v2.0.0", result.stdout)
         self.assertIn(f"Commit SHA: {NEW_SHA}", result.stdout)
@@ -246,15 +273,18 @@ class ToolUpdatesTest(unittest.TestCase):
         ):
             with self.subTest(refs=refs, status=status):
                 result = self.run_checker(refs, git_status=status)
+
                 self.assertEqual(result.returncode, 2, result.stdout)
 
     def test_malformed_and_absent_pins_are_errors(self):
         for pin in ("# no pins\n", "FIXTURE_TAG=v1 # tool-pin: example/tool@bad\n"):
             result = self.run_checker("", pin=pin)
+
             self.assertEqual(result.returncode, 2, result.stdout)
 
     def test_action_lookup_failures_are_not_reported_as_up_to_date(self):
         result = self.run_checker("", mode="", git_status=1, action=True)
+
         self.assertEqual(result.returncode, 2)
         self.assertIn("[FAIL] Unable to fetch action version: example/action", result.stderr)
         self.assertNotIn("All checked actions and tools are up-to-date", result.stdout)
@@ -262,6 +292,7 @@ class ToolUpdatesTest(unittest.TestCase):
     def test_available_tool_updates_are_yellow(self):
         refs = f"{SHA}\trefs/tags/v1.0.0\n{NEW_SHA}\trefs/tags/v2.0.0"
         result = self.run_checker(refs, color=True)
+
         self.assertEqual(result.returncode, 1)
         self.assertIn("\033[33m[WARN]\033[0m UPDATE AVAILABLE (tool):", result.stdout)
         self.assertIn("Updates available:       \033[33m1", result.stdout)
@@ -275,6 +306,7 @@ class ToolUpdatesTest(unittest.TestCase):
             with self.subTest(label=label):
                 direct = self.run_checker(refs, git_status=git_status)
                 wrapped = self.run_checker(refs, git_status=git_status, wrapped=True)
+
                 self.assertEqual(direct.returncode, direct_status, direct.stderr)
                 self.assertEqual(wrapped.returncode, 0, wrapped.stderr)
                 self.assertEqual(direct.stderr.count(f"\n\n[{label}]"), 1)
@@ -283,6 +315,7 @@ class ToolUpdatesTest(unittest.TestCase):
                 self.assertIn("Actions/tools checked:", wrapped.stdout)
                 self.assertNotIn("All checked actions and tools are up-to-date", wrapped.stderr)
                 self.assertNotIn("action/tool update(s) available", wrapped.stderr)
+
                 if label == "FAIL":
                     self.assertIn("review the failed entries above", wrapped.stderr)
                     self.assertIn("retry failed GitHub lookups", wrapped.stderr)
@@ -294,6 +327,7 @@ class ToolUpdatesTest(unittest.TestCase):
             f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
             color=True, sha_failure=True,
         )
+
         self.assertEqual(result.returncode, 2)
         self.assertIn("\033[31m[FAIL]\033[0m Unable to fetch action SHA:", result.stderr)
         self.assertNotIn("All checked actions and tools are up-to-date", result.stdout)
@@ -302,6 +336,7 @@ class ToolUpdatesTest(unittest.TestCase):
         result = self.run_checker(
             "", mode="", action=True, git_status=124,
         )
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn(
             "example/action @ v1.0.0 (GitHub lookup timed out after 10s",
@@ -315,6 +350,7 @@ class ToolUpdatesTest(unittest.TestCase):
             f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
             sha_failure=True, sha_failure_status=124,
         )
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn(
             "Unable to fetch action SHA: example/action @ v1.0.0 "
@@ -330,6 +366,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     git_error="fatal: Could not resolve host: github.com\n",
                     wrapped=wrapped,
                 )
+
                 self.assertEqual(result.returncode, 0 if wrapped else 2)
                 self.assertIn("git ls-remote failed with exit 128", result.stderr)
                 self.assertIn(
@@ -343,6 +380,7 @@ class ToolUpdatesTest(unittest.TestCase):
             f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
             action_refs=f"{SHA}\trefs/tags/v5",
         )
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn(
             "GitHub lookup succeeded, but no usable stable version tags", result.stderr,
@@ -352,6 +390,7 @@ class ToolUpdatesTest(unittest.TestCase):
 
     def test_major_only_action_tags_check_current_moved_and_newer_pins(self):
         workflow = f"steps:\n  - uses: example/action@{SHA} # v5\n"
+
         for action_refs, expected, message in (
             (f"{SHA}\trefs/tags/v5", 0, "v5 (up-to-date)"),
             (f"{TAG_SHA}\trefs/tags/v5\n{SHA}\trefs/tags/v5^{{}}",
@@ -364,13 +403,16 @@ class ToolUpdatesTest(unittest.TestCase):
                     f"{SHA}\trefs/tags/v1.0.0", mode="",
                     workflow_content=workflow, action_refs=action_refs,
                 )
+
                 self.assertEqual(result.returncode, expected, result.stderr)
                 self.assertIn(message, result.stdout)
+
                 if expected == 1:
                     self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
 
     def test_major_only_fallback_never_selects_nonversion_or_prerelease_tags(self):
         workflow = f"steps:\n  - uses: example/action@{SHA} # v5\n"
+
         for action_refs in (
             f"{SHA}\trefs/tags/verbose\n{SHA}\trefs/tags/v6-rc1",
             "",
@@ -380,6 +422,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     f"{SHA}\trefs/tags/v1.0.0", mode="",
                     workflow_content=workflow, action_refs=action_refs,
                 )
+
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn("no usable stable version tags", result.stderr)
 
@@ -388,6 +431,7 @@ class ToolUpdatesTest(unittest.TestCase):
             "v9.0.0-rc1", "v9.0.0-beta.2", "v9.0.0-alpha", "v9.0.0-preview",
             "v9.0.0+build", "v9.0.0junk", "v9.0.0.1", "v9.1-rc1", "v99",
         )
+
         for stable in ("v2.0.0", "2.0.0", "v2.1", "2.1"):
             with self.subTest(stable=stable):
                 current = "v1.0.0" if stable.startswith("v") else "1.0.0"
@@ -400,9 +444,11 @@ class ToolUpdatesTest(unittest.TestCase):
                     ),
                     action_sha_refs=f"{NEW_SHA}\trefs/tags/{stable}",
                 )
+
                 self.assertEqual(result.returncode, 1, result.stderr)
                 self.assertIn(f"{current} -> {stable}", result.stdout)
                 self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
+
                 for tag in excluded:
                     self.assertNotIn(f"-> {tag}", result.stdout)
 
@@ -413,6 +459,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     f"{SHA}\trefs/tags/v1.0.0", mode="", action=True, wrapped=wrapped,
                     action_refs=f"{NEW_SHA}\trefs/tags/v2.0.0-rc1",
                 )
+
                 self.assertEqual(result.returncode, 0 if wrapped else 2, result.stderr)
                 self.assertIn("no usable stable version tags", result.stderr)
                 self.assertNotIn("[OK] example/action", result.stdout)
@@ -441,10 +488,12 @@ class ToolUpdatesTest(unittest.TestCase):
                                 f"{NEW_SHA}\trefs/tags/{newer}^{{}}"
                             ),
                         )
+
                         self.assertEqual(
                             result.returncode, 1 if current == older and not wrapped else 0,
                             result.stdout + result.stderr,
                         )
+
                         if current == older:
                             self.assertIn(f"{older} -> {newer}", result.stdout)
                             self.assertIn(f"SHA:   {NEW_SHA}", result.stdout)
@@ -455,6 +504,7 @@ class ToolUpdatesTest(unittest.TestCase):
     def test_equivalent_action_tag_prefixes_have_deterministic_preference(self):
         for version in ("2.0.0", "2.1", "2"):
             refs = [f"{TAG_SHA}\trefs/tags/{version}", f"{SHA}\trefs/tags/v{version}"]
+
             for ordered in (refs, list(reversed(refs))):
                 with self.subTest(version=version, refs=ordered):
                     result = self.run_checker(
@@ -462,6 +512,7 @@ class ToolUpdatesTest(unittest.TestCase):
                         workflow_content=f"steps:\n  - uses: example/action@{SHA} # v{version}\n",
                         action_refs="\n".join(ordered),
                     )
+
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertIn(f"v{version} (up-to-date)", result.stdout)
 
@@ -471,6 +522,7 @@ class ToolUpdatesTest(unittest.TestCase):
             workflow_content=f"steps:\n  - uses: example/action@{SHA} # v5\n",
             action_refs=f"{SHA}\trefs/tags/v5\n{NEW_SHA}\trefs/tags/v6.0.0-rc1",
         )
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("v5 (up-to-date)", result.stdout)
 
@@ -480,6 +532,7 @@ class ToolUpdatesTest(unittest.TestCase):
             workflow_content=f"steps:\n  - uses: example/action@{SHA} # v5\n",
             action_refs=f"{SHA}\trefs/tags/v5\n{NEW_SHA}\trefs/tags/v5.1.0",
         )
+
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("v5 -> v5.1.0", result.stdout)
 
@@ -490,6 +543,7 @@ class ToolUpdatesTest(unittest.TestCase):
         ):
             with self.subTest(refs=refs):
                 result = self.run_checker(refs, mode="", action=True)
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn("[OK] example/action", result.stdout)
                 self.assertNotIn("UPDATE AVAILABLE", result.stdout)
@@ -504,6 +558,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
                     action_refs=refs,
                 )
+
                 self.assertEqual(result.returncode, 1, result.stderr)
                 self.assertIn("v1.0.0 -> v1.0.0", result.stdout)
                 self.assertIn("Pin differs from tag commit (same version)", result.stdout)
@@ -516,6 +571,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
                     action_refs=refs, wrapped=True,
                 )
+
                 self.assertEqual(wrapped.returncode, 0, wrapped.stderr)
                 self.assertIn("UPDATE AVAILABLE: example/action", wrapped.stdout)
                 self.assertIn("[WARN]", wrapped.stderr)
@@ -530,6 +586,7 @@ class ToolUpdatesTest(unittest.TestCase):
                 f"{NEW_SHA}\trefs/tags/v2.0.0^{{}}"
             ),
         )
+
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("UPDATE AVAILABLE: example/action/init", result.stdout)
         self.assertIn("v1.0.0 -> v2.0.0", result.stdout)
@@ -541,6 +598,7 @@ class ToolUpdatesTest(unittest.TestCase):
             f"{SHA}\trefs/tags/v1.0.0", mode="", action=True, composite=True,
             action_refs=f"{NEW_SHA}\trefs/tags/v1.0.0",
         )
+
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("workflows/check.yml:2", result.stdout)
         self.assertIn("actions/bootstrap/action.yml:3", result.stdout)
@@ -558,6 +616,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     f"{SHA}\trefs/tags/v1.0.0", mode="", action=True,
                     action_sha_refs=refs,
                 )
+
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn("Unable to fetch action SHA:", result.stderr)
                 self.assertIn(
@@ -580,6 +639,7 @@ class ToolUpdatesTest(unittest.TestCase):
                 f"{NEW_SHA}\trefs/tags/v2.0.0^{{}}"
             ),
         )
+
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertEqual(result.stdout.count("UPDATE AVAILABLE: example/action"), 1)
         self.assertIn("v1.0.0 -> v2.0.0", result.stdout)
@@ -599,9 +659,11 @@ class ToolUpdatesTest(unittest.TestCase):
             "  - uses: example/repo/.github/workflows/check.yml@main\n"
             "  - uses: invalid\n"
         )
+
         for source in ("workflow_content", "composite_content"):
             with self.subTest(source=source):
                 content = ignored + f"  - uses: example/action@{SHA} # v1.0.0\n"
+
                 if source == "workflow_content":
                     result = self.run_checker(
                         "", mode="--current-pins-md", workflow_content=content,
@@ -610,6 +672,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     result = self.run_checker(
                         "", mode="--current-pins-md", composite_content=content,
                     )
+
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stdout.count("| example/action@v1.0.0 |"), 1)
                 self.assertNotIn("local/action", result.stdout)
@@ -621,6 +684,7 @@ class ToolUpdatesTest(unittest.TestCase):
             "", mode="--current-pins-md", action=True,
             composite_content=f"  - uses: example/action@{NEW_SHA} # v1.0.0\n",
         )
+
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("Conflicting pinned refs detected", result.stderr)
         self.assertIn("workflows/check.yml:2", result.stderr)
@@ -635,6 +699,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     "  - uses: example/action@v1.0.0\n"
                     f"  - uses: example/unknown@{'a' * 40}\n"
                 )
+
                 if source == "workflow_content":
                     result = self.run_checker(
                         "", mode="--current-pins-md", workflow_content=content,
@@ -643,6 +708,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     result = self.run_checker(
                         "", mode="--current-pins-md", composite_content=content,
                     )
+
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn("Unpinned action reference", result.stderr)
                 self.assertIn("Cannot determine version for example/unknown", result.stderr)

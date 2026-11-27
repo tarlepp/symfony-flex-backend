@@ -130,6 +130,7 @@ bash "$repository/scripts/make/pre-pr-checks.sh" --invalid \
 [ "$status" -eq 64 ]
 
 run_checks '' --all
+
 for target in \
     application-info check-requirements composer-validate lint-yaml test-command-output \
     lint-python typecheck-python lint-markdown check-skills \

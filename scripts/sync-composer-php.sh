@@ -37,6 +37,7 @@
 set -euo pipefail
 
 mode=${1:-patch}
+
 if (( $# > 1 )) || [[ "$mode" != patch && "$mode" != --next-minor ]]; then
     echo '::error::Expected no arguments or --next-minor.' >&2
     exit 64
@@ -57,9 +58,11 @@ if ! [[ "$old_version" =~ $version_pattern && "$new_version" =~ $version_pattern
 fi
 
 lock_args=(update --lock --no-install)
+
 if [[ "$mode" == --next-minor ]]; then
     IFS=. read -r old_major old_minor _ <<< "$old_version"
     IFS=. read -r new_major new_minor _ <<< "$new_version"
+
     if [[ "$old_major" != "$new_major" || "$new_minor" != "$((old_minor + 1))" ]]; then
         echo '::error::Only the immediately following PHP minor in the same major is allowed.' >&2
         exit 1
@@ -79,6 +82,7 @@ fi
 
 shopt -s nullglob
 manifests=(tools/*/composer.json)
+
 if (( ${#manifests[@]} == 0 )); then
     echo '::error::No tool Composer manifests found.' >&2
     exit 1
@@ -104,6 +108,7 @@ locked_packages() {
 for manifest in "${manifests[@]}"; do
     printf 'Synchronizing %s for PHP %s -> %s\n' "$manifest" "$old_version" "$new_version"
     composer_command=(composer --working-dir="$(dirname "$manifest")" --no-interaction --no-plugins --no-scripts)
+
     if [[ "$mode" == --next-minor ]]; then
         before="$(locked_packages "${manifest%.json}.lock")"
     fi
@@ -113,6 +118,7 @@ for manifest in "${manifests[@]}"; do
     "${composer_command[@]}" validate --no-check-version
     if [[ "$mode" == --next-minor ]]; then
         after="$(locked_packages "${manifest%.json}.lock")"
+
         if [[ "$before" != "$after" ]]; then
             printf '::error::Package versions or references changed in %s.\n' "${manifest%.json}.lock" >&2
             exit 1

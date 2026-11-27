@@ -40,8 +40,10 @@ class WorkflowOutputTest(unittest.TestCase):
     def setUp(self):
         """Build a throwaway checkout around the real validator entrypoint."""
         self.temporary = tempfile.TemporaryDirectory(prefix="workflow-output-")
+
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+
         for directory in (
             "scripts/checks/tests",
             "scripts/ci/tests",
@@ -53,6 +55,7 @@ class WorkflowOutputTest(unittest.TestCase):
             ".github/actions/example",
         ):
             (self.root / directory).mkdir(parents=True)
+
         for name in (
             "checks/lint-workflows.sh",
             "checks/check-composite-action-shell.py",
@@ -71,10 +74,12 @@ class WorkflowOutputTest(unittest.TestCase):
             "tests/run-workflow-tests.py",
         ):
             shutil.copyfile(ROOT / "scripts" / name, self.root / "scripts" / name)
+
         shutil.copyfile(
             ROOT / "scripts/ci/tests/ci-gates-test.py",
             self.root / "scripts/ci/tests/ci-gates-test.py",
         )
+
         for workflow in (ROOT / ".github/workflows").glob("*.yml"):
             shutil.copyfile(workflow, self.root / ".github/workflows" / workflow.name)
         # Stand-ins let each nested suite fail without running unrelated tests.
@@ -153,8 +158,10 @@ case "$name" in
 esac
 """
         self.fixture = self.root / "fixture"
+
         self.fixture.write_text(fixture)
         self.fixture.chmod(0o755)
+
         for name in ("curl", "tar", "sha256sum", "uname"):
             shutil.copyfile(self.fixture, self.root / "bin" / name)
             (self.root / "bin" / name).chmod(0o755)
@@ -167,6 +174,7 @@ esac
             CALLS=str(self.root / "calls"), FIXTURE=str(self.fixture),
             COLOR="never", NO_COLOR="", FAIL_TOOL="",
         )
+
         environment.pop("RUST_LOG", None)
         environment.update(overrides)
         result = subprocess.run(
@@ -174,11 +182,14 @@ esac
             text=True, capture_output=True, check=False,
         )
         calls = self.root / "calls"
+
         return result, calls.read_text() if calls.exists() else ""
 
     def test_named_stages_keep_warnings_and_native_audit_summary(self):
         result, calls = self.run_script()
+
         self.assertEqual(result.returncode, 0, result.stderr)
+
         for label in (
             "CI gate regressions (offline)",
             "Prepare and verify actionlint v1.7.12",
@@ -197,6 +208,7 @@ esac
         ):
             self.assertIn("[RUN] " + label, result.stderr)
             self.assertIn("[OK] " + label, result.stderr)
+
         self.assertIn("fixture warning remains visible", result.stderr)
         self.assertIn("1 ignored, 15 suppressed", result.stdout)
         self.assertEqual(calls.count("sha256sum --check --quiet"), 4)
@@ -228,13 +240,17 @@ esac
             "5/5 - Validate tooling scripts",
         )
         positions = []
+
         for heading in groups:
             marker = f"\n[RUN] {heading}\n"
+
             self.assertEqual(result.stderr.count(marker), 1)
             positions.append(result.stderr.index(marker))
+
         self.assertEqual(positions, sorted(positions))
         gate_start = result.stderr.index("[RUN] CI gate regressions (offline)\n")
         gate_end = result.stderr.index("[OK] CI gate regressions (offline)\n")
+
         self.assertIn("Ran 22 tests", result.stderr[gate_start:gate_end])
         self.assertIn(
             "\n[RUN] 1/5 - Validate CI gate contracts\n\n"
@@ -271,6 +287,7 @@ esac
             "sys.exit(7)\n",
         )
         result, calls = self.run_script()
+
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[RUN] CI gate regressions (offline)\n", result.stderr)
         self.assertIn("fixture gate diagnostic\n", result.stderr)
@@ -284,6 +301,7 @@ esac
 
     def test_nested_runner_preserves_results_diagnostics_and_suite_arguments(self):
         suite = self.root / "scripts/checks/tests/example.py"
+
         suite.write_text(
             "import sys\nimport unittest\n"
             "argument = sys.argv.pop(1)\n"
@@ -294,6 +312,7 @@ esac
             "        self.assertEqual(argument, 'success', 'fixture assertion')\n"
             "if __name__ == '__main__': unittest.main()\n",
         )
+
         for argument, status in (("success", 0), ("skip", 0), ("failure", 1)):
             with self.subTest(argument=argument):
                 result = subprocess.run(
@@ -302,6 +321,7 @@ esac
                     cwd=self.root, text=True, capture_output=True, check=False,
                     timeout=10,
                 )
+
                 self.assertEqual(result.returncode, status, result.stderr)
                 self.assertEqual(result.stdout, "OK\n")
                 self.assertIn("    Ran 1 test", result.stderr)
@@ -310,8 +330,10 @@ esac
                     for line in result.stderr.splitlines()
                 ))
                 self.assertNotIn("\n    OK\n", result.stderr)
+
                 if argument == "skip":
                     self.assertIn("skipped=1", result.stderr)
+
                 if argument == "failure":
                     self.assertIn("fixture assertion", result.stderr)
                     self.assertIn("FAILED (failures=1)", result.stderr)
@@ -323,12 +345,16 @@ esac
                 for cached in self.root.glob("build/cache/workflow-validators/**/*"):
                     if cached.is_file():
                         cached.unlink()
+
                 result, calls = self.run_script(FAIL_TOOL=tool)
+
                 self.assertEqual(result.returncode, 7, result.stderr)
                 self.assertIn(f"fixture failure: {tool}", result.stderr)
                 self.assertIn("[FAIL]", result.stderr)
+
                 if tool == "curl":
                     self.assertNotIn("sha256sum", calls)
+
                 if tool in ("curl", "sha256sum"):
                     self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
 
@@ -354,6 +380,7 @@ esac
         ):
             with self.subTest(script=script):
                 result, _ = self.run_script(FAIL_SHELLCHECK_SCRIPT=script)
+
                 self.assertEqual(result.returncode, 7, result.stderr)
                 self.assertIn(f"fixture shell finding: {script}", result.stderr)
                 self.assertIn("[FAIL] CI tooling scripts (ShellCheck)", result.stderr)
@@ -361,24 +388,30 @@ esac
 
     def test_warm_cache_is_verified_without_downloads(self):
         cold, cold_calls = self.run_script()
+
         self.assertEqual(cold.returncode, 0, cold.stderr)
         self.assertEqual(cold_calls.count("curl "), 4)
         warm, warm_calls = self.run_script()
+
         self.assertEqual(warm.returncode, 0, warm.stderr)
         self.assertNotIn("curl ", warm_calls)
         self.assertEqual(warm_calls.count("sha256sum --check --quiet"), 4)
         self.assertEqual(warm_calls.count("tar "), 3)
         self.assertIn("action-validator .github/actions/example/action.yml", warm_calls)
         cached = list(self.root.glob("build/cache/workflow-validators/linux-amd64/*"))
+
         self.assertEqual(len(cached), 4)
         self.assertTrue(all(len(path.name) == 64 for path in cached))
 
     def test_cold_downloads_have_bounded_connection_transfer_and_retries(self):
         result, calls = self.run_script()
+
         self.assertEqual(result.returncode, 0, result.stderr)
         downloads = [shlex.split(line) for line in calls.splitlines()
                      if line.startswith("curl ")]
+
         self.assertEqual(len(downloads), 4)
+
         for arguments in downloads:
             with self.subTest(url=arguments[-3]):
                 for option, value in (
@@ -387,13 +420,16 @@ esac
                 ):
                     self.assertEqual(arguments.count(option), 1)
                     self.assertEqual(arguments[arguments.index(option) + 1], value)
+
                 self.assertIn("--fail", arguments)
                 self.assertIn("--show-error", arguments)
 
     def test_timeout_preserves_status_and_cleans_partial_download_without_caching(self):
         temporary = self.root / "downloads"
+
         temporary.mkdir()
         result, calls = self.run_script(CURL_TIMEOUT="1", TMPDIR=str(temporary))
+
         self.assertEqual(result.returncode, 28, result.stderr)
         self.assertIn("\n    curl: (28) fixture transfer timed out\n", result.stderr)
         self.assertNotIn("\ncurl:", result.stderr)
@@ -408,10 +444,14 @@ esac
 
     def test_corrupt_cached_download_fails_before_extraction_or_execution(self):
         first, _ = self.run_script()
+
         self.assertEqual(first.returncode, 0, first.stderr)
+
         for cached in self.root.glob("build/cache/workflow-validators/linux-amd64/*"):
             cached.write_text("corrupt")
+
         result, calls = self.run_script()
+
         self.assertEqual(result.returncode, 9, result.stderr)
         self.assertIn("\n    fixture checksum mismatch\n", result.stderr)
         self.assertNotIn("curl ", calls)
@@ -420,19 +460,23 @@ esac
 
     def test_platform_and_checksum_changes_cannot_reuse_wrong_download(self):
         first, _ = self.run_script()
+
         self.assertEqual(first.returncode, 0, first.stderr)
         arm, arm_calls = self.run_script(FIXTURE_ARCH="aarch64")
+
         self.assertEqual(arm.returncode, 0, arm.stderr)
         self.assertEqual(arm_calls.count("curl "), 4)
         self.assertEqual(len(list(self.root.glob(
             "build/cache/workflow-validators/linux-arm64/*",
         ))), 4)
         script = self.root / "scripts/checks/lint-workflows.sh"
+
         script.write_text(script.read_text().replace(
             "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
             "a" * 64,
         ))
         changed, changed_calls = self.run_script()
+
         self.assertEqual(changed.returncode, 0, changed.stderr)
         self.assertEqual(changed_calls.count("curl "), 1)
 
@@ -440,6 +484,7 @@ esac
         for tool in ("curl", "sha256sum"):
             with self.subTest(tool=tool):
                 result, _ = self.run_script(FAIL_TOOL=tool)
+
                 self.assertEqual(result.returncode, 7, result.stderr)
                 self.assertEqual(list(self.root.glob(
                     "build/cache/workflow-validators/**/*",
@@ -447,30 +492,35 @@ esac
 
     def test_explicit_debug_logging_is_preserved(self):
         result, calls = self.run_script(RUST_LOG="debug", COLOR="always", NO_COLOR="1")
+
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("RUST_LOG=debug", calls)
         self.assertNotIn("\033", result.stderr)
 
     def test_cache_regression_failure_blocks_validation(self):
         result, _ = self.run_script(CACHE_TEST_EXIT="7")
+
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Composer cache mount regressions (offline)", result.stderr)
         self.assertNotIn("[OK] Composer cache mount regressions (offline)", result.stderr)
 
     def test_analyzer_regression_failure_blocks_validation(self):
         result, _ = self.run_script(ANALYZER_TEST_EXIT="7")
+
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Analyzer job and gate regressions (offline)", result.stderr)
         self.assertNotIn("[OK] Analyzer job and gate regressions (offline)", result.stderr)
 
     def test_docker_workflow_regression_failure_blocks_validation(self):
         result, _ = self.run_script(DOCKER_WORKFLOW_TEST_EXIT="7")
+
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Docker maintenance workflow regressions (offline)", result.stderr)
         self.assertNotIn("[OK] Docker maintenance workflow regressions (offline)", result.stderr)
 
     def test_composite_shell_regression_failure_blocks_validation(self):
         result, _ = self.run_script(COMPOSITE_TEST_EXIT="7")
+
         self.assertEqual(result.returncode, 7, result.stderr)
         self.assertIn("[FAIL] Composite action shell regressions (offline)", result.stderr)
         self.assertNotIn("[RUN] 5/5", result.stderr)
@@ -478,6 +528,7 @@ esac
     def test_invalid_composite_metadata_blocks_shell_validation(self):
         (self.root / ".github/actions/example/action.yml").write_text("runs: [")
         result, _ = self.run_script()
+
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("[FAIL] Local composite action shell (ShellCheck)", result.stderr)
         self.assertNotIn("[RUN] 5/5", result.stderr)

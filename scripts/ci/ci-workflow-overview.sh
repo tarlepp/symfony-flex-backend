@@ -41,14 +41,17 @@ shift
 overview="✅ Reported checks successful before overview"
 attention=false
 incomplete=false
+
 if [ "$PRIOR_STATUS" != success ]; then
     attention=true
 fi
 
 overview_args=("$@")
+
 for ((index = 0; index < ${#overview_args[@]}; index += 2)); do
     label=${overview_args[index]}
     result=${overview_args[index + 1]}
+
     case "$label" in
         Analyzer)
             case "$result" in
