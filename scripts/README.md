@@ -126,10 +126,13 @@ native stdout/stderr and the command's exit status:
 
 Run mode streams output without buffering and reports success only after the
 command exits successfully. Information commands use this same mode: status
-messages stay on stderr, leaving structured stdout intact. Multi-step commands
-must pass a fail-fast executable or the complete nested Make recipe, not a shell
+messages stay on stderr. The Make dispatcher indents ordinary nonempty output
+from both streams by two spaces, leaving GitHub workflow commands at column
+zero. The opening `[RUN]` and final `[OK]` or `[FAIL]` stay level; direct uses
+of the shared helper preserve child output unchanged. Multi-step commands must
+pass a fail-fast executable or the complete nested Make recipe, not a shell
 function whose intermediate failures could be hidden by Bash conditional
-execution. Make's recipe dispatcher uses the default run mode for this boundary.
+execution.
 
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
@@ -202,31 +205,39 @@ container with `APP_ENV=prod`.
 
 See the [command reference](../doc/COMMANDS.md#commands) for scope and execution.
 Each complete recipe, including preparation, prints one `[RUN]` and a separated
-final `[OK]` or `[FAIL]`. `run-tests` retains automatic PHP/phpdbg selection
-without duplicate summaries. A failed preparation step cannot produce a success
-summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents recursive
-decoration; callers should not set it.
+final `[OK]` or `[FAIL]`. Ordinary recipe output is indented two spaces on both
+streams, while GitHub workflow commands remain unindented and boundary statuses
+share the same indentation level. `run-tests` retains automatic PHP/phpdbg
+selection without duplicate summaries. A failed preparation step cannot produce
+a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents
+recursive decoration; callers should not set it.
 
 Native progress, diagnostics, GitHub annotations, analyzer options and report
-paths remain unchanged. Quality summaries report the nested Make exit status
-(normally 2 on recipe failure), while its native diagnostics retain the tool's
-exit code. Nested Make recipe error lines are filtered before the final status;
-the shell integration filters the outer Make error lines. Markdown linting uses
-the readable status label `Markdown documentation`. Markdown rule diagnostics
-gain a red `[FAIL]` prefix, retaining their original file/line, rule, and
-message. The prefix respects the shared color controls and remains readable
-without ANSI colors. Make derives native color flags from the same shared
-policy: Symfony/Composer commands use `--ansi` or `--no-ansi`, CodeSniffer and
-parallel-lint use `--colors` or `--no-colors`, PHPUnit uses
-`--colors=always|never`, and plain Psalm uses `--monochrome`. Infection passes
-the color choice to its test runner. Compose receives the resolved native choice
-through `COMPOSE_ANSI`, without changing lifecycle commands or service
-selection. The security check's Composer dry run also uses the shared native
-choice. PHPLoc colors console section headings and values when native color is
-enabled; its JSON report is unchanged. It disables Xdebug for the PHPLoc process
-to avoid debugger connection attempts. GitHub-format Psalm/PHPStan analysis
-always stays plain, independent of status colors, preserving annotations and
-JSON report formats.
+paths remain unchanged apart from indentation of ordinary recipe output.
+
+Quality summaries report the nested Make exit status (normally 2 on recipe
+failure), while its native diagnostics retain the tool's exit code. Nested Make
+recipe error lines are filtered before the final status, and the shell
+integration filters outer Make error lines.
+
+Markdown linting uses the readable status label `Markdown documentation`.
+
+Markdown rule diagnostics gain a red `[FAIL]` prefix, retaining their original
+file/line, rule, and message. The prefix respects the shared color controls and
+remains readable without ANSI colors.
+
+Make derives native color flags from the shared policy. Symfony/Composer use
+`--ansi` or `--no-ansi`; CodeSniffer and parallel-lint use `--colors` or
+`--no-colors`; PHPUnit uses `--colors=always|never`; plain Psalm uses
+`--monochrome`. Infection passes the color choice to its test runner. Compose
+receives the resolved native choice through `COMPOSE_ANSI`, without changing
+lifecycle commands or service selection. The security check's Composer dry run
+uses the shared native color choice.
+
+PHPLoc colors console section headings and values when native color is enabled;
+its JSON report is unchanged. It disables Xdebug for the PHPLoc process to avoid
+debugger connection attempts. GitHub-format Psalm/PHPStan analysis stays plain,
+independent of status colors, preserving annotations and JSON report formats.
 
 The Symfony requirements checker follows the same native color policy. Forced
 color uses its terminal support detection; plain mode filters ANSI decoration
@@ -495,15 +506,17 @@ make docker-image-verify-pins
 make docker-image-update-pins    # OVERWRITE: update existing Dockerfile pins
 ```
 
-Blue `[RUN]` headings group manifest validation, pinned tag/digest parity,
-version discovery/output formatting, registry responses/pagination, Dockerfile
-discovery, lookup failures/retries, update-pin validation, and aggregate
-results/empty discovery. Individual `[OK]` results remain visible beneath each
-heading. Expected negative cases are passing tests when their rejection
-assertions succeed. Case success is printed after its follow-up assertions, and
-failures include the scenario, failed assertion where available, captured helper
-output, and a final summary. Fixture-specific color controls do not change the
-test runner's palette.
+The test script owns its top-level `[RUN]` and final `[OK]`, without an extra
+Make wrapper status. Indented blue `[RUN]` headings group manifest validation,
+pinned tag/digest parity, version discovery/output formatting, registry
+responses/pagination, Dockerfile discovery, lookup failures/retries, update-pin
+validation, and aggregate results/empty discovery. Individual `[OK]` results are
+indented beneath each heading, which receives a final `[OK]` when its scenarios
+pass. Expected negative cases are passing tests when their rejection assertions
+succeed. Case success is printed after its follow-up assertions, and failures
+include the scenario, failed assertion where available, captured helper output,
+and a final summary. Fixture-specific color controls do not change the test
+runner's palette.
 
 Run the output-contract and forwarding regression checks from the same host
 directory with development services running:
@@ -627,11 +640,16 @@ Available groups, in display order, are `information`, `tests`, `quality`,
 `checks`, `reports`, `setup`, `lifecycle`, and `docker`. Direct script callers
 can use `bash scripts/make/make-help.sh quality` from the same working directory.
 
-Information commands keep their native stdout: configuration JSON, statistics
-tables, license counts, application/version information, and digest/platform
-details. Shared status and report-path messages go to stderr, so redirects do
-not acquire success banners. License and statistics pipelines propagate failed
-commands instead of reporting success based only on their final pipeline stage.
+Information commands retain their native stdout content: configuration JSON,
+statistics tables, license counts, application/version information, and
+digest/platform details. Wrapped Make output indents ordinary nonempty lines by
+two spaces, including redirected stdout. GitHub workflow commands stay at column
+zero. Status and report paths stay on stderr; redirects do not acquire success
+banners.
+
+License and statistics pipelines propagate failed commands instead of reporting
+success based only on their final pipeline stage.
+
 The existing configuration command still intentionally displays configuration;
 added messages never repeat its values. License counts are extracted from
 Composer JSON rather than its human-readable table, excluding headers and
@@ -771,11 +789,11 @@ recipes, lifecycle commands, information/reports, check outcome policies,
 workflow output, and host/CI forwarding. It stops on the first failed suite and
 prints the aggregate `[OK]` only after all suites succeed.
 
-Output follows `make lint-workflows`: suite statuses are indented two spaces,
-unittest diagnostics four spaces, and each suite's output stays between its
-`[RUN]` and outcome. The redundant unittest `OK` footer is omitted; failures,
-counts, timings and skips remain visible. Forwarding diagnostics use the same
-four-space indentation while preserving stdout/stderr and exit status.
+Output follows `make lint-workflows`: suite statuses and unittest diagnostics
+are indented two spaces, and each suite's output stays between its `[RUN]` and
+outcome. The redundant unittest `OK` footer is omitted; failures, counts,
+timings and skips remain visible. Forwarding diagnostics use the same two-space
+indentation while preserving stdout/stderr and exit status.
 
 The Docker scenario suite is exercised by the shared-status tests. All Docker,
 registry, configuration, dependency, key, and upload mutations use isolated
@@ -1030,12 +1048,12 @@ Every regression suite has a named start and outcome, while native test output,
 warnings and errors remain visible. Each check keeps its `[RUN]`, native output
 and outcome together, with a blank line before the next check rather than before
 the outcome. Inner status lines are indented two spaces beneath their numbered
-stage. `scripts/tests/run-workflow-tests.py` indents unittest diagnostics four
+stage. `scripts/tests/run-workflow-tests.py` indents unittest diagnostics two
 spaces and omits its standalone `OK` footer and trailing blank lines, leaving
 `[OK]` as the success indicator. Counts, timings, skips and failure details
 remain visible; direct suite invocations retain unittest's usual output. Other
 validator diagnostics use `scripts/output/native-output.py --indent` to stream
-both output channels with four-space indentation, preserving colors and exit
+both output channels with two-space indentation, preserving colors and exit
 status. The download/cache helper,
 `scripts/checks/download-workflow-validator.sh`, uses the same relay, so curl
 and checksum errors align with other native diagnostics without changing

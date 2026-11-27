@@ -436,7 +436,7 @@ class MakeLauncherTest(unittest.TestCase):
         shutil.copyfile(ROOT / "Makefile", self.root / "Makefile")
         self.copy_scripts(
             "make/make.sh", "make/compose-context.sh", "make/make-help.sh",
-            "output/command-output.sh", "output/report-output.sh",
+            "output/command-output.sh", "output/native-output.py", "output/report-output.sh",
         )
         docker = bin_path / "docker"
 
@@ -507,7 +507,7 @@ class MakeLauncherTest(unittest.TestCase):
                         )
 
                         self.assertEqual(result.returncode, 2 if omitted else 0, result.stderr)
-                        self.assertIn('{"native":"report"}\n', result.stdout)
+                        self.assertIn('  {"native":"report"}\n', result.stdout)
                         self.assertNotIn("\033", result.stdout.splitlines()[0])
                         self.assertEqual("\033" in result.stderr, colored)
                         self.assertNotRegex(result.stderr, r"make(?:\[\d+\])?: \*\*\*")

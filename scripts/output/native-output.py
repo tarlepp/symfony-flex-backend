@@ -14,9 +14,10 @@
 #
 # Details:
 #   The default mode removes SGR color and style sequences, leaving other escape
-#   sequences intact. Indent mode adds four spaces to nonempty lines and a final
-#   newline to unterminated output. Both modes relay stdout and stderr separately,
-#   using a pseudo-terminal for each terminal destination and a pipe otherwise.
+#   sequences intact. Indent mode adds two spaces to nonempty ordinary lines,
+#   preserves GitHub workflow commands at column zero, and finishes unterminated
+#   output with a newline. Both modes relay stdout and stderr separately, using a
+#   pseudo-terminal for each terminal destination and a pipe otherwise.
 #   The supplied command is executed; its side effects are not restricted.
 #
 # Exit Status:
@@ -100,22 +101,49 @@ class SgrFilter:
 class IndentFilter:
     def __init__(self):
         self.line_start = True
+        self.pending = bytearray()
 
     def feed(self, data, final=False):
-        """Indent nonempty lines across chunks and finish a partial final line."""
+        """Indent output lines but preserve GitHub workflow commands at column zero."""
         output = bytearray()
 
         for value in data:
-            if self.line_start and value not in (10, 13):
-                output.extend(b"    ")
+            if self.line_start:
+                if self.pending:
+                    self.pending.append(value)
+                    if bytes(self.pending) == b"::":
+                        output.extend(self.pending)
+                        self.pending.clear()
+                        self.line_start = False
+                    elif not b"::".startswith(bytes(self.pending)):
+                        output.extend(b"  ")
+                        output.extend(self.pending)
+                        self.line_start = self.pending[-1] in (10, 13)
+                        self.pending.clear()
+                    continue
+                if value in (10, 13):
+                    output.append(value)
+                elif value == ord(":"):
+                    self.pending.append(value)
+                else:
+                    output.extend(b"  ")
+                    output.append(value)
+                    self.line_start = False
+            else:
+                output.append(value)
 
-            output.append(value)
-            self.line_start = value in (10, 13)
+            if value in (10, 13):
+                self.line_start = True
 
-        if final and not self.line_start:
-            output.extend(b"\n")
-            self.line_start = True
-
+        if final:
+            if self.pending:
+                output.extend(b"  ")
+                output.extend(self.pending)
+                self.pending.clear()
+                self.line_start = False
+            if not self.line_start:
+                output.extend(b"\n")
+                self.line_start = True
         return bytes(output)
 
 

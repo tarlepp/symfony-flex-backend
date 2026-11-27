@@ -203,6 +203,14 @@ exit 0
 
         return result
 
+    @staticmethod
+    def unindent_make_output(output):
+        """Remove the Make dispatch prefix while retaining native indentation."""
+        return "".join(
+            line[2:] if line.startswith("  ") else line
+            for line in output.splitlines(keepends=True)
+        )
+
     def init_stats_repository(self):
         """Track the sample source so statistics can discover it in Git's index."""
         subprocess.run(["git", "init", "-q"], cwd=self.root, check=True, capture_output=True)
@@ -272,9 +280,9 @@ exit 0
                 )
 
                 self.assertEqual(result.returncode == 0, exit_code == 0, result.stderr)
-                self.assertTrue(result.stdout.startswith(expected), result.stdout)
-                output = Path(result.stdout.strip().split("|")[-1])
-
+                stdout = self.unindent_make_output(result.stdout)
+                self.assertTrue(stdout.startswith(expected), stdout)
+                output = Path(stdout.strip().split("|")[-1])
                 self.assertFalse(output.exists(), "Temporary output must be removed")
 
                 if exit_code:
@@ -495,6 +503,16 @@ exit 0
                 result = self.make(target, COLOR="always")
 
                 self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue(all(
+                    not line or line.startswith("  ")
+                    for line in result.stdout.splitlines()
+                ), result.stdout)
+                status_lines = [
+                    line for line in re.sub(r"\x1b\[[0-9;]*m", "", result.stderr).splitlines()
+                    if line
+                ]
+                self.assertRegex(status_lines[0], r"^\[RUN\] ")
+                self.assertRegex(status_lines[-1], r"^\[OK\] ")
                 self.assertNotRegex(result.stdout, r"\[(RUN|OK|INFO|FAIL)\]")
 
                 if target not in ("tool-versions", "project-stats", "check-licenses"):
@@ -506,8 +524,9 @@ exit 0
                     self.assertEqual(json.loads(result.stdout), {"fixture": True})
 
                 if target == "check-licenses":
-                    plain = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
-
+                    plain = self.unindent_make_output(
+                        re.sub(r"\x1b\[[0-9;]*m", "", result.stdout),
+                    )
                     self.assertIn("\x1b[34m", result.stdout)
                     self.assertEqual(
                         {line.strip() for line in plain.splitlines()},
@@ -515,8 +534,9 @@ exit 0
                     )
 
                 if target == "project-stats":
-                    plain = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
-
+                    plain = self.unindent_make_output(
+                        re.sub(r"\x1b\[[0-9;]*m", "", result.stdout),
+                    )
                     self.assertIn("\x1b[", result.stdout)
                     self.assertTrue(plain.startswith("Project file statistics"))
                     self.assertRegex(plain, r"(?m)^Total\s+1\s+1$")
@@ -594,9 +614,13 @@ exit 0
             self.assertEqual(result.returncode, 0, result.stderr)
 
         self.assertIn("\x1b[1;34mProject file statistics\x1b[0m", forced.stdout)
-        self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", forced.stdout), plain.stdout)
-        self.assertEqual(disabled.stdout, plain.stdout)
-        self.assertEqual(automatic.stdout, plain.stdout)
+        plain_output = self.unindent_make_output(plain.stdout)
+        self.assertEqual(
+            self.unindent_make_output(re.sub(r"\x1b\[[0-9;]*m", "", forced.stdout)),
+            plain_output,
+        )
+        self.assertEqual(self.unindent_make_output(disabled.stdout), plain_output)
+        self.assertEqual(self.unindent_make_output(automatic.stdout), plain_output)
 
         environment = dict(os.environ, COLOR="auto", NO_COLOR="", TERM="xterm")
 
@@ -630,7 +654,7 @@ exit 0
                 self.assertEqual("\x1b[" in terminal_output, expect_color)
                 self.assertEqual(
                     re.sub(r"\x1b\[[0-9;]*m", "", terminal_output).replace("\r\n", "\n"),
-                    plain.stdout,
+                    plain_output,
                 )
 
         for native, no_color, expect_color in (
@@ -645,7 +669,10 @@ exit 0
 
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual("\x1b[" in result.stdout, expect_color)
-                self.assertEqual(re.sub(r"\x1b\[[0-9;]*m", "", result.stdout), plain.stdout)
+                self.assertEqual(
+                    re.sub(r"\x1b\[[0-9;]*m", "", result.stdout),
+                    plain_output,
+                )
 
     def test_project_stats_counts_tracked_working_tree_files_and_text_lines(self):
         self.init_stats_repository()
@@ -684,8 +711,8 @@ exit 0
         result = self.make("project-stats")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        lines = result.stdout.splitlines()
-
+        stdout = self.unindent_make_output(result.stdout)
+        lines = stdout.splitlines()
         self.assertEqual(lines[:3], [
             "Project file statistics", "Tracked working-tree files (excluding generated artifacts)", "",
         ])
@@ -719,8 +746,7 @@ exit 0
 
             if match:
                 rows[match[1]] = tuple(int(value.replace(",", "")) for value in match.groups()[1:])
-
-        self.assertIn("1,002", result.stdout)
+        self.assertIn("1,002", stdout)
         self.assertEqual(rows, {
             ".example": (1, 1),
             ".fixture": (1, 1),
@@ -732,12 +758,12 @@ exit 0
             "Total": (10, 1009),
         })
         self.assertNotIn(".sh", rows)
-        self.assertRegex(result.stdout, r"(?m)^  Source\s+1\s+2$")
-        self.assertRegex(result.stdout, r"(?m)^  Other\s+9\s+1,007$")
-        self.assertIn("  Lockfiles:           6\n", result.stdout)
-        self.assertIn("  Generated artifacts: 10\n", result.stdout)
-        self.assertIn("  Files:      0 tests / 1 source\n", result.stdout)
-        self.assertIn("  Text lines: 0 tests / 2 source\n", result.stdout)
+        self.assertRegex(stdout, r"(?m)^  Source\s+1\s+2$")
+        self.assertRegex(stdout, r"(?m)^  Other\s+9\s+1,007$")
+        self.assertIn("  Lockfiles:           6\n", stdout)
+        self.assertIn("  Generated artifacts: 10\n", stdout)
+        self.assertIn("  Files:      0 tests / 1 source\n", stdout)
+        self.assertIn("  Text lines: 0 tests / 2 source\n", stdout)
 
     def test_project_stats_pr_changes_compare_merge_base_and_exclude_generated(self):
         subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
@@ -798,8 +824,9 @@ exit 0
         result = self.make("project-stats")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertRegex(result.stdout, r"(?m)^Total\s+0\s+0$")
-        self.assertTrue(result.stdout.endswith(
+        stdout = self.unindent_make_output(result.stdout)
+        self.assertRegex(stdout, r"(?m)^Total\s+0\s+0$")
+        self.assertTrue(stdout.endswith(
             "Summary\n  Included files: 0\n  File types:    0\n  Text lines:    0\n"
             "\n  Most files:\n    None\n\n  Most text lines:\n    None\n"
         ))
@@ -809,7 +836,8 @@ exit 0
         result = self.make("project-stats")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertTrue(result.stdout.endswith(
+        stdout = self.unindent_make_output(result.stdout)
+        self.assertTrue(stdout.endswith(
             "\n  Most files:\n    .png: 1 file\n\n  Most text lines:\n    None\n"
         ))
 
@@ -853,26 +881,24 @@ exit 0
         result = self.make("tool-versions")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-
+        stdout = self.unindent_make_output(result.stdout)
         for heading in (
             "Platform versions", "Project main dependencies",
             "Installed PHP development packages",
             "Python tooling", "Node.js tooling", "Shell and supporting tools",
             "Optional security and workflow validators on PATH",
         ):
-            self.assertIn(heading, result.stdout)
-
-        self.assertIn("example/analyzer: 1.2.3", result.stdout)
-        self.assertIn("squizlabs/php_codesniffer: 3.4.5", result.stdout)
-        self.assertIn("cmgmyr/phploc: 8.0.6", result.stdout)
-        self.assertNotIn("9.0.0", result.stdout)
-        self.assertNotIn("example/transitive-library", result.stdout)
-        self.assertNotIn("roave/security-advisories", result.stdout)
-        self.assertNotIn("Workflow validator downloads and npx caches", result.stdout)
-        self.assertTrue(result.stdout.startswith(
+            self.assertIn(heading, stdout)
+        self.assertIn("example/analyzer: 1.2.3", stdout)
+        self.assertIn("squizlabs/php_codesniffer: 3.4.5", stdout)
+        self.assertIn("cmgmyr/phploc: 8.0.6", stdout)
+        self.assertNotIn("9.0.0", stdout)
+        self.assertNotIn("example/transitive-library", stdout)
+        self.assertNotIn("roave/security-advisories", stdout)
+        self.assertNotIn("Workflow validator downloads and npx caches", stdout)
+        self.assertTrue(stdout.startswith(
             "\nDevelopment environment tool inventory (current container)\n"))
-        platform, dependencies = result.stdout.split("\nProject main dependencies\n", 1)
-
+        platform, dependencies = stdout.split("\nProject main dependencies\n", 1)
         self.assertIn("Node.js: native information", platform)
         self.assertIn("Python fixture version", platform)
         self.assertNotIn("native Composer version", platform)
@@ -894,22 +920,20 @@ exit 0
         self.assertNotIn("example/analyzer", project)
         self.assertNotIn("example/runtime", project)
         self.assertNotIn("phpunit/phpunit", isolated)
-        self.assertEqual(result.stdout.count("Node.js: "), 1)
-        self.assertIn("      tools/fixture\n        example/analyzer: 1.2.3", result.stdout)
+        self.assertEqual(stdout.count("Node.js: "), 1)
+        self.assertIn("      tools/fixture\n        example/analyzer: 1.2.3", stdout)
         self.assertEqual(
-            [line for line in result.stdout.splitlines() if line and not line.startswith(" ")],
+            [line for line in stdout.splitlines() if line and not line.startswith(" ")],
             ["Development environment tool inventory (current container)",
              "Platform versions", "PHP runtime extensions and debugging",
              "Project main dependencies", "Tooling"],
         )
-        tooling = result.stdout.split("\nTooling\n", 1)[1]
-
+        tooling = stdout.split("\nTooling\n", 1)[1]
         for heading in ("Installed PHP development packages", "Python tooling",
                         "Node.js tooling", "Shell and supporting tools",
                         "Optional security and workflow validators on PATH"):
             self.assertIn(f"\n  {heading}\n", tooling)
-
-        for line in result.stdout.splitlines():
+        for line in stdout.splitlines():
             if line.strip() and line not in (
                 "Development environment tool inventory (current container)",
                 "Platform versions", "Project main dependencies", "Tooling",

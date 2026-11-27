@@ -258,14 +258,14 @@ esac
         )
         self.assertRegex(
             result.stderr,
-            r"\n    Ran 22 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
+            r"\n  Ran 22 tests in [^\n]+\n  \[OK\] CI gate regressions \(offline\)\n",
         )
         self.assertNotIn("\nOK\n", result.stderr)
-        self.assertNotIn("\n    OK\n", result.stderr)
-        self.assertIn("\n    WARN: fixture warning remains visible\n", result.stderr)
-        self.assertIn("\n    No findings to report.", "\n" + result.stdout)
+        self.assertNotIn("\n  OK\n", result.stderr)
+        self.assertIn("\n  WARN: fixture warning remains visible\n", result.stderr)
+        self.assertIn("\n  No findings to report.", "\n" + result.stdout)
         self.assertIn(
-            "\n    .github/actions/example/action.yml: step 1 (Fixture shell)\n",
+            "\n  .github/actions/example/action.yml: step 1 (Fixture shell)\n",
             result.stdout + result.stderr,
         )
         self.assertIn(
@@ -324,13 +324,12 @@ esac
 
                 self.assertEqual(result.returncode, status, result.stderr)
                 self.assertEqual(result.stdout, "OK\n")
-                self.assertIn("    Ran 1 test", result.stderr)
+                self.assertIn("  Ran 1 test", result.stderr)
                 self.assertTrue(all(
-                    not line or line.startswith("    ")
+                    not line or line.startswith("  ")
                     for line in result.stderr.splitlines()
                 ))
-                self.assertNotIn("\n    OK\n", result.stderr)
-
+                self.assertNotIn("\n  OK\n", result.stderr)
                 if argument == "skip":
                     self.assertIn("skipped=1", result.stderr)
 
@@ -431,7 +430,7 @@ esac
         result, calls = self.run_script(CURL_TIMEOUT="1", TMPDIR=str(temporary))
 
         self.assertEqual(result.returncode, 28, result.stderr)
-        self.assertIn("\n    curl: (28) fixture transfer timed out\n", result.stderr)
+        self.assertIn("\n  curl: (28) fixture transfer timed out\n", result.stderr)
         self.assertNotIn("\ncurl:", result.stderr)
         self.assertIn("[FAIL] Prepare and verify actionlint", result.stderr)
         self.assertNotIn("[OK] Prepare and verify actionlint", result.stderr)
@@ -453,7 +452,7 @@ esac
         result, calls = self.run_script()
 
         self.assertEqual(result.returncode, 9, result.stderr)
-        self.assertIn("\n    fixture checksum mismatch\n", result.stderr)
+        self.assertIn("\n  fixture checksum mismatch\n", result.stderr)
         self.assertNotIn("curl ", calls)
         self.assertNotIn("tar ", calls)
         self.assertNotIn("actionlint -shellcheck", calls)

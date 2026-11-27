@@ -53,7 +53,7 @@ class QualityOutputTest(unittest.TestCase):
 
         for directory in (
             "scripts/output", "scripts/make", "bin", "vendor/bin",
-            "tools/02_phpstan/vendor/phpstan/phpstan",
+            "tools/02_phpstan/vendor/phpstan/phpstan", "scripts/docker/tests",
         ):
             (self.root / directory).mkdir(parents=True)
 
@@ -69,6 +69,18 @@ class QualityOutputTest(unittest.TestCase):
         shutil.copyfile(ROOT / "scripts/output/report-output.sh", self.root / "scripts/output/report-output.sh")
         shutil.copyfile(ROOT / "scripts/make/make.sh", self.root / "scripts/make/make.sh")
         shutil.copyfile(ROOT / "scripts/output/markdown-output.sh", self.root / "scripts/output/markdown-output.sh")
+        docker_test = self.root / "scripts/docker/tests/docker-images-test.sh"
+        docker_test.write_text(
+            """#!/usr/bin/env bash
+source scripts/output/command-output.sh
+output_status RUN 'Docker image tests'
+OUTPUT_STATUS_INDENT='  ' output_status RUN 'Manifest validation'
+OUTPUT_STATUS_INDENT='    ' output_status OK 'OCI multi-platform index (digest and verify)'
+OUTPUT_STATUS_INDENT='  ' output_status OK 'Manifest validation'
+output_status OK 'Docker image tests: 1 scenarios passed'
+"""
+        )
+        docker_test.chmod(0o755)
         # Keep the real formatters in the output path while stubbing tool calls.
         fixture = """#!/usr/bin/env bash
 if [ "$(basename "$0")" = python3 ] && [[ "${1:-}" = scripts/output/native-output.py || "${1:-}" = scripts/output/phpmetrics-output.py ]]; then
@@ -178,10 +190,22 @@ done
 
                 self.assertEqual(result.stderr.count(f"[OK] {completion}\n"), 1)
                 self.assertTrue(result.stderr.endswith(f"\n\n[OK] {completion}\n"))
-                self.assertIn("native progress", result.stdout)
+                self.assertIn("  native progress\n", result.stdout)
                 self.assertIn("::notice file=src/Example.php", result.stderr)
+                self.assertNotIn("  ::notice file=src/Example.php", result.stderr)
+                self.assertTrue(result.stderr.startswith(f"[RUN] {label}\n"))
                 self.assertNotIn("\033", result.stderr)
                 self.assertTrue(calls)
+
+    def test_docker_image_test_has_nested_section_statuses_without_duplicate_target_run(self):
+        result, _ = self.run_target("test-docker-images")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(result.stderr.startswith("[RUN] Docker image tests\n"))
+        self.assertNotIn("[RUN] test-docker-images", result.stderr)
+        self.assertIn("  [RUN] Manifest validation\n", result.stderr)
+        self.assertIn("    [OK] OCI multi-platform index (digest and verify)\n", result.stderr)
+        self.assertIn("  [OK] Manifest validation\n", result.stderr)
+        self.assertTrue(result.stderr.endswith("[OK] Docker image tests: 1 scenarios passed\n"))
 
     def test_preparation_and_analysis_failures_never_report_success(self):
         for target, command in (
@@ -201,6 +225,7 @@ done
                 label = "Markdown documentation" if target == "lint-markdown" else target
 
                 self.assertIn(f"[FAIL] {label}", result.stderr)
+                self.assertIn("  native failure diagnostic\n", result.stderr)
                 self.assertNotIn("make[1]: ***", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
 
