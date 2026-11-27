@@ -957,9 +957,9 @@ awk '
 ' "$WORK/output"
 grep -Fq 'test:1.0.0 -> test:2.0.0' "$WORK/output"
 awk '
-    /^  Dockerfile$/ { group = "root"; root++; next }
-    /^  docker\/mariadb\/Dockerfile$/ { group = "mariadb"; mariadb++; next }
-    /^  docker\/nginx\/Dockerfile$/ { group = "nginx"; nginx++; next }
+    /^  \.\/Dockerfile$/ { group = "root"; root++; next }
+    /^  \.\/docker\/mariadb\/Dockerfile$/ { group = "mariadb"; mariadb++; next }
+    /^  \.\/docker\/nginx\/Dockerfile$/ { group = "nginx"; nginx++; next }
     /test:1.0.0 -> test:2.0.0/ { updates[group]++ }
     /tools\/installer:1.0.0 -> tools\/installer:2.0.0/ {
         if (group != "root") exit 1
@@ -970,6 +970,18 @@ awk '
             updates["root"] != 1 || updates["mariadb"] != 1 || updates["nginx"] != 1) exit 1
     }
 ' "$WORK/output"
+status=0
+make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 IMAGE= \
+    docker-image-check-updates > "$WORK/output" 2>&1 || status=$?
+[ "$status" -ne 0 ]
+grep -Fxq '  ./Dockerfile' "$WORK/output"
+grep -Fxq '  ./docker/mariadb/Dockerfile' "$WORK/output"
+grep -Fxq '  ./docker/nginx/Dockerfile' "$WORK/output"
+grep -Fxq '[WARN] 2 image(s) require attention: updates available' "$WORK/output"
+GITHUB_ACTIONS=true GITHUB_STEP_SUMMARY="$WORK/advisory-summary" \
+    IMAGE='' bash "$SCRIPT" check-updates --advisory > "$WORK/output" 2>&1
+grep -Fq '::warning file=Dockerfile,title=Docker image update available::' "$WORK/output"
+grep -Fq '### Dockerfile: test:1.0.0' "$WORK/advisory-summary"
 grep -Fq 'Multi-platform pin: tools/installer:2.0.0@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' "$WORK/output"
 if grep -q 'SKIP\|FAIL' "$WORK/output"; then
     cat "$WORK/output"
@@ -1007,8 +1019,8 @@ fi
 
 check_updates 'single image retains matching Dockerfiles' 'test:1.0.0' 1 \
     'docker/mariadb/Dockerfile'
-grep -Fxq '  Dockerfile' "$WORK/output"
-grep -Fxq '  docker/nginx/Dockerfile' "$WORK/output"
+grep -Fxq '  ./Dockerfile' "$WORK/output"
+grep -Fxq '  ./docker/nginx/Dockerfile' "$WORK/output"
 [ "$(wc -l < "$TEST_REQUESTS")" -eq 1 ]
 if grep -q 'tools/installer' "$WORK/output"; then
     printf 'FAIL: single image filter included another image\n'
