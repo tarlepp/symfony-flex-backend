@@ -462,32 +462,11 @@ It checks every external `FROM` and `COPY --from` image in these files:
 * `docker/nginx/Dockerfile` - shared nginx image
 * `docker/mariadb/Dockerfile` - MariaDB image
 
-```text
-[OK] Verifying base images of 3 Dockerfiles
-
-Dockerfile
-  line 6: php:8.5.13-fpm-trixie@sha256:7fd2766bd3bb6efcfb49591e4bf014e123c18f01149093bd508525c6bdf0cf9f
-  OK    Tag digest matches
-  OK    Multi-platform: linux/amd64 linux/arm/v7 linux/arm64/v8 linux/386 linux/ppc64le
-
-...
-
-docker/nginx/Dockerfile
-  line 1: nginx:mainline-alpine-slim@sha256:45b82ed5f285b90d63df07ba70430fdd8f25624b416617d9e6dc93412b2006dc
-  OK    Multi-platform: linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8 linux/386 linux/ppc64le linux/riscv64 linux/s390x
-
-docker/mariadb/Dockerfile
-  line 1: mariadb:10.7.1@sha256:5a8009369ee57c85b6f4a08406147bd9c505cde6b8250d16a27d2a5febfdead7
-  OK    Multi-platform: linux/amd64 linux/arm64/v8 linux/ppc64le linux/s390x
-
-Summary
-  Multi-platform base images:
-    Dockerfile                                               OK
-    docker/nginx/Dockerfile                                  OK
-    docker/mariadb/Dockerfile                                OK
-
-[OK] All Dockerfiles use valid multi-platform image pins
-```
+The output groups each image and its checks beneath its Dockerfile. Separate
+image entries make multiple pins in the same file easier to distinguish; the
+closing summary reports one result per file. Console paths use the `./` prefix
+to identify them as repository-relative files. GitHub annotations and job
+summary details still identify the individual instruction lines.
 
 Statuses for each external image reference:
 
