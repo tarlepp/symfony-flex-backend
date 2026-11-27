@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "135e92bb2022e32a447f11f3d3cd34b6",
+    "content-hash": "c1f53eb203463cc46e70476c1863010a",
     "packages": [],
     "packages-dev": [
         {
@@ -51,82 +51,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-17T00:41:49+00:00",
-            "published-time": "2023-03-17T00:42:08+00:00"
-        },
-        {
-            "name": "composer-unused/symbol-parser",
-            "version": "0.3.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer-unused/symbol-parser.git",
-                "reference": "afa62007cca768bd1ecbc0e8ed347c675c239410"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/symbol-parser/zipball/afa62007cca768bd1ecbc0e8ed347c675c239410",
-                "reference": "afa62007cca768bd1ecbc0e8ed347c675c239410",
-                "shasum": ""
-            },
-            "require": {
-                "composer-unused/contracts": "^0.3",
-                "nikic/php-parser": "^5.0",
-                "php": "^7.4 || ^8.0",
-                "phpstan/phpdoc-parser": "^1.25 || ^2",
-                "psr/container": "^1.0 || ^2.0",
-                "psr/log": "^1.1 || ^2 || ^3",
-                "symfony/finder": "^5.3 || ^6.0 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "ergebnis/composer-normalize": "^2.49",
-                "ext-ds": "*",
-                "phpstan/phpstan": "^2.1",
-                "phpunit/phpunit": "^10.5",
-                "roave/security-advisories": "dev-master",
-                "squizlabs/php_codesniffer": "^4.0.1",
-                "symfony/property-access": "^5.4 || ^6.0 || ^7.0 || ^8.0",
-                "symfony/serializer": "^5.4 || ^6.0 || ^7.0 || ^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ComposerUnused\\SymbolParser\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas Frömer",
-                    "email": "composer-unused@icanhazstring.com"
-                }
-            ],
-            "description": "Toolkit to parse symbols from a composer package",
-            "homepage": "https://github.com/composer-unused/symbol-parser",
-            "keywords": [
-                "composer",
-                "parser",
-                "symbol"
-            ],
-            "support": {
-                "issues": "https://github.com/composer-unused/symbol-parser/issues",
-                "source": "https://github.com/composer-unused/symbol-parser"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/icanhazstring",
-                    "type": "github"
-                },
-                {
-                    "url": "https://paypal.me/icanhazstring",
-                    "type": "other"
-                }
-            ],
-            "abandoned": "Reintegrated into icanhazstring/composer-unused",
-            "time": "2026-01-29T13:38:57+00:00",
-            "published-time": "2026-01-29T13:39:17+00:00"
+            "time": "2023-03-17T00:41:49+00:00"
         },
         {
             "name": "composer/pcre",
@@ -202,8 +127,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-07T11:47:49+00:00",
-            "published-time": "2026-06-11T12:12:37+00:00"
+            "time": "2026-06-07T11:47:49+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -265,8 +189,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-25T19:20:28+00:00",
-            "published-time": "2026-11-25T19:31:20+00:00"
+            "time": "2026-11-25T19:20:28+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -351,8 +274,7 @@
                 "security": "https://github.com/ergebnis/composer-normalize/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/composer-normalize"
             },
-            "time": "2026-11-19T13:10:46+00:00",
-            "published-time": "2026-11-19T13:10:52+00:00"
+            "time": "2026-11-19T13:10:46+00:00"
         },
         {
             "name": "ergebnis/differ",
@@ -428,8 +350,7 @@
                 "security": "https://github.com/ergebnis/differ/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/differ"
             },
-            "time": "2026-11-24T15:44:30+00:00",
-            "published-time": "2026-11-24T15:44:38+00:00"
+            "time": "2026-11-24T15:44:30+00:00"
         },
         {
             "name": "ergebnis/json",
@@ -502,8 +423,7 @@
                 "security": "https://github.com/ergebnis/json/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/json"
             },
-            "time": "2026-11-24T15:46:25+00:00",
-            "published-time": "2026-11-24T15:46:33+00:00"
+            "time": "2026-11-24T15:46:25+00:00"
         },
         {
             "name": "ergebnis/json-normalizer",
@@ -585,8 +505,7 @@
                 "security": "https://github.com/ergebnis/json-normalizer/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/json-normalizer"
             },
-            "time": "2026-11-24T15:46:49+00:00",
-            "published-time": "2026-11-24T15:46:57+00:00"
+            "time": "2026-11-24T15:46:49+00:00"
         },
         {
             "name": "ergebnis/json-pointer",
@@ -660,8 +579,7 @@
                 "security": "https://github.com/ergebnis/json-pointer/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/json-pointer"
             },
-            "time": "2026-11-24T15:47:16+00:00",
-            "published-time": "2026-11-24T15:47:23+00:00"
+            "time": "2026-11-24T15:47:16+00:00"
         },
         {
             "name": "ergebnis/json-printer",
@@ -736,8 +654,7 @@
                 "security": "https://github.com/ergebnis/json-printer/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/json-printer"
             },
-            "time": "2026-11-24T15:47:46+00:00",
-            "published-time": "2026-11-24T15:47:53+00:00"
+            "time": "2026-11-24T15:47:46+00:00"
         },
         {
             "name": "ergebnis/json-schema-validator",
@@ -814,38 +731,37 @@
                 "security": "https://github.com/ergebnis/json-schema-validator/blob/main/.github/SECURITY.md",
                 "source": "https://github.com/ergebnis/json-schema-validator"
             },
-            "time": "2026-11-24T15:48:10+00:00",
-            "published-time": "2026-11-24T15:48:18+00:00"
+            "time": "2026-11-24T15:48:10+00:00"
         },
         {
             "name": "icanhazstring/composer-unused",
-            "version": "0.9.8",
+            "version": "0.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer-unused/composer-unused.git",
-                "reference": "7374b91d32e2885a9458cd2c2c39fdc55a7c52d9"
+                "reference": "00034869d0e5ec97409fb492562a7ec9d677c049"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer-unused/composer-unused/zipball/7374b91d32e2885a9458cd2c2c39fdc55a7c52d9",
-                "reference": "7374b91d32e2885a9458cd2c2c39fdc55a7c52d9",
+                "url": "https://api.github.com/repos/composer-unused/composer-unused/zipball/00034869d0e5ec97409fb492562a7ec9d677c049",
+                "reference": "00034869d0e5ec97409fb492562a7ec9d677c049",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0",
                 "composer-unused/contracts": "^0.3",
-                "composer-unused/symbol-parser": "^0.3.1",
                 "composer/xdebug-handler": "^3.0",
                 "ext-json": "*",
                 "nikic/php-parser": "^5.0",
                 "ondram/ci-detector": "^4.1",
-                "php": "^8.1",
+                "php": "^8.3",
                 "phpstan/phpdoc-parser": "^1.25 || ^2",
                 "psr/container": "^1.0 || ^2.0",
                 "psr/log": "^1.1 || ^2 || ^3",
                 "symfony/config": "^6.0 || ^7.0 || ^8.0",
                 "symfony/console": "^6.0 || ^7.0 || ^8.0",
                 "symfony/dependency-injection": "^6.0 || ^7.0 || ^8.0",
+                "symfony/finder": "^5.3 || ^6.0 || ^7.0 || ^8.0",
                 "symfony/property-access": "^6.0 || ^7.0 || ^8.0",
                 "symfony/serializer": "^6.0 || ^7.0 || ^8.0",
                 "webmozart/assert": "^1.10 || ^2.0",
@@ -866,7 +782,6 @@
                 "phpstan/phpstan": "^2.1.40",
                 "phpstan/phpstan-phpunit": "^2.0.16",
                 "phpunit/phpunit": "^9.6.34",
-                "roave/security-advisories": "dev-master",
                 "squizlabs/php_codesniffer": "^4.0"
             },
             "bin": [
@@ -881,6 +796,7 @@
             },
             "autoload": {
                 "psr-4": {
+                    "ComposerUnused\\SymbolParser\\": "src/SymbolParser",
                     "ComposerUnused\\ComposerUnused\\": "src"
                 }
             },
@@ -916,8 +832,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-10-31T13:13:19+00:00",
-            "published-time": "2026-10-31T13:19:14+00:00"
+            "time": "2026-11-20T12:53:59+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -988,8 +903,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-24T20:35:12+00:00",
-            "published-time": "2026-11-24T20:35:18+00:00"
+            "time": "2026-11-24T20:35:12+00:00"
         },
         {
             "name": "maglnet/composer-require-checker",
@@ -1075,8 +989,7 @@
                 "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
                 "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.24.0"
             },
-            "time": "2026-03-20T12:51:42+00:00",
-            "published-time": "2026-03-20T12:54:41+00:00"
+            "time": "2026-03-20T12:51:42+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -1149,8 +1062,7 @@
                 "issues": "https://github.com/marc-mabe/php-enum/issues",
                 "source": "https://github.com/marc-mabe/php-enum/tree/v4.7.2"
             },
-            "time": "2025-09-14T11:18:39+00:00",
-            "published-time": "2025-09-14T11:32:17+00:00"
+            "time": "2025-09-14T11:18:39+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1207,8 +1119,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.9.0"
             },
-            "time": "2026-09-13T18:51:52+00:00",
-            "published-time": "2026-09-13T18:53:16+00:00"
+            "time": "2026-09-13T18:51:52+00:00"
         },
         {
             "name": "ondram/ci-detector",
@@ -1286,8 +1197,7 @@
                 "issues": "https://github.com/OndraM/ci-detector/issues",
                 "source": "https://github.com/OndraM/ci-detector/tree/4.2.0"
             },
-            "time": "2024-03-12T13:22:30+00:00",
-            "published-time": "2024-03-12T13:23:38+00:00"
+            "time": "2024-03-12T13:22:30+00:00"
         },
         {
             "name": "php-standard-library/php-standard-library",
@@ -1578,8 +1488,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-28T08:36:50+00:00",
-            "published-time": "2026-10-28T15:53:46+00:00"
+            "time": "2026-10-28T08:36:50+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -1626,8 +1535,7 @@
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/2.4.2"
             },
-            "time": "2026-11-25T13:45:51+00:00",
-            "published-time": "2026-11-25T13:46:33+00:00"
+            "time": "2026-11-25T13:45:51+00:00"
         },
         {
             "name": "psr/container",
@@ -1680,8 +1588,7 @@
                 "issues": "https://github.com/php-fig/container/issues",
                 "source": "https://github.com/php-fig/container/tree/2.0.2"
             },
-            "time": "2021-11-05T16:47:00+00:00",
-            "published-time": "2021-11-05T16:53:27+00:00"
+            "time": "2021-11-05T16:47:00+00:00"
         },
         {
             "name": "psr/log",
@@ -1731,8 +1638,7 @@
             "support": {
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
-            "time": "2024-09-11T13:17:53+00:00",
-            "published-time": "2024-09-11T13:21:14+00:00"
+            "time": "2024-09-11T13:17:53+00:00"
         },
         {
             "name": "revolt/event-loop",
@@ -1804,8 +1710,7 @@
                 "issues": "https://github.com/revoltphp/event-loop/issues",
                 "source": "https://github.com/revoltphp/event-loop/tree/v1.1.0"
             },
-            "time": "2026-11-14T19:05:53+00:00",
-            "published-time": "2026-11-19T18:36:08+00:00"
+            "time": "2026-11-14T19:05:53+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -3015,8 +2920,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-26T14:44:38+00:00",
-            "published-time": "2026-11-26T14:44:43+00:00"
+            "time": "2026-11-26T14:44:38+00:00"
         },
         {
             "name": "symfony/config",
@@ -3094,8 +2998,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-09T20:09:12+00:00",
-            "published-time": "2026-11-25T09:29:40+00:00"
+            "time": "2026-11-09T20:09:12+00:00"
         },
         {
             "name": "symfony/console",
@@ -3195,8 +3098,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:59:55+00:00",
-            "published-time": "2026-11-25T09:31:15+00:00"
+            "time": "2026-11-24T15:59:55+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3278,8 +3180,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:59:55+00:00",
-            "published-time": "2026-11-25T09:29:21+00:00"
+            "time": "2026-11-24T15:59:55+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3350,8 +3251,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-16T14:15:10+00:00",
-            "published-time": "2026-11-04T11:25:34+00:00"
+            "time": "2026-09-16T14:15:10+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -3422,8 +3322,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:59:55+00:00",
-            "published-time": "2026-11-25T09:29:32+00:00"
+            "time": "2026-11-24T15:59:55+00:00"
         },
         {
             "name": "symfony/finder",
@@ -3491,8 +3390,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:06:41+00:00",
-            "published-time": "2026-11-25T09:29:36+00:00"
+            "time": "2026-11-24T15:06:41+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3575,8 +3473,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-10T16:19:22+00:00",
-            "published-time": "2026-04-26T14:44:50+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/polyfill-deepclone",
@@ -3663,8 +3560,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-14T07:17:09+00:00",
-            "published-time": "2026-10-14T09:42:25+00:00"
+            "time": "2026-10-14T07:17:09+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
@@ -3746,8 +3642,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-15T09:18:53+00:00",
-            "published-time": "2026-10-28T10:07:44+00:00"
+            "time": "2026-10-15T09:18:53+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
@@ -3832,8 +3727,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-23T22:02:09+00:00",
-            "published-time": "2026-09-30T10:23:47+00:00"
+            "time": "2026-09-23T22:02:09+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -3918,8 +3812,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-28T09:35:49+00:00",
-            "published-time": "2026-10-28T10:07:45+00:00"
+            "time": "2026-10-28T09:35:49+00:00"
         },
         {
             "name": "symfony/polyfill-php85",
@@ -3999,8 +3892,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-30T15:20:09+00:00",
-            "published-time": "2026-11-15T14:20:22+00:00"
+            "time": "2026-10-30T15:20:09+00:00"
         },
         {
             "name": "symfony/property-access",
@@ -4081,8 +3973,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-23T20:28:13+00:00",
-            "published-time": "2026-11-25T09:30:42+00:00"
+            "time": "2026-11-23T20:28:13+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -4168,8 +4059,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-23T20:28:13+00:00",
-            "published-time": "2026-11-25T09:30:57+00:00"
+            "time": "2026-11-23T20:28:13+00:00"
         },
         {
             "name": "symfony/serializer",
@@ -4268,8 +4158,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T18:01:43+00:00",
-            "published-time": "2026-11-25T09:30:34+00:00"
+            "time": "2026-11-24T18:01:43+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -4356,8 +4245,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-20T17:38:25+00:00",
-            "published-time": "2026-11-04T11:25:33+00:00"
+            "time": "2026-10-20T17:38:25+00:00"
         },
         {
             "name": "symfony/string",
@@ -4447,8 +4335,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:59:55+00:00",
-            "published-time": "2026-11-25T09:30:00+00:00"
+            "time": "2026-11-24T15:59:55+00:00"
         },
         {
             "name": "symfony/type-info",
@@ -4530,8 +4417,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-16T12:51:10+00:00",
-            "published-time": "2026-11-25T09:30:22+00:00"
+            "time": "2026-11-16T12:51:10+00:00"
         },
         {
             "name": "symfony/var-exporter",
@@ -4614,8 +4500,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-22T14:30:01+00:00",
-            "published-time": "2026-10-28T18:24:08+00:00"
+            "time": "2026-10-22T14:30:01+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -4681,8 +4566,7 @@
                 "issues": "https://github.com/webmozarts/assert/issues",
                 "source": "https://github.com/webmozarts/assert/tree/2.5.1"
             },
-            "time": "2026-11-15T13:41:13+00:00",
-            "published-time": "2026-11-15T13:41:42+00:00"
+            "time": "2026-11-15T13:41:13+00:00"
         },
         {
             "name": "webmozart/glob",
@@ -4731,8 +4615,7 @@
                 "issues": "https://github.com/webmozarts/glob/issues",
                 "source": "https://github.com/webmozarts/glob/tree/4.7.0"
             },
-            "time": "2024-03-07T20:33:40+00:00",
-            "published-time": "2024-03-07T20:34:42+00:00"
+            "time": "2024-03-07T20:33:40+00:00"
         }
     ],
     "aliases": [],
@@ -4749,5 +4632,5 @@
     "platform-overrides": {
         "php": "8.5.13"
     },
-    "plugin-api-version": "2.11.0"
+    "plugin-api-version": "2.9.0"
 }
