@@ -128,6 +128,43 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("[OK] example", result.stderr)
         self.assertNotIn("\033", result.stderr)
 
+    def test_compact_top_level_outcomes_leave_nested_and_direct_spacing_unchanged(self):
+        for status, outcome in ((0, "OK"), (7, "FAIL")):
+            with self.subTest(status=status):
+                result = self.run_command(
+                    ["bash", str(HELPER), "top", "bash", "-c",
+                     f"printf 'detail\\n' >&2; exit {status}"],
+                    OUTPUT_COMPACT_TOP_LEVEL="1",
+                )
+                suffix = "" if status == 0 else " (exit 7)"
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stderr, f"[RUN] top\ndetail\n[{outcome}] top{suffix}\n")
+        nested = self.run_command(
+            ["bash", "-c", 'source scripts/output/command-output.sh; '
+             'OUTPUT_STATUS_INDENT="  " output_run inner bash -c \'echo detail >&2\''],
+            OUTPUT_COMPACT_TOP_LEVEL="1",
+        )
+        self.assertEqual(nested.returncode, 0)
+        self.assertEqual(nested.stderr, "  [RUN] inner\ndetail\n\n  [OK] inner\n")
+        child = self.run_command(
+            ["bash", str(HELPER), "outer", "bash", "-c",
+             'source scripts/output/command-output.sh; output_run inner true'],
+            OUTPUT_COMPACT_TOP_LEVEL="1",
+        )
+        self.assertEqual(child.returncode, 0)
+        self.assertEqual(child.stderr, "[RUN] outer\n[RUN] inner\n\n[OK] inner\n[OK] outer\n")
+
+    def test_make_target_label_does_not_change_child_stream_indentation(self):
+        command = ["bash", str(HELPER), "example", "bash", "-c",
+                   "printf '  payload\\n::notice::fixture\\n'; printf '  diagnostic\\n' >&2"]
+        direct = self.run_command(command, OUTPUT_RUN_TARGET="", OUTPUT_RUN_GROUPED="1")
+        grouped = self.run_command(command, OUTPUT_RUN_TARGET="example", OUTPUT_RUN_GROUPED="1")
+        self.assertEqual(direct.returncode, 0)
+        self.assertEqual(grouped.returncode, 0)
+        self.assertEqual(direct.stdout, "  payload\n::notice::fixture\n")
+        self.assertEqual(grouped.stdout, direct.stdout)
+        self.assertEqual(grouped.stderr.replace(" (make example)", ""), direct.stderr)
+
     def test_grouped_runs_keep_outcomes_with_their_checks(self):
         for status, outcome in ((0, "OK"), (7, "FAIL"), (130, "WARN"), (143, "WARN")):
             with self.subTest(status=status):

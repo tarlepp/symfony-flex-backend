@@ -147,15 +147,6 @@ run_host_regression_suite() {
         python3 scripts/tests/run-workflow-tests.py "$@" || exit "$?"
 }
 
-run_grouped_host_command() {
-    local label=$1
-    shift
-
-    printf '\n' >&2
-    OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_GROUPED_SEPARATOR=0 output_run "$label" \
-        python3 scripts/output/native-output.py --indent "$@" || exit "$?"
-}
-
 compose=(docker compose)
 
 if [ -n "${GITHUB_WORKFLOW:-}" ]; then
@@ -205,7 +196,7 @@ fi
 
 if selected images; then
     run_make test-docker-images
-    run_grouped_host_command 'Check Docker image updates' \
+    run_host_command 'Check Docker image updates' \
         bash scripts/docker/docker-images.sh check-updates --advisory
     run_make docker-image-verify-pins
 fi

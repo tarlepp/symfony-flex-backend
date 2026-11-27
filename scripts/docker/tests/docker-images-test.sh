@@ -454,6 +454,14 @@ verify_pin_parity 'matching tag digest' \
     'Tag digest matches'
 
 grep -Fxq '[OK] All Dockerfiles use valid multi-platform image pins' "$WORK/output"
+IMAGE=unmatched:fixture make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
+    docker-image-digest > "$WORK/output" 2>&1
+grep -q -B 1 '^\[OK\] Inspected unmatched:fixture' "$WORK/output"
+if grep -B 1 '^\[OK\] Inspected unmatched:fixture' "$WORK/output" | grep -q '^$'; then
+    printf 'FAIL: image digest has blank padding before its main outcome\n'
+    exit 1
+fi
+
 OUTPUT_RUN_GROUPED=1 verify_pin_parity 'grouped pin verification status' \
     'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' 0 \
     'Tag digest matches'

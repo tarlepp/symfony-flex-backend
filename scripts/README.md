@@ -135,10 +135,13 @@ from both streams by two spaces, leaving GitHub workflow commands at column
 zero. It removes whitespace-only padding adjacent to native `[OK]` lines and
 trailing whitespace-only output so native success messages sit directly beside
 the wrapper outcome. The opening `[RUN]` and final `[OK]` or `[FAIL]` stay level;
-direct uses of the shared helper preserve child output unchanged. Multi-step
-commands must pass a fail-fast executable or the complete nested Make recipe,
-not a shell function whose intermediate failures could be hidden by Bash
-conditional execution.
+direct uses of the shared helper preserve child output unchanged. Direct Make
+targets explicitly indent native child output where needed; pre-PR grouping adds
+a target label and separators without changing child indentation. Self-reporting
+targets own their output hierarchy in both contexts. Multi-step commands must
+pass a fail-fast executable or the complete nested Make recipe, not a shell
+function whose intermediate failures could be hidden by Bash conditional
+execution.
 
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion
@@ -210,13 +213,14 @@ start services; use the actual deployed PHP container, not the development
 container with `APP_ENV=prod`.
 
 See the [command reference](../doc/COMMANDS.md#commands) for scope and execution.
-Each complete recipe, including preparation, prints one `[RUN]` and a separated
-final `[OK]` or `[FAIL]`. Ordinary recipe output is indented two spaces on both
-streams, while GitHub workflow commands remain unindented and boundary statuses
-share the same indentation level. `run-tests` retains automatic PHP/phpdbg
-selection without duplicate summaries. A failed preparation step cannot produce
-a success summary. The internal `COMMAND_OUTPUT_RUN` Make variable prevents
-recursive decoration; callers should not set it.
+Each complete recipe, including preparation, prints one `[RUN]` and a final
+`[OK]` or `[FAIL]` without an intervening blank line. Ordinary recipe output is
+indented two spaces on both streams, while GitHub workflow commands remain
+unindented and boundary statuses share the same indentation level. `run-tests`
+retains automatic PHP/phpdbg selection without duplicate summaries. A failed
+preparation step cannot produce a success summary. The internal
+`COMMAND_OUTPUT_RUN` Make variable prevents recursive decoration; callers should
+not set it.
 
 Native progress, diagnostics, GitHub annotations, analyzer options and report
 paths remain unchanged apart from indentation of ordinary recipe output.
@@ -285,8 +289,8 @@ or bypass tool-specific agent safeguards.
 * The wrapper preserves command exit status, including failures and
   interruptions; Make itself may translate a failed recipe into exit 2. Existing
   informational update-check policies are unchanged.
-* Finite commands separate the final outcome from details with a blank line.
-  Sourced helpers use `output_result <status> <message>` for this separation.
+* Top-level Make `[OK]` and `[FAIL]` outcomes follow details without a blank
+  line. Nested results and direct helper calls keep their existing separation.
   Docker verification groups details by Dockerfile; action/tool checks group
   findings by repository and show aggregate counts. Warning outcomes never imply
   that updates were installed or that an upload succeeded.
@@ -639,7 +643,9 @@ help-only inventory. Help respects `COLOR` and `NO_COLOR` and remains usable
 without Docker. Use `GROUP` to show only one purpose; omitted or `GROUP=all`
 shows the full inventory. Unknown groups fail with the supported choices instead
 of an empty successful listing. Filtering changes only help output, not command
-routing.
+routing. The heading and introductory lines use the standard two-space Make
+output indentation, with target entries indented four spaces beneath their
+group.
 
 From the repository root on the Docker host (no running services required):
 

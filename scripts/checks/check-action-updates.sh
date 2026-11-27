@@ -564,7 +564,10 @@ print_summary() {
     printf 'Discovery warnings:      %s%s%s\n' "$YELLOW" "$DISCOVERY_WARNINGS" "$NC"
     printf 'Up-to-date:              %s%s%s\n' "$GREEN" "$CURRENT" "$NC"
     printf 'Updates available:       %s%s%s\n' "$YELLOW" "$OUTDATED" "$NC"
-    printf '\n'
+    if [ "$OUTDATED" -gt 0 ] || [ "${ACTION_OUTPUT_WRAPPED:-0}" != 1 ] ||
+        [ "${OUTPUT_COMPACT_TOP_LEVEL:-0}" != 1 ]; then
+        printf '\n'
+    fi
 
     if [ "$OUTDATED" -gt 0 ]; then
         printf '%sTo update actions:%s\n' "$YELLOW" "$NC"
@@ -572,7 +575,10 @@ print_summary() {
         printf '2. Follow the update process in doc/ACTIONS_UPDATE.md\n'
         printf '3. Test changes in a feature branch\n'
         printf '4. Create a PR and verify CI passes\n'
-        printf '\n'
+        if [ "$DISCOVERY_WARNINGS" -eq 0 ] || [ "${ACTION_OUTPUT_WRAPPED:-0}" != 1 ] ||
+            [ "${OUTPUT_COMPACT_TOP_LEVEL:-0}" != 1 ]; then
+            printf '\n'
+        fi
     fi
 }
 

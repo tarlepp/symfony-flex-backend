@@ -41,7 +41,7 @@ class ToolUpdatesTest(unittest.TestCase):
                     action_sha_refs=None, composite=False, git_error="",
                     sha_failure_status=1, workflow_content=None,
                     composite_content=None, files=None, missing_directory=None,
-                    find_status=None, unreadable_file=None):
+                    find_status=None, unreadable_file=None, compact=False, merged=False):
         """Run the real checker against isolated inputs and capture its result.
 
         By default, only tool pins are checked. Pass an empty mode to check
@@ -135,14 +135,16 @@ class ToolUpdatesTest(unittest.TestCase):
                 PATH=f"{root}:{os.environ['PATH']}",
             )
             command = ["bash", str(CHECKER), mode]
-
+            if compact:
+                environment["OUTPUT_COMPACT_TOP_LEVEL"] = "1"
             if wrapped:
                 output_wrapper = CHECKER.parents[1] / "output" / "action-update-output.sh"
                 command = ["bash", str(output_wrapper), *command]
 
             return subprocess.run(
                 command,
-                env=environment, text=True, capture_output=True, check=False,
+                env=environment, text=True, stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT if merged else subprocess.PIPE, check=False,
                 timeout=10,
             )
 
@@ -321,6 +323,23 @@ class ToolUpdatesTest(unittest.TestCase):
                     self.assertIn("retry failed GitHub lookups", wrapped.stderr)
                     self.assertIn("informational Make target remains successful", wrapped.stderr)
                     self.assertIn("[FAIL] Unable to fetch tool tags:", wrapped.stderr)
+
+    def test_compact_wrapped_outcome_has_no_trailing_summary_padding(self):
+        for refs, status, pin, outcome in (
+            (f"{SHA}\trefs/tags/v1.0.0", 0, None, "[OK] Action and tool update checks completed"),
+            ("", 1, None, "[FAIL] Action/tool checks incomplete:"),
+            (f"{SHA}\trefs/tags/v1.0.0\n{NEW_SHA}\trefs/tags/v2.0.0", 0,
+             f"FIXTURE_TAG=v1.0.0 # tool-pin: example/tool@{SHA}\n"
+             "INVALID_TAG=v1 # tool-pin: example/bad@bad\n",
+             "[FAIL] Action/tool checks incomplete:"),
+        ):
+            with self.subTest(outcome=outcome):
+                result = self.run_checker(
+                    refs, git_status=status, pin=pin, wrapped=True, compact=True, merged=True,
+                )
+                self.assertEqual(result.returncode, 0, result.stdout)
+                self.assertIn(f"\n{outcome}", result.stdout)
+                self.assertNotIn(f"\n\n{outcome}", result.stdout)
 
     def test_action_sha_lookup_failure_is_a_red_discovery_error(self):
         result = self.run_checker(

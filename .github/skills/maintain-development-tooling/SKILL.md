@@ -153,24 +153,31 @@ Inspect the implementation and its actual callers:
    The Make dispatcher adds two spaces to ordinary wrapped-target output lines
    on stdout and stderr. GitHub workflow commands stay at column zero so
    annotations remain active. The opening `[RUN]` and final outcome stay at the
-   same level. Wrapped target output removes whitespace padding immediately
-   before native `[OK]` lines and at end of stream. Self-reporting direct
-   targets own their hierarchy by indenting nested sections and scenario
-   statuses consistently, and closing completed sections with an outcome. In
-   grouped output, put the first nested `[RUN]` below its parent heading; keep
-   each outcome with its check. Use one blank line between completed sibling
-   checks and the next `[RUN]`, but none before the final aggregate outcome. If
-   a caller adds a separator, set `OUTPUT_RUN_GROUPED_SEPARATOR=0` to avoid
-   doubling it. Clear `OUTPUT_RUN_GROUPED` for independent regression processes
-   so output contracts stay isolated. Test stream indentation and outcome
-   levels; direct command helper callers retain child output. The local pre-PR
-   runner passes each nested Make target as `OUTPUT_RUN_TARGET`; wrapped labels
-   add the target name. `command-output.sh` adds the suffix to direct target
-   labels and indents child output. Register concise, human-readable pre-PR
-   labels before the `(make <target>)` suffix. Self-reporting direct targets
-   should use descriptive labels. The local pre-PR runner filters timestamped
-   Monolog `deprecation.INFO` records from nested Make stderr only; preserve
-   other diagnostics and direct Make behavior.
+   same level, without a blank line before a top-level `[OK]` or `[FAIL]`.
+   Nested result spacing and direct helper calls retain their own contracts.
+   Wrapped target output removes whitespace padding immediately before native
+   `[OK]` lines and at end of stream. Self-reporting direct targets own their
+   hierarchy by indenting nested sections and scenario statuses consistently,
+   and closing completed sections with an outcome. In grouped output, put the
+   first nested `[RUN]` below its parent heading; keep each outcome with its
+   check. Use one blank line between completed sibling checks and the next
+   `[RUN]`, but none before the final aggregate outcome. If a caller adds a
+   separator, set `OUTPUT_RUN_GROUPED_SEPARATOR=0` to avoid doubling it. Clear
+   `OUTPUT_RUN_GROUPED` for independent regression processes so output contracts
+   stay isolated. Test stream indentation and outcome levels; direct command
+   helper callers retain child output. The local pre-PR runner passes each
+   nested Make target as `OUTPUT_RUN_TARGET`; wrapped labels add the target name.
+   `command-output.sh` adds the suffix to direct target labels without changing
+   child indentation. Direct Make targets indent native output explicitly when
+   needed, and self-reporting targets own the same hierarchy in standalone and
+   grouped output. Register concise, human-readable pre-PR labels before the
+   `(make <target>)` suffix. Self-reporting direct targets should use descriptive
+   labels. The local pre-PR runner filters timestamped Monolog `deprecation.INFO`
+   records from nested Make stderr only; preserve other diagnostics and direct
+   Make behavior. `make help` uses the same two-space output indentation: its
+   section headings and introductory lines are indented two spaces, and target
+   entries are indented four spaces beneath them; shared top-level statuses stay
+   unindented.
 
    The pre-PR development and production image builds use host-only
    `docker-build-pre-pr-development` and `docker-build-pre-pr-production`
