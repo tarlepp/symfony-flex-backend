@@ -1071,6 +1071,10 @@ class CommandOutputTest(unittest.TestCase):
             (scripts / "make").mkdir()
             shutil.copyfile(ROOT / "scripts/make/pre-pr-checks.sh", scripts / "make/pre-pr-checks.sh")
             shutil.copyfile(HELPER, scripts / "output/command-output.sh")
+            shutil.copyfile(
+                ROOT / "scripts/output/command-progress.py",
+                scripts / "output/command-progress.py",
+            )
             shutil.copyfile(ROOT / "scripts/output/native-output.py", scripts / "output/native-output.py")
             shutil.copyfile(ROOT / "Makefile", Path(directory) / "Makefile")
             shutil.copy(
@@ -1105,6 +1109,10 @@ class CommandOutputTest(unittest.TestCase):
             (scripts / "make").mkdir()
             shutil.copyfile(ROOT / "scripts/make/pre-pr-checks.sh", scripts / "make/pre-pr-checks.sh")
             shutil.copyfile(HELPER, scripts / "output/command-output.sh")
+            shutil.copyfile(
+                ROOT / "scripts/output/command-progress.py",
+                scripts / "output/command-progress.py",
+            )
             shutil.copyfile(ROOT / "scripts/output/native-output.py", scripts / "output/native-output.py")
             shutil.copyfile(ROOT / "Makefile", Path(directory) / "Makefile")
             shutil.copy(
