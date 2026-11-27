@@ -29,7 +29,7 @@
 #   TARGET      Build stage, defaults to the last stage (build, push)
 #   TAG         Image tag to create (build, push)
 #   BUILDER     buildx builder name for multi-platform builds (push)
-#   DOCKER_VERIFY_WRAPPED  Set by Make to suppress the duplicate success outcome
+#   DOCKER_VERIFY_WRAPPED  Set by Make to suppress duplicate success/failure outcomes
 #
 # Input values are prompted for only when running in an interactive terminal.
 # check-updates defaults to external FROM and COPY --from images in project
@@ -1120,6 +1120,7 @@ native_color_enabled() {
 
 command_digest() {
     local raw type digest platforms name repository color='' heading='' reset=''
+    local report_indent="${OUTPUT_STATUS_INDENT:-}  " matching_lines line
 
     if native_color_enabled; then
         color=$'\033[34m'
@@ -1146,9 +1147,9 @@ command_digest() {
     name="${IMAGE%@*}"
 
     printf '\n'
-    printf '%sMedia type:%s %s\n' "$color" "$reset" "$type"
-    printf '%sDigest:%s     %s\n' "$color" "$reset" "$digest"
-    printf '%sPlatforms:%s  %s\n' "$color" "$reset" "${platforms:-none listed}"
+    printf '%s%sMedia type:%s %s\n' "$report_indent" "$color" "$reset" "$type"
+    printf '%s%sDigest:%s     %s\n' "$report_indent" "$color" "$reset" "$digest"
+    printf '%s%sPlatforms:%s  %s\n' "$report_indent" "$color" "$reset" "${platforms:-none listed}"
     printf '\n'
 
     if ! is_index "$type"; then
@@ -1163,16 +1164,21 @@ command_digest() {
         exit 1
     fi
 
-    printf '%sPin reference:%s\n\n    FROM %s@%s\n' "$heading" "$reset" "$name" "$digest"
+    printf '%s%sPin reference:%s\n\n%s    FROM %s@%s\n' \
+        "$report_indent" "$heading" "$reset" "$report_indent" "$name" "$digest"
     if [ "${OUTPUT_COMPACT_TOP_LEVEL:-0}" != 1 ]; then
         printf '\n'
     fi
 
     repository="${name%%:*}"
 
-    if grep -nE "^FROM ${repository}[:@]" "${PINNED_DOCKERFILES[@]}" 2> /dev/null; then
+    if matching_lines=$(grep -nE "^FROM ${repository}[:@]" "${PINNED_DOCKERFILES[@]}" 2> /dev/null); then
+        while IFS= read -r line; do
+            printf '%s%s\n' "$report_indent" "$line"
+        done <<< "$matching_lines"
         printf '\n'
-        output_status INFO "Lines above use the same image; update those to the new pin reference"
+        OUTPUT_STATUS_INDENT="$report_indent" \
+            output_status INFO "Lines above use the same image; update those to the new pin reference"
     fi
     output_outcome OK "Inspected ${IMAGE}; multi-platform pin reference shown above"
 }
@@ -1399,7 +1405,9 @@ command_verify() {
     write_verify_summary "$failures" "$warnings"
 
     if [ "$failures" -gt 0 ]; then
-        output_result FAIL "${failures} check(s) failed, see doc/DOCKER_MULTI_PLATFORM.md"
+        if [ "${DOCKER_VERIFY_WRAPPED:-0}" != 1 ]; then
+            output_result FAIL "${failures} check(s) failed, see doc/DOCKER_MULTI_PLATFORM.md"
+        fi
         exit 1
     fi
 
@@ -1416,31 +1424,32 @@ command_verify() {
 # The subshell keeps pipefail local; the guard also works under conditional calls.
 inspect_builder_platforms() (
     local color=$1 reset=$2 heading=$3
+    local indent="${OUTPUT_STATUS_INDENT:-}  "
 
     set -o pipefail
 
     docker buildx inspect --bootstrap |
-        awk -v color="$color" -v reset="$reset" -v heading="$heading" '
+        awk -v color="$color" -v reset="$reset" -v heading="$heading" -v indent="$indent" '
             /^(Name|Driver|Platforms):/ && !seen[$1]++ {
                 if (!printed_heading++) {
-                    printf "%sBuildx builder%s\n", heading, reset
-                    print "Current builder and first node"
+                    printf "%s%sBuildx builder%s\n", indent, heading, reset
+                    print indent "Current builder and first node"
                     print ""
                 }
                 colon = index($0, ":")
                 label = substr($0, 1, colon)
                 value = substr($0, colon + 1)
                 sub(/^[[:space:]]+/, "", value)
-                printf "%s%s%s%*s%s\n", color, label, reset, 12 - length(label), "", value
+                printf "%s%s%s%s%*s%s\n", indent, color, label, reset, 12 - length(label), "", value
             }
         ' || exit $?
 
     printf '\n' &&
-        printf '%sField descriptions%s\n' "$heading" "$reset" &&
+        printf '%s%sField descriptions%s\n' "$indent" "$heading" "$reset" &&
         printf '%s\n' \
-            '  Name       Current buildx builder.' \
-            '  Driver     Backend used to run the builder.' \
-            '  Platforms  Build targets reported for the first builder node.'
+            "${indent}  Name       Current buildx builder." \
+            "${indent}  Driver     Backend used to run the builder." \
+            "${indent}  Platforms  Build targets reported for the first builder node."
 )
 
 command_platforms() {

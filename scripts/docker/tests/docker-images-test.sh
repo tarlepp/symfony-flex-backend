@@ -563,6 +563,10 @@ TEST_VERIFY_TAG_DIGEST='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 grep -Fq '      [FAIL] Tag digest mismatch:' "$WORK/output"
 grep -q '^::error file=Dockerfile,line=2,title=Tag and digest do not match::' "$WORK/output"
 grep -Fq '[FAIL] Repository Dockerfile pins (live registry verification)' "$WORK/output"
+if grep -Eq '^\[FAIL\] [0-9]+ check\(s\) failed, see doc/DOCKER_MULTI_PLATFORM\.md$' "$WORK/output"; then
+    printf 'FAIL: pre-PR verification contains a duplicate failure outcome\n'
+    exit 1
+fi
 printf 'FROM test:fixture\n' > "$WORK/Dockerfile"
 bash "$WORK/scripts/make/pre-pr-checks.sh" > "$WORK/output" 2>&1
 grep -Fxq '  ./Dockerfile' "$WORK/output"
@@ -597,6 +601,15 @@ TEST_VERIFY_TAG_DIGEST='sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 grep -Fq '      [FAIL] Tag digest mismatch:' "$WORK/output"
 grep -Fq '::error file=Dockerfile,line=2,title=Tag and digest do not match::' "$WORK/output"
 grep -Fq '[FAIL] Repository Dockerfile pins (live registry verification)' "$WORK/output"
+if grep -Eq '^\[FAIL\] [0-9]+ check\(s\) failed, see doc/DOCKER_MULTI_PLATFORM\.md$' "$WORK/output"; then
+    printf 'FAIL: Make output contains a duplicate failure outcome\n'
+    exit 1
+fi
+if [ "$(grep -c '^\[FAIL\] ' "$WORK/output")" -ne 1 ]; then
+    printf 'FAIL: Make output must contain one top-level failure outcome\n'
+    cat "$WORK/output"
+    exit 1
+fi
 printf 'FROM test:fixture\n' > "$WORK/Dockerfile"
 make --no-print-directory APPLICATION_CONFIG=unused INSIDE_CONTAINER_RUNTIME=0 \
     docker-image-verify-pins > "$WORK/output" 2>&1
@@ -608,6 +621,7 @@ write_base_dockerfiles 'test:fixture@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 verify_pin_parity 'mismatched tag digest fails verification' \
     'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' 1 \
     'Tag digest mismatch: tag resolves to sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+grep -Eq '^\[FAIL\] [0-9]+ check\(s\) failed, see doc/DOCKER_MULTI_PLATFORM\.md$' "$WORK/output"
 grep -Fq '::error file=Dockerfile,line=1,title=Tag and digest do not match::' "$WORK/output"
 
 verify_pin_parity 'tag digest lookup failure fails verification' \

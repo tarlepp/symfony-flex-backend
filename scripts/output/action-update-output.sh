@@ -8,7 +8,8 @@
 #
 # Details:
 #   Update and lookup findings are informational; cancellation and unexpected
-#   failure statuses are preserved.
+#   failure statuses are preserved. Nested checker output is indented beneath
+#   this wrapper's status and final outcome.
 #
 # Callers:
 #   Makefile:
@@ -20,7 +21,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/command-output.sh"
 output_status RUN 'GitHub Action pins and available updates (informational)'
 
 status=0
-ACTION_OUTPUT_WRAPPED=1 "$@" || status=$?
+ACTION_OUTPUT_WRAPPED=1 python3 "$OUTPUT_DIR/native-output.py" --indent "$@" || status=$?
 
 case "$status" in
     0)
