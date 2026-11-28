@@ -73,7 +73,10 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
    Dockerfile. The maintenance workflow synchronizes Doctrine and the CI MariaDB
    pin even when the image tag is unchanged. For unchanged PHP tags, it verifies
    Composer baselines and lockfiles and fails on drift for review rather than
-   silently changing the supported PHP requirement.
+   silently changing the supported PHP requirement. Its generated PR summarizes
+   actual file and configuration changes and reports maintenance step outcomes
+   separately from PR CI; do not infer that synchronization changed a file or
+   that the updater ran application builds or tests.
 5. Run `make docker-image-verify-pins`. It covers external `FROM` and
    `COPY --from` references in the root PHP, nginx, and MariaDB Dockerfiles, not
    every image reference in the repository. Inspect changed Compose, CI, or
