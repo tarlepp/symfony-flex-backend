@@ -194,6 +194,7 @@ exit 0
             NVM_DIR=str(self.root / "missing-nvm"),
         )
 
+        environment.pop("GITHUB_OUTPUT", None)
         environment.update(overrides)
         result = subprocess.run(
             ["bash", "scripts/make/make.sh", "APPLICATION_CONFIG=fixture.json",
@@ -290,6 +291,20 @@ exit 0
 
                 if exit_code:
                     self.assertIn("[FAIL] Preview CI validation selection (exit 2)", result.stderr)
+
+    def test_change_preview_preserves_caller_output(self):
+        detector = self.root / "scripts/ci/ci-detect-changes.sh"
+        detector.write_text(
+            '#!/bin/bash\n'
+            'printf "php=true\\n" >> "$GITHUB_OUTPUT"\n'
+        )
+        output = self.root / "caller-output"
+        output.write_text("existing=true\n")
+
+        result = self.make("ci-detect-changes", GITHUB_OUTPUT=str(output))
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(output.read_text(), "existing=true\nphp=true\n")
 
     def test_change_preview_has_no_blank_line_before_outcome(self):
         detector = self.root / "scripts/ci/ci-detect-changes.sh"
