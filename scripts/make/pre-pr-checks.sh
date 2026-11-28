@@ -121,6 +121,13 @@ run_make() {
         make "$target" || exit "$?"
 }
 
+run_host_make() {
+    local target=$1
+
+    printf '\n' >&2
+    OUTPUT_RUN_GROUPED=1 OUTPUT_RUN_TARGET="$target" make "$target" || exit "$?"
+}
+
 run_host_command() {
     local label=$1
     shift
@@ -223,11 +230,10 @@ if selected tests; then
         python3 scripts/ci/ci-test-reports.py verify
 fi
 
+
 if selected docker; then
-    run_host_command 'Build development Docker image' docker buildx build --pull --load --target development \
-        --tag symfony-flex-backend:pre-pr-development .
-    run_host_command 'Build production Docker image' docker buildx build --pull --load --target production \
-        --no-cache-filter production --tag symfony-flex-backend:pre-pr-production .
+    run_host_make docker-build-pre-pr-development
+    run_host_make docker-build-pre-pr-production
 fi
 
 printf '\nSelected local pre-PR checks completed.\n'

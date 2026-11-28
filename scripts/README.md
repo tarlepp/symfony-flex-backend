@@ -1223,7 +1223,20 @@ stderr; other diagnostics and direct Make target output remain unchanged. It
 does not reproduce GitHub-hosted security scans, dependency review, external reporting,
 scheduled maintenance, or informational jobs. The all-checks target always
 builds both image targets; the selected target builds them when the Docker
-category is selected.
+category is selected. The host-only build targets can also run individually from
+the repository root on the Docker host:
+
+```bash
+make docker-build-pre-pr-development
+make docker-build-pre-pr-production
+```
+
+These commands overwrite `symfony-flex-backend:pre-pr-development` and
+`symfony-flex-backend:pre-pr-production` respectively. Both pull base images and
+load the build locally; the production target disables cache for the production
+stage. Both use Buildx plain progress to avoid interactive redraws through the
+output wrapper while retaining build logs and errors. They require Docker Buildx
+and registry access and do not start services.
 
 It reads the current working directory's Git repository; it must not change to
 the script directory, because offline tests use isolated repositories.
