@@ -592,6 +592,11 @@ distinguishes both from PR CI; lockfile changes are listed without embedding the
 full diffs. Existing core CI gates are unchanged; the updater does not build its
 proposed images or run application tests.
 
+The [image-update coverage guide](DOCKER_MULTI_PLATFORM.md#automatic-update-coverage)
+distinguishes eligible Dockerfile pins and synchronized settings from the
+frontend directive, unpinned Compose images and other references requiring
+separate review. A no-change run does not mean those excluded images are current.
+
 For digest-only updates, the PR and Actions run summary share the same report of
 runnable platform changes and available base-image and source-revision metadata.
 Expand the details to compare the old and new indexes, platform annotations and

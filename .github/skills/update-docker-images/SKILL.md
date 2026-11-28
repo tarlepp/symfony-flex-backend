@@ -76,7 +76,12 @@ and the image-pinning procedure in [DOCKER_MULTI_PLATFORM.md](../../../doc/DOCKE
    silently changing the supported PHP requirement. Its generated PR summarizes
    actual file and configuration changes and reports maintenance step outcomes
    separately from PR CI; do not infer that synchronization changed a file or
-   that the updater ran application builds or tests.
+   that the updater ran application builds or tests. Consult the
+   [automation coverage guide](../../../doc/DOCKER_MULTI_PLATFORM.md#automatic-update-coverage)
+   before claiming that all images are maintained. The frontend directive,
+   unpinned Compose images, and other non-Dockerfile references are not generally
+   covered; CI MariaDB synchronization is a specific exception. Review excluded
+   references separately rather than silently changing policy.
 5. Run `make docker-image-verify-pins`. It covers external `FROM` and
    `COPY --from` references in the root PHP, nginx, and MariaDB Dockerfiles, not
    every image reference in the repository. Inspect changed Compose, CI, or
