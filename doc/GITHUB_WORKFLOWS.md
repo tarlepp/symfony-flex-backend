@@ -574,18 +574,19 @@ without creating duplicate PRs on each run. It applies stable minor/patch
 updates within each image's current major version and refreshes digests,
 preserving variants and existing platforms. PHP is patch-only: when the PHP tag
 changes, the workflow refreshes PHP requirements, platform settings, and
-lockfiles for the root and every tool without upgrading packages. When the
-MariaDB tag changes, the workflow updates Doctrine's `server_version` to match.
-It also synchronizes the core CI MariaDB service tag and digest with the MariaDB
-Dockerfile, including digest-only changes and existing drift. CI's PHP runtime
-comes from the shared PHP Dockerfile. It updates existing tagged digest pins in
-Dockerfile `FROM` and external `COPY --from` instructions; other Compose and
-workflow image references are outside its scope. It verifies the Dockerfile pins
-before creating or updating one PR per selected base branch. No changes means no
-new PR. The Actions run summary shows the base branch, step and PR outcomes, a
-changed-file summary (including lockfiles), and the exact image pin, CI service
-and Doctrine diffs. Existing core CI gates are unchanged; the updater does not
-build its proposed images or run application tests.
+lockfiles for the root and every tool without upgrading packages. When the PHP
+tag is unchanged, it verifies those baselines and lockfiles and fails on drift
+for manual review. The workflow synchronizes Doctrine's `server_version` and the
+core CI MariaDB service tag and digest with the MariaDB Dockerfile, including
+digest-only changes and existing drift. CI's PHP runtime comes from the shared
+PHP Dockerfile. It updates existing tagged digest pins in Dockerfile `FROM` and
+external `COPY --from` instructions; other Compose and workflow image references
+are outside its scope. It verifies the Dockerfile pins before creating or
+updating one PR per selected base branch. No changes means no new PR. The Actions
+run summary shows the base branch, step and PR outcomes, a changed-file summary
+(including lockfiles), and the exact image pin, CI service and Doctrine diffs.
+Existing core CI gates are unchanged; the updater does not build its proposed
+images or run application tests.
 
 For digest-only updates, the PR and Actions run summary share the same report of
 runnable platform changes and available base-image and source-revision metadata.

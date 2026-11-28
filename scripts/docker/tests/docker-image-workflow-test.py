@@ -1558,7 +1558,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Could not read the Dockerfile diff", result.stderr)
 
-    def test_doctrine_sync_updates_only_server_version_on_a_same_major_tag_change(self):
+    def test_doctrine_sync_updates_only_server_version_and_detects_unchanged_tag_drift(self):
         dockerfile = self.root / "docker/mariadb/Dockerfile"
 
         dockerfile.parent.mkdir(parents=True)
@@ -1579,6 +1579,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         for candidate, source, status, expected in (
             (pin("13.1.1"), original, 0, original.replace("mariadb-13.0.2", "mariadb-13.1.1")),
             (pin("13.0.2", "b"), original, 0, original),
+            (pin("13.0.2", "b"), original.replace("mariadb-13.0.2", "mariadb-13.0.1"), 0, original),
             (pin("14.0.0"), original, 1, original),
             (pin("13.1.1") * 2, original, 1, original),
             (pin("13.1.1"), original.replace("server_version:", "other:"), 1,
@@ -1587,6 +1588,10 @@ class DockerImageWorkflowTest(unittest.TestCase):
              original + "        server_version: 'mariadb-13.0.2'\n"),
             (pin("13.1.1"), original.replace("'mariadb-13.0.2'", "'13.0.2'"), 1,
              original.replace("'mariadb-13.0.2'", "'13.0.2'")),
+            (pin("13.0.2"), original.replace("server_version:", "other:"), 1,
+             original.replace("server_version:", "other:")),
+            (pin("13.0.2"), original + "        server_version: 'mariadb-13.0.2'\n", 1,
+             original + "        server_version: 'mariadb-13.0.2'\n"),
         ):
             with self.subTest(candidate=candidate, status=status):
                 dockerfile.write_text(candidate)
@@ -1738,7 +1743,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 self.assertIn("::error::", result.stdout)
                 self.assertEqual(workflow.read_text(), workflow_source)
 
-    def test_composer_sync_only_for_patch_changes_and_fails_closed(self):
+    def test_composer_sync_checks_patch_and_unchanged_baselines_and_fails_closed(self):
         helper = ROOT / "scripts/sync-composer-php.sh"
         mock = self.root / "composer"
 
@@ -1750,8 +1755,13 @@ class DockerImageWorkflowTest(unittest.TestCase):
         tool.mkdir(parents=True)
 
         for directory in (self.root, tool):
-            for name in ("composer.json", "composer.lock"):
-                (directory / name).touch()
+            (directory / "composer.json").write_text(json.dumps({
+                "require": {"php": "^8.5.12"}, "config": {"platform": {"php": "8.5.12"}},
+            }))
+            (directory / "composer.lock").write_text(json.dumps({
+                "packages": [], "packages-dev": [], "platform": {"php": "^8.5.12"},
+                "platform-overrides": {"php": "8.5.12"},
+            }))
 
         def dockerfile(version, digest="a"):
             return f"FROM php:{version}-fpm-trixie@sha256:{digest * 64} AS php-upstream\n"
@@ -1766,14 +1776,52 @@ class DockerImageWorkflowTest(unittest.TestCase):
                 check=False, timeout=10,
             )
 
-        for candidate, status in (
-            (dockerfile("8.5.12", "b"), 0), (dockerfile("8.6.1"), 1),
-            ("FROM scratch\n", 1), (dockerfile("8.5.13") * 2, 1),
-        ):
-            result = run(candidate)
+        result = run(dockerfile("8.5.12", "b"))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Composer baselines and lockfiles verified", result.stdout)
+        self.assertEqual(calls.read_text().splitlines(), [
+            f"--working-dir={directory} --no-interaction --no-plugins --no-scripts validate --no-check-version"
+            for directory in ("tools/example", ".")
+        ])
 
-            self.assertEqual(result.returncode, status, result.stderr)
+        for candidate in (dockerfile("8.6.1"), "FROM scratch\n", dockerfile("8.5.13") * 2):
+            result = run(candidate)
+            self.assertEqual(result.returncode, 1, result.stderr)
             self.assertFalse(calls.exists())
+
+        for filename, key, value in (
+            ("composer.json", ("require", "php"), "^8.5.11"),
+            ("composer.json", ("config", "platform", "php"), "8.5.11"),
+            ("composer.lock", ("platform", "php"), "^8.5.11"),
+            ("composer.lock", ("platform-overrides", "php"), "8.5.11"),
+        ):
+            target = tool / filename
+            original = target.read_text()
+            data = json.loads(original)
+            field = data
+            for component in key[:-1]:
+                field = field[component]
+            field[key[-1]] = value
+            target.write_text(json.dumps(data))
+            result = run(dockerfile("8.5.12", "b"))
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("baseline drift", result.stderr)
+            self.assertFalse(calls.exists())
+            target.write_text(original)
+
+        for filename in ("composer.json", "composer.lock"):
+            target = tool / filename
+            original = target.read_text()
+            target.write_text("{invalid")
+            result = run(dockerfile("8.5.12", "b"))
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("invalid JSON", result.stderr)
+            self.assertFalse(calls.exists())
+            target.write_text(original)
+
+        result = run(dockerfile("8.5.12"), FAIL_COMMAND="validate")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(len(calls.read_text().splitlines()), 1)
 
         result = run(dockerfile("8.5.13"))
 
@@ -1797,9 +1845,7 @@ class DockerImageWorkflowTest(unittest.TestCase):
         self.assertIn("Missing Composer manifest or lockfile", result.stderr)
         self.assertFalse(calls.exists())
 
-        for directory in (self.root, tool):
-            (directory / "composer.lock").write_text('{"packages":[],"packages-dev":[]}\n')
-
+        (tool / "composer.lock").write_text('{"packages":[],"packages-dev":[]}\n')
         for version in ("8.5.13", "8.7.0", "9.0.0"):
             result = run(dockerfile(version), dockerfile("8.5.12"), "--next-minor")
 
@@ -1816,15 +1862,66 @@ class DockerImageWorkflowTest(unittest.TestCase):
         with mock.open("a") as script_file:
             script_file.write(
                 'if [[ "$*" == *" update --lock "* ]]; then\n'
-                '    printf \'%s\\n\' \'{"packages":[{"name":"example/tool","version":"2.0"}],"packages-dev":[]}\''
+                '    printf \'%s\\n\' \'{"packages":[{"name":"example/tool","version":"1.0",'
+                '"source":{"reference":"changed"},"dist":{"reference":"same"}}],"packages-dev":[]}\''
                 ' > "${1#--working-dir=}/composer.lock"\n'
                 'fi\n'
             )
 
-        result = run(dockerfile("8.6.2"), dockerfile("8.5.12"), "--next-minor")
+        for candidate, args in (
+            ("8.5.13", ()),
+            ("8.6.2", ("--next-minor",)),
+        ):
+            for directory in (self.root, tool):
+                (directory / "composer.lock").write_text(json.dumps({
+                    "packages": [{
+                        "name": "example/tool", "version": "1.0",
+                        "source": {"reference": "original"}, "dist": {"reference": "same"},
+                    }],
+                    "packages-dev": [],
+                }))
+            result = run(dockerfile(candidate), dockerfile("8.5.12"), *args)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("Package versions or references changed", result.stderr)
 
-        self.assertEqual(result.returncode, 1)
-        self.assertIn("Package versions or references changed", result.stderr)
+    def test_composer_sync_workflow_step_passes_old_dockerfile_to_helper(self):
+        helper = self.root / "scripts/sync-composer-php.sh"
+        helper.write_bytes((ROOT / "scripts/sync-composer-php.sh").read_bytes())
+        pin = f"FROM php:8.5.12-fpm-trixie@sha256:{'a' * 64} AS php-upstream\n"
+        (self.root / "Dockerfile").write_text(pin)
+        tool = self.root / "tools/example"
+        tool.mkdir(parents=True)
+        for directory in (self.root, tool):
+            (directory / "composer.json").write_text(json.dumps({
+                "require": {"php": "^8.5.12"}, "config": {"platform": {"php": "8.5.12"}},
+            }))
+            (directory / "composer.lock").write_text(json.dumps({
+                "packages": [], "packages-dev": [], "platform": {"php": "^8.5.12"},
+                "platform-overrides": {"php": "8.5.12"},
+            }))
+        git = self.root / "git"
+        git.write_text(f'#!/bin/bash\n[[ "$*" == "show HEAD:Dockerfile" ]] || exit 64\nprintf %s \'{pin}\'\n')
+        git.chmod(0o755)
+        binary_dir = self.root / "bin"
+        binary_dir.mkdir()
+        docker = binary_dir / "docker"
+        docker.write_text(
+            '#!/bin/bash\n'
+            '[[ "$*" == "compose -f compose.yaml -f docker/ci-compose.yaml exec -T '
+            '-e COMPOSER_HOME=/tmp/composer php bash scripts/sync-composer-php.sh" ]] || exit 64\n'
+            'exec bash scripts/sync-composer-php.sh\n',
+        )
+        docker.chmod(0o755)
+        composer = self.root / "composer"
+        composer.write_text('#!/bin/bash\n[[ "$*" == *" validate --no-check-version" ]]\n')
+        composer.chmod(0o755)
+
+        result = self.run_script(
+            WORKFLOW, "Synchronize Composer with the PHP image",
+            PATH=f"{binary_dir}:{self.root}:{os.environ['PATH']}",
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Composer baselines and lockfiles verified", result.stdout)
 
     def test_php_minor_pr_outcome_summary_and_failures(self):
         steps = yaml.safe_load(WORKFLOW)["jobs"]["php-minor-readiness"]["steps"]
