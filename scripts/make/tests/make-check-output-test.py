@@ -91,7 +91,7 @@ class MakeCheckOutputTest(unittest.TestCase):
         )
 
         for name in (
-            "bin/python3", "bin/php", "scripts/checks/lint-workflows.sh",
+            "bin/python3", "bin/php", "bin/console", "scripts/checks/lint-workflows.sh",
             "scripts/make/tests/make-container-test.sh", "scripts/docker/docker-images.sh",
         ):
             file = self.root / name
@@ -104,7 +104,7 @@ class MakeCheckOutputTest(unittest.TestCase):
         docker.write_text("#!/usr/bin/env bash\nexit 0\n")
         docker.chmod(0o755)
 
-    def run_check(self, target, status=0, color="never", no_color="", run_target=""):
+    def run_check(self, target, status=0, color="never", no_color="", run_target="", grouped="0"):
         """Return the Make result and the fresh command log for one invocation."""
         calls = self.root / "calls"
 
@@ -114,6 +114,7 @@ class MakeCheckOutputTest(unittest.TestCase):
             CALLS=str(calls), FIXTURE_STATUS=str(status), NO_COLOR=no_color,
             OUTPUT_RUN_TARGET=run_target,
             OUTPUT_RUN_TARGET_ACTIVE="",
+            OUTPUT_RUN_GROUPED=grouped,
         )
         result = subprocess.run(
             ["make", "--no-print-directory", "APPLICATION_CONFIG=unused",
@@ -131,7 +132,8 @@ class MakeCheckOutputTest(unittest.TestCase):
                     result, calls = self.run_check(target, status)
 
                     self.assertIn("[RUN] " + label, result.stderr)
-                    self.assertEqual(result.stdout, "fixture stdout\n")
+                    indent = "" if target == "docker-image-verify-pins" else "  "
+                    self.assertEqual(result.stdout, f"{indent}fixture stdout\n")
                     self.assertIn("fixture diagnostic", result.stderr)
                     arguments = command.split(" ", 1)[1]
 
@@ -141,15 +143,42 @@ class MakeCheckOutputTest(unittest.TestCase):
                     if status == 0:
                         self.assertEqual(result.returncode, 0, result.stderr)
                         self.assertEqual(result.stderr.count("[OK] " + label), 1)
-                        self.assertIn(f"fixture diagnostic\n\n[OK] {label}", result.stderr)
+                        self.assertIn(f"{indent}fixture diagnostic\n\n[OK] {label}", result.stderr)
                     else:
                         self.assertNotEqual(result.returncode, 0)
                         self.assertIn(f"[FAIL] {label} (exit {status})", result.stderr)
-                        self.assertIn(f"fixture diagnostic\n\n[FAIL] {label}", result.stderr)
+                        self.assertIn(f"{indent}fixture diagnostic\n\n[FAIL] {label}", result.stderr)
                         self.assertIn(f"Error {status}", result.stderr)
                         self.assertNotIn("[OK]", result.stderr)
 
                     self.assertNotIn("\033", result.stderr)
+
+    def test_direct_and_grouped_checks_share_the_same_body_layout(self):
+        for target, label, _ in CHECKS:
+            for status in (0, 7):
+                with self.subTest(target=target, status=status):
+                    direct, _ = self.run_check(target, status=status)
+                    grouped, _ = self.run_check(target, status=status, run_target=target, grouped="1")
+                    self.assertEqual(direct.returncode, grouped.returncode)
+                    self.assertEqual(direct.stdout, grouped.stdout)
+                    direct_stderr = direct.stderr.replace("\n\n[OK]", "\n[OK]").replace("\n\n[FAIL]", "\n[FAIL]")
+                    grouped_stderr = grouped.stderr.replace(f" (make {target})", "")
+                    # Make's recipe error includes a line number, not part of the target output.
+                    self.assertEqual(direct_stderr, grouped_stderr)
+
+    def test_dependency_checks_indent_their_native_output(self):
+        for level in ("latest", "minor", "patch"):
+            target = f"check-dependencies-{level}"
+            for status in (0, 7):
+                with self.subTest(target=target, status=status):
+                    direct, _ = self.run_check(target, status=status)
+                    grouped, _ = self.run_check(target, status=status, run_target=target, grouped="1")
+                    self.assertEqual(direct.returncode, grouped.returncode)
+                    self.assertEqual(direct.stdout, "  fixture stdout\n")
+                    self.assertEqual(grouped.stdout, direct.stdout)
+                    self.assertIn("  fixture diagnostic\n", direct.stderr)
+                    self.assertIn("  fixture diagnostic\n", grouped.stderr)
+                    self.assertIn("[OK]" if status == 0 else "[FAIL]", grouped.stderr)
 
     def test_make_color_controls(self):
         for target, label, _ in CHECKS:
@@ -174,8 +203,7 @@ class MakeCheckOutputTest(unittest.TestCase):
         environment.pop("NATIVE_COLOR", None)
         command = ["make", "--no-print-directory", "APPLICATION_CONFIG=unused",
                    "INSIDE_DOCKER_CONTAINER=1", "check-requirements"]
-        plain = "Symfony Requirements Checker\n[OK]\n"
-
+        plain = "  Symfony Requirements Checker\n  [OK]\n"
         for color, no_color, emit_ansi, expected in (
             ("always", "", "0", True), ("never", "", "1", False),
             ("always", "1", "1", False), ("auto", "", "0", False),

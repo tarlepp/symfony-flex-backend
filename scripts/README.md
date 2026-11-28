@@ -135,10 +135,13 @@ from both streams by two spaces, leaving GitHub workflow commands at column
 zero. It removes whitespace-only padding adjacent to native `[OK]` lines and
 trailing whitespace-only output so native success messages sit directly beside
 the wrapper outcome. The opening `[RUN]` and final `[OK]` or `[FAIL]` stay level;
-direct uses of the shared helper preserve child output unchanged. Multi-step
-commands must pass a fail-fast executable or the complete nested Make recipe,
-not a shell function whose intermediate failures could be hidden by Bash
-conditional execution.
+direct uses of the shared helper preserve child output unchanged. Direct Make
+targets explicitly indent native child output where needed; pre-PR grouping adds
+a target label and separators without changing child indentation. Self-reporting
+targets own their output hierarchy in both contexts. Multi-step commands must
+pass a fail-fast executable or the complete nested Make recipe, not a shell
+function whose intermediate failures could be hidden by Bash conditional
+execution.
 
 Stream mode replaces the helper process using `exec`, retaining terminal
 descriptors, signals, arguments, and native failures without completion

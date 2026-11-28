@@ -133,10 +133,6 @@ output_run() {
         label="$label (make $OUTPUT_RUN_TARGET)"
         OUTPUT_RUN_TARGET_ACTIVE=1
         export OUTPUT_RUN_TARGET_ACTIVE
-        command=(
-            python3 "$OUTPUT_DIR/native-output.py" --indent --compact-status-spacing
-            "${command[@]}"
-        )
     fi
 
     if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then

@@ -166,8 +166,10 @@ Inspect the implementation and its actual callers:
    levels; direct command helper callers retain child output. The local pre-PR
    runner passes each nested Make target as `OUTPUT_RUN_TARGET`; wrapped labels
    add the target name. `command-output.sh` adds the suffix to direct target
-   labels and indents child output. Register concise, human-readable pre-PR
-   labels before the `(make <target>)` suffix. Self-reporting direct targets
+   labels without changing child indentation. Direct Make targets indent native
+   output explicitly when needed, and self-reporting targets own the same
+   hierarchy in standalone and grouped output. Register concise, human-readable
+   pre-PR labels before the `(make <target>)` suffix. Self-reporting direct targets
    should use descriptive labels. The local pre-PR runner filters timestamped
    Monolog `deprecation.INFO` records from nested Make stderr only; preserve
    other diagnostics and direct Make behavior.

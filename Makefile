@@ -62,6 +62,7 @@ NATIVE_COLOR := $(native_color)
 endif
 export NATIVE_COLOR
 export COMPOSE_ANSI := $(NATIVE_COLOR)
+INDENT_OUTPUT := python3 scripts/output/native-output.py --indent --compact-status-spacing
 # Progress indicator policy: auto (interactive terminal outside CI), always or never
 export PROGRESS ?= auto
 CONTAINER_ENV = --env COLOR --env NO_COLOR --env NATIVE_COLOR --env PROGRESS --env OUTPUT_PROGRESS_SHARED $(foreach name,\
@@ -246,7 +247,7 @@ ifneq ($(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
 	@$(MAKE) COMMAND_OUTPUT_RUN=1 $@
 else
 	+@OUTPUT_RUN_TARGET_ACTIVE=1 bash scripts/output/command-output.sh --run "$(COMMAND_LABEL)" \
-		python3 scripts/output/native-output.py --indent --compact-status-spacing \
+		$(INDENT_OUTPUT) \
 		bash scripts/make/make.sh COMMAND_OUTPUT_RUN=1 $@
 endif
 $(filter-out $(WRAPPED_TARGETS),$(MAKECMDGOALS)):
@@ -347,17 +348,21 @@ test-docker-images: ## Run offline mocked helper tests; use docker-image-verify-
 	@bash scripts/docker/tests/docker-images-test.sh
 
 test-make-routing: ## Test host and CI container command routing
-	@bash scripts/output/command-output.sh "Make container routing (offline mocked tests)" bash scripts/make/tests/make-container-test.sh
+	@bash scripts/output/command-output.sh "Make container routing (offline mocked tests)" \
+		$(INDENT_OUTPUT) \
+		env -u OUTPUT_RUN_GROUPED -u OUTPUT_RUN_TARGET -u OUTPUT_RUN_TARGET_ACTIVE bash scripts/make/tests/make-container-test.sh
 
 # Linting and static analysis
 
 check-requirements: ## Check application runtime requirements
 	@bash scripts/output/command-output.sh --run \
 		"Application runtime requirements" \
+		$(INDENT_OUTPUT) \
 		bash scripts/output/native-output.sh env TERM_PROGRAM=$(if $(filter always,$(NATIVE_COLOR)),Hyper,) XDEBUG_MODE=off php ./vendor/bin/requirements-checker
 
 check-skills: ## Validate skill metadata, index coverage, and repository Markdown links inside Docker
-	@bash scripts/output/command-output.sh "Skill metadata and documentation links" python3 scripts/checks/check-skills.py
+	@bash scripts/output/command-output.sh "Skill metadata and documentation links" \
+		$(INDENT_OUTPUT) python3 scripts/checks/check-skills.py
 
 composer-require-checker: ## Check the defined dependencies against your code
 	@XDEBUG_MODE=off php /app/vendor/bin/composer-require-checker $(ANSI_FLAG)
@@ -387,7 +392,8 @@ lint-python: ## Lint Python files with Ruff
 		python3 scripts/output/native-output.py --indent ruff check .
 
 lint-workflows: ## Validate GitHub workflows, embedded shell, and local action metadata
-	@bash scripts/output/command-output.sh "GitHub workflows and local action metadata" bash scripts/checks/lint-workflows.sh
+	@bash scripts/output/command-output.sh "GitHub workflows and local action metadata" \
+		$(INDENT_OUTPUT) bash scripts/checks/lint-workflows.sh
 
 lint-yaml: ## Lint config YAML files
 	@@bin/console lint:yaml config --parse-tags $(ANSI_FLAG)
@@ -459,13 +465,16 @@ check-action-updates: ## Check pinned GitHub Actions and available updates
 	@bash scripts/output/command-output.sh --progress "GitHub Action pins and available updates" bash scripts/output/action-update-output.sh ./scripts/checks/check-action-updates.sh
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
-	@bash scripts/output/command-output.sh "Vendor dependency update check (latest)" bin/console check-dependencies $(ANSI_FLAG)
+	@bash scripts/output/command-output.sh "Vendor dependency update check (latest)" \
+		$(INDENT_OUTPUT) bin/console check-dependencies $(ANSI_FLAG)
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
-	@bash scripts/output/command-output.sh "Vendor dependency update check (minor)" bin/console check-dependencies --level=minor $(ANSI_FLAG)
+	@bash scripts/output/command-output.sh "Vendor dependency update check (minor)" \
+		$(INDENT_OUTPUT) bin/console check-dependencies --level=minor $(ANSI_FLAG)
 
 check-dependencies-patch: ## Checks if any vendor dependency can be updated (only patch versions)
-	@bash scripts/output/command-output.sh "Vendor dependency update check (patch)" bin/console check-dependencies --level=patch $(ANSI_FLAG)
+	@bash scripts/output/command-output.sh "Vendor dependency update check (patch)" \
+		$(INDENT_OUTPUT) bin/console check-dependencies --level=patch $(ANSI_FLAG)
 
 check-licenses: ## Check vendor licenses
 	@bash -o pipefail -c 'XDEBUG_MODE=off composer license --format=json | \
@@ -744,7 +753,7 @@ docker-image-verify-pins: ## Verify external FROM and COPY image pins are multi-
 ifeq ($(INSIDE_CONTAINER_RUNTIME), 1)
 	$(HOST_CONTEXT_FAILURE)
 else
-	@bash scripts/output/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker/docker-images.sh verify
+	@DOCKER_VERIFY_WRAPPED=1 bash scripts/output/command-output.sh "Repository Dockerfile pins (live registry verification)" ./scripts/docker/docker-images.sh verify
 endif
 
 docker-setup-qemu: ## Install QEMU emulators for cross-platform builds (asks PLATFORMS)
