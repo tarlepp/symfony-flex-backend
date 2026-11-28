@@ -26,6 +26,7 @@
 import os
 from pathlib import Path
 import pty
+import re
 import select
 import shutil
 import signal
@@ -144,7 +145,7 @@ class CommandOutputTest(unittest.TestCase):
 
                 self.assertEqual(
                     result.stderr,
-                    f"\n[RUN] example\ndiagnostic\n[{outcome}] example{suffix}\n",
+                    f"[RUN] example\ndiagnostic\n[{outcome}] example{suffix}\n",
                 )
 
         result = self.run_command([
@@ -155,8 +156,7 @@ class CommandOutputTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stderr,
-                         "\n[RUN] first\n[OK] first\n\n[RUN] second\n[OK] second\n")
-
+                         "[RUN] first\n[OK] first\n\n[RUN] second\n[OK] second\n")
         result = self.run_command([
             "bash", "-c",
             'source scripts/output/command-output.sh; OUTPUT_RUN_GROUPED=1; '
@@ -168,7 +168,7 @@ class CommandOutputTest(unittest.TestCase):
         self.assertEqual(result.returncode, 7)
         self.assertEqual(
             result.stderr,
-            "[RUN] stage\n\n  [RUN] check\ndiagnostic\n  [FAIL] check (exit 7)\n",
+            "[RUN] stage\n  [RUN] check\ndiagnostic\n  [FAIL] check (exit 7)\n",
         )
 
     def test_failure_status_is_not_swallowed(self):
@@ -182,6 +182,38 @@ class CommandOutputTest(unittest.TestCase):
                 self.assertIn("\033[31m[FAIL]\033[0m", result.stderr)
                 self.assertIn(f"exit {status}", result.stderr)
                 self.assertNotIn("[OK]", result.stderr)
+
+    def test_pre_pr_deprecation_filter_preserves_other_streams_and_failures(self):
+        deprecation = (
+            "[2026-11-24T11:32:04.469665+00:00] deprecation.INFO: noisy log"
+        )
+        warning = "[2026-11-24T11:32:04+00:00] deprecation.WARNING: keep"
+        for status in (0, 7):
+            with self.subTest(status=status):
+                result = self.run_command([
+                    "python3", str(ROOT / "scripts/output/native-output.py"),
+                    "--suppress-deprecation-info", "bash", "-c",
+                    f"printf '%s\\n' '{deprecation}'; "
+                    f"printf '  %s\\n%s\\n' '{deprecation}' '{warning}' >&2; "
+                    f"printf 'ordinary diagnostic\\npartial' >&2; exit {status}",
+                ])
+                self.assertEqual(result.returncode, status)
+                self.assertEqual(result.stdout, f"{deprecation}\n")
+                self.assertEqual(result.stderr, f"{warning}\nordinary diagnostic\npartial")
+
+    def test_pre_pr_deprecation_filter_handles_split_records_and_live_output(self):
+        result = self.run_command([
+            "python3", str(ROOT / "scripts/output/native-output.py"),
+            "--suppress-deprecation-info", "bash", "-c",
+            "printf '[2026-11-24T11:32:04' >&2; sleep 0.1; "
+            "printf '+00:00] deprecation.INFO: hidden\\n' >&2; "
+            "printf '[2026-11-24T11:32:04+00:00] other.INFO: kept\\n' >&2; "
+            "printf '[2026-11' >&2",
+        ])
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(
+            result.stderr, "[2026-11-24T11:32:04+00:00] other.INFO: kept\n[2026-11",
+        )
 
     def test_default_run_mode_preserves_structured_output_and_fail_fast_steps(self):
         for status in (0, 7):
@@ -245,6 +277,29 @@ class CommandOutputTest(unittest.TestCase):
             result.stderr,
             "::warning::annotation\n  ordinary diagnostic\n",
         )
+
+    def test_compact_status_spacing_removes_blank_padding_around_success(self):
+        result = self.run_command([
+            "python3", str(ROOT / "scripts/output/native-output.py"),
+            "--indent", "--compact-status-spacing",
+            "bash", "-c",
+            "printf 'detail\\n\\n   \\033[32m[OK]\\033[0m success   \\n \\t\\n\\n'; "
+            "printf 'first\\n\\nsecond\\n' >&2",
+        ])
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, "  detail\n     \033[32m[OK]\033[0m success\n")
+        self.assertEqual(result.stderr, "  first\n\n  second\n")
+
+        status, terminal, stdout = self.run_terminal([
+            "python3", str(ROOT / "scripts/output/native-output.py"),
+            "--compact-status-spacing", "--indent",
+            "bash", "-c",
+            "printf 'detail\\n\\n   [OK] success   \\r\\n \\t\\r\\n\\n'",
+        ])
+        self.assertEqual(status, 0)
+        self.assertIn(b"[OK] success", terminal)
+        self.assertNotIn(b"\r\n\r\n", terminal)
+        self.assertEqual(stdout, b"")
 
     def test_native_indentation_keeps_partial_lines_visible(self):
         process = subprocess.Popen([
@@ -884,6 +939,17 @@ class CommandOutputTest(unittest.TestCase):
         self.assertIn("\n[OK] inner\n", result.stderr)
         self.assertRegex(result.stderr, r"\[OK\] outer \(took [0-9]+\.[0-9]s\)\n$")
 
+    def test_pre_pr_selection_fixture_isolates_inherited_output_settings(self):
+        result = self.run_command(
+            ["bash", "scripts/make/tests/pre-pr-checks-test.sh"],
+            COLOR="always", PROGRESS="always", OUTPUT_STATUS_INDENT="  ",
+            OUTPUT_RUN_TARGET="test-command-output", OUTPUT_RUN_TARGET_ACTIVE="1",
+            OUTPUT_RUN_GROUPED="1", OUTPUT_RUN_GROUPED_SEPARATOR="0",
+            OUTPUT_RUN_GROUPED_STARTED="1",
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Pre-PR check selection tests passed.", result.stdout)
+
     def test_suite_colors_are_independent_of_helper_fixture(self):
         result = self.run_command(["bash", str(SUITE)], COLOR="always")
 
@@ -923,6 +989,15 @@ class CommandOutputTest(unittest.TestCase):
         )
         self.assertNotIn("[FAIL]", result.stderr)
 
+    def test_docker_suite_isolates_inherited_pre_pr_grouping(self):
+        result = self.run_command(
+            ["bash", str(SUITE)], COLOR="never", OUTPUT_RUN_GROUPED="1",
+            OUTPUT_RUN_TARGET="test-docker-images", OUTPUT_RUN_TARGET_ACTIVE="1",
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("[OK] Docker image tests:", result.stderr)
+        self.assertNotIn("[FAIL]", result.stderr)
+
     def test_suite_groups_keep_individual_results_in_order(self):
         result = self.run_command(["bash", str(SUITE)], COLOR="never")
 
@@ -946,6 +1021,7 @@ class CommandOutputTest(unittest.TestCase):
             lines[-1],
             f"[OK] Docker image tests: {DOCKER_IMAGE_TEST_COUNT} scenarios passed",
         )
+        self.assertEqual(lines[-2], "  [OK] Major reporting stays separate from automatic pin updates")
         self.assertNotIn("\033", result.stderr)
 
     def test_suite_assertion_failure_has_context_and_captured_output(self):
@@ -961,8 +1037,7 @@ class CommandOutputTest(unittest.TestCase):
                 scripts / "docker/docker-images.sh",
             )
             content = SUITE.read_text()
-            assertion = "grep -Fxq 'IMAGE input (no matching Dockerfile)'"
-
+            assertion = "grep -Fxq '  IMAGE input (no matching Dockerfile)'"
             self.assertEqual(content.count(assertion), 1)
             changed = content.replace(assertion, "grep -Fxq 'deliberately missing assertion'")
             suite = tests / SUITE.name
@@ -1108,8 +1183,9 @@ class CommandOutputTest(unittest.TestCase):
             (root / "scripts/output").mkdir(parents=True)
             (root / "scripts/checks").mkdir(parents=True)
             (root / "scripts/make/tests").mkdir(parents=True)
-
-            for name in ("command-output.sh", "native-output.py"):
+            for name in (
+                "command-output.sh", "command-progress.py", "native-output.py"
+            ):
                 shutil.copyfile(
                     ROOT / "scripts/output" / name,
                     root / "scripts/output" / name,
@@ -1128,6 +1204,8 @@ class CommandOutputTest(unittest.TestCase):
                 (root / suite).write_text(
                     "import os\nimport unittest\n"
                     "class Example(unittest.TestCase):\n"
+                    "    def test_grouping_is_not_inherited(self):\n"
+                    "        self.assertIsNone(os.environ.get('OUTPUT_RUN_GROUPED'))\n"
                     "    def test_example(self):\n"
                     "        self.assertNotEqual(os.environ.get('FAIL_NESTED'), '1', 'fixture assertion')\n"
                 )
@@ -1147,27 +1225,68 @@ class CommandOutputTest(unittest.TestCase):
 
                     self.assertEqual(result.returncode, int(failed), result.stderr)
                     self.assertIn("\n  [RUN] command-output regression suite\n", result.stderr)
-                    self.assertIn("  Ran 1 test", result.stderr)
+                    self.assertIn("    Ran 2 tests", result.stderr)
+                    self.assertNotIn("------", result.stderr)
                     self.assertNotIn("\nOK\n", result.stderr)
                     self.assertNotIn("\n    OK\n", result.stderr)
 
                     if failed == "1":
-                        self.assertIn("  FAILED (failures=1)\n", result.stderr)
+                        self.assertIn("    FAILED (failures=1)\n", result.stderr)
                         self.assertIn("fixture assertion", result.stderr)
                         self.assertIn("  [FAIL] command-output regression suite (exit 1)", result.stderr)
                         self.assertNotIn("make-launcher regression suite", result.stderr)
                     else:
-                        self.assertIn("  routing detail\n", result.stdout)
-                        self.assertIn("  routing warning\n", result.stderr)
+                        self.assertIn("    routing detail\n", result.stdout)
+                        self.assertIn("    routing warning\n", result.stderr)
                         self.assertIn("  [RUN] Pre-PR check selection regression suite\n", result.stderr)
-                        self.assertIn("pre-PR detail\n", result.stdout)
+                        self.assertIn("    pre-PR detail\n", result.stdout)
                         self.assertIn(
-                            "\n  [OK] command-output regression suite\n\n"
-                            "  [RUN] make-launcher regression suite\n", result.stderr,
+                            "\n  [OK] command-output regression suite\n"
+                            "\n  [RUN] make-launcher regression suite\n", result.stderr,
                         )
-                        self.assertTrue(result.stderr.endswith(
-                            "\n[OK] Command output contracts: 10 regression suites passed\n",
-                        ))
+                        self.assertRegex(
+                            result.stderr,
+                            r"\n *\[OK\] Pre-PR check selection regression suite"
+                            r"(?: \(took [0-9.]+s\))?\n"
+                            r" *\[OK\] Command output contracts: 10 regression suites passed "
+                            r"\(took [0-9.]+s\)\n$",
+                        )
+
+            result = self.run_command(
+                ["bash", str(runner)],
+                FAIL_NESTED="0",
+                COLOR="never",
+                OUTPUT_RUN_GROUPED="1",
+                OUTPUT_RUN_TARGET="test-command-output",
+                OUTPUT_RUN_TARGET_ACTIVE="",
+                PROGRESS="always",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn(
+                "[RUN] Command output contracts (offline fixtures) "
+                "(make test-command-output)\n",
+                result.stderr,
+            )
+            self.assertIn(
+                "  [INFO] Docker, registries and uploaders are mocked;",
+                result.stderr,
+            )
+            self.assertIn(
+                "  [RUN] command-output regression suite\n",
+                result.stderr,
+            )
+            self.assertIn("    Ran 2 tests", result.stderr)
+            self.assertIn("    routing detail\n", result.stdout)
+            self.assertTrue(
+                re.search(
+                    r"\n *\[OK\] Pre-PR check selection regression suite"
+                    r"(?: \(took [0-9.]+s\))?\n"
+                    r" *\[OK\] Command output contracts: 10 regression suites passed "
+                    r"\(make test-command-output\) \(took [0-9.]+s\)\n$",
+                    result.stderr,
+                ),
+                result.stderr,
+            )
 
 
 if __name__ == "__main__":

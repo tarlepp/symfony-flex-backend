@@ -23,11 +23,21 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 source scripts/output/command-output.sh
 OUTPUT_RUN_GROUPED=1
+base_status_indent=${OUTPUT_STATUS_INDENT:-}
+started=''
+started=$(output_clock)
 
+command_suffix=''
+if [ "${OUTPUT_RUN_TARGET:-}" = test-command-output ] &&
+    [ "${OUTPUT_RUN_TARGET_ACTIVE:-0}" != 1 ]; then
+    command_suffix=" (make test-command-output)"
+fi
+
+OUTPUT_STATUS_INDENT=$base_status_indent
 output_status RUN 'Command output contracts (offline fixtures)'
+unset OUTPUT_RUN_TARGET OUTPUT_RUN_TARGET_ACTIVE
+OUTPUT_STATUS_INDENT="${base_status_indent}  "
 output_status INFO 'Docker, registries and uploaders are mocked; no application mutation or upload is performed'
-
-OUTPUT_STATUS_INDENT='  '
 
 for suite in \
     scripts/output/tests/command-output-test.py \
@@ -40,12 +50,31 @@ for suite in \
     scripts/checks/tests/lint-workflows-output-test.py; do
     suite_name=${suite##*/}
     suite_name=${suite_name%-test.py}
-    output_run "$suite_name regression suite" \
+    OUTPUT_STATUS_INDENT="${base_status_indent}  " \
+        OUTPUT_TEST_INDENT='    ' output_run "$suite_name regression suite" \
         python3 scripts/tests/run-workflow-tests.py "$suite"
 done
-output_run 'Host and CI forwarding regression suite' \
-    python3 scripts/output/native-output.py --indent bash scripts/make/tests/make-container-test.sh
-output_run 'Pre-PR check selection regression suite' bash scripts/make/tests/pre-pr-checks-test.sh
+if [ -n "$command_suffix" ]; then
+    output_run 'Host and CI forwarding regression suite' \
+        python3 scripts/output/native-output.py --indent \
+        python3 scripts/output/native-output.py --indent \
+        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/make-container-test.sh
+    output_run 'Pre-PR check selection regression suite' \
+        python3 scripts/output/native-output.py --indent \
+        python3 scripts/output/native-output.py --indent \
+        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/pre-pr-checks-test.sh
+else
+    output_run 'Host and CI forwarding regression suite' \
+        python3 scripts/output/native-output.py --indent \
+        python3 scripts/output/native-output.py --indent \
+        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/make-container-test.sh
+    output_run 'Pre-PR check selection regression suite' \
+        python3 scripts/output/native-output.py --indent \
+        python3 scripts/output/native-output.py --indent \
+        env -u OUTPUT_RUN_GROUPED bash scripts/make/tests/pre-pr-checks-test.sh
+fi
 
-printf '\n' >&2
-OUTPUT_STATUS_INDENT='' output_status OK 'Command output contracts: 10 regression suites passed'
+elapsed=$(output_elapsed "$started")
+OUTPUT_STATUS_INDENT=$base_status_indent \
+    output_status OK \
+    "Command output contracts: 10 regression suites passed${command_suffix}${elapsed:+ (took $elapsed)}"

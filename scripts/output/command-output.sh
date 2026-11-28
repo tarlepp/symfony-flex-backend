@@ -90,6 +90,19 @@ output_duration() {
 output_status() {
     local status=$1 message=$2 color=''
 
+    if [ "$status" = RUN ] &&
+        [ "${OUTPUT_RUN_STATUS_ACTIVE:-0}" != 1 ]; then
+        OUTPUT_RUN_GROUPED_STARTED=0
+    fi
+
+    if [ "$status" = RUN ] &&
+        [ -n "${OUTPUT_RUN_TARGET:-}" ] &&
+        [ "${OUTPUT_RUN_TARGET_ACTIVE:-0}" != 1 ]; then
+        message="$message (make $OUTPUT_RUN_TARGET)"
+        OUTPUT_RUN_TARGET_ACTIVE=1
+        export OUTPUT_RUN_TARGET_ACTIVE
+    fi
+
     case "$status" in
         RUN|INFO) color=$OUTPUT_BLUE ;;
         OK) color=$OUTPUT_GREEN ;;
@@ -111,12 +124,31 @@ output_result() {
 
 output_run() {
     local label=$1 status=0 started='' took=''
+    local -a command
     shift
 
-    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
-        printf '\n' >&2
+    command=("$@")
+    if [ -n "${OUTPUT_RUN_TARGET:-}" ] &&
+        [ "${OUTPUT_RUN_TARGET_ACTIVE:-0}" != 1 ]; then
+        label="$label (make $OUTPUT_RUN_TARGET)"
+        OUTPUT_RUN_TARGET_ACTIVE=1
+        export OUTPUT_RUN_TARGET_ACTIVE
+        command=(
+            python3 "$OUTPUT_DIR/native-output.py" --indent --compact-status-spacing
+            "${command[@]}"
+        )
     fi
-    output_status RUN "$label"
+
+    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
+        if [ "${OUTPUT_RUN_GROUPED_STARTED:-0}" = 1 ] &&
+            [ "${OUTPUT_RUN_GROUPED_SEPARATOR:-1}" = 1 ]; then
+            printf '\n' >&2
+        fi
+    fi
+    OUTPUT_RUN_STATUS_ACTIVE=1 output_status RUN "$label"
+    if [ "${OUTPUT_RUN_GROUPED:-0}" = 1 ]; then
+        OUTPUT_RUN_GROUPED_STARTED=1
+    fi
 
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
         started=$(output_clock)
@@ -134,9 +166,9 @@ output_run() {
     ' TERM
 
     if [ "$OUTPUT_PROGRESS" = 1 ]; then
-        OUTPUT_PROGRESS_STARTED='' output_relay "$label" "$@" || status=$?
+        OUTPUT_PROGRESS_STARTED='' output_relay "$label" "${command[@]}" || status=$?
     else
-        OUTPUT_PROGRESS_STARTED='' "$@" || status=$?
+        OUTPUT_PROGRESS_STARTED='' "${command[@]}" || status=$?
     fi
 
     trap - INT TERM
