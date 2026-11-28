@@ -171,6 +171,15 @@ Inspect the implementation and its actual callers:
    should use descriptive labels. The local pre-PR runner filters timestamped
    Monolog `deprecation.INFO` records from nested Make stderr only; preserve
    other diagnostics and direct Make behavior.
+
+   For `make ci-detect-changes`, the dispatcher indents the section title two spaces,
+   its introductory lines, group headings and notes four spaces, and job entries
+   six spaces. The final note is immediately followed by the wrapper outcome.
+   The Make caller sets `CI_JOB_PREVIEW_INDENT` for only the introductory lines
+   and groups the target's outcome; do not shift the whole section or alter the
+   direct detector and GitHub Actions output by default. Preserve the separator
+   between a completed preview or check and the next sibling `[RUN]`, without
+   adding one within the completed check.
 7. Keep checks read-only unless mutation is explicitly part of the approved
    command. Use isolated temporary fixtures and cleanup limited to their
    resolved paths. Mock Docker, registry, Git, and other external commands
@@ -191,6 +200,17 @@ Inspect the implementation and its actual callers:
    fixtures, separate the output assertion from teardown and cover inherited
    ignored SIGINT. Use isolated process groups and bounded cleanup of all
    descendants, not just the group leader; see the [streaming fixture guidance](../../../doc/TESTING.md#command-output-contracts).
+
+   For visual output changes, assert the requested whitespace literally at the
+   real caller boundary, including representative section headings, nested
+   entries, notes, and adjacent statuses. Capture stdout and stderr together when
+   checking their combined layout: separate assertions cannot prove spacing
+   across streams. Also check the individual streams when their destinations
+   matter, and cover relevant standalone and grouped callers, failures, and color.
+   Compare direct script and CI output when a change is intended only for Make;
+   preserve unaffected lines instead of applying a blanket indentation adjustment.
+   Exercise the read-only Make command after the final edit in addition to
+   isolated fixtures.
 9. Exercise actual report or test-runner outputs when those contracts change. A
    mocked invocation does not prove PHPUnit discovery, coverage generation,
    report paths, or uploader compatibility. Use [write-tests](../write-tests/SKILL.md)
